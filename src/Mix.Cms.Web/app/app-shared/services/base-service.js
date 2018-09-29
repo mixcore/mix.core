@@ -9,8 +9,7 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService', 'AppS
             this.prefixUrl = '/' + this.lang + '/' + modelName;
         }
         var _getSingle = async function (params = []) {
-            var url = this.prefixUrl || '/' + this.lang + '/media'
-                 + '/details';
+            var url = (this.prefixUrl || '/' + this.lang + '/' + this.modelName) + '/details';
             for (let i = 0; i < params.length; i++) {
                 if (params[i]) {
                     url += '/' + params[i];

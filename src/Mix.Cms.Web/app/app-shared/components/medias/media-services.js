@@ -39,7 +39,8 @@ app.factory('MediaService', ['$rootScope', 'CommonService', 'BaseService',
                 return await commonServices.getApiResult(req);
             }
         };
-        
+        serviceFactory.modelName = 'media';
+        serviceFactory.prefixUrl = '/' + serviceFactory.lang + '/media';
         serviceFactory.cloneMedia = _cloneMedia;
         serviceFactory.uploadMedia = _uploadMedia;
         return serviceFactory;
