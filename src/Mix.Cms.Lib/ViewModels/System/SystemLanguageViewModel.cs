@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixCore.Cms.Lib.ViewModels.System
+namespace Mix.Cms.Lib.ViewModels.MixSystem
 {
     public class SystemLanguageViewModel
         : ViewModelBase<MixCmsContext, MixLanguage, SystemLanguageViewModel>

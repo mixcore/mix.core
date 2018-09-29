@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
-using MixCore.Cms.Lib.ViewModels.Init;
+using Mix.Cms.Lib.ViewModels.MixInit;
 using Mix.Cms.Lib.Repositories;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
@@ -153,7 +153,7 @@ namespace Mix.Cms.Lib.Services
             var configurations = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_CONFIGURATIONS, "data", true, "{}");
             var obj = JObject.Parse(configurations.Content);
             var arrConfiguration = obj["data"].ToObject<List<MixConfiguration>>();
-            var result = await ViewModels.Configuration.ReadMvcViewModel.ImportConfigurations(arrConfiguration, culture.Specificulture,  context, transaction);
+            var result = await ViewModels.MixConfigurations.ReadMvcViewModel.ImportConfigurations(arrConfiguration, culture.Specificulture,  context, transaction);
             return result.IsSucceed;
 
         }
@@ -164,7 +164,7 @@ namespace Mix.Cms.Lib.Services
             var configurations = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_LANGUAGES, "data", true, "{}");
             var obj = JObject.Parse(configurations.Content);
             var arrLanguage = obj["data"].ToObject<List<MixLanguage>>();
-            var result = await ViewModels.Language.ReadMvcViewModel.ImportLanguages(arrLanguage, culture.Specificulture,  context, transaction);
+            var result = await ViewModels.MixLanguages.ReadMvcViewModel.ImportLanguages(arrLanguage, culture.Specificulture,  context, transaction);
             return result.IsSucceed;
 
         }
@@ -172,10 +172,10 @@ namespace Mix.Cms.Lib.Services
         private bool InitThemes(MixCmsContext context, IDbContextTransaction transaction)
         {
             bool isSucceed = true;
-            var getThemes = InitThemeViewModel.Repository.GetModelList(_context: context, _transaction: transaction);
+            var getThemes = ViewModels.MixThemes.InitViewModel.Repository.GetModelList(_context: context, _transaction: transaction);
             if (!context.MixTheme.Any())
             {
-                InitThemeViewModel theme = new InitThemeViewModel(new MixTheme()
+                ViewModels.MixThemes.InitViewModel theme = new ViewModels.MixThemes.InitViewModel(new MixTheme()
                 {
                     Name = "Default",
                     CreatedBy = "Admin"

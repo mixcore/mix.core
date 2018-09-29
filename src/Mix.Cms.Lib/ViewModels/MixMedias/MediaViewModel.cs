@@ -1,0 +1,165 @@
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Repositories;
+using Mix.Cms.Lib.Services;
+using Mix.Common.Helper;
+using Mix.Domain.Core.ViewModels;
+using Mix.Domain.Data.ViewModels;
+using Newtonsoft.Json;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
+
+namespace Mix.Cms.Lib.ViewModels.MixMedias
+{
+    public class MediaViewModel
+        : ViewModelBase<MixCmsContext, MixMedia, MediaViewModel>
+    {
+        #region Properties
+
+        #region Models
+
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "Please choose File")]
+        [JsonProperty("extension")]
+        public string Extension { get; set; }
+
+        [JsonProperty("fileFolder")]
+        public string FileFolder { get; set; }
+
+        [JsonProperty("fileName")]
+        public string FileName { get; set; }
+
+        [JsonProperty("fileType")]
+        public string FileType { get; set; }
+
+        [JsonProperty("fileSize")]
+        public int FileSize { get; set; }
+
+        [JsonProperty("title")]
+        public string Title { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("tags")]
+        public string Tags { get; set; }
+
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
+
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+
+        #endregion Models
+
+        #region Views
+
+        [JsonProperty("domain")]
+        public string Domain { get { return MixService.GetConfig<string>("Domain") ?? "/"; } }
+
+        [JsonProperty("fullPath")]
+        public string FullPath
+        {
+            get
+            {
+                return string.IsNullOrEmpty(FileName) ? string.Empty : CommonHelper.GetFullPath(new string[]{
+                    Domain,
+                    FileFolder,
+                    $"{FileName}{Extension}"
+                });
+            }
+        }
+
+        [JsonProperty("mediaFile")]
+        public FileViewModel MediaFile { get; set; }
+        #endregion Views
+
+        #endregion Properties
+
+        #region Contructors
+
+        public MediaViewModel() : base()
+        {
+        }
+
+        public MediaViewModel(MixMedia model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            : base(model, _context, _transaction)
+        {
+        }
+
+        #endregion Contructors
+
+        #region Overrides
+
+        public override MixMedia ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            if (Id == 0)
+            {
+                Id = MediaViewModel.Repository.Max(c => c.Id).Data + 1;
+                CreatedDateTime = DateTime.UtcNow;
+                IsClone = true;
+                //Cultures = Cultures ?? CommonRepository.Instance.LoadCultures(Specificulture, _context, _transaction);
+                Cultures.ForEach(c => c.IsSupported = true);
+            }
+
+            return base.ParseModel(_context, _transaction);
+        }
+
+        public override void Validate(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            if (MediaFile?.FileStream != null)
+            {
+                MediaFile.Filename = SeoHelper.GetSEOString(MediaFile.Filename);
+                MediaFile.FileFolder = CommonHelper.GetFullPath(new[] {
+                    MixService.GetConfig<string>("UploadFolder"),
+                    DateTime.UtcNow.ToString("MM-yyyy")
+                }); ;
+                var isSaved = FileRepository.Instance.SaveWebFile(MediaFile);
+                if (isSaved)
+                {
+                    Extension = MediaFile.Extension;
+                    FileName = MediaFile.Filename;
+                    FileFolder = MediaFile.FileFolder;
+                }
+                else
+                {
+                    IsValid = false;
+                }
+
+            }
+            FileType = FileType ?? "image";
+            base.Validate(_context, _transaction);
+
+        }
+
+        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            Cultures = CommonRepository.Instance.LoadCultures(Specificulture, _context, _transaction);
+            this.Cultures.ForEach(c => c.IsSupported = true);
+            MediaFile = new FileViewModel();
+        }
+
+        public override RepositoryResponse<bool> RemoveRelatedModels(MediaViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>
+            {
+                IsSucceed = FileRepository.Instance.DeleteFile(FileName, Extension, FileFolder)
+            };
+            return result;
+        }
+
+        public override Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(MediaViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            FileRepository.Instance.DeleteFile(FileName, Extension, FileFolder);
+            return base.RemoveRelatedModelsAsync(view, _context, _transaction);
+        }
+
+        #endregion Overrides
+    }
+}
