@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["Description"] = "Your powerful dashboard is here";
+    Layout = "_LayoutPortal_Angular";
+}
+<div ng-app="SwastikaPortal" ng-init="init()" ng-controller="AppPortalController">
+    <div class="loader-container" ng-show="isBusy">
+        <div id="loader"></div>
+    </div>
+    <div>
+        <header-nav settings="settings" bread-crumbs="breadCrumbs"></header-nav>
+        <div class="container-fluid wrapper">
+            <div class="row flex-xl-nowrap">
+                <main-side-bar ng-if="isAdmin"></main-side-bar>
+
+                <main-side-bar-dynamic ng-if="roles" roles="roles" actived-role="roles[0]"></main-side-bar-dynamic>
+                <main class="py-md-4 px-md-2 sw-content" role="main">
+
+                    <section class="content container-fluid">
+
+                        <div class="{{pageClass}}" ng-view >
+                        </div>
+                        <medias ng-if="isInit"></medias>
+                        <message ng-if="isInit" message="message"></message>
+                        <confirm ng-if="isInit" message="confirmMessage"></confirm>
+                        <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
+                    </section>
+
+                    <footer class="footer d-block">
+                        <div class="container-fluid">
+                            <nav>
+                                <p class="copyright text-center">
+                                    <script>
+                                        document.write(new Date().getFullYear());
+                                    </script>
+                                    <a href="http://www.swastika.io">Swastika I/O</a>, made on Earth by humans.
+                                </p>
+                            </nav>
+                        </div>
+                    </footer>
+                </main>
+            </div>
+        </div>
+    </div>
+
+</div>

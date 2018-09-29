@@ -1,0 +1,566 @@
+// style for the landing page
+.index-page,
+.presentation-page{
+    .page-header{
+        height: 125vh;
+
+        .container{
+            > .content-center{
+                top: 37%;
+            }
+        }
+    }
+}
+
+.index-page,
+.presentation-page{
+    .category-absolute{
+        position: absolute;
+        top: 100vh;
+        margin-top: -60px;
+        padding: 0 15px;
+        width: 100%;
+        text-align: center;
+        color: rgba(255,255,255,.5);
+    }
+}
+
+.presentation-page{
+    .section-sections{
+        // padding-bottom: 0;
+        // margin-bottom: -120px;
+
+        .section-description{
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .col-md-3{
+            padding: 7.5px;
+        }
+
+        img{
+            width: 100%;
+            border-radius: $border-radius-small;
+            transition: all .2s $transition-ease;
+            box-shadow: 0px 5px 25px 0px rgba(0, 0, 0, 0.2);
+
+            &:hover{
+                @include transform-scale(1.02);
+            }
+        }
+    }
+
+    .section-pricing{
+        .card-pricing{
+            margin-top: 45px;
+        }
+
+        .card-margin{
+            margin-top: 90px;
+        }
+    }
+}
+
+.blog-posts{
+    .projects-4{
+        padding-top: 0;
+    }
+}
+
+.ecommerce-page{
+    .container{
+        position: relative;
+        z-index: 2;
+    }
+
+    .card-header{
+        padding-left: 0;
+        padding-right: 0;
+
+        &:after{
+            width: 100%;
+            left: 0;
+        }
+    }
+
+    .slider-refine{
+        margin: 15px 0;
+    }
+
+    .card-refine{
+        & > .card-title{
+            margin-bottom: 30px;
+        }
+
+        [role="tabpanel"]{
+          max-height: 273px;
+          overflow-y: scroll;
+        }
+
+        h6{
+          margin-top: .5rem;
+        }
+
+        .card-body{
+            padding-left: 25px;
+            padding-right: 25px;
+            padding-bottom: 0;
+
+            &.panel-refine{
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+        }
+
+        .price-right,
+        .price-left{
+            font-weight: 500;
+        }
+
+        .btn{
+            margin: -5px -12px;
+        }
+
+        .checkbox input[type=checkbox]:checked + .checkbox-material .check{
+            background: $primary-color;
+        }
+    }
+
+    .card-product{
+        .card-image{
+            width: 200px;
+            margin: 0 auto;
+        }
+    }
+}
+
+.product-page{
+    background-color: #eee;
+
+   .carousel{
+        margin: -90px 0px 0;
+
+        img {
+          border-radius: $border-radius-small;
+          height: auto;
+        }
+    }
+    .section{
+        padding-top: 30px;
+    }
+    .main-price{
+      margin: 10px 0 25px;
+      font-weight: $font-weight-light;
+    }
+
+    .blockquote{
+        width: 90%;
+        margin-top: -10px;
+        margin-left: 5%;
+    }
+
+    .pick-size{
+        margin-top: 15px;
+        margin-bottom: 15px;
+        .form-group{
+            margin-top: 5px;
+        }
+    }
+
+    .related-products{
+
+        .title{
+            margin-bottom: 80px;
+        }
+    }
+    .features{
+      padding-top: 30px;
+    }
+    .accordeon .card{
+        margin-bottom: 15px;
+    }
+}
+
+.landing-page{
+
+    .page-header{
+        height: 100vh;
+        position: relative;
+
+        .share{
+            margin-top: 150px;
+        }
+        h1{
+            font-weight: 600;
+        }
+        .title{
+            color: $white-color;
+        }
+    }
+
+    .section-team{
+        .team .team-player img{
+            max-width: 100px;
+        }
+
+        .team-player{
+            margin-bottom: 15px;
+        }
+    }
+
+    .section-contact-us{
+        .title{
+            margin-bottom: 15px;
+        }
+
+        .description{
+            margin-bottom: 30px;
+        }
+
+        .input-group,
+        .send-button,
+        .textarea-container{
+            padding: 0 40px;
+        }
+
+        .textarea-container{
+            margin: 40px 0;
+        }
+
+        a.btn{
+            margin-top: 35px;
+        }
+    }
+}
+
+.profile-page,
+.blog-post{
+    .button-container{
+        text-align: center;
+        margin-top: -112px;
+        position: relative;
+        z-index: 100;
+    }
+}
+
+// style for the profile page
+.profile-page{
+    .profile-container{
+        color: #FFFFFF;
+    }
+    .photo-container{
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto;
+        box-shadow: 0px 10px 25px 0px rgba(0, 0, 0, 0.3);
+    }
+
+    .title{
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .category{
+        text-align: center;
+    }
+
+    h5.description{
+        max-width: 700px;
+        margin: 20px auto 75px;
+    }
+
+    .nav-align-center{
+        margin-top: 30px;
+    }
+
+    .info-horizontal{
+        padding: 15px 0 0;
+    }
+    .content{
+        max-width: 450px;
+        margin: 0 auto;
+
+        .social-description{
+            display: inline-block;
+            max-width: 150px;
+            width: 145px;
+            text-align: center;
+            margin: 15px 0 0px;
+
+            h2{
+                margin-bottom: 5px;
+            }
+        }
+    }
+
+    .collections{
+        img{
+            margin-bottom: 30px;
+        }
+    }
+
+    .gallery{
+        margin-top: 45px;
+        padding-bottom: 50px;
+    }
+}
+
+.section-full-page{
+
+    &:after,
+    &:before{
+        display: block;
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 2;
+    }
+
+    &:before{
+        background-color: rgba(0,0,0,.5);
+    }
+
+    &[filter-color="purple"],
+    &[filter-color="primary"]{
+        &:after{
+            @include linear-gradient(rgba($light-gray,.26), rgba($primary-color,.95));
+
+        }
+
+    }
+
+    &[data-image]:after{
+        opacity: .5;
+    }
+
+    > .content,
+    > .footer{
+        position: relative;
+        z-index: 4;
+    }
+
+    > .content{
+        min-height: calc(100vh - 80px);
+    }
+
+    .full-page-background{
+        position: absolute;
+        z-index: 1;
+        height: 100%;
+        width: 100%;
+        display: block;
+        top: 0;
+        left: 0;
+        background-size: cover;
+        background-position: center center;
+
+    }
+
+    .footer nav > ul a:not(.btn),
+    .footer,
+    .footer .copyright a{
+        color: $white-color;
+    }
+
+}
+
+.signup-page{
+    .section{
+        padding-top: 180px;
+        padding-bottom: 0;
+    }
+
+    .input-group, .form-group{
+        margin-bottom: 20px;
+    }
+
+    .card-signup{
+        max-width: 100%;
+        margin-bottom: 130px;
+        padding: 15px 0px;
+
+        &:not([data-background-color]) .card-title{
+            color: initial;
+        }
+
+        .checkbox label{
+            margin-left: 14px;
+            padding-left: 39px;
+            color: initial;
+        }
+    }
+
+    .info-horizontal{
+        padding: 0px 0px 20px;
+    }
+    .social{
+        .btn{
+            margin: 5px;
+        }
+        h4{
+            margin-top: 20px;
+        }
+    }
+}
+
+.login-page{
+
+    .page-header{
+      display: block;
+      align-items: unset;
+    }
+
+    .card-login{
+        border-radius: $border-radius-large;
+        padding-bottom: $padding-base-horizontal;
+        max-width: 320px;
+
+        .btn-wd{
+            min-width: 180px;
+        }
+
+        .logo-container{
+            width: 65px;
+            margin: 0 auto;
+            margin-bottom: 55px;
+
+            img{
+                width: 100%;
+            }
+        }
+
+        .input-group:last-child{
+            margin-bottom: 40px;
+        }
+
+        &.card-plain{
+            @include input-coloured-bg($opacity-5, $white-color, $white-color, $transparent-bg, $opacity-1, $opacity-2);
+
+            .input-group-text,
+            .form-group.no-border .input-group-text,
+            .input-group.no-border .input-group-text{
+                color: $opacity-8;
+            }
+        }
+    }
+
+    .link{
+        font-size: 10px;
+        color: $white-color !important;
+        text-decoration: none;
+
+        &:hover,
+        &:focus{
+            border-color: $white-color !important;
+        }
+    }
+}
+
+.contact-page{
+    .contact-content{
+        padding-bottom: 40px;
+        padding-top: 40px;
+    }
+    .container{
+        max-width: 970px;
+    }
+    .big-map{
+        height: 55vh;
+        width: 100%;
+        display: block;
+        position: relative;
+    }
+    .message{
+        margin-top: 20px;
+    }
+    .info{
+        padding-bottom: 10px;
+        padding-top: 0px;
+        .title{
+            margin: 25px 0 10px;
+        }
+    }
+}
+
+
+.blog-post{
+    .section-blog-info{
+        padding-top: 30px;
+        padding-bottom: 0px;
+
+        .btn{
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        .blog-tags{
+            padding-top: 8px;
+        }
+        .card-profile{
+            margin-top: 0;
+            text-align: left;
+
+            .description{
+                font-size: $font-size-base;
+            }
+            .btn{
+                margin-top: 25px;
+            }
+        }
+    }
+    .section-comments{
+        .title{
+            margin-bottom: 30px;
+        }
+    }
+
+    .media{
+        p{
+            color: $default-color;
+        }
+    }
+}
+
+.about-us{
+    .page-header{
+        .container{
+            color: #FFFFFF;
+            text-align: center;
+        }
+        .title{
+            color: $white-color;
+        }
+    }
+    .about-description{
+        padding: 70px 0px 0px 0px;
+    }
+    .about-services{
+        padding-top: 10px;
+    }
+    .about-office{
+        .description{
+            margin-bottom: 70px;
+        }
+        img{
+            margin: 20px 0px;
+        }
+    }
+
+    .about-contact,
+    .about-office{
+        padding: 80px 0px;
+        .description{
+            margin-bottom: 70px;
+        }
+    }
+}
+
+.sections-page .page-header{
+  display: flex;
+  align-items: center;
+}

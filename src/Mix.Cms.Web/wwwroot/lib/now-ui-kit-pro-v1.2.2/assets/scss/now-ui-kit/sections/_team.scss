@@ -1,0 +1,59 @@
+.team-2{
+    .card{
+        .card-title{
+            margin: 10px 0 0;
+        }
+        h6{
+            margin-top: 5px;
+        }
+    }
+
+    [class*="col-md-"]:nth-child(2){
+        margin-top: 45px;
+    }
+}
+
+.team-3{
+    .card.card-profile{
+        .card-image a > img{
+            border-radius: 0;
+            border-bottom-left-radius: $border-radius-small;
+            border-top-left-radius: $border-radius-small;
+        }
+
+        .card-title{
+            margin-top: 15px;
+        }
+    }
+}
+
+
+.team-4{
+    .card{
+        text-align: left;
+
+        .footer{
+            margin-top: 0;
+        }
+    }
+}
+
+.team-5{
+    h5.description{
+        margin-bottom: 100px;
+    }
+
+    [class*="col-md-"]{
+        margin-top: 50px;
+
+        &:nth-child(2){
+            margin-top: 95px;
+        }
+    }
+
+    .card.card-profile{
+        .card-title + .category{
+            margin-bottom: .625rem;
+        }
+    }
+}

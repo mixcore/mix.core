@@ -1,0 +1,51 @@
+
+.card-testimonial{
+	@extend %card-profile;
+    .card-body{
+        padding-top: 25px;
+    }
+
+    .card-avatar{
+        max-width: 100px;
+        max-height: 100px;
+        margin-top: -50px;
+    }
+    .card-footer{
+        margin-top: 0;
+        margin-bottom: 2.5rem;
+    }
+    .card-description{
+        & + .card-title{
+            margin-top: 30px;
+        }
+    }
+    .icon{
+        i{
+            font-size: 32px;
+        }
+
+        &.icon-primary i{
+            color: $primary-color;
+        }
+
+        &.icon-info i{
+            color: $info-color;
+        }
+
+        &.icon-danger i{
+            color: $danger-color;
+        }
+
+        &.icon-warning i{
+            color: $warning-color;
+        }
+
+        &.icon-success i{
+            color: $success-color;
+        }
+    }
+
+	& .card-description + .card-title{
+	    margin-top: 20px;
+	}
+}

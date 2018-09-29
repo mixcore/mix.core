@@ -1,0 +1,21 @@
+.nav-pills{
+  &.flex-column li > a{
+      margin-bottom: 15px;
+  }
+
+  &:not(.nav-pills-icons):not(.nav-pills-just-icons) .nav-item .nav-link{
+    border-radius: $btn-round-radius;
+  }
+
+  &.nav-pills-icons{
+    .nav-item {
+      .nav-link{
+        background-color: transparent;
+      }
+
+      i{
+        font-size: 20px;
+      }
+    }
+  }
+}

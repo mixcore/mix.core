@@ -1,0 +1,80 @@
+{
+  "ConnectionStrings": {
+    "MixAccountConnection": "Server=(localdb)\\mssqllocaldb;Database=1111sw-cms.db;Trusted_Connection=True;MultipleActiveResultSets=true",
+    "MixCmsConnection": "Server=(localdb)\\mssqllocaldb;Database=1111sw-cms.db;Trusted_Connection=True;MultipleActiveResultSets=true",
+    "DefaultConnection": null
+  },
+  "Authentication": {
+    "CookieExpiration": 1,
+    "RefreshTokenExpiration": 1,
+    "TokenType": "Bearer",
+    "Audience": "mix-core",
+    "SecretKey": "mixcore-secret-key",
+    "Issuer": "mix-core"
+  },
+  "Translator": {
+    "vi-vn": {
+      "fe_site_name": "Site name",
+      "language": "Languages",
+      "portal_articles": "Articles",
+      "portal_create": "Create",
+      "portal_cultures": "Cultures",
+      "portal_dashboard": "Dashboard",
+      "portal_file": "File",
+      "portal_import": "Import",
+      "portal_list": "List",
+      "portal_media": "Media",
+      "portal_modules": "Modules",
+      "portal_orders": "Orders",
+      "portal_pages": "Pages",
+      "portal_permissions": "Import",
+      "portal_products": "Tours",
+      "portal_settings": "Settings",
+      "portal_themes": "Themes",
+      "portal_users": "Users",
+      "read_more": "Read more"
+    }
+  },
+  "LocalSettings": {
+    "vi-vn": {
+      "ContactAddress": "",
+      "ContactEmail": "Site Name",
+      "ContactPhone": "",
+      "Facebook": "",
+      "FacebookAppId": "",
+      "Favicon": "",
+      "Logo": "",
+      "SiteName": "Site Name",
+      "Theme": "Default",
+      "ThemeId": "1"
+    }
+  },
+  "GlobalSettings": {
+    "IsInit": "True",
+    "DefaultCulture": "vi-vn",
+    "DefaultTemplate": "_Default",
+    "DefaultTemplateFolder": "Default_Blank",
+    "DefaultTemplateLayout": "_Layout",
+    "OrderBy": "Priority",
+    "DefaultStatus": "2",
+    "IsSqlite": "False",
+    "Language": "vi-vn",
+    "UploadFolder": "Content/Uploads",
+    "ThemeId": "1",
+    "TemplateExtension": ".cshtml"
+  },
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Warning"
+    }
+  },
+  "JWTSettings": {
+    "SecretKey": "sw-cms-secret-key",
+    "Issuer": "sw-cms",
+    "Audience": "sw-client"
+  },
+  "AllowedHosts": "*",
+  "IsSqlite": false,
+  "Language": "en-us"
+}

@@ -1,0 +1,82 @@
+<div class="col-md-5 ml-auto mr-auto" ng-init="loadSettings()">
+    <div class="card card-login card-plain">
+        <form class="form-horizontal" ng-class="{'submitted': submitted}" ng-submit="initCms()">
+            <div class="header header-primary text-center">
+                <div class="logo-container">
+                    <img src="/images/swastika-io-logo-white.svg" alt="">
+                </div>
+            </div>
+            <div class="content">
+                <div class="row">
+                    <style>
+                        .form-check-label:before {
+                            background-color: white !important;
+                        }
+                    </style>
+                    <div class="col form-check mb-4">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" ng-model="initCmsModel.isUseLocal">
+                            <span class="form-check-sign"></span>
+                            Use local Database
+                        </label>
+                    </div>
+                    <div ng-show="initCmsModel.isUseLocal" class="input-group no-border input-lg">
+                        <!--<label class="form-check-label hidden">
+                            <input class="form-check-input" type="checkbox" ng-model="initCmsModel.isSqlite" />
+                            <span class="form-check-sign"></span>
+                            Use Sqlite
+                        </label>-->
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><em class="now-ui-icons business_chart-pie-36"></em></span>
+                        </div>
+                        <input ng-show="!initCmsModel.isSqlite" ng-model="initCmsModel.localDbConnectionString" class="form-control" placeholder="Local Db">
+                        <input ng-show="initCmsModel.isSqlite" ng-model="initCmsModel.sqliteDbConnectionString" class="form-control" placeholder="Local Db">
+                    </div>
+                    <div ng-show="initCmsModel.isUseLocal" class="input-group no-border input-lg">
+
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><em class="now-ui-icons business_badge"></em></span>
+                        </div>
+                        <input ng-change="updateLocalDbName()" ng-model="initCmsModel.localDbName" class="form-control" placeholder="Local Db">
+                    </div>
+                </div>
+                <div ng-hide="initCmsModel.isUseLocal">
+                    <h5 class="card-description text-white"> or remote database </h5>
+                    <div class="input-group no-border input-lg">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="now-ui-icons business_chart-pie-36"></i></span>
+                        </div>
+                        <input ng-model="initCmsModel.dataBaseServer" class="form-control" placeholder="Database Server (e.g. domain or IP)">
+                    </div>
+                    <div class="input-group no-border input-lg">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="now-ui-icons business_badge"></i></span>
+                        </div>
+                        <input ng-model="initCmsModel.dataBaseName" class="form-control" placeholder="Database name (e.g. SwastikaDb)">
+                    </div>
+                    <div class="input-group no-border input-lg">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><em class="now-ui-icons ui-1_lock-circle-open"></em></span>
+                        </div>
+                        <input ng-model="initCmsModel.dataBaseUser" class="form-control" placeholder="Database Username">
+                    </div>
+                    <div class="input-group no-border input-lg">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><em class="now-ui-icons now-ui-icons objects_key-25"></em></span>
+                        </div>
+                        <input ng-model="initCmsModel.dataBasePassword" type="password" class="form-control" placeholder="Database Password">
+                    </div>
+                </div>
+                <!--<select class="btn btn-secondary custom-select"
+                        ng-model="initCmsModel.culture"
+                        ng-options="item in settings.cultures track by $index">
+                </select>-->
+                <h5 class="card-description text-white">Select culture </h5>
+                <select class="btn btn-secondary custom-select input-lg" ng-options="item as item.fullName for item in settings.cultures track by item.specificulture" ng-model="initCmsModel.culture"></select>
+            </div>
+            <div class="card-footer text-center">
+                <a ng-click="initCms();" class="btn btn-primary btn-round btn-lg btn-block">Continue...</a>
+            </div>
+        </form>
+    </div>
+</div>

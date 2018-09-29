@@ -1,0 +1,39 @@
+.btn{
+  // social buttons
+  &.btn-facebook {
+    @include social-buttons-color($social-facebook, $social-facebook-state-color);
+  }
+  &.btn-twitter {
+    @include social-buttons-color($social-twitter, $social-twitter-state-color);
+  }
+  &.btn-pinterest {
+    @include social-buttons-color($social-pinterest, $social-pinterest-state-color);
+  }
+  &.btn-google {
+    @include social-buttons-color($social-google, $social-google-state-color);
+  }
+  &.btn-linkedin {
+    @include social-buttons-color($social-linkedin, $social-linkedin-state-color);
+  }
+  &.btn-dribbble {
+    @include social-buttons-color($social-dribbble, $social-dribbble-state-color);
+  }
+  &.btn-github {
+    @include social-buttons-color($social-github, $social-github-state-color);
+  }
+  &.btn-youtube {
+    @include social-buttons-color($social-youtube, $social-youtube-state-color);
+  }
+  &.btn-instagram {
+    @include social-buttons-color($social-instagram, $social-instagram-state-color);
+  }
+  &.btn-reddit {
+    @include social-buttons-color($social-reddit, $social-reddit-state-color);
+  }
+  &.btn-tumblr {
+    @include social-buttons-color($social-tumblr, $social-tumblr-state-color);
+  }
+  &.btn-behance {
+    @include social-buttons-color($social-behance, $social-behance-state-color);
+  }
+}

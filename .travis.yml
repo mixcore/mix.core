@@ -1,0 +1,10 @@
+language: csharp
+mono: none
+dotnet: 2.1.300-preview2
+before_install:
+  - git clone --depth=50 --branch=master https://github.com/Swastika-IO/Swastika-IO-Heart.git /home/travis/build/Swastika-IO/Swastika-Heart
+  - git clone --depth=50 --branch=master https://github.com/Swastika-IO/Swastika-IO-Identity.git /home/travis/build/Swastika-IO/Swastika-Identity
+  - cd src/Swastika.Cms.Web.Mvc
+script:
+  - dotnet restore
+  - dotnet build

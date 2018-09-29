@@ -1,0 +1,27 @@
+.navbar{
+  p{
+    line-height: 1.8em;
+    font-size: 1em;
+    font-weight: 400;
+  }
+
+  &.navbar-absolute{
+	  position: absolute;
+	  width: 100%;
+	  padding-top: 10px;
+	  z-index: 1029;
+  }
+
+  .navbar-toggler{
+    vertical-align: middle;
+
+    &.navbar-toggler-left{
+      top:0;
+    }
+
+    &.navbar-toggler-right{
+      padding-right: 0;
+      top: 8px;
+    }
+  }
+}

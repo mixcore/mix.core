@@ -1,0 +1,124 @@
+.card{
+  .rounded{
+      border-radius: $border-radius-small !important;
+  }
+
+  &:not(.card-plain) .rounded{
+      border-bottom-left-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+  }
+
+  a[data-toggle='collapse']{
+      text-decoration: none;
+  }
+
+  & a:not(.btn):not(.nav-link):not([data-toggle='collapse']):not(.footer-link){
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      color: $light-black;
+
+      &:hover,
+      &:focus{
+          border-color: #444;
+      }
+  }
+
+  .card-header{
+      .card-collapse &{
+          padding: .75rem 0;
+          position: relative;
+
+          &:after{
+              content: "";
+              position: absolute;
+              bottom: 0 ;
+              width: 100%;
+              height: 1px;
+              background-color: $light-gray;
+          }
+
+          a[data-toggle="collapse"]{
+              display: block;
+              color: $light-black;
+
+
+              &[aria-expanded="true"],
+              &.expanded{
+                  i{
+                      @include rotate-180();
+                  }
+              }
+
+              i{
+                  float: right;
+                  position: relative;
+                  color: $primary-color;
+                  top: 1px;
+                  @include transition($general-transition-time, $transition-ease);
+              }
+          }
+      }
+  }
+
+  .card-image{
+      position: relative;
+  }
+
+  .card-footer{
+      div{
+          display: inline-block;
+      }
+
+      .stats{
+          &.stats-right{
+              float: right;
+              line-height: 30px;
+          }
+
+          span:first-child{
+              margin-right: 30px;
+          }
+      }
+  }
+
+  &:not(.card-product) .card-footer .stats{
+      .now-ui-icons{
+          position: relative;
+          top: 3px;
+          font-size: 18px;
+          margin-right: 5px;
+
+      }
+
+      i{
+          color: lighten($default-color, 10%);
+      }
+  }
+
+  .card-title{
+      margin-top: 15px;
+      line-height: 1.25em;
+  }
+
+  .author{
+      .avatar{
+          width: 30px;
+          height: 30px;
+          overflow: hidden;
+          border-radius: 50%;
+          margin-right: 5px;
+      }
+      span{
+          color: $dark-gray;
+      }
+  }
+
+
+  .info{
+      padding: 40px 0 40px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+
+  }
+}

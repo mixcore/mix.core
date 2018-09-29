@@ -1,0 +1,29 @@
+<div ng-switch="$ctrl.type">
+    <div ng-switch-when="0">
+        <span ng-bind="$ctrl.value">
+    </div>
+    <div ng-switch-when="1">
+        <span ng-bind="$ctrl.value">
+    </div>
+    <div ng-switch-when="2">        
+        <preview-image img-height="25" img-src="$ctrl.value"></preview-image>
+    </div>
+    <div ng-switch-when="3">
+        <i class="{{$ctrl.value}}">
+    </div>
+    <div ng-switch-when="4">
+        <p ng-bind-html="$ctrl.value">
+    </div>
+    <div ng-switch-when="5">
+        <div ng-bind-html="$ctrl.value">
+    </div>
+    <div ng-switch-when="6">
+        <p ng-bind-html="$ctrl.value">
+    </div>
+    <div ng-switch-when="7">
+        <input class="form-control" type="checkbox" ng-model="$ctrl.value">
+    </div>
+    <div ng-switch-when="8">
+        <p ng-bind-html="$ctrl.value"></p>
+    </div>
+</div>

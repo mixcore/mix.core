@@ -1,0 +1,74 @@
+.projects-1{
+    .card-title{
+        margin-top: 10px
+    }
+}
+
+.projects-2{
+    h2.title{
+        margin-top: 5px;
+        margin-bottom: 15px;
+    }
+    .card-title{
+        margin-bottom: 5px;
+    }
+    .category{
+        color: $default-color;
+        margin-top: 5px;
+    }
+    .card-description{
+        margin-top: 20px;
+    }
+    .card{
+        text-align: center;
+    }
+}
+
+.projects-3{
+    h2.title,
+    h3.title{
+        margin-bottom: 80px;
+        margin-top: 5px;
+    }
+
+    .card{
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    .category{
+        margin-bottom: 5px;
+    }
+    .card-title{
+        margin-top: 10px;
+    }
+
+
+}
+
+.projects-5{
+    h2.title{
+        margin-top: 5px;
+        margin-bottom: 15px;
+    }
+
+    .info{
+        padding: 0;
+
+        p{
+            margin: 0;
+        }
+    }
+
+    .card-background{
+        margin-bottom: 0;
+
+         .card-body{
+            padding-top: 140px;
+            padding-bottom: 140px;
+        }
+    }
+    hr{
+        margin: 70px auto;
+        max-width: 970px;
+    }
+}

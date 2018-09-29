@@ -1,0 +1,49 @@
+%card-profile{
+    margin-top: 60px;
+    text-align: center;
+
+    .card-body .card-title{
+        margin-top: 0;
+    }
+
+     [class*=col-]{
+        .card-description{
+            margin-bottom: 0;
+
+            & + .card-footer{
+                margin-top: 8px;
+            }
+        }
+
+
+     }
+
+    .card-avatar{
+        max-width: 130px;
+        max-height: 130px;
+        margin: -60px auto 0;
+
+        img{
+            border-radius: 50% !important;
+        }
+
+        & + .card-body{
+            margin-top: 15px;
+        }
+    }
+
+    &.card-plain{
+        .card-avatar{
+            margin-top: 0;
+        }
+    }
+    .card-body{
+        .card-avatar{
+            margin: 0 auto 30px;
+        }
+    }
+}
+
+.card-profile{
+	@extend %card-profile;
+}
