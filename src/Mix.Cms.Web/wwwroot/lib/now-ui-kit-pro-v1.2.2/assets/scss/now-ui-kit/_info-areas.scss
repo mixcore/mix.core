@@ -1,0 +1,174 @@
+.info{
+    max-width: 360px;
+    margin: 0 auto;
+    padding: 70px 0 30px;
+    text-align: center;
+
+    &.info-hover{
+        .info-title{
+            transition: color .4s;
+        }
+
+        &:hover{
+            .icon{
+                @include transform-translate-y(-.5rem);
+
+                &.icon-primary{
+                    &.icon-circle{
+                        box-shadow: 0px 15px 30px 0px rgba(249, 99, 50, 0.35);
+                    }
+                }
+                &.icon-info{
+                    &.icon-circle{
+                        box-shadow: 0px 15px 35px 0px rgba(44, 168, 255, 0.35);
+                    }
+                }
+                &.icon-success{
+                    &.icon-circle{
+                        box-shadow: 0px 15px 35px 0px rgba(24, 206, 15, 0.35);
+                    }
+                }
+                &.icon-warning{
+                    &.icon-circle{
+                        box-shadow: 0px 15px 35px 0px rgba(255, 178, 54, 0.35);
+                    }
+                }
+                &.icon-danger{
+                    &.icon-circle{
+                        box-shadow: 0px 15px 35px 0px rgba(255, 54, 54, 0.35);
+                    }
+                }
+
+                &.icon-info + .info-title{
+                    color: $info-color;
+                }
+
+                &.icon-warning + .info-title{
+                    color: $warning-color;
+                }
+
+                &.icon-danger + .info-title{
+                    color: $danger-color;
+                }
+
+                &.icon-primary + .info-title{
+                    color: $primary-color;
+                }
+
+                &.icon-success + .info-title{
+                    color: $success-color;
+                }
+            }
+        }
+    }
+
+    .icon{
+        color: $default-color;
+        transition: transform .4s, box-shadow .4s;
+
+        > i{
+            font-size: 3em;
+        }
+
+        &.icon-circle{
+            max-width: 80px;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            border-radius: 50%;
+            box-shadow: 0px 9px 35px -6px rgba(0, 0, 0, 0.3);
+            font-size: $font-size-mini;
+            background-color: $white-color;
+            position: relative;
+
+            i{
+                line-height: 2.7;
+            }
+        }
+    }
+
+    .info-title{
+        margin: $margin-base-vertical + 10 0 $margin-base-vertical;
+        padding: 0 15px;
+        color: $black-color;
+    }
+    p{
+        color: $default-color;
+        padding: 0 15px;
+        font-size: 1.1em;
+    }
+}
+
+.info-horizontal{
+    text-align: left !important;
+
+    .icon{
+        float: left;
+        margin-top: 23px;
+        margin-right: 10px;
+
+        >i{
+            font-size: 2em;
+        }
+
+        &.icon-circle{
+            width: 65px;
+            height: 65px;
+            max-width: 65px;
+            margin-top: 8px;
+
+            i{
+                display: table;
+                margin: 0 auto;
+                line-height: 3.5;
+                font-size: 1.9em;
+            }
+        }
+    }
+    .description{
+        overflow: hidden;
+    }
+
+}
+
+.icon{
+    &.icon-primary{
+        color: $brand-primary;
+
+        &.icon-circle{
+            box-shadow: 0px 9px 30px -6px $primary-color-opacity;
+        }
+    }
+    &.icon-info{
+        color: $brand-info;
+
+        &.icon-circle{
+            box-shadow: 0px 9px 30px -6px $info-color-opacity;
+        }
+    }
+    &.icon-success{
+        color: $brand-success;
+
+        &.icon-circle{
+            box-shadow: 0px 9px 30px -6px $success-color-opacity;
+        }
+    }
+    &.icon-warning{
+        color: $brand-warning;
+
+        &.icon-circle{
+            box-shadow: 0px 9px 30px -6px $warning-color-opacity;
+        }
+    }
+    &.icon-danger{
+        color: $brand-danger;
+
+        &.icon-circle{
+            box-shadow: 0px 9px 30px -6px $danger-color-opacity;
+        }
+    }
+
+    &.icon-white{
+        color: $white-color;
+    }
+}

@@ -1,0 +1,56 @@
+version: 1.0.{build}
+image: Visual Studio 2017
+configuration: Release
+init:
+- ps: >-
+    choco install opencover.portable
+
+    choco install dotnetcore-sdk
+
+    choco install codecov
+
+    choco install "msbuild-sonarqube-runner" -y
+before_build:
+- cmd: >-
+    git clone -q --branch=master https://github.com/Swastika-IO/Swastika-IO-Heart.git C:\projects\Swastika-Heart
+
+    git clone -q --branch=master https://github.com/Swastika-IO/Swastika-IO-Identity.git C:\projects\Swastika-Identity
+
+    cd src
+
+    nuget restore
+
+
+    REM SonarQube.Scanner.MSBuild.exe begin /k:"Swastika-IO-Core" /d:sonar.organization="swastika-io" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="abc12c086721b2321aeca5c1f7c06e19b6a92213"
+
+
+    REM MsBuild.exe /t:Rebuild
+
+
+    REM SonarQube.Scanner.MSBuild.exe end /d:sonar.login="abc12c086721b2321aeca5c1f7c06e19b6a92213"
+
+
+    cd Swastika.Cms.Web.Mvc
+
+    dotnet restore
+
+    dotnet build
+build:
+  project: src\Swastika.Core.sln
+  verbosity: minimal
+test_script:
+- cmd: >-
+    OpenCover.Console.exe -register:user -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:test -filter:"+[Swastika.Cms.Web.Mvc*]* -[Swastika.Cms.Test*]*" -output:".\MyProject_coverage.xml" -oldstyle
+
+    codecov -f "MyProject_coverage.xml" -t ef322be9-f840-40eb-949e-1232ddb113ec
+artifacts:
+- path: dist
+  name: web-app
+notifications:
+- provider: Email
+  to:
+  - nhathoang989@gmail.com
+  subject: '[ Swastika I/O ] Build failure'
+  on_build_success: false
+  on_build_failure: true
+  on_build_status_changed: false

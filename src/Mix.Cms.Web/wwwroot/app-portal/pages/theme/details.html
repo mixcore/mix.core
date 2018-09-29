@@ -1,0 +1,41 @@
+<!-- Main content -->
+<section class="" ng-init="loadTheme()">
+    <form ng-class="{'submitted': submitted}" ng-submit="saveTheme(activedTheme)" ng-if="activedTheme">
+
+        <actions back-url="'/portal/theme/list'"></actions>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        Main Content
+                    </div>
+                    <div class="card-body">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <input type="text" ng-model="activedTheme.name" class="form-control form-control-lg" placeholder="Enter your theme name here...">
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="text" ng-model="activedTheme.previewUrl" class="form-control form-control-lg" placeholder="Preview Url">
+                        </div>
+
+                        <div class="input-group form-group">                            
+                            <api-file posted-file="activedTheme.asset"></api-file>
+                        </div>
+                        <custom-image header="'Feature Image'" type="'Themes'" folder="activedTheme.name" src-url="activedTheme.imageUrl" src="activedTheme.image" auto="'true'"></custom-image>
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" ng-model="activedTheme.isActived" id="isActived">
+                                <label class="custom-control-label" for="isActived">Activate this theme to be default theme</label>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </form>
+</section>
+<!-- /.content -->

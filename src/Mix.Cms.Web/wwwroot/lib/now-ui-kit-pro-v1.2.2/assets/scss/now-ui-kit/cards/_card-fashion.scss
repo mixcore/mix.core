@@ -1,0 +1,80 @@
+.card-fashion{
+    min-height: 500px;
+    border-radius: 0;
+    box-shadow: none;
+    margin:0;
+    display: block;
+
+    .card-container &{
+        width: 50%;
+        float: left;
+    }
+
+    &:not(.card-background) .card-title{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        text-align: center;
+        width: 85%;
+    }
+
+    h4{
+        margin-top: 0;
+    }
+
+    &.card-background{
+        &::after{
+            border-radius: 0;
+        }
+
+        a{
+            color: $white-color !important;
+
+            &:hover,
+            &:focus{
+                border-color: $white-color !important;
+            }
+        }
+    }
+
+    &:not(.card-background) .stats span,
+    .stats-link{
+        color: initial;
+    }
+
+    .card-body{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 2rem 2rem 1.4rem;
+        color: #fff;
+        min-height: auto;
+    }
+
+    &:not(.card-background):before{
+        left: 100%;
+        top: 50%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        z-index: 2;
+        position: absolute;
+        pointer-events: none;
+        border-color: rgba(255,255,255,0);
+        border-left-color: #ffffff;
+        border-width: 10px;
+        margin-top: -10px;
+    }
+
+    &.arrow-left:not(.card-background):before{
+        right: 100%;
+        border-right-color: #fff;
+        left: auto;
+        border-left: none;
+    }
+
+}

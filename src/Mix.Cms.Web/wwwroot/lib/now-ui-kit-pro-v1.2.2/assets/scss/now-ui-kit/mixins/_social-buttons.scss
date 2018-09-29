@@ -1,0 +1,64 @@
+// for social buttons
+@mixin social-buttons-color ($color, $state-color){
+    background-color: $color;
+    color: #fff;
+
+    &:hover,
+    &:focus,
+    &:not(:disabled):not(.disabled):active,
+    &:not(:disabled):not(.disabled).active,
+    &:not(:disabled):not(.disabled):active:focus,
+    &:not(:disabled):not(.disabled).active:focus,
+    &:active:hover,
+    &.active:hover,
+    .show > &.dropdown-toggle,
+    .show > &.dropdown-toggle:focus,
+    .show > &.dropdown-toggle:hover{
+        background-color: $state-color;
+        color: #fff;
+    }
+
+    &.btn-simple{
+        color: $color;
+        box-shadow: none;
+        background-color: $transparent-bg;
+        border-color: $color;
+
+        &:hover,
+        &:focus,
+        &:not(:disabled):not(.disabled):active,
+        &:not(:disabled):not(.disabled).active,
+        &:not(:disabled):not(.disabled):active:focus,
+        &:not(:disabled):not(.disabled).active:focus,
+        &:active:hover,
+        &.active:hover,
+        .show > &.dropdown-toggle,
+        .show > &.dropdown-toggle:focus,
+        .show > &.dropdown-toggle:hover{
+            color: $state-color;
+            border-color: $state-color;
+            background-color: $transparent-bg;
+        }
+    }
+
+    &.btn-neutral{
+        color: $color;
+        background-color: $white-color;
+
+
+        &:hover,
+        &:focus,
+        &:not(:disabled):not(.disabled):active,
+        &:not(:disabled):not(.disabled).active,
+        &:not(:disabled):not(.disabled):active:focus,
+        &:not(:disabled):not(.disabled).active:focus,
+        &:active:hover,
+        &.active:hover,
+        .show > &.dropdown-toggle,
+        .show > &.dropdown-toggle:focus,
+        .show > &.dropdown-toggle:hover{
+            color: $state-color;
+            background-color: $white-color;
+        }
+    }
+}

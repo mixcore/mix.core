@@ -1,0 +1,113 @@
+﻿{
+  "specificulture": "en-us",
+  "data": [
+    {
+      "keyword": "LanguageVersion",
+      "category": "Site",
+      "value": 1,
+      "dataType": 0,
+      "description": "Company Address",
+      "priority": 0,
+      "status": 2
+    },
+    {
+      "keyword": "SettingVersion",
+      "category": "Site",
+      "value": 1,
+      "dataType": 0,
+      "description": "Company Address",
+      "priority": 0,
+      "status": 2
+    },
+    {
+      "keyword": "ContactAddress",
+      "category": "Site",
+      "value": "",
+      "dataType": 0,
+      "description": "Company Address",
+      "priority": 0,
+      "status": 2
+    },
+    {
+      "keyword": "ContactEmail",
+      "category": "Site",
+      "value": "Site Name",
+      "dataType": 0,
+      "description": "Email",
+      "priority": 0,
+      "status": 2
+    },
+    {
+      "keyword": "ContactPhone",
+      "category": "Site",
+      "value": "",
+      "dataType": 0,
+      "description": "Hotline",
+      "priority": 0,
+      "status": 2
+    },
+    {
+      "keyword": "Facebook",
+      "category": "Site",
+      "value": "",
+      "dataType": 0,
+      "description": null,
+      "priority": 0,
+      "status": 2
+    },
+    {
+      "keyword": "FacebookAppId",
+      "category": "Site",
+      "value": "",
+      "dataType": 0,
+      "description": null,
+      "priority": 0,
+      "status": 2
+    },
+    {
+      "keyword": "Favicon",
+      "category": "Site",
+      "value": "",
+      "dataType": 2,
+      "description": null,
+      "priority": 0,
+      "status": 2
+    },
+    {
+      "keyword": "Logo",
+      "category": "Site",
+      "value": "",
+      "dataType": 2,
+      "description": null,
+      "priority": 0,
+      "status": 2
+    },
+    {
+      "keyword": "SiteName",
+      "category": "Site",
+      "value": "Site Name",
+      "dataType": 0,
+      "description": null,
+      "priority": 0,
+      "status": 2
+    },
+    {
+      "keyword": "Theme",
+      "category": "Site",
+      "value": "Default",
+      "dataType": 0,
+      "description": "Cms Theme",
+      "priority": 0,
+      "status": 2
+    },
+    {
+      "keyword": "ThemeId",
+      "category": "Site",
+      "value": "1",
+      "dataType": 0,
+      "description": "Cms Theme",
+      "priority": 0,
+      "status": 2
+    }
+  ]
+}

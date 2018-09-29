@@ -1,0 +1,13 @@
+# Rewrite path with additional sub directory
+# RewriteRule ^([a-z]{2}[-][a-z]{2})$ /$1/home [L,R=302]
+
+
+# RewriteRule ^admin(.*)$    backend/$1
+# RewriteRule ^swagger|portal|api|backend|Content|lib|css|js|app-shared|app-client|app-portal|app-init|images(\/(.*)){2,8}$    undefined
+# RewriteRule ^backend(\/(.*)){1,8}$    undefined
+# RewriteRule ^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))/article(\/(.*)){1,8}$    undefined
+# RewriteRule ^Content/(.*)$    undefined
+# RewriteRule ^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))$    /$1/
+# RewriteRule ^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/\w$    /$1/alias?alias=$5
+# RewriteRule ^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/(.*)\/(\d+)\/(\d+)$    /$1/alias?alias=$5&pageSize=$6&pageIndex=$7
+# RewriteRule ^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/(.*)$    /$1/alias?alias=$5

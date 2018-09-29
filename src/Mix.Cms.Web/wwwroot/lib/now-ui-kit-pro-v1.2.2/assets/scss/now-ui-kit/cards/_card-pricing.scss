@@ -1,0 +1,104 @@
+
+.card-pricing{
+    text-align: center;
+
+    .card-title{
+        margin-top: 30px;
+    }
+
+    .icon{
+        padding: 10px 0 0px;
+
+        i{
+            font-size: 30px;
+            line-height: 2.7;
+            max-width: 80px;
+            color: $default-color;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            border-radius: 50%;
+            box-shadow: 0px 9px 35px -6px rgba(0, 0, 0, 0.3);
+            background-color: $white-color;
+            position: relative;
+        }
+
+        &.icon-primary i{
+            @include icon-color($primary-color);
+        }
+        &.icon-info i{
+            @include icon-color($info-color);
+        }
+        &.icon-success i{
+            color: $success-color;
+            box-shadow:  0px 9px 30px -6px rgba(22, 199, 13, 0.85);
+        }
+        &.icon-warning i{
+            @include icon-color($warning-color);
+        }
+        &.icon-danger i{
+            @include icon-color($danger-color);
+        }
+    }
+    h1{
+        small{
+            font-size: 18px;
+
+            &:first-child{
+                position: relative;
+                top: -17px;
+                font-size: 26px;
+            }
+        }
+    }
+
+    ul{
+        list-style: none;
+        padding: 0;
+        max-width: 240px;
+        margin: 10px auto;
+
+        li{
+            color: $default-color;
+            text-align: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba($default-color,.3);
+
+            &:last-child{
+                border: 0;
+            }
+            b{
+                color: $black-color;
+            }
+            i{
+                top: 3px;
+                right: 3px;
+                position: relative;
+                font-size: 20px;
+            }
+        }
+    }
+
+    &.card-background{
+        ul{
+            li{
+                color: $white-color;
+                border-color: rgba($white-color,.3);
+
+                b{
+                    color: $white-color;
+                }
+            }
+        }
+        [class*="text-"]{
+            color: $white-color !important;
+        }
+        .card-body{
+            padding-top: 1.25rem;
+            padding-bottom: 1.25rem;
+        }
+    }
+    &.card-background:after{
+        background-color: rgba(0, 0, 0, 0.65);
+    }
+}

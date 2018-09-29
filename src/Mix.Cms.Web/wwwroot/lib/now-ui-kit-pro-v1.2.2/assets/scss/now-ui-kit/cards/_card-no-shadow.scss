@@ -1,0 +1,9 @@
+.card-no-shadow{
+    box-shadow: none;
+    border-radius: 0;
+    margin: 0;
+
+    &:after{
+        border-radius: 0;
+    }
+}

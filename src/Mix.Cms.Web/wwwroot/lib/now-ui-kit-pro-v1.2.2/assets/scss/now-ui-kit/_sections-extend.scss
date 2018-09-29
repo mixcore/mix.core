@@ -1,0 +1,233 @@
+.parallax-s{
+    overflow: hidden;
+    height: 500px;
+    width: 100%;
+}
+
+.section-image{
+    background-size: cover;
+    background-position: center center;
+    position: relative;
+    width: 100%;
+
+    .title,
+    .card-plain .card-title{
+        color: $white-color;
+    }
+
+    .nav-pills .nav-link{
+        background-color: $white-color;
+
+        &:hover,
+        &:focus{
+            background-color: $white-color;
+        }
+    }
+
+    .info-title,
+    .info.info-horizontal .icon i,
+    .card-pricing.card-plain ul li{
+        color: $white-color;
+    }
+    .description,
+    .info .icon:not(.icon-circle){
+        color: $opacity-8;
+    }
+    .card:not(.card-plain){
+        .info-title{
+            color: $black-color;
+        }
+        .info p,
+        .info .icon,
+        .description{
+            color: $dark-gray;
+        }
+    }
+
+    .footer{
+        color: $white-color;
+    }
+    .card-plain{
+        [class*="text-"],
+        ul li b{
+            color: $white-color;
+        }
+        .category{
+            color: rgba($white-color,.5);
+        }
+    }
+
+    &:after{
+        position: absolute;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        display: block;
+        left: 0;
+        top: 0;
+        content: "";
+        background-color: rgba(0,0,0,.7);
+    }
+
+    .container{
+        z-index: 2;
+        position: relative;
+    }
+}
+
+.page-header{
+    .signup-page &{
+        max-height: fit-content;
+        display: block;
+        align-items: unset;
+    }
+
+    &.page-header-mini{
+        min-height: 40vh;
+        max-height: 340px;
+    }
+
+    .title{
+        margin-bottom: 15px;
+    }
+    .title + h4{
+        margin-top: 10px;
+    }
+
+
+}
+
+.section-story-overview{
+    padding: 50px 0;
+
+    .image-container{
+        img{
+            width: 100%;
+            left: 0;
+            top: 0;
+            height: auto;
+            position: absolute;
+        }
+    }
+}
+
+
+[data-background-color="gray"]{
+    background-color: lighten($default-color, 40%);
+}
+
+[data-background-color]:not([data-background-color="gray"]){
+
+    .separator-line{
+        background-color: $opacity-5;
+    }
+
+    .footer{
+        &.footer-white .footer-brand,
+        &.footer-white ul li > a.nav-link:not(.btn-icon){
+            color: initial;
+        }
+    }
+
+    .card:not(.card-plain) .category,
+    .card:not(.card-plain) .card-description,
+    & .card:not(.card-plain) .category,
+    & .card:not(.card-plain) .category{
+        color: $dark-gray;
+    }
+
+    .card:not(.card-plain) .card-title,
+    & .card:not(.card-plain) .card-title{
+        color: initial;
+    }
+
+    .carousel .carousel-inner{
+        box-shadow: none;
+    }
+
+    h1,h2,h3,h4,h5,h6,
+    a:not(.btn):not(.dropdown-item):not(.card-link),
+    .icons-container i,
+    &.card-pricing ul li,
+    .info.info-horizontal .icon i,
+    .card-pricing.card-plain ul li{
+        color: $white-color;
+    }
+
+    &.card a:not(.btn):not(.dropdown-item){
+        color: $white-color;
+
+        &:hover,
+        &:focus{
+            border-color: $white-color;
+        }
+    }
+
+    &.footer hr,
+    &.card-pricing .icon i,
+    &.card-pricing ul li{
+        border-color: $opacity-2;
+    }
+
+    .card-footer .stats i,
+    &.card-plain .category,
+    .card-plain .category,
+    .card-header:after{
+        color: $opacity-5;
+    }
+
+    &.card-pricing ul li i,
+    &.card-pricing ul li b,
+    .card-pricing.card-plain ul li b,
+    .card-category,
+    .author span,
+    .card-pricing.card-plain ul li i{
+        color: $opacity-8 !important;
+    }
+
+    .input-group-text,
+    .form-group.no-border .input-group-text,
+    .input-group.no-border .input-group-text{
+        color: $opacity-8;
+    }
+
+    .subscribe-line{
+        .form-control{
+            background-color: $transparent-bg;
+            border: 1px solid $light-gray;
+            color: $black-color;
+
+            &:last-child{
+                border-left: 0 none;
+            }
+        }
+
+        .input-group-text,
+        .form-group.no-border .input-group-text,
+        .input-group.no-border .input-group-text{
+            color: $dark-background;
+            border: 1px solid $light-gray;
+        }
+    }
+}
+
+[class*="features-"],
+[class*="team-"],
+[class*="projects-"],
+[class*="pricing-"],
+[class*="testimonials-"],
+[class*="contactus-"]{
+    padding: 80px 0;
+}
+
+
+@import 'sections/_headers';
+@import 'sections/_features';
+@import 'sections/_blogs';
+@import 'sections/_team';
+@import 'sections/_projects';
+@import 'sections/_pricing';
+@import 'sections/_testimonials';
+@import 'sections/_contactus';
+
+@import 'sections/_social-subscribe-lines';

@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <DockerTargetOS>Windows</DockerTargetOS>
+    <UserSecretsId>206d0599-2e80-42e1-b45e-a479cb90baa3</UserSecretsId>
+    <RuntimeFrameworkVersion>2.1.2</RuntimeFrameworkVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.0.1916590" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="3.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="app\app-portal\pages\moduleData\components\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mix.Cms.Api\Mix.Cms.Api.csproj" />
+    <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
+  </ItemGroup>
+
+</Project>

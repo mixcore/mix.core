@@ -1,0 +1,32 @@
+
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 ml-auto mr-auto text-center">
+                <h2 class="title">@Model.Title</h2>
+                <div>
+                    @Html.Raw(Model.Description)
+                </div>
+                <ul>
+                    @foreach (var item in Model.Data.JsonItems)
+                    {
+                        <li style="background-image: url(@item["image"]);"></li>
+                    }
+                </ul>
+                <ul>
+                    @foreach (var item in Model.Articles.Items)
+                    {
+                        <li>@item.Article.Title</li>
+                    }
+                </ul> 
+                <ul>
+                    @foreach (var item in Model.Products.Items)
+                    {
+                        <li>@item.Product.Title</li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="separator separator-primary"></div>
+    </div>
+</div>

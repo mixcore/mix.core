@@ -1,0 +1,38 @@
+<!-- Main content -->
+<section class="" ng-init="loadTemplate()">
+    
+    <form ng-class="{'submitted': submitted}" ng-submit="saveTemplate(activedTemplate)" ng-if="activedTemplate">    
+        <actions back-url="listUrl"></actions>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control form-control-lg" ng-model="activedTemplate.fileName">
+            </div>
+            </div>
+            <div class="col-md-12">
+                <tabs-v>
+                    <pane-v title="Razor Template">
+                        <div class="container-code-editor">
+                            <div class="form-control code-editor">{{activedTemplate.content}}</div>
+                            <input id="content-razor" class="form-control code-content" type="hidden" ng-model="activedTemplate.content" value="{{activedTemplate.content}}">
+                        </div>
+                    </pane-v>
+                    <pane-v title="Scripts">
+                        <div class="container-code-editor">
+                            <div class="form-control code-editor">{{activedTemplate.scripts}}</div>
+                            <input id="content-scripts" class="form-control code-content" type="hidden" ng-model="activedTemplate.scripts" value="{{activedTemplate.scripts}}">
+                        </div>
+                    </pane-v>
+                    <pane-v title="Styles">
+                        <div class="container-code-editor">
+                            <div class="form-control code-editor">{{activedTemplate.styles}}</div>
+                            <input id="content-styles" class="form-control code-content" type="hidden" ng-model="activedTemplate.styles" value="{{activedTemplate.styles}}">
+                        </div>
+                    </pane-v>
+                </tabs-v>
+            </div>
+        </div>
+    </form>
+</section>
+<!-- /.content -->

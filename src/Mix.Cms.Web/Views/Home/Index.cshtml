@@ -1,0 +1,113 @@
+﻿@{
+    ViewData["Title"] = Model.Title;
+    ViewData["SeoTitle"] = Model.SeoTitle;
+    ViewData["SeoKeywords"] = Model.SeoKeywords;
+    ViewData["SeoDescription"] = Model.SeoDescription;
+    string lang = ViewBag.culture;
+
+}
+<div ng-controller="AppClientController" ng-init="init('@lang')">
+    @if (!string.IsNullOrEmpty(Model.TemplatePath))
+    {
+        @(MixService.GetConfig<string>("Phone", lang))
+        try
+        {
+            <partial name="@Model.TemplatePath" model="@Model" />
+        }
+        catch (System.InvalidOperationException invalidOperationException)
+        {
+            <p class="danger text-center has-error">Unable load template with Exception detail below:</p>
+            <code>
+                @invalidOperationException
+            </code>
+
+        }
+        catch (Exception ex)
+        {
+            <code>
+                @ex
+            </code>
+            <p class="danger text-center has-error">Unable load template</p>
+        }
+    }
+    else
+    {
+        <section class="container">
+            <h1>@(MixService.Translate<string>("Please choose template", ViewBag.culture))</h1>
+        </section>
+    }
+</div>
+@section Styles{
+    <base href="/@ViewBag.culture">
+    @Html.Raw(Model.View?.Styles)
+    @if (!string.IsNullOrEmpty(MixService.GetConfig<string>("GA_KEY", ViewBag.culture)))
+    {
+        <!-- Google Analytics -->
+        <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', '@(MixService.GetConfig<string>("GA_KEY", ViewBag.culture))', 'auto');
+        ga('send', 'pageview');
+        </script>
+        <!-- End Google Analytics -->
+    }
+    <div id="fb-root"></div><div id="fb-root"></div><div id="fb-root"></div>
+    <script>
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.1&appId=1471411989648473&autoLogAppEvents=1';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+
+}
+@section scripts{
+
+    <script>window.jQuery || document.write('<script src="/js/jquery.min.js"><\/script>')</script>
+
+    <!-- TRUMBOWYG -->
+    <script src="/lib/Trumbowyg-2.9.0/trumbowyg.min.js"></script>
+    <script src="/lib/Trumbowyg-2.9.0/plugins/base64/trumbowyg.base64.js"></script>
+    <script src="/lib/Trumbowyg-2.9.0/plugins/cleanpaste/trumbowyg.cleanpaste.js"></script>
+    <script src="/lib/Trumbowyg-2.9.0/plugins/colors/trumbowyg.colors.js"></script>
+    <script src="/lib/Trumbowyg-2.9.0/plugins/upload/trumbowyg.upload.js"></script>
+    <script src="/lib/Trumbowyg-2.9.0/plugins/noembed/trumbowyg.noembed.js"></script>
+    <script type="text/javascript" src="/lib/cropperjs-1.2.2/dist/cropper.js"></script>
+    <script type="text/javascript" src="/lib/ace/src/ace.js"></script>
+    <script type="text/javascript" src="/lib/ace/src/mode-csharp.js"></script>
+    <script type="text/javascript" src="/lib/ace/src/mode-razor.js"></script>
+    <script type="text/javascript" src="/lib/ace/src/mode-json.js"></script>
+    <script type="text/javascript" src="/lib/ace/src/theme-chrome.js"></script>
+    <script type="text/javascript" src="/lib/ace/src/theme-clouds_midnight.js"></script>
+    <script type="text/javascript" src="/lib/ace/src/worker-json.js"></script>
+    <script src="/lib/clipboard.js-2.0.0/dist/clipboard.min.js"></script>
+    <script type="text/javascript" src="/lib/bootstrap4-tagsinput-4.1.2/tagsinput.js"></script>
+
+    @Html.Raw(Model.View?.Scripts)
+    <link href="~/css/portal/main.css" rel="stylesheet" />
+    <link href="/lib/flag-icon-css/css/flag-icon.min.css" rel="stylesheet" />
+    <link href="/lib/flag-icon-css/css/flag-icon.min.css" />
+    
+    <script src="~/js/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular-animate.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular-sanitize.js"></script>
+    
+    
+
+    <script src="~/app-client/app.js"></script>
+    
+    <script src="~/js/app-shared.min.js"></script>
+    <script src="~/js/app-client.min.js"></script>
+    <script src="~/app-client/app.constant.js"></script>
+    
+    <script src="~/app-client/shared/controllers/app-client-controller.js"></script>
+    
+    <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200|Open+Sans+Condensed:700" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+}
