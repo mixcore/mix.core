@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cms", "Cms", "{C45D03E7-0453-4199-A5DE-E61B5FF29AF4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Heart", "Heart", "{C28E20DA-23BA-4B69-8F00-725057F9082E}"
+	ProjectSection(SolutionItems) = preProject
+		Mix.Cms.Lib\ViewModels\Shared\Info\InfoThemeViewModel.cs = Mix.Cms.Lib\ViewModels\Shared\Info\InfoThemeViewModel.cs
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Cms.Web", "Mix.Cms.Web\Mix.Cms.Web.csproj", "{0E27FDA9-70B1-41AD-8465-3E56EA78F0DF}"
 EndProject

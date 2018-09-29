@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 
-namespace MixCore.Cms.Lib.ViewModels.System
+namespace Mix.Cms.Lib.ViewModels.MixSystem
 {
     public class SystemCultureViewModel
         : ViewModelBase<MixCmsContext, MixCulture, SystemCultureViewModel>

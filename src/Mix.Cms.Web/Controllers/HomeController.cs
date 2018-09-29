@@ -102,7 +102,7 @@ namespace Mix.Cms.Web.Controllers
         IActionResult Page(Expression<Func<MixCategory, bool>> predicate, int? pageIndex = null, int pageSize = 10)
         {
             // Home Page
-            var getPage = Lib.ViewModels.Page.ReadMvcViewModel.Repository.GetSingleModel(predicate);
+            var getPage = Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModel(predicate);
 
             if (getPage.IsSucceed && getPage.Data.View != null)
             {
@@ -122,7 +122,7 @@ namespace Mix.Cms.Web.Controllers
 
         IActionResult ArticleView(Expression<Func<MixArticle, bool>> predicate)
         {
-            var getArticle = Lib.ViewModels.Article.ReadMvcViewModel.Repository.GetSingleModel(predicate);
+            var getArticle = Lib.ViewModels.MixArticles.ReadMvcViewModel.Repository.GetSingleModel(predicate);
             if (getArticle.IsSucceed)
             {
                 ViewData["Title"] = getArticle.Data.SeoTitle;
@@ -139,7 +139,7 @@ namespace Mix.Cms.Web.Controllers
 
         IActionResult ProductView(Expression<Func<MixProduct, bool>> predicate)
         {
-            var getProduct = Lib.ViewModels.Product.ReadMvcViewModel.Repository.GetSingleModel(predicate);
+            var getProduct = Lib.ViewModels.MixProducts.ReadMvcViewModel.Repository.GetSingleModel(predicate);
             if (getProduct.IsSucceed)
             {
                 getProduct.Data.ProductNavs.ForEach(p =>
@@ -160,7 +160,7 @@ namespace Mix.Cms.Web.Controllers
             }
         }
 
-        void GeneratePageDetailsUrls(Lib.ViewModels.Page.ReadMvcViewModel page)
+        void GeneratePageDetailsUrls(Lib.ViewModels.MixPages.ReadMvcViewModel page)
         {
             foreach (var articleNav in page.Articles.Items)
             {
@@ -179,7 +179,7 @@ namespace Mix.Cms.Web.Controllers
             }
         }
 
-        void GeneratePageDetailsUrls(Lib.ViewModels.Module.ReadMvcViewModel module)
+        void GeneratePageDetailsUrls(Lib.ViewModels.MixModules.ReadMvcViewModel module)
         {
             foreach (var articleNav in module.Articles.Items)
             {

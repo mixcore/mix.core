@@ -3,7 +3,7 @@
 
 @{
     string culture = ViewBag.culture;
-    List<Mix.Cms.Lib.ViewModels.Page.ReadListItemViewModel> topCates = MixCmsHelper.GetCategory(Url, ViewBag.culture, MixEnums.CatePosition.Top, Context.Request.Path);
+    List<Mix.Cms.Lib.ViewModels.MixPages.ReadListItemViewModel> topCates = MixCmsHelper.GetCategory(Url, ViewBag.culture, MixEnums.CatePosition.Top, Context.Request.Path);
 }
 <nav class="navbar navbar-expand-lg bg-white fixed-top navbar-transparent" color-on-scroll="500">
     <div class="container">

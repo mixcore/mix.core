@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mix.Cms.Lib.ViewModels.Init
+namespace Mix.Cms.Lib.ViewModels.MixInit
 {
     public class InitCmsViewModel
     {

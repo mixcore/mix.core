@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <Folder Include="Interfaces\" />
-    <Folder Include="ViewModels\Query\" />
+    <Folder Include="ViewModels\Shared\" />
   </ItemGroup>
 
 </Project>

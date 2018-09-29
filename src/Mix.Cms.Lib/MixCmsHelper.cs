@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Mix.Cms.Lib.ViewModels.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +10,13 @@ namespace Mix.Cms.Lib
 {
     public class MixCmsHelper
     {
-        public static List<ViewModels.Page.ReadListItemViewModel> GetCategory(IUrlHelper Url, string culture, MixEnums.CatePosition position, string activePath = "")
+        public static List<ViewModels.MixPages.ReadListItemViewModel> GetCategory(IUrlHelper Url, string culture, MixEnums.CatePosition position, string activePath = "")
         {
-            var getTopCates = ViewModels.Page.ReadListItemViewModel.Repository.GetModelListBy
+            var getTopCates = ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelListBy
             (c => c.Specificulture == culture && c.MixCategoryPosition.Any(
               p => p.PositionId == (int)position)
             );
-            var cates = getTopCates.Data ?? new List<ViewModels.Page.ReadListItemViewModel>();
+            var cates = getTopCates.Data ?? new List<ViewModels.MixPages.ReadListItemViewModel>();
             activePath = activePath.ToLower();
             foreach (var cate in cates)
             {
@@ -44,7 +43,7 @@ namespace Mix.Cms.Lib
                 }
                 cate.IsActived = (cate.DetailsUrl == activePath
                     || (cate.Type == MixPageType.Home && activePath == string.Format("/{0}/home", culture)));
-                cate.Childs.ForEach((Action<ViewModels.Page.ReadListItemViewModel>)(c =>
+                cate.Childs.ForEach((Action<ViewModels.MixPages.ReadListItemViewModel>)(c =>
                 {
                     c.IsActived = (
                     c.DetailsUrl == activePath);
@@ -54,12 +53,12 @@ namespace Mix.Cms.Lib
             return cates;
         }
 
-        public static List<ViewModels.Page.ReadListItemViewModel> GetCategory(IUrlHelper Url, string culture, MixPageType cateType, string activePath = "")
+        public static List<ViewModels.MixPages.ReadListItemViewModel> GetCategory(IUrlHelper Url, string culture, MixPageType cateType, string activePath = "")
         {
-            var getTopCates = ViewModels.Page.ReadListItemViewModel.Repository.GetModelListBy
+            var getTopCates = ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelListBy
             (c => c.Specificulture == culture && c.Type == (int)cateType
             );
-            var cates = getTopCates.Data ?? new List<ViewModels.Page.ReadListItemViewModel>();
+            var cates = getTopCates.Data ?? new List<ViewModels.MixPages.ReadListItemViewModel>();
             activePath = activePath.ToLower();
             foreach (var cate in cates)
             {
@@ -89,7 +88,7 @@ namespace Mix.Cms.Lib
                     cate.DetailsUrl == activePath || (cate.Type == MixPageType.Home && activePath == string.Format("/{0}/home", culture))
                     );
 
-                cate.Childs.ForEach((Action<ViewModels.Page.ReadListItemViewModel>)(c =>
+                cate.Childs.ForEach((Action<ViewModels.MixPages.ReadListItemViewModel>)(c =>
                 {
                     c.IsActived = (
                     c.DetailsUrl == activePath);
