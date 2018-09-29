@@ -23,7 +23,6 @@ namespace Mix.Cms.Api.Controllers
 {
     [Produces("application/json")]
     [Route("api/v1/{culture}/page")]
-    [Route("api/v1/{culture}/category")]
     public class ApiPageController :
         BaseApiController
     {

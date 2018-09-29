@@ -4,6 +4,7 @@ app.component('mediaNavs', {
     controller: ['$rootScope', '$scope', 'ngAppSettings', 'MediaService', 
         function ($rootScope, $scope, ngAppSettings, mediaService) {
         var ctrl = this;
+        mediaService.init('media');
         ctrl.request = {
             pageSize: '10',
             pageIndex: 0,
