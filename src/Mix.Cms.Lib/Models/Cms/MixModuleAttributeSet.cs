@@ -13,7 +13,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public Guid Id { get; set; }
         public int ModuleId { get; set; }
         public string Specificulture { get; set; }
-        public int ArticleId { get; set; }
+        public int? ArticleId { get; set; }
         public int? CategoryId { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public string Fields { get; set; }
@@ -23,8 +23,8 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Value { get; set; }
 
         public MixArticleModule MixArticleModule { get; set; }
-        public MixPageModule MixPageModule { get; set; }
         public MixModule MixModule { get; set; }
+        public MixPageModule MixPageModule { get; set; }
         public ICollection<MixModuleAttributeValue> MixModuleAttributeValue { get; set; }
     }
 }

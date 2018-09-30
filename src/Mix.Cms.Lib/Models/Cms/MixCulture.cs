@@ -8,10 +8,10 @@ namespace Mix.Cms.Lib.Models.Cms
         public MixCulture()
         {
             MixArticle = new HashSet<MixArticle>();
-            MixPage = new HashSet<MixPage>();
             MixConfiguration = new HashSet<MixConfiguration>();
             MixLanguage = new HashSet<MixLanguage>();
             MixModule = new HashSet<MixModule>();
+            MixPage = new HashSet<MixPage>();
             MixProduct = new HashSet<MixProduct>();
             MixUrlAlias = new HashSet<MixUrlAlias>();
         }
@@ -27,10 +27,10 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Status { get; set; }
 
         public ICollection<MixArticle> MixArticle { get; set; }
-        public ICollection<MixPage> MixPage { get; set; }
         public ICollection<MixConfiguration> MixConfiguration { get; set; }
         public ICollection<MixLanguage> MixLanguage { get; set; }
         public ICollection<MixModule> MixModule { get; set; }
+        public ICollection<MixPage> MixPage { get; set; }
         public ICollection<MixProduct> MixProduct { get; set; }
         public ICollection<MixUrlAlias> MixUrlAlias { get; set; }
     }
