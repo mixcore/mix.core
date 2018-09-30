@@ -19,7 +19,7 @@ using static Mix.Cms.Lib.MixEnums;
 namespace Mix.Cms.Lib.ViewModels.MixPages
 {
     public class UpdateViewModel
-       : ViewModelBase<MixCmsContext, MixCategory, UpdateViewModel>
+       : ViewModelBase<MixCmsContext, MixPage, UpdateViewModel>
     {
         #region Properties
 
@@ -222,7 +222,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
         }
 
-        public UpdateViewModel(MixCategory model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public UpdateViewModel(MixPage model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -230,7 +230,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         #region Overrides
 
-        public override MixCategory ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixPage ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             GenerateSEO();
 
@@ -294,7 +294,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         #region Sync
 
-        public override RepositoryResponse<bool> SaveSubModels(MixCategory parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override RepositoryResponse<bool> SaveSubModels(MixPage parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool> { IsSucceed = true };
             var saveTemplate = View.SaveModel(true, _context, _transaction);
@@ -423,7 +423,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         #region Async
 
-        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixCategory parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixPage parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool> { IsSucceed = true };
             var saveTemplate = await View.SaveModelAsync(true, _context, _transaction);
@@ -589,7 +589,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public List<MixPagePositions.ReadViewModel> GetPositionNavs(MixCmsContext context, IDbContextTransaction transaction)
         {
             var query = context.MixPosition
-                  .Include(cp => cp.MixCategoryPosition)
+                  .Include(cp => cp.MixPagePosition)
                   //.Where(p => p.Specificulture == Specificulture)
                   .Select(p => new MixPagePositions.ReadViewModel()
                   {
@@ -597,7 +597,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                       PositionId = p.Id,
                       Specificulture = Specificulture,
                       Description = p.Description,
-                      IsActived = context.MixCategoryPosition.Count(m => m.CategoryId == Id && m.PositionId == p.Id && m.Specificulture == Specificulture) > 0
+                      IsActived = context.MixPagePosition.Count(m => m.CategoryId == Id && m.PositionId == p.Id && m.Specificulture == Specificulture) > 0
                   });
 
             return query.OrderBy(m => m.Priority).ToList();
@@ -606,7 +606,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public List<MixPageModules.ReadMvcViewModel> GetModuleNavs(MixCmsContext context, IDbContextTransaction transaction)
         {
             var query = context.MixModule
-                .Include(cp => cp.MixCategoryModule)
+                .Include(cp => cp.MixPageModule)
                 .Where(module => module.Specificulture == Specificulture)
                 .Select(module => new MixPageModules.ReadMvcViewModel()
                 {
@@ -620,7 +620,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             var result = query.ToList();
             result.ForEach(nav =>
             {
-                var currentNav = context.MixCategoryModule.FirstOrDefault(
+                var currentNav = context.MixPageModule.FirstOrDefault(
                         m => m.ModuleId == nav.ModuleId && m.CategoryId == Id && m.Specificulture == Specificulture);
                 nav.Priority = currentNav?.Priority ?? 0;
                 nav.IsActived = currentNav != null;
@@ -630,8 +630,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public List<MixPagePages.ReadViewModel> GetParentNavs(MixCmsContext context, IDbContextTransaction transaction)
         {
-            var query = context.MixCategory
-                .Include(cp => cp.MixCategoryCategoryMixCategory)
+            var query = context.MixPage
+                .Include(cp => cp.MixPagePageMixPage)
                 .Where(Category => Category.Specificulture == Specificulture && Category.Id != Id)
                 .Select(Category =>
                     new MixPagePages.ReadViewModel()
@@ -646,7 +646,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             var result = query.ToList();
             result.ForEach(nav =>
             {
-                nav.IsActived = context.MixCategoryCategory.Any(
+                nav.IsActived = context.MixPagePage.Any(
                         m => m.ParentId == nav.ParentId && m.Id == Id && m.Specificulture == Specificulture);
             });
             return result.OrderBy(m => m.Priority).ToList();
@@ -654,12 +654,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public List<MixPagePages.ReadViewModel> GetChildNavs(MixCmsContext context, IDbContextTransaction transaction)
         {
-            var query = context.MixCategory
-                .Include(cp => cp.MixCategoryCategoryMixCategory)
+            var query = context.MixPage
+                .Include(cp => cp.MixPagePageMixPage)
                 .Where(Category => Category.Specificulture == Specificulture && Category.Id != Id)
                 .Select(Category =>
                 new MixPagePages.ReadViewModel(
-                      new MixCategoryCategory()
+                      new MixPagePage()
                       {
                           Id = Category.Id,
                           ParentId = Id,
@@ -670,7 +670,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             var result = query.ToList();
             result.ForEach(nav =>
             {
-                var currentNav = context.MixCategoryCategory.FirstOrDefault(
+                var currentNav = context.MixPagePage.FirstOrDefault(
                         m => m.ParentId == Id && m.Id == nav.Id && m.Specificulture == Specificulture);
                 nav.Priority = currentNav?.Priority ?? 0;
                 nav.IsActived = currentNav != null;

@@ -19,7 +19,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Value { get; set; }
 
         public MixArticleModule MixArticleModule { get; set; }
-        public MixCategoryModule MixCategoryModule { get; set; }
+        public MixPageModule MixPageModule { get; set; }
         public MixModule MixModule { get; set; }
     }
 }

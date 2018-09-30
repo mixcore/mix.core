@@ -149,7 +149,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             var transaction = _transaction ?? context.Database.BeginTransaction();
             try
             {
-                var query = context.MixCategoryArticle.Include(ac => ac.MixArticle)
+                var query = context.MixPageArticle.Include(ac => ac.MixArticle)
                     .Where(ac =>
                     ac.CategoryId == categoryId && ac.Specificulture == specificulture
                     && ac.Status == (int)MixEnums.MixContentStatus.Published).Select(ac => ac.MixArticle);
@@ -202,7 +202,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             var transaction = _transaction ?? context.Database.BeginTransaction();
             try
             {
-                var query = context.MixCategoryArticle.Include(ac => ac.MixArticle)
+                var query = context.MixPageArticle.Include(ac => ac.MixArticle)
                     .Where(ac =>
                     ac.CategoryId == categoryId && ac.Specificulture == specificulture
                     && ac.Status == (int)MixContentStatus.Published).Select(ac => ac.MixArticle);

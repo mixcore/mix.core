@@ -28,7 +28,7 @@ namespace Mix.Cms.Lib.ViewModels
         {
             using (MixCmsContext context = new MixCmsContext())
             {
-                TotalPage = context.MixCategory.Count();
+                TotalPage = context.MixPage.Count();
                 TotalArticle = context.MixArticle.Count();
                 TotalProduct = context.MixProduct.Count();
             }

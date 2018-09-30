@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels
 {
@@ -154,7 +155,7 @@ namespace Mix.Cms.Lib.ViewModels
         public int Priority { get; set; }
 
         [JsonProperty("dataType")]
-        public DataType DataType { get; set; }
+        public MixDataType DataType { get; set; }
 
         [JsonProperty("isUnique")]
         public bool IsUnique { get; set; }

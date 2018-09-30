@@ -171,7 +171,7 @@ namespace Mix.Cms.Lib.Migrations
                     b.ToTable("mix_article_module");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCategory", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPage", b =>
                 {
                     b.Property<int>("Id");
 
@@ -257,10 +257,10 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasIndex("Specificulture");
 
-                    b.ToTable("mix_category");
+                    b.ToTable("mix_page");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCategoryArticle", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageArticle", b =>
                 {
                     b.Property<string>("ArticleId")
                         .HasMaxLength(50);
@@ -290,10 +290,10 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasIndex("CategoryId", "Specificulture");
 
-                    b.ToTable("mix_category_article");
+                    b.ToTable("mix_page_article");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCategoryCategory", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPagePage", b =>
                 {
                     b.Property<int>("Id");
 
@@ -320,10 +320,10 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasIndex("ParentId", "Specificulture");
 
-                    b.ToTable("mix_category_category");
+                    b.ToTable("mix_page_page");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCategoryModule", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageModule", b =>
                 {
                     b.Property<int>("ModuleId");
 
@@ -352,10 +352,10 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasIndex("ModuleId", "Specificulture");
 
-                    b.ToTable("mix_category_module");
+                    b.ToTable("mix_page_module");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCategoryPosition", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPagePosition", b =>
                 {
                     b.Property<int>("PositionId");
 
@@ -377,10 +377,10 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasIndex("CategoryId", "Specificulture");
 
-                    b.ToTable("mix_category_position");
+                    b.ToTable("mix_page_position");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCategoryProduct", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageProduct", b =>
                 {
                     b.Property<string>("ProductId")
                         .HasMaxLength(50);
@@ -408,7 +408,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasIndex("ProductId", "Specificulture");
 
-                    b.ToTable("mix_category_product");
+                    b.ToTable("mix_page_product");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCmsUser", b =>
@@ -1707,85 +1707,85 @@ namespace Mix.Cms.Lib.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCategory", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPage", b =>
                 {
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixSetAttribute", "SetAttribute")
-                        .WithMany("MixCategory")
+                        .WithMany("MixPage")
                         .HasForeignKey("SetAttributeId")
-                        .HasConstraintName("FK_mix_category_mix_set_attribute");
+                        .HasConstraintName("FK_mix_page_mix_set_attribute");
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixCulture", "SpecificultureNavigation")
-                        .WithMany("MixCategory")
+                        .WithMany("MixPage")
                         .HasForeignKey("Specificulture")
-                        .HasConstraintName("FK_Mix_Category_Mix_Culture")
+                        .HasConstraintName("FK_Mix_Page_Mix_Culture")
                         .HasPrincipalKey("Specificulture");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCategoryArticle", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageArticle", b =>
                 {
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixArticle", "MixArticle")
-                        .WithMany("MixCategoryArticle")
+                        .WithMany("MixPageArticle")
                         .HasForeignKey("ArticleId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Category_Article_Mix_Article");
+                        .HasConstraintName("FK_Mix_Page_Article_Mix_Article");
 
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixCategory", "MixCategory")
-                        .WithMany("MixCategoryArticle")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPage", "MixPage")
+                        .WithMany("MixPageArticle")
                         .HasForeignKey("CategoryId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Category_Article_Mix_Category");
+                        .HasConstraintName("FK_Mix_Page_Article_Mix_Page");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCategoryCategory", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPagePage", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixCategory", "MixCategory")
-                        .WithMany("MixCategoryCategoryMixCategory")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPage", "MixPage")
+                        .WithMany("MixPagePageMixPage")
                         .HasForeignKey("Id", "Specificulture")
-                        .HasConstraintName("FK_Mix_Category_Category_Mix_Category");
+                        .HasConstraintName("FK_Mix_Page_Page_Mix_Page");
 
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixCategory", "MixCategoryNavigation")
-                        .WithMany("MixCategoryCategoryMixCategoryNavigation")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPage", "MixPageNavigation")
+                        .WithMany("MixPagePageMixPageNavigation")
                         .HasForeignKey("ParentId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Category_Category_Mix_Category1");
+                        .HasConstraintName("FK_Mix_Page_Page_Mix_Page1");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCategoryModule", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageModule", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixCategory", "MixCategory")
-                        .WithMany("MixCategoryModule")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPage", "MixPage")
+                        .WithMany("MixPageModule")
                         .HasForeignKey("CategoryId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Category_Module_Mix_Category");
+                        .HasConstraintName("FK_Mix_Page_Module_Mix_Page");
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixModule", "MixModule")
-                        .WithMany("MixCategoryModule")
+                        .WithMany("MixPageModule")
                         .HasForeignKey("ModuleId", "Specificulture")
                         .HasConstraintName("FK_Mix_Menu_Module_Mix_Module1")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCategoryPosition", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPagePosition", b =>
                 {
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPosition", "Position")
-                        .WithMany("MixCategoryPosition")
+                        .WithMany("MixPagePosition")
                         .HasForeignKey("PositionId")
-                        .HasConstraintName("FK_Mix_Category_Position_Mix_Position")
+                        .HasConstraintName("FK_Mix_Page_Position_Mix_Position")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixCategory", "MixCategory")
-                        .WithMany("MixCategoryPosition")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPage", "MixPage")
+                        .WithMany("MixPagePosition")
                         .HasForeignKey("CategoryId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Category_Position_Mix_Category");
+                        .HasConstraintName("FK_Mix_Page_Position_Mix_Page");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCategoryProduct", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageProduct", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixCategory", "MixCategory")
-                        .WithMany("MixCategoryProduct")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPage", "MixPage")
+                        .WithMany("MixPageProduct")
                         .HasForeignKey("CategoryId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Category_Product_Mix_Category");
+                        .HasConstraintName("FK_Mix_Page_Product_Mix_Page");
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixProduct", "MixProduct")
-                        .WithMany("MixCategoryProduct")
+                        .WithMany("MixPageProduct")
                         .HasForeignKey("ProductId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Category_Product_Mix_Product");
+                        .HasConstraintName("FK_Mix_Page_Product_Mix_Product");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixComment", b =>
@@ -1870,10 +1870,10 @@ namespace Mix.Cms.Lib.Migrations
                         .HasForeignKey("ModuleId", "ArticleId", "Specificulture")
                         .HasConstraintName("FK_Mix_Module_Attribute_set_Mix_Article_Module");
 
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixCategoryModule", "MixCategoryModule")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPageModule", "MixPageModule")
                         .WithMany("MixModuleAttributeSet")
                         .HasForeignKey("ModuleId", "CategoryId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Module_Attribute_set_Mix_Category_Module");
+                        .HasConstraintName("FK_Mix_Module_Attribute_set_Mix_Page_Module");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleAttributeValue", b =>
@@ -1893,10 +1893,10 @@ namespace Mix.Cms.Lib.Migrations
                         .HasConstraintName("FK_Mix_Module_Data_Mix_Module")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixCategoryModule", "MixCategoryModule")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPageModule", "MixPageModule")
                         .WithMany("MixModuleData")
                         .HasForeignKey("ModuleId", "CategoryId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Module_Data_Mix_Category_Module");
+                        .HasConstraintName("FK_Mix_Module_Data_Mix_Page_Module");
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixArticleModule", "MixArticleModule")
                         .WithMany("MixModuleData")

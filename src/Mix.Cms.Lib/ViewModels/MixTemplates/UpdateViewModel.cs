@@ -106,6 +106,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             }
         }
 
+
         #endregion Views
 
         #endregion Properties
@@ -250,17 +251,25 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             return getView.Data;
         }
 
-        public static UpdateViewModel GetDefault(string themeName, string folderType, string folder, string specificulture)
+        public static UpdateViewModel GetDefault(MixEnums.EnumTemplateFolder folderType, string specificulture)
         {
+            string activedTheme = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.Theme, specificulture)
+                    ?? MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTheme);
+            string folder = CommonHelper.GetFullPath(new string[]
+                    {
+                    MixConstants.Folder.TemplatesFolder
+                    , activedTheme
+                    , folderType.ToString()
+                    });
             return new UpdateViewModel(new MixTemplate()
             {
-                Extension = MixService.GetConfig<string>("TemplateExtension"),
+                Extension = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.TemplateExtension, specificulture),
                 ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, specificulture),
-                ThemeName = themeName,
-                FolderType = folderType,
-                FileFolder = folder,
-                FileName = MixService.GetConfig<string>("DefaultTemplate"),
-                Content = "<div></div>"
+                ThemeName = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.Theme, specificulture),
+                FileName = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplate),
+                Content = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateContent),
+                FolderType = folderType.ToString(),
+                FileFolder = folder.ToString()
             });
 
         }

@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixCategory
+    public partial class MixPage
     {
-        public MixCategory()
+        public MixPage()
         {
-            MixCategoryArticle = new HashSet<MixCategoryArticle>();
-            MixCategoryCategoryMixCategory = new HashSet<MixCategoryCategory>();
-            MixCategoryCategoryMixCategoryNavigation = new HashSet<MixCategoryCategory>();
-            MixCategoryModule = new HashSet<MixCategoryModule>();
-            MixCategoryPosition = new HashSet<MixCategoryPosition>();
-            MixCategoryProduct = new HashSet<MixCategoryProduct>();
+            MixPageArticle = new HashSet<MixPageArticle>();
+            MixPagePageMixPage = new HashSet<MixPagePage>();
+            MixPagePageMixPageNavigation = new HashSet<MixPagePage>();
+            MixPageModule = new HashSet<MixPageModule>();
+            MixPagePosition = new HashSet<MixPagePosition>();
+            MixPageProduct = new HashSet<MixPageProduct>();
         }
 
         public int Id { get; set; }
@@ -46,11 +46,11 @@ namespace Mix.Cms.Lib.Models.Cms
 
         public MixSetAttribute SetAttribute { get; set; }
         public MixCulture SpecificultureNavigation { get; set; }
-        public ICollection<MixCategoryArticle> MixCategoryArticle { get; set; }
-        public ICollection<MixCategoryCategory> MixCategoryCategoryMixCategory { get; set; }
-        public ICollection<MixCategoryCategory> MixCategoryCategoryMixCategoryNavigation { get; set; }
-        public ICollection<MixCategoryModule> MixCategoryModule { get; set; }
-        public ICollection<MixCategoryPosition> MixCategoryPosition { get; set; }
-        public ICollection<MixCategoryProduct> MixCategoryProduct { get; set; }
+        public ICollection<MixPageArticle> MixPageArticle { get; set; }
+        public ICollection<MixPagePage> MixPagePageMixPage { get; set; }
+        public ICollection<MixPagePage> MixPagePageMixPageNavigation { get; set; }
+        public ICollection<MixPageModule> MixPageModule { get; set; }
+        public ICollection<MixPagePosition> MixPagePosition { get; set; }
+        public ICollection<MixPageProduct> MixPageProduct { get; set; }
     }
 }

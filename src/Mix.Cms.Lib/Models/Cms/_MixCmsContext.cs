@@ -8,12 +8,12 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual DbSet<MixArticle> MixArticle { get; set; }
         public virtual DbSet<MixArticleMedia> MixArticleMedia { get; set; }
         public virtual DbSet<MixArticleModule> MixArticleModule { get; set; }
-        public virtual DbSet<MixCategory> MixCategory { get; set; }
-        public virtual DbSet<MixCategoryArticle> MixCategoryArticle { get; set; }
-        public virtual DbSet<MixCategoryCategory> MixCategoryCategory { get; set; }
-        public virtual DbSet<MixCategoryModule> MixCategoryModule { get; set; }
-        public virtual DbSet<MixCategoryPosition> MixCategoryPosition { get; set; }
-        public virtual DbSet<MixCategoryProduct> MixCategoryProduct { get; set; }
+        public virtual DbSet<MixPage> MixPage { get; set; }
+        public virtual DbSet<MixPageArticle> MixPageArticle { get; set; }
+        public virtual DbSet<MixPagePage> MixPagePage { get; set; }
+        public virtual DbSet<MixPageModule> MixPageModule { get; set; }
+        public virtual DbSet<MixPagePosition> MixPagePosition { get; set; }
+        public virtual DbSet<MixPageProduct> MixPageProduct { get; set; }
         public virtual DbSet<MixCmsUser> MixCmsUser { get; set; }
         public virtual DbSet<MixComment> MixComment { get; set; }
         public virtual DbSet<MixConfiguration> MixConfiguration { get; set; }
@@ -206,11 +206,11 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasConstraintName("FK_Mix_Article_Module_Mix_Module1");
             });
 
-            modelBuilder.Entity<MixCategory>(entity =>
+            modelBuilder.Entity<MixPage>(entity =>
             {
                 entity.HasKey(e => new { e.Id, e.Specificulture });
 
-                entity.ToTable("mix_category");
+                entity.ToTable("mix_page");
 
                 entity.HasIndex(e => e.SetAttributeId);
 
@@ -259,23 +259,23 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Title).HasMaxLength(4000);
 
                 entity.HasOne(d => d.SetAttribute)
-                    .WithMany(p => p.MixCategory)
+                    .WithMany(p => p.MixPage)
                     .HasForeignKey(d => d.SetAttributeId)
-                    .HasConstraintName("FK_mix_category_mix_set_attribute");
+                    .HasConstraintName("FK_mix_page_mix_set_attribute");
 
                 entity.HasOne(d => d.SpecificultureNavigation)
-                    .WithMany(p => p.MixCategory)
+                    .WithMany(p => p.MixPage)
                     .HasPrincipalKey(p => p.Specificulture)
                     .HasForeignKey(d => d.Specificulture)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Mix_Category_Mix_Culture");
+                    .HasConstraintName("FK_Mix_Page_Mix_Culture");
             });
 
-            modelBuilder.Entity<MixCategoryArticle>(entity =>
+            modelBuilder.Entity<MixPageArticle>(entity =>
             {
                 entity.HasKey(e => new { e.ArticleId, e.CategoryId, e.Specificulture });
 
-                entity.ToTable("mix_category_article");
+                entity.ToTable("mix_page_article");
 
                 entity.HasIndex(e => new { e.ArticleId, e.Specificulture });
 
@@ -294,23 +294,23 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.MixArticle)
-                    .WithMany(p => p.MixCategoryArticle)
+                    .WithMany(p => p.MixPageArticle)
                     .HasForeignKey(d => new { d.ArticleId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Mix_Category_Article_Mix_Article");
+                    .HasConstraintName("FK_Mix_Page_Article_Mix_Article");
 
-                entity.HasOne(d => d.MixCategory)
-                    .WithMany(p => p.MixCategoryArticle)
+                entity.HasOne(d => d.MixPage)
+                    .WithMany(p => p.MixPageArticle)
                     .HasForeignKey(d => new { d.CategoryId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Mix_Category_Article_Mix_Category");
+                    .HasConstraintName("FK_Mix_Page_Article_Mix_Page");
             });
 
-            modelBuilder.Entity<MixCategoryCategory>(entity =>
+            modelBuilder.Entity<MixPagePage>(entity =>
             {
                 entity.HasKey(e => new { e.Id, e.ParentId, e.Specificulture });
 
-                entity.ToTable("mix_category_category");
+                entity.ToTable("mix_page_page");
 
                 entity.HasIndex(e => new { e.Id, e.Specificulture });
 
@@ -324,24 +324,24 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
-                entity.HasOne(d => d.MixCategory)
-                    .WithMany(p => p.MixCategoryCategoryMixCategory)
+                entity.HasOne(d => d.MixPage)
+                    .WithMany(p => p.MixPagePageMixPage)
                     .HasForeignKey(d => new { d.Id, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Mix_Category_Category_Mix_Category");
+                    .HasConstraintName("FK_Mix_Page_Page_Mix_Page");
 
-                entity.HasOne(d => d.MixCategoryNavigation)
-                    .WithMany(p => p.MixCategoryCategoryMixCategoryNavigation)
+                entity.HasOne(d => d.MixPageNavigation)
+                    .WithMany(p => p.MixPagePageMixPageNavigation)
                     .HasForeignKey(d => new { d.ParentId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Mix_Category_Category_Mix_Category1");
+                    .HasConstraintName("FK_Mix_Page_Page_Mix_Page1");
             });
 
-            modelBuilder.Entity<MixCategoryModule>(entity =>
+            modelBuilder.Entity<MixPageModule>(entity =>
             {
                 entity.HasKey(e => new { e.ModuleId, e.CategoryId, e.Specificulture });
 
-                entity.ToTable("mix_category_module");
+                entity.ToTable("mix_page_module");
 
                 entity.HasIndex(e => new { e.CategoryId, e.Specificulture });
 
@@ -355,23 +355,23 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
-                entity.HasOne(d => d.MixCategory)
-                    .WithMany(p => p.MixCategoryModule)
+                entity.HasOne(d => d.MixPage)
+                    .WithMany(p => p.MixPageModule)
                     .HasForeignKey(d => new { d.CategoryId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Mix_Category_Module_Mix_Category");
+                    .HasConstraintName("FK_Mix_Page_Module_Mix_Page");
 
                 entity.HasOne(d => d.MixModule)
-                    .WithMany(p => p.MixCategoryModule)
+                    .WithMany(p => p.MixPageModule)
                     .HasForeignKey(d => new { d.ModuleId, d.Specificulture })
                     .HasConstraintName("FK_Mix_Menu_Module_Mix_Module1");
             });
 
-            modelBuilder.Entity<MixCategoryPosition>(entity =>
+            modelBuilder.Entity<MixPagePosition>(entity =>
             {
                 entity.HasKey(e => new { e.PositionId, e.CategoryId, e.Specificulture });
 
-                entity.ToTable("mix_category_position");
+                entity.ToTable("mix_page_position");
 
                 entity.HasIndex(e => new { e.CategoryId, e.Specificulture });
 
@@ -382,22 +382,22 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.Position)
-                    .WithMany(p => p.MixCategoryPosition)
+                    .WithMany(p => p.MixPagePosition)
                     .HasForeignKey(d => d.PositionId)
-                    .HasConstraintName("FK_Mix_Category_Position_Mix_Position");
+                    .HasConstraintName("FK_Mix_Page_Position_Mix_Position");
 
-                entity.HasOne(d => d.MixCategory)
-                    .WithMany(p => p.MixCategoryPosition)
+                entity.HasOne(d => d.MixPage)
+                    .WithMany(p => p.MixPagePosition)
                     .HasForeignKey(d => new { d.CategoryId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Mix_Category_Position_Mix_Category");
+                    .HasConstraintName("FK_Mix_Page_Position_Mix_Page");
             });
 
-            modelBuilder.Entity<MixCategoryProduct>(entity =>
+            modelBuilder.Entity<MixPageProduct>(entity =>
             {
                 entity.HasKey(e => new { e.ProductId, e.CategoryId, e.Specificulture });
 
-                entity.ToTable("mix_category_product");
+                entity.ToTable("mix_page_product");
 
                 entity.HasIndex(e => new { e.CategoryId, e.Specificulture });
 
@@ -413,17 +413,17 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
-                entity.HasOne(d => d.MixCategory)
-                    .WithMany(p => p.MixCategoryProduct)
+                entity.HasOne(d => d.MixPage)
+                    .WithMany(p => p.MixPageProduct)
                     .HasForeignKey(d => new { d.CategoryId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Mix_Category_Product_Mix_Category");
+                    .HasConstraintName("FK_Mix_Page_Product_Mix_Page");
 
                 entity.HasOne(d => d.MixProduct)
-                    .WithMany(p => p.MixCategoryProduct)
+                    .WithMany(p => p.MixPageProduct)
                     .HasForeignKey(d => new { d.ProductId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Mix_Category_Product_Mix_Product");
+                    .HasConstraintName("FK_Mix_Page_Product_Mix_Product");
             });
 
             modelBuilder.Entity<MixCmsUser>(entity =>
@@ -827,10 +827,10 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasForeignKey(d => new { d.ModuleId, d.ArticleId, d.Specificulture })
                     .HasConstraintName("FK_Mix_Module_Attribute_set_Mix_Article_Module");
 
-                entity.HasOne(d => d.MixCategoryModule)
+                entity.HasOne(d => d.MixPageModule)
                     .WithMany(p => p.MixModuleAttributeSet)
                     .HasForeignKey(d => new { d.ModuleId, d.CategoryId, d.Specificulture })
-                    .HasConstraintName("FK_Mix_Module_Attribute_set_Mix_Category_Module");
+                    .HasConstraintName("FK_Mix_Module_Attribute_set_Mix_Page_Module");
             });
 
             modelBuilder.Entity<MixModuleAttributeValue>(entity =>
@@ -896,10 +896,10 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasForeignKey(d => new { d.ModuleId, d.Specificulture })
                     .HasConstraintName("FK_Mix_Module_Data_Mix_Module");
 
-                entity.HasOne(d => d.MixCategoryModule)
+                entity.HasOne(d => d.MixPageModule)
                     .WithMany(p => p.MixModuleData)
                     .HasForeignKey(d => new { d.ModuleId, d.CategoryId, d.Specificulture })
-                    .HasConstraintName("FK_Mix_Module_Data_Mix_Category_Module");
+                    .HasConstraintName("FK_Mix_Module_Data_Mix_Page_Module");
 
                 entity.HasOne(d => d.MixArticleModule)
                     .WithMany(p => p.MixModuleData)

@@ -14,7 +14,7 @@ using static Mix.Cms.Lib.MixEnums;
 namespace Mix.Cms.Lib.ViewModels.MixPages
 {
     public class ReadViewModel
-       : ViewModelBase<MixCmsContext, MixCategory, ReadViewModel>
+       : ViewModelBase<MixCmsContext, MixPage, ReadViewModel>
     {
         #region Properties
 
@@ -87,14 +87,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
 
-        [JsonProperty("updatedDateTime")]
-        public DateTime? UpdatedDateTime { get; set; }
-
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
-
-        [JsonProperty("updatedBy")]
-        public string UpdatedBy { get; set; }
 
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
@@ -151,7 +145,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
         }
 
-        public ReadViewModel(MixCategory model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ReadViewModel(MixPage model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -162,7 +156,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getChilds = Repository.GetModelListBy
-                (p => p.MixCategoryCategoryMixCategory.Any(c => c.ParentId == Id
+                (p => p.MixPagePageMixPage.Any(c => c.ParentId == Id
                 && c.Specificulture == Specificulture)
                 );
             if (getChilds.IsSucceed)

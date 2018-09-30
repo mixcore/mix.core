@@ -42,6 +42,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("type")]
         public ModuleType Type { get; set; }
+          [JsonProperty("status")]
+        public MixContentStatus Status { get; set; }
 
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }

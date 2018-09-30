@@ -59,9 +59,9 @@ namespace Mix.Cms.Lib.Services
                         isSucceed = true;
                     }
 
-                    if (isSucceed && context.MixCategory.Count()==0)
+                    if (isSucceed && context.MixPage.Count()==0)
                     {
-                        var cate = new MixCategory()
+                        var cate = new MixPage()
                         {
                             Id = 1,
                             Level = 0,
@@ -90,7 +90,7 @@ namespace Mix.Cms.Lib.Services
                         var createVNHome = await context.SaveChangesAsync().ConfigureAwait(false);
                         isSucceed = createVNHome > 0;
 
-                        var cate404 = new MixCategory()
+                        var cate404 = new MixPage()
                         {
                             Id = 2,
                             Title = "404",

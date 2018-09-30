@@ -30,7 +30,8 @@ namespace Mix.Cms.Lib
             Scripts,
             Images,
             Fonts,
-            Others
+            Others,
+            Templates
         }
 
 
@@ -88,7 +89,7 @@ namespace Mix.Cms.Lib
             ListProduct = 6
         }
 
-        public enum DataType
+        public enum MixDataType
         {
             String = 0,
             Int = 1,
