@@ -1,18 +1,18 @@
 ﻿
 modules.component('moduleForm', {
     templateUrl: '/app-shared/components/module-data/module-form.html',
-    controller: ['$scope', '$rootScope','ngAppSettings', '$routeParams', '$timeout', '$location', 'AuthService', 'ModuleDataServices',
-        function ($scope, $rootScope, ngAppSettings, $routeParams, $timeout, $location, authService, moduleDataServices) {
+    controller: ['$scope', '$rootScope','ngAppSettings', '$routeParams', '$timeout', '$location', 'AuthService', 'ModuleDataService',
+        function ($scope, $rootScope, ngAppSettings, $routeParams, $timeout, $location, authService, moduleDataService) {
             var ctrl = this;
             $rootScope.isBusy = false;
 
             ctrl.initModuleForm = async function () {
                 var resp = null;
                 if (!ctrl.moduleId) {
-                    resp = await moduleDataServices.initModuleForm(ctrl.name);
+                    resp = await moduleDataService.initModuleForm(ctrl.name);
                 }
                 else {
-                    resp = await moduleDataServices.getModuleData(ctrl.moduleId, ctrl.d, 'portal');
+                    resp = await moduleDataService.getModuleData(ctrl.moduleId, ctrl.d, 'portal');
                 }
                 if (resp && resp.isSucceed) {
                     ctrl.data = resp.data;
@@ -30,7 +30,7 @@ modules.component('moduleForm', {
             ctrl.loadModuleData = async function () {
                 $rootScope.isBusy = true;
                 var id = $routeParams.id;
-                var response = await moduleDataServices.getModuleData(ctrl.moduleId, ctrl.d, 'portal');
+                var response = await moduleDataService.getModuleData(ctrl.moduleId, ctrl.d, 'portal');
                 if (response.isSucceed) {
                     ctrl.data = response.data;
                     //$rootScope.initEditor();
@@ -56,7 +56,7 @@ modules.component('moduleForm', {
                             break;
                     }
                 });
-                var resp = await moduleDataServices.saveModuleData(ctrl.data);
+                var resp = await moduleDataService.saveModuleData(ctrl.data);
                 if (resp && resp.isSucceed) {
                     ctrl.data = resp.data;
                     ctrl.initModuleForm();

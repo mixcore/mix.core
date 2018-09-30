@@ -1,8 +1,8 @@
 (function (angular) {
     'use strict';
     app.controller('AppClientController', [ '$rootScope', '$scope', 'ngAppSettings', 'CommonService', 'AuthService'
-        , 'TranslatorService', 'ModuleDataServices',
-        function ($rootScope, $scope, ngAppSettings, commonServices, authService, translatorService, moduleDataServices) {
+        , 'TranslatorService', 'ModuleDataService',
+        function ($rootScope, $scope, ngAppSettings, commonServices, authService, translatorService, moduleDataService) {
             $scope.lang = '';
             $scope.isInit = false;
             $scope.init = async function (lang) {
@@ -34,10 +34,10 @@
                 var resp = null;
                 $scope.name = name;
                 if ($scope.id) {
-                    resp = await moduleDataServices.getModuleData($scope.id, $scope.dataId, 'portal');
+                    resp = await moduleDataService.getModuleData($scope.id, $scope.dataId, 'portal');
                 }
                 else {
-                    resp = await moduleDataServices.initModuleForm($scope.name);
+                    resp = await moduleDataService.initModuleForm($scope.name);
                 }
 
                 if (resp && resp.isSucceed) {
@@ -53,7 +53,7 @@
             };
             $scope.saveModuleData = async function () {
 
-                var resp = await moduleDataServices.saveModuleData($scope.activedModuleData);
+                var resp = await moduleDataService.saveModuleData($scope.activedModuleData);
                 if (resp && resp.isSucceed) {
                     $scope.activedModuleData = resp.data;
                     $rootScope.showMessage('Success', 'success');

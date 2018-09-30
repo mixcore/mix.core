@@ -53,6 +53,7 @@
     "IsInit": "True",
     "DefaultCulture": "vi-vn",
     "DefaultTemplate": "_Default",
+    "DefaultTheme": "Default",
     "DefaultTemplateFolder": "Default_Blank",
     "DefaultTemplateLayout": "_Layout",
     "OrderBy": "Priority",
