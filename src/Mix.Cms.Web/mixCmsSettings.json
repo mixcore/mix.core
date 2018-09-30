@@ -1,7 +1,7 @@
 {
   "ConnectionStrings": {
-    "MixAccountConnection": "Server=115.77.190.113,4444;Database=mix_cms_struture;UID=tinku;Pwd=1234qwe@;MultipleActiveResultSets=true;",
-    "MixCmsConnection": "Server=115.77.190.113,4444;Database=mix_cms_struture;UID=tinku;Pwd=1234qwe@;MultipleActiveResultSets=true;",
+    "MixAccountConnection": null,
+    "MixCmsConnection": null,
     "DefaultConnection": null
   },
   "Authentication": {
@@ -13,7 +13,7 @@
     "Issuer": "mix-core"
   },
   "Translator": {
-    "en-us": {
+    "vi-vn": {
       "fe_site_name": "Site name",
       "language": "Languages",
       "portal_articles": "Articles",
@@ -28,7 +28,7 @@
       "portal_orders": "Orders",
       "portal_pages": "Pages",
       "portal_permissions": "Import",
-      "portal_products": "Products",
+      "portal_products": "Tours",
       "portal_settings": "Settings",
       "portal_themes": "Themes",
       "portal_users": "Users",
@@ -36,24 +36,22 @@
     }
   },
   "LocalSettings": {
-    "en-us": {
+    "vi-vn": {
       "ContactAddress": "",
       "ContactEmail": "Site Name",
       "ContactPhone": "",
       "Facebook": "",
       "FacebookAppId": "",
       "Favicon": "",
-      "LanguageVersion": "1",
       "Logo": "",
-      "SettingVersion": "1",
       "SiteName": "Site Name",
       "Theme": "Default",
       "ThemeId": "1"
     }
   },
   "GlobalSettings": {
-    "IsInit": "True",
-    "DefaultCulture": "en-us",
+    "IsInit": false,
+    "DefaultCulture": "vi-vn",
     "DefaultTemplate": "_Default",
     "DefaultTheme": "Default",
     "DefaultTemplateFolder": "Default_Blank",
@@ -61,7 +59,7 @@
     "OrderBy": "Priority",
     "DefaultStatus": "2",
     "IsSqlite": "False",
-    "Language": "en-us",
+    "Language": "vi-vn",
     "UploadFolder": "Content/Uploads",
     "ThemeId": "1",
     "TemplateExtension": ".cshtml"

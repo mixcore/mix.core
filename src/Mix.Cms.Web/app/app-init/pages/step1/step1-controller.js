@@ -116,7 +116,7 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
             adminPassword: '',
             lang: 'en-us',
             isSqlite: false,
-            culture: $scope.settings[0]
+            culture: $scope.settings.cultures[0]
         };
         $scope.updateLocalDbName = function () {
             $scope.initCmsModel.localDbConnectionString = 'Server=(localdb)\\mssqllocaldb;Database=' + $scope.initCmsModel.localDbName + ';Trusted_Connection=True;MultipleActiveResultSets=true';
