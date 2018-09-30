@@ -2,9 +2,9 @@ language: csharp
 mono: none
 dotnet: 2.1.300-preview2
 before_install:
-  - git clone --depth=50 --branch=master https://github.com/Swastika-IO/Swastika-IO-Heart.git /home/travis/build/Swastika-IO/Swastika-Heart
-  - git clone --depth=50 --branch=master https://github.com/Swastika-IO/Swastika-IO-Identity.git /home/travis/build/Swastika-IO/Swastika-Identity
-  - cd src/Swastika.Cms.Web.Mvc
+  - git clone --depth=50 --branch=master https://github.com/mixcore/mix.heart.git /home/travis/build/mixcore/mix.heart
+  - git clone --depth=50 --branch=master https://github.com/mixcore/mix.identity.git /home/travis/build/mixcore/mix.identity
+  - cd src/Mix.Cms.Web
 script:
   - dotnet restore
   - dotnet build
