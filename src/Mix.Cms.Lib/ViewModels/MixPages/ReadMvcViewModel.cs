@@ -13,7 +13,7 @@ using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixPages
 {
-    public class ReadMvcViewModel: ViewModelBase<MixCmsContext, MixCategory, ReadMvcViewModel>
+    public class ReadMvcViewModel: ViewModelBase<MixCmsContext, MixPage, ReadMvcViewModel>
     {
         #region Properties
 
@@ -160,7 +160,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
         }
 
-        public ReadMvcViewModel(MixCategory model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ReadMvcViewModel(MixPage model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 

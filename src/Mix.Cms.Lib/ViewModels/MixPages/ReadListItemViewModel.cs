@@ -14,7 +14,7 @@ using static Mix.Cms.Lib.MixEnums;
 namespace Mix.Cms.Lib.ViewModels.MixPages
 {
     public class ReadListItemViewModel
-       : ViewModelBase<MixCmsContext, MixCategory, ReadListItemViewModel>
+       : ViewModelBase<MixCmsContext, MixPage, ReadListItemViewModel>
     {
         #region Properties
 
@@ -151,7 +151,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
         }
 
-        public ReadListItemViewModel(MixCategory model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ReadListItemViewModel(MixPage model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -162,7 +162,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getChilds = Repository.GetModelListBy
-                (p => p.MixCategoryCategoryMixCategory.Any(c => c.ParentId == Id
+                (p => p.MixPagePageMixPage.Any(c => c.ParentId == Id
                 && c.Specificulture == Specificulture)
                 );
             if (getChilds.IsSucceed)

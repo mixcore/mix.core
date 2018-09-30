@@ -6,9 +6,9 @@ using Newtonsoft.Json;
 namespace Mix.Cms.Lib.ViewModels.MixPageArticles
 {
     public class ReadViewModel
-       : ViewModelBase<MixCmsContext, MixCategoryArticle, ReadViewModel>
+       : ViewModelBase<MixCmsContext, MixPageArticle, ReadViewModel>
     {
-        public ReadViewModel(MixCategoryArticle model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public ReadViewModel(MixPageArticle model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }

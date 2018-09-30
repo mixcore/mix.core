@@ -293,7 +293,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
 
             if (this.View == null)
             {
-                this.View = MixTemplates.UpdateViewModel.GetDefault(ActivedTheme, TemplateFolderType, "Products", Specificulture);
+                this.View = MixTemplates.UpdateViewModel.GetDefault(MixEnums.EnumTemplateFolder.Products, Specificulture);
             }
 
             this.Template = CommonHelper.GetFullPath(new string[]
@@ -464,7 +464,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
 
             if (result.IsSucceed)
             {
-                var navCate = _context.MixCategoryProduct.AsEnumerable();
+                var navCate = _context.MixPageProduct.AsEnumerable();
                 foreach (var item in navCate)
                 {
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;

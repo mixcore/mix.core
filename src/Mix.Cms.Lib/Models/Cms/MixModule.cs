@@ -8,7 +8,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public MixModule()
         {
             MixArticleModule = new HashSet<MixArticleModule>();
-            MixCategoryModule = new HashSet<MixCategoryModule>();
+            MixPageModule = new HashSet<MixPageModule>();
             MixModuleArticle = new HashSet<MixModuleArticle>();
             MixModuleAttributeSet = new HashSet<MixModuleAttributeSet>();
             MixModuleData = new HashSet<MixModuleData>();
@@ -31,10 +31,11 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Title { get; set; }
         public int Type { get; set; }
         public int? PageSize { get; set; }
+        public DateTime CreatedDateTime { get; set; }
 
         public MixCulture SpecificultureNavigation { get; set; }
         public ICollection<MixArticleModule> MixArticleModule { get; set; }
-        public ICollection<MixCategoryModule> MixCategoryModule { get; set; }
+        public ICollection<MixPageModule> MixPageModule { get; set; }
         public ICollection<MixModuleArticle> MixModuleArticle { get; set; }
         public ICollection<MixModuleAttributeSet> MixModuleAttributeSet { get; set; }
         public ICollection<MixModuleData> MixModuleData { get; set; }

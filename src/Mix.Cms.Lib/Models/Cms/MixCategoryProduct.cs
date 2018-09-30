@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixCategoryProduct
+    public partial class MixPageProduct
     {
         public int ProductId { get; set; }
         public int CategoryId { get; set; }
@@ -13,7 +13,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Priority { get; set; }
         public int Status { get; set; }
 
-        public MixCategory MixCategory { get; set; }
+        public MixPage MixPage { get; set; }
         public MixProduct MixProduct { get; set; }
     }
 }

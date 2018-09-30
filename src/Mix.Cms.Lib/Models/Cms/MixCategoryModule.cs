@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixCategoryModule
+    public partial class MixPageModule
     {
-        public MixCategoryModule()
+        public MixPageModule()
         {
             MixModuleAttributeSet = new HashSet<MixModuleAttributeSet>();
             MixModuleData = new HashSet<MixModuleData>();
@@ -20,7 +20,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Priority { get; set; }
         public int Status { get; set; }
 
-        public MixCategory MixCategory { get; set; }
+        public MixPage MixPage { get; set; }
         public MixModule MixModule { get; set; }
         public ICollection<MixModuleAttributeSet> MixModuleAttributeSet { get; set; }
         public ICollection<MixModuleData> MixModuleData { get; set; }

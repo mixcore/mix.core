@@ -13,7 +13,7 @@ namespace Mix.Cms.Lib
         public static List<ViewModels.MixPages.ReadListItemViewModel> GetCategory(IUrlHelper Url, string culture, MixEnums.CatePosition position, string activePath = "")
         {
             var getTopCates = ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelListBy
-            (c => c.Specificulture == culture && c.MixCategoryPosition.Any(
+            (c => c.Specificulture == culture && c.MixPagePosition.Any(
               p => p.PositionId == (int)position)
             );
             var cates = getTopCates.Data ?? new List<ViewModels.MixPages.ReadListItemViewModel>();

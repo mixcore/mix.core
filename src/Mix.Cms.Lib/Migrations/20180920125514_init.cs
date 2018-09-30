@@ -465,7 +465,7 @@ namespace Mix.Cms.Lib.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_category",
+                name: "mix_page",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false),
@@ -499,15 +499,15 @@ namespace Mix.Cms.Lib.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_category", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_page", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
-                        name: "FK_mix_category_mix_set_attribute",
+                        name: "FK_mix_page_mix_set_attribute",
                         column: x => x.SetAttributeId,
                         principalTable: "mix_set_attribute",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Mix_Category_Mix_Culture",
+                        name: "FK_Mix_Page_Mix_Culture",
                         column: x => x.Specificulture,
                         principalTable: "mix_culture",
                         principalColumn: "Specificulture",
@@ -727,7 +727,7 @@ namespace Mix.Cms.Lib.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_category_article",
+                name: "mix_page_article",
                 columns: table => new
                 {
                     ArticleId = table.Column<string>(maxLength: 50, nullable: false),
@@ -740,23 +740,23 @@ namespace Mix.Cms.Lib.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_category_article", x => new { x.ArticleId, x.CategoryId, x.Specificulture });
+                    table.PrimaryKey("PK_mix_page_article", x => new { x.ArticleId, x.CategoryId, x.Specificulture });
                     table.ForeignKey(
-                        name: "FK_Mix_Category_Article_Mix_Article",
+                        name: "FK_Mix_Page_Article_Mix_Article",
                         columns: x => new { x.ArticleId, x.Specificulture },
                         principalTable: "mix_article",
                         principalColumns: new[] { "Id", "Specificulture" },
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Mix_Category_Article_Mix_Category",
+                        name: "FK_Mix_Page_Article_Mix_Page",
                         columns: x => new { x.CategoryId, x.Specificulture },
-                        principalTable: "mix_category",
+                        principalTable: "mix_page",
                         principalColumns: new[] { "Id", "Specificulture" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_category_category",
+                name: "mix_page_page",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false),
@@ -769,23 +769,23 @@ namespace Mix.Cms.Lib.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_category_category", x => new { x.Id, x.ParentId, x.Specificulture });
+                    table.PrimaryKey("PK_mix_page_page", x => new { x.Id, x.ParentId, x.Specificulture });
                     table.ForeignKey(
-                        name: "FK_Mix_Category_Category_Mix_Category",
+                        name: "FK_Mix_Page_Page_Mix_Page",
                         columns: x => new { x.Id, x.Specificulture },
-                        principalTable: "mix_category",
+                        principalTable: "mix_page",
                         principalColumns: new[] { "Id", "Specificulture" },
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Mix_Category_Category_Mix_Category1",
+                        name: "FK_Mix_Page_Page_Mix_Page1",
                         columns: x => new { x.ParentId, x.Specificulture },
-                        principalTable: "mix_category",
+                        principalTable: "mix_page",
                         principalColumns: new[] { "Id", "Specificulture" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_category_module",
+                name: "mix_page_module",
                 columns: table => new
                 {
                     ModuleId = table.Column<int>(nullable: false),
@@ -799,11 +799,11 @@ namespace Mix.Cms.Lib.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_category_module", x => new { x.ModuleId, x.CategoryId, x.Specificulture });
+                    table.PrimaryKey("PK_mix_page_module", x => new { x.ModuleId, x.CategoryId, x.Specificulture });
                     table.ForeignKey(
-                        name: "FK_Mix_Category_Module_Mix_Category",
+                        name: "FK_Mix_Page_Module_Mix_Page",
                         columns: x => new { x.CategoryId, x.Specificulture },
-                        principalTable: "mix_category",
+                        principalTable: "mix_page",
                         principalColumns: new[] { "Id", "Specificulture" },
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -815,7 +815,7 @@ namespace Mix.Cms.Lib.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_category_position",
+                name: "mix_page_position",
                 columns: table => new
                 {
                     PositionId = table.Column<int>(nullable: false),
@@ -827,23 +827,23 @@ namespace Mix.Cms.Lib.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_category_position", x => new { x.PositionId, x.CategoryId, x.Specificulture });
+                    table.PrimaryKey("PK_mix_page_position", x => new { x.PositionId, x.CategoryId, x.Specificulture });
                     table.ForeignKey(
-                        name: "FK_Mix_Category_Position_Mix_Position",
+                        name: "FK_Mix_Page_Position_Mix_Position",
                         column: x => x.PositionId,
                         principalTable: "mix_position",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Mix_Category_Position_Mix_Category",
+                        name: "FK_Mix_Page_Position_Mix_Page",
                         columns: x => new { x.CategoryId, x.Specificulture },
-                        principalTable: "mix_category",
+                        principalTable: "mix_page",
                         principalColumns: new[] { "Id", "Specificulture" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_category_product",
+                name: "mix_page_product",
                 columns: table => new
                 {
                     ProductId = table.Column<string>(maxLength: 50, nullable: false),
@@ -856,15 +856,15 @@ namespace Mix.Cms.Lib.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_category_product", x => new { x.ProductId, x.CategoryId, x.Specificulture });
+                    table.PrimaryKey("PK_mix_page_product", x => new { x.ProductId, x.CategoryId, x.Specificulture });
                     table.ForeignKey(
-                        name: "FK_Mix_Category_Product_Mix_Category",
+                        name: "FK_Mix_Page_Product_Mix_Page",
                         columns: x => new { x.CategoryId, x.Specificulture },
-                        principalTable: "mix_category",
+                        principalTable: "mix_page",
                         principalColumns: new[] { "Id", "Specificulture" },
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Mix_Category_Product_Mix_Product",
+                        name: "FK_Mix_Page_Product_Mix_Product",
                         columns: x => new { x.ProductId, x.Specificulture },
                         principalTable: "mix_product",
                         principalColumns: new[] { "Id", "Specificulture" },
@@ -1099,9 +1099,9 @@ namespace Mix.Cms.Lib.Migrations
                         principalColumns: new[] { "ModuleId", "ArticleId", "Specificulture" },
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Mix_Module_Attribute_set_Mix_Category_Module",
+                        name: "FK_Mix_Module_Attribute_set_Mix_Page_Module",
                         columns: x => new { x.ModuleId, x.CategoryId, x.Specificulture },
-                        principalTable: "mix_category_module",
+                        principalTable: "mix_page_module",
                         principalColumns: new[] { "ModuleId", "CategoryId", "Specificulture" },
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -1133,9 +1133,9 @@ namespace Mix.Cms.Lib.Migrations
                         principalColumns: new[] { "Id", "Specificulture" },
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Mix_Module_Data_Mix_Category_Module",
+                        name: "FK_Mix_Module_Data_Mix_Page_Module",
                         columns: x => new { x.ModuleId, x.CategoryId, x.Specificulture },
-                        principalTable: "mix_category_module",
+                        principalTable: "mix_page_module",
                         principalColumns: new[] { "ModuleId", "CategoryId", "Specificulture" },
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -1204,58 +1204,58 @@ namespace Mix.Cms.Lib.Migrations
                 columns: new[] { "ModuleId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_category_SetAttributeId",
-                table: "mix_category",
+                name: "IX_mix_page_SetAttributeId",
+                table: "mix_page",
                 column: "SetAttributeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_category_Specificulture",
-                table: "mix_category",
+                name: "IX_mix_page_Specificulture",
+                table: "mix_page",
                 column: "Specificulture");
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_category_article_ArticleId_Specificulture",
-                table: "mix_category_article",
+                name: "IX_mix_page_article_ArticleId_Specificulture",
+                table: "mix_page_article",
                 columns: new[] { "ArticleId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_category_article_CategoryId_Specificulture",
-                table: "mix_category_article",
+                name: "IX_mix_page_article_PageId_Specificulture",
+                table: "mix_page_article",
                 columns: new[] { "CategoryId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_category_category_Id_Specificulture",
-                table: "mix_category_category",
+                name: "IX_mix_page_page_Id_Specificulture",
+                table: "mix_page_page",
                 columns: new[] { "Id", "Specificulture" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_category_category_ParentId_Specificulture",
-                table: "mix_category_category",
+                name: "IX_mix_page_page_ParentId_Specificulture",
+                table: "mix_page_page",
                 columns: new[] { "ParentId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_category_module_CategoryId_Specificulture",
-                table: "mix_category_module",
+                name: "IX_mix_page_module_PageId_Specificulture",
+                table: "mix_page_module",
                 columns: new[] { "CategoryId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_category_module_ModuleId_Specificulture",
-                table: "mix_category_module",
+                name: "IX_mix_page_module_ModuleId_Specificulture",
+                table: "mix_page_module",
                 columns: new[] { "ModuleId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_category_position_CategoryId_Specificulture",
-                table: "mix_category_position",
+                name: "IX_mix_page_position_PageId_Specificulture",
+                table: "mix_page_position",
                 columns: new[] { "CategoryId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_category_product_CategoryId_Specificulture",
-                table: "mix_category_product",
+                name: "IX_mix_page_product_PageId_Specificulture",
+                table: "mix_page_product",
                 columns: new[] { "CategoryId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_category_product_ProductId_Specificulture",
-                table: "mix_category_product",
+                name: "IX_mix_page_product_ProductId_Specificulture",
+                table: "mix_page_product",
                 columns: new[] { "ProductId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
@@ -1320,7 +1320,7 @@ namespace Mix.Cms.Lib.Migrations
                 columns: new[] { "ModuleId", "ArticleId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_module_attribute_set_ModuleId_CategoryId_Specificulture",
+                name: "IX_mix_module_attribute_set_ModuleId_PageId_Specificulture",
                 table: "mix_module_attribute_set",
                 columns: new[] { "ModuleId", "CategoryId", "Specificulture" });
 
@@ -1340,7 +1340,7 @@ namespace Mix.Cms.Lib.Migrations
                 columns: new[] { "ModuleId", "ArticleId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_module_data_ModuleId_CategoryId_Specificulture",
+                name: "IX_mix_module_data_ModuleId_PageId_Specificulture",
                 table: "mix_module_data",
                 columns: new[] { "ModuleId", "CategoryId", "Specificulture" });
 
@@ -1462,16 +1462,16 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_article_media");
 
             migrationBuilder.DropTable(
-                name: "mix_category_article");
+                name: "mix_page_article");
 
             migrationBuilder.DropTable(
-                name: "mix_category_category");
+                name: "mix_page_page");
 
             migrationBuilder.DropTable(
-                name: "mix_category_position");
+                name: "mix_page_position");
 
             migrationBuilder.DropTable(
-                name: "mix_category_product");
+                name: "mix_page_product");
 
             migrationBuilder.DropTable(
                 name: "mix_cms_user");
@@ -1558,7 +1558,7 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_article_module");
 
             migrationBuilder.DropTable(
-                name: "mix_category_module");
+                name: "mix_page_module");
 
             migrationBuilder.DropTable(
                 name: "mix_customer");
@@ -1567,7 +1567,7 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_article");
 
             migrationBuilder.DropTable(
-                name: "mix_category");
+                name: "mix_page");
 
             migrationBuilder.DropTable(
                 name: "mix_module");

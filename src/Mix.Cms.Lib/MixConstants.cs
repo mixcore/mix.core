@@ -37,7 +37,13 @@ namespace Mix.Cms.Lib
             public const string DefaultCulture = "DefaultCulture";
             public const string IsSqlite = "IsSqlite";
             public const string ThemeId = "ThemeId";
+            public const string TemplateExtension = "TemplateExtension";
+            public const string DefaultTheme= "DefaultTheme";
+            public const string DefaultTemplate = "DefaultTemplate";
+            public const string DefaultTemplateContent = "DefaultTemplateContent";
+            public const string DefaultContentStatus = "DefaultContentStatus";
         }
+
         public static class Folder
         {
             public const string FileFolder = @"Content";

@@ -6,9 +6,9 @@ using Newtonsoft.Json;
 namespace Mix.Cms.Lib.ViewModels.MixPagePositions
 {
     public class ReadViewModel
-       : ViewModelBase<MixCmsContext, MixCategoryPosition, ReadViewModel>
+       : ViewModelBase<MixCmsContext, MixPagePosition, ReadViewModel>
     {
-        public ReadViewModel(MixCategoryPosition model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public ReadViewModel(MixPagePosition model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
