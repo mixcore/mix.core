@@ -99,7 +99,7 @@ namespace Mix.Cms.Web.Controllers
         }
 
 
-        IActionResult Page(Expression<Func<MixCategory, bool>> predicate, int? pageIndex = null, int pageSize = 10)
+        IActionResult Page(Expression<Func<MixPage, bool>> predicate, int? pageIndex = null, int pageSize = 10)
         {
             // Home Page
             var getPage = Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModel(predicate);

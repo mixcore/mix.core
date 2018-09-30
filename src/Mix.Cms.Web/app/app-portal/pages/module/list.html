@@ -1,5 +1,5 @@
 <!-- <section class="content container-fluid"> -->
-    <filter-list request="request" callback="loadModules(pageIndex)"></filter-list>
+    <filter-list request="request" callback="getList(pageIndex)"></filter-list>
 
     <table class="table table-sm table-hover" cellspacing="0">
         <thead class="thead-light">
@@ -27,7 +27,7 @@
             </tr>
         </thead>
 
-        <tbody class="sortable" ng-init="loadModules()">
+        <tbody class="sortable" ng-init="getList()">
             <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="module" sort-model-id="{{item.id}}">
                 <td style="cursor:move;" class="drag-header">
                     <!--<span class="fas fa-sort"></span>-->
@@ -70,5 +70,5 @@
             </tr>
         </tbody>
     </table>
-    <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end" a-class="page-link" paging-action="loadModules(page-1)" scroll-top="true">
+    <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
 <!-- </section> -->

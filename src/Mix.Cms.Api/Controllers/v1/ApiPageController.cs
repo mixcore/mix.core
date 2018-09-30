@@ -34,7 +34,7 @@ namespace Mix.Cms.Api.Controllers
         // GET api/category/id
         [HttpGet, HttpOptions]
         [Route("delete/{id}")]
-        public async Task<RepositoryResponse<MixCategory>> DeleteAsync(int id)
+        public async Task<RepositoryResponse<MixPage>> DeleteAsync(int id)
         {
             var getPage = await ReadListItemViewModel.Repository.GetSingleModelAsync(
                 model => model.Id == id && model.Specificulture == _lang);
@@ -45,7 +45,7 @@ namespace Mix.Cms.Api.Controllers
             }
             else
             {
-                return new RepositoryResponse<MixCategory>()
+                return new RepositoryResponse<MixPage>()
                 {
                     IsSucceed = false
                 };
@@ -72,7 +72,7 @@ namespace Mix.Cms.Api.Controllers
                     }
                     else
                     {
-                        var model = new MixCategory()
+                        var model = new MixPage()
                         {
                             Specificulture = _lang,
                             Status = MixService.GetConfig<int>("DefaultStatus"),
@@ -100,7 +100,7 @@ namespace Mix.Cms.Api.Controllers
                     }
                     else
                     {
-                        var model = new MixCategory();
+                        var model = new MixPage();
                         RepositoryResponse<ReadMvcViewModel> result = new RepositoryResponse<ReadMvcViewModel>()
                         {
                             IsSucceed = true,
@@ -139,11 +139,11 @@ namespace Mix.Cms.Api.Controllers
         // POST api/category
         [HttpPost, HttpOptions]
         [Route("save/{id}")]
-        public async Task<RepositoryResponse<MixCategory>> SaveFields(int id, [FromBody]List<EntityField> fields)
+        public async Task<RepositoryResponse<MixPage>> SaveFields(int id, [FromBody]List<EntityField> fields)
         {
             if (fields != null)
             {
-                var result = new RepositoryResponse<MixCategory>() { IsSucceed = true };
+                var result = new RepositoryResponse<MixPage>() { IsSucceed = true };
                 foreach (var property in fields)
                 {
                     if (result.IsSucceed)
@@ -158,7 +158,7 @@ namespace Mix.Cms.Api.Controllers
                 }
                 return result;
             }
-            return new RepositoryResponse<MixCategory>();
+            return new RepositoryResponse<MixPage>();
         }
 
         // GET api/category
@@ -171,7 +171,7 @@ namespace Mix.Cms.Api.Controllers
             var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
             bool isLevel = int.TryParse(parsed.Get("level"), out int level);
             ParseRequestPagingDate(request);
-            Expression<Func<MixCategory, bool>> predicate = model =>
+            Expression<Func<MixPage, bool>> predicate = model =>
                         model.Specificulture == _lang
                         && (!request.Status.HasValue || model.Status == request.Status.Value)
                         && (!isLevel || model.Level == level)

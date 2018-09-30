@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.controller('ModuleDataController', ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$timeout', '$location', 'AuthService', 'ModuleDataServices',
-    function ($scope, $rootScope, ngAppSettings, $routeParams, $timeout, $location, authService, moduleDataServices) {
+app.controller('ModuleDataController', ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$timeout', '$location', 'AuthService', 'ModuleDataService',
+    function ($scope, $rootScope, ngAppSettings, $routeParams, $timeout, $location, authService, moduleDataService) {
         $scope.request = {
             pageSize: '10',
             pageIndex: 0,
@@ -36,7 +36,7 @@ app.controller('ModuleDataController', ['$scope', '$rootScope', 'ngAppSettings',
 
         $scope.getModuleData = async function (id) {
             $rootScope.isBusy = true;
-            var resp = await moduleDataServices.getModuleData(id, 'portal');
+            var resp = await moduleDataService.getModuleData(id, 'portal');
             if (resp && resp.isSucceed) {
                 $scope.activedModuleData = resp.data;
                 $rootScope.initEditor();
@@ -54,10 +54,10 @@ app.controller('ModuleDataController', ['$scope', '$rootScope', 'ngAppSettings',
             var resp = null;
             $scope.name = name;
             if ($scope.id) {
-                resp = await moduleDataServices.getModuleData($scope.id, $scope.dataId, 'portal');
+                resp = await moduleDataService.getModuleData($scope.id, $scope.dataId, 'portal');
             }
             else {
-                resp = await moduleDataServices.initModuleForm($scope.name);
+                resp = await moduleDataService.initModuleForm($scope.name);
             }
 
             if (resp && resp.isSucceed) {
@@ -82,7 +82,7 @@ app.controller('ModuleDataController', ['$scope', '$rootScope', 'ngAppSettings',
             $rootScope.isBusy = true;
             var moduleId = $routeParams.moduleId;
             var id = $routeParams.id;
-            var response = await moduleDataServices.getModuleData(moduleId, id, 'portal');
+            var response = await moduleDataService.getModuleData(moduleId, id, 'portal');
             if (response.isSucceed) {
                 $scope.activedModuleData = response.data;
                 $rootScope.initEditor();
@@ -108,7 +108,7 @@ app.controller('ModuleDataController', ['$scope', '$rootScope', 'ngAppSettings',
                 var d = new Date($scope.request.toDate);
                 $scope.request.toDate = d.toISOString();
             }
-            var resp = await moduleDataServices.getModuleDatas($scope.request);
+            var resp = await moduleDataService.getModuleDatas($scope.request);
             if (resp && resp.isSucceed) {
 
                 $scope.data = resp.data;
@@ -124,7 +124,7 @@ app.controller('ModuleDataController', ['$scope', '$rootScope', 'ngAppSettings',
 
         $scope.removeModuleData = async function (id) {
             if (confirm("Are you sure!")) {
-                var resp = await moduleDataServices.removeModuleData(id);
+                var resp = await moduleDataService.removeModuleData(id);
                 if (resp && resp.isSucceed) {
                     $scope.loadModuleDatas();
                 }
@@ -136,7 +136,7 @@ app.controller('ModuleDataController', ['$scope', '$rootScope', 'ngAppSettings',
 
         $scope.saveModuleData = async function () {
 
-            var resp = await moduleDataServices.saveModuleData($scope.activedModuleData);
+            var resp = await moduleDataService.saveModuleData($scope.activedModuleData);
             if (resp && resp.isSucceed) {
                 $scope.activedModuleData = resp.data;
                 $rootScope.showMessage('Thành công', 'success');
