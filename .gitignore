@@ -6,3 +6,5 @@
 /src/Mix.Cms.Web/obj
 /src/Mix.Cms.Web/bin
 /src/Mix.Cms.Web/node_modules
+/src/Mix.Cms.Api/obj
+/src/Mix.Cms.Api/bin
