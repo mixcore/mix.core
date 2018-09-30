@@ -4,11 +4,11 @@ app.factory('Step1Services', ['$http', 'CommonService', function ($http, commonS
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
     
     var step1ServiceFactory = {};
-    var apiUrl = '/api/portal/';
+    var apiUrl = '/portal/';
     var _initCms = async function (data) {
         var req = {
             method: 'POST',
-            url: '/api/portal/init-cms',
+            url: '/portal/init-cms',
             data: JSON.stringify(data)
         };
         return await commonServices.getApiResult(req);

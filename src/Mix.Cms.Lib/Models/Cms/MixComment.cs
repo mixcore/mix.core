@@ -6,9 +6,9 @@ namespace Mix.Cms.Lib.Models.Cms
     public partial class MixComment
     {
         public Guid Id { get; set; }
-        public int ProductId { get; set; }
+        public int? ProductId { get; set; }
         public string Specificulture { get; set; }
-        public int ArticleId { get; set; }
+        public int? ArticleId { get; set; }
         public int? OrderId { get; set; }
         public string Content { get; set; }
         public string CreatedBy { get; set; }

@@ -176,6 +176,7 @@ namespace Mix.Cms.Api.Controllers
 
             switch (request.Key)
             {
+
                 case "mvc":
                     var mvcResult = await ReadMvcViewModel.Repository.GetModelListByAsync(predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
                     return JObject.FromObject(mvcResult);

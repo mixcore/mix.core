@@ -8,11 +8,11 @@ namespace Mix.Cms.Lib.Models.Cms
         public MixModule()
         {
             MixArticleModule = new HashSet<MixArticleModule>();
-            MixPageModule = new HashSet<MixPageModule>();
             MixModuleArticle = new HashSet<MixModuleArticle>();
             MixModuleAttributeSet = new HashSet<MixModuleAttributeSet>();
             MixModuleData = new HashSet<MixModuleData>();
             MixModuleProduct = new HashSet<MixModuleProduct>();
+            MixPageModule = new HashSet<MixPageModule>();
             MixProductModule = new HashSet<MixProductModule>();
         }
 
@@ -35,11 +35,11 @@ namespace Mix.Cms.Lib.Models.Cms
 
         public MixCulture SpecificultureNavigation { get; set; }
         public ICollection<MixArticleModule> MixArticleModule { get; set; }
-        public ICollection<MixPageModule> MixPageModule { get; set; }
         public ICollection<MixModuleArticle> MixModuleArticle { get; set; }
         public ICollection<MixModuleAttributeSet> MixModuleAttributeSet { get; set; }
         public ICollection<MixModuleData> MixModuleData { get; set; }
         public ICollection<MixModuleProduct> MixModuleProduct { get; set; }
+        public ICollection<MixPageModule> MixPageModule { get; set; }
         public ICollection<MixProductModule> MixProductModule { get; set; }
     }
 }

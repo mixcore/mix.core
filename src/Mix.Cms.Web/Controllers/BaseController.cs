@@ -42,18 +42,14 @@ namespace Mix.Cms.Web.Controllers
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            if (!string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
-            {
-                GetLanguage();
-            }
+            ViewBag.culture = _culture;
+            _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
             base.OnActionExecuting(context);
         }
 
         protected void GetLanguage()
         {
-            _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
-
-            ViewBag.culture = _culture;
+            
         }
 
     }

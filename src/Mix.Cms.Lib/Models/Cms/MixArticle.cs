@@ -9,9 +9,9 @@ namespace Mix.Cms.Lib.Models.Cms
         {
             MixArticleMedia = new HashSet<MixArticleMedia>();
             MixArticleModule = new HashSet<MixArticleModule>();
-            MixPageArticle = new HashSet<MixPageArticle>();
             MixComment = new HashSet<MixComment>();
             MixModuleArticle = new HashSet<MixModuleArticle>();
+            MixPageArticle = new HashSet<MixPageArticle>();
         }
 
         public int Id { get; set; }
@@ -45,8 +45,8 @@ namespace Mix.Cms.Lib.Models.Cms
         public MixCulture SpecificultureNavigation { get; set; }
         public ICollection<MixArticleMedia> MixArticleMedia { get; set; }
         public ICollection<MixArticleModule> MixArticleModule { get; set; }
-        public ICollection<MixPageArticle> MixPageArticle { get; set; }
         public ICollection<MixComment> MixComment { get; set; }
         public ICollection<MixModuleArticle> MixModuleArticle { get; set; }
+        public ICollection<MixPageArticle> MixPageArticle { get; set; }
     }
 }

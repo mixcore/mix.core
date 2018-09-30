@@ -88,8 +88,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => e.Specificulture);
 
-                entity.Property(e => e.Id).HasMaxLength(50);
-
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
                 entity.Property(e => e.CreatedBy).HasMaxLength(250);
@@ -151,8 +149,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => new { e.MediaId, e.Specificulture });
 
-                entity.Property(e => e.ArticleId).HasMaxLength(50);
-
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
                 entity.Property(e => e.Description).HasMaxLength(250);
@@ -184,8 +180,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => new { e.ModuleId, e.Specificulture });
 
-                entity.Property(e => e.ArticleId).HasMaxLength(50);
-
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
                 entity.Property(e => e.Description).HasMaxLength(250);
@@ -204,226 +198,6 @@ namespace Mix.Cms.Lib.Models.Cms
                     .WithMany(p => p.MixArticleModule)
                     .HasForeignKey(d => new { d.ModuleId, d.Specificulture })
                     .HasConstraintName("FK_Mix_Article_Module_Mix_Module1");
-            });
-
-            modelBuilder.Entity<MixPage>(entity =>
-            {
-                entity.HasKey(e => new { e.Id, e.Specificulture });
-
-                entity.ToTable("mix_page");
-
-                entity.HasIndex(e => e.SetAttributeId);
-
-                entity.HasIndex(e => e.Specificulture);
-
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
-
-                entity.Property(e => e.CreatedBy)
-                    .IsRequired()
-                    .HasMaxLength(250);
-
-                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.CssClass).HasMaxLength(50);
-
-                entity.Property(e => e.Icon).HasMaxLength(50);
-
-                entity.Property(e => e.Image).HasMaxLength(250);
-
-                entity.Property(e => e.LastModified).HasColumnType("datetime");
-
-                entity.Property(e => e.Layout).HasMaxLength(50);
-
-                entity.Property(e => e.ModifiedBy).HasMaxLength(250);
-
-                entity.Property(e => e.SeoDescription).HasMaxLength(4000);
-
-                entity.Property(e => e.SeoKeywords).HasMaxLength(4000);
-
-                entity.Property(e => e.SeoName)
-                    .HasMaxLength(500)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.SeoTitle).HasMaxLength(4000);
-
-                entity.Property(e => e.SetAttributeData).HasColumnType("ntext");
-
-                entity.Property(e => e.StaticUrl).HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.Tags).HasMaxLength(500);
-
-                entity.Property(e => e.Template).HasMaxLength(250);
-
-                entity.Property(e => e.Title).HasMaxLength(4000);
-
-                entity.HasOne(d => d.SetAttribute)
-                    .WithMany(p => p.MixPage)
-                    .HasForeignKey(d => d.SetAttributeId)
-                    .HasConstraintName("FK_mix_page_mix_set_attribute");
-
-                entity.HasOne(d => d.SpecificultureNavigation)
-                    .WithMany(p => p.MixPage)
-                    .HasPrincipalKey(p => p.Specificulture)
-                    .HasForeignKey(d => d.Specificulture)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Mix_Page_Mix_Culture");
-            });
-
-            modelBuilder.Entity<MixPageArticle>(entity =>
-            {
-                entity.HasKey(e => new { e.ArticleId, e.CategoryId, e.Specificulture });
-
-                entity.ToTable("mix_page_article");
-
-                entity.HasIndex(e => new { e.ArticleId, e.Specificulture });
-
-                entity.HasIndex(e => new { e.CategoryId, e.Specificulture });
-
-                entity.Property(e => e.ArticleId).HasMaxLength(50);
-
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
-
-                entity.Property(e => e.Description).HasMaxLength(250);
-
-                entity.Property(e => e.Image).HasMaxLength(250);
-
-                entity.Property(e => e.Priority).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
-                entity.HasOne(d => d.MixArticle)
-                    .WithMany(p => p.MixPageArticle)
-                    .HasForeignKey(d => new { d.ArticleId, d.Specificulture })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Mix_Page_Article_Mix_Article");
-
-                entity.HasOne(d => d.MixPage)
-                    .WithMany(p => p.MixPageArticle)
-                    .HasForeignKey(d => new { d.CategoryId, d.Specificulture })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Mix_Page_Article_Mix_Page");
-            });
-
-            modelBuilder.Entity<MixPagePage>(entity =>
-            {
-                entity.HasKey(e => new { e.Id, e.ParentId, e.Specificulture });
-
-                entity.ToTable("mix_page_page");
-
-                entity.HasIndex(e => new { e.Id, e.Specificulture });
-
-                entity.HasIndex(e => new { e.ParentId, e.Specificulture });
-
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
-
-                entity.Property(e => e.Description).HasMaxLength(250);
-
-                entity.Property(e => e.Image).HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
-                entity.HasOne(d => d.MixPage)
-                    .WithMany(p => p.MixPagePageMixPage)
-                    .HasForeignKey(d => new { d.Id, d.Specificulture })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Mix_Page_Page_Mix_Page");
-
-                entity.HasOne(d => d.MixPageNavigation)
-                    .WithMany(p => p.MixPagePageMixPageNavigation)
-                    .HasForeignKey(d => new { d.ParentId, d.Specificulture })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Mix_Page_Page_Mix_Page1");
-            });
-
-            modelBuilder.Entity<MixPageModule>(entity =>
-            {
-                entity.HasKey(e => new { e.ModuleId, e.CategoryId, e.Specificulture });
-
-                entity.ToTable("mix_page_module");
-
-                entity.HasIndex(e => new { e.CategoryId, e.Specificulture });
-
-                entity.HasIndex(e => new { e.ModuleId, e.Specificulture });
-
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
-
-                entity.Property(e => e.Description).HasMaxLength(250);
-
-                entity.Property(e => e.Image).HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
-                entity.HasOne(d => d.MixPage)
-                    .WithMany(p => p.MixPageModule)
-                    .HasForeignKey(d => new { d.CategoryId, d.Specificulture })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Mix_Page_Module_Mix_Page");
-
-                entity.HasOne(d => d.MixModule)
-                    .WithMany(p => p.MixPageModule)
-                    .HasForeignKey(d => new { d.ModuleId, d.Specificulture })
-                    .HasConstraintName("FK_Mix_Menu_Module_Mix_Module1");
-            });
-
-            modelBuilder.Entity<MixPagePosition>(entity =>
-            {
-                entity.HasKey(e => new { e.PositionId, e.CategoryId, e.Specificulture });
-
-                entity.ToTable("mix_page_position");
-
-                entity.HasIndex(e => new { e.CategoryId, e.Specificulture });
-
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
-
-                entity.Property(e => e.Description).HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
-                entity.HasOne(d => d.Position)
-                    .WithMany(p => p.MixPagePosition)
-                    .HasForeignKey(d => d.PositionId)
-                    .HasConstraintName("FK_Mix_Page_Position_Mix_Position");
-
-                entity.HasOne(d => d.MixPage)
-                    .WithMany(p => p.MixPagePosition)
-                    .HasForeignKey(d => new { d.CategoryId, d.Specificulture })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Mix_Page_Position_Mix_Page");
-            });
-
-            modelBuilder.Entity<MixPageProduct>(entity =>
-            {
-                entity.HasKey(e => new { e.ProductId, e.CategoryId, e.Specificulture });
-
-                entity.ToTable("mix_page_product");
-
-                entity.HasIndex(e => new { e.CategoryId, e.Specificulture });
-
-                entity.HasIndex(e => new { e.ProductId, e.Specificulture });
-
-                entity.Property(e => e.ProductId).HasMaxLength(50);
-
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
-
-                entity.Property(e => e.Description).HasMaxLength(250);
-
-                entity.Property(e => e.Image).HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
-                entity.HasOne(d => d.MixPage)
-                    .WithMany(p => p.MixPageProduct)
-                    .HasForeignKey(d => new { d.CategoryId, d.Specificulture })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Mix_Page_Product_Mix_Page");
-
-                entity.HasOne(d => d.MixProduct)
-                    .WithMany(p => p.MixPageProduct)
-                    .HasForeignKey(d => new { d.ProductId, d.Specificulture })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Mix_Page_Product_Mix_Product");
             });
 
             modelBuilder.Entity<MixCmsUser>(entity =>
@@ -467,8 +241,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.Property(e => e.ArticleId).HasMaxLength(50);
-
                 entity.Property(e => e.CreatedBy).HasMaxLength(250);
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
@@ -476,8 +248,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Email).HasMaxLength(250);
 
                 entity.Property(e => e.FullName).HasMaxLength(250);
-
-                entity.Property(e => e.ProductId).HasMaxLength(50);
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
@@ -727,6 +497,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
+                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
+
                 entity.Property(e => e.Description).HasMaxLength(4000);
 
                 entity.Property(e => e.Fields).HasMaxLength(4000);
@@ -768,8 +540,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => new { e.ModuleId, e.Specificulture });
 
-                entity.Property(e => e.ArticleId).HasMaxLength(50);
-
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
                 entity.Property(e => e.Description).HasMaxLength(250);
@@ -801,11 +571,10 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => new { e.ModuleId, e.ArticleId, e.Specificulture });
 
-                entity.HasIndex(e => new { e.ModuleId, e.CategoryId, e.Specificulture });
+                entity.HasIndex(e => new { e.ModuleId, e.CategoryId, e.Specificulture })
+                    .HasName("IX_mix_module_attribute_set_ModuleId_PageId_Specificulture");
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
-
-                entity.Property(e => e.ArticleId).HasMaxLength(50);
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
@@ -869,7 +638,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => new { e.ModuleId, e.ArticleId, e.Specificulture });
 
-                entity.HasIndex(e => new { e.ModuleId, e.CategoryId, e.Specificulture });
+                entity.HasIndex(e => new { e.ModuleId, e.CategoryId, e.Specificulture })
+                    .HasName("IX_mix_module_data_ModuleId_PageId_Specificulture");
 
                 entity.HasIndex(e => new { e.ModuleId, e.ProductId, e.Specificulture });
 
@@ -877,15 +647,11 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
-                entity.Property(e => e.ArticleId).HasMaxLength(50);
-
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.Fields)
                     .IsRequired()
                     .HasMaxLength(4000);
-
-                entity.Property(e => e.ProductId).HasMaxLength(50);
 
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
@@ -916,8 +682,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.HasIndex(e => new { e.ModuleId, e.Specificulture });
 
                 entity.HasIndex(e => new { e.ProductId, e.Specificulture });
-
-                entity.Property(e => e.ProductId).HasMaxLength(50);
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
@@ -980,8 +744,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => new { e.ProductId, e.Specificulture });
 
-                entity.Property(e => e.ProductId).HasMaxLength(50);
-
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
                 entity.Property(e => e.Description).HasMaxLength(4000);
@@ -1001,6 +763,226 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasForeignKey(d => new { d.ProductId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_Item_Product");
+            });
+
+            modelBuilder.Entity<MixPage>(entity =>
+            {
+                entity.HasKey(e => new { e.Id, e.Specificulture });
+
+                entity.ToTable("mix_page");
+
+                entity.HasIndex(e => e.SetAttributeId);
+
+                entity.HasIndex(e => e.Specificulture);
+
+                entity.Property(e => e.Specificulture).HasMaxLength(10);
+
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.CssClass).HasMaxLength(50);
+
+                entity.Property(e => e.Icon).HasMaxLength(50);
+
+                entity.Property(e => e.Image).HasMaxLength(250);
+
+                entity.Property(e => e.LastModified).HasColumnType("datetime");
+
+                entity.Property(e => e.Layout).HasMaxLength(50);
+
+                entity.Property(e => e.ModifiedBy).HasMaxLength(250);
+
+                entity.Property(e => e.SeoDescription).HasMaxLength(4000);
+
+                entity.Property(e => e.SeoKeywords).HasMaxLength(4000);
+
+                entity.Property(e => e.SeoName)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SeoTitle).HasMaxLength(4000);
+
+                entity.Property(e => e.SetAttributeData).HasColumnType("ntext");
+
+                entity.Property(e => e.StaticUrl).HasMaxLength(250);
+
+                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Tags).HasMaxLength(500);
+
+                entity.Property(e => e.Template).HasMaxLength(250);
+
+                entity.Property(e => e.Title).HasMaxLength(4000);
+
+                entity.HasOne(d => d.SetAttribute)
+                    .WithMany(p => p.MixPage)
+                    .HasForeignKey(d => d.SetAttributeId)
+                    .HasConstraintName("FK_mix_page_mix_set_attribute");
+
+                entity.HasOne(d => d.SpecificultureNavigation)
+                    .WithMany(p => p.MixPage)
+                    .HasPrincipalKey(p => p.Specificulture)
+                    .HasForeignKey(d => d.Specificulture)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Mix_Page_Mix_Culture");
+            });
+
+            modelBuilder.Entity<MixPageArticle>(entity =>
+            {
+                entity.HasKey(e => new { e.ArticleId, e.CategoryId, e.Specificulture });
+
+                entity.ToTable("mix_page_article");
+
+                entity.HasIndex(e => new { e.ArticleId, e.Specificulture });
+
+                entity.HasIndex(e => new { e.CategoryId, e.Specificulture })
+                    .HasName("IX_mix_page_article_PageId_Specificulture");
+
+                entity.Property(e => e.Specificulture).HasMaxLength(10);
+
+                entity.Property(e => e.Description).HasMaxLength(250);
+
+                entity.Property(e => e.Image).HasMaxLength(250);
+
+                entity.Property(e => e.Priority).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.MixArticle)
+                    .WithMany(p => p.MixPageArticle)
+                    .HasForeignKey(d => new { d.ArticleId, d.Specificulture })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Mix_Page_Article_Mix_Article");
+
+                entity.HasOne(d => d.MixPage)
+                    .WithMany(p => p.MixPageArticle)
+                    .HasForeignKey(d => new { d.CategoryId, d.Specificulture })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Mix_Page_Article_Mix_Page");
+            });
+
+            modelBuilder.Entity<MixPageModule>(entity =>
+            {
+                entity.HasKey(e => new { e.ModuleId, e.CategoryId, e.Specificulture });
+
+                entity.ToTable("mix_page_module");
+
+                entity.HasIndex(e => new { e.CategoryId, e.Specificulture })
+                    .HasName("IX_mix_page_module_PageId_Specificulture");
+
+                entity.HasIndex(e => new { e.ModuleId, e.Specificulture });
+
+                entity.Property(e => e.Specificulture).HasMaxLength(10);
+
+                entity.Property(e => e.Description).HasMaxLength(250);
+
+                entity.Property(e => e.Image).HasMaxLength(250);
+
+                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.MixPage)
+                    .WithMany(p => p.MixPageModule)
+                    .HasForeignKey(d => new { d.CategoryId, d.Specificulture })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Mix_Page_Module_Mix_Page");
+
+                entity.HasOne(d => d.MixModule)
+                    .WithMany(p => p.MixPageModule)
+                    .HasForeignKey(d => new { d.ModuleId, d.Specificulture })
+                    .HasConstraintName("FK_Mix_Menu_Module_Mix_Module1");
+            });
+
+            modelBuilder.Entity<MixPagePage>(entity =>
+            {
+                entity.HasKey(e => new { e.Id, e.ParentId, e.Specificulture });
+
+                entity.ToTable("mix_page_page");
+
+                entity.HasIndex(e => new { e.Id, e.Specificulture });
+
+                entity.HasIndex(e => new { e.ParentId, e.Specificulture });
+
+                entity.Property(e => e.Specificulture).HasMaxLength(10);
+
+                entity.Property(e => e.Description).HasMaxLength(250);
+
+                entity.Property(e => e.Image).HasMaxLength(250);
+
+                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.MixPage)
+                    .WithMany(p => p.MixPagePageMixPage)
+                    .HasForeignKey(d => new { d.Id, d.Specificulture })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Mix_Page_Page_Mix_Page");
+
+                entity.HasOne(d => d.MixPageNavigation)
+                    .WithMany(p => p.MixPagePageMixPageNavigation)
+                    .HasForeignKey(d => new { d.ParentId, d.Specificulture })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Mix_Page_Page_Mix_Page1");
+            });
+
+            modelBuilder.Entity<MixPagePosition>(entity =>
+            {
+                entity.HasKey(e => new { e.PositionId, e.CategoryId, e.Specificulture });
+
+                entity.ToTable("mix_page_position");
+
+                entity.HasIndex(e => new { e.CategoryId, e.Specificulture })
+                    .HasName("IX_mix_page_position_PageId_Specificulture");
+
+                entity.Property(e => e.Specificulture).HasMaxLength(10);
+
+                entity.Property(e => e.Description).HasMaxLength(250);
+
+                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.Position)
+                    .WithMany(p => p.MixPagePosition)
+                    .HasForeignKey(d => d.PositionId)
+                    .HasConstraintName("FK_Mix_Page_Position_Mix_Position");
+
+                entity.HasOne(d => d.MixPage)
+                    .WithMany(p => p.MixPagePosition)
+                    .HasForeignKey(d => new { d.CategoryId, d.Specificulture })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Mix_Page_Position_Mix_Page");
+            });
+
+            modelBuilder.Entity<MixPageProduct>(entity =>
+            {
+                entity.HasKey(e => new { e.ProductId, e.CategoryId, e.Specificulture });
+
+                entity.ToTable("mix_page_product");
+
+                entity.HasIndex(e => new { e.CategoryId, e.Specificulture })
+                    .HasName("IX_mix_page_product_PageId_Specificulture");
+
+                entity.HasIndex(e => new { e.ProductId, e.Specificulture });
+
+                entity.Property(e => e.Specificulture).HasMaxLength(10);
+
+                entity.Property(e => e.Description).HasMaxLength(250);
+
+                entity.Property(e => e.Image).HasMaxLength(250);
+
+                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.MixPage)
+                    .WithMany(p => p.MixPageProduct)
+                    .HasForeignKey(d => new { d.CategoryId, d.Specificulture })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Mix_Page_Product_Mix_Page");
+
+                entity.HasOne(d => d.MixProduct)
+                    .WithMany(p => p.MixPageProduct)
+                    .HasForeignKey(d => new { d.ProductId, d.Specificulture })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Mix_Page_Product_Mix_Product");
             });
 
             modelBuilder.Entity<MixParameter>(entity =>
@@ -1135,8 +1117,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => e.Specificulture);
 
-                entity.Property(e => e.Id).HasMaxLength(50);
-
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
                 entity.Property(e => e.Code)
@@ -1212,8 +1192,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => new { e.ProductId, e.Specificulture });
 
-                entity.Property(e => e.ProductId).HasMaxLength(50);
-
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
                 entity.Property(e => e.Description).HasMaxLength(250);
@@ -1245,8 +1223,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => new { e.ProductId, e.Specificulture });
 
-                entity.Property(e => e.ProductId).HasMaxLength(50);
-
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
                 entity.Property(e => e.Description).HasMaxLength(250);
@@ -1276,10 +1252,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.HasIndex(e => new { e.DestinationId, e.Specificulture });
 
                 entity.HasIndex(e => new { e.SourceId, e.Specificulture });
-
-                entity.Property(e => e.SourceId).HasMaxLength(50);
-
-                entity.Property(e => e.DestinationId).HasMaxLength(50);
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
@@ -1422,7 +1394,6 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasForeignKey(d => d.Specificulture)
                     .HasConstraintName("FK_Mix_Url_Alias_Mix_Culture");
             });
-
         }
     }
 }
