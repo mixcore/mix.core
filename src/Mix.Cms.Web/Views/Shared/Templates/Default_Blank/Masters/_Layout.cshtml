@@ -8,7 +8,7 @@
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>@ViewData["Title"] - @(MixService.GetConfig<string>("Theme", ViewBag.culture) ?? "Swastika - I/O")</title>
+    <title>@ViewData["Title"] - @(MixService.GetConfig<string>("Theme", ViewBag.culture) ?? "Mix - I/O")</title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     @if (!string.IsNullOrEmpty(MixService.GetConfig<string>("GA_KEY", ViewBag.culture)))
     {
@@ -27,7 +27,7 @@
     <!--[STYLES]-->
     @RenderSection("Styles", false)
 </head>
-<body class="@this.ViewData["pageClass"]" ng-app="SwastikaClient" ng-init="initApp()"
+<body class="@this.ViewData["pageClass"]" ng-app="MixClient" ng-init="initApp()"
       data-spy="scroll" data-target=".navbar-collapse">
     <div class="loader-container" ng-show="isBusy">
         <div id="loader"></div>

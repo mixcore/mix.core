@@ -1,4 +1,4 @@
-@using Swastika.Cms.Lib.ViewModels;
+@using Mix.Cms.Lib.ViewModels;
 @{
     string culture = ViewBag.culture;
     List<Mix.Cms.Lib.ViewModels.MixPages.ReadListItemViewModel> topCates = MixCmsHelper.GetCategory(Url, ViewBag.culture, MixEnums.CatePosition.Top, Context.Request.Path);

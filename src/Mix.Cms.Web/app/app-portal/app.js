@@ -1,5 +1,5 @@
 'use strict';
-var app = angular.module('SwastikaPortal', ['ngRoute', 'components', 'ngFileUpload', 'LocalStorageModule',
+var app = angular.module('MixPortal', ['ngRoute', 'components', 'ngFileUpload', 'LocalStorageModule',
     'bw.paging', 'dndLists', 'ngTagsInput', 'ngSanitize']);
 var modules = angular.module('components', []);
 app.run(['$rootScope', '$location', 'CommonService', 'AuthService', 'TranslatorService','GlobalSettingsService', 'ngAppSettings',
