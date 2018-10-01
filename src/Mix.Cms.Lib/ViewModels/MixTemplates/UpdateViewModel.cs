@@ -242,13 +242,14 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             return result;
         }
 
-        public static UpdateViewModel GetTemplateByPath(int themeId, string path, string type, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public static UpdateViewModel GetTemplateByPath(string path, string specificulture, MixEnums.EnumTemplateFolder folderType, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             string templateName = path?.Split('/')[1];
+            int themeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, specificulture);
             var getView = UpdateViewModel.Repository.GetSingleModel(t =>
-                    t.ThemeId == themeId && t.FolderType == type
+                    t.ThemeId == themeId && t.FolderType == folderType.ToString()
                     && !string.IsNullOrEmpty(templateName) && templateName.Equals($"{t.FileName}{t.Extension}"), _context, _transaction);
-            return getView.Data;
+            return getView.Data ?? GetDefault(folderType, specificulture);
         }
 
         public static UpdateViewModel GetDefault(MixEnums.EnumTemplateFolder folderType, string specificulture)
@@ -263,10 +264,10 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                     });
             return new UpdateViewModel(new MixTemplate()
             {
-                Extension = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.TemplateExtension, specificulture),
                 ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, specificulture),
                 ThemeName = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.Theme, specificulture),
                 FileName = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplate),
+                Extension = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.TemplateExtension),
                 Content = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateContent),
                 FolderType = folderType.ToString(),
                 FileFolder = folder.ToString()

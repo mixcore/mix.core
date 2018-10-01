@@ -2,7 +2,8 @@
 app.factory('PageService', ['$rootScope', 'CommonService', 'BaseService',
     function ($rootScope, commonServices, baseService) {
 
-        var serviceFactory = Object.create(baseService);
+        baseService.init('page');
+        var serviceFactory = baseService;//Object.create(baseService);
 
         var _updateInfos = async function (pages) {
 
@@ -13,8 +14,6 @@ app.factory('PageService', ['$rootScope', 'CommonService', 'BaseService',
             };
             return await commonServices.getApiResult(req);
         };
-        serviceFactory.modelName = 'page';
-        serviceFactory.prefixUrl = '/' + serviceFactory.lang + '/page';
         serviceFactory.updateInfos = _updateInfos;
         return serviceFactory;
 

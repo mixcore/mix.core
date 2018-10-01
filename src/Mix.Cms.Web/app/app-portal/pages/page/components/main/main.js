@@ -13,9 +13,6 @@ app.component('pageMain', {
                 if (ctrl.page.seoName == null || ctrl.page.seoName == '') {
                     ctrl.page.seoName = $rootScope.generateKeyword(ctrl.page.title, '-');
                 }
-                if (ctrl.page.urlAlias.alias == null || ctrl.page.urlAlias.alias == '') {
-                    ctrl.page.urlAlias.alias = $rootScope.generateKeyword(ctrl.page.title, '-');
-                }
             }
         }
     }],

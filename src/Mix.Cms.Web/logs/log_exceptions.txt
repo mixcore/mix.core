@@ -1766,5 +1766,56 @@
       "Source": "Microsoft.EntityFrameworkCore",
       "WatsonBuckets": null
     }
+  },
+  {
+    "CreatedDateTime": "2018-10-01T14:39:16.2315177Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "Sequence contains no elements.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Query.QueryMethodProvider.GetResult[TResult](IEnumerable`1 valueBuffers, Boolean throwOnNullResult)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ResultEnumerable`1.GetEnumerator()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.Max(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in C:\\Git\\GitHub\\Mixcore\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 1296",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore.Relational",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-01T14:40:52.1099094Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "Sequence contains no elements.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Query.QueryMethodProvider.GetResult[TResult](IEnumerable`1 valueBuffers, Boolean throwOnNullResult)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ResultEnumerable`1.GetEnumerator()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.Max(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in C:\\Git\\GitHub\\Mixcore\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 1296",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore.Relational",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-01T14:41:19.2066086Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "Sequence contains no elements.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Query.QueryMethodProvider.GetResult[TResult](IEnumerable`1 valueBuffers, Boolean throwOnNullResult)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ResultEnumerable`1.GetEnumerator()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.Max(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in C:\\Git\\GitHub\\Mixcore\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 1296",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore.Relational",
+      "WatsonBuckets": null
+    }
   }
 ]
