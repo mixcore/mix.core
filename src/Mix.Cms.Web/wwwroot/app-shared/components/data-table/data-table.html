@@ -1,7 +1,7 @@
 <div ng-if="!$ctrl.canDrag">
     <span class="text-warning" ng-bind="$ctrl.translate('warning_can_not_drag_drop',true, '(**Drag Drop only allow when order by priority asc)')"></span>
 </div>
-<div ng-if="$ctrl.data.items" ng-init="$ctrl.init()">
+<div class="data-table" ng-if="$ctrl.data.items" ng-init="$ctrl.init()">
     <div class="nav">
         <div class="col-sm-12 p-2">
             <div class="row header">
