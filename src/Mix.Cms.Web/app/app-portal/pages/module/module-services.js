@@ -4,8 +4,5 @@ app.factory('ModuleService', ['BaseService',
         baseService.init('module')
         var serviceFactory = baseService;
         // Define more service methods here
-        serviceFactory.modelName = 'module';
-        serviceFactory.prefixUrl = '/' + serviceFactory.lang + '/module';
-
         return serviceFactory;
     }]);

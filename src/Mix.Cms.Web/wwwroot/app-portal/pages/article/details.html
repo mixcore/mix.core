@@ -1,58 +1,58 @@
 <!-- Main content -->
-<section class="" ng-init="loadArticle()">
-    <form ng-class="{'submitted': submitted}" ng-submit="saveArticle(activedArticle)">
-        <actions preview-url="activedArticle.detailsUrl" back-url="'/portal/article/list'"></actions>
+<section class="" ng-init="getSingle()">
+    <form ng-class="{'submitted': submitted}" ng-submit="save(activedData)">
+        <actions preview-url="activedData.detailsUrl" back-url="'/portal/article/list'"></actions>
         <div class="m-4"></div>
         <div class="row">
             <section class="col-lg-9">
                 <div class="row">
                     <div class="col-lg-12">
-                        <article-main article="activedArticle"></article-main>
+                        <article-main article="activedData"></article-main>
                     </div>
                 </div>
                 <div class="row">
                     <tabs-v class="col-lg-12">
                         <pane-v title="General">
-                            <article-general article="activedArticle"></article-general>
+                            <article-general article="activedData"></article-general>
                         </pane-v>
                         <pane-v title="Seo">
-                            <article-seo article="activedArticle"></article-seo>
+                            <article-seo article="activedData"></article-seo>
                         </pane-v>
                         <pane-v title="Parents">
-                            <article-parents article="activedArticle"></article-parents>
+                            <article-parents article="activedData"></article-parents>
                         </pane-v>
                         <pane-v title="Modules">
-                            <article-modules article="activedArticle"></article-modules>
+                            <article-modules article="activedData"></article-modules>
                         </pane-v>
                         <pane-v title="Layout">
                             <div class="tab-pane">
-                                <template-editor template="activedArticle.view"></template-editor>
+                                <template-editor template="activedData.view"></template-editor>
                             </div>
                         </pane-v>
                         <pane-v title="Medias">
-                            <!--   <article-medias article="activedArticle" medias="mediaData"></article-medias>-->
-                            <!--<navigation data="activedArticle.mediaNavs" prefix="media"></navigation>-->
-                            <navs data="activedArticle.mediaNavs" prefix="'media'" model="'nav-article-media'"></navs>
+                            <!--   <article-medias article="activedData" medias="mediaData"></article-medias>-->
+                            <!--<navigation data="activedData.mediaNavs" prefix="media"></navigation>-->
+                            <navs data="activedData.mediaNavs" prefix="'media'" model="'nav-article-media'"></navs>
                         </pane-v>
                         <pane-v title="Related">
-                            <article-related article="activedArticle" list="data"></article-related>
+                            <related-navs request="request" source-id="activedData.id" culture="activedData.specificulture" prefix="'article'" navs="activedData.articleNavs" data="data" load-data="getList(pageIndex)"></related-navs>
                         </pane-v>
                     </tabs-v>
                 </div>
             </section>
             <section class="col-lg-3" style="padding-left:0">
-                <cultures is-clone="activedArticle.isClone" data="activedArticle.cultures"></cultures>
-                <url-alias url-alias="activedArticle.urlAlias"></url-alias>
+                <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
+                <url-alias url-alias="activedData.urlAlias"></url-alias>
                 <div class="card">
                     <div class="card-header">
                         Info
                     </div>
                     <div class="card-body">
-                        <statuses status="activedArticle.status">
+                        <statuses status="activedData.status">
                         <div class="form-group">
                             <span class="switch">
                                 <label>
-                                    <input type="checkbox" ng-model="activedArticle.isClone" class="switch">
+                                    <input type="checkbox" ng-model="activedData.isClone" class="switch">
                                     Clone
                                 </label>
                             </span>
@@ -63,7 +63,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1"><i class="mi mi-Calendar"></i></span>
                                 </div>
-                                <input ng-model="activedArticle.createdDateTime" type="text" class="form-control" readonly="readonly">
+                                <input ng-model="activedData.createdDateTime" type="text" class="form-control" readonly="readonly">
                             </div>
                         </div>
                         <div class="form-group">
@@ -72,13 +72,13 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1"><i class="mi mi-Contact"></i></span>
                                 </div>
-                                <input ng-model="activedArticle.createdBy" class="form-control" readonly="readonly">
+                                <input ng-model="activedData.createdBy" class="form-control" readonly="readonly">
                             </div>
                         </div>
                     </statuses></div>
                 </div>
-                <custom-image header="'Feature Image'" type="'Articles'" folder="activedArticle.seoName" src-url="activedArticle.imageUrl" src="activedArticle.image" auto="'true'"></custom-image>
-                <custom-image header="'Feature Thumnail'" type="'Articles'" folder="activedArticle.seoName" src-url="activedArticle.thumbnailUrl" src="activedArticle.thumbnail" auto="'true'"></custom-image>
+                <custom-image header="'Feature Image'" type="'Articles'" folder="activedData.seoName" src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
+                <custom-image header="'Feature Thumnail'" type="'Articles'" folder="activedData.seoName" src-url="activedData.thumbnailUrl" src="activedData.thumbnail" auto="'true'"></custom-image>
             </section>
         </div>
     </form>

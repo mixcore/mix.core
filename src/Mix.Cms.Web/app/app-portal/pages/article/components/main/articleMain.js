@@ -7,11 +7,7 @@ app.component('articleMain', {
             ctrl.generateSEO = function () {
                 if (!ctrl.article.id) {
                     ctrl.article.seoName = $rootScope.generateKeyword(ctrl.article.title, '-');
-                }
-                if (!ctrl.article.id) {
-                    ctrl.article.urlAlias.alias = $rootScope.generateKeyword(ctrl.article.title, '-');
-                }
-                $scope.$apply();
+                }                
             };
         }
     ],

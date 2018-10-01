@@ -8,12 +8,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual DbSet<MixArticle> MixArticle { get; set; }
         public virtual DbSet<MixArticleMedia> MixArticleMedia { get; set; }
         public virtual DbSet<MixArticleModule> MixArticleModule { get; set; }
-        public virtual DbSet<MixPage> MixPage { get; set; }
-        public virtual DbSet<MixPageArticle> MixPageArticle { get; set; }
-        public virtual DbSet<MixPagePage> MixPagePage { get; set; }
-        public virtual DbSet<MixPageModule> MixPageModule { get; set; }
-        public virtual DbSet<MixPagePosition> MixPagePosition { get; set; }
-        public virtual DbSet<MixPageProduct> MixPageProduct { get; set; }
         public virtual DbSet<MixCmsUser> MixCmsUser { get; set; }
         public virtual DbSet<MixComment> MixComment { get; set; }
         public virtual DbSet<MixConfiguration> MixConfiguration { get; set; }
@@ -31,6 +25,12 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual DbSet<MixModuleProduct> MixModuleProduct { get; set; }
         public virtual DbSet<MixOrder> MixOrder { get; set; }
         public virtual DbSet<MixOrderItem> MixOrderItem { get; set; }
+        public virtual DbSet<MixPage> MixPage { get; set; }
+        public virtual DbSet<MixPageArticle> MixPageArticle { get; set; }
+        public virtual DbSet<MixPageModule> MixPageModule { get; set; }
+        public virtual DbSet<MixPagePage> MixPagePage { get; set; }
+        public virtual DbSet<MixPagePosition> MixPagePosition { get; set; }
+        public virtual DbSet<MixPageProduct> MixPageProduct { get; set; }
         public virtual DbSet<MixParameter> MixParameter { get; set; }
         public virtual DbSet<MixPortalPage> MixPortalPage { get; set; }
         public virtual DbSet<MixPortalPageNavigation> MixPortalPageNavigation { get; set; }
@@ -40,6 +40,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual DbSet<MixProduct> MixProduct { get; set; }
         public virtual DbSet<MixProductMedia> MixProductMedia { get; set; }
         public virtual DbSet<MixProductModule> MixProductModule { get; set; }
+        public virtual DbSet<MixRelatedArticle> MixRelatedArticle { get; set; }
         public virtual DbSet<MixRelatedProduct> MixRelatedProduct { get; set; }
         public virtual DbSet<MixSetAttribute> MixSetAttribute { get; set; }
         public virtual DbSet<MixTemplate> MixTemplate { get; set; }
@@ -78,6 +79,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             modelBuilder.Entity<MixArticle>(entity =>
             {
                 entity.HasKey(e => new { e.Id, e.Specificulture });
@@ -1241,6 +1243,33 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasForeignKey(d => new { d.ProductId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Mix_Product_Module_Mix_Product");
+            });
+
+            modelBuilder.Entity<MixRelatedArticle>(entity =>
+            {
+                entity.HasKey(e => new { e.SourceId, e.DestinationId, e.Specificulture });
+
+                entity.ToTable("mix_related_article");
+
+                entity.Property(e => e.Specificulture).HasMaxLength(10);
+
+                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Description).HasMaxLength(450);
+
+                entity.Property(e => e.Image).HasMaxLength(450);
+
+                entity.HasOne(d => d.MixArticle)
+                    .WithMany(p => p.MixRelatedArticleMixArticle)
+                    .HasForeignKey(d => new { d.DestinationId, d.Specificulture })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_mix_related_article_mix_article1");
+
+                entity.HasOne(d => d.S)
+                    .WithMany(p => p.MixRelatedArticleS)
+                    .HasForeignKey(d => new { d.SourceId, d.Specificulture })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_mix_related_article_mix_article");
             });
 
             modelBuilder.Entity<MixRelatedProduct>(entity =>

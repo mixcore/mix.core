@@ -8,7 +8,7 @@ app.controller('PageController', ['$scope', '$rootScope', '$routeParams', 'ngApp
             var id = $routeParams.id;
             var response = await pageServices.getPage(id, 'fe');
             if (response.isSucceed) {
-                $scope.activedPage = response.data;
+                $scope.activedData = response.data;
                 $rootScope.initEditor();
                 $rootScope.isBusy = false;
                 $scope.$apply();
@@ -24,7 +24,7 @@ app.controller('PageController', ['$scope', '$rootScope', '$routeParams', 'ngApp
             $rootScope.isBusy = true;
             var resp = await pageServices.updateInfos(items);
             if (resp && resp.isSucceed) {
-                $scope.activedPage = resp.data;
+                $scope.activedData = resp.data;
                 $rootScope.showMessage('success', 'success');
                 $rootScope.isBusy = false;
                 $scope.$apply();

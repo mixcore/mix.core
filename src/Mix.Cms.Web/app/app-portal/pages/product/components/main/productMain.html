@@ -21,43 +21,14 @@
             </div>
         </div>
 
-        <!--<div class="form-group">
-            <label>Code</label>
-            <input type="text"
-                   class="form-control form-control-lg"
-                   ng-model="$ctrl.product.code" />
-        </div>
-        <div class="form-group">
-            <label>Chất liệu</label>
-            <input type="text"
-                   class="form-control form-control-lg"
-                   ng-model="$ctrl.product.material" />
-        </div>
-        <div class="form-group">
-            <label>Quy cách</label>
-            <input type="text"
-                   class="form-control form-control-lg"
-                   ng-model="$ctrl.product.size" />
-        </div>
-        <div class="form-group">
-            <label>Giá bình thường</label>
-            <input type="text"
-                   class="form-control form-control-lg"
-                   ng-model="$ctrl.product.strNormalPrice" />
-        </div>
-        <div class="form-group">
-            <label>Giá khuyến mãi</label>
-            <input type="text"
-                   class="form-control form-control-lg"
-                   ng-model="$ctrl.product.strDealPrice" />
-        </div>-->
         <div class="form-group">
             <label>Excerpt</label>
             <textarea class="form-control editor-content excerpt" ng-model="$ctrl.product.excerpt">{{$ctrl.product.excerpt}}</textarea>
+            
         </div>
         <div class="form-group">
             <label>Body content</label>
-            <textarea class="form-control editor-content content" ng-model="$ctrl.product.content">{{$ctrl.product.content}}</textarea>
+            <trymboyw-editor content="$ctrl.product.content"></trymboyw-editor>
         </div>
     </div>
 </div>

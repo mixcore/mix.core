@@ -2,8 +2,6 @@
 app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', 
     'ModuleService', 'ModuleDataService',
     function ($scope, $rootScope, ngAppSettings, $routeParams, moduleServices, moduleDataService) {
-        moduleServices.init('module');
-        //moduleDataService.init('module-data');
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, moduleServices, 'product');
         $scope.defaultAttr = {
             name: '',
@@ -21,7 +19,7 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$r
         $scope.loadModuleDatas = async function () {
             $rootScope.isBusy = true;
             var id = $routeParams.id;
-            var response = await moduleServices.getModule(id, 'fe');
+            var response = await moduleServices.getSingle([id, 'portal']);
             if (response.isSucceed) {
                 $scope.activedData = response.data;
                 $rootScope.initEditor();

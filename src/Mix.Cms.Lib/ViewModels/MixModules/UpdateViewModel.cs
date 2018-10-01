@@ -51,6 +51,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("type")]
         public ModuleType Type { get; set; }
 
+        [JsonProperty("status")]
+        public MixContentStatus Status { get; set; }
+
         [JsonProperty("pageSize")]
         public int? PageSize { get; set; }
 
@@ -141,6 +144,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             {
                 Id = ReadListItemViewModel.Repository.Max(m => m.Id, _context, _transaction).Data + 1;
                 LastModified = DateTime.UtcNow;
+                CreatedDateTime = DateTime.UtcNow;
             }
             Template = View != null ? string.Format(@"{0}/{1}{2}", View.FolderType, View.FileName, View.Extension) : Template;
             var arrField = Columns != null ? JArray.Parse(
