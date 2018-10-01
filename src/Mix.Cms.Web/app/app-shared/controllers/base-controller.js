@@ -9,12 +9,6 @@ function BaseCtrl ($scope, $rootScope, $routeParams, ngAppSettings, service, mod
     $scope.isInit = false;
     $scope.errors = [];    
     $scope.range = $rootScope.range;
-    $scope.$on('$viewContentLoaded', function(){
-        setTimeout(function(){
-            service.init(modelName);
-            $scope.isInit = true;
-        }, 200)
-    })
     
     $scope.getSingle = async function () {
         $rootScope.isBusy = true;
@@ -65,8 +59,8 @@ function BaseCtrl ($scope, $rootScope, $routeParams, ngAppSettings, service, mod
         }
     };
 
-    $scope.delete = function (id) {
-        $rootScope.showConfirm($scope, 'deleteConfirmed', [id], null, 'Remove Page', 'Are you sure');
+    $scope.remove = function (id) {
+        $rootScope.showConfirm($scope, 'removeConfirmed', [id], null, 'Remove', 'Are you sure');
     };
 
     $scope.removeConfirmed = async function (id) {

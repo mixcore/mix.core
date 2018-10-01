@@ -1,7 +1,6 @@
 ﻿'use strict';
 app.controller('PageController', ['$scope', '$rootScope', '$routeParams', 'ngAppSettings', 'PageService', '$routeParams',
     function ($scope, $rootScope, $routeParams, ngAppSettings, service, $routeParams) {
-        service.init('page');
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
         $scope.request.query = 'level=0';        
         $scope.loadPageDatas = async function () {

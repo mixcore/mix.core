@@ -176,7 +176,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 Columns.Add(thisField);
             }
             int themeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
-            View = MixTemplates.UpdateViewModel.GetTemplateByPath(themeId, Template, MixEnums.EnumTemplateFolder.Modules.ToString(), _context, _transaction);
+            View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Modules, _context, _transaction);
             if (this.View == null)
             {
                 this.View = MixTemplates.UpdateViewModel.GetDefault(EnumTemplateFolder.Modules, Specificulture);

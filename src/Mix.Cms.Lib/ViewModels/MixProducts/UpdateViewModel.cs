@@ -286,8 +286,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
             }
 
             //Get Templates
-            int themeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
-            View = MixTemplates.UpdateViewModel.GetTemplateByPath(themeId, Template, TemplateFolderType, _context, _transaction);
+            View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Products, _context, _transaction);
 
             this.View = View ?? Templates.FirstOrDefault();
 
