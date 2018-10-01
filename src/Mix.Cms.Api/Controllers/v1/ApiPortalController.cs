@@ -19,7 +19,7 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Cms.Lib;
 using static Mix.Cms.Lib.MixEnums;
 using Mix.Cms.Lib.Models.Cms;
-using Swastika.Cms.Lib.ViewModels.Account;
+using Mix.Cms.Lib.ViewModels.Account;
 using Mix.Cms.Lib.ViewModels.MixInit;
 
 namespace Mix.Cms.Api.Controllers

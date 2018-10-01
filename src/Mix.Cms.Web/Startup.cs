@@ -110,7 +110,7 @@ namespace Mix.Cms.Web
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swastika API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mix API V1");
             });
 
             app.UseMvc(routes =>
