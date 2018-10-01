@@ -13,7 +13,6 @@
                 ctrl.changeLang = function (lang, langIcon) {
                     ctrl.settings.lang = lang;
                     ctrl.settings.langIcon = langIcon;
-
                     commonServices.fillSettings(lang).then(function () {
                         translatorService.reset(lang).then(function () {
                             GlobalSettingsService.reset(lang).then(function () {
