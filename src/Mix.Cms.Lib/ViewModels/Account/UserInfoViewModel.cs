@@ -6,7 +6,7 @@ using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
-using Swastika.Cms.Lib.ViewModels.Account;
+using Mix.Cms.Lib.ViewModels.Account;
 using System;
 using System.Collections.Generic;
 

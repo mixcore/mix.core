@@ -1,13 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Domain.Core.ViewModels;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using Mix.Cms.Lib.Models.Account;
 
-namespace Swastika.Cms.Lib.ViewModels.Account
+namespace Mix.Cms.Lib.ViewModels.Account
 {
     public class UserRoleViewModel
         : ViewModelBase<MixCmsAccountContext, AspNetUserRoles, UserRoleViewModel>

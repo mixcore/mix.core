@@ -2,7 +2,7 @@
 using Mix.Cms.Lib.Models.Account;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
-using Swastika.Cms.Lib.ViewModels.Account;
+using Mix.Cms.Lib.ViewModels.Account;
 
 namespace Mix.Cms.Lib.ViewModels.Account
 {
