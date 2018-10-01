@@ -12,6 +12,8 @@ namespace Mix.Cms.Lib.Models.Cms
             MixComment = new HashSet<MixComment>();
             MixModuleArticle = new HashSet<MixModuleArticle>();
             MixPageArticle = new HashSet<MixPageArticle>();
+            MixRelatedArticleMixArticle = new HashSet<MixRelatedArticle>();
+            MixRelatedArticleS = new HashSet<MixRelatedArticle>();
         }
 
         public int Id { get; set; }
@@ -48,5 +50,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public ICollection<MixComment> MixComment { get; set; }
         public ICollection<MixModuleArticle> MixModuleArticle { get; set; }
         public ICollection<MixPageArticle> MixPageArticle { get; set; }
+        public ICollection<MixRelatedArticle> MixRelatedArticleMixArticle { get; set; }
+        public ICollection<MixRelatedArticle> MixRelatedArticleS { get; set; }
     }
 }

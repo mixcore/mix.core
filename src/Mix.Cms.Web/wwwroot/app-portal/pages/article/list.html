@@ -1,5 +1,5 @@
 <!-- <section class="content container-fluid"> -->
-    <filter-list request="request" callback="loadArticles(pageIndex)"></filter-list>
+    <filter-list request="request" callback="getList(pageIndex)"></filter-list>
     
     <table class="table table-sm table-hover" cellspacing="0">
         <thead class="thead-light">
@@ -30,7 +30,7 @@
             </tr>
         </thead>
 
-        <tbody class="sortable" ng-init="loadArticles()">
+        <tbody class="sortable" ng-init="getList()">
             <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="article" sort-model-id="{{item.id}}">
                 <td style="cursor:move;" class="drag-header">
                     <span class="fas fa-sort"></span>
@@ -61,10 +61,10 @@
                         <a href="/portal/article/details/{{item.id}}" class="btn btn-light">
                             <span class="fas fa-pencil-alt text-primary"></span>
                         </a>
-                        <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-light">
+                        <a ng-click="preview(item)" target="_blank" class="btn btn-light">
                             <span class="fas fa-eye text-info"></span>
                         </a>        
-                        <a ng-click="removeArticle(item.id);" class="btn btn-light">
+                        <a ng-click="remove(item.id);" class="btn btn-light">
                             <span class="fas fa-times text-danger"></span>
                         </a>
                     </div>
@@ -72,6 +72,6 @@
             </tr>
         </tbody>
     </table>
-    <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end" a-class="page-link" paging-action="loadArticles(page-1)" scroll-top="true">
+    <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
 <!-- </section> -->
 </paging>
