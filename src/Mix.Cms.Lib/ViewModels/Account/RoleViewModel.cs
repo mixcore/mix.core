@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Mix.Cms.Lib.Models.Account;
 
-namespace Swastika.Cms.Lib.ViewModels.Account
+namespace Mix.Cms.Lib.ViewModels.Account
 {
     public class RoleViewModel
         : ViewModelBase<MixCmsAccountContext, AspNetRoles, RoleViewModel>
