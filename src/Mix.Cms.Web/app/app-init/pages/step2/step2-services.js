@@ -6,7 +6,7 @@ app.factory('Step2Services', ['$http', 'CommonService', function ($http, commonS
     var usersServiceFactory = {};
     var apiUrl = '/api/portal/';
     var _register = async function (user) {
-        var apiUrl = '/api/account/register';
+        var apiUrl = '/account/register';
         var req = {
             method: 'POST',
             url: apiUrl,
