@@ -6,14 +6,25 @@ app.component('productMain', {
             var ctrl = this;
             ctrl.translate = $rootScope.translate;
             ctrl.privacies = ngAppSettings.privacies;
-            ctrl.formatPrice = function(price){
-                return  price.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            ctrl.formatPrice = function (price) {
+                return price.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             };
-            ctrl.generateSEO = function () {
-                if (!ctrl.product.id) {
-                    ctrl.product.seoName = $rootScope.generateKeyword(ctrl.product.title, '-');
+            ctrl.generateSeo = function () {
+                if (ctrl.product) {
+                    if (ctrl.product.seoName == null || ctrl.product.seoName == '') {
+                        ctrl.product.seoName = $rootScope.generateKeyword(ctrl.product.title, '-');
+                    }
+                    if (ctrl.product.seoTitle == null || ctrl.product.seoTitle == '') {
+                        ctrl.product.seoTitle = $rootScope.generateKeyword(ctrl.product.title, '-');
+                    }
+                    if (ctrl.product.seoDescription == null || ctrl.product.seoDescription == '') {
+                        ctrl.product.seoDescription = $rootScope.generateKeyword(ctrl.product.title, '-');
+                    }
+                    if (ctrl.product.seoKeywords == null || ctrl.product.seoKeywords == '') {
+                        ctrl.product.seoKeywords = $rootScope.generateKeyword(ctrl.product.title, '-');
+                    }
                 }
-            };
+            }
         }
     ],
     bindings: {

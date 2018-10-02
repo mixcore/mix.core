@@ -5,12 +5,12 @@ app.factory('UserServices', ['$http', 'CommonService', 'ngAppSettings'
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 
     var usersServiceFactory = {};
-    var apiUrl = '/api/account/';
+    var apiUrl = '/account/';
     
     var serviceBase = ngAuthSettings.serviceBase;
     
     var _getUserDemographicInfo = function () {
-        var url = '/api/GetUserDemographicInfo';
+        var url = '/GetUserDemographicInfo';
         var req = {
             method: 'GET',
             url: serviceBase + url
@@ -44,7 +44,7 @@ app.factory('UserServices', ['$http', 'CommonService', 'ngAppSettings'
     };
 
     var _getUser = async function (id, viewType) {
-        var apiUrl = '/api/account/';
+        var apiUrl = '/account/';
         var url = apiUrl + 'details/' + viewType;
         if (id) {
             url += '/' + id;
@@ -60,7 +60,7 @@ app.factory('UserServices', ['$http', 'CommonService', 'ngAppSettings'
 
         var req = {
             method: 'POST',
-            url: serviceBase + '/api/account/user-in-role',
+            url: serviceBase + '/account/user-in-role',
             data: JSON.stringify(userInRole)
 
         };
@@ -69,7 +69,7 @@ app.factory('UserServices', ['$http', 'CommonService', 'ngAppSettings'
     };
 
     var _saveUser = async function (user) {
-        var apiUrl = '/api/account/';
+        var apiUrl = '/account/';
         var req = {
             method: 'POST',
             url: apiUrl + 'save',
@@ -79,7 +79,7 @@ app.factory('UserServices', ['$http', 'CommonService', 'ngAppSettings'
     };
 
     var _register = async function (user) {
-        var apiUrl = '/api/account/';
+        var apiUrl = '/account/';
         var req = {
             method: 'POST',
             url: apiUrl + 'register',

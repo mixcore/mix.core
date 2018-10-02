@@ -121,6 +121,21 @@ namespace Mix.Cms.Web
                 routes.MapRoute(
                     name: "areaRoute",
                     template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{area:exists}/{controller=Portal}/{action=Init}");
+                routes.MapRoute(
+                    name: "alias",
+                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{seoName}");
+                routes.MapRoute(
+                   name: "page",
+                   template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{seoName}");
+                routes.MapRoute(
+                    name: "file",
+                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/portal/file");
+                routes.MapRoute(
+                    name: "article",
+                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{seoName}");
+                routes.MapRoute(
+                    name: "product",
+                    template: @"{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + @"}/{seoName}");
 
             });
         }
