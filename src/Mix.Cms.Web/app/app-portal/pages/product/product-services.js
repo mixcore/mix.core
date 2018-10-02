@@ -1,10 +1,8 @@
 ﻿'use strict';
 app.factory('ProductService', ['BaseService',
-    function (baseService) {
-        baseService.init('product');
-        var serviceFactory = baseService;
+    function (baseService) {        
+        var serviceFactory = Object.create(baseService);
+        serviceFactory.init('product');
         // Define more service methods here
-        serviceFactory.modelName = 'product';
-        serviceFactory.prefixUrl = '/' + serviceFactory.lang;
         return serviceFactory;
     }]);
