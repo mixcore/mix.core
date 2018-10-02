@@ -1,12 +1,13 @@
 ﻿'use strict';
-app.controller('PageController', ['$scope', '$rootScope', '$routeParams', 'ngAppSettings', 'PageService', '$routeParams',
-    function ($scope, $rootScope, $routeParams, ngAppSettings, service, $routeParams) {
+app.controller('PageController', 
+            ['$scope', '$rootScope', '$routeParams', 'ngAppSettings', 'PageService',
+    function ($scope, $rootScope, $routeParams, ngAppSettings, service) {
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
         $scope.request.query = 'level=0';        
         $scope.loadPageDatas = async function () {
             $rootScope.isBusy = true;
             var id = $routeParams.id;
-            var response = await pageServices.getPage(id, 'fe');
+            var response = await pageServices.getPage(id, 'portal');
             if (response.isSucceed) {
                 $scope.activedData = response.data;
                 $rootScope.initEditor();

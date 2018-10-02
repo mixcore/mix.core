@@ -1,6 +1,6 @@
 'use strict';
 
-function BaseCtrl ($scope, $rootScope, $routeParams, ngAppSettings, service, modelName) {
+function BaseCtrl ($scope, $rootScope, $routeParams, ngAppSettings, service) {
    
     $scope.request = angular.copy(ngAppSettings.request);
     $scope.contentStatuses = angular.copy(ngAppSettings.contentStatuses);

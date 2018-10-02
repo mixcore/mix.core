@@ -2,9 +2,8 @@
 app.factory('PageService', ['$rootScope', 'CommonService', 'BaseService',
     function ($rootScope, commonServices, baseService) {
 
-        baseService.init('page');
-        var serviceFactory = baseService;//Object.create(baseService);
-
+        var serviceFactory = Object.create(baseService);
+        serviceFactory.init('page');
         var _updateInfos = async function (pages) {
 
             var req = {
