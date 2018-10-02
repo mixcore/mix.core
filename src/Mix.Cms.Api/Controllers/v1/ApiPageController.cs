@@ -194,7 +194,7 @@ namespace Mix.Cms.Api.Controllers
                         fedata.Data.Items.ForEach(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                "Page", new { seoName = a.SeoName }, Request, Url);
+                                "page", new { seoName = a.SeoName }, Request, Url);
                         });
                     }
                     return JObject.FromObject(fedata);
@@ -206,7 +206,7 @@ namespace Mix.Cms.Api.Controllers
                         bedata.Data.Items.ForEach(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                "Page", new { seoName = a.SeoName }, Request, Url);
+                                "page", new { seoName = a.SeoName }, Request, Url);
                         });
                     }
                     return JObject.FromObject(bedata);
@@ -218,11 +218,11 @@ namespace Mix.Cms.Api.Controllers
                         data.Data.Items.ForEach((Action<ReadListItemViewModel>)(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                "Page", new { seoName = a.SeoName }, Request, Url);
+                                "page", new { seoName = a.SeoName }, Request, Url);
                             a.Childs.ForEach((Action<ReadListItemViewModel>)(c =>
                             {
                                 c.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                    "Page", new { seoName = c.SeoName }, Request, Url);
+                                    "page", new { seoName = c.SeoName }, Request, Url);
                             }));
                         }));
                     }
