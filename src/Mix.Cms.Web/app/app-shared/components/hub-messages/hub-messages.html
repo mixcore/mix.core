@@ -1,0 +1,18 @@
+<div class="modal modal-default fade show" id="modal-hub-messages" ng-init="init()">
+    <div class="modal-dialog modal-lg modal-dialog-centered" style="max-width: 95%;">
+        <div class="modal-content">
+            <!-- <div class="modal-body" style="height: calc(100vh - 143px);overflow-y: auto;"> -->
+            <div class="modal-body">
+                <ul>
+                    <li ng-repeat="msg in responses">
+                        <pre>
+                            <p ng-bind="msg"></p>
+                        </pre>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
