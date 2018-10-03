@@ -24,7 +24,7 @@ namespace Mix.Cms.Api.Controllers
     public class ApiMediaController :
      BaseApiController
     {
-        public ApiMediaController()
+        public ApiMediaController(Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(hubContext)
         {
         }
 

@@ -24,7 +24,7 @@ namespace Mix.Cms.Api.Controllers
             BaseApiController
     {
 
-        public ApiTemplateController()
+        public ApiTemplateController(Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(hubContext)
         {
         }
         #region Get

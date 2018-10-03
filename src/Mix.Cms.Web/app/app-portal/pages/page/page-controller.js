@@ -2,7 +2,7 @@
 app.controller('PageController', 
             ['$scope', '$rootScope', '$routeParams', 'ngAppSettings', 'PageService',
     function ($scope, $rootScope, $routeParams, ngAppSettings, service) {
-        BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
+        BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);        
         $scope.request.query = 'level=0';        
         $scope.loadPageDatas = async function () {
             $rootScope.isBusy = true;

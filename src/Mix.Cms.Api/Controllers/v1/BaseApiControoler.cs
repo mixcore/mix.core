@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.SignalR;
+using Mix.Cms.Hub;
 using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
 using System;
@@ -8,6 +10,8 @@ namespace Mix.Cms.Api.Controllers
 {
     public class BaseApiController: Controller
     {
+        protected readonly IHubContext<PortalHub> _hubContext;
+
         /// <summary>
         /// The language
         /// </summary>
@@ -17,14 +21,16 @@ namespace Mix.Cms.Api.Controllers
         /// The domain
         /// </summary>
         protected string _domain;
+        
         /// <summary>
         /// The repo
         /// </summary>
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseApiController"/> class.
         /// </summary>
-        public BaseApiController()
+        public BaseApiController(IHubContext<PortalHub> hubContext)
         {
+            _hubContext = hubContext;
         }
 
         #region Overrides
@@ -36,6 +42,12 @@ namespace Mix.Cms.Api.Controllers
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             GetLanguage();
+            var logMsg = new RepositoryResponse<string>()
+            {
+                IsSucceed = true,
+                Data = User.Identity.Name + Request.Path.Value
+            };
+            _hubContext.Clients.All.SendAsync("ReceiveMessage", logMsg);
             base.OnActionExecuting(context);
         }
 

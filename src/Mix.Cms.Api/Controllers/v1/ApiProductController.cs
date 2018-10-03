@@ -25,7 +25,7 @@ namespace Mix.Cms.Api.Controllers
     public class ApiProductController :
         BaseApiController
     {
-        public ApiProductController()
+        public ApiProductController(Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(hubContext)
         {
         }
 

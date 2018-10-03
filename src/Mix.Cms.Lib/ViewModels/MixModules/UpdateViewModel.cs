@@ -18,9 +18,7 @@ using static Mix.Cms.Lib.MixEnums;
 namespace Mix.Cms.Lib.ViewModels.MixModules
 {
     public class UpdateViewModel : ViewModelBase<MixCmsContext, MixModule, UpdateViewModel>
-
     {
-
         #region Properties
 
         #region Models

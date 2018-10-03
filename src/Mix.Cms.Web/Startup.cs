@@ -14,7 +14,7 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Swashbuckle.AspNetCore.Swagger;
 using Mix.Identity.Services;
-using System.IO;
+using Mix.Cms.Hub;
 
 namespace Mix.Cms.Web
 {
@@ -59,6 +59,9 @@ namespace Mix.Cms.Web
             services.AddTransient<IEmailSender, AuthEmailMessageSender>();
             services.AddTransient<ISmsSender, AuthSmsMessageSender>();
             services.AddSingleton<MixService>();
+
+            // add signalr
+            services.AddSignalR();
 
             services.AddSwaggerGen(c =>
             {
@@ -105,6 +108,10 @@ namespace Mix.Cms.Web
             //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseSignalR(route =>
+            {
+                route.MapHub<PortalHub>("/portalhub");
+            });
 
             app.UseAuthentication();
             app.UseSwagger();
