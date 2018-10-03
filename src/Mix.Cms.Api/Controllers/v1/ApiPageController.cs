@@ -18,6 +18,8 @@ using static Mix.Cms.Lib.MixEnums;
 using System.Linq.Expressions;
 using System.Web;
 using Mix.Cms.Lib.ViewModels.MixPages;
+using Microsoft.AspNetCore.SignalR;
+using Mix.Cms.Hub;
 
 namespace Mix.Cms.Api.Controllers
 {
@@ -26,8 +28,9 @@ namespace Mix.Cms.Api.Controllers
     public class ApiPageController :
         BaseApiController
     {
-        public ApiPageController()
+        public ApiPageController(IHubContext<PortalHub> hubContext): base(hubContext)
         {
+            
         }
         #region Get
 
@@ -167,7 +170,6 @@ namespace Mix.Cms.Api.Controllers
         public async Task<JObject> GetList(
             [FromBody] RequestPaging request)
         {
-
             var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
             bool isLevel = int.TryParse(parsed.Get("level"), out int level);
             ParseRequestPagingDate(request);

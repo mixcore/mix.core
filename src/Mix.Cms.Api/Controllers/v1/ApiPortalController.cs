@@ -35,10 +35,10 @@ namespace Mix.Cms.Api.Controllers
         public ApiPortalController(
            UserManager<ApplicationUser> userManager,
            SignInManager<ApplicationUser> signInManager,
-           RoleManager<IdentityRole> roleManager
-
+           RoleManager<IdentityRole> roleManager,
+            Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext
             )
-            : base()
+            : base(hubContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;

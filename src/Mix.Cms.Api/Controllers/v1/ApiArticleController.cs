@@ -25,7 +25,7 @@ namespace Mix.Cms.Api.Controllers
     public class ApiArticleController :
         BaseApiController
     {
-        public ApiArticleController()
+        public ApiArticleController(Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext): base(hubContext)
         {
         }
 
