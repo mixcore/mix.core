@@ -8,6 +8,9 @@
                 {
                     ctrl.avatar = authService.authentication.avatar;
                 }
+                GlobalSettingsService.fillGlobalSettings().then(function (response) {
+                    ctrl.settings = response;
+                });
                 ctrl.translate = $rootScope.translate;
                 ctrl.getConfiguration = $rootScope.getConfiguration;
                 ctrl.changeLang = function (lang, langIcon) {
