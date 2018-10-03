@@ -14,7 +14,7 @@ function BaseHub($scope) {
         $scope.connection.invoke('SendMessage', $scope.request);
     };
     $scope.receiveMessage = function (msg) {
-        $scope.responses.push($scope.prettyJsonObj(msg));
+        $scope.responses.splice(0, 0,msg);
         $scope.$applyAsync();
     };
     $scope.prettyJsonObj = function(obj) {
