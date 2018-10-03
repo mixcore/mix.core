@@ -61,6 +61,7 @@ namespace Mix.Cms.Api.Controllers
         [Route("details/{viewType}")]
         public async Task<ActionResult<JObject>> Details(string viewType, int? id)
         {
+            string msg = string.Empty;
             switch (viewType)
             {
                 case "portal":
@@ -71,6 +72,8 @@ namespace Mix.Cms.Api.Controllers
                         {
                             beResult.Data.DetailsUrl = MixCmsHelper.GetRouterUrl("Page", new { beResult.Data.SeoName }, Request, Url);
                         }
+                        msg = $"Get {viewType} page with id {id.Value}";
+                        Alert("Get Details", 200, msg);
                         return Ok(JObject.FromObject(beResult));
                     }
                     else
@@ -89,6 +92,8 @@ namespace Mix.Cms.Api.Controllers
                             IsSucceed = true,
                             Data = await UpdateViewModel.InitViewAsync(model)
                         };
+                        msg = $"Get default {viewType} page";
+                        Alert("Get Details", 200, msg);
                         return JObject.FromObject(result);
                     }
                 default:
@@ -186,7 +191,7 @@ namespace Mix.Cms.Api.Controllers
                         && (!request.ToDate.HasValue
                             || (model.CreatedDateTime <= request.ToDate.Value)
                         );
-
+            
             switch (request.Key)
             {
                 case "mvc":
@@ -199,6 +204,8 @@ namespace Mix.Cms.Api.Controllers
                                 "page", new { seoName = a.SeoName }, Request, Url);
                         });
                     }
+
+                    Alert("Get List Page", 200, $"Get {request.Key} list page");
                     return JObject.FromObject(fedata);
                 case "portal":
 
@@ -211,6 +218,8 @@ namespace Mix.Cms.Api.Controllers
                                 "page", new { seoName = a.SeoName }, Request, Url);
                         });
                     }
+
+                    Alert("Get List Page", 200, $"Get {request.Key} list page");
                     return JObject.FromObject(bedata);
                 default:
 
@@ -228,6 +237,8 @@ namespace Mix.Cms.Api.Controllers
                             }));
                         }));
                     }
+
+                    Alert("Get List Page", 200, $"Get {request.Key} list page");
                     return JObject.FromObject(data);
             }
         }

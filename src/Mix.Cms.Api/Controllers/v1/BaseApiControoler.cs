@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.SignalR;
 using Mix.Cms.Hub;
 using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers
 {
@@ -42,18 +44,27 @@ namespace Mix.Cms.Api.Controllers
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             GetLanguage();
-            var logMsg = new RepositoryResponse<string>()
-            {
-                IsSucceed = true,
-                Data = User.Identity.Name + Request.Path.Value
-            };
-            _hubContext.Clients.All.SendAsync("ReceiveMessage", logMsg);
+            Alert("Executing request", 200);
             base.OnActionExecuting(context);
         }
 
 
         #endregion
 
+        protected Task Alert(string action, int status, string message = null)
+        {
+            var logMsg = new JObject()
+                {
+                    new JProperty("created_at", DateTime.UtcNow),
+                    new JProperty("user", User.Identity?.Name),                   
+                    new JProperty("request_url", Request.Path.Value),
+                    new JProperty("action", action),
+                    new JProperty("status", status),
+                    new JProperty("message", message)
+                };
+            _hubContext.Clients.All.SendAsync("ReceiveMessage", logMsg);
+            return Task.CompletedTask;
+        }
 
         protected void ParseRequestPagingDate(RequestPaging request)
         {
