@@ -12,7 +12,6 @@ using Mix.Cms.Lib.Services;
 using Mix.Cms.Web.Models;
 using Mix.Domain.Core.ViewModels;
 using Mix.Identity.Models;
-using Newtonsoft.Json.Linq;
 using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Web.Controllers
@@ -31,12 +30,12 @@ namespace Mix.Cms.Web.Controllers
         [Route("")]
         [Route("{culture}")]
         [Route("{culture}/{seoName}")]
-        public IActionResult Index(string culture, string seoName)
+        public async System.Threading.Tasks.Task<IActionResult> IndexAsync(string culture, string seoName)
         {
             if (MixService.GetConfig<bool>("IsInit"))
             {
                 //Go to landing page
-                return Page(seoName);
+                return await PageAsync(seoName);
 
 
             }
@@ -86,13 +85,13 @@ namespace Mix.Cms.Web.Controllers
 
         [HttpGet]
         [Route("404")]
-        public IActionResult PageNotFound()
+        public async System.Threading.Tasks.Task<IActionResult> PageNotFoundAsync()
         {
-            return Page("404");
+            return await PageAsync("404");
         }
 
 
-        IActionResult Page(string seoName)//Expression<Func<MixPage, bool>> predicate, int? pageIndex = null, int pageSize = 10)
+        async System.Threading.Tasks.Task<IActionResult> PageAsync(string seoName)//Expression<Func<MixPage, bool>> predicate, int? pageIndex = null, int pageSize = 10)
         {
             // Home Page
 
@@ -121,7 +120,7 @@ namespace Mix.Cms.Web.Controllers
                     && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
                 }
 
-                getPage = Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModel(predicate);
+                getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
                 _memoryCache.Set(cacheKey, getPage.Data);
             }
 
