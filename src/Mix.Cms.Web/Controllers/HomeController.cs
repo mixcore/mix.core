@@ -30,7 +30,7 @@ namespace Mix.Cms.Web.Controllers
         [Route("")]
         [Route("{culture}")]
         [Route("{culture}/{seoName}")]
-        public async System.Threading.Tasks.Task<IActionResult> IndexAsync(string culture, string seoName)
+        public async System.Threading.Tasks.Task<IActionResult> Index(string culture, string seoName)
         {
             if (MixService.GetConfig<bool>("IsInit"))
             {
@@ -85,7 +85,7 @@ namespace Mix.Cms.Web.Controllers
 
         [HttpGet]
         [Route("404")]
-        public async System.Threading.Tasks.Task<IActionResult> PageNotFoundAsync()
+        public async System.Threading.Tasks.Task<IActionResult> PageNotFound()
         {
             return await PageAsync("404");
         }
