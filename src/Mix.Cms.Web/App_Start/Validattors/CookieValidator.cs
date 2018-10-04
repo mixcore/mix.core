@@ -12,7 +12,7 @@ namespace Mix.Cms.Web.Mvc.App_Start.Validattors
         {
             // Do sth before process  request with current principal
             // context.RejectPrincipal();
-            
+            await Task.CompletedTask;
         }
     }
 }

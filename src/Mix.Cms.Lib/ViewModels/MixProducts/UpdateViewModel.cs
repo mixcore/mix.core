@@ -18,7 +18,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
     public class UpdateViewModel
         : ViewModelBase<MixCmsContext, MixProduct, UpdateViewModel>
     {
-        
+
         #region Properties
 
         #region Models
@@ -308,7 +308,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
                 MediaNavs.ForEach(n => n.IsActived = true);
             }
 
-            ProductNavs = GetRelated(_context, _transaction);            
+            ProductNavs = GetRelated(_context, _transaction);
         }
 
         public override MixProduct ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -453,8 +453,8 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
                 return result;
             }
         }
-        
-        public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+
+        public override Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>()
             {
@@ -478,7 +478,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
                 }
             }
-            
+
             if (result.IsSucceed)
             {
                 var navMedia = _context.MixProductMedia.AsEnumerable();
@@ -496,7 +496,9 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
                 }
             }
-            return result;
+            var taskSource = new TaskCompletionSource<RepositoryResponse<bool>>();
+            taskSource.SetResult(result);
+            return taskSource.Task;
         }
 
         #endregion Async Methods

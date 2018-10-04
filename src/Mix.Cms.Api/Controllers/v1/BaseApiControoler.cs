@@ -44,14 +44,14 @@ namespace Mix.Cms.Api.Controllers
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             GetLanguage();
-            Alert("Executing request", 200);
+            AlertAsync("Executing request", 200);
             base.OnActionExecuting(context);
         }
 
 
         #endregion
 
-        protected Task Alert(string action, int status, string message = null)
+        protected void AlertAsync(string action, int status, string message = null)
         {
             var logMsg = new JObject()
                 {
@@ -63,7 +63,6 @@ namespace Mix.Cms.Api.Controllers
                     new JProperty("message", message)
                 };
             _hubContext.Clients.All.SendAsync("ReceiveMessage", logMsg);
-            return Task.CompletedTask;
         }
 
         protected void ParseRequestPagingDate(RequestPaging request)
