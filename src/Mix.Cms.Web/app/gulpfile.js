@@ -68,14 +68,15 @@ paths.plugins = {
 };
 paths.portal = {
     src: [        
-        paths.webroot + "app-portal/pages/**/*.js"
+        paths.webroot + "app-portal/pages/**/*.js",
+        paths.webroot + "app-portal/components/**/*.js"
     ],
     dest: paths.webroot + "js/app-portal.min.js"
 };
 
 paths.portalApp = {
     src: [
-        paths.webroot + "app-portal/shared/**/*.js",
+        paths.webroot + "app-portal/app-portal-controller.js",
         paths.webroot + "app-portal/app.js",
         paths.webroot + "app-portal/app.filter.js",
         paths.webroot + "app-portal/app.directive.js",
