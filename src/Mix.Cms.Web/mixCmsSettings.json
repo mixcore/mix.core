@@ -64,7 +64,9 @@
     "Language": "en-us",
     "UploadFolder": "Content/Uploads",
     "ThemeId": "1",
-    "TemplateExtension": ".cshtml"
+    "TemplateExtension": ".cshtml",
+    "ApiEncryptKey": "16rdKQfqN3L4TY7YktgxBw==",
+    "IsEncryptApi": true
   },
   "Logging": {
     "IncludeScopes": false,
