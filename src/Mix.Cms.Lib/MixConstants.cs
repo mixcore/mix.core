@@ -37,6 +37,8 @@ namespace Mix.Cms.Lib
             public const string DefaultCulture = "DefaultCulture";
             public const string IsSqlite = "IsSqlite";
             public const string ThemeId = "ThemeId";
+            public const string ApiEncryptKey = "ApiEncryptKey";
+            public const string IsEncryptApi = "IsEncryptApi";
             public const string TemplateExtension = "TemplateExtension";
             public const string DefaultTheme= "DefaultTheme";
             public const string DefaultTemplate = "DefaultTemplate";

@@ -59,7 +59,7 @@ app.filter('utcToLocal', FilterUtcDate)
             'Published',
             'Draft',
             'Schedule'
-        ],
+        ],        
         editorConfigurations: {
             core: {},
             plugins: {
