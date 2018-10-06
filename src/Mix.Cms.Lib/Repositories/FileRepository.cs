@@ -35,10 +35,8 @@ namespace Mix.Cms.Lib.Repositories
         /// Gets the instance.
         /// </summary>
         /// <returns></returns>
-        public static FileRepository Instance
-        {
-            get
-            {
+        public static FileRepository Instance {
+            get {
                 if (instance == null)
                 {
                     lock (syncRoot)
@@ -49,8 +47,7 @@ namespace Mix.Cms.Lib.Repositories
                 }
                 return instance;
             }
-            set
-            {
+            set {
                 instance = value;
             }
         }
@@ -230,13 +227,13 @@ namespace Mix.Cms.Lib.Repositories
         public FileViewModel GetFile(string fullname, string FileFolder, bool isCreate = false, string defaultContent = "")
         {
             var arr = fullname.Split('.');
-            if (arr.Length==2)
+            if (arr.Length == 2)
             {
                 return GetFile(arr[0], $".{arr[1]}", FileFolder, isCreate, defaultContent);
             }
             else
             {
-                return new FileViewModel() { FileFolder = FileFolder }; ;
+                return new FileViewModel() { FileFolder = FileFolder };
             }
         }
 
@@ -270,6 +267,7 @@ namespace Mix.Cms.Lib.Repositories
             }
             return false;
         }
+
         public bool EmptyFolder(string folderPath)
         {
             DeleteFolder(folderPath);
@@ -572,7 +570,6 @@ namespace Mix.Cms.Lib.Repositories
             {
                 if (!string.IsNullOrEmpty(file.Filename))
                 {
-
                     CreateDirectoryIfNotExist(file.FileFolder);
 
                     string fileName = $"{file.Filename}{file.Extension}";

@@ -1,0 +1,1 @@
+C:\_workspace\github\mixcore\mix.core\src\.sonarqube\out\2
