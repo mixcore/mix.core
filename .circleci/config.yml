@@ -6,6 +6,7 @@ jobs:
     steps:
       - checkout
       - run: find .
+      - run: cd /src/Mix.Cms.Web
       - run: dotnet restore
       - run: dotnet build
       - run: dotnet test --no-build Build.Tests
