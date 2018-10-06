@@ -172,6 +172,24 @@
       <SonarQubeExclude>true</SonarQubeExclude>
     </PropertyGroup>
 
+    <!-- Temporary project detection -->
+    <!-- Some kinds of project have logic to trigger additional special builds based on
+         the same project file e.g. WPF projects build a temporary assembly before
+         the main compilation takes place.
+         We only want to analyze the "normal" build of the project, so we should turn off analysis
+         for the known cases. -->
+
+    <PropertyGroup>
+      <!-- Special case 1: WPF projects call the task Windows.GenerateTemporaryTargetAssembly in PresentationBuildTasks. -->
+      <IsTempProject Condition="$(MSBuildProjectFile.EndsWith('.tmp_proj', System.StringComparison.OrdinalIgnoreCase))">true</IsTempProject>
+      <IsTempProject Condition="$(MSBuildProjectFile.EndsWith('_wpftmp.csproj', System.StringComparison.OrdinalIgnoreCase))">true</IsTempProject>
+      <IsTempProject Condition="$(MSBuildProjectFile.EndsWith('_wpftmp.vbproj', System.StringComparison.OrdinalIgnoreCase))">true</IsTempProject>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="$(IsTempProject) == 'true' AND $(SonarQubeExclude)==''" >
+      <SonarQubeExclude>true</SonarQubeExclude>
+    </PropertyGroup>
+
     <PropertyGroup Condition=" $(SonarQubeTestProject) == '' ">
       <!-- The MS Test project type guid-->
       <SonarQubeMsTestProjectTypeGuid>3AC096D0-A1C2-E12C-1390-A8335801FDAB</SonarQubeMsTestProjectTypeGuid>
@@ -360,11 +378,16 @@
   <Target Name="SetRoslynCodeAnalysisProperties">
 
     <!-- Fetch the relevant settings from the config file -->
-    <GetAnalyzerSettings AnalysisConfigDir="$(SonarQubeConfigPath)" Language="$(SQLanguage)" OriginalAdditionalFiles="@(AdditionalFiles)">
+    <GetAnalyzerSettings AnalysisConfigDir="$(SonarQubeConfigPath)"
+                         Language="$(SQLanguage)"
+                         CurrentProjectDirectoryPath="$(MSBuildProjectDirectory)"
+                         OriginalAnalyzers="@(Analyzer)"
+                         OriginalAdditionalFiles="@(AdditionalFiles)"
+                         OriginalRulesetFilePath="$(ResolvedCodeAnalysisRuleset)"
+                         ProjectSpecificConfigDirectory="$(ProjectSpecificConfDir)">
       <Output TaskParameter="RuleSetFilePath" PropertyName="SQRuleSetFilePath" />
       <Output TaskParameter="AnalyzerFilePaths" ItemName="SQAnalyzerFilePaths" />
-      <Output TaskParameter="AdditionalFiles" ItemName="SQAdditionalFiles" />
-      <Output TaskParameter="AdditionalFilesToRemove" ItemName="SQAdditionalFilesToRemove" />
+      <Output TaskParameter="AdditionalFilePaths" ItemName="SQAdditionalFiles" />
     </GetAnalyzerSettings>
 
     <PropertyGroup>
@@ -382,11 +405,11 @@
     </WriteLinesToFile>
 
     <ItemGroup>
-      <!-- Remove any existing analyzers and additional files -->
+      <!-- Clear the original set of analyzers and additional files -->
       <Analyzer Remove="@(Analyzer)" />
-      <AdditionalFiles Remove="@(SQAdditionalFilesToRemove)" />
+      <AdditionalFiles Remove="@(AdditionalFiles)" />
 
-      <!-- Add specified analyzers and additional files (if any) -->
+      <!-- Use the set of analyzers and additional files calculated by the GetAnalyzerSettings task -->
       <Analyzer Include="@(SQAnalyzerFilePaths)" />
       <AdditionalFiles Include="@(SQAdditionalFiles)" />
       <AdditionalFiles Include="$(ProjectConfFilePath)" />
