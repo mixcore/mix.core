@@ -41,12 +41,13 @@ app.factory('AuthService',
 
                 if (resp.isSucceed) {
                     data = resp.data;
-                    localStorageService.set('authorizationData',
-                        {
-                            userRoles: data.userData.userRoles,
-                            token: data.access_token, userName: data.userData.firstName, roleNames: data.userData.roles,
-                            avatar: data.userData.avatar, refresh_token: data.refresh_token, userId: data.userData.id
-                        });
+                    var authData = {
+                        userRoles: data.userData.userRoles,
+                        token: data.access_token, userName: data.userData.firstName, roleNames: data.userData.roles,
+                        avatar: data.userData.avatar, refresh_token: data.refresh_token, userId: data.userData.id
+                    };
+                    var encrypted = $rootScope.encrypt(JSON.stringify(authData));
+                    localStorageService.set('authorizationData', { encrypted });
                     _authentication = {
                         isAuth: true,
                         userName: data.userData.NickName,
@@ -88,9 +89,10 @@ app.factory('AuthService',
 
             var _fillAuthData = async function () {
 
-                var authData = localStorageService.get('authorizationData');
-                if (authData) {
+                var encryptedAuthData = localStorageService.get('authorizationData');
 
+                if (encryptedAuthData) {
+                    var authData = JSON.parse($rootScope.decrypt(encryptedAuthData.encrypted));
                     _authentication = {
                         isAuth: true,
                         userName: authData.userName,

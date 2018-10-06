@@ -1,6 +1,6 @@
 'use strict';
 var app = angular.module('MixPortal',
-    ['ngRoute', 'ngFileUpload', 'LocalStorageModule']);
+    ['ngRoute', 'ngFileUpload', 'LocalStorageModule', 'angularjs-crypto']);
     var modules = angular.module('components', []);
 
 app.directive('ngEnter', function () {

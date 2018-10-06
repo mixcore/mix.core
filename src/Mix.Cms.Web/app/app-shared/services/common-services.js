@@ -6,8 +6,6 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
             lang: '',
             cultures: []
         };
-        var _translator = {};
-
         var _showAlertMsg = function (title, message) {
             $rootScope.message = {
                 title: title,
@@ -84,11 +82,10 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
         };
         var _getApiResult = async function (req, serviceBase) {
             $rootScope.isBusy = true;
-            if(!authService.authentication){
+            if (!authService.authentication) {
                 await authService.fillAuthData();
             }
-            if(authService.authentication)
-            {
+            if (authService.authentication) {
                 req.Authorization = authService.authentication.token;
             }
 
@@ -105,7 +102,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
             req.headers.Authorization = 'Bearer ' + req.Authorization || '';
             return $http(req).then(function (resp) {
                 //var resp = results.data;
-                
+
                 return resp.data;
             },
                 function (error) {
@@ -114,10 +111,10 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
                         return authService.refreshToken(authService.authentication.refresh_token).then(function () {
                             req.headers.Authorization = 'Bearer ' + authService.authentication.token;
                             return $http(req).then(function (results) {
-                                
+
                                 return results.data;
                             }, function (err) {
-                                
+
                                 authService.logOut();
                                 authService.authentication.token = null;
                                 authService.authentication.refresh_token = null;
@@ -127,7 +124,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
                         }, function (err) {
 
                             var t = { isSucceed: false, errors: [err.status] };
-                            
+
                             authService.logOut();
                             authService.authentication.token = null;
                             authService.authentication.refresh_token = null;

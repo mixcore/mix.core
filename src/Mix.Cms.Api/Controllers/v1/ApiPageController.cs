@@ -21,6 +21,7 @@ using Mix.Cms.Lib.ViewModels.MixPages;
 using Microsoft.AspNetCore.SignalR;
 using Mix.Cms.Hub;
 using Microsoft.Extensions.Caching.Memory;
+using System.Security.Cryptography;
 
 namespace Mix.Cms.Api.Controllers
 {
@@ -123,7 +124,18 @@ namespace Mix.Cms.Api.Controllers
         #endregion Get
 
         #region Post
+        [HttpPost, HttpOptions]
+        [Route("encrypted/save")]
+        public async Task<JObject> Post([FromBody] RequestEncrypted request)
+        {
+            request.Key = "2b7e151628aed2a6abf7158809cf4f3c";
+            request.Encrypted = MixService.EncryptString("{}", request.Key);
 
+            string decrypt = MixService.DecryptString(request.Encrypted, request.Key);
+            JObject data = JObject.Parse(decrypt);
+            
+            return data;
+        }
         // POST api/category
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
