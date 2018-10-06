@@ -2,7 +2,7 @@
 var app = angular.module('MixPortal', ['ngRoute', 'components', 'ngFileUpload', 'LocalStorageModule',
     'bw.paging', 'dndLists', 'ngTagsInput', 'ngSanitize']);
 var modules = angular.module('components', []);
-app.run(['$rootScope', '$location', 'CommonService', 'AuthService', 'TranslatorService', 'GlobalSettingsService', 'ngAppSettings',
+app.run(['$rootScope', '$location', 'CommonService', 'AuthService', 'TranslatorService','GlobalSettingsService', 'ngAppSettings',
     function ($rootScope, $location, commonServices, authService, translatorService, configurationService, ngAppSettings) {
         $rootScope.currentContext = $rootScope;
         $rootScope.isBusy = false;
@@ -27,21 +27,19 @@ app.run(['$rootScope', '$location', 'CommonService', 'AuthService', 'TranslatorS
             for (var i = 1; i <= max; i += 1) input.push(i);
             return input;
         };
-
+        
         $rootScope.generateKeyword = function (src, character) {
-            if (src) {
-                return src.replace(/[^a-zA-Z0-9]+/g, character)
-                    .replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2')
-                    .replace(/([a-z])([A-Z])/g, '$1-$2')
-                    .replace(/([0-9])([^0-9])/g, '$1-$2')
-                    .replace(/([^0-9])([0-9])/g, '$1-$2')
-                    .replace(/-+/g, character)
-                    .toLowerCase();
-            }
+            return src.replace(/[^a-zA-Z0-9]+/g, character)
+                .replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2')
+                .replace(/([a-z])([A-Z])/g, '$1-$2')
+                .replace(/([0-9])([^0-9])/g, '$1-$2')
+                .replace(/([^0-9])([0-9])/g, '$1-$2')
+                .replace(/-+/g, character)
+                .toLowerCase();
         };
-
-        $rootScope.generatePhone = function (src) {
-            return src.replace(/^([0-9]{3})([0-9]{3})([0-9]{4})$/, '($1) $2-$3');
+        
+        $rootScope.generatePhone = function(src){
+            return src.replace(/^([0-9]{3})([0-9]{3})([0-9]{4})$/,'($1) $2-$3');
         }
 
         $rootScope.logOut = function () {
@@ -165,7 +163,7 @@ app.run(['$rootScope', '$location', 'CommonService', 'AuthService', 'TranslatorS
                 return keyword || defaultText;
             }
         };
-
+        
         $rootScope.getConfiguration = function (keyword, isWrap, defaultText) {
             if ($rootScope.globalSettings && ($rootScope.configurationService || $rootScope.isBusy)) {
                 return $rootScope.configurationService.get(keyword, isWrap, defaultText);
