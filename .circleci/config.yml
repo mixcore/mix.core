@@ -1,0 +1,14 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: microsoft/dotnet:2.1.300-preview2-sdk-alpine
+    steps:
+      - checkout
+      - run: find .
+      - run: git clone --depth=50 --branch=master https://github.com/mixcore/mix.heart.git /home/travis/build/mixcore/mix.heart
+      - run: git clone --depth=50 --branch=master https://github.com/mixcore/mix.identity.git /home/travis/build/mixcore/mix.identity
+      - run: cd src/Mix.Cms.Web
+      - run: dotnet restore
+      - run: dotnet build
+      - run: dotnet test --no-build Build.Tests
