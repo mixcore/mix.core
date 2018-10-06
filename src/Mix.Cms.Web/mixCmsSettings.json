@@ -1,7 +1,7 @@
 {
   "ConnectionStrings": {
-    "MixAccountConnection": "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=sw-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True",
-    "MixCmsConnection": "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=sw-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True",
+    "MixAccountConnection": "",
+    "MixCmsConnection": "",
     "DefaultConnection": null
   },
   "Authentication": {
@@ -52,7 +52,7 @@
     }
   },
   "GlobalSettings": {
-    "IsInit": true,
+    "IsInit": false,
     "DefaultCulture": "en-us",
     "DefaultTemplate": "_Default",
     "DefaultTheme": "Default",
