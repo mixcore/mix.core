@@ -86,10 +86,12 @@ namespace Mix.Cms.Api.Controllers
             {
                 Lang = _lang,
                 ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, _lang),
+                ApiEncryptKey = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ApiEncryptKey),
+                ApiEncryptIV = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ApiEncryptIV),
+                IsEncryptApi = MixService.GetConfig<bool>(MixConstants.ConfigurationKeyword.IsEncryptApi),
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
                 Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList()
-
             };
 
             configurations.LangIcon = culture?.Icon ?? MixService.GetConfig<string>("Language");
@@ -148,6 +150,8 @@ namespace Mix.Cms.Api.Controllers
             {
                 Lang = _lang,
                 ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, _lang),
+                ApiEncryptKey = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ApiEncryptKey),
+                IsEncryptApi = MixService.GetConfig<bool>(MixConstants.ConfigurationKeyword.IsEncryptApi),
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
                 Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList()

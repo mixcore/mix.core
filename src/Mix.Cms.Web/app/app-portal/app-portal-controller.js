@@ -9,6 +9,7 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
         $scope.lang = '';
         $scope.settings = {};
         $scope.init = function () {
+            
             if (!$rootScope.isBusy) {
                 $rootScope.isBusy = true;
                 $rootScope.configurationService.fillGlobalSettings().then(function (response) {
@@ -19,7 +20,7 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
                         $rootScope.translator.fillTranslator($rootScope.globalSettings.lang).then(function () {
 
                             commonServices.fillSettings().then(function (response) {
-                                
+
                                 authService.fillAuthData().then(function (response) {
                                     $rootScope.authentication = authService.authentication;
                                     if (authService.authentication && authService.authentication.isAuth) {
