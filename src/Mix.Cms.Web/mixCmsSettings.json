@@ -56,6 +56,7 @@
     "DefaultCulture": "en-us",
     "DefaultTemplate": "_Default",
     "DefaultTheme": "Default",
+    "DefaultContentStatus": "2",
     "DefaultTemplateFolder": "Default_Blank",
     "DefaultTemplateLayout": "_Layout",
     "OrderBy": "Priority",
