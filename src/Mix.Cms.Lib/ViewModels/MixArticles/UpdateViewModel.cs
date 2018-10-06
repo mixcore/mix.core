@@ -404,7 +404,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             }
         }
 
-        public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>()
             {
@@ -446,7 +446,9 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
                 }
             }
-            return result;
+            var taskSource = new TaskCompletionSource<RepositoryResponse<bool>>();
+            taskSource.SetResult(result);
+            return taskSource.Task;            
         }
 
         #endregion Async Methods

@@ -1,8 +1,8 @@
-<div ng-if="$ctrl.template">
-    <div class="form-group" ng-init="$ctrl.getList()">
+<div>
+    <div class="form-group">
         <h6>Layout</h6>
         <div class="input-group mb-3">
-            <select class="btn btn-outline-secondary custom-select col-sm-4" ng-options="item as item.fileName for item in $ctrl.templates track by item.id" ng-model="$ctrl.template" ng-change="$ctrl.updateEditors()"></select>
+            <select class="btn btn-outline-secondary custom-select col-sm-4" ng-options="item as item.fileName for item in $ctrl.templates track by item.id" ng-model="$ctrl.template" ng-change="updateEditors()"></select>
             <input class="form-control sel-filename" type="text" ng-model="$ctrl.template.fileName" value="{{$ctrl.template.fileName}}" placeholder="Input template name here...">
             <input class="template-id" type="hidden" ng-model="$ctrl.template.id" value="{{$ctrl.template.id}}">
         </div>
@@ -10,7 +10,8 @@
     <tabs-v>
         <pane-v title="Razor Template">
             <div class="container-code-editor">
-                <ace-editor content="$ctrl.template.content"></ace-editor>                
+                <div class="form-control code-editor">{{$ctrl.template.content}}</div>
+                <input class="form-control content" type="hidden" ng-model="$ctrl.template.content" value="{{$ctrl.template.content}}">
             </div>
         </pane-v>
         <pane-v title="Scripts">

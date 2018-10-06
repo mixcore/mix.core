@@ -20,17 +20,18 @@ using System.Web;
 using Mix.Cms.Lib.ViewModels.MixPages;
 using Microsoft.AspNetCore.SignalR;
 using Mix.Cms.Hub;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Mix.Cms.Api.Controllers
 {
     [Produces("application/json")]
     [Route("api/v1/{culture}/page")]
     public class ApiPageController :
-        BaseApiController
+        BaseGenericApiControoler<MixCmsContext, MixPage>
     {
-        public ApiPageController(IHubContext<PortalHub> hubContext): base(hubContext)
+        public ApiPageController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext) : base(memoryCache, hubContext)
         {
-            
+
         }
         #region Get
 
@@ -67,14 +68,14 @@ namespace Mix.Cms.Api.Controllers
                 case "portal":
                     if (id.HasValue)
                     {
-                        var beResult = await UpdateViewModel.Repository.GetSingleModelAsync(model => model.Id == id && model.Specificulture == _lang).ConfigureAwait(false);
-                        if (beResult.IsSucceed)
+                        Expression<Func<MixPage, bool>> predicate = model => model.Id == id && model.Specificulture == _lang;
+                        var portalResult = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_{id}", predicate);
+                        if (portalResult.IsSucceed)
                         {
-                            beResult.Data.DetailsUrl = MixCmsHelper.GetRouterUrl("Page", new { beResult.Data.SeoName }, Request, Url);
+                            portalResult.Data.DetailsUrl = MixCmsHelper.GetRouterUrl("Page", new { portalResult.Data.SeoName }, Request, Url);
                         }
-                        msg = $"Get {viewType} page with id {id.Value}";
-                        Alert("Get Details", 200, msg);
-                        return Ok(JObject.FromObject(beResult));
+
+                        return Ok(JObject.FromObject(portalResult));
                     }
                     else
                     {
@@ -87,13 +88,7 @@ namespace Mix.Cms.Api.Controllers
                             Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 
-                        RepositoryResponse<UpdateViewModel> result = new RepositoryResponse<UpdateViewModel>()
-                        {
-                            IsSucceed = true,
-                            Data = await UpdateViewModel.InitViewAsync(model)
-                        };
-                        msg = $"Get default {viewType} page";
-                        Alert("Get Details", 200, msg);
+                        RepositoryResponse<UpdateViewModel> result = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_default", null, model);
                         return JObject.FromObject(result);
                     }
                 default:
@@ -191,7 +186,7 @@ namespace Mix.Cms.Api.Controllers
                         && (!request.ToDate.HasValue
                             || (model.CreatedDateTime <= request.ToDate.Value)
                         );
-            
+
             switch (request.Key)
             {
                 case "mvc":
@@ -205,7 +200,7 @@ namespace Mix.Cms.Api.Controllers
                         });
                     }
 
-                    Alert("Get List Page", 200, $"Get {request.Key} list page");
+                    AlertAsync("Get List Page", 200, $"Get {request.Key} list page");
                     return JObject.FromObject(fedata);
                 case "portal":
 
@@ -219,7 +214,7 @@ namespace Mix.Cms.Api.Controllers
                         });
                     }
 
-                    Alert("Get List Page", 200, $"Get {request.Key} list page");
+                    AlertAsync("Get List Page", 200, $"Get {request.Key} list page");
                     return JObject.FromObject(bedata);
                 default:
 
@@ -238,7 +233,7 @@ namespace Mix.Cms.Api.Controllers
                         }));
                     }
 
-                    Alert("Get List Page", 200, $"Get {request.Key} list page");
+                    AlertAsync("Get List Page", 200, $"Get {request.Key} list page");
                     return JObject.FromObject(data);
             }
         }
