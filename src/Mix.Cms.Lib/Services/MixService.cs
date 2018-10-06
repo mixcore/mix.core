@@ -26,7 +26,7 @@ namespace Mix.Cms.Lib.Services
         private JObject LocalSettings { get; set; }
         private JObject Translator { get; set; }
         private JObject Authentication { get; set; }
-        FileSystemWatcher watcher = new FileSystemWatcher();
+        readonly FileSystemWatcher watcher = new FileSystemWatcher();
 
         public MixService()
         {

@@ -6,7 +6,9 @@ jobs:
     steps:
       - checkout
       - run: find .
-      - run: cd /src/Mix.Cms.Web
+      - run: git clone --depth=50 --branch=master https://github.com/mixcore/mix.heart.git /home/travis/build/mixcore/mix.heart
+      - run: git clone --depth=50 --branch=master https://github.com/mixcore/mix.identity.git /home/travis/build/mixcore/mix.identity
+      - run: cd src/Mix.Cms.Web
       - run: dotnet restore
       - run: dotnet build
       - run: dotnet test --no-build Build.Tests

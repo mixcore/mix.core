@@ -1,0 +1,13 @@
+e
+\C:\_workspace\github\mixcore\mix.core\src\Mix.Cms.Api\Controllers\v1\ApiAccountController.csutf-8e
+\C:\_workspace\github\mixcore\mix.core\src\Mix.Cms.Api\Controllers\v1\ApiArticleController.csutf-8c
+ZC:\_workspace\github\mixcore\mix.core\src\Mix.Cms.Api\Controllers\v1\ApiMediaController.csutf-8d
+[C:\_workspace\github\mixcore\mix.core\src\Mix.Cms.Api\Controllers\v1\ApiModuleController.csutf-8b
+YC:\_workspace\github\mixcore\mix.core\src\Mix.Cms.Api\Controllers\v1\ApiPageController.csutf-8d
+[C:\_workspace\github\mixcore\mix.core\src\Mix.Cms.Api\Controllers\v1\ApiPortalController.csutf-8e
+\C:\_workspace\github\mixcore\mix.core\src\Mix.Cms.Api\Controllers\v1\ApiProductController.csutf-8f
+]C:\_workspace\github\mixcore\mix.core\src\Mix.Cms.Api\Controllers\v1\ApiTemplateController.csutf-8b
+YC:\_workspace\github\mixcore\mix.core\src\Mix.Cms.Api\Controllers\v1\BaseApiControoler.csutf-8i
+`C:\_workspace\github\mixcore\mix.core\src\Mix.Cms.Api\Controllers\v1\BaseGenericApiControoler.csutf-8I
+@C:\_workspace\github\mixcore\mix.core\src\Mix.Cms.Api\Program.csutf-8I
+@C:\_workspace\github\mixcore\mix.core\src\Mix.Cms.Api\Startup.csutf-8

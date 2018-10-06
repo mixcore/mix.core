@@ -1,0 +1,17 @@
+T
+RC:\_workspace\github\mixcore\mix.heart\src\Mix.Heart\Common\Helper\CommonHelper.csN
+LC:\_workspace\github\mixcore\mix.heart\src\Mix.Heart\Common\Helper\Helper.csQ
+OC:\_workspace\github\mixcore\mix.heart\src\Mix.Heart\Common\Helper\SEOHelper.csX
+VC:\_workspace\github\mixcore\mix.heart\src\Mix.Heart\Common\Helper\UnitOfWorkHelper.csN
+LC:\_workspace\github\mixcore\mix.heart\src\Mix.Heart\Common\Utility\Const.csM
+KC:\_workspace\github\mixcore\mix.heart\src\Mix.Heart\Common\Utility\Enum.csZ
+XC:\_workspace\github\mixcore\mix.heart\src\Mix.Heart\Domain\Core\Models\SignalRModels.cs]
+[C:\_workspace\github\mixcore\mix.heart\src\Mix.Heart\Domain\Core\Models\SupportedCulture.csd
+bC:\_workspace\github\mixcore\mix.heart\src\Mix.Heart\Domain\Core\Repository\DefaultRepositories.csc
+aC:\_workspace\github\mixcore\mix.heart\src\Mix.Heart\Domain\Core\Repository\ViewRepositoryBase.csa
+_C:\_workspace\github\mixcore\mix.heart\src\Mix.Heart\Domain\Core\ViewModels\CommonViewModels.cs^
+\C:\_workspace\github\mixcore\mix.heart\src\Mix.Heart\Domain\Core\ViewModels\ViewModelBase.cs\
+ZC:\_workspace\github\mixcore\mix.heart\src\Mix.Heart\UI\Core\Controllers\BaseController.csX
+VC:\_workspace\github\mixcore\mix.heart\src\Mix.Heart\UI\Core\SignalR\BaseSignalRHub.csU
+QC:\Users\smile\AppData\Local\Temp\.NETStandard,Version=v2.0.AssemblyAttributes.csk
+gC:\_workspace\github\mixcore\mix.heart\src\Mix.Heart\obj\Debug\netstandard2.0\Mix.Heart.AssemblyInfo.cs
