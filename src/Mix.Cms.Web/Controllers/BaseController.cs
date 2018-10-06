@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
 
@@ -14,9 +16,11 @@ namespace Mix.Cms.Web.Controllers
         protected string _domain;
         protected IConfiguration _configuration;
         protected IHostingEnvironment _env;
-        public BaseController(IHostingEnvironment env)
+        protected readonly IMemoryCache _memoryCache;
+        public BaseController(IHostingEnvironment env, IMemoryCache memoryCache)
         {
             _env = env;
+            _memoryCache = memoryCache;
             // Set CultureInfo
             var cultureInfo = new CultureInfo(_culture);
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;

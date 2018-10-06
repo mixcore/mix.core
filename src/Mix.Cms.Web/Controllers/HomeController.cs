@@ -4,10 +4,13 @@ using System.Linq.Expressions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Web.Models;
+using Mix.Domain.Core.ViewModels;
 using Mix.Identity.Models;
 using static Mix.Cms.Lib.MixEnums;
 
@@ -17,8 +20,9 @@ namespace Mix.Cms.Web.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         public HomeController(IHostingEnvironment env,
+            IMemoryCache memoryCache,
              UserManager<ApplicationUser> userManager
-            ) : base(env)
+            ) : base(env, memoryCache)
         {
             this._userManager = userManager;
         }
@@ -26,23 +30,13 @@ namespace Mix.Cms.Web.Controllers
         [Route("")]
         [Route("{culture}")]
         [Route("{culture}/{seoName}")]
-        public IActionResult Index(string culture, string seoName)
+        public async System.Threading.Tasks.Task<IActionResult> Index(string culture, string seoName)
         {
             if (MixService.GetConfig<bool>("IsInit"))
             {
                 //Go to landing page
-                if (string.IsNullOrEmpty(seoName))
-                {
-                    return Page(p =>
-                    p.Type == (int)MixPageType.Home
-                    && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture);
-                }
-                else
-                {
-                    return Page(p =>
-                    p.SeoName == seoName
-                    && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture);
-                }
+                return await PageAsync(seoName);
+
 
             }
             else
@@ -78,7 +72,7 @@ namespace Mix.Cms.Web.Controllers
         [Route("init/{page}")]
         public IActionResult Init(string page)
         {
-            if (string.IsNullOrEmpty(page)  && MixService.GetConfig<bool>("IsInit"))                
+            if (string.IsNullOrEmpty(page) && MixService.GetConfig<bool>("IsInit"))
             {
                 return Redirect($"/init/login");
             }
@@ -86,23 +80,49 @@ namespace Mix.Cms.Web.Controllers
             {
                 return View();
             }
-            
+
         }
 
         [HttpGet]
         [Route("404")]
-        public IActionResult PageNotFound()
+        public async System.Threading.Tasks.Task<IActionResult> PageNotFound()
         {
-            return Page(p =>
-                    p.SeoName == "404"
-                    && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture);
+            return await PageAsync("404");
         }
 
 
-        IActionResult Page(Expression<Func<MixPage, bool>> predicate, int? pageIndex = null, int pageSize = 10)
+        async System.Threading.Tasks.Task<IActionResult> PageAsync(string seoName)//Expression<Func<MixPage, bool>> predicate, int? pageIndex = null, int pageSize = 10)
         {
             // Home Page
-            var getPage = Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModel(predicate);
+
+            var getPage = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
+
+            var cacheKey = $"Page_{_culture}_{seoName}";
+            var data = _memoryCache.Get<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
+            if (data != null)
+            {
+                getPage.IsSucceed = true;
+                getPage.Data = data;
+            }
+            else
+            {
+                Expression<Func<MixPage, bool>> predicate;
+                if (string.IsNullOrEmpty(seoName))
+                {
+                   predicate = p =>
+                   p.Type == (int)MixPageType.Home
+                   && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+                }
+                else
+                {
+                    predicate = p =>
+                    p.SeoName == seoName
+                    && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+                }
+
+                getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+                _memoryCache.Set(cacheKey, getPage.Data);
+            }
 
             if (getPage.IsSucceed && getPage.Data.View != null)
             {
