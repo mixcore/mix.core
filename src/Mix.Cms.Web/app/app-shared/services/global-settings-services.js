@@ -24,7 +24,7 @@ app.factory('GlobalSettingsService', ['$rootScope', 'CommonService', 'localStora
         };
         var _getglobalSettings = async function (culture) {
             var globalSettings = localStorageService.get('globalSettings');
-            if (globalSettings && globalSettings.lang === culture) {
+            if (globalSettings && (!culture || globalSettings.lang === culture)) {
                 globalSettings = globalSettings;
                 return globalSettings;
             }

@@ -6,8 +6,7 @@ app.run(['$rootScope', '$location', 'CommonService', 'AuthService', 'TranslatorS
     'ngAppSettings',
     function ($rootScope, $location, commonServices, authService, translatorService, configurationService,
         ngAppSettings) {
-
-        GlobalSettingsService.fillGlobalSettings().then(function (response) {            
+            configurationService.fillGlobalSettings().then(function (response) {
             $rootScope.base64Key = CryptoJS.enc.Base64.parse(response.apiEncryptKey);
             $rootScope.iv = CryptoJS.enc.Base64.parse(response.apiEncryptIV);
         });
@@ -168,7 +167,7 @@ app.run(['$rootScope', '$location', 'CommonService', 'AuthService', 'TranslatorS
                 { iv: $rootScope.iv });
             return encrypted.ciphertext.toString(CryptoJS.enc.Base64);
         }
-        $rootScope.decrypt = function (encrypted) {            
+        $rootScope.decrypt = function (encrypted) {
             var cipherParams = CryptoJS.lib.CipherParams.create({
                 ciphertext: CryptoJS.enc.Base64.parse(encrypted)
             });
