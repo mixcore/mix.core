@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.SignalR;
 using Mix.Cms.Hub;
 using Microsoft.Extensions.Caching.Memory;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace Mix.Cms.Api.Controllers
 {
@@ -128,11 +129,22 @@ namespace Mix.Cms.Api.Controllers
         [Route("encrypted/save")]
         public async Task<JObject> Post([FromBody] RequestEncrypted request)
         {
-            request.Key = "2b7e151628aed2a6abf7158809cf4f3c";
-            request.Encrypted = MixService.EncryptString("{}", request.Key);
-
-            string decrypt = MixService.DecryptString(request.Encrypted, request.Key);
-            JObject data = JObject.Parse(decrypt);
+            var key = Convert.FromBase64String(request.Key); //Encoding.UTF8.GetBytes(request.Key);
+            var iv = Convert.FromBase64String(request.IV); //Encoding.UTF8.GetBytes(request.IV);
+            string encrypted = string.Empty;
+            string decrypt = string.Empty;
+            if (!string.IsNullOrEmpty(request.PlainText))
+            {
+                encrypted = MixService.EncryptStringToBytes_Aes(request.PlainText, key, iv).ToString();
+            }
+            if (!string.IsNullOrEmpty(request.Encrypted))
+            {
+                decrypt = MixService.DecryptStringFromBytes_Aes(request.Encrypted, key, iv);
+            }
+            JObject data = new JObject(
+                new JProperty("key", request.Key), 
+                new JProperty("encrypted", encrypted), 
+                new JProperty("plainText", decrypt));
             
             return data;
         }

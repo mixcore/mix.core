@@ -6,9 +6,9 @@ app.run(['$rootScope', '$location', 'CommonService', 'AuthService', 'TranslatorS
     'ngAppSettings',
     function ($rootScope, $location, commonServices, authService, translatorService, configurationService,
         ngAppSettings) {
-            configurationService.fillGlobalSettings().then(function (response) {
-            $rootScope.base64Key = CryptoJS.enc.Base64.parse(response.apiEncryptKey);
-            $rootScope.iv = CryptoJS.enc.Base64.parse(response.apiEncryptIV);
+
+        configurationService.fillGlobalSettings().then(function (response) {
+            $rootScope.settings = response;
         });
         $rootScope.currentContext = $rootScope;
         $rootScope.isBusy = false;
@@ -160,23 +160,51 @@ app.run(['$rootScope', '$location', 'CommonService', 'AuthService', 'TranslatorS
                     }
                 });
         };
-        $rootScope.encrypt = function (str) {
-            var encrypted = CryptoJS.AES.encrypt(
-                str,
-                $rootScope.base64Key,
-                { iv: $rootScope.iv });
-            return encrypted.ciphertext.toString(CryptoJS.enc.Base64);
-        }
-        $rootScope.decrypt = function (encrypted) {
-            var cipherParams = CryptoJS.lib.CipherParams.create({
-                ciphertext: CryptoJS.enc.Base64.parse(encrypted)
+        $rootScope.encrypt = function (message) {            
+            var keySize = 256;
+            var ivSize = 128;
+            var iterations = 100;
+            var salt = CryptoJS.lib.WordArray.random(128 / 8);
+            var pass= 'secret-key';
+            var key = CryptoJS.PBKDF2(pass, salt, {
+                keySize: keySize / 32,
+                iterations: iterations
             });
+
+            var iv = CryptoJS.lib.WordArray.random(ivSize / 8);
+
+            var options = {
+                mode: CryptoJS.mode.ECB,
+                padding: CryptoJS.pad.Pkcs7,
+                iv: iv,
+            };
+            var encrypted = CryptoJS.AES.encrypt(message, key, options);
+            return {
+                key: key.toString(CryptoJS.enc.Base64),
+                iv: iv.toString(CryptoJS.enc.Base64),
+                data: encrypted.ciphertext.toString(CryptoJS.enc.Base64)
+            }
+        }
+        $rootScope.decrypt = function (encryptedData, options) {
+
+            var cipherParams = CryptoJS.lib.CipherParams.create({
+                ciphertext: CryptoJS.enc.Base64.parse(encryptedData.data)
+            });
+            var key = CryptoJS.enc.Base64.parse(encryptedData.key);
+            var iv = CryptoJS.enc.Base64.parse(encryptedData.iv);
+            var options = {
+                mode: CryptoJS.mode.ECB,
+                padding: CryptoJS.pad.Pkcs7,
+                iv: iv,
+            };
+
             var decrypted = CryptoJS.AES.decrypt(
                 cipherParams,
-                $rootScope.base64Key,
-                { iv: $rootScope.iv });
+                key,
+                options);
             return decrypted.toString(CryptoJS.enc.Utf8);
         }
+        
         $rootScope.translate = function (keyword, isWrap, defaultText) {
             if ($rootScope.globalSettings && ($rootScope.translator || $rootScope.isBusy)) {
                 return $rootScope.translator.get(keyword, isWrap, defaultText);

@@ -1,0 +1,376 @@
+[
+  {
+    "CreatedDateTime": "2018-10-04T10:12:04.0924494Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-04T10:12:04.3004702Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-04T10:12:21.9132313Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-04T10:12:21.9752375Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-04T10:20:45.800615Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-04T10:20:45.960631Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-04T10:34:36.5976864Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-04T10:34:36.663693Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-04T10:34:54.3914656Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-04T10:34:54.4014666Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-04T10:35:03.706397Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-04T10:35:03.716398Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-05T02:58:32.1848359Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-05T02:58:32.3608535Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-05T02:58:45.4991672Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-05T02:58:45.5131686Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-05T02:58:53.4919664Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-05T02:58:53.5099682Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-05T04:26:57.446309Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-05T04:26:57.4843128Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-05T04:49:12.979849Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2018-10-05T04:49:13.0008511Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. Any instance members are not guaranteed to be thread safe.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction) in D:\\NhatHoang\\Git\\GitHub\\mix.heart\\src\\Mix.Heart\\Domain\\Core\\Repository\\ViewRepositoryBase.cs:line 282",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  }
+]
