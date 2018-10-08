@@ -1,7 +1,7 @@
 {
   "ConnectionStrings": {
-    "MixAccountConnection": "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=sw-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True",
-    "MixCmsConnection": "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=sw-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True",
+    "MixAccountConnection": "Server=(localdb)\\mssqllocaldb;Database=113131sw-cms.db;Trusted_Connection=True;MultipleActiveResultSets=true",
+    "MixCmsConnection": "Server=(localdb)\\mssqllocaldb;Database=113131sw-cms.db;Trusted_Connection=True;MultipleActiveResultSets=true",
     "DefaultConnection": null
   },
   "Authentication": {
@@ -52,7 +52,7 @@
     }
   },
   "GlobalSettings": {
-    "IsInit": true,
+    "IsInit": "True",
     "DefaultCulture": "en-us",
     "DefaultTemplate": "_Default",
     "DefaultTheme": "Default",
@@ -67,7 +67,7 @@
     "ThemeId": "1",
     "TemplateExtension": ".cshtml",
     "ApiEncryptKey": "2b7e151628aed2a6abf7158809cf4f3c",
-    "ApiEncryptIV": "3ad77bb40d7a3660a89ecaf32466ef97",
+    "ApiEncryptIV": "2b7e151628aed2as",
     "IsEncryptApi": true
   },
   "Logging": {
