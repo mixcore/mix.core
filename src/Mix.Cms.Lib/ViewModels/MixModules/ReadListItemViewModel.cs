@@ -6,6 +6,7 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixModules
 {
@@ -33,9 +34,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("description")]
         public string Description { get; set; }
 
-        [JsonProperty("type")]
-        public int Type { get; set; }
-
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
 
@@ -47,6 +45,14 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("imageUrl")]
         public string ImageUrl { get; set; }
 
+        [JsonProperty("fields")]
+        public string Fields { get; set; }
+
+        [JsonProperty("type")]
+        public ModuleType Type { get; set; }
+
+        [JsonProperty("status")]
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #endregion Properties

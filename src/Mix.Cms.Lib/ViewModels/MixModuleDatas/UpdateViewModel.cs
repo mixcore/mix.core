@@ -1,16 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Repositories;
+using Mix.Cms.Lib.Services;
+using Mix.Common.Helper;
+using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
 {
-    public class ReadViewModel
-      : ViewModelBase<MixCmsContext, MixModuleData, ReadViewModel>
+    public class UpdateViewModel : ViewModelBase<MixCmsContext, MixModuleData, UpdateViewModel>
     {
         #region Properties
 
@@ -29,9 +36,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         public string Value { get; set; }
 
         [JsonProperty("articleId")]
-        public int ArticleId { get; set; }
+        public string ArticleId { get; set; }
         [JsonProperty("productId")]
-        public int ProductId { get; set; }
+        public string ProductId { get; set; }
         [JsonProperty("categoryId")]
         public int? CategoryId { get; set; }
         [JsonProperty("createdDateTime")]
@@ -55,11 +62,11 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
 
         #region Contructors
 
-        public ReadViewModel() : base()
+        public UpdateViewModel() : base()
         {
         }
 
-        public ReadViewModel(MixModuleData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public UpdateViewModel(MixModuleData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -118,7 +125,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                 JObject obj = new JObject();
                 obj.Add(new JProperty("dataType", prop.DataType));
                 obj.Add(new JProperty("value", prop.Value));
-                result.Add(new JProperty(prop.Name, obj));
+                result.Add(new JProperty(CommonHelper.ParseJsonPropertyName(prop.Name), obj));
             }
             return result.ToString(Formatting.None);
         }
@@ -131,7 +138,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                 JObject obj = new JObject();
                 obj.Add(new JProperty("dataType", prop.DataType));
                 obj.Add(new JProperty("value", prop.Value));
-                result.Add(new JProperty(prop.Name, obj));
+                result.Add(new JProperty(CommonHelper.ParseJsonPropertyName(prop.Name), obj));
             }
             return result;
         }

@@ -71,7 +71,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         #region Views
         [JsonProperty("data")]
-        public PaginationModel<MixModulesDatas.ReadViewModel> Data { get; set; } = new PaginationModel<MixModulesDatas.ReadViewModel>();
+        public PaginationModel<MixModuleDatas.ReadViewModel> Data { get; set; } = new PaginationModel<MixModuleDatas.ReadViewModel>();
 
         [JsonProperty("columns")]
         public List<ModuleFieldViewModel> Columns { get; set; }
@@ -234,19 +234,19 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             , int? pageSize = null, int? pageIndex = 0
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            RepositoryResponse<PaginationModel<MixModulesDatas.ReadViewModel>> getDataResult = new RepositoryResponse<PaginationModel<MixModulesDatas.ReadViewModel>>();
+            RepositoryResponse<PaginationModel<MixModuleDatas.ReadViewModel>> getDataResult = new RepositoryResponse<PaginationModel<MixModuleDatas.ReadViewModel>>();
 
             switch (Type)
             {
                 case ModuleType.Root:
-                    getDataResult = MixModulesDatas.ReadViewModel.Repository
+                    getDataResult = MixModuleDatas.ReadViewModel.Repository
                        .GetModelListBy(m => m.ModuleId == Id && m.Specificulture == Specificulture
                        , "Priority", 0, pageSize, pageIndex
                        , _context, _transaction);
                     break;
 
                 case ModuleType.SubPage:
-                    getDataResult = MixModulesDatas.ReadViewModel.Repository
+                    getDataResult = MixModuleDatas.ReadViewModel.Repository
                        .GetModelListBy(m => m.ModuleId == Id && m.Specificulture == Specificulture
                        && (m.CategoryId == categoryId)
                        , "Priority", 0, pageSize, pageIndex
@@ -254,7 +254,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                     break;
 
                 case ModuleType.SubArticle:
-                    getDataResult = MixModulesDatas.ReadViewModel.Repository
+                    getDataResult = MixModuleDatas.ReadViewModel.Repository
                        .GetModelListBy(m => m.ModuleId == Id && m.Specificulture == Specificulture
                        && (m.ArticleId == articleId)
                        , "Priority", 0, pageSize, pageIndex

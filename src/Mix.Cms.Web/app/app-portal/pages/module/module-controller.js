@@ -74,7 +74,7 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$r
         };
 
         $scope.generateName = function(col){
-            return $rootScope.generateKeyword(col.title, '_');
+            col.name =  $rootScope.generateKeyword(col.title, '_');
         }
         $scope.removeAttr = function (index) {
             if ($scope.activedData) {

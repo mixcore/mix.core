@@ -6,7 +6,9 @@
             var ctrl = this;
             globalSettingsService.fillGlobalSettings().then(function (response) {
                 ctrl.settings = response;
-                ctrl.loadTemplates();
+                setTimeout(() => {
+                    ctrl.loadTemplates();
+                }, 200);
             });
             ctrl.loadParams = async function () {
                 $rootScope.isBusy = true;

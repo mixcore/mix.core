@@ -47,7 +47,7 @@ app.factory('AuthService',
                         avatar: data.userData.avatar, refresh_token: data.refresh_token, userId: data.userData.id
                     };
                     var encrypted = $rootScope.encrypt(JSON.stringify(authData));
-                    localStorageService.set('authorizationData', { encrypted });
+                    localStorageService.set('authorizationData', encrypted);
                     _authentication = {
                         isAuth: true,
                         userName: data.userData.NickName,
@@ -92,7 +92,7 @@ app.factory('AuthService',
                 var encryptedAuthData = localStorageService.get('authorizationData');
 
                 if (encryptedAuthData) {
-                    var authData = JSON.parse($rootScope.decrypt(encryptedAuthData.encrypted));
+                    var authData = JSON.parse($rootScope.decrypt(encryptedAuthData));
                     _authentication = {
                         isAuth: true,
                         userName: authData.userName,
