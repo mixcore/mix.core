@@ -68,6 +68,15 @@ namespace Mix.Cms.Lib
             Schedule = 4
         }
 
+        public enum MixOrderStatus
+        {
+            Deleted = 0,
+            Preview = 1,
+            Published = 2,
+            Draft = 3,
+            Schedule = 4
+        }
+
         public enum MixUserStatus
         {
             Deleted = 0,
