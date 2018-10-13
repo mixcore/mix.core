@@ -1,7 +1,6 @@
 ﻿'use strict';
-app.controller('CultureController', ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', 'CultureService',
-    function ($scope, $rootScope, ngAppSettings, $routeParams, service) {
-        BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
+app.controller('CultureController', ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', 'CultureService', 'CommonService',
+    function ($scope, $rootScope, ngAppSettings, $routeParams, service, commonService) {
         $scope.cultures = [
 
             { specificulture: 'en-us', fullName: 'United States - English (Default)', icon: 'flag-icon-us' },
@@ -104,6 +103,15 @@ app.controller('CultureController', ['$scope', '$rootScope', 'ngAppSettings', '$
 
         ];
         $scope.selected = null;
+        BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
+        $scope.saveCallback = function () {
+            commonService.initAllSettings();
+            window.location.href = '/portal/culture/list';
+        }
+        $scope.removeCallback = function () {
+            commonService.initAllSettings();
+            window.location.href = '/portal/culture/list';
+        }
         $scope.changeData = function (selected) {
             if (selected) {
                 $scope.activedData.specificulture = selected.specificulture;

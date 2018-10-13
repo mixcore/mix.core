@@ -26,7 +26,7 @@ app.factory('MediaService', ['$rootScope', 'CommonService', 'BaseService',
                 files.append('description', mediaFile.description);
 
                 var req = {
-                    url: this.prefixUrl + '/media/upload', //'/api/tts/UploadImage',
+                    url: this.prefixUrl + '/media/upload', //'/tts/UploadImage',
                     method: "POST",
                     headers: {
                         'Content-Type': 'multipart/form-data'

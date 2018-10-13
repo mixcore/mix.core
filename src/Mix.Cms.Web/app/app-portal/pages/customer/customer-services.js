@@ -8,7 +8,7 @@ app.factory('CustomerServices', ['$http', '$rootScope', 'CommonService', functio
     var settings = $rootScope.globalSettings
 
     var _getCustomer = async function (id, type) {
-        var apiUrl = '/api/queen-beauty/customer/';
+        var apiUrl = '/queen-beauty/customer/';
         var url = apiUrl + 'details/' + type;
         if (id) {
             url += '/' + id;
@@ -21,7 +21,7 @@ app.factory('CustomerServices', ['$http', '$rootScope', 'CommonService', functio
     };
 
     var _initCustomer = async function (type) {
-        var apiUrl = '/api/queen-beauty/customer/';
+        var apiUrl = '/queen-beauty/customer/';
         var req = {
             method: 'GET',
             url: apiUrl + 'init/' + type,
@@ -30,7 +30,7 @@ app.factory('CustomerServices', ['$http', '$rootScope', 'CommonService', functio
     };
 
     var _getCustomers = async function (request) {
-        var apiUrl = '/api/queen-beauty/customer/';
+        var apiUrl = '/queen-beauty/customer/';
         var req = {
             method: 'POST',
             url: apiUrl + 'list',
@@ -41,7 +41,7 @@ app.factory('CustomerServices', ['$http', '$rootScope', 'CommonService', functio
     };
 
     var _removeCustomer = async function (id) {
-        var apiUrl = '/api/queen-beauty/customer/';
+        var apiUrl = '/queen-beauty/customer/';
         var req = {
             method: 'GET',
             url: apiUrl + 'delete/' + id
@@ -50,7 +50,7 @@ app.factory('CustomerServices', ['$http', '$rootScope', 'CommonService', functio
     };
 
     var _saveCustomer = async function (customer) {
-        var apiUrl = '/api/queen-beauty/customer/';
+        var apiUrl = '/queen-beauty/customer/';
         var req = {
             method: 'POST',
             url: apiUrl + 'save',

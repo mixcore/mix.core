@@ -28,7 +28,7 @@ app.factory('TranslatorService', ['$rootScope', 'CommonService', 'localStorageSe
         }
         else {
             translator = { lang: culture, data: null };
-            var url = '/api/portal';
+            var url = '/portal';
             if (culture) {
                 url += '/' + culture;
             }

@@ -4,7 +4,7 @@ app.factory('PortalPageServices', ['$http', '$rootScope', 'CommonService', funct
     var pagesServiceFactory = {};
 
     var _getPage = async function (id, type) {
-        var apiUrl = '/api/portal-page/';
+        var apiUrl = '/portal-page/';
         var url = apiUrl + 'details/' + type;
         if (id) {
             url += '/' + id;
@@ -17,7 +17,7 @@ app.factory('PortalPageServices', ['$http', '$rootScope', 'CommonService', funct
     };
 
     var _initPage = async function (type) {
-        var apiUrl = '/api/portal-page/';
+        var apiUrl = '/portal-page/';
         var req = {
             method: 'GET',
             url: apiUrl + 'init/' + type
@@ -26,7 +26,7 @@ app.factory('PortalPageServices', ['$http', '$rootScope', 'CommonService', funct
     };
 
     var _getPages = async function (request) {
-        var apiUrl = '/api/portal-page/';
+        var apiUrl = '/portal-page/';
         var req = {
             method: 'POST',
             url: apiUrl + 'list/0',
@@ -37,7 +37,7 @@ app.factory('PortalPageServices', ['$http', '$rootScope', 'CommonService', funct
     };
 
     var _removePage = async function (id) {
-        var apiUrl = '/api/portal-page/';
+        var apiUrl = '/portal-page/';
         var req = {
             method: 'GET',
             url: apiUrl + 'delete/' + id
@@ -46,7 +46,7 @@ app.factory('PortalPageServices', ['$http', '$rootScope', 'CommonService', funct
     };
 
     var _savePage = async function (page) {
-        var apiUrl = '/api/portal-page/';
+        var apiUrl = '/portal-page/';
         var req = {
             method: 'POST',
             url: apiUrl + 'save',
@@ -56,7 +56,7 @@ app.factory('PortalPageServices', ['$http', '$rootScope', 'CommonService', funct
     };
 
     var _updateInfos = async function (pages) {
-        var apiUrl = '/api/portal-page/';
+        var apiUrl = '/portal-page/';
         var req = {
             method: 'POST',
             url: apiUrl + 'update-infos',
@@ -66,7 +66,7 @@ app.factory('PortalPageServices', ['$http', '$rootScope', 'CommonService', funct
     };
 
     var _updateChildInfos = async function (pages) {
-        var apiUrl = '/api/portal-page/';
+        var apiUrl = '/portal-page/';
         var req = {
             method: 'POST',
             url: apiUrl + 'update-child-infos',
