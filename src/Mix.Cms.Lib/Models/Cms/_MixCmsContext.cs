@@ -288,6 +288,12 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Category).HasMaxLength(250);
 
+                entity.Property(e => e.CreatedBy).HasMaxLength(50);
+
+                entity.Property(e => e.CreatedDateTime)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
                 entity.Property(e => e.Description).HasMaxLength(250);
 
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");

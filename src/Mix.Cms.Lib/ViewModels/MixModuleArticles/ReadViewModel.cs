@@ -2,6 +2,7 @@
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixModuleArticles
 {
@@ -31,7 +32,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleArticles
 
         [JsonProperty("description")]
         public string Description { get; set; }
-
+        [JsonProperty("status")]
+        public MixContentStatus Status { get; set; }
         #region Views
 
         public MixArticles.ReadViewModel Article { get; set; }

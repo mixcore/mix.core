@@ -4,19 +4,17 @@ app.factory('RoleService', ['BaseService','CommonService', function (baseService
     serviceFactory.init('role', true);
 
     var _getPermissions = async function () {
-        var apiUrl = '/role/';
         var req = {
             method: 'GET',
-            url: apiUrl + 'permissions'
+            url: this.prefixUrl + '/permissions'
         };
         return await commonService.getApiResult(req);
     };
 
     var _updatePermission = async function (permission) {
-        var apiUrl = '/role/';
         var req = {
             method: 'POST',
-            url: apiUrl + 'update-permission',
+            url: this.prefixUrl + '/update-permission',
             data: JSON.stringify(permission)
         };
         return await commonService.getApiResult(req);
@@ -24,11 +22,11 @@ app.factory('RoleService', ['BaseService','CommonService', function (baseService
     var _createRole = function (name) {
         var req = {
             method: 'POST',
-            url: apiUrl + 'create',
+            url: this.prefixUrl + '/create',
             data: JSON.stringify(name)
         };
 
-        return commonServices.getApiResult(req);
+        return commonService.getApiResult(req);
     };
     serviceFactory.createRole = _createRole;
     serviceFactory.getPermissions = _getPermissions;

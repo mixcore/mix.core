@@ -36,7 +36,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
                 if (culture) {
                     url += '/' + culture;
                 }
-                url += '/settings';
+                url += '/all-settings';
                 var req = {
                     method: 'GET',
                     url: url

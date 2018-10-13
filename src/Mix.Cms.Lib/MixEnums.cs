@@ -164,7 +164,10 @@ namespace Mix.Cms.Lib
             //
             // Summary:
             //     Represents file upload data type.
-            Upload = 16
+            Upload = 16,
+            Color = 17,
+            Boolean = 18,
+            Icon = 19
         }
 
         public enum ModuleType
