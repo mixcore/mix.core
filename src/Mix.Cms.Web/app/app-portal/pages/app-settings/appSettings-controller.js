@@ -2,7 +2,7 @@
 app.controller('AppSettingsController', 
     ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$timeout', '$location', 
 'AuthService','CommonService', 'AppSettingsServices',
-    function ($scope, $rootScope, ngAppSettings, $routeParams, $timeout, $location, authService, commonServices, appSettingsServices) {
+    function ($scope, $rootScope, ngAppSettings, $routeParams, $timeout, $location, authService, commonService, appSettingsServices) {
 
         $scope.appSettings = null;
         $scope.errors = [];
@@ -38,7 +38,7 @@ app.controller('AppSettingsController',
                 $scope.$apply();
             }
 
-            var result = await commonServices.getSettings();
+            var result = await commonService.getSettings();
             if (result.isSucceed) {
                 $scope.settings = result.data;
                 $rootScope.isBusy = false;

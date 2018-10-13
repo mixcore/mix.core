@@ -1,7 +1,7 @@
 ﻿'use strict';
 app.controller('LanguageController', ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$timeout', '$location'
     , 'AuthService', 'LanguageServices', 'CommonService', 'TranslatorService',
-    function ($scope, $rootScope, ngAppSettings, $routeParams, $timeout, $location, authService, languageServices, commonServices, translatorService) {
+    function ($scope, $rootScope, ngAppSettings, $routeParams, $timeout, $location, authService, languageServices, commonService, translatorService) {
         $scope.request = {
             pageSize: '10',
             pageIndex: 0,
@@ -123,7 +123,7 @@ app.controller('LanguageController', ['$scope', '$rootScope', 'ngAppSettings', '
             $rootScope.isBusy = true;
             var result = await languageServices.removeLanguage(id);
             if (result.isSucceed) {
-                commonServices.removeTranslator();
+                commonService.removeTranslator();
                 $scope.loadLanguages();
             }
             else {
@@ -139,7 +139,7 @@ app.controller('LanguageController', ['$scope', '$rootScope', 'ngAppSettings', '
             var resp = await languageServices.saveLanguage(language);
             if (resp && resp.isSucceed) {
                 $scope.activedLanguage = resp.data;
-                commonServices.removeTranslator();
+                commonService.removeTranslator();
                 $rootScope.showMessage('success', 'success');
 
                 translatorService.reset($rootScope.globalSettings.lang).then(function () {

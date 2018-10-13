@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('Step2Services', ['$http', 'CommonService', function ($http, commonServices) {
+app.factory('Step2Services', ['$http', 'CommonService', function ($http, commonService) {
 
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 
@@ -13,7 +13,7 @@ app.factory('Step2Services', ['$http', 'CommonService', function ($http, commonS
             data: JSON.stringify(user)
         };
 
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     usersServiceFactory.register = _register;

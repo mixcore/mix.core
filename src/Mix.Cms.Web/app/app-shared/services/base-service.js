@@ -1,6 +1,6 @@
 'use strict';
 app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService', 'AppSettings',
-    function ($rootScope, $routeParams, commonServices, appSettings) {
+    function ($rootScope, $routeParams, commonService, appSettings) {
         var serviceFactory = {};
 
         var _init = function (modelName, isGlobal) {
@@ -25,7 +25,7 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService', 'AppS
                 method: 'GET',
                 url: url
             };
-            return await commonServices.getApiResult(req);
+            return await commonService.getApiResult(req);
         };
         var _getList = async function (objData, params = []) {
             var url = this.prefixUrl + '/list';
@@ -38,7 +38,7 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService', 'AppS
                 data: JSON.stringify(objData)
             };
 
-            return await commonServices.getApiResult(req);
+            return await commonService.getApiResult(req);
         };
 
         var _delete = async function (id) {
@@ -47,7 +47,7 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService', 'AppS
                 method: 'GET',
                 url: url
             };
-            return await commonServices.getApiResult(req);
+            return await commonService.getApiResult(req);
         };
 
         var _save = async function (objData) {
@@ -57,7 +57,7 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService', 'AppS
                 url: url,
                 data: JSON.stringify(objData)
             };
-            return await commonServices.getApiResult(req);
+            return await commonService.getApiResult(req);
         };
 
         var _updateInfos = async function (objData) {
@@ -67,7 +67,7 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService', 'AppS
                 url: url,
                 data: JSON.stringify(objData)
             };
-            return await commonServices.getApiResult(req);
+            return await commonService.getApiResult(req);
         };
         serviceFactory.lang = '';
         serviceFactory.prefixUrl = '';

@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('OrderServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonServices) {
+app.factory('OrderServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonService) {
 
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 
@@ -17,7 +17,7 @@ app.factory('OrderServices', ['$http', '$rootScope', 'CommonService', function (
             method: 'GET',
             url: url
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _initOrder = async function (type) {
@@ -26,7 +26,7 @@ app.factory('OrderServices', ['$http', '$rootScope', 'CommonService', function (
             method: 'GET',
             url: apiUrl + 'init/' + type,
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _getOrders = async function (request) {
@@ -37,7 +37,7 @@ app.factory('OrderServices', ['$http', '$rootScope', 'CommonService', function (
             data: JSON.stringify(request)
         };
         
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     var _removeOrder = async function (id) {
@@ -46,7 +46,7 @@ app.factory('OrderServices', ['$http', '$rootScope', 'CommonService', function (
             method: 'GET',
             url: apiUrl + 'delete/' + id
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _saveOrder = async function (order) {
@@ -56,7 +56,7 @@ app.factory('OrderServices', ['$http', '$rootScope', 'CommonService', function (
             url: apiUrl + 'save',
             data: JSON.stringify(order)
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     ordersServiceFactory.getOrder = _getOrder;

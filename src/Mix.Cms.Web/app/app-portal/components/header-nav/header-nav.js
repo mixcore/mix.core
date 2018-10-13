@@ -2,7 +2,7 @@
     app.component('headerNav', {
         templateUrl: '/app-portal/components/header-nav/headerNav.html',
         controller: ['$rootScope', 'CommonService', 'AuthService', 'TranslatorService', 'GlobalSettingsService',
-            function ($rootScope, commonServices, authService, translatorService, GlobalSettingsService) {
+            function ($rootScope, commonService, authService, translatorService, GlobalSettingsService) {
                 var ctrl = this;
                 if(authService.authentication)
                 {
@@ -16,7 +16,7 @@
                 ctrl.changeLang = function (lang, langIcon) {
                     ctrl.settings.lang = lang;
                     ctrl.settings.langIcon = langIcon;
-                    commonServices.fillSettings(lang).then(function () {
+                    commonService.fillSettings(lang).then(function () {
                         translatorService.reset(lang).then(function () {
                             GlobalSettingsService.reset(lang).then(function () {
                                 window.top.location = location.href;

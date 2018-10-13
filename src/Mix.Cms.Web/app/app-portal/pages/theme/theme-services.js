@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('ThemeServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonServices) {
+app.factory('ThemeServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonService) {
 
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 
@@ -17,7 +17,7 @@ app.factory('ThemeServices', ['$http', '$rootScope', 'CommonService', function (
             method: 'GET',
             url: url
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _syncTemplates = async function (id) {
@@ -27,7 +27,7 @@ app.factory('ThemeServices', ['$http', '$rootScope', 'CommonService', function (
             method: 'GET',
             url: url
         };
-        return await commonServices.getApiResult(req,'');
+        return await commonService.getApiResult(req,'');
     };
 
     var _initTheme = async function (type) {
@@ -36,7 +36,7 @@ app.factory('ThemeServices', ['$http', '$rootScope', 'CommonService', function (
             method: 'GET',
             url: apiUrl + 'init/' + type,
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _getThemes = async function (request) {
@@ -47,7 +47,7 @@ app.factory('ThemeServices', ['$http', '$rootScope', 'CommonService', function (
             data: JSON.stringify(request)
         };
         
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     var _removeTheme = async function (id) {
@@ -56,7 +56,7 @@ app.factory('ThemeServices', ['$http', '$rootScope', 'CommonService', function (
             method: 'GET',
             url: apiUrl + 'delete/' + id
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _saveTheme = async function (theme) {
@@ -66,7 +66,7 @@ app.factory('ThemeServices', ['$http', '$rootScope', 'CommonService', function (
             url: apiUrl + 'save',
             data: JSON.stringify(theme)
         };
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     themesServiceFactory.syncTemplates = _syncTemplates;

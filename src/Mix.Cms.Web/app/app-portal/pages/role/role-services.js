@@ -1,34 +1,7 @@
 ﻿'use strict';
-app.factory('RoleServices', ['$http', 'CommonService', function ($http, commonServices) {
-
-    //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
-
-    var rolesServiceFactory = {};
-    var apiUrl = '/role/';
-    
-    var _getRoles = function (request) {
-
-        var req = {
-            method: 'POST',
-            url: apiUrl + 'list',
-            data: request
-        };
-
-        return commonServices.getApiResult(req);
-    };
-
-    var _getRole = async function (id, viewType) {
-        var apiUrl = '/role/';
-        var url = apiUrl + 'details/' + viewType;
-        if (id) {
-            url += '/' + id;
-        }
-        var req = {
-            method: 'GET',
-            url: url
-        };
-        return await commonServices.getApiResult(req);
-    };
+app.factory('RoleService', ['BaseService','CommonService', function (baseService, commonService) {
+    var serviceFactory = Object.create(baseService);
+    serviceFactory.init('role', true);
 
     var _getPermissions = async function () {
         var apiUrl = '/role/';
@@ -36,17 +9,7 @@ app.factory('RoleServices', ['$http', 'CommonService', function ($http, commonSe
             method: 'GET',
             url: apiUrl + 'permissions'
         };
-        return await commonServices.getApiResult(req);
-    };
-
-    var _saveRole = async function (role) {
-        var apiUrl = '/role/';
-        var req = {
-            method: 'POST',
-            url: apiUrl + 'save',
-            data: JSON.stringify(role)
-        };
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     var _updatePermission = async function (permission) {
@@ -56,19 +19,8 @@ app.factory('RoleServices', ['$http', 'CommonService', function ($http, commonSe
             url: apiUrl + 'update-permission',
             data: JSON.stringify(permission)
         };
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
-
-    var _removeRole = function (role) {
-        var req = {
-            method: 'POST',
-            url: apiUrl + 'delete',
-            data: JSON.stringify(role)
-        };
-
-        return commonServices.getApiResult(req);
-    };
-
     var _createRole = function (name) {
         var req = {
             method: 'POST',
@@ -78,14 +30,9 @@ app.factory('RoleServices', ['$http', 'CommonService', function ($http, commonSe
 
         return commonServices.getApiResult(req);
     };
-
-    rolesServiceFactory.getRoles = _getRoles;
-    rolesServiceFactory.getPermissions = _getPermissions;
-    rolesServiceFactory.getRole = _getRole;
-    rolesServiceFactory.updatePermission = _updatePermission;
-    rolesServiceFactory.saveRole = _saveRole;
-    rolesServiceFactory.createRole = _createRole;
-    rolesServiceFactory.removeRole = _removeRole;
-    return rolesServiceFactory;
+    serviceFactory.createRole = _createRole;
+    serviceFactory.getPermissions = _getPermissions;
+    serviceFactory.updatePermission = _updatePermission;
+    return serviceFactory;
 
 }]);

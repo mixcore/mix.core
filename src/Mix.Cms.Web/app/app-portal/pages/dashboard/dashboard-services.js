@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('DashboardServices', ['$http', 'CommonService', function ($http, commonServices) {
+app.factory('DashboardServices', ['$http', 'CommonService', function ($http, commonService) {
 
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 
@@ -11,7 +11,7 @@ app.factory('DashboardServices', ['$http', 'CommonService', function ($http, com
             url: apiUrl + 'dashboard'
         };
 
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     usersServiceFactory.getDashboardInfo = _getDashboardInfo;

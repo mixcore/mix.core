@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('LanguageServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonServices) {
+app.factory('LanguageServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonService) {
 
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 
@@ -17,7 +17,7 @@ app.factory('LanguageServices', ['$http', '$rootScope', 'CommonService', functio
             method: 'GET',
             url: url
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _initLanguage = async function (type) {
@@ -26,7 +26,7 @@ app.factory('LanguageServices', ['$http', '$rootScope', 'CommonService', functio
             method: 'GET',
             url: apiUrl + 'init/' + type,
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _getLanguages = async function (request) {
@@ -37,7 +37,7 @@ app.factory('LanguageServices', ['$http', '$rootScope', 'CommonService', functio
             data: JSON.stringify(request)
         };
         
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     var _removeLanguage = async function (id) {
@@ -46,7 +46,7 @@ app.factory('LanguageServices', ['$http', '$rootScope', 'CommonService', functio
             method: 'GET',
             url: apiUrl + 'delete/' + id
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _saveLanguage = async function (language) {
@@ -56,7 +56,7 @@ app.factory('LanguageServices', ['$http', '$rootScope', 'CommonService', functio
             url: apiUrl + 'save',
             data: JSON.stringify(language)
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
     var _uploadLanguage = async function (languageFile) {
         //var container = $(this).parents('.model-language').first().find('.custom-file').first();
@@ -81,7 +81,7 @@ app.factory('LanguageServices', ['$http', '$rootScope', 'CommonService', functio
                 data: files,
             };
 
-            return await commonServices.getApiResult(req)
+            return await commonService.getApiResult(req)
         }
     };
 

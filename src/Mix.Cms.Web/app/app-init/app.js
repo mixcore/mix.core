@@ -47,9 +47,9 @@ app.directive('ngEnter', function () {
     });
 
 app.run(['$rootScope', '$location', 'CommonService',
-    function ($rootScope, $location, commonServices) {
-        commonServices.removeSettings();
-        commonServices.removeTranslator();
+    function ($rootScope, $location, commonService) {
+        commonService.removeSettings();
+        commonService.removeTranslator();
         $rootScope.currentContext = $rootScope;
         $rootScope.errors = [];
         $rootScope.isBusy = false;

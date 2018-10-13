@@ -15,10 +15,10 @@
         <a class="btn btn-success" ng-click="createRole()">Create</a> -->
     </div>
     <div class="col-md-10">
-        <filter-list request="request" callback="loadRoles(pageIndex)"></filter-list>
+        <filter-list request="request" callback="getList(pageIndex)"></filter-list>
     </div>
 </div>
-<table class="table table-sm table-hover" cellspacing="0" ng-init="loadRoles(0)">
+<table class="table table-sm table-hover" cellspacing="0">
     <thead class="thead-light">
         <tr>
             <th scope="col">
@@ -37,8 +37,8 @@
             <th scope="col" style="width: 5%;">Actions</th>
         </tr>
     </thead>
-    <tbody class="sortable">
-        <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="role" sort-model-id="{{item.id}}">
+    <tbody class="sortable" ng-init="getList()">
+        <tr ng-repeat="item in data track by $index" class="sortable-item" sort-model="role" sort-model-id="{{item.id}}">
 
             <td>
                 <span ng-bind="item.name"></span>
@@ -57,7 +57,7 @@
                     <a href="/portal/role/details/{{item.id}}" class="btn btn-light">
                         <span class="oi oi-pencil text-primary"></span>
                     </a>
-                    <a ng-click="removeRole(item.name);" class="btn btn-light">
+                    <a ng-click="remove(item.name);" class="btn btn-light">
                         <span class="fas fa-times text-danger"></span>
                     </a>
                 </div>

@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('Step1Services', ['$http', 'CommonService', function ($http, commonServices) {
+app.factory('Step1Services', ['$http', 'CommonService', function ($http, commonService) {
 
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
     
@@ -11,7 +11,7 @@ app.factory('Step1Services', ['$http', 'CommonService', function ($http, commonS
             url: '/portal/init-cms',
             data: JSON.stringify(data)
         };
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     step1ServiceFactory.initCms = _initCms;

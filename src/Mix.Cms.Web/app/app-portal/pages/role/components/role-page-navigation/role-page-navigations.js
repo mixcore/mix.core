@@ -1,7 +1,7 @@
 ﻿
 modules.component('rolePageNav', {
     templateUrl: '/app-portal/pages/role/components/role-page-navigation/role-page-navigations.html',
-    controller: ['$rootScope', '$scope', 'ngAppSettings', 'RoleServices', function ($rootScope, $scope, ngAppSettings, roleServices) {
+    controller: ['$rootScope', '$scope', 'ngAppSettings', 'RoleService', function ($rootScope, $scope, ngAppSettings, roleServices) {
         var ctrl = this;
         ctrl.selected = null;
         ctrl.updateOrders = function (index) {

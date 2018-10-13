@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('QueenDashboardServices', ['$http', 'CommonService', function ($http, commonServices) {
+app.factory('QueenDashboardServices', ['$http', 'CommonService', function ($http, commonService) {
 
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 
@@ -11,7 +11,7 @@ app.factory('QueenDashboardServices', ['$http', 'CommonService', function ($http
             url: apiUrl + 'dashboard'
         };
 
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     usersServiceFactory.getDashboardInfo = _getDashboardInfo;

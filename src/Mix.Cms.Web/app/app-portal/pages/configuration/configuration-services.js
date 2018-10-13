@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('ConfigurationServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonServices) {
+app.factory('ConfigurationServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonService) {
 
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 
@@ -17,7 +17,7 @@ app.factory('ConfigurationServices', ['$http', '$rootScope', 'CommonService', fu
             method: 'GET',
             url: url
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _initConfiguration = async function (type) {
@@ -26,7 +26,7 @@ app.factory('ConfigurationServices', ['$http', '$rootScope', 'CommonService', fu
             method: 'GET',
             url: apiUrl + 'init/' + type,
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _getConfigurations = async function (request) {
@@ -37,7 +37,7 @@ app.factory('ConfigurationServices', ['$http', '$rootScope', 'CommonService', fu
             data: JSON.stringify(request)
         };
         
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     var _removeConfiguration = async function (id) {
@@ -46,7 +46,7 @@ app.factory('ConfigurationServices', ['$http', '$rootScope', 'CommonService', fu
             method: 'GET',
             url: apiUrl + 'delete/' + id
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _saveConfiguration = async function (configuration) {
@@ -56,7 +56,7 @@ app.factory('ConfigurationServices', ['$http', '$rootScope', 'CommonService', fu
             url: apiUrl + 'save',
             data: JSON.stringify(configuration)
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
     var _uploadConfiguration = async function (configurationFile) {
         //var container = $(this).parents('.model-configuration').first().find('.custom-file').first();
@@ -81,7 +81,7 @@ app.factory('ConfigurationServices', ['$http', '$rootScope', 'CommonService', fu
                 data: files,
             };
 
-            return await commonServices.getApiResult(req)
+            return await commonService.getApiResult(req)
         }
     };
 

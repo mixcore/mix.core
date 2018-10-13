@@ -86,7 +86,7 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
         if (resp && resp.isSucceed) {
             $scope.activedData = resp.data;
             $rootScope.showMessage('success', 'success');
-            //$location.path('/portal/page/list');
+            
             if ($scope.saveCallback) {
                 $rootScope.executeFunctionByName('saveCallback', $scope.saveCallbackArgs, $scope)
             }

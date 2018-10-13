@@ -1,7 +1,7 @@
 'use strict';
 app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', '$location'
-    , 'CommonService', 'AuthService', 'TranslatorService', 'GlobalSettingsService', 'RoleServices',
-    function ($rootScope, $scope, ngAppSettings, $location, commonServices, authService, translatorService, configurationService, roleServices) {
+    , 'CommonService', 'AuthService', 'TranslatorService', 'GlobalSettingsService', 'RoleService',
+    function ($rootScope, $scope, ngAppSettings, $location, commonService, authService, translatorService, configurationService, roleServices) {
         $scope.isInit = false;
         $scope.isAdmin = false;
         $scope.translator = translatorService;
@@ -19,7 +19,7 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
                     if ($rootScope.globalSettings) {
                         $rootScope.translator.fillTranslator($rootScope.globalSettings.lang).then(function () {
 
-                            commonServices.fillSettings().then(function (response) {
+                            commonService.fillSettings().then(function (response) {
 
                                 authService.fillAuthData().then(function (response) {
                                     $rootScope.authentication = authService.authentication;
