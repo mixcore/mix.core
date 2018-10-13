@@ -35,16 +35,14 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
         [JsonProperty("value")]
         public string Value { get; set; }
 
-        [Required]
-        [JsonProperty("defaultValue")]
-        public string DefaultValue { get; set; }
-
-
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
+        [JsonProperty("status")]
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views

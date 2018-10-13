@@ -1,63 +1,9 @@
 ﻿'use strict';
-app.factory('ConfigurationServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonService) {
+app.factory('ConfigurationService', ['BaseService','CommonService', function (baseService, commonService) {
 
-    //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
+    var serviceFactory = Object.create(baseService);
+    serviceFactory.init('configuration');
 
-    var configurationsServiceFactory = {};
-
-    var settings = $rootScope.globalSettings
-
-    var _getConfiguration = async function (id, type) {
-        var apiUrl = '/' + settings.lang + '/configuration/';
-        var url = apiUrl + 'details/' + type;
-        if (id) {
-            url += '/' + id;
-        }
-        var req = {
-            method: 'GET',
-            url: url
-        };
-        return await commonService.getApiResult(req)
-    };
-
-    var _initConfiguration = async function (type) {
-        var apiUrl = '/' + settings.lang + '/configuration/';
-        var req = {
-            method: 'GET',
-            url: apiUrl + 'init/' + type,
-        };
-        return await commonService.getApiResult(req)
-    };
-
-    var _getConfigurations = async function (request) {
-        var apiUrl = '/' + settings.lang + '/configuration/';
-        var req = {
-            method: 'POST',
-            url: apiUrl + 'list',
-            data: JSON.stringify(request)
-        };
-        
-        return await commonService.getApiResult(req);
-    };
-
-    var _removeConfiguration = async function (id) {
-        var apiUrl = '/' + settings.lang + '/configuration/';
-        var req = {
-            method: 'GET',
-            url: apiUrl + 'delete/' + id
-        };
-        return await commonService.getApiResult(req)
-    };
-
-    var _saveConfiguration = async function (configuration) {
-        var apiUrl = '/' + settings.lang + '/configuration/';
-        var req = {
-            method: 'POST',
-            url: apiUrl + 'save',
-            data: JSON.stringify(configuration)
-        };
-        return await commonService.getApiResult(req)
-    };
     var _uploadConfiguration = async function (configurationFile) {
         //var container = $(this).parents('.model-configuration').first().find('.custom-file').first();
         if (configurationFile.file !== undefined && configurationFile.file !== null) {
@@ -72,7 +18,7 @@ app.factory('ConfigurationServices', ['$http', '$rootScope', 'CommonService', fu
             files.append('description', configurationFile.description);
 
             var req = {
-                url: '/' + settings.lang + '/configuration/upload', //'/tts/UploadImage',
+                url: this.prefixUrl + '/upload',
                 type: "POST",
                 headers: {
                 },
@@ -84,13 +30,7 @@ app.factory('ConfigurationServices', ['$http', '$rootScope', 'CommonService', fu
             return await commonService.getApiResult(req)
         }
     };
-
-    configurationsServiceFactory.getConfiguration = _getConfiguration;
-    configurationsServiceFactory.initConfiguration = _initConfiguration;
-    configurationsServiceFactory.getConfigurations = _getConfigurations;
-    configurationsServiceFactory.removeConfiguration = _removeConfiguration;
-    configurationsServiceFactory.saveConfiguration = _saveConfiguration;
-    configurationsServiceFactory.uploadConfiguration = _uploadConfiguration;
-    return configurationsServiceFactory;
+    serviceFactory.uploadConfiguration = _uploadConfiguration;
+    return serviceFactory;
 
 }]);

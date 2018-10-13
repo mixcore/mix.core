@@ -45,7 +45,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         public DateTime CreatedDateTime { get; set; }
         [JsonProperty("updatedDateTime")]
         public DateTime? UpdatedDateTime { get; set; }
-
+        [JsonProperty("status")]
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views

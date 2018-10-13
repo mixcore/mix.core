@@ -180,9 +180,8 @@ namespace Mix.Cms.Api.Controllers.v1
 
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin")]
-        [HttpPost, HttpOptions]
-        [Route("delete")]
-        public async Task<RepositoryResponse<AspNetRoles>> Delete([FromBody] string name)
+        [Route("delete/{name}")]
+        public async Task<RepositoryResponse<AspNetRoles>> Delete(string name)
         {
             if (name != "SuperAdmin")
             {

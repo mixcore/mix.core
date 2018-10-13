@@ -5,7 +5,7 @@ app.controller('RoleController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
         $scope.role = { name: '' };
         $scope.createRole = async function () {
             $rootScope.isBusy = true;
-            var result = await roleServices.createRole($scope.role.name);
+            var result = await service.createRole($scope.role.name);
             if (result.isSucceed) {
                 $scope.role.name = '';
                 $scope.getList();

@@ -45,6 +45,9 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
+        [JsonProperty("status")]
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
