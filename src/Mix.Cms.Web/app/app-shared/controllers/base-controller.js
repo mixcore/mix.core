@@ -1,14 +1,16 @@
 'use strict'
-function BaseCtrl ($scope, $rootScope, $routeParams, ngAppSettings, service) {
-   
+function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
+
     $scope.request = angular.copy(ngAppSettings.request);
     $scope.contentStatuses = angular.copy(ngAppSettings.contentStatuses);
     $scope.activedData = null;
     $scope.data = null;
     $scope.isInit = false;
-    $scope.errors = [];    
+    $scope.errors = [];
+    $scope.saveCallbackArgs = [];
+    $scope.removeCallbackArgs = [];
     $scope.range = $rootScope.range;
-    
+
     $scope.getSingle = async function () {
         $rootScope.isBusy = true;
         var id = $routeParams.id;
@@ -66,6 +68,9 @@ function BaseCtrl ($scope, $rootScope, $routeParams, ngAppSettings, service) {
         $rootScope.isBusy = true;
         var result = await service.delete(id);
         if (result.isSucceed) {
+            if ($scope.removeCallback) {
+                $rootScope.executeFunctionByName('removeCallback', $scope.removeCallbackArgs, $scope)
+            }
             $scope.getList();
         }
         else {
@@ -75,15 +80,17 @@ function BaseCtrl ($scope, $rootScope, $routeParams, ngAppSettings, service) {
         }
     };
 
-
     $scope.save = async function (page) {
         $rootScope.isBusy = true;
         var resp = await service.save(page);
         if (resp && resp.isSucceed) {
             $scope.activedData = resp.data;
             $rootScope.showMessage('success', 'success');
-            $rootScope.isBusy = false;
             //$location.path('/portal/page/list');
+            if ($scope.saveCallback) {
+                $rootScope.executeFunctionByName('saveCallback', $scope.saveCallbackArgs, $scope)
+            }
+            $rootScope.isBusy = false;
             $scope.$apply();
         }
         else {

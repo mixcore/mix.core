@@ -30,7 +30,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
             return settings;
         }
         else {
-            var url = '/api/portal';
+            var url = '/portal';
             if (culture) {
                 url += '/' + culture;
             }

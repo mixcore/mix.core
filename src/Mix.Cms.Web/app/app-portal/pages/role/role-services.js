@@ -4,7 +4,7 @@ app.factory('RoleServices', ['$http', 'CommonService', function ($http, commonSe
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 
     var rolesServiceFactory = {};
-    var apiUrl = '/api/role/';
+    var apiUrl = '/role/';
     
     var _getRoles = function (request) {
 
@@ -18,7 +18,7 @@ app.factory('RoleServices', ['$http', 'CommonService', function ($http, commonSe
     };
 
     var _getRole = async function (id, viewType) {
-        var apiUrl = '/api/role/';
+        var apiUrl = '/role/';
         var url = apiUrl + 'details/' + viewType;
         if (id) {
             url += '/' + id;
@@ -31,7 +31,7 @@ app.factory('RoleServices', ['$http', 'CommonService', function ($http, commonSe
     };
 
     var _getPermissions = async function () {
-        var apiUrl = '/api/role/';
+        var apiUrl = '/role/';
         var req = {
             method: 'GET',
             url: apiUrl + 'permissions'
@@ -40,7 +40,7 @@ app.factory('RoleServices', ['$http', 'CommonService', function ($http, commonSe
     };
 
     var _saveRole = async function (role) {
-        var apiUrl = '/api/role/';
+        var apiUrl = '/role/';
         var req = {
             method: 'POST',
             url: apiUrl + 'save',
@@ -50,7 +50,7 @@ app.factory('RoleServices', ['$http', 'CommonService', function ($http, commonSe
     };
 
     var _updatePermission = async function (permission) {
-        var apiUrl = '/api/role/';
+        var apiUrl = '/role/';
         var req = {
             method: 'POST',
             url: apiUrl + 'update-permission',

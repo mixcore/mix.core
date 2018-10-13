@@ -4,7 +4,7 @@ app.factory('Step2Services', ['$http', 'CommonService', function ($http, commonS
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 
     var usersServiceFactory = {};
-    var apiUrl = '/api/portal/';
+    var apiUrl = '/portal/';
     var _register = async function (user) {
         var apiUrl = '/account/register';
         var req = {

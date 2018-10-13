@@ -23,7 +23,7 @@ modules.component('apiFile', {
             files.append('title', title);
             files.append('description', description);
             $.ajax({
-                url: '/' + SW.Common.currentLanguage + '/media/upload', //'/api/tts/UploadImage',
+                url: '/' + SW.Common.currentLanguage + '/media/upload', //'/tts/UploadImage',
                 type: "POST",
                 contentType: false, // Not to set any content header
                 processData: false, // Not to process data

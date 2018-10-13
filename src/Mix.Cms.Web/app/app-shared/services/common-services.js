@@ -53,6 +53,18 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
             }
         };
 
+        var _initAllSettings = async function (culture) {
+            localStorageService.remove('settings');
+            localStorageService.remove('translator');
+            localStorageService.remove('globalSettings');
+
+            var response = await _getSettings(culture);
+            localStorageService.set('settings', response.settings);
+            localStorageService.set('translator', response.translator);
+            localStorageService.set('globalSettings', response.globalSettings);
+
+            return response;
+        };
 
         var _removeSettings = async function (settings) {
             localStorageService.remove('settings');
@@ -93,6 +105,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
             if (serviceBase !== undefined) {
                 serviceUrl = serviceBase + '/api/' + appSettings.apiVersion
             }
+
             req.url = serviceUrl + req.url;
             if (!req.headers) {
                 req.headers = {
@@ -147,6 +160,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
         adminCommonFactory.getApiResult = _getApiResult;
         adminCommonFactory.getSettings = _getSettings;
         adminCommonFactory.setSettings = _setSettings;
+        adminCommonFactory.initAllSettings = _initAllSettings;
         adminCommonFactory.removeSettings = _removeSettings;
         adminCommonFactory.removeTranslator = _removeTranslator;
         adminCommonFactory.showAlertMsg = _showAlertMsg;

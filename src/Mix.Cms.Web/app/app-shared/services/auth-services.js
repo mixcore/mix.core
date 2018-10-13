@@ -172,7 +172,7 @@ app.factory('AuthService',
 
             var _refreshToken = function (id) {
                 var deferred = $q.defer();
-                var url = appSettings.serviceBase + '/api/' + appSettings.apiVersion + '/account/refresh-token/' + id;
+                var url = appSettings.serviceBase + '/' + appSettings.apiVersion + '/account/refresh-token/' + id;
                 $http.get(url).then(function (response) {
                     var data = response.data.data;
 
@@ -198,7 +198,7 @@ app.factory('AuthService',
             var _obtainAccessToken = function (externalData) {
 
                 var deferred = $q.defer();
-                var url = appSettings.serviceBase + '/api/' + appSettings.apiVersion + '/account/ObtainLocalAccessToken';
+                var url = appSettings.serviceBase + '/' + appSettings.apiVersion + '/account/ObtainLocalAccessToken';
                 $http.get(url, { params: { provider: externalData.provider, externalAccessToken: externalData.externalAccessToken } }).success(function (response) {
 
                     localStorageService.set('authorizationData', { token: response.access_token, userName: response.userName, roleName: response.userData.roleNames, refresh_token: response.refresh_token, useRefreshTokens: true });
@@ -223,7 +223,7 @@ app.factory('AuthService',
 
                 var deferred = $q.defer();
 
-                $http.post(appSettings.serviceBase + '/api/' + appSettings.apiVersion + '/account/registerexternal', registerExternalData).success(function (response) {
+                $http.post(appSettings.serviceBase + '/' + appSettings.apiVersion + '/account/registerexternal', registerExternalData).success(function (response) {
 
                     localStorageService.set('authorizationData', { token: response.access_token, userName: response.userName, refresh_token: response.refresh_token, useRefreshTokens: true });
 

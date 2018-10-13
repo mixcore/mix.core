@@ -72,7 +72,7 @@ app.factory('ConfigurationServices', ['$http', '$rootScope', 'CommonService', fu
             files.append('description', configurationFile.description);
 
             var req = {
-                url: '/' + settings.lang + '/configuration/upload', //'/api/tts/UploadImage',
+                url: '/' + settings.lang + '/configuration/upload', //'/tts/UploadImage',
                 type: "POST",
                 headers: {
                 },

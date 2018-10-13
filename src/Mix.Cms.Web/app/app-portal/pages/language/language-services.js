@@ -72,7 +72,7 @@ app.factory('LanguageServices', ['$http', '$rootScope', 'CommonService', functio
             files.append('description', languageFile.description);
 
             var req = {
-                url: '/' + settings.lang + '/language/upload', //'/api/tts/UploadImage',
+                url: '/' + settings.lang + '/language/upload', //'/tts/UploadImage',
                 type: "POST",
                 headers: {
                 },

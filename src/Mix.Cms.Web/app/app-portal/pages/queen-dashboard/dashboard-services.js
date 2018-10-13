@@ -4,7 +4,7 @@ app.factory('QueenDashboardServices', ['$http', 'CommonService', function ($http
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 
     var usersServiceFactory = {};
-    var apiUrl = '/api/en-us/queen-beauty/';
+    var apiUrl = '/en-us/queen-beauty/';
     var _getDashboardInfo = async function () {
         var req = {
             method: 'GET',

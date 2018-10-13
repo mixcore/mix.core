@@ -8,7 +8,7 @@ app.factory('FileServices', ['$http', '$rootScope', 'CommonService', function ($
     var settings = $rootScope.globalSettings
 
     var _getFile = async function (folder, filename) {
-        var apiUrl = '/api/file/';
+        var apiUrl = '/file/';
         var url = apiUrl + 'details?folder=' + folder + '&filename=' + filename;        
         var req = {
             method: 'GET',
@@ -18,7 +18,7 @@ app.factory('FileServices', ['$http', '$rootScope', 'CommonService', function ($
     };
 
     var _initFile = async function (type) {
-        var apiUrl = '/api/file/';
+        var apiUrl = '/file/';
         var req = {
             method: 'GET',
             url: apiUrl + 'init/' + type,
@@ -27,7 +27,7 @@ app.factory('FileServices', ['$http', '$rootScope', 'CommonService', function ($
     };
 
     var _getFiles = async function (request) {
-        var apiUrl = '/api/file/';
+        var apiUrl = '/file/';
         var req = {
             method: 'POST',
             url: apiUrl + 'list',
@@ -38,7 +38,7 @@ app.factory('FileServices', ['$http', '$rootScope', 'CommonService', function ($
     };
 
     var _removeFile = async function (id) {
-        var apiUrl = '/api/file/';
+        var apiUrl = '/file/';
         var req = {
             method: 'GET',
             url: apiUrl + 'delete/' + id
@@ -47,7 +47,7 @@ app.factory('FileServices', ['$http', '$rootScope', 'CommonService', function ($
     };
 
     var _saveFile = async function (file) {
-        var apiUrl = '/api/file/';
+        var apiUrl = '/file/';
         var req = {
             method: 'POST',
             url: apiUrl + 'save',
