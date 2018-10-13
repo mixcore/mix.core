@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
 
-namespace Mix.Cms.Api.Controllers
+namespace Mix.Cms.Api.Controllers.v1
 {
     public class BaseApiController: Controller
     {

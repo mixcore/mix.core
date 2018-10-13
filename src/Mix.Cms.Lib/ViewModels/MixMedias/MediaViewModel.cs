@@ -12,8 +12,8 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixMedias
 {
-    public class MediaViewModel
-        : ViewModelBase<MixCmsContext, MixMedia, MediaViewModel>
+    public class UpdateViewModel
+        : ViewModelBase<MixCmsContext, MixMedia, UpdateViewModel>
     {
         #region Properties
 
@@ -56,6 +56,8 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
 
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -84,11 +86,11 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
 
         #region Contructors
 
-        public MediaViewModel() : base()
+        public UpdateViewModel() : base()
         {
         }
 
-        public MediaViewModel(MixMedia model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public UpdateViewModel(MixMedia model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
@@ -101,7 +103,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         {
             if (Id == 0)
             {
-                Id = MediaViewModel.Repository.Max(c => c.Id).Data + 1;
+                Id = UpdateViewModel.Repository.Max(c => c.Id).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
                 IsClone = true;
                 //Cultures = Cultures ?? CommonRepository.Instance.LoadCultures(Specificulture, _context, _transaction);
@@ -145,7 +147,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
             MediaFile = new FileViewModel();
         }
 
-        public override RepositoryResponse<bool> RemoveRelatedModels(MediaViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override RepositoryResponse<bool> RemoveRelatedModels(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>
             {
@@ -154,7 +156,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
             return result;
         }
 
-        public override Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(MediaViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             FileRepository.Instance.DeleteFile(FileName, Extension, FileFolder);
             return base.RemoveRelatedModelsAsync(view, _context, _transaction);

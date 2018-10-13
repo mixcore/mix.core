@@ -172,10 +172,10 @@ namespace Mix.Cms.Lib.Services
         private bool InitThemes(MixCmsContext context, IDbContextTransaction transaction)
         {
             bool isSucceed = true;
-            var getThemes = ViewModels.MixThemes.InitViewModel.Repository.GetModelList(_context: context, _transaction: transaction);
+            var getThemes = ViewModels.MixThemes.UpdateViewModel.Repository.GetModelList(_context: context, _transaction: transaction);
             if (!context.MixTheme.Any())
             {
-                ViewModels.MixThemes.InitViewModel theme = new ViewModels.MixThemes.InitViewModel(new MixTheme()
+                ViewModels.MixThemes.UpdateViewModel theme = new ViewModels.MixThemes.UpdateViewModel(new MixTheme()
                 {
                     Name = "Default",
                     CreatedBy = "Admin"
@@ -203,7 +203,8 @@ namespace Mix.Cms.Lib.Services
                         FullName = culture.FullName,
                         Description = culture.Description,
                         Icon = culture.Icon,
-                        Alias = culture.Alias
+                        Alias = culture.Alias,
+                        Status = (int)MixEnums.MixContentStatus.Published
                     };
                     context.Entry(enCulture).State = EntityState.Added;
 

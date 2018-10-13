@@ -4,17 +4,17 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Hub;
-using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Mix.Cms.Api.Controllers
+namespace Mix.Cms.Api.Controllers.v1
 {
     public class BaseGenericApiControoler<TDbContext, TModel> : Controller
         where TDbContext : DbContext
@@ -22,7 +22,9 @@ namespace Mix.Cms.Api.Controllers
     {
         protected readonly IHubContext<PortalHub> _hubContext;
 
-        protected readonly IMemoryCache _memoryCache;
+        private static List<string> cachedKeys = new List<string>();
+
+        protected IMemoryCache _memoryCache;
 
         /// <summary>
         /// The language
@@ -66,15 +68,15 @@ namespace Mix.Cms.Api.Controllers
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
             var getPage = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
+            var cacheKey = $"{typeof(TModel).Name}_details_{_lang}_{key}";
 
-            var cacheKey = $"{typeof(TModel).Name}_{_lang}_{key}";
-            var data = _memoryCache.Get<RepositoryResponse<TView>>(cacheKey);
-            if (data == null)
+            if (!_memoryCache.TryGetValue<RepositoryResponse<TView>>(cacheKey, out RepositoryResponse<TView> data))
             {
+                
                 if (predicate != null)
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
-                    _memoryCache.Set<RepositoryResponse<TView>>(cacheKey, data);
+                    _memoryCache.Set(cacheKey, data);
                 }
                 else
                 {
@@ -83,12 +85,103 @@ namespace Mix.Cms.Api.Controllers
                         IsSucceed = true,
                         Data = DefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model)
                     };
-                    _memoryCache.Set<RepositoryResponse<TView>>(cacheKey, data);
+                    
                 }
+                if (!cachedKeys.Contains(cacheKey))
+                {
+                    cachedKeys.Add(cacheKey);
+                }
+                AlertAsync("Add Cache", 200, cacheKey);
             }
             return data;
         }
 
+        protected async Task<RepositoryResponse<TModel>> DeleteAsync<TView>(Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
+            where TView : ViewModelBase<TDbContext, TModel, TView>
+        {
+            var getPage = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
+            var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
+            if (data.IsSucceed)
+            {
+                RemoveCache();
+                return await data.Data.RemoveModelAsync(isDeleteRelated).ConfigureAwait(false);
+            }
+            return new RepositoryResponse<TModel>() { IsSucceed = false };
+        }
+
+        protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync<TView>(string key, RequestPaging request, Expression<Func<TModel, bool>> predicate = null, TModel model = null)
+            where TView : ViewModelBase<TDbContext, TModel, TView>
+        {
+            var getData = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
+            var cacheKey = $"{typeof(TModel).Name}_list_{_lang}_{key}_{request.Status}";
+            var data = _memoryCache.Get<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
+            if (data == null)
+            {
+                if (predicate != null)
+                {
+                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
+                    _memoryCache.Set(cacheKey, data);
+                }
+                else
+                {
+                data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
+                _memoryCache.Set(cacheKey, data);
+
+                }
+                if (!cachedKeys.Contains(cacheKey))
+                {
+                    cachedKeys.Add(cacheKey);
+                }
+                AlertAsync("Add Cache", 200, cacheKey);
+            }
+
+            //AlertAsync("Get List Page", 200, $"Get {request.Key} list page");
+            return data;
+        }
+
+        protected async Task<RepositoryResponse<TView>> SaveAsync<TView>(TView vm, bool isSaveSubModel)
+            where TView : ViewModelBase<TDbContext, TModel, TView>
+        {
+            if (vm!=null)
+            {
+                var result = await vm.SaveModelAsync(isSaveSubModel).ConfigureAwait(false);
+                RemoveCache();
+                return result;
+            }
+            return new RepositoryResponse<TView>();
+        }
+
+        public JObject SaveEncrypt([FromBody] RequestEncrypted request)
+        {
+            var key = Convert.FromBase64String(request.Key); //Encoding.UTF8.GetBytes(request.Key);
+            var iv = Convert.FromBase64String(request.IV); //Encoding.UTF8.GetBytes(request.IV);
+            string encrypted = string.Empty;
+            string decrypt = string.Empty;
+            if (!string.IsNullOrEmpty(request.PlainText))
+            {
+                encrypted = MixService.EncryptStringToBytes_Aes(request.PlainText, key, iv).ToString();
+            }
+            if (!string.IsNullOrEmpty(request.Encrypted))
+            {
+                decrypt = MixService.DecryptStringFromBytes_Aes(request.Encrypted, key, iv);
+            }
+            JObject data = new JObject(
+                new JProperty("key", request.Key),
+                new JProperty("encrypted", encrypted),
+                new JProperty("plainText", decrypt));
+
+            return data;
+        }
+
+        protected void RemoveCache()
+        {
+            foreach (var item in cachedKeys)
+            {
+                _memoryCache.Remove(item);
+            }            
+            cachedKeys = new List<string>();
+            AlertAsync("Empty Cache", 200);
+        }
         protected void AlertAsync(string action, int status, string message = null)
         {
             var logMsg = new JObject()
@@ -118,7 +211,6 @@ namespace Mix.Cms.Api.Controllers
         {
             _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : MixService.GetConfig<string>("Language");
             ViewBag.culture = _lang;
-
             _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
         }
     }

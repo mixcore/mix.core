@@ -79,7 +79,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             modelBuilder.Entity<MixArticle>(entity =>
             {
                 entity.HasKey(e => new { e.Id, e.Specificulture });
@@ -325,6 +324,12 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Alias).HasMaxLength(150);
 
+                entity.Property(e => e.CreatedBy).HasMaxLength(50);
+
+                entity.Property(e => e.CreatedDateTime)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
                 entity.Property(e => e.Description).HasMaxLength(250);
 
                 entity.Property(e => e.FullName).HasMaxLength(150);
@@ -434,6 +439,12 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
                 entity.Property(e => e.Category).HasMaxLength(250);
+
+                entity.Property(e => e.CreatedBy).HasMaxLength(50);
+
+                entity.Property(e => e.CreatedDateTime)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.DefaultValue).HasMaxLength(250);
 

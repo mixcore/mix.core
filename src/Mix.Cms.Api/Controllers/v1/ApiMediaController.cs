@@ -6,203 +6,121 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
-using Mix.Cms.Lib.Services;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Mix.Domain.Core.ViewModels;
-using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
 using System.Linq.Expressions;
 using Mix.Common.Helper;
 using Microsoft.AspNetCore.Http;
 using Mix.Cms.Lib.ViewModels.MixMedias;
+using Microsoft.Extensions.Caching.Memory;
+using static Mix.Cms.Lib.MixEnums;
+using System.Web;
 
-namespace Mix.Cms.Api.Controllers
+namespace Mix.Cms.Api.Controllers.v1
 {
     [Route("api/v1/{culture}/media")]
     public class ApiMediaController :
-     BaseApiController
+      BaseGenericApiControoler<MixCmsContext, MixMedia>
     {
-        public ApiMediaController(Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(hubContext)
+        public ApiMediaController(IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
         {
         }
 
         #region Get
 
+        // GET api/media/id
+        [HttpGet, HttpOptions]
+        [Route("delete/{id}")]
+        public async Task<RepositoryResponse<MixMedia>> DeleteAsync(int id)
+        {
+            return await base.DeleteAsync<UpdateViewModel>(
+                model => model.Id == id && model.Specificulture == _lang, true);
+        }
+
         // GET api/medias/id
         [HttpGet, HttpOptions]
-        [Route("details/{viewType}/{id}")]
+        [Route("details/{id}/{viewType}")]
         [Route("details/{viewType}")]
-        public async Task<JObject> Details(string viewType, int? id = null)
+        public async Task<ActionResult<JObject>> Details(string viewType, int? id)
         {
+            string msg = string.Empty;
             switch (viewType)
             {
                 default:
                     if (id.HasValue)
                     {
-                        var feResult = await MediaViewModel.Repository.GetSingleModelAsync(
-                        model => model.Id == id && model.Specificulture == _lang).ConfigureAwait(false);
-                        return JObject.FromObject(feResult);
+                        var beResult = await UpdateViewModel.Repository.GetSingleModelAsync(model => model.Id == id && model.Specificulture == _lang).ConfigureAwait(false);                       
+                        return Ok(JObject.FromObject(beResult));
                     }
                     else
                     {
-                        var media = new MixMedia()
-                        {
-                            Specificulture = _lang,
-                            Priority = MediaViewModel.Repository.Max(a => a.Priority).Data + 1
-                        };
-                        var result = new RepositoryResponse<MediaViewModel>()
+                        var model = new MixMedia();
+                        RepositoryResponse<UpdateViewModel> result = new RepositoryResponse<UpdateViewModel>()
                         {
                             IsSucceed = true,
-                            Data = (await MediaViewModel.InitViewAsync(media))
+                            Data = new UpdateViewModel(model)
+                            {
+                                Specificulture = _lang,
+                                Status = MixContentStatus.Preview,
+                            }
                         };
-                        return JObject.FromObject(result);
+                        return Ok(JObject.FromObject(result));
                     }
-
-            }
-        }
-        // GET api/medias/id
-        [HttpGet, HttpOptions]
-        [Route("clone/{id}")]
-        public async Task<JObject> Clone(int id)
-        {
-            var result = await MediaViewModel.Repository.GetSingleModelAsync(
-            model => model.Id == id && model.Specificulture == _lang).ConfigureAwait(false);
-            if (result.IsSucceed)
-            {
-                result.Data.IsClone = true;
-                var cloneResult = await result.Data.SaveModelAsync(false);
-                return JObject.FromObject(cloneResult);
-            }
-            else
-            {
-                return JObject.FromObject(result);
             }
         }
 
-        // GET api/medias/id
-        [HttpGet, HttpOptions]
-        [Route("delete/{id}")]
-        public async Task<RepositoryResponse<MixMedia>> Delete(int id)
-        {
-            var getMedia = MediaViewModel.Repository.GetSingleModel(a => a.Id == id && a.Specificulture == _lang);
-            if (getMedia.IsSucceed)
-            {
-                return await getMedia.Data.RemoveModelAsync(true).ConfigureAwait(false);
-            }
-            else
-            {
-                return new RepositoryResponse<MixMedia>() { IsSucceed = false };
-            }
-        }
 
         #endregion Get
 
         #region Post
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Route("upload")]
-        [HttpPost, HttpOptions]
-        public async Task<RepositoryResponse<MediaViewModel>> UploadAsync([FromForm] string fileFolder, [FromForm] string title, [FromForm] string description)
-        {
-            var files = Request.Form.Files;
-
-            if (files.Count > 0)
-            {
-                var fileUpload = files.FirstOrDefault();
-
-                string folderPath = CommonHelper.GetFullPath(new[] {
-                    MixService.GetConfig<string>("UploadFolder"),
-                    fileFolder,
-                    DateTime.UtcNow.ToString("MM-yyyy")
-                });
-                // save web files in wwwRoot
-                string uploadPath = CommonHelper.GetFullPath(new[] {
-                    MixConstants.Folder.WebRootPath,
-                    folderPath
-                });
-
-                string fileName =
-                CommonHelper.GetFullPath(new[] {
-                    "/",
-                    await UploadFileAsync(files.FirstOrDefault(), uploadPath).ConfigureAwait(false)
-                });
-                MediaViewModel media = new MediaViewModel(new MixMedia()
-                {
-                    Specificulture = _lang,
-                    FileName = fileName.Split('.')[0].Substring(fileName.LastIndexOf('/') + 1),
-                    FileFolder = folderPath,
-                    Extension = fileName.Substring(fileName.LastIndexOf('.')),
-                    CreatedDateTime = DateTime.UtcNow,
-                    FileType = fileUpload.ContentType.Split('/')[0],
-                    FileSize = fileUpload.Length,
-                    Title = title ?? fileName.Split('.')[0].Substring(fileName.LastIndexOf('/') + 1),
-                    Description = description ?? fileName.Split('.')[0].Substring(fileName.LastIndexOf('/') + 1)
-                });
-                return await media.SaveModelAsync();
-            }
-            else
-            {
-                return new RepositoryResponse<MediaViewModel>();
-            }
-        }
-
-        // POST api/medias
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        // POST api/media
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("save")]
-        public async Task<RepositoryResponse<MediaViewModel>> Post([FromBody]MediaViewModel model)
+        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromBody]UpdateViewModel model)
         {
             if (model != null)
             {
-                model.Specificulture = _lang;
-                var result = await model.SaveModelAsync(true).ConfigureAwait(false);
-
+                var result = await base.SaveAsync<UpdateViewModel>(model, true);
                 return result;
             }
-            return new RepositoryResponse<MediaViewModel>();
+            return new RepositoryResponse<UpdateViewModel>() { Status = 501 };
         }
 
-        // GET api/medias
-
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        // GET api/media
         [HttpPost, HttpOptions]
         [Route("list")]
-        public async Task<RepositoryResponse<PaginationModel<Lib.ViewModels.MixMedias.MediaViewModel>>> GetList([FromBody]RequestPaging request)
+        public async Task<ActionResult<JObject>> GetList(
+            [FromBody] RequestPaging request)
         {
+            var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
+            bool isLevel = int.TryParse(parsed.Get("level"), out int level);
             ParseRequestPagingDate(request);
             Expression<Func<MixMedia, bool>> predicate = model =>
-                model.Specificulture == _lang
-                && (string.IsNullOrWhiteSpace(request.Keyword)
-                || (model.FileName.Contains(request.Keyword)
-                || model.Title.Contains(request.Keyword)
-                || model.Description.Contains(request.Keyword)))
-                && (!request.FromDate.HasValue
-                    || (model.CreatedDateTime >= request.FromDate.Value)
-                )
-                && (!request.ToDate.HasValue
-                    || (model.CreatedDateTime <= request.ToDate.Value)
-                );
-
-            var data = await MediaViewModel.Repository.GetModelListByAsync(predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-
-            return data;
-        }
-
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpPost, HttpOptions]
-        [Route("list/byProduct/{productId}")]
-        [Route("list/byProduct")]
-        public async Task<RepositoryResponse<PaginationModel<Mix.Cms.Lib.ViewModels.MixProductMedias.ReadViewModel>>> GetListByProduct(RequestPaging request, int? productId = null)
-        {
-            var data = await Lib.ViewModels.MixProductMedias.ReadViewModel.Repository.GetModelListByAsync(
-            m => m.ProductId == productId && m.Specificulture == _lang, request.OrderBy
-            , request.Direction, request.PageSize, request.PageIndex)
-            .ConfigureAwait(false);
-
-            return data;
-
+                        model.Specificulture == _lang
+                        && (!request.Status.HasValue || model.Status == request.Status.Value)
+                        && (string.IsNullOrWhiteSpace(request.Keyword)
+                            || (model.Title.Contains(request.Keyword)
+                            || model.Description.Contains(request.Keyword)))
+                        && (!request.FromDate.HasValue
+                            || (model.CreatedDateTime >= request.FromDate.Value)
+                        )
+                        && (!request.ToDate.HasValue
+                            || (model.CreatedDateTime <= request.ToDate.Value)
+                        );
+            string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
+            switch (request.Key)
+            {
+                
+                default:
+                    var portalResult = await base.GetListAsync<UpdateViewModel>(key, request, predicate);
+                    
+                    return Ok(JObject.FromObject(portalResult));
+                
+            }
         }
 
         #endregion Post

@@ -3,10 +3,16 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService', 'AppS
     function ($rootScope, $routeParams, commonServices, appSettings) {
         var serviceFactory = {};
 
-        var _init = function (modelName) {
+        var _init = function (modelName, isGlobal) {
             this.modelName = modelName;
-            this.lang = $rootScope.configurationService.get('lang');
-            this.prefixUrl = '/' + this.lang + '/' + modelName;
+            if(!isGlobal)
+            {
+                this.lang = $rootScope.configurationService.get('lang');
+                this.prefixUrl = '/' + this.lang + '/' + modelName;
+            }
+            else{
+                this.prefixUrl = '/' + modelName;
+            }
         }
         var _getSingle = async function (params = []) {
             var url = (this.prefixUrl || '/' + this.lang + '/' + this.modelName) + '/details';

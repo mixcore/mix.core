@@ -22,7 +22,7 @@ namespace Mix.Cms.Lib.ViewModels.MixOrders
         [JsonProperty("userId")]
         public string UserId { get; set; }
         [JsonProperty("customerId")]
-        public string CustomerId { get; set; }
+        public int CustomerId { get; set; }
 
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
@@ -36,6 +36,9 @@ namespace Mix.Cms.Lib.ViewModels.MixOrders
         #endregion
 
         #region View
+        [JsonProperty("detailsUrl")]
+        public string DetailsUrl { get; set; }
+
         [JsonProperty("phoneNumber")]
         public string PhoneNumber { get; set; }
 

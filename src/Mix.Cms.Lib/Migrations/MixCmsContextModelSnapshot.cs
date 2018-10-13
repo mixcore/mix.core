@@ -15,7 +15,7 @@ namespace Mix.Cms.Lib.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.3-rtm-32065")
+                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -333,6 +333,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Alias")
                         .HasMaxLength(150);
 
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
                     b.Property<string>("Description")
                         .HasMaxLength(250);
 
@@ -367,7 +375,7 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCustomer", b =>
                 {
-                    b.Property<string>("Id");
+                    b.Property<int>("Id");
 
                     b.Property<string>("Address")
                         .HasMaxLength(450);
@@ -485,6 +493,14 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Category")
                         .HasMaxLength(250);
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<int>("DataType");
 
@@ -825,7 +841,7 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("CustomerId");
+                    b.Property<int?>("CustomerId");
 
                     b.Property<int>("Status");
 

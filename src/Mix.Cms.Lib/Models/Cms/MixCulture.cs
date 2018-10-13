@@ -25,6 +25,8 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Priority { get; set; }
         public string Specificulture { get; set; }
         public int Status { get; set; }
+        public DateTime CreatedDateTime { get; set; }
+        public string CreatedBy { get; set; }
 
         public ICollection<MixArticle> MixArticle { get; set; }
         public ICollection<MixConfiguration> MixConfiguration { get; set; }

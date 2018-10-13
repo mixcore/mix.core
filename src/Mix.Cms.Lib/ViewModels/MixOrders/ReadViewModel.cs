@@ -34,7 +34,8 @@ namespace Mix.Cms.Lib.ViewModels.MixOrders
         public MixEnums.MixOrderStatus Status { get; set; }
         #endregion Models
         #region View
-
+        [JsonProperty("detailsUrl")]
+        public string DetailsUrl { get; set; }
         [JsonProperty("totalSpent")]
         public double TotalSpent { get; set; }
 

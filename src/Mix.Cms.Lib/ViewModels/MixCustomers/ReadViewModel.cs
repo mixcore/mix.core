@@ -14,7 +14,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCustomers
         #region Models
 
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public int Id { get; set; }
         [JsonProperty("isAgreeNotified")]
         public string IsAgreeNotified { get; set; }
         [JsonProperty("fullName")]

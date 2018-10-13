@@ -161,8 +161,9 @@ namespace Mix.Cms.Lib.Services
 
         }
         public static void Reload()
-        {
+        {            
             Instance.LoadConfiggurations();
+            
         }
         public static void LoadFromDatabase(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

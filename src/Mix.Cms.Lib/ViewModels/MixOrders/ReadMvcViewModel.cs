@@ -22,7 +22,7 @@ namespace Mix.Cms.Lib.ViewModels.MixOrders
         [JsonProperty("userId")]
         public string UserId { get; set; }
         [JsonProperty("customerId")]
-        public string CustomerId { get; set; }
+        public int CustomerId { get; set; }
 
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
@@ -46,7 +46,7 @@ namespace Mix.Cms.Lib.ViewModels.MixOrders
         public MixCustomers.ReadViewModel Customer { get; set; }
 
         [JsonProperty("status")]
-        public new int Status { get; set; }
+        public MixEnums.MixOrderStatus Status { get; set; }
 
         [JsonProperty("comments")]
         public List<MixComments.ReadViewModel> Comments { get; private set; }

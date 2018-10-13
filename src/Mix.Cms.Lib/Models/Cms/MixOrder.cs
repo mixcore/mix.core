@@ -13,7 +13,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
         public int Id { get; set; }
         public string UserId { get; set; }
-        public string CustomerId { get; set; }
+        public int? CustomerId { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public string CreatedBy { get; set; }
         public int StoreId { get; set; }

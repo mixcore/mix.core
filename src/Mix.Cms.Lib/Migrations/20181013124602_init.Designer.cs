@@ -10,14 +10,14 @@ using Mix.Cms.Lib.Models.Cms;
 namespace Mix.Cms.Lib.Migrations
 {
     [DbContext(typeof(MixCmsContext))]
-    [Migration("20180930173922_Init")]
-    partial class Init
+    [Migration("20181013124602_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.3-rtm-32065")
+                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -335,6 +335,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Alias")
                         .HasMaxLength(150);
 
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
                     b.Property<string>("Description")
                         .HasMaxLength(250);
 
@@ -369,7 +377,7 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCustomer", b =>
                 {
-                    b.Property<string>("Id");
+                    b.Property<int>("Id");
 
                     b.Property<string>("Address")
                         .HasMaxLength(450);
@@ -487,6 +495,14 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Category")
                         .HasMaxLength(250);
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<int>("DataType");
 
@@ -827,7 +843,7 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("CustomerId");
+                    b.Property<int?>("CustomerId");
 
                     b.Property<int>("Status");
 
@@ -1459,6 +1475,37 @@ namespace Mix.Cms.Lib.Migrations
                     b.ToTable("mix_product_module");
                 });
 
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedArticle", b =>
+                {
+                    b.Property<int>("SourceId");
+
+                    b.Property<int>("DestinationId");
+
+                    b.Property<string>("Specificulture")
+                        .HasMaxLength(10);
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(450);
+
+                    b.Property<string>("Image")
+                        .HasMaxLength(450);
+
+                    b.Property<int>("Priority");
+
+                    b.Property<int>("Status");
+
+                    b.HasKey("SourceId", "DestinationId", "Specificulture");
+
+                    b.HasIndex("DestinationId", "Specificulture");
+
+                    b.HasIndex("SourceId", "Specificulture");
+
+                    b.ToTable("mix_related_article");
+                });
+
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedProduct", b =>
                 {
                     b.Property<int>("SourceId");
@@ -2004,6 +2051,19 @@ namespace Mix.Cms.Lib.Migrations
                         .WithMany("MixProductModule")
                         .HasForeignKey("ProductId", "Specificulture")
                         .HasConstraintName("FK_Mix_Product_Module_Mix_Product");
+                });
+
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedArticle", b =>
+                {
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixArticle", "MixArticle")
+                        .WithMany("MixRelatedArticleMixArticle")
+                        .HasForeignKey("DestinationId", "Specificulture")
+                        .HasConstraintName("FK_mix_related_article_mix_article1");
+
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixArticle", "S")
+                        .WithMany("MixRelatedArticleS")
+                        .HasForeignKey("SourceId", "Specificulture")
+                        .HasConstraintName("FK_mix_related_article_mix_article");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedProduct", b =>

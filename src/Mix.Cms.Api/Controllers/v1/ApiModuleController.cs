@@ -12,82 +12,68 @@ using System.Linq;
 using System.Threading.Tasks;
 using Mix.Domain.Core.ViewModels;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
 using static Mix.Cms.Lib.MixEnums;
 using System.Linq.Expressions;
 using System.Web;
 using Mix.Cms.Lib.ViewModels.MixModules;
+using Microsoft.Extensions.Caching.Memory;
 
-namespace Mix.Cms.Api.Controllers
+namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
     [Route("api/v1/{culture}/module")]
     public class ApiModuleController :
-        BaseApiController
+         BaseGenericApiControoler<MixCmsContext, MixModule>
     {
-        public ApiModuleController(Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(hubContext)
+        public ApiModuleController(IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
         {
         }
+
         #region Get
 
-        // GET api/category/id
+        // GET api/module/id
         [HttpGet, HttpOptions]
         [Route("delete/{id}")]
         public async Task<RepositoryResponse<MixModule>> DeleteAsync(int id)
         {
-            var getModule = await ReadListItemViewModel.Repository.GetSingleModelAsync(
-                model => model.Id == id && model.Specificulture == _lang);
-            if (getModule.IsSucceed)
-            {
-
-                return await getModule.Data.RemoveModelAsync(true);
-            }
-            else
-            {
-                return new RepositoryResponse<MixModule>()
-                {
-                    IsSucceed = false
-                };
-            }
+            return await base.DeleteAsync<UpdateViewModel>(
+                model => model.Id == id && model.Specificulture == _lang, true);
         }
 
-        // GET api/pages/id
+        // GET api/modules/id
         [HttpGet, HttpOptions]
         [Route("details/{id}/{viewType}")]
         [Route("details/{viewType}")]
         public async Task<ActionResult<JObject>> Details(string viewType, int? id)
         {
+            string msg = string.Empty;
             switch (viewType)
             {
                 case "portal":
                     if (id.HasValue)
                     {
-                        var beResult = await UpdateViewModel.Repository.GetSingleModelAsync(model => model.Id == id && model.Specificulture == _lang).ConfigureAwait(false);
-                        return Ok(JObject.FromObject(beResult));
+                        Expression<Func<MixModule, bool>> predicate = model => model.Id == id && model.Specificulture == _lang;
+                        var portalResult = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_{id}", predicate);
+                        return Ok(JObject.FromObject(portalResult));
                     }
                     else
                     {
                         var model = new MixModule()
                         {
                             Specificulture = _lang,
-                            Status = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
-                            PageSize = 20,
+                            Status = MixService.GetConfig<int>("DefaultStatus"),
                             Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 
-                        RepositoryResponse<UpdateViewModel> result = new RepositoryResponse<UpdateViewModel>()
-                        {
-                            IsSucceed = true,
-                            Data = await UpdateViewModel.InitViewAsync(model)
-                        };
-                        return JObject.FromObject(result);
+                        RepositoryResponse<UpdateViewModel> result = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_default", null, model);
+                        return Ok(JObject.FromObject(result));
                     }
                 default:
                     if (id.HasValue)
                     {
                         var beResult = await ReadMvcViewModel.Repository.GetSingleModelAsync(model => model.Id == id && model.Specificulture == _lang).ConfigureAwait(false);
-                        return JObject.FromObject(beResult);
+                        return Ok(JObject.FromObject(beResult));
                     }
                     else
                     {
@@ -99,10 +85,9 @@ namespace Mix.Cms.Api.Controllers
                             {
                                 Specificulture = _lang,
                                 Status = MixContentStatus.Preview,
-                                PageSize = 20
                             }
                         };
-                        return JObject.FromObject(result);
+                        return Ok(JObject.FromObject(result));
                     }
             }
         }
@@ -112,22 +97,22 @@ namespace Mix.Cms.Api.Controllers
 
         #region Post
 
-        // POST api/category
+        // POST api/module
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("save")]
-        public async Task<RepositoryResponse<UpdateViewModel>> Post([FromBody]UpdateViewModel model)
+        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromBody]UpdateViewModel model)
         {
             if (model != null)
             {
                 model.CreatedBy = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
-                var result = await model.SaveModelAsync(true).ConfigureAwait(false);
+                var result = await base.SaveAsync<UpdateViewModel>(model, true);
                 return result;
             }
             return new RepositoryResponse<UpdateViewModel>() { Status = 501 };
         }
 
-        // POST api/category
+        // POST api/module
         [HttpPost, HttpOptions]
         [Route("save/{id}")]
         public async Task<RepositoryResponse<MixModule>> SaveFields(int id, [FromBody]List<EntityField> fields)
@@ -152,13 +137,14 @@ namespace Mix.Cms.Api.Controllers
             return new RepositoryResponse<MixModule>();
         }
 
-        // GET api/category
+        // GET api/module
         [HttpPost, HttpOptions]
         [Route("list")]
-        public async Task<JObject> GetList(
+        public async Task<ActionResult<JObject>> GetList(
             [FromBody] RequestPaging request)
         {
-
+            var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
+            bool isLevel = int.TryParse(parsed.Get("level"), out int level);
             ParseRequestPagingDate(request);
             Expression<Func<MixModule, bool>> predicate = model =>
                         model.Specificulture == _lang
@@ -172,19 +158,21 @@ namespace Mix.Cms.Api.Controllers
                         && (!request.ToDate.HasValue
                             || (model.CreatedDateTime <= request.ToDate.Value)
                         );
-
+            string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
             switch (request.Key)
             {
-
                 case "mvc":
-                    var mvcResult = await ReadMvcViewModel.Repository.GetModelListByAsync(predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-                    return JObject.FromObject(mvcResult);
+                    var mvcResult = await base.GetListAsync<ReadMvcViewModel>(key, request, predicate);
+                 
+                    return Ok(JObject.FromObject(mvcResult));
                 case "portal":
-                    var portalResult = await UpdateViewModel.Repository.GetModelListByAsync(predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-                    return JObject.FromObject(portalResult);
+                    var portalResult = await base.GetListAsync<UpdateViewModel>(key, request, predicate);
+                   
+                    return Ok(JObject.FromObject(portalResult));
                 default:
-                    var data = await ReadListItemViewModel.Repository.GetModelListByAsync(predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-                    return JObject.FromObject(data);
+
+                    var listItemResult = await base.GetListAsync<ReadListItemViewModel>(key, request, predicate);
+                    return JObject.FromObject(listItemResult);
             }
         }
 
