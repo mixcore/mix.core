@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('FileServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonServices) {
+app.factory('FileServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonService) {
 
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 
@@ -14,7 +14,7 @@ app.factory('FileServices', ['$http', '$rootScope', 'CommonService', function ($
             method: 'GET',
             url: url
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _initFile = async function (type) {
@@ -23,7 +23,7 @@ app.factory('FileServices', ['$http', '$rootScope', 'CommonService', function ($
             method: 'GET',
             url: apiUrl + 'init/' + type,
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _getFiles = async function (request) {
@@ -34,7 +34,7 @@ app.factory('FileServices', ['$http', '$rootScope', 'CommonService', function ($
             data: JSON.stringify(request)
         };
         
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     var _removeFile = async function (id) {
@@ -43,7 +43,7 @@ app.factory('FileServices', ['$http', '$rootScope', 'CommonService', function ($
             method: 'GET',
             url: apiUrl + 'delete/' + id
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _saveFile = async function (file) {
@@ -53,7 +53,7 @@ app.factory('FileServices', ['$http', '$rootScope', 'CommonService', function ($
             url: apiUrl + 'save',
             data: JSON.stringify(file)
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     filesServiceFactory.getFile = _getFile;

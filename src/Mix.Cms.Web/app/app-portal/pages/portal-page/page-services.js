@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('PortalPageServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonServices) {
+app.factory('PortalPageServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonService) {
 
     var pagesServiceFactory = {};
 
@@ -13,7 +13,7 @@ app.factory('PortalPageServices', ['$http', '$rootScope', 'CommonService', funct
             method: 'GET',
             url: url
         };
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     var _initPage = async function (type) {
@@ -22,7 +22,7 @@ app.factory('PortalPageServices', ['$http', '$rootScope', 'CommonService', funct
             method: 'GET',
             url: apiUrl + 'init/' + type
         };
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     var _getPages = async function (request) {
@@ -33,7 +33,7 @@ app.factory('PortalPageServices', ['$http', '$rootScope', 'CommonService', funct
             data: JSON.stringify(request)
         };
         
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     var _removePage = async function (id) {
@@ -42,7 +42,7 @@ app.factory('PortalPageServices', ['$http', '$rootScope', 'CommonService', funct
             method: 'GET',
             url: apiUrl + 'delete/' + id
         };
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     var _savePage = async function (page) {
@@ -52,7 +52,7 @@ app.factory('PortalPageServices', ['$http', '$rootScope', 'CommonService', funct
             url: apiUrl + 'save',
             data: JSON.stringify(page)
         };
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     var _updateInfos = async function (pages) {
@@ -62,7 +62,7 @@ app.factory('PortalPageServices', ['$http', '$rootScope', 'CommonService', funct
             url: apiUrl + 'update-infos',
             data: JSON.stringify(pages)
         };
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     var _updateChildInfos = async function (pages) {
@@ -72,7 +72,7 @@ app.factory('PortalPageServices', ['$http', '$rootScope', 'CommonService', funct
             url: apiUrl + 'update-child-infos',
             data: JSON.stringify(pages)
         };
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     pagesServiceFactory.getPage = _getPage;

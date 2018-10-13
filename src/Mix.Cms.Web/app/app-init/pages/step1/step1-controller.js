@@ -1,7 +1,7 @@
 ﻿'use strict';
 app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$timeout', '$location', '$http',
     'CommonService', 'Step1Services',
-    function ($scope, $rootScope, ngAppSettings, $timeout, $location, $http, commonServices, step1Services) {
+    function ($scope, $rootScope, ngAppSettings, $timeout, $location, $http, commonService, step1Services) {
         $scope.settings = {
             cultures: [
                 { specificulture: 'en-us', fullName: 'United States - English (Default)', icon: 'flag-icon-us' },

@@ -1,6 +1,6 @@
 ﻿'use strict';
 app.factory('UserServices', ['$http', 'CommonService', 'ngAppSettings'
-    , function ($http, commonServices, ngAuthSettings) {
+    , function ($http, commonService, ngAuthSettings) {
 
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 
@@ -16,7 +16,7 @@ app.factory('UserServices', ['$http', 'CommonService', 'ngAppSettings'
             url: serviceBase + url
         };
 
-        return commonServices.getApiResult(req);
+        return commonService.getApiResult(req);
     };
 
 
@@ -29,7 +29,7 @@ app.factory('UserServices', ['$http', 'CommonService', 'ngAppSettings'
             data: JSON.stringify({ strBase64: strBase64 })
         };
 
-        return commonServices.getApiResult(req);
+        return commonService.getApiResult(req);
     };
 
     var _getUsers = function (request) {
@@ -40,7 +40,7 @@ app.factory('UserServices', ['$http', 'CommonService', 'ngAppSettings'
             data: request
         };
 
-        return commonServices.getApiResult(req);
+        return commonService.getApiResult(req);
     };
 
     var _getUser = async function (id, viewType) {
@@ -53,7 +53,7 @@ app.factory('UserServices', ['$http', 'CommonService', 'ngAppSettings'
             method: 'GET',
             url: url
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _updateRoleStatus = function (userInRole) {
@@ -65,7 +65,7 @@ app.factory('UserServices', ['$http', 'CommonService', 'ngAppSettings'
 
         };
 
-        return commonServices.getApiResult(req);
+        return commonService.getApiResult(req);
     };
 
     var _saveUser = async function (user) {
@@ -75,7 +75,7 @@ app.factory('UserServices', ['$http', 'CommonService', 'ngAppSettings'
             url: apiUrl + 'save',
             data: JSON.stringify(user)
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _register = async function (user) {
@@ -85,7 +85,7 @@ app.factory('UserServices', ['$http', 'CommonService', 'ngAppSettings'
             url: apiUrl + 'register',
             data: JSON.stringify(user)
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _removeUser = function (user) {
@@ -95,7 +95,7 @@ app.factory('UserServices', ['$http', 'CommonService', 'ngAppSettings'
             data: JSON.stringify(user)
         };
 
-        return commonServices.getApiResult(req);
+        return commonService.getApiResult(req);
     };
 
     usersServiceFactory.importUsers = _importUsers;

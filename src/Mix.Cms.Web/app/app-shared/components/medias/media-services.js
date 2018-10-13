@@ -1,6 +1,6 @@
 ﻿'use strict';
 app.factory('MediaService', ['$rootScope', 'CommonService', 'BaseService',
-    function ($rootScope, commonServices, baseService) {
+    function ($rootScope, commonService, baseService) {
 
         var serviceFactory = Object.create(baseService);
         
@@ -9,7 +9,7 @@ app.factory('MediaService', ['$rootScope', 'CommonService', 'BaseService',
                 method: 'GET',
                 url: this.prefixUrl + '/clone/' + id
             };
-            return await commonServices.getApiResult(req);
+            return await commonService.getApiResult(req);
         };
 
         var _uploadMedia = async function (mediaFile) {
@@ -36,7 +36,7 @@ app.factory('MediaService', ['$rootScope', 'CommonService', 'BaseService',
                     data: files,
                 };
 
-                return await commonServices.getApiResult(req);
+                return await commonService.getApiResult(req);
             }
         };
         serviceFactory.modelName = 'media';

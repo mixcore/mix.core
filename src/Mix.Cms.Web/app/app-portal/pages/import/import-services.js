@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('ImportFileServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonServices) {
+app.factory('ImportFileServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonService) {
 
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 
@@ -14,7 +14,7 @@ app.factory('ImportFileServices', ['$http', '$rootScope', 'CommonService', funct
             url: apiUrl,
             data: JSON.stringify(importFile)
         };
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     importFilesServiceFactory.saveImportFile = _saveImportFile;

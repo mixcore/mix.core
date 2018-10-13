@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('ModuleDataService', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonServices) {
+app.factory('ModuleDataService', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonService) {
 
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 
@@ -19,7 +19,7 @@ app.factory('ModuleDataService', ['$http', '$rootScope', 'CommonService', functi
             method: 'GET',
             url: url
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
 
@@ -31,12 +31,12 @@ app.factory('ModuleDataService', ['$http', '$rootScope', 'CommonService', functi
             data: JSON.stringify(request)
         };
         
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     var _initModuleForm = async function (name) {
         if (!settings) {
-            settings = await commonServices.fillSettings();
+            settings = await commonService.fillSettings();
         }
         var apiUrl = '/' + settings.lang + '/module-data/';
         var req = {
@@ -44,7 +44,7 @@ app.factory('ModuleDataService', ['$http', '$rootScope', 'CommonService', functi
             url: apiUrl + 'init-by-name/' + name,
         };
         
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     var _removeModuleData = async function (id) {
@@ -53,7 +53,7 @@ app.factory('ModuleDataService', ['$http', '$rootScope', 'CommonService', functi
             method: 'GET',
             url: apiUrl + 'delete/' + id
         };
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     var _saveModuleData = async function (moduleData) {
@@ -63,7 +63,7 @@ app.factory('ModuleDataService', ['$http', '$rootScope', 'CommonService', functi
             url: apiUrl + 'save',
             data: JSON.stringify(moduleData)
         };
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
     var _saveFields = async function (id, propertyName, propertyValue) {
         var apiUrl = '/' + settings.lang + '/module-data/';
@@ -78,7 +78,7 @@ app.factory('ModuleDataService', ['$http', '$rootScope', 'CommonService', functi
             url: apiUrl + 'save/'+ id,
             data: JSON.stringify(field)
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
     moduleDatasServiceFactory.getModuleData = _getModuleData;
     moduleDatasServiceFactory.getModuleDatas = _getModuleDatas;

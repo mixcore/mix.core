@@ -2,13 +2,13 @@
     'use strict';
     app.controller('AppClientController', [ '$rootScope', '$scope', 'ngAppSettings', 'CommonService', 'AuthService'
         , 'TranslatorService', 'ModuleDataService',
-        function ($rootScope, $scope, ngAppSettings, commonServices, authService, translatorService, moduleDataService) {
+        function ($rootScope, $scope, ngAppSettings, commonService, authService, translatorService, moduleDataService) {
             $scope.lang = '';
             $scope.isInit = false;
             $scope.init = async function (lang) {
                 if (!$rootScope.isBusy) {
                     $rootScope.isBusy = true;
-                    commonServices.fillSettings(lang).then(function (response) {
+                    commonService.fillSettings(lang).then(function (response) {
                         $scope.isInit = true;
                         $rootScope.globalSettings = response;
                         if ($rootScope.globalSettings) {

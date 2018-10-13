@@ -42,7 +42,7 @@ app.directive('ngEnter', function () {
 }).filter('utcToLocal', Filter);
 
 app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthService', 'TranslatorService',
-    function ($rootScope, ngAppSettings, $location, commonServices, authService, translatorService) {
+    function ($rootScope, ngAppSettings, $location, commonService, authService, translatorService) {
         $rootScope.isBusy = false;
         $rootScope.translator = translatorService;
         $rootScope.message = {
@@ -181,7 +181,7 @@ app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthServi
             }
         };
         $rootScope.changeLang = function (lang) {
-            commonServices.fillSettings(lang).then(function (response) {
+            commonService.fillSettings(lang).then(function (response) {
                 $rootScope.globalSettings = response;
                 translatorService.fillTranslator($rootScope.globalSettings.lang);
             });

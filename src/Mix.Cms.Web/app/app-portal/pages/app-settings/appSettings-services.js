@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('AppSettingsServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonServices) {
+app.factory('AppSettingsServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonService) {
 
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 
@@ -14,7 +14,7 @@ app.factory('AppSettingsServices', ['$http', '$rootScope', 'CommonService', func
             method: 'GET',
             url: url
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _saveAppSettings = async function (appSettings) {
@@ -24,7 +24,7 @@ app.factory('AppSettingsServices', ['$http', '$rootScope', 'CommonService', func
             url: apiUrl,
             data: JSON.stringify(appSettings)
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     appSettingssServiceFactory.getAppSettings = _getAppSettings;

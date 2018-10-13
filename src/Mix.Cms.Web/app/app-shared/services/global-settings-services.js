@@ -1,6 +1,6 @@
 ﻿'use strict';
 app.factory('GlobalSettingsService', ['$rootScope', 'CommonService', 'localStorageService', 'AppSettings',
-    function ($rootScope, commonServices, localStorageService, appSettings) {
+    function ($rootScope, commonService, localStorageService, appSettings) {
         var factory = {};
         var _globalSettings = {
             lang: '',
@@ -39,7 +39,7 @@ app.factory('GlobalSettingsService', ['$rootScope', 'CommonService', 'localStora
                     method: 'GET',
                     url: url
                 };
-                var getData = await commonServices.getApiResult(req);
+                var getData = await commonService.getApiResult(req);
                 if (getData.isSucceed) {
                     globalSettings = getData.data;
                     localStorageService.set('globalSettings', globalSettings);

@@ -14,7 +14,7 @@ using Mix.Cms.Hub;
 namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
-    [Route("api/v1/{customer}/file")]
+    [Route("api/v1/file")]
     public class ApiFileController : BaseApiController
     {
         public ApiFileController(IHubContext<PortalHub> hubContext) : base(hubContext)

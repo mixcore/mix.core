@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('MediaServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonServices) {
+app.factory('MediaServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonService) {
 
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 
@@ -17,7 +17,7 @@ app.factory('MediaServices', ['$http', '$rootScope', 'CommonService', function (
             method: 'GET',
             url: url
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _initMedia = async function (type) {
@@ -26,7 +26,7 @@ app.factory('MediaServices', ['$http', '$rootScope', 'CommonService', function (
             method: 'GET',
             url: apiUrl + 'init/' + type,
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _getMedias = async function (request) {
@@ -37,7 +37,7 @@ app.factory('MediaServices', ['$http', '$rootScope', 'CommonService', function (
             data: JSON.stringify(request)
         };
         
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     var _removeMedia = async function (id) {
@@ -46,7 +46,7 @@ app.factory('MediaServices', ['$http', '$rootScope', 'CommonService', function (
             method: 'GET',
             url: apiUrl + 'delete/' + id
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _saveMedia = async function (media) {
@@ -56,7 +56,7 @@ app.factory('MediaServices', ['$http', '$rootScope', 'CommonService', function (
             url: apiUrl + 'save',
             data: JSON.stringify(media)
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
     var _uploadMedia = async function (mediaFile) {
         //var container = $(this).parents('.model-media').first().find('.custom-file').first();
@@ -82,7 +82,7 @@ app.factory('MediaServices', ['$http', '$rootScope', 'CommonService', function (
                 data: files,
             };
 
-            return await commonServices.getApiResult(req)
+            return await commonService.getApiResult(req)
         }
     };
 

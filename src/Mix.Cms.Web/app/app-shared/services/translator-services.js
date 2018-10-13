@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('TranslatorService', ['$rootScope', 'CommonService', 'localStorageService', function ($rootScope, commonServices, localStorageService) {
+app.factory('TranslatorService', ['$rootScope', 'CommonService', 'localStorageService', function ($rootScope, commonService, localStorageService) {
     var factory = {};
     var _translator = {
         lang: '',
@@ -38,7 +38,7 @@ app.factory('TranslatorService', ['$rootScope', 'CommonService', 'localStorageSe
                 url: url
             };
             translator.lang = culture;
-            var getData = await commonServices.getApiResult(req);
+            var getData = await commonService.getApiResult(req);
             if (getData.isSucceed) {
                 translator.data = getData.data;
                 localStorageService.set('translator', translator);

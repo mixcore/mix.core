@@ -4,7 +4,7 @@ app.constant('AppSettings', {
 });
 app.run(['$rootScope', '$location', 'CommonService', 'AuthService', 'TranslatorService', 'GlobalSettingsService',
     'ngAppSettings',
-    function ($rootScope, $location, commonServices, authService, translatorService, configurationService,
+    function ($rootScope, $location, commonService, authService, translatorService, configurationService,
         ngAppSettings) {
 
         configurationService.fillGlobalSettings().then(function (response) {
@@ -54,8 +54,8 @@ app.run(['$rootScope', '$location', 'CommonService', 'AuthService', 'TranslatorS
         };
 
         $rootScope.updateSettings = function () {
-            commonServices.removeSettings();
-            commonServices.fillSettings($rootScope.globalSettings.lang).then(function (response) {
+            commonService.removeSettings();
+            commonService.fillSettings($rootScope.globalSettings.lang).then(function (response) {
                 $rootScope.globalSettings = response;
 
             });

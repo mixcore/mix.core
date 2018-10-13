@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('CustomerServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonServices) {
+app.factory('CustomerServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonService) {
 
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 
@@ -17,7 +17,7 @@ app.factory('CustomerServices', ['$http', '$rootScope', 'CommonService', functio
             method: 'GET',
             url: url
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _initCustomer = async function (type) {
@@ -26,7 +26,7 @@ app.factory('CustomerServices', ['$http', '$rootScope', 'CommonService', functio
             method: 'GET',
             url: apiUrl + 'init/' + type,
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _getCustomers = async function (request) {
@@ -37,7 +37,7 @@ app.factory('CustomerServices', ['$http', '$rootScope', 'CommonService', functio
             data: JSON.stringify(request)
         };
         
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     var _removeCustomer = async function (id) {
@@ -46,7 +46,7 @@ app.factory('CustomerServices', ['$http', '$rootScope', 'CommonService', functio
             method: 'GET',
             url: apiUrl + 'delete/' + id
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     var _saveCustomer = async function (customer) {
@@ -56,7 +56,7 @@ app.factory('CustomerServices', ['$http', '$rootScope', 'CommonService', functio
             url: apiUrl + 'save',
             data: JSON.stringify(customer)
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     customersServiceFactory.getCustomer = _getCustomer;

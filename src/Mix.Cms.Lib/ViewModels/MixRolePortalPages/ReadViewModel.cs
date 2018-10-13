@@ -10,7 +10,7 @@ using System.Linq;
 namespace Mix.Cms.Lib.ViewModels.MixRolePortalPages
 {
     public class ReadViewModel
-       : ViewModelBase<MixCmsContext, MixPortalPageNavigation, ReadViewModel>
+       : ViewModelBase<MixCmsContext, MixPortalPage, ReadViewModel>
     {
         #region Properties
 
@@ -69,7 +69,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRolePortalPages
         {
         }
 
-        public ReadViewModel(MixPortalPageNavigation model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ReadViewModel(MixPortalPage model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 

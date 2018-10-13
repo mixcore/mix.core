@@ -10,7 +10,7 @@ app.factory('CultureService', ['BaseService', function (baseService) {
             url: this.prefixUrl + '/update-infos',
             data: JSON.stringify(pages)
         };
-        return await commonServices.getApiResult(req);
+        return await commonService.getApiResult(req);
     };
 
     var _syncTemplates = async function (id) {
@@ -20,7 +20,7 @@ app.factory('CultureService', ['BaseService', function (baseService) {
             method: 'GET',
             url: url
         };
-        return await commonServices.getApiResult(req)
+        return await commonService.getApiResult(req)
     };
 
     serviceFactory.syncTemplates = _syncTemplates;

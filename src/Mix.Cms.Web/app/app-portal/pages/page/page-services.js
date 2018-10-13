@@ -1,6 +1,6 @@
 ﻿'use strict';
 app.factory('PageService', ['$rootScope', 'CommonService', 'BaseService',
-    function ($rootScope, commonServices, baseService) {
+    function ($rootScope, commonService, baseService) {
 
         var serviceFactory = Object.create(baseService);
         serviceFactory.init('page');
@@ -11,7 +11,7 @@ app.factory('PageService', ['$rootScope', 'CommonService', 'BaseService',
                 url: this.prefixUrl + '/update-infos',
                 data: JSON.stringify(pages)
             };
-            return await commonServices.getApiResult(req);
+            return await commonService.getApiResult(req);
         };
         serviceFactory.updateInfos = _updateInfos;
         return serviceFactory;
