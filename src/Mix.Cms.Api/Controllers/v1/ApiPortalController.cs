@@ -22,7 +22,7 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.Account;
 using Mix.Cms.Lib.ViewModels.MixInit;
 
-namespace Mix.Cms.Api.Controllers
+namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
     [Route("api/v1/portal")]

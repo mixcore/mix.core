@@ -13,18 +13,21 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using static Mix.Cms.Lib.MixEnums;
 using System.Linq.Expressions;
+using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib.ViewModels.MixTemplates;
+using Mix.Cms.Lib;
+using Newtonsoft.Json.Linq;
 
-namespace Mix.Cms.Api.Controllers
+namespace Mix.Cms.Api.Controllers.v1
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
             Roles = "SuperAdmin, Admin")]
     [Produces("application/json")]
     [Route("api/v1/{culture}/template")]
     public class ApiTemplateController :
-            BaseApiController
+            BaseGenericApiControoler<MixCmsContext, MixTemplate>
     {
-
-        public ApiTemplateController(Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(hubContext)
+        public ApiTemplateController(IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
         {
         }
         #region Get
@@ -32,13 +35,14 @@ namespace Mix.Cms.Api.Controllers
         [HttpGet, HttpOptions]
         [Route("details/{viewType}/{themeId}/{folderType}/{id}")]
         [Route("details/{viewType}/{themeId}/{folderType}")]
-        public async Task<RepositoryResponse<Lib.ViewModels.MixTemplates.UpdateViewModel>> DetailsAsync(string viewType, int themeId, string folderType, int? id)
+        public async Task<ActionResult<RepositoryResponse<UpdateViewModel>>> DetailsAsync(string viewType, int themeId, string folderType, int? id)
         {
+
             if (id.HasValue)
             {
-                var beResult = await Lib.ViewModels.MixTemplates.UpdateViewModel.Repository.GetSingleModelAsync(
-                    model => model.Id == id && model.ThemeId == themeId).ConfigureAwait(false);
-                return beResult;
+                Expression<Func<MixTemplate, bool>> predicate = model => model.Id == id;
+                var portalResult = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_{id}", predicate);
+                return Ok(JObject.FromObject(portalResult));
             }
             else
             {
@@ -54,13 +58,8 @@ namespace Mix.Cms.Api.Controllers
                         FolderType = folderType
                     };
 
-                    RepositoryResponse<Lib.ViewModels.MixTemplates.UpdateViewModel> result = new RepositoryResponse<Lib.ViewModels.MixTemplates.UpdateViewModel>()
-                    {
-                        IsSucceed = true,
-                        Data = await Lib.ViewModels.MixTemplates.UpdateViewModel.InitViewAsync(model)
-                    };
-                    result.Data.Specificulture = _lang;
-                    return result;
+                    RepositoryResponse<UpdateViewModel> result = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_default", null, model);
+                    return Ok(JObject.FromObject(result));
                 }
                 else
                 {
@@ -101,43 +100,13 @@ namespace Mix.Cms.Api.Controllers
         public async Task<RepositoryResponse<Lib.ViewModels.MixTemplates.UpdateViewModel>> Save(
             [FromBody] Lib.ViewModels.MixTemplates.UpdateViewModel model)
         {
-            if (model != null)
-            {
-                var result = await model.SaveModelAsync(true).ConfigureAwait(false);
-                return result;
-            }
-            return new RepositoryResponse<Lib.ViewModels.MixTemplates.UpdateViewModel>();
-        }
-
-        // POST api/template
-        [HttpPost, HttpOptions]
-        [Route("save/{id}")]
-        public async Task<RepositoryResponse<MixTemplate>> SaveFields(int id, [FromBody]List<EntityField> fields)
-        {
-            if (fields != null)
-            {
-                var result = new RepositoryResponse<MixTemplate>() { IsSucceed = true };
-                foreach (var property in fields)
-                {
-                    if (result.IsSucceed)
-                    {
-                        result = await Lib.ViewModels.MixTemplates.UpdateViewModel.Repository.UpdateFieldsAsync(c => c.Id == id, fields).ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        break;
-                    }
-
-                }
-                return result;
-            }
-            return new RepositoryResponse<MixTemplate>();
+            return await base.SaveAsync<UpdateViewModel>(model, true);
         }
 
         // GET api/template
         [HttpPost, HttpOptions]
         [Route("list/{themeId}")]
-        public async Task<RepositoryResponse<PaginationModel<Lib.ViewModels.MixTemplates.UpdateViewModel>>> GetList(
+        public async Task<ActionResult<JObject>> GetList(
             int themeId,
             [FromBody]RequestPaging request
             )
@@ -157,9 +126,20 @@ namespace Mix.Cms.Api.Controllers
                         || model.FolderType == request.Keyword
                     ));
 
-            var data = await Lib.ViewModels.MixTemplates.UpdateViewModel.Repository.GetModelListByAsync(predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
+            string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
+            switch (request.Key)
+            {
+                case "mvc":
+                    var mvcResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);
+                    return Ok(JObject.FromObject(mvcResult));
+                case "portal":
+                    var portalResult = await base.GetListAsync<UpdateViewModel>(key, request, predicate);
+                    return Ok(JObject.FromObject(portalResult));
+                default:
+                    var listItemResult = await base.GetListAsync<ReadListItemViewModel>(key, request, predicate);
 
-            return data;
+                    return JObject.FromObject(listItemResult);
+            }
         }
 
         #endregion Post

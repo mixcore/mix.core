@@ -10,7 +10,7 @@ namespace Mix.Cms.Lib.Models.Cms
             MixOrder = new HashSet<MixOrder>();
         }
 
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string UserId { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }

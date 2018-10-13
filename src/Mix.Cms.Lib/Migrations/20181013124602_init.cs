@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Mix.Cms.Lib.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -60,7 +60,9 @@ namespace Mix.Cms.Lib.Migrations
                     LCID = table.Column<string>(maxLength: 50, nullable: true),
                     Priority = table.Column<int>(nullable: false),
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))")
+                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())"),
+                    CreatedBy = table.Column<string>(maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -72,7 +74,7 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_customer",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     UserId = table.Column<string>(maxLength: 256, nullable: true),
                     Username = table.Column<string>(maxLength: 256, nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
@@ -246,7 +248,9 @@ namespace Mix.Cms.Lib.Migrations
                     Priority = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
                     Value = table.Column<string>(nullable: true),
-                    DefaultValue = table.Column<string>(maxLength: 250, nullable: true)
+                    DefaultValue = table.Column<string>(maxLength: 250, nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())"),
+                    CreatedBy = table.Column<string>(maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -322,7 +326,7 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     Id = table.Column<int>(nullable: false),
                     UserId = table.Column<string>(maxLength: 50, nullable: true),
-                    CustomerId = table.Column<string>(nullable: true),
+                    CustomerId = table.Column<int>(nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     CreatedBy = table.Column<string>(maxLength: 50, nullable: true),
                     StoreId = table.Column<int>(nullable: false),
@@ -723,6 +727,36 @@ namespace Mix.Cms.Lib.Migrations
                         name: "FK_Mix_Module_Article_Mix_Module",
                         columns: x => new { x.ModuleId, x.Specificulture },
                         principalTable: "mix_module",
+                        principalColumns: new[] { "Id", "Specificulture" },
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "mix_related_article",
+                columns: table => new
+                {
+                    SourceId = table.Column<int>(nullable: false),
+                    Specificulture = table.Column<string>(maxLength: 10, nullable: false),
+                    DestinationId = table.Column<int>(nullable: false),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Priority = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(maxLength: 450, nullable: true),
+                    Image = table.Column<string>(maxLength: 450, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_related_article", x => new { x.SourceId, x.DestinationId, x.Specificulture });
+                    table.ForeignKey(
+                        name: "FK_mix_related_article_mix_article1",
+                        columns: x => new { x.DestinationId, x.Specificulture },
+                        principalTable: "mix_article",
+                        principalColumns: new[] { "Id", "Specificulture" },
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_mix_related_article_mix_article",
+                        columns: x => new { x.SourceId, x.Specificulture },
+                        principalTable: "mix_article",
                         principalColumns: new[] { "Id", "Specificulture" },
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -1437,6 +1471,16 @@ namespace Mix.Cms.Lib.Migrations
                 columns: new[] { "ProductId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_mix_related_article_DestinationId_Specificulture",
+                table: "mix_related_article",
+                columns: new[] { "DestinationId", "Specificulture" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mix_related_article_SourceId_Specificulture",
+                table: "mix_related_article",
+                columns: new[] { "SourceId", "Specificulture" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_mix_related_product_DestinationId_Specificulture",
                 table: "mix_related_product",
                 columns: new[] { "DestinationId", "Specificulture" });
@@ -1524,6 +1568,9 @@ namespace Mix.Cms.Lib.Migrations
 
             migrationBuilder.DropTable(
                 name: "mix_product_module");
+
+            migrationBuilder.DropTable(
+                name: "mix_related_article");
 
             migrationBuilder.DropTable(
                 name: "mix_related_product");

@@ -21,10 +21,8 @@ using Mix.Cms.Lib.ViewModels.MixPages;
 using Microsoft.AspNetCore.SignalR;
 using Mix.Cms.Hub;
 using Microsoft.Extensions.Caching.Memory;
-using System.Security.Cryptography;
-using System.Text;
 
-namespace Mix.Cms.Api.Controllers
+namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
     [Route("api/v1/{culture}/page")]
@@ -37,25 +35,13 @@ namespace Mix.Cms.Api.Controllers
         }
         #region Get
 
-        // GET api/category/id
+        // GET api/page/id
         [HttpGet, HttpOptions]
         [Route("delete/{id}")]
         public async Task<RepositoryResponse<MixPage>> DeleteAsync(int id)
         {
-            var getPage = await ReadListItemViewModel.Repository.GetSingleModelAsync(
-                model => model.Id == id && model.Specificulture == _lang);
-            if (getPage.IsSucceed)
-            {
-
-                return await getPage.Data.RemoveModelAsync(true);
-            }
-            else
-            {
-                return new RepositoryResponse<MixPage>()
-                {
-                    IsSucceed = false
-                };
-            }
+            return await base.DeleteAsync<UpdateViewModel>(
+                model => model.Id == id && model.Specificulture == _lang, true);
         }
 
         // GET api/pages/id
@@ -91,7 +77,7 @@ namespace Mix.Cms.Api.Controllers
                         };
 
                         RepositoryResponse<UpdateViewModel> result = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_default", null, model);
-                        return JObject.FromObject(result);
+                        return Ok(JObject.FromObject(result));
                     }
                 default:
                     if (id.HasValue)
@@ -101,7 +87,7 @@ namespace Mix.Cms.Api.Controllers
                         {
                             beResult.Data.DetailsUrl = MixCmsHelper.GetRouterUrl("Page", new { beResult.Data.SeoName }, Request, Url);
                         }
-                        return JObject.FromObject(beResult);
+                        return Ok(JObject.FromObject(beResult));
                     }
                     else
                     {
@@ -116,7 +102,7 @@ namespace Mix.Cms.Api.Controllers
                                 PageSize = 20
                             }
                         };
-                        return JObject.FromObject(result);
+                        return Ok(JObject.FromObject(result));
                     }
             }
         }
@@ -125,45 +111,23 @@ namespace Mix.Cms.Api.Controllers
         #endregion Get
 
         #region Post
-        [HttpPost, HttpOptions]
-        [Route("encrypted/save")]
-        public async Task<JObject> Post([FromBody] RequestEncrypted request)
-        {
-            var key = Convert.FromBase64String(request.Key); //Encoding.UTF8.GetBytes(request.Key);
-            var iv = Convert.FromBase64String(request.IV); //Encoding.UTF8.GetBytes(request.IV);
-            string encrypted = string.Empty;
-            string decrypt = string.Empty;
-            if (!string.IsNullOrEmpty(request.PlainText))
-            {
-                encrypted = MixService.EncryptStringToBytes_Aes(request.PlainText, key, iv).ToString();
-            }
-            if (!string.IsNullOrEmpty(request.Encrypted))
-            {
-                decrypt = MixService.DecryptStringFromBytes_Aes(request.Encrypted, key, iv);
-            }
-            JObject data = new JObject(
-                new JProperty("key", request.Key), 
-                new JProperty("encrypted", encrypted), 
-                new JProperty("plainText", decrypt));
-            
-            return data;
-        }
-        // POST api/category
+        
+        // POST api/page
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("save")]
-        public async Task<RepositoryResponse<UpdateViewModel>> Post([FromBody]UpdateViewModel model)
+        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromBody]UpdateViewModel model)
         {
             if (model != null)
             {
                 model.CreatedBy = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
-                var result = await model.SaveModelAsync(true).ConfigureAwait(false);
+                var result = await base.SaveAsync<UpdateViewModel>(model, true);
                 return result;
             }
             return new RepositoryResponse<UpdateViewModel>() { Status = 501 };
         }
 
-        // POST api/category
+        // POST api/page
         [HttpPost, HttpOptions]
         [Route("save/{id}")]
         public async Task<RepositoryResponse<MixPage>> SaveFields(int id, [FromBody]List<EntityField> fields)
@@ -188,10 +152,10 @@ namespace Mix.Cms.Api.Controllers
             return new RepositoryResponse<MixPage>();
         }
 
-        // GET api/category
+        // GET api/page
         [HttpPost, HttpOptions]
         [Route("list")]
-        public async Task<JObject> GetList(
+        public async Task<ActionResult<JObject>> GetList(
             [FromBody] RequestPaging request)
         {
             var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
@@ -210,42 +174,39 @@ namespace Mix.Cms.Api.Controllers
                         && (!request.ToDate.HasValue
                             || (model.CreatedDateTime <= request.ToDate.Value)
                         );
-
+            string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
             switch (request.Key)
             {
                 case "mvc":
-                    var fedata = await ReadMvcViewModel.Repository.GetModelListByAsync(predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-                    if (fedata.IsSucceed)
+                    var mvcResult = await base.GetListAsync<ReadMvcViewModel>(key, request, predicate);
+                    if (mvcResult.IsSucceed)
                     {
-                        fedata.Data.Items.ForEach(a =>
+                        mvcResult.Data.Items.ForEach(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
                                 "page", new { seoName = a.SeoName }, Request, Url);
                         });
                     }
 
-                    AlertAsync("Get List Page", 200, $"Get {request.Key} list page");
-                    return JObject.FromObject(fedata);
+                    return Ok(JObject.FromObject(mvcResult));
                 case "portal":
-
-                    var bedata = await UpdateViewModel.Repository.GetModelListByAsync(predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-                    if (bedata.IsSucceed)
+                    var portalResult = await base.GetListAsync<UpdateViewModel>(key, request, predicate);
+                    if (portalResult.IsSucceed)
                     {
-                        bedata.Data.Items.ForEach(a =>
+                        portalResult.Data.Items.ForEach(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
                                 "page", new { seoName = a.SeoName }, Request, Url);
                         });
                     }
 
-                    AlertAsync("Get List Page", 200, $"Get {request.Key} list page");
-                    return JObject.FromObject(bedata);
+                    return Ok(JObject.FromObject(portalResult));
                 default:
 
-                    var data = await ReadListItemViewModel.Repository.GetModelListByAsync(predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-                    if (data.IsSucceed)
+                    var listItemResult = await base.GetListAsync<ReadListItemViewModel>(key, request, predicate);
+                    if (listItemResult.IsSucceed)
                     {
-                        data.Data.Items.ForEach((Action<ReadListItemViewModel>)(a =>
+                        listItemResult.Data.Items.ForEach((Action<ReadListItemViewModel>)(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
                                 "page", new { seoName = a.SeoName }, Request, Url);
@@ -257,8 +218,7 @@ namespace Mix.Cms.Api.Controllers
                         }));
                     }
 
-                    AlertAsync("Get List Page", 200, $"Get {request.Key} list page");
-                    return JObject.FromObject(data);
+                    return JObject.FromObject(listItemResult);
             }
         }
 

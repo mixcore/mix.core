@@ -35,7 +35,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleMedias
 
         #region Views
 
-        public MediaViewModel Media { get; set; }
+        public UpdateViewModel Media { get; set; }
 
         #endregion Views
 
@@ -43,7 +43,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleMedias
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getMedia = MediaViewModel.Repository.GetSingleModel(p => p.Id == MediaId && p.Specificulture == Specificulture
+            var getMedia = UpdateViewModel.Repository.GetSingleModel(p => p.Id == MediaId && p.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction
             );
             if (getMedia.IsSucceed)

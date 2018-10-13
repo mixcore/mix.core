@@ -114,6 +114,9 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
 
         [JsonProperty("size")]
         public string Size { get; set; }
+
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views

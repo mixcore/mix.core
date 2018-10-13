@@ -16,11 +16,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixThemes
 {
-    public class InitViewModel
-      : ViewModelBase<MixCmsContext, MixTheme, InitViewModel>
+    public class UpdateViewModel
+      : ViewModelBase<MixCmsContext, MixTheme, UpdateViewModel>
     {
         public const int templatePageSize = 10;
 
@@ -79,12 +80,12 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         #region Contructors
 
-        public InitViewModel()
+        public UpdateViewModel()
             : base()
         {
         }
 
-        public InitViewModel(MixTheme model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public UpdateViewModel(MixTheme model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
@@ -171,7 +172,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                         Keyword = MixConstants.ConfigurationKeyword.Theme,
                         Specificulture = Specificulture,
                         Category = "Site",
-                        DataType = DataType.Text,
+                        DataType = MixDataType.Text,
                         Description = "Cms Theme",
                         Value = Name
                     };
@@ -201,7 +202,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                         Keyword = MixConstants.ConfigurationKeyword.ThemeId,
                         Specificulture = Specificulture,
                         Category = "Site",
-                        DataType = DataType.Text,
+                        DataType = MixDataType.Text,
                         Description = "Cms Theme Id",
                         Value = Model.Id.ToString()
                     };
@@ -252,7 +253,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             return result;
         }
 
-        public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(InitViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = await MixTemplates.InitViewModel.Repository.RemoveListModelAsync(t => t.ThemeId == Id);
             if (result.IsSucceed)
@@ -414,7 +415,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             return result;
         }
 
-        public override RepositoryResponse<bool> RemoveRelatedModels(InitViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override RepositoryResponse<bool> RemoveRelatedModels(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = MixTemplates.InitViewModel.Repository.RemoveListModel(t => t.ThemeId == Id);
             if (result.IsSucceed)

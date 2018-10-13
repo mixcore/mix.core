@@ -44,7 +44,13 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("statuses")]
         public List<string> Statuses { get; set; }
     }
-
+    public class FilePageViewModel
+    {
+        [JsonProperty("files")]
+        public List<FileViewModel> Files { get; set; }
+        [JsonProperty("directories")]
+        public List<string> Directories { get; set; }
+    }
     public class InitCulture
     {
         [JsonProperty("specificulture")]
@@ -67,7 +73,7 @@ namespace Mix.Cms.Lib.ViewModels
         public string Name { get; set; }
 
         [JsonProperty("dataType")]
-        public DataType DataType { get; set; }
+        public MixDataType DataType { get; set; }
 
         [JsonProperty("value")]
         public string Value { get; set; }
@@ -77,7 +83,7 @@ namespace Mix.Cms.Lib.ViewModels
     public class DataValueViewModel
     {
         [JsonProperty("dataType")]
-        public DataType DataType { get; set; }
+        public MixDataType DataType { get; set; }
         [JsonProperty("value")]
         public string Value { get; set; }
         [JsonProperty("name")]
@@ -200,7 +206,7 @@ namespace Mix.Cms.Lib.ViewModels
         public bool IsRequired { get; set; }
 
         [JsonProperty("dataType")]
-        public DataType DataType { get; set; }
+        public MixDataType DataType { get; set; }
 
         [JsonProperty("value")]
         public string Value { get; set; }

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixLanguages
 {
@@ -27,7 +28,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         public string Category { get; set; }
 
         [JsonProperty("dataType")]
-        public DataType DataType { get; set; }
+        public MixDataType DataType { get; set; }
 
         [JsonProperty("description")]
         public string Description { get; set; }
@@ -38,7 +39,8 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         [Required]
         [JsonProperty("defaultValue")]
         public string DefaultValue { get; set; }
-
+        [JsonProperty("status")]
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #endregion Properties

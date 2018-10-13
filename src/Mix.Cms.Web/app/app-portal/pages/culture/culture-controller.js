@@ -1,16 +1,7 @@
 ﻿'use strict';
-app.controller('CultureController', ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$timeout', '$location', 'AuthService', 'CultureServices',
-    function ($scope, $rootScope, ngAppSettings, $routeParams, $timeout, $location, authService, cultureServices) {
-        $scope.request = {
-            pageSize: '10',
-            pageIndex: 0,
-            status: '2',
-            orderBy: 'Priority',
-            direction: '0',
-            fromDate: null,
-            toDate: null,
-            keyword: ''
-        };
+app.controller('CultureController', ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', 'CultureService',
+    function ($scope, $rootScope, ngAppSettings, $routeParams, service) {
+        BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
         $scope.cultures = [
 
             { specificulture: 'en-us', fullName: 'United States - English (Default)', icon: 'flag-icon-us' },
@@ -111,157 +102,13 @@ app.controller('CultureController', ['$scope', '$rootScope', 'ngAppSettings', '$
             { specificulture: 'ja-jp', fullName: '日本 - 日本語', icon: 'flag-icon-jp' },
             { specificulture: 'zh-hk', fullName: '香港特別行政區 - 繁體中文', icon: 'flag-icon-hk' }
 
-        ]
-        $scope.icons = [
-            'flag-icon-us',
-            'flag-icon-vn',
-            'flag-icon-gb',
-            'flag-icon-fr',
-            'flag-icon-cn',
-            'flag-icon-be',
         ];
-        $scope.activedCulture = null;
-
-        $scope.relatedCultures = [];
-
-        $rootScope.isBusy = false;
-
-        $scope.data = {
-            pageIndex: 0,
-            pageSize: 1,
-            totalItems: 0
-        };
-
-        $scope.errors = [];
-
-        $scope.range = function (max) {
-            var input = [];
-            for (var i = 1; i <= max; i += 1) input.push(i);
-            return input;
-        };
-
-        $scope.getCulture = async function (id) {
-            $rootScope.isBusy = true;
-            var resp = await cultureServices.getCulture(id, 'portal');
-            if (resp && resp.isSucceed) {
-                $scope.activedCulture = resp.data;
-                $rootScope.initEditor();
-                $rootScope.isBusy = false;
-                $scope.$apply();
+        $scope.selected = null;
+        $scope.changeData = function (selected) {
+            if (selected) {
+                $scope.activedData.specificulture = selected.specificulture;
+                $scope.activedData.fullName = selected.fullName;
+                $scope.activedData.icon = selected.icon;
             }
-            else {
-                if (resp) { $rootScope.showErrors(resp.errors); }
-                $rootScope.isBusy = false;
-                $scope.$apply();
-            }
-        };
-
-        $scope.syncTemplates = async function (id) {
-            $rootScope.isBusy = true;
-            var response = await cultureServices.syncTemplates(id);
-            if (response.isSucceed) {
-                $scope.activedCulture = response.data;
-                $rootScope.isBusy = false;
-                $scope.$apply();
-            }
-            else {
-                $rootScope.showErrors(response.errors);
-                $rootScope.isBusy = false;
-                $scope.$apply();
-            }
-        };
-
-        $scope.loadCulture = async function () {
-            $rootScope.isBusy = true;
-            var id = $routeParams.id;
-            var response = await cultureServices.getCulture(id, 'portal');
-            if (response.isSucceed) {
-                $scope.activedCulture = response.data;
-                if (!id) {
-                    $scope.activedCulture.icon = $scope.icons[0];
-                }
-                $rootScope.isBusy = false;
-                $scope.$apply();
-            }
-            else {
-                $rootScope.showErrors(response.errors);
-                $rootScope.isBusy = false;
-                $scope.$apply();
-            }
-        };
-        $scope.loadCultures = async function (pageIndex) {
-            if (pageIndex != undefined) {
-                $scope.request.pageIndex = pageIndex;
-            }
-            if ($scope.request.fromDate != null) {
-                var d = new Date($scope.request.fromDate);
-                $scope.request.fromDate = d.toISOString();
-            }
-            if ($scope.request.toDate != null) {
-                var d = new Date($scope.request.toDate);
-                $scope.request.toDate = d.toISOString();
-            }
-            $rootScope.isBusy = true;
-            var resp = await cultureServices.getCultures($scope.request);
-            if (resp && resp.isSucceed) {
-                ($scope.data = resp.data);
-                //$("html, body").animate({ "scrollTop": "0px" }, 500);
-                $.each($scope.data.items, function (i, culture) {
-                    $.each($scope.activedCultures, function (i, e) {
-                        if (e.cultureId == culture.id) {
-                            culture.isHidden = true;
-                        }
-                    })
-                })
-                $rootScope.isBusy = false;
-                $scope.$apply();
-            }
-            else {
-                if (resp) { $rootScope.showErrors(resp.errors); }
-                $rootScope.isBusy = false;
-                $scope.$apply();
-            }
-        };
-
-        $scope.saveCulture = async function (culture) {
-            culture.content = $('.editor-content').val();
-            $rootScope.isBusy = true;
-            var resp = await cultureServices.saveCulture(culture);
-            if (resp && resp.isSucceed) {
-                $scope.activedCulture = resp.data;
-                $rootScope.showMessage('success', 'success');
-                $rootScope.isBusy = false;
-                $rootScope.updateSettings();
-                window.location.href = '/portal/culture/list';
-                $rootScope.isBusy = false;
-                $scope.$apply();
-            }
-            else {
-                if (resp) { $rootScope.showErrors(resp.errors); }
-                $rootScope.isBusy = false;
-                $scope.$apply();
-            }
-        };
-
-        $scope.removeCulture = function (id) {
-            $rootScope.showConfirm($scope, 'removeCultureConfirmed', [id], null, 'Remove Culture', 'Are you sure');
-        }
-
-        $scope.removeCultureConfirmed = async function (id) {
-            $rootScope.isBusy = true;
-            var result = await cultureServices.removeCulture(id);
-            if (result.isSucceed) {
-                $rootScope.updateSettings();
-                window.location.href = '/portal/culture/list';
-            }
-            else {
-                $rootScope.showMessage('failed');
-                $rootScope.isBusy = false;
-                $scope.$apply();
-            }
-        }
-
-        $scope.changeIcon = function (icon) {
-            $scope.activedCulture.icon = icon;
         }
     }]);

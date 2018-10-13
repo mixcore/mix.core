@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixConfigurations
 {
@@ -27,7 +28,9 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
         [JsonProperty("value")]
         public string Value { get; set; }
         [JsonProperty("dataType")]
-        public DataType DataType { get; set; }
+        public MixDataType DataType { get; set; }
+        [JsonProperty("status")]
+        public MixContentStatus Status{ get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
 

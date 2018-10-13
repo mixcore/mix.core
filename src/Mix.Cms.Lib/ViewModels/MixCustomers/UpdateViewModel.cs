@@ -32,6 +32,8 @@ namespace Mix.Cms.Lib.ViewModels.MixCustomers
         public string PhoneNumber { get; set; }
         [JsonProperty("birthday")]
         public DateTime? BirthDay { get; set; }
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
 

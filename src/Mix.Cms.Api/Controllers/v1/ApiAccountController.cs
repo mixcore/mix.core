@@ -26,7 +26,7 @@ using Mix.Identity.Models.AccountViewModels;
 using Newtonsoft.Json.Linq;
 using static Mix.Cms.Lib.MixEnums;
 
-namespace Mix.Cms.Api.Controllers
+namespace Mix.Cms.Api.Controllers.v1
 {
     //[Authorize(Roles = "SuperAdmin,Admin")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

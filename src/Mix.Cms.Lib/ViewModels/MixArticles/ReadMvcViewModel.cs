@@ -82,6 +82,8 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         [JsonProperty("tags")]
         public string Tags { get; set; }
 
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views

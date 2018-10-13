@@ -15,42 +15,31 @@ using static Mix.Cms.Lib.MixEnums;
 using System.Linq.Expressions;
 using System.Web;
 using Mix.Cms.Lib.ViewModels.MixOrders;
-using Microsoft.AspNetCore.SignalR;
-using Mix.Cms.Hub;
 using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib;
+using Mix.Cms.Lib.Services;
+using System.Linq;
 
-namespace Mix.Cms.Api.Controllers
+namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
     [Route("api/v1/{culture}/order")]
     public class ApiOrderController :
         BaseGenericApiControoler<MixCmsContext, MixOrder>
     {
-        public ApiOrderController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext) : base(memoryCache, hubContext)
+        public ApiOrderController(IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
         {
-
         }
+
         #region Get
 
-        // GET api/category/id
+        // GET api/order/id
         [HttpGet, HttpOptions]
         [Route("delete/{id}")]
         public async Task<RepositoryResponse<MixOrder>> DeleteAsync(int id)
         {
-            var getOrder = await ReadListItemViewModel.Repository.GetSingleModelAsync(
-                model => model.Id == id && model.Specificulture == _lang);
-            if (getOrder.IsSucceed)
-            {
-
-                return await getOrder.Data.RemoveModelAsync(true);
-            }
-            else
-            {
-                return new RepositoryResponse<MixOrder>()
-                {
-                    IsSucceed = false
-                };
-            }
+            return await base.DeleteAsync<UpdateViewModel>(
+                model => model.Id == id && model.Specificulture == _lang, true);
         }
 
         // GET api/orders/id
@@ -62,13 +51,38 @@ namespace Mix.Cms.Api.Controllers
             string msg = string.Empty;
             switch (viewType)
             {
-               
+                case "portal":
+                    if (id.HasValue)
+                    {
+                        Expression<Func<MixOrder, bool>> predicate = model => model.Id == id && model.Specificulture == _lang;
+                        var portalResult = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_{id}", predicate);
+                        if (portalResult.IsSucceed)
+                        {
+                            portalResult.Data.DetailsUrl = MixCmsHelper.GetRouterUrl("Order", new { portalResult.Data.Id }, Request, Url);
+                        }
+
+                        return Ok(JObject.FromObject(portalResult));
+                    }
+                    else
+                    {
+                        var model = new MixOrder()
+                        {
+                            Specificulture = _lang,
+                            Status = MixService.GetConfig<int>("DefaultStatus")
+                        };
+
+                        RepositoryResponse<UpdateViewModel> result = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_default", null, model);
+                        return Ok(JObject.FromObject(result));
+                    }
                 default:
                     if (id.HasValue)
                     {
                         var beResult = await ReadViewModel.Repository.GetSingleModelAsync(model => model.Id == id && model.Specificulture == _lang).ConfigureAwait(false);
-                       
-                        return JObject.FromObject(beResult);
+                        if (beResult.IsSucceed)
+                        {
+                            beResult.Data.DetailsUrl = MixCmsHelper.GetRouterUrl("Order", new { beResult.Data.Id }, Request, Url);
+                        }
+                        return Ok(JObject.FromObject(beResult));
                     }
                     else
                     {
@@ -79,10 +93,10 @@ namespace Mix.Cms.Api.Controllers
                             Data = new ReadViewModel(model)
                             {
                                 Specificulture = _lang,
-                                Status = MixOrderStatus.Preview
+                                Status = MixOrderStatus.Preview,
                             }
                         };
-                        return JObject.FromObject(result);
+                        return Ok(JObject.FromObject(result));
                     }
             }
         }
@@ -91,22 +105,23 @@ namespace Mix.Cms.Api.Controllers
         #endregion Get
 
         #region Post
-        
-        // POST api/category
+
+        // POST api/order
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("save")]
-        public async Task<RepositoryResponse<UpdateViewModel>> Post([FromBody]UpdateViewModel model)
+        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromBody]UpdateViewModel model)
         {
             if (model != null)
             {
-                var result = await model.SaveModelAsync(true).ConfigureAwait(false);
+                model.CreatedBy = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
+                var result = await base.SaveAsync<UpdateViewModel>(model, true);
                 return result;
             }
             return new RepositoryResponse<UpdateViewModel>() { Status = 501 };
         }
 
-        // POST api/category
+        // POST api/order
         [HttpPost, HttpOptions]
         [Route("save/{id}")]
         public async Task<RepositoryResponse<MixOrder>> SaveFields(int id, [FromBody]List<EntityField> fields)
@@ -131,10 +146,10 @@ namespace Mix.Cms.Api.Controllers
             return new RepositoryResponse<MixOrder>();
         }
 
-        // GET api/category
+        // GET api/order
         [HttpPost, HttpOptions]
         [Route("list")]
-        public async Task<JObject> GetList(
+        public async Task<ActionResult<JObject>> GetList(
             [FromBody] RequestPaging request)
         {
             var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
@@ -144,27 +159,53 @@ namespace Mix.Cms.Api.Controllers
                         model.Specificulture == _lang
                         && (!request.Status.HasValue || model.Status == request.Status.Value)
                         && (string.IsNullOrWhiteSpace(request.Keyword)
-                            || model.Customer.FullName.Contains(request.Keyword))
+                            )
                         && (!request.FromDate.HasValue
                             || (model.CreatedDateTime >= request.FromDate.Value)
                         )
                         && (!request.ToDate.HasValue
                             || (model.CreatedDateTime <= request.ToDate.Value)
                         );
-
+            string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
             switch (request.Key)
             {
                 case "mvc":
-                    var fedata = await ReadViewModel.Repository.GetModelListByAsync(predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-                    return JObject.FromObject(fedata);
-                case "portal":
+                    var mvcResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);
+                    if (mvcResult.IsSucceed)
+                    {
+                        mvcResult.Data.Items.ForEach(a =>
+                        {
+                            a.DetailsUrl = MixCmsHelper.GetRouterUrl(
+                                "order", new { seoName = a.Id }, Request, Url);
+                        });
+                    }
 
-                    var bedata = await UpdateViewModel.Repository.GetModelListByAsync(predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-                    return JObject.FromObject(bedata);
+                    return Ok(JObject.FromObject(mvcResult));
+                case "portal":
+                    var portalResult = await base.GetListAsync<UpdateViewModel>(key, request, predicate);
+                    if (portalResult.IsSucceed)
+                    {
+                        portalResult.Data.Items.ForEach(a =>
+                        {
+                            a.DetailsUrl = MixCmsHelper.GetRouterUrl(
+                                "order", new { seoName = a.Id }, Request, Url);
+                        });
+                    }
+
+                    return Ok(JObject.FromObject(portalResult));
                 default:
 
-                    var data = await ReadListItemViewModel.Repository.GetModelListByAsync(predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-                    return JObject.FromObject(data);
+                    var listItemResult = await base.GetListAsync<ReadListItemViewModel>(key, request, predicate);
+                    if (listItemResult.IsSucceed)
+                    {
+                        listItemResult.Data.Items.ForEach((Action<ReadListItemViewModel>)(a =>
+                        {
+                            a.DetailsUrl = MixCmsHelper.GetRouterUrl(
+                                "order", new { seoName = a.Id }, Request, Url);
+                        }));
+                    }
+
+                    return JObject.FromObject(listItemResult);
             }
         }
 
