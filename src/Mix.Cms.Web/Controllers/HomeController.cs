@@ -97,16 +97,16 @@ namespace Mix.Cms.Web.Controllers
 
             var getPage = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
 
-            var cacheKey = $"Page_{_culture}_{seoName}";
-            var data = _memoryCache.Get<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
-            if (data != null)
-            {
-                getPage.IsSucceed = true;
-                getPage.Data = data;
-            }
-            else
-            {
-                Expression<Func<MixPage, bool>> predicate;
+            //var cacheKey = $"Page_{_culture}_{seoName}";
+            //var data = _memoryCache.Get<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
+            //if (data != null)
+            //{
+            //    getPage.IsSucceed = true;
+            //    getPage.Data = data;
+            //}
+            //else
+            //{
+            Expression<Func<MixPage, bool>> predicate;
                 if (string.IsNullOrEmpty(seoName))
                 {
                    predicate = p =>
@@ -121,8 +121,8 @@ namespace Mix.Cms.Web.Controllers
                 }
 
                 getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
-                _memoryCache.Set(cacheKey, getPage.Data);
-            }
+            //    _memoryCache.Set(cacheKey, getPage.Data);
+            //}
 
             if (getPage.IsSucceed && getPage.Data.View != null)
             {

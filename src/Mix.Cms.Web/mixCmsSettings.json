@@ -1,7 +1,7 @@
 {
   "ConnectionStrings": {
-    "MixAccountConnection": "Server=115.77.190.113,4444;Database=mixcorelocal;UID=tinku;Pwd=1234qwe@;MultipleActiveResultSets=true;",
-    "MixCmsConnection": "Server=115.77.190.113,4444;Database=mixcorelocal;UID=tinku;Pwd=1234qwe@;MultipleActiveResultSets=true;",
+    "MixAccountConnection": "Server=115.77.190.113,4444;Database=mixcoredev;UID=tinku;Pwd=1234qwe@;MultipleActiveResultSets=true;",
+    "MixCmsConnection": "Server=115.77.190.113,4444;Database=mixcoredev;UID=tinku;Pwd=1234qwe@;MultipleActiveResultSets=true;",
     "DefaultConnection": null
   },
   "Authentication": {
@@ -33,80 +33,10 @@
       "portal_themes": "Themes",
       "portal_users": "Users",
       "read_more": "Read more"
-    },
-    "nl-be": {
-      "fe_site_name": "Site name",
-      "language": "Languages",
-      "portal_articles": "Articles",
-      "portal_create": "Create",
-      "portal_cultures": "Cultures",
-      "portal_dashboard": "Dashboard",
-      "portal_file": "File",
-      "portal_import": "Import",
-      "portal_list": "List",
-      "portal_media": "Media",
-      "portal_modules": "Modules",
-      "portal_orders": "Orders",
-      "portal_pages": "Pages",
-      "portal_permissions": "Permissions",
-      "portal_products": "Products",
-      "portal_settings": "Settings",
-      "portal_themes": "Themes",
-      "portal_users": "Users",
-      "read_more": "Read more"
-    },
-    "es-bo": {
-      "fe_site_name": "Site name",
-      "language": "Languages",
-      "portal_articles": "Articles",
-      "portal_create": "Create",
-      "portal_cultures": "Cultures",
-      "portal_dashboard": "Dashboard",
-      "portal_file": "File",
-      "portal_import": "Import",
-      "portal_list": "List",
-      "portal_media": "Media",
-      "portal_modules": "Modules",
-      "portal_orders": "Orders",
-      "portal_pages": "Pages",
-      "portal_permissions": "Permissions",
-      "portal_products": "Products",
-      "portal_settings": "Settings",
-      "portal_themes": "Themes",
-      "portal_users": "Users",
-      "read_more": "Read more"
     }
   },
   "LocalSettings": {
     "en-us": {
-      "ContactAddress": "",
-      "ContactEmail": "Site Name",
-      "ContactPhone": "",
-      "Facebook": "",
-      "FacebookAppId": "",
-      "Favicon": "",
-      "LanguageVersion": "1",
-      "Logo": "",
-      "SettingVersion": "1",
-      "SiteName": "test",
-      "Theme": "Default",
-      "ThemeId": "1"
-    },
-    "nl-be": {
-      "ContactAddress": "",
-      "ContactEmail": "Site Name",
-      "ContactPhone": "",
-      "Facebook": "",
-      "FacebookAppId": "",
-      "Favicon": "",
-      "LanguageVersion": "1",
-      "Logo": "",
-      "SettingVersion": "1",
-      "SiteName": "Site Name",
-      "Theme": "Default",
-      "ThemeId": "1"
-    },
-    "es-bo": {
       "ContactAddress": "",
       "ContactEmail": "Site Name",
       "ContactPhone": "",
