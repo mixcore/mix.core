@@ -60,5 +60,6 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         #endregion
 
+
     }
 }
