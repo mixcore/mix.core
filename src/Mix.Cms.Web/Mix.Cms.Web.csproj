@@ -5,6 +5,12 @@
     <DockerTargetOS>Windows</DockerTargetOS>
     <UserSecretsId>206d0599-2e80-42e1-b45e-a479cb90baa3</UserSecretsId>
     <RuntimeFrameworkVersion>2.1.2</RuntimeFrameworkVersion>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
+    <MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
+    <GenerateProgramFile>false</GenerateProgramFile>
+    <PublishWithAspNetCoreTargetManifest>False</PublishWithAspNetCoreTargetManifest>
   </PropertyGroup>
 
   <ItemGroup>

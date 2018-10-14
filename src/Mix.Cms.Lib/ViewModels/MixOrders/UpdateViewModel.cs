@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixOrders
 {
@@ -49,7 +50,7 @@ namespace Mix.Cms.Lib.ViewModels.MixOrders
         public MixCustomers.ReadViewModel Customer { get; set; }
 
         [JsonProperty("status")]
-        public new int Status { get; set; }
+        public MixOrderStatus Status { get; set; }
 
         [JsonProperty("comments")]
         public List<MixComments.ReadViewModel> Comments { get; private set; }
