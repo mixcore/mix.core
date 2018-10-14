@@ -5,10 +5,6 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         controller: "DashboardController",
         templateUrl: "/app-portal/pages/dashboard/dashboard.html"
     });
-    $routeProvider.when("/portal/import", {
-        controller: "ImportFileController",
-        templateUrl: "/app-portal/pages/import/details.html"
-    });
 
     $routeProvider.when("/portal/login", {
         controller: "loginController",
@@ -257,6 +253,11 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
     $routeProvider.when("/portal/app-settings/details", {
         controller: "AppSettingsController",
         templateUrl: "/app-portal/pages/app-settings/details.html"
+    });
+    
+    $routeProvider.when("/portal/import", {
+        controller: "ImportFileController",
+        templateUrl: "/app-portal/pages/import/details.html"
     });
 
     $routeProvider.when("/portal/culture/list", {
