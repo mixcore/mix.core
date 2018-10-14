@@ -36,7 +36,7 @@
                 </div>
                 <div class="col-sm-{{$ctrl.lastColWidth}}">
                     <div class="btn-group btn-group-sm float-right" role="group" aria-label="Actions">
-                        <a ng-if="nav.childNavs.length > 0" class="btn btn-light" data-toggle="collapse" href="#collapse-page-{{nav.id}}-childs" role="button" aria-expanded="false" aria-controls="collapse-page-{{nav.id}}-childs" aria-controls="collapse-page-{{nav.id}}-childs">
+                        <a ng-if="nav.childNavs.length > 0" class="btn btn-light" ng-click="$ctrl.toggleChildNavs(nav)">
                             <span class="oi oi-list text-primary"></span>
                         </a>
                         <a ng-if="$ctrl.editUrl" ng-click="$ctrl.goTo(nav.id)" class="btn btn-sm btn-light">
@@ -49,7 +49,7 @@
                 </div>
             </div>
             <!-- Childs -->
-            <div class="collapse" ng-class="{'show': $ctrl.selected === nav}" id="collapse-page-{{nav.id}}-childs" dnd-list="nav.childNavs" class="nav" dnd-disable-if="!$ctrl.canDrag">
+            <div ng-show="nav.showChildNavs" dnd-list="nav.childNavs" class="nav" dnd-disable-if="!$ctrl.canDrag">
                 <div class="col-sm-12 dndPlaceholder"></div>
                 <div ng-repeat="snav in nav.childNavs" class="col-sm-12 dnd-item" dnd-draggable="snav" dnd-moved="$ctrl.updateChildOrders($index,nav.childNavs)" dnd-effect-allowed="move" dnd-selected="$ctrl.selected = snav">
                     <div class="row">

@@ -252,12 +252,12 @@
                     subMenus: [
                         {
                             title: ('portal_create'),
-                            href: '/portal/portal-page/create',
+                            href: '/portal/permission/create',
                             icon: 'mi mi-Add'
                         },
                         {
                             title: 'portal_list',
-                            href: '/portal/portal-page/list',
+                            href: '/portal/permission/list',
                             icon: 'mi mi-List'
                         }
                     ]

@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixPortalPages
 {
@@ -49,12 +50,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
 
+        [JsonProperty("status")]
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
-
-        [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain", Specificulture) ?? "/"; } }
 
         [JsonProperty("positionNavs")]
         public List<MixPortalPagePositions.ReadViewModel> PositionNavs { get; set; }
@@ -197,7 +197,18 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
             }
             return result;
         }
+        public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
 
+            var positions = _context.MixPortalPagePosition.Where(p=>p.PortalPageId == Id ).ToList();
+            positions.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+
+            var navs = _context.MixPortalPageNavigation.Where(p=>p.Id == Id || p.ParentId == Id ).ToList();
+            navs.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+
+            return result;
+        }
         #endregion Overrides
 
         #region Expands

@@ -1,6 +1,6 @@
 ﻿
-app.component('portalPageMain', {
-    templateUrl: '/app-portal/pages/portal-page/components/main/main.html',
+app.component('permissionMain', {
+    templateUrl: '/app-portal/pages/permission/components/main/main.html',
     controller: ['$rootScope', '$scope', 'ngAppSettings', '$routeParams',function ($rootScope, $scope, ngAppSettings, $routeParams) {
         var ctrl = this;
         ctrl.settings = $rootScope.globalSettings;

@@ -47,11 +47,11 @@
     },
     {
       "keyword": "portal_permissions",
-      "category": "Permissions",
+      "category": "Portal",
       "dataType": 0,
       "description": null,
-      "value": "Import",
-      "defaultValue": "Import",
+      "value": "Permissions",
+      "defaultValue": "Permissions",
       "cultures": null,
       "priority": 0,
       "status": 2

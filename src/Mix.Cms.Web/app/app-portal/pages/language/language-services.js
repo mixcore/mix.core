@@ -1,63 +1,9 @@
 ﻿'use strict';
-app.factory('LanguageServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonService) {
+app.factory('LanguageService', ['BaseService','CommonService', function (baseService, commonService) {
 
-    //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
+    var serviceFactory = Object.create(baseService);
+    serviceFactory.init('language');
 
-    var languagesServiceFactory = {};
-
-    var settings = $rootScope.globalSettings
-
-    var _getLanguage = async function (id, type) {
-        var apiUrl = '/' + settings.lang + '/language/';
-        var url = apiUrl + 'details/' + type;
-        if (id) {
-            url += '/' + id;
-        }
-        var req = {
-            method: 'GET',
-            url: url
-        };
-        return await commonService.getApiResult(req)
-    };
-
-    var _initLanguage = async function (type) {
-        var apiUrl = '/' + settings.lang + '/language/';
-        var req = {
-            method: 'GET',
-            url: apiUrl + 'init/' + type,
-        };
-        return await commonService.getApiResult(req)
-    };
-
-    var _getLanguages = async function (request) {
-        var apiUrl = '/' + settings.lang + '/language/';
-        var req = {
-            method: 'POST',
-            url: apiUrl + 'list',
-            data: JSON.stringify(request)
-        };
-        
-        return await commonService.getApiResult(req);
-    };
-
-    var _removeLanguage = async function (id) {
-        var apiUrl = '/' + settings.lang + '/language/';
-        var req = {
-            method: 'GET',
-            url: apiUrl + 'delete/' + id
-        };
-        return await commonService.getApiResult(req)
-    };
-
-    var _saveLanguage = async function (language) {
-        var apiUrl = '/' + settings.lang + '/language/';
-        var req = {
-            method: 'POST',
-            url: apiUrl + 'save',
-            data: JSON.stringify(language)
-        };
-        return await commonService.getApiResult(req)
-    };
     var _uploadLanguage = async function (languageFile) {
         //var container = $(this).parents('.model-language').first().find('.custom-file').first();
         if (languageFile.file !== undefined && languageFile.file !== null) {
@@ -72,7 +18,7 @@ app.factory('LanguageServices', ['$http', '$rootScope', 'CommonService', functio
             files.append('description', languageFile.description);
 
             var req = {
-                url: '/' + settings.lang + '/language/upload', //'/tts/UploadImage',
+                url: this.prefixUrl + '/upload',
                 type: "POST",
                 headers: {
                 },
@@ -84,13 +30,7 @@ app.factory('LanguageServices', ['$http', '$rootScope', 'CommonService', functio
             return await commonService.getApiResult(req)
         }
     };
-
-    languagesServiceFactory.getLanguage = _getLanguage;
-    languagesServiceFactory.initLanguage = _initLanguage;
-    languagesServiceFactory.getLanguages = _getLanguages;
-    languagesServiceFactory.removeLanguage = _removeLanguage;
-    languagesServiceFactory.saveLanguage = _saveLanguage;
-    languagesServiceFactory.uploadLanguage = _uploadLanguage;
-    return languagesServiceFactory;
+    serviceFactory.uploadLanguage = _uploadLanguage;
+    return serviceFactory;
 
 }]);
