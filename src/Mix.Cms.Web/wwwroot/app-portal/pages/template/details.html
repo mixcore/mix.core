@@ -10,22 +10,16 @@
                     <input type="text" class="form-control form-control-lg" ng-model="activedData.fileName">
                 </div>
             </div>
-            <div class="col-md-12">                
+            <div class="col-md-12">
                 <tabs-v>
                     <pane-v title="Razor Template">
                         <ace-editor content="activedData.content"></ace-editor>
                     </pane-v>
                     <pane-v title="Scripts">
-                        <div class="container-code-editor">
-                            <div class="form-control code-editor">{{activedData.scripts}}</div>
-                            <input class="form-control code-content" type="hidden" ng-model="activedData.scripts" value="{{activedData.scripts}}">
-                        </div>
+                        <ace-editor content="activedData.scripts"></ace-editor>
                     </pane-v>
                     <pane-v title="Styles">
-                        <div class="container-code-editor">
-                            <div class="form-control code-editor">{{activedData.styles}}</div>
-                            <input class="form-control code-content" type="hidden" ng-model="activedData.styles" value="{{activedData.styles}}">
-                        </div>
+                        <ace-editor content="activedData.styles"></ace-editor>
                     </pane-v>
                 </tabs-v>
             </div>
