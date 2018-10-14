@@ -15,11 +15,11 @@ app.controller('PermissionController',
                     title: 'Default',
                     name: 'textDefault',
                     filter: true,
-                    type: 0 // string - ngAppSettings.dataTypes[0]
+                    type: 0// string - ngAppSettings.dataTypes[0]
                 },
                 {
-                    title: 'Description',
-                    name: 'description',
+                    title: 'Url',
+                    name: 'url',
                     filter: true,
                     type: 0 // string - ngAppSettings.dataTypes[0]
                 },

@@ -59,8 +59,8 @@
                         <div class="col-sm-1">
                             <input type="number" readonly="readonly" ng-model="snav.priority" class="item-priority form-control form-control-sm d-inline">
                         </div>
-                        <div class="col-sm-{{$ctrl.colWidth}}" ng-repeat="col in $ctrl.columns track by $index">
-                            <sw-data-preview type="col.type" value="snav[col.name]" width="50"></sw-data-preview>
+                        <div class="col-sm-{{$ctrl.colWidth}}" ng-repeat="col in $ctrl.columns">
+                            <sw-data-preview type="col.type" value="snav.page[col.name]" width="50"></sw-data-preview>
                         </div>
                         <div class="col-sm-{{$ctrl.lastColWidth}}">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Actions">
