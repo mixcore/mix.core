@@ -15,8 +15,6 @@ namespace Mix.Cms.Lib.ViewModels.Account
 {
     public class MixRegisterViewModel : ViewModelBase<MixCmsContext, MixCmsUser, MixRegisterViewModel>
     {
-
-
         #region Properties
 
         #region Models

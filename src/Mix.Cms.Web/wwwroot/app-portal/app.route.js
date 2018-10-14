@@ -78,19 +78,19 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         templateUrl: "/app-portal/pages/page/details.html"
     });
 
-    $routeProvider.when("/portal/portal-page/list", {
-        controller: "PortalPageController",
-        templateUrl: "/app-portal/pages/portal-page/list.html"
+    $routeProvider.when("/portal/permission/list", {
+        controller: "PermissionController",
+        templateUrl: "/app-portal/pages/permission/list.html"
     });
 
-    $routeProvider.when("/portal/portal-page/create", {
-        controller: "PortalPageController",
-        templateUrl: "/app-portal/pages/portal-page/details.html"
+    $routeProvider.when("/portal/permission/create", {
+        controller: "PermissionController",
+        templateUrl: "/app-portal/pages/permission/details.html"
     });
 
-    $routeProvider.when("/portal/portal-page/details/:id", {
-        controller: "PortalPageController",
-        templateUrl: "/app-portal/pages/portal-page/details.html"
+    $routeProvider.when("/portal/permission/details/:id", {
+        controller: "PermissionController",
+        templateUrl: "/app-portal/pages/permission/details.html"
     });
 
     $routeProvider.when("/portal/page/data/:id", {

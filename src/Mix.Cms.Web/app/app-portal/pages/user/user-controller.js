@@ -41,7 +41,6 @@ app.controller('UserController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
             var response = await userServices.getUser(id, 'portal');
             if (response.isSucceed) {
                 $scope.activedUser = response.data;
-                $rootScope.initEditor();
                 $rootScope.isBusy = false;
                 $scope.$apply();
             }

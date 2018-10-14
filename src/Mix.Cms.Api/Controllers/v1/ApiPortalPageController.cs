@@ -18,11 +18,12 @@ using Mix.Cms.Lib.ViewModels.MixPortalPages;
 using Microsoft.AspNetCore.SignalR;
 using Mix.Cms.Hub;
 using Microsoft.Extensions.Caching.Memory;
+using System.Collections.Generic;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
-    [Route("api/v1/{culture}/portal-page")]
+    [Route("api/v1/permission")]
     public class ApiPortalPageController :
         BaseGenericApiControoler<MixCmsContext, MixPortalPage>
     {
@@ -121,12 +122,10 @@ namespace Mix.Cms.Api.Controllers.v1
             bool isLevel = int.TryParse(parsed.Get("level"), out int level);
             ParseRequestPagingDate(request);
             Expression<Func<MixPortalPage, bool>> predicate = model =>
-                        (!request.Status.HasValue || model.Status == request.Status.Value)
+                        (!isLevel || model.Level == level)
                         && (string.IsNullOrWhiteSpace(request.Keyword)
-                            || (model.TextKeyword.Contains(request.Keyword))
-                            || (model.TextDefault.Contains(request.Keyword))
-                            || (model.Url.Contains(request.Keyword))
-                            )
+                            || (model.TextDefault.Contains(request.Keyword)
+                            || model.Description.Contains(request.Keyword)))
                         && (!request.FromDate.HasValue
                             || (model.CreatedDateTime >= request.FromDate.Value)
                         )
@@ -136,14 +135,40 @@ namespace Mix.Cms.Api.Controllers.v1
             string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
             switch (request.Key)
             {
-                case "portal":
+                
+                default:
                     var portalResult = await base.GetListAsync<UpdateViewModel>(key, request, predicate);
                     return Ok(JObject.FromObject(portalResult));
-                default:
+            }
+        }
 
-                    var listItemResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);
+        // POST api/PortalPage
+        [HttpPost, HttpOptions]
+        [Route("update-infos")]
+        public async Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfos([FromBody]List<ReadViewModel> models)
+        {
+            if (models != null)
+            {
+                return await ReadViewModel.UpdateInfosAsync(models);
+            }
+            else
+            {
+                return new RepositoryResponse<List<ReadViewModel>>();
+            }
+        }
 
-                    return JObject.FromObject(listItemResult);
+        // POST api/PortalPage
+        [HttpPost, HttpOptions]
+        [Route("update-child-infos")]
+        public async Task<RepositoryResponse<List<Lib.ViewModels.MixPortalPages.ReadViewModel>>> UpdateNavInfos([FromBody]List<ReadViewModel> models)
+        {
+            if (models != null)
+            {
+                return await ReadViewModel.UpdateInfosAsync(models);
+            }
+            else
+            {
+                return new RepositoryResponse<List<ReadViewModel>>();
             }
         }
 

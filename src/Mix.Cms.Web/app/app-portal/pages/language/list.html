@@ -1,7 +1,7 @@
 <!-- <section class="content container-fluid"> -->
     <div class="row">
         <div class="col-md-12">
-            <filter-list request="request" callback="loadLanguages(pageIndex)"></filter-list>
+            <filter-list request="request" callback="getList(pageIndex)"></filter-list>
         </div>
     </div>
     <table class="table table-sm table-hover" cellspacing="0">
@@ -25,7 +25,7 @@
             </tr>
         </thead>
 
-        <tbody class="sortable" ng-init="loadLanguages()">
+        <tbody class="sortable" ng-init="getList()">
             <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="language" sort-model-id="{{item.id}}">
                 <td>
                     <span ng-bind="item.keyword"></span>
@@ -45,7 +45,7 @@
                         <a href="/portal/language/details/{{item.keyword}}" class="btn btn-light">
                             <span class="oi oi-pencil text-primary"></span>
                         </a>
-                        <a ng-click="removeLanguage(item.keyword);" class="btn btn-light">
+                        <a ng-click="remove(item.keyword);" class="btn btn-light">
                             <span class="fas fa-times text-danger"></span>
                         </a>
                     </div>
@@ -53,5 +53,5 @@
             </tr>
         </tbody>
     </table>
-    <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end" a-class="page-link" paging-action="loadLanguages(page-1)" scroll-top="true">
+    <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
 <!-- </section> -->

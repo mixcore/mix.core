@@ -117,12 +117,10 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<ActionResult<JObject>> GetList(
             [FromBody] RequestPaging request)
         {
-            var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
-            bool isLevel = int.TryParse(parsed.Get("level"), out int level);
             ParseRequestPagingDate(request);
             Expression<Func<MixLanguage, bool>> predicate = model =>
                         model.Specificulture == _lang
-                        && (!request.Status.HasValue || model.Status == request.Status.Value)
+                        //&& (!request.Status.HasValue || model.Status == request.Status.Value)
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (model.Keyword.Contains(request.Keyword)
                             || model.Description.Contains(request.Keyword)))

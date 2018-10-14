@@ -4,7 +4,10 @@
         var ctrl = this;
         ctrl.colWidth = 3;
         ctrl.init = function () {
-            ctrl.min = ctrl.data.items[0].priority;
+            if(ctrl.data.items.length)
+            {
+                ctrl.min = ctrl.data.items[0].priority;
+            }
             ctrl.colWidth = parseInt(9 / ctrl.columns.length);
             ctrl.lastColWidth = (9 % ctrl.columns.length) > 0 ? 2 : 1;
         };
@@ -36,6 +39,9 @@
         };
         ctrl.goTo = function (id) {
             $location.path(ctrl.editUrl + '/' + id);
+        }
+        ctrl.toggleChildNavs = function(nav){
+            nav.showChildNavs = nav.childNavs.length>0 && !nav.showChildNavs;
         }
     }],
     bindings: {
