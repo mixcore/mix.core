@@ -20,16 +20,16 @@ modules.component('customFile', {
                 var reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = async function () {
-                    var getMedia = await mediaService.getMedia(null, 'portal');
+                    var getMedia = await mediaService.getSingle(['portal']);
                     if (getMedia.isSucceed) {
                         var index = reader.result.indexOf(',') + 1;
                         var base64 = reader.result.substring(index);
-                        ctrl.mediaFile.fileName = file.name.substring(0, file.name.lastIndexOf('.'));
-                        ctrl.mediaFile.extension = file.name.substring(file.name.lastIndexOf('.'));
-                        ctrl.mediaFile.fileStream = reader.result;
+                        ctrl.data.mediaFile.fileName = file.name.substring(0, file.name.lastIndexOf('.'));
+                        ctrl.data.mediaFile.extension = file.name.substring(file.name.lastIndexOf('.'));
+                        ctrl.data.mediaFile.fileStream = reader.result;
                         var media = getMedia.data;
-                        media.mediaFile = ctrl.mediaFile;
-                        var resp = await mediaService.saveMedia(media);
+                        media.data.mediaFile = ctrl.data.mediaFile;
+                        var resp = await mediaService.save(media);
                         if (resp && resp.isSucceed) {
                             ctrl.src = resp.data.fullPath;
                             ctrl.srcUrl = resp.data.fullPath;
@@ -54,18 +54,19 @@ modules.component('customFile', {
 
         };
         ctrl.getBase64 = function (file) {
-            if (file !== null && ctrl.postedFile) {
+            if (file !== null && ctrl.data.mediaFile) {
                 $rootScope.isBusy = true;
                 var reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = function () {
                     var index = reader.result.indexOf(',') + 1;
                     var base64 = reader.result.substring(index);
-                    ctrl.postedFile.fileName = file.name.substring(0, file.name.lastIndexOf('.'));
-                    ctrl.postedFile.extension = file.name.substring(file.name.lastIndexOf('.'));
-                    ctrl.postedFile.fileStream = reader.result;
+                    ctrl.data.mediaFile.fileName = file.name.substring(0, file.name.lastIndexOf('.'));
+                    ctrl.data.mediaFile.extension = file.name.substring(file.name.lastIndexOf('.'));
+                    ctrl.data.mediaFile.fileStream = reader.result;
                     ctrl.srcUrl = reader.result;
                     $rootScope.isBusy = false;
+                    
                     $scope.$apply();
                 };
                 reader.onerror = function (error) {
@@ -85,11 +86,11 @@ modules.component('customFile', {
         description: '=',
         src: '=',
         srcUrl: '=',
-        postedFile: '=',
+        data: '=',
         type: '=',
         folder: '=',
         auto: '=',
         onDelete: '&',
-        onUpdate: '&'
+        save: '&',
     }
 });

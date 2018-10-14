@@ -38,7 +38,7 @@ modules.component('customImage', {
                 var reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = async function () {
-                    var getMedia = await mediaService.getMedia(null, 'portal');
+                    var getMedia = await mediaService.getSingle(['portal']);
                     if (getMedia.isSucceed) {
                         var index = reader.result.indexOf(',') + 1;
                         var base64 = reader.result.substring(index);
@@ -47,7 +47,7 @@ modules.component('customImage', {
                         ctrl.mediaFile.fileStream = reader.result;
                         var media = getMedia.data;
                         media.mediaFile = ctrl.mediaFile;
-                        var resp = await mediaService.saveMedia(media);
+                        var resp = await mediaService.save(media);
                         if (resp && resp.isSucceed) {
                             ctrl.src = resp.data.fullPath;
                             ctrl.srcUrl = resp.data.fullPath;

@@ -73,20 +73,11 @@
             </div>
             <div class="modal-footer">
 
-                <div class="col-md-12 d-flex justify-content-end">
+                <div class="d-flex justify-content-end">
                     <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                        <div class="input-group mr-2">
-
-                            <custom-file header="''" folder="'Medias'" media="activedMedia" auto="'false'"></custom-file>
-
-                        </div>
-                        <div class="btn-group btn-group-sm mr-2" role="group" aria-label="First group">
-                            <!--<cultures is-clone="activedMedia.isClone" data="activedMedia.cultures"></cultures>-->
-
-                            <button type="button" ng-click="saveMedia(activedMedia)" class="btn btn-secondary"><i class="mi mi-Upload"></i>
-                                Upload</button>
-                            <!--<button type="button" ng-click="uploadMedia()" class="btn btn-secondary"><i class="mi mi-Upload"></i> Upload</button>-->
-                        </div>
+                            <custom-file header="''" folder="'Medias'" media-file="activedData.mediaFile" data="activedData"
+                            src-url="activedData.mediaFile.fullPath" save="save(activedData)"
+                                auto="'false'" class=""></custom-file>
                     </div>
                 </div>
                 <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">

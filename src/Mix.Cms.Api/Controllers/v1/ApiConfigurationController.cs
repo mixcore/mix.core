@@ -103,13 +103,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("save")]
         public async Task<RepositoryResponse<UpdateViewModel>> Save([FromBody]UpdateViewModel model)
         {
-            if (model != null)
-            {
-                model.CreatedBy = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
-                var result = await base.SaveAsync<UpdateViewModel>(model, true);
-                return result;
-            }
-            return new RepositoryResponse<UpdateViewModel>() { Status = 501 };
+            return await base.SaveAsync<UpdateViewModel>(model, true);
         }
 
         // GET api/configuration
