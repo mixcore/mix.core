@@ -1,7 +1,7 @@
 {
   "ConnectionStrings": {
-    "MixAccountConnection": "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=sw-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True",
-    "MixCmsConnection": "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=sw-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True",
+    "MixAccountConnection": "Server=115.77.190.113,4444;Database=mixcorelocal;UID=tinku;Pwd=1234qwe@;MultipleActiveResultSets=true;",
+    "MixCmsConnection": "Server=115.77.190.113,4444;Database=mixcorelocal;UID=tinku;Pwd=1234qwe@;MultipleActiveResultSets=true;",
     "DefaultConnection": null
   },
   "Authentication": {
