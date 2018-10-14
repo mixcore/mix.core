@@ -25,7 +25,6 @@ app.controller('TemplateController', ['$scope', '$rootScope', '$routeParams', 'n
             var resp = await service.getSingle(['portal', themeId, folderType, id]);
             if (resp && resp.isSucceed) {
                 $scope.activedData = resp.data;
-                $rootScope.initEditors();
                 $rootScope.isBusy = false;
                 $scope.$apply();
             }
