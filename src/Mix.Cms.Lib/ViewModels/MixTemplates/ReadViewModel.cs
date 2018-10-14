@@ -103,6 +103,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             }
         }
 
+        [JsonProperty("templatePath")]
         public string TemplatePath
         {
             get

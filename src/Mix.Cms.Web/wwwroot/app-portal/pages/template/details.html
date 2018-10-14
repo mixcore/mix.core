@@ -1,33 +1,30 @@
 <!-- Main content -->
 <section class="" ng-init="getSingle()">
-    
-    <form ng-class="{'submitted': submitted}" ng-submit="save(activedData)" ng-if="activedData">    
+
+    <form ng-class="{'submitted': submitted}" ng-submit="save(activedData)" ng-if="activedData">
         <actions back-url="listUrl"></actions>
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                <label>Name</label>
-                <input type="text" class="form-control form-control-lg" ng-model="activedData.fileName">
+                    <label>Name</label>
+                    <input type="text" class="form-control form-control-lg" ng-model="activedData.fileName">
+                </div>
             </div>
-            </div>
-            <div class="col-md-12">
+            <div class="col-md-12">                
                 <tabs-v>
                     <pane-v title="Razor Template">
-                        <div class="container-code-editor">
-                            <div class="form-control code-editor">{{activedData.content}}</div>
-                            <input id="content-razor" class="form-control code-content" type="hidden" ng-model="activedData.content" value="{{activedData.content}}">
-                        </div>
+                        <ace-editor content="activedData.content"></ace-editor>
                     </pane-v>
                     <pane-v title="Scripts">
                         <div class="container-code-editor">
                             <div class="form-control code-editor">{{activedData.scripts}}</div>
-                            <input id="content-scripts" class="form-control code-content" type="hidden" ng-model="activedData.scripts" value="{{activedData.scripts}}">
+                            <input class="form-control code-content" type="hidden" ng-model="activedData.scripts" value="{{activedData.scripts}}">
                         </div>
                     </pane-v>
                     <pane-v title="Styles">
                         <div class="container-code-editor">
                             <div class="form-control code-editor">{{activedData.styles}}</div>
-                            <input id="content-styles" class="form-control code-content" type="hidden" ng-model="activedData.styles" value="{{activedData.styles}}">
+                            <input class="form-control code-content" type="hidden" ng-model="activedData.styles" value="{{activedData.styles}}">
                         </div>
                     </pane-v>
                 </tabs-v>

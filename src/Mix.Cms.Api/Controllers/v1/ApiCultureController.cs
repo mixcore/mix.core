@@ -22,6 +22,7 @@ namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
     [Route("api/v1/culture")]
+    [Route("api/v1/{culture}/culture")]
     public class ApiCultureController :
         BaseGenericApiControoler<MixCmsContext, MixCulture>
     {
@@ -53,7 +54,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     if (id.HasValue)
                     {
                         Expression<Func<MixCulture, bool>> predicate = model => model.Id == id;
-                        var portalResult = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_{id}", predicate);
+                        var portalResult = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_{id}", predicate);                        
                         return Ok(JObject.FromObject(portalResult));
                     }
                     else

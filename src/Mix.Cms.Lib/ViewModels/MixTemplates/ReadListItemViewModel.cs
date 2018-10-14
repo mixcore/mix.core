@@ -25,27 +25,21 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         [JsonProperty("templateId")]
         public int TemplateId { get; set; }
 
-        [JsonIgnore]
         [JsonProperty("templateName")]
         public string TemplateName { get; set; }
 
-        [JsonIgnore]
         [JsonProperty("folderType")]
         public string FolderType { get; set; }
 
-        [JsonIgnore]
         [JsonProperty("fileFolder")]
         public string FileFolder { get; set; }
 
-        [JsonIgnore]
         [JsonProperty("fileName")]
         public string FileName { get; set; }
 
-        [JsonIgnore]
         [JsonProperty("extension")]
         public string Extension { get; set; }
 
-        [JsonIgnore]
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
 
@@ -84,6 +78,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             }
         }
 
+        [JsonProperty("templatePath")]
         public string TemplatePath
         {
             get

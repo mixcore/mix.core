@@ -2,7 +2,7 @@
 app.factory('CultureService', ['BaseService', function (baseService) {
 
     var serviceFactory = Object.create(baseService);
-    serviceFactory.init('culture', true);
+    serviceFactory.init('culture');
     var _updateInfos = async function (pages) {
 
         var req = {

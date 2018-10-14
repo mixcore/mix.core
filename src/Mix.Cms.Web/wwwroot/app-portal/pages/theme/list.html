@@ -12,7 +12,7 @@
         <div class="col-md-4">
         </div>
     </div>
-    <filter-list request="request" callback="loadThemes(pageIndex)"></filter-list>
+    <filter-list request="request" callback="getList(pageIndex)"></filter-list>
 
     <table class="table table-sm table-hover" cellspacing="0">
         <thead class="thead-light">
@@ -41,7 +41,7 @@
             </tr>
         </thead>
 
-        <tbody class="sortable" ng-init="loadThemes()">
+        <tbody class="sortable" ng-init="getList()">
             <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="theme" sort-model-id="{{item.id}}">
                 <td style="cursor:move;" class="drag-header">
                     <span class="fas fa-sort"></span>
@@ -79,7 +79,7 @@
                         <a href="/portal/theme/details/{{item.id}}" class="btn btn-light">
                             <span class="fas fa-pencil-alt text-primary"></span>
                         </a>
-                        <a ng-click="removeTheme(item.id);" class="btn btn-light">
+                        <a ng-click="remove(item.id);" class="btn btn-light">
                             <span class="fas fa-times text-danger"></span>
                         </a>
                     </div>
@@ -90,13 +90,13 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-end">
             <li class="page-item">
-                <a class="page-link active" href="javascript:void(0)" ng-click="loadThemes(data.pageIndex-1)" ng-hide="data.pageIndex==0">Prev</a>
+                <a class="page-link active" href="javascript:void(0)" ng-click="getList(data.pageIndex-1)" ng-hide="data.pageIndex==0">Prev</a>
             </li>
             <li class="page-item" ng-class="{active: n-1==data.pageIndex}" ng-repeat="n in range(data.totalPage)">
-                <a class="page-link" href="javascript:void(0)" ng-click="loadThemes(n-1)">{{n}}</a>
+                <a class="page-link" href="javascript:void(0)" ng-click="getList(n-1)">{{n}}</a>
             </li>
             <li class="page-item">
-                <a class="page-link" href="javascript:void(0)" ng-click="loadThemes(data.page)" ng-hide="data.pageIndex >= (data.totalPage-1)">Next</a>
+                <a class="page-link" href="javascript:void(0)" ng-click="getList(data.page)" ng-hide="data.pageIndex >= (data.totalPage-1)">Next</a>
             </li>
         </ul>
     </nav>
