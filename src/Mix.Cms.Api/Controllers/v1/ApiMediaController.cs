@@ -63,7 +63,7 @@ namespace Mix.Cms.Api.Controllers.v1
                             Data = new UpdateViewModel(model)
                             {
                                 Specificulture = _lang,
-                                Status = MixContentStatus.Preview,
+                                Status = MixContentStatus.Published,
                             }
                         };
                         return Ok(JObject.FromObject(result));

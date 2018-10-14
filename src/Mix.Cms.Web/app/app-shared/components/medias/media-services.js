@@ -3,7 +3,7 @@ app.factory('MediaService', ['$rootScope', 'CommonService', 'BaseService',
     function ($rootScope, commonService, baseService) {
 
         var serviceFactory = Object.create(baseService);
-        
+        serviceFactory.init('media');
         var _cloneMedia = async function (id) {
             var req = {
                 method: 'GET',
@@ -39,8 +39,6 @@ app.factory('MediaService', ['$rootScope', 'CommonService', 'BaseService',
                 return await commonService.getApiResult(req);
             }
         };
-        serviceFactory.modelName = 'media';
-        serviceFactory.prefixUrl = '/' + serviceFactory.lang + '/media';
         serviceFactory.cloneMedia = _cloneMedia;
         serviceFactory.uploadMedia = _uploadMedia;
         return serviceFactory;

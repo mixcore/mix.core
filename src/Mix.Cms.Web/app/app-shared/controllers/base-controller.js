@@ -26,9 +26,9 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
             $scope.$apply();
         }
     };
-    $scope.getList = async function (pageIndex) {
-        if (pageIndex !== undefined) {
-            $scope.request.pageIndex = pageIndex;
+    $scope.getList = async function (dataIndex) {
+        if (dataIndex !== undefined) {
+            $scope.request.dataIndex = dataIndex;
         }
         if ($scope.request.fromDate !== null) {
             var d = new Date($scope.request.fromDate);
@@ -42,11 +42,11 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
         if (resp && resp.isSucceed) {
 
             ($scope.data = resp.data);
-            $.each($scope.data.items, function (i, page) {
+            $.each($scope.data.items, function (i, data) {
 
                 $.each($scope.activedDatas, function (i, e) {
-                    if (e.pageId === page.id) {
-                        page.isHidden = true;
+                    if (e.dataId === data.id) {
+                        data.isHidden = true;
                     }
                 });
             });
@@ -80,9 +80,9 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
         }
     };
 
-    $scope.save = async function (page) {
+    $scope.save = async function (data) {
         $rootScope.isBusy = true;
-        var resp = await service.save(page);
+        var resp = await service.save(data);
         if (resp && resp.isSucceed) {
             $scope.activedData = resp.data;
             $rootScope.showMessage('success', 'success');
