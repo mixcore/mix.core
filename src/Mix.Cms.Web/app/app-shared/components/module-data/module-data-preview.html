@@ -1,5 +1,5 @@
 <div ng-switch="$ctrl.data.dataType">
-    <div ng-switch-when="0">
+    <div ng-switch-default>
         <span ng-bind="$ctrl.data.value">
         </span>
     </div>
@@ -20,6 +20,7 @@
     </div>
     <div ng-switch-when="5">
         <div ng-bind-html="$ctrl.data.value">
+        </div>
         </div>
         <div ng-switch-when="6">
             <p ng-bind-html="$ctrl.data.value">

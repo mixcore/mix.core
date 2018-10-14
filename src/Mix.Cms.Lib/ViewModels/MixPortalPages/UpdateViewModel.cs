@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -60,10 +59,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         public List<MixPortalPagePositions.ReadViewModel> PositionNavs { get; set; }
 
         [JsonProperty("childNavs")]
-        public List<MixPortalPagePortalPages.ReadViewModel> ChildNavs { get; set; }
+        public List<MixPortalPagePortalPages.UpdateViewModel> ChildNavs { get; set; }
 
         [JsonProperty("parentNavs")]
-        public List<MixPortalPagePortalPages.ReadViewModel> ParentNavs { get; set; }
+        public List<MixPortalPagePortalPages.UpdateViewModel> ParentNavs { get; set; }
 
         #endregion Views
 
@@ -213,13 +212,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
 
         #region Expands
 
-        public List<MixPortalPagePortalPages.ReadViewModel> GetParentNavs(MixCmsContext context, IDbContextTransaction transaction)
+        public List<MixPortalPagePortalPages.UpdateViewModel> GetParentNavs(MixCmsContext context, IDbContextTransaction transaction)
         {
             var query = context.MixPortalPage
                 .Include(cp => cp.MixPortalPageNavigationParent)
                 .Where(PortalPage => PortalPage.Id != Id)
                 .Select(PortalPage =>
-                    new MixPortalPagePortalPages.ReadViewModel()
+                    new MixPortalPagePortalPages.UpdateViewModel()
                     {
                         Id = Id,
                         ParentId = PortalPage.Id,
@@ -237,13 +236,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
             return result.OrderBy(m => m.Priority).ToList();
         }
 
-        public List<MixPortalPagePortalPages.ReadViewModel> GetChildNavs(MixCmsContext context, IDbContextTransaction transaction)
+        public List<MixPortalPagePortalPages.UpdateViewModel> GetChildNavs(MixCmsContext context, IDbContextTransaction transaction)
         {
             var query = context.MixPortalPage
                 .Include(cp => cp.MixPortalPageNavigationParent)
                 .Where(PortalPage => PortalPage.Id != Id)
                 .Select(PortalPage =>
-                new MixPortalPagePortalPages.ReadViewModel(
+                new MixPortalPagePortalPages.UpdateViewModel(
                       new MixPortalPageNavigation()
                       {
                           Id = PortalPage.Id,

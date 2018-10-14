@@ -9,15 +9,15 @@ using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
 {
-    public class ReadViewModel
-       : ViewModelBase<MixCmsContext, MixPortalPageNavigation, ReadViewModel>
+    public class UpdateViewModel
+       : ViewModelBase<MixCmsContext, MixPortalPageNavigation, UpdateViewModel>
     {
-        public ReadViewModel(MixPortalPageNavigation model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public UpdateViewModel(MixPortalPageNavigation model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
 
-        public ReadViewModel() : base()
+        public UpdateViewModel() : base()
         {
         }
 
@@ -45,7 +45,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
         public bool IsActived { get; set; }
 
         [JsonProperty("page")]
-        public MixRolePortalPages.ReadViewModel Page { get; set; }
+        public MixRolePortalPages.UpdateViewModel Page { get; set; }
 
         [JsonProperty("parent")]
         public MixPortalPages.ReadViewModel ParentPage { get; set; }
@@ -56,8 +56,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getCategory = MixRolePortalPages.ReadViewModel.Repository.GetSingleModel(p => p.Id == Id
-                , _context: _context, _transaction: _transaction
+            var getCategory = MixRolePortalPages.UpdateViewModel.Repository.GetSingleModel(p => p.Id == Id
+               
             );
             if (getCategory.IsSucceed)
             {
@@ -76,11 +76,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
 
         #region Expands
 
-        public static async System.Threading.Tasks.Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfosAsync(List<MixPortalPagePortalPages.ReadViewModel> cates)
+        public static async System.Threading.Tasks.Task<RepositoryResponse<List<UpdateViewModel>>> UpdateInfosAsync(List<MixPortalPagePortalPages.UpdateViewModel> cates)
         {
             MixCmsContext context = new MixCmsContext();
             var transaction = context.Database.BeginTransaction();
-            var result = new RepositoryResponse<List<ReadViewModel>>();
+            var result = new RepositoryResponse<List<UpdateViewModel>>();
             try
             {
 
@@ -100,8 +100,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
-                UnitOfWorkHelper<MixCmsContext>.HandleException<ReadViewModel>(ex, true, transaction);
-                return new RepositoryResponse<List<ReadViewModel>>()
+                UnitOfWorkHelper<MixCmsContext>.HandleException<UpdateViewModel>(ex, true, transaction);
+                return new RepositoryResponse<List<UpdateViewModel>>()
                 {
                     IsSucceed = false,
                     Data = null,

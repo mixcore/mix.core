@@ -9,8 +9,8 @@ using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixRolePortalPages
 {
-    public class ReadViewModel
-       : ViewModelBase<MixCmsContext, MixPortalPage, ReadViewModel>
+    public class UpdateViewModel
+       : ViewModelBase<MixCmsContext, MixPortalPage, UpdateViewModel>
     {
         #region Properties
 
@@ -50,11 +50,8 @@ namespace Mix.Cms.Lib.ViewModels.MixRolePortalPages
 
         #region Views
 
-        [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain") ?? "/"; } }
-
         [JsonProperty("childPages")]
-        public List<MixPortalPagePortalPages.ReadViewModel> ChildPages { get; set; } = new List<MixPortalPagePortalPages.ReadViewModel>();
+        public List<MixPortalPagePortalPages.UpdateViewModel> ChildPages { get; set; } = new List<MixPortalPagePortalPages.UpdateViewModel>();
 
         [JsonProperty("navPermission")]
         public MixPortalPageRoles.ReadViewModel NavPermission { get; set; }
@@ -65,11 +62,11 @@ namespace Mix.Cms.Lib.ViewModels.MixRolePortalPages
 
         #region Contructors
 
-        public ReadViewModel() : base()
+        public UpdateViewModel() : base()
         {
         }
 
-        public ReadViewModel(MixPortalPage model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public UpdateViewModel(MixPortalPage model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -78,7 +75,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRolePortalPages
         #region Overrides
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getChilds = MixPortalPagePortalPages.ReadViewModel.Repository.GetModelListBy(n => n.ParentId == Id, _context, _transaction);
+            var getChilds = MixPortalPagePortalPages.UpdateViewModel.Repository.GetModelListBy(n => n.ParentId == Id, _context, _transaction);
             if (getChilds.IsSucceed)
             {
                 ChildPages = getChilds.Data.OrderBy(c => c.Priority).ToList();

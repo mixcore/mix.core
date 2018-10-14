@@ -36,7 +36,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
         #region Views
 
         [JsonProperty("permissions")]
-        public List<MixRolePortalPages.ReadViewModel> Permissions { get; set; }
+        public List<MixRolePortalPages.UpdateViewModel> Permissions { get; set; }
 
         #endregion
 
@@ -78,7 +78,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
         public override void ExpandView(MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
         {
 
-            Permissions = MixRolePortalPages.ReadViewModel.Repository.GetModelListBy(p => p.Level == 0).Data;
+            Permissions = MixRolePortalPages.UpdateViewModel.Repository.GetModelListBy(p => p.Level == 0).Data;
             foreach (var item in Permissions)
             {
                 item.NavPermission = MixPortalPageRoles.ReadViewModel.Repository.GetSingleModel(n => n.PageId == item.Id && n.RoleId == Id).Data;
@@ -194,7 +194,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
             }
         }
 
-        async Task<RepositoryResponse<bool>> HandlePermission(MixRolePortalPages.ReadViewModel item, MixCmsContext context, IDbContextTransaction transaction)
+        async Task<RepositoryResponse<bool>> HandlePermission(MixRolePortalPages.UpdateViewModel item, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
 
