@@ -10014,7 +10014,6 @@ a:hover {
 }
 
 .sidebar-background {
-  background-image: url(https://demos.creative-tim.com/material-dashboard-dark/assets/img/sidebar-2.jpg);
   position: absolute;
   z-index: 1;
   height: 100%;
