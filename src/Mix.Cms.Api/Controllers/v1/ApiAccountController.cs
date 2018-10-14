@@ -271,10 +271,10 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             switch (viewType)
             {
-                case "be":
+                case "portal":
                     if (!string.IsNullOrEmpty(id))
                     {
-                        var beResult = await MixRegisterViewModel.Repository.GetSingleModelAsync(
+                        var beResult = await Lib.ViewModels.Account.MixUsers.UpdateViewModel.Repository.GetSingleModelAsync(
                             model => model.Id == id).ConfigureAwait(false);
                         return JObject.FromObject(beResult);
                     }
@@ -282,10 +282,10 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         var model = new MixCmsUser() { Status = (int)MixUserStatus.Actived };
 
-                        RepositoryResponse<MixRegisterViewModel> result = new RepositoryResponse<MixRegisterViewModel>()
+                        RepositoryResponse<Lib.ViewModels.Account.MixUsers.UpdateViewModel> result = new RepositoryResponse<Lib.ViewModels.Account.MixUsers.UpdateViewModel>()
                         {
                             IsSucceed = true,
-                            Data = await MixRegisterViewModel.InitViewAsync(model)
+                            Data = await Lib.ViewModels.Account.MixUsers.UpdateViewModel.InitViewAsync(model)
                         };
                         return JObject.FromObject(result);
                     }

@@ -64,7 +64,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             switch (viewType)
             {
-                case "be":
+                case "portal":
                     var beResult = await UpdateViewModel.Repository.GetSingleModelAsync(r => r.Id == id);
                     return JObject.FromObject(beResult);
                 default:
