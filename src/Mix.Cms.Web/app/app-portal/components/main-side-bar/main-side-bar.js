@@ -247,7 +247,7 @@
                 {
                     title: 'portal_permissions',
                     shortTitle: 'portal_short_portal_permissions',
-                    icon: 'mi mi-Multitask',
+                    icon: 'mi mi-LockscreenDesktop',
                     href: '#',
                     subMenus: [
                         {
