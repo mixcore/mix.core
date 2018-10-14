@@ -12,13 +12,6 @@
                     subMenus: []
                 },
                 {
-                    title: 'portal_import',
-                    shortTitle: 'portal_short_import',
-                    icon: 'mi mi-Tiles',
-                    href: '/portal/import',
-                    subMenus: []
-                },
-                {
                     title: 'portal_articles',
                     shortTitle: ('portal_articles'),
                     icon: 'mi mi-ReadingList',
@@ -57,7 +50,7 @@
                 {
                     title: 'portal_orders',
                     shortTitle: 'portal_orders',
-                    icon: 'mi mi-Package',
+                    icon: 'mi mi-CashDrawer',
                     href: '#',
                     subMenus: [
                         {
@@ -207,6 +200,13 @@
                             icon: 'mi mi-List'
                         }
                     ]
+                },
+                {
+                    title: 'portal_import',
+                    shortTitle: 'portal_short_import',
+                    icon: 'mi mi-Upload',
+                    href: '/portal/import',
+                    subMenus: []
                 },
                 {
                     title: 'language',
