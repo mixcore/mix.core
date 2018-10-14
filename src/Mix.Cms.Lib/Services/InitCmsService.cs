@@ -8,7 +8,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
-using Mix.Cms.Lib.ViewModels.MixInit;
 using Mix.Cms.Lib.Repositories;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
@@ -178,7 +177,8 @@ namespace Mix.Cms.Lib.Services
                 ViewModels.MixThemes.UpdateViewModel theme = new ViewModels.MixThemes.UpdateViewModel(new MixTheme()
                 {
                     Name = "Default",
-                    CreatedBy = "Admin"
+                    CreatedBy = "Admin",
+                    Status = (int)MixContentStatus.Published
                 }, context, transaction);
 
                 isSucceed = isSucceed && theme.SaveModel(true, context, transaction).IsSucceed;
@@ -249,40 +249,6 @@ namespace Mix.Cms.Lib.Services
             }
             return isSucceed;
         }
-
-        //public void RefreshAll(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        //{
-        //    RefreshConfigurations(_context, _transaction);
-        //    RefreshCultures(_context, _transaction);
-        //}
-
-        //public void RefreshConfigurations(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        //{
-        //    this.CmsConfigurations = new CmsConfiguration();
-        //    if (!string.IsNullOrEmpty(CmsConfigurations.CmsConnectionString))
-        //    {
-        //        CmsConfigurations.Init(_context, _transaction);
-        //    }
-        //}
-
-        //public void RefreshCultures(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        //{
-        //    this.CmsCulture = new CmsCultureConfiguration();
-        //    if (!string.IsNullOrEmpty(CmsConfigurations.CmsConnectionString))
-        //    {
-        //        CmsCulture.Init(_context, _transaction);
-        //    }
-        //}
-
-        //public string GetLocalString(string key, string culture, string defaultValue = null)
-        //{
-        //    return this.CmsConfigurations.GetLocalString(key, culture, defaultValue);
-        //}
-
-        //public int GetLocalInt(string key, string culture, int defaultValue = 0)
-        //{
-        //    return this.CmsConfigurations.GetLocalInt(key, culture, defaultValue);
-        //}
 
     }
 }

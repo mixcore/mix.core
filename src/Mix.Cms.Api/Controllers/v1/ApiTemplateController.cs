@@ -31,7 +31,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
         }
         #region Get
-
+        
         [HttpGet, HttpOptions]
         [Route("details/{viewType}/{themeId}/{folderType}/{id}")]
         [Route("details/{viewType}/{themeId}/{folderType}")]
@@ -136,7 +136,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     var portalResult = await base.GetListAsync<UpdateViewModel>(key, request, predicate);
                     return Ok(JObject.FromObject(portalResult));
                 default:
-                    var listItemResult = await base.GetListAsync<ReadListItemViewModel>(key, request, predicate);
+                    var listItemResult = await base.GetListAsync<UpdateViewModel>(key, request, predicate);
 
                     return JObject.FromObject(listItemResult);
             }

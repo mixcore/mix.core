@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -41,6 +39,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
 
+        [JsonProperty("status")]
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -106,7 +106,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Templates = MixTemplates.InitViewModel.Repository.GetModelListBy(t => t.ThemeId == Id,
-                _context: _context, _transaction: _transaction).Data;
+                _context: _context, _transaction: _transaction).Data;            
         }
 
 

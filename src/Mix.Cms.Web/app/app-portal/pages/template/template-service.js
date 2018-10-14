@@ -1,6 +1,6 @@
 'use strict';
-app.factory('TemplateService', ['$rootScope', 'CommonService', 'BaseService',
-    function ($rootScope, commonService, baseService) {
+app.factory('TemplateService', ['BaseService',
+    function (baseService) {
 
         var serviceFactory = Object.create(baseService);
         serviceFactory.init('template');        

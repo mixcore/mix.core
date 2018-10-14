@@ -43,11 +43,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
 
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
-        [Required]
-        [JsonProperty("specificulture")]
-        public new string Specificulture { get; set; }
-
+        
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
         #endregion Models

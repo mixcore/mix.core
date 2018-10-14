@@ -99,7 +99,7 @@ app.run(['$rootScope', '$location', 'CommonService', 'AuthService', 'TranslatorS
             $('#dlg-preview-popup').modal('show');
         };
 
-        $rootScope.initEditor = function () {
+        $rootScope.initEditors = function () {
             setTimeout(function () {
 
                 $.each($('.code-editor'), function (i, e) {
@@ -120,14 +120,9 @@ app.run(['$rootScope', '$location', 'CommonService', 'AuthService', 'TranslatorS
                     });
                     editor.getSession().on('change', function (e) {
                         // e.type, etc
+                        console.log(editor.getValue());
                         $(container).parent().find('.code-content').val(editor.getValue());
                     });
-                });
-
-                $.each($('.editor-content'), function (i, e) {
-                    var $textArea = $(e);
-                    $textArea.trumbowyg(ngAppSettings.editorConfigurations.plugins);
-
                 });
             }, 200);
         };

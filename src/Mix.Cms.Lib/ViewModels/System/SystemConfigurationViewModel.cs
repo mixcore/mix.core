@@ -30,9 +30,14 @@ namespace Mix.Cms.Lib.ViewModels.MixSystem
         public string Value { get; set; }
         [JsonProperty("dataType")]
         public MixDataType DataType { get; set; }
+        [JsonProperty("status")]
+        public MixContentStatus Status { get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
-
+        [JsonProperty("createdDatetime")]
+        public DateTime CreatedDatetime { get; set; }
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         #endregion Models
 
         #region Views
@@ -60,7 +65,14 @@ namespace Mix.Cms.Lib.ViewModels.MixSystem
         #endregion Contructors
 
         #region Overrides
-
+        public override MixConfiguration ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            if (CreatedDatetime == default(DateTime))
+            {
+                CreatedDatetime = DateTime.UtcNow;
+            }
+            return base.ParseModel(_context, _transaction);
+        }
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Property = new DataValueViewModel() { DataType = DataType, Value = Value, Name = Keyword };

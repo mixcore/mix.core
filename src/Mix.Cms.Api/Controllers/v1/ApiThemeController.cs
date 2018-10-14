@@ -13,11 +13,12 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using System.Linq.Expressions;
-using System.Web;
 using Mix.Cms.Lib.ViewModels.MixThemes;
 using Microsoft.AspNetCore.SignalR;
 using Mix.Cms.Hub;
 using Microsoft.Extensions.Caching.Memory;
+using System.Collections.Generic;
+using Mix.Cms.Lib;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -31,6 +32,22 @@ namespace Mix.Cms.Api.Controllers.v1
 
         }
         #region Get
+
+
+        // GET api/theme/id
+        [HttpGet, HttpOptions]
+        [Route("sync/{id}")]
+        public async Task<RepositoryResponse<List<Lib.ViewModels.MixTemplates.UpdateViewModel>>> Sync(int id)
+        {
+
+            var getTemplate = await Lib.ViewModels.MixTemplates.UpdateViewModel.Repository.GetModelListByAsync(
+                 template => template.ThemeId == id).ConfigureAwait(false);
+            foreach (var item in getTemplate.Data)
+            {
+                await item.SaveModelAsync(true).ConfigureAwait(false);
+            }
+            return getTemplate;
+        }
 
         // GET api/theme/id
         [HttpGet, HttpOptions]
@@ -55,6 +72,10 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         Expression<Func<MixTheme, bool>> predicate = model => model.Id == id;
                         var portalResult = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_{id}", predicate);
+                        if (portalResult.IsSucceed)
+                        {
+                            portalResult.Data.IsActived = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, _lang) == portalResult.Data.Id;
+                        }
                         return Ok(JObject.FromObject(portalResult));
                     }
                     else
@@ -73,8 +94,12 @@ namespace Mix.Cms.Api.Controllers.v1
                     if (id.HasValue)
                     {
                         Expression<Func<MixTheme, bool>> predicate = model => model.Id == id;
-                        var portalResult = await base.GetSingleAsync<ReadViewModel>($"{viewType}_{id}", predicate);
-                        return Ok(JObject.FromObject(portalResult));
+                        var result = await base.GetSingleAsync<ReadViewModel>($"{viewType}_{id}", predicate);
+                        if (result.IsSucceed)
+                        {
+                            result.Data.IsActived = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, _lang) == result.Data.Id;
+                        }
+                        return Ok(JObject.FromObject(result));
                     }
                     else
                     {
@@ -105,6 +130,7 @@ namespace Mix.Cms.Api.Controllers.v1
             if (model != null)
             {
                 model.CreatedBy = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
+                model.Specificulture = _lang;
                 var result = await base.SaveAsync<UpdateViewModel>(model, true);
                 return result;
             }
@@ -117,20 +143,19 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<ActionResult<JObject>> GetList(
             [FromBody] RequestPaging request)
         {
-            var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
-            bool isLevel = int.TryParse(parsed.Get("level"), out int level);
+
             ParseRequestPagingDate(request);
             Expression<Func<MixTheme, bool>> predicate = model =>
-                        (!request.Status.HasValue || model.Status == request.Status.Value)
-                        && (string.IsNullOrWhiteSpace(request.Keyword)
-                            || (model.Name.Contains(request.Keyword)
-                            ))
-                        && (!request.FromDate.HasValue
-                            || (model.CreatedDateTime >= request.FromDate.Value)
-                        )
-                        && (!request.ToDate.HasValue
-                            || (model.CreatedDateTime <= request.ToDate.Value)
-                        );
+                string.IsNullOrWhiteSpace(request.Keyword)
+                    || (model.Name.Contains(request.Keyword)
+                    )
+                && (!request.FromDate.HasValue
+                    || (model.CreatedDateTime >= request.FromDate.Value)
+                )
+                && (!request.ToDate.HasValue
+                    || (model.CreatedDateTime <= request.ToDate.Value)
+                )
+                    ;
             string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
             switch (request.Key)
             {
