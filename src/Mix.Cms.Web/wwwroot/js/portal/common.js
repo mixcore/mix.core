@@ -98,6 +98,9 @@
             //    SW.Common.loadFiles(container);
             //});
 
+            
+            const ps = new PerfectScrollbar('main');
+
             $('[data-toggle="popover"]').popover({
                 html: true,
                 content: function () {
