@@ -77,7 +77,17 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public List<ModuleFieldViewModel> Columns { get; set; }
 
         #region Template
+        [JsonProperty("templates")]
+        public List<MixTemplates.UpdateViewModel> Templates { get; set; }// Article Templates
 
+        [JsonIgnore]
+        public string TemplateFolderType
+        {
+            get
+            {
+                return MixEnums.EnumTemplateFolder.Articles.ToString();
+            }
+        }
         [JsonProperty("view")]
         public MixTemplates.UpdateViewModel View { get; set; }
 
@@ -177,6 +187,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 };
                 Columns.Add(thisField);
             }
+            this.Templates = this.Templates ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
+                t => t.Theme.Name == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
             int themeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
             View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Modules, _context, _transaction);
             if (this.View == null)

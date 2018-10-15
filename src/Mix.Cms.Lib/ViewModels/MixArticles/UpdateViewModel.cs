@@ -240,6 +240,8 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             }
 
             //Get Templates
+            this.Templates = this.Templates ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
+                t => t.Theme.Name == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
             View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Articles, _context, _transaction);
 
             this.View = View ?? Templates.FirstOrDefault();
