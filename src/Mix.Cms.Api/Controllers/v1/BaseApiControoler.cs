@@ -60,6 +60,7 @@ namespace Mix.Cms.Api.Controllers.v1
             var logMsg = new JObject()
                 {
                     new JProperty("created_at", DateTime.UtcNow),
+                    new JProperty("ip_address", Request.HttpContext.Connection.RemoteIpAddress.ToString()),
                     new JProperty("user", User.Identity?.Name),                   
                     new JProperty("request_url", Request.Path.Value),
                     new JProperty("action", action),

@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "provider": "cdnjs",
+      "library": "ace@1.4.1",
+      "destination": "wwwroot/lib/ace/",
+      "files": [
+        "ace.js"
+      ]
+    }
+  ]
+}

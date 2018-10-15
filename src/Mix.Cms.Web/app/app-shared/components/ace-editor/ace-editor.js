@@ -4,6 +4,7 @@ modules.component('aceEditor', {
     controller: ['$rootScope', '$scope', 'ngAppSettings',
         function ($rootScope, $scope, ngAppSettings) {
             var ctrl = this;
+            ctrl.editor;
             ctrl.id = Math.floor(Math.random() * 100) + 1;
             ctrl.initAce = function () {
                 setTimeout(() => {
@@ -33,8 +34,14 @@ modules.component('aceEditor', {
                         // e.type, etc
                         ctrl.content = editor.getValue();
                     });
+                    ctrl.editor = editor;
                 });
             };
+            $scope.$on('updateContentCodeEditors', function () { 
+                setTimeout(()=>{
+                    ctrl.editor.setValue(ctrl.content);
+                },100);
+            });
         }],
     bindings: {
         content: '='
