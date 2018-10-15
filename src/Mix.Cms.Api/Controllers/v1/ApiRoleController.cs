@@ -59,8 +59,9 @@ namespace Mix.Cms.Api.Controllers.v1
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme
             , Roles = "SuperAdmin")]
         [HttpGet, HttpPost, HttpOptions]
-        [Route("details/{viewType}/{id}")]
-        public async Task<JObject> GetDetails(string viewType, string id)
+        [Route("details/{id}/{viewType}")]
+        [Route("details/{viewType}")]
+        public async Task<JObject> GetDetails(string id, string viewType)
         {
             switch (viewType)
             {
