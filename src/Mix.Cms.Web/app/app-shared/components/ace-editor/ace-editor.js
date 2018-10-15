@@ -39,7 +39,7 @@ modules.component('aceEditor', {
             };
             $scope.$on('updateContentCodeEditors', function () { 
                 setTimeout(()=>{
-                    ctrl.editor.setValue(ctrl.content);
+                    ctrl.editor.setValue(ctrl.content || '');
                 },100);
             });
         }],
