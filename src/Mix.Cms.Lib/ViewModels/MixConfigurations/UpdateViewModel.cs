@@ -75,6 +75,7 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
         public override MixConfiguration ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Value = Property.Value;
+            DataType = Property.DataType;
             if (CreatedDateTime == default(DateTime))
             {
                 CreatedDateTime = DateTime.UtcNow;

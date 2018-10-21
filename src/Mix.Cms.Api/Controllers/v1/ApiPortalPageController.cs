@@ -137,7 +137,7 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 
                 default:
-                    var portalResult = await base.GetListAsync<UpdateViewModel>(key, request, predicate);
+                    var portalResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);
                     return Ok(JObject.FromObject(portalResult));
             }
         }
@@ -149,6 +149,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (models != null)
             {
+                RemoveCache();
                 return await ReadViewModel.UpdateInfosAsync(models);
             }
             else
@@ -160,15 +161,16 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST api/PortalPage
         [HttpPost, HttpOptions]
         [Route("update-child-infos")]
-        public async Task<RepositoryResponse<List<Lib.ViewModels.MixPortalPages.ReadViewModel>>> UpdateNavInfos([FromBody]List<ReadViewModel> models)
+        public async Task<RepositoryResponse<List<Lib.ViewModels.MixPortalPagePortalPages.ReadViewModel>>> UpdateNavInfos([FromBody]List<Lib.ViewModels.MixPortalPagePortalPages.ReadViewModel> models)
         {
             if (models != null)
             {
-                return await ReadViewModel.UpdateInfosAsync(models);
+                RemoveCache();
+                return await Lib.ViewModels.MixPortalPagePortalPages.ReadViewModel.UpdateInfosAsync(models);
             }
             else
             {
-                return new RepositoryResponse<List<ReadViewModel>>();
+                return new RepositoryResponse<List<Lib.ViewModels.MixPortalPagePortalPages.ReadViewModel>>();
             }
         }
 

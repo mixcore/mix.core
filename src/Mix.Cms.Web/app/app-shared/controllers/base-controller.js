@@ -26,9 +26,9 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
             $scope.$apply();
         }
     };
-    $scope.getList = async function (dataIndex) {
-        if (dataIndex !== undefined) {
-            $scope.request.dataIndex = dataIndex;
+    $scope.getList = async function (pageIndex) {
+        if (pageIndex !== undefined) {
+            $scope.request.pageIndex = pageIndex;
         }
         if ($scope.request.fromDate !== null) {
             var d = new Date($scope.request.fromDate);

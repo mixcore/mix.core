@@ -119,8 +119,7 @@ app.run(['$rootScope', '$location', 'CommonService', 'AuthService', 'TranslatorS
                         maxLines: Infinity
                     });
                     editor.getSession().on('change', function (e) {
-                        // e.type, etc
-                        console.log(editor.getValue());
+                        // e.type, etc                        
                         $(container).parent().find('.code-content').val(editor.getValue());
                     });
                 });

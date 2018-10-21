@@ -2,12 +2,6 @@
     <div ng-switch-default>
         <span ng-bind="$ctrl.value"></span>
     </div>
-    <div ng-switch-when="1">
-        <span ng-bind="$ctrl.value"></span>
-    </div>
-    <div ng-switch-when="2">        
-        <preview-image img-height="25" img-src="$ctrl.value"></preview-image>
-    </div>
     <div ng-switch-when="3">
         <i class="{{$ctrl.value}}"></i>
     </div>
@@ -25,5 +19,8 @@
     </div>
     <div ng-switch-when="8">
         <p ng-bind-html="$ctrl.value"></p>
+    </div>
+    <div ng-switch-when="16">
+        <preview-image img-height="25" img-src="$ctrl.value"></preview-image>
     </div>
 </div>

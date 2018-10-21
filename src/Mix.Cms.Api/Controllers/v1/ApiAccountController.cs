@@ -130,6 +130,8 @@ namespace Mix.Cms.Api.Controllers.v1
                 if (oldToken.ExpiresUtc > DateTime.UtcNow)
                 {
                     var user = await _userManager.FindByEmailAsync(oldToken.Email);
+                    await _signInManager.SignInAsync(user, true).ConfigureAwait(false);
+
                     var token = await GenerateAccessTokenAsync(user, true);
                     if (token != null)
                     {
