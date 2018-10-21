@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('MixClient', ['ngRoute', 'LocalStorageModule', 'components', 'angularjs-crypto']);
+var app = angular.module('MixClient', ['ngRoute', 'LocalStorageModule', 'components']);
 var serviceBase = '';
 
 app.directive('ngEnter', function () {
