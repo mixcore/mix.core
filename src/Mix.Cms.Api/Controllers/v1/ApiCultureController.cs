@@ -24,7 +24,7 @@ namespace Mix.Cms.Api.Controllers.v1
     [Route("api/v1/culture")]
     [Route("api/v1/{culture}/culture")]
     public class ApiCultureController :
-        BaseGenericApiControoler<MixCmsContext, MixCulture>
+        BaseGenericApiController<MixCmsContext, MixCulture>
     {
         public ApiCultureController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext) : base(memoryCache, hubContext)
         {

@@ -38,7 +38,6 @@ app.controller('FileController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
                 $scope.activedFile = response.data;                
                 $rootScope.isBusy = false;
                 $scope.$apply();
-                $rootScope.initEditor();
             }
             else {
                 $rootScope.showErrors(response.errors);
@@ -91,8 +90,7 @@ app.controller('FileController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
             }
         };
 
-        $scope.saveFile = async function (file) {
-            file.content = $('.code-content').val();
+        $scope.saveFile = async function (file) {            
             $rootScope.isBusy = true;
             var resp = await fileServices.saveFile(file);
             if (resp && resp.isSucceed) {

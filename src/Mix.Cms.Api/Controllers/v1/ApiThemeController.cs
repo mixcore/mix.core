@@ -25,7 +25,7 @@ namespace Mix.Cms.Api.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/{culture}/theme")]
     public class ApiThemeController :
-        BaseGenericApiControoler<MixCmsContext, MixTheme>
+        BaseGenericApiController<MixCmsContext, MixTheme>
     {
         public ApiThemeController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext) : base(memoryCache, hubContext)
         {

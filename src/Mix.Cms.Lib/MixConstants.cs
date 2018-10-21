@@ -26,6 +26,8 @@ namespace Mix.Cms.Lib
         public const string CONST_DEFAULT_EXTENSIONS_FILE_PATH = "\\Contents\\Extensions\\";
         public const string CONST_DEFAULT_EXTENSION_FILE_NAME = "extensions.json";
 
+        public static List<string> cachedKeys = new List<string>();
+
         public static class ConfigurationKeyword
         {
             public const string ConnectionString = "ConnectionString";
