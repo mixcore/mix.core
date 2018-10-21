@@ -364,8 +364,8 @@ namespace Mix.Cms.Api.Controllers.v1
         private async Task<AccessTokenViewModel> GenerateAccessTokenAsync(ApplicationUser user, bool isRemember)
         {
             var dtIssued = DateTime.UtcNow;
-            var dtExpired = dtIssued.AddDays(MixService.GetAuthConfig<int>("CookieExpiration"));
-            var dtRefreshTokenExpired = dtIssued.AddDays(MixService.GetAuthConfig<int>("RefreshTokenExpiration"));
+            var dtExpired = dtIssued.AddMinutes(MixService.GetAuthConfig<int>("CookieExpiration"));
+            var dtRefreshTokenExpired = dtIssued.AddMinutes(MixService.GetAuthConfig<int>("RefreshTokenExpiration"));
             string refreshTokenId = string.Empty;
             string refreshToken = string.Empty;
             if (isRemember)
