@@ -22,7 +22,7 @@ namespace Mix.Cms.Api.Controllers.v1
 {
     [Route("api/v1/{culture}/media")]
     public class ApiMediaController :
-      BaseGenericApiControoler<MixCmsContext, MixMedia>
+      BaseGenericApiController<MixCmsContext, MixMedia>
     {
         public ApiMediaController(IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
         {

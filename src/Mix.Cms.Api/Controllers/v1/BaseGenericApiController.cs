@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Hub;
+using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
@@ -16,13 +17,11 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
-    public class BaseGenericApiControoler<TDbContext, TModel> : Controller
+    public class BaseGenericApiController<TDbContext, TModel> : Controller
         where TDbContext : DbContext
         where TModel : class
     {
         protected readonly IHubContext<PortalHub> _hubContext;
-
-        private static List<string> cachedKeys = new List<string>();
 
         protected IMemoryCache _memoryCache;
 
@@ -42,7 +41,7 @@ namespace Mix.Cms.Api.Controllers.v1
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseApiController"/> class.
         /// </summary>
-        public BaseGenericApiControoler(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext)
+        public BaseGenericApiController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext)
         {
             _hubContext = hubContext;
             _memoryCache = memoryCache;
@@ -87,9 +86,9 @@ namespace Mix.Cms.Api.Controllers.v1
                     };
                     
                 }
-                if (!cachedKeys.Contains(cacheKey))
+                if (!MixConstants.cachedKeys.Contains(cacheKey))
                 {
-                    cachedKeys.Add(cacheKey);
+                    MixConstants.cachedKeys.Add(cacheKey);
                 }
                 AlertAsync("Add Cache", 200, cacheKey);
             }
@@ -128,9 +127,9 @@ namespace Mix.Cms.Api.Controllers.v1
                 _memoryCache.Set(cacheKey, data);
 
                 }
-                if (!cachedKeys.Contains(cacheKey))
+                if (!MixConstants.cachedKeys.Contains(cacheKey))
                 {
-                    cachedKeys.Add(cacheKey);
+                    MixConstants.cachedKeys.Add(cacheKey);
                 }
                 AlertAsync("Add Cache", 200, cacheKey);
             }
@@ -175,11 +174,11 @@ namespace Mix.Cms.Api.Controllers.v1
 
         protected void RemoveCache()
         {
-            foreach (var item in cachedKeys)
+            foreach (var item in MixConstants.cachedKeys)
             {
                 _memoryCache.Remove(item);
-            }            
-            cachedKeys = new List<string>();
+            }
+            MixConstants.cachedKeys = new List<string>();
             AlertAsync("Empty Cache", 200);
         }
         protected void AlertAsync(string action, int status, string message = null)

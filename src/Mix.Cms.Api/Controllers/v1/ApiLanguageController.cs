@@ -23,7 +23,7 @@ namespace Mix.Cms.Api.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/{culture}/language")]
     public class ApiLanguageController :
-         BaseGenericApiControoler<MixCmsContext, MixLanguage>
+         BaseGenericApiController<MixCmsContext, MixLanguage>
     {
         public ApiLanguageController(IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
         {

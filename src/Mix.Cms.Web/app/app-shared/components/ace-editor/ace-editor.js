@@ -17,11 +17,25 @@ modules.component('aceEditor', {
                 $.each($('#code-editor-' + ctrl.id), function (i, e) {
                     var container = $(this);
                     var editor = ace.edit(e);
-                    if (container.hasClass('json')) {
-                        editor.session.setMode("ace/mode/json");
-                    }
-                    else {
-                        editor.session.setMode("ace/mode/razor");
+                    switch (ctrl.ext) {
+                        case '.json':
+                            editor.session.setMode("ace/mode/json");
+                            break;
+                        case '.js':
+                            editor.session.setMode("ace/mode/javascript");
+                            break;
+                        case '.css':
+                            editor.session.setMode("ace/mode/css");
+                            break;
+                        case '.cshtml':
+                            editor.session.setMode("ace/mode/razor");
+                            break;
+                        case '.cs':
+                            editor.session.setMode("ace/mode/csharp");
+                            break;
+                        default:
+                            editor.session.setMode("ace/mode/razor");
+                            break;
                     }
                     editor.setTheme("ace/theme/chrome");
                     //editor.setReadOnly(true);
@@ -37,13 +51,14 @@ modules.component('aceEditor', {
                     ctrl.editor = editor;
                 });
             };
-            $scope.$on('updateContentCodeEditors', function () { 
-                setTimeout(()=>{
+            $scope.$on('updateContentCodeEditors', function () {
+                setTimeout(() => {
                     ctrl.editor.setValue(ctrl.content || '');
-                },100);
+                }, 100);
             });
         }],
     bindings: {
-        content: '='
+        content: '=',
+        ext: '='
     }
 });

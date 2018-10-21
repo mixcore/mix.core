@@ -25,7 +25,7 @@ namespace Mix.Cms.Api.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/{culture}/order")]
     public class ApiOrderController :
-        BaseGenericApiControoler<MixCmsContext, MixOrder>
+        BaseGenericApiController<MixCmsContext, MixOrder>
     {
         public ApiOrderController(IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
         {

@@ -25,7 +25,7 @@ namespace Mix.Cms.Api.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/{culture}/template")]
     public class ApiTemplateController :
-            BaseGenericApiControoler<MixCmsContext, MixTemplate>
+            BaseGenericApiController<MixCmsContext, MixTemplate>
     {
         public ApiTemplateController(IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
         {
