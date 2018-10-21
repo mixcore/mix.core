@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <Folder Include="Interfaces\" />
+    <Folder Include="ViewModels\MixRolePortalPages\" />
     <Folder Include="ViewModels\Shared\" />
   </ItemGroup>
 

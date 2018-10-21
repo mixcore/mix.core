@@ -7,10 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Mix.Cms.Lib.ViewModels.MixRolePortalPages
+namespace Mix.Cms.Lib.ViewModels.MixPortalPages
 {
-    public class UpdateViewModel
-       : ViewModelBase<MixCmsContext, MixPortalPage, UpdateViewModel>
+    public class UpdateRolePermissionViewModel
+       : ViewModelBase<MixCmsContext, MixPortalPage, UpdateRolePermissionViewModel>
     {
         #region Properties
 
@@ -62,11 +62,11 @@ namespace Mix.Cms.Lib.ViewModels.MixRolePortalPages
 
         #region Contructors
 
-        public UpdateViewModel() : base()
+        public UpdateRolePermissionViewModel() : base()
         {
         }
 
-        public UpdateViewModel(MixPortalPage model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public UpdateRolePermissionViewModel(MixPortalPage model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 

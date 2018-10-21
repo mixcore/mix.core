@@ -98,6 +98,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
             {
                 Level = 0;
             }
+
+            if (ChildNavs != null)
+            {
+                ChildNavs.Where(c => c.IsActived).ToList().ForEach(c => c.Page.Level = Level + 1);
+            }
+
             return base.ParseModel(_context, _transaction);
         }
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -146,7 +152,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
                     item.Id = parent.Id;
                     if (item.IsActived)
                     {
-                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+                        var saveResult = await item.SaveModelAsync(true, _context, _transaction);
                         result.IsSucceed = saveResult.IsSucceed;
                         if (!result.IsSucceed)
                         {
@@ -156,7 +162,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
                     }
                     else
                     {
-                        var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
+                        var saveResult = await item.RemoveModelAsync(true, _context, _transaction);
                         result.IsSucceed = saveResult.IsSucceed;
                         if (!result.IsSucceed)
                         {
@@ -174,7 +180,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
                     item.ParentId = parent.Id;
                     if (item.IsActived)
                     {
-                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+                        var saveResult = await item.SaveModelAsync(true, _context, _transaction);
                         result.IsSucceed = saveResult.IsSucceed;
                         if (!result.IsSucceed)
                         {
@@ -184,7 +190,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
                     }
                     else
                     {
-                        var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
+                        var saveResult = await item.RemoveModelAsync(true, _context, _transaction);
                         result.IsSucceed = saveResult.IsSucceed;
                         if (!result.IsSucceed)
                         {
@@ -200,10 +206,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
 
-            var positions = _context.MixPortalPagePosition.Where(p=>p.PortalPageId == Id ).ToList();
+            var positions = await _context.MixPortalPagePosition.Where(p => p.PortalPageId == Id).ToListAsync();
             positions.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var navs = _context.MixPortalPageNavigation.Where(p=>p.Id == Id || p.ParentId == Id ).ToList();
+            var navs = await _context.MixPortalPageNavigation.Where(p => p.Id == Id || p.ParentId == Id).ToListAsync();
             navs.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
             return result;

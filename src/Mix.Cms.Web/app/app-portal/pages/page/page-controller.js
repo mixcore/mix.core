@@ -7,10 +7,9 @@ app.controller('PageController',
         $scope.loadPageDatas = async function () {
             $rootScope.isBusy = true;
             var id = $routeParams.id;
-            var response = await pageServices.getPage(id, 'portal');
+            var response = await service.getSingle(id, 'portal');
             if (response.isSucceed) {
                 $scope.activedData = response.data;
-                $rootScope.initEditor();
                 $rootScope.isBusy = false;
                 $scope.$apply();
             }
@@ -23,7 +22,7 @@ app.controller('PageController',
 
         $scope.updateInfos = async function (items) {
             $rootScope.isBusy = true;
-            var resp = await pageServices.updateInfos(items);
+            var resp = await service.updateInfos(items);
             if (resp && resp.isSucceed) {
                 $scope.activedData = resp.data;
                 $rootScope.showMessage('success', 'success');
