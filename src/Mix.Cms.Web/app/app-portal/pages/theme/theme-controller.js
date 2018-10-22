@@ -4,7 +4,7 @@ app.controller('ThemeController', ['$scope', '$rootScope', 'ngAppSettings', '$ro
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);  
         $scope.syncTemplates = async function (id) {
             $rootScope.isBusy = true;
-            var response = await ThemeService.syncTemplates(id);
+            var response = await service.syncTemplates(id);
             if (response.isSucceed) {
                 $scope.activedTheme = response.data;
                 $rootScope.isBusy = false;

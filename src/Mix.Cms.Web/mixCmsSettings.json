@@ -5,8 +5,9 @@
     "DefaultConnection": null
   },
   "Authentication": {
+    "ClockSkew": 1,
     "CookieExpiration": 1,
-    "RefreshTokenExpiration": 1,
+    "RefreshTokenExpiration": 20,
     "TokenType": "Bearer",
     "Audience": "mix-core",
     "SecretKey": "mixcore-secret-key",
@@ -65,7 +66,7 @@
       "FacebookAppId": "",
       "Favicon": "",
       "LanguageVersion": "1",
-      "Logo": "",
+      "Logo": "https://localhost:44319/css/portal/img/mixcore-logo-blue.png",
       "SettingVersion": "1",
       "SiteName": "Site Name",
       "Theme": "Default",
@@ -79,7 +80,7 @@
       "FacebookAppId": "",
       "Favicon": "",
       "LanguageVersion": "1",
-      "Logo": "",
+      "Logo": "https://localhost:44319/css/portal/img/mixcore-logo-blue.png",
       "SettingVersion": "1",
       "SiteName": "Site Name",
       "Theme": "Default",

@@ -5,7 +5,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -13,7 +12,6 @@ using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Web.Mvc.App_Start.Validattors;
-using Mix.Identity.Data;
 using Mix.Identity.Models;
 using System;
 using System.Text;
@@ -65,6 +63,7 @@ namespace Mix.Cms.Web
                         options.TokenValidationParameters =
                              new TokenValidationParameters
                              {
+                                 ClockSkew = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>("ClockSkew")),
                                  ValidateIssuer = false,
                                  ValidateAudience = false,
                                  ValidateLifetime = true,
@@ -90,24 +89,14 @@ namespace Mix.Cms.Web
         }
 
         protected void ConfigCookieAuth(IServiceCollection services, IConfiguration Configuration)
-        {
-            services.ConfigureApplicationCookie(options =>
-            {
-                // Cookie settings
-                options.Cookie.HttpOnly = true;
-                options.Cookie.Expiration = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>("CookieExpiration"));
-                options.LoginPath = "/" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "/Portal/Auth/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
-                options.LogoutPath = "/" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "/Portal/Auth/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
-                options.AccessDeniedPath = "/"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
-                options.SlidingExpiration = true;
-            });
-
+        {           
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(
                 options =>
                 {
                     // Cookie settings
                     options.Cookie.HttpOnly = true;
+                    options.Cookie.MaxAge = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>("CookieExpiration"));
                     options.Cookie.Expiration = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>("CookieExpiration"));
                     options.LoginPath = "/" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "/Portal/Auth/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
                     options.LogoutPath = "/" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "/Portal/Auth/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
