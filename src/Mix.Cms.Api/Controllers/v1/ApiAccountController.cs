@@ -29,7 +29,7 @@ using static Mix.Cms.Lib.MixEnums;
 namespace Mix.Cms.Api.Controllers.v1
 {
     //[Authorize(Roles = "SuperAdmin,Admin")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/v1/account")]
     public class ApiAccountController : Controller
     {
@@ -79,7 +79,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(
-                    model.UserName, model.Password, isPersistent: model.RememberMe, lockoutOnFailure: false).ConfigureAwait(false);
+                    model.UserName, model.Password, isPersistent: model.RememberMe, lockoutOnFailure: true).ConfigureAwait(false);
                 if (result.Succeeded)
                 {
                     var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
@@ -117,9 +117,9 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("refresh-token/{refreshTokenId}")]
         [HttpGet, HttpOptions]
-        [AllowAnonymous]
         public async Task<RepositoryResponse<AccessTokenViewModel>> RefreshToken(string refreshTokenId)
         {
             RepositoryResponse<AccessTokenViewModel> result = new RepositoryResponse<AccessTokenViewModel>();
@@ -136,10 +136,25 @@ namespace Mix.Cms.Api.Controllers.v1
                     if (token != null)
                     {
                         await oldToken.RemoveModelAsync();
+                        var info = await UserInfoViewModel.Repository.GetSingleModelAsync(u => u.Username == user.UserName);
+                        if (!info.IsSucceed)
+                        {
+                            info.Data = new UserInfoViewModel();
+                        }
+                        token.UserData = info.Data;
+
+                        result.IsSucceed = true;
+                        result.Status = 1;
+                        result.Data = token;
+                        _logger.LogInformation("User refresh token.");
+                        return result;
                     }
-                    result.IsSucceed = true;
-                    result.Data = token;
-                    return result;
+                    else
+                    {
+                        result.IsSucceed = false;
+                        result.Data = token;
+                        return result;
+                    }
                 }
                 else
                 {
@@ -266,6 +281,7 @@ namespace Mix.Cms.Api.Controllers.v1
             return result;
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet, HttpOptions]
         [Route("details/{viewType}/{id}")]
         [Route("details/{viewType}")]
@@ -314,6 +330,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
 
         // POST api/template
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost, HttpOptions]
         [Route("save")]
         public async Task<RepositoryResponse<UserInfoViewModel>> Save(
@@ -328,6 +345,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // POST api/account/list
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost, HttpOptions]
         [Route("list")]
         public async Task<RepositoryResponse<PaginationModel<UserInfoViewModel>>> GetList(RequestPaging request)

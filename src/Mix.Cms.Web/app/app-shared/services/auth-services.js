@@ -172,17 +172,22 @@ app.factory('AuthService',
 
             var _refreshToken = function (id) {
                 var deferred = $q.defer();
-                var url = appSettings.serviceBase + '/' + appSettings.apiVersion + '/account/refresh-token/' + id;
+                var url = appSettings.serviceBase + '/api/' + appSettings.apiVersion + '/account/refresh-token/' + id;
                 $http.get(url).then(function (response) {
                     var data = response.data.data;
 
                     if (data) {
-                        var authData = localStorageService.get('authorizationData');
+                        var authData = {
+                            userRoles: data.userData.userRoles,
+                            token: data.access_token, userName: data.userData.firstName, roleNames: data.userData.roles,
+                            avatar: data.userData.avatar, refresh_token: data.refresh_token, userId: data.userData.id
+                        };
+                        var encrypted = $rootScope.encrypt(JSON.stringify(authData));
+                        localStorageService.set('authorizationData', encrypted);
                         authData.token = data.access_token;
                         authData.refresh_token = data.refresh_token;
                         _authentication.token = data.access_token;
-                        _authentication.refresh_token = data.refresh_token;
-                        localStorageService.set('authorizationData', authData);
+                        _authentication.refresh_token = data.refresh_token;                        
                     }
 
                     deferred.resolve(response);
