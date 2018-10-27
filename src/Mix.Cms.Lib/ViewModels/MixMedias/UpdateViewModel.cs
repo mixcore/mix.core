@@ -2,12 +2,16 @@
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels.MixSystem;
 using Mix.Common.Helper;
+using Mix.Domain.Core.Models;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixMedias
@@ -106,7 +110,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
                 Id = UpdateViewModel.Repository.Max(c => c.Id).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
                 IsClone = true;
-                //Cultures = Cultures ?? CommonRepository.Instance.LoadCultures(Specificulture, _context, _transaction);
+                Cultures = Cultures ?? LoadCultures(Specificulture, _context, _transaction);
                 Cultures.ForEach(c => c.IsSupported = true);
             }
 
@@ -142,7 +146,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            this.Cultures.ForEach(c => c.IsSupported = true);
+            Cultures = LoadCultures(Specificulture, _context, _transaction);
             MediaFile = new FileViewModel();
         }
 
@@ -162,7 +166,33 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         }
 
         #endregion Overrides
+        #region Expand
+        List<SupportedCulture> LoadCultures(string initCulture = null, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var getCultures = SystemCultureViewModel.Repository.GetModelList(_context, _transaction);
+            var result = new List<SupportedCulture>();
+            if (getCultures.IsSucceed)
+            {
+                foreach (var culture in getCultures.Data)
+                {
+                    result.Add(
+                        new SupportedCulture()
+                        {
+                            Icon = culture.Icon,
+                            Specificulture = culture.Specificulture,
+                            Alias = culture.Alias,
+                            FullName = culture.FullName,
+                            Description = culture.FullName,
+                            Id = culture.Id,
+                            Lcid = culture.Lcid,
+                            IsSupported = culture.Specificulture == initCulture || _context.MixMedia.Any(p => p.Id == Id && p.Specificulture == culture.Specificulture)
+                        });
 
+                }
+            }
+            return result;
+        }
+        #endregion
 
     }
 }
