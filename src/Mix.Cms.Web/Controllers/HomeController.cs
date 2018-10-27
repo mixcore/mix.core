@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib;
@@ -19,12 +20,20 @@ namespace Mix.Cms.Web.Controllers
     public class HomeController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IApiDescriptionGroupCollectionProvider _apiExplorer;
         public HomeController(IHostingEnvironment env,
             IMemoryCache memoryCache,
-             UserManager<ApplicationUser> userManager
+             UserManager<ApplicationUser> userManager,
+             IApiDescriptionGroupCollectionProvider apiExplorer
             ) : base(env, memoryCache)
         {
             this._userManager = userManager;
+            _apiExplorer = apiExplorer;
+        }
+        [Route("doc")]
+        public IActionResult Documentation()
+        {
+            return View(_apiExplorer);
         }
 
         [Route("")]

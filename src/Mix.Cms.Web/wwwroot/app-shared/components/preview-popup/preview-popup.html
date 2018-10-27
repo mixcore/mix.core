@@ -7,6 +7,7 @@
                     <i class="mi mi-PreviewLink"></i>
                     <span ng-bind="$ctrl.previewObject.title"></span> -
                     <a class="text-primary" href="{{$ctrl.previewObject.data.detailsUrl ||$ctrl.previewObject.data}}" target="_blank"><i class="mi mi-NewWindow"></i> New Window</a>
+                    - <a class="text-primary btn" ng-if="$ctrl.previewObject.data.editUrl" ng-click="$ctrl.goToLink($ctrl.previewObject.data.editUrl)"><i class="mi mi-Pencil"></i> Edit</a>
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>

@@ -26,6 +26,7 @@ namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
     [Route("api/v1/{culture}/page")]
+    [ApiExplorerSettings(IgnoreApi = false, GroupName = nameof(ApiPageController))]
     public class ApiPageController :
         BaseGenericApiController<MixCmsContext, MixPage>
     {

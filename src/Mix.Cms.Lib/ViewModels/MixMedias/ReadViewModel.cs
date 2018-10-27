@@ -142,7 +142,6 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Cultures = CommonRepository.Instance.LoadCultures(Specificulture, _context, _transaction);
             this.Cultures.ForEach(c => c.IsSupported = true);
             MediaFile = new FileViewModel();
         }
@@ -163,5 +162,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         }
 
         #endregion Overrides
+
+
     }
 }
