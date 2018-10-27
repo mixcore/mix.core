@@ -55,6 +55,27 @@
       "portal_themes": "Themes",
       "portal_users": "Users",
       "read_more": "Read more"
+    },
+    "vi-vn": {
+      "fe_site_name": "Site name",
+      "language": "Languages",
+      "portal_articles": "Articles",
+      "portal_create": "Create",
+      "portal_cultures": "Cultures",
+      "portal_dashboard": "Dashboard",
+      "portal_file": "File",
+      "portal_import": "Import",
+      "portal_list": "List",
+      "portal_media": "Media",
+      "portal_modules": "Modules",
+      "portal_orders": "Orders",
+      "portal_pages": "Pages",
+      "portal_permissions": "Permissions",
+      "portal_products": "Products",
+      "portal_settings": "Settings",
+      "portal_themes": "Themes",
+      "portal_users": "Users",
+      "read_more": "Read more"
     }
   },
   "LocalSettings": {
@@ -73,6 +94,20 @@
       "ThemeId": "1"
     },
     "es-ar": {
+      "ContactAddress": "",
+      "ContactEmail": "Site Name",
+      "ContactPhone": "",
+      "Facebook": "",
+      "FacebookAppId": "",
+      "Favicon": "",
+      "LanguageVersion": "1",
+      "Logo": "https://localhost:44319/css/portal/img/mixcore-logo-blue.png",
+      "SettingVersion": "1",
+      "SiteName": "Site Name",
+      "Theme": "Default",
+      "ThemeId": "1"
+    },
+    "vi-vn": {
       "ContactAddress": "",
       "ContactEmail": "Site Name",
       "ContactPhone": "",

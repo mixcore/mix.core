@@ -1,0 +1,254 @@
+@model Mix.Cms.Lib.ViewModels.MixPages.ReadMvcViewModel
+@{
+    var listTags = Model.Articles.Items.Where(a => !string.IsNullOrEmpty(a.Article.Tags)).Select(a => a.Article.Tags).ToList();
+    string tags = string.Empty;
+    if (listTags.Count > 0)
+    {
+        for (int i = 0; i < listTags.Count; i++)
+        {
+            tags += listTags[i] + ",";
+        }
+    }
+    string culture = ViewBag.culture;
+}
+
+<div class="blog-posts">
+    <div class="page-header page-header-small">
+        <div class="page-header-image" data-parallax="true" style="background-image: url('@Model.Image') ;">
+        </div>
+        <div class="content-center">
+            <div class="row">
+                <div class="col-md-8 ml-auto mr-auto text-center">
+                    <h2 class="title">@Model.Title</h2>
+                    <a href="#button" class="btn btn-primary btn-round  btn-icon">
+                        <em class="fab fa-twitter"></em>
+                    </a>
+                    <a href="#button" class="btn btn-primary btn-round  btn-icon">
+                        <em class="fab fa-instagram"></em>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="projects-4">
+        <div class="container-fluid">
+            
+            @for(int i = 0; i< Model.Articles.TotalItems; i+=2)
+            {
+                var article = Model.Articles.Items[i];
+                var index = (i/2)%2;
+                if(i < Model.Articles.TotalItems - 1)
+                {
+                    var nextArticle = Model.Articles.Items[i+1];
+                    <div class="row">
+                        @Html.PartialAsync("../Pages/_List_Post_Item.cshtml"
+                        , article
+                        , new ViewDataDictionary(this.ViewData)
+                        {
+                            {
+                                "Index", i
+                            }
+                        })
+                        @Html.PartialAsync("../Pages/_List_Post_Item.cshtml"
+                        , nextArticle
+                        , new ViewDataDictionary(this.ViewData)
+                        {
+                            {
+                                "Index", i+1
+                            }
+                        })
+                    </div>
+                }
+                else{
+                    <div class="row">
+                        @Html.PartialAsync("../Pages/_List_Post_Item.cshtml"
+                        , article
+                        , new ViewDataDictionary(this.ViewData)
+                        {
+                            {
+                                "Index", i
+                            }
+                        })
+                    </div>
+                }
+                
+                
+            }
+            </div>
+        </div>
+    </div>
+    <div class="main">
+        <div class="container">
+            <div class="section">
+                <h3 class="title text-center">You may also be interested in</h3>
+                <br />
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card card-plain card-blog">
+                            <div class="card-image">
+                                <a href="#pablo">
+                                    <img class="img rounded img-raised" src="../assets/img/bg5.jpg" />
+                                </a>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="category text-info">Enterprise</h6>
+                                <h4 class="card-title">
+                                    <a href="#pablo">Autodesk looks to future of 3D printing with Project Escher</a>
+                                </h4>
+                                <p class="card-description">
+                                    Like so many organizations these days, Autodesk is a company in transition. It was until recently a traditional boxed software company selling licenses.
+                                    <a href="#pablo"> Read More </a>
+                                    <div class="author">
+                                        <img src="../assets/img/olivia.jpg" alt="..." class="avatar img-raised">
+                                        <span>Anna Spark</span>
+                                    </div>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card card-plain card-blog">
+                            <div class="card-image">
+                                <a href="#pablo">
+                                    <img class="img rounded img-raised" src="../assets/img/bg27.jpg" />
+                                </a>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="category text-success">
+                                    Startups
+                                </h6>
+                                <h4 class="card-title">
+                                    <a href="#pablo">Lyft launching cross-platform service this week</a>
+                                </h4>
+                                <p class="card-description">
+                                    Like so many organizations these days, Autodesk is a company in transition. It was until recently a traditional boxed software company selling licenses.
+                                    <a href="#pablo"> Read More </a>
+                                    <div class="author">
+                                        <img src="../assets/img/michael.jpg" alt="..." class="avatar img-raised">
+                                        <span>John Black</span>
+                                    </div>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card card-plain card-blog">
+                            <div class="card-image">
+                                <a href="#pablo">
+                                    <img class="img rounded img-raised" src="../assets/img/bg21.jpg" />
+                                </a>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="category text-danger">
+                                    <em class="now-ui-icons media-2_sound-wave"></em> Enterprise
+                                </h6>
+                                <h4 class="card-title">
+                                    <a href="#pablo">6 insights into the French Fashion landscape</a>
+                                </h4>
+                                <p class="card-description">
+                                    Like so many organizations these days, Autodesk is a company in transition. It was until recently a traditional boxed software company selling licenses.
+                                    <a href="#pablo"> Read More </a>
+                                    <div class="author">
+                                        <img src="../assets/img/james.jpg" alt="..." class="avatar img-raised">
+                                        <span>James Newman</span>
+                                    </div>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section pt-0 pb-0">
+            <div class="team-3 section-image" data-parallax="true" style="background-image: url('../assets/img/bg26.jpg')">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8 ml-auto mr-auto text-center">
+                            <h2 class="title">Our little team.</h2>
+                            <h4 class="description">
+                                This is the paragraph where you can write more details about your product. Keep you user engaged by providing meaningful information.
+                            </h4>
+                        </div>
+                        <div class="col-xl-6 col-lg-7 ml-auto mr-auto">
+                            <div class="card card-profile">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="card-image">
+                                            <a href="#pablo">
+                                                <img class="img" src="../assets/img/olivia.jpg">
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="card-body">
+                                            <h3 class="card-title">Ariana Hazel</h3>
+                                            <h6 class="category text-primary"> Fashion Designer</h6>
+                                            <p class="card-description">
+                                                Happiness resides not in possessions, and not in gold, happiness dwells in the soul...
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-7 ml-auto mr-auto">
+                            <div class="card card-profile">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="card-image">
+                                            <a href="#pablo">
+                                                <img class="img" src="../assets/img/james.jpg">
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="card-body">
+                                            <h3 class="card-title">Ryan Samuel</h3>
+                                            <h6 class="category text-primary">Financial Examiner</h6>
+                                            <p class="card-description">
+                                                Today you are you! That is truer than true! There is no one alive who is you-er than you!..
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="subscribe-line subscribe-line-white">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 class="title">Get Tips &amp; Tricks every Week!</h4>
+                        <p class="description">
+                            Join our newsletter and get news in your inbox every week! We hate spam too, so no worries about this.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card card-plain card-form-horizontal">
+                            <div class="card-content">
+                                <form method="" action="">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <em class="now-ui-icons ui-1_email-85"></em>
+                                                </span>
+                                                <input type="email" class="form-control" placeholder="Your Email...">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <button type="button" class="btn btn-primary btn-round btn-block">Subscribe</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

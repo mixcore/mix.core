@@ -15,6 +15,8 @@ using Mix.Cms.Lib.Services;
 using Swashbuckle.AspNetCore.Swagger;
 using Mix.Identity.Services;
 using Mix.Cms.Hub;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Mix.Cms.Web
 {
@@ -37,7 +39,9 @@ namespace Mix.Cms.Web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
+            services.TryAddSingleton<IApiDescriptionGroupCollectionProvider, ApiDescriptionGroupCollectionProvider>();
+            services.TryAddEnumerable(
+                ServiceDescriptor.Transient<IApiDescriptionProvider, DefaultApiDescriptionProvider>());
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -54,7 +58,7 @@ namespace Mix.Cms.Web
             //When View Page Source That changes only the HTML encoder, leaving the JavaScript and URL encoders with their (ASCII) defaults.
             services.Configure<WebEncoderOptions>(options => options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All));
             services.Configure<FormOptions>(options => options.MultipartBodyLengthLimit = 100000000);
-           
+
             // add application services.
             services.AddTransient<IEmailSender, AuthEmailMessageSender>();
             services.AddTransient<ISmsSender, AuthSmsMessageSender>();

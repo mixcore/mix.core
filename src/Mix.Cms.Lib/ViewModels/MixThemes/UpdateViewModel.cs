@@ -72,7 +72,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             }
         }
 
-        public List<MixTemplates.InitViewModel> Templates { get; set; }
+        public List<MixTemplates.UpdateViewModel> Templates { get; set; }
 
         #endregion Views
 
@@ -105,7 +105,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Templates = MixTemplates.InitViewModel.Repository.GetModelListBy(t => t.ThemeId == Id,
+            Templates = MixTemplates.UpdateViewModel.Repository.GetModelListBy(t => t.ThemeId == Id,
                 _context: _context, _transaction: _transaction).Data;            
         }
 

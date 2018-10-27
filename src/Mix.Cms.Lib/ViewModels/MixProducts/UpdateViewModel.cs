@@ -2,7 +2,9 @@
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels.MixSystem;
 using Mix.Common.Helper;
+using Mix.Domain.Core.Models;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -265,7 +267,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Cultures = CommonRepository.Instance.LoadCultures(Specificulture, _context, _transaction);
+            Cultures = LoadCultures(Specificulture, _context, _transaction);
 
             StrNormalPrice = MixCmsHelper.FormatPrice(NormalPrice);
             StrDealPrice = MixCmsHelper.FormatPrice(DealPrice);
@@ -508,6 +510,31 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
         #endregion Overrides
 
         #region Expands
+        List<SupportedCulture> LoadCultures(string initCulture = null, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var getCultures = SystemCultureViewModel.Repository.GetModelList(_context, _transaction);
+            var result = new List<SupportedCulture>();
+            if (getCultures.IsSucceed)
+            {
+                foreach (var culture in getCultures.Data)
+                {
+                    result.Add(
+                        new SupportedCulture()
+                        {
+                            Icon = culture.Icon,
+                            Specificulture = culture.Specificulture,
+                            Alias = culture.Alias,
+                            FullName = culture.FullName,
+                            Description = culture.FullName,
+                            Id = culture.Id,
+                            Lcid = culture.Lcid,
+                            IsSupported = culture.Specificulture == initCulture || _context.MixProduct.Any(p => p.Id == Id && p.Specificulture == culture.Specificulture)
+                        });
+
+                }
+            }
+            return result;
+        }
 
         private void GenerateSEO()
         {

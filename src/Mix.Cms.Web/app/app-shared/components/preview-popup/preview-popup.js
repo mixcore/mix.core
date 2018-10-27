@@ -1,9 +1,10 @@
 ﻿modules.component('previewPopup', {
     templateUrl: '/app-shared/components/preview-popup/preview-popup.html',
-    controller: ['$rootScope', '$scope', 'ngAppSettings', function ($rootScope, $scope) {
+    controller: ['$location', function ($location) {
         var ctrl = this;
-        ctrl.preview = async function () {
-            
+        ctrl.goToLink = async function (link) {
+            $('#dlg-preview-popup').modal('hide');
+            $location.path(link);
         };
     }],
     bindings: {
