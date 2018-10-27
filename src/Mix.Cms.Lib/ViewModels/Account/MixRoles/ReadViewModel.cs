@@ -96,7 +96,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
 
         #region Expands
 
-        List< MixPortalPageRoles.ReadViewModel> GetPermission()
+        List<MixPortalPageRoles.ReadViewModel> GetPermission()
         {
             using (MixCmsContext context = new MixCmsContext())
             {
@@ -112,6 +112,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
                       }, context, transaction));
 
                 var result = query.ToList();
+                
                 result.ForEach(nav =>
                 {
                     nav.IsActived = context.MixPortalPageRole.Any(

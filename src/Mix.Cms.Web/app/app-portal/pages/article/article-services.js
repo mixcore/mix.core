@@ -4,5 +4,5 @@ app.factory('ArticleService', ['BaseService',
         baseService.init('article');
         var serviceFactory = baseService;
         // Define more service methods here
-        return serviceFactory;
-    }]);
+    return serviceFactory;
+}]);
