@@ -1,6 +1,6 @@
-<div ng-if="$ctrl.template">
+<div ng-if="$ctrl.template" ng-init="$ctrl.init()">
     <div class="form-group">
-        <h6>Layout</h6>
+        <h6>Layout {{$ctrl.folderType}}</h6>
         <div class="input-group mb-3">
             <select class="btn btn-outline-secondary custom-select col-sm-4" 
             ng-options="item as item.fileName for item in $ctrl.templates track by item.id" 
