@@ -1,0 +1,37 @@
+﻿@model Mix.Cms.Lib.ViewModels.MixProducts.ReadMvcViewModel
+@{
+    string culture = ViewBag.culture;
+    ViewData["Title"] = Model.Title;
+    ViewData["SeoTitle"] = Model.SeoTitle;
+    ViewData["SeoKeywords"] = Model.SeoKeywords;
+    ViewData["SeoDescription"] = Model.SeoDescription;
+}
+
+@if (!string.IsNullOrEmpty(Model.TemplatePath))
+{
+    try
+    {
+        await Html.RenderPartialAsync(Model.TemplatePath, Model);
+    }
+    catch(Exception ex)
+    {
+
+        <p class="danger text-center has-error">@ex.StackTrace</p>
+    }
+}
+else
+{
+    <section class="container">
+        <h1>@MixService.Translate("Please choose template", ViewBag.culture)</h1>
+    </section>
+}
+@section scripts{
+    @Html.Raw(Model.View?.Scripts)
+
+    <script src="~/js/angular.min.js"></script>
+    <script src="~/app/app-frontend.js"></script>
+    <script src="~/app/controllers/frontend-controller.js"></script>
+}
+@section styles{
+    @Html.Raw(Model.View?.Styles)
+}

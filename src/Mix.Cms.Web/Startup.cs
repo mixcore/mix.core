@@ -141,11 +141,10 @@ namespace Mix.Cms.Web
                     template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/portal/file");
                 routes.MapRoute(
                     name: "article",
-                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{seoName}");
+                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/article/{seoName}");
                 routes.MapRoute(
                     name: "product",
-                    template: @"{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + @"}/{seoName}");
-
+                    template: @"{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + @"}/product/{seoName}");
             });
         }
     }

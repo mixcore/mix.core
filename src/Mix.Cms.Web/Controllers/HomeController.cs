@@ -36,8 +36,6 @@ namespace Mix.Cms.Web.Controllers
             {
                 //Go to landing page
                 return await PageAsync(seoName);
-
-
             }
             else
             {
@@ -50,6 +48,20 @@ namespace Mix.Cms.Web.Controllers
                     return Redirect($"/init/step2");
                 }
             }
+        }
+
+        [Route("article/{seoName}")]
+        [Route("{culture}/article/{seoName}")]
+        public async System.Threading.Tasks.Task<IActionResult> Article(string culture, string seoName)
+        {
+            return await ArticleViewAsync(seoName);
+        }
+
+        [Route("product/{seoName}")]
+        [Route("{culture}/product/{seoName}")]
+        public async System.Threading.Tasks.Task<IActionResult> Product(string culture, string seoName)
+        {
+            return await ProductViewAsync(seoName);
         }
 
         [HttpGet]
@@ -97,8 +109,8 @@ namespace Mix.Cms.Web.Controllers
 
             var getPage = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
 
-            var cacheKey = $"Page_{_culture}_{seoName}";
-            
+            var cacheKey = $"page_{_culture}_{seoName}";
+
             var data = _memoryCache.Get<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
             if (data != null)
             {
@@ -110,9 +122,9 @@ namespace Mix.Cms.Web.Controllers
                 Expression<Func<MixPage, bool>> predicate;
                 if (string.IsNullOrEmpty(seoName))
                 {
-                   predicate = p =>
-                   p.Type == (int)MixPageType.Home
-                   && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+                    predicate = p =>
+                    p.Type == (int)MixPageType.Home
+                    && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
                 }
                 else
                 {
@@ -145,9 +157,40 @@ namespace Mix.Cms.Web.Controllers
             }
         }
 
-        IActionResult ArticleView(Expression<Func<MixArticle, bool>> predicate)
+        async System.Threading.Tasks.Task<IActionResult> ArticleViewAsync(string seoName)
         {
-            var getArticle = Lib.ViewModels.MixArticles.ReadMvcViewModel.Repository.GetSingleModel(predicate);
+
+            var getArticle = new RepositoryResponse<Lib.ViewModels.MixArticles.ReadMvcViewModel>();
+
+            var cacheKey = $"article_{_culture}_{seoName}";
+
+            var data = _memoryCache.Get<Lib.ViewModels.MixArticles.ReadMvcViewModel>(cacheKey);
+            if (data != null)
+            {
+                getArticle.IsSucceed = true;
+                getArticle.Data = data;
+            }
+            else
+            {
+                Expression<Func<MixArticle, bool>> predicate;
+                if (string.IsNullOrEmpty(seoName))
+                {
+                    predicate = p =>
+                    p.Type == (int)MixPageType.Home
+                    && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+                }
+                else
+                {
+                    predicate = p =>
+                    p.SeoName == seoName
+                    && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+                }
+
+                getArticle = await Lib.ViewModels.MixArticles.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+                _memoryCache.Set(cacheKey, getArticle.Data);
+
+            }
+
             if (getArticle.IsSucceed)
             {
                 ViewData["Title"] = getArticle.Data.SeoTitle;
@@ -162,21 +205,45 @@ namespace Mix.Cms.Web.Controllers
             }
         }
 
-        IActionResult ProductView(Expression<Func<MixProduct, bool>> predicate)
+        async System.Threading.Tasks.Task<IActionResult> ProductViewAsync(string seoName)
         {
-            var getProduct = Lib.ViewModels.MixProducts.ReadMvcViewModel.Repository.GetSingleModel(predicate);
+            var getProduct = new RepositoryResponse<Lib.ViewModels.MixProducts.ReadMvcViewModel>();
+
+            var cacheKey = $"product_{_culture}_{seoName}";
+
+            var data = _memoryCache.Get<Lib.ViewModels.MixProducts.ReadMvcViewModel>(cacheKey);
+            if (data != null)
+            {
+                getProduct.IsSucceed = true;
+                getProduct.Data = data;
+            }
+            else
+            {
+                Expression<Func<MixProduct, bool>> predicate;
+                if (string.IsNullOrEmpty(seoName))
+                {
+                    predicate = p =>
+                    p.Type == (int)MixPageType.Home
+                    && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+                }
+                else
+                {
+                    predicate = p =>
+                    p.SeoName == seoName
+                    && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+                }
+
+                getProduct = await Lib.ViewModels.MixProducts.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+                _memoryCache.Set(cacheKey, getProduct.Data);
+
+            }
+
             if (getProduct.IsSucceed)
             {
-                getProduct.Data.ProductNavs.ForEach(p =>
-                {
-                    p.RelatedProduct.DetailsUrl = GenerateDetailsUrl("Product", new { seoName = p.RelatedProduct.SeoName });
-                });
-
                 ViewData["Title"] = getProduct.Data.SeoTitle;
                 ViewData["Description"] = getProduct.Data.SeoDescription;
                 ViewData["Keywords"] = getProduct.Data.SeoKeywords;
                 ViewData["Image"] = getProduct.Data.ImageUrl;
-
                 return View(getProduct.Data);
             }
             else
