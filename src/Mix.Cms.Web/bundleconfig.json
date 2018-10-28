@@ -1,0 +1,97 @@
+[
+  {
+    "outputFileName": "wwwroot/js/framework.min.js",
+    "inputFiles": [
+      "wwwroot/js/jquery/jquery.min.js",
+      "wwwroot/js/angularjs/angular.min.js",
+      "wwwroot/js/angularjs/angular-route.min.js",
+      "wwwroot/js/angularjs/angular-animate.min.js",
+      "wwwroot/js/angularjs/angular-sanitize.min.js"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": false
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/js/bootstrap.min.js",
+    "inputFiles": [
+      "wwwroot/lib/bootstrap/js/*.min.js"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": false
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/css/bootstrap.min.css",
+    "inputFiles": [
+      "wwwroot/lib/bootstrap/css/*.min.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/shared.min.js",
+    "inputFiles": [
+      "wwwroot/lib/shared/**/*.js",
+      "wwwroot/lib/shared/**/*.*.js"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": false
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/css/shared.min.css",
+    "inputFiles": [
+      "wwwroot/css/shared/site.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/now-ui.min.js",
+    "inputFiles": [
+      "wwwroot/plugins/now-ui-kit-pro-v1.2.2/assets/js/plugins/moment.min.js",
+      "wwwroot/plugins/now-ui-kit-pro-v1.2.2/assets/js/plugins/*.*.js",
+      "wwwroot/plugins/now-ui-kit-pro-v1.2.2/assets/js/core/*.*.js",
+      "wwwroot/plugins/now-ui-kit-pro-v1.2.2/assets/js/now-ui-kit.js"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": false
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/css/now-ui.min.css",
+    "inputFiles": [
+      "wwwroot/plugins/now-ui-kit-pro-v1.2.2/assets/css/bootstrap.min.css",
+      "wwwroot/plugins/now-ui-kit-pro-v1.2.2/assets/css/now-ui-kit.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/portal.min.js",
+    "inputFiles": [
+      "wwwroot/lib/portal/**/*.js",
+      "wwwroot/lib/portal/**/*.*.js"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": false
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/css/portal.min.css",
+    "inputFiles": [
+
+      "wwwroot/lib/portal/**/*.css",
+      "wwwroot/lib/portal/**/*.*.css",
+      "wwwroot/css/portal/**/*.css",
+      "wwwroot/css/portal/**/*.*.css",
+      "wwwroot/css/portal/portal.white-sd.css",
+      "wwwroot/css/portal/main.css"
+    ]
+  }
+]
