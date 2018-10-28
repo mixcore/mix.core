@@ -93,5 +93,73 @@
       "wwwroot/css/portal/portal.white-sd.css",
       "wwwroot/css/portal/main.css"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/css/app-vendor.min.css",
+    "inputFiles": [
+
+      "app/app-shared/**/*.css",
+      "app/app-portal/**/*.css",
+      "app/app-client/**/*.css",
+      "app/app-init/**/*.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/app-portal.min.js",
+    "inputFiles": [
+      "app/app-portal/app.js",
+      "app/app-portal/app-portal-controller.js",
+      "app/app-portal/app.directive.js",
+      "app/app-portal/app.filter.js",
+      "app/app-portal/app.route.js",
+      "app/app-portal/demo.js",
+      "app/app-portal/pages/**/*.js",
+      "app/app-portal/components/**/*.js"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/js/app-init.min.js",
+    "inputFiles": [
+      "app/app-init/app.js",
+      "app/app-init/app.route.js",
+      "app/app-init/pages/**/*.js"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/js/app-shared.min.js",
+    "inputFiles": [
+      "app/app-shared/**/*.js",
+      "app/app-shared/**/*.*.js"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/js/app-client.min.js",
+    "inputFiles": [
+      "app/app-client/app.js",
+      "app/app-client/app.route.js",
+      "app/app-client/app.constant.js",
+      "app/app-client/app-client-controller.js",
+      "app/app-client/components/**/*(*.js|!(*.min.js))"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": true
+    },
+    "sourceMap": false
   }
 ]

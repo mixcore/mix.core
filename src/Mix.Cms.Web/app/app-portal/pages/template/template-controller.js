@@ -38,14 +38,14 @@ app.controller('TemplateController', ['$scope', '$rootScope', '$routeParams', 'n
             $scope.themeId = themeId || $routeParams.themeId;
             $scope.request.key = this.folderType;
             $scope.folderType = this.folderType;
-            if (pageIndex != undefined) {
+            if (pageIndex !== undefined) {
                 $scope.request.pageIndex = pageIndex;
             }
-            if ($scope.request.fromDate != null) {
+            if ($scope.request.fromDate !== null) {
                 var d = new Date($scope.request.fromDate);
                 $scope.request.fromDate = d.toISOString();
             }
-            if ($scope.request.toDate != null) {
+            if ($scope.request.toDate !== null) {
                 var d = new Date($scope.request.toDate);
                 $scope.request.toDate = d.toISOString();
             }

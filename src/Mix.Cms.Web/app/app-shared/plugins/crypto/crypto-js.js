@@ -191,7 +191,7 @@
 	        init: function (words, sigBytes) {
 	            words = this.words = words || [];
 
-	            if (sigBytes != undefined) {
+	            if (sigBytes !== undefined) {
 	                this.sigBytes = sigBytes;
 	            } else {
 	                this.sigBytes = words.length * 4;
@@ -530,7 +530,7 @@
 	         */
 	        _append: function (data) {
 	            // Convert string to WordArray, else assume WordArray already
-	            if (typeof data == 'string') {
+	            if (typeof data === 'string') {
 	                data = Utf8.parse(data);
 	            }
 
@@ -1568,7 +1568,7 @@
 
 	(function () {
 	    // Check if typed arrays are supported
-	    if (typeof ArrayBuffer != 'function') {
+	    if (typeof ArrayBuffer !== 'function') {
 	        return;
 	    }
 
@@ -1901,7 +1901,7 @@
 	            hasher = this._hasher = new hasher.init();
 
 	            // Convert string to WordArray, else assume WordArray already
-	            if (typeof key == 'string') {
+	            if (typeof key === 'string') {
 	                key = Utf8.parse(key);
 	            }
 
@@ -2530,7 +2530,7 @@
 	        init: function (words, sigBytes) {
 	            words = this.words = words || [];
 
-	            if (sigBytes != undefined) {
+	            if (sigBytes !== undefined) {
 	                this.sigBytes = sigBytes;
 	            } else {
 	                this.sigBytes = words.length * 8;
@@ -3439,7 +3439,7 @@
 	         */
 	        _createHelper: (function () {
 	            function selectCipherStrategy(key) {
-	                if (typeof key == 'string') {
+	                if (typeof key === 'string') {
 	                    return PasswordBasedCipher;
 	                } else {
 	                    return SerializableCipher;
@@ -3713,15 +3713,15 @@
 	            var mode = cfg.mode;
 
 	            // Reset block mode
-	            if (this._xformMode == this._ENC_XFORM_MODE) {
+	            if (this._xformMode === this._ENC_XFORM_MODE) {
 	                var modeCreator = mode.createEncryptor;
-	            } else /* if (this._xformMode == this._DEC_XFORM_MODE) */ {
+	            } else /* if (this._xformMode === this._DEC_XFORM_MODE) */ {
 	                var modeCreator = mode.createDecryptor;
 	                // Keep at least one block in the buffer for unpadding
 	                this._minBufferSize = 1;
 	            }
 
-	            if (this._mode && this._mode.__creator == modeCreator) {
+	            if (this._mode && this._mode.__creator === modeCreator) {
 	                this._mode.init(this, iv && iv.words);
 	            } else {
 	                this._mode = modeCreator.call(mode, this, iv && iv.words);
@@ -3738,13 +3738,13 @@
 	            var padding = this.cfg.padding;
 
 	            // Finalize
-	            if (this._xformMode == this._ENC_XFORM_MODE) {
+	            if (this._xformMode === this._ENC_XFORM_MODE) {
 	                // Pad data
 	                padding.pad(this._data, this.blockSize);
 
 	                // Process final blocks
 	                var finalProcessedBlocks = this._process(!!'flush');
-	            } else /* if (this._xformMode == this._DEC_XFORM_MODE) */ {
+	            } else /* if (this._xformMode === this._DEC_XFORM_MODE) */ {
 	                // Process final blocks
 	                var finalProcessedBlocks = this._process(!!'flush');
 
@@ -3873,7 +3873,7 @@
 	            var ciphertextWords = ciphertext.words;
 
 	            // Test for salt
-	            if (ciphertextWords[0] == 0x53616c74 && ciphertextWords[1] == 0x65645f5f) {
+	            if (ciphertextWords[0] === 0x53616c74 && ciphertextWords[1] === 0x65645f5f) {
 	                // Extract salt
 	                var salt = WordArray.create(ciphertextWords.slice(2, 4));
 
@@ -3987,7 +3987,7 @@
 	         *     var ciphertextParams = CryptoJS.lib.SerializableCipher._parse(ciphertextStringOrParams, format);
 	         */
 	        _parse: function (ciphertext, format) {
-	            if (typeof ciphertext == 'string') {
+	            if (typeof ciphertext === 'string') {
 	                return format.parse(ciphertext, this);
 	            } else {
 	                return ciphertext;
@@ -4496,7 +4496,7 @@
 
 	                        // Mix Rcon
 	                        t ^= RCON[(ksRow / keySize) | 0] << 24;
-	                    } else if (keySize > 6 && ksRow % keySize == 4) {
+	                    } else if (keySize > 6 && ksRow % keySize === 4) {
 	                        // Sub word
 	                        t = (SBOX[t >>> 24] << 24) | (SBOX[(t >>> 16) & 0xff] << 16) | (SBOX[(t >>> 8) & 0xff] << 8) | SBOX[t & 0xff];
 	                    }

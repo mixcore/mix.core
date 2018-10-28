@@ -13,7 +13,7 @@
                 <input type="checkbox" ng-model="loginData.rememberme" class="ng-pristine ng-valid"><strong> Remember</strong>
             </label>
         </div>
-        <div ng-hide="message == ''" class="alert alert-danger ng-binding ng-hide">
+        <div ng-hide="message === ''" class="alert alert-danger ng-binding ng-hide">
             <span ng-bind="message"></span>
         </div>
         <button class="btn btn-md btn-info btn-block" style="margin-top: 10px;" type="submit" ng-click="login()">Login</button>

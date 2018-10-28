@@ -19,7 +19,7 @@ app.controller('loginController', [ '$rootScope', '$scope', 'ngAppSettings', '$l
     });
     $scope.login = async function () {
         
-        if (authService.referredUrl == "/init/login") {
+        if (authService.referredUrl === "/init/login") {
             authService.referredUrl = "/portal";
         }
         var result = await authService.login($scope.loginData);
@@ -45,7 +45,7 @@ $scope.authCompletedCB = function (fragment) {
 
     $scope.$apply(function () {
 
-        if (fragment.haslocalaccount == 'False') {
+        if (fragment.haslocalaccount === 'False') {
 
             authService.logOut();
 

@@ -209,7 +209,7 @@ angular.module('bw.paging', []).directive('paging', function () {
     function internalAction(scope, page) {
 
         // Block clicks we try to load the active page
-        if (scope.page == page) {
+        if (scope.page === page) {
             return;
         }
 
@@ -358,7 +358,7 @@ angular.module('bw.paging', []).directive('paging', function () {
         for (i = start; i <= finish; i++) {
 
             var pgHref = scope.pgHref.replace(regex, i);
-            var liClass = scope.page == i ? scope.activeClass : ''; 
+            var liClass = scope.page === i ? scope.activeClass : ''; 
 
             // Handle items that are affected by disabled
             if(scope.isDisabled){
@@ -407,7 +407,7 @@ angular.module('bw.paging', []).directive('paging', function () {
 
         // We ignore dots if the next value is 3
         // ie: 1 2 [...] 3 4 5 becomes just 1 2 3 4 5
-        if (next != 3) {
+        if (next !== 3) {
             addDots(scope);
         }
     }
@@ -426,7 +426,7 @@ angular.module('bw.paging', []).directive('paging', function () {
 
         // We ignore dots if the previous value is one less that our start range
         // ie: 1 2 3 4 [...] 5 6  becomes just 1 2 3 4 5 6
-        if (prev != pageCount - 2) {
+        if (prev !== pageCount - 2) {
             addDots(scope);
         }
 

@@ -6,13 +6,13 @@ app.component('productRelated', {
         ctrl.activeProduct = function (pr) {
             var currentItem = null;
             $.each(ctrl.product.productNavs, function (i, e) {
-                if (e.relatedProductId == pr.id) {
+                if (e.relatedProductId === pr.id) {
                     e.isActived = pr.isActived;
                     currentItem = e;
                     return false;
                 }
             });
-            if (currentItem == null) {
+            if (currentItem === null) {
                 currentItem = {
                     relatedProductId: pr.id,
                     sourceProductId: ctrl.product.id,

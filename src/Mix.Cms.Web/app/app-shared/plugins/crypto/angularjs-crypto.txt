@@ -21,14 +21,14 @@ cryptoModule.config(['$httpProvider', function ($httpProvider) {
                         log(cfg, "intercept request " + angular.toJson(data));
                         if (!data) return $q.reject(request);
                         encrypt(data, cfg, pattern);
-                    } else if (( typeof( request.params ) != "undefined")) {
+                    } else if (( typeof( request.params ) !== "undefined")) {
                         encrypt(request.params, cfg, pattern);
                     }
                 } else if ((request.fullcryptbody || false)) {
                     if (!data) return $q.reject(request);
                     request.data = cfg.plugin.encode(JSON.stringify(data), cfg.key())
                     log(cfg, "encode full body " + request.data);
-            	} else if ((request.fullcryptquery || false) && ( typeof( request.params ) != "undefined")) {
+            	} else if ((request.fullcryptquery || false) && ( typeof( request.params ) !== "undefined")) {
                         log(cfg, "encode full query " + request.params);
                         request.params = {query:cfg.plugin.encode(JSON.stringify(request.params),cfg.key())}
                         log(cfg, "encode full query " + request.params);
@@ -42,7 +42,7 @@ cryptoModule.config(['$httpProvider', function ($httpProvider) {
                 if (missingCryptoJs(shouldCrypt, cfg, $q)) {
                     return q.reject('CryptoJS missing');
                 }
-                if (shouldCrypt == true) {
+                if (shouldCrypt === true) {
                     if (checkHeader(cfg, response.headers()['content-type'])) {
                         var data = response.data;
                         log(cfg, "intercept response " + angular.toJson(data));
@@ -131,7 +131,7 @@ String.prototype.beginsWith = function (string) {
 
 String.prototype.endsWith = function (str) {
     var lastIndex = this.lastIndexOf(str);
-    return (lastIndex != -1) && (lastIndex + str.length == this.length);
+    return (lastIndex !== -1) && (lastIndex + str.length === this.length);
 };
 
 function defaultVal(val, defaultVal){

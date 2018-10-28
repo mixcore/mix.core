@@ -47,7 +47,7 @@ app.controller('FileController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
         };
         $scope.loadFiles = async function (folder) {
             if (folder) {
-                $scope.request.key += ($scope.request.key != '') ? '/' : '';
+                $scope.request.key += ($scope.request.key !== '') ? '/' : '';
                 $scope.request.key += folder;
             } else {
                 $scope.request.key = $routeParams.folder ? $routeParams.folder : '';
@@ -60,7 +60,7 @@ app.controller('FileController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
                 $.each($scope.data.items, function (i, file) {
 
                     $.each($scope.activedFiles, function (i, e) {
-                        if (e.fileId == file.id) {
+                        if (e.fileId === file.id) {
                             file.isHidden = true;
                         }
                     })

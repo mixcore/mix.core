@@ -28,13 +28,13 @@
         };
         ctrl.loadProducts = function (pageIndex) {
             ctrl.isBusy = true;
-            if (pageIndex != undefined) {
+            if (pageIndex !== undefined) {
                 ctrl.request.pageIndex = pageIndex;
             }
-            if (ctrl.request.fromDate != null) {
+            if (ctrl.request.fromDate !== null) {
                 ctrl.request.fromDate = ctrl.request.fromDate.toISOString();
             }
-            if (ctrl.request.toDate != null) {
+            if (ctrl.request.toDate !== null) {
                 ctrl.request.toDate = ctrl.request.toDate.toISOString();
             }
             var url = '/' + ctrl.currentLanguage + '/product/list';//byProduct/' + productId;
@@ -46,7 +46,7 @@
 
                 $.each(ctrl.data.items, function (i, product) {
                     $.each(ctrl.activedDatas, function (i, e) {
-                        if (e.productId == product.id) {
+                        if (e.productId === product.id) {
                             product.isHidden = true;
                         }
                     })
@@ -108,19 +108,19 @@
 
         ctrl.changeMedia = function (media) {
             var currentItem = null;
-            if (ctrl.activedData.mediaNavs == undefined) {
+            if (ctrl.activedData.mediaNavs === undefined) {
                 ctrl.activedData.mediaNavs = [];
             }
             $.each(ctrl.activedData.mediaNavs, function (i, e) {
-                if (e.mediaId == media.id) {
+                if (e.mediaId === media.id) {
                     e.isActived = media.isActived;
                     currentItem = e;
                     return false;
                 }
             });
-            if (currentItem == null) {
+            if (currentItem === null) {
                 currentItem = {
-                    description: media.description != 'undefined' ? media.description : '',
+                    description: media.description !== 'undefined' ? media.description : '',
                     image: media.fullPath,
                     mediaId: media.id,
                     product: ctrl.activedData.id,
@@ -137,13 +137,13 @@
         ctrl.changeProduct = function (product) {
             var currentItem = null;
             $.each(ctrl.activedData.productNavs, function (i, e) {
-                if (e.relatedProductId == product.id) {
+                if (e.relatedProductId === product.id) {
                     e.isActived = product.isActived;
                     currentItem = e;
                     return false;
                 }
             });
-            if (currentItem == null) {
+            if (currentItem === null) {
                 currentItem = {
                     relatedProductId: product.id,
                     sourceProductId: $('#product-id').val(),

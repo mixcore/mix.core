@@ -23,7 +23,7 @@
         <div class="form-group">
             <label class="control-label">Page types</label>
             <div class="btn-group btn-group-sm btn-group-toggle d-flex w-100" role="group" data-toggle="buttons">
-                <label ng-repeat="type in $ctrl.settings.pageTypes track by $index" ng-switch="type" ng-class="{active: $index == $ctrl.page.type}" class="btn btn-outline-primary btn-block mt-0" ng-click="$ctrl.page.type=$index;">
+                <label ng-repeat="type in $ctrl.settings.pageTypes track by $index" ng-switch="type" ng-class="{active: $index === $ctrl.page.type}" class="btn btn-outline-primary btn-block mt-0" ng-click="$ctrl.page.type=$index;">
                     <input ng-model="$ctrl.page.type" type="radio" value="{{$index}}" class="custom-control-input" id="page_type_{{$index}}">
                     <i ng-switch-when="Blank" class="mi mi-Preview mi-lg mi-fw" title="{{type}}"></i>
                     <i ng-switch-when="Article" class="mi mi-ReadingList mi-lg mi-ReadingList" title="{{type}}"></i>

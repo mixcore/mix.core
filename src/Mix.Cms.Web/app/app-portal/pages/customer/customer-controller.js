@@ -40,14 +40,14 @@ app.controller('CustomerController', ['$scope', '$rootScope', 'ngAppSettings', '
         };
         $scope.loadCustomers = async function (pageIndex) {
             
-            if (pageIndex != undefined) {
+            if (pageIndex !== undefined) {
                 $scope.request.pageIndex = pageIndex;
             }
-            if ($scope.request.fromDate != null) {
+            if ($scope.request.fromDate !== null) {
                 var d = new Date($scope.request.fromDate);
                 $scope.request.fromDate = d.toISOString();
             }
-            if ($scope.request.toDate != null) {
+            if ($scope.request.toDate !== null) {
                 var d = new Date($scope.request.toDate);
                 $scope.request.toDate = d.toISOString();
             }
@@ -59,7 +59,7 @@ app.controller('CustomerController', ['$scope', '$rootScope', 'ngAppSettings', '
                 $.each($scope.data.items, function (i, customer) {
 
                     $.each($scope.activedCustomers, function (i, e) {
-                        if (e.customerId == customer.id) {
+                        if (e.customerId === customer.id) {
                             customer.isHidden = true;
                         }
                     })

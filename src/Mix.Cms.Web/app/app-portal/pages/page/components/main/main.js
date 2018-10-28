@@ -9,16 +9,16 @@ app.component('pageMain', {
         }
         ctrl.generateSeo = function () {
             if (ctrl.page) {
-                if (ctrl.page.seoName == null || ctrl.page.seoName == '') {
+                if (ctrl.page.seoName === null || ctrl.page.seoName === '') {
                     ctrl.page.seoName = $rootScope.generateKeyword(ctrl.page.title, '-');
                 }
-                if (ctrl.page.seoTitle == null || ctrl.page.seoTitle == '') {
+                if (ctrl.page.seoTitle === null || ctrl.page.seoTitle === '') {
                     ctrl.page.seoTitle = $rootScope.generateKeyword(ctrl.page.title, '-');
                 }
-                if (ctrl.page.seoDescription == null || ctrl.page.seoDescription == '') {
+                if (ctrl.page.seoDescription === null || ctrl.page.seoDescription === '') {
                     ctrl.page.seoDescription = $rootScope.generateKeyword(ctrl.page.title, '-');
                 }
-                if (ctrl.page.seoKeywords == null || ctrl.page.seoKeywords == '') {
+                if (ctrl.page.seoKeywords === null || ctrl.page.seoKeywords === '') {
                     ctrl.page.seoKeywords = $rootScope.generateKeyword(ctrl.page.title, '-');
                 }
             }
