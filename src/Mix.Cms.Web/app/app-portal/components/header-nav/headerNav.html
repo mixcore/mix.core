@@ -1,4 +1,4 @@
-<header class="navbar navbar-expand flex-column flex-md-row sw-navbar">
+<header class="navbar navbar-expand flex-column flex-md-row sw-navbar position-sticky">
     <a class="navbar-brand mr-0 mr-md-2" href="/{{$ctrl.settings.lang}}" target="_blank" aria-label="mixcore">
         <img src="/css/portal/img/mixcore-logo-blue.png" alt="mixcore" width="35">
     </a>
@@ -6,11 +6,11 @@
     <span class="navbar-brand" ng-bind="$ctrl.getConfiguration('SiteName',false,'mixcore')"></span>
 
     <button type="button" id="sidebarCollapse" class="btn btn-link">
-            <span class="mi mi-List"></span>
+        <span class="mi mi-List"></span>
     </button>
 
     <div class="navbar-nav-scroll">
-        <breadcrumbs bread-crumbs="$ctrl.breadCrumbs"></breadcrumbs>        
+        <breadcrumbs bread-crumbs="$ctrl.breadCrumbs"></breadcrumbs>
     </div>
 
     <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex" ng-if="$ctrl.settings">
@@ -45,5 +45,4 @@
     <div class="avatar" ng-if="$ctrl.avatar">
         <img class="rounded-circle sw-avatar" alt="200x200" ng-src="{{$ctrl.avatar}}" data-holder-rendered="true" style="width: 36px; height: 36px;">
     </div>
-    
 </header>

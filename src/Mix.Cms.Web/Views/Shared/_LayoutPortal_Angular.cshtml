@@ -10,12 +10,13 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=1920">
-    
+
     <link rel="icon" href="/css/portal/img/swastika-io-logo-blue.png">
-    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
-    <link href="~/css/shared.min.css" rel="stylesheet" />
+    @*<link href="~/css/shared.min.css" rel="stylesheet" />*@
+    @*<link rel="stylesheet" href="~/css/app-vendor.min.css" />*@
+
+    <link rel="stylesheet" href="~/css/portal/portal.white-sd.css" />
     <link rel="stylesheet" href="~/css/portal.min.css" />
-    <link rel="stylesheet" href="~/css/app-vendor.min.css" />
     @RenderSection("Styles", required: false)
 </head>
 
@@ -26,7 +27,6 @@
     <script src="~/js/shared.min.js"></script>
     <script src="~/js/portal.min.js"></script>
 
-
     <script src="~/js/app-portal.min.js"></script>
     <script src="~/js/app-shared.min.js"></script>
 
@@ -36,6 +36,5 @@
     <!--Datatables-->
     @*@RenderSection("Modals", required: false)*@
     @*@await Component.InvokeAsync(typeof(Mix.Cms.Mvc.Areas.Portal.ViewComponents.Modals))*@
-
 </body>
 </html>
