@@ -235,3 +235,6 @@ ModelManifest.xml
 .paket/paket.exe
 # FAKE - F# Make
 .fake/
+
+# Source
+src/Mix.Cms.Web/mixCmsSettings.json
