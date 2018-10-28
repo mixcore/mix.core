@@ -6,13 +6,13 @@ app.component('articleRelated', {
         ctrl.activeArticle = function (model) {
             var currentItem = null;
             $.each(ctrl.article.articleNavs, function (i, e) {
-                if (e.relatedArticleId == model.id) {
+                if (e.relatedArticleId === model.id) {
                     e.isActived = model.isActived;
                     currentItem = e;
                     return false;
                 }
             });
-            if (currentItem == null) {
+            if (currentItem === null) {
                 currentItem = {
                     relatedArticleId: model.id,
                     sourceArticleId: ctrl.article.id,

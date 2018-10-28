@@ -22,7 +22,7 @@
         <tbody class="sortable" ng-init="loadFiles()">
             <tr ng-repeat="d in data.directories track by $index">
                 <td class="text-primary">
-                    <span class="fas fa-folder mr-2"></span> <a ng-click="loadFiles(d)" class="text-primary" ng-bind="d"></a>
+                    <span class="fas fa-folder mr-2"></span> <a ng-click="loadFiles(d)" class="btn btn-sm text-primary" ng-bind="d"></a>
                 </td>
                 <td colspan="3"></td>
             </tr>

@@ -5,19 +5,19 @@ app.component('articleMedias', {
         var ctrl = this;
         ctrl.activeMedia = function (media) {
             var currentItem = null;
-            if (ctrl.article.mediaNavs == null) {
+            if (ctrl.article.mediaNavs === null) {
                 ctrl.article.mediaNavs = [];
             }
             $.each(ctrl.article.mediaNavs, function (i, e) {
-                if (e.mediaId == media.id) {
+                if (e.mediaId === media.id) {
                     e.isActived = media.isActived;
                     currentItem = e;
                     return false;
                 }
             });
-            if (currentItem == null) {
+            if (currentItem === null) {
                 currentItem = {
-                    description: media.description != 'undefined' ? media.description : '',
+                    description: media.description !== 'undefined' ? media.description : '',
                     image: media.fullPath,
                     mediaId: media.id,
                     article: ctrl.article.id,

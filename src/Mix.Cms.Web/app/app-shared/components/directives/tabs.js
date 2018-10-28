@@ -14,7 +14,7 @@
             }
 
             this.addPane = function (pane) {
-                if (panes.length == 0) $scope.select(pane);
+                if (panes.length === 0) $scope.select(pane);
                 panes.push(pane);
             }
         },

@@ -13,7 +13,7 @@ app.controller('Step2Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
                 $rootScope.showMessage('Please agreed with our policy', 'warning');
             }
             else {
-                if ($scope.password != $scope.confirmPassword) {
+                if ($scope.password !== $scope.confirmPassword) {
                     $rootScope.showErrors(['Confirm Password is not matched']);
                 }
                 else {

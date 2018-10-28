@@ -5,7 +5,7 @@ app.factory('AppSettingsServices', ['$http', '$rootScope', 'CommonService', func
 
     var appSettingssServiceFactory = {};
 
-    var settings = $rootScope.globalSettings
+    var settings = $rootScope.globalSettings;
 
     var _getAppSettings = async function () {
         var url = '/portal/app-settings/details';
@@ -14,7 +14,7 @@ app.factory('AppSettingsServices', ['$http', '$rootScope', 'CommonService', func
             method: 'GET',
             url: url
         };
-        return await commonService.getApiResult(req)
+        return await commonService.getApiResult(req);
     };
 
     var _saveAppSettings = async function (appSettings) {
@@ -24,7 +24,7 @@ app.factory('AppSettingsServices', ['$http', '$rootScope', 'CommonService', func
             url: apiUrl,
             data: JSON.stringify(appSettings)
         };
-        return await commonService.getApiResult(req)
+        return await commonService.getApiResult(req);
     };
 
     appSettingssServiceFactory.getAppSettings = _getAppSettings;

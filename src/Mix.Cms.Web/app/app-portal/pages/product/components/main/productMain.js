@@ -11,16 +11,16 @@ app.component('productMain', {
             };
             ctrl.generateSeo = function () {
                 if (ctrl.product) {
-                    if (ctrl.product.seoName == null || ctrl.product.seoName == '') {
+                    if (ctrl.product.seoName === null || ctrl.product.seoName === '') {
                         ctrl.product.seoName = $rootScope.generateKeyword(ctrl.product.title, '-');
                     }
-                    if (ctrl.product.seoTitle == null || ctrl.product.seoTitle == '') {
+                    if (ctrl.product.seoTitle === null || ctrl.product.seoTitle === '') {
                         ctrl.product.seoTitle = $rootScope.generateKeyword(ctrl.product.title, '-');
                     }
-                    if (ctrl.product.seoDescription == null || ctrl.product.seoDescription == '') {
+                    if (ctrl.product.seoDescription === null || ctrl.product.seoDescription === '') {
                         ctrl.product.seoDescription = $rootScope.generateKeyword(ctrl.product.title, '-');
                     }
-                    if (ctrl.product.seoKeywords == null || ctrl.product.seoKeywords == '') {
+                    if (ctrl.product.seoKeywords === null || ctrl.product.seoKeywords === '') {
                         ctrl.product.seoKeywords = $rootScope.generateKeyword(ctrl.product.title, '-');
                     }
                 }

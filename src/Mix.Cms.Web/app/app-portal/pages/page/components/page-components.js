@@ -27,13 +27,13 @@
         };
         ctrl.loadPages = function (pageIndex) {
             ctrl.isBusy = true;
-            if (pageIndex != undefined) {
+            if (pageIndex !== undefined) {
                 ctrl.request.pageIndex = pageIndex;
             }
-            if (ctrl.request.fromDate != null) {
+            if (ctrl.request.fromDate !== null) {
                 ctrl.request.fromDate = ctrl.request.fromDate.toISOString();
             }
-            if (ctrl.request.toDate != null) {
+            if (ctrl.request.toDate !== null) {
                 ctrl.request.toDate = ctrl.request.toDate.toISOString();
             }
             var url = '/' + ctrl.currentLanguage + '/page/list';//byPage/' + pageId;
@@ -45,7 +45,7 @@
 
                 $.each(ctrl.data.items, function (i, page) {
                     $.each(ctrl.activedPages, function (i, e) {
-                        if (e.pageId == page.id) {
+                        if (e.pageId === page.id) {
                             page.isHidden = true;
                         }
                     })
@@ -107,19 +107,19 @@
 
         ctrl.changeMedia = function (media) {
             var currentItem = null;
-            if (ctrl.activedPage.mediaNavs == undefined) {
+            if (ctrl.activedPage.mediaNavs === undefined) {
                 ctrl.activedPage.mediaNavs = [];
             }
             $.each(ctrl.activedPage.mediaNavs, function (i, e) {
-                if (e.mediaId == media.id) {
+                if (e.mediaId === media.id) {
                     e.isActived = media.isActived;
                     currentItem = e;
                     return false;
                 }
             });
-            if (currentItem == null) {
+            if (currentItem === null) {
                 currentItem = {
-                    description: media.description != 'undefined' ? media.description : '',
+                    description: media.description !== 'undefined' ? media.description : '',
                     image: media.fullPath,
                     mediaId: media.id,
                     page: ctrl.activedPage.id,
@@ -136,13 +136,13 @@
         ctrl.changePage = function (page) {
             var currentItem = null;
             $.each(ctrl.activedPage.pageNavs, function (i, e) {
-                if (e.relatedPageId == page.id) {
+                if (e.relatedPageId === page.id) {
                     e.isActived = page.isActived;
                     currentItem = e;
                     return false;
                 }
             });
-            if (currentItem == null) {
+            if (currentItem === null) {
                 currentItem = {
                     relatedPageId: page.id,
                     sourcePageId: $('#page-id').val(),

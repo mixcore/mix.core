@@ -52,7 +52,7 @@ app.controller('UserController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
         };
 
         $scope.loadUsers = async function (pageIndex) {
-            if (pageIndex != undefined) {
+            if (pageIndex !== undefined) {
                 $scope.request.pageIndex = pageIndex;
             }
             $rootScope.isBusy = true;
@@ -95,7 +95,7 @@ app.controller('UserController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
         }
 
         $scope.saveUser = async function (user) {
-            //if (user.avatar != user.avatarUrl) {
+            //if (user.avatar !== user.avatarUrl) {
             //    user.avatar = user.avatarUrl;
             //}
             $rootScope.isBusy = true;
