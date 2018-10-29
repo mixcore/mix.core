@@ -12,7 +12,7 @@
     },
     {
       "provider": "filesystem",
-      "library": "wwwroot/plugins/bootstrap/dist/",
+      "library": "wwwroot/plugins/bootstrap/",
       "destination": "wwwroot/lib/bootstrap/",
       "files": [
         "js/bootstrap.min.js"
@@ -25,32 +25,6 @@
       "files": [
         "portal.white.js",
         "gmap.js"
-      ]
-    },
-    {
-      "provider": "cdnjs",
-      "library": "Trumbowyg@2.10.0",
-      "destination": "wwwroot/lib/portal/Trumbowyg/",
-      "files": [
-        "trumbowyg.min.js",
-        "plugins/base64/trumbowyg.base64.min.js",
-        "plugins/cleanpaste/trumbowyg.cleanpaste.min.js",
-        "plugins/colors/trumbowyg.colors.min.js",
-        "plugins/emoji/trumbowyg.emoji.min.js",
-        "plugins/colors/ui/trumbowyg.colors.min.css",
-        "plugins/emoji/ui/trumbowyg.emoji.min.css",
-        "plugins/fontfamily/trumbowyg.fontfamily.min.js",
-        "plugins/fontsize/trumbowyg.fontsize.min.js",
-        "plugins/highlight/trumbowyg.highlight.min.js",
-        "plugins/highlight/ui/trumbowyg.highlight.min.css",
-        "plugins/history/trumbowyg.history.min.js",
-        "plugins/resizimg/trumbowyg.resizimg.min.js",
-        "plugins/table/trumbowyg.table.min.js",
-        "plugins/table/ui/trumbowyg.table.min.css",
-        "plugins/template/trumbowyg.template.min.js",
-        "plugins/upload/trumbowyg.upload.min.js",
-        "ui/icons.svg",
-        "ui/trumbowyg.min.css"
       ]
     },
     {
@@ -159,6 +133,16 @@
       "destination": "wwwroot/lib/portal/prism/",
       "files": [
         "prism.min.js"
+      ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "Trumbowyg@2.11.1",
+      "destination": "wwwroot/lib/portal/Trumbowyg/",
+      "files": [
+        "trumbowyg.min.js",
+        "ui/icons.svg",
+        "ui/trumbowyg.min.css"
       ]
     }
   ]

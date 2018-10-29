@@ -27,7 +27,7 @@
                                 <span class="flag-icon {{activedData.icon}}"></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-left" aria-labelledby="sw-versions">
-                                <a class="dropdown-item" ng-repeat="item in icons" ng-class="{active: activedData.icon == item}" href="#" ng-click="changeIcon(item);">
+                                <a class="dropdown-item" ng-repeat="item in icons" ng-class="{active: activedData.icon === item}" href="#" ng-click="changeIcon(item);">
                                     <span class="flag-icon {{item}}"></span>
                                 </a>
                             </div>
