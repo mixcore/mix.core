@@ -70,9 +70,10 @@ app.filter('utcToLocal', FilterUtcDate)
                         ico: 'insertImage'
                     }
                 },
-                btns: [
-                    ['table'],
+                btns: [                    
                     ['undo', 'redo'],
+                    ['table'],
+                    ['emoji'],
                     ['formatting'],
                     ['strong', 'em', 'del', 'underline'],
                     ['link'],
@@ -94,6 +95,17 @@ app.filter('utcToLocal', FilterUtcDate)
                             'Authorization': 'Client-ID 9e57cb1c4791cea'
                         },
                         urlPropertyName: 'data.link'
+                    },
+                    table:{},
+                    fontfamily: {
+                        init: function (trumbowyg) {
+                            trumbowyg.o.plugins.fontfamily = trumbowyg.o.plugins.fontfamily || defaultOptions;
+                            trumbowyg.addBtnDef('fontfamily', {
+                                dropdown: buildDropdown(trumbowyg),
+                                hasIcon: false,
+                                text: trumbowyg.lang.fontFamily
+                            });
+                        }
                     }
                 }
             },
@@ -136,6 +148,22 @@ function FilterUtcDate($filter) {
         // convert and format date using the built in angularjs date filter
         return $filter('date')(utcDateString, format);
     };
+}
+function buildDropdown(trumbowyg) {
+    var dropdown = [];
+
+    $.each(trumbowyg.o.plugins.fontfamily.fontList, function (index, font) {
+        trumbowyg.addBtnDef('fontfamily_' + index, {
+            title: '<span style="font-family: ' + font.family + ';">' + font.name + '</span>',
+            hasIcon: false,
+            fn: function () {
+                trumbowyg.execCmd('fontName', font.family, true);
+            }
+        });
+        dropdown.push('fontfamily_' + index);
+    });
+
+    return dropdown;
 }
 function FilterPhoneNumber(){
     return function (phone) {
