@@ -154,7 +154,7 @@
       "app/app-client/app.route.js",
       "app/app-client/app.constant.js",
       "app/app-client/app-client-controller.js",
-      "app/app-client/components/**/*(*.js|!(*.min.js))"
+      "app/app-client/components/**/*.js"
     ],
     "minify": {
       "enabled": false,
