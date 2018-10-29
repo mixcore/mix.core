@@ -5,6 +5,7 @@
     "DefaultConnection": null
   },
   "Authentication": {
+    "ClockSkew": 10,
     "CookieExpiration": 10,
     "RefreshTokenExpiration": 1200,
     "TokenType": "Bearer",
@@ -103,8 +104,8 @@
       "Logo": "https://localhost:44319/css/portal/img/mixcore-logo-blue.png",
       "SettingVersion": "1",
       "SiteName": "Site Name",
-      "Theme": "Themes-agen",
-      "ThemeId": "2"
+      "Theme": "Default",
+      "ThemeId": "1"
     },
     "vi-vn": {
       "ContactAddress": "",
