@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="app\app-portal\pages\moduleData\components\" />
+    <Folder Include="wwwroot\lib\portal\Trumbowyg\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -12,6 +12,7 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -71,7 +72,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
             if (!_memoryCache.TryGetValue<RepositoryResponse<TView>>(cacheKey, out RepositoryResponse<TView> data))
             {
-                
+
                 if (predicate != null)
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
@@ -84,7 +85,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         IsSucceed = true,
                         Data = DefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model)
                     };
-                    
+
                 }
                 if (!MixConstants.cachedKeys.Contains(cacheKey))
                 {
@@ -123,8 +124,8 @@ namespace Mix.Cms.Api.Controllers.v1
                 }
                 else
                 {
-                data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-                _memoryCache.Set(cacheKey, data);
+                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
+                    _memoryCache.Set(cacheKey, data);
 
                 }
                 if (!MixConstants.cachedKeys.Contains(cacheKey))
@@ -141,7 +142,7 @@ namespace Mix.Cms.Api.Controllers.v1
         protected async Task<RepositoryResponse<TView>> SaveAsync<TView>(TView vm, bool isSaveSubModel)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-            if (vm!=null)
+            if (vm != null)
             {
                 var result = await vm.SaveModelAsync(isSaveSubModel).ConfigureAwait(false);
                 RemoveCache();
@@ -187,7 +188,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 {
                     new JProperty("created_at", DateTime.UtcNow),
                     new JProperty("ip_address", Request.HttpContext.Connection.RemoteIpAddress.ToString()),
-                    new JProperty("user", User.Identity?.Name),
+                    new JProperty("user", User.Identity?.Name?? User.Claims.SingleOrDefault(c=>c.Subject.Name == "Username")?.Value),
                     new JProperty("request_url", Request.Path.Value),
                     new JProperty("action", action),
                     new JProperty("status", status),
