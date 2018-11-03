@@ -3,8 +3,8 @@
     <form ng-if="activedData" ng-class="{'submitted': submitted}" ng-submit="save(activedData)">
         <actions preview-url="activedData.fullPath" back-url="'/portal/configuration/list'"></actions>
 
-
-        <div class="card">
+<div class="row justify-content-md-center">
+        <div class="card col-lg-6">
             <h6 class="card-header">Create new configuration</h6>
             <div class="card-body">
 
@@ -39,7 +39,7 @@
                 </div>
             </div>
         </div>
-
+    </div>
     </form>
 </section>
 <!-- /.content -->
