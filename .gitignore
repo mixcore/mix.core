@@ -245,3 +245,4 @@ src/Mix.Cms.Web/wwwroot/css/portal.min.css
 src/Mix.Cms.Web/wwwroot/js/app-portal.min.js
 src/Mix.Cms.Web/wwwroot/js/app-shared.min.js
 src/Mix.Cms.Web/wwwroot/js/portal.min.js
+src/Mix.Cms.Web/mixCmsSettings.json

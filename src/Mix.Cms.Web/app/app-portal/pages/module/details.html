@@ -13,10 +13,10 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="card">
-                            <div class="card-header">
+                            <h6 class="card-header">
                                 Module Attributes (<label asp-for="Columns" class="control-label"></label>)
                                 <a ng-click="addAttr()" class="btn btn-primary btn-sm float-right text-white">Add New</a>
-                            </div>
+                            </h6>
                             <div class="card-body p-1">
                                 <input type="hidden" asp-for="Id">
                                 <input type="hidden" asp-for="Specificulture">
@@ -136,9 +136,9 @@
             <section class="col-lg-3" style="padding-left:0">
                 <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
                 <div class="card">
-                    <div class="card-header">
+                    <h6 class="card-header">
                         Info
-                    </div>
+                    </h6>
                     <div class="card-body">
                         <statuses status="activedData.status">
                         <div class="form-group">
