@@ -9860,7 +9860,7 @@ a:hover {
 }
 
 .sw-sidebar .sw-toc-item .mi {
-  margin-right: 5px;
+  margin-right: 10px;
   position: relative;
   top: 2px;
   color: #2196f3;
@@ -9912,7 +9912,6 @@ a:hover {
 
 .sw-sidebar .sw-toc-item .active a,
 .sw-sidebar .sw-toc-item .active:hover a {
-  font-weight: 500;
   color: #313435;
   border-left-color: #72777a;
 }
@@ -9930,7 +9929,7 @@ a:hover {
   display: block;
   padding: .5rem 1.5rem;
   padding-right: 0;
-  font-weight: 500;
+  font-weight: 400;
   color: #72777a;
 }
 
@@ -9955,6 +9954,7 @@ a:hover {
 
 .sw-sidebar .sw-toc-item .sw-toc-link:hover a {
   color: #fff;
+  text-decoration: none;
 }
 
 .sw-sidebar .sw-toc-item .sw-toc-link:hover .btn-group {
@@ -9965,7 +9965,7 @@ a:hover {
   position: relative;
   top: 3px;
   color: #2196f3;
-  margin-right: 5px;
+  margin-right: 10px;
 }
 
 @media (min-width: 768px) {
