@@ -1,6 +1,6 @@
 ﻿
 modules.component('navs', {
-    templateUrl: '/app-shared/components/navigations/navigations.html',
+    templateUrl: '/app/app-shared/components/navigations/navigations.html',
     controller: ['$scope', function ($scope) {
         var ctrl = this;
         ctrl.selected = null;

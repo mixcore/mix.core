@@ -1,6 +1,6 @@
 ﻿
 modules.component('mixPaging', {
-    templateUrl: '/app-shared/components/paging/paging.html',
+    templateUrl: '/app/app-shared/components/paging/paging.html',
     controller: ['$rootScope', function ($rootScope) {
         var ctrl = this;
         ctrl.loadData = function (index) {

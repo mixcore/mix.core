@@ -1,6 +1,6 @@
 ﻿
 modules.component('fbShare', {
-    templateUrl: '/app-client/components/fb-share/fb-share.html',
+    templateUrl: '/app/app-client/components/fb-share/fb-share.html',
     controller: ['$location', function ($location) {
         var ctrl = this;
         ctrl.href = ctrl.href || window.top.location.href;

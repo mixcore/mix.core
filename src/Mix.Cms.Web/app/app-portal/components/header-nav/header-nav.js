@@ -1,6 +1,6 @@
 ﻿(function (angular) {
     app.component('headerNav', {
-        templateUrl: '/app-portal/components/header-nav/headerNav.html',
+        templateUrl: '/app/app-portal/components/header-nav/headerNav.html',
         controller: ['$rootScope', 'CommonService', 'AuthService', 'TranslatorService', 'GlobalSettingsService',
             function ($rootScope, commonService, authService, translatorService, GlobalSettingsService) {
                 var ctrl = this;

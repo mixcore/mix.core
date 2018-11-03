@@ -1,6 +1,6 @@
 ﻿
 modules.component('hubMessages', {
-    templateUrl: '/app-shared/components/hub-messages/hub-messages.html',
+    templateUrl: '/app/app-shared/components/hub-messages/hub-messages.html',
     controller: 'HubMessagesController',
     bindings: {
         

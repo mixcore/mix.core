@@ -1,0 +1,48 @@
+<header class="navbar navbar-expand flex-column flex-md-row sw-navbar position-sticky">
+    <a class="navbar-brand mr-0 mr-md-2" href="/{{$ctrl.settings.lang}}" target="_blank" aria-label="mixcore">
+        <img src="/css/portal/img/mixcore-logo-blue.png" alt="mixcore" width="35">
+    </a>
+
+    <span class="navbar-brand" ng-bind="$ctrl.getConfiguration('SiteName',false,'mixcore')"></span>
+
+    <button type="button" id="sidebarCollapse" class="btn btn-link">
+        <span class="mi mi-List"></span>
+    </button>
+
+    <div class="navbar-nav-scroll">
+        <breadcrumbs bread-crumbs="$ctrl.breadCrumbs"></breadcrumbs>
+    </div>
+
+    <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex" ng-if="$ctrl.settings">
+        <li class="nav-item mr-2">
+            <a class="nav-link p-2" href="#" data-toggle="modal" data-target="#modal-hub-messages">
+                <i class="mi mi-ActionCenter"></i>
+            </a>
+        </li>
+        <li class="nav-item mr-2">
+            <a class="nav-link p-2" href="#" data-toggle="modal" data-target="#modal-files">
+                <i class="mi mi-Media"></i>
+            </a>
+        </li>
+        <li class="nav-item dropdown mr-2">
+            <a class="nav-link p-2" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <span class="flag-icon {{$ctrl.settings.langIcon}}"></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item" ng-repeat="culture in $ctrl.settings.cultures" ng-class="{active: culture.specificulture === $ctrl.settings.lang}" href="#" ng-click="$ctrl.changeLang(culture.specificulture, culture.icon);">
+                    <span class="flag-icon {{culture.icon}}"></span>
+                    <span ng-bind="culture.description"></span>
+                </a>
+            </div>
+        </li>
+
+        <li class="nav-item mr-2">
+            <a class="nav-link p-2 text-danger" href="#" ng-click="$ctrl.logOut()" rel="noopener" aria-label="Logout">
+                <i class="mi mi-PowerButton"></i>
+            </a>
+        </li>
+    </ul>
+    <div class="avatar" ng-if="$ctrl.avatar">
+        <img class="rounded-circle sw-avatar" alt="200x200" ng-src="{{$ctrl.avatar}}" data-holder-rendered="true" style="width: 36px; height: 36px;">
+    </div>
+</header>

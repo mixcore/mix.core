@@ -1,8 +1,0 @@
-<div ng-model="$ctrl.ratingValue">
-    <ul class="star-rating" ng-class="{readonly: $ctrl.isReadonly}" ng-init="$ctrl.init()">
-        <li ng-repeat="star in $ctrl.stars" class="star" ng-class="{filled: star.filled}" ng-click="$ctrl.toggle($index)">
-            <i class="fab fa-star"></i>
-            <!-- or &#9733 -->
-        </li>
-    </ul>
-</div>

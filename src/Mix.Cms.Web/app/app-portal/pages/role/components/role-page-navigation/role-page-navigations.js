@@ -1,6 +1,6 @@
 ﻿
 modules.component('rolePageNav', {
-    templateUrl: '/app-portal/pages/role/components/role-page-navigation/role-page-navigations.html',
+    templateUrl: '/app/app-portal/pages/role/components/role-page-navigation/role-page-navigations.html',
     controller: ['$rootScope', '$scope', 'ngAppSettings', 'RoleService', function ($rootScope, $scope, ngAppSettings, roleServices) {
         var ctrl = this;
         ctrl.selected = null;
