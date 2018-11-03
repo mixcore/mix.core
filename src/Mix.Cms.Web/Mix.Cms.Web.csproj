@@ -14,6 +14,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="app-client\shared\controllers\**" />
+    <Content Remove="app-client\shared\controllers\**" />
+    <EmbeddedResource Remove="app-client\shared\controllers\**" />
+    <None Remove="app-client\shared\controllers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.ApiExplorer" Version="2.1.3" />
@@ -21,9 +28,11 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="3.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="3.0.0" />
+    <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.6.362" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="app-portal\pages\moduleData\components\" />
     <Folder Include="app\app-portal\pages\moduleData\components\" />
     <Folder Include="wwwroot\lib\portal\Trumbowyg\" />
   </ItemGroup>

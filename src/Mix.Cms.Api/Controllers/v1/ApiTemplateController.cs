@@ -73,20 +73,8 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("delete/{id}")]
         public async Task<RepositoryResponse<MixTemplate>> DeleteAsync(int id)
         {
-            var getPage = await Lib.ViewModels.MixTemplates.UpdateViewModel.Repository.GetSingleModelAsync(
-                model => model.Id == id);
-            if (getPage.IsSucceed)
-            {
-
-                return await getPage.Data.RemoveModelAsync(true);
-            }
-            else
-            {
-                return new RepositoryResponse<MixTemplate>()
-                {
-                    IsSucceed = false
-                };
-            }
+            return await base.DeleteAsync<UpdateViewModel>(
+                model => model.Id == id, true);
         }
 
 
