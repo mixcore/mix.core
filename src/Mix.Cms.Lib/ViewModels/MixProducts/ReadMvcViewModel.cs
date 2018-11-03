@@ -180,7 +180,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
                 {
                     ""
                     , MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.Theme, Specificulture) ?? "Default"
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture) ?? "Default"
                     , Template
                 });
             }

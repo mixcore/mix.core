@@ -176,7 +176,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
         {
             get
             {
-                return MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.Theme, Specificulture) ?? MixService.GetConfig<string>("DefaultTemplateFolder");
+                return MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture) ?? MixService.GetConfig<string>("DefaultTemplateFolder");
             }
         }
 

@@ -98,7 +98,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         {
             get
             {
-                return MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.Theme, Specificulture) ?? MixService.GetConfig<string>("DefaultTheme");
+                return MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture) ?? MixService.GetConfig<string>("DefaultTheme");
             }
         }
 

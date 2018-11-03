@@ -6,6 +6,13 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
+                    <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <select class="btn custom-select" ng-model="activedData.folderType">
+                                <option ng-repeat="item in folderTypes track by $index" ng-value="item">{{item}}</option>
+                            </select>
+                        </div>
+                    </div>
                     <label>Name</label>
                     <input type="text" class="form-control form-control-lg" ng-model="activedData.fileName">
                 </div>

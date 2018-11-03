@@ -10,8 +10,8 @@ using Mix.Cms.Lib.Models.Cms;
 namespace Mix.Cms.Lib.Migrations
 {
     [DbContext(typeof(MixCmsContext))]
-    [Migration("20181013164837_upd")]
-    partial class upd
+    [Migration("20181103045052_init-all")]
+    partial class initall
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -42,7 +42,8 @@ modules.component('aceEditor', {
                     editor.$blockScrolling = Infinity;
                     editor.session.setUseWrapMode(true);
                     editor.setOptions({
-                        maxLines: Infinity
+                        maxLines: 50,
+                        fontSize: 11
                     });
                     editor.getSession().on('change', function (e) {
                         // e.type, etc

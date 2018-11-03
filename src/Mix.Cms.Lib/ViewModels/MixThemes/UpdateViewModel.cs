@@ -163,13 +163,13 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             if (IsActived)
             {
                 SystemConfigurationViewModel config = (await SystemConfigurationViewModel.Repository.GetSingleModelAsync(
-                    c => c.Keyword == MixConstants.ConfigurationKeyword.Theme && c.Specificulture == Specificulture
+                    c => c.Keyword == MixConstants.ConfigurationKeyword.ThemeName && c.Specificulture == Specificulture
                     , _context, _transaction)).Data;
                 if (config == null)
                 {
                     config = new SystemConfigurationViewModel()
                     {
-                        Keyword = MixConstants.ConfigurationKeyword.Theme,
+                        Keyword = MixConstants.ConfigurationKeyword.ThemeName,
                         Specificulture = Specificulture,
                         Category = "Site",
                         DataType = MixDataType.Text,
@@ -322,14 +322,14 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             if (IsActived)
             {
                 SystemConfigurationViewModel config = (SystemConfigurationViewModel.Repository.GetSingleModel(
-                    c => c.Keyword == MixConstants.ConfigurationKeyword.Theme && c.Specificulture == Specificulture
+                    c => c.Keyword == MixConstants.ConfigurationKeyword.ThemeName && c.Specificulture == Specificulture
                     , _context, _transaction)).Data;
 
                 if (config == null)
                 {
                     config = new SystemConfigurationViewModel(new MixConfiguration()
                     {
-                        Keyword = MixConstants.ConfigurationKeyword.Theme,
+                        Keyword = MixConstants.ConfigurationKeyword.ThemeName,
                         Specificulture = Specificulture,
                         Category = "Site",
                         DataType = (int)DataType.Text,
