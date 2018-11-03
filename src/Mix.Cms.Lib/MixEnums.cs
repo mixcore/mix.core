@@ -91,10 +91,18 @@ namespace Mix.Cms.Lib
         {
             Blank = 0,
             Article = 1,
-            List = 2,
+            ListArticle = 2,
             Home = 3,
             StaticUrl = 4,
             Modules = 5,
+            ListProduct = 6
+        }
+
+        public enum MixModuleType
+        {
+            Blank = 0,
+            Article = 1,
+            ListArticle = 2,            
             ListProduct = 6
         }
 

@@ -1,7 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixPageArticles
 {
@@ -56,5 +61,60 @@ namespace Mix.Cms.Lib.ViewModels.MixPageArticles
         #endregion Async
 
         #endregion overrides
+
+        #region Expand
+
+
+        public static RepositoryResponse<List<MixPageArticles.ReadViewModel>> GetPageArticleNavAsync(int articleId, string specificulture
+           , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            MixCmsContext context = _context ?? new MixCmsContext();
+            var transaction = _transaction ?? context.Database.BeginTransaction();
+            try
+            {
+                var navCategoryArticleViewModels = context.MixPage.Include(cp => cp.MixPageArticle).Where(a => a.Specificulture == specificulture && a.Type == (int)MixEnums.MixPageType.ListArticle)
+                    .Select(p => new MixPageArticles.ReadViewModel(
+                        new MixPageArticle()
+                        {
+                            ArticleId = articleId,
+                            CategoryId = p.Id,
+                            Specificulture = specificulture
+                        },
+                        _context, _transaction)
+                    {
+                        IsActived = p.MixPageArticle.Any(cp => cp.ArticleId == articleId && cp.Specificulture == specificulture),
+                        Description = p.Title
+                    });
+                return new RepositoryResponse<List<ReadViewModel>>()
+                {
+                    IsSucceed = true,
+                    Data = navCategoryArticleViewModels.ToList()
+                };
+            }
+            catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
+            {
+                if (_transaction == null)
+                {
+                    transaction.Rollback();
+                }
+                return new RepositoryResponse<List<MixPageArticles.ReadViewModel>>()
+                {
+                    IsSucceed = true,
+                    Data = null,
+                    Exception = ex
+                };
+            }
+            finally
+            {
+                if (_context == null)
+                {
+                    //if current Context is Root
+                    transaction.Dispose();
+                    context.Dispose();
+                }
+            }
+        }
+
+        #endregion
     }
 }

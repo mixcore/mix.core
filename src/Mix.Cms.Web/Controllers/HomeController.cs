@@ -144,6 +144,10 @@ namespace Mix.Cms.Web.Controllers
 
                 getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
                 _memoryCache.Set(cacheKey, getPage.Data);
+                if (!MixConstants.cachedKeys.Contains(cacheKey))
+                {
+                    MixConstants.cachedKeys.Add(cacheKey);
+                }
             }
 
             if (getPage.IsSucceed && getPage.Data.View != null)
@@ -197,6 +201,10 @@ namespace Mix.Cms.Web.Controllers
 
                 getArticle = await Lib.ViewModels.MixArticles.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
                 _memoryCache.Set(cacheKey, getArticle.Data);
+                if (!MixConstants.cachedKeys.Contains(cacheKey))
+                {
+                    MixConstants.cachedKeys.Add(cacheKey);
+                }
 
             }
 
@@ -244,6 +252,10 @@ namespace Mix.Cms.Web.Controllers
 
                 getProduct = await Lib.ViewModels.MixProducts.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
                 _memoryCache.Set(cacheKey, getProduct.Data);
+                if (!MixConstants.cachedKeys.Contains(cacheKey))
+                {
+                    MixConstants.cachedKeys.Add(cacheKey);
+                }
 
             }
 

@@ -34,7 +34,7 @@ namespace Mix.Cms.Lib
                         break;
 
                     case MixPageType.Home:
-                    case MixPageType.List:
+                    case MixPageType.ListArticle:
                     case MixPageType.Article:
                     case MixPageType.Modules:
                     default:
@@ -76,7 +76,7 @@ namespace Mix.Cms.Lib
                         break;
 
                     case MixPageType.Home:
-                    case MixPageType.List:
+                    case MixPageType.ListArticle:
                     case MixPageType.Article:
                     case MixPageType.Modules:
                     default:
