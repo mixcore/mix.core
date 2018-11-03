@@ -101,7 +101,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         public string Domain => MixService.GetConfig<string>("Domain") ?? "/";
 
         [JsonProperty("categories")]
-        public List<MixPageArticles.ReadViewModel> Categories { get; set; }
+        public List<MixPageArticles.ReadViewModel> Pages { get; set; }
 
         [JsonProperty("modules")]
         public List<MixModuleArticles.ReadViewModel> Modules { get; set; } // Parent to Modules
@@ -259,6 +259,26 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     , this.View?.FileName
                });
 
+            var getPageArticle = MixPageArticles.ReadViewModel.GetPageArticleNavAsync(Id, Specificulture, _context, _transaction);
+            if (getPageArticle.IsSucceed)
+            {
+                this.Pages = getPageArticle.Data;
+                this.Pages.ForEach(c =>
+                {
+                    c.IsActived = MixPageArticles.ReadViewModel.Repository.CheckIsExists(n => n.CategoryId == c.CategoryId && n.ArticleId == Id, _context, _transaction);
+                });
+            }
+
+            var getModuleArticle = MixModuleArticles.ReadViewModel.GetModuleArticleNavAsync(Id, Specificulture, _context, _transaction);
+            if (getModuleArticle.IsSucceed)
+            {
+                this.Modules = getModuleArticle.Data;
+                this.Modules.ForEach(c =>
+                {
+                    c.IsActived = MixModuleArticles.ReadViewModel.Repository.CheckIsExists(n => n.ModuleId == c.ModuleId && n.ArticleId == Id, _context, _transaction);
+                });
+            }
+
             var getArticleMedia = MixArticleMedias.ReadViewModel.Repository.GetModelListBy(n => n.ArticleId == Id && n.Specificulture == Specificulture, _context, _transaction);
             if (getArticleMedia.IsSucceed)
             {
@@ -388,6 +408,63 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                         else
                         {
                             var saveResult = await navArticle.RemoveModelAsync(false, _context, _transaction);
+                            result.IsSucceed = saveResult.IsSucceed;
+                            if (!result.IsSucceed)
+                            {
+                                result.Exception = saveResult.Exception;
+                                Errors.AddRange(saveResult.Errors);
+                            }
+                        }
+                    }
+                }
+                if (result.IsSucceed)
+                {
+                    // Save Parent Category
+                    foreach (var item in Pages)
+                    {
+                        item.ArticleId = parent.Id;
+                        if (item.IsActived)
+                        {
+                            var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+                            result.IsSucceed = saveResult.IsSucceed;
+                            if (!result.IsSucceed)
+                            {
+                                result.Exception = saveResult.Exception;
+                                Errors.AddRange(saveResult.Errors);
+                            }
+                        }
+                        else
+                        {
+                            var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
+                            result.IsSucceed = saveResult.IsSucceed;
+                            if (!result.IsSucceed)
+                            {
+                                result.Exception = saveResult.Exception;
+                                Errors.AddRange(saveResult.Errors);
+                            }
+                        }
+                    }
+                }
+
+                if (result.IsSucceed)
+                {
+                    // Save Parent Modules
+                    foreach (var item in Modules)
+                    {
+                        item.ArticleId = parent.Id;
+                        if (item.IsActived)
+                        {
+                            var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+                            result.IsSucceed = saveResult.IsSucceed;
+                            if (!result.IsSucceed)
+                            {
+                                result.Exception = saveResult.Exception;
+                                Errors.AddRange(saveResult.Errors);
+                            }
+                        }
+                        else
+                        {
+                            var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
                             result.IsSucceed = saveResult.IsSucceed;
                             if (!result.IsSucceed)
                             {

@@ -189,7 +189,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                         GetSubModules(_context, _transaction);
                         break;
 
-                    case MixPageType.List:
+                    case MixPageType.ListArticle:
                         GetSubArticles(_context, _transaction);
                         break;
 

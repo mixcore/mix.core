@@ -16,6 +16,7 @@
   "Translator": {
     "en-us": {
       "fe_site_name": "Site name",
+      "input_output": "IO",
       "language": "Languages",
       "portal_articles": "Articles",
       "portal_create": "Create",
@@ -37,6 +38,7 @@
     },
     "es-ar": {
       "fe_site_name": "Site name",
+      "input_output": "Input / Output",
       "language": "Languages",
       "portal_articles": "Articles",
       "portal_create": "Create",
@@ -58,6 +60,7 @@
     },
     "vi-vn": {
       "fe_site_name": "Site name",
+      "input_output": "Input / Output",
       "language": "Languages",
       "portal_articles": "Articles",
       "portal_create": "Create",
@@ -104,8 +107,8 @@
       "Logo": "https://localhost:44319/css/portal/img/mixcore-logo-blue.png",
       "SettingVersion": "1",
       "SiteName": "Site Name",
-      "Theme": "Default",
-      "ThemeId": "1"
+      "Theme": "Themes-agen",
+      "ThemeId": "2"
     },
     "vi-vn": {
       "ContactAddress": "",
@@ -114,6 +117,7 @@
       "Facebook": "",
       "FacebookAppId": "",
       "Favicon": "",
+      "GA_KEY": null,
       "LanguageVersion": "1",
       "Logo": "https://localhost:44319/css/portal/img/mixcore-logo-blue.png",
       "SettingVersion": "1",

@@ -251,8 +251,6 @@ namespace Mix.Cms.Lib.Services
                     }
                 }
             }
-
-
             // Return the encrypted bytes from the memory stream.
             return Convert.ToBase64String(encrypted);
         }
@@ -290,7 +288,6 @@ namespace Mix.Cms.Lib.Services
                     {
                         using (StreamReader srDecrypt = new StreamReader(csDecrypt))
                         {
-
                             // Read the decrypted bytes from the decrypting stream
                             // and place them in a string.
                             plaintext = srDecrypt.ReadToEnd();
