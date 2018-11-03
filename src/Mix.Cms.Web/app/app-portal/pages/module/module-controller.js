@@ -13,7 +13,7 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$r
             isDisplay: true,
             width: 3
         };
-        $scope.dataTypes = ngAppSettings.editorConfigurations.dataTypes;
+        $scope.dataTypes = ngAppSettings.dataTypes;
         $scope.activedData = null;
 
         $scope.loadModuleDatas = async function () {

@@ -247,6 +247,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             string templateName = path?.Split('/')[1];
             int themeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, specificulture);
+            string themeName = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, specificulture);
             var getView = UpdateViewModel.Repository.GetSingleModel(t =>
                     t.ThemeId == themeId && t.FolderType == folderType.ToString()
                     && !string.IsNullOrEmpty(templateName) && templateName.Equals($"{t.FileName}{t.Extension}"), _context, _transaction);
@@ -255,7 +256,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         public static UpdateViewModel GetDefault(MixEnums.EnumTemplateFolder folderType, string specificulture)
         {
-            string activedTheme = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.Theme, specificulture)
+            string activedTheme = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, specificulture)
                     ?? MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTheme);
             string folder = CommonHelper.GetFullPath(new string[]
                     {
@@ -266,7 +267,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             return new UpdateViewModel(new MixTemplate()
             {
                 ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, specificulture),
-                ThemeName = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.Theme, specificulture),
+                ThemeName = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, specificulture),
                 FileName = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplate),
                 Extension = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.TemplateExtension),
                 Content = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateContent),

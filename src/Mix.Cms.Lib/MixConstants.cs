@@ -33,12 +33,12 @@ namespace Mix.Cms.Lib
             public const string ConnectionString = "ConnectionString";
             public const string OrderBy = "OrderBy";
             public const string DefaultTemplateFolder = "DefaultTemplateFolder";
-            public const string Theme = "Theme";
             public const string Language = "Language";
             public const string DefaultStatus = "DefaultStatus";
             public const string DefaultCulture = "DefaultCulture";
             public const string IsSqlite = "IsSqlite";
             public const string ThemeId = "ThemeId";
+            public const string ThemeName= "ThemeName";
             public const string ApiEncryptKey = "ApiEncryptKey";
             public const string ApiEncryptIV = "ApiEncryptIV";
             public const string IsEncryptApi = "IsEncryptApi";

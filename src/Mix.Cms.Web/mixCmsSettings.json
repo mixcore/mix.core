@@ -93,8 +93,8 @@
       "Logo": "https://localhost:44319/css/portal/img/mixcore-logo-blue.png",
       "SettingVersion": "1",
       "SiteName": "Site Name",
-      "Theme": "Default",
-      "ThemeId": "1"
+      "ThemeId": "1",
+      "ThemeName": "Default"
     },
     "es-ar": {
       "ContactAddress": "",
@@ -107,8 +107,8 @@
       "Logo": "https://localhost:44319/css/portal/img/mixcore-logo-blue.png",
       "SettingVersion": "1",
       "SiteName": "Site Name",
-      "Theme": "Themes-agen",
-      "ThemeId": "2"
+      "ThemeId": "1",
+      "ThemeName": "Default"
     },
     "vi-vn": {
       "ContactAddress": "",
@@ -122,8 +122,8 @@
       "Logo": "https://localhost:44319/css/portal/img/mixcore-logo-blue.png",
       "SettingVersion": "1",
       "SiteName": "Site Name",
-      "Theme": "Default",
-      "ThemeId": "1"
+      "ThemeId": "1",
+      "ThemeName": "Default"
     }
   },
   "GlobalSettings": {

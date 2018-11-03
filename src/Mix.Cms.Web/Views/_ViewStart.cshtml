@@ -1,4 +1,4 @@
 ﻿@{
-    string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.Theme, ViewBag.culture) ?? "Default";
+    string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, ViewBag.culture) ?? "Default";
     Layout = $"Templates/{master}/Masters/{"_Layout"}";
 }

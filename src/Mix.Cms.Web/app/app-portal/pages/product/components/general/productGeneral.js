@@ -4,7 +4,7 @@ app.component('productGeneral', {
     controller: ['$rootScope', '$scope', 'ngAppSettings', function ($rootScope, $scope, ngAppSettings) {
         var ctrl = this;
         //ctrl.tags = ctrl.product.tags;
-        ctrl.dataTypes = ngAppSettings.editorConfigurations.dataTypes;
+        ctrl.dataTypes = ngAppSettings.dataTypes;
         ctrl.configurations = ngAppSettings.editorConfigurations;
         ctrl.addProperty = function (type) {
             var i = $(".property").length;

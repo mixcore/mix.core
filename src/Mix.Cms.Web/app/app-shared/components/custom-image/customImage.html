@@ -3,7 +3,7 @@
         {{$ctrl.header }}
     </div>
     <div class="card-body p-0" style="background:url(/images/upload-image-thumbnail.png) no-repeat center;  cursor:pointer;">        
-        <img imageonload ng-src="{{$ctrl.srcUrl}}" name="pic" class="custom-file-img d-block" style="/*max-height: 150px;*/ width: 100%;" accept="image/*">
+        <img imageonload ng-src="{{$ctrl.srcUrl}}"  ng-if="$ctrl.srcUrl" name="pic" class="custom-file-img d-block" style="/*max-height: 150px;*/ width: 100%;" accept="image/*">
         <input type="hidden" value="{{$ctrl.type}}/{{$ctrl.folder}}" class="folder-val">
     </div>
     <div class="card-footer">

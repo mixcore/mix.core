@@ -142,20 +142,20 @@ app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthServi
                         urlPropertyName: 'data.link'
                     }
                 }
-            },
-            dataTypes: [
-                { title: 'string', value: 0 },
-                { title: 'int', value: 1 },
-                { title: 'image', value: 2 },
-                { title: 'codeEditor', value: 4 },
-                { title: 'html', value: 5 },
-                { title: 'textArea', value: 6 },
-                { title: 'boolean', value: 7 },
-                { title: 'mdTextArea', value: 8 },
-                { title: 'date', value: 9 },
-                { title: 'datetime', value: 10 },
-            ]
+            }
         };
+        ngAppSettings.dataTypes = [
+            { title: 'string', value: 0 },
+            { title: 'int', value: 1 },
+            { title: 'image', value: 2 },
+            { title: 'codeEditor', value: 4 },
+            { title: 'html', value: 5 },
+            { title: 'textArea', value: 6 },
+            { title: 'boolean', value: 7 },
+            { title: 'mdTextArea', value: 8 },
+            { title: 'date', value: 9 },
+            { title: 'datetime', value: 10 },
+        ];
         $rootScope.range = function (max) {
             var input = [];
             for (var i = 1; i <= max; i += 1) input.push(i);
@@ -201,7 +201,7 @@ app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthServi
             };
             $('#dlg-confirm-msg').modal('show');
         };
-        
+
         $rootScope.showErrors = function (errors) {
             $.each(errors, function (i, e) {
                 $rootScope.showMessage(e, 'danger');

@@ -40,11 +40,11 @@
     else
     {
     <div class="col-md-3 px-0">
-        <div class="card card-fashion">
+        <div class="card card-fashion" style="background-image: url('@thumb')">
             <div class="card-title">
                 <a href="#pablo">
                     <h4>
-                        <a asp-area="" asp-controller="Home" asp-action="ArticleDetails" asp-route-SeoName="@Model.SeoName">
+                        <a href="@Model.DetailsUrl">
                            @Model.Title
                        </a>
                     </h4>

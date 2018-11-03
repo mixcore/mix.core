@@ -20,6 +20,13 @@
                             Use local Database
                         </label>
                     </div>
+                    <div class="col form-check mb-4">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" ng-model="initCmsModel.isSqlite">
+                            <span class="form-check-sign"></span>
+                            Use SQLite Database
+                        </label>
+                    </div>
                     <div ng-show="initCmsModel.isUseLocal" class="input-group no-border input-lg">
                         <!--<label class="form-check-label hidden">
                             <input class="form-check-input" type="checkbox" ng-model="initCmsModel.isSqlite" />

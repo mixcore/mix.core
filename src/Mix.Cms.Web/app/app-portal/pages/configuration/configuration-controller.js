@@ -4,7 +4,7 @@ app.controller('ConfigurationController',
         function ($scope, $rootScope, ngAppSettings, $routeParams, $location, service, commonService) {
             BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
             $scope.cates = ['Site', 'System'];
-            $scope.dataTypes = ngAppSettings.editorConfigurations.dataTypes;
+            $scope.dataTypes = ngAppSettings.dataTypes;
             $scope.saveCallback = function () {
                 commonService.initAllSettings().then(function () {
                     $location.path('/portal/configuration/list');
