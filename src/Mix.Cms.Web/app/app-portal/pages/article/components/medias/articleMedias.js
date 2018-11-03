@@ -1,6 +1,6 @@
 ﻿
 app.component('articleMedias', {
-    templateUrl: '/app-portal/pages/article/components/medias/articleMedias.html',
+    templateUrl: '/app/app-portal/pages/article/components/medias/articleMedias.html',
     controller: function () {
         var ctrl = this;
         ctrl.activeMedia = function (media) {

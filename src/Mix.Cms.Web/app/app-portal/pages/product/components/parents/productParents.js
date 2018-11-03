@@ -1,6 +1,6 @@
 ﻿
 app.component('productParents', {
-    templateUrl: '/app-portal/pages/product/components/parents/productParents.html',
+    templateUrl: '/app/app-portal/pages/product/components/parents/productParents.html',
     bindings: {
         product: '=',
         onDelete: '&',

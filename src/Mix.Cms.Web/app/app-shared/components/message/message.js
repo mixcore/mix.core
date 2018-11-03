@@ -1,5 +1,5 @@
 ﻿modules.component('message', {
-    templateUrl: '/app-shared/components/message/message.html',
+    templateUrl: '/app/app-shared/components/message/message.html',
     bindings: {
         message: '='
     }

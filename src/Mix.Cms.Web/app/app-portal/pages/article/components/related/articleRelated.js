@@ -1,6 +1,6 @@
 ﻿
 app.component('articleRelated', {
-    templateUrl: '/app-portal/pages/article/components/related/articleRelated.html',
+    templateUrl: '/app/app-portal/pages/article/components/related/articleRelated.html',
     controller: function () {
         var ctrl = this;
         ctrl.activeArticle = function (model) {

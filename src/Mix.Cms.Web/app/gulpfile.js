@@ -7,7 +7,7 @@ var gulp = require("gulp"),
     cssmin = require("gulp-cssmin"),
     fontmin = require("gulp-fontmin"),
     htmlmin = require("gulp-htmlmin"),
-    
+
     uglify = require("gulp-uglify");
 
 var uglifyjs = require('uglify-es'); // can be a git checkout
@@ -20,10 +20,10 @@ var dest = '../wwwroot';//For publish folder use "./bin/Release/PublishOutput/";
 //C:\\Git\\GitHub\\Queen-Beauty\\QueenBeauty\\
 var paths = {
     webroot: "./",///wwwroot
-    jsObtions:{},
-    htmlOptions:{collapseWhitespace: false},
-    cssOptions:{}, //showLog : (True, false) to trun on or off of the log
-    fontOptions:{fontPath: dest+ '/wwwroot/fonts'}
+    jsObtions: {},
+    htmlOptions: { collapseWhitespace: false },
+    cssOptions: {}, //showLog : (True, false) to trun on or off of the log
+    fontOptions: { fontPath: dest + '/wwwroot/fonts' }
 };
 
 paths.views = {
@@ -37,7 +37,7 @@ paths.views = {
 };
 paths.fonts = {
     src: [
-        paths.webroot + "lib/micon/fonts/*.*"        
+        paths.webroot + "lib/micon/fonts/*.*"
     ],
     dest: paths.webroot + dest + "/fonts"
 };
@@ -48,7 +48,7 @@ paths.css = {
         paths.webroot + "app-client/**/*.css",
         paths.webroot + "app-init/**/*.css"
     ],
-    dest : paths.webroot + "css/vendor.min.css"
+    dest: paths.webroot + "css/vendor.min.css"
 };
 paths.plugins = {
     src: [
@@ -67,7 +67,7 @@ paths.plugins = {
     dest: paths.webroot + "js/vendor.min.js"
 };
 paths.portal = {
-    src: [        
+    src: [
         paths.webroot + "app-portal/pages/**/*.js",
         paths.webroot + "app-portal/components/**/*.js"
     ],
@@ -86,7 +86,7 @@ paths.portalApp = {
 };
 
 paths.init = {
-    src: [        
+    src: [
         paths.webroot + "app-init/pages/**/*.js"
     ],
     dest: paths.webroot + "js/app-init.min.js"
@@ -142,9 +142,9 @@ gulp.task("clean:css", function (cb) {
     rimraf(paths.css.dest, cb);
 });
 
-gulp.task("clean", ["clean:js", "clean:clientJs","clean:sharedJs", "clean:css"]);
+gulp.task("clean", ["clean:js", "clean:clientJs", "clean:sharedJs", "clean:css"]);
 
-gulp.task("min:plugins", function (cb) {    
+gulp.task("min:plugins", function (cb) {
     return gulp.src(paths.plugins.src, { base: "." })
         .pipe(concat(paths.plugins.dest))
         //.pipe(minify(paths.jsOptions))
@@ -152,7 +152,7 @@ gulp.task("min:plugins", function (cb) {
 
 });
 
-gulp.task("min:portal", function (cb) {    
+gulp.task("min:portal", function (cb) {
     return gulp.src(paths.portal.src, { base: "." })
         .pipe(concat(paths.portal.dest))
         //.pipe(minify(paths.jsOptions))
@@ -160,7 +160,7 @@ gulp.task("min:portal", function (cb) {
 
 });
 
-gulp.task("min:portalApp", function (cb) {    
+gulp.task("min:portalApp", function (cb) {
     return gulp.src(paths.portalApp.src, { base: "." })
         //.pipe(concat(paths.portal.dest))
         //.pipe(minify(paths.jsOptions))
@@ -168,7 +168,7 @@ gulp.task("min:portalApp", function (cb) {
 
 });
 
-gulp.task("min:init", function (cb) {    
+gulp.task("min:init", function (cb) {
     return gulp.src(paths.init.src, { base: "." })
         .pipe(concat(paths.init.dest))
         //.pipe(minify(paths.jsOptions))
@@ -176,7 +176,7 @@ gulp.task("min:init", function (cb) {
 
 });
 
-gulp.task("min:initApp", function (cb) {    
+gulp.task("min:initApp", function (cb) {
     return gulp.src(paths.initApp.src, { base: "." })
         //.pipe(concat(paths.portal.dest))
         //.pipe(minify(paths.jsOptions))
@@ -185,19 +185,19 @@ gulp.task("min:initApp", function (cb) {
 });
 
 gulp.task("min:views", function (cb) {
-    return gulp.src(paths.views.src, { base: "." })        
+    return gulp.src(paths.views.src, { base: "." })
         .pipe(htmlmin(paths.htmlOptions))
         .pipe(gulp.dest(dest));
 
 });
 gulp.task("min:fonts", function (cb) {
-    return gulp.src(paths.fonts.src, { base: "." })          
+    return gulp.src(paths.fonts.src, { base: "." })
         .pipe(fontmin(paths.fontOptions))
         .pipe(gulp.dest(paths.fonts.dest));
 
 });
 
-gulp.task("min:clientApp", function (cb) {    
+gulp.task("min:clientApp", function (cb) {
     return gulp.src(paths.clientApp.src, { base: "." })
         //.pipe(concat(paths.portal.dest))
         //.pipe(minify(paths.jsOptions))
@@ -212,7 +212,7 @@ gulp.task("min:clientJs", function (cb) {
 
 });
 
-gulp.task("min:sharedJs", function (cb) {    
+gulp.task("min:sharedJs", function (cb) {
     return gulp.src(paths.sharedJs.src, { base: "." })
         .pipe(concat(paths.sharedJs.dest))
         //.pipe(minify(paths.jsOptions))
@@ -229,5 +229,5 @@ gulp.task("min:css", function (cb) {
 });
 
 gulp.task("min", ["min:plugins", "min:portal", "min:portalApp", "min:init", "min:initApp"
-, "min:clientApp", "min:clientJs","min:sharedJs", "min:css", "min:fonts"]);
+    , "min:clientApp", "min:clientJs", "min:sharedJs", "min:css", "min:fonts"]);
 gulp.task("build", ["min:views"]);

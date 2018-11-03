@@ -1,0 +1,43 @@
+<!-- Modal -->
+<div class="modal fade modal-default" id="dlg-preview-popup" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog {{$ctrl.previewObject.size}} modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header py-2">
+                <h5 class="modal-title">
+                    <i class="mi mi-PreviewLink"></i>
+                    <span ng-bind="$ctrl.previewObject.title"></span> -
+                    <a class="text-primary" href="{{$ctrl.previewObject.data.detailsUrl ||$ctrl.previewObject.data}}" target="_blank"><i class="mi mi-NewWindow"></i> New Window</a>
+                    - <a class="text-primary btn" ng-if="$ctrl.previewObject.data.editUrl" ng-click="$ctrl.goToLink($ctrl.previewObject.data.editUrl)"><i class="mi mi-Pencil"></i> Edit</a>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="container">
+                    <div ng-switch="$ctrl.previewObject.type">
+                        <div class="row" ng-switch-when="img">
+                            <div class="col-md-12 p-0">
+                                <a class="" href="{{$ctrl.previewObject.data}}" target="_blank">
+                                    <img ng-src="{{$ctrl.previewObject.data}}">
+                                </a>
+                            </div>
+                        </div>
+                        <div ng-switch-when="product" class="">
+                            <div class="row">
+                                <div class="col-md-12 p-0">
+                                    
+                                    <img ng-src="{{$ctrl.previewObject.data.imageUrl}}">
+                                    <p></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12" ng-bind-html="$ctrl.previewObject.data.content"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

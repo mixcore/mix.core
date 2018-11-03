@@ -1,6 +1,6 @@
 ﻿
 modules.component('actions', {
-    templateUrl: '/app-portal/components/actions/actions.html',
+    templateUrl: '/app/app-portal/components/actions/actions.html',
     controller: ['$rootScope', '$scope', '$location', function ($rootScope, $scope, $location) {
         var ctrl = this;
         ctrl.translate = function (keyword) {

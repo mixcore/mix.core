@@ -1,6 +1,6 @@
 ﻿
 app.component('mediaNavs', {
-    templateUrl: '/app-shared/components/media-navs/media-navs.html',
+    templateUrl: '/app/app-shared/components/media-navs/media-navs.html',
     controller: ['$rootScope', '$scope', 'ngAppSettings', 'MediaService', 
         function ($rootScope, $scope, ngAppSettings, mediaService) {
         var ctrl = this;

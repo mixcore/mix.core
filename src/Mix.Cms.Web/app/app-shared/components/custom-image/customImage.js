@@ -1,11 +1,11 @@
 ﻿
 //modules.controller('ImageController', );
 modules.component('customImage', {
-    templateUrl: '/app-shared/components/custom-image/customImage.html',
+    templateUrl: '/app/app-shared/components/custom-image/customImage.html',
     controller: ['$rootScope', '$scope', 'ngAppSettings', 'MediaService', function ($rootScope, $scope, ngAppSettings, mediaService) {
         var ctrl = this;
         ctrl.init = function () {
-            ctrl.srcUrl = ctrl.srcUrl || '/lib/now-ui-kit-pro-v1.2.2/assets/img/image_placeholder.jpg';
+            ctrl.srcUrl = ctrl.srcUrl || '/images/image_placeholder.jpg';
             ctrl.id = Math.random();
         };
         ctrl.mediaFile = {

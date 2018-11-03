@@ -1,6 +1,6 @@
 ﻿
 app.component('articleModules', {
-    templateUrl: '/app-portal/pages/article/components/modules/articleModules.html',
+    templateUrl: '/app/app-portal/pages/article/components/modules/articleModules.html',
     bindings: {
         article: '=',
         onDelete: '&',
