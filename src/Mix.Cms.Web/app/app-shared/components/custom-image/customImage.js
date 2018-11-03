@@ -1,7 +1,7 @@
 ﻿
 //modules.controller('ImageController', );
 modules.component('customImage', {
-    templateUrl: '/app-shared/components/custom-image/customImage.html',
+    templateUrl: '/app/app-shared/components/custom-image/customImage.html',
     controller: ['$rootScope', '$scope', 'ngAppSettings', 'MediaService', function ($rootScope, $scope, ngAppSettings, mediaService) {
         var ctrl = this;
         ctrl.init = function () {

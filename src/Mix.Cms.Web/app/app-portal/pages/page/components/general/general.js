@@ -1,6 +1,6 @@
 ﻿
 app.component('pageGeneral', {
-    templateUrl: '/app-portal/pages/page/components/general/general.html',
+    templateUrl: '/app/app-portal/pages/page/components/general/general.html',
     controller: function ($scope) {
         var ctrl = this;
         ctrl.dataTypes = [

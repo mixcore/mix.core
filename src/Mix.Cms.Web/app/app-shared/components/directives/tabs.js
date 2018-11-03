@@ -18,7 +18,7 @@
                 panes.push(pane);
             }
         },
-        templateUrl: '/app-shared/components/templates/tabs.html',
+        templateUrl: '/app/app-shared/components/templates/tabs.html',
         replace: true
     };
 });

@@ -1,0 +1,20 @@
+<div class="card" ng-if="$ctrl.article!=null">
+    <h6 class="card-header">
+        Main Content
+    </h6>
+    <div class="card-body">
+
+        <div class="form-group">
+            <label>Title</label>
+            <input type="text" class="form-control form-control-lg" ng-model="$ctrl.article.title" ng-blur="$ctrl.generateSEO()">
+        </div>
+        <div class="form-group">
+            <label>Excerpt</label>
+            <textarea class="form-control form-control-lg" ng-model="$ctrl.article.excerpt">{{$ctrl.article.excerpt}}</textarea>
+        </div>
+        <div class="form-group">
+            <label>Body content</label>
+            <trymboyw-editor content="$ctrl.article.content"></trymboyw-editor>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,53 @@
+<div class="tab-pane" ng-if="$ctrl.article.moduleNavs.length>0">
+
+    <div class="form-group">
+        <label class="control-label">@translator.Get("Modules")</label>
+        <div class="form-check col-md-10">
+            <ul class="nav">
+                <li class="col-sm-6" ng-repeat="module in $ctrl.article.moduleNavs track by $index" ng-if="module.isActived">
+                    <span class="switch switch-sm">
+                        <input type="checkbox" ng-model="module.isActived" id="module_{{$index}}" class="switch">
+                        <label class="switch" for="module_{{$index}}">
+                            {{module.description}}
+                        </label>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="form-group">
+
+        <label class="control-label">@translator.Get("Modules Data")</label>
+        <div ng-repeat="child in $ctrl.article.moduleNavs track by $index" ng-class="{hidden: !child.isActived}" class="col-md-12 module-data-{{child.moduleId}}">
+            <h1>{{child.module.title}}</h1>
+            @*<a href="#" class="btn btn-success AddObject" moduleid="@module.Id">Add new</a>*@
+            <table class="table table-hover table-striped" id="module-{{child.module.id}}">
+                <thead class="thead-light">
+                    <tr ng-repeat="col in child.module.columns">
+                        <th ng-if="col.isDisplay" class="col-sm-{{col.width}}">
+                            {{col.name}}
+                        </th>
+                        <th>Actived</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in child.module.data.items track by $index" id="data-{{item.id}}" dataid="data-{{item.id}}">
+                        <td ng-repeat="col in child.module.columns">
+                            @*@{Html.RenderPartial("_ViewByFieldType", new ViewDataDictionary(this.Vi‌​ewData) { { "DataType", prop.DataType }, { "Value", prop.Value } });}*@
+                        </td>
+                        <td>
+                            <input type="checkbox" ng-model="item.isActived" class="cb-active-data" dataid="{{item.id}}">
+                        </td>
+                        <td>
+                            @*<a asp-area="Portal" asp-controller="Module" asp-action="EditModuleData" asp-route-id="@item.ModuleId" asp-route-dataid="@item.Id" dataid="@item.Id" class="btn btn-sm btn-warning">
+                                <span class="oi oi-pencil"></span>
+                            </a>*@
+                            Edit
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

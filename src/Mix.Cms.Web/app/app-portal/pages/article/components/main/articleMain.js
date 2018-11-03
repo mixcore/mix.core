@@ -1,6 +1,6 @@
 ﻿
 app.component('articleMain', {
-    templateUrl: '/app-portal/pages/article/components/main/articleMain.html',
+    templateUrl: '/app/app-portal/pages/article/components/main/articleMain.html',
     controller: ['$rootScope', '$scope',
         function ($rootScope, $scope) {
             var ctrl = this;

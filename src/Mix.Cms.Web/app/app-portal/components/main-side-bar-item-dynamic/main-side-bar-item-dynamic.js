@@ -1,6 +1,6 @@
 ﻿
 modules.component('mainSideBarItemDynamic', {
-    templateUrl: '/app-portal/components/main-side-bar-item-dynamic/main-side-bar-item-dynamic.html',
+    templateUrl: '/app/app-portal/components/main-side-bar-item-dynamic/main-side-bar-item-dynamic.html',
     controller: ['$rootScope', function ($rootScope) {
         var ctrl = this;
         ctrl.translate = $rootScope.translate;

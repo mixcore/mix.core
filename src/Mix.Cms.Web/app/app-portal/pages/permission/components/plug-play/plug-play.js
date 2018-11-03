@@ -1,6 +1,6 @@
 ﻿
 app.component('permissionPlugPlay', {
-    templateUrl: '/app-portal/pages/permission/components/plug-play/plug-play.html',
+    templateUrl: '/app/app-portal/pages/permission/components/plug-play/plug-play.html',
     bindings: {
         page: '=',
         onDelete: '&',

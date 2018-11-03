@@ -1,6 +1,6 @@
 ﻿
 modules.component('trymboywEditor', {
-    templateUrl: '/app-shared/components/trymboyw-editor/trymboyw-editor.html',
+    templateUrl: '/app/app-shared/components/trymboyw-editor/trumboyw-editor',
     controller: ['$rootScope', '$scope', 'ngAppSettings',
         function ($rootScope, $scope, ngAppSettings) {
             var ctrl = this;

@@ -1,6 +1,6 @@
 ﻿
 app.component('moduleMain', {
-    templateUrl: '/app-portal/pages/module/components/main/main.html',
+    templateUrl: '/app/app-portal/pages/module/components/main/main.html',
     controller: ['$rootScope', function ($rootScope) {
         var ctrl = this;
         ctrl.gennerateName = function () {
