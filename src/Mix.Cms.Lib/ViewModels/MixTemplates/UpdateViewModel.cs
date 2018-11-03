@@ -8,6 +8,7 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixTemplates
@@ -264,7 +265,9 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                     , activedTheme
                     , folderType.ToString()
                     });
-            return new UpdateViewModel(new MixTemplate()
+            var defaulTemplate = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
+                t => t.Theme.Name == activedTheme && t.FolderType == folderType.ToString()).Data?.FirstOrDefault();
+            return defaulTemplate ?? new UpdateViewModel(new MixTemplate()
             {
                 ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, specificulture),
                 ThemeName = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, specificulture),
