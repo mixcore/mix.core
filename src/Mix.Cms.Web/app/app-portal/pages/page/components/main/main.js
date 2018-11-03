@@ -1,6 +1,6 @@
 ﻿
 app.component('pageMain', {
-    templateUrl: '/app-portal/pages/page/components/main/main.html',
+    templateUrl: '/app/app-portal/pages/page/components/main/main.html',
     controller: ['$rootScope', '$scope', 'ngAppSettings', function ($rootScope, $scope) {
         var ctrl = this;
         ctrl.settings = $rootScope.globalSettings;

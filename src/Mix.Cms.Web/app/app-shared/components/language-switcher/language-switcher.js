@@ -1,6 +1,6 @@
 ﻿(function (angular) {
     app.component('languageSwitcher', {
-        templateUrl: '/app-shared/components/language-switcher/language-switcher.html',
+        templateUrl: '/app/app-shared/components/language-switcher/language-switcher.html',
         controller: ['$rootScope', '$location', 'CommonService', 'TranslatorService', function ($rootScope, $location, commonService, translatorService) {
             var ctrl = this;
             ctrl.changeLang = async function (lang, langIcon) {

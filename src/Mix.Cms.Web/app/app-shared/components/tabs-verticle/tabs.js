@@ -19,7 +19,7 @@ modules.directive('tabsV', function () {
                 panes.push(pane);
             }
         },
-        templateUrl: '/app-shared/components/tabs-verticle/tabs.html',
+        templateUrl: '/app/app-shared/components/tabs-verticle/tabs.html',
         replace: true
     };
 });

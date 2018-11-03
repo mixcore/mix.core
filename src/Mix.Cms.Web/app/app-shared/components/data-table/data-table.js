@@ -1,5 +1,5 @@
 ﻿modules.component('swDataTable', {
-    templateUrl: '/app-shared/components/data-table/data-table.html',
+    templateUrl: '/app/app-shared/components/data-table/data-table.html',
     controller: ['$rootScope', '$scope', '$location', 'ngAppSettings', function ($rootScope, $scope, $location, ngAppSettings) {
         var ctrl = this;
         ctrl.colWidth = 3;

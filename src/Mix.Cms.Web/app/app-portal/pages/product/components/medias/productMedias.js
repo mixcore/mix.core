@@ -1,6 +1,6 @@
 ﻿
 app.component('productMedias', {
-    templateUrl: '/app-portal/pages/product/components/medias/productMedias.html',
+    templateUrl: '/app/app-portal/pages/product/components/medias/productMedias.html',
     controller: ['$rootScope', function ($rootScope) {
         var ctrl = this;
         ctrl.medias = $rootScope.medias;

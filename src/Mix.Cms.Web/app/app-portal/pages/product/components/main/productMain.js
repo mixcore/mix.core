@@ -1,6 +1,6 @@
 ﻿
 app.component('productMain', {
-    templateUrl: '/app-portal/pages/product/components/main/productMain.html',
+    templateUrl: '/app/app-portal/pages/product/components/main/productMain.html',
     controller: ['$rootScope', '$scope', 'ngAppSettings',
         function ($rootScope, $scope, ngAppSettings) {
             var ctrl = this;

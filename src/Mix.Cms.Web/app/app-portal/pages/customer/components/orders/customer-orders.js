@@ -1,6 +1,6 @@
 ﻿
 app.component('customerOrders', {
-    templateUrl: '/app-portal/pages/customer/components/orders/customer-orders.html',
+    templateUrl: '/app/app-portal/pages/customer/components/orders/customer-orders.html',
     controller: ['$rootScope', 'OrderServices', function($rootScope, orderServices){
         var ctrl = this;
         ctrl.removeOrder = function (id) {
