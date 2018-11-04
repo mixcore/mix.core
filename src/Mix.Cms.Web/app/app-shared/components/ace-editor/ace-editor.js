@@ -49,6 +49,10 @@ modules.component('aceEditor', {
                         // e.type, etc
                         ctrl.content = editor.getValue();
                     });
+                    editor.getSession().on('paste', function (e) {
+                        // e.type, etc
+                        ctrl.content = editor.getValue();
+                    });
                     ctrl.editor = editor;
                 });
             };

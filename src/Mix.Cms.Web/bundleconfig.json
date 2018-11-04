@@ -2,7 +2,6 @@
   {
     "outputFileName": "wwwroot/js/framework.min.js",
     "inputFiles": [
-      "wwwroot/js/jquery/jquery.min.js",
       "wwwroot/js/angularjs/angular.min.js",
       "wwwroot/js/angularjs/angular-route.min.js",
       "wwwroot/js/angularjs/angular-animate.min.js",
