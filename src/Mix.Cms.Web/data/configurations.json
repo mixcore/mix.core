@@ -67,7 +67,7 @@
     {
       "keyword": "Favicon",
       "category": "Site",
-      "value": "",
+      "value": "/css/portal/img/mixcore-logo-blue.png",
       "dataType": 2,
       "description": null,
       "priority": 0,
@@ -76,7 +76,7 @@
     {
       "keyword": "Logo",
       "category": "Site",
-      "value": "",
+      "value": "/css/portal/img/mixcore-logo-blue.png",
       "dataType": 2,
       "description": null,
       "priority": 0,
@@ -85,7 +85,7 @@
     {
       "keyword": "SiteName",
       "category": "Site",
-      "value": "Site Name",
+      "value": "Mix Core",
       "dataType": 0,
       "description": null,
       "priority": 0,

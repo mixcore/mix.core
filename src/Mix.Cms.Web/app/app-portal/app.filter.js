@@ -108,28 +108,28 @@ app.filter('utcToLocal', FilterUtcDate)
                         }
                     }
                 }
-            },
-            dataTypes: [
-                { title: 'Custom', value: 0 },
-                { title: 'DateTime', value: 1 },
-                { title: 'Date', value: 2 },
-                { title: 'Time', value: 3 },
-                { title: 'Duration', value: 4 },
-                { title: 'PhoneNumber', value: 5 },
-                { title: 'Currency', value: 6 },
-                { title: 'Text', value: 7 },
-                { title: 'Html', value: 8 },
-                { title: 'MultilineText', value: 9 },
-                { title: 'EmailAddress', value: 10 },
-                { title: 'Password', value: 11 },
-                { title: 'Url', value: 12 },
-                { title: 'ImageUrl', value: 13 },
-                { title: 'CreditCard', value: 14 },
-                { title: 'PostalCode', value: 15 },
-                { title: 'Upload', value: 16 },
+            }            
+        },
+        dataTypes: [
+            { title: 'Custom', value: 0 },
+            { title: 'DateTime', value: 1 },
+            { title: 'Date', value: 2 },
+            { title: 'Time', value: 3 },
+            { title: 'Duration', value: 4 },
+            { title: 'PhoneNumber', value: 5 },
+            { title: 'Currency', value: 6 },
+            { title: 'Text', value: 7 },
+            { title: 'Html', value: 8 },
+            { title: 'MultilineText', value: 9 },
+            { title: 'EmailAddress', value: 10 },
+            { title: 'Password', value: 11 },
+            { title: 'Url', value: 12 },
+            { title: 'ImageUrl', value: 13 },
+            { title: 'CreditCard', value: 14 },
+            { title: 'PostalCode', value: 15 },
+            { title: 'Upload', value: 16 },
 
-            ]
-        }
+        ]
     });
 
 function FilterUtcDate($filter) {

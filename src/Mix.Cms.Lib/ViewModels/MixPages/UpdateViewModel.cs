@@ -266,22 +266,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
             this.Templates = this.Templates ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Name == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
-            this.View = Templates.FirstOrDefault(t => !string.IsNullOrEmpty(this.Template) && this.Template.Contains(t.FileName + t.Extension));
-            this.View = View ?? Templates.FirstOrDefault();
-            if (this.View == null)
-            {
-                this.View = new MixTemplates.UpdateViewModel(new MixTemplate()
-                {
-                    Extension = MixService.GetConfig<string>("TemplateExtension"),
-                    ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture),
-                    ThemeName = ActivedTheme,
-                    FolderType = TemplateFolderType,
-                    FileFolder = this.TemplateFolder,
-                    FileName = MixService.GetConfig<string>("DefaultTemplate"),
-                    ModifiedBy = ModifiedBy,
-                    Content = "<div></div>"
-                });
-            }
+            this.View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Pages, _context, _transaction);
             this.Template = CommonHelper.GetFullPath(new string[]
                {
                     this.View?.FileFolder

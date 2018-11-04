@@ -246,11 +246,6 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 t => t.Theme.Name == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
             View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Articles, _context, _transaction);
 
-            if (this.View == null)
-            {
-                this.View = MixTemplates.UpdateViewModel.GetDefault(MixEnums.EnumTemplateFolder.Articles, Specificulture);
-            }
-
             this.Template = CommonHelper.GetFullPath(new string[]
                {
                     this.View?.FileFolder
