@@ -15,9 +15,13 @@
 
   <ItemGroup>
     <Compile Remove="app-client\shared\controllers\**" />
+    <Compile Remove="app-portal\**" />
     <Content Remove="app-client\shared\controllers\**" />
+    <Content Remove="app-portal\**" />
     <EmbeddedResource Remove="app-client\shared\controllers\**" />
+    <EmbeddedResource Remove="app-portal\**" />
     <None Remove="app-client\shared\controllers\**" />
+    <None Remove="app-portal\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,9 +36,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="app-portal\pages\moduleData\components\" />
     <Folder Include="app\app-portal\pages\moduleData\components\" />
     <Folder Include="wwwroot\lib\portal\Trumbowyg\" />
+    <Content Include="app\">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </Content>
+  <Content Include="logs\">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
