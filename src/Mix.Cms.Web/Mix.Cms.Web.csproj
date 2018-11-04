@@ -38,10 +38,10 @@
   <ItemGroup>
     <Folder Include="app\app-portal\pages\moduleData\components\" />
     <Folder Include="wwwroot\lib\portal\Trumbowyg\" />
-    <Content Include="app\">
+    <Content Include="app">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
-  <Content Include="logs\">
+  <Content Include="logs">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
