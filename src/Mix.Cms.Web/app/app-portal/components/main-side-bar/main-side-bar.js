@@ -29,42 +29,42 @@
                         }
                     ]
                 },
-                {
-                    title: 'portal_products',
-                    shortTitle: 'portal_products',
-                    icon: 'mi mi-Package',
-                    href: '#',
-                    subMenus: [
-                        {
-                            title: ('portal_create'),
-                            href: '/portal/product/create',
-                            icon: 'mi mi-Add'
-                        },
-                        {
-                            title: 'portal_list',
-                            href: '/portal/product/list',
-                            icon: 'mi mi-List'
-                        }
-                    ]
-                },
-                {
-                    title: 'portal_orders',
-                    shortTitle: 'portal_orders',
-                    icon: 'mi mi-CashDrawer',
-                    href: '#',
-                    subMenus: [
-                        {
-                            title: ('portal_create'),
-                            href: '/portal/order/create',
-                            icon: 'mi mi-Add'
-                        },
-                        {
-                            title: 'portal_list',
-                            href: '/portal/order/list',
-                            icon: 'mi mi-List'
-                        }
-                    ]
-                },
+                // {
+                //     title: 'portal_products',
+                //     shortTitle: 'portal_products',
+                //     icon: 'mi mi-Package',
+                //     href: '#',
+                //     subMenus: [
+                //         {
+                //             title: ('portal_create'),
+                //             href: '/portal/product/create',
+                //             icon: 'mi mi-Add'
+                //         },
+                //         {
+                //             title: 'portal_list',
+                //             href: '/portal/product/list',
+                //             icon: 'mi mi-List'
+                //         }
+                //     ]
+                // },
+                // {
+                //     title: 'portal_orders',
+                //     shortTitle: 'portal_orders',
+                //     icon: 'mi mi-CashDrawer',
+                //     href: '#',
+                //     subMenus: [
+                //         {
+                //             title: ('portal_create'),
+                //             href: '/portal/order/create',
+                //             icon: 'mi mi-Add'
+                //         },
+                //         {
+                //             title: 'portal_list',
+                //             href: '/portal/order/list',
+                //             icon: 'mi mi-List'
+                //         }
+                //     ]
+                // },
                 {
                     title: 'portal_pages',
                     shortTitle: 'portal_pages',
