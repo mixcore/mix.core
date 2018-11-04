@@ -1,7 +1,7 @@
 {
   "ConnectionStrings": {
-    "MixAccountConnection": null,
-    "MixCmsConnection": null,
+    "MixAccountConnection": "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=sw-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True",
+    "MixCmsConnection": "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=sw-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True",
     "DefaultConnection": null
   },
   "Authentication": {
@@ -14,27 +14,47 @@
     "Issuer": "mix-core"
   },
   "Translator": {
-    
+    "vi-vn": {
+      "fe_site_name": "Site name",
+      "language": "Languages",
+      "portal_articles": "Articles",
+      "portal_create": "Create",
+      "portal_cultures": "Cultures",
+      "portal_dashboard": "Dashboard",
+      "portal_file": "File",
+      "portal_import": "Import",
+      "portal_list": "List",
+      "portal_media": "Media",
+      "portal_modules": "Modules",
+      "portal_orders": "Orders",
+      "portal_pages": "Pages",
+      "portal_permissions": "Permissions",
+      "portal_products": "Products",
+      "portal_settings": "Settings",
+      "portal_themes": "Themes",
+      "portal_users": "Users",
+      "read_more": "Read more"
+    }
   },
   "LocalSettings": {
-    "en-us": {
+    "vi-vn": {
       "ContactAddress": "",
       "ContactEmail": "Site Name",
       "ContactPhone": "",
       "Facebook": "",
       "FacebookAppId": "",
-      "Favicon": "",
+      "Favicon": "/css/portal/img/mixcore-logo-blue.png",
       "LanguageVersion": "1",
-      "Logo": "",
+      "Logo": "/css/portal/img/mixcore-logo-blue.png",
       "SettingVersion": "1",
-      "SiteName": "Site Name",
+      "SiteName": "Mix Core",
       "Theme": "Default",
       "ThemeId": "1"
     }
   },
   "GlobalSettings": {
-    "IsInit": false,
-    "DefaultCulture": "en-us",
+    "IsInit": "True",
+    "DefaultCulture": "vi-vn",
     "DefaultTemplate": "_Default",
     "DefaultTheme": "Default",
     "DefaultContentStatus": "2",
@@ -43,7 +63,7 @@
     "OrderBy": "Priority",
     "DefaultStatus": "2",
     "IsSqlite": "False",
-    "Language": "en-us",
+    "Language": "vi-vn",
     "UploadFolder": "Content/Uploads",
     "ThemeId": "1",
     "TemplateExtension": ".cshtml",
