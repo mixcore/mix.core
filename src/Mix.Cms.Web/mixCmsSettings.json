@@ -1,20 +1,39 @@
 {
   "ConnectionStrings": {
-    "MixAccountConnection": null,
-    "MixCmsConnection": null,
+    "MixAccountConnection": "Server=mi3-wsq2.a2hosting.com;Database=smilewa1_mixcore_test;UID=smilewa1_singuyen;Pwd=P@ssw0rd;MultipleActiveResultSets=true;",
+    "MixCmsConnection": "Server=mi3-wsq2.a2hosting.com;Database=smilewa1_mixcore_test;UID=smilewa1_singuyen;Pwd=P@ssw0rd;MultipleActiveResultSets=true;",
     "DefaultConnection": null
   },
   "Authentication": {
-    "ClockSkew": 10,
-    "CookieExpiration": 10,
-    "RefreshTokenExpiration": 1200,
+    "CookieExpiration": 100,
+    "RefreshTokenExpiration": 100,
     "TokenType": "Bearer",
     "Audience": "mix-core",
     "SecretKey": "mixcore-secret-key",
     "Issuer": "mix-core"
   },
   "Translator": {
-    
+    "en-us": {
+      "fe_site_name": "Site name",
+      "language": "Languages",
+      "portal_articles": "Articles",
+      "portal_create": "Create",
+      "portal_cultures": "Cultures",
+      "portal_dashboard": "Dashboard",
+      "portal_file": "File",
+      "portal_import": "Import",
+      "portal_list": "List",
+      "portal_media": "Media",
+      "portal_modules": "Modules",
+      "portal_orders": "Orders",
+      "portal_pages": "Pages",
+      "portal_permissions": "Permissions",
+      "portal_products": "Products",
+      "portal_settings": "Settings",
+      "portal_themes": "Themes",
+      "portal_users": "Users",
+      "read_more": "Read more"
+    }
   },
   "LocalSettings": {
     "en-us": {
@@ -33,7 +52,7 @@
     }
   },
   "GlobalSettings": {
-    "IsInit": false,
+    "IsInit": "True",
     "DefaultCulture": "en-us",
     "DefaultTemplate": "_Default",
     "DefaultTheme": "Default",
