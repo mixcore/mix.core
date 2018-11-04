@@ -56,14 +56,22 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
         #region overrides
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixPortalPageNavigation parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            var result = await Page.SaveModelAsync(false, _context, _transaction);
-            return new RepositoryResponse<bool>()
+            if (Page!=null)
             {
-                IsSucceed = result.IsSucceed,
-                Data = result.IsSucceed,
-                Errors = result.Errors,
-                Exception = result.Exception
-            };
+                var result = await Page.SaveModelAsync(false, _context, _transaction);
+                return new RepositoryResponse<bool>()
+                {
+                    IsSucceed = result.IsSucceed,
+                    Data = result.IsSucceed,
+                    Errors = result.Errors,
+                    Exception = result.Exception
+                };
+            }
+            else
+            {
+                return await base.SaveSubModelsAsync(parent, _context, _transaction);
+            }
+            
         }
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

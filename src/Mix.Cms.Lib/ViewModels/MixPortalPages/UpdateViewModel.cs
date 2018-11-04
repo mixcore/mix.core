@@ -206,12 +206,18 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
 
-            var positions = await _context.MixPortalPagePosition.Where(p => p.PortalPageId == Id).ToListAsync();
-            positions.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+            await _context.MixPortalPagePosition.Where(p => p.PortalPageId == Id).ForEachAsync(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var navs = await _context.MixPortalPageNavigation.Where(p => p.Id == Id || p.ParentId == Id).ToListAsync();
-            navs.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
-
+            var navs = _context.MixPortalPageNavigation.Where(p => p.Id == Id || p.ParentId == Id);
+            foreach (var item in navs)
+            {
+                _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                if (item.ParentId == Id)
+                {
+                    _context.Entry(_context.MixPortalPage.Single(sub => sub.Id == item.Id)).State = EntityState.Deleted;
+                }
+            }
+            await _context.SaveChangesAsync();
             return result;
         }
         #endregion Overrides
