@@ -84,13 +84,10 @@
   {
     "outputFileName": "wwwroot/css/portal.min.css",
     "inputFiles": [
-
-      //"wwwroot/css/portal/portal.white-sd.css",
       "wwwroot/lib/portal/**/*.css",
       "wwwroot/lib/portal/**/*.*.css",
       "wwwroot/css/portal/**/*.css",
       "wwwroot/css/portal/**/*.*.css"
-      //"wwwroot/css/portal/main.css"
     ]
   },
   {
