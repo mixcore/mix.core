@@ -158,7 +158,7 @@
     ],
     "minify": {
       "enabled": false,
-      "renameLocals": true
+      "renameLocals": false 
     },
     "sourceMap": false
   }
