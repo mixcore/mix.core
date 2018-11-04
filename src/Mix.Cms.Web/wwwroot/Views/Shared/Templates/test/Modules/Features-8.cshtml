@@ -1,0 +1,29 @@
+<!--     *********     FEATURES 8      *********      -->
+
+<div class="features-8 section-image" style="background-image: url('@Model.Image')">
+
+    <div class="col-md-8 ml-auto mr-auto text-center">
+        <h2 class="title">@Model.Title</h2>
+        <h4 class="description">@Html.Raw(Model.Description)</h4>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            @foreach (var nav in Model.Products.Items)
+            {
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-image">
+                        <img src="@nav.Product.ImageUrl" class="rounded" alt="" />
+                    </div>
+                    <div class="info text-center">
+                        <h4 class="info-title">@nav.Product.Title</h4>
+                        <p class="description">@Html.Raw(nav.Product.Excerpt)</p>
+                    </div>
+                </div>
+            </div>
+            }
+
+        </div>
+    </div>
+</div>

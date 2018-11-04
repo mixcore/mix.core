@@ -35,8 +35,10 @@ namespace Mix.Cms.Lib.Repositories
         /// Gets the instance.
         /// </summary>
         /// <returns></returns>
-        public static FileRepository Instance {
-            get {
+        public static FileRepository Instance
+        {
+            get
+            {
                 if (instance == null)
                 {
                     lock (syncRoot)
@@ -47,7 +49,8 @@ namespace Mix.Cms.Lib.Repositories
                 }
                 return instance;
             }
-            set {
+            set
+            {
                 instance = value;
             }
         }
@@ -287,6 +290,26 @@ namespace Mix.Cms.Lib.Repositories
 
                 //Copy all the files & Replaces any files with the same name
                 foreach (string newPath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
+                {
+                    File.Copy(newPath, newPath.Replace(srcPath, desPath), true);
+                }
+
+                return true;
+            }
+            return true;
+        }
+         public bool CopyWebDirectory(string srcPath, string desPath)
+        {
+            if (srcPath != desPath)
+            {
+                //Now Create all of the directories
+                foreach (string dirPath in Directory.GetDirectories($"{MixConstants.Folder.WebRootPath}/{srcPath}", "*", SearchOption.AllDirectories))
+                {
+                    Directory.CreateDirectory(dirPath.Replace(srcPath, desPath));
+                }
+
+                //Copy all the files & Replaces any files with the same name
+                foreach (string newPath in Directory.GetFiles($"{MixConstants.Folder.WebRootPath}/{srcPath}", "*.*", SearchOption.AllDirectories))
                 {
                     File.Copy(newPath, newPath.Replace(srcPath, desPath), true);
                 }
@@ -661,7 +684,7 @@ namespace Mix.Cms.Lib.Repositories
             {
                 MixConstants.Folder.WebRootPath,
                 file.FileFolder
-        });
+            });
             try
             {
                 ZipFile.ExtractToDirectory(filePath, webFolder);
@@ -670,6 +693,36 @@ namespace Mix.Cms.Lib.Repositories
             catch
             {
                 return false;
+            }
+        }
+
+        public string ZipFolder(string srcFolder, string fileName)
+        {
+            try
+            {
+                string tmpPath = $"{MixConstants.Folder.WebRootPath}/{srcFolder}/tmp";
+                string outputFile = $"{srcFolder}/{fileName}.zip";
+                string outputFilePath = $"{MixConstants.Folder.WebRootPath}/{outputFile}";
+
+                if (Directory.Exists(srcFolder))
+                {
+                    CopyDirectory(srcFolder, tmpPath);
+                    if (File.Exists(outputFilePath))
+                    {
+                        File.Delete(outputFilePath);
+                    }
+                    ZipFile.CreateFromDirectory(tmpPath, outputFilePath);
+                    DeleteFolder(tmpPath);
+                    return outputFile;
+                }
+                else
+                {
+                    return string.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
             }
         }
     }

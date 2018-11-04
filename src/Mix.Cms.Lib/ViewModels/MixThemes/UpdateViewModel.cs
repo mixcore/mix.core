@@ -49,7 +49,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public bool IsActived { get; set; }
 
         [JsonProperty("asset")]
-        public IFormFile Asset { get; set; }
+        public FileViewModel Asset { get; set; }
 
         [JsonProperty("assetFolder")]
         public string AssetFolder
@@ -106,7 +106,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Templates = MixTemplates.UpdateViewModel.Repository.GetModelListBy(t => t.ThemeId == Id,
-                _context: _context, _transaction: _transaction).Data;            
+                _context: _context, _transaction: _transaction).Data;
+            Asset = new FileViewModel() { FileFolder = $"Import/Themes/{DateTime.UtcNow.ToShortDateString()}" };
         }
 
 
@@ -117,13 +118,9 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>() { IsSucceed = true };
 
-            if (Asset != null && Asset.Length > 0)
+            if (Asset.Content != null || Asset.FileStream != null)
             {
-                string filename = FileRepository.Instance.SaveWebFile(Asset, AssetFolder);
-                if (!string.IsNullOrEmpty(filename))
-                {
-                    FileRepository.Instance.UnZipFile(filename, AssetFolder);
-                }
+                ImportTheme();
             }
             if (Id == 0)
             {
@@ -216,14 +213,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 {
                     Errors.AddRange(saveResult.Errors);
                 }
-                else
-                {
-                    //MixCmsService.Instance.RefreshConfigurations(_context, _transaction);
-                }
                 result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
             }
 
-            if (Asset != null && Asset.Length > 0 && Id == 0)
+            if (Asset.Content != null || Asset.FileStream != null)
             {
                 var files = FileRepository.Instance.GetWebFiles(AssetFolder);
                 StringBuilder strStyles = new StringBuilder();
@@ -276,13 +269,9 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>() { IsSucceed = true };
 
-            if (Asset != null && Asset.Length > 0)
+            if (Asset.Content != null || Asset.FileStream != null)
             {
-                string filename = FileRepository.Instance.SaveWebFile(Asset, AssetFolder);
-                if (!string.IsNullOrEmpty(filename))
-                {
-                    FileRepository.Instance.UnZipFile(filename, AssetFolder);
-                }
+                ImportTheme();
             }
             if (Id == 0)
             {
@@ -385,7 +374,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
             }
 
-            if (Asset != null && Asset.Length > 0 && Id == 0)
+
+            if (Asset.Content != null || Asset.FileStream != null)
             {
                 var files = FileRepository.Instance.GetWebFiles(AssetFolder);
                 StringBuilder strStyles = new StringBuilder();
@@ -431,8 +421,24 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             };
         }
 
-        #endregion 
+        #endregion
 
         #endregion Overrides
+
+        #region Expand
+
+        void ImportTheme()
+        {
+            Asset.Filename = Name;
+            if (FileRepository.Instance.SaveWebFile(Asset))
+            {
+                FileRepository.Instance.UnZipFile($"{Asset.Filename}{Asset.Extension}", Asset.FileFolder);
+                FileRepository.Instance.CopyWebDirectory($"{Asset.FileFolder}/Assets", AssetFolder);
+                FileRepository.Instance.CopyWebDirectory($"{Asset.FileFolder}/Templates", TemplateFolder);
+                FileRepository.Instance.DeleteWebFolder(Asset.FileFolder);
+            }
+        }
+
+        #endregion
     }
 }

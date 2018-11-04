@@ -19,6 +19,7 @@ using Mix.Cms.Hub;
 using Microsoft.Extensions.Caching.Memory;
 using System.Collections.Generic;
 using Mix.Cms.Lib;
+using Mix.Cms.Lib.Repositories;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -47,6 +48,27 @@ namespace Mix.Cms.Api.Controllers.v1
                 await item.SaveModelAsync(true).ConfigureAwait(false);
             }
             return getTemplate;
+        }
+        
+        // GET api/theme/id
+        [HttpGet, HttpOptions]
+        [Route("export/{id}")]
+        public async Task<RepositoryResponse<string>> Export(int id)
+        {
+            var getTemplate = await ReadViewModel.Repository.GetSingleModelAsync(
+                 theme => theme.Id == id).ConfigureAwait(false);
+            string exportPath = $"Exports/Themes/{getTemplate.Data.Name}";
+            FileRepository.Instance.DeleteFolder(exportPath);
+            FileRepository.Instance.CopyDirectory($"{getTemplate.Data.TemplateFolder}", $"{exportPath}/Templates");
+            FileRepository.Instance.CopyDirectory($"wwwroot/{getTemplate.Data.AssetFolder}", $"{exportPath}/Assets");
+            string filePath = FileRepository.Instance.ZipFolder($"{exportPath}", getTemplate.Data.Name);
+            FileRepository.Instance.DeleteWebFolder($"{exportPath}/Assets");
+            FileRepository.Instance.DeleteWebFolder($"{exportPath}/Templates");
+            return new RepositoryResponse<string>()
+            {
+                IsSucceed = !string.IsNullOrEmpty(exportPath),
+                Data = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/{filePath}"
+            };
         }
 
         // GET api/theme/id

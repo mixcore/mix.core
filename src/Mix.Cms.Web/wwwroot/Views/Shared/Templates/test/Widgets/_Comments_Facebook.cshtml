@@ -1,0 +1,9 @@
+@{
+    string href = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}";
+
+}
+
+
+    <div class="fb-comments col-sm-12" width="100%"
+         data-href="@href"
+         data-numposts="5"></div>
