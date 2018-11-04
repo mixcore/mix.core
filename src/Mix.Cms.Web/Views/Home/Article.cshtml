@@ -12,7 +12,6 @@
     try
     {
         <partial name="@Model.TemplatePath" model="@Model" />
-        @Html.RenderPartialAsync(Model.TemplatePath,Model)
     }
     catch(Exception ex)
     {

@@ -1,19 +1,20 @@
 {
   "ConnectionStrings": {
-    "MixAccountConnection": "Server=mi3-wsq2.a2hosting.com;Database=smilewa1_mixcore_test;UID=smilewa1_singuyen;Pwd=P@ssw0rd;MultipleActiveResultSets=true;",
-    "MixCmsConnection": "Server=mi3-wsq2.a2hosting.com;Database=smilewa1_mixcore_test;UID=smilewa1_singuyen;Pwd=P@ssw0rd;MultipleActiveResultSets=true;",
+    "MixAccountConnection": "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=sw-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True",
+    "MixCmsConnection": "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=sw-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True",
     "DefaultConnection": null
   },
   "Authentication": {
-    "CookieExpiration": 20,
-    "RefreshTokenExpiration": 20,
+    "ClockSkew": 10,
+    "CookieExpiration": 10,
+    "RefreshTokenExpiration": 1200,
     "TokenType": "Bearer",
     "Audience": "mix-core",
     "SecretKey": "mixcore-secret-key",
     "Issuer": "mix-core"
   },
   "Translator": {
-    "en-us": {
+    "vi-vn": {
       "fe_site_name": "Site name",
       "language": "Languages",
       "portal_articles": "Articles",
@@ -36,33 +37,33 @@
     }
   },
   "LocalSettings": {
-    "en-us": {
+    "vi-vn": {
       "ContactAddress": "",
       "ContactEmail": "Site Name",
       "ContactPhone": "",
       "Facebook": "",
       "FacebookAppId": "",
-      "Favicon": "",
+      "Favicon": "/css/portal/img/mixcore-logo-blue.png",
       "LanguageVersion": "1",
-      "Logo": "",
+      "Logo": "/css/portal/img/mixcore-logo-blue.png",
       "SettingVersion": "1",
-      "SiteName": "Site Name",
+      "SiteName": "Mix Core",
       "Theme": "Default",
       "ThemeId": "1"
     }
   },
   "GlobalSettings": {
     "IsInit": "True",
-    "DefaultCulture": "en-us",
+    "DefaultCulture": "vi-vn",
     "DefaultTemplate": "_Default",
     "DefaultTheme": "Default",
     "DefaultContentStatus": "2",
-    "DefaultTemplateFolder": "Default_Blank",
+    "DefaultTemplateFolder": "Default",
     "DefaultTemplateLayout": "_Layout",
     "OrderBy": "Priority",
     "DefaultStatus": "2",
     "IsSqlite": "False",
-    "Language": "en-us",
+    "Language": "vi-vn",
     "UploadFolder": "Content/Uploads",
     "ThemeId": "1",
     "TemplateExtension": ".cshtml",

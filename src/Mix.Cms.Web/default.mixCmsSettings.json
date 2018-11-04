@@ -1,0 +1,68 @@
+{
+  "ConnectionStrings": {
+    "MixAccountConnection": null,
+    "MixCmsConnection": null,
+    "DefaultConnection": null
+  },
+  "Authentication": {
+    "ClockSkew": 10,
+    "CookieExpiration": 10,
+    "RefreshTokenExpiration": 1200,
+    "TokenType": "Bearer",
+    "Audience": "mix-core",
+    "SecretKey": "mixcore-secret-key",
+    "Issuer": "mix-core"
+  },
+  "Translator": {
+    
+  },
+  "LocalSettings": {
+    "en-us": {
+      "ContactAddress": "",
+      "ContactEmail": "Site Name",
+      "ContactPhone": "",
+      "Facebook": "",
+      "FacebookAppId": "",
+      "Favicon": "",
+      "LanguageVersion": "1",
+      "Logo": "",
+      "SettingVersion": "1",
+      "SiteName": "Site Name",
+      "Theme": "Default",
+      "ThemeId": "1"
+    }
+  },
+  "GlobalSettings": {
+    "IsInit": false,
+    "DefaultCulture": "en-us",
+    "DefaultTemplate": "_Default",
+    "DefaultTheme": "Default",
+    "DefaultContentStatus": "2",
+    "DefaultTemplateFolder": "Default",
+    "DefaultTemplateLayout": "_Layout",
+    "OrderBy": "Priority",
+    "DefaultStatus": "2",
+    "IsSqlite": "False",
+    "Language": "en-us",
+    "UploadFolder": "Content/Uploads",
+    "ThemeId": "1",
+    "TemplateExtension": ".cshtml",
+    "ApiEncryptKey": "2b7e151628aed2a6abf7158809cf4f3c",
+    "ApiEncryptIV": "2b7e151628aed2as",
+    "IsEncryptApi": true
+  },
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Warning"
+    }
+  },
+  "JWTSettings": {
+    "SecretKey": "sw-cms-secret-key",
+    "Issuer": "sw-cms",
+    "Audience": "sw-client"
+  },
+  "AllowedHosts": "*",
+  "IsSqlite": false,
+  "Language": "en-us"
+}

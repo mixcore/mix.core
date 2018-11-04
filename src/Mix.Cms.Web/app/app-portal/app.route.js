@@ -6,10 +6,6 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         templateUrl: "/app/app-portal/pages/dashboard/dashboard.html"
     });
 
-    $routeProvider.when("/init/login", {
-        controller: "loginController",
-        templateUrl: "/app/app-portal/pages/login/login.html"
-    });
 
     $routeProvider.when("/portal/customer/details/:id", {
         controller: "CustomerController",

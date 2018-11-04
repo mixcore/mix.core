@@ -111,7 +111,7 @@ namespace Mix.Cms.Lib.Services
 
         public static T GetConfig<T>(string name, string culture)
         {
-            var result = Instance.LocalSettings[culture][name];
+            var result = !string.IsNullOrEmpty(culture) ? Instance.LocalSettings[culture][name]: null;
             return result != null ? result.Value<T>() : default(T);
         }
 
