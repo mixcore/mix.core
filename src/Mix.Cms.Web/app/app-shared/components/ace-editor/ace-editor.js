@@ -6,6 +6,7 @@ modules.component('aceEditor', {
             var ctrl = this;
             ctrl.editor;
             ctrl.id = Math.floor(Math.random() * 100) + 1;
+            
             ctrl.initAce = function () {
                 setTimeout(() => {
                     ctrl.updateEditors();
