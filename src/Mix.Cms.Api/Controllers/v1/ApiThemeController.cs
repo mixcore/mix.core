@@ -58,12 +58,19 @@ namespace Mix.Cms.Api.Controllers.v1
             var getTemplate = await ReadViewModel.Repository.GetSingleModelAsync(
                  theme => theme.Id == id).ConfigureAwait(false);
             string exportPath = $"Exports/Themes/{getTemplate.Data.Name}";
+            
+            // Delete Existing folder
             FileRepository.Instance.DeleteFolder(exportPath);
+            // Copy current templates file
             FileRepository.Instance.CopyDirectory($"{getTemplate.Data.TemplateFolder}", $"{exportPath}/Templates");
+            // Copy current assets files
             FileRepository.Instance.CopyDirectory($"wwwroot/{getTemplate.Data.AssetFolder}", $"{exportPath}/Assets");
+            // Zip to [theme_name].zip
             string filePath = FileRepository.Instance.ZipFolder($"{exportPath}", getTemplate.Data.Name);
+            // Delete temp folder
             FileRepository.Instance.DeleteWebFolder($"{exportPath}/Assets");
             FileRepository.Instance.DeleteWebFolder($"{exportPath}/Templates");
+
             return new RepositoryResponse<string>()
             {
                 IsSucceed = !string.IsNullOrEmpty(exportPath),
