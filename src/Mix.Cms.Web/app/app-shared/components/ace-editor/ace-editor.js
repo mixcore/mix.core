@@ -57,11 +57,6 @@ modules.component('aceEditor', {
                     ctrl.editor = editor;
                 });
             };
-            $scope.$on('updateContentCodeEditors', function () {
-                setTimeout(() => {
-                    ctrl.editor.setValue(ctrl.content || '');
-                }, 100);
-            });
         }],
     bindings: {
         content: '=',

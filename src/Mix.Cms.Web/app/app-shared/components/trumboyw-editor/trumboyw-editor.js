@@ -1,5 +1,5 @@
 ﻿
-modules.component('trymboywEditor', {
+modules.component('trumboywEditor', {
     templateUrl: '/app/app-shared/components/trumboyw-editor/trumboyw-editor.html',
     controller: ['$rootScope', '$scope', 'ngAppSettings',
         function ($rootScope, $scope, ngAppSettings) {

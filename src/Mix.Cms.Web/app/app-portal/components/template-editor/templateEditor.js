@@ -10,7 +10,7 @@
                 $scope.$broadcast('updateContentCodeEditors', []);
             };
             ctrl.init = async function(){
-                if(ctrl.folderType){
+                if(ctrl.folderType && !ctrl.folderType){
                     var themeId = globalSettingsService.get('themeId');
                     var resp = await service.getSingle(['portal', themeId, ctrl.folderType]);
                     if (resp && resp.isSucceed) {
