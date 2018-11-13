@@ -159,7 +159,7 @@ namespace Mix.Cms.Lib.Services
 
         private async Task<bool> InitLanguagesAsync(InitCulture culture, MixCmsContext context, IDbContextTransaction transaction)
         {
-            /* Init Configs */
+            /* Init Languages */
             var configurations = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_LANGUAGES, "data", true, "{}");
             var obj = JObject.Parse(configurations.Content);
             var arrLanguage = obj["data"].ToObject<List<MixLanguage>>();

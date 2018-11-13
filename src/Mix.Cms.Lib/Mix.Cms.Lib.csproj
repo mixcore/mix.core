@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ViewModels\Shared\**" />
+    <EmbeddedResource Remove="ViewModels\Shared\**" />
+    <None Remove="ViewModels\Shared\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Interfaces\IMixCmsService.cs" />
     <Compile Remove="Services\CmsConfiguration.cs" />
     <Compile Remove="Services\CmsCultureConfiguration.cs" />
@@ -24,7 +30,6 @@
   <ItemGroup>
     <Folder Include="Interfaces\" />
     <Folder Include="ViewModels\MixRolePortalPages\" />
-    <Folder Include="ViewModels\Shared\" />
   </ItemGroup>
 
 </Project>

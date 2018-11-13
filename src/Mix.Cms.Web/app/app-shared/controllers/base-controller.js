@@ -10,7 +10,7 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
     $scope.saveCallbackArgs = [];
     $scope.removeCallbackArgs = [];
     $scope.range = $rootScope.range;
-
+    
     $scope.getSingle = async function () {
         $rootScope.isBusy = true;
         var id = $routeParams.id;

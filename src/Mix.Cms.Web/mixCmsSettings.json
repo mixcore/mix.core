@@ -1,7 +1,7 @@
 {
   "ConnectionStrings": {
-    "MixAccountConnection": "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=sw-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True",
-    "MixCmsConnection": "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=sw-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True",
+    "MixAccountConnection": "Server=(localdb)\\mssqllocaldb;Database=mix-cms.db;Trusted_Connection=True;MultipleActiveResultSets=true",
+    "MixCmsConnection": "Server=(localdb)\\mssqllocaldb;Database=mix-cms.db;Trusted_Connection=True;MultipleActiveResultSets=true",
     "DefaultConnection": null
   },
   "Authentication": {
@@ -14,7 +14,7 @@
     "Issuer": "mix-core"
   },
   "Translator": {
-    "vi-vn": {
+    "en-us": {
       "fe_site_name": "Site name",
       "language": "Languages",
       "portal_articles": "Articles",
@@ -37,7 +37,7 @@
     }
   },
   "LocalSettings": {
-    "vi-vn": {
+    "en-us": {
       "ContactAddress": "",
       "ContactEmail": "Site Name",
       "ContactPhone": "",
@@ -54,7 +54,7 @@
   },
   "GlobalSettings": {
     "IsInit": "True",
-    "DefaultCulture": "vi-vn",
+    "DefaultCulture": "en-us",
     "DefaultTemplate": "_Default",
     "DefaultTheme": "Default",
     "DefaultContentStatus": "2",
@@ -63,7 +63,7 @@
     "OrderBy": "Priority",
     "DefaultStatus": "2",
     "IsSqlite": "False",
-    "Language": "vi-vn",
+    "Language": "en-us",
     "UploadFolder": "Content/Uploads",
     "ThemeId": "1",
     "TemplateExtension": ".cshtml",
