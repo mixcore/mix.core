@@ -110,6 +110,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             Templates = MixTemplates.UpdateViewModel.Repository.GetModelListBy(t => t.ThemeId == Id,
                 _context: _context, _transaction: _transaction).Data;
             TemplateAsset = new FileViewModel() { FileFolder = $"Import/Themes/{DateTime.UtcNow.ToShortDateString()}" };
+            Asset = new FileViewModel() { FileFolder = AssetFolder };
         }
 
 
