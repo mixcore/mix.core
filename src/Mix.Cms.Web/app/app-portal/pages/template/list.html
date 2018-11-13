@@ -46,7 +46,10 @@
                     <span ng-bind="item.fileName"></span>
                 </td>
                 <td>
-                    <span ng-bind="item.fileFolder"></span>
+                    <div class="input-group input-group-sm">
+                        <input id="path-modal-{{$index}}" value="{{item.fileFolder}}" onclick="this.select()" class="form-control form-control-sm"
+                            readonly="readonly">
+                    </div>
                 </td>
                <td>
                     <small>

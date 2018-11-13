@@ -6,7 +6,8 @@ function BaseHub($scope) {
     $scope.requests = [];
     $scope.rooms = [];
     $scope.others = [];
-
+    $scope.totalReconnect = 10;
+    $scope.timeDelay = 1000;
     $scope.connect = function () {
         $scope.connection.invoke('join', $scope.player);
     };
@@ -14,10 +15,10 @@ function BaseHub($scope) {
         $scope.connection.invoke('SendMessage', $scope.request);
     };
     $scope.receiveMessage = function (msg) {
-        $scope.responses.splice(0, 0,msg);
+        $scope.responses.splice(0, 0, msg);
         $scope.$applyAsync();
     };
-    $scope.prettyJsonObj = function(obj) {
+    $scope.prettyJsonObj = function (obj) {
         return JSON.stringify(obj, null, '\t');
     }
     // Starts a connection with transport fallback - if the connection cannot be started using
@@ -45,6 +46,32 @@ function BaseHub($scope) {
                 console.log(`Cannot start the connection use transport.`, error);
                 return Promise.reject(error);
             });
+        $scope.connection.onclose(function (e) {
+            var count = 0;
+            setTimeout(function () {
+
+                while (count < $scope.totalReconnect) {
+                    if ($scope.reconnect()) {
+                        count = $scope.totalReconnect;
+                    } else {
+                        count++;
+                    }
+                }
+            }, $scope.timeDelay);
+        });
+
+        $scope.reconnect = function () {
+            $scope.connection.start()
+                .then(function () {
+                    console.log('connection started', $scope.connection);
+                    return true;
+                    //$scope.$apply();
+                })
+                .catch(function (error) {
+                    console.log(`Cannot start the connection use transport.`, error);
+                    return false;
+                });
+        }
     };
 
     $scope.$on("$destroy", function () {
