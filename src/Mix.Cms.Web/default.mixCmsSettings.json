@@ -14,7 +14,7 @@
     "Issuer": "mix-core"
   },
   "Translator": {
-    
+
   },
   "LocalSettings": {
     "en-us": {
@@ -51,6 +51,7 @@
     "ApiEncryptIV": "2b7e151628aed2as",
     "IsEncryptApi": true
   },
+  
   "Logging": {
     "IncludeScopes": false,
     "LogLevel": {
