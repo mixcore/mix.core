@@ -1,7 +1,7 @@
 {
   "ConnectionStrings": {
-    "MixAccountConnection": "Server=(localdb)\\mssqllocaldb;Database=mix-cms.db;Trusted_Connection=True;MultipleActiveResultSets=true",
-    "MixCmsConnection": "Server=(localdb)\\mssqllocaldb;Database=mix-cms.db;Trusted_Connection=True;MultipleActiveResultSets=true",
+    "MixAccountConnection": null,
+    "MixCmsConnection": null,
     "DefaultConnection": null
   },
   "Authentication": {
