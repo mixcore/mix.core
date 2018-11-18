@@ -6,9 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cms", "Cms", "{C45D03E7-0453-4199-A5DE-E61B5FF29AF4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Heart", "Heart", "{C28E20DA-23BA-4B69-8F00-725057F9082E}"
-	ProjectSection(SolutionItems) = preProject
-		Mix.Cms.Lib\ViewModels\Shared\Info\InfoThemeViewModel.cs = Mix.Cms.Lib\ViewModels\Shared\Info\InfoThemeViewModel.cs
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Cms.Web", "Mix.Cms.Web\Mix.Cms.Web.csproj", "{0E27FDA9-70B1-41AD-8465-3E56EA78F0DF}"
 EndProject
@@ -20,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Cms.Lib", "Mix.Cms.Lib\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Identity", "..\..\mix.identity\src\Mix.Identity\Mix.Identity.csproj", "{37ABE40A-13D7-4604-AD4B-540F4093BB1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mix.Cms.Hub", "Mix.Cms.Hub\Mix.Cms.Hub.csproj", "{22C892C8-633B-406B-B8A8-F10F676F4C19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Cms.Hub", "Mix.Cms.Hub\Mix.Cms.Hub.csproj", "{22C892C8-633B-406B-B8A8-F10F676F4C19}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mix.Services.Messenger", "Mix.Services.Messenger\Mix.Services.Messenger.csproj", "{461312C2-0E62-47F0-A1E8-222E41DC4574}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +51,10 @@ Global
 		{22C892C8-633B-406B-B8A8-F10F676F4C19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22C892C8-633B-406B-B8A8-F10F676F4C19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22C892C8-633B-406B-B8A8-F10F676F4C19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{461312C2-0E62-47F0-A1E8-222E41DC4574}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{461312C2-0E62-47F0-A1E8-222E41DC4574}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{461312C2-0E62-47F0-A1E8-222E41DC4574}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{461312C2-0E62-47F0-A1E8-222E41DC4574}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,6 +66,7 @@ Global
 		{46A6FAC4-B138-4AB8-AAB2-597EE1774371} = {C45D03E7-0453-4199-A5DE-E61B5FF29AF4}
 		{37ABE40A-13D7-4604-AD4B-540F4093BB1B} = {C28E20DA-23BA-4B69-8F00-725057F9082E}
 		{22C892C8-633B-406B-B8A8-F10F676F4C19} = {C45D03E7-0453-4199-A5DE-E61B5FF29AF4}
+		{461312C2-0E62-47F0-A1E8-222E41DC4574} = {C45D03E7-0453-4199-A5DE-E61B5FF29AF4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B133AF3-4413-4B56-9BEC-8C4509008F85}

@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.Logging;
+using Mix.Cms.Lib.Models.Account;
+using Mix.Identity;
+using Mix.Identity.Models;
 
 namespace Mix.Cms.Web
 {
@@ -26,7 +30,8 @@ namespace Mix.Cms.Web
 
             return WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(config)
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                ;
         }
     }
 }

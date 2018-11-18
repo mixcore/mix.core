@@ -17,10 +17,30 @@
 
     <link rel="stylesheet" href="~/css/portal/portal.white-sd.css" />
     <link rel="stylesheet" href="~/css/portal.min.css" />
+
     @RenderSection("Styles", required: false)
 </head>
 
 <body>
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '@(MixService.GetConfig<string>("FacebookAppId", ViewBag.culture))',
+                autoLogAppEvents: true,
+                xfbml: true,
+                version: 'v3.2'
+            });
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+
     @RenderBody()
     <script src="~/js/framework.min.js"></script>
     <script src="~/js/bootstrap.min.js"></script>
