@@ -14,27 +14,7 @@
     "Issuer": "mix-core"
   },
   "Translator": {
-    "en-us": {
-      "fe_site_name": "Site name",
-      "language": "Languages",
-      "portal_articles": "Articles",
-      "portal_create": "Create",
-      "portal_cultures": "Cultures",
-      "portal_dashboard": "Dashboard",
-      "portal_file": "File",
-      "portal_import": "Import",
-      "portal_list": "List",
-      "portal_media": "Media",
-      "portal_modules": "Modules",
-      "portal_orders": "Orders",
-      "portal_pages": "Pages",
-      "portal_permissions": "Permissions",
-      "portal_products": "Products",
-      "portal_settings": "Settings",
-      "portal_themes": "Themes",
-      "portal_users": "Users",
-      "read_more": "Read more"
-    }
+
   },
   "LocalSettings": {
     "en-us": {
@@ -42,18 +22,18 @@
       "ContactEmail": "Site Name",
       "ContactPhone": "",
       "Facebook": "",
-      "FacebookAppId": "1958592154434745",
-      "Favicon": "/css/portal/img/mixcore-logo-blue.png",
+      "FacebookAppId": "",
+      "Favicon": "",
       "LanguageVersion": "1",
-      "Logo": "/css/portal/img/mixcore-logo-blue.png",
+      "Logo": "",
       "SettingVersion": "1",
-      "SiteName": "Mix Core",
+      "SiteName": "Site Name",
       "Theme": "Default",
       "ThemeId": "1"
     }
   },
   "GlobalSettings": {
-    "IsInit": "True",
+    "IsInit": false,
     "DefaultCulture": "en-us",
     "DefaultTemplate": "_Default",
     "DefaultTheme": "Default",
@@ -71,6 +51,7 @@
     "ApiEncryptIV": "2b7e151628aed2as",
     "IsEncryptApi": true
   },
+  
   "Logging": {
     "IncludeScopes": false,
     "LogLevel": {
