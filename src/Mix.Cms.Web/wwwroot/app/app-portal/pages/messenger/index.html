@@ -1,0 +1,30 @@
+<section class="" ng-init="init()">
+    <div class="row">
+        <div class="col-8">
+            <h1>Messenger <span ng-if="user.loggedIn">- Hello {{user.info.name}}</span> <img imageonload src="{{user.info.avatar}}">
+            </h1>
+            <div ng-if="!user.loggedIn">
+                <a href="#" ng-click="login()">Login</a>
+            </div>
+            <div ng-if="user.loggedIn">
+                <div class="row" ng-repeat="msg in messages">
+                    <div class="col-md-12" ng-class="{ 'text-right': msg.connection.id == user.info.id }">
+                        <img imageonload src="{{msg.connection.avatar}}"> <b class="small">{{msg.connection.name}}</b>
+                        <br><span class="small" ng-bind="msg.createdDate | utcToLocal"></span>
+                        <p ng-bind-html="msg.content"></p>
+                    </div>
+                </div>
+                <textarea ng-enter="sendMessage()" class="form-control" ng-model="message.content"></textarea>
+                <a class="btn btn-info" ng-click="sendMessage()">Send</a>
+            </div>
+        </div>
+        <div class="col-4">
+            <ul>
+                <li ng-repeat="m in members">
+                    <img imageonload src="{{m.avatar}}"> {{m.name}} - {{m.id}}
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+<!-- /.content -->
