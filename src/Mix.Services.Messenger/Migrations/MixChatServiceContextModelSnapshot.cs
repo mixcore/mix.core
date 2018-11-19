@@ -14,7 +14,7 @@ namespace Mix.Services.Messenger.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-preview3-35497");
+                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024");
 
             modelBuilder.Entity("Mix.Services.Messenger.Models.Data.MixMessengerHubRoom", b =>
                 {
@@ -183,13 +183,14 @@ namespace Mix.Services.Messenger.Migrations
 
             modelBuilder.Entity("Mix.Services.Messenger.Models.Data.MixMessengerUserDevice", b =>
                 {
-                    b.Property<int>("Id");
-
-                    b.Property<string>("ConnectionId")
-                        .IsRequired()
+                    b.Property<string>("UserId")
                         .HasMaxLength(50);
 
                     b.Property<string>("DeviceId")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("ConnectionId")
+                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<DateTime?>("EndDate")
@@ -200,11 +201,7 @@ namespace Mix.Services.Messenger.Migrations
 
                     b.Property<int>("Status");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.HasKey("Id");
+                    b.HasKey("UserId", "DeviceId");
 
                     b.ToTable("mix_messenger_user_device");
                 });

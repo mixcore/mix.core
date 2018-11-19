@@ -12,22 +12,25 @@ namespace Mix.Services.Messenger.Hubs
     {
         const string receiveMethod = "ReceiveMessage";
         const string defaultRoom = "public";
+        const string defaultDevice = "website";
+
         public async Task Join(HubRequest<MessengerConnection> request)
         {
             // Set connection Id
             request.Data.ConnectionId = Context.ConnectionId;
-            
+            request.Data.DeviceId = request.Data.DeviceId ?? defaultDevice;
             // Mapping connecting user to db  models
             var user = new ViewModels.MixMessengerUsers.ConnectViewModel(request.Data);
+            
             user.CreatedDate = DateTime.UtcNow;
             // Save user and current device to db
-            var result = await user.SaveModelAsync(true);
+            var result = await user.Join();
 
             //  save success
             if (result.IsSucceed)
             {
                 //  Send success msg to caller 
-                SendToConnection(user, MessageReponseKey.ConnectSuccess, Context.ConnectionId, false);
+                SendToCaller(user, MessageReponseKey.ConnectSuccess);
                 // Announce every one there's new member
                 SendToAll(user, MessageReponseKey.NewMember, false);
             }
@@ -36,7 +39,7 @@ namespace Mix.Services.Messenger.Hubs
                 //  Send failed msg to caller 
                 SendToConnection(result, MessageReponseKey.ConnectFailed, Context.ConnectionId, false);
             }
-            
+
         }
 
         public void SendMessage(JObject request)
@@ -71,7 +74,7 @@ namespace Mix.Services.Messenger.Hubs
 
                 if (isMySelf)
                 {
-                    
+
                     Clients.Client(connectionId).SendAsync(receiveMethod, JObject.FromObject(result));
                 }
                 else
@@ -79,6 +82,17 @@ namespace Mix.Services.Messenger.Hubs
                     Clients.OthersInGroup(connectionId).SendAsync(receiveMethod, JObject.FromObject(result));
                 }
             }
+        }
+
+        private void SendToCaller<T>(T message, MessageReponseKey action)
+        {
+            HubResponse<T> result = new HubResponse<T>()
+            {
+                IsSucceed = true,
+                Data = message,
+                ResponseKey = GetResponseKey(action)
+            };
+            Clients.Caller.SendAsync(receiveMethod, JObject.FromObject(result));
         }
 
         private void SendToGroup<T>(T message, MessageReponseKey action, string groupName, bool isMySelf)
@@ -115,11 +129,11 @@ namespace Mix.Services.Messenger.Hubs
 
             if (isMySelf)
             {
-                Clients.All.SendAsync(receiveMethod, JObject.FromObject(result));
+                Clients.All.SendAsync(receiveMethod, result);
             }
             else
             {
-                Clients.Others.SendAsync(receiveMethod, JObject.FromObject(result));
+                Clients.Others.SendAsync(receiveMethod, result);
             }
         }
 
@@ -509,7 +523,7 @@ namespace Mix.Services.Messenger.Hubs
         public override Task OnDisconnectedAsync(Exception exception)
         {
             // Get current disconnected device
-            var getUserDevice =ViewModels.MixMessengerUserDevices.DefaultViewModel.Repository.GetSingleModel(u => u.ConnectionId == Context.ConnectionId);
+            var getUserDevice = ViewModels.MixMessengerUserDevices.DefaultViewModel.Repository.GetSingleModel(u => u.ConnectionId == Context.ConnectionId);
             if (getUserDevice.IsSucceed)
             {
                 getUserDevice.Data.Status = DeviceStatus.Disconnected;

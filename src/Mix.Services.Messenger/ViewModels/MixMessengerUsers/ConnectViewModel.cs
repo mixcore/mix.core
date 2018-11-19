@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Mix.Services.Messenger.Models;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Services.Messenger.ViewModels.MixMessengerUsers
 {
-    public class ConnectViewModel : ViewModelBase<MixChatServiceContext, MixMessengerUser, ConnectViewModel>
+    public class ConnectViewModel
     {
         #region Properties
         [JsonProperty("id")]
@@ -19,8 +20,8 @@ namespace Mix.Services.Messenger.ViewModels.MixMessengerUsers
         public string Name { get; set; }
         [JsonProperty("avatar")]
         public string Avatar { get; set; }
-        [JsonProperty("connections")]
-        MixMessengerUserDevices.DefaultViewModel Connection { get; set; }
+        [JsonProperty("device")]
+        public MixMessengerUserDevice Device { get; set; }
         [JsonProperty("createdDate")]
         public DateTime CreatedDate { get; set; }
         [JsonProperty("lastModified")]
@@ -29,20 +30,15 @@ namespace Mix.Services.Messenger.ViewModels.MixMessengerUsers
         #endregion
 
         #region Contructor
-        public ConnectViewModel()
-        {
-        }
-
-        public ConnectViewModel(MixMessengerUser model, MixChatServiceContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
-        {
-        }
+        
         public ConnectViewModel(MessengerConnection connection)
         {
             Id = connection.Id;
             Name = connection.Name;
             Avatar = connection.Avatar;
-            Connection = new MixMessengerUserDevices.DefaultViewModel()
+            Device = new MixMessengerUserDevice()
             {
+                UserId = connection.Id,
                 ConnectionId = connection.ConnectionId,
                 DeviceId = connection.DeviceId,
             };
@@ -52,91 +48,59 @@ namespace Mix.Services.Messenger.ViewModels.MixMessengerUsers
 
         #region Override
 
-        #region Sync
-        public override RepositoryResponse<bool> SaveSubModels(MixMessengerUser parent, MixChatServiceContext _context, IDbContextTransaction _transaction)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            try
-            {
-                if (result.IsSucceed)
-                {
-                    if (Connection != null)
-                    {
-                        Connection.UserId = parent.Id;
-                        var cnn = _context.MixMessengerUserDevice.FirstOrDefault(c => c.UserId == Connection.UserId && c.DeviceId == Connection.DeviceId);
-                        if (cnn != null)
-                        {
-                            cnn.ConnectionId = Connection.ConnectionId;
-                            cnn.Status = (int)MixChatEnums.DeviceStatus.Actived;
-                            cnn.StartDate = DateTime.UtcNow;
-                            _context.Entry(cnn).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                            _context.SaveChanges();
-                        }
-                        else
-                        {
-                            Connection.Status = MixChatEnums.DeviceStatus.Actived;
-                            Connection.StartDate = DateTime.UtcNow;
-                            var saveResult = Connection.SaveModel(true, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Errors.AddRange(saveResult.Errors);
-                                result.Exception = saveResult.Exception;
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                result.IsSucceed = false;
-                result.Exception = ex;
-            }
-            return result;
-        }
-        #endregion
-
         #region Async
-        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixMessengerUser parent, MixChatServiceContext _context, IDbContextTransaction _transaction)
+        public async Task<RepositoryResponse<bool>> Join()
         {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            try
+            using(MixChatServiceContext _context = new MixChatServiceContext())
             {
-                if (result.IsSucceed)
+                var result = new RepositoryResponse<bool>() { IsSucceed = true };
+                try
                 {
-                    if (Connection != null)
+                    var user = new MixMessengerUser()
                     {
-                        Connection.UserId = parent.Id;
-                        var cnn = _context.MixMessengerUserDevice.FirstOrDefault(c => c.UserId == Connection.UserId && c.DeviceId == Connection.DeviceId);
-                        if (cnn != null)
+                        Id = Id,
+                        FacebookId =  Id,
+                        Avatar = Avatar,
+                        CreatedDate = DateTime.UtcNow,
+                        Name = Name,
+                        Status  = 1
+                    };
+                    if (_context.MixMessengerUser.Any(u=>u.Id == user.Id))
+                    {
+                        _context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    }
+                    else
+                    {
+                        _context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                    }
+                    if (Device != null)
+                    {
+                        //var cnn = _context.MixMessengerUserDevice.FirstOrDefault(c => c.UserId == Device.UserId && c.DeviceId == Device.DeviceId);
+                        if (_context.MixMessengerUserDevice.Any(c => c.UserId == Device.UserId && c.DeviceId == Device.DeviceId))
                         {
-                            cnn.ConnectionId = Connection.ConnectionId;
-                            cnn.Status = (int)MixChatEnums.DeviceStatus.Actived;
-                            cnn.StartDate = DateTime.UtcNow;
-                            Connection = new MixMessengerUserDevices.DefaultViewModel(cnn);
-                            
+                            Device.ConnectionId = Device.ConnectionId;
+                            Device.Status = (int)MixChatEnums.DeviceStatus.Actived;
+                            Device.StartDate = DateTime.UtcNow;
+                            _context.Entry(Device).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         }
                         else
                         {
-                            Connection.Status = MixChatEnums.DeviceStatus.Actived;
-                            Connection.StartDate = DateTime.UtcNow;
+                            Device.Status = (int)MixChatEnums.DeviceStatus.Actived;
+                            Device.StartDate = DateTime.UtcNow;
+                            _context.Entry(Device).State = Microsoft.EntityFrameworkCore.EntityState.Added;
                         }
-                        var saveResult = await Connection.SaveModelAsync(true, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Errors.AddRange(saveResult.Errors);
-                            result.Exception = saveResult.Exception;
-                        }
+                        
                     }
+                    result.IsSucceed = (await _context.SaveChangesAsync()) > 0;
                 }
+                catch (Exception ex)
+                {
+                    result.IsSucceed = false;
+                    result.Exception = ex;
+                }
+                return result;
             }
-            catch (Exception ex)
-            {
-                result.IsSucceed = false;
-                result.Exception = ex;
-            }
-            return result;
+            
         }
         #endregion
 

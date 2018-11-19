@@ -17,16 +17,14 @@ app.controller('MessengerController', ['$scope', function ($scope) {
         isMyself: false
     };
     $scope.init = function () {
-        $scope.startConnection('MixChatHub').then(function () {
-            $scope.checkLoginStatus();
-        });
+        $scope.startConnection('MixChatHub', $scope.checkLoginStatus);
     };
 
     $scope.login = function () {
         FB.login(function (response) {
             if (response.authResponse) {
                 FB.api('/me', function (response) {
-                    $scope.user.loggedIn = true;
+
                     $scope.user.info.name = response.name;
                     $scope.user.info.id = response.id;
                     $scope.user.info.avatar = '//graph.facebook.com/' + response.id + '/picture?width=32&height=32';
@@ -39,16 +37,15 @@ app.controller('MessengerController', ['$scope', function ($scope) {
         });
     };
     $scope.join = function () {
-        if ($scope.user.loggedIn) {
-            $scope.request.uid = $scope.user.info.id;
-            $scope.request.data = $scope.user.info;
-            $scope.message.connection = $scope.user.info;
-            $scope.connection.invoke('join', $scope.request);
-        }
+        $scope.request.uid = $scope.user.info.id;
+        $scope.request.data = $scope.user.info;
+        $scope.message.connection = $scope.user.info;
+        $scope.connection.invoke('join', $scope.request);
+
     };
     $scope.sendMessage = function () {
         if ($scope.user.loggedIn) {
-            $scope.request.data = $scope.message;            
+            $scope.request.data = $scope.message;
             $scope.connection.invoke('sendMessage', $scope.request);
             $scope.message.content = '';
             //$scope.$apply();
@@ -63,6 +60,11 @@ app.controller('MessengerController', ['$scope', function ($scope) {
 
             case 'NewMessage':
                 $scope.newMessage(msg.data);
+                break;
+            case 'ConnectSuccess':
+                $scope.user.loggedIn = true;
+                $scope.newMember(msg.data);
+                $scope.$apply();
                 break;
 
             case 'MemberOffline':
@@ -81,7 +83,6 @@ app.controller('MessengerController', ['$scope', function ($scope) {
                 // request, and the time the access token 
                 // and signed request each expire.
                 FB.api('/me', function (response) {
-                    $scope.user.loggedIn = true;
                     $scope.user.info.name = response.name;
                     $scope.user.info.id = response.id;
                     $scope.user.info.avatar = '//graph.facebook.com/' + response.id + '/picture?width=32&height=32';
@@ -128,6 +129,8 @@ app.controller('MessengerController', ['$scope', function ($scope) {
     $scope.newMessage = function (msg) {
         $scope.messages.push(msg);
         $scope.$apply();
+        var objDiv = document.getElementById("mix-discussion");
+        objDiv.scrollTop = objDiv.scrollHeight + 20;
     }
 }]);
 
