@@ -23,10 +23,33 @@ namespace Mix.Services.Messenger.Models.Data
         public virtual DbSet<MixMessengerUser> MixMessengerUser { get; set; }
         public virtual DbSet<MixMessengerUserDevice> MixMessengerUserDevice { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                //define the database to use
+                string cnn = "Data Source=mix-messenger.db";
+                //string cnn = "Server=(localdb)\\mssqllocaldb;Database=mix-cms.db;Trusted_Connection=True;MultipleActiveResultSets=true";
+                optionsBuilder.UseSqlite(cnn);
+                //define the database to use
+                //string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+                //if (!string.IsNullOrEmpty(cnn))
+                //{
+                //    if (MixService.GetConfig<bool>("IsSqlite"))
+                //    {
+                //        optionsBuilder.UseSqlite(cnn);
+                //    }
+                //    else
+                //    {
+                //        optionsBuilder.UseSqlServer(cnn);
+                //    }
+                //}
+            }
+        }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.0-preview3-35497");
-
             modelBuilder.Entity<MixMessengerHubRoom>(entity =>
             {
                 entity.ToTable("mix_messenger_hub_room");
@@ -185,23 +208,21 @@ namespace Mix.Services.Messenger.Models.Data
 
             modelBuilder.Entity<MixMessengerUserDevice>(entity =>
             {
+                entity.HasKey(e => new { e.UserId, e.DeviceId });
+
                 entity.ToTable("mix_messenger_user_device");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.UserId).HasMaxLength(50);
+
+                entity.Property(e => e.DeviceId).HasMaxLength(50);
 
                 entity.Property(e => e.ConnectionId)
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.DeviceId).HasMaxLength(50);
-
                 entity.Property(e => e.EndDate).HasColumnType("datetime");
 
                 entity.Property(e => e.StartDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(50);
             });
         }
     }

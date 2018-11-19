@@ -116,7 +116,7 @@ namespace Mix.Cms.Web
                 opt.AllowAnyHeader();
                 opt.AllowAnyMethod();
             });
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseSignalR(route =>

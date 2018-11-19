@@ -66,17 +66,16 @@ namespace Mix.Services.Messenger.Migrations
                 name: "mix_messenger_user_device",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
                     UserId = table.Column<string>(maxLength: 50, nullable: false),
                     ConnectionId = table.Column<string>(maxLength: 50, nullable: false),
-                    DeviceId = table.Column<string>(maxLength: 50, nullable: true),
+                    DeviceId = table.Column<string>(maxLength: 50, nullable: false),
                     Status = table.Column<int>(nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_messenger_user_device", x => x.Id);
+                    table.PrimaryKey("PK_mix_messenger_user_device", x => new { x.UserId, x.DeviceId });
                 });
 
             migrationBuilder.CreateTable(

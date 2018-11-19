@@ -1,0 +1,5 @@
+#mix-discussion{
+    max-height: 400px;
+    overflow: auto;
+    padding: 20px;
+}

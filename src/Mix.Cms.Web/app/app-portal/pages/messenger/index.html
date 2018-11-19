@@ -7,11 +7,13 @@
                 <a href="#" ng-click="login()">Login</a>
             </div>
             <div ng-if="user.loggedIn">
-                <div class="row" ng-repeat="msg in messages">
-                    <div class="col-md-12" ng-class="{ 'text-right': msg.connection.id == user.info.id }">
-                        <img imageonload src="{{msg.connection.avatar}}" /> <b class="small">{{msg.connection.name}}</b>
-                        <br /><span class="small" ng-bind="msg.createdDate | utcToLocal"></span>
-                        <p ng-bind-html="msg.content"></p>
+                <div id="mix-discussion">
+                    <div class="row" ng-repeat="msg in messages">
+                        <div class="col-md-12" ng-class="{ 'text-right': msg.connection.id == user.info.id }">
+                            <img imageonload src="{{msg.connection.avatar}}" /> <b class="small">{{msg.connection.name}}</b>
+                            <br /><span class="small" ng-bind="msg.createdDate | utcToLocal"></span>
+                            <p ng-bind-html="msg.content"></p>
+                        </div>
                     </div>
                 </div>
                 <textarea ng-enter="sendMessage()" class="form-control" ng-model="message.content"></textarea>
