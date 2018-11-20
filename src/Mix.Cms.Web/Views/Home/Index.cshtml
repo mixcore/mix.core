@@ -56,6 +56,7 @@
     }
 </div>
 @section Styles{
+    <link rel="stylesheet" href="~/css/app-vendor.min.css" />
     <base href="/@ViewBag.culture">
     @Html.Raw(Model.View?.Styles)
     @if (!string.IsNullOrEmpty(MixService.GetConfig<string>("GA_KEY", ViewBag.culture)))

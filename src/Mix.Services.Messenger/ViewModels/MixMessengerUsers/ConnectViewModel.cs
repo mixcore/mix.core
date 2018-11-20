@@ -59,11 +59,11 @@ namespace Mix.Services.Messenger.ViewModels.MixMessengerUsers
                     var user = new MixMessengerUser()
                     {
                         Id = Id,
-                        FacebookId =  Id,
+                        FacebookId = Id,
                         Avatar = Avatar,
                         CreatedDate = DateTime.UtcNow,
                         Name = Name,
-                        Status  = 1
+                        Status = (int)MixChatEnums.OnlineStatus.Connected
                     };
                     if (_context.MixMessengerUser.Any(u=>u.Id == user.Id))
                     {

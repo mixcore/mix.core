@@ -5,6 +5,7 @@ app.controller('MessengerController', ['$scope', function ($scope) {
         loggedIn: false,
         info: {}
     };
+    $scope.isHide = false;
     $scope.members = [];
     $scope.messages = [];
     $scope.message = { connection: {}, content: '' };
@@ -43,6 +44,10 @@ app.controller('MessengerController', ['$scope', function ($scope) {
         $scope.connection.invoke('join', $scope.request);
 
     };
+    $scope.toggle = function(){
+        $scope.isHide = !$scope.isHide;
+        $scope.$apply();
+    }
     $scope.sendMessage = function () {
         if ($scope.user.loggedIn) {
             $scope.request.data = $scope.message;
@@ -63,7 +68,7 @@ app.controller('MessengerController', ['$scope', function ($scope) {
                 break;
             case 'ConnectSuccess':
                 $scope.user.loggedIn = true;
-                $scope.newMember(msg.data);
+                $scope.initList(msg.data);
                 $scope.$apply();
                 break;
 
@@ -114,6 +119,17 @@ app.controller('MessengerController', ['$scope', function ($scope) {
         if (index < 0) {
             $scope.members.splice(0, 0, member);
         }
+        $scope.$apply();
+    }
+    
+    $scope.initList = function (data) {
+        data.forEach(member => {
+            var index = $scope.members.findIndex(x => x.id === member.id);
+            if (index < 0) {
+                $scope.members.splice(0, 0, member);
+            }    
+        });
+        
         $scope.$apply();
     }
 

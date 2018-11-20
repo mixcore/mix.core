@@ -1,13 +1,17 @@
-<section class="" ng-init="init()">
-    <div class="row">
-        <div class="col-8">
-            <h1>Messenger <span ng-if="user.loggedIn">- Hello {{user.info.name}}</span> <img imageonload src="{{user.info.avatar}}" />
+<section class="card" ng-init="init()" id="mix-messenger"
+    ng-class="{'collape': isHide}"
+>
+    <div class="card-header">
+        <h6>Messenger</h6> <a class="btn btn-toggle" ng-click="toggle()"><i ng-class="{'fa-minus': !isHide ,'fa-plus': isHide}" class="fa fa-minus"></i></a>
+    </div>
+    <div class="row card-body">
+        <div class="col-10">
             </h1>
             <div ng-if="!user.loggedIn">
                 <a href="#" ng-click="login()">Login</a>
             </div>
-            <div ng-if="user.loggedIn">
-                <div id="mix-discussion">
+            <div ng-if="user.loggedIn" class="container">
+                <div id="mix-discussion" class="discussion">
                     <div class="row" ng-repeat="msg in messages">
                         <div class="col-md-12" ng-class="{ 'text-right': msg.connection.id == user.info.id }">
                             <img imageonload src="{{msg.connection.avatar}}" /> <b class="small">{{msg.connection.name}}</b>
@@ -16,14 +20,16 @@
                         </div>
                     </div>
                 </div>
-                <textarea ng-enter="sendMessage()" class="form-control" ng-model="message.content"></textarea>
-                <a class="btn btn-info" ng-click="sendMessage()">Send</a>
+                <div class="action">
+                    <textarea placeholder="message" ng-enter="sendMessage()" class="form-control" ng-model="message.content"></textarea>
+                    <a class="btn btn-info" ng-click="sendMessage()">Send</a>
+                </div>
             </div>
         </div>
-        <div class="col-4">
+        <div class="contact col-2">
             <ul>
                 <li ng-repeat="m in members">
-                    <img imageonload src="{{m.avatar}}" /> {{m.name}} - {{m.id}}
+                    <img imageonload src="{{m.avatar}}" />
                 </li>
             </ul>
         </div>
