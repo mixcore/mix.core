@@ -15,6 +15,7 @@
             Connect,
             ConnectSuccess,
             ConnectFailed,
+            ConnectInitData,
             GetTeam,
             GetTeamMessages,
             SendMessage,

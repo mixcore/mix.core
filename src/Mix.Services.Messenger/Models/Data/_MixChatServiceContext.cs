@@ -36,7 +36,7 @@ namespace Mix.Services.Messenger.Models.Data
                 //optionsBuilder.UseSqlServer(cnn);
 
                 //define the database to use
-                string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+                string cnn = MixService.GetConnectionString(MixConstants.CONST_MESSENGER_CONNECTION);
                 if (!string.IsNullOrEmpty(cnn))
                 {
                     if (MixService.GetConfig<bool>("IsSqlite"))
