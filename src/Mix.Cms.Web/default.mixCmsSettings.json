@@ -2,6 +2,7 @@
   "ConnectionStrings": {
     "MixAccountConnection": null,
     "MixCmsConnection": null,
+    "MixMessengerConnection": null,
     "DefaultConnection": null
   },
   "Authentication": {
