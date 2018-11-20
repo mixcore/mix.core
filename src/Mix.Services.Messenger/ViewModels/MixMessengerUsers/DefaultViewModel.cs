@@ -23,7 +23,8 @@ namespace Mix.Services.Messenger.ViewModels.MixMessengerUsers
         public DateTime CreatedDate { get; set; }
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
-
+        [JsonProperty("status")]
+        public MixChatEnums.OnlineStatus Status { get; set; }
         #endregion
 
         #region Contructor

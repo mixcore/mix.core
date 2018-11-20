@@ -50,7 +50,11 @@
             NotAuthorized,
             TeamFulled
         }
-
+        public enum OnlineStatus
+        {
+            DisConnected = 0,
+            Connected = 1
+        }
         public enum MemberStatus
         {
             Requested = 0,

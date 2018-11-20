@@ -29,8 +29,10 @@ namespace Mix.Services.Messenger.Hubs
             //  save success
             if (result.IsSucceed)
             {
+
                 //  Send success msg to caller 
-                SendToCaller(user, MessageReponseKey.ConnectSuccess);
+                var getAvailableUsers = ViewModels.MixMessengerUsers.DefaultViewModel.Repository.GetModelListBy(u => u.Status == (int)MixChatEnums.OnlineStatus.Connected);
+                SendToCaller(getAvailableUsers.Data, MessageReponseKey.ConnectSuccess);
                 // Announce every one there's new member
                 SendToAll(user, MessageReponseKey.NewMember, false);
             }
@@ -531,6 +533,12 @@ namespace Mix.Services.Messenger.Hubs
                 if (countOnlineDevice == 0)
                 {
                     SendToAll(getUserDevice.Data.UserId, MessageReponseKey.MemberOffline, false);
+                }
+                var getUser = ViewModels.MixMessengerUsers.DefaultViewModel.Repository.GetSingleModel(u => u.Id == getUserDevice.Data.UserId);
+                if (getUser.IsSucceed)
+                {
+                    getUser.Data.Status = OnlineStatus.DisConnected;
+                    getUser.Data.SaveModel();
                 }
             }
             //SendToAll(user, MessageReponseKey.RemoveMember, false);
