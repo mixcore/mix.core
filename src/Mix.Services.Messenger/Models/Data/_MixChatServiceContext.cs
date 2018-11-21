@@ -1,8 +1,5 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Mix.Cms.Lib;
-using Mix.Cms.Lib.Services;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Mix.Services.Messenger.Models.Data
 {
@@ -16,7 +13,7 @@ namespace Mix.Services.Messenger.Models.Data
             : base(options)
         {
         }
-
+        private static string cnn = "Server=(localdb)\\mssqllocaldb;Database=mix-messenger.db;Trusted_Connection=True;MultipleActiveResultSets=true";
         public virtual DbSet<MixMessengerHubRoom> MixMessengerHubRoom { get; set; }
         public virtual DbSet<MixMessengerMessage> MixMessengerMessage { get; set; }
         public virtual DbSet<MixMessengerNavRoomUser> MixMessengerNavRoomUser { get; set; }
@@ -32,22 +29,19 @@ namespace Mix.Services.Messenger.Models.Data
                 //define the database to use
                 //string cnn = "Data Source=mix-messenger.db";
                 //optionsBuilder.UseSqlite(cnn);
-                //string cnn = "Server=(localdb)\\mssqllocaldb;Database=mix-messenger.db;Trusted_Connection=True;MultipleActiveResultSets=true";
-                //optionsBuilder.UseSqlServer(cnn);
+                IConfiguration configuration = new ConfigurationBuilder()
+               .SetBasePath(System.IO.Directory.GetCurrentDirectory())
+               .AddJsonFile(Common.Utility.Const.CONST_FILE_APPSETTING)
+               .Build();
+                if (!string.IsNullOrEmpty(configuration.GetConnectionString("MixMessengerConnection")))
+                {
+                    cnn = configuration.GetConnectionString("MixMessengerConnection");
+                }
+                optionsBuilder.UseSqlServer(cnn);
 
                 //define the database to use
-                string cnn = MixService.GetConnectionString(MixConstants.CONST_MESSENGER_CONNECTION);
-                if (!string.IsNullOrEmpty(cnn))
-                {
-                    if (MixService.GetConfig<bool>("IsSqlite"))
-                    {
-                        optionsBuilder.UseSqlite(cnn);
-                    }
-                    else
-                    {
-                        optionsBuilder.UseSqlServer(cnn);
-                    }
-                }
+                //string cnn = MixService.GetConnectionString(MixConstants.CONST_MESSENGER_CONNECTION);
+
             }
         }
 

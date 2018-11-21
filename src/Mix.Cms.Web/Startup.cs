@@ -17,9 +17,7 @@ using Mix.Identity.Services;
 using Mix.Cms.Hub;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.EntityFrameworkCore;
 using Mix.Services.Messenger.Hubs;
-using Mix.Services.Messenger.Models.Data;
 
 namespace Mix.Cms.Web
 {
@@ -28,8 +26,7 @@ namespace Mix.Cms.Web
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            MixChatServiceContext chatContext = new MixChatServiceContext();
-            chatContext.Database.Migrate();
+            
         }
 
         public IConfiguration Configuration { get; }
