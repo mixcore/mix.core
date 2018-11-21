@@ -11,6 +11,7 @@ using static Mix.Cms.Lib.MixEnums;
 using Mix.Cms.Lib.Repositories;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using Mix.Services.Messenger.Models.Data;
 
 namespace Mix.Cms.Lib.Services
 {
@@ -34,6 +35,8 @@ namespace Mix.Cms.Lib.Services
                 {
                     context = new MixCmsContext();
                     accountContext = new MixCmsAccountContext();
+                    MixChatServiceContext chatContext = new MixChatServiceContext();
+                    chatContext.Database.Migrate();
                     await context.Database.MigrateAsync();
                     await accountContext.Database.MigrateAsync();
                     transaction = context.Database.BeginTransaction();
