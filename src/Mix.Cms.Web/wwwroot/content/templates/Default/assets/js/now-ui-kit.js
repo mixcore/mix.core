@@ -33,7 +33,7 @@ var nowuiKit,
 
 $(document).ready(function() {
   //  Activate the Tooltips
-  $('[data-toggle="tooltip"], [rel="tooltip"]').tooltip();
+  //$('[data-toggle="tooltip"], [rel="tooltip"]').tooltip();
 
   //    Activate bootstrap-select
   if ($(".selectpicker").length != 0) {
