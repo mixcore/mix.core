@@ -106,9 +106,9 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
         };
         $scope.initCmsModel = {
             isUseLocal: false,
-            localDbConnectionString: 'Server=(localdb)\\MSSQLLocalDB;Initial Catalog=sw-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True',
-            sqliteDbConnectionString: 'Data Source=sw-cms.db',
-            localDbName: 'sw-cms.db',
+            localDbConnectionString: 'Server=(localdb)\\MSSQLLocalDB;Initial Catalog=mix-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True',
+            sqliteDbConnectionString: 'Data Source=mix-cms.db',
+            localDbName: 'mix-cms.db',
             dataBaseServer: '',
             dataBaseName: '',
             dataBaseUser: '',
