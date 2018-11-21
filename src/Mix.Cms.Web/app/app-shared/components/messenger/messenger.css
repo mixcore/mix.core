@@ -19,11 +19,31 @@
     padding: 5px 10px;
     font-size: 11px;
 }
+#mix-messenger .btn-contact{
+    top: 0;
+    right: 35px;
+    position: absolute;
+    padding: 5px 10px;
+    font-size: 11px;
+}
 #mix-messenger .card-body{
     padding: 10px;
 }
 #mix-messenger .container{
     height: 350px;    
+}
+#mix-messenger .contact{
+    position: absolute;
+    right: 0;
+    top: 40px;
+    background: #f7f1f1;
+    height: 310px;
+    width: 250px;
+    text-align: right;
+    padding: 10px;
+}
+#mix-messenger .contact.collape{
+    display: none;
 }
 #mix-messenger .contact ul{
      padding: 0;     
