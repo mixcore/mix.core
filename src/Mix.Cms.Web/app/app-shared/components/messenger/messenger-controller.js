@@ -46,7 +46,6 @@ app.controller('MessengerController', ['$scope', function ($scope) {
     };
     $scope.toggle = function(){
         $scope.isHide = !$scope.isHide;
-        $scope.$apply();
     }
     $scope.sendMessage = function () {
         if ($scope.user.loggedIn) {
