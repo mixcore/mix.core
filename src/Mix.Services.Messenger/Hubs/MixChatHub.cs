@@ -529,7 +529,7 @@ namespace Mix.Services.Messenger.Hubs
             if (getUserDevice.IsSucceed)
             {
                 getUserDevice.Data.Status = DeviceStatus.Disconnected;
-                var countOnlineDevice = ViewModels.MixMessengerUserDevices.DefaultViewModel.Repository.Count(d => d.Status == (int)DeviceStatus.Actived).Data;
+                var countOnlineDevice = ViewModels.MixMessengerUserDevices.DefaultViewModel.Repository.Count(d => d.UserId == getUserDevice.Data.UserId && d.DeviceId != getUserDevice.Data.DeviceId && d.Status == (int)DeviceStatus.Actived).Data;
                 if (countOnlineDevice == 0)
                 {
                     SendToAll(getUserDevice.Data.UserId, MessageReponseKey.MemberOffline, false);
@@ -539,6 +539,7 @@ namespace Mix.Services.Messenger.Hubs
                 {
                     getUser.Data.Status = OnlineStatus.DisConnected;
                     getUser.Data.SaveModel();
+                    SendToAll(getUserDevice.Data.UserId, MessageReponseKey.MemberOffline, false);
                 }
             }
             //SendToAll(user, MessageReponseKey.RemoveMember, false);
