@@ -60,8 +60,14 @@ namespace Mix.Cms.Lib.Services
 
         private void LoadConfiggurations()
         {
-            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, string.Empty, true, "{}");
+            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, ".json", string.Empty, true);
+
             JObject jsonSettings = JObject.Parse(settings.Content);
+            if (jsonSettings["GlobalSettings"] == null)
+            {
+                settings = FileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, ".json", string.Empty, true, "{}");
+                jsonSettings = JObject.Parse(settings.Content);
+            }
             instance.ConnectionStrings = JObject.FromObject(jsonSettings["ConnectionStrings"]);
             instance.Authentication = JObject.FromObject(jsonSettings["Authentication"]);
             instance.Translator = JObject.FromObject(jsonSettings["Translator"]);
@@ -96,11 +102,11 @@ namespace Mix.Cms.Lib.Services
         {
             Instance.Authentication[name] = value.ToString();
         }
-        
+
         public static T GetConfig<T>(string name)
         {
             var result = Instance.GlobalSettings[name];
-            return result!=null? result.Value<T>() : default(T);
+            return result != null ? result.Value<T>() : default(T);
         }
 
         public static void SetConfig<T>(string name, T value)
@@ -111,7 +117,7 @@ namespace Mix.Cms.Lib.Services
 
         public static T GetConfig<T>(string name, string culture)
         {
-            var result = !string.IsNullOrEmpty(culture) ? Instance.LocalSettings[culture][name]: null;
+            var result = !string.IsNullOrEmpty(culture) ? Instance.LocalSettings[culture][name] : null;
             return result != null ? result.Value<T>() : default(T);
         }
 
@@ -143,7 +149,7 @@ namespace Mix.Cms.Lib.Services
 
         public static bool Save()
         {
-            var settings = FileRepository.Instance.GetFile("mixCmsSettings", ".json", string.Empty, true, "{}");
+            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, ".json", string.Empty, true, "{}");
             if (settings != null)
             {
                 JObject jsonSettings = JObject.Parse(settings.Content);
@@ -151,6 +157,7 @@ namespace Mix.Cms.Lib.Services
                 jsonSettings["GlobalSettings"] = instance.GlobalSettings;
                 jsonSettings["Translator"] = instance.Translator;
                 jsonSettings["LocalSettings"] = instance.LocalSettings;
+                jsonSettings["Authentication"] = instance.Authentication;
                 settings.Content = jsonSettings.ToString();
                 return FileRepository.Instance.SaveFile(settings);
             }
@@ -161,9 +168,9 @@ namespace Mix.Cms.Lib.Services
 
         }
         public static void Reload()
-        {            
+        {
             Instance.LoadConfiggurations();
-            
+
         }
         public static void LoadFromDatabase(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -339,8 +346,8 @@ namespace Mix.Cms.Lib.Services
         {
             var fullCipher = Convert.FromBase64String(cipherText);
 
-            
-            var cipher = new byte[16];            
+
+            var cipher = new byte[16];
             var key = Encoding.UTF8.GetBytes(keyString);
             var iv = Encoding.UTF8.GetBytes("2b7e151628aed2as");
             Buffer.BlockCopy(fullCipher, 0, iv, 0, iv.Length);

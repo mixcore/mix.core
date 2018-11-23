@@ -38,10 +38,10 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
 
         [JsonProperty("localDbConnectionString")]
         public string LocalDbConnectionString { get; set; } =
-            $"Server=(localdb)\\MSSQLLocalDB;Initial Catalog=sw-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True";
+            $"Server=(localdb)\\MSSQLLocalDB;Initial Catalog=mix-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True";
 
         [JsonProperty("sqliteDbConnectionString")]
-        public string SqliteDbConnectionString { get; set; } = $"Data Source=sw-cms.db";
+        public string SqliteDbConnectionString { get; set; } = $"Data Source=mix-cms.db";
 
         [JsonProperty("superAdminsuperAdmin")]
         public string SuperAdmin { get; set; }

@@ -1,8 +1,5 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Mix.Cms.Lib;
-using Mix.Cms.Lib.Services;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Mix.Services.Messenger.Models.Data
 {
@@ -32,21 +29,18 @@ namespace Mix.Services.Messenger.Models.Data
                 //define the database to use
                 //string cnn = "Data Source=mix-messenger.db";
                 //optionsBuilder.UseSqlite(cnn);
-                //string cnn = "Server=(localdb)\\mssqllocaldb;Database=mix-messenger.db;Trusted_Connection=True;MultipleActiveResultSets=true";
+                 ;
+                IConfiguration configuration = new ConfigurationBuilder()
+               .SetBasePath(System.IO.Directory.GetCurrentDirectory())
+               .AddJsonFile(Common.Utility.Const.CONST_FILE_APPSETTING)
+               .Build();
+                string cnn = "Server=(localdb)\\mssqllocaldb;Database=mix-messenger.db;Trusted_Connection=True;MultipleActiveResultSets=true";
                 //optionsBuilder.UseSqlServer(cnn);
 
                 //define the database to use
-                string cnn = MixService.GetConnectionString(MixConstants.CONST_MESSENGER_CONNECTION);
                 if (!string.IsNullOrEmpty(cnn))
                 {
-                    if (MixService.GetConfig<bool>("IsSqlite"))
-                    {
-                        optionsBuilder.UseSqlite(cnn);
-                    }
-                    else
-                    {
                         optionsBuilder.UseSqlServer(cnn);
-                    }
                 }
             }
         }

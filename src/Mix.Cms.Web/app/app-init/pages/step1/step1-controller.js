@@ -2,6 +2,7 @@
 app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$timeout', '$location', '$http',
     'CommonService', 'Step1Services',
     function ($scope, $rootScope, ngAppSettings, $timeout, $location, $http, commonService, step1Services) {
+        var rand = Math.random();
         $scope.settings = {
             cultures: [
                 { specificulture: 'en-us', fullName: 'United States - English (Default)', icon: 'flag-icon-us' },
@@ -106,9 +107,9 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
         };
         $scope.initCmsModel = {
             isUseLocal: false,
-            localDbConnectionString: 'Server=(localdb)\\MSSQLLocalDB;Initial Catalog=mix-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True',
-            sqliteDbConnectionString: 'Data Source=mix-cms.db',
-            localDbName: 'mix-cms.db',
+            localDbConnectionString: 'Server=(localdb)\\MSSQLLocalDB;Initial Catalog=' + rand + 'mix-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True',
+            sqliteDbConnectionString: 'Data Source=' + rand + 'mix-cms.db',
+            localDbName: rand + 'mix-cms.db',
             dataBaseServer: '',
             dataBaseName: '',
             dataBaseUser: '',

@@ -258,6 +258,7 @@ namespace Mix.Cms.Api.Controllers.v1
             var result = new RepositoryResponse<bool>();
 
             MixService.SetConnectionString(MixConstants.CONST_CMS_CONNECTION, model.ConnectionString);
+            MixService.SetConnectionString(MixConstants.CONST_MESSENGER_CONNECTION, model.ConnectionString);
             MixService.SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, model.ConnectionString);
             MixService.SetConfig(MixConstants.CONST_SETTING_IS_SQLITE, model.IsSqlite);
             MixService.SetConfig(MixConstants.CONST_SETTING_LANGUAGE, model.Culture.Specificulture);
@@ -272,6 +273,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 MixService.SetConfig<bool>("IsInit", true);
                 MixService.SetConfig<string>("DefaultCulture", model.Culture.Specificulture);
                 MixService.Save();
+                MixService.Reload();
             }
             else
             {
