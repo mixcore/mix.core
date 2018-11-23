@@ -1,8 +1,8 @@
 {
   "ConnectionStrings": {
-    "MixAccountConnection": null,
-    "MixCmsConnection": null,
-    "MixMessengerConnection": null,
+    "MixAccountConnection": "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=0.27968984951681297mix-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True",
+    "MixCmsConnection": "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=0.27968984951681297mix-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True",
+    "MixMessengerConnection": "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=0.27968984951681297mix-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True",
     "DefaultConnection": null
   },
   "Authentication": {
@@ -15,7 +15,27 @@
     "Issuer": "mix-core"
   },
   "Translator": {
-
+    "en-us": {
+      "fe_site_name": "Site name",
+      "language": "Languages",
+      "portal_articles": "Articles",
+      "portal_create": "Create",
+      "portal_cultures": "Cultures",
+      "portal_dashboard": "Dashboard",
+      "portal_file": "File",
+      "portal_import": "Import",
+      "portal_list": "List",
+      "portal_media": "Media",
+      "portal_modules": "Modules",
+      "portal_orders": "Orders",
+      "portal_pages": "Pages",
+      "portal_permissions": "Permissions",
+      "portal_products": "Products",
+      "portal_settings": "Settings",
+      "portal_themes": "Themes",
+      "portal_users": "Users",
+      "read_more": "Read more"
+    }
   },
   "LocalSettings": {
     "en-us": {
@@ -24,17 +44,18 @@
       "ContactPhone": "",
       "Facebook": "",
       "FacebookAppId": "",
-      "Favicon": "",
+      "Favicon": "/css/portal/img/mixcore-logo-blue.png",
       "LanguageVersion": "1",
-      "Logo": "",
+      "Logo": "/css/portal/img/mixcore-logo-blue.png",
       "SettingVersion": "1",
-      "SiteName": "Site Name",
-      "Theme": "Default",
-      "ThemeId": "1"
+      "SiteName": "Mix Core",
+      "Theme": "Alist",
+      "ThemeId": "2",
+      "ThemeName": "Alist"
     }
   },
   "GlobalSettings": {
-    "IsInit": false,
+    "IsInit": "True",
     "DefaultCulture": "en-us",
     "DefaultTemplate": "_Default",
     "DefaultTheme": "Default",
@@ -52,7 +73,6 @@
     "ApiEncryptIV": "2b7e151628aed2as",
     "IsEncryptApi": true
   },
-
   "Logging": {
     "IncludeScopes": false,
     "LogLevel": {

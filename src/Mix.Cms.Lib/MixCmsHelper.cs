@@ -152,5 +152,11 @@ namespace Mix.Cms.Lib
                 return 0;
             }
         }
+
+        public static ViewModels.MixModules.ReadMvcViewModel GetModule (string name, string culture)
+        {
+            var module = ViewModels.MixModules.ReadMvcViewModel.GetBy(m => m.Name == name && m.Specificulture == culture);
+            return module.Data;
+        }
     }
 }

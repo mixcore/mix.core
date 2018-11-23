@@ -11,8 +11,8 @@ namespace Mix.Cms.Lib
         public const string CONST_ACCOUNT_CONNECTION = "MixAccountConnection";
         public const string CONST_SETTING_IS_SQLITE = "IsSqlite";
         public const string CONST_SETTING_LANGUAGE = "Language";
-        public const string CONST_CHAT_CONNECTION = "ChatConnection";
-        public const string CONST_FILE_APPSETTING = "mixCmsSettings.json";
+        public const string CONST_FILE_APPSETTING = "mixCmsSettings";
+        public const string CONST_DEFAULT_FILE_APPSETTING = "mixCmsSettings";
         public const string CONST_FILE_CONFIGURATIONS = "configurations.json";
         public const string CONST_FILE_LANGUAGES = "languages.json";
         public const string CONST_PATH_HOME_ACCESS_DENIED = "/home/access-denied";
