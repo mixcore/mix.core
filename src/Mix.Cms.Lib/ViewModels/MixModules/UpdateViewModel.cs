@@ -87,7 +87,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         {
             get
             {
-                return MixEnums.EnumTemplateFolder.Articles.ToString();
+                return MixEnums.EnumTemplateFolder.Modules.ToString();
             }
         }
         [JsonProperty("view")]
@@ -191,18 +191,13 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             }
             this.Templates = this.Templates ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Name == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
-            int themeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
-            View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Modules, _context, _transaction);
-            if (this.View == null)
-            {
-                this.View = MixTemplates.UpdateViewModel.GetDefault(EnumTemplateFolder.Modules, Specificulture);
-            }
+            this.View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Modules, _context, _transaction);
             this.Template = CommonHelper.GetFullPath(new string[]
                {
                     this.View?.FileFolder
                     , this.View?.FileName
                });
-
+            this.Data = MixModuleDatas.ReadViewModel.Repository.GetModelListBy(d => d.ModuleId == Id && d.Specificulture == Specificulture, "Id", 1, PageSize,0,_context,  _transaction).Data;
         }
 
         #region Async
