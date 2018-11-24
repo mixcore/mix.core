@@ -119,7 +119,7 @@ namespace Mix.Cms.Web
             app.UseSignalR(route =>
             {
                 route.MapHub<PortalHub>("/portalhub");
-                //route.MapHub<MixChatHub>("/MixChatHub");
+                route.MapHub<MixChatHub>("/MixChatHub");
             });
 
             app.UseAuthentication();
