@@ -13,7 +13,7 @@ using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixPages
 {
-    public class ReadMvcViewModel: ViewModelBase<MixCmsContext, MixPage, ReadMvcViewModel>
+    public class ReadMvcViewModel : ViewModelBase<MixCmsContext, MixPage, ReadMvcViewModel>
     {
         #region Properties
 
@@ -173,20 +173,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             this.View = MixTemplates.ReadViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
             if (View != null)
             {
+                GetSubModules(_context, _transaction);
                 switch (Type)
                 {
                     case MixPageType.Home:
-                        GetSubModules(_context, _transaction);
-                        break;
-
                     case MixPageType.Blank:
-                        break;
-
                     case MixPageType.Article:
-                        break;
-
                     case MixPageType.Modules:
-                        GetSubModules(_context, _transaction);
                         break;
 
                     case MixPageType.ListArticle:

@@ -6,6 +6,15 @@ app.factory('ModuleDataService', ['$http', '$rootScope', 'CommonService', functi
     var moduleDatasServiceFactory = {};
 
     var settings = $rootScope.globalSettings
+    var _updateInfos = async function (pages) {
+        var apiUrl = '/' + settings.lang + '/module-data';
+        var req = {
+            method: 'POST',
+            url: apiUrl + '/update-infos',
+            data: JSON.stringify(pages)
+        };
+        return await commonService.getApiResult(req);
+    };
 
     var _getModuleData = async function (moduleId, id, type) {
         var apiUrl = '/' + settings.lang + '/module-data/';
@@ -86,5 +95,6 @@ app.factory('ModuleDataService', ['$http', '$rootScope', 'CommonService', functi
     moduleDatasServiceFactory.saveModuleData = _saveModuleData;
     moduleDatasServiceFactory.initModuleForm = _initModuleForm;
     moduleDatasServiceFactory.saveFields = _saveFields;
+    moduleDatasServiceFactory.updateInfos = _updateInfos;
     return moduleDatasServiceFactory;
 }]);

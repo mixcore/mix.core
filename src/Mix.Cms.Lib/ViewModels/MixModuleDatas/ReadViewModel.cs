@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Common.Helper;
+using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -147,6 +149,47 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
             return DataProperties.FirstOrDefault(p => p.Name == name);
         }
 
-        #endregion Expands
+        public static async System.Threading.Tasks.Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfosAsync(List<ReadViewModel> data)
+        {
+            MixCmsContext context = new MixCmsContext();
+            var transaction = context.Database.BeginTransaction();
+            var result = new RepositoryResponse<List<ReadViewModel>>();
+            try
+            {
+                foreach (var item in data)
+                {
+                    var model = context.MixModuleData.FirstOrDefault(m => m.Id == item.Id && m.Specificulture == item.Specificulture);
+                    if (model!=null)
+                    {
+                        model.Priority = item.Priority;
+                        context.Entry(model).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    }
+                }
+                result.IsSucceed = (await context.SaveChangesAsync()) > 0;
+                if (!result.IsSucceed)
+                {
+                    result.Errors.Add("Nothing changed");
+                }
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, true, transaction);
+                return result;
+            }
+            catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
+            {
+                UnitOfWorkHelper<MixCmsContext>.HandleException<ReadViewModel>(ex, true, transaction);
+                return new RepositoryResponse<List<ReadViewModel>>()
+                {
+                    IsSucceed = false,
+                    Data = null,
+                    Exception = ex
+                };
+            }
+            finally
+            {
+                //if current Context is Root
+                transaction.Dispose();
+                context.Dispose();
+            }
+            #endregion Expands
+        }
     }
 }

@@ -10,18 +10,27 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
     $scope.saveCallbackArgs = [];
     $scope.removeCallbackArgs = [];
     $scope.range = $rootScope.range;
-    
+    $scope.getSingleSuccessCallback = null;
+    $scope.getSingleFailCallback = null;
+    $scope.getListSuccessCallback = null;
+    $scope.getListFailCallback = null;
     $scope.getSingle = async function () {
         $rootScope.isBusy = true;
         var id = $routeParams.id;
         var resp = await service.getSingle([id, 'portal']);
         if (resp && resp.isSucceed) {
             $scope.activedData = resp.data;
+            if($scope.getSingleSuccessCallback){
+                $scope.getSingleSuccessCallback();
+            }
             $rootScope.isBusy = false;
             $scope.$apply();
         }
         else {
             if (resp) { $rootScope.showErrors(resp.errors); }
+            if($scope.getSingleFailCallback){
+                $scope.getSingleFailCallback();
+            }
             $rootScope.isBusy = false;
             $scope.$apply();
         }
@@ -50,11 +59,17 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
                     }
                 });
             });
+            if($scope.getListSuccessCallback){
+                $scope.getListSuccessCallback();
+            }
             $rootScope.isBusy = false;
             $scope.$apply();
         }
         else {
             if (resp) { $rootScope.showErrors(resp.errors); }
+            if($scope.getListFailCallback){
+                $scope.getListFailCallback();
+            }
             $rootScope.isBusy = false;
             $scope.$apply();
         }

@@ -3,6 +3,11 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$r
     'ModuleService', 'ModuleDataService',
     function ($scope, $rootScope, ngAppSettings, $routeParams, moduleServices, moduleDataService) {
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, moduleServices, 'product');
+        $scope.contentUrl = '';
+        $scope.getSingleSuccessCallback = function()
+        {
+            $scope.contentUrl = '/portal/module/data/'+ $scope.activedData.id;
+        };
         $scope.defaultAttr = {
             name: '',
             options: [],
@@ -15,13 +20,23 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$r
         };
         $scope.dataTypes = ngAppSettings.dataTypes;
         $scope.activedData = null;
-
+        $scope.editDataUrl = '';
+        $scope.dataColumns = [];
         $scope.loadModuleDatas = async function () {
             $rootScope.isBusy = true;
             var id = $routeParams.id;
-            var response = await moduleServices.getSingle([id, 'portal']);
+            var response = await moduleServices.getSingle([id, 'mvc']);
             if (response.isSucceed) {
                 $scope.activedData = response.data;
+                $scope.editDataUrl = '/portal/module-data/details/'+$scope.activedData.id;
+                angular.forEach($scope.activedData.columns,function(e,i){
+                    $scope.dataColumns.push({
+                        title: e.title,
+                        name: e.name,
+                        filter: true,
+                        type: 0 // string - ngAppSettings.dataTypes[0]
+                    })
+                });
                 $rootScope.isBusy = false;
                 $scope.$apply();
             }
@@ -111,4 +126,19 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$r
                 $scope.$apply();
             }
         }
+        $scope.updateDataInfos = async function (items) {
+            $rootScope.isBusy = true;
+            var resp = await moduleDataService.updateInfos(items);
+            if (resp && resp.isSucceed) {
+                $scope.activedPage = resp.data;
+                $rootScope.showMessage('success', 'success');
+                $rootScope.isBusy = false;
+                $scope.$apply();
+            }
+            else {
+                if (resp) { $rootScope.showErrors(resp.errors); }
+                $rootScope.isBusy = false;
+                $scope.$apply();
+            }
+        };
     }]);

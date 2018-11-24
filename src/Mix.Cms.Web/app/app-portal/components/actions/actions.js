@@ -13,6 +13,7 @@ modules.component('actions', {
     }],
     bindings: {
         previewUrl: '=',
-        backUrl: '='
+        backUrl: '=',
+        contentUrl: '=',
     }
 });

@@ -83,6 +83,7 @@ modules.component('customImage', {
                     ctrl.postedFile.extension = file.name.substring(file.name.lastIndexOf('.'));
                     ctrl.postedFile.fileStream = reader.result;
                     ctrl.srcUrl = reader.result;
+                    ctrl.src = reader.result;
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 };

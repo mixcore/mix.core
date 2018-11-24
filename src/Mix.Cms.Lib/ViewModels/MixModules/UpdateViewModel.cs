@@ -19,6 +19,7 @@ using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixModules
 {
+    //Use for update module info only => don't need to load data
     public class UpdateViewModel : ViewModelBase<MixCmsContext, MixModule, UpdateViewModel>
     {
         #region Properties
@@ -197,7 +198,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                     this.View?.FileFolder
                     , this.View?.FileName
                });
-            this.Data = MixModuleDatas.ReadViewModel.Repository.GetModelListBy(d => d.ModuleId == Id && d.Specificulture == Specificulture, "Id", 1, PageSize,0,_context,  _transaction).Data;
         }
 
         #region Async

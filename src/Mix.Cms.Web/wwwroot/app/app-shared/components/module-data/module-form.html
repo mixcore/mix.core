@@ -9,8 +9,8 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div ng-repeat="prop in $ctrl.data.dataProperties track by $index">
-                                <module-form-editor is-show-title="isShowTitle" data="$ctrl.data.jItem[prop.name]" ng-if="!prop.isSelect"></module-form-editor>
+                            <div ng-repeat="prop in $ctrl.data.dataProperties track by $index">                                
+                                <module-form-editor is-show-title="isShowTitle" title="prop.name" data="$ctrl.data.jItem[prop.name]" ng-if="!prop.isSelect"></module-form-editor>
                                 <div ng-if="prop.isSelect">
                                     <label class="control-label" ng-bind="prop.title"></label>
                                     <br>
