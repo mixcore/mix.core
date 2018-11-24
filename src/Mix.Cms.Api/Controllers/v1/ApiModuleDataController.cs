@@ -214,6 +214,21 @@ namespace Mix.Cms.Api.Controllers.v1
             return Ok(JObject.FromObject(portalResult));
         }
 
+        // POST api/PortalPage
+        [HttpPost, HttpOptions]
+        [Route("update-infos")]
+        public async Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfos([FromBody]List<ReadViewModel> models)
+        {
+            if (models != null)
+            {
+                RemoveCache();
+                return await ReadViewModel.UpdateInfosAsync(models);
+            }
+            else
+            {
+                return new RepositoryResponse<List<ReadViewModel>>();
+            }
+        }
         #endregion Post
     }
 }

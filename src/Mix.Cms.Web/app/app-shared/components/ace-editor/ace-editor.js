@@ -48,7 +48,9 @@ modules.component('aceEditor', {
                         }
                         editor.setTheme("ace/theme/chrome");
                         //editor.setReadOnly(true);
-                        editor.setValue(ctrl.content);
+                        if(ctrl.content){
+                            editor.setValue(ctrl.content);
+                        }
                         editor.$blockScrolling = Infinity;
                         editor.session.setUseWrapMode(true);
                         editor.setOptions({
@@ -69,7 +71,7 @@ modules.component('aceEditor', {
             };
         }],
     bindings: {
-        content: '<',
+        content: '=',
         ext: '='
     }
 });

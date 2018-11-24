@@ -1,37 +1,37 @@
 <div class="form-group">
-    <label class="control-label" ng-if="isShowTitle" ng-bind="$ctrl.data.title"></label>
+    <label class="control-label" ng-if="$ctrl.sShowTitle" ng-bind="$ctrl.title"></label>    
     <div ng-switch="$ctrl.data.dataType">
         <div ng-switch-when="0">
             <!--custom-->
-            <input class="form-control {{$ctrl.inputClass}}" type="text" ng-model="$ctrl.data.value" placeholder="{{$ctrl.data.title}}">
+            <input class="form-control {{$ctrl.inputClass}}" type="text" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
         </div>
         <div ng-switch-when="1">
             <!--datetime-->
-            <input class="form-control {{$ctrl.inputClass}}" type="datetime-local" ng-model="$ctrl.data.value" placeholder="{{$ctrl.data.title}}">
+            <input class="form-control {{$ctrl.inputClass}}" type="datetime-local" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
         </div>
         <div ng-switch-when="2">
             <!--date-->
-            <input class="form-control {{$ctrl.inputClass}}" type="date" ng-model="$ctrl.data.value" placeholder="{{$ctrl.data.title}}">
+            <input class="form-control {{$ctrl.inputClass}}" type="date" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
         </div>
         <div ng-switch-when="3">
             <!--time-->
-            <input class="form-control {{$ctrl.inputClass}}" type="time" ng-model="$ctrl.data.value" placeholder="{{$ctrl.data.title}}">
+            <input class="form-control {{$ctrl.inputClass}}" type="time" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
         </div>
         <div ng-switch-when="4">
             <!--duration-->
-            <input class="form-control {{$ctrl.inputClass}}" type="text" ng-model="$ctrl.data.value" placeholder="{{$ctrl.data.title}}">
+            <input class="form-control {{$ctrl.inputClass}}" type="text" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
         </div>
         <div ng-switch-when="5">
             <!--phonenumber-->
-            <input class="form-control {{$ctrl.inputClass}}" type="tel" ng-model="$ctrl.data.value" placeholder="{{$ctrl.data.title}}">
+            <input class="form-control {{$ctrl.inputClass}}" type="tel" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
         </div>
         <div ng-switch-when="6">
             <!--Currency-->
-            <input class="form-control {{$ctrl.inputClass}}" type="text" ng-model="$ctrl.data.value" placeholder="{{$ctrl.data.title}}">
+            <input class="form-control {{$ctrl.inputClass}}" type="text" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
         </div>
         <div ng-switch-when="7">
             <!--Text-->
-            <input class="form-control {{$ctrl.inputClass}}" type="text" ng-model="$ctrl.data.value" placeholder="{{$ctrl.data.title}}">
+            <input placeholder="{{$ctrl.title}}" class="form-control {{$ctrl.inputClass}}" type="text" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
         </div>
         <div ng-switch-when="8">
             <!--Html-->
@@ -39,31 +39,31 @@
         </div>
         <div ng-switch-when="9">
             <!--TextArea-->
-            <textarea class="form-control {{$ctrl.inputClass}}" rows="5" ng-model="$ctrl.data.value" placeholder="{{$ctrl.data.title}}"></textarea>
+            <textarea class="form-control {{$ctrl.inputClass}}" rows="5" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}"></textarea>
         </div>
         <div ng-switch-when="10">
             <!--Email-->
-            <input class="form-control {{$ctrl.inputClass}}" type="email" ng-model="$ctrl.data.value" placeholder="{{$ctrl.data.title}}">
+            <input class="form-control {{$ctrl.inputClass}}" type="email" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
         </div>
         <div ng-switch-when="11">
             <!--Password-->
-            <input class="form-control {{$ctrl.inputClass}}" type="password" ng-model="$ctrl.data.value" placeholder="{{$ctrl.data.title}}">
+            <input class="form-control {{$ctrl.inputClass}}" type="password" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
         </div>
         <div ng-switch-when="12">
             <!--Url-->
-            <input class="form-control {{$ctrl.inputClass}}" type="url" ng-model="$ctrl.data.value" placeholder="{{$ctrl.data.title}}">
+            <input class="form-control {{$ctrl.inputClass}}" type="url" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
         </div>
         <div ng-switch-when="13">
             <!--ImageUrl-->
-            <input class="form-control {{$ctrl.inputClass}}" type="url" ng-model="$ctrl.data.value" placeholder="{{$ctrl.data.title}}">
+            <input placeholder="{{$ctrl.title}}" class="form-control {{$ctrl.inputClass}}" type="url" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
         </div>
         <div ng-switch-when="14">
             <!--CreditCard-->
-            <input class="form-control {{$ctrl.inputClass}}" type="text" ng-model="$ctrl.data.value" placeholder="{{$ctrl.data.title}}">
+            <input class="form-control {{$ctrl.inputClass}}" type="text" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
         </div>
         <div ng-switch-when="15">
             <!--PostalCode-->
-            <input class="form-control {{$ctrl.inputClass}}" type="text" ng-model="$ctrl.data.value" placeholder="{{$ctrl.data.title}}">
+            <input class="form-control {{$ctrl.inputClass}}" type="text" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
         </div>
         <div ng-switch-when="16">
             <!--upload-->
@@ -72,11 +72,11 @@
         </div>
         <div ng-switch-when="17">
             <!--Color-->
-            <input class="form-control {{$ctrl.inputClass}}" type="color" ng-model="$ctrl.data.value" placeholder="{{$ctrl.data.title}}">
+            <input class="form-control {{$ctrl.inputClass}}" type="color" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
         </div>
         <div ng-switch-when="18">
             <!--Color-->
-            <input class="{{$ctrl.inputClass}}" type="checkbox" ng-model="$ctrl.data.value" placeholder="{{$ctrl.data.title}}">
+            <input class="{{$ctrl.inputClass}}" type="checkbox" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
         </div>
         <div ng-switch-when="19">
             <div class="no-margin no-padding">

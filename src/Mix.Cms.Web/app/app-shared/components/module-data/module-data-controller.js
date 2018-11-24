@@ -151,6 +151,6 @@ app.controller('ModuleDataController', ['$scope', '$rootScope', 'ngAppSettings',
                 $rootScope.isBusy = false;
                 $scope.$apply();
             }
-        };
+        };       
 
     }]);
