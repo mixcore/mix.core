@@ -4,7 +4,7 @@
     {
       "keyword": "read_more",
       "category": "Common",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "value": "Read more",
       "defaultValue": "Read more",
@@ -15,7 +15,7 @@
     {
       "keyword": "portal_import",
       "category": "Portal",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "value": "Import",
       "defaultValue": "Import",
@@ -26,7 +26,7 @@
     {
       "keyword": "portal_list",
       "category": "Portal",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "value": "List",
       "defaultValue": "List",
@@ -37,7 +37,7 @@
     {
       "keyword": "portal_create",
       "category": "Portal",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "value": "Create",
       "defaultValue": "Create",
@@ -48,7 +48,7 @@
     {
       "keyword": "portal_permissions",
       "category": "Portal",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "value": "Permissions",
       "defaultValue": "Permissions",
@@ -59,7 +59,7 @@
     {
       "keyword": "portal_users",
       "category": "Portal",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "value": "Users",
       "defaultValue": "Users",
@@ -70,7 +70,7 @@
     {
       "keyword": "portal_themes",
       "category": "Portal",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "value": "Themes",
       "defaultValue": "Themes",
@@ -81,7 +81,7 @@
     {
       "keyword": "portal_settings",
       "category": "Portal",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "value": "Settings",
       "defaultValue": "Settings",
@@ -92,7 +92,7 @@
     {
       "keyword": "portal_products",
       "category": "Portal",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "value": "Products",
       "defaultValue": "Products",
@@ -103,7 +103,7 @@
     {
       "keyword": "portal_pages",
       "category": "Portal",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "value": "Pages",
       "defaultValue": "Pages",
@@ -114,7 +114,7 @@
     {
       "keyword": "portal_orders",
       "category": "Portal",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "value": "Orders",
       "defaultValue": "Orders",
@@ -125,7 +125,7 @@
     {
       "keyword": "portal_modules",
       "category": "Portal",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "value": "Modules",
       "defaultValue": "Modules",
@@ -136,7 +136,7 @@
     {
       "keyword": "portal_media",
       "category": "Portal",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "value": "Media",
       "defaultValue": "Media",
@@ -147,7 +147,7 @@
     {
       "keyword": "portal_file",
       "category": "Portal",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "value": "File",
       "defaultValue": "File",
@@ -158,7 +158,7 @@
     {
       "keyword": "portal_dashboard",
       "category": "Portal",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "value": "Dashboard",
       "defaultValue": "Dashboard",
@@ -170,7 +170,7 @@
     {
       "keyword": "portal_cultures",
       "category": "Portal",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "value": "Cultures",
       "defaultValue": "Cultures",
@@ -181,7 +181,7 @@
     {
       "keyword": "portal_articles",
       "category": "Portal",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "value": "Articles",
       "defaultValue": "Articles",
@@ -192,7 +192,7 @@
     {
       "keyword": "language",
       "category": "Common",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "value": "Languages",
       "defaultValue": "Languages",
@@ -203,7 +203,7 @@
     {
       "keyword": "fe_site_name",
       "category": "Frontend",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "value": "Site name",
       "defaultValue": "Site name",
