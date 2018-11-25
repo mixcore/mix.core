@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -54,7 +54,7 @@
     @RenderSection("Styles", false)
 </head>
 
-<body class="@ViewData["PageClass"]">
+<body class="@ViewData["PageClass"]" ng-app="MixClient" ng-controller="AppClientController" ng-init="init('@ViewBag.culture')">
     <partial name="../Layouts/_Top_Nav.cshtml" />
     <div class="wrapper">
         <partial name="../Layouts/_Header.cshtml" />

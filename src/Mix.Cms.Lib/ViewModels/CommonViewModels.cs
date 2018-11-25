@@ -41,6 +41,9 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("pageTypes")]
         public List<string> PageTypes { get; set; }
 
+        [JsonProperty("moduleTypes")]
+        public List<string> ModuleTypes { get; set; }
+
         [JsonProperty("statuses")]
         public List<string> Statuses { get; set; }
     }

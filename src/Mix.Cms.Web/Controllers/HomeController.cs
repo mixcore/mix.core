@@ -143,6 +143,7 @@ namespace Mix.Cms.Web.Controllers
                 }
 
                 getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+               
                 _memoryCache.Set(cacheKey, getPage.Data);
                 if (!MixConstants.cachedKeys.Contains(cacheKey))
                 {
@@ -289,6 +290,11 @@ namespace Mix.Cms.Web.Controllers
                 {
                     productNav.Product.DetailsUrl = GenerateDetailsUrl("Product", new { seoName = productNav.Product.SeoName });
                 }
+            }
+
+            foreach (var nav in page.Modules)
+            {
+                GeneratePageDetailsUrls(nav.Module);
             }
         }
 

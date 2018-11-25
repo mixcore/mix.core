@@ -73,6 +73,10 @@ namespace Mix.Cms.Api.Controllers.v1
                     if (id.HasValue)
                     {
                         var beResult = await ReadMvcViewModel.Repository.GetSingleModelAsync(model => model.Id == id && model.Specificulture == _lang).ConfigureAwait(false);
+                        if (beResult.IsSucceed)
+                        {
+                            beResult.Data.LoadData();
+                        }
                         return Ok(JObject.FromObject(beResult));
                     }
                     else
@@ -87,6 +91,7 @@ namespace Mix.Cms.Api.Controllers.v1
                                 Status = MixContentStatus.Preview,
                             }
                         };
+
                         return Ok(JObject.FromObject(result));
                     }
             }

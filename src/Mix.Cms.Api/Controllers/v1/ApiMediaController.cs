@@ -84,6 +84,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (model != null)
             {
+                model.Specificulture = _lang;
                 var result = await base.SaveAsync<UpdateViewModel>(model, true);
                 return result;
             }
