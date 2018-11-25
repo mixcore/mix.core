@@ -4,15 +4,24 @@ modules.component('aceEditor', {
     controller: ['$rootScope', '$scope', 'ngAppSettings',
         function ($rootScope, $scope, ngAppSettings) {
             var ctrl = this;
-            ctrl.editor;
+            ctrl.previousId;
+            ctrl.editor = null;
             ctrl.id = Math.floor(Math.random() * 100) + 1;
             ctrl.$onChanges = (changes) => {
                 if (changes.content) {
                     ctrl.updateEditors();
                 }
             };
+
+            this.$doCheck = function () {
+                if (ctrl.previousId && ctrl.previousId !== ctrl.contentId) {
+                    ctrl.previousId = ctrl.contentId;
+                    ctrl.updateEditors();
+                }
+            }.bind(this);
             ctrl.initAce = function () {
                 setTimeout(() => {
+                    ctrl.previousId = ctrl.contentId;
                     ctrl.updateEditors();
                     $scope.$apply();
                 }, 200);
@@ -48,7 +57,7 @@ modules.component('aceEditor', {
                         }
                         editor.setTheme("ace/theme/chrome");
                         //editor.setReadOnly(true);
-                        if(ctrl.content){
+                        if (ctrl.content) {
                             editor.setValue(ctrl.content);
                         }
                         editor.$blockScrolling = Infinity;
@@ -72,6 +81,7 @@ modules.component('aceEditor', {
         }],
     bindings: {
         content: '=',
+        contentId: '=',
         ext: '='
     }
 });
