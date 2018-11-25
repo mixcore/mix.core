@@ -6,25 +6,8 @@
     string lang = ViewBag.culture;
 
 }
-<script>
-        window.fbAsyncInit = function () {
-            FB.init({
-                appId: '@(MixService.GetConfig<string>("FacebookAppId", ViewBag.culture))',
-                autoLogAppEvents: true,
-                xfbml: true,
-                version: 'v3.2'
-            });
-        };
 
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) { return; }
-            js = d.createElement(s); js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-    </script>
-<div ng-app="MixClient" ng-controller="AppClientController" ng-init="init('@lang')">
+<div>
     @if (!string.IsNullOrEmpty(Model.TemplatePath))
     {
         @(MixService.GetConfig<string>("Phone", lang))
@@ -58,7 +41,7 @@
 @section Styles{
     <link rel="stylesheet" href="~/css/app-vendor.min.css" />
     <base href="/@ViewBag.culture">
-    @Html.Raw(Model.View?.Styles)
+    
     @if (!string.IsNullOrEmpty(MixService.GetConfig<string>("GA_KEY", ViewBag.culture)))
     {
         <!-- Google Analytics -->
@@ -73,7 +56,7 @@
         </script>
         <!-- End Google Analytics -->
     }
-    <div id="fb-root"></div><div id="fb-root"></div><div id="fb-root"></div>
+    <div id="fb-root"></div>
     <script>
         (function (d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
@@ -82,24 +65,45 @@
             js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.1&appId=1471411989648473&autoLogAppEvents=1';
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));</script>
+    @if (!string.IsNullOrEmpty(MixService.GetConfig<string>("FacebookAppId", ViewBag.culture)))
+    {
+        <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '@(MixService.GetConfig<string>("FacebookAppId", ViewBag.culture))',
+                autoLogAppEvents: true,
+                xfbml: true,
+                version: 'v3.2'
+            });
+        };
 
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+        </script>
+    }
+    @Html.Raw(Model.View?.Styles)
 }
 @section defaultscripts{
 
     @*<script>window.jQuery || document.write('<script src="/js/jquery.min.js"><\/script>')</script>*@
 
-     <script src="~/js/framework.min.js"></script>
+    <script src="~/js/framework.min.js"></script>
     <!-- <script src="~/js/bootstrap.min.js"></script> -->
     <!-- <script src="~/js/shared.min.js"></script> -->
 
-    @Html.Raw(Model.View?.Scripts)
-    
     <script src="~/js/app-client.min.js"></script>
     <script src="~/js/app-shared.min.js"></script>
-    
+
     <!-- <script src="~/app-client/shared/controllers/app-client-controller.js"></script> -->
-    
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200|Open+Sans+Condensed:700" rel="stylesheet">
     <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    
+    @Html.Raw(Model.View?.Scripts)
+
 }

@@ -271,6 +271,17 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     c.IsActived = MixModuleArticles.ReadViewModel.Repository.CheckIsExists(n => n.ModuleId == c.ModuleId && n.ArticleId == Id, _context, _transaction);
                 });
             }
+            var otherModules = MixModuleArticles.ReadViewModel.Repository.GetModelListBy(m => !Modules.Any(n => n.ModuleId == n.ModuleId && n.Specificulture == n.Specificulture), "CreatedDateTime", 1, 10, 0, _context, _transaction);
+            foreach (var item in otherModules.Data.Items)
+            {
+                Modules.Add(new MixModuleArticles.ReadViewModel()
+                {
+                    ModuleId = item.ModuleId,
+                    Image = item.Image,
+                    ArticleId = Id,
+                    Description = item.Description
+                });
+            }
 
             var getArticleMedia = MixArticleMedias.ReadViewModel.Repository.GetModelListBy(n => n.ArticleId == Id && n.Specificulture == Specificulture, _context, _transaction);
             if (getArticleMedia.IsSucceed)

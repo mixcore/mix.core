@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('MixClient', ['ngRoute', 'LocalStorageModule', 'components','ngSanitize']);
+var app = angular.module('MixClient', ['LocalStorageModule', 'components','ngSanitize']);
 var serviceBase = '';
 
 app.directive('ngEnter', function () {
@@ -64,7 +64,7 @@ app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthServi
             'Published',
             'Draft',
             'Schedule'
-        ]
+        ];
         ngAppSettings.orders = [
             {
                 value: 'CreatedDateTime',
@@ -90,13 +90,13 @@ app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthServi
                 value: '1',
                 title: 'Desc'
             }
-        ]
+        ];
         ngAppSettings.pageSizes = [
             '5',
             '10',
             '15',
             '20'
-        ]
+        ];
         ngAppSettings.request = {
             pageSize: '10',
             pageIndex: 0,
@@ -154,7 +154,7 @@ app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthServi
             { title: 'boolean', value: 7 },
             { title: 'mdTextArea', value: 8 },
             { title: 'date', value: 9 },
-            { title: 'datetime', value: 10 },
+            { title: 'datetime', value: 10 }
         ];
         $rootScope.range = function (max) {
             var input = [];
@@ -206,14 +206,14 @@ app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthServi
             $.each(errors, function (i, e) {
                 $rootScope.showMessage(e, 'danger');
             });
-        }
+        };
 
         $rootScope.showMessage = function (content, type) {
             var from = 'bottom';
             var align = 'right';
             $.notify({
                 icon: "now-ui-icons ui-1_bell-53",
-                message: content,
+                message: content
 
             }, {
                     type: type,
@@ -223,7 +223,7 @@ app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthServi
                         align: align
                     }
                 });
-        }
+        };
 
         $rootScope.translate = function (keyword, defaultValue) {
             if ($rootScope.globalSettings && ($rootScope.translator || $rootScope.isBusy)) {
@@ -232,7 +232,7 @@ app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthServi
             else {
                 return defaultValue || keyword;
             }
-        }
+        };
     }]);
 
 
