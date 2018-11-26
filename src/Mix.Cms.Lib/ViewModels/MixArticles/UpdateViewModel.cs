@@ -289,7 +289,17 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 MediaNavs = getArticleMedia.Data.OrderBy(p => p.Priority).ToList();
                 MediaNavs.ForEach(n => n.IsActived = true);
             }
-
+            var medias = MixMedias.UpdateViewModel.Repository.GetModelListBy(m => !MediaNavs.Any(n => n.MediaId == m.Id), "CreatedDateTime", 1, 10, 0, _context, _transaction);
+            foreach (var item in medias.Data.Items)
+            {
+                MediaNavs.Add(new MixArticleMedias.ReadViewModel()
+                {
+                    MediaId = item.Id,
+                    Image = item.FullPath,
+                    ArticleId = Id,
+                    Description  = item.Title
+                });
+            }
             ArticleNavs = GetRelated(_context, _transaction);
         }
 
@@ -533,7 +543,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             }
             var taskSource = new TaskCompletionSource<RepositoryResponse<bool>>();
             taskSource.SetResult(result);
-            return taskSource.Task;            
+            return taskSource.Task;
         }
 
         #endregion Async Methods
