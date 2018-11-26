@@ -59,10 +59,10 @@
                             </td>
                             <td>
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Actions">
-                                    <a href="javascript:void(0)" ng-click="saveMedia(item)" class="btn btn-sm btn-light">
+                                    <a ng-click="save(item)" class="btn btn-sm btn-light">
                                         <span class="fas fa-check text-info"></span>
                                     </a>
-                                    <a href="javascript:void(0)" ng-click="removeMedia(item.id)" class="btn btn-sm btn-light">
+                                    <a ng-click="remove(item.id)" class="btn btn-sm btn-light">
                                         <span class="fas fa-times text-danger"></span>
                                     </a>
                                 </div>
@@ -73,12 +73,12 @@
             </div>
             <div class="modal-footer">
 
-                <div class="d-flex justify-content-end">
-                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="col-md-7">
+                    <div class="col-md-12" role="toolbar" aria-label="Toolbar with button groups">
                             <custom-file header="''" folder="'Medias'" media-file="activedData.mediaFile" data="activedData" src-url="activedData.mediaFile.fullPath" save="save(activedData)" auto="'false'" class=""></custom-file>
                     </div>
                 </div>
-                <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
+                <paging class="small col-md-5" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
             </paging></div>
         </div>
         <!-- /.modal-content -->

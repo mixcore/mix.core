@@ -1,12 +1,11 @@
 ﻿'use strict';
-app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', 
+app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$routeParams',
     'ModuleService', 'ModuleDataService',
     function ($scope, $rootScope, ngAppSettings, $routeParams, moduleServices, moduleDataService) {
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, moduleServices, 'product');
         $scope.contentUrl = '';
-        $scope.getSingleSuccessCallback = function()
-        {
-            $scope.contentUrl = '/portal/module/data/'+ $scope.activedData.id;
+        $scope.getSingleSuccessCallback = function () {
+            $scope.contentUrl = '/portal/module/data/' + $scope.activedData.id;
         };
         $scope.defaultAttr = {
             name: '',
@@ -21,21 +20,25 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$r
         $scope.dataTypes = ngAppSettings.dataTypes;
         $scope.activedData = null;
         $scope.editDataUrl = '';
-        $scope.dataColumns = [];
+
         $scope.loadModuleDatas = async function () {
             $rootScope.isBusy = true;
             var id = $routeParams.id;
+            $scope.dataColumns = [];
             var response = await moduleServices.getSingle([id, 'mvc']);
             if (response.isSucceed) {
+
                 $scope.activedData = response.data;
-                $scope.editDataUrl = '/portal/module-data/details/'+$scope.activedData.id;
-                angular.forEach($scope.activedData.columns,function(e,i){
-                    $scope.dataColumns.push({
-                        title: e.title,
-                        name: e.name,
-                        filter: true,
-                        type: 0 // string - ngAppSettings.dataTypes[0]
-                    })
+                $scope.editDataUrl = '/portal/module-data/details/' + $scope.activedData.id;
+                angular.forEach($scope.activedData.columns, function (e, i) {
+                    if (e.isDisplay) {
+                        $scope.dataColumns.push({
+                            title: e.title,
+                            name: e.name,
+                            filter: true,
+                            type: 0 // string - ngAppSettings.dataTypes[0]
+                        });
+                    }
                 });
                 $rootScope.isBusy = false;
                 $scope.$apply();
@@ -87,8 +90,8 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$r
             angular.element('#option_' + index).val('');
         };
 
-        $scope.generateName = function(col){
-            col.name =  $rootScope.generateKeyword(col.title, '_');
+        $scope.generateName = function (col) {
+            col.name = $rootScope.generateKeyword(col.title, '_');
         }
         $scope.removeAttr = function (index) {
             if ($scope.activedData) {
@@ -115,7 +118,7 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$r
                 $scope.$apply();
             }
         }
-        $scope.updateModuleDataField = async function (item, propertyName){
+        $scope.updateModuleDataField = async function (item, propertyName) {
             var result = await moduleDataService.saveFields(item.id, propertyName, item[propertyName]);
             if (result.isSucceed) {
                 $scope.loadModuleDatas();

@@ -1,0 +1,95 @@
+<<<<<<< HEAD
+@using Mix.Cms.Lib.ViewModels;
+@{
+    string culture = ViewBag.culture;
+    List<Mix.Cms.Lib.ViewModels.MixPages.ReadListItemViewModel> topCates = MixCmsHelper.GetCategory(Url, ViewBag.culture, MixEnums.CatePosition.Top, Context.Request.Path);
+=======
+@using Swastika.Cms.Lib.ViewModels;
+@{
+     string culture = ViewBag.culture;
+    var getTopCates = InfoCategoryViewModel.Repository.GetModelListBy
+(c => c.Specificulture == culture && c.SiocCategoryPosition.Count(
+   p => p.PositionId == (int)Swastika.Cms.Lib.SWCmsConstants.CatePosition.Top) > 0
+);
+    var topCates = getTopCates.Data?? new List<InfoCategoryViewModel>();
+>>>>>>> parent of fd2daa4... remove template files
+}
+<nav class="navbar navbar-expand-lg navbar-transparent bg-primary navbar-absolute">
+    <div class="container">
+        <div class="navbar-translate">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#example-navbar-primary" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-bar bar1"></span>
+                <span class="navbar-toggler-bar bar2"></span>
+                <span class="navbar-toggler-bar bar3"></span>
+            </button>
+            <a class="navbar-brand" href="#pablo">Creative Tim</a>
+        </div>
+        <div class="collapse navbar-collapse" id="example-navbar-primary">
+            <ul class="navbar-nav ml-auto">
+<<<<<<< HEAD
+
+                @foreach (var cate in topCates.OrderBy(c => c.Priority))
+=======
+            
+                @foreach (var cate in topCates.OrderBy(c=>c.Priority))
+>>>>>>> parent of fd2daa4... remove template files
+                {
+                    string action = cate.Type.ToString();
+                    switch (cate.Type)
+                    {
+<<<<<<< HEAD
+                        case MixEnums.MixPageType.Blank:
+                            string pageNames = string.Join(",", cate.Childs.Select(c => c.SeoName).ToList());
+                            <li is-active-menu asp-controllers="Home" asp-action=",Home" asp-route-pagenames="@pageNames" pages="@pageNames" class="dropdown nav-item">
+                                <a href="@cate.StaticUrl" target="_blank" class="dropdown-hover-toggle nav-link">
+                                    @cate.Title <i class="fab fa-angle-down"></i>
+=======
+                        case Swastika.Cms.Lib.SWCmsConstants.CateType.Blank:
+                            string pageNames = string.Join(",", cate.Childs.Select(c => c.SeoName).ToList());
+                            <li is-active-menu asp-controllers="Home" asp-action=",Home" asp-route-pagenames="@pageNames" pages="@pageNames" class="dropdown nav-item">
+                                <a href="@cate.StaticUrl" target="_blank" class="dropdown-hover-toggle nav-link">
+                                    @cate.Title <i class="fa fa-angle-down"></i>
+>>>>>>> parent of fd2daa4... remove template files
+                                </a>
+                                <ul class="dropdown-hover-menu dropdown-menu navbar-nav ml-auto">
+                                    @foreach (var childNav in cate.Childs)
+                                    {
+                                        action = childNav.Type.ToString();
+                                        <li is-active-menu asp-controllers="Home" asp-action=",Home" asp-route-pagenames="@childNav.SeoName" class="nav-item">
+                                            <a asp-route-culture="@ViewBag.culture" asp-controller="Home" asp-action="Home" asp-route-pageName="@childNav.SeoName" class="nav-link">@childNav.Title</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                            break;
+<<<<<<< HEAD
+                        case MixEnums.MixPageType.Home:
+=======
+                        case Swastika.Cms.Lib.SWCmsConstants.CateType.Home:
+>>>>>>> parent of fd2daa4... remove template files
+                            <li is-active-menu asp-controllers="Home" asp-action="Home" asp-route-pagenames=",@cate.SeoName" class="nav-item">
+                                <a asp-route-culture="@ViewBag.culture" asp-controller="Home" asp-action="Home" asp-route-pageName="" class="nav-link">@cate.Title</a>
+                            </li>
+                            break;
+<<<<<<< HEAD
+                        case MixEnums.MixPageType.StaticUrl:
+=======
+                        case Swastika.Cms.Lib.SWCmsConstants.CateType.StaticUrl:
+>>>>>>> parent of fd2daa4... remove template files
+                            <li class="nav-item">
+                                <a class="nav-link" href="@cate.StaticUrl">@cate.Title</a>
+                            </li>
+                            break;
+                        default:
+                            <li is-active-menu asp-controllers="Home" asp-action="Home" asp-route-pagenames="@cate.SeoName">
+                                @*<a href="@href">@cate.Title</a>*@
+                                <a asp-route-culture="@ViewBag.culture" asp-controller="Home" asp-action="Home" asp-route-pageName="@cate.SeoName">@cate.Title</a>
+                            </li>
+                            break;
+                    }
+
+                }
+            </ul>
+        </div>
+    </div>
+</nav>
