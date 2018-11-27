@@ -149,9 +149,12 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 });
             }
         }
-
+        [JsonIgnore]
         public List<ExtraProperty> Properties { get; set; }
 
+        [JsonProperty("extraData")]
+        public JObject ExtraData { get; set; }
+        
         [JsonProperty("mediaNavs")]
         public List<MixArticleMedias.ReadViewModel> MediaNavs { get; set; }
 
@@ -176,13 +179,15 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             this.View = MixTemplates.ReadViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
+
+            ExtraData = new JObject();
             Properties = new List<ExtraProperty>();
             if (!string.IsNullOrEmpty(ExtraProperties))
             {
                 JArray arr = JArray.Parse(ExtraProperties);
                 foreach (JToken item in arr)
                 {
-                    Properties.Add(item.ToObject<ExtraProperty>());
+                    ExtraData.Add(new JProperty(item["name"].Value<string>(), item["value"].Value<string>()));
                 }
             }
 
@@ -192,6 +197,8 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 MediaNavs = getArticleMedia.Data.OrderBy(p => p.Priority).ToList();
                 MediaNavs.ForEach(n => n.IsActived = true);
             }
+
+            
         }
 
         #endregion Overrides
