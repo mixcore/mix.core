@@ -1,3 +1,5 @@
 ﻿app.config(function ($routeProvider, $locationProvider, $sceProvider) {
-    $locationProvider.html5Mode(true);
+    //for render onepage app
+    //$locationProvider.html5Mode(true);
+    
 });

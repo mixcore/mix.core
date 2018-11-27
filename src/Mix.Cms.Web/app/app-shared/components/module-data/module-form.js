@@ -80,6 +80,8 @@ modules.component('moduleForm', {
         d: '=',
         title: '=',
         name: '=',
+        submitText: '=',
+        isShowTitle: '=',
         backUrl: '='
     }
 });

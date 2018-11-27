@@ -16,7 +16,7 @@
         </div>
     </div>
     <filter-list request="request" callback="loadMoreModuleDatas()"></filter-list>
-    <mix-module-data-table data="activedData.data" can-drag="request.orderBy === 'Priority' && request.direction === '0'" edit-url="editDataUrl" columns="dataColumns" on-delete="removeModuleData(id)" on-update-infos="updateDataInfos(activedData.data.items)">
+    <mix-module-data-table data="activedData.data" can-drag="request.orderBy === 'Priority' && request.direction === '0'" edit-url="editDataUrl" columns="dataColumns" on-delete="removeData(id)" on-update-infos="updateDataInfos(activedData.data.items)">
     </mix-module-data-table>
     <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end" a-class="page-link" paging-action="getList(page-1)" scroll-top="true"></paging>
     <table class="table table-sm table-hover" cellspacing="0" ng-if="activedData.articles.totalItems > 0">
