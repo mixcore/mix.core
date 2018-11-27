@@ -29,7 +29,7 @@
                                     <span class="oi oi-sort-ascending"></span>
                                 </th>
                                 <th scope="col">Name</th>
-                                <th scope="col" width="20%">Data Type</th>
+                                <!-- <th scope="col" width="20%">Data Type</th> -->
                                 <th scope="col">Value</th>
                             </tr>
                         </thead>
@@ -44,11 +44,11 @@
                                 <td>
                                     <input ng-model="prop.name" class="form-control form-control-sm">
                                 </td>
-                                <td>
+                                <!-- <td>
                                     <select ng-model="prop.dataType" class="form-control form-control-sm prop-data-type">
                                         <option ng-repeat="type in $ctrl.dataTypes track by $index" value="{{type.value}}">{{type.title}}</option>
                                     </select>
-                                </td>
+                                </td> -->
                                 <td class="prop-value-container">
                                     <div class="animate-switch-container" ng-switch on="prop.dataType">                                        
                                         <div class="animate-switch" ng-switch-when="1">

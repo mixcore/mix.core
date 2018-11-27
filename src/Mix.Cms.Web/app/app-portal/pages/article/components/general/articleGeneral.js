@@ -64,7 +64,7 @@ app.component('articleGeneral', {
                 priority: 0,
                 name: '',
                 value: null,
-                dataType: 0
+                dataType: 7
             });
         };
         ctrl.initEditor = function() {
