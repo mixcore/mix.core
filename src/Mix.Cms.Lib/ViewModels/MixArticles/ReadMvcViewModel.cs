@@ -152,9 +152,6 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         [JsonIgnore]
         public List<ExtraProperty> Properties { get; set; }
 
-        [JsonProperty("extraData")]
-        public JObject ExtraData { get; set; }
-        
         [JsonProperty("mediaNavs")]
         public List<MixArticleMedias.ReadViewModel> MediaNavs { get; set; }
 
@@ -180,14 +177,14 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         {
             this.View = MixTemplates.ReadViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
 
-            ExtraData = new JObject();
             Properties = new List<ExtraProperty>();
+
             if (!string.IsNullOrEmpty(ExtraProperties))
             {
                 JArray arr = JArray.Parse(ExtraProperties);
                 foreach (JToken item in arr)
                 {
-                    ExtraData.Add(new JProperty(item["name"].Value<string>(), item["value"].Value<string>()));
+                    Properties.Add(item.ToObject<ExtraProperty>());
                 }
             }
 
@@ -198,17 +195,18 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 MediaNavs.ForEach(n => n.IsActived = true);
             }
 
-            
+
         }
 
         #endregion Overrides
 
         #region Expands
-
-        private string GetPropertyValue(string name)
+        //Get Property by name
+        public string Property(string name)
         {
             var prop = Properties.FirstOrDefault(p => p.Name.ToLower() == name.ToLower());
-            return prop?.Value;
+            return  prop?.Value;
+            
         }
 
         #endregion Expands
