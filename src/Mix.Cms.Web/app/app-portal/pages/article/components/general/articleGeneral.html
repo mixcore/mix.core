@@ -1,5 +1,5 @@
 <div class="tab-pane fade active show" id="pills-general" role="tabpanel" aria-labelledby="pills-general-tab">
-    
+
     <div class="form-group">
         <label class="control-label">Source</label>
         <input type="text" class="form-control" ng-model="$ctrl.article.source">
@@ -39,34 +39,19 @@
                                     <span class="oi oi-move"></span>
                                 </td>
                                 <td>
-                                    <input type="text" ng-model="prop.priority" class="item-priority form-control form-control-sm d-inline" style="width:40px;">
+                                    <input type="text" ng-model="prop.priority" class="item-priority form-control form-control-sm d-inline"
+                                        style="width:40px;">
                                 </td>
                                 <td>
                                     <input ng-model="prop.name" class="form-control form-control-sm">
                                 </td>
-                                <td>                                    
+                                <td>
                                     <select class="form-control form-control-sm" ng-model="prop.dataType">
                                         <option ng-repeat="item in $ctrl.dataTypes" ng-value="item.value">{{item.title}}</option>
                                     </select>
                                 </td>
                                 <td class="prop-value-container">
-                                    
-                                        <module-form-editor title="prop.name" data="prop"></module-form-editor>                                      
-                                    <div class="animate-switch-container" ng-switch on="prop.dataType">  
-                                            
-                                        <!-- <div class="animate-switch" ng-switch-when="1">
-                                            <input class="form-control form-control-sm" type="number" ng-model="prop.value">
-                                        </div>                                          
-                                        <div class="animate-switch" ng-switch-when="2">
-                                            <custom-file header="'Image'" folder="'articles/Properties'" src="prop.value" auto="'true'"></custom-file>
-                                        </div>
-                                        <div class="animate-switch" ng-switch-when="7">
-                                            <input class="form-control form-control-sm" type="checkbox" ng-true-value="'true'" ng-model="prop.value">
-                                        </div>
-                                        <div class="animate-switch" ng-switch-default>
-                                            <input class="form-control form-control-sm" type="text" ng-model="prop.value">
-                                        </div> -->
-                                    </div>
+                                    <module-form-editor title="prop.name" data="prop"></module-form-editor>
                                 </td>
                             </tr>
                         </tbody>
