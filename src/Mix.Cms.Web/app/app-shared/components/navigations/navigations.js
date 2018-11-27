@@ -1,7 +1,7 @@
 ﻿
 modules.component('navs', {
     templateUrl: '/app/app-shared/components/navigations/navigations.html',
-    controller: ['$scope', function ($scope) {
+    controller: ['$scope', '$location', function ($scope, $location) {
         var ctrl = this;
         ctrl.selected = null;
         ctrl.updateOrders = function (index) {
@@ -10,9 +10,14 @@ modules.component('navs', {
                 ctrl.data[i].priority = i + 1;
             }
         };
+        ctrl.goToDetails = async function (nav) {
+            $location.path(ctrl.detailsUrl + nav[ctrl.key]);
+        };
     }],
     bindings: {
         prefix: '=',
+        detailsUrl: '=',
+        key: '=',
         data: '=',
         callback: '&'
     }

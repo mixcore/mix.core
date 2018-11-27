@@ -1,6 +1,6 @@
 <div class="cd-section" id="contactus">
 <!--     *********    CONTACT US 1     *********      -->
-<div class="contactus-1 section-image" style="background-image: url('assets/img/contact1.jpg')">
+<div class="contactus-1 section-image" style="background-image: url('@Model.Image')">
     <div id="contactUsMap" class="map" style="width: 100%;height: 100%;position: absolute;top: 0;"></div>
     <div class="container">
         <div class="row">
@@ -34,61 +34,14 @@
             </div>
             <div class="col-md-5 ml-auto mr-auto">
                 <div class="card card-contact card-raised">
-                    <form role="form" id="contact-form" method="post">
+                    
                         <div class="card-header text-center">
                             <h4 class="card-title">Contact Us</h4>
                         </div>
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6 pr-2">
-                                    <label>First name</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="now-ui-icons users_circle-08"></i>
-                                        </span>
-                                        <input type="text" class="form-control" placeholder="First Name...">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 pl-2">
-                                    <div class="form-group">
-                                        <label>Last name</label>
-                                        <div class="input-group">
-                                            <span class="input-group-addon">
-                                                <i class="now-ui-icons text_caps-small"></i>
-                                            </span>
-                                            <input type="text" placeholder="Last Name..." class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Email address</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <i class="now-ui-icons ui-1_email-85"></i>
-                                    </span>
-                                    <input type="email" placeholder="Email Here..." class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Your message</label>
-                                <textarea name="message" class="form-control" id="message" rows="6"></textarea>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="checkbox">
-                                        <input id="checkbox1" type="checkbox">
-                                        <label for="checkbox1">
-                                            I'm not a robot
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <button type="submit" class="btn btn-primary btn-round pull-right">Send Message</button>
-                                </div>
-                            </div>
+                            <module-form name="contact_us" submit-text="'Send'" module-id="6" is-show-title="'true'"></module-form>
                         </div>
-                    </form>
+                    
                 </div>
             </div>
         </div>
