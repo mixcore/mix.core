@@ -11,7 +11,7 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$r
             name: '',
             options: [],
             priority: 0,
-            dataType: 0,
+            dataType: 7,
             isGroupBy: false,
             isSelect: false,
             isDisplay: true,
