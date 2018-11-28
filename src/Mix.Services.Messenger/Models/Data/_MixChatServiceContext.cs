@@ -22,6 +22,7 @@ namespace Mix.Services.Messenger.Models.Data
         public virtual DbSet<MixMessengerUser> MixMessengerUser { get; set; }
         public virtual DbSet<MixMessengerUserDevice> MixMessengerUserDevice { get; set; }
 
+        private static string _cnn = "Server=(localdb)\\mssqllocaldb;Database=mix-messenger.db;Trusted_Connection=True;MultipleActiveResultSets=true";
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -34,9 +35,13 @@ namespace Mix.Services.Messenger.Models.Data
                .SetBasePath(System.IO.Directory.GetCurrentDirectory())
                .AddJsonFile(Common.Utility.Const.CONST_FILE_APPSETTING)
                .Build();
-                string cnn = "Server=(localdb)\\mssqllocaldb;Database=mix-messenger.db;Trusted_Connection=True;MultipleActiveResultSets=true";
-                //optionsBuilder.UseSqlServer(cnn);
 
+                //optionsBuilder.UseSqlServer(cnn);
+                string cnn = configuration.GetConnectionString("MixMessengerConnection");
+                if (string.IsNullOrEmpty(cnn))
+                {
+                    cnn = _cnn;
+                }
                 //define the database to use
                 if (!string.IsNullOrEmpty(cnn))
                 {
