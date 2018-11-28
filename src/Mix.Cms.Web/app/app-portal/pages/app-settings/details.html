@@ -1,4 +1,5 @@
 <section class="" ng-init="loadAppSettings()">
+    {{appSettings}}
     <form ng-if="appSettings" ng-class="{'submitted': submitted}" ng-submit="saveAppSettings(appSettings)">
         <actions preview-url="appSettings.fullPath" back-url="'/portal/configuration/list'"></actions>
         <div class="row justify-content-md-center">
