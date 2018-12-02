@@ -181,15 +181,6 @@ namespace Mix.Cms.Lib
             Icon = 19
         }
 
-        public enum ModuleType
-        {
-            Root,
-            SubPage,
-            SubArticle,
-            SubProduct,
-            Form
-        }
-
         public enum UrlAliasType
         {
             Page,

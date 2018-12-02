@@ -49,7 +49,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public string Fields { get; set; }
 
         [JsonProperty("type")]
-        public ModuleType Type { get; set; }
+        public MixModuleType Type { get; set; }
 
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }

@@ -28,7 +28,7 @@
             //console.log('insert ', index, item, external, type);
         }
         ctrl.delete = function (id) {
-            ctrl.onDelete({ id: id });
+            ctrl.onDelete({ id: id,moduleId: ctrl.moduleId });
         };
         ctrl.goTo = function (id) {
             $location.path(ctrl.editUrl + '/' + id);
@@ -38,6 +38,7 @@
         }
     }],
     bindings: {
+        moduleId: '=',
         data: '=',
         childName: '=',
         canDrag: '=',

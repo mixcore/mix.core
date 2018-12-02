@@ -25,7 +25,7 @@
                 <tbody class="sortable" ng-init="$ctrl.load()">
                     <tr ng-repeat="item in $ctrl.data.items track by $index">
                         <td>
-                            {{item.title}}
+                            <span class="small" ng-bind="item.title"></span>
                         </td>
                         <td>
                             <img class="rounded" height="25" ng-src="{{item.imageUrl}}">
@@ -33,7 +33,7 @@
                         <td>
                             <span class="switch switch-sm position-absolute">
                                 <input type="checkbox" class="switch" ng-model="item.isActived" ng-change="$ctrl.activeItem(item)" id="{{$ctrl.prefix}}_{{item.id}}" value="true">
-                                <label class="switch m-0" for="{{$ctrl.prefix}}_{{item.id}}">
+                                <label class="switch m-0 small" for="{{$ctrl.prefix}}_{{item.id}}">
                                 </label>
                             </span>
                         </td>

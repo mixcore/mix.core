@@ -27,7 +27,7 @@
         </div>
         <div ng-switch-when="6">
             <!--Currency-->
-            <input class="form-control {{$ctrl.inputClass}}" type="text" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
+            <input class="form-control {{$ctrl.inputClass}}" type="number" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
         </div>
         <div ng-switch-when="7">
             <!--Text-->
@@ -75,7 +75,7 @@
             <input class="form-control {{$ctrl.inputClass}}" type="color" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
         </div>
         <div ng-switch-when="18">
-            <!--Color-->
+            <!--Boolean-->
             <input class="{{$ctrl.inputClass}}" type="checkbox" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
         </div>
         <div ng-switch-when="19">
