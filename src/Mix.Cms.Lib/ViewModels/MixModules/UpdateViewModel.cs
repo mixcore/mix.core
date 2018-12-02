@@ -272,7 +272,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
             switch (Type)
             {
-                case MixModuleType.Root:
+                case MixModuleType.Content:
                     getDataResult = MixModuleDatas.ReadViewModel.Repository
                        .GetModelListBy(m => m.ModuleId == Id && m.Specificulture == Specificulture
                        , "Priority", 0, pageSize, pageIndex

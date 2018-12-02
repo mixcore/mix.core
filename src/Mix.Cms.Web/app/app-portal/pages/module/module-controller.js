@@ -5,9 +5,13 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$r
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, moduleServices, 'product');
         $scope.contentUrl = '';
         $scope.getSingleSuccessCallback = function () {
-            if($scope.activedData.id>0){
-            $scope.contentUrl = '/portal/module/data/' + $scope.activedData.id;
+            if ($scope.activedData.id > 0) {
+                $scope.contentUrl = '/portal/module/data/' + $scope.activedData.id;
             }
+        };
+        $scope.getListByType = async function (pageIndex) {
+            $scope.request.query = '?type=' + $scope.type;
+            await $scope.getList(pageIndex);
         };
         $scope.defaultAttr = {
             name: '',
@@ -19,7 +23,9 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$r
             isDisplay: true,
             width: 3
         };
+        $scope.type='-1';
         $scope.dataTypes = ngAppSettings.dataTypes;
+        $scope.settings = $rootScope.globalSettings;
         $scope.activedData = null;
         $scope.editDataUrl = '';
 

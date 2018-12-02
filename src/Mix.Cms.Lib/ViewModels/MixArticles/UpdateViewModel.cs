@@ -275,7 +275,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 });
             }
             var otherModules = MixModules.ReadListItemViewModel.Repository.GetModelListBy(
-                m => (m.Type == (int)MixEnums.MixModuleType.Root || m.Type == (int)MixEnums.MixModuleType.ListArticle) &&
+                m => (m.Type == (int)MixEnums.MixModuleType.Content || m.Type == (int)MixEnums.MixModuleType.ListArticle) &&
                 !Modules.Any(n => n.ModuleId == m.Id && n.Specificulture == m.Specificulture)
                 , "CreatedDateTime", 1, null, 0, _context, _transaction);
             foreach (var item in otherModules.Data.Items)
@@ -319,7 +319,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     item.Module.LoadData(articleId: Id);
                 }
             }
-            var otherModuleNavs = MixModules.ReadListItemViewModel.Repository.GetModelListBy(
+            var otherModuleNavs = MixModules.ReadMvcViewModel.Repository.GetModelListBy(
                 m => (m.Type == (int)MixEnums.MixModuleType.SubArticle) && m.Specificulture== Specificulture
                 && !ModuleNavs.Any(n => n.ModuleId == m.Id), "CreatedDateTime", 1, null, 0, _context, _transaction);
             foreach (var item in otherModuleNavs.Data.Items)
@@ -327,9 +327,10 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 ModuleNavs.Add(new MixArticleModules.ReadViewModel()
                 {
                     ModuleId = item.Id,
-                    Image = item.ImageUrl,
+                    Image = item.Image,
                     ArticleId = Id,
-                    Description = item.Title
+                    Description = item.Title,
+                    Module = item
                 });
             }
 

@@ -35,7 +35,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleModules
 
         #region Views
         [JsonProperty("module")]
-        public UpdateViewModel Module { get; set; }
+        public ReadMvcViewModel Module { get; set; }
 
         #endregion Views
 
@@ -43,7 +43,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleModules
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getModule = UpdateViewModel.Repository.GetSingleModel(p => p.Id == ModuleId && p.Specificulture == Specificulture
+            var getModule = ReadMvcViewModel.Repository.GetSingleModel(p => p.Id == ModuleId && p.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction
             );
             if (getModule.IsSucceed)
