@@ -141,7 +141,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             Expression<Func<MixModuleProduct, bool>> productExp = null;
             switch (Type)
             {
-                case MixModuleType.Root:
+                case MixModuleType.Content:
                     dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture;
                     articleExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
                     productExp = m => m.ModuleId == Id && m.Specificulture == Specificulture;

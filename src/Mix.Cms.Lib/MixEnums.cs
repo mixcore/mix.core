@@ -100,8 +100,8 @@ namespace Mix.Cms.Lib
 
         public enum MixModuleType
         {
-            Root = 0,
-            Article = 1,
+            Content = 0,
+            Data = 1,
             ListArticle = 2,
             SubPage = 3,
             SubArticle = 4,
