@@ -24,10 +24,10 @@ namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
     [Route("api/v1/permission")]
-    public class ApiPortalPageController :
+    public class ApiPermissionController :
         BaseGenericApiController<MixCmsContext, MixPortalPage>
     {
-        public ApiPortalPageController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext) : base(memoryCache, hubContext)
+        public ApiPermissionController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext) : base(memoryCache, hubContext)
         {
 
         }

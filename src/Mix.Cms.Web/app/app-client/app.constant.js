@@ -101,7 +101,10 @@ app.constant('ngAppSettings', {
             { title: 'mdTextArea', value: 8 },
             { title: 'date', value: 9 },
             { title: 'datetime', value: 10 }
-        ]   
+        ],
+        miIcons=[
+            'mi-Page','mi-AllApps', 'mi-Add'
+        ]  
     });
 
 function Filter($filter) {

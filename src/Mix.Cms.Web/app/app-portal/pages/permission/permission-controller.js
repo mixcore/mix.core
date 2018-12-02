@@ -4,6 +4,7 @@ app.controller('PermissionController',
         function ($scope, $rootScope, ngAppSettings, $routeParams, $location, service, commonService) {
             BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
             $scope.request.query = "level=0";
+            $scope.miOptions=ngAppSettings.miIcons;
             $scope.columns = [
                 {
                     title: 'Keyword',
@@ -30,7 +31,12 @@ app.controller('PermissionController',
                     type: 0 // string - ngAppSettings.dataTypes[0]
                 },
             ];
-
+            $scope.initCurrentPath = async function(){
+                await $scope.getSingle();
+                $scope.activedData.url = $location.path();
+                $scope.$applyAsync();
+            };
+            
             $scope.updateInfos = async function (items) {
                 $rootScope.isBusy = true;
                 var resp = await service.updateInfos(items);
@@ -62,4 +68,7 @@ app.controller('PermissionController',
                     $scope.$apply();
                 }
             };
+            $('#dlg-favorite').on('show.bs.modal', function (event) {
+                $scope.initCurrentPath();
+              });
         }]);

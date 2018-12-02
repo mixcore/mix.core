@@ -9,11 +9,10 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div ng-repeat="prop in $ctrl.data.dataProperties track by $index">                                
+                            <div ng-repeat="prop in $ctrl.data.dataProperties track by $index">
                                 <module-form-editor is-show-title="$ctrl.isShowTitle" title="prop.title" data="$ctrl.data.jItem[prop.name]" ng-if="!prop.isSelect"></module-form-editor>
-                                <div ng-if="prop.isSelect">
-                                    <label class="control-label" ng-bind="prop.title"></label>
-                                    <br>
+                                <div ng-if="prop.isSelect" class="form-group">
+                                    <label class="control-label" ng-if="$ctrl.isShowTitle" ng-bind="prop.title"></label>
                                     <select class="btn custom-select form-control" ng-model="$ctrl.data.jItem[prop.name]['value']">
                                         <option ng-repeat="item in prop.options track by $index" ng-value="item">{{item}}</option>
                                     </select>
@@ -21,13 +20,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" ng-if="$ctrl.submitText">
-                            <div class="col-sm-12">
-                                <button type="submit" class="btn btn-primary btn-round pull-right">Send Message</button>
-                            </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="submit" class="btn btn-primary btn-round pull-right">Submit</button>
                         </div>
+                    </div>
                 </div>
-               
+
             </div>
         </form>
     </div>

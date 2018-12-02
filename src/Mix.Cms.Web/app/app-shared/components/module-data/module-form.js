@@ -1,7 +1,7 @@
 ﻿
 modules.component('moduleForm', {
     templateUrl: '/app/app-shared/components/module-data/module-form.html',
-    controller: ['$scope', '$rootScope','ngAppSettings', '$routeParams', '$timeout', '$location', 'AuthService', 'ModuleDataService',
+    controller: ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$timeout', '$location', 'AuthService', 'ModuleDataService',
         function ($scope, $rootScope, ngAppSettings, $routeParams, $timeout, $location, authService, moduleDataService) {
             var ctrl = this;
             $rootScope.isBusy = false;
@@ -10,12 +10,16 @@ modules.component('moduleForm', {
                 var resp = null;
                 if (!ctrl.moduleId) {
                     resp = await moduleDataService.initModuleForm(ctrl.name);
+
                 }
                 else {
                     resp = await moduleDataService.getModuleData(ctrl.moduleId, ctrl.d, 'portal');
                 }
                 if (resp && resp.isSucceed) {
                     ctrl.data = resp.data;
+                    ctrl.data.articleId = ctrl.articleId;
+                    ctrl.data.productId = ctrl.productId;
+                    ctrl.data.categoryId = ctrl.categoryId;
                     $rootScope.isBusy = false;
                     $scope.$apply();
                     //ctrl.initEditor();
@@ -61,9 +65,13 @@ modules.component('moduleForm', {
                     ctrl.data = resp.data;
                     ctrl.initModuleForm();
                     $rootScope.showMessage('Thành công', 'success');
-                    $rootScope.isBusy = false;
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
+                    if (ctrl.saveCallback) {
+                        ctrl.saveCallback({data: ctrl.data});
+                    }
+                    else {
+                        $rootScope.isBusy = false;
+                        $scope.$apply();
+                    }
                     //$location.path('/portal/moduleData/details/' + resp.data.id);
                 }
                 else {
@@ -77,12 +85,16 @@ modules.component('moduleForm', {
         }],
     bindings: {
         moduleId: '=',
+        categoryId: '=',
+        productId: '=',
+        articleId: '=',
         d: '=',
         title: '=',
         name: '=',
         submitText: '=',
         isShowTitle: '=',
-        backUrl: '='
+        backUrl: '=',
+        saveCallback: '&',
     }
 });
 
@@ -142,7 +154,7 @@ modules.component('moduleFormEditor', {
         data: '=',
         inputClass: '=',
         isShowTitle: '=',
-        title:'='
+        title: '='
     }
 });
 

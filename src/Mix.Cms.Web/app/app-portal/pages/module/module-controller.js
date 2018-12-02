@@ -5,7 +5,9 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$r
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, moduleServices, 'product');
         $scope.contentUrl = '';
         $scope.getSingleSuccessCallback = function () {
+            if($scope.activedData.id>0){
             $scope.contentUrl = '/portal/module/data/' + $scope.activedData.id;
+            }
         };
         $scope.defaultAttr = {
             name: '',
