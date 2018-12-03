@@ -14,7 +14,11 @@
             <paging class="small" page="child.module.data.page" page-size="child.module.data.pageSize" 
             total="child.module.data.totalItems" ul-class="pagination justify-content-end"
                 a-class="page-link" paging-action="$ctrl.loadModuleDatas(child.moduleId, page-1)" scroll-top="true"></paging>
-            <module-form module-id="child.moduleId" title="child.module.title" is-show-title="true" article-id="$ctrl.article.id"
+                <div ng-if="!$ctrl.article.id">
+                        <span class="text-warning" ng-bind="$ctrl.translate('warning_can_not_create_data',true, '(**Save article first then you can create data for it)')"></span>
+                    </div>
+                
+                <module-form ng-if="$ctrl.article.id" module-id="child.moduleId" title="child.module.title" is-show-title="true" article-id="$ctrl.article.id"
                 save-callback="$ctrl.saveDataCallback(data)"></module-form>
         </div>
     </div>

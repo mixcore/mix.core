@@ -7,6 +7,9 @@
             if(ctrl.data.items.length)
             {
                 ctrl.min = ctrl.data.items[0].priority;
+                if(!ctrl.min){
+                    ctrl.min=0;
+                }
             }
             ctrl.colWidth = parseInt(9 / ctrl.columns.length);
             ctrl.lastColWidth = (9 % ctrl.columns.length) > 0 ? 2 : 1;

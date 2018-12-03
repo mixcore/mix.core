@@ -32,5 +32,8 @@ namespace Mix.Cms.Lib.ViewModels.Account
         public string DeviceId { get; set; }
 
         public UserInfoViewModel UserData { get; set; }
+
+        [JsonProperty("lastUpdateConfiguration")]
+        public DateTime? LastUpdateConfiguration { get; set; }
     }
 }

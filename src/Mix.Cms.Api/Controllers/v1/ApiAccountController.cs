@@ -414,6 +414,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 //UserData = user,
                 Issued = dtIssued,
                 Expires = dtExpired,
+                LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
             };
             return token;
         }

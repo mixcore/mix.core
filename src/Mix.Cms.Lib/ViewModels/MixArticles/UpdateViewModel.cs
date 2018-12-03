@@ -320,10 +320,11 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 }
             }
             var otherModuleNavs = MixModules.ReadMvcViewModel.Repository.GetModelListBy(
-                m => (m.Type == (int)MixEnums.MixModuleType.SubArticle) && m.Specificulture== Specificulture
+                m => (m.Type == (int)MixEnums.MixModuleType.SubArticle) && m.Specificulture == Specificulture
                 && !ModuleNavs.Any(n => n.ModuleId == m.Id), "CreatedDateTime", 1, null, 0, _context, _transaction);
             foreach (var item in otherModuleNavs.Data.Items)
             {
+                item.LoadData(articleId: Id, _context: _context, _transaction: _transaction);
                 ModuleNavs.Add(new MixArticleModules.ReadViewModel()
                 {
                     ModuleId = item.Id,
@@ -477,7 +478,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                         }
                     }
                 }
-                
+
                 if (result.IsSucceed)
                 {
                     foreach (var navArticle in ArticleNavs)
