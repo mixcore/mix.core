@@ -44,8 +44,14 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("moduleTypes")]
         public List<string> ModuleTypes { get; set; }
 
+        [JsonProperty("dataTypes")]
+        public List<string> DataTypes { get; set; }
+
         [JsonProperty("statuses")]
         public List<string> Statuses { get; set; }
+
+        [JsonProperty("lastUpdateConfiguration")]
+        public DateTime? LastUpdateConfiguration { get; set; }
     }
     public class FilePageViewModel
     {

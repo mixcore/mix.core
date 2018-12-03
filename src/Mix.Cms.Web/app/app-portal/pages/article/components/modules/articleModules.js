@@ -5,8 +5,8 @@ app.component('articleModules', {
         function ($rootScope, $scope, ngAppSettings, moduleDataService) {
             var ctrl = this;
             ctrl.request = angular.copy(ngAppSettings.request);
-            ctrl.translate = function (keyword) {
-                return $rootScope.translate(keyword);
+            ctrl.translate = function (keyword, wrap, defaultValue) {
+                return $rootScope.translate(keyword,wrap, defaultValue);
             };
 
             ctrl.removeData = function (id, moduleId) {

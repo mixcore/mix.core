@@ -62,7 +62,9 @@ namespace Mix.Cms.Api.Controllers.v1
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
                 ModuleTypes = Enum.GetNames(typeof(MixModuleType)).ToList(),
-                Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList()
+                DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
+                Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
+                LastUpdateConfiguration = DateTime.UtcNow
 
             };
             settings.LangIcon = culture?.Icon ?? MixService.GetConfig<string>("Language");
@@ -93,7 +95,9 @@ namespace Mix.Cms.Api.Controllers.v1
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
                 ModuleTypes = Enum.GetNames(typeof(MixModuleType)).ToList(),
-                Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList()
+                DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
+                Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
+                LastUpdateConfiguration = DateTime.UtcNow
             };
 
             configurations.LangIcon = culture?.Icon ?? MixService.GetConfig<string>("Language");
@@ -158,8 +162,9 @@ namespace Mix.Cms.Api.Controllers.v1
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
                 ModuleTypes = Enum.GetNames(typeof(MixModuleType)).ToList(),
-                Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList()
-
+                DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
+                Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
+                LastUpdateConfiguration = DateTime.UtcNow
             };
 
             configurations.LangIcon = culture?.Icon ?? MixService.GetConfig<string>("Language");
