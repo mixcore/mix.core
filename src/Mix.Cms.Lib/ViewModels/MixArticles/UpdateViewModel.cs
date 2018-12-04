@@ -544,7 +544,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     foreach (var item in Modules)
                     {
                         item.ArticleId = parent.Id;
-                        item.Status = MixEnums.MixContentStatus.Published;
+                        item.Status = (int)MixEnums.MixContentStatus.Published;
                         if (item.IsActived)
                         {
                             var saveResult = await item.SaveModelAsync(false, _context, _transaction);
