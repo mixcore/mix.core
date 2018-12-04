@@ -26,7 +26,7 @@ namespace Mix.Cms.Lib.Services
             RepositoryResponse<bool> result = new RepositoryResponse<bool>();
             MixCmsContext context = null;
             MixCmsAccountContext accountContext = null;
-            //MixChatServiceContext messengerContext;
+            MixChatServiceContext messengerContext;
             IDbContextTransaction transaction = null;
             IDbContextTransaction accTransaction = null;
             bool isSucceed = true;
@@ -36,11 +36,11 @@ namespace Mix.Cms.Lib.Services
                 {
                     context = new MixCmsContext();
                     accountContext = new MixCmsAccountContext();
-                    //messengerContext = new MixChatServiceContext();
+                    messengerContext = new MixChatServiceContext();
                     //MixChatServiceContext._cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
                     await context.Database.MigrateAsync();
                     await accountContext.Database.MigrateAsync();
-                    //await messengerContext.Database.MigrateAsync();
+                    await messengerContext.Database.MigrateAsync();
                     transaction = context.Database.BeginTransaction();
 
                     var countCulture = context.MixCulture.Count();
