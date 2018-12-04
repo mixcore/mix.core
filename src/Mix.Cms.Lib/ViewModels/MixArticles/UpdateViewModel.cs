@@ -455,7 +455,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     {
                         navModule.ArticleId = parent.Id;
                         navModule.Specificulture = parent.Specificulture;
-
+                        navModule.Status = (int)MixEnums.MixContentStatus.Published;
                         if (navModule.IsActived)
                         {
                             var saveResult = await navModule.SaveModelAsync(false, _context, _transaction);
@@ -484,6 +484,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     foreach (var navArticle in ArticleNavs)
                     {
                         navArticle.SourceId = parent.Id;
+                        navArticle.Status = MixEnums.MixContentStatus.Published;
                         navArticle.Specificulture = parent.Specificulture;
                         if (navArticle.IsActived)
                         {
@@ -513,6 +514,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     foreach (var item in Pages)
                     {
                         item.ArticleId = parent.Id;
+                        item.Status = MixEnums.MixContentStatus.Published;
                         if (item.IsActived)
                         {
                             var saveResult = await item.SaveModelAsync(false, _context, _transaction);
@@ -542,6 +544,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     foreach (var item in Modules)
                     {
                         item.ArticleId = parent.Id;
+                        item.Status = MixEnums.MixContentStatus.Published;
                         if (item.IsActived)
                         {
                             var saveResult = await item.SaveModelAsync(false, _context, _transaction);
