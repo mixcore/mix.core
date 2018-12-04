@@ -240,3 +240,11 @@ ModelManifest.xml
 src/Mix.Cms.Web/appsettings.json
 /docs/demo-create-crickettour.mp4
 /docs/demo-create-crickettour.7z
+src/Mix.Cms.Web/appsettings.json
+src/Mix.Cms.Web/mixCmsSettings.json
+src/Mix.Cms.Web/wwwroot/js/app-portal.min.js
+src/Mix.Cms.Web/wwwroot/js/app-shared.min.js
+src/Mix.Cms.Web/wwwroot/js/portal.min.js
+src/Mix.Cms.Web/wwwroot/css/portal.min.css
+src/Mix.Cms.Web/wwwroot/css/now-ui.min.css
+src/Mix.Cms.Web/wwwroot/css/bootstrap.min.css
