@@ -1,16 +1,22 @@
 ﻿'use strict';
 app.controller('PageController', 
-            ['$scope', '$rootScope', '$routeParams', 'ngAppSettings', 'PageService',
-    function ($scope, $rootScope, $routeParams, ngAppSettings, service) {
+            ['$scope', '$rootScope', '$routeParams', 'ngAppSettings', 'PageService','PageArticleService',
+    function ($scope, $rootScope, $routeParams, ngAppSettings, service, pageArticleService) {
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);        
         $scope.request.query = 'level=0';       
-        
-        $scope.loadPageDatas = async function () {
+        $scope.pageData={
+            articles:[],
+            products:[],
+            data:[],
+        };
+        $scope.articleRequest = angular.copy(ngAppSettings.request);
+        $scope.loadArticles = async function () {
             $rootScope.isBusy = true;
             var id = $routeParams.id;
-            var response = await service.getSingle(id, 'portal');
+            $scope.articleRequest.query += '&page_id='+id;
+            var response = await pageArticleService.getList($scope.articleRequest);
             if (response.isSucceed) {
-                $scope.activedData = response.data;
+                $scope.pageData.articles = response.data;
                 $rootScope.isBusy = false;
                 $scope.$apply();
             }

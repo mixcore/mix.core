@@ -2,14 +2,16 @@
     <div class="inner">
         <div class="btn-group btn-group-sm" role="group" ng-if="$ctrl.item.childPages.length > 0">
             <a ng-repeat="m in $ctrl.item.childPages" href="{{m.page.url}}" class="btn btn-light">
-                <span class="mi {{m.page.icon}} mi-fw"></span>
+                <span ng-if="m.page.icon" class="mi {{m.page.icon}} mi-fw"></span>
+                <span ng-if="!m.page.icon" class="mi mi-Page mi-fw"></span>
             </a>
         </div>
     </div>
     <div class="{{$ctrl.itemStyle}}" data-toggle="collapse" data-target="#permission-{{$ctrl.item.id}}" role="button" aria-expanded="false" aria-controls="{{$ctrl.item.textDefault}}">
         
         <a href="{{$ctrl.item.url}}" class="text {{$ctrl.linkStyle}}">
-            <i class="mi {{$ctrl.item.icon}} {{$ctrl.iconSize}} mi-fw"></i>
+            <i ng-if="$ctrl.item.icon" class="mi {{$ctrl.item.icon}} {{$ctrl.iconSize}} mi-fw"></i>
+            <i ng-if="!$ctrl.item.icon" class="mi mix-Page {{$ctrl.iconSize}} mi-fw"></i>
             <span ng-bind="$ctrl.translate($ctrl.item.textKeyword, false, $ctrl.item.textDefault)"></span>
         </a>
     </div>
