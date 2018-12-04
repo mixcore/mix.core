@@ -253,3 +253,7 @@ src/Mix.Cms.Web/wwwroot/js/app-shared.min.js
 src/Mix.Cms.Web/appsettings.json
 src/Mix.Cms.Web/mixCmsSettings.json
 src/Mix.Cms.Web/wwwroot/js/app-portal.min.js
+src/Mix.Cms.Web/wwwroot/js/app-client.min.js
+src/Mix.Cms.Web/wwwroot/js/app-portal.min.js
+src/Mix.Cms.Web/wwwroot/js/app-shared.min.js
+src/Mix.Cms.Web/wwwroot/js/portal.min.js
