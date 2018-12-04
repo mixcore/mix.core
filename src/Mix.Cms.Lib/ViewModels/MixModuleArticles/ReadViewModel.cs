@@ -37,8 +37,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleArticles
 
         [JsonProperty("description")]
         public string Description { get; set; }
-        [JsonProperty("status")]
-        public MixContentStatus Status { get; set; }
+        
         #region Views
 
         public MixArticles.ReadViewModel Article { get; set; }

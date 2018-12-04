@@ -33,6 +33,8 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleModules
         [JsonProperty("description")]
         public string Description { get; set; }
 
+        [JsonProperty("status")]
+        public int Status { get; set; }
         #region Views
         [JsonProperty("module")]
         public ReadMvcViewModel Module { get; set; }
