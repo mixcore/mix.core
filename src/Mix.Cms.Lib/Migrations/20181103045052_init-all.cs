@@ -772,7 +772,7 @@ namespace Mix.Cms.Lib.Migrations
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
                     Description = table.Column<string>(maxLength: 250, nullable: true),
                     Image = table.Column<string>(maxLength: 250, nullable: true),
-                    Priority = table.Column<int>(nullable: true, defaultValueSql: "((0))"),
+                    Priority = table.Column<int>(nullable: false, defaultValueSql: "((0))"),
                     Status = table.Column<int>(nullable: false, defaultValueSql: "((1))")
                 },
                 constraints: table =>
