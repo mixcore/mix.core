@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixPageArticles
 {
@@ -37,8 +38,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPageArticles
         [JsonProperty("description")]
         public string Description { get; set; }
 
+        [JsonProperty("status")]
+        public MixContentStatus Status { get; set; }
         #region Views
 
+        [JsonProperty("article")]
         public MixArticles.ReadListItemViewModel Article { get; set; }
 
         #endregion Views

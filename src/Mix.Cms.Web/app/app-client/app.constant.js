@@ -102,7 +102,7 @@ app.constant('ngAppSettings', {
             { title: 'date', value: 9 },
             { title: 'datetime', value: 10 }
         ],
-        miIcons:[
+        miIcons: [
             'mi-Page','mi-AllApps', 'mi-Add'
         ]  
     });
