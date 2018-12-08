@@ -54,4 +54,7 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
                 });
             }
         };
+        $rootScope.limString = function(str, max){
+            return str.substring(0, max);
+        };
     }]);

@@ -4,8 +4,9 @@ modules.component('customImage', {
     templateUrl: '/app/app-shared/components/custom-image/customImage.html',
     controller: ['$rootScope', '$scope', 'ngAppSettings', 'MediaService', function ($rootScope, $scope, ngAppSettings, mediaService) {
         var ctrl = this;
+        var image_placeholder = '/images/image_placeholder.jpg';
         ctrl.init = function () {
-            ctrl.srcUrl = ctrl.srcUrl || '/images/image_placeholder.jpg';
+            ctrl.srcUrl = ctrl.srcUrl || image_placeholder;
             ctrl.id = Math.random();
         };
         ctrl.mediaFile = {
@@ -17,7 +18,7 @@ modules.component('customImage', {
         };
         ctrl.media = null;
         ctrl.$doCheck = function () {
-            if (ctrl.src !== ctrl.srcUrl) {
+            if (ctrl.src !== ctrl.srcUrl && ctrl.srcUrl != image_placeholder) {
                 ctrl.src = ctrl.srcUrl;
             }
         }.bind(ctrl);

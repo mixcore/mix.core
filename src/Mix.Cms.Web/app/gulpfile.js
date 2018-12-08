@@ -230,4 +230,4 @@ gulp.task("min:css", function (cb) {
 
 gulp.task("min", ["min:plugins", "min:portal", "min:portalApp", "min:init", "min:initApp"
     , "min:clientApp", "min:clientJs", "min:sharedJs", "min:css", "min:fonts"]);
-gulp.task("build", ["min:views"]);
+gulp.task("build", ["clean", "min:views"]);

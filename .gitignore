@@ -254,3 +254,5 @@ docs/videos/init-mixcore-cms.mp4
 docs/videos/demo-create-crickettour.7z
 docs/videos/create-article-page.mp4
 .gitignore
+/docs/videos
+/demo

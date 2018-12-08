@@ -13,8 +13,10 @@
                                 <module-form-editor is-show-title="$ctrl.isShowTitle" title="prop.title" data="$ctrl.data.jItem[prop.name]"
                                     ng-if="!prop.isSelect"></module-form-editor>
                                 <div ng-if="prop.isSelect" class="form-group">
-                                    <label class="control-label" ng-if="$ctrl.isShowTitle" ng-bind="prop.title"></label>
-                                    <select class="btn custom-select form-control" ng-model="$ctrl.data.jItem[prop.name]['value']">
+                                    
+                                    <label class="control-label" ng-if="$ctrl.isShowTitle" ng-bind="prop.title"></label>                                    
+                                    <mix-select-icons ng-if="prop.dataType==19" options="prop.options" data="$ctrl.data.jItem[prop.name]['value']"></mix-select-icons>
+                                    <select ng-if="prop.dataType!=19" class="btn custom-select form-control" ng-model="$ctrl.data.jItem[prop.name]['value']">
                                         <option ng-repeat="item in prop.options track by $index" ng-value="item">{{item}}</option>
                                     </select>
                                 </div>

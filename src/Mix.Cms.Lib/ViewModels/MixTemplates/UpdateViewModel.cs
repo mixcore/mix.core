@@ -140,6 +140,21 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             }
         }
 
+        public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            base.Validate(_context, _transaction);
+            if (IsValid)
+            {
+                if (Id == 0)
+                {
+                    if (_context.MixTemplate.Any(t => t.FileName == FileName && t.ThemeId == ThemeId))
+                    {
+                        FileName = $"{FileName}_1";
+                    }
+                }
+            }
+        }
+
         public override MixTemplate ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)

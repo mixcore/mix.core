@@ -9,8 +9,8 @@
             <div class="col-7">
                 <span class="switch switch-sm">
                     <input type="checkbox" ng-change="$ctrl.callback({nav: nav})" ng-model="nav.isActived" id="{{$ctrl.prefix}}_{{$index}}" class="switch">
-                    <label class="switch m-0" for="{{$ctrl.prefix}}_{{$index}}">
-                        {{nav.description}}
+                    <label class="switch m-0" for="{{$ctrl.prefix}}_{{$index}}" ng-bind="$ctrl.limString(nav.description, 15)">
+                        
                     </label>
                 </span>
             </div>

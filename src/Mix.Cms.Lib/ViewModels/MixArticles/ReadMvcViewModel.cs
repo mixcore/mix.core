@@ -131,7 +131,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 }
                 else
                 {
-                    return Thumbnail;
+                    return ImageUrl;
                 }
             }
         }
@@ -155,6 +155,8 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         [JsonProperty("mediaNavs")]
         public List<MixArticleMedias.ReadViewModel> MediaNavs { get; set; }
 
+        [JsonProperty("moduleNavs")]
+        public List<MixArticleModules.ReadViewModel> ModuleNavs { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -195,7 +197,18 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 MediaNavs.ForEach(n => n.IsActived = true);
             }
 
-
+            // Modules
+            var getArticleModule = MixArticleModules.ReadViewModel.Repository.GetModelListBy(
+                n => n.ArticleId == Id && n.Specificulture == Specificulture, _context, _transaction);
+            if (getArticleModule.IsSucceed)
+            {
+                ModuleNavs = getArticleModule.Data.OrderBy(p => p.Priority).ToList();
+                foreach (var item in ModuleNavs)
+                {
+                    item.IsActived = true;
+                    item.Module.LoadData(articleId: Id);
+                }
+            }
         }
 
         #endregion Overrides
@@ -205,8 +218,13 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         public string Property(string name)
         {
             var prop = Properties.FirstOrDefault(p => p.Name.ToLower() == name.ToLower());
-            return  prop?.Value;
-            
+            return prop?.Value;
+
+        }
+
+        public MixModules.ReadMvcViewModel GetModule(string name)
+        {
+            return ModuleNavs.FirstOrDefault(m => m.Module.Name == name)?.Module;
         }
 
         #endregion Expands

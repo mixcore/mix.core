@@ -4,6 +4,15 @@
         <actions back-url="listUrl"></actions>
         <div class="row">
             <section class="col-lg-12">
+                <div class="form-group">
+                    <label class="control-label">Folder</label>
+                    <input id="path-modal-{{$index}}" value="/{{activedFile.fileFolder}}/" onclick="this.select()" class="form-control" readonly="readonly">
+
+                </div>
+            </section>
+        </div>
+        <div class="row">
+            <section class="col-lg-12">
                 <ace-editor content="activedFile.content" ext="activedFile.extension"></ace-editor>
             </section>
         </div>

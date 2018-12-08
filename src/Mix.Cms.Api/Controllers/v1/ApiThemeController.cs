@@ -161,6 +161,11 @@ namespace Mix.Cms.Api.Controllers.v1
                 model.CreatedBy = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
                 model.Specificulture = _lang;
                 var result = await base.SaveAsync<UpdateViewModel>(model, true);
+                if (result.IsSucceed)
+                {
+                    MixService.LoadFromDatabase();
+                    MixService.Save();
+                }
                 return result;
             }
             return new RepositoryResponse<UpdateViewModel>() { Status = 501 };

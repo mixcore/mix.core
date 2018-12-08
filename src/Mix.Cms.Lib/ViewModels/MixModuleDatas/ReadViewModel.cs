@@ -144,6 +144,12 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
             return prop != null && prop.Value != null ? prop.Value.ToString() : string.Empty;
         }
 
+        public string Property(string name)
+        {
+            
+            return JItem[name]?.Value<JObject>().Value<string>("value");
+        }
+
         public ApiModuleDataValueViewModel GetDataProperty(string name)
         {
             return DataProperties.FirstOrDefault(p => p.Name == name);
@@ -159,7 +165,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                 foreach (var item in data)
                 {
                     var model = context.MixModuleData.FirstOrDefault(m => m.Id == item.Id && m.Specificulture == item.Specificulture);
-                    if (model!=null)
+                    if (model != null)
                     {
                         model.Priority = item.Priority;
                         context.Entry(model).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
