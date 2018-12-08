@@ -26,13 +26,13 @@
                     <div class="btn-group btn-group-sm btn-group-toggle d-flex w-100" role="group" data-toggle="buttons">
                         <label ng-repeat="type in $ctrl.settings.moduleTypes track by $index" ng-switch="type" ng-class="{active: $index === $ctrl.module.type}" class="btn btn-outline-primary btn-block mt-0" ng-click="$ctrl.page.type=$index;">
                             <input ng-model="$ctrl.module.type" type="radio" value="{{$index}}" class="custom-control-input" id="module_type_{{$index}}">
-                            <i ng-switch-when="Content" class="mi mi-Preview mi-lg mi-fw" title="{{type}}"></i>
-                            <i ng-switch-when="Data" class="mi mi-ReadingList mi-lg mi-ReadingList" title="{{type}}"></i>
-                            <i ng-switch-when="ListArticle" class="mi mi-Package mi-lg mi-fw" title="{{type}}"></i>
-                            <i ng-switch-when="SubPage" class="mi mi-BulletedList mi-lg mi-fw" title="{{type}}"></i>
-                            <i ng-switch-when="SubArticle" class="mi mi-Home mi-lg mi-flip-horizontal" title="{{type}}"></i>
-                            <i ng-switch-when="SubProduct" class="mi mi-Go mi-lg mi-flip-horizontal" title="{{type}}"></i>
-                            <i ng-switch-when="ListProduct" class="mi mi-ResolutionLegacy mi-lg mi-flip-horizontal" title="{{type}}"></i>
+                            <span ng-switch-when="Content" class="" title="{{type}}">Content</span>
+                            <span ng-switch-when="Data" class="" title="{{type}}">Data</span>
+                            <span ng-switch-when="ListArticle" class="" title="{{type}}">List Article</span>
+                            <span ng-switch-when="SubPage" class="" title="{{type}}">Sub Page</span>
+                            <span ng-switch-when="SubArticle" class="" title="{{type}}">Sub Article</span>
+                            <span ng-switch-when="SubProduct" class="" title="{{type}}">Sub Product</span>
+                            <span ng-switch-when="ListProduct" class="" title="{{type}}">List Product</span>
                         </label>
                     </div>
                 </div>    
