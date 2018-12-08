@@ -30,7 +30,7 @@
                                             <!--<th scope="col" width="5%">
                                                 <span class="fas fa-sort-numeric-down"></span>
                                             </th>-->
-                                            <th scope="col">Attribute Name</th>
+                                            <th scope="col">Name</th>
                                             <!--<th scope="col">Name</th>-->
                                             <th scope="col" width="20%">Data Type</th>
                                             <!--<th scope="col" width="5%">Width</th>-->
@@ -42,8 +42,8 @@
                                             <th scope="col" width="5%"></th>
                                         </tr>
                                     </thead>
-                                    <tbody class="sortable">
-                                        <tr class="sortable-item module-column" ng-repeat="col in activedData.columns track by $index">
+                                    <tbody class="">
+                                        <tr class="module-column" ng-repeat="col in activedData.columns track by $index">
                                             <!--<td style="cursor:move;" class="drag-header">
                                                 <span class="fas fa-sort"></span>
                                             </td>-->
@@ -54,7 +54,7 @@
                                             <td>
                                                 <input ng-model="col.title" placeholder="Title" ng-change="generateName(col)"
                                                     class="form-control form-control-sm">
-                                                <small class="form-text text-muted">Field Name: <span ng-bind="col.name"></span></small>
+                                                <small class="form-text text-muted">Code: <span ng-bind="col.name"></span></small>
                                                 <!--<input ng-model="col.name" placeholder="Field Name" class="form-control form-control-sm" />-->
                                             </td>
                                             <td>
@@ -67,35 +67,35 @@
                                                 <input ng-model="col.width" class="form-control form-control-sm" />
                                             </td>-->
                                             <td>
-                                                <span class="switch">
-                                                    <input id="isUnique_{{$index}}" type="checkbox" class="switch"
+                                                <span class="switch switch-sm">
+                                                    <input id="isUnique_{{$index}}" type="checkbox" class="switch switch-sm"
                                                         ng-model="col.isUnique">
                                                     <label for="isUnique_{{$index}}">&nbsp;</label>
                                                 </span>
                                             </td>
                                             <td>
-                                                <span class="switch">
+                                                <span class="switch switch-sm">
                                                     <input id="isRequired_{{$index}}" type="checkbox" class="checkbox"
                                                         ng-model="col.isRequired">
                                                     <label for="isRequired_{{$index}}">&nbsp;</label>
                                                 </span>
                                             </td>
                                             <!--<td>
-                                                <span class="switch">
-                                                    <input id="isGroupBy_{{$index}}" type="checkbox" class="switch" ng-model="col.isGroupBy">
+                                                <span class="switch switch-sm">
+                                                    <input id="isGroupBy_{{$index}}" type="checkbox" class="switch switch-sm" ng-model="col.isGroupBy">
                                                     <label for="isGroupBy_{{$index}}">&nbsp;</label>
                                                 </span>
                                             </td>-->
                                             <td>
-                                                <span class="switch">
-                                                    <input id="isSelect_{{$index}}" type="checkbox" class="switch"
+                                                <span class="switch switch-sm">
+                                                    <input id="isSelect_{{$index}}" type="checkbox" class="switch switch-sm"
                                                         ng-model="col.isSelect">
                                                     <label for="isSelect_{{$index}}">&nbsp;</label>
                                                 </span>
                                             </td>
                                             <td>
-                                                <span class="switch">
-                                                    <input id="isDisplay_{{$index}}" type="checkbox" class="switch"
+                                                <span class="switch switch-sm">
+                                                    <input id="isDisplay_{{$index}}" type="checkbox" class="switch switch-sm"
                                                         ng-model="col.isDisplay">
                                                     <label for="isDisplay_{{$index}}">&nbsp;</label>
                                                 </span>
@@ -104,6 +104,13 @@
                                                 <a class="btn btn-sm btn-light del-popover" ng-click="removeAttr($index);">
                                                     <span class="fas fa-times text-danger"></span>
                                                 </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="8">
+                                                    <h6 class="pt-2">
+                                                            Attributes Default List Data 
+                                                        </h6>
                                             </td>
                                         </tr>
                                         <tr class="module-column" ng-repeat="col in activedData.columns track by $index"
@@ -115,18 +122,19 @@
                                                         <input type="text" id="option_{{$index}}" ng-enter="addOption(col,$index)" placeholder="fill then enter to add options" class="form-control">
                                                     </div> -->
                                                     <div class="form-group row mb-0">
-                                                        <label for="staticEmail" class="col-sm-2 col-form-label"
-                                                            ng-bind="col.title"></label>
+                                                        <h2 class="col-sm-2 col-form-label" ng-bind="col.title"></h2>
                                                         <div class="col-sm-10">
                                                             <input type="text" class="form-control form-control-sm" id="option_{{$index}}"
                                                                 ng-enter="addOption(col,$index)" placeholder="fill then enter to add options">
                                                         </div>
                                                     </div>
-                                                    <div class="row pb-1" ng-repeat="opt in col.options track by $index">
-                                                        <div class="col-8">
+                                                    <div class="row" ng-repeat="opt in col.options track by $index">
+                                                            <div class="col-sm-2">
+                                                                </div>
+                                                        <div class="col-sm-9">
                                                             <input type="text" class="form-control form-control-sm" ng-model="col.options[$index]">
                                                         </div>
-                                                        <div class="col-4">
+                                                        <div class="col-sm-1">
                                                             <a class="btn" ng-click="col.options.splice($index,1)">
                                                                 <span class="fas fa-times text-danger"></span>
                                                             </a>
@@ -157,9 +165,9 @@
                     <div class="card-body">
                         <statuses status="activedData.status">
                             <div class="form-group">
-                                <span class="switch">
+                                <span class="switch switch-sm">
                                     <label>
-                                        <input type="checkbox" ng-model="activedData.isClone" class="switch">
+                                        <input type="checkbox" ng-model="activedData.isClone" class="switch switch-sm">
                                         Clone
                                     </label>
                                 </span>
