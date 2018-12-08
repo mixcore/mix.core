@@ -73,23 +73,3 @@ else
     }
     @Html.Raw(Model.View?.Styles)
 }
-@section defaultscripts{
-
-    @*<script>window.jQuery || document.write('<script src="/js/jquery.min.js"><\/script>')</script>*@
-
-    <script src="~/js/framework.min.js"></script>
-    <!-- <script src="~/js/bootstrap.min.js"></script> -->
-    <!-- <script src="~/js/shared.min.js"></script> -->
-
-    <script src="~/js/app-client.min.js"></script>
-    <script src="~/js/app-shared.min.js"></script>
-
-    <!-- <script src="~/app-client/shared/controllers/app-client-controller.js"></script> -->
-    <!--     Fonts and icons     -->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200|Open+Sans+Condensed:700" rel="stylesheet">
-    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
-
-    @Html.Raw(Model.View?.Scripts)
-
-}
-    }

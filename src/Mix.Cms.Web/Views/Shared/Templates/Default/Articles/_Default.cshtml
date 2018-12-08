@@ -1,4 +1,7 @@
 @model Mix.Cms.Lib.ViewModels.MixArticles.ReadMvcViewModel
+@{ 
+    var prices = Model.GetModule("prices");
+}
 <!-- End Navbar -->
 <div class="page-header page-header-mini">
     
@@ -8,7 +11,7 @@
 <div class="section">
     <div class="container">
         <div class="row">
-            
+            <h1>@prices.TemplatePath</h1>
             <div class="col-md-5">
                 <div id="productCarousel" class="carousel slide" data-ride="carousel" data-interval="8000">
                     @if(Model.MediaNavs.Count>0)

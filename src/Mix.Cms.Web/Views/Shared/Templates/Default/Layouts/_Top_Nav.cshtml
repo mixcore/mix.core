@@ -14,13 +14,13 @@
                 <span class="navbar-toggler-bar bar3"></span>
             </button>
             <a class="navbar-brand" href="/@ViewBag.culture" title="mixcore">
-                <img class="logo-white" src="@(MixService.GetConfig<string>("Logo", ViewBag.culture))" width="32" 
+                <img class="logo-white" src="@(MixService.GetConfig<string>("Logo", ViewBag.culture))" height="40" 
                      title="@(MixService.GetConfig<string>("SiteName", ViewBag.culture as string))" 
                      alt="@(MixService.GetConfig<string>("SiteName", ViewBag.culture as string))" />
             </a>
         </div>
         <div class="collapse navbar-collapse" id="example-navbar-primary">
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav mx-auto">
                 @foreach (var cate in topCates.OrderBy(c => c.Priority))
                 {
                     string activedClass = cate.IsActived ? "active" : string.Empty;
@@ -60,6 +60,23 @@
                 }
             </ul>
            
+            <ul class="nav navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="https://twitter.com/CreativeTim">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://www.facebook.com/CreativeTim">
+                        <i class="fab fa-facebook-square"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://www.instagram.com/CreativeTimOfficial">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>

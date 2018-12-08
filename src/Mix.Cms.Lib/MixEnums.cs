@@ -178,7 +178,8 @@ namespace Mix.Cms.Lib
             Upload = 16,
             Color = 17,
             Boolean = 18,
-            Icon = 19
+            Icon = 19,
+            VideoYoutube = 20
         }
 
         public enum UrlAliasType

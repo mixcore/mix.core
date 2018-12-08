@@ -275,8 +275,9 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 });
             }
             var otherModules = MixModules.ReadListItemViewModel.Repository.GetModelListBy(
-                m => (m.Type == (int)MixEnums.MixModuleType.Content || m.Type == (int)MixEnums.MixModuleType.ListArticle) &&
-                !Modules.Any(n => n.ModuleId == m.Id && n.Specificulture == m.Specificulture)
+                m => (m.Type == (int)MixEnums.MixModuleType.Content || m.Type == (int)MixEnums.MixModuleType.ListArticle) 
+                && m.Specificulture == Specificulture
+                && !Modules.Any(n => n.ModuleId == m.Id && n.Specificulture == m.Specificulture)
                 , "CreatedDateTime", 1, null, 0, _context, _transaction);
             foreach (var item in otherModules.Data.Items)
             {
@@ -455,7 +456,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     {
                         navModule.ArticleId = parent.Id;
                         navModule.Specificulture = parent.Specificulture;
-                        navModule.Status = (int)MixEnums.MixContentStatus.Published;
+                        navModule.Status = MixEnums.MixContentStatus.Published;
                         if (navModule.IsActived)
                         {
                             var saveResult = await navModule.SaveModelAsync(false, _context, _transaction);
@@ -544,7 +545,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     foreach (var item in Modules)
                     {
                         item.ArticleId = parent.Id;
-                        item.Status = (int)MixEnums.MixContentStatus.Published;
+                        item.Status = MixEnums.MixContentStatus.Published;
                         if (item.IsActived)
                         {
                             var saveResult = await item.SaveModelAsync(false, _context, _transaction);

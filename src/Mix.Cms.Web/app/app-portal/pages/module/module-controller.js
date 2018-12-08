@@ -24,8 +24,9 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$r
             width: 3
         };
         $scope.type='-1';
-        $scope.dataTypes = ngAppSettings.dataTypes;
+        
         $scope.settings = $rootScope.globalSettings;
+        //$scope.dataTypes = ngAppSettings.dataTypes;
         $scope.activedData = null;
         $scope.editDataUrl = '';
 
@@ -152,4 +153,22 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$r
                 $scope.$apply();
             }
         };
+
+        $scope.loadArticles = async function () {
+            $rootScope.isBusy = true;
+            var id = $routeParams.id;
+            $scope.articleRequest.query += '&page_id='+id;
+            var response = await pageArticleService.getList($scope.articleRequest);
+            if (response.isSucceed) {
+                $scope.pageData.articles = response.data;
+                $rootScope.isBusy = false;
+                $scope.$apply();
+            }
+            else {
+                $rootScope.showErrors(response.errors);
+                $rootScope.isBusy = false;
+                $scope.$apply();
+            }
+        };
+
     }]);

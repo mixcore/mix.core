@@ -58,7 +58,7 @@
                                             </td>
                                             <td>
                                                 <select class="form-control form-control-sm" ng-model="col.dataType">
-                                                    <option ng-repeat="item in dataTypes" ng-value="item.value">{{item.title}}</option>
+                                                    <option ng-repeat="item in settings.dataTypes track by $index" ng-value="$index">{{item}}</option>
                                                 </select>
                                             </td>
                                             <!--<td>
