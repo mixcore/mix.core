@@ -1,17 +1,18 @@
-<section ng-init="init()" id="mix-messenger" ng-class="{'collape': isHide}">
+<section ng-init="init()" id="mix-messenger">
 <!-- Chat Widget start -->
 <div class="ui" ng-onload="loadMsgButton()">
                    
-            <div class="widget hidden">
+            <div class="widget" ng-class="{'hidden': isHide}">
             <div class="widget-header">
                 <a ng-if="!user.loggedIn" href="#" ng-click="login()">Login</a>
-                <div ng-if="user.loggedIn" class="row">
-                    <a class="col-9">Messenger ({{members.length}})</a> 
-                    <a class="col-1" ng-click="toggleContact()"><i class="fas fa-list-ul"></i></a>
-                    <a class="col-1" ng-click="toggle()"><i ng-class="{'fa-minus': !isHide ,'fa-plus': isHide}" class="fa fa-minus"></i></a>
+                <div ng-if="user.loggedIn" class="row" style="margin-right: 0px;margin-left: 0px;">
+                    <a class="col-9">Messenger ({{members.length}})</a>                     
+                    <a class="col-1" ng-click="toggle()"><i class="fa fa-minus"></i></a>
+                    <a class="col-1" ng-click="toggleContact()"><i class="fas fa-users"></i></a>
+                    <a class="col-1" ng-click="logout()"><i class="fas fa-sign-out-alt"></i></a>
                 </div>
             </div>
-            <div class="widget-conversation">
+            <div ng-if="user.loggedIn" class="widget-conversation">
                 <div ng-if="user.loggedIn" class="container">
                     <div id="mix-discussion" class="discussion">
                         
@@ -26,46 +27,17 @@
                                 <div class="message-text">{{msg.content}}</div>
                                 <div class="message-hour">{{msg.createdDate | utcToLocal:'dd.MM.yyyy hh:mm:ss'}}<span class="ion-android-done-all"></span></div>
                             </li>   
-<!--                             
-                            <div class="col-md-12" ng-class="{ 'text-right': msg.connection.id == user.info.id }">
-                                <img imageonload src="{{msg.connection.avatar}}" /> <b class="small">{{msg.connection.name}}</b>
-                                <br /><span class="small" ng-bind="msg.createdDate | utcToLocal:'dd.MM.yyyy hh:mm:ss'"></span>
-                                <p ng-bind-html="msg.content"></p>
-                            </div> -->
                         </div>
                     </div>
                     
                 </div>
             </div>
             
-            <div class="widget-form">
-                    <textarea id="message" class="msgContent" minlength="1" placeholder="message" ng-enter="sendMessage()" ng-model="message.content"></textarea>
-                    <button class="sendMsgBtn" ng-click="sendMessage()"><i class="fas fa-paper-plane"></i></button>
-                </div>   
-            <!-- <textarea placeholder="message" ng-enter="sendMessage()" class="form-control" ng-model="message.content"></textarea>
-                <a class="btn btn-info" ng-click="sendMessage()">Send</a> -->
-            
-                        <!-- <ul id='conversation'>
-                        
-                        <li class='message-left'>
-                            <div class='message-avatar'>
-                            <div class='avatar ion-ios-person'></div>
-                            <div class='name'>Steve</div>
-                            </div>
-                            <div class='message-text'>Hello, I'm Steve.</br>How can I help you today?</div>
-                            <div class='message-hour'>08:55 <span class='ion-android-done-all'></span></div>
-                        </li>
-                    
-                        <li class='message-right'>
-                            <div class='message-avatar'>
-                            <div class='avatar ion-ios-person'></div>
-                            <div class='name'>You</div>
-                            </div>
-                            <div class='message-text'>Hi, Steve. I need more information about Developer Plan.</div>
-                            <div class='message-hour'>08:56 <span class='ion-android-done-all'></span></div>
-                        </li>     
-                        </ul> -->
-            <div class="contact" ng-class="{'collape': hideContact}">
+            <div ng-if="user.loggedIn" class="widget-form">
+                <textarea id="message" class="msgContent" minlength="1" placeholder="message" ng-enter="sendMessage()" ng-model="message.content"></textarea>
+                <button class="sendMsgBtn" ng-click="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+            </div>              
+            <div ng-if="user.loggedIn" class="contact" ng-class="{'collape': hideContact}">
                 <ul>
                     <li ng-repeat="m in members">
                         <img imageonload src="{{m.avatar}}">  <span ng-bind="m.name"></span>
@@ -74,9 +46,7 @@
             </div>
         </div>        
         </div>
-       
-        
-      <a class="btn-support" id="quest">🦊</a>
+      <a class="btn-support" ng-click="toggle()" id="quest">🦊</a>
       
 <!-- Chat Widget end -->
     <!-- <div class="card-header">
