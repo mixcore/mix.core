@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Mix.Cms.Lib;
+using Mix.Cms.Lib.Services;
 
-namespace Mix.Services.Messenger.Models.Data
+namespace Mix.Cms.Messenger.Models.Data
 {
     public partial class MixChatServiceContext : DbContext
     {
@@ -31,21 +33,34 @@ namespace Mix.Services.Messenger.Models.Data
                 //string cnn = "Data Source=mix-messenger.db";
                 //optionsBuilder.UseSqlite(cnn);
                  ;
-                IConfiguration configuration = new ConfigurationBuilder()
-               .SetBasePath(System.IO.Directory.GetCurrentDirectory())
-               .AddJsonFile(Common.Utility.Const.CONST_FILE_APPSETTING)
-               .Build();
+                // IConfiguration configuration = new ConfigurationBuilder()
+                //.SetBasePath(System.IO.Directory.GetCurrentDirectory())
+                //.AddJsonFile(Common.Utility.Const.CONST_FILE_APPSETTING)
+                //.Build();
 
-                //optionsBuilder.UseSqlServer(cnn);
-                string cnn = configuration.GetConnectionString("MixMessengerConnection");
-                if (string.IsNullOrEmpty(cnn))
-                {
-                    cnn = _cnn;
-                }
-                //define the database to use
+                // //optionsBuilder.UseSqlServer(cnn);
+                // string cnn = configuration.GetConnectionString("MixMessengerConnection");
+                // if (string.IsNullOrEmpty(cnn))
+                // {
+                //     cnn = _cnn;
+                // }
+                // //define the database to use
+                // if (!string.IsNullOrEmpty(cnn))
+                // {
+                //         optionsBuilder.UseSqlServer(cnn);
+                // }
+
+                string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
                 if (!string.IsNullOrEmpty(cnn))
                 {
+                    if (MixService.GetConfig<bool>("IsSqlite"))
+                    {
+                        optionsBuilder.UseSqlite(cnn);
+                    }
+                    else
+                    {
                         optionsBuilder.UseSqlServer(cnn);
+                    }
                 }
             }
         }

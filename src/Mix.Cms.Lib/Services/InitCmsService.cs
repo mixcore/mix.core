@@ -11,7 +11,7 @@ using static Mix.Cms.Lib.MixEnums;
 using Mix.Cms.Lib.Repositories;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using Mix.Services.Messenger.Models.Data;
+using Mix.Cms.Messenger.Models.Data;
 
 namespace Mix.Cms.Lib.Services
 {

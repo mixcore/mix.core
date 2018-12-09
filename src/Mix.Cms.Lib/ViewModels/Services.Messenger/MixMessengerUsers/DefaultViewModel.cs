@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Domain.Data.ViewModels;
-using Mix.Services.Messenger.Models.Data;
+using Mix.Cms.Messenger.Models.Data;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Mix.Services.Messenger.ViewModels.MixMessengerUsers
+namespace Mix.Cms.Messenger.ViewModels.MixMessengerUsers
 {
     public class DefaultViewModel : ViewModelBase<MixChatServiceContext, MixMessengerUser, DefaultViewModel>
     {

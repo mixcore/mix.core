@@ -102,7 +102,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                     JItem[item.Name] = new JObject()
                     {
                         new JProperty("dataType", item.DataType),
-                        new JProperty("value", "")
+                        new JProperty("value", JItem[item.Name]?.Value<JObject>().Value<string>("value"))
                     };
                 }
             }

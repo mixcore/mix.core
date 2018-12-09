@@ -2,23 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Mix.Services.Messenger.Models.Data;
+using Mix.Cms.Messenger.Models.Data;
 
-namespace Mix.Services.Messenger.Migrations
+namespace Mix.Cms.Messenger.Migrations
 {
     [DbContext(typeof(MixChatServiceContext))]
-    [Migration("20181119151731_init")]
-    partial class init
+    partial class MixChatServiceContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.4-rtm-31024");
 
-            modelBuilder.Entity("Mix.Services.Messenger.Models.Data.MixMessengerHubRoom", b =>
+            modelBuilder.Entity("Mix.Cms.Messenger.Models.Data.MixMessengerHubRoom", b =>
                 {
                     b.Property<Guid>("Id");
 
@@ -53,7 +51,7 @@ namespace Mix.Services.Messenger.Migrations
                     b.ToTable("mix_messenger_hub_room");
                 });
 
-            modelBuilder.Entity("Mix.Services.Messenger.Models.Data.MixMessengerMessage", b =>
+            modelBuilder.Entity("Mix.Cms.Messenger.Models.Data.MixMessengerMessage", b =>
                 {
                     b.Property<Guid>("Id");
 
@@ -84,7 +82,7 @@ namespace Mix.Services.Messenger.Migrations
                     b.ToTable("mix_messenger_message");
                 });
 
-            modelBuilder.Entity("Mix.Services.Messenger.Models.Data.MixMessengerNavRoomUser", b =>
+            modelBuilder.Entity("Mix.Cms.Messenger.Models.Data.MixMessengerNavRoomUser", b =>
                 {
                     b.Property<Guid>("RoomId");
 
@@ -102,7 +100,7 @@ namespace Mix.Services.Messenger.Migrations
                     b.ToTable("mix_messenger_nav_room_user");
                 });
 
-            modelBuilder.Entity("Mix.Services.Messenger.Models.Data.MixMessengerNavTeamUser", b =>
+            modelBuilder.Entity("Mix.Cms.Messenger.Models.Data.MixMessengerNavTeamUser", b =>
                 {
                     b.Property<int>("TeamId");
 
@@ -125,7 +123,7 @@ namespace Mix.Services.Messenger.Migrations
                     b.ToTable("mix_messenger_nav_team_user");
                 });
 
-            modelBuilder.Entity("Mix.Services.Messenger.Models.Data.MixMessengerTeam", b =>
+            modelBuilder.Entity("Mix.Cms.Messenger.Models.Data.MixMessengerTeam", b =>
                 {
                     b.Property<int>("Id");
 
@@ -153,7 +151,7 @@ namespace Mix.Services.Messenger.Migrations
                     b.ToTable("mix_messenger_team");
                 });
 
-            modelBuilder.Entity("Mix.Services.Messenger.Models.Data.MixMessengerUser", b =>
+            modelBuilder.Entity("Mix.Cms.Messenger.Models.Data.MixMessengerUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(50);
@@ -183,7 +181,7 @@ namespace Mix.Services.Messenger.Migrations
                     b.ToTable("mix_messenger_user");
                 });
 
-            modelBuilder.Entity("Mix.Services.Messenger.Models.Data.MixMessengerUserDevice", b =>
+            modelBuilder.Entity("Mix.Cms.Messenger.Models.Data.MixMessengerUserDevice", b =>
                 {
                     b.Property<string>("UserId")
                         .HasMaxLength(50);
@@ -208,45 +206,45 @@ namespace Mix.Services.Messenger.Migrations
                     b.ToTable("mix_messenger_user_device");
                 });
 
-            modelBuilder.Entity("Mix.Services.Messenger.Models.Data.MixMessengerMessage", b =>
+            modelBuilder.Entity("Mix.Cms.Messenger.Models.Data.MixMessengerMessage", b =>
                 {
-                    b.HasOne("Mix.Services.Messenger.Models.Data.MixMessengerHubRoom", "Room")
+                    b.HasOne("Mix.Cms.Messenger.Models.Data.MixMessengerHubRoom", "Room")
                         .WithMany("MixMessengerMessage")
                         .HasForeignKey("RoomId")
                         .HasConstraintName("FK_messenger_message_messenger_hub_room");
 
-                    b.HasOne("Mix.Services.Messenger.Models.Data.MixMessengerTeam", "Team")
+                    b.HasOne("Mix.Cms.Messenger.Models.Data.MixMessengerTeam", "Team")
                         .WithMany("MixMessengerMessage")
                         .HasForeignKey("TeamId")
                         .HasConstraintName("FK_messenger_message_messenger_team");
 
-                    b.HasOne("Mix.Services.Messenger.Models.Data.MixMessengerUser", "User")
+                    b.HasOne("Mix.Cms.Messenger.Models.Data.MixMessengerUser", "User")
                         .WithMany("MixMessengerMessage")
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK_messenger_message_messenger_user");
                 });
 
-            modelBuilder.Entity("Mix.Services.Messenger.Models.Data.MixMessengerNavRoomUser", b =>
+            modelBuilder.Entity("Mix.Cms.Messenger.Models.Data.MixMessengerNavRoomUser", b =>
                 {
-                    b.HasOne("Mix.Services.Messenger.Models.Data.MixMessengerHubRoom", "Room")
+                    b.HasOne("Mix.Cms.Messenger.Models.Data.MixMessengerHubRoom", "Room")
                         .WithMany("MixMessengerNavRoomUser")
                         .HasForeignKey("RoomId")
                         .HasConstraintName("FK_messenger_nav_room_user_messenger_hub_room");
 
-                    b.HasOne("Mix.Services.Messenger.Models.Data.MixMessengerUser", "User")
+                    b.HasOne("Mix.Cms.Messenger.Models.Data.MixMessengerUser", "User")
                         .WithMany("MixMessengerNavRoomUser")
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK_messenger_nav_room_user_messenger_user");
                 });
 
-            modelBuilder.Entity("Mix.Services.Messenger.Models.Data.MixMessengerNavTeamUser", b =>
+            modelBuilder.Entity("Mix.Cms.Messenger.Models.Data.MixMessengerNavTeamUser", b =>
                 {
-                    b.HasOne("Mix.Services.Messenger.Models.Data.MixMessengerTeam", "Team")
+                    b.HasOne("Mix.Cms.Messenger.Models.Data.MixMessengerTeam", "Team")
                         .WithMany("MixMessengerNavTeamUser")
                         .HasForeignKey("TeamId")
                         .HasConstraintName("FK_messenger_nav_team_user_messenger_team");
 
-                    b.HasOne("Mix.Services.Messenger.Models.Data.MixMessengerUser", "User")
+                    b.HasOne("Mix.Cms.Messenger.Models.Data.MixMessengerUser", "User")
                         .WithMany("MixMessengerNavTeamUser")
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK_messenger_nav_team_user_messenger_user");

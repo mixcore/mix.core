@@ -39,12 +39,14 @@ namespace Mix.Cms.Web.Controllers
         [Route("")]
         [Route("{culture}")]
         [Route("{culture}/{seoName}")]
-        public async System.Threading.Tasks.Task<IActionResult> Index(string culture, string seoName)
+        [Route("{culture}/{seoName}/{pageSize}/{pageIndex}")]
+        public async System.Threading.Tasks.Task<IActionResult> Index(
+            string culture, string seoName, int? pageSize = 1, int? pageIndex = 0)
         {
             if (MixService.GetConfig<bool>("IsInit"))
             {
                 //Go to landing page
-                return await PageAsync(seoName);
+                return await PageAsync(seoName, pageSize, pageIndex);
             }
             else
             {
@@ -111,14 +113,13 @@ namespace Mix.Cms.Web.Controllers
             return await PageAsync("404");
         }
 
-
-        async System.Threading.Tasks.Task<IActionResult> PageAsync(string seoName)//Expression<Func<MixPage, bool>> predicate, int? pageIndex = null, int pageSize = 10)
+        async System.Threading.Tasks.Task<IActionResult> PageAsync(string seoName, int? pageSize = 1, int? pageIndex = 0)//Expression<Func<MixPage, bool>> predicate, int? pageIndex = null, int pageSize = 10)
         {
             // Home Page
 
             var getPage = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
 
-            var cacheKey = $"page_{_culture}_{seoName}";
+            var cacheKey = $"page_{_culture}_{seoName}_{pageSize}_{pageIndex}";
 
             var data = _memoryCache.Get<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
             if (data != null)
@@ -143,7 +144,10 @@ namespace Mix.Cms.Web.Controllers
                 }
 
                 getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
-               
+                if (getPage.Data!=null)
+                {
+                    getPage.Data.LoadData(pageIndex: pageIndex, pageSize: pageSize);
+                }
                 _memoryCache.Set(cacheKey, getPage.Data);
                 if (!MixConstants.cachedKeys.Contains(cacheKey))
                 {

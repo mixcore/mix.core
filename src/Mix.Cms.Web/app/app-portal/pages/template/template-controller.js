@@ -22,6 +22,7 @@ app.controller('TemplateController', ['$scope', '$rootScope', '$routeParams', 'n
             var id = $routeParams.id;
             var folderType = $routeParams.folderType ? $routeParams.folderType : 'Masters';
             var themeId = $routeParams.themeId;
+            $scope.listUrl = '/portal/template/list/'+ themeId;
             var resp = await service.getSingle(['portal', themeId, folderType, id]);
             if (resp && resp.isSucceed) {
                 $scope.activedData = resp.data;
