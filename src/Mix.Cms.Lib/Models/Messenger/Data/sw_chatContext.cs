@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Mix.Services.Messenger.Models.Data
+namespace Mix.Cms.Messenger.Models.Data
 {
     public partial class sw_chatContext : DbContext
     {

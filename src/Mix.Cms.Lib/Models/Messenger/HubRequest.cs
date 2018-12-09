@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace Mix.Services.Messenger.Models
+namespace Mix.Cms.Messenger.Models
 {
     public class HubRequest<T>
     {

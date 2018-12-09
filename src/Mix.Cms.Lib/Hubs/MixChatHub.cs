@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Mix.Services.Messenger.Models;
+using Mix.Cms.Messenger.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using static Mix.Services.Messenger.MixChatEnums;
+using Mix.Cms.Messenger;
+using static Mix.Cms.Messenger.MixChatEnums;
 
-namespace Mix.Services.Messenger.Hubs
+namespace Mix.Cms.Messenger.Hubs
 {
     public class MixChatHub : Hub
     {

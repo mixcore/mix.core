@@ -2,14 +2,14 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
-using Mix.Services.Messenger.Models;
-using Mix.Services.Messenger.Models.Data;
+using Mix.Cms.Messenger.Models;
+using Mix.Cms.Messenger.Models.Data;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Mix.Services.Messenger.ViewModels.MixMessengerUsers
+namespace Mix.Cms.Messenger.ViewModels.MixMessengerUsers
 {
     public class ConnectViewModel
     {

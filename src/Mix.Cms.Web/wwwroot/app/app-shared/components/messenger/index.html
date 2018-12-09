@@ -1,92 +1,12 @@
-<section ng-init="init()" id="mix-messenger" ng-class="{'collape': isHide}">
-<!-- Chat Widget start -->
-<div class="ui" ng-onload="loadMsgButton()">
-                   
-            <div class="widget hidden">
-            <div class="widget-header">
-                <a ng-if="!user.loggedIn" href="#" ng-click="login()">Login</a>
-                <div ng-if="user.loggedIn" class="row">
-                    <a class="col-9">Messenger ({{members.length}})</a> 
-                    <a class="col-1" ng-click="toggleContact()"><i class="fas fa-list-ul"></i></a>
-                    <a class="col-1" ng-click="toggle()"><i ng-class="{'fa-minus': !isHide ,'fa-plus': isHide}" class="fa fa-minus"></i></a>
-                </div>
-            </div>
-            <div class="widget-conversation">
-                <div ng-if="user.loggedIn" class="container">
-                    <div id="mix-discussion" class="discussion">
-                        
-                        <div class="row" ng-repeat="msg in messages">
-                            
-                            <li ng-class="{ 'message-right': msg.connection.id == user.info.id , 'message-left': msg.connection.id != user.info.id }">
-                                <div class="message-avatar">
-                                <img class="avatar" src="{{msg.connection.avatar}}">
-                                
-                                </div>
-                                <div class="name">{{msg.connection.name}}</div>
-                                <div class="message-text">{{msg.content}}</div>
-                                <div class="message-hour">{{msg.createdDate | utcToLocal:'dd.MM.yyyy hh:mm:ss'}}<span class="ion-android-done-all"></span></div>
-                            </li>   
-<!--                             
-                            <div class="col-md-12" ng-class="{ 'text-right': msg.connection.id == user.info.id }">
-                                <img imageonload src="{{msg.connection.avatar}}" /> <b class="small">{{msg.connection.name}}</b>
-                                <br /><span class="small" ng-bind="msg.createdDate | utcToLocal:'dd.MM.yyyy hh:mm:ss'"></span>
-                                <p ng-bind-html="msg.content"></p>
-                            </div> -->
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="widget-form">
-                    <textarea id="message" class="msgContent" minlength="1" placeholder="message" ng-enter="sendMessage()" ng-model="message.content"></textarea>
-                    <button class="sendMsgBtn" ng-click="sendMessage()"><i class="fas fa-paper-plane"></i></button>
-                </div>   
-            <!-- <textarea placeholder="message" ng-enter="sendMessage()" class="form-control" ng-model="message.content"></textarea>
-                <a class="btn btn-info" ng-click="sendMessage()">Send</a> -->
-            
-                        <!-- <ul id='conversation'>
-                        
-                        <li class='message-left'>
-                            <div class='message-avatar'>
-                            <div class='avatar ion-ios-person'></div>
-                            <div class='name'>Steve</div>
-                            </div>
-                            <div class='message-text'>Hello, I'm Steve.</br>How can I help you today?</div>
-                            <div class='message-hour'>08:55 <span class='ion-android-done-all'></span></div>
-                        </li>
-                    
-                        <li class='message-right'>
-                            <div class='message-avatar'>
-                            <div class='avatar ion-ios-person'></div>
-                            <div class='name'>You</div>
-                            </div>
-                            <div class='message-text'>Hi, Steve. I need more information about Developer Plan.</div>
-                            <div class='message-hour'>08:56 <span class='ion-android-done-all'></span></div>
-                        </li>     
-                        </ul> -->
-            <div class="contact" ng-class="{'collape': hideContact}">
-                <ul>
-                    <li ng-repeat="m in members">
-                        <img imageonload src="{{m.avatar}}">  <span ng-bind="m.name"></span>
-                    </li>
-                </ul>
-            </div>
-        </div>        
-        </div>
-       
-        
-      <a class="btn-support" id="quest">🦊</a>
-      
-<!-- Chat Widget end -->
-    <!-- <div class="card-header">
+<section class="card" ng-init="init()" id="mix-messenger" ng-class="{'collape': isHide}">
+    <div class="card-header">
         <h6>Messenger</h6> 
         <a class="btn btn-contact btn-success" ng-click="toggleContact()">Available({{members.length}})</a>
         <a class="btn btn-toggle btn-info" ng-click="toggle()"><i ng-class="{'fa-minus': !isHide ,'fa-plus': isHide}" class="fa fa-minus"></i></a>
     </div>
     <div class="row card-body">
         <div class="col-12">
-            </h1>
+            
             <div ng-if="!user.loggedIn">
                 <a href="#" ng-click="login()">Login</a>
             </div>
@@ -94,8 +14,8 @@
                 <div id="mix-discussion" class="discussion">
                     <div class="row" ng-repeat="msg in messages">
                         <div class="col-md-12" ng-class="{ 'text-right': msg.connection.id == user.info.id }">
-                            <img imageonload src="{{msg.connection.avatar}}" /> <b class="small">{{msg.connection.name}}</b>
-                            <br /><span class="small" ng-bind="msg.createdDate | utcToLocal:'dd.MM.yyyy hh:mm:ss'"></span>
+                            <img imageonload src="{{msg.connection.avatar}}"> <b class="small">{{msg.connection.name}}</b>
+                            <br><span class="small" ng-bind="msg.createdDate | utcToLocal:'dd.MM.yyyy hh:mm:ss'"></span>
                             <p ng-bind-html="msg.content"></p>
                         </div>
                     </div>
@@ -109,10 +29,10 @@
         <div class="contact" ng-class="{'collape': hideContact}">
             <ul>
                 <li ng-repeat="m in members">
-                    <img imageonload src="{{m.avatar}}" />  <span ng-bind="m.name"></span>
+                    <img imageonload src="{{m.avatar}}">  <span ng-bind="m.name"></span>
                 </li>
             </ul>
         </div>
-    </div> -->
+    </div>
 </section>
 <!-- /.content -->

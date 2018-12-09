@@ -1,4 +1,4 @@
-﻿namespace Mix.Services.Messenger
+﻿namespace Mix.Cms.Messenger
 {
     public class MixChatEnums
     {

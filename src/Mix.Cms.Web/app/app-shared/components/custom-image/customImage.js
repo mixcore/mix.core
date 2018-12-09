@@ -17,11 +17,16 @@ modules.component('customImage', {
             description: ''
         };
         ctrl.media = null;
-        ctrl.$doCheck = function () {
+        /*ctrl.$doCheck = function () {
             if (ctrl.src !== ctrl.srcUrl && ctrl.srcUrl != image_placeholder) {
                 ctrl.src = ctrl.srcUrl;
             }
-        }.bind(ctrl);
+        }.bind(ctrl);*/
+        ctrl.updateSrc = function () {
+            if (ctrl.src !== ctrl.srcUrl && ctrl.srcUrl != image_placeholder) {
+                ctrl.src = ctrl.srcUrl;
+            }
+        };
         ctrl.selectFile = function (file, errFiles) {
             if (file !== undefined && file !== null) {
                 ctrl.mediaFile.folder = ctrl.folder ? ctrl.folder : 'Media';
