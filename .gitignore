@@ -256,3 +256,7 @@ docs/videos/create-article-page.mp4
 .gitignore
 /docs/videos
 /demo
+src/Mix.Cms.Web/app/gulpfile.js
+src/Mix.Cms.Web/appsettings.json
+src/Mix.Cms.Web/appsettings.json
+src/Mix.Cms.Web/package-lock.json

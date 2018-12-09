@@ -18,8 +18,120 @@ app.controller('MessengerController', ['$scope', function ($scope) {
         room: '',
         isMyself: false
     };
+    $scope.loadMsgButton = function () {
+        
+}
     $scope.init = function () {
-        $scope.startConnection('MixChatHub', $scope.checkLoginStatus);
+        $scope.startConnection('MixChatHub', $scope.checkLoginStatus);    
+        
+        $(".btn-support").on("click", function() {
+            if ($(".widget").hasClass("hidden")) {
+              $(".widget").removeClass("hidden");
+            } else {
+              $(".widget").addClass("hidden");
+            }
+          });
+          $("button").on("click", function() {
+            var text = $("#message").val();
+            var hnow = new Date().getHours();
+            var mnow = new Date().getMinutes();
+            mnow = mnow < 10 ? "0" + mnow : mnow;
+            var d = hnow + ":" + mnow;
+        
+            if (text.length > 0) {
+              $("#message").css("border", "1px solid #f4f5f9");
+              $("#conversation").append(
+                "<li class='message-right'><div class='message-avatar'><div class='avatar ion-ios-person'></div><div class='name'>You</div></div><div class='message-text'>" +
+                  text +
+                  "</div><div class='message-hour'>" +
+                  d +
+                  " <span class='ion-android-done-all'></span></div></li>"
+              );
+              $("#message").val("");
+              $(".widget-conversation").scrollTop(
+                $("ul li")
+                  .last()
+                  .position().top +
+                  $("ul li")
+                    .last()
+                    .height()
+              );
+            } else {
+              $("#message").css("border", "1px solid #eb9f9f");
+              $("#message").animate({ opacity: "0.1" }, "slow");
+              $("#message").animate({ opacity: "1" }, "slow");
+              $("#message").animate({ opacity: "0.1" }, "slow");
+              $("#message").animate({ opacity: "1" }, "slow");
+            }
+          });
+  
+        
+        
+        // var _createClass = function () {function defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}return function (Constructor, protoProps, staticProps) {if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;};}();function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}var HoverButton = function () {
+        //   function HoverButton(el) {_classCallCheck(this, HoverButton);
+        //     this.el = el;
+        //     this.hover = false;
+        //     this.calculatePosition();
+        //     this.attachEventsListener();
+        //   }_createClass(HoverButton, [{ key: 'attachEventsListener', value: function attachEventsListener()
+        
+        //     {var _this = this;
+        //       window.addEventListener('mousemove', function (e) {return _this.onMouseMove(e);});
+        //       window.addEventListener('resize', function (e) {return _this.calculatePosition(e);});
+        //     } }, { key: 'calculatePosition', value: function calculatePosition()
+        
+        //     {
+        
+        
+        //       var box = this.el.getBoundingClientRect();
+        //       this.x = box.left + box.width * 0.5;
+        //       this.y = box.top + box.height * 0.5;
+        //       this.width = box.width;
+        //       this.height = box.height;
+        //     } }, { key: 'onMouseMove', value: function onMouseMove(
+        
+        //     e) {
+        //       var hover = false;
+        //       var hoverArea = this.hover ? 0.7 : 0.5;
+        //       var x = e.clientX - this.x;
+        //       var y = e.clientY - this.y;
+        //       var distance = Math.sqrt(x * x + y * y);
+        //       if (distance < this.width * hoverArea) {
+        //         hover = true;
+        //         if (!this.hover) {
+        //           this.hover = true;
+        //         }
+        //         this.onHover(e.clientX, e.clientY);
+        //       }
+        
+        //       if (!hover && this.hover) {
+        //         this.onLeave();
+        //         this.hover = false;
+        //       }
+        //     } }, { key: 'onHover', value: function onHover(
+        
+        //     x, y) {
+        //       TweenMax.to(this.el, 0.4, {
+        //         x: (x - this.x) * 0.4,
+        //         y: (y - this.y) * 0.4,
+        //         scale: 1.15,
+        //         ease: Power2.easeOut });
+        
+        //       this.el.style.zIndex = 10;
+        //     } }, { key: 'onLeave', value: function onLeave()
+        //     {
+        //       TweenMax.to(this.el, 0.7, {
+        //         x: 0,
+        //         y: 0,
+        //         scale: 1,
+        //         ease: Elastic.easeOut.config(1.2, 0.4) });
+        
+        //       this.el.style.zIndex = 1;
+        //     } }]);return HoverButton;}();
+        
+        
+        // var btn1 = document.querySelector('#quest');
+        // new HoverButton(btn1);
     };
 
     $scope.login = function () {
@@ -64,6 +176,7 @@ app.controller('MessengerController', ['$scope', function ($scope) {
         switch (msg.responseKey) {
             case 'NewMember':
                 $scope.newMember(msg.data);
+                $('.widget-conversation').scrollTop = $('.widget-conversation')[0].scrollHeight;
                 break;
 
             case 'NewMessage':
@@ -151,5 +264,7 @@ app.controller('MessengerController', ['$scope', function ($scope) {
         var objDiv = document.getElementById("mix-discussion");
         objDiv.scrollTop = objDiv.scrollHeight + 20;
     }
+    
+    
 }]);
 
