@@ -6,3 +6,13 @@
 - Demo: http://dev.mixcore.org
 - Docs: https://docs.mixcore.org
 - Youtube: https://www.youtube.com/channel/UChqzh6JnC8HBUSQ9AWIcZAw
+
+# Build & Run
+
+```
+cd src\Mix.Cms.Web
+gulp build
+dotnet bundle
+dotnet build
+dotnet run
+```
