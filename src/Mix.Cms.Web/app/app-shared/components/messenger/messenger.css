@@ -109,8 +109,8 @@ Message Widget
 .widget {
   width: calc(52% - 100px);
   min-width: 400px;
-  height: calc(32% - 60px);
-  min-height: 400px;
+  /* height: calc(32% - 60px);
+  min-height: 400px; */
   position: absolute;
   right: 6%;
   bottom: calc(6% + 70px);
@@ -135,13 +135,16 @@ Message Widget
   height: 30px;
   background-color: #fff;
   font-size: 0.8em;
-  line-height: 34px;
-  text-align: center;
-  text-transform: uppercase;
+  text-align: left;
   color: #7f9eb2;
   box-shadow: 0 1px 0 rgba(50,54,70,0.08);
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
+  padding-top: 10px;
+}
+
+.widget-header>a{
+  cursor: pointer;
 }
 
 .widget-conversation {
@@ -150,6 +153,8 @@ Message Widget
   overflow-y: scroll;
   position: relative;
   background-color: #f4f5f9;
+  max-height: 300px;
+  min-height: 50px;
 }
 
 ul {
@@ -204,6 +209,7 @@ li.message-right .name{
 
 li.message-left .name{
   text-align: left;
+  margin-left: 50px;
 }
 
 .name {
@@ -228,7 +234,7 @@ li.message-left .name{
 li.message-left > .message-text {
   text-align: left;
   left: 16px;
-  margin-left: 60px;
+  margin-left: 43px;
   font-size: 9pt;
 }
 
