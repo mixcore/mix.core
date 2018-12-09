@@ -6,7 +6,9 @@
                    
             <div class='widget'ng-class="{'hidden': isHide}">
             <div class='widget-header'>
-                <a ng-if="!user.loggedIn" href="#" ng-click="login()">Login</a>
+                <div ng-if="!user.loggedIn" class="row" style="margin-right: 0px;margin-left: 0px;">
+                        <a href="#" ng-click="login()">Login</a>
+                </div>                
                 <div ng-if="user.loggedIn" class="row" style="margin-right: 0px;margin-left: 0px;">
                     <a class="col-9">Messenger ({{members.length}})</a>                     
                     <a class="col-1" ng-click="toggle()"><i class="fa fa-minus"></i></a>
