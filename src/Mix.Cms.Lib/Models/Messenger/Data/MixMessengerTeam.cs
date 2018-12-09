@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Mix.Services.Messenger.Models.Data
+namespace Mix.Cms.Messenger.Models.Data
 {
     public partial class MixMessengerTeam
     {

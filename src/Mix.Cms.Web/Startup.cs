@@ -17,7 +17,7 @@ using Mix.Identity.Services;
 using Mix.Cms.Hub;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Mix.Services.Messenger.Hubs;
+using Mix.Cms.Messenger.Hubs;
 
 namespace Mix.Cms.Web
 {
