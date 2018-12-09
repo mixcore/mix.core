@@ -1,0 +1,103 @@
+<!-- <section class="content container-fluid"> -->
+    <div class="row">
+        <div class="col-md-8">
+            <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group mr-2" role="group" aria-label="First group">
+                    <a href="/portal/theme/create" class="btn btn-secondary">
+                        <i class="fas fa-plus"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+    <filter-list request="request" callback="getList(pageIndex)"></filter-list>
+
+    <table class="table table-sm table-hover" cellspacing="0">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col" width="5%">
+                    <span class="fas fa-sort"></span>
+                </th>
+                <th scope="col" width="5%">
+                    <span class="fas fa-sort-numeric-down"></span>
+                </th>
+                <th scope="col">
+                    Name
+                </th>
+                <th scope="col" width="10%">
+                    Image
+                </th>
+                <th scope="col" width="15%">
+                    Created By
+                </th>
+                <th scope="col" width="15%">
+                    Created Date
+                </th>
+                <th scope="col" width="10%" class="text-right">
+                    Actions
+                </th>
+            </tr>
+        </thead>
+
+        <tbody class="sortable" ng-init="getList()">
+            <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="theme" sort-model-id="{{item.id}}">
+                <td style="cursor:move;" class="drag-header">
+                    <span class="fas fa-sort"></span>
+                </td>
+                <td>
+                    <input type="text" value="{{item.priority}}" class="item-priority form-control form-control-sm d-inline" style="width:40px;">
+                </td>
+                <td>
+                    {{item.name}}
+                </td>
+                <td>
+                    <img height="30" imageonload ng-src="{{item.imageUrl}}">
+                </td>
+                <td>
+                    {{item.createdBy}}
+                </td>
+                <td>
+                    <small>
+                        {{item.createdDateTime | utcToLocal:'dd.MM.yyyy hh:mm:ss a'}}
+                    </small>
+                </td>
+                <td>
+                    <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
+                        <a ng-if="item.previewUrl" href="{{item.previewUrl}}" target="_blank" class="btn btn-light">
+                            <span class="fas fa-eye text-info"></span>
+                        </a>
+                        <a href="/portal/template/list/{{item.id}}" class="btn btn-light">
+                            <span class="fas fa-paint-brush text-info"></span>
+                        </a>
+                        <a href="/portal/file/list?folder={{item.assetFolder}}" class="btn btn-light">
+                            <span class="fas fa-file text-secondary"></span>
+                        </a>
+                        <a ng-click="syncTemplates(item.id)" class="btn btn-sm btn-light d-inline-block"><span class="fas fa-sync-alt text-primary"></span></a>
+
+                        <a href="/portal/theme/details/{{item.id}}" class="btn btn-light">
+                            <span class="fas fa-pencil-alt text-primary"></span>
+                        </a>
+                        <a ng-click="remove(item.id);" class="btn btn-light">
+                            <span class="fas fa-times text-danger"></span>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-end">
+            <li class="page-item">
+                <a class="page-link active" href="javascript:void(0)" ng-click="getList(data.pageIndex-1)" ng-hide="data.pageIndex==0">Prev</a>
+            </li>
+            <li class="page-item" ng-class="{active: n-1==data.pageIndex}" ng-repeat="n in range(data.totalPage)">
+                <a class="page-link" href="javascript:void(0)" ng-click="getList(n-1)">{{n}}</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="javascript:void(0)" ng-click="getList(data.page)" ng-hide="data.pageIndex >= (data.totalPage-1)">Next</a>
+            </li>
+        </ul>
+    </nav>
+<!-- </section> -->

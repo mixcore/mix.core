@@ -1,6 +1,6 @@
 <!-- <section class="content container-fluid"> -->
     <filter-list request="request" callback="getList(pageIndex)"></filter-list>
-    <select ng-model="type" ng-change="getListByType(pageIndex)" class="btn custom-select mb-2">
+    <select ng-model="type" ng-change="getListByType(pageIndex)" class="btn custom-select mb-3">
         <option value="-1">All</option>
         <option ng-repeat="type in settings.moduleTypes track by $index" ng-value="$index">{{type}}</option>
     </select>
