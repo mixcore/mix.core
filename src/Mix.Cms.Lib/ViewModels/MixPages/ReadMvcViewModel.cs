@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using static Mix.Cms.Lib.MixEnums;
 
@@ -174,25 +175,25 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             if (View != null)
             {
                 GetSubModules(_context, _transaction);
-                switch (Type)
-                {
-                    case MixPageType.Home:
-                    case MixPageType.Blank:
-                    case MixPageType.Article:
-                    case MixPageType.Modules:
-                        break;
+                //switch (Type)
+                //{
+                //    case MixPageType.Home:
+                //    case MixPageType.Blank:
+                //    case MixPageType.Article:
+                //    case MixPageType.Modules:
+                //        break;
 
-                    case MixPageType.ListArticle:
-                        GetSubArticles(_context, _transaction);
-                        break;
+                //    case MixPageType.ListArticle:
+                //        GetSubArticles(_context, _transaction);
+                //        break;
 
-                    case MixPageType.ListProduct:
-                        GetSubProducts(_context, _transaction);
-                        break;
+                //    case MixPageType.ListProduct:
+                //        GetSubProducts(_context, _transaction);
+                //        break;
 
-                    default:
-                        break;
-                }
+                //    default:
+                //        break;
+                //}
             }
         }
 
@@ -201,6 +202,73 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         #region Expands
 
         #region Sync
+        public void LoadData(int? pageSize = null, int? pageIndex = 0
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        { UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                Expression<Func<MixPageModule, bool>> dataExp = null;
+                Expression<Func<MixPageArticle, bool>> articleExp = null;
+                Expression<Func<MixPageProduct, bool>> productExp = null;
+                switch (Type)
+                {
+                    case MixPageType.Modules:
+                        foreach (var item in Modules)
+                        {
+                            item.Module.LoadData(categoryId: Id, pageSize: pageSize, pageIndex: pageIndex, _context: context, _transaction:transaction);
+                        }
+                        break;
+                    case MixPageType.ListArticle:
+                        articleExp = n => n.CategoryId == Id && n.Specificulture == Specificulture;
+                        break;
+                    case MixPageType.ListProduct:
+                        productExp = n => n.CategoryId == Id && n.Specificulture == Specificulture;
+                        break;
+                    default:
+                        dataExp = m => m.CategoryId == Id && m.Specificulture == Specificulture;
+                        articleExp = n => n.CategoryId == Id && n.Specificulture == Specificulture;
+                        productExp = m => m.CategoryId == Id && m.Specificulture == Specificulture;
+                        break;
+                }
+
+                if (articleExp != null)
+                {
+                    var getArticles = MixPageArticles.ReadViewModel.Repository
+                    .GetModelListBy(articleExp
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+                    , PageSize, 0
+                    , _context: context, _transaction: transaction);
+                    if (getArticles.IsSucceed)
+                    {
+                        Articles = getArticles.Data;
+                    }
+                }
+                if (productExp != null)
+                {
+                    var getArticles = MixPageArticles.ReadViewModel.Repository
+                    .GetModelListBy(articleExp
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+                    , PageSize, 0
+                    , _context: context, _transaction: transaction);
+                    if (getArticles.IsSucceed)
+                    {
+                        Articles = getArticles.Data;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                UnitOfWorkHelper<MixCmsContext>.HandleException<PaginationModel<ReadMvcViewModel>>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    context.Dispose();
+                }
+            }
+        }
 
         private void GetSubModules(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

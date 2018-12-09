@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Mix.Services.Messenger.Migrations
+namespace Mix.Cms.Messenger.Migrations
 {
     public partial class init : Migration
     {

@@ -1,10 +1,14 @@
 ﻿@model Mix.Cms.Lib.ViewModels.MixProducts.ReadMvcViewModel
 @{
     string culture = ViewBag.culture;
-    ViewData["Title"] = Model.Title;
-    ViewData["SeoTitle"] = Model.SeoTitle;
-    ViewData["SeoKeywords"] = Model.SeoKeywords;
-    ViewData["SeoDescription"] = Model.SeoDescription;
+}
+@section Seo{
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}")" />
+    <meta property="og:title" content="@Model.Title" />
+    <meta property="og:description"
+          content="@Model.Excerpt" />
+    <meta property="og:image" content="@($"{Context.Request.Scheme}://{Context.Request.Host}{Model.Image}")" />
 }
 @if (!string.IsNullOrEmpty(Model.TemplatePath))
 {

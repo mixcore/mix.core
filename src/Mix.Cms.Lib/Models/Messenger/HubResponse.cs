@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Mix.Services.Messenger.Models
+namespace Mix.Cms.Messenger.Models
 {
     public class HubResponse<T>
     {
