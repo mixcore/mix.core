@@ -16,3 +16,9 @@ dotnet bundle
 dotnet build
 dotnet run
 ```
+
+# UI:  
+  - **Default template:**
+![Mixcore CMS default template with Now UI Pro](https://github.com/mixcore/mix.core/blob/master/assets/front-end.jpg?raw=true "Mixcore CMS default template with Now UI Pro")
+  - **Admin Portal:**
+![Mixcore Admin Portal Bootstrap 4.x](https://github.com/mixcore/mix.core/blob/master/assets/admin-portal.jpg?raw=true "Mixcore CMS Admin Portal Bootstrap 4")
