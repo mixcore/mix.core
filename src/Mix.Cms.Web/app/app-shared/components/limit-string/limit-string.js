@@ -5,14 +5,14 @@ modules.component('limitString', {
         function ($rootScope, $scope, ngAppSettings) {
             var ctrl = this;
             ctrl.shortenString = '';
-            var previousContentId = undefined;
+            ctrl.previousContentId = undefined;
 
-            this.$onInit = () => { previousContentId = angular.copy(ctrl.contentId) };
+            this.$onInit = () => { ctrl.previousContentId = angular.copy(ctrl.contentId) };
 
             this.$doCheck = () => {
-                if (!angular.equals(ctrl.contentId, previousContentId)) {
+                if (ctrl.contentId !== ctrl.previousContentId) {
                     ctrl.loadModuleData();
-                    previousContentId = angular.copy(ctrl.contentId);
+                    ctrl.previousContentId = ctrl.contentId;
                 }
             };
             ctrl.shortString = function () {
