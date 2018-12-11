@@ -62,7 +62,7 @@
                         
                         <a href="/portal/page/details/{{item.id}}" class="btn btn-light"><span class="oi oi-pencil text-primary"></span></a>
                         <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-light"><span class="oi oi-eye text-primary"></span></a>
-                        <a href="/portal/page/data/{{item.id}}" class="btn btn-light">
+                        <a ng-if="item.type==2" href="/portal/page/page-article/list/{{item.id}}" class="btn btn-light">
                             <span class="fas fa-list text-info"></span>
                         </a>
 
@@ -122,14 +122,14 @@
                                         </small>
                                     </td>
                                     <td>
-                                        {{c.createdBy}}
+                                        {{c.createdBy}}{{item.type}}
                                     </td>
 
                                     <td>
                                         <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
                                             <a href="/portal/page/details/{{c.id}}" class="btn btn-light"><span class="oi oi-pencil text-primary small"></span></a>
                                             <a href="{{c.detailsUrl}}" target="_blank" class="btn btn-light"><span class="oi oi-eye text-primary small"></span></a>
-                                            <a href="/portal/page/data/{{c.id}}" class="btn btn-light">
+                                            <a ng-if="item.type==2" href="/portal/page/page-article/list/{{c.id}}" class="btn btn-light">
                                                 <span class="fas fa-list text-info"></span>
                                             </a>
                                             <a ng-click="removePage(item.id);" class="btn btn-light">
