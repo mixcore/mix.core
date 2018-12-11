@@ -1,4 +1,3 @@
-@RenderSection("Seo",false)
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,12 +14,9 @@
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <meta property="fb:app_id" content="@(MixService.GetConfig<string>("FacebookAppId", ViewBag.culture))" />
     <script>document.write('<meta property="og:url" content="' + window.top.location + '" />')</script>
-    <meta property="og:type" content="article" />
-    <meta property="og:title" content="@ViewData["Title"]" />
-    <meta property="og:description"
-          content="@ViewData["Description"]" />
-    <meta property="og:image" content="@ViewData["Image"]" />
+    
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    @RenderSection("Seo", false)
     <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @ViewData["Title"]</title>
 
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />

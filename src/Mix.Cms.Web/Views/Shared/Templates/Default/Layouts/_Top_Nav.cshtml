@@ -4,6 +4,7 @@
 @{
     string culture = ViewBag.culture;
     List<Mix.Cms.Lib.ViewModels.MixPages.ReadListItemViewModel> topCates = MixCmsHelper.GetCategory(Url, ViewBag.culture, MixEnums.CatePosition.Nav, Context.Request.Path);
+    var socials = MixCmsHelper.GetModule("social", ViewBag.culture);
 }
 <nav class="navbar navbar-expand-lg bg-white fixed-top navbar-transparent" color-on-scroll="500">
     <div class="container">
@@ -61,21 +62,13 @@
             </ul>
            
             <ul class="nav navbar-nav">
+                @foreach(var item in socials.Data.Items){
                 <li class="nav-item">
-                    <a class="nav-link" href="https://twitter.com/CreativeTim">
-                        <i class="fab fa-twitter"></i>
+                    <a class="nav-link" target="_blank" href="@item.Property("url")">
+                        <i class="@item.Property("icon")"></i>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="https://www.facebook.com/CreativeTim">
-                        <i class="fab fa-facebook-square"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="https://www.instagram.com/CreativeTimOfficial">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                </li>
+                }
             </ul>
         </div>
     </div>

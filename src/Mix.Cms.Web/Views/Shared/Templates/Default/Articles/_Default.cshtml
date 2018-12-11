@@ -1,7 +1,4 @@
 @model Mix.Cms.Lib.ViewModels.MixArticles.ReadMvcViewModel
-@{ 
-    var prices = Model.GetModule("prices");
-}
 <!-- End Navbar -->
 <div class="page-header page-header-mini">
     
@@ -11,7 +8,7 @@
 <div class="section">
     <div class="container">
         <div class="row">
-            <h1>@prices.TemplatePath</h1>
+            
             <div class="col-md-5">
                 <div id="productCarousel" class="carousel slide" data-ride="carousel" data-interval="8000">
                     @if(Model.MediaNavs.Count>0)
@@ -59,7 +56,7 @@
                 <h2 class="title"> @Model.Title </h2>
                 @*<h5 class="category">@Model.Title</h5>*@
                 <div id="accordion" role="tablist" aria-multiselectable="true" class="card-collapse">
-                    <div class="card card-plain">
+                    <div class="card card-plain mb-0">
                         <div class="card-header" role="tab" id="headingOne">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                 Description
@@ -82,8 +79,8 @@
                 
             </div>
         </div>
-        <div class="section">
-            <div class="section-story-overview">
+        <div class="section pt-0 pb-0">
+            <div class="section-story-overview pt-0">
                 <div class="row">
                     <div class="col-md-12">
                         @Html.Raw(Model.Content)
@@ -91,8 +88,8 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <partial name="../Widgets/_Comments_Facebook.cshtml"/>
-        </div>
+        
+        <partial name="../Widgets/_Comments_Facebook.cshtml"/>
+        
     </div>
 </div>
