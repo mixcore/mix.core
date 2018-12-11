@@ -3,10 +3,10 @@
     <div class="buttons">
         @if (Model!=null)
         {
-            @foreach (var item in Model.Data.JsonItems)
+            @foreach (var item in Model.Data.Items)
             {
-            <a href="@item["url"]["value"]" class="btn btn-icon btn-link btn-neutral btn-lg">
-                <i class="fab @item["icon"]["value"]"></i>
+            <a href="@item.Property("url")" class="btn btn-icon btn-link btn-neutral btn-lg">
+                <i class="fab @item.Property("icon")"></i>
             </a>
             }
         }

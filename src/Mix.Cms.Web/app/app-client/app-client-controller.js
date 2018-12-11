@@ -29,7 +29,13 @@
             };
 
             $scope.translate = $rootScope.translate;
-
+            $scope.previewData = function(moduleId, id){
+                var obj = {
+                    moduleId: moduleId,
+                    id: id
+                };
+                $rootScope.preview('module-data', obj, null, 'modal-lg');
+            }
             $scope.initModuleForm = async function (name) {
                 var resp = null;
                 $scope.name = name;

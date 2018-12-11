@@ -10,28 +10,21 @@
         }
     }
     string culture = ViewBag.culture;
-    var social = MixCmsHelper.GetModule("Social", ViewBag.culture as string);
+    var social = MixCmsHelper.GetModule("Social", ViewBag.culture);
 }
 <div class="wrapper">
     
-<messenger></messenger>
     <div class="page-header page-header-small">
         <div class="page-header-image" data-parallax="true" style="background-image: url('@Model.Image');">
         </div>
         <div class="content-center">
             <div class="row">
                 <div class="col-md-8 ml-auto mr-auto text-center">
-                    <h2 class="title"></h2>
-                    @Html.Raw(Model.Excerpt)
-                    @if (social!=null)
-                    {
-                        @foreach (var item in social.Data.JsonItems)
-                        {
-                        <a href="@item["url"]["value"]" class="btn btn-primary btn-round  btn-icon">
-                            <i class="fab @item["icon"]["value"]"></i>
-                        </a>
-                        }
-                    }
+                    <h2 class="title">
+                        @Html.Raw(Model.Excerpt)
+                    </h2>
+                    
+                    
                 </div>
             </div>
         </div>
@@ -59,6 +52,55 @@
                             <a href="@product.DetailsUrl" class="btn btn-primary btn-round">Read More</a>
                         </div>
                     }
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col-md-8 ml-auto mr-auto">
+                    @if (Model.Articles.TotalPage > 1)
+                    {
+                        <div class="tr-pagination text-center">
+                            <ul class="pagination" style="display: inline-flex!important;">
+                                @if (Model.Articles.PageIndex > 0)
+                                {
+                                    <li class="float-left page-item">
+                                        <a class="page-link"
+                                           asp-controller="@ViewContext.RouteData.Values["Controller"]"
+                                           asp-action="@ViewContext.RouteData.Values["Action"]"
+                                           asp-route-pageSize="@Model.Articles.PageSize"
+                                           asp-route-pageIndex="@(Model.Articles.PageIndex-1)">
+                                            Previous
+                                        </a>
+                                    </li>
+                                }
+                                @for (int i = 0; i < Model.Articles.TotalPage; i++)
+                                {
+                                    string cl = i == Model.Articles.PageIndex ? "active" : string.Empty;
+                                    <li class="@cl  page-item">
+                                        <a class="page-link"
+                                           asp-controller="@ViewContext.RouteData.Values["Controller"]"
+                                           asp-action="@ViewContext.RouteData.Values["Action"]"
+                                           asp-route-pageSize="@Model.Articles.PageSize"
+                                           asp-route-pageIndex="@i">
+                                            @(i + 1)
+                                        </a>
+                                    </li>
+                                }
+                                @if (Model.Articles.PageIndex < Model.Articles.TotalPage - 1)
+                                {
+                                    <li class="float-right page-item">
+                                        <a class="page-link"
+                                           asp-controller="@ViewContext.RouteData.Values["Controller"]"
+                                           asp-action="@ViewContext.RouteData.Values["Action"]"
+                                           asp-route-pageSize="@Model.Articles.PageSize"
+                                           asp-route-pageIndex="@(Model.Articles.PageIndex+1)">
+                                            Next
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                   }
                 </div>
             </div>
         </div>
