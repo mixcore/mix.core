@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -10,18 +10,9 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-
+    @RenderSection("Seo",false)
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <meta property="fb:app_id" content="@(MixService.GetConfig<string>("FacebookAppId", ViewBag.culture))" />
-    <script>document.write('<meta property="og:url" content="' + window.top.location + '" />')</script>
-    <meta property="og:type" content="article" />
-    <meta property="og:title" content="@ViewData["Title"]" />
-    <meta property="og:description"
-          content="@ViewData["Description"]" />
-    <meta property="og:image" content="@ViewData["Image"]" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @ViewData["Title"]</title>
-
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200|Open+Sans+Condensed:700" rel="stylesheet">

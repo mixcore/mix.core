@@ -140,13 +140,15 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-
+                pageSize = pageSize > 0 ? PageSize : PageSize;
+                pageIndex = pageIndex ?? 0;
                 Expression<Func<MixModuleData, bool>> dataExp = null;
                 Expression<Func<MixModuleArticle, bool>> articleExp = null;
                 Expression<Func<MixModuleProduct, bool>> productExp = null;
                 switch (Type)
                 {
                     case MixModuleType.Content:
+                    case MixModuleType.Data:
                         dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture;
                         articleExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
                         productExp = m => m.ModuleId == Id && m.Specificulture == Specificulture;
@@ -183,7 +185,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                     .GetModelListBy(
                         dataExp
                         , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
-                        , PageSize, 0
+                        , pageSize, pageIndex
                         , _context: context, _transaction: transaction);
                     if (getDataResult.IsSucceed)
                     {
@@ -197,7 +199,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                     var getArticles = MixModuleArticles.ReadViewModel.Repository
                     .GetModelListBy(articleExp
                     , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
-                    , PageSize, 0
+                    , pageSize, pageIndex
                     , _context: context, _transaction: transaction);
                     if (getArticles.IsSucceed)
                     {
@@ -209,7 +211,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                     var getArticles = MixModuleArticles.ReadViewModel.Repository
                     .GetModelListBy(articleExp
                     , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
-                    , PageSize, 0
+                    , PageSize, pageIndex
                     , _context: context, _transaction: transaction);
                     if (getArticles.IsSucceed)
                     {

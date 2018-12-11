@@ -1,10 +1,13 @@
 <!--     *********     BLOGS 1      *********      -->
-
+@model Mix.Cms.Lib.ViewModels.MixModules.ReadMvcViewModel
 <div class="blogs-1" id="blogs-1">
 
     <div class="container">
         <div class="row">
+            @if (Model.Data.PageSize.HasValue)
+            {
 
+            }
             <div class="col-md-10 ml-auto mr-auto">
                 <h2 class="title">Latest Blogposts</h2>
 
