@@ -39,14 +39,13 @@ namespace Mix.Cms.Web.Controllers
         [Route("")]
         [Route("{culture}")]
         [Route("{culture}/{seoName}")]
-        [Route("{culture}/{seoName}/{pageSize}/{pageIndex}")]
         public async System.Threading.Tasks.Task<IActionResult> Index(
-            string culture, string seoName, int? pageSize = 1, int? pageIndex = 0)
+            string culture, string seoName)
         {
             if (MixService.GetConfig<bool>("IsInit"))
             {
                 //Go to landing page
-                return await PageAsync(seoName, pageSize, pageIndex);
+                return await PageAsync(seoName);
             }
             else
             {
@@ -113,10 +112,11 @@ namespace Mix.Cms.Web.Controllers
             return await PageAsync("404");
         }
 
-        async System.Threading.Tasks.Task<IActionResult> PageAsync(string seoName, int? pageSize = 1, int? pageIndex = 0)//Expression<Func<MixPage, bool>> predicate, int? pageIndex = null, int pageSize = 10)
+        async System.Threading.Tasks.Task<IActionResult> PageAsync(string seoName)//Expression<Func<MixPage, bool>> predicate, int? pageIndex = null, int pageSize = 10)
         {
             // Home Page
-
+            int.TryParse(Request.Query["pageSize"], out int pageSize);
+            int.TryParse(Request.Query["pageIndex"], out int pageIndex);
             var getPage = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
 
             var cacheKey = $"page_{_culture}_{seoName}_{pageSize}_{pageIndex}";

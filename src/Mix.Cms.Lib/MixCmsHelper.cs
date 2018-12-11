@@ -98,14 +98,12 @@ namespace Mix.Cms.Lib
             return cates;
         }
 
-
         public static string GetRouterUrl(string routerName, object routeValues, HttpRequest request, IUrlHelper Url)
         {
             return string.Format("{0}://{1}{2}", request.Scheme, request.Host,
                         Url.RouteUrl(routerName, routeValues)
                         );
         }
-
 
         public static string FormatPrice(double? price, string oldPrice = "0")
         {
@@ -126,6 +124,7 @@ namespace Mix.Cms.Lib
             }
             return oldPrice;
         }
+
         public static bool CheckIsPrice(string number)
         {
             if (number == null)

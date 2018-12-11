@@ -1,7 +1,7 @@
 ﻿@model Mix.Cms.Lib.ViewModels.MixArticles.ReadMvcViewModel
 @{
     string culture = ViewBag.culture;
-}
+}   
 @section Seo{
     <meta property="og:type" content="article" />
     <meta property="og:url" content="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}")" />

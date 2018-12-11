@@ -46,6 +46,12 @@
     <ProjectReference Include="..\Mix.Cms.Hub\Mix.Cms.Hub.csproj" />
     <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\Shared\Templates\Default\Widgets\_Pagination.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
   
 
 </Project>

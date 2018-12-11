@@ -317,7 +317,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 foreach (var item in ModuleNavs)
                 {
                     item.IsActived = true;
-                    item.Module.LoadData(articleId: Id);
+                    item.Module.LoadData(articleId: Id, _context: _context, _transaction: _transaction);
                 }
             }
             var otherModuleNavs = MixModules.ReadMvcViewModel.Repository.GetModelListBy(

@@ -6,7 +6,7 @@
         <div class="row">
 
             <div class="col-md-10 ml-auto mr-auto">
-                <h2 class="title">Latest Blogposts</h2>
+                <h2 class="title">Latest Themes @Model.Data.TotalPage</h2>
 
                 <br />
                 @foreach(var item in Model.Data.Items){
@@ -14,13 +14,13 @@
                     <div class="row">
                         <div class="col-md-7">
                             <h3 class="card-title">
-                                <a href="@item.Property("url")">@item.Property("title")</a>
+                                <a target="_blank" href="@item.Property("url")">@item.Property("title")</a>
                             </h3>
                             <p class="card-description">
-                               @item.Property("description")<a href="@item.Property("url")"> Read More </a>
+                               @item.Property("description")<a target="_blank" href="@item.Property("url")"> Read More </a>
                             </p>
                             <p class="author">
-                                by <a href="@item.Property("url")"><b>Anthony Ha</b></a>, 5 days ago
+                                by <a target="_blank" href="@item.Property("url")"><b>@item.Property("author")</b></a>
                             
                         </div>
                         <div class="col-md-5">
@@ -32,7 +32,50 @@
                     </div>
                 </div>
                 }
-                
+                @if (Model.Data.TotalPage > 1)
+                {
+                    <div class="tr-pagination text-center">
+                        <ul class="pagination">
+                            @if (Model.Data.PageIndex > 0)
+                            {
+                                <li class="float-left">
+                                    <a class="page-numbers"
+                                       asp-controller="@ViewContext.RouteData.Values["Controller"]"
+                                       asp-action="@ViewContext.RouteData.Values["Action"]"
+                                       asp-route-pageSize="@Model.Data.PageSize"
+                                       asp-route-pageIndex="@(Model.Data.PageIndex-1)">
+                                        Previous
+                                    </a>
+                                </li>
+                            }
+                            @for (int i = 0; i < Model.Data.TotalPage; i++)
+                            {
+                                string cl = i == Model.Data.PageIndex ? "active" : string.Empty;
+                                <li class="@cl">
+                                    <a class="page-numbers"
+                                       asp-controller="@ViewContext.RouteData.Values["Controller"]"
+                                       asp-action="@ViewContext.RouteData.Values["Action"]"
+                                       asp-route-pageSize="@Model.Data.PageSize"
+                                       asp-route-pageIndex="@i">
+                                        @(i + 1)
+                                    </a>
+                                </li>
+                            }
+                            @if (Model.Data.PageIndex < Model.Data.TotalPage - 1)
+                            {
+                                <li class="float-right">
+                                    <a class="page-numbers"
+                                       asp-controller="@ViewContext.RouteData.Values["Controller"]"
+                                       asp-action="@ViewContext.RouteData.Values["Action"]"
+                                       asp-route-pageSize="@Model.Data.PageSize"
+                                       asp-route-pageIndex="@(Model.Data.PageIndex+1)">
+                                        Next
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+               }
 
             </div>
 
