@@ -105,7 +105,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         {
             get
             {
-                if (Image != null && (Image.IndexOf("http") == -1 && Image[0] != '/'))
+                if (Image != null && (Image.IndexOf("http") == -1))
                 {
                     return CommonHelper.GetFullPath(new string[] {
                     Domain,  Image
@@ -157,6 +157,9 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
         [JsonProperty("moduleNavs")]
         public List<MixArticleModules.ReadViewModel> ModuleNavs { get; set; }
+                
+        [JsonProperty("articleNavs")]
+        public List<MixArticleArticles.ReadViewModel> ArticleNavs { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -209,6 +212,9 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     item.Module.LoadData(articleId: Id, _context: _context, _transaction: _transaction);
                 }
             }
+
+            // Related Articles
+            ArticleNavs = MixArticleArticles.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
         }
 
         #endregion Overrides

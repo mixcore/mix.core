@@ -43,6 +43,7 @@ app.component('mediaNavs', {
             }
         };
         ctrl.loadMedias = async function (pageIndex) {
+            
             if (pageIndex !== undefined) {
                 ctrl.request.pageIndex = pageIndex;
             }
@@ -55,7 +56,6 @@ app.component('mediaNavs', {
             }
             if ($rootScope.globalSettings) {
                 $rootScope.isBusy = true;
-                console.log(mediaService);
                 var resp = await mediaService.getList(ctrl.request);
                 if (resp && resp.isSucceed) {
                     ctrl.medias = resp.data;
@@ -80,6 +80,7 @@ app.component('mediaNavs', {
     }],
     bindings: {
         mediaNavs: '=',
+        sourceFieldName:'=',
         loadMedia: '&',
         onDelete: '&',
         onUpdate: '&'

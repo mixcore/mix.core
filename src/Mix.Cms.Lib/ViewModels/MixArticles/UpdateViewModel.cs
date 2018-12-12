@@ -172,7 +172,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         {
             get
             {
-                if (Image != null && (Image.IndexOf("http") == -1 && Image[0] != '/'))
+                if (Image != null && (Image.IndexOf("http") == -1))
                 {
                     return CommonHelper.GetFullPath(new string[] {
                     Domain,  Image
@@ -297,17 +297,17 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 MediaNavs = getArticleMedia.Data.OrderBy(p => p.Priority).ToList();
                 MediaNavs.ForEach(n => n.IsActived = true);
             }
-            var otherMedias = MixMedias.UpdateViewModel.Repository.GetModelListBy(m => !MediaNavs.Any(n => n.MediaId == m.Id), "CreatedDateTime", 1, 10, 0, _context, _transaction);
-            foreach (var item in otherMedias.Data.Items)
-            {
-                MediaNavs.Add(new MixArticleMedias.ReadViewModel()
-                {
-                    MediaId = item.Id,
-                    Image = item.FullPath,
-                    ArticleId = Id,
-                    Description = item.Title
-                });
-            }
+            // var otherMedias = MixMedias.UpdateViewModel.Repository.GetModelListBy(m => !MediaNavs.Any(n => n.MediaId == m.Id), "CreatedDateTime", 1, 10, 0, _context, _transaction);
+            // foreach (var item in otherMedias.Data.Items)
+            // {
+            //     MediaNavs.Add(new MixArticleMedias.ReadViewModel()
+            //     {
+            //         MediaId = item.Id,
+            //         Image = item.FullPath,
+            //         ArticleId = Id,
+            //         Description = item.Title
+            //     });
+            // }
             // Modules
             var getArticleModule = MixArticleModules.ReadViewModel.Repository.GetModelListBy(
                 n => n.ArticleId == Id && n.Specificulture == Specificulture, _context, _transaction);

@@ -113,7 +113,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             get
             {
-                if (Image != null && (Image.IndexOf("http") == -1 && Image[0] != '/'))
+                if (Image != null && (Image.IndexOf("http") == -1))
                 {
                     return CommonHelper.GetFullPath(new string[] {
                     Domain,  Image
