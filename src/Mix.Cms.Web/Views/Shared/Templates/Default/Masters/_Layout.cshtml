@@ -51,7 +51,7 @@
     <link rel="stylesheet" href="~/css/app-vendor.min.css" />
     <base href="/@ViewBag.culture">
 
-    @if (!string.IsNullOrEmpty(MixService.GetConfig<string>("GA_KEY", ViewBag.culture)))
+    @if (!string.IsNullOrEmpty(MixService.GetConfig<string>("Google_Analytic_Key", ViewBag.culture)))
     {
         <!-- Google Analytics -->
         <script>
@@ -60,7 +60,7 @@
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-        ga('create', '@(MixService.GetConfig<string>("GA_KEY", ViewBag.culture))', 'auto');
+        ga('create', '@(MixService.GetConfig<string>("Google_Analytic_Key", ViewBag.culture))', 'auto');
         ga('send', 'pageview');
         </script>
         <!-- End Google Analytics -->

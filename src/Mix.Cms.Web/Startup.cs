@@ -114,7 +114,16 @@ namespace Mix.Cms.Web
                 opt.AllowAnyMethod();
             });
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            var cachePeriod = env.IsDevelopment() ? "600" : "604800";
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    // Requires the following import:
+                    // using Microsoft.AspNetCore.Http;
+                    ctx.Context.Response.Headers.Append("Cache-Control", $"public, max-age={cachePeriod}");
+                }
+            });
             app.UseCookiePolicy();
             app.UseSignalR(route =>
             {
