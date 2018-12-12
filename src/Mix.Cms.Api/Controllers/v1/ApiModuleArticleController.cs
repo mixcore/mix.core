@@ -148,6 +148,8 @@ namespace Mix.Cms.Api.Controllers.v1
                 default:
 
                     var listItemResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);
+                    listItemResult.Data.Items.ForEach(n => n.Article.DetailsUrl = MixCmsHelper.GetRouterUrl(
+                                "article", new { seoName = n.Article.SeoName }, Request, Url));
                     return JObject.FromObject(listItemResult);
             }
         }

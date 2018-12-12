@@ -17,11 +17,13 @@ modules.component('limitString', {
             };
             ctrl.shortString = function () {
                 var data = decodeURIComponent(ctrl.content);
-                if (ctrl.max < data.length) {
-                    ctrl.shortenString = data.replace(/[+]/g, ' ').substr(0, ctrl.max) + ' ...';
-                }
-                else {
-                    ctrl.shortenString = data.replace(/[+]/g, ' ');
+                if (data) {
+                    if (ctrl.max < data.length) {
+                        ctrl.shortenString = data.replace(/[+]/g, ' ').substr(0, ctrl.max) + ' ...';
+                    }
+                    else {
+                        ctrl.shortenString = data.replace(/[+]/g, ' ');
+                    }
                 }
             }
             ctrl.view = function () {

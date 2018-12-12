@@ -13,8 +13,10 @@ modules.component('navs', {
         ctrl.goToDetails = async function (nav) {
             $location.path(ctrl.detailsUrl + nav[ctrl.key]);
         };
-        ctrl.limString = function(str, max){            
-            return (str.length>max)?  str.substring(0, max) + ' ...': str;
+        ctrl.limString = function(str, max){          
+            if(str){  
+                return (str.length>max)?  str.substring(0, max) + ' ...': str;
+            }
         };
     }],
     bindings: {

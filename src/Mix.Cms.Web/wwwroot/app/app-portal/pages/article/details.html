@@ -29,9 +29,9 @@
                             </div>
                         </pane-v>
                         <pane-v title="Medias">
-                            <!--   <article-medias article="activedData" medias="mediaData"></article-medias>-->
+                            <article-medias article="activedData" medias="activedData.mediaNavs"></article-medias>
                             <!--<navigation data="activedData.mediaNavs" prefix="media"></navigation>-->
-                            <navs data="activedData.mediaNavs" prefix="'media'" model="'nav-article-media'"></navs>
+                            <!--<navs data="activedData.mediaNavs" prefix="'media'" model="'nav-article-media'"></navs>-->
                         </pane-v>
                         <pane-v title="Related">
                             <related-navs request="request" source-id="activedData.id" culture="activedData.specificulture" prefix="'article'" navs="activedData.articleNavs" data="data" load-data="getList(pageIndex)"></related-navs>

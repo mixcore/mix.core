@@ -1,85 +1,85 @@
 <!-- Main content -->
 <section class="" ng-init="getSingle()">
-    <form ng-class="{'submitted': submitted}" ng-submit="save(activedData)">
-        <actions preview-url="activedData.detailsUrl" back-url="'/portal/article/list'"></actions>
-        <div class="row">
-            <section class="col-8">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <article-main article="activedData"></article-main>
-                    </div>
-                </div>
-                <div class="row">
-                    <tabs-v class="col-lg-12">
-                        <pane-v title="General">
-                            <article-general article="activedData"></article-general>
-                        </pane-v>
-                        <pane-v title="Seo">
-                            <article-seo article="activedData"></article-seo>
-                        </pane-v>
-                        <pane-v title="Parents">
-                            <article-parents article="activedData"></article-parents>
-                        </pane-v>
-                        <pane-v title="Modules">
-                            <article-modules article="activedData"></article-modules>
-                        </pane-v>
-                        <pane-v title="Layout">
-                            <div class="tab-pane">
-                                <template-editor folder-type="'Articles'" template="activedData.view" templates="activedData.templates"></template-editor>
-                            </div>
-                        </pane-v>
-                        <pane-v title="Medias">
-                            <!--   <article-medias article="activedData" medias="mediaData"></article-medias>-->
-                            <!--<navigation data="activedData.mediaNavs" prefix="media"></navigation>-->
-                            <navs data="activedData.mediaNavs" prefix="'media'" model="'nav-article-media'"></navs>
-                        </pane-v>
-                        <pane-v title="Related">
-                            <related-navs request="request" source-id="activedData.id" culture="activedData.specificulture" prefix="'article'" navs="activedData.articleNavs" data="data" load-data="getList(pageIndex)"></related-navs>
-                        </pane-v>
-                    </tabs-v>
-                </div>
-            </section>
-            <section class="col-4" style="padding-left:0">
-                <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
-                <url-alias url-alias="activedData.urlAlias"></url-alias>
-                <div class="card">
-                    <h6 class="card-header">
-                        Info
-                    </h6>
-                    <div class="card-body">
-                        <statuses status="activedData.status">
-                        <div class="form-group">
-                            <span class="switch">
-                                <label>
-                                    <input type="checkbox" ng-model="activedData.isClone" class="switch">
-                                    Clone
-                                </label>
-                            </span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Created Date Time</label>
-                            <div class="input-group input-group-sm mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1"><i class="mi mi-Calendar"></i></span>
-                                </div>
-                                <input ng-model="activedData.createdDateTime" type="text" class="form-control" readonly="readonly">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Created By</label>
-                            <div class="input-group input-group-sm mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1"><i class="mi mi-Contact"></i></span>
-                                </div>
-                                <input ng-model="activedData.createdBy" class="form-control" readonly="readonly">
-                            </div>
+        <form ng-class="{'submitted': submitted}" ng-submit="save(activedData)">
+            <actions preview-url="activedData.detailsUrl" back-url="'/portal/article/list'"></actions>
+            <div class="row">
+                <section class="col-8">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <article-main article="activedData"></article-main>
                         </div>
                     </div>
-                </div>
-                <custom-image header="'Image'" type="'Articles'" folder="activedData.seoName" src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
-                <custom-image header="'Thumnail'" type="'Articles'" folder="activedData.seoName" src-url="activedData.thumbnailUrl" src="activedData.thumbnail" auto="'true'"></custom-image>
-            </section>
-        </div>
-    </form>
-</section>
-<!-- /.content -->
+                    <div class="row">
+                        <tabs-v class="col-lg-12">
+                            <pane-v title="General">
+                                <article-general article="activedData"></article-general>
+                            </pane-v>
+                            <pane-v title="Seo">
+                                <article-seo article="activedData"></article-seo>
+                            </pane-v>
+                            <pane-v title="Parents">
+                                <article-parents article="activedData"></article-parents>
+                            </pane-v>
+                            <pane-v title="Modules">
+                                <article-modules article="activedData"></article-modules>
+                            </pane-v>
+                            <pane-v title="Layout">
+                                <div class="tab-pane">
+                                    <template-editor folder-type="'Articles'" template="activedData.view" templates="activedData.templates"></template-editor>
+                                </div>
+                            </pane-v>
+                            <pane-v title="Medias">
+                                <article-medias article="activedData" medias="activedData.mediaNavs"></article-medias>
+                                <!--<navigation data="activedData.mediaNavs" prefix="media"></navigation>-->
+                                <!--<navs data="activedData.mediaNavs" prefix="'media'" model="'nav-article-media'"></navs>-->
+                            </pane-v>
+                            <pane-v title="Related">
+                                <related-navs request="request" source-id="activedData.id" culture="activedData.specificulture" prefix="'article'" navs="activedData.articleNavs" data="data" load-data="getList(pageIndex)"></related-navs>
+                            </pane-v>
+                        </tabs-v>
+                    </div>
+                </section>
+                <section class="col-4" style="padding-left:0">
+                    <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
+                    <url-alias url-alias="activedData.urlAlias"></url-alias>
+                    <div class="card">
+                        <h6 class="card-header">
+                            Info
+                        </h6>
+                        <div class="card-body">
+                            <statuses status="activedData.status">
+                            <div class="form-group">
+                                <span class="switch">
+                                    <label>
+                                        <input type="checkbox" ng-model="activedData.isClone" class="switch">
+                                        Clone
+                                    </label>
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Created Date Time</label>
+                                <div class="input-group input-group-sm mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1"><i class="mi mi-Calendar"></i></span>
+                                    </div>
+                                    <input ng-model="activedData.createdDateTime" type="text" class="form-control" readonly="readonly">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Created By</label>
+                                <div class="input-group input-group-sm mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1"><i class="mi mi-Contact"></i></span>
+                                    </div>
+                                    <input ng-model="activedData.createdBy" class="form-control" readonly="readonly">
+                                </div>
+                            </div>
+                        </statuses></div>
+                    </div>
+                    <custom-image header="'Image'" type="'Articles'" folder="activedData.seoName" src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
+                    <custom-image header="'Thumnail'" type="'Articles'" folder="activedData.seoName" src-url="activedData.thumbnailUrl" src="activedData.thumbnail" auto="'true'"></custom-image>
+                </section>
+            </div>
+        </form>
+    </section>
+    <!-- /.content -->
