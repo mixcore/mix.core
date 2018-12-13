@@ -67,9 +67,8 @@
         </div>
         <div ng-switch-when="16">
             <!--upload-->
-            <custom-image header="''" type="'Modules'" folder="activedPage.seoName" src-url="$ctrl.data.value" ng-src="{{$ctrl.data.value}}"
-                auto="'true'">
-        </div>
+            <custom-image header="''" type="'Modules'" folder="activedPage.seoName" src-url="$ctrl.data.value" ng-src="{{$ctrl.data.value}}" auto="'true'">
+        </custom-image></div>
         <div ng-switch-when="17">
             <!--Color-->
             <input class="form-control {{$ctrl.inputClass}}" type="color" ng-model="$ctrl.data.value" placeholder="{{$ctrl.title}}">
@@ -88,7 +87,7 @@
                             <label class="input-group-text" for="inputGroupSelect01">Options</label>                            
                         </div>
                         <select class="custom-select" id="inputGroupSelect01">
-                            <option selected>Choose...</option>
+                            <option selected="selected">Choose...</option>
                             <option value="fa-500px">fa-500px</option>
                             <option value="&lt;i class=&quot;fab fa-accessible-icon&quot;&gt;&lt;/i&gt;">fa-accessible-icon</option>
                             <option value="&lt;i class=&quot;fab fa-accusoft&quot;&gt;&lt;/i&gt;">fa-accusoft</option>

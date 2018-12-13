@@ -31,14 +31,12 @@
         </thead>
 
         <tbody class="sortable">
-            <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="article"
-                sort-model-id="{{item.article.id}}">
+            <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="article" sort-model-id="{{item.article.id}}">
                 <td style="cursor:move;" class="drag-header">
                     <span class="fas fa-sort"></span>
                 </td>
                 <td>
-                    <input type="text" value="{{item.priority}}" class="item-priority form-control form-control-sm d-inline"
-                        style="width:40px;">
+                    <input type="text" value="{{item.article.priority}}" class="item-priority form-control form-control-sm d-inline" style="width:40px;">
                 </td>
                 <td>
                     {{item.article.title}}
@@ -76,6 +74,6 @@
                 </td>
             </tr>
         </tbody>
-    </table>
+    </table>    
     <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end" a-class="page-link" paging-action="getList(page-1)" scroll-top="true"></paging>
 <!-- </section> -->

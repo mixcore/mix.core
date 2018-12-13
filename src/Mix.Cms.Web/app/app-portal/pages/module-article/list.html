@@ -31,14 +31,12 @@
         </thead>
 
         <tbody class="sortable">
-            <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="article"
-                sort-model-id="{{item.article.id}}">
+            <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="article" sort-model-id="{{item.article.id}}">
                 <td style="cursor:move;" class="drag-header">
                     <span class="fas fa-sort"></span>
                 </td>
                 <td>
-                    <input type="text" value="{{item.priority}}" class="item-priority form-control form-control-sm d-inline"
-                        style="width:40px;">
+                    <input type="text" value="{{item.priority}}" class="item-priority form-control form-control-sm d-inline" style="width:40px;">
                 </td>
                 <td>
                     {{item.article.title}}
