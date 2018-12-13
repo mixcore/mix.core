@@ -179,5 +179,6 @@ function FilterMoney() {
     return function (money) {
         return money.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     };
-}
-$('#editor').trumbowyg();
+} 
+$.trumbowyg.svgPath = '/assets/icons.svg';
+                
