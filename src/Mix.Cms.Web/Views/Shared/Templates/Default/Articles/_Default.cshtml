@@ -65,7 +65,6 @@
                         </div>
                         <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
                             <div class="card-body">
-                                
                                 <p>
                                 <fb-send class="hide-on-mb" app-id="'@(MixService.GetConfig<string>("FacebookAppId", ViewBag.culture as string))'"></fb-send>
                                 <fb-share></fb-share>
@@ -86,49 +85,19 @@
                         @Html.Raw(Model.Content)
                     </div>
                 </div>
+                @foreach (var nav in Model.ModuleNavs.OrderBy(n => n.Priority))
+                {
+                    var module = nav.Module; 
+                    if (module != null)
+                    {
+                        <partial name="@module.TemplatePath" model="@module" />
+                    }
+                }
+                <partial name="../Widgets/_Comments_Facebook.cshtml"/>
+        
             </div>
         </div>
         
-        <partial name="../Widgets/_Comments_Facebook.cshtml"/>
         
     </div>
 </div>
-@if(Model.ArticleNavs.Count>0)
-{
-<div class="section related-products" data-background-color="black">
-    <div class="container">
-        <h3 class="title text-center">You may also be interested in:</h3>
-        <div class="row">
-            @foreach (var item in Model.ArticleNavs)
-            {
-                var product = item.RelatedArticle;
-                <div class="col-sm-6 col-md-3">
-                    <div class="card card-product">
-                        <div class="card-image">
-                            <a href="@product.DetailsUrl">s
-                                <img class="img rounded" src="@product.ImageUrl" />
-                            </a>
-                        </div>
-                        <div class="card-body">
-                            @*<h6 class="category text-danger">Trending</h6>*@
-                            <h4 class="card-title">
-                                <a href="@product.DetailsUrl" class="card-link">@product.Title</a>
-                            </h4>
-                            <div class="card-description">
-                                @Html.Raw(product.Excerpt)
-                            </div>
-                            <div class="card-footer">
-                               
-                                @*
-                                <button class="btn btn-neutral btn-icon btn-round pull-right" rel="tooltip" title="" data-placement="left" data-original-title="Add to wishlist">
-                                    <i class="now-ui-icons ui-2_favourite-28"></i>
-                                </button>*@
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
-</div>
-}

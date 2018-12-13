@@ -29,10 +29,9 @@
                         <span class="fas fa-sort"></span>
                     </div>
                     <div class="col-sm-1">
-                        <input type="number" readonly="readonly" ng-model="nav.priority" class="item-priority form-control form-control-sm d-inline">
+                        <span ng-bind="nav.priority"></span>
                     </div>
                     <div class="col-sm-{{$ctrl.colWidth}}" ng-repeat="col in $ctrl.columns track by $index">
-                        
                         <module-data-preview data="nav.jItem[col.name]" width="50"></module-data-preview>
                     </div>
                     <div class="col-sm-{{$ctrl.lastColWidth}}">

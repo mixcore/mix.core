@@ -140,20 +140,7 @@
       "library": "Trumbowyg@2.11.1",
       "destination": "wwwroot/lib/portal/Trumbowyg/",
       "files": [
-        "trumbowyg.min.js",
-        "plugins/colors/trumbowyg.colors.min.js",
-        "plugins/base64/trumbowyg.base64.min.js",
-        "plugins/colors/ui/trumbowyg.colors.min.css",
-        "plugins/emoji/trumbowyg.emoji.min.js",
-        "plugins/emoji/ui/trumbowyg.emoji.min.css",
-        "plugins/fontfamily/trumbowyg.fontfamily.min.js",
-        "plugins/fontsize/trumbowyg.fontsize.min.js",
-        "plugins/history/trumbowyg.history.min.js",
-        "plugins/lineheight/trumbowyg.lineheight.min.js",
-        "plugins/resizimg/trumbowyg.resizimg.min.js",
-        "plugins/table/trumbowyg.table.min.js",
-        "plugins/table/ui/trumbowyg.table.min.css",
-        "plugins/upload/trumbowyg.upload.min.js",
+        "trumbowyg.min.js",       
         "ui/icons.svg",
         "ui/trumbowyg.min.css"
       ]

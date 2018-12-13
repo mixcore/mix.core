@@ -9,7 +9,7 @@ modules.component('trumboywEditor', {
                 $.trumbowyg.svgPath = '/assets/icons.svg';
                 setTimeout(function () {
                     ctrl.textArea = $(document.getElementById(ctrl.id));
-                    ctrl.textArea.trumbowyg(ngAppSettings.editorConfigurations.plugins)
+                    ctrl.textArea.trumbowyg()
                     .on('tbwchange ', function () { ctrl.content = ctrl.textArea.val() })    
                     .trumbowyg('html', ctrl.content);
                 }, 500);

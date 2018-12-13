@@ -70,8 +70,7 @@ app.filter('utcToLocal', FilterUtcDate)
                         ico: 'insertImage'
                     }
                 },
-                btns: [
-                    ['undo', 'redo'],
+                btns: [                   
                     ['table'],
                     ['emoji'],
                     ['formatting'],
@@ -181,3 +180,4 @@ function FilterMoney() {
         return money.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     };
 }
+$('#editor').trumbowyg();
