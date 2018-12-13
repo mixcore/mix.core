@@ -93,7 +93,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (Image != null && (Image.IndexOf("http") == -1))
+            if (Image != null && (Image.IndexOf("http") == -1) && Image[0] != '/')
             {
                 ImageUrl = CommonHelper.GetFullPath(new string[] {
                     Domain,  Image
@@ -107,7 +107,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         }
         public override Task<bool> ExpandViewAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (Image != null && (Image.IndexOf("http") == -1))
+            if (Image != null && (Image.IndexOf("http") == -1) && Image[0] != '/')
             {
                 ImageUrl = CommonHelper.GetFullPath(new string[] {
                     Domain,  Image

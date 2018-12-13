@@ -74,7 +74,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Domain = MixService.GetConfig<string>("Domain", Specificulture) ?? "/";
-            if (Image != null && (Image.IndexOf("http") == -1))
+            if (Image != null && (Image.IndexOf("http") == -1) && Image[0] != '/')
             {
                 ImageUrl = CommonHelper.GetFullPath(new string[] {
                     Domain,  Image
@@ -89,7 +89,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public override Task<bool> ExpandViewAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Domain = MixService.GetConfig<string>("Domain", Specificulture) ?? "/";
-            if (Image != null && (Image.IndexOf("http") == -1))
+            if (Image != null && (Image.IndexOf("http") == -1) && Image[0] != '/')
             {
                 ImageUrl = CommonHelper.GetFullPath(new string[] {
                     Domain,  Image
