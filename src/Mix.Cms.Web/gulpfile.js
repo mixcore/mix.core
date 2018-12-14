@@ -19,7 +19,7 @@ var minify = composer(uglifyjs, console);
 var dest = './wwwroot';//For publish folder use "./bin/Release/PublishOutput/"; 
 //C:\\Git\\GitHub\\Queen-Beauty\\QueenBeauty\\
 var paths = {
-    webroot: "./app/",///wwwroot
+    webroot: "./wwwroot/",///wwwroot
     jsObtions: {},
     htmlOptions: { collapseWhitespace: false },
     cssOptions: {}, //showLog : (True, false) to trun on or off of the log
@@ -95,10 +95,10 @@ paths.css = {
 };
 paths.views = {
     src: [
-        paths.webroot + "app-shared/**/*.html",
-        paths.webroot + "app-portal/**/*.html",
-        paths.webroot + "app-client/**/*.html",
-        paths.webroot + "app-init/**/*.html"
+        "./app/app-shared/**/*.html",
+        "./app/app-portal/**/*.html",
+        "./app/app-client/**/*.html",
+        "./app/app-init/**/*.html"
     ],
     dest: './wwwroot/'
 };
@@ -172,6 +172,23 @@ gulp.task("min:views", function (cb) {
 });
 
 
+gulp.task("clean:js", function (cb) {
+    rimraf(paths.portal.dest, cb);
+});
+
+gulp.task("clean:clientJs", function (cb) {
+    rimraf(paths.client.dest, cb);
+});
+
+gulp.task("clean:sharedJs", function (cb) {
+    rimraf(paths.sharedJs.dest, cb);
+});
+
+gulp.task("clean:css", function (cb) {
+    rimraf(paths.css.dest, cb);
+});
+
+gulp.task("clean", ["clean:js", "clean:clientJs", "clean:sharedJs", "clean:css"]);
 gulp.task("min", ["min:portal", "min:portalApp", "min:init", "min:initApp"
     , "min:clientApp", "min:clientJs", "min:sharedJs", "min:css"]);
-gulp.task("build", ["min:views", "min"]);
+gulp.task("build", ["clean", "min:views", "min"]);

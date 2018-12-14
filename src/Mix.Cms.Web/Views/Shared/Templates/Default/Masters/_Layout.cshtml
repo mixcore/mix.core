@@ -16,7 +16,7 @@
     <script>document.write('<meta property="og:url" content="' + window.top.location + '" />')</script>
     
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    @RenderSection("Seo", false)
+    
     <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @ViewData["Title"]</title>
 
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
@@ -28,26 +28,6 @@
     <link href="/Content/Templates/Default/assets/css/now-ui-kit.css?v=1.2.2" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="/Content/Templates/Default/assets/demo/demo.css" rel="stylesheet" />
-    <!-- Google Tag Manager -->
-    <script>
-        (function (w, d, s, l, i) {
-            w[l] = w[l] || [];
-            w[l].push({
-                'gtm.start': new Date().getTime(),
-                event: 'gtm.js'
-            });
-            var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s),
-                dl = l !== 'dataLayer' ? '&l=' + l : '';
-            j.async = true;
-            j.src =
-                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-            f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-NKDMSK6');
-    </script>
-    <!-- End Google Tag Manager -->
-    <!--[STYLES]-->
-    @RenderSection("Styles", false)
     <link rel="stylesheet" href="~/css/app-vendor.min.css" />
     <base href="/@ViewBag.culture">
 
@@ -95,6 +75,11 @@
         }(document, 'script', 'facebook-jssdk'));
         </script>
     }
+    
+    <!--[STYLES]-->
+    @RenderSection("Seo", false)
+    @RenderSection("Styles", false)
+    
 </head>
 
 <body class="@ViewData["PageClass"]" ng-app="MixClient" ng-controller="AppClientController" ng-init="init('@ViewBag.culture')">

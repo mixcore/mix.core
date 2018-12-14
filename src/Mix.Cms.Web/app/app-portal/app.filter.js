@@ -63,6 +63,8 @@ app.filter('utcToLocal', FilterUtcDate)
         editorConfigurations: {
             core: {},
             plugins: {
+                removeformatPasted: true,
+                imageWidthModalEdit: true,
                 btnsDef: {
                     // Customizables dropdowns
                     image: {
@@ -75,6 +77,8 @@ app.filter('utcToLocal', FilterUtcDate)
                     ['emoji'],
                     ['formatting'],
                     ['strong', 'em', 'del', 'underline'],
+                    ['fontsize'],
+                    ['highlight'],
                     ['link'],
                     ['image'],
                     ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
@@ -179,5 +183,6 @@ function FilterMoney() {
     return function (money) {
         return money.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     };
-}
-$('#editor').trumbowyg();
+} 
+$.trumbowyg.svgPath = '/assets/icons.svg';
+                
