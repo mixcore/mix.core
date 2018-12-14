@@ -7,6 +7,7 @@ modules.component('trumboywEditor', {
             ctrl.id = Math.random().toString(36).substring(7);
             ctrl.init = function (e) {
                 $.trumbowyg.svgPath = '/assets/icons.svg';
+                
                 setTimeout(function () {
                     ctrl.textArea = $(document.getElementById(ctrl.id));
                     ctrl.textArea.trumbowyg()
