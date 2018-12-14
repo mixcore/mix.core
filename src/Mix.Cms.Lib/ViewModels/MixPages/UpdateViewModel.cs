@@ -166,7 +166,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 }
                 else
                 {
-                    return Thumbnail;
+                    return ImageUrl;
                 }
             }
         }
@@ -253,6 +253,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 Id = Repository.Max(c => c.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
+            if (!string.IsNullOrEmpty(Image) && Image[0] == '/') { Image = Image.Substring(1); }
+            if (!string.IsNullOrEmpty(Thumbnail) && Thumbnail[0] == '/') { Thumbnail = Thumbnail.Substring(1); }
             return base.ParseModel(_context, _transaction);
         }
 
