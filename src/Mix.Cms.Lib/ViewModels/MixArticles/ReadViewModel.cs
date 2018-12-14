@@ -92,24 +92,16 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             }
         }
 
+        [JsonProperty("thumbnailUrl")]
         public string ThumbnailUrl
         {
             get
             {
-                if (!string.IsNullOrEmpty(Thumbnail))
+                if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
-                    if (Thumbnail.IndexOf("http") == -1)
-                    {
-                        return CommonHelper.GetFullPath(new string[] {
-                            Domain,  Thumbnail
-
-                        });
-                    }
-                    else
-                    {
-                        return Thumbnail;
-                    }
-
+                    return CommonHelper.GetFullPath(new string[] {
+                    Domain,  Thumbnail
+                });
                 }
                 else
                 {

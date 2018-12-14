@@ -124,7 +124,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 }
                 else
                 {
-                    return Thumbnail;
+                    return ImageUrl;
                 }
             }
         }

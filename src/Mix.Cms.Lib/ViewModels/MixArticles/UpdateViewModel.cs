@@ -198,7 +198,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 }
                 else
                 {
-                    return Thumbnail;
+                    return ImageUrl;
                 }
             }
         }
@@ -397,7 +397,8 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     Image = CommonHelper.GetFullPath(new string[] { folder, filename });
                 }
             }
-
+            if(!string.IsNullOrEmpty(Image) && Image[0] == '/'){ Image = Image.Substring(1);}
+            if(!string.IsNullOrEmpty(Thumbnail) && Thumbnail[0] == '/'){ Thumbnail = Thumbnail.Substring(1);}
             Tags = ListTag.ToString(Newtonsoft.Json.Formatting.None);
             GenerateSEO();
 

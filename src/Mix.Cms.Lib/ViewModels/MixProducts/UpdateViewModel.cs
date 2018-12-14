@@ -237,7 +237,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
                 }
                 else
                 {
-                    return Thumbnail;
+                    return ImageUrl;
                 }
             }
         }
@@ -361,7 +361,8 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
                     Image = CommonHelper.GetFullPath(new string[] { folder, filename });
                 }
             }
-
+            if (Image[0] == '/') { Image = Image.Substring(1); }
+            if (Thumbnail[0] == '/') { Thumbnail = Thumbnail.Substring(1); }
             Tags = ListTag.ToString(Newtonsoft.Json.Formatting.None);
             NormalPrice = MixCmsHelper.ReversePrice(StrNormalPrice);
             DealPrice = MixCmsHelper.ReversePrice(StrDealPrice);

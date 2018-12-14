@@ -89,8 +89,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         #region Views
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }
-
-
+        
         [JsonProperty("view")]
         public MixTemplates.ReadViewModel View { get; set; }
 
