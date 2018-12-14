@@ -63,6 +63,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("image")]
         public string Image { get; set; }
 
+        [JsonProperty("thumbnail")]
+        public string Thumbnail { get; set; }
+
         [JsonProperty("seoName")]
         public string SeoName { get; set; }
 
@@ -119,7 +122,23 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 }
             }
         }
-
+        [JsonProperty("thumbnailUrl")]
+        public string ThumbnailUrl
+        {
+            get
+            {
+                if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
+                {
+                    return CommonHelper.GetFullPath(new string[] {
+                    Domain,  Thumbnail
+                });
+                }
+                else
+                {
+                    return ImageUrl;
+                }
+            }
+        }
         [JsonProperty("childs")]
         public List<ReadViewModel> Childs { get; set; }
 
