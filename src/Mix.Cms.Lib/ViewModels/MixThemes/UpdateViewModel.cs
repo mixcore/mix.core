@@ -20,8 +20,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
     public class UpdateViewModel
       : ViewModelBase<MixCmsContext, MixTheme, UpdateViewModel>
     {
-        public const int templatePageSize = 10;
-
         #region Properties
 
         #region Models
@@ -31,6 +29,9 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         [JsonProperty("name")]
         public string Name { get; set; }
+
+        [JsonProperty("image")]
+        public string Image { get; set; }
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
@@ -43,6 +44,26 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         #endregion Models
 
         #region Views
+        [JsonProperty("domain")]
+        public string Domain { get { return MixService.GetConfig<string>("Domain") ?? "/"; } }
+
+        [JsonProperty("imageUrl")]
+        public string ImageUrl
+        {
+            get
+            {
+                if (Image != null && (Image.IndexOf("http") == -1) && Image[0] != '/')
+                {
+                    return CommonHelper.GetFullPath(new string[] {
+                    Domain,  Image
+                });
+                }
+                else
+                {
+                    return Image;
+                }
+            }
+        }
 
         [JsonProperty("isActived")]
         public bool IsActived { get; set; }
@@ -151,7 +172,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 }
 
             }
-            if (Id == 0)
+            if (Id == 0 && (TemplateAsset.Content == null && TemplateAsset.FileStream == null))
             {
                 string defaultFolder = CommonHelper.GetFullPath(new string[] { MixConstants.Folder.TemplatesFolder, Name == "Default" ? "Default" 
                     : MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateFolder) });
@@ -304,7 +325,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             }
 
             // Create default template if create new without import template assets
-            if (result.IsSucceed && Id == 0 && TemplateAsset.Content == null)
+            if (Id == 0 && (TemplateAsset.Content == null && TemplateAsset.FileStream == null))
             {
                 string defaultFolder = CommonHelper.GetFullPath(new string[] { MixConstants.Folder.TemplatesFolder, Name == "Default" ? "Default" :
                     MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateFolder) });
@@ -466,7 +487,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             {
                 FileRepository.Instance.UnZipFile($"{TemplateAsset.Filename}{TemplateAsset.Extension}", TemplateAsset.FileFolder);
                 FileRepository.Instance.CopyWebDirectory($"{TemplateAsset.FileFolder}/Assets", AssetFolder);
-                FileRepository.Instance.CopyWebDirectory($"{TemplateAsset.FileFolder}/Templates", TemplateFolder);
+                FileRepository.Instance.CopyDirectory($"{MixConstants.Folder.WebRootPath}/{TemplateAsset.FileFolder}/Templates", TemplateFolder);
                 FileRepository.Instance.DeleteWebFolder(TemplateAsset.FileFolder);
 
                 // Save template files to db                

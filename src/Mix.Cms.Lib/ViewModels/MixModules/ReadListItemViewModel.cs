@@ -39,11 +39,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
-        [JsonIgnore]
-        public string Domain { get; set; }
 
-        [JsonProperty("imageUrl")]
-        public string ImageUrl { get; set; }
+        [JsonProperty("domain")]
+        public string Domain { get { return MixService.GetConfig<string>("Domain") ?? "/"; } }
 
         [JsonProperty("fields")]
         public string Fields { get; set; }
@@ -54,6 +52,24 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
         #endregion Models
+
+        [JsonProperty("imageUrl")]
+        public string ImageUrl
+        {
+            get
+            {
+                if (Image != null && (Image.IndexOf("http") == -1) && Image[0] != '/')
+                {
+                    return CommonHelper.GetFullPath(new string[] {
+                    Domain,  Image
+                });
+                }
+                else
+                {
+                    return Image;
+                }
+            }
+        }
 
         #endregion Properties
 
@@ -73,32 +89,11 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Domain = MixService.GetConfig<string>("Domain", Specificulture) ?? "/";
-            if (Image != null && (Image.IndexOf("http") == -1) && Image[0] != '/')
-            {
-                ImageUrl = CommonHelper.GetFullPath(new string[] {
-                    Domain,  Image
-                });
-            }
-            else
-            {
-                ImageUrl = Image;
-            }
         }
 
         public override Task<bool> ExpandViewAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Domain = MixService.GetConfig<string>("Domain", Specificulture) ?? "/";
-            if (Image != null && (Image.IndexOf("http") == -1) && Image[0] != '/')
-            {
-                ImageUrl = CommonHelper.GetFullPath(new string[] {
-                    Domain,  Image
-                });
-            }
-            else
-            {
-                ImageUrl = Image;
-            }
+           
             return base.ExpandViewAsync(_context, _transaction);
         }
 

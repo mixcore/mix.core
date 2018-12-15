@@ -57,9 +57,28 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #endregion Models
 
         #region Views
+        [JsonProperty("domain")]
+        public string Domain { get { return MixService.GetConfig<string>("Domain") ?? "/"; } }
 
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }
+        [JsonProperty("imageUrl")]
+        public string ImageUrl
+        {
+            get
+            {
+                if (Image != null && (Image.IndexOf("http") == -1) && Image[0] != '/')
+                {
+                    return CommonHelper.GetFullPath(new string[] {
+                    Domain,  Image
+                });
+                }
+                else
+                {
+                    return Image;
+                }
+            }
+        }
 
         [JsonProperty("columns")]
         public List<ModuleFieldViewModel> Columns

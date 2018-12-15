@@ -21,6 +21,7 @@
         @(MixService.GetConfig<string>("Phone", lang))
         try
         {
+            <h1>@Model.TemplatePath</h1>
             <partial name="@Model.TemplatePath" model="@Model" />
         }
         catch (System.InvalidOperationException invalidOperationException)

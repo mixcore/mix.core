@@ -1,8 +1,0 @@
-@model Mix.Cms.Lib.ViewModels.MixPages.ReadMvcViewModel
-@foreach (var nav in Model.Modules.OrderBy(n => n.Priority))
-{
-    if (nav != null)
-    {
-        <partial name="@nav.Module.TemplatePath" model="@nav.Module" />
-    }
-}
