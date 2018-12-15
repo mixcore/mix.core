@@ -280,25 +280,34 @@ namespace Mix.Cms.Web.Controllers
 
         void GeneratePageDetailsUrls(Lib.ViewModels.MixPages.ReadMvcViewModel page)
         {
-            foreach (var articleNav in page.Articles.Items)
+            if (page.Articles != null)
             {
-                if (articleNav.Article != null)
+                foreach (var articleNav in page.Articles.Items)
                 {
-                    articleNav.Article.DetailsUrl = GenerateDetailsUrl("Article", new { seoName = articleNav.Article.SeoName });
+                    if (articleNav.Article != null)
+                    {
+                        articleNav.Article.DetailsUrl = GenerateDetailsUrl("Article", new { seoName = articleNav.Article.SeoName });
+                    }
                 }
             }
 
-            foreach (var productNav in page.Products.Items)
+            if (page.Products != null)
             {
-                if (productNav.Product != null)
+                foreach (var productNav in page.Products.Items)
                 {
-                    productNav.Product.DetailsUrl = GenerateDetailsUrl("Product", new { seoName = productNav.Product.SeoName });
+                    if (productNav.Product != null)
+                    {
+                        productNav.Product.DetailsUrl = GenerateDetailsUrl("Product", new { seoName = productNav.Product.SeoName });
+                    }
                 }
             }
 
-            foreach (var nav in page.Modules)
+            if (page.Modules != null)
             {
-                GeneratePageDetailsUrls(nav.Module);
+                foreach (var nav in page.Modules)
+                {
+                    GeneratePageDetailsUrls(nav.Module);
+                }
             }
         }
 
