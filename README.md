@@ -24,3 +24,15 @@ dotnet run
 ![Mixcore CMS default template with Now UI Pro](https://github.com/mixcore/mix.core/blob/master/assets/front-end.jpg?raw=true "Mixcore CMS default template with Now UI Pro")
   - **Admin Portal:**
 ![Mixcore Admin Portal Bootstrap 4.x](https://github.com/mixcore/mix.core/blob/master/assets/admin-portal.jpg?raw=true "Mixcore CMS Admin Portal Bootstrap 4")
+
+## How to contribute
+
+Fork this repo to your GitHub account, clone it locally and try to follow
+the following simple guidelines.
+
+* **Never** write any code in your master branch
+* When writing code, do it in a specific feature branch
+* Send your pull request from that feature branch
+* After your pull request has been accepted, sync the changes into master from the upstream remote
+* Delete you feature branch
+* Again, **NEVER** write any code in your master branch ;)
