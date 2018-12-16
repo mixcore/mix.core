@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.Models;
 using Mix.Domain.Core.ViewModels;
@@ -128,6 +129,7 @@ namespace Mix.Cms.Lib.ViewModels
             get
             {
                 _webPath = CommonHelper.GetFullPath(new string[] {
+                     MixService.GetConfig<string>("Domain"),
                     FileFolder,
                     $"{Filename}{Extension}"
                 });
@@ -345,19 +347,37 @@ namespace Mix.Cms.Lib.ViewModels
     }
     public class SiteMap
     {
-        public DateTime LastMod { get; set; }
+        public DateTime? LastMod { get; set; }
         public string ChangeFreq { get; set; }
         public double Priority { get; set; }
         public string Loc { get; set; }
-
+        public List<SitemapLanguage> OtherLanguages { get; set; }
         public XElement ParseXElement()
         {
+            XNamespace xhtml = "http://www.w3.org/1999/xhtml";
+            XNamespace ns = @"http://www.sitemaps.org/schemas/sitemap/0.9";
+            XNamespace xsi = @"http://www.w3.org/1999/xhtml";
+
             var e = new XElement("url");
-            e.Add(new XElement("lastmod", LastMod.ToString("yyyy-MM-dd")));
+            e.Add(new XElement("lastmod", LastMod.HasValue ? LastMod.Value : DateTime.UtcNow));
             e.Add(new XElement("changefreq", ChangeFreq));
             e.Add(new XElement("priority", Priority));
-            e.Add(new XElement("loc", Loc));           
+            e.Add(new XElement("loc", Loc));
+            foreach (var item in OtherLanguages)
+            {
+                e.Add(new XElement(xsi + "link",
+                     new XAttribute(XNamespace.Xmlns + "xhtml", xsi.NamespaceName),
+                    new XAttribute("rel", "alternate"),
+                    new XAttribute("hreflang", item.HrefLang),
+                    new XAttribute("href", item.Href)
+                    ));
+            }
             return e;
         }
+    }
+    public class SitemapLanguage
+    {
+        public string HrefLang { get; set; }
+        public string Href { get; set; }
     }
 }

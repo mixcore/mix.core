@@ -358,6 +358,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 Id = Repository.Max(c => c.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
+            LastModified = DateTime.UtcNow;
             if (Properties != null && Properties.Count > 0)
             {
                 JArray arrProperties = new JArray();
