@@ -1,27 +1,21 @@
 ﻿@{
-    ViewData["Title"] = Model.Title;
-    ViewData["SeoTitle"] = Model.SeoTitle;
-    ViewData["SeoKeywords"] = Model.SeoKeywords;
-    ViewData["SeoDescription"] = Model.SeoDescription;
     string lang = ViewBag.culture;
-
 }
 @section Seo{
+    <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @Model.Title</title>
     <meta property="og:type" content="article" />
     <meta property="og:url" content="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}")" />
     <meta property="og:title" content="@Model.Title" />
     <meta property="og:description"
-          content="@Model.Excerpt" />
-    <meta property="og:image" content="@($"{Context.Request.Scheme}://{Context.Request.Host}{Model.Image}")" />
+          content="@Model.SeoDescription" />
+    <meta property="og:image" content="@Model.ImageUrl" />
 }
 <div>
-    <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>    
     @if (!string.IsNullOrEmpty(Model.TemplatePath))
     {
         @(MixService.GetConfig<string>("Phone", lang))
         try
         {
-            <h1>@Model.TemplatePath</h1>
             <partial name="@Model.TemplatePath" model="@Model" />
         }
         catch (System.InvalidOperationException invalidOperationException)

@@ -272,7 +272,7 @@ namespace Mix.Cms.Api.Controllers.v1
             MixService.SetConfig(MixConstants.CONST_SETTING_LANGUAGE, model.Culture.Specificulture);
 
             InitCmsService sv = new InitCmsService();
-            var initResult = await sv.InitCms(model.Culture);
+            var initResult = await sv.InitCms(model.SiteName, model.Culture);
             if (initResult.IsSucceed)
             {
                 await InitRolesAsync();

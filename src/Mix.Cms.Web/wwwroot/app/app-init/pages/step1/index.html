@@ -78,6 +78,12 @@
                         ng-model="initCmsModel.culture"
                         ng-options="item in settings.cultures track by $index">
                 </select>-->
+                <div class="input-group no-border input-lg">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><em class="now-ui-icons now-ui-icons objects_key-25"></em></span>
+                        </div>
+                        <input ng-model="initCmsModel.siteName" type="text" class="form-control" placeholder="Site Name">
+                    </div>
                 <h5 class="card-description text-white">Select culture </h5>
                 <select class="btn btn-secondary custom-select input-lg" ng-options="item as item.fullName for item in settings.cultures track by item.specificulture" ng-model="initCmsModel.culture"></select>
             </div>

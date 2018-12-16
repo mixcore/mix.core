@@ -21,7 +21,7 @@ namespace Mix.Cms.Lib.Services
         {
         }
 
-        public async Task<RepositoryResponse<bool>> InitCms(InitCulture culture)
+        public async Task<RepositoryResponse<bool>> InitCms(string siteName, InitCulture culture)
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>();
             MixCmsContext context = null;
@@ -49,14 +49,17 @@ namespace Mix.Cms.Lib.Services
 
                     if (!isInit)
                     {
+                        MixService.SetConfig<string>("SiteName", siteName);
                         isSucceed = InitCultures(culture, context, transaction);
 
                         isSucceed = isSucceed && InitPositions(context, transaction);
 
+                        isSucceed = isSucceed && await InitConfigurationsAsync(siteName, culture, context, transaction);
+                        isSucceed = isSucceed && await InitLanguagesAsync(culture, context, transaction);
+
                         isSucceed = isSucceed && InitThemes(context, transaction);
 
-                        isSucceed = isSucceed && await InitConfigurationsAsync(culture, context, transaction);
-                        isSucceed = isSucceed && await InitLanguagesAsync(culture, context, transaction);
+                        
                     }
                     else
                     {
@@ -151,12 +154,16 @@ namespace Mix.Cms.Lib.Services
         }
 
         
-        private async Task<bool> InitConfigurationsAsync(InitCulture culture, MixCmsContext context, IDbContextTransaction transaction)
+        private async Task<bool> InitConfigurationsAsync(string siteName, InitCulture culture, MixCmsContext context, IDbContextTransaction transaction)
         {
             /* Init Configs */
             var configurations = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_CONFIGURATIONS, "data", true, "{}");
             var obj = JObject.Parse(configurations.Content);
             var arrConfiguration = obj["data"].ToObject<List<MixConfiguration>>();
+            if (!string.IsNullOrEmpty(siteName))
+            {
+                arrConfiguration.Find(c => c.Keyword == "SiteName").Value = siteName;
+            }
             var result = await ViewModels.MixConfigurations.ReadMvcViewModel.ImportConfigurations(arrConfiguration, culture.Specificulture,  context, transaction);
             return result.IsSucceed;
 

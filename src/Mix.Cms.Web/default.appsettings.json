@@ -27,17 +27,17 @@
       "Favicon": "",
       "LanguageVersion": "1",
       "Logo": "",
-      "SettingVersion": "1",
-      "SiteName": "Site Name",
+      "SettingVersion": "1",      
       "Theme": "Default",
       "ThemeId": "1"
     }
   },
   "GlobalSettings": {
     "IsInit": false,
+    "SiteName": "Site Name",
     "DefaultCulture": "en-us",
     "DefaultTemplate": "_Default",
-    "DefaultTheme": "Default",
+    "DefaultTheme": "Default_Blank",
     "DefaultContentStatus": "2",
     "DefaultTemplateFolder": "Default",
     "DefaultTemplateLayout": "_Layout",

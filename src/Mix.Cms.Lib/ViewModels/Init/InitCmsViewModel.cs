@@ -57,6 +57,9 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
 
         [JsonProperty("culture")]
         public InitCulture Culture { get; set; }
+
+        [JsonProperty("siteName")]
+        public string SiteName { get; set; } = "MixCore";
         #endregion
 
         public InitCmsViewModel()

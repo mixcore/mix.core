@@ -70,7 +70,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.FileFolder,
                     MixConstants.Folder.TemplatesAssetFolder,
-                    SeoHelper.GetSEOString(Name) });
+                    SeoHelper.GetSEOString($"{MixService.GetConfig<string>("SiteName")}-{Name}")
+                });
             }
         }
 
@@ -79,7 +80,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[] { MixConstants.Folder.TemplatesFolder, Name });
+                return CommonHelper.GetFullPath(new string[] { MixConstants.Folder.TemplatesFolder, SeoHelper.GetSEOString($"{MixService.GetConfig<string>("SiteName")}-{Name}") });
             }
         }
 
