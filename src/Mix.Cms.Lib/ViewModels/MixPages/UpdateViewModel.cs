@@ -235,7 +235,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public override MixPage ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             GenerateSEO();
-
+            
             var navParent = ParentNavs?.FirstOrDefault(p => p.IsActived);
 
             if (navParent != null)
@@ -253,6 +253,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 Id = Repository.Max(c => c.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
+            LastModified = DateTime.UtcNow;
             if (!string.IsNullOrEmpty(Image) && Image[0] == '/') { Image = Image.Substring(1); }
             if (!string.IsNullOrEmpty(Thumbnail) && Thumbnail[0] == '/') { Thumbnail = Thumbnail.Substring(1); }
             return base.ParseModel(_context, _transaction);

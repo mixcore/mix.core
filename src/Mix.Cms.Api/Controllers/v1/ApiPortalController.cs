@@ -193,57 +193,88 @@ namespace Mix.Cms.Api.Controllers.v1
         // GET api/category/id
         [HttpGet, HttpOptions]
         [Route("sitemap")]
-        public RepositoryResponse<FileViewModel> GetSiteMap()
+        public RepositoryResponse<FileViewModel> SiteMap()
         {
-            
-            XNamespace ns = @"http://www.sitemaps.org/schemas/sitemap/0.9";
-            XNamespace xsi = @"http://www.w3.org/1999/xhtml";
-            //XElement root = new XElement("urlset", new XAttribute(XNamespace.Xmlns+xsi,xsi.NamespaceName));
-            var root = new XElement("urlset",
-            new XAttribute("xlmns", @"http://www.sitemaps.org/schemas/sitemap/0.9")
-            );
-            var pages = Lib.ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelList();
-            foreach (var page in pages.Data)
+            try
             {
-                page.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                "page", new { seoName = page.SeoName }, Request, Url);
-                var sitemap = new SiteMap()
+                var root = new XElement("urlset",
+                new XAttribute("xlmns", @"http://www.sitemaps.org/schemas/sitemap/0.9")
+                );
+                var pages = Lib.ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelList();
+                List<int> handledPageId = new List<int>();
+                foreach (var page in pages.Data)
                 {
-                    ChangeFreq = "monthly",
-                    LastMod = DateTime.UtcNow,
-                    Loc = page.DetailsUrl,
-                    Priority = 0.3
-                };
-                root.Add(sitemap.ParseXElement());
-            }
-
-            var articles = Lib.ViewModels.MixArticles.ReadListItemViewModel.Repository.GetModelList();
-            foreach (var article in articles.Data)
-            {
-                article.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                "page", new { seoName = article.SeoName }, Request, Url);
-                var sitemap = new SiteMap()
-                {
-                    ChangeFreq = "monthly",
-                    LastMod = DateTime.UtcNow,
-                    Loc = article.DetailsUrl,
-                    Priority = 0.3
-                };
-                root.Add(sitemap.ParseXElement());
-            }
-
-            string folder = $"Sitemaps/{DateTime.UtcNow.Year}/{DateTime.UtcNow.Month}/{DateTime.UtcNow.Day}";
-            FileRepository.Instance.CreateDirectoryIfNotExist(folder);
-            string filePath = $"wwwroot/{folder}/sitemap.xml";
-            root.Save(filePath);
-            return new RepositoryResponse<FileViewModel>() { IsSucceed = true,
-                Data = new FileViewModel() {
-                    Extension = ".xml",
-                    Filename = "sitemap",
-                    FileFolder = folder
+                        page.DetailsUrl = MixCmsHelper.GetRouterUrl(
+                                        "page", new { seoName = page.SeoName, culture = page.Specificulture }, Request, Url);
+                    var otherLanguages = pages.Data.Where(p => p.Id == page.Id && p.Specificulture != page.Specificulture);
+                    var lstOther = new List<SitemapLanguage>();
+                    foreach (var item in otherLanguages)
+                    {
+                        lstOther.Add(new SitemapLanguage() {
+                            HrefLang = item.Specificulture,
+                            Href= MixCmsHelper.GetRouterUrl(
+                                        "page", new { seoName = page.SeoName, culture = item.Specificulture }, Request, Url)
+                        } );
+                    }
+                    
+                    var sitemap = new SiteMap()
+                    {
+                        ChangeFreq = "monthly",
+                        LastMod = DateTime.UtcNow,
+                        Loc = page.DetailsUrl,
+                        Priority = 0.3,
+                        OtherLanguages = lstOther
+                    };
+                    root.Add(sitemap.ParseXElement());
                 }
-            };
 
+                var articles = Lib.ViewModels.MixArticles.ReadListItemViewModel.Repository.GetModelList();
+                foreach (var article in articles.Data)
+                {
+                    article.DetailsUrl = MixCmsHelper.GetRouterUrl(
+                                    "article", new { seoName = article.SeoName, culture = article.Specificulture }, Request, Url);
+                    var otherLanguages = pages.Data.Where(p => p.Id == article.Id && p.Specificulture != article.Specificulture);
+                    var lstOther = new List<SitemapLanguage>();
+                    foreach (var item in otherLanguages)
+                    {
+                        lstOther.Add(new SitemapLanguage()
+                        {
+                            HrefLang = item.Specificulture,
+                            Href = MixCmsHelper.GetRouterUrl(
+                                        "page", new { seoName = article.SeoName, culture = item.Specificulture }, Request, Url)
+                        });
+                    }
+                    var sitemap = new SiteMap()
+                    {
+                        ChangeFreq = "monthly",
+                        LastMod = DateTime.UtcNow,
+                        Loc = article.DetailsUrl,
+                        OtherLanguages = lstOther,
+                        Priority = 0.3
+                    };
+                    root.Add(sitemap.ParseXElement());
+                }
+
+                string folder = $"Sitemaps";
+                FileRepository.Instance.CreateDirectoryIfNotExist(folder);
+                string filename = $"sitemap";
+                string filePath = $"wwwroot/{folder}/{filename}.xml";
+                root.Save(filePath);
+                return new RepositoryResponse<FileViewModel>()
+                {
+                    IsSucceed = true,
+                    Data = new FileViewModel()
+                    {
+                        Extension = ".xml",
+                        Filename = filename,
+                        FileFolder = folder
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                return new RepositoryResponse<FileViewModel>() { Exception = ex };
+            }
         }
 
         #endregion Get
