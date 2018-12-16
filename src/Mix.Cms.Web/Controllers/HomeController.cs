@@ -148,11 +148,11 @@ namespace Mix.Cms.Web.Controllers
                 {
                     getPage.Data.LoadData(pageIndex: pageIndex, pageSize: pageSize);
                 }
-                //_memoryCache.Set(cacheKey, getPage.Data);
-                //if (!MixConstants.cachedKeys.Contains(cacheKey))
-                //{
-                //    MixConstants.cachedKeys.Add(cacheKey);
-                //}
+                _memoryCache.Set(cacheKey, getPage.Data);
+                if (!MixConstants.cachedKeys.Contains(cacheKey))
+                {
+                    MixConstants.cachedKeys.Add(cacheKey);
+                }
             }
 
             if (getPage.IsSucceed && getPage.Data.View != null)

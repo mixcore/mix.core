@@ -82,7 +82,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.FileFolder,
                     MixConstants.Folder.TemplatesAssetFolder,
-                    SeoHelper.GetSEOString(Name) });
+                    SeoHelper.GetSEOString($"{MixService.GetConfig<string>("SiteName")}-{Name}") });
             }
         }
 
@@ -91,7 +91,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[] { MixConstants.Folder.TemplatesFolder, Name });
+                return CommonHelper.GetFullPath(new string[] {
+                    MixConstants.Folder.TemplatesFolder,
+                    SeoHelper.GetSEOString($"{MixService.GetConfig<string>("SiteName")}-{Name}")
+                });
             }
         }
 
@@ -174,10 +177,13 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             }
             if (Id == 0 && (TemplateAsset.Content == null && TemplateAsset.FileStream == null))
             {
-                string defaultFolder = CommonHelper.GetFullPath(new string[] { MixConstants.Folder.TemplatesFolder, Name == "Default" ? "Default" 
-                    : MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateFolder) });
+
+                string defaultFolder = CommonHelper.GetFullPath(new string[] {
+                    MixConstants.Folder.TemplatesFolder,
+                    MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateFolder) });
                 bool copyResult = FileRepository.Instance.CopyDirectory(defaultFolder, TemplateFolder);
-                var files = copyResult ? FileRepository.Instance.GetFilesWithContent(TemplateFolder) : new List<FileViewModel>();
+
+                var files = FileRepository.Instance.GetFilesWithContent(TemplateFolder);
                 //TODO: Create default asset
                 foreach (var file in files)
                 {
@@ -194,8 +200,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                             ThemeName = Model.Name,
                             FolderType = file.FolderName,
                             ModifiedBy = CreatedBy
-                        });
-                    var saveResult = await template.SaveModelAsync(true, _context, _transaction);
+                        }, _context, _transaction);
+                    var saveResult = template.SaveModel(true, _context, _transaction);
                     result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
                     if (!saveResult.IsSucceed)
                     {
@@ -327,10 +333,13 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             // Create default template if create new without import template assets
             if (Id == 0 && (TemplateAsset.Content == null && TemplateAsset.FileStream == null))
             {
-                string defaultFolder = CommonHelper.GetFullPath(new string[] { MixConstants.Folder.TemplatesFolder, Name == "Default" ? "Default" :
+
+                string defaultFolder = CommonHelper.GetFullPath(new string[] {
+                    MixConstants.Folder.TemplatesFolder,
+                    Name == "Default"? "Default":
                     MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateFolder) });
                 bool copyResult = FileRepository.Instance.CopyDirectory(defaultFolder, TemplateFolder);
-                var files = copyResult ? FileRepository.Instance.GetFilesWithContent(TemplateFolder) : new List<FileViewModel>();
+                var files = FileRepository.Instance.GetFilesWithContent(TemplateFolder);
                 //TODO: Create default asset
                 foreach (var file in files)
                 {

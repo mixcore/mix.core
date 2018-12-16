@@ -1,11 +1,16 @@
 ﻿@model Mix.Cms.Lib.ViewModels.MixArticles.ReadMvcViewModel
+@{
+    string culture = ViewBag.culture;
+       
+}
 @section Seo{
+    <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @Model.Title</title>
     <meta property="og:type" content="article" />
     <meta property="og:url" content="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}")" />
     <meta property="og:title" content="@Model.Title" />
     <meta property="og:description"
           content="@Model.SeoDescription" />
-    <meta property="og:image" content="@Model.ThumbnailUrl" />
+    <meta property="og:image" content="@Model.Title" />
 }
 @if (!string.IsNullOrEmpty(Model.TemplatePath))
 {
