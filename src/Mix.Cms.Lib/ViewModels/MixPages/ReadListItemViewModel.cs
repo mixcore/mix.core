@@ -38,6 +38,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("title")]
         public string Title { get; set; }
 
+         [JsonProperty("seoName")]
+        public string SeoName { get; set; }
+
         [JsonProperty("fields")]
         public string Fields { get; set; }
 
@@ -65,9 +68,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("thumbnail")]
         public string Thumbnail { get; set; }
-
-        [JsonProperty("seoName")]
-        public string SeoName { get; set; }
 
         [JsonProperty("seoDescription")]
         public string SeoDescription { get; set; }

@@ -35,6 +35,21 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // GET api/article/id
         [HttpGet, HttpOptions]
+        [Route("test")]
+        public async Task<RepositoryResponse<System.Xml.Linq.XElement>> test()
+        {
+            var e = new Lib.ViewModels.SiteMap()
+            {
+                LastMod = DateTime.UtcNow,
+                ChangeFreq = "monthly",
+                Loc= "loc",
+                Priority = 0.3
+            };
+            
+            return new RepositoryResponse<System.Xml.Linq.XElement>() { Data = e.ParseXElement() };
+        }
+         // GET api/article/id
+        [HttpGet, HttpOptions]
         [Route("delete/{id}")]
         public async Task<RepositoryResponse<MixArticle>> DeleteAsync(int id)
         {

@@ -21,6 +21,9 @@ using static Mix.Cms.Lib.MixEnums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.Account;
 using Mix.Cms.Lib.ViewModels.MixInit;
+using System.Xml.Linq;
+using System.Text;
+using System.Xml;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -185,6 +188,62 @@ namespace Mix.Cms.Api.Controllers.v1
                 IsSucceed = true,
                 Data = new DashboardViewModel()
             };
+        }
+
+        // GET api/category/id
+        [HttpGet, HttpOptions]
+        [Route("sitemap")]
+        public RepositoryResponse<FileViewModel> GetSiteMap()
+        {
+            
+            XNamespace ns = @"http://www.sitemaps.org/schemas/sitemap/0.9";
+            XNamespace xsi = @"http://www.w3.org/1999/xhtml";
+            //XElement root = new XElement("urlset", new XAttribute(XNamespace.Xmlns+xsi,xsi.NamespaceName));
+            var root = new XElement("urlset",
+            new XAttribute("xlmns", @"http://www.sitemaps.org/schemas/sitemap/0.9")
+            );
+            var pages = Lib.ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelList();
+            foreach (var page in pages.Data)
+            {
+                page.DetailsUrl = MixCmsHelper.GetRouterUrl(
+                                "page", new { seoName = page.SeoName }, Request, Url);
+                var sitemap = new SiteMap()
+                {
+                    ChangeFreq = "monthly",
+                    LastMod = DateTime.UtcNow,
+                    Loc = page.DetailsUrl,
+                    Priority = 0.3
+                };
+                root.Add(sitemap.ParseXElement());
+            }
+
+            var articles = Lib.ViewModels.MixArticles.ReadListItemViewModel.Repository.GetModelList();
+            foreach (var article in articles.Data)
+            {
+                article.DetailsUrl = MixCmsHelper.GetRouterUrl(
+                                "page", new { seoName = article.SeoName }, Request, Url);
+                var sitemap = new SiteMap()
+                {
+                    ChangeFreq = "monthly",
+                    LastMod = DateTime.UtcNow,
+                    Loc = article.DetailsUrl,
+                    Priority = 0.3
+                };
+                root.Add(sitemap.ParseXElement());
+            }
+
+            string folder = $"Sitemaps/{DateTime.UtcNow.Year}/{DateTime.UtcNow.Month}/{DateTime.UtcNow.Day}";
+            FileRepository.Instance.CreateDirectoryIfNotExist(folder);
+            string filePath = $"wwwroot/{folder}/sitemap.xml";
+            root.Save(filePath);
+            return new RepositoryResponse<FileViewModel>() { IsSucceed = true,
+                Data = new FileViewModel() {
+                    Extension = ".xml",
+                    Filename = "sitemap",
+                    FileFolder = folder
+                }
+            };
+
         }
 
         #endregion Get
