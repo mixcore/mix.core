@@ -47,6 +47,19 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
             }
         };
 
+        var _genrateSitemap = async function () {
+
+            var url = '/portal';            
+            url += '/sitemap';
+            var req = {
+                method: 'GET',
+                url: url
+            };
+            return _getApiResult(req).then(function (response) {
+                return response.data;
+            });
+        };
+
         var _setSettings = async function (settings) {
             if (settings && settings.cultures.length > 0) {
                 localStorageService.set('settings', settings);
@@ -167,6 +180,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
         adminCommonFactory.checkfile = _checkfile;
         adminCommonFactory.fillSettings = _fillSettings;
         adminCommonFactory.settings = _settings;
+        adminCommonFactory.genrateSitemap = _genrateSitemap;
         return adminCommonFactory;
 
     }]);

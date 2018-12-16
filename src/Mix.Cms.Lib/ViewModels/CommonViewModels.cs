@@ -9,8 +9,10 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels
@@ -260,9 +262,102 @@ namespace Mix.Cms.Lib.ViewModels
             return result;
         }
     }
+    public class MobileComponent
+    {
+        [JsonProperty("id")]
+        public int Id { get; set; }
 
+        [JsonProperty("componentType")]
+        public string ComponentType { get; set; }
+
+        [JsonProperty("styleName")]
+        public string StyleName { get; set; }
+
+        [JsonProperty("dataType")]
+        public string DataType { get; set; }
+
+        [JsonProperty("dataValue")]
+        public string DataValue { get; set; }
+
+        [JsonProperty("dataSource")]
+        public List<MobileComponent> DataSource { get; set; }
+
+        public MobileComponent(XElement element)
+        {
+            if (element != null)
+            {
+                StyleName = element.Attribute("class")?.Value;
+
+                DataSource = new List<MobileComponent>();
+                var subElements = element.Elements();
+                if (subElements.Any())
+                {
+                    if (element.Attribute("data") != null)
+                    {
+                        ComponentType = "View";
+                        DataValue = element.Attribute("data")?.Value.Replace("Model.", "@Model.").Replace("{{", "").Replace("}}", "");
+                        DataType = "object_array";
+                    }
+                    else
+                    {
+                        ComponentType = "View";
+                        DataType = "component";
+                    }
+                    foreach (var subElement in subElements)
+                    {
+                        if (subElement.Name != "br")
+                        {
+                            DataSource.Add(new MobileComponent(subElement));
+                        }
+                    }
+                }
+                else
+                {
+                    switch (element.Name.LocalName)
+                    {
+                        case "img":
+                            ComponentType = "Image";
+                            DataType = "image_url";
+                            DataValue = element.Attribute("src")?.Value.Replace("Model.", "@Model.").Replace("{{", "").Replace("}}", "");
+                            break;
+
+                        case "br":
+                            break;
+
+                        default:
+                            ComponentType = "Text";
+
+                            string val = element.Value.Trim();
+                            if (val.Contains("{{") && val.Contains("}}"))
+                            {
+                                DataType = "object";
+                            }
+                            else
+                            {
+                                DataType = "string";
+                            }
+                            DataValue = element.Value.Trim().Replace("Model.", "@Model.").Replace("{{", "").Replace("}}", "");
+                            break;
+                    }
+                }
+            }
+        }
+    }
     public class SiteMap
     {
-        public string url { get; set; }
+        public DateTime LastMod { get; set; }
+        public string ChangeFreq { get; set; }
+        public double Priority { get; set; }
+        public string Loc { get; set; }
+
+        public XElement ParseXElement()
+        {
+            var e = new XElement("url");
+            e.Add(new XElement("lastmod", LastMod.ToString("yyyy-MM-dd")));
+            e.Add(new XElement("changefreq", ChangeFreq));
+            e.Add(new XElement("priority", Priority));
+            e.Add(new XElement("loc", Loc));           
+            return e;
+        }
     }
 }

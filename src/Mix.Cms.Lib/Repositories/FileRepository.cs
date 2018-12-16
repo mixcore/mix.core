@@ -320,7 +320,7 @@ namespace Mix.Cms.Lib.Repositories
         }
 
         
-        private void CreateDirectoryIfNotExist(string fullPath)
+        public void CreateDirectoryIfNotExist(string fullPath)
         {
             if (!string.IsNullOrEmpty(fullPath) && !Directory.Exists(fullPath))
             {

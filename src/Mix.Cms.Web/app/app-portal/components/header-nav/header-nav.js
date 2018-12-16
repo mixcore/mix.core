@@ -29,6 +29,11 @@
                 ctrl.addFavorite = function () {
                     $('#dlg-favorite').modal('show');
                 }
+                ctrl.generateSitemap = async function(){
+                    $rootScope.isBusy = true;
+                    var resp = await commonService.genrateSitemap();
+                    window.top.location.href = '/portal/file/details?folder=' + resp.fileFolder + '&filename=' + resp.fileName + resp.extension;
+                }
             }],
         bindings: {
             breadCrumbs: '=',

@@ -11,6 +11,7 @@
     <meta property="og:image" content="@Model.ImageUrl" />
 }
 <div>
+    <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
     @if (!string.IsNullOrEmpty(Model.TemplatePath))
     {
         @(MixService.GetConfig<string>("Phone", lang))

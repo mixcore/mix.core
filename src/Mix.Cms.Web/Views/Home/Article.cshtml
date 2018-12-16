@@ -12,6 +12,7 @@
           content="@Model.SeoDescription" />
     <meta property="og:image" content="@Model.Title" />
 }
+<preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
 @if (!string.IsNullOrEmpty(Model.TemplatePath))
 {
     try

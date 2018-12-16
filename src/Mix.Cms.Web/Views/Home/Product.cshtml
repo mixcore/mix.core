@@ -6,6 +6,7 @@
     ViewData["SeoKeywords"] = Model.SeoKeywords;
     ViewData["SeoDescription"] = Model.SeoDescription;
 }
+<preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
 @if (!string.IsNullOrEmpty(Model.TemplatePath))
 {
     try

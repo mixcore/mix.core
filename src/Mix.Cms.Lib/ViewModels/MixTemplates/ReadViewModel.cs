@@ -7,8 +7,9 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
+using System.Xml.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixTemplates
 {
@@ -57,6 +58,17 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         [JsonProperty("spaContent")]
         public string SpaContent { get; set; }
+
+        [JsonProperty("spaView")]
+        public XElement SpaView
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(SpaContent) 
+                    ? XElement.Parse(Regex.Replace(SpaContent, "(?<!\r)\n|\r\n|\t", "").Trim()) 
+                    : new XElement("div");
+            }
+        }
 
         [JsonProperty("scripts")]
         public string Scripts { get; set; }
