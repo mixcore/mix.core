@@ -67,7 +67,9 @@ namespace Mix.Cms.Lib.Services
             {
                 settings = FileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, ".json", string.Empty, true, "{}");
                 jsonSettings = JObject.Parse(settings.Content);
+
             }
+            
             instance.ConnectionStrings = JObject.FromObject(jsonSettings["ConnectionStrings"]);
             instance.Authentication = JObject.FromObject(jsonSettings["Authentication"]);
             instance.Translator = JObject.FromObject(jsonSettings["Translator"]);
@@ -153,6 +155,7 @@ namespace Mix.Cms.Lib.Services
             if (settings != null)
             {
                 JObject jsonSettings = JObject.Parse(settings.Content);
+                jsonSettings["GlobalSettings"]["LastUpdateConfiguration"] = DateTime.UtcNow;
                 jsonSettings["ConnectionStrings"] = instance.ConnectionStrings;
                 jsonSettings["GlobalSettings"] = instance.GlobalSettings;
                 jsonSettings["Translator"] = instance.Translator;

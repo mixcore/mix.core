@@ -108,6 +108,7 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 MixService.LoadFromDatabase();
                 MixService.Save();
+                result.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
             }
             return result;
         }
