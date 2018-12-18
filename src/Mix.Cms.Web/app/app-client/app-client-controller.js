@@ -9,6 +9,7 @@
                 if (!$rootScope.isBusy) {
                     $rootScope.isBusy = true;
                     commonService.fillSettings(lang).then(function (response) {
+                        $rootScope.isInit = true;
                         $scope.isInit = true;
                         $rootScope.globalSettings = response;
                         if ($rootScope.globalSettings) {

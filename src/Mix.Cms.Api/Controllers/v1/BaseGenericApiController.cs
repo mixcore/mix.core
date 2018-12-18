@@ -94,6 +94,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 }
                 AlertAsync("Add Cache", 200, cacheKey);
             }
+            data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
             return data;
         }
 
@@ -135,7 +136,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 }
                 AlertAsync("Add Cache", 200, cacheKey);
             }
-
+            data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
             //AlertAsync("Get List Page", 200, $"Get {request.Key} list page");
             return data;
         }

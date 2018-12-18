@@ -7,27 +7,29 @@
 
             ctrl.initModuleForm = async function () {
                 var resp = null;
-                if (!ctrl.moduleId) {
-                    resp = await moduleDataService.initModuleForm(ctrl.name);
-
+                if (!$rootScope.isInit) {
+                    setTimeout(function () { ctrl.initModuleForm(); }, 500);
+                } else {
+                    if (!ctrl.moduleId) {
+                        resp = await moduleDataService.initModuleForm(ctrl.name);
+                    }
+                    else {
+                        resp = await moduleDataService.getModuleData(ctrl.moduleId, ctrl.d, 'portal');
+                    }
+                    if (resp && resp.isSucceed) {
+                        ctrl.data = resp.data;
+                        ctrl.data.articleId = ctrl.articleId;
+                        ctrl.data.productId = ctrl.productId;
+                        ctrl.data.categoryId = ctrl.categoryId;
+                        $rootScope.isBusy = false;
+                        $scope.$apply();
+                        //ctrl.initEditor();
+                    }
+                    else {
+                        if (resp) { $rootScope.showErrors(resp.errors); }
+                        $scope.$apply();
+                    }
                 }
-                else {
-                    resp = await moduleDataService.getModuleData(ctrl.moduleId, ctrl.d, 'portal');
-                }
-                if (resp && resp.isSucceed) {
-                    ctrl.data = resp.data;
-                    ctrl.data.articleId = ctrl.articleId;
-                    ctrl.data.productId = ctrl.productId;
-                    ctrl.data.categoryId = ctrl.categoryId;
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
-                    //ctrl.initEditor();
-                }
-                else {
-                    if (resp) { $rootScope.showErrors(resp.errors); }
-                    $scope.$apply();
-                }
-
             };
 
             ctrl.loadModuleData = async function () {
