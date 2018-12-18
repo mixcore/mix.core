@@ -259,7 +259,7 @@ app.controller('MessengerController', ['$scope', function ($scope) {
     $scope.newMessage = function (msg) {
         $scope.messages.push(msg);
         $scope.$apply();
-        var objDiv = document.getElementById("mix-discussion");
+        var objDiv = document.getElementsByClassName("widget-conversation")[0];
         objDiv.scrollTop = objDiv.scrollHeight + 20;
     }
     

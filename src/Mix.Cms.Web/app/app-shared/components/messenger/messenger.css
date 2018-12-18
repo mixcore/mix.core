@@ -355,7 +355,7 @@ button.sendMsgBtn:hover {
 }
 
 #quest {
-  background: lightgray;
+  /* background: lightgray; */
   
   border-radius: 50%;
   border: 1px solid white;

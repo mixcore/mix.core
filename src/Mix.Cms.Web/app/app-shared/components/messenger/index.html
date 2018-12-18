@@ -50,7 +50,9 @@
             </div>
         </div>        
         </div>
-      <a class='btn-support' ng-click="toggle()" id="quest">🦊</a>
+        <a ng-if="user.loggedIn" class='btn-support' ng-click="toggle()" id="quest"><i class="fab fa-facebook-messenger"></i></a>
+        <a ng-if="!user.loggedIn" class='btn-support' ng-click="login()" id="quest"><i class="fab fa-facebook-messenger"></i></a>
+     
       </div>
 <!-- Chat Widget end -->
     <!-- <div class="card-header">
