@@ -155,9 +155,10 @@ namespace Mix.Cms.Lib.Services
             if (settings != null)
             {
                 JObject jsonSettings = JObject.Parse(settings.Content);
-                jsonSettings["GlobalSettings"]["LastUpdateConfiguration"] = DateTime.UtcNow;
+                
                 jsonSettings["ConnectionStrings"] = instance.ConnectionStrings;
                 jsonSettings["GlobalSettings"] = instance.GlobalSettings;
+                jsonSettings["GlobalSettings"]["LastUpdateConfiguration"] = DateTime.UtcNow;
                 jsonSettings["Translator"] = instance.Translator;
                 jsonSettings["LocalSettings"] = instance.LocalSettings;
                 jsonSettings["Authentication"] = instance.Authentication;
