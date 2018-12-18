@@ -127,14 +127,17 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
             }
             req.headers.Authorization = 'Bearer ' + req.Authorization || '';
             return $http(req).then(function (resp) {
-                //var resp = results.data;
-                if(!$rootScope.settings.lastUpdateConfiguration || 
+                if(req.url.indexOf('settings')==-1 &&
+                    (!$rootScope.settings || !$rootScope.settings.lastUpdateConfiguration || 
                     $rootScope.settings.lastUpdateConfiguration < resp.data.lastUpdateConfiguration)
-                {
-                    _initAllSettings();
+                ){
+                    _initAllSettings().then(()=>{
+                        return resp.data;
+                    });
 
+                }else{
+                    return resp.data;
                 }
-                return resp.data;
             },
                 function (error) {
                     if (error.status === 401) {
