@@ -167,6 +167,7 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["Keywords"] = getPage.Data.SeoKeywords;
                 ViewData["Image"] = getPage.Data.ImageUrl;
                 ViewData["PageClass"] = getPage.Data.CssClass;
+                getPage.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
                 return View(getPage.Data);
             }
             else
@@ -219,6 +220,7 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["Description"] = getArticle.Data.SeoDescription;
                 ViewData["Keywords"] = getArticle.Data.SeoKeywords;
                 ViewData["Image"] = getArticle.Data.ImageUrl;
+                getArticle.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
                 return View(getArticle.Data);
             }
             else
@@ -270,6 +272,7 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["Description"] = getProduct.Data.SeoDescription;
                 ViewData["Keywords"] = getProduct.Data.SeoKeywords;
                 ViewData["Image"] = getProduct.Data.ImageUrl;
+                getProduct.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
                 return View(getProduct.Data);
             }
             else
