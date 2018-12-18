@@ -128,7 +128,12 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
             req.headers.Authorization = 'Bearer ' + req.Authorization || '';
             return $http(req).then(function (resp) {
                 //var resp = results.data;
+                if(!$rootScope.settings.lastUpdateConfiguration || 
+                    $rootScope.settings.lastUpdateConfiguration < resp.data.lastUpdateConfiguration)
+                {
+                    _initAllSettings();
 
+                }
                 return resp.data;
             },
                 function (error) {

@@ -13,7 +13,16 @@ app.factory('ThemeService', ['CommonService', 'BaseService',
             };
             return await commonService.getApiResult(req, '');
         };
+        var _export = async function (id) {
+            var url = this.prefixUrl + '/export/' + id;
+            var req = {
+                method: 'GET',
+                url: url
+            };
+            return await commonService.getApiResult(req, '');
+        };
 
+        serviceFactory.export = _export;
         serviceFactory.syncTemplates = _syncTemplates;
         return serviceFactory;
 
