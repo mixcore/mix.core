@@ -19,7 +19,7 @@
     "Port": 587,
     "User": "",
     "Password": "",
-    "From": "Bearer",
+    "From": "support@mixcore.org",
     "FromName": "mix-core"
   },
   "Translator": {

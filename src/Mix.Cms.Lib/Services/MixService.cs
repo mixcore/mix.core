@@ -72,10 +72,10 @@ namespace Mix.Cms.Lib.Services
                 jsonSettings = JObject.Parse(settings.Content);
 
             }
-            
+
             instance.ConnectionStrings = JObject.FromObject(jsonSettings["ConnectionStrings"]);
             instance.Authentication = JObject.FromObject(jsonSettings["Authentication"]);
-            instance.Smtp = JObject.FromObject(jsonSettings["Smtp"]);
+            instance.Smtp = JObject.FromObject(jsonSettings["Smtp"] ?? new JObject());
             instance.Translator = JObject.FromObject(jsonSettings["Translator"]);
             instance.GlobalSettings = JObject.FromObject(jsonSettings["GlobalSettings"]);
             instance.LocalSettings = JObject.FromObject(jsonSettings["LocalSettings"]);
@@ -159,7 +159,7 @@ namespace Mix.Cms.Lib.Services
             if (settings != null)
             {
                 JObject jsonSettings = JObject.Parse(settings.Content);
-                
+
                 jsonSettings["ConnectionStrings"] = instance.ConnectionStrings;
                 jsonSettings["GlobalSettings"] = instance.GlobalSettings;
                 jsonSettings["GlobalSettings"]["LastUpdateConfiguration"] = DateTime.UtcNow;
