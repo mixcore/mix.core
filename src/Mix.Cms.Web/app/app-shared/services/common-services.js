@@ -25,6 +25,18 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
             else return true;
         };
 
+        var _sendMail = async function (subject, body) {
+                var url = '/portal/sendmail';
+                var req = {
+                    method: 'POST',
+                    url: url,
+                    data: { subject: subject, body: body }
+                };
+                return _getApiResult(req).then(function (response) {
+                    return response.data;
+                });
+        };
+
         var _getSettings = async function (culture) {
             var settings = localStorageService.get('settings');
             // && culture !== undefined && settings.lang === culture
@@ -175,6 +187,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
                     }
                 });
         };
+        adminCommonFactory.sendMail = _sendMail;
         adminCommonFactory.getApiResult = _getApiResult;
         adminCommonFactory.getSettings = _getSettings;
         adminCommonFactory.setSettings = _setSettings;

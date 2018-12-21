@@ -603,11 +603,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(4000);
 
+                    b.Property<string>("EdmTemplate")
+                        .HasMaxLength(250);
+
                     b.Property<string>("Fields")
                         .HasMaxLength(4000);
 
                     b.Property<string>("FormTemplate")
-                        .HasMaxLength(4000);
+                        .HasMaxLength(250);
 
                     b.Property<string>("Image")
                         .HasMaxLength(250);
@@ -1011,9 +1014,7 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Image")
                         .HasMaxLength(250);
 
-                    b.Property<int?>("Priority")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((0))");
+                    b.Property<int>("Priority");
 
                     b.Property<int>("Status")
                         .ValueGeneratedOnAdd()

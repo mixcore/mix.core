@@ -39,6 +39,12 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("template")]
         public string Template { get; set; }
 
+        [JsonProperty("formTemplate")]
+        public string FormTemplate { get; set; }
+
+        [JsonProperty("edmTemplate")]
+        public string EdmTemplate { get; set; }
+
         [Required]
         [JsonProperty("title")]
         public string Title { get; set; }
@@ -144,6 +150,71 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         #endregion Template
 
+        #region Form
+        [JsonProperty("forms")]
+        public List<MixTemplates.UpdateViewModel> Forms { get; set; }// Article Forms
+
+        [JsonIgnore]
+        public string FormFolderType
+        {
+            get
+            {
+                return MixEnums.EnumTemplateFolder.Forms.ToString();
+            }
+        }
+        [JsonProperty("formView")]
+        public MixTemplates.UpdateViewModel FormView { get; set; }
+
+        [JsonProperty("formFolder")]
+        public string FormFolder
+        {
+            get
+            {
+                return CommonHelper.GetFullPath(new string[]
+                {
+                    MixConstants.Folder.TemplatesFolder
+                    , ActivedTheme
+                    , MixEnums.EnumTemplateFolder.Forms.ToString()
+                }
+            );
+            }
+        }
+
+        #endregion Form
+
+        #region Edm
+        [JsonProperty("edms")]
+        public List<MixTemplates.UpdateViewModel> Edms { get; set; }// Article Edms
+
+        [JsonIgnore]
+        public string EdmFolderType
+        {
+            get
+            {
+                return MixEnums.EnumTemplateFolder.Edms.ToString();
+            }
+        }
+
+        [JsonProperty("edmView")]
+        public MixTemplates.UpdateViewModel EdmView { get; set; }
+
+        [JsonProperty("edmFolder")]
+        public string EdmFolder
+        {
+            get
+            {
+                return CommonHelper.GetFullPath(new string[]
+                {
+                    MixConstants.Folder.TemplatesFolder
+                    , ActivedTheme
+                    , MixEnums.EnumTemplateFolder.Edms.ToString()
+                }
+            );
+            }
+        }
+
+        #endregion Edm
+
         //Parent Article Id
         [JsonProperty("articleId")]
         public string ArticleId { get; set; }
@@ -179,6 +250,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 CreatedDateTime = DateTime.UtcNow;
             }
             Template = View != null ? string.Format(@"{0}/{1}{2}", View.FolderType, View.FileName, View.Extension) : Template;
+            FormTemplate = FormView != null ? string.Format(@"{0}/{1}{2}", FormView.FolderType, FormView.FileName, FormView.Extension) : FormTemplate;
+            EdmTemplate = EdmView != null ? string.Format(@"{0}/{1}{2}", EdmView.FolderType, EdmView.FileName, EdmView.Extension) : EdmTemplate;
+
             var arrField = Columns != null ? JArray.Parse(
                 Newtonsoft.Json.JsonConvert.SerializeObject(Columns.OrderBy(c => c.Priority).Where(
                     c => !string.IsNullOrEmpty(c.Name)))) : new JArray();
@@ -219,6 +293,24 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                     this.View?.FileFolder
                     , this.View?.FileName
                });
+
+            this.Forms = this.Forms ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
+                t => t.Theme.Name == ActivedTheme && t.FolderType == this.FormFolderType).Data;
+            this.FormView = MixTemplates.UpdateViewModel.GetTemplateByPath(FormTemplate, Specificulture, MixEnums.EnumTemplateFolder.Forms, _context, _transaction);
+            this.FormTemplate = CommonHelper.GetFullPath(new string[]
+               {
+                    this.FormView?.FileFolder
+                    , this.FormView?.FileName
+               });
+
+            this.Edms = this.Edms ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
+                t => t.Theme.Name == ActivedTheme && t.FolderType == this.EdmFolderType).Data;
+            this.EdmView = MixTemplates.UpdateViewModel.GetTemplateByPath(EdmTemplate, Specificulture, MixEnums.EnumTemplateFolder.Edms, _context, _transaction);
+            this.EdmTemplate = CommonHelper.GetFullPath(new string[]
+               {
+                    this.EdmView?.FileFolder
+                    , this.EdmView?.FileName
+               });
         }
 
         #region Async
@@ -230,7 +322,18 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixModule parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+
             var saveView = await View.SaveModelAsync(true, _context, _transaction);
+
+            if (saveView.IsSucceed && !string.IsNullOrEmpty(FormView.Content))
+            {
+                saveView = await FormView.SaveModelAsync(true, _context, _transaction);
+            }
+            if (saveView.IsSucceed && !string.IsNullOrEmpty(EdmView.Content))
+            {
+                saveView = await EdmView.SaveModelAsync(true, _context, _transaction);
+            }
+
             return new RepositoryResponse<bool>()
             {
                 IsSucceed = saveView.IsSucceed,
@@ -238,6 +341,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 Exception = saveView.Exception,
                 Errors = saveView.Errors
             };
+            
         }
 
         #endregion Async

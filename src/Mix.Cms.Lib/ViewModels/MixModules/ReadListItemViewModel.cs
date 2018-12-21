@@ -28,6 +28,12 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("template")]
         public string Template { get; set; }
 
+        [JsonProperty("formTemplate")]
+        public string FormTemplate { get; set; }
+
+        [JsonProperty("edmTemplate")]
+        public string EdmTemplate { get; set; }
+
         [JsonProperty("title")]
         public string Title { get; set; }
 
@@ -58,7 +64,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         {
             get
             {
-                if (Image != null && (Image.IndexOf("http") == -1) && Image[0] != '/')
+                if (!string.IsNullOrWhiteSpace(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
                     Domain,  Image

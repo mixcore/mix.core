@@ -7,6 +7,8 @@ app.controller('TemplateController', ['$scope', '$rootScope', '$routeParams', 'n
             'Layouts',
             'Pages',
             'Modules',
+            'Forms',
+            'Edms',
             'Products',
             'Articles',
             'Widgets',
