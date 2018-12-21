@@ -59,7 +59,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixUsers
         public List<NavUserRoleViewModel> UserRoles { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain => MixService.GetConfig<string>("Domain") ?? "/";
+        public string Domain => MixService.GetConfig<string>("Domain");
 
         [JsonProperty("avatarUrl")]
         public string AvatarUrl
