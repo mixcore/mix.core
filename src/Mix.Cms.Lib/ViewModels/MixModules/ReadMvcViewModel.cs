@@ -32,6 +32,12 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("template")]
         public string Template { get; set; }
 
+        [JsonProperty("formTemplate")]
+        public string FormTemplate { get; set; }
+
+        [JsonProperty("edmTemplate")]
+        public string EdmTemplate { get; set; }
+
         [JsonProperty("title")]
         public string Title { get; set; }
 
@@ -58,7 +64,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         #region Views
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain") ?? "/"; } }
+        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }

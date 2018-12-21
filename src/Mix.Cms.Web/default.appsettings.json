@@ -14,6 +14,14 @@
     "SecretKey": "mixcore-secret-key",
     "Issuer": "mix-core"
   },
+  "Smtp": {
+    "Server": "",
+    "Port": 587,
+    "User": "",
+    "Password": "",
+    "From": "support@mixcore.org",
+    "FromName": "mix-core"
+  },
   "Translator": {
 
   },

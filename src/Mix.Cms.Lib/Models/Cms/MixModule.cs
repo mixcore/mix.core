@@ -21,17 +21,18 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Description { get; set; }
         public string Fields { get; set; }
         public string Image { get; set; }
-        public DateTime? LastModified { get; set; }
         public string ModifiedBy { get; set; }
         public string Name { get; set; }
         public int Priority { get; set; }
         public int Status { get; set; }
         public string Template { get; set; }
         public string FormTemplate { get; set; }
+        public string EdmTemplate { get; set; }
         public string Title { get; set; }
         public int Type { get; set; }
         public int? PageSize { get; set; }
         public DateTime CreatedDateTime { get; set; }
+        public DateTime? LastModified { get; set; }
 
         public MixCulture SpecificultureNavigation { get; set; }
         public ICollection<MixArticleModule> MixArticleModule { get; set; }
