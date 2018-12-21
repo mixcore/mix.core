@@ -306,6 +306,13 @@ namespace Mix.Cms.Api.Controllers.v1
             return new RepositoryResponse<JObject>() { IsSucceed = model != null, Data = model };
         }
 
+        [HttpPost, HttpOptions]
+        [Route("sendmail")]
+        public void SendMail([FromBody]JObject model)
+        {
+            MixService.SendMail(model.Value<string>("subject"), model.Value<string>("body"), MixService.GetConfig<string>("ContactEmail", _lang));
+        }
+
         // POST api/category
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]

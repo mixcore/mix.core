@@ -521,9 +521,11 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Description).HasMaxLength(4000);
 
+                entity.Property(e => e.EdmTemplate).HasMaxLength(250);
+
                 entity.Property(e => e.Fields).HasMaxLength(4000);
 
-                entity.Property(e => e.FormTemplate).HasMaxLength(4000);
+                entity.Property(e => e.FormTemplate).HasMaxLength(250);
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
@@ -866,8 +868,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Description).HasMaxLength(250);
 
                 entity.Property(e => e.Image).HasMaxLength(250);
-
-                entity.Property(e => e.Priority).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
@@ -1268,6 +1268,10 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.HasKey(e => new { e.SourceId, e.DestinationId, e.Specificulture });
 
                 entity.ToTable("mix_related_article");
+
+                entity.HasIndex(e => new { e.DestinationId, e.Specificulture });
+
+                entity.HasIndex(e => new { e.SourceId, e.Specificulture });
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 

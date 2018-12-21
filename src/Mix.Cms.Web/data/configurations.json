@@ -92,7 +92,7 @@
       "status": 2
     },
     {
-      "keyword": "Theme",
+      "keyword": "ThemeName",
       "category": "Site",
       "value": "Default",
       "dataType": 7,

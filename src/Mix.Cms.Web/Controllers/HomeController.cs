@@ -118,7 +118,6 @@ namespace Mix.Cms.Web.Controllers
             int.TryParse(Request.Query["pageSize"], out int pageSize);
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
             var getPage = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
-
             var cacheKey = $"page_{_culture}_{seoName}_{pageSize}_{pageIndex}";
 
             var data = _memoryCache.Get<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);

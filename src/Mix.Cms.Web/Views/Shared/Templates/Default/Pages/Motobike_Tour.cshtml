@@ -67,7 +67,6 @@
                                         <a class="page-link"
                                            asp-controller="@ViewContext.RouteData.Values["Controller"]"
                                            asp-action="@ViewContext.RouteData.Values["Action"]"
-                                           asp-route-pageSize="@Model.Articles.PageSize"
                                            asp-route-pageIndex="@(Model.Articles.PageIndex-1)">
                                             Previous
                                         </a>
@@ -80,7 +79,6 @@
                                         <a class="page-link"
                                            asp-controller="@ViewContext.RouteData.Values["Controller"]"
                                            asp-action="@ViewContext.RouteData.Values["Action"]"
-                                           asp-route-pageSize="@Model.Articles.PageSize"
                                            asp-route-pageIndex="@i">
                                             @(i + 1)
                                         </a>
@@ -92,7 +90,6 @@
                                         <a class="page-link"
                                            asp-controller="@ViewContext.RouteData.Values["Controller"]"
                                            asp-action="@ViewContext.RouteData.Values["Action"]"
-                                           asp-route-pageSize="@Model.Articles.PageSize"
                                            asp-route-pageIndex="@(Model.Articles.PageIndex+1)">
                                             Next
                                         </a>

@@ -6,9 +6,13 @@
             <div class="row">
                 <div class="col-md-10 ml-auto mr-auto">
                     <h2 class="title">@Model.Title</h2>
+                    <p class="description">@Html.Raw(Model.Description)</p>
                     <div class="row">
                         @foreach(var item in Model.Articles.Items)
                         {
+                            if(Model.Articles.Items.IndexOf(item)>2){
+                                break;
+                            }
                             var article = item.Article;
                             <div class="col-md-4">
                                 <div class="card card-blog">
@@ -33,6 +37,11 @@
                             </div>
                         }
                     </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a class="float-right" href="/@ViewBag.culture/hot-tours">View More</a>
+                        </div>
+                     </div>
                 </div>
             </div>
         </div>

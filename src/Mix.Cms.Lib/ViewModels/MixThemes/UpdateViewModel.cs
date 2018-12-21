@@ -82,7 +82,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.FileFolder,
                     MixConstants.Folder.TemplatesAssetFolder,
-                    SeoHelper.GetSEOString($"{MixService.GetConfig<string>("SiteName")}-{Name}") });
+                    SeoHelper.GetSEOString(Name)
+                });
             }
         }
 
@@ -93,7 +94,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             {
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.TemplatesFolder,
-                    SeoHelper.GetSEOString($"{MixService.GetConfig<string>("SiteName")}-{Name}")
+                    SeoHelper.GetSEOString(Name)
                 });
             }
         }
@@ -239,10 +240,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 if (!saveConfigResult.IsSucceed)
                 {
                     Errors.AddRange(saveConfigResult.Errors);
-                }
-                else
-                {
-                    //MixCmsService.Instance.RefreshConfigurations(_context, _transaction);
                 }
                 result.IsSucceed = result.IsSucceed && saveConfigResult.IsSucceed;
 

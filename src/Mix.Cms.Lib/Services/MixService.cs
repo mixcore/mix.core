@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -28,6 +30,7 @@ namespace Mix.Cms.Lib.Services
         private JObject LocalSettings { get; set; }
         private JObject Translator { get; set; }
         private JObject Authentication { get; set; }
+        private JObject Smtp { get; set; }
         readonly FileSystemWatcher watcher = new FileSystemWatcher();
 
         public MixService()
@@ -72,6 +75,7 @@ namespace Mix.Cms.Lib.Services
             
             instance.ConnectionStrings = JObject.FromObject(jsonSettings["ConnectionStrings"]);
             instance.Authentication = JObject.FromObject(jsonSettings["Authentication"]);
+            instance.Smtp = JObject.FromObject(jsonSettings["Smtp"]);
             instance.Translator = JObject.FromObject(jsonSettings["Translator"]);
             instance.GlobalSettings = JObject.FromObject(jsonSettings["GlobalSettings"]);
             instance.LocalSettings = JObject.FromObject(jsonSettings["LocalSettings"]);
@@ -162,6 +166,7 @@ namespace Mix.Cms.Lib.Services
                 jsonSettings["Translator"] = instance.Translator;
                 jsonSettings["LocalSettings"] = instance.LocalSettings;
                 jsonSettings["Authentication"] = instance.Authentication;
+                jsonSettings["Smtp"] = instance.Smtp;
                 settings.Content = jsonSettings.ToString();
                 return FileRepository.Instance.SaveFile(settings);
             }
@@ -379,6 +384,23 @@ namespace Mix.Cms.Lib.Services
                     return result;
                 }
             }
+        }
+
+        public static void SendMail(string subject, string message, string to)
+        {
+            SmtpClient client = new SmtpClient(instance.Smtp.Value<string>("Server"));
+            client.UseDefaultCredentials = false;
+            client.Credentials = new NetworkCredential(instance.Smtp.Value<string>("User"), instance.Smtp.Value<string>("Password"));
+            client.Port = instance.Smtp.Value<int>("Port");
+            client.EnableSsl = instance.Smtp.Value<bool>("Ssl");
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.IsBodyHtml = true;
+            mailMessage.From = new MailAddress(instance.Smtp.Value<string>("From"));
+            mailMessage.To.Add(to);
+            mailMessage.Body = message;
+            mailMessage.Subject = subject;
+            client.Send(mailMessage);
+
         }
     }
 }

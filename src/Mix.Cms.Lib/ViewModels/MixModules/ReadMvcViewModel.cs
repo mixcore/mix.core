@@ -32,6 +32,12 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("template")]
         public string Template { get; set; }
 
+        [JsonProperty("formTemplate")]
+        public string FormTemplate { get; set; }
+
+        [JsonProperty("edmTemplate")]
+        public string EdmTemplate { get; set; }
+
         [JsonProperty("title")]
         public string Title { get; set; }
 
