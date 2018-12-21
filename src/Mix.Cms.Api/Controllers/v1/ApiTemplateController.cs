@@ -41,7 +41,7 @@ namespace Mix.Cms.Api.Controllers.v1
             if (id.HasValue)
             {
                 Expression<Func<MixTemplate, bool>> predicate = model => model.Id == id;
-                var portalResult = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_{id}", predicate);
+                var portalResult = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_{themeId}_{folderType}_{id}", predicate);
                 return Ok(JObject.FromObject(portalResult));
             }
             else
@@ -114,7 +114,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         || model.FolderType == request.Keyword
                     ));
 
-            string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
+            string key = $"{request.Key}_{themeId}_{request.PageSize}_{request.PageIndex}";
             switch (request.Key)
             {
                 case "mvc":

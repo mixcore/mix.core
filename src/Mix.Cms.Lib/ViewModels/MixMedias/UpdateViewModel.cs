@@ -67,7 +67,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         #region Views
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain") ?? "/"; } }
+        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("fullPath")]
         public string FullPath
