@@ -39,7 +39,7 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
         #region Views
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain", Specificulture) ?? "/"; } }
+        public string Domain { get { return MixService.GetConfig<string>("Domain", Specificulture); } }
 
         [JsonProperty("property")]
         public DataValueViewModel Property { get; set; }

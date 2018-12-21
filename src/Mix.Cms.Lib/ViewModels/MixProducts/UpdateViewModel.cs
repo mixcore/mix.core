@@ -131,7 +131,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
         #region Views
 
         [JsonProperty("domain")]
-        public string Domain => MixService.GetConfig<string>("Domain") ?? "/";
+        public string Domain => MixService.GetConfig<string>("Domain");
 
         [JsonProperty("categories")]
         public List<MixPageProducts.ReadViewModel> Categories { get; set; }

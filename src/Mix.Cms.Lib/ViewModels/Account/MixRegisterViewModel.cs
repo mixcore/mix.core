@@ -60,7 +60,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
 
         [JsonProperty("domain")]
-        public string Domain => MixService.GetConfig<string>("Domain") ?? "/";
+        public string Domain => MixService.GetConfig<string>("Domain");
 
         [JsonProperty("avatarUrl")]
         public string AvatarUrl
