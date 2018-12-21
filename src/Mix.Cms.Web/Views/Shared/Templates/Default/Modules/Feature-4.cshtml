@@ -1,11 +1,11 @@
 <!--     *********     FEATURES 4      *********      -->
 
-    <div class="features-4">
+    <div class="features-4 features-aboutus">
         <div class="container">
             <div class="row">
                 <div class="col-md-8 ml-auto mr-auto text-center">
                     <h2 class="title">@Model.Title</h2>
-                    <h4 class="description">@Html.Raw(Model.Description)</h4>
+                    <div class="description">@Html.Raw(Model.Description)</div>
                 </div>
             </div>
 
@@ -18,7 +18,7 @@
                             <iframe class="card" width="350" height="283" src="https://www.youtube.com/embed/@(item.Property("video_youtube"))" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         }
                         else{
-                            <div class="card card-background card-raised" data-background-color style="background-image: url('@item.Property("image")')">
+                            <div class="card card-raised" data-background-color style="background-image: url('@item.Property("image")');background-size:cover; background-position:center center">
                                 
                                 <div class="info">
                                    
@@ -27,7 +27,7 @@
                                     </div>
                                     <div class="description">
                                         <h4 class="info-title">@item.Property("title")</h4>
-                                       <p>@item.Property("description")</p>
+                                       <p class="desc">@item.Property("description")</p>
                                         @if(!string.IsNullOrWhiteSpace(item.Property("url")))
                                         {
                                             <a href="@item.Property("url")" class="ml-3">Read More &raquo;</a>

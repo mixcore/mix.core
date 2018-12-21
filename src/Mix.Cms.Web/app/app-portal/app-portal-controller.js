@@ -14,6 +14,7 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
                 $rootScope.isBusy = true;
                 $rootScope.configurationService.fillGlobalSettings().then(function (response) {
                     $scope.isInit = true;
+                    $rootScope.isInit = true;
                     $rootScope.globalSettings = response;
                     ngAppSettings.globalSettings = response;
                     if ($rootScope.globalSettings) {

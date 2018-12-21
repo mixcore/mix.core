@@ -45,7 +45,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         #region Views
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain") ?? "/"; } }
+        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl
@@ -82,7 +82,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.FileFolder,
                     MixConstants.Folder.TemplatesAssetFolder,
-                    SeoHelper.GetSEOString($"{MixService.GetConfig<string>("SiteName")}-{Name}") });
+                    SeoHelper.GetSEOString(Name)
+                });
             }
         }
 
@@ -93,7 +94,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             {
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.TemplatesFolder,
-                    SeoHelper.GetSEOString($"{MixService.GetConfig<string>("SiteName")}-{Name}")
+                    SeoHelper.GetSEOString(Name)
                 });
             }
         }
@@ -133,11 +134,9 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             Templates = MixTemplates.UpdateViewModel.Repository.GetModelListBy(t => t.ThemeId == Id,
                 _context: _context, _transaction: _transaction).Data;
-            TemplateAsset = new FileViewModel() { FileFolder = $"Import/Themes/{DateTime.UtcNow.ToShortDateString()}" };
+            TemplateAsset = new FileViewModel() { FileFolder = $"Import/Themes/{DateTime.UtcNow.ToShortDateString()}/{Name}" };
             Asset = new FileViewModel() { FileFolder = AssetFolder };
         }
-
-
 
         #region Async
 
@@ -147,6 +146,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
             if (TemplateAsset.Content != null || TemplateAsset.FileStream != null)
             {
+                TemplateAsset.FileFolder = $"Import/Themes/{DateTime.UtcNow.ToShortDateString()}/{Name}";
                 ImportTheme(_context, _transaction);
             }
             if (Asset.Content != null || Asset.FileStream != null)
@@ -239,10 +239,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 if (!saveConfigResult.IsSucceed)
                 {
                     Errors.AddRange(saveConfigResult.Errors);
-                }
-                else
-                {
-                    //MixCmsService.Instance.RefreshConfigurations(_context, _transaction);
                 }
                 result.IsSucceed = result.IsSucceed && saveConfigResult.IsSucceed;
 

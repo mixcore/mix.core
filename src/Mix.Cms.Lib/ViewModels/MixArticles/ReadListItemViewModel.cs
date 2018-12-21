@@ -91,7 +91,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         public ReadViewModel View { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain") ?? "/"; } }
+        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl

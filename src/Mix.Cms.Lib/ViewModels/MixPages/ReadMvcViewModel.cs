@@ -108,7 +108,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public string DetailsUrl { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain") ?? "/"; } }
+        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl
