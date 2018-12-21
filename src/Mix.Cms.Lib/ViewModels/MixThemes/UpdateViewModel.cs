@@ -45,7 +45,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         #region Views
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain") ?? "/"; } }
+        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl
@@ -82,7 +82,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.FileFolder,
                     MixConstants.Folder.TemplatesAssetFolder,
-                    SeoHelper.GetSEOString($"{MixService.GetConfig<string>("SiteName")}-{Name}") });
+                    SeoHelper.GetSEOString(Name) });
             }
         }
 
@@ -93,7 +93,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             {
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.TemplatesFolder,
-                    SeoHelper.GetSEOString($"{MixService.GetConfig<string>("SiteName")}-{Name}")
+                    SeoHelper.GetSEOString(Name)
                 });
             }
         }
