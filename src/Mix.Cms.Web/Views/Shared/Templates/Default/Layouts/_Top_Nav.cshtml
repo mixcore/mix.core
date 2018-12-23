@@ -33,10 +33,10 @@
                                 @cate.Title <i class="@cate.Icon"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dd-@cate.Id">
-                                @foreach (var childNav in cate.Childs)
+                                @foreach (var childNav in cate.Childs.OrderBy(c => c.Priority))
                                 {
                                     activedClass = childNav.IsActived ? "active" : string.Empty;
-                                    <a href="@childNav.DetailsUrl" class="dropdown-item @activedClass">@childNav.Title</a>
+                                    <a href="@childNav.Page.DetailsUrl" class="dropdown-item @activedClass">@childNav.Page.Title</a>
                                 }
                             </div>
                         </li>
@@ -60,7 +60,7 @@
                     </li>
                 }
             </ul>
-           
+           @if(socials!=null){
             <ul class="nav navbar-nav">
                 @foreach(var item in socials.Data.Items){
                 <li class="nav-item">
@@ -70,6 +70,7 @@
                 </li>
                 }
             </ul>
+            }
         </div>
     </div>
 </nav>

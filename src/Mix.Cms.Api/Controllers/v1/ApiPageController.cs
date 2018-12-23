@@ -211,10 +211,10 @@ namespace Mix.Cms.Api.Controllers.v1
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
                                 "page", new { seoName = a.SeoName }, Request, Url);
-                            a.Childs.ForEach((Action<ReadListItemViewModel>)(c =>
+                            a.Childs.ForEach((Action<Lib.ViewModels.MixPagePages.ReadViewModel>)(c =>
                             {
-                                c.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                    "page", new { seoName = c.SeoName }, Request, Url);
+                                c.Page.DetailsUrl = MixCmsHelper.GetRouterUrl(
+                                    "page", new { seoName = c.Page.SeoName }, Request, Url);
                             }));
                         }));
                     }
