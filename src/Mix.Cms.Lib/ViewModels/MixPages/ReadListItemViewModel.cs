@@ -146,7 +146,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             }
         }
         [JsonProperty("childs")]
-        public List<ReadListItemViewModel> Childs { get; set; }
+        public List<MixPagePages.ReadViewModel> Childs { get; set; }
 
         [JsonProperty("totalArticle")]
         public int TotalArticle { get; set; }
@@ -180,10 +180,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getChilds = Repository.GetModelListBy
-                (p => p.MixPagePageMixPage.Any(c => c.ParentId == Id
-                && c.Specificulture == Specificulture)
-                );
+            var getChilds = MixPagePages.ReadViewModel.Repository.GetModelListBy(
+                p => p.ParentId == Id && p.Specificulture == Specificulture,_context, _transaction);
             if (getChilds.IsSucceed)
             {
                 Childs = getChilds.Data;

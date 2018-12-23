@@ -47,7 +47,7 @@
     "DefaultTemplate": "_Default",
     "DefaultTheme": "Default_Blank",
     "DefaultContentStatus": "2",
-    "DefaultTemplateFolder": "Default",
+    "DefaultTemplateFolder": "Default_Blank",
     "DefaultTemplateLayout": "_Layout",
     "OrderBy": "Priority",
     "DefaultStatus": "2",

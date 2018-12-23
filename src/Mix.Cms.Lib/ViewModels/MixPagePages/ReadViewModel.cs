@@ -34,7 +34,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePages
 
         #region Views
 
-        public MixPages.ReadListItemViewModel Category { get; set; }
+        [JsonProperty("page")]
+        public MixPages.ReadListItemViewModel Page { get; set; }
 
         #endregion Views
 
@@ -47,7 +48,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePages
             );
             if (getCategory.IsSucceed)
             {
-                Category = getCategory.Data;
+                Page = getCategory.Data;
             }
         }
 

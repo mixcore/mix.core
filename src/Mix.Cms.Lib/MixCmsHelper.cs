@@ -25,7 +25,7 @@ namespace Mix.Cms.Lib
                     case MixPageType.Blank:
                         foreach (var child in cate.Childs)
                         {
-                            child.DetailsUrl = Url.RouteUrl("Page", new { culture, seoName = child.SeoName });
+                            child.Page.DetailsUrl = Url.RouteUrl("Page", new { culture, seoName = child.Page.SeoName });
                         }
                         break;
 
@@ -43,10 +43,10 @@ namespace Mix.Cms.Lib
                 }
                 cate.IsActived = (cate.DetailsUrl == activePath
                     || (cate.Type == MixPageType.Home && activePath == string.Format("/{0}/home", culture)));
-                cate.Childs.ForEach((Action<ViewModels.MixPages.ReadListItemViewModel>)(c =>
+                cate.Childs.ForEach((Action<ViewModels.MixPagePages.ReadViewModel>)(c =>
                 {
                     c.IsActived = (
-                    c.DetailsUrl == activePath);
+                    c.Page.DetailsUrl == activePath);
                     cate.IsActived = cate.IsActived || c.IsActived;
                 }));
             }
@@ -67,7 +67,7 @@ namespace Mix.Cms.Lib
                     case MixPageType.Blank:
                         foreach (var child in cate.Childs)
                         {
-                            child.DetailsUrl = Url.RouteUrl("Page", new { culture, pageName = child.SeoName });
+                            child.Page.DetailsUrl = Url.RouteUrl("Page", new { culture, pageName = child.Page.SeoName });
                         }
                         break;
 
@@ -88,10 +88,10 @@ namespace Mix.Cms.Lib
                     cate.DetailsUrl == activePath || (cate.Type == MixPageType.Home && activePath == string.Format("/{0}/home", culture))
                     );
 
-                cate.Childs.ForEach((Action<ViewModels.MixPages.ReadListItemViewModel>)(c =>
+                cate.Childs.ForEach((Action<ViewModels.MixPagePages.ReadViewModel>)(c =>
                 {
                     c.IsActived = (
-                    c.DetailsUrl == activePath);
+                    c.Page.DetailsUrl == activePath);
                     cate.IsActived = cate.IsActived || c.IsActived;
                 }));
             }
