@@ -22,6 +22,7 @@ namespace Mix.Cms.Web
 
             return WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(config)
+                .UseSetting("https_port", "443")
                 .UseStartup<Startup>()
                 ;
         }

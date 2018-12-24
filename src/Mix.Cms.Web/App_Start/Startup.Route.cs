@@ -13,7 +13,7 @@ namespace Mix.Cms.Web
     public partial class Startup
     {
         protected void ConfigRoutes(IApplicationBuilder app)
-        {
+        {            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

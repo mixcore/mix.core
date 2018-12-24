@@ -23,18 +23,37 @@ namespace Mix.Cms.Web
 {
     public partial class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
-            
+            _env = env;
+
         }
 
         public IConfiguration Configuration { get; }
+        public IHostingEnvironment _env { get; }
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            if (_env.IsDevelopment())
+            {
 
+                services.AddHttpsRedirection(options =>
+            {
+                options.RedirectStatusCode = StatusCodes.Status101SwitchingProtocols;
+                options.HttpsPort = 5001;
+            });
+            }
+            else
+            {
+
+                services.AddHttpsRedirection(options =>
+                {
+                    options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
+                    options.HttpsPort = 443;
+                });
+
+            }
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -113,7 +132,7 @@ namespace Mix.Cms.Web
                 opt.AllowAnyHeader();
                 opt.AllowAnyMethod();
             });
-            app.UseHttpsRedirection();
+            
             var cachePeriod = env.IsDevelopment() ? "600" : "604800";
             app.UseStaticFiles(new StaticFileOptions
             {
@@ -139,6 +158,11 @@ namespace Mix.Cms.Web
             });
 
             ConfigRoutes(app);
+
+            if (MixService.GetConfig<bool>("IsHttps"))
+            {
+                app.UseHttpsRedirection();
+            }
         }
     }
 }
