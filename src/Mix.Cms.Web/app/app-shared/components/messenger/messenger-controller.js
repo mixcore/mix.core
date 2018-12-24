@@ -165,8 +165,7 @@ app.controller('MessengerController', ['$scope', function ($scope) {
         if ($scope.user.loggedIn) {
             $scope.request.data = $scope.message;
             $scope.connection.invoke('sendMessage', $scope.request);
-            $scope.message.content = '';
-            //$scope.$apply();
+            $scope.message.content = '';         
         }
     };
     $scope.receiveMessage = function (msg) {

@@ -121,7 +121,7 @@ namespace Mix.Cms.Web.Controllers
             var cacheKey = $"page_{_culture}_{seoName}_{pageSize}_{pageIndex}";
 
             var data = _memoryCache.Get<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
-            if (data != null)
+            if (data != null && MixService.GetConfig<bool>("IsCache"))
             {
                 getPage.IsSucceed = true;
                 getPage.Data = data;
@@ -183,7 +183,7 @@ namespace Mix.Cms.Web.Controllers
             var cacheKey = $"article_{_culture}_{seoName}";
 
             var data = _memoryCache.Get<Lib.ViewModels.MixArticles.ReadMvcViewModel>(cacheKey);
-            if (data != null)
+            if (data != null && MixService.GetConfig<bool>("IsCache"))
             {
                 getArticle.IsSucceed = true;
                 getArticle.Data = data;
@@ -235,7 +235,7 @@ namespace Mix.Cms.Web.Controllers
             var cacheKey = $"product_{_culture}_{seoName}";
 
             var data = _memoryCache.Get<Lib.ViewModels.MixProducts.ReadMvcViewModel>(cacheKey);
-            if (data != null)
+            if (data != null && MixService.GetConfig<bool>("IsCache"))
             {
                 getProduct.IsSucceed = true;
                 getProduct.Data = data;
@@ -315,19 +315,26 @@ namespace Mix.Cms.Web.Controllers
 
         void GeneratePageDetailsUrls(Lib.ViewModels.MixModules.ReadMvcViewModel module)
         {
-            foreach (var articleNav in module.Articles.Items)
+            if (module.Articles != null)
             {
-                if (articleNav.Article != null)
+
+                foreach (var articleNav in module.Articles.Items)
                 {
-                    articleNav.Article.DetailsUrl = GenerateDetailsUrl("Article", new { seoName = articleNav.Article.SeoName });
+                    if (articleNav.Article != null)
+                    {
+                        articleNav.Article.DetailsUrl = GenerateDetailsUrl("Article", new { seoName = articleNav.Article.SeoName });
+                    }
                 }
             }
-
-            foreach (var productNav in module.Products.Items)
+            if (module.Products != null)
             {
-                if (productNav.Product != null)
+
+                foreach (var productNav in module.Products.Items)
                 {
-                    productNav.Product.DetailsUrl = GenerateDetailsUrl("Product", new { seoName = productNav.Product.SeoName });
+                    if (productNav.Product != null)
+                    {
+                        productNav.Product.DetailsUrl = GenerateDetailsUrl("Product", new { seoName = productNav.Product.SeoName });
+                    }
                 }
             }
         }
