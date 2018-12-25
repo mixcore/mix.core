@@ -107,43 +107,6 @@ app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthServi
             toDate: null,
             keyword: ''
         };
-        ngAppSettings.editorConfigurations = {
-            core: {},
-            plugins: {
-                btnsDef: {
-                    // Customizables dropdowns
-                    image: {
-                        dropdown: ['insertImage', 'upload', 'base64', 'noembed'],
-                        ico: 'insertImage'
-                    }
-                },
-                btns: [
-                    ['viewHTML'],
-                    ['undo', 'redo'],
-                    ['formatting'],
-                    ['strong', 'em', 'del', 'underline'],
-                    ['link'],
-                    ['image'],
-                    ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
-                    ['unorderedList', 'orderedList'],
-                    ['foreColor', 'backColor'],
-                    ['preformatted'],
-                    ['horizontalRule'],
-                    ['fullscreen']
-                ],
-                plugins: {
-                    // Add imagur parameters to upload plugin
-                    upload: {
-                        serverPath: 'https://api.imgur.com/3/image',
-                        fileFieldName: 'image',
-                        headers: {
-                            'Authorization': 'Client-ID 9e57cb1c4791cea'
-                        },
-                        urlPropertyName: 'data.link'
-                    }
-                }
-            }
-        };
         ngAppSettings.dataTypes = [
             { title: 'string', value: 0 },
             { title: 'int', value: 1 },
