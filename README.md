@@ -19,6 +19,8 @@ dotnet build
 dotnet run
 ```
 
+> Note: If you facing any System.Data.SqlClient.SqlException error, please replace all content inside "appsettings.json" file with "{}".
+
 # UI:  
   - **Default template:**
 ![Mixcore CMS default template with Now UI Pro](https://github.com/mixcore/mix.core/blob/master/assets/front-end.jpg?raw=true "Mixcore CMS default template with Now UI Pro")
