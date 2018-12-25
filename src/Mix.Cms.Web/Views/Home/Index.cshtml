@@ -17,7 +17,7 @@
         @(MixService.GetConfig<string>("Phone", lang))
         try
         {
-            <partial name="@Model.TemplatePath" model="@Model" />
+            <partial name="@Model.TemplatePath" model="@Model"/>
         }
         catch (System.InvalidOperationException invalidOperationException)
         {
@@ -45,4 +45,8 @@
 @section Styles{
     
     @Html.Raw(Model.View?.Styles)
+}
+@section Scripts{
+    
+    @Html.Raw(Model.View?.Scripts)
 }

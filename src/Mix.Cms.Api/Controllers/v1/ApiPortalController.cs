@@ -37,12 +37,14 @@ namespace Mix.Cms.Api.Controllers.v1
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IApplicationLifetime _appLifetime;
+        private readonly IHostingEnvironment _env;
         public ApiPortalController(
            UserManager<ApplicationUser> userManager,
            SignInManager<ApplicationUser> signInManager,
            RoleManager<IdentityRole> roleManager,
             Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext,
-            IApplicationLifetime appLifetime
+            IApplicationLifetime appLifetime,
+            IHostingEnvironment env
             )
             : base(hubContext)
         {
@@ -310,9 +312,10 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 settings.Content = model.ToString();
                 FileRepository.Instance.SaveFile(settings);
-                _appLifetime.StopApplication();
-                //Mix.Cms.Web Program.Shutdown()
-                //MixCmsService.Instance.RefreshConfigurations();
+                //if (!_env.IsDevelopment())
+                //{
+                //    _appLifetime.StopApplication();
+                //}
             }
             return new RepositoryResponse<JObject>() { IsSucceed = model != null, Data = model };
         }
