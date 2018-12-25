@@ -1,0 +1,26 @@
+@{ 
+
+    ViewData["Title"] = Model.Title;
+    ViewData["Description"] = Model.Excerpt;
+    ViewData["Image"] = Model.ImageUrl;
+}
+<div class="wrapper">
+    <div class="page-header page-header-small">
+        <div class="page-header-image" data-parallax="true" style="background-image: url('/Content/Templates/default/assets/img/bg32.jpg');">
+        </div>
+        <div class="content-center">
+            <div class="row">
+                <div class="col-md-8 ml-auto mr-auto">
+                    <h1 class="title">Error 404 - Page Not Found</h1>
+                    <h4>                        
+                        @Model.Excerpt
+                    </h4>
+                    <p>
+                        <a class="btn glyphicon-link" href="/@(ViewBag.culture)">Home</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
