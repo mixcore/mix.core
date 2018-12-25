@@ -1,0 +1,144 @@
+@{
+    int index = (int)this.ViewData["Index"];
+    var i = index %2;
+    string thumb = !string.IsNullOrEmpty(Model.Thumbnail) ? Model.Thumbnail : Model.Image;
+    var rowIndex = (index/2)%2;
+}
+
+@if(rowIndex ==0)
+{
+    @if(i == 0)
+    {
+    <div class="col-md-6 px-0">
+    
+        <div class="card card-fashion card-background" style="background-image: url('@thumb')">
+            <div class="card-body">
+                <div class="card-title text-left">
+                    <h2>
+                        <a href="@Model.DetailsUrl">
+                           @Model.Title
+                       </a>
+                    </h2>
+                </div>
+                <div class="card-footer text-left">
+                    <div class="stats">
+                        <span>
+                            <i class="now-ui-icons users_circle-08"></i>@Model.CreatedBy
+                        </span>
+                        <span>
+                            <i class="now-ui-icons tech_watch-time"></i> @Model.CreatedDateTime.ToString("MMM dd, yyyy")
+                        </span>
+                    </div>
+                    <div class="stats-link pull-right">
+                        <a href="#pablo" class="footer-link">Yachts</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+    else
+    {
+    <div class="col-md-3 px-0">
+        <div class="card card-fashion" style="background-image: url('@thumb')">
+            <div class="card-title">
+                <a href="#pablo">
+                    <h4>
+                        <a href="@Model.DetailsUrl">
+                           @Model.Title
+                       </a>
+                    </h4>
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="card-footer">
+                    <div class="stats">
+                        <span>
+                            <i class="now-ui-icons users_circle-08"></i>@Model.CreatedBy
+                        </span>
+                        <span>
+                            <i class="now-ui-icons tech_watch-time"></i> @Model.CreatedDateTime.ToString("MMM dd, yyyy")
+                        </span>
+                    </div>
+                    <div class="stats-link pull-right">
+                        <a href="#pablo">Sea</a>&sbquo;
+                        <a href="#pablo">Magazine</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 px-0">
+        <div class="card card-fashion card-background" style="background-image: url('../assets/img/project11.jpg')">
+        </div>
+    </div>
+    }
+}
+else{
+    @if(i == 0)
+    {
+    <div class="col-md-3 px-0">
+        <div class="card card-fashion">
+            <div class="card-title">
+                <a href="#pablo">
+                    <h4>
+                       <a asp-area="" asp-controller="Home" asp-action="ArticleDetails"  asp-route-SeoName="@Model.SeoName">
+                           @Model.Title
+                       </a>
+                    </h4>
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="card-footer">
+                    <div class="stats">
+                        <span>
+                            <i class="now-ui-icons users_circle-08"></i>@Model.CreatedBy
+                        </span>
+                        <span>
+                            <i class="now-ui-icons tech_watch-time"></i> @Model.CreatedDateTime.ToString("MMM dd, yyyy")
+                        </span>
+                    </div>
+                    <div class="stats-link pull-right">
+                        <a href="#pablo">Sea</a>&sbquo;
+                        <a href="#pablo">Magazine</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 px-0">
+        <div class="card card-fashion card-background" style="background-image: url('../assets/img/project11.jpg')">
+        </div>
+    </div>
+    }
+    else
+    {
+        <div class="col-md-6 px-0">
+        <div class="card card-fashion card-background" style="background-image: url('@thumb')">
+            <div class="card-body">
+                <div class="card-title text-left">
+                    <h2>
+                        <a asp-area="" asp-controller="Home" asp-action="ArticleDetails" asp-route-SeoName="@Model.SeoName">
+                           @Model.Title
+                       </a>
+                    </h2>
+                </div>
+                <div class="card-footer text-left">
+                    <div class="stats">
+                        <span>
+                            <i class="now-ui-icons users_circle-08"></i>@Model.CreatedBy
+                        </span>
+                        <span>
+                            <i class="now-ui-icons tech_watch-time"></i> @Model.CreatedDateTime.ToString("MMM dd, yyyy")
+                        </span>
+                    </div>
+                    <div class="stats-link pull-right">
+                        <a href="#pablo" class="footer-link">Yachts</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    }
+}
