@@ -60,59 +60,6 @@ app.filter('utcToLocal', FilterUtcDate)
             'Draft',
             'Schedule'
         ],
-        editorConfigurations: {
-            core: {},
-            plugins: {
-                removeformatPasted: true,
-                imageWidthModalEdit: true,
-                btnsDef: {
-                    // Customizables dropdowns
-                    image: {
-                        dropdown: ['insertImage', 'upload', 'base64', 'noembed'],
-                        ico: 'insertImage'
-                    }
-                },
-                btns: [                   
-                    ['table'],
-                    ['emoji'],
-                    ['formatting'],
-                    ['strong', 'em', 'del', 'underline'],
-                    ['fontsize'],
-                    ['highlight'],
-                    ['link'],
-                    ['image'],
-                    ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
-                    ['unorderedList', 'orderedList'],
-                    ['foreColor', 'backColor'],
-                    ['preformatted'],
-                    ['horizontalRule'],
-                    ['fullscreen'],
-                    ['viewHTML']
-                ],
-                plugins: {
-                    // Add imagur parameters to upload plugin
-                    upload: {
-                        serverPath: 'https://api.imgur.com/3/image',
-                        fileFieldName: 'image',
-                        headers: {
-                            'Authorization': 'Client-ID 9e57cb1c4791cea'
-                        },
-                        urlPropertyName: 'data.link'
-                    },
-                    table: {},
-                    fontfamily: {
-                        init: function (trumbowyg) {
-                            trumbowyg.o.plugins.fontfamily = trumbowyg.o.plugins.fontfamily || defaultOptions;
-                            trumbowyg.addBtnDef('fontfamily', {
-                                dropdown: buildDropdown(trumbowyg),
-                                hasIcon: false,
-                                text: trumbowyg.lang.fontFamily
-                            });
-                        }
-                    }
-                }
-            }
-        },
         dataTypes: [
             { title: 'Custom', value: 0 },
             { title: 'DateTime', value: 1 },

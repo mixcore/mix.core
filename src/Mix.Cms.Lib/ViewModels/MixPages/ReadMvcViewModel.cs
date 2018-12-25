@@ -305,8 +305,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     scripts.Append(nav.Module.View.Scripts);
                     styles.Append(nav.Module.View.Styles);
                 }
-                View.Scripts = scripts.ToString();
-                View.Styles = styles.ToString();
+                View.Scripts += scripts.ToString();
+                View.Styles += styles.ToString();
             }
         }
 
