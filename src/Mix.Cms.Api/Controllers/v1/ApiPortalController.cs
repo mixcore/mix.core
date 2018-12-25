@@ -311,6 +311,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 settings.Content = model.ToString();
                 FileRepository.Instance.SaveFile(settings);
                 _appLifetime.StopApplication();
+                //Mix.Cms.Web Program.Shutdown()
                 //MixCmsService.Instance.RefreshConfigurations();
             }
             return new RepositoryResponse<JObject>() { IsSucceed = model != null, Data = model };
