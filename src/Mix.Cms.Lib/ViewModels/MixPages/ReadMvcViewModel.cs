@@ -115,7 +115,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             get
             {
-                if (Image != null && (Image.IndexOf("http") == -1) && Image[0] != '/')
+                if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
                     Domain,  Image
@@ -265,14 +265,14 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 }
                 if (productExp != null)
                 {
-                    var getArticles = MixPageArticles.ReadViewModel.Repository
-                    .GetModelListBy(articleExp
+                    var getProducts = MixPageProducts.ReadViewModel.Repository
+                    .GetModelListBy(productExp
                     , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
                     , pageSize, pageIndex
                     , _context: context, _transaction: transaction);
-                    if (getArticles.IsSucceed)
+                    if (getProducts.IsSucceed)
                     {
-                        Articles = getArticles.Data;
+                        Products = getProducts.Data;
                     }
                 }
             }

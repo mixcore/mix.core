@@ -3,7 +3,7 @@
 
 @{
     string culture = ViewBag.culture;
-    List<Mix.Cms.Lib.ViewModels.MixPages.ReadListItemViewModel> topCates = MixCmsHelper.GetCategory(Url, ViewBag.culture, MixEnums.CatePosition.Nav, Context.Request.Path);
+    var topCates = ViewData["TopPages"] as List<Mix.Cms.Lib.ViewModels.MixPages.ReadListItemViewModel>;
     var socials = MixCmsHelper.GetModule("social", ViewBag.culture);
 }
 <nav class="navbar navbar-expand-lg bg-white fixed-top navbar-transparent" color-on-scroll="500">
@@ -60,8 +60,8 @@
                     </li>
                 }
             </ul>
-           @if(socials!=null){
-            <ul class="nav navbar-nav">
+           
+            @*<ul class="nav navbar-nav">
                 @foreach(var item in socials.Data.Items){
                 <li class="nav-item">
                     <a class="nav-link" target="_blank" href="@item.Property("url")">
@@ -69,8 +69,7 @@
                     </a>
                 </li>
                 }
-            </ul>
-            }
+            </ul>*@
         </div>
     </div>
 </nav>
