@@ -95,7 +95,11 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("view")]
         public MixTemplates.ReadViewModel View { get; set; }
+        [JsonProperty("formView")]
+        public MixTemplates.ReadViewModel FormView { get; set; }
 
+        [JsonProperty("edmView")]
+        public MixTemplates.ReadViewModel EdmView { get; set; }
         [JsonProperty("data")]
         public PaginationModel<ViewModels.MixModuleDatas.ReadViewModel> Data { get; set; } = new PaginationModel<ViewModels.MixModuleDatas.ReadViewModel>();
 
@@ -137,6 +141,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             this.View = MixTemplates.ReadViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
+            this.FormView = MixTemplates.ReadViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
+            this.View = MixTemplates.ReadViewModel.GetTemplateByPath(EdmTemplate, Specificulture, _context, _transaction).Data;
             // call load data from controller for padding parameter (articleId, productId, ...)
         }
 

@@ -37,22 +37,25 @@ namespace Mix.Cms.Web
         {
             if (_env.IsDevelopment())
             {
-
-                services.AddHttpsRedirection(options =>
-            {
-                options.RedirectStatusCode = StatusCodes.Status101SwitchingProtocols;
-                options.HttpsPort = 5001;
-            });
+                if (MixService.GetConfig<bool>("IsHttps"))
+                {
+                    services.AddHttpsRedirection(options =>
+                    {
+                        options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
+                        options.HttpsPort = 5001;
+                    });
+                }
             }
             else
             {
-
-                services.AddHttpsRedirection(options =>
+                if (MixService.GetConfig<bool>("IsHttps"))
+                {
+                    services.AddHttpsRedirection(options =>
                 {
                     options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
                     options.HttpsPort = 443;
                 });
-
+                }
             }
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -114,9 +117,9 @@ namespace Mix.Cms.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
+            if (_env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -125,15 +128,18 @@ namespace Mix.Cms.Web
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
+            if (MixService.GetConfig<bool>("IsHttps"))
+            {
+                app.UseHttpsRedirection();
+            }
             app.UseCors(opt =>
             {
                 opt.AllowAnyOrigin();
                 opt.AllowAnyHeader();
                 opt.AllowAnyMethod();
             });
-            
-            var cachePeriod = env.IsDevelopment() ? "600" : "604800";
+
+            var cachePeriod = _env.IsDevelopment() ? "600" : "604800";
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>
@@ -159,10 +165,7 @@ namespace Mix.Cms.Web
 
             ConfigRoutes(app);
 
-            if (MixService.GetConfig<bool>("IsHttps"))
-            {
-                app.UseHttpsRedirection();
-            }
+
         }
     }
 }
