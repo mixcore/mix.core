@@ -24,6 +24,7 @@ using Mix.Cms.Lib.ViewModels.MixInit;
 using System.Xml.Linq;
 using System.Text;
 using System.Xml;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -35,19 +36,26 @@ namespace Mix.Cms.Api.Controllers.v1
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IApplicationLifetime _appLifetime;
         public ApiPortalController(
            UserManager<ApplicationUser> userManager,
            SignInManager<ApplicationUser> signInManager,
            RoleManager<IdentityRole> roleManager,
-            Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext
+            Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext,
+            IApplicationLifetime appLifetime
             )
             : base(hubContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _appLifetime = appLifetime;
         }
 
+        public async Task ShutdownSite()
+        {
+            _appLifetime.StopApplication();
+        }
         #region Get
 
         // GET api/category/id
@@ -287,7 +295,8 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("app-settings/details")]
         public RepositoryResponse<JObject> LoadAppSettings()
         {
-            return new RepositoryResponse<JObject>() { IsSucceed = true, Data = MixService.GetGlobalSetting() };
+            var settings = FileRepository.Instance.GetFile("appsettings", ".json", string.Empty, true, "{}");
+            return new RepositoryResponse<JObject>() { IsSucceed = true, Data = JObject.Parse(settings.Content) };
         }
 
         // POST api/category
@@ -301,6 +310,7 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 settings.Content = model.ToString();
                 FileRepository.Instance.SaveFile(settings);
+                _appLifetime.StopApplication();
                 //MixCmsService.Instance.RefreshConfigurations();
             }
             return new RepositoryResponse<JObject>() { IsSucceed = model != null, Data = model };
