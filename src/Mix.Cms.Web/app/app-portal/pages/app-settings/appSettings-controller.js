@@ -11,7 +11,7 @@ app.controller('AppSettingsController',
             $rootScope.isBusy = true;
             var resp = await appSettingsServices.getAppSettings();
             if (resp && resp.isSucceed) {
-                $scope.appSettings = resp.data;
+                $scope.appSettings = JSON.stringify(resp.data);
                 $rootScope.initEditor();
                 $rootScope.isBusy = false;
                 $scope.$apply();
