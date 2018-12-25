@@ -15,15 +15,15 @@
 mkdir mixcore
 cd mixcore
 
-git clone https://github.com/mixcore/mix.heart.git
-git clone https://github.com/mixcore/mix.identity.git
-git clone https://github.com/mixcore/mix.core.git
+git clone https://github.com/Swastika-IO/sio.heart.git
+git clone https://github.com/Swastika-IO/sio.identity.git
+git clone https://github.com/Swastika-IO/sio.core.git
 ```
 
 # Build & Run
 
 ```
-cd mix.core/src/Mix.Cms.Web
+cd sio.core/src/Sio.Cms.Web
 
 npm install
 gulp build
