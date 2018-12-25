@@ -1,0 +1,13 @@
+@model Mix.Cms.Lib.ViewModels.MixModules.ReadMvcViewModel
+<!-- custom render view here -->    
+    <div class="buttons">
+        @if (Model!=null)
+        {
+            @foreach (var item in Model.Data.JsonItems)
+            {
+            <a href="@item["url"]["value"]" class="btn btn-icon btn-link btn-neutral btn-lg">
+                <i class="fab @item["icon"]["value"]"></i>
+            </a>
+            }
+        }
+    </div>

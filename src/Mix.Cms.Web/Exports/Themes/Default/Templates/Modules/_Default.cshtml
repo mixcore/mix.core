@@ -1,0 +1,59 @@
+@model Mix.Cms.Lib.ViewModels.MixModules.ReadMvcViewModel
+<div class="header-3 banners">
+    <div class="row">
+            <div class="col-md-8 ml-auto mr-auto text-center">
+                <h2 class="title">Who we are?</h2>
+                <h5 class="description">According to the National Oceanic and Atmospheric Administration, Ted, Scambos, NSIDClead scentist, puts the potentially record low maximum sea ice extent tihs year down to low ice extent in the Pacific and a late drop in ice extent in the Barents Sea.</h5>
+            </div>
+        </div>
+        <div class="separator separator-primary"></div>
+    <div id="carouselExampleIndicators" class="carousel slide">
+        <ol class="carousel-indicators">
+            @for (int i = 0; i < Model.Data.JsonItems.Count; i++)
+            {
+                
+                <li data-target="#carouselExampleIndicators" data-slide-to="@i" class="@(i==0?"active":"")"></li>
+            }
+        </ol>
+        <div class="carousel-inner" role="listbox">
+            @for (int i = 0; i < Model.Data.JsonItems.Count; i++)
+            {
+                var product = Model.Data.JsonItems[i];
+                <div class="carousel-item @(i==0?"active":"")">
+                    <div class="page-header header-filter">
+                        <div class="page-header-image hide-on-mb" style="background-image: url('@product["image"]["value"]');z-index:1;"></div>
+                        <div class="page-header-image hide-on-desktop" style="background-image: url('@product["image_mobile"]["value"]');z-index:1;"></div>
+                        <div class="content-center">
+                            <div class="container text-left">
+                                <div class="content-center">
+                                    <div class="row">
+                                        
+                                        <div class="col-md-8 ml-auto mr-auto text-right">
+                                            <h1 class="title"><a href="@product["url"]["value"]">@product["title"]["value"]</a></h1>
+                                            <h4 class="description ">
+                                                @Html.Raw(product["description"]["value"])
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <em class="now-ui-icons arrows-1_minimal-left"></em>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <em class="now-ui-icons arrows-1_minimal-right"></em>
+        </a>
+    </div>
+</div>
+<!--     *********    END HEADER 3      *********      -->
+
+<style>
+    .banners .page-header .page-header-image{
+        z-index:1;
+    }
+</style>
