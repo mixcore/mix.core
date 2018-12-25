@@ -1,0 +1,53 @@
+<div class="cd-section pt-0 mt-0" id="contactus">
+<!--     *********    CONTACT US 1     *********      -->
+<div class="contactus-1 section-image" style="background-image: url('@Model.Image')">
+    <div id="gmap" class="map" style="width: 100%;height: 100%;position: absolute;top: 0;">
+       <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.5245932349426!2d106.6819253994565!3d10.771075051577991!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f23b33b8287%3A0xbaf020b8d0825ad3!2zMzg1LzM5IE5ndXnhu4VuIMSQw6xuaCBDaGnhu4N1LCBQaMaw4budbmcgNSwgUXXhuq1uIDMsIEjhu5MgQ2jDrSBNaW5o!5e0!3m2!1svi!2s!4v1544360198395" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <h2 class="title">@Model.Title</h2>
+                <h4 class="description">@Model.Description</h4>
+                <div class="info info-horizontal">
+                    <div class="icon icon-primary">
+                        <i class="now-ui-icons location_pin"></i>
+                    </div>
+                    <div class="description">
+                        <h4 class="info-title">Find us at the office</h4>
+                        <p class="description"> 
+                        <a target="_blank" href="https://www.google.com/maps/place/@System.Web.HttpUtility.UrlEncode(MixService.GetConfig<string>("ContactAddress", ViewBag.culture))">@(MixService.GetConfig<string>("ContactAddress", ViewBag.culture))</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="info info-horizontal">
+                    <div class="icon icon-primary">
+                        <i class="now-ui-icons tech_mobile"></i>
+                    </div>
+                    <div class="description">
+                        <h4 class="info-title">Give us a ring</h4>
+                        <p class="description"> 
+                             @(MixService.GetConfig<string>("ContactName", ViewBag.culture))
+                            <br> <a href="mailto:@(MixService.GetConfig<string>("ContactEmail", ViewBag.culture))">@(MixService.GetConfig<string>("ContactEmail", ViewBag.culture))</a>
+                            <br> <a href="tel:@(MixService.GetConfig<string>("ContactPhone", ViewBag.culture))">@(MixService.GetConfig<string>("ContactPhone", ViewBag.culture))</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 ml-auto mr-auto">
+                <div class="card card-contact card-raised">
+                    
+                        <div class="card-header text-center">
+                            <h4 class="card-title">Contact Us</h4>
+                        </div>
+                        <div class="card-body">
+                            <module-form name="contact_us" submit-text="'Send'" module-id="6" is-show-title="'true'"></module-form>
+                        </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--     *********    END CONTACT US 1      *********      -->
+</div>

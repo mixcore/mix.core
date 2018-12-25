@@ -1,0 +1,16 @@
+<<<<<<< HEAD
+@model Mix.Cms.Lib.ViewModels.MixPages.ReadMvcViewModel
+@foreach (var nav in Model.Modules.OrderBy(n => n.Priority))
+{
+    if (nav != null)
+    {
+        <partial name="@nav.Module.TemplatePath" model="@nav.Module" />
+=======
+@model Swastika.Cms.Lib.ViewModels.FrontEnd.FECategoryViewModel
+@foreach (var module in Model.Modules.OrderBy(n => n.Priority))
+{
+    if (module != null)
+    {
+        Html.RenderPartial(module.TemplatePath, module);
+>>>>>>> parent of fd2daa4... remove template files
+    }}

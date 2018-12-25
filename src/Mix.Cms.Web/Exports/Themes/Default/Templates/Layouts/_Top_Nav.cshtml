@@ -1,0 +1,76 @@
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+@{
+    string culture = ViewBag.culture;
+    List<Mix.Cms.Lib.ViewModels.MixPages.ReadListItemViewModel> topCates = MixCmsHelper.GetCategory(Url, ViewBag.culture, MixEnums.CatePosition.Nav, Context.Request.Path);
+    var socials = MixCmsHelper.GetModule("social", ViewBag.culture);
+}
+<nav class="navbar navbar-expand-lg bg-white fixed-top navbar-transparent" color-on-scroll="500">
+    <div class="container">
+        <div class="navbar-translate">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#example-navbar-primary" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-bar bar1"></span>
+                <span class="navbar-toggler-bar bar2"></span>
+                <span class="navbar-toggler-bar bar3"></span>
+            </button>
+            <a class="navbar-brand" href="/@ViewBag.culture" title="mixcore">
+                <img class="logo-white" src="@(MixService.GetConfig<string>("Logo", ViewBag.culture))" height="40" 
+                     title="@(MixService.GetConfig<string>("SiteName", ViewBag.culture as string))" 
+                     alt="@(MixService.GetConfig<string>("SiteName", ViewBag.culture as string))" />
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" id="example-navbar-primary">
+            <ul class="navbar-nav mx-auto">
+                @foreach (var cate in topCates.OrderBy(c => c.Priority))
+                {
+                    string activedClass = cate.IsActived ? "active" : string.Empty;
+                    if (cate.Type == MixEnums.MixPageType.Blank)
+                    {
+                        <li class="dropdown nav-item @activedClass">
+                            <a href="@cate.StaticUrl" target="_blank"
+                               class="nav-link dropdown-toggle" data-toggle="dropdown" id="dd-@cate.Id">
+                                @cate.Title <i class="@cate.Icon"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dd-@cate.Id">
+                                @foreach (var childNav in cate.Childs.OrderBy(c => c.Priority))
+                                {
+                                    activedClass = childNav.IsActived ? "active" : string.Empty;
+                                    <a href="@childNav.Page.DetailsUrl" class="dropdown-item @activedClass">@childNav.Page.Title</a>
+                                }
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item @activedClass">
+
+                            <a href="@cate.DetailsUrl" class="nav-link">@cate.Title</a>
+                        </li>
+
+                    }
+                }
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin">
+                            <i class="now-ui-icons ui-2_settings-90"></i>
+                            <p>Portal</p>
+                        </a>
+                    </li>
+                }
+            </ul>
+           @if(socials!=null){
+            <ul class="nav navbar-nav">
+                @foreach(var item in socials.Data.Items){
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="@item.Property("url")">
+                        <i class="@item.Property("icon")"></i>
+                    </a>
+                </li>
+                }
+            </ul>
+            }
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,45 @@
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+@{
+    List<Mix.Cms.Lib.ViewModels.MixPages.ReadListItemViewModel> cates = MixCmsHelper.GetCategory(Url, ViewBag.culture, MixEnums.CatePosition.Footer, Context.Request.Path);
+}
+<footer class="footer footer-default ">
+    <div class="container">
+        <nav>
+            <ul>
+                @foreach (var cate in cates.OrderBy(c => c.Priority))
+                {
+                    <li>
+                        <a href="@cate.DetailsUrl">
+                            @cate.Title
+                        </a>
+                    </li>
+                }
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <li>
+                        <a href="/admin">
+                            Login
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="/admin">
+                            Portal
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+        <div class="copyright">
+            &copy;
+            <script>
+                document.write(new Date().getFullYear())
+            </script>, Build with love by
+            <a href="http://dev.mixcore.org/en-us/home" target="_blank">mixcore</a>.
+        </div>
+    </div>
+</footer>
