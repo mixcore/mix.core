@@ -1,34 +1,60 @@
 <section class="" ng-init="loadAppSettings()">
-    {{appSettings}}
     <form ng-if="appSettings" ng-class="{'submitted': submitted}" ng-submit="saveAppSettings(appSettings)">
         <actions preview-url="appSettings.fullPath" back-url="'/portal/configuration/list'"></actions>
+
         <div class="row justify-content-md-center">
             <div class="card col-6">
                 <h6 class="card-header">
-                    Connection Strings
+                    App Settings
                 </h6>
                 <div class="card-body">
 
                     <div class="row">
                         <section class="col-lg-12">
                             <div class="form-group">
+                                <ace-editor content="appSettings"></ace-editor>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section class="col-lg-12">
+                            <div class="form-group">
+                                <span class="switch switch-sm">
+                                    <input type="checkbox" ng-model="appSettings.GlobalSettings.IsInit" id="IsInit"
+                                        class="switch ng-pristine ng-untouched ng-valid ng-empty">
+                                    <label class="switch mb-0" for="IsInit">
+                                        <span>IsInit {{appSettings.GlobalSettings.IsInit}}</span>
+                                    </label>
+                                </span>
+
+                                <!-- 
                                 <label class="control-label">IsInit {{appSettings.GlobalSettings.IsInit}}</label>
-                                <input type="checkbox" class="form-control" ng-model="appSettings.GlobalSettings.IsInit"></input>
+                                <input type="checkbox" class="form-control" ng-model="appSettings.GlobalSettings.IsInit"></input> -->
                             </div>
                             <div class="form-group">
-                            <div class="form-group">
-                                <label class="control-label">IsHttps {{appSettings.GlobalSettings.IsHttps}}</label>
-                                <input type="checkbox" class="form-control" ng-model="appSettings.GlobalSettings.IsHttps"></input>
-                            </div>
-                            <div class="form-group">
-                            <div class="form-group">
-                                <label class="control-label">CMS</label>
-                                <textarea type="text" class="form-control" ng-model="appSettings.ConnectionStrings.CmsConnection"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label">Account</label>
-                                <textarea type="text" class="form-control" ng-model="appSettings.ConnectionStrings.AccountConnection"></textarea>
-                            </div>
+                                <div class="form-group">
+
+                                    <span class="switch switch-sm">
+                                        <input type="checkbox" ng-model="appSettings.GlobalSettings.IsHttps" id="IsHttps"
+                                            class="switch ng-pristine ng-untouched ng-valid ng-empty">
+                                        <label class="switch mb-0" for="IsHttps">
+                                            <span>IsHttps {{appSettings.GlobalSettings.IsHttps}}</span>
+                                        </label>
+                                    </span>
+
+
+                                    <!-- <label class="control-label">IsHttps {{appSettings.GlobalSettings.IsHttps}}</label>
+                                    <input type="checkbox" class="form-control" ng-model="appSettings.GlobalSettings.IsHttps"></input> -->
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label class="control-label">Connection Strings for CMS</label>
+                                        <textarea type="text" class="form-control" ng-model="appSettings.ConnectionStrings.CmsConnection"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Connection Strings for Account</label>
+                                        <textarea type="text" class="form-control" ng-model="appSettings.ConnectionStrings.AccountConnection"></textarea>
+                                    </div>
 
                         </section>
                     </div>
