@@ -9,11 +9,25 @@
 - Docs: https://docs.mixcore.org
 - Youtube: https://www.youtube.com/channel/UChqzh6JnC8HBUSQ9AWIcZAw
 
+# GITs clone
+
+```
+mkdir mixcore
+cd mixcore
+
+git clone https://github.com/mixcore/mix.heart.git
+git clone https://github.com/mixcore/mix.identity.git
+git clone https://github.com/mixcore/mix.core.git
+```
+
 # Build & Run
 
 ```
-cd src\Mix.Cms.Web
+cd mix.core/src/Mix.Cms.Web
+
+npm install
 gulp build
+dotnet restore
 dotnet bundle
 dotnet build
 dotnet run
