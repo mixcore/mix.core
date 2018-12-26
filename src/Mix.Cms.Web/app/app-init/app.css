@@ -1,9 +1,47 @@
-﻿.page-header>.content {
-    margin-top: unset !important;
+﻿/* GENERAL */
+.login-page .card-login .input-group:last-child{
+    margin-bottom: 10px!important;
+}
+
+.useServerTitle{
+    font-weight: 300;
+    font-size: 1.3em;
+    line-height: 1.4em;
+    margin-bottom: 15px;
+}
+
+.link{
+    cursor: pointer;
+}
+
+.page-header>.content {
+    margin-top: 2% !important;
 }
 
 .login-page .card-login.card-plain .form-control {
     height: 46px;
+}
+
+.form-check .form-check-sign::after{
+    color: white!important;
+}
+
+.form-check-label a{
+    color: #f96332!important;
+}
+
+
+/* ALERT */
+
+.alert .close{
+    position: unset!important;
+    right: unset!important;
+    top: unset!important;
+    line-height: 1!important;
+}
+
+.alert.alert-danger{
+    background-color: rgba(255,54,54,1);
 }
 
 /* Center the loader */
@@ -13,7 +51,7 @@
     width: 100%;
     height: 100%;
     position: fixed;
-    background-color: #2196F3;
+    background-color: rgba(115, 130, 186, .8);;
     opacity: .97;
     z-index: 9999;
     display: flex;
