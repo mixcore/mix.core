@@ -1,13 +1,24 @@
-﻿/* Center the loader */
+﻿.page-header>.content {
+    margin-top: unset !important;
+}
+
+.login-page .card-login.card-plain .form-control {
+    height: 46px;
+}
+
+/* Center the loader */
 .loader-container {
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     position: fixed;
-    background-color: black;
-    opacity: 0.2;
+    background-color: #2196F3;
+    opacity: .97;
     z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #loader {
@@ -44,5 +55,41 @@
 
     100% {
         transform: rotate(360deg);
+    }
+}
+
+/* NEW LOADER */
+.loader {
+    color: #fff;
+    font-family: Consolas, Menlo, Monaco, monospace;
+    font-weight: bold;
+    font-size: 30vh;
+    opacity: 0.8;
+}
+
+.loader span {
+    display: inline-block;
+    -webkit-animation: pulse 0.4s alternate infinite ease-in-out;
+    animation: pulse 0.4s alternate infinite ease-in-out;
+}
+
+.loader span:nth-child(odd) {
+    -webkit-animation-delay: 0.4s;
+    animation-delay: 0.4s;
+}
+
+@-webkit-keyframes pulse {
+    to {
+        -webkit-transform: scale(0.8);
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+}
+
+@keyframes pulse {
+    to {
+        -webkit-transform: scale(0.8);
+        transform: scale(0.8);
+        opacity: 0.5;
     }
 }
