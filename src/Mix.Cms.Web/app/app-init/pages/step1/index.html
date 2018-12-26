@@ -36,15 +36,18 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><em class="now-ui-icons business_chart-pie-36"></em></span>
                         </div>
-                        <input ng-show="!initCmsModel.isSqlite" ng-model="initCmsModel.localDbConnectionString" class="form-control" placeholder="Local Db">
-                        <input ng-show="initCmsModel.isSqlite" ng-model="initCmsModel.sqliteDbConnectionString" class="form-control" placeholder="Local Db">
+                        <input ng-show="!initCmsModel.isSqlite" ng-model="initCmsModel.localDbConnectionString" class="form-control"
+                            placeholder="Local Db">
+                        <input ng-show="initCmsModel.isSqlite" ng-model="initCmsModel.sqliteDbConnectionString" class="form-control"
+                            placeholder="Local Db">
                     </div>
                     <div ng-show="initCmsModel.isUseLocal" class="input-group no-border input-lg">
 
                         <div class="input-group-prepend">
                             <span class="input-group-text"><em class="now-ui-icons business_badge"></em></span>
                         </div>
-                        <input ng-change="updateLocalDbName()" ng-model="initCmsModel.localDbName" class="form-control" placeholder="Local Db">
+                        <input ng-change="updateLocalDbName()" ng-model="initCmsModel.localDbName" class="form-control"
+                            placeholder="Local Db">
                     </div>
                 </div>
                 <div ng-hide="initCmsModel.isUseLocal">
@@ -71,7 +74,8 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><em class="now-ui-icons now-ui-icons objects_key-25"></em></span>
                         </div>
-                        <input ng-model="initCmsModel.dataBasePassword" type="password" class="form-control" placeholder="Database Password">
+                        <input ng-model="initCmsModel.dataBasePassword" type="password" class="form-control"
+                            placeholder="Database Password">
                     </div>
                 </div>
                 <!--<select class="btn btn-secondary custom-select"
@@ -79,16 +83,17 @@
                         ng-options="item in settings.cultures track by $index">
                 </select>-->
                 <div class="input-group no-border input-lg">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><em class="now-ui-icons now-ui-icons objects_key-25"></em></span>
-                        </div>
-                        <input ng-model="initCmsModel.siteName" type="text" class="form-control" placeholder="Site Name">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><em class="now-ui-icons now-ui-icons objects_key-25"></em></span>
                     </div>
+                    <input ng-model="initCmsModel.siteName" type="text" class="form-control" placeholder="Site Name">
+                </div>
                 <h5 class="card-description text-white">Select culture </h5>
-                <select class="btn btn-secondary custom-select input-lg" ng-options="item as item.fullName for item in settings.cultures track by item.specificulture" ng-model="initCmsModel.culture"></select>
+                <select class="btn btn-secondary custom-select input-lg" ng-options="item as item.fullName for item in settings.cultures track by item.specificulture"
+                    ng-model="initCmsModel.culture"></select>
             </div>
             <div class="card-footer text-center">
-                <a ng-click="initCms();" class="btn btn-primary btn-round btn-lg btn-block">Continue...</a>
+                <button ng-click="initCms();" class="btn btn-primary btn-round btn-lg btn-block" ng-disabled="!initCmsModel.sqliteDbConnectionString || !initCmsModel.localDbName || !initCmsModel.dataBaseServer || !initCmsModel.dataBaseName || !initCmsModel.dataBaseUser || !initCmsModel.dataBasePassword || !initCmsModel.siteName || !initCmsModel.culture">Continue</button>
             </div>
         </form>
     </div>
