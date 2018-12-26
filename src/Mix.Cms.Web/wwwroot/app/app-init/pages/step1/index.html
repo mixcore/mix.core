@@ -1,4 +1,4 @@
-<div class="col-md-5 ml-auto mr-auto" ng-init="loadSettings()">
+<div class="col-md-12 ml-auto mr-auto" ng-init="loadSettings()">
         <div class="card card-login card-plain">
             <form class="form-horizontal" ng-class="{'submitted': submitted}">
                 <!-- <div class="header header-primary text-center">
@@ -78,13 +78,13 @@
                
                 <div class="footerButton">
                     <div class="card-footer text-center">
-                        <button ng-if="!initCmsModel.isUseLocal" ng-click="initCms();" class="btn btn-neutral btn-round btn-lg btn-block" ng-disabled="!initCmsModel.dataBaseServer || !initCmsModel.dataBaseName || !initCmsModel.dataBaseUser || !initCmsModel.dataBasePassword || !initCmsModel.siteName || !initCmsModel.culture">
+                        <button ng-if="!initCmsModel.isUseLocal" ng-click="initCms();" class="btn btn-primary btn-round btn-lg btn-block" ng-disabled="!initCmsModel.dataBaseServer || !initCmsModel.dataBaseName || !initCmsModel.dataBaseUser || !initCmsModel.dataBasePassword || !initCmsModel.siteName || !initCmsModel.culture">
                             <span ng-if="!initCmsModel.dataBaseServer || !initCmsModel.dataBaseName || !initCmsModel.dataBaseUser || !initCmsModel.dataBasePassword || !initCmsModel.siteName || !initCmsModel.culture">Setting...</span>
-                            <span ng-if="initCmsModel.dataBaseServer && initCmsModel.dataBaseName && initCmsModel.dataBaseUser && initCmsModel.dataBasePassword && initCmsModel.siteName && initCmsModel.culture">Connect remote server</span>
+                            <span ng-if="initCmsModel.dataBaseServer && initCmsModel.dataBaseName && initCmsModel.dataBaseUser && initCmsModel.dataBasePassword && initCmsModel.siteName && initCmsModel.culture">Connect</span>
                         </button>
-                        <button ng-if="initCmsModel.isUseLocal" ng-click="initCms();" class="btn btn-neutral btn-round btn-lg btn-block" ng-disabled="!initCmsModel.sqliteDbConnectionString || !initCmsModel.localDbName|| !initCmsModel.siteName">
+                        <button ng-if="initCmsModel.isUseLocal" ng-click="initCms();" class="btn btn-primary btn-round btn-lg btn-block" ng-disabled="!initCmsModel.sqliteDbConnectionString || !initCmsModel.localDbName|| !initCmsModel.siteName">
                                 <span ng-if="!initCmsModel.sqliteDbConnectionString || !initCmsModel.localDbName|| !initCmsModel.siteName">Setting...</span>
-                                <span ng-if="initCmsModel.sqliteDbConnectionString && initCmsModel.localDbName && initCmsModel.siteName">Configurate local</span>
+                                <span ng-if="initCmsModel.sqliteDbConnectionString && initCmsModel.localDbName && initCmsModel.siteName">Configurate</span>
                             </button>
                         <div class="pull-left">
                                 <h6>
