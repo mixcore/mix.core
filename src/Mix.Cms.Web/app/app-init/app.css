@@ -13,9 +13,14 @@
 .link{
     cursor: pointer;
 }
-
-.page-header>.content {
-    margin-top: 2% !important;
+.page-header>.content{
+    margin-top: 0px!important;
+}
+.page-header {
+    display: flex!important;
+    align-items: center!important;
+    position: relative!important;
+    justify-content: center!important;
 }
 
 .login-page .card-login.card-plain .form-control {
@@ -29,7 +34,10 @@
 .form-check-label a{
     color: #f96332!important;
 }
-
+.form-check-label a:hover{
+    border-color: #f96332!important;
+    color: #f96332!important;
+}
 
 /* ALERT */
 
@@ -41,7 +49,7 @@
 }
 
 .alert.alert-danger{
-    background-color: rgba(255,54,54,1);
+    background-color: rgba(255,54,54,1)!important;
 }
 
 /* Center the loader */
@@ -51,7 +59,7 @@
     width: 100%;
     height: 100%;
     position: fixed;
-    background-color: rgba(115, 130, 186, .8);;
+    background-color: rgba(115, 130, 186, .8);
     opacity: .97;
     z-index: 9999;
     display: flex;
