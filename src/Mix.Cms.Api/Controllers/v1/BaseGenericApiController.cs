@@ -115,7 +115,7 @@ namespace Mix.Cms.Api.Controllers.v1
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
             var getData = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
-            var cacheKey = $"{typeof(TModel).Name}_list_{_lang}_{key}_{request.Status}_{request.Keyword}_{request.OrderBy}_{request.PageSize}_{request.PageIndex}";
+            var cacheKey = $"{typeof(TModel).Name}_list_{_lang}_{key}_{request.Status}_{request.Keyword}_{request.OrderBy}_{request.Direction}_{request.PageSize}_{request.PageIndex}";
             var data = _memoryCache.Get<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
             if (data == null)
             {

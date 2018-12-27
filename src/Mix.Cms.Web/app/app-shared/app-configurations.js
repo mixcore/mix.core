@@ -137,7 +137,17 @@ app.run(['$rootScope', '$location', 'CommonService', 'AuthService', 'TranslatorS
                 $rootScope.showMessage('Server Errors', 'danger');
             }
         };
-
+        $rootScope.shortString = function (msg, max) {
+            var data = decodeURIComponent(msg);
+            if (data) {
+                if (max < data.length) {
+                    return data.replace(/[+]/g, ' ').substr(0, max) + ' ...';
+                }
+                else {
+                    return data.replace(/[+]/g, ' ');
+                }
+            }
+        };
         $rootScope.showMessage = function (content, type) {
             var from = 'bottom';
             var align = 'right';
