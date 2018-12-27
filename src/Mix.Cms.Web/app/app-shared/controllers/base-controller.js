@@ -114,5 +114,18 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
             $scope.$apply();
         }
     };
-
+    $scope.shortString = function (msg,max){
+        var data = decodeURIComponent(msg);
+        if (data) {
+            if (max < data.length) {
+                return data.replace(/[+]/g, ' ').substr(0, max) + ' ...';
+            }
+            else {
+                return data.replace(/[+]/g, ' ');
+            }
+        }
+        else{
+            return '';
+        }
+    }
 }
