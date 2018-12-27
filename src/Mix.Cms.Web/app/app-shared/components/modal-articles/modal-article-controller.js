@@ -95,29 +95,29 @@ app.controller('ModalArticleController', [
         $scope.request.query = "level=0";
         $scope.miOptions = ngAppSettings.miIcons;
         $scope.columns = [{
-                title: 'Keyword',
-                name: 'textKeyword',
+                title: 'Title',
+                name: 'title',
                 filter: true,
                 type: 0 // string - ngAppSettings.dataTypes[0]
             },
-            {
-                title: 'Default',
-                name: 'textDefault',
-                filter: true,
-                type: 0 // string - ngAppSettings.dataTypes[0]
-            },
+            // {
+            //     title: 'Description',
+            //     name: 'description',
+            //     filter: true,
+            //     type: 0 // string - ngAppSettings.dataTypes[0]
+            // },
             {
                 title: 'Url',
-                name: 'url',
+                name: 'imageUrl',
                 filter: true,
-                type: 0 // string - ngAppSettings.dataTypes[0]
+                type: 16 // string - ngAppSettings.dataTypes[0]
             },
-            {
-                title: 'Created Date',
-                name: 'createdDateTime',
-                filter: true,
-                type: 0 // string - ngAppSettings.dataTypes[0]
-            },
+            // {
+            //     title: 'Created Date',
+            //     name: 'createdDateTime',
+            //     filter: true,
+            //     type: 0 // string - ngAppSettings.dataTypes[0]
+            // },
         ];
         $scope.initCurrentPath = async function () {
             await $scope.getSingle();

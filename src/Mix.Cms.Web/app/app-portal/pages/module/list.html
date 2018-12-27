@@ -1,4 +1,4 @@
-<!-- <section class="content container-fluid"> -->
+<section class="card manual">
     <filter-list request="request" callback="getList(pageIndex)"></filter-list>
     <select ng-model="type" ng-change="getListByType(pageIndex)">
         <option value="-1">All</option>
@@ -85,4 +85,4 @@
         </tbody>
     </table>
     <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
-<!-- </section> -->
+</section>
