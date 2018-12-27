@@ -166,7 +166,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 }
                 else
                 {
-                    return ImageUrl;
+                    return string.IsNullOrEmpty(Thumbnail) ? ImageUrl : Thumbnail;
                 }
             }
         }
