@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -114,6 +116,10 @@ namespace Mix.Cms.Web.Controllers
 
         async System.Threading.Tasks.Task<IActionResult> PageAsync(string seoName)//Expression<Func<MixPage, bool>> predicate, int? pageIndex = null, int pageSize = 10)
         {
+            ViewData["TopPages"] = GetCategory(CatePosition.Nav, seoName);
+            ViewData["HeaderPages"] = GetCategory(CatePosition.Top, seoName);
+            ViewData["FooterPages"] = GetCategory(CatePosition.Footer, seoName);
+            ViewData["LeftPages"] = GetCategory(CatePosition.Left, seoName);
             // Home Page
             int.TryParse(Request.Query["pageSize"], out int pageSize);
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
@@ -143,7 +149,7 @@ namespace Mix.Cms.Web.Controllers
                 }
 
                 getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
-                if (getPage.Data!=null)
+                if (getPage.Data != null)
                 {
                     getPage.Data.LoadData(pageIndex: pageIndex, pageSize: pageSize);
                 }
@@ -177,7 +183,10 @@ namespace Mix.Cms.Web.Controllers
 
         async System.Threading.Tasks.Task<IActionResult> ArticleViewAsync(string seoName)
         {
-
+            ViewData["TopPages"] = GetCategory(CatePosition.Nav, seoName);
+            ViewData["HeaderPages"] = GetCategory(CatePosition.Top, seoName);
+            ViewData["FooterPages"] = GetCategory(CatePosition.Footer, seoName);
+            ViewData["LeftPages"] = GetCategory(CatePosition.Left, seoName);
             var getArticle = new RepositoryResponse<Lib.ViewModels.MixArticles.ReadMvcViewModel>();
 
             var cacheKey = $"article_{_culture}_{seoName}";
@@ -230,6 +239,10 @@ namespace Mix.Cms.Web.Controllers
 
         async System.Threading.Tasks.Task<IActionResult> ProductViewAsync(string seoName)
         {
+            ViewData["TopPages"] = GetCategory(CatePosition.Nav, seoName);
+            ViewData["HeaderPages"] = GetCategory(CatePosition.Top, seoName);
+            ViewData["FooterPages"] = GetCategory(CatePosition.Footer, seoName);
+            ViewData["LeftPages"] = GetCategory(CatePosition.Left, seoName);
             var getProduct = new RepositoryResponse<Lib.ViewModels.MixProducts.ReadMvcViewModel>();
 
             var cacheKey = $"product_{_culture}_{seoName}";
@@ -344,6 +357,64 @@ namespace Mix.Cms.Web.Controllers
             return MixCmsHelper.GetRouterUrl(type, routeValues, Request, Url);
         }
 
+        List<Lib.ViewModels.MixPages.ReadListItemViewModel> GetCategory(MixEnums.CatePosition position, string seoName)
+        {
+            var result = new List<Lib.ViewModels.MixPages.ReadListItemViewModel>();
+            var cacheKey = $"page_position_{position}";
+
+            var data = _memoryCache.Get<List<Lib.ViewModels.MixPages.ReadListItemViewModel>>(cacheKey);
+            if (data != null && MixService.GetConfig<bool>("IsCache"))
+            {
+                result = data;
+            }
+            else
+            {
+                var getTopCates = Lib.ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelListBy
+            (c => c.Specificulture == _culture && c.MixPagePosition.Any(
+              p => p.PositionId == (int)position)
+            );
+
+                result = getTopCates.Data ?? new List<Lib.ViewModels.MixPages.ReadListItemViewModel>();
+                foreach (var cate in result)
+                {
+                    switch (cate.Type)
+                    {
+                        case MixPageType.Blank:
+                            foreach (var child in cate.Childs)
+                            {
+                                child.Page.DetailsUrl = GenerateDetailsUrl("Page", new { seoName = child.Page.SeoName });
+                            }
+                            break;
+
+                        case MixPageType.StaticUrl:
+                            cate.DetailsUrl = cate.StaticUrl;
+                            break;
+
+                        case MixPageType.Home:
+                        case MixPageType.ListArticle:
+                        case MixPageType.Article:
+                        case MixPageType.Modules:
+                        default:
+                            cate.DetailsUrl = GenerateDetailsUrl("Page", new { seoName = cate.SeoName });
+                            break;
+                    }
+                }
+
+            }
+
+            foreach (var cate in result)
+            {
+                cate.IsActived = (cate.SeoName == seoName
+                    || (cate.Type == MixPageType.Home && string.IsNullOrEmpty(seoName)));
+                cate.Childs.ForEach((Action<Lib.ViewModels.MixPagePages.ReadViewModel>)(c =>
+                {
+                    c.IsActived = (
+                    c.Page.SeoName == seoName);
+                    cate.IsActived = cate.IsActived || c.IsActived;
+                }));
+            }
+            return result;
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

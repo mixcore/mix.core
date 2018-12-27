@@ -73,7 +73,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         {
             get
             {
-                if (Image != null && (Image.IndexOf("http") == -1) && Image[0] != '/')
+                if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
                     Domain,  Image
@@ -95,7 +95,11 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("view")]
         public MixTemplates.ReadViewModel View { get; set; }
+        [JsonProperty("formView")]
+        public MixTemplates.ReadViewModel FormView { get; set; }
 
+        [JsonProperty("edmView")]
+        public MixTemplates.ReadViewModel EdmView { get; set; }
         [JsonProperty("data")]
         public PaginationModel<ViewModels.MixModuleDatas.ReadViewModel> Data { get; set; } = new PaginationModel<ViewModels.MixModuleDatas.ReadViewModel>();
 
@@ -137,6 +141,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             this.View = MixTemplates.ReadViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
+            this.FormView = MixTemplates.ReadViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
+            this.View = MixTemplates.ReadViewModel.GetTemplateByPath(EdmTemplate, Specificulture, _context, _transaction).Data;
             // call load data from controller for padding parameter (articleId, productId, ...)
         }
 
@@ -175,8 +181,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                     case MixModuleType.Content:
                     case MixModuleType.Data:
                         dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture;
-                        articleExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
-                        productExp = m => m.ModuleId == Id && m.Specificulture == Specificulture;
+                        //articleExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
+                        //productExp = m => m.ModuleId == Id && m.Specificulture == Specificulture;
                         break;
 
                     case MixModuleType.SubPage:
@@ -233,14 +239,14 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 }
                 if (productExp != null)
                 {
-                    var getArticles = MixModuleArticles.ReadViewModel.Repository
-                    .GetModelListBy(articleExp
+                    var getProducts = MixModuleProducts.ReadViewModel.Repository
+                    .GetModelListBy(productExp
                     , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
                     , PageSize, pageIndex
                     , _context: context, _transaction: transaction);
-                    if (getArticles.IsSucceed)
+                    if (getProducts.IsSucceed)
                     {
-                        Articles = getArticles.Data;
+                        Products = getProducts.Data;
                     }
                 }
             }

@@ -29,6 +29,9 @@
                 ctrl.addFavorite = function () {
                     $('#dlg-favorite').modal('show');
                 }
+                ctrl.toggleSidebar = function () {           
+                    $('#sidebar').toggleClass('active');
+                }
                 ctrl.generateSitemap = async function(){
                     $rootScope.isBusy = true;
                     var resp = await commonService.genrateSitemap();

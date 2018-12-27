@@ -48,6 +48,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Views\Home\PageAsync.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Shared\Templates\Default\Widgets\_Pagination.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
