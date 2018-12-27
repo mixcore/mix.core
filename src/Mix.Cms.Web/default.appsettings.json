@@ -42,6 +42,8 @@
   },
   "GlobalSettings": {
     "IsInit": false,
+    "IsHttps": true,
+    "IsCache": true,
     "SiteName": "Site Name",
     "DefaultCulture": "en-us",
     "DefaultTemplate": "_Default",

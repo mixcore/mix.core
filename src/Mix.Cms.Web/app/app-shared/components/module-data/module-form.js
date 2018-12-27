@@ -65,7 +65,8 @@
                 if (resp && resp.isSucceed) {
                     ctrl.data = resp.data;
                     ctrl.initModuleForm();
-                    $rootScope.showMessage('Thành công', 'success');
+                    var msg = $rootScope.translate('success');
+                    $rootScope.showMessage(msg, 'success');
                     if (ctrl.saveCallback) {
                         ctrl.saveCallback({ data: ctrl.data });
                     }
