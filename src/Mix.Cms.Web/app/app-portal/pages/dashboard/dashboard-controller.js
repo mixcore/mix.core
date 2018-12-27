@@ -18,6 +18,7 @@ app.controller('DashboardController', ['$scope', '$rootScope', 'ngAppSettings', 
         $rootScope.isBusy = true;
         var response = await dashboardServices.getDashboardInfo();
         if (response.isSucceed) {
+            // $('#mainSection').removeClass('card');
             $scope.data = response.data;
             $rootScope.isBusy = false;
             $scope.$apply();

@@ -43,7 +43,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePages
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getCategory = MixPages.ReadListItemViewModel.Repository.GetSingleModel(p => p.Id == ParentId && p.Specificulture == Specificulture
+            var getCategory = MixPages.ReadListItemViewModel.Repository.GetSingleModel(p => p.Id == Id && p.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction
             );
             if (getCategory.IsSucceed)

@@ -5,7 +5,9 @@
 }
 <div ng-app="MixPortal" ng-init="init()" ng-controller="AppPortalController">
     <div class="loader-container" ng-show="isBusy">
-        <div id="loader"></div>
+       <div class="loader">
+            <span>{</span><span>}</span>
+        </div>
     </div>
 
     <header-nav settings="settings" bread-crumbs="breadCrumbs"></header-nav>
