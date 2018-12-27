@@ -44,7 +44,7 @@
                 </td>
                 <td>
                     <small>
-                        {{item.excerpt}}
+                        {{shortString(item.excerpt,50)}}
                     </small>
                 </td>
                 <td>
@@ -120,10 +120,10 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <span ng-bind="c.title"></span>
+                                        <span ng-bind="c.page.title"></span>
                                     </td>
                                     <td>
-                                        <span ng-bind="c.excerpt"></span>
+                                        <span class="small" ng-bind="shortString(c.page.excerpt,50)"></span>
                                     </td>
                                     <td>
                                         <small>
@@ -131,7 +131,7 @@
                                         </small>
                                     </td>
                                     <td>
-                                        {{c.createdBy}}{{item.type}}
+                                        {{c.page.createdBy}}
                                     </td>
 
                                     <td>

@@ -157,7 +157,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
                 }
                 else
                 {
-                    return ImageUrl;
+                    return string.IsNullOrEmpty(Thumbnail) ? ImageUrl : Thumbnail;
                 }
             }
         }
