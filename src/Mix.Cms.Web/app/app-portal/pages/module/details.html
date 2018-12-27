@@ -28,9 +28,9 @@
                                             <!--<th scope="col" width="5%">
                                                 <span class="fas fa-sort"></span>
                                             </th>-->
-                                            <!--<th scope="col" width="5%">
+                                            <th scope="col" width="5%">
                                                 <span class="fas fa-sort-numeric-down"></span>
-                                            </th>-->
+                                            </th>
                                             <th scope="col">Attribute Name</th>
                                             <!--<th scope="col">Name</th>-->
                                             <th scope="col" width="20%">Data Type</th>
@@ -43,11 +43,17 @@
                                             <th scope="col" width="5%"></th>
                                         </tr>
                                     </thead>
-                                    <tbody class="sortable">
-                                        <tr class="sortable-item module-column" ng-repeat="col in activedData.columns track by $index">
-                                            <!--<td style="cursor:move;" class="drag-header">
+                                    <tbody class="sortable" dnd-list="activedData.columns" 
+                                        dnd-inserted="insertColCallback(index, item, external, type)">
+                                        <tr class="sortable-item module-column" ng-repeat="col in activedData.columns track by $index"
+                                            dnd-draggable="col" 
+                                            dnd-dragstart="updateColOrders($index,activedData.columns)"
+                                            
+                                            dnd-effect-allowed="move" dnd-selected="selectedCol = col" 
+                                            ng-class="{'selected': selectedCol === col}">
+                                            <td style="cursor:move;" class="drag-header">
                                                 <span class="fas fa-sort"></span>
-                                            </td>-->
+                                            </td>
                                             <!--<td>
                                                 <input type="text" ng-model="col.priority" class="item-priority form-control form-control-sm d-inline" style="width:40px;" />
                                             </td>-->
