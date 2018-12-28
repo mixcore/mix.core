@@ -17,6 +17,7 @@ using Mix.Cms.Lib.ViewModels.MixMedias;
 using Microsoft.Extensions.Caching.Memory;
 using static Mix.Cms.Lib.MixEnums;
 using System.Web;
+using System.Collections.Generic;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -124,6 +125,20 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
+        // POST api/update-infos
+        [HttpPost, HttpOptions]
+        [Route("update-infos")]
+        public async Task<RepositoryResponse<List<UpdateViewModel>>> UpdateInfos([FromBody]List<UpdateViewModel> models)
+        {
+            if (models != null)
+            {                
+                return await base.SaveListAsync(models, false);
+            }
+            else
+            {
+                return new RepositoryResponse<List<UpdateViewModel>>();
+            }
+        }
         #endregion Post
 
         #region Helpers

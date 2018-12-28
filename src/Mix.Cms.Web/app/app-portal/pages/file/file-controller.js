@@ -28,7 +28,13 @@ app.controller('FileController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
             for (var i = 1; i <= max; i += 1) input.push(i);
             return input;
         };
-
+        $scope.loadPage = async function(folder){
+            if (folder) {
+                $scope.request.key += ($scope.request.key !== '') ? '/' : '';
+                $scope.request.key += folder;
+            }
+            $location.path('/portal/file/list?folder=' + $scope.request.key);
+        };
         $scope.loadFile = async function () {
             $rootScope.isBusy = true;
             $scope.listUrl = '/portal/file/list?folder=' + $routeParams.folder;
@@ -52,6 +58,7 @@ app.controller('FileController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
             } else {
                 $scope.request.key = $routeParams.folder ? $routeParams.folder : '';
             }
+            
             $rootScope.isBusy = true;
             var resp = await fileServices.getFiles($scope.request);
             if (resp && resp.isSucceed) {
@@ -73,6 +80,7 @@ app.controller('FileController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
                 $rootScope.isBusy = false;
                 $scope.$apply();
             }
+            
         };
 
         $scope.removeFile = async function (id) {

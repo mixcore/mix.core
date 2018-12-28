@@ -6,4 +6,5 @@ app.controller('ArticleController', ['$scope', '$rootScope', 'ngAppSettings', '$
             item.editUrl = '/portal/article/details/' + item.id;
             $rootScope.preview('article', item, item.title, 'modal-lg');
         };
-    }]);
+    }
+]);
