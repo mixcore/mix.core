@@ -1,5 +1,4 @@
-﻿
-modules.component('aceEditor', {
+﻿modules.component('aceEditor', {
     templateUrl: '/app/app-shared/components/ace-editor/ace-editor.html',
     controller: ['$rootScope', '$scope', 'ngAppSettings',
         function ($rootScope, $scope, ngAppSettings) {
@@ -33,6 +32,7 @@ modules.component('aceEditor', {
             ctrl.updateEditors = function () {
                 $.each($('#code-editor-' + ctrl.id), function (i, e) {
                     //var container = $(this);
+                    ace.require("ace/ext/language_tools");
                     if (e) {
                         var editor = ace.edit(e);
                         switch (ctrl.ext) {
@@ -63,6 +63,9 @@ modules.component('aceEditor', {
                         editor.$blockScrolling = Infinity;
                         editor.session.setUseWrapMode(true);
                         editor.setOptions({
+                            enableBasicAutocompletion: true,
+                            enableSnippets: true,
+                            enableLiveAutocompletion: false,
                             maxLines: 50,
                             fontSize: 11
                         });
@@ -78,7 +81,8 @@ modules.component('aceEditor', {
                     }
                 });
             };
-        }],
+        }
+    ],
     bindings: {
         content: '=',
         contentId: '=',
