@@ -2,12 +2,12 @@
     <div ng-switch-when="0">        
         <h1 class="display-4"><span class="text-capitalize" ng-bind="$ctrl.tagName">
         </span></h1>
-        <hr class="my-3">    
+        <hr ng-if="$ctrl.tagName" class="my-3">    
     </div>
     <div ng-switch-when="1">
         <h1 class="display-4">Add <span class="text-capitalize" ng-bind="$ctrl.tagName">
         </span></h1>
-        <hr class="my-3">  
+        <hr ng-if="$ctrl.tagName" class="my-3">  
     </div>
 
 <!-- <div class="row position-sticky" style="top: 4rem; z-index: 12;">
