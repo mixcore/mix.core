@@ -6,6 +6,7 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixArticles
 {
@@ -79,6 +80,11 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
         [JsonProperty("tags")]
         public string Tags { get; set; }
+
+        [JsonProperty("status")]
+        public MixContentStatus Status { get; set; }
+
+
 
         #endregion Models
 
