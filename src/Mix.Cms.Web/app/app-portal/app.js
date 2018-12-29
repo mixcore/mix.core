@@ -3,7 +3,7 @@ var app = angular.module('MixPortal', ['ngRoute', 'components', 'ngFileUpload', 
     'bw.paging', 'dndLists', 'ngTagsInput', 'ngSanitize']);
 var modules = angular.module('components', []);
 
-app.run(['GlobalSettingsService', function(globalSettingsService){
+app.run(['$rootScope', 'GlobalSettingsService', function($rootScope, globalSettingsService){
     globalSettingsService.fillGlobalSettings().then(function (response) {
         $rootScope.settings = response;
     });
