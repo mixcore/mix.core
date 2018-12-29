@@ -3,7 +3,11 @@ var app = angular.module('MixPortal', ['ngRoute', 'components', 'ngFileUpload', 
     'bw.paging', 'dndLists', 'ngTagsInput', 'ngSanitize']);
 var modules = angular.module('components', []);
 
-
+app.run(['GlobalSettingsService', function(globalSettingsService){
+    globalSettingsService.fillGlobalSettings().then(function (response) {
+        $rootScope.settings = response;
+    });
+}]);
 function Filter($filter) {
     return function (utcDateString, format) {
         // return if input date is null or undefined
