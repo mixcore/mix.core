@@ -77,6 +77,19 @@
                             // e.type, etc
                             ctrl.content = editor.getValue();
                         });
+                        editor.commands.addCommand({
+                            name: 'saveFile',
+                            bindKey: {
+                            win: 'Ctrl-S',
+                            mac: 'Command-S',
+                            sender: 'editor|cli'
+                            },
+                            exec: function(env, args, request) {
+                                
+                               var btn = document.getElementById('btnToSubmit');
+                               btn.click();
+                            }
+                            });
                         ctrl.editor = editor;
                     }
                 });
