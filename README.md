@@ -41,6 +41,16 @@ dotnet run
   - **Admin Portal:**
 ![Mixcore Admin Portal Bootstrap 4.x](https://github.com/mixcore/mix.core/blob/master/assets/admin-portal.jpg?raw=true "Mixcore CMS Admin Portal Bootstrap 4")
 
+## Thanks to
+
+This project has been developed using:
+* [Creative Tim](https://www.creative-tim.com/)
+* [Bootstrap](https://getbootstrap.com/)
+* [BrowserStack](https://www.browserstack.com/)
+* [Micon](http://xtoolkit.github.io/Micon/icons/)
+* [.NET](https://www.microsoft.com/net/core)
+* And more...
+
 ## How to contribute
 
 Fork this repo to your GitHub account, clone it locally and try to follow
