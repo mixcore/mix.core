@@ -68,12 +68,13 @@
                       
                         <a href="/portal/page/details/{{item.id}}" class="btn btn-light"><span class="oi oi-pencil text-primary"></span></a>
                         <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-light"><span class="oi oi-eye text-primary"></span></a>
-                        <!-- <a ng-if="item.type==2" href="/portal/page/page-article/list/{{item.id}}" class="btn btn-light">
+                       <a ng-if="item.type==2" href="/portal/page/page-article/list/{{item.id}}" class="btn btn-light">
                             <span class="fas fa-list text-info"></span>
-                        </a> -->
+                        </a> 
+                         <!-- 
                         <a ng-if="item.type==2" href="#" data-toggle="modal" data-target="#modal-articles" class="btn btn-light">
                             <span class="fas fa-list text-info"></span>
-                        </a>
+                        </a>-->
                         <a href="#" class="btn btn-light" ng-click="remove(item.id)">
                             <span class="oi oi-x text-danger"></span>
                         </a>

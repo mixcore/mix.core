@@ -155,12 +155,14 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             var query = HttpUtility.ParseQueryString(request.Query ?? "");
             bool isPage = int.TryParse(query.Get("page_id"), out int pageId);
+            bool isNotPage = int.TryParse(query.Get("not_page_id"), out int notPageId);
             bool isModule = int.TryParse(query.Get("module_id"), out int moduleId);
             ParseRequestPagingDate(request);
             Expression<Func<MixArticle, bool>> predicate = model =>
                         model.Specificulture == _lang
                         && (!request.Status.HasValue || model.Status == request.Status.Value)
-                        && (!isPage || model.MixPageArticle.Any(nav=>nav.CategoryId == pageId && nav.ArticleId== model.Id && nav.Specificulture == _lang))
+                        && (!isPage || model.MixPageArticle.Any(nav=>nav.CategoryId == pageId && nav.ArticleId== model.Id && nav.Specificulture == _lang))                        
+                        && (!isNotPage || !model.MixPageArticle.Any(nav=>nav.CategoryId == notPageId && nav.ArticleId== model.Id && nav.Specificulture == _lang))                        
                         && (!isModule || model.MixModuleArticle.Any(nav=>nav.ModuleId == moduleId && nav.ArticleId== model.Id))
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (model.Title.Contains(request.Keyword)

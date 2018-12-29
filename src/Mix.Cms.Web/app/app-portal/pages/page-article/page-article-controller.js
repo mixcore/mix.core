@@ -1,14 +1,21 @@
 ﻿'use strict';
 app.controller('PageArticleController',
-    ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$location', 'PageArticleService', 'CommonService',
-        function ($scope, $rootScope, ngAppSettings, $routeParams, $location, service, commonService) {
+    [
+        '$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$location',
+        'PageArticleService', 'ArticleService', 'CommonService',
+        function ($scope, $rootScope, ngAppSettings, $routeParams, $location,
+            service, articleService, commonService) {
             BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
             $scope.cates = ['Site', 'System'];
-            $scope.settings = $rootScope.globalSettings;            
+            $scope.settings = $rootScope.globalSettings;
+            $scope.pageId = $routeParams.id;
+            $scope.othersRequest = angular.copy(ngAppSettings.request);
+            $scope.othersRequest.query = "&not_page_id=" + $routeParams.id;
+            $scope.others = [];
             $scope.getList = async function () {
                 $rootScope.isBusy = true;
                 var id = $routeParams.id;
-                $scope.request.query = '&page_id='+id;
+                $scope.request.query = '&page_id=' + id;
                 var response = await service.getList($scope.request);
                 if (response.isSucceed) {
                     $scope.data = response.data;
@@ -24,7 +31,7 @@ app.controller('PageArticleController',
             $scope.remove = function (pageId, articleId) {
                 $rootScope.showConfirm($scope, 'removeConfirmed', [pageId, articleId], null, 'Remove', 'Are you sure');
             };
-        
+
             $scope.removeConfirmed = async function (pageId, articleId) {
                 $rootScope.isBusy = true;
                 var result = await service.delete(pageId, articleId);
@@ -40,9 +47,36 @@ app.controller('PageArticleController',
                     $scope.$apply();
                 }
             };
-        
-            $scope.saveCallback = function () {               
+
+            $scope.saveCallback = function () {
             }
             $scope.removeCallback = function () {
+            }
+
+            $scope.loadOthers = async function (pageIndex) {
+                $scope.othersRequest.pageIndex = pageIndex;
+                $scope.others = [];
+                var response = await articleService.getList($scope.othersRequest);
+                if (response.isSucceed) {
+                    angular.forEach(response.data.items, function (e) {
+                        $scope.others.push({
+                            priority: $scope.data.totalItem + 1,
+                            description: e.title,
+                            articleId: e.id,
+                            categoryId: $scope.pageId,
+                            image: e.thumbnailUrl,
+                            article: e,
+                            status: 2,
+                            isActived: false
+                        });
+                    });
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                }
+                else {
+                    $rootScope.showErrors(response.errors);
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                }
             }
         }]);
