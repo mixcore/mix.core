@@ -63,7 +63,7 @@ namespace Mix.Cms.Lib.Services
 
         private void LoadConfiggurations()
         {
-            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, ".json", string.Empty, true);
+            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, ".json", string.Empty, true, "{}");
 
             JObject jsonSettings = JObject.Parse(settings.Content);
             if (jsonSettings["GlobalSettings"] == null)
