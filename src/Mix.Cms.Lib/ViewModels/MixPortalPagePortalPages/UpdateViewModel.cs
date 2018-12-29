@@ -56,7 +56,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
         #region overrides
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixPortalPageNavigation parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            if (Page!=null)
+            if (Page != null)
             {
                 var result = await Page.SaveModelAsync(false, _context, _transaction);
                 return new RepositoryResponse<bool>()
@@ -71,24 +71,24 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
             {
                 return await base.SaveSubModelsAsync(parent, _context, _transaction);
             }
-            
+
         }
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getCategory = MixPortalPages.UpdateRolePermissionViewModel.Repository.GetSingleModel(p => p.Id == Id
-               
+
             );
             if (getCategory.IsSucceed)
             {
                 Page = getCategory.Data;
             }
-            var getParent = MixPortalPages.ReadViewModel.Repository.GetSingleModel(p => p.Id == ParentId
-                , _context: _context, _transaction: _transaction
-            );
-            if (getParent.IsSucceed)
-            {
-                ParentPage = getParent.Data;
-            }
+            //var getParent = MixPortalPages.ReadViewModel.Repository.GetSingleModel(p => p.Id == ParentId
+            //    , _context: _context, _transaction: _transaction
+            //);
+            //if (getParent.IsSucceed)
+            //{
+            //    ParentPage = getParent.Data;
+            //}
         }
 
         #endregion overrides
