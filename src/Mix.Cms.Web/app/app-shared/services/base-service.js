@@ -59,6 +59,15 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService', 'AppS
             };
             return await commonService.getApiResult(req);
         };
+        var _saveList = async function (objData) {
+            var url = this.prefixUrl + '/update-infos';
+            var req = {
+                method: 'POST',
+                url: url,
+                data: JSON.stringify(objData)
+            };
+            return await commonService.getApiResult(req);
+        };
 
         var _updateInfos = async function (objData) {
             var url = this.prefixUrl + '/update-infos';
@@ -75,6 +84,7 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService', 'AppS
         serviceFactory.getSingle = _getSingle;
         serviceFactory.getList = _getList;
         serviceFactory.save = _save;
+        serviceFactory.saveList = _saveList;
         serviceFactory.delete = _delete;
         serviceFactory.updateInfos = _updateInfos;
         return serviceFactory;

@@ -117,6 +117,7 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
             $scope.$apply();
         }
     };
+    
     $scope.shortString = function (msg, max) {
         if (msg) {
             var data = decodeURIComponent(msg);

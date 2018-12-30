@@ -58,6 +58,9 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
                 });
             }
         };
+        $scope.prettyJsonObj = function (obj) {
+            return JSON.stringify(obj, null, '\t');
+        }
         $scope.$on('$routeChangeStart', function($event, next, current) { 
             // ... you could trigger something here ...
             $scope.pageTagName =$location.$$path.toString().split('/')[2];

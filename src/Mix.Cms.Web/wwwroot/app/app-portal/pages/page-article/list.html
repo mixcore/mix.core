@@ -5,7 +5,7 @@
             <span class="fas fa-plus-square text-info"></span>
         </a>
     </div>    
-    <modal-nav-articles request="othersRequest" callback="loadOthers(pageIndex)" src-id="pageId" data="others"></modal-nav-articles>
+    <modal-nav-articles request="othersRequest" load="loadOthers(pageIndex)" save="saveOthers()" src-id="pageId" data="others"></modal-nav-articles>
 </div>
 <table id="list-page" class="table table-sm table-hover sortable" cellspacing="0" ng-init="getList()">
     <thead class="thead-light">
