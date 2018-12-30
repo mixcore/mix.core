@@ -1,4 +1,4 @@
-<div class="projects-1 pb-0 section-blog">
+<div class="projects-1">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-8 ml-auto mr-auto text-center">
@@ -7,23 +7,24 @@
             </div>
         </div>
         <div class="row">
-            @foreach(var nav in Model.Articles.Items)
+             @foreach(var nav in Model.Articles.Items)
             {
-                <div class="col-md-6 mr-auto ml-auto px-0">
-                    <div class="card card-background card-background-product card-no-shadow" style="background-image: url('@nav.Article.ThumbnailUrl');height: 468px;overflow: hidden;">
-                        <div class="card-body">
-                            <h3 class="card-title">
-                                @nav.Article.Title
-                            </h3>
-                            <div class="card-description" style="color:white">
-                                @Html.Raw(nav.Article.Excerpt)
-                            </div>
-                            <a href="@nav.Article.DetailsUrl" class="btn btn-danger btn-round">
-                                <i class="now-ui-icons ui-1_send"></i> Read More
-                            </a>
-                        </div>
+            <div class="col-md-6 px-0">
+                <div class="card card-background card-background-product card-no-shadow" style="background-image: url('@nav.Article.ThumbnailUrl')">
+                    <div class="card-body">
+                        <h6 class="category">History</h6>
+                        <h3 class="card-title">
+                            @nav.Article.Title
+                        </h3>
+                        <p class="card-description">
+                            
+                        </p>
+                        <a href="@nav.Article.DetailsUrl" class="btn btn-danger btn-round">
+                            <i class="now-ui-icons ui-1_send"></i> Read More
+                        </a>
                     </div>
                 </div>
+            </div>
             }
         </div>
     </div>

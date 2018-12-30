@@ -4,7 +4,7 @@
         function(){
             var ctrl = this;
             ctrl.loadArticles = function(pageIndex){
-                ctrl.callback({ pageIndex: pageIndex });
+                ctrl.load({ pageIndex: pageIndex });
             }
         }
         
@@ -13,7 +13,7 @@
         srcId: '=',
         data: '=',        
         request: '=',        
-        onDelete: '&',
-        callback: '&'        
+        load: '&',
+        save: '&'
     }
 });

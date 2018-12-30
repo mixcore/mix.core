@@ -228,5 +228,21 @@ app.run(['$rootScope', 'CommonService', 'AuthService', 'TranslatorService', 'Glo
                 $rootScope.errors = [];
             }
         });
-
+        $rootScope.filterArray = function (array, key, value){
+            var result = [];
+            for (var i = 0; i < array.length; i++) {
+                if (array[i][key] === value) {
+                    result.push(array[i]);
+                }
+            }
+            return result;
+        };
+        function findObjectByKey(array, key, value) {
+            for (var i = 0; i < array.length; i++) {
+                if (array[i][key] === value) {
+                    return array[i];
+                }
+            }
+            return null;
+        }
     }]);

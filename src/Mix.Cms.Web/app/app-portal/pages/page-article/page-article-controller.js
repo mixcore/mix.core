@@ -60,17 +60,32 @@ app.controller('PageArticleController',
                 if (response.isSucceed) {
                     angular.forEach(response.data.items, function (e) {
                         $scope.others.push({
-                            priority: $scope.data.totalItem + 1,
+                            priority: e.priority,
                             description: e.title,
                             articleId: e.id,
                             categoryId: $scope.pageId,
                             image: e.thumbnailUrl,
+                            specificulture: $rootScope.configurationService.get('lang'),
                             article: e,
                             status: 2,
                             isActived: false
                         });
                     });
                     $rootScope.isBusy = false;
+                    $scope.$apply();
+                }
+                else {
+                    $rootScope.showErrors(response.errors);
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                }
+            }
+            $scope.saveOthers = async function(){
+                var arr = $rootScope.filterArray($scope.others, 'isActived', true);
+                var response = await service.saveList(arr);
+                if (response.isSucceed) {
+                    $scope.loadOthers();
+                    $scope.getList();
                     $scope.$apply();
                 }
                 else {
