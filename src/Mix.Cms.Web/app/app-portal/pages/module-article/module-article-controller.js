@@ -4,7 +4,9 @@ app.controller('ModuleArticleController',
         function ($scope, $rootScope, ngAppSettings, $routeParams, $location, service, commonService) {
             BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
             $scope.cates = ['Site', 'System'];
-            $scope.settings = $rootScope.globalSettings;            
+            $scope.others = [];
+            $scope.settings = $rootScope.globalSettings;    
+            $scope.moduleId = $routeParams.id;
             $scope.getList = async function () {
                 $rootScope.isBusy = true;
                 var id = $routeParams.id;
@@ -44,5 +46,18 @@ app.controller('ModuleArticleController',
             $scope.saveCallback = function () {               
             }
             $scope.removeCallback = function () {
+            }
+            
+            $scope.saveOthers = async function(){                
+                var response = await service.saveList($scope.others);
+                if (response.isSucceed) {
+                    $scope.getList();
+                    $scope.$apply();
+                }
+                else {
+                    $rootScope.showErrors(response.errors);
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                }
             }
         }]);
