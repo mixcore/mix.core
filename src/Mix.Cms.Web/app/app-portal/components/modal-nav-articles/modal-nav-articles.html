@@ -1,5 +1,5 @@
 <div class="modal modal-default fade show" id="modal-nav-articles-{{$ctrl.srcId}}" 
-    ng-init="$ctrl.load({pageIndex: 0})">
+ng-init="$ctrl.loadArticles()">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -15,18 +15,29 @@
             </div>
             <!-- <div class="modal-body" style="height: calc(100vh - 143px);overflow-y: auto;"> -->
             <div class="modal-body">
-                <div class="tab-pane" ng-if="$ctrl.data.length>0">
-                    <navs data="$ctrl.data" prefix="'article-nav'" key="'articleId'" details-url="'/portal/article/details/'"
+                <div class="tab-pane" ng-if="$ctrl.navs.length>0">
+                    <navs data="$ctrl.navs" prefix="'article-nav'" key="'articleId'" details-url="'/portal/article/details/'"
                         model="'nav-page-article'"></navs>
+
                 </div>
-                <paging class="small" page="$ctrl.data.page" page-size="$ctrl.data.pageSize" total="$ctrl.data.totalItems"
-                    ul-class="pagination justify-content-end" a-class="page-link" paging-action="$ctrl.loadArticles(page-1)"
-                    scroll-top="true"></paging>
+
+
             </div>
             <div class="modal-footer">
                 <div class="row">
                     <div class="col-md-12">
-                        <a class="btn btn-success" ng-click="$ctrl.save()">Save</a>
+                        <paging class="small" 
+                            page="$ctrl.data.page" page-size="$ctrl.data.pageSize" 
+                            total="$ctrl.data.totalItems"
+                            ul-class="pagination justify-content-end" a-class="page-link" 
+                            paging-action="$ctrl.loadArticles(page-1)"
+                            scroll-top="true">
+                        </paging>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <a class="btn btn-success" ng-click="$ctrl.saveSelected()">Save</a>
                     </div>
                 </div>
             </div>
