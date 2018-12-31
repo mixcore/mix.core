@@ -33,7 +33,7 @@ var nowuiKit,
 
 $(document).ready(function() {
   //  Activate the Tooltips
-  $('[data-toggle="tooltip"], [rel="tooltip"]').tooltip();
+  //$('[data-toggle="tooltip"], [rel="tooltip"]').tooltip();
 
   //    Activate bootstrap-select
   if ($(".selectpicker").length != 0) {
@@ -107,10 +107,6 @@ $(document).ready(function() {
     $(window).on('scroll', nowuiKit.checkScrollForParallax);
   }
 
-  // Activate Carousel
-  $('.carousel').carousel({
-    interval: 4000
-  });
 
   if ($(".datetimepicker").length != 0) {
     $('.datetimepicker').datetimepicker({

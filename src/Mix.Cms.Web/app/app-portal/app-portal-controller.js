@@ -3,13 +3,15 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
     , 'CommonService', 'AuthService', 'TranslatorService', 'GlobalSettingsService', 'RoleService',
     function ($rootScope, $scope, ngAppSettings, $location, commonService, authService, translatorService, configurationService, roleServices) {
         $scope.isInit = false;
+        $scope.pageTagName ='';
+        $scope.pageTagTypeName ='';
+        $scope.pageTagType =0;
         $scope.isAdmin = false;
         $scope.translator = translatorService;
         $scope.configurationService = configurationService;
         $scope.lang = '';
         $scope.settings = {};
-        $scope.init = function () {
-            
+        $scope.init = function () {            
             if (!$rootScope.isBusy) {
                 $rootScope.isBusy = true;
                 $rootScope.configurationService.fillGlobalSettings().then(function (response) {
@@ -17,6 +19,7 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
                     $rootScope.isInit = true;
                     $rootScope.globalSettings = response;
                     ngAppSettings.globalSettings = response;
+
                     if ($rootScope.globalSettings) {
                         $rootScope.translator.fillTranslator($rootScope.globalSettings.lang).then(function () {
 
@@ -55,6 +58,16 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
                 });
             }
         };
+        $scope.prettyJsonObj = function (obj) {
+            return JSON.stringify(obj, null, '\t');
+        }
+        $scope.$on('$routeChangeStart', function($event, next, current) { 
+            // ... you could trigger something here ...
+            $scope.pageTagName =$location.$$path.toString().split('/')[2];
+            $scope.pageTagTypeName =$location.$$path.toString().split('/')[3];
+            if($scope.pageTagTypeName == 'list') $scope.pageTagType =0;
+            if($scope.pageTagTypeName == 'create') $scope.pageTagType =1;
+          });
         $rootScope.limString = function(str, max){
             return str.substring(0, max);
         };

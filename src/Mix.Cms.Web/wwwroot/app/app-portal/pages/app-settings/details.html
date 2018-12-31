@@ -8,21 +8,13 @@
                     App Settings
                 </h6>
                 <div class="card-body">
-
-                    <div class="row">
-                        <section class="col-lg-12">
-                            <div class="form-group">
-                                <ace-editor content="appSettings"></ace-editor>
-                            </div>
-                        </section>
-                    </div>
                     <div class="row">
                         <section class="col-lg-12">
                             <div class="form-group">
                                 <span class="switch switch-sm">
                                     <input type="checkbox" ng-model="appSettings.GlobalSettings.IsInit" id="IsInit" class="switch ng-pristine ng-untouched ng-valid ng-empty">
                                     <label class="switch mb-0" for="IsInit">
-                                        <span>IsInit {{appSettings.GlobalSettings.IsInit}}</span>
+                                        <span>IsInit</span>
                                     </label>
                                 </span>
 
@@ -36,7 +28,7 @@
                                     <span class="switch switch-sm">
                                         <input type="checkbox" ng-model="appSettings.GlobalSettings.IsHttps" id="IsHttps" class="switch ng-pristine ng-untouched ng-valid ng-empty">
                                         <label class="switch mb-0" for="IsHttps">
-                                            <span>IsHttps {{appSettings.GlobalSettings.IsHttps}}</span>
+                                            <span>IsHttps</span>
                                         </label>
                                     </span>
 
@@ -47,11 +39,11 @@
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label class="control-label">Connection Strings for CMS</label>
-                                        <textarea type="text" class="form-control" ng-model="appSettings.ConnectionStrings.CmsConnection"></textarea>
+                                        <textarea rows="5" class="form-control" ng-model="appSettings.ConnectionStrings.MixCmsConnection"></textarea>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label">Connection Strings for Account</label>
-                                        <textarea type="text" class="form-control" ng-model="appSettings.ConnectionStrings.AccountConnection"></textarea>
+                                        <textarea rows="5" class="form-control" ng-model="appSettings.ConnectionStrings.MixAccountConnection"></textarea>
                                     </div>
 
                         </div></div></section>
@@ -70,13 +62,13 @@
                         <section class="col-lg-12">
                             <div class="form-group">
                                 <label class="control-label">Status</label>
-                                <select class="btn btn-outline-secondary custom-select" ng-model="appSettings.DefaultStatus">
+                                <select class="btn btn-outline-secondary custom-select" ng-model="appSettings.GlobalSettings.DefaultStatus">
                                     <option ng-repeat="item in statuses track by $index" value="{{$index}}">{{item}}</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Language</label>
-                                <select class="btn btn-outline-secondary custom-select" ng-model="appSettings.Language">
+                                <select class="btn btn-outline-secondary custom-select" ng-model="appSettings.GlobalSettings.Language">
                                     <option ng-repeat="item in settings.cultures track by $index" ng-value="item.specificulture">
                                         {{item.fullName}}
                                     </option>

@@ -191,4 +191,4 @@ gulp.task("clean:css", function (cb) {
 gulp.task("clean", ["clean:js", "clean:clientJs", "clean:sharedJs", "clean:css"]);
 gulp.task("min", ["min:portal", "min:portalApp", "min:init", "min:initApp"
     , "min:clientApp", "min:clientJs", "min:sharedJs", "min:css"]);
-gulp.task("build", ["clean", "min:views", "min"]);
+gulp.task("build", ["min:views"]);//["clean", "min:views", "min"]);

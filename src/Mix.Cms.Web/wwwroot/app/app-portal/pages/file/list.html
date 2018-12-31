@@ -1,4 +1,4 @@
-<!-- <section class="content container-fluid"> -->
+<section class="card manual">
     <filter-list request="request" callback="loadFiles(pageIndex)"></filter-list>
 
     <table class="table table-sm table-hover" cellspacing="0">
@@ -22,7 +22,7 @@
         <tbody class="sortable" ng-init="loadFiles()">
             <tr ng-repeat="d in data.directories track by $index">
                 <td class="text-primary">
-                    <span class="fas fa-folder mr-2"></span> <a ng-click="loadFiles(d)" class="btn btn-sm text-primary" ng-bind="d"></a>
+                    <span class="fas fa-folder mr-2"></span> <a ng-click="loadPage(d)" class="btn btn-sm text-primary" ng-bind="d"></a>
                 </td>
                 <td colspan="3"></td>
             </tr>
@@ -62,4 +62,4 @@
         </tbody>
     </table>
     <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end" a-class="page-link" paging-action="loadFiles(page-1)" scroll-top="true">
-<!-- </section> --></paging>
+</paging></section>

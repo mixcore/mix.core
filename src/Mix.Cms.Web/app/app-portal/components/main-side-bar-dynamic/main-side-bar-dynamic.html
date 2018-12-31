@@ -1,10 +1,11 @@
 <div id="sidebar" class="sw-sidebar" ng-init="$ctrl.init()">
     <select class="btn btn-outline-secondary custom-select" ng-if="$ctrl.roles.length > 1" ng-options="item as item.name for item in $ctrl.roles track by item.name" ng-model="$ctrl.role"></select>
     <ul class="sw-links" id="sw-docs-nav" data-children=".sw-toc-item">
-        <li ng-repeat="permission in $ctrl.role.permissions">
+        <li ng-repeat="permission in $ctrl.role.permissions ">
             <main-side-bar-item-dynamic item="permission" icon-size="'mi-lg'" item-style="'sw-toc-link'"></main-side-bar-item-dynamic>
         </li>
-        <li class="sw-toc-item mt-1 mb-5"></li>
+        <li class="sw-toc-item mt-1 mb-5">            
+        </li>
     </ul>
 
 </div>

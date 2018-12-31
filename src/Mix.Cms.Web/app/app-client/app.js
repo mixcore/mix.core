@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('MixClient', ['ngRoute','LocalStorageModule', 'components','ngSanitize']);
+var app = angular.module('MixClient', ['ngRoute', 'LocalStorageModule', 'components', 'ngSanitize']);
 var serviceBase = '';
 
 app.directive('ngEnter', function () {
@@ -41,8 +41,8 @@ app.directive('ngEnter', function () {
     };
 }).filter('utcToLocal', Filter);
 
-app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthService', 'TranslatorService',
-    function ($rootScope, ngAppSettings, $location, commonService, authService, translatorService) {
+app.run(['$rootScope', 'ngAppSettings', 'GlobalSettingsService', 'CommonService', 'AuthService', 'TranslatorService',
+    function ($rootScope, ngAppSettings, globalSettingsService, commonService, authService, translatorService) {
         $rootScope.isBusy = false;
         $rootScope.translator = translatorService;
         $rootScope.message = {
@@ -119,6 +119,9 @@ app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthServi
             { title: 'date', value: 9 },
             { title: 'datetime', value: 10 }
         ];
+        globalSettingsService.fillGlobalSettings().then(function (response) {
+            $rootScope.settings = response;
+        });
         $rootScope.range = function (max) {
             var input = [];
             for (var i = 1; i <= max; i += 1) input.push(i);
@@ -196,24 +199,25 @@ app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthServi
                 return defaultValue || keyword;
             }
         };
+
     }]);
 
 
-    function Filter($filter) {
-        return function (utcDateString, format) {
-            // return if input date is null or undefined
-            if (!utcDateString) {
-                return;
-            }
-    
-            // append 'Z' to the date string to indicate UTC time if the timezone isn't already specified
-            if (utcDateString.indexOf('Z') === -1 && utcDateString.indexOf('+') === -1) {
-                utcDateString += 'Z';
-            }
-    
-            // convert and format date using the built in angularjs date filter
-            return $filter('date')(utcDateString, format);
-        };
-    }
-    
+function Filter($filter) {
+    return function (utcDateString, format) {
+        // return if input date is null or undefined
+        if (!utcDateString) {
+            return;
+        }
+
+        // append 'Z' to the date string to indicate UTC time if the timezone isn't already specified
+        if (utcDateString.indexOf('Z') === -1 && utcDateString.indexOf('+') === -1) {
+            utcDateString += 'Z';
+        }
+
+        // convert and format date using the built in angularjs date filter
+        return $filter('date')(utcDateString, format);
+    };
+}
+
 var modules = angular.module('components', []);

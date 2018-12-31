@@ -25,7 +25,7 @@ modules.component('limitString', {
                         ctrl.shortenString = data.replace(/[+]/g, ' ');
                     }
                 }
-            }
+            };
             ctrl.view = function () {
                 var obj = {
                     moduleId: ctrl.moduleId,

@@ -42,5 +42,5 @@ app.controller('PageController',
                 $scope.$apply();
             }
         };
-
+       
     }]);

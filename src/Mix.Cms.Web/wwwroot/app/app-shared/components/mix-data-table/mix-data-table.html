@@ -29,7 +29,7 @@
                     <span class="fas fa-sort"></span>
                 </div>
                 <div class="col-sm-1">
-                    <input type="number" readonly="readonly" ng-model="nav.priority" class="item-priority form-control form-control-sm d-inline">
+                    <input style="width:40px" type="number" readonly="readonly" ng-model="nav.priority" class="item-priority form-control form-control-sm d-inline">
                 </div>
                 <div class="col-sm-{{$ctrl.colWidth}}" ng-repeat="col in $ctrl.columns track by $index">
                     <mix-data-preview type="col.type" value="nav[col.name]" width="50"></mix-data-preview>
