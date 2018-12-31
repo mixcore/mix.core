@@ -153,7 +153,21 @@ namespace Mix.Cms.Api.Controllers.v1
                     return JObject.FromObject(listItemResult);
             }
         }
-
+        
+        // POST api/update-infos
+        [HttpPost, HttpOptions]
+        [Route("update-infos")]
+        public async Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfos([FromBody]List<ReadViewModel> models)
+        {
+            if (models != null)
+            {                
+                return await base.SaveListAsync(models, false);
+            }
+            else
+            {
+                return new RepositoryResponse<List<ReadViewModel>>();
+            }
+        }
         #endregion Post
     }
 }

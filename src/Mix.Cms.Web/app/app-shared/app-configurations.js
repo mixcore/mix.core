@@ -2,14 +2,9 @@ app.constant('AppSettings', {
     serviceBase: '',
     apiVersion: 'v1',
 });
-app.run(['$rootScope', '$location', 'CommonService', 'AuthService', 'TranslatorService', 'GlobalSettingsService',
-    'ngAppSettings',
-    function ($rootScope, $location, commonService, authService, translatorService, configurationService,
-        ngAppSettings) {
-
-        configurationService.fillGlobalSettings().then(function (response) {
-            $rootScope.settings = response;
-        });
+app.run(['$rootScope', 'CommonService', 'AuthService', 'TranslatorService', 'GlobalSettingsService',
+    function ($rootScope, commonService, authService, translatorService, configurationService,
+        ) {        
         $rootScope.currentContext = $rootScope;
         $rootScope.isBusy = false;
         $rootScope.translator = translatorService;
@@ -137,7 +132,17 @@ app.run(['$rootScope', '$location', 'CommonService', 'AuthService', 'TranslatorS
                 $rootScope.showMessage('Server Errors', 'danger');
             }
         };
-
+        $rootScope.shortString = function (msg, max) {
+            var data = decodeURIComponent(msg);
+            if (data) {
+                if (max < data.length) {
+                    return data.replace(/[+]/g, ' ').substr(0, max) + ' ...';
+                }
+                else {
+                    return data.replace(/[+]/g, ' ');
+                }
+            }
+        };
         $rootScope.showMessage = function (content, type) {
             var from = 'bottom';
             var align = 'right';
@@ -223,5 +228,21 @@ app.run(['$rootScope', '$location', 'CommonService', 'AuthService', 'TranslatorS
                 $rootScope.errors = [];
             }
         });
-
+        $rootScope.filterArray = function (array, key, value){
+            var result = [];
+            for (var i = 0; i < array.length; i++) {
+                if (array[i][key] === value) {
+                    result.push(array[i]);
+                }
+            }
+            return result;
+        };
+        function findObjectByKey(array, key, value) {
+            for (var i = 0; i < array.length; i++) {
+                if (array[i][key] === value) {
+                    return array[i];
+                }
+            }
+            return null;
+        }
     }]);

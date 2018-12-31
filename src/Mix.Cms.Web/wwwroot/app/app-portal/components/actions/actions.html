@@ -1,7 +1,7 @@
-<div class="row position-sticky" style="top: 4rem; z-index: 12;">
+<div class="" style="top: 0; z-index: 9999; position: fixed;">
     <div class="col-12">
-        <div class="card sw-nav-action mb-3">
-            <div class="nav card-body p-3 justify-content-end">         
+        <div class="sw-nav-action mb-0">
+            <div class="nav card-body mt-1 p-2 justify-content-end">         
                 <div class="btn-group mr-2" role="group" aria-label="First group">
                     <button type="button" ng-click="$ctrl.back()" class="btn btn-secondary btn-sm px-5"><i class="mi mi-Cancel"></i>
                         <span ng-bind="$ctrl.translate('Back')"></span></button>
@@ -15,7 +15,7 @@
                         <span ng-bind="$ctrl.translate('Data')"></span></a>
                 </div>
                 <div class="btn-group" role="group" aria-label="First group">
-                        <button type="submit" class="btn btn-primary pl-5 pr-4"><i class="mi mi-Save"></i>
+                        <button id="btnToSubmit" type="submit" class="btn btn-primary pl-5 pr-4"><i class="mi mi-Save"></i>
                             <span ng-bind="$ctrl.translate('Save')"></span></button>
                         <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="sr-only">Toggle Dropdown</span>

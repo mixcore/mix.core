@@ -2,10 +2,10 @@
     <div class="form-group">
         <h6>Layout {{$ctrl.folderType}}</h6>
         <div class="input-group mb-3">
-            <select class="btn btn-outline-secondary custom-select col-sm-4" 
-            ng-options="item as item.fileName for item in $ctrl.templates track by item.id" 
-            ng-model="$ctrl.template" ng-change="$ctrl.selectTemplate($ctrl.template)"></select>
-            <input class="form-control sel-filename" ng-change="$ctrl.new()" type="text" ng-model="$ctrl.template.fileName" value="{{$ctrl.template.fileName}}" placeholder="Input template name here...">
+            <select class="btn btn-outline-secondary custom-select col-sm-4" ng-options="item as item.fileName for item in $ctrl.templates track by item.id"
+                ng-model="$ctrl.template" ng-change="$ctrl.selectTemplate($ctrl.template)"></select>
+            <input class="form-control sel-filename" ng-change="$ctrl.new()" type="text" ng-model="$ctrl.template.fileName"
+                value="{{$ctrl.template.fileName}}" placeholder="Input template name here...">
             <input class="template-id" type="hidden" ng-model="$ctrl.template.id" value="{{$ctrl.template.id}}">
         </div>
     </div>

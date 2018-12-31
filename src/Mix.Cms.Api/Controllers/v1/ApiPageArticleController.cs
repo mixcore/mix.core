@@ -130,12 +130,12 @@ namespace Mix.Cms.Api.Controllers.v1
             [FromBody] RequestPaging request)
         {
             var query = HttpUtility.ParseQueryString(request.Query ?? "");
-            bool isPage = int.TryParse(query.Get("page_id"), out int pageId);
+            bool isPage = int.TryParse(query.Get("page_id"), out int pageId);            
             bool isArticle = int.TryParse(query.Get("article_id"), out int articleId);
             ParseRequestPagingDate(request);
             Expression<Func<MixPageArticle, bool>> predicate = model =>
                         model.Specificulture == _lang
-                        && (!isPage || model.CategoryId == pageId)
+                        && (!isPage || model.CategoryId == pageId)                        
                         && (!isArticle || model.ArticleId == articleId)
                         && (!request.Status.HasValue || model.Status == request.Status.Value)
                         && (string.IsNullOrWhiteSpace(request.Keyword)
@@ -146,12 +146,25 @@ namespace Mix.Cms.Api.Controllers.v1
             switch (request.Key)
             {
                 default:
-
                     var listItemResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);
+                    listItemResult.Data.Items.ForEach(n => n.IsActived = true);
                     return JObject.FromObject(listItemResult);
             }
         }
 
+        [HttpPost, HttpOptions]
+        [Route("update-infos")]
+        public async Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfos([FromBody]List<ReadViewModel> models)
+        {
+            if (models != null)
+            {                
+                return await base.SaveListAsync(models, false);
+            }
+            else
+            {
+                return new RepositoryResponse<List<ReadViewModel>>();
+            }
+        }
         #endregion Post
     }
 }

@@ -148,9 +148,8 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfos([FromBody]List<ReadViewModel> models)
         {
             if (models != null)
-            {
-                RemoveCache();
-                return await ReadViewModel.UpdateInfosAsync(models);
+            {                
+                return await base.SaveListAsync(models, false);// ReadViewModel.UpdateInfosAsync(models);
             }
             else
             {

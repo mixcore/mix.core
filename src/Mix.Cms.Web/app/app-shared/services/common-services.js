@@ -118,6 +118,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
 
         };
         var _getApiResult = async function (req, serviceBase) {
+            //console.log(req.data);
             $rootScope.isBusy = true;
             if (!authService.authentication) {
                 await authService.fillAuthData();
@@ -202,11 +203,4 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
         return adminCommonFactory;
 
     }]);
-    function findObjectByKey(array, key, value) {
-        for (var i = 0; i < array.length; i++) {
-            if (array[i][key] === value) {
-                return array[i];
-            }
-        }
-        return null;
-    }
+    
