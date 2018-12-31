@@ -7,11 +7,9 @@ app.controller('PageArticleController',
             service, articleService, commonService) {
             BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
             $scope.cates = ['Site', 'System'];
+            $scope.others=[];
             $scope.settings = $rootScope.globalSettings;
             $scope.pageId = $routeParams.id;
-            $scope.othersRequest = angular.copy(ngAppSettings.request);
-            $scope.othersRequest.query = "&not_page_id=" + $routeParams.id;
-            $scope.others = [];
             $scope.getList = async function () {
                 $rootScope.isBusy = true;
                 var id = $routeParams.id;
@@ -53,38 +51,9 @@ app.controller('PageArticleController',
             $scope.removeCallback = function () {
             }
 
-            $scope.loadOthers = async function (pageIndex) {
-                $scope.othersRequest.pageIndex = pageIndex;
-                $scope.others = [];
-                var response = await articleService.getList($scope.othersRequest);
+            $scope.saveOthers = async function(){                
+                var response = await service.saveList($scope.others);
                 if (response.isSucceed) {
-                    angular.forEach(response.data.items, function (e) {
-                        $scope.others.push({
-                            priority: e.priority,
-                            description: e.title,
-                            articleId: e.id,
-                            categoryId: $scope.pageId,
-                            image: e.thumbnailUrl,
-                            specificulture: $rootScope.configurationService.get('lang'),
-                            article: e,
-                            status: 2,
-                            isActived: false
-                        });
-                    });
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
-                }
-                else {
-                    $rootScope.showErrors(response.errors);
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
-                }
-            }
-            $scope.saveOthers = async function(){
-                var arr = $rootScope.filterArray($scope.others, 'isActived', true);
-                var response = await service.saveList(arr);
-                if (response.isSucceed) {
-                    $scope.loadOthers();
                     $scope.getList();
                     $scope.$apply();
                 }
