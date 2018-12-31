@@ -3,9 +3,18 @@
     <ul class="sw-links" id="sw-docs-nav" data-children=".sw-toc-item">
         <li ng-repeat="permission in $ctrl.role.permissions ">
             <main-side-bar-item-dynamic item="permission" icon-size="'mi-lg'" item-style="'sw-toc-link'"></main-side-bar-item-dynamic>
+            <a href="#" class="btn btn-light" data-toggle="collapse" data-target="#{{permission.title}}" role="button" aria-expanded="false" aria-controls="{{$ctrl.item.title}}">
+                <span class="fas fa-chevron-down"></span>
+            </a>
         </li>
+        <li class="sw-toc-item mt-1 mb-5">
+            
+        </li>
+<<<<<<< Updated upstream
         <li class="sw-toc-item mt-1 mb-5">            
         </li>
+=======
+>>>>>>> Stashed changes
     </ul>
 
 </div>
