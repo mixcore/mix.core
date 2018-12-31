@@ -286,7 +286,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     ModuleId = item.Id,
                     Image = item.Image,
                     ArticleId = Id,
-                    Description = item.Title
+                    Description = Title
                 });
             }
 
