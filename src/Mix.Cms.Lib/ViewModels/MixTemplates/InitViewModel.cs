@@ -129,15 +129,6 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         #region Common
 
-        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var file = FileRepository.Instance.GetFile(FileName, Extension, FileFolder);
-            if (!string.IsNullOrWhiteSpace(file?.Content))
-            {
-                Content = file.Content;
-            }
-        }
-
         public override MixTemplate ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)

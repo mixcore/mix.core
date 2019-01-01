@@ -9,7 +9,7 @@
         <nav>
             <ul>
                 @foreach (var cate in cates.OrderBy(c => c.Priority))
-                {
+                {                    
                     <li>
                         <a href="@cate.DetailsUrl">
                             @cate.Title

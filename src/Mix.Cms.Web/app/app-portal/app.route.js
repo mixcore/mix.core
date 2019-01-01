@@ -119,9 +119,10 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         controller: "ModuleController",
         templateUrl: "/app/app-portal/pages/module/details.html"
     });
-    $routeProvider.when("/portal/module/data/:id", {
-        controller: "ModuleController",
-        templateUrl: "/app/app-portal/pages/module/data.html"
+    
+    $routeProvider.when("/portal/module-data/list/:moduleId", {
+        controller: "ModuleDataController",
+        templateUrl: "/app/app-portal/pages/module-data/list.html"
     });
 
     $routeProvider.when("/portal/module/create", {
