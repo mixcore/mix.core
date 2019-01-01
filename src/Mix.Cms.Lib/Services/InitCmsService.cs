@@ -57,7 +57,7 @@ namespace Mix.Cms.Lib.Services
                         isSucceed = isSucceed && await InitConfigurationsAsync(siteName, culture, context, transaction);
                         isSucceed = isSucceed && await InitLanguagesAsync(culture, context, transaction);
 
-                        isSucceed = isSucceed && InitThemes(context, transaction);
+                        isSucceed = isSucceed && InitThemes(siteName, context, transaction);
 
                         
                     }
@@ -180,15 +180,15 @@ namespace Mix.Cms.Lib.Services
 
         }
 
-        private bool InitThemes(MixCmsContext context, IDbContextTransaction transaction)
+        private bool InitThemes(string siteName, MixCmsContext context, IDbContextTransaction transaction)
         {
             bool isSucceed = true;
-            var getThemes = ViewModels.MixThemes.UpdateViewModel.Repository.GetModelList(_context: context, _transaction: transaction);
+            var getThemes = ViewModels.MixThemes.InitViewModel.Repository.GetModelList(_context: context, _transaction: transaction);
             if (!context.MixTheme.Any())
             {
-                ViewModels.MixThemes.UpdateViewModel theme = new ViewModels.MixThemes.UpdateViewModel(new MixTheme()
+                ViewModels.MixThemes.InitViewModel theme = new ViewModels.MixThemes.InitViewModel(new MixTheme()
                 {
-                    Name = "Default",
+                    Name = siteName,
                     CreatedBy = "Admin",
                     Status = (int)MixContentStatus.Published
                 }, context, transaction);

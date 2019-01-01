@@ -157,9 +157,9 @@ namespace Mix.Cms.Lib.Services
         public static bool Save()
         {
             var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, ".json", string.Empty, true, "{}");
-            if (settings != null && !string.IsNullOrWhiteSpace(settings.Content))
+            if (settings != null)
             {
-                JObject jsonSettings = JObject.Parse(settings.Content);
+                JObject jsonSettings = !string.IsNullOrWhiteSpace(settings.Content)? JObject.Parse(settings.Content): new JObject();
 
                 jsonSettings["ConnectionStrings"] = instance.ConnectionStrings;
                 jsonSettings["GlobalSettings"] = instance.GlobalSettings;
