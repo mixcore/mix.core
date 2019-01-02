@@ -11,7 +11,7 @@ modules.component('navs', {
             }
         };
         ctrl.goToDetails = async function (nav) {
-            $location.path(ctrl.detailsUrl + nav[ctrl.key]);
+            $location.url(ctrl.detailsUrl + nav[ctrl.key]);
         };
         ctrl.limString = function(str, max){          
             if(str){  
