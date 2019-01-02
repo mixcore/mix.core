@@ -51,12 +51,9 @@ namespace Mix.Cms.Lib.Services
                     {
                         MixService.SetConfig<string>("SiteName", siteName);
                         isSucceed = InitCultures(culture, context, transaction);
-
                         isSucceed = isSucceed && InitPositions(context, transaction);
-
                         isSucceed = isSucceed && await InitConfigurationsAsync(siteName, culture, context, transaction);
                         isSucceed = isSucceed && await InitLanguagesAsync(culture, context, transaction);
-
                         isSucceed = isSucceed && InitThemes(siteName, context, transaction);
 
                         
@@ -163,7 +160,7 @@ namespace Mix.Cms.Lib.Services
             if (!string.IsNullOrEmpty(siteName))
             {
                 arrConfiguration.Find(c => c.Keyword == "SiteName").Value = siteName;
-                arrConfiguration.Find(c => c.Keyword == "ThemeName").Value = Common.Helper.SeoHelper.GetSEOString(siteName);
+                arrConfiguration.Find(c => c.Keyword == "ThemeName").Value = siteName;
             }
             var result = await ViewModels.MixConfigurations.ReadMvcViewModel.ImportConfigurations(arrConfiguration, culture.Specificulture,  context, transaction);
             return result.IsSucceed;

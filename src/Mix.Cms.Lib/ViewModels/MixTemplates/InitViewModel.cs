@@ -138,7 +138,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             FileFolder = CommonHelper.GetFullPath(new string[]
                 {
                     MixConstants.Folder.TemplatesFolder
-                    , ThemeName
+                    , SeoHelper.GetSEOString(ThemeName)
                     , FolderType
                 });
 
