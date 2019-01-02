@@ -105,7 +105,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             {
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.TemplatesFolder,
-                    SeoHelper.GetSEOString(Name)
+                    Name
                 });
             }
         }

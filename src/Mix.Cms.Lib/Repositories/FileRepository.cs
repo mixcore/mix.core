@@ -222,6 +222,7 @@ namespace Mix.Cms.Lib.Repositories
                     Extension = ext,
                     Content = defaultContent
                 };
+                SaveFile(result);
             }
 
             return result ?? new FileViewModel() { FileFolder = FileFolder };
