@@ -33,7 +33,7 @@ app.controller('FileController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
                 $scope.request.key += ($scope.request.key !== '') ? '/' : '';
                 $scope.request.key += folder;
             }
-            $location.path('/portal/file/list?folder=' + $scope.request.key);
+            $location.url('/portal/file/list?folder=' + encodeURIComponent($scope.request.key));
         };
         $scope.loadFile = async function () {
             $rootScope.isBusy = true;
