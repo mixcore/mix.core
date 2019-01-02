@@ -17,6 +17,5 @@ app.controller('ModalArticleController', [
                 type: 16 // string - ngAppSettings.dataTypes[7]
             },
         ];
-
     }
 ]);

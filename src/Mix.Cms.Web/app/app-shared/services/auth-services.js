@@ -68,7 +68,13 @@ app.factory('AuthService',
                     });
                     this.authentication = _authentication;
                     _initSettings().then(function () {
-                        window.location.href = document.referrer || '/';
+                        if (document.referrer && document.referrer.indexOf('init') === -1)
+                        {
+                        window.location.href = document.referrer
+                        }
+                        else{
+                            window.location.href = '/';
+                        }
                     });
 
                 } else {
