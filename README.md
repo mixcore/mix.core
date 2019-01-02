@@ -8,6 +8,7 @@
 - Demo: http://dev.mixcore.org
 - Docs: https://docs.mixcore.org
 - Youtube: https://www.youtube.com/channel/UChqzh6JnC8HBUSQ9AWIcZAw
+- Twitter: https://twitter.com/mixcore_cms
 
 # GITs clone
 

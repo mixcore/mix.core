@@ -23,7 +23,7 @@ app.controller('MediaController', ['$scope', '$rootScope', 'ngAppSettings', '$ro
             $rootScope.isBusy = true;
             var resp = await service.uploadMedia($scope.mediaFile);
             if (resp && resp.isSucceed) {
-                $scope.activedMedia = resp.data;
+                //$scope.activedMedia = resp.data;
                 $scope.getList();
                 $scope.$apply();
             }
