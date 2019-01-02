@@ -172,11 +172,11 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
         public List<MixTemplates.UpdateViewModel> Templates { get; set; }// Product Templates
 
         [JsonIgnore]
-        public string ActivedTheme
+        public int ActivedTheme
         {
             get
             {
-                return MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture) ?? MixService.GetConfig<string>("DefaultTemplateFolder");
+                return MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
             }
         }
 
@@ -197,7 +197,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
                 return CommonHelper.GetFullPath(new string[]
                 {
                     MixConstants.Folder.TemplatesFolder
-                    , ActivedTheme
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture)
                     , TemplateFolderType
                 }
             );
@@ -289,7 +289,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
 
             //Get Templates
             this.Templates = this.Templates ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
-                t => t.Theme.Name == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
+                t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
             View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Products, _context, _transaction);
 
             this.View = View ?? Templates.FirstOrDefault();
