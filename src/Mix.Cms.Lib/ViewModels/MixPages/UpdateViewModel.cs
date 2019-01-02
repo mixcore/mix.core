@@ -180,11 +180,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public List<MixTemplates.UpdateViewModel> Templates { get; set; }// Article Templates
 
         [JsonIgnore]
-        public string ActivedTheme
+        public int ActivedTheme
         {
             get
             {
-                return MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture) ?? MixService.GetConfig<string>("DefaultTemplateFolder");
+                return MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
             }
         }
 
@@ -205,7 +205,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 return CommonHelper.GetFullPath(new string[]
                 {
                     MixConstants.Folder.TemplatesFolder
-                    , ActivedTheme
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture)
                     , TemplateFolderType
                 }
             );
@@ -268,7 +268,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             }
 
             this.Templates = this.Templates ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
-                t => t.Theme.Name == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
+                t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
             this.View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Pages, _context, _transaction);
             this.Template = CommonHelper.GetFullPath(new string[]
                {

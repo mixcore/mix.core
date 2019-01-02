@@ -122,11 +122,11 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public MixTemplates.UpdateViewModel View { get; set; }
 
         [JsonIgnore]
-        public string ActivedTheme
+        public int ActivedTheme
         {
             get
             {
-                return MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture) ?? MixService.GetConfig<string>("DefaultTheme");
+                return MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
             }
         }
 
@@ -141,7 +141,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 return CommonHelper.GetFullPath(new string[]
                 {
                     MixConstants.Folder.TemplatesFolder
-                    , ActivedTheme
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture)
                     , ThemeFolderType
                 }
             );
@@ -173,7 +173,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 return CommonHelper.GetFullPath(new string[]
                 {
                     MixConstants.Folder.TemplatesFolder
-                    , ActivedTheme
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture)
                     , MixEnums.EnumTemplateFolder.Forms.ToString()
                 }
             );
@@ -206,7 +206,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 return CommonHelper.GetFullPath(new string[]
                 {
                     MixConstants.Folder.TemplatesFolder
-                    , ActivedTheme
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture)
                     , MixEnums.EnumTemplateFolder.Edms.ToString()
                 }
             );
@@ -286,7 +286,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 Columns.Add(thisField);
             }
             this.Templates = this.Templates ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
-                t => t.Theme.Name == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
+                t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
             this.View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Modules, _context, _transaction);
             this.Template = CommonHelper.GetFullPath(new string[]
                {
@@ -295,7 +295,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                });
 
             this.Forms = this.Forms ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
-                t => t.Theme.Name == ActivedTheme && t.FolderType == this.FormFolderType).Data;
+                t => t.Theme.Id == ActivedTheme && t.FolderType == this.FormFolderType).Data;
             this.FormView = MixTemplates.UpdateViewModel.GetTemplateByPath(FormTemplate, Specificulture, MixEnums.EnumTemplateFolder.Forms, _context, _transaction);
             this.FormTemplate = CommonHelper.GetFullPath(new string[]
                {
@@ -304,7 +304,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                });
 
             this.Edms = this.Edms ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
-                t => t.Theme.Name == ActivedTheme && t.FolderType == this.EdmFolderType).Data;
+                t => t.Theme.Id == ActivedTheme && t.FolderType == this.EdmFolderType).Data;
             this.EdmView = MixTemplates.UpdateViewModel.GetTemplateByPath(EdmTemplate, Specificulture, MixEnums.EnumTemplateFolder.Edms, _context, _transaction);
             this.EdmTemplate = CommonHelper.GetFullPath(new string[]
                {

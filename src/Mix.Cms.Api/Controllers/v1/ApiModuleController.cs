@@ -149,7 +149,7 @@ namespace Mix.Cms.Api.Controllers.v1
             [FromBody] RequestPaging request)
         {
             var query = HttpUtility.ParseQueryString(request.Query ?? "");
-            bool isType = int.TryParse(query.Get("type"), out int moduleType);
+            bool isType = int.TryParse(query.Get("type"), out int moduleType) && moduleType >= 0;
             ParseRequestPagingDate(request);
             Expression<Func<MixModule, bool>> predicate = model =>
                         model.Specificulture == _lang
