@@ -54,7 +54,7 @@ namespace Mix.Cms.Messenger.Hubs
 
         public Task SendMessageToCaller(string message)
         {
-            return Clients.Caller.SendAsync("ReceiveMessage", message);
+            return Clients.Caller.SendAsync(receiveMethod, message);
         }
 
         public Task SendMessageToGroups(string message)

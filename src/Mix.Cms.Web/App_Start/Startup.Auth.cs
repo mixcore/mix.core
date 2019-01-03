@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Web
 {
+    //Ref: https://www.blinkingcaret.com/2017/09/06/secure-web-api-in-asp-net-core/
     public partial class Startup
     {
         protected void ConfigIdentity(IServiceCollection services, IConfiguration Configuration, string connectionName)
@@ -65,7 +66,7 @@ namespace Mix.Cms.Web
                         options.TokenValidationParameters =
                              new TokenValidationParameters
                              {
-                                 ClockSkew = TimeSpan.Zero,//.FromMinutes(MixService.GetAuthConfig<int>("ClockSkew")),
+                                 ClockSkew = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>("ClockSkew")), //x minute tolerance for the expiration date
                                  ValidateIssuer = MixService.GetAuthConfig<bool>("ValidateIssuer"),
                                  ValidateAudience = MixService.GetAuthConfig<bool>("ValidateAudience"),
                                  ValidateLifetime = MixService.GetAuthConfig<bool>("ValidateLifetime"),
