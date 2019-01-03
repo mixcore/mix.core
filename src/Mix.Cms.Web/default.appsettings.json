@@ -6,9 +6,13 @@
     "DefaultConnection": null
   },
   "Authentication": {
-    "ClockSkew": 10,
-    "CookieExpiration": 10,
-    "RefreshTokenExpiration": 1200,
+    "ClockSkew": 1,
+    "CookieExpiration": 2,
+    "RefreshTokenExpiration": 10,
+    "ValidateIssuer": false,
+    "ValidateAudience": false,
+    "ValidateLifetime": true,
+    "ValidateIssuerSigningKey": true,
     "TokenType": "Bearer",
     "Audience": "mix-core",
     "SecretKey": "mixcore-secret-key",

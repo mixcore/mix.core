@@ -60,14 +60,16 @@ namespace Mix.Cms.Web
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
                     {
+                        options.RequireHttpsMetadata = false;
+                        options.SaveToken = true;
                         options.TokenValidationParameters =
                              new TokenValidationParameters
                              {
-                                 ClockSkew = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>("ClockSkew")),
-                                 ValidateIssuer = false,
-                                 ValidateAudience = false,
-                                 ValidateLifetime = true,
-                                 ValidateIssuerSigningKey = true,
+                                 ClockSkew = TimeSpan.Zero,//.FromMinutes(MixService.GetAuthConfig<int>("ClockSkew")),
+                                 ValidateIssuer = MixService.GetAuthConfig<bool>("ValidateIssuer"),
+                                 ValidateAudience = MixService.GetAuthConfig<bool>("ValidateAudience"),
+                                 ValidateLifetime = MixService.GetAuthConfig<bool>("ValidateLifetime"),
+                                 ValidateIssuerSigningKey = MixService.GetAuthConfig<bool>("ValidateIssuerSigningKey"),
                                  ValidIssuer = MixService.GetAuthConfig<string>("Issuer"),
                                  ValidAudience = MixService.GetAuthConfig<string>("Audience"),
                                  IssuerSigningKey = JwtSecurityKey.Create(MixService.GetAuthConfig<string>("SecretKey"))
@@ -83,7 +85,8 @@ namespace Mix.Cms.Web
                             {
                                 Console.WriteLine("OnTokenValidated: " + context.SecurityToken);
                                 return Task.CompletedTask;
-                            }
+                            },
+                            
                         };
                     });
         }
