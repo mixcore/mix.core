@@ -65,6 +65,24 @@
       "status": 2
     },
     {
+      "keyword": "Facebook_Page_Id",
+      "category": "Site",
+      "value": "",
+      "dataType": 7,
+      "description": null,
+      "priority": 0,
+      "status": 2
+    },
+    {
+      "keyword": "Google_Analytic_Key",
+      "category": "Site",
+      "value": "",
+      "dataType": 7,
+      "description": null,
+      "priority": 0,
+      "status": 2
+    },
+    {
       "keyword": "Favicon",
       "category": "Site",
       "value": "/css/portal/img/mixcore-logo-blue.png",

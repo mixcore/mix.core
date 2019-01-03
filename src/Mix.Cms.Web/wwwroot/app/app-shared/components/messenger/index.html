@@ -22,7 +22,7 @@
                             
                             <li ng-class="{ 'message-right': msg.connection.id == user.info.id , 'message-left': msg.connection.id != user.info.id }">
                                 <div class="message-avatar">
-                                <img class="avatar" src="{{msg.connection.avatar}}">
+                                <img class="avatar" ng-src="{{msg.connection.avatar}}">
                                 
                                 </div>
                                 <div class="name">{{msg.connection.name}}</div>
@@ -42,7 +42,7 @@
             <div ng-if="user.loggedIn" class="contact" ng-class="{'collape': hideContact}">
                 <ul>
                     <li ng-repeat="m in members">
-                        <img imageonload src="{{m.avatar}}">  <span ng-bind="m.name"></span>
+                        <img imageonload ng-src="{{m.avatar}}">  <span ng-bind="m.name"></span>
                     </li>
                 </ul>
             </div>
