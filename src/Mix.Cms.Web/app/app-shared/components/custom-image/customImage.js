@@ -7,6 +7,7 @@ modules.component('customImage', {
         var image_placeholder = '/images/image_placeholder.jpg';
         ctrl.init = function () {
             ctrl.srcUrl = ctrl.srcUrl || image_placeholder;
+            ctrl.maxHeight = ctrl.maxHeight|| '200px';
             ctrl.id = Math.random();
         };
         ctrl.mediaFile = {
