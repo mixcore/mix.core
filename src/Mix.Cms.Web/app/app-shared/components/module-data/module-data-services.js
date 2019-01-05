@@ -1,7 +1,6 @@
 ﻿'use strict';
-app.factory('ModuleDataService', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonService) {
+app.factory('SharedModuleDataService', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonService) {
 
-    //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 
     var moduleDatasServiceFactory = {};
 

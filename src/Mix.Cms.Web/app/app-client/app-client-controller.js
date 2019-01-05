@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
     app.controller('AppClientController', [ '$rootScope', '$scope', 'ngAppSettings', 'CommonService', 'AuthService'
-        , 'TranslatorService', 'ModuleDataService',
+        , 'TranslatorService', 'SharedModuleDataService',
         function ($rootScope, $scope, ngAppSettings, commonService, authService, translatorService, moduleDataService) {
             $scope.lang = '';
             $scope.isInit = false;

@@ -1,7 +1,7 @@
 ﻿
 app.component('articleModules', {
     templateUrl: '/app/app-portal/pages/article/components/modules/articleModules.html',
-    controller: ['$rootScope', '$scope', 'ngAppSettings', 'ModuleDataService',
+    controller: ['$rootScope', '$scope', 'ngAppSettings', 'SharedModuleDataService',
         function ($rootScope, $scope, ngAppSettings, moduleDataService) {
             var ctrl = this;
             ctrl.request = angular.copy(ngAppSettings.request);

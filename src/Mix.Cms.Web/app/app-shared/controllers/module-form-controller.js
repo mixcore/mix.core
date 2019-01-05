@@ -1,6 +1,6 @@
 'use strict';
 app.controller('ModuleFormController', [
-    '$scope', 'ModuleDataService',
+    '$scope', 'SharedModuleDataService',
     function ($scope, moduleDataService) {
         $scope.initModuleForm = async function (name) {
             var resp = null;
