@@ -1,6 +1,6 @@
 ﻿modules.component('moduleForm', {
     templateUrl: '/app/app-shared/components/module-data/module-form.html',
-    controller: ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$timeout', '$location', 'AuthService', 'ModuleDataService',
+    controller: ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$timeout', '$location', 'AuthService', 'SharedModuleDataService',
         function ($scope, $rootScope, ngAppSettings, $routeParams, $timeout, $location, authService, moduleDataService) {
             var ctrl = this;
             $rootScope.isBusy = false;
@@ -102,7 +102,7 @@
 
 modules.component('modulePreview', {
     templateUrl: '/app/app-shared/components/module-data/module-preview.html',
-    controller: ['$scope', '$rootScope', 'ModuleDataService',
+    controller: ['$scope', '$rootScope', 'SharedModuleDataService',
         function ($scope, $rootScope, moduleDataService) {
             var ctrl = this;
             $rootScope.isBusy = false;

@@ -1,6 +1,6 @@
 ﻿'use strict';
 app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$routeParams',
-    'ModuleService', 'ModuleDataService',
+    'ModuleService', 'SharedModuleDataService',
     function ($scope, $rootScope, ngAppSettings, $routeParams, moduleServices, moduleDataService) {
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, moduleServices, 'product');
         $scope.contentUrl = '';
@@ -60,7 +60,7 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$r
         };
 
         $scope.loadMoreModuleDatas = async function (pageIndex) {
-            $scope.request.key = $scope.activedData.id;
+            $scope.request.query = '&module_id=' + $scope.activedData.id;
             if (pageIndex !== undefined) {
                 $scope.request.pageIndex = pageIndex;
             }
