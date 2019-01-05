@@ -66,7 +66,7 @@ namespace Mix.Cms.Web
                         options.TokenValidationParameters =
                              new TokenValidationParameters
                              {
-                                 ClockSkew = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>("ClockSkew")), //x minute tolerance for the expiration date
+                                 ClockSkew = TimeSpan.Zero,//.FromMinutes(MixService.GetAuthConfig<int>("ClockSkew")), //x minute tolerance for the expiration date
                                  ValidateIssuer = MixService.GetAuthConfig<bool>("ValidateIssuer"),
                                  ValidateAudience = MixService.GetAuthConfig<bool>("ValidateAudience"),
                                  ValidateLifetime = MixService.GetAuthConfig<bool>("ValidateLifetime"),
