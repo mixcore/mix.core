@@ -6,7 +6,10 @@
     </div>
     <div class="form-group">
         <label class="control-label">Tags</label>
-        <input type="text" class="form-control tags" ng-model="$ctrl.article.tags">
+        <!--<input type="text" class="form-control tags" ng-model="$ctrl.article.tags">-->
+        <tags-input ng-model="$ctrl.product.listTag">
+            <!--<auto-complete source="$ctrl.loadTags($query)"></auto-complete>-->
+        </tags-input>
     </div>
 
     <div class="row">
