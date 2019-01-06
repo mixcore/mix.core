@@ -23,11 +23,17 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         [JsonProperty("name")]
         public string Name { get; set; }
 
+        [JsonProperty("title")]
+        public string Title { get; set; }
+
         [JsonProperty("previewUrl")]
         public string PreviewUrl { get; set; }
 
         [JsonProperty("image")]
         public string Image { get; set; }
+
+        [JsonProperty("thumbnail")]
+        public string Thumbnail { get; set; }
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
@@ -55,7 +61,23 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 }
             }
         }
-
+        [JsonProperty("thumbnailUrl")]
+        public string ThumbnailUrl
+        {
+            get
+            {
+                if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
+                {
+                    return CommonHelper.GetFullPath(new string[] {
+                    Domain,  Thumbnail
+                });
+                }
+                else
+                {
+                    return string.IsNullOrEmpty(Thumbnail) ? ImageUrl : Thumbnail;
+                }
+            }
+        }
         [JsonProperty("isActived")]
         public bool IsActived { get; set; }
 
@@ -70,7 +92,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.FileFolder,
                     MixConstants.Folder.TemplatesAssetFolder,
-                    SeoHelper.GetSEOString(Name)
+                    Name
                 });
             }
         }
@@ -80,7 +102,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[] { MixConstants.Folder.TemplatesFolder, SeoHelper.GetSEOString(Name) });
+                return CommonHelper.GetFullPath(new string[] { MixConstants.Folder.TemplatesFolder, Name });
             }
         }
 

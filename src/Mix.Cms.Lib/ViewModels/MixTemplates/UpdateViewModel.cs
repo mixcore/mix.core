@@ -90,7 +90,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[] { MixConstants.Folder.TemplatesFolder, ThemeName });
+                return CommonHelper.GetFullPath(new string[] { 
+                    MixConstants.Folder.TemplatesFolder, ThemeName });
             }
         }
 

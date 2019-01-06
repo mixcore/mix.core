@@ -143,7 +143,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 {
                     ""
                     , MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture) ?? "Default"
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture) ?? "Default"
                     , Template
                 });
             }

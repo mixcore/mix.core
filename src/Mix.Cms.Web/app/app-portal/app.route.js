@@ -111,12 +111,12 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
     });
 
     $routeProvider.when("/portal/module-data/details/:moduleId/:id", {
-        controller: "ModuleDataController",
+        controller: "SharedModuleDataController",
         templateUrl: "/app/app-portal/pages/moduleData/details.html"
     });
 
     $routeProvider.when("/portal/module-data/details/:moduleId", {
-        controller: "ModuleDataController",
+        controller: "SharedModuleDataController",
         templateUrl: "/app/app-portal/pages/moduleData/details.html"
     });
 

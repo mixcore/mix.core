@@ -5,7 +5,7 @@
         dnd-draggable="nav"
         dnd-type="'nav'"
         dnd-effect-allowed="move"     
-        dnd-selected="models.selected = nav"   
+        dnd-selected="$ctrl.selected = nav"   
         dnd-moved="$ctrl.updateOrders($index)"
         ng-class="{'selected': $ctrl.selected === nav}"
         >

@@ -44,13 +44,15 @@
                                         </tr>
                                     </thead>
                                     <tbody class="sortable" dnd-list="activedData.columns" 
-                                        dnd-inserted="insertColCallback(index, item, external, type)">
-                                        <tr class="sortable-item module-column" ng-repeat="col in activedData.columns track by $index"
+                                        >
+                                        <tr class="sortable-item module-column" 
+                                            ng-repeat="col in activedData.columns"
                                             dnd-draggable="col" 
-                                            dnd-dragstart="updateColOrders($index,activedData.columns)"
-                                            
-                                            dnd-effect-allowed="move" dnd-selected="selectedCol = col" 
-                                            ng-class="{'selected': selectedCol === col}">
+                                            dnd-effect-allowed="move" 
+                                            dnd-selected="selectedCol = col" 
+                                            dnd-moved="activedData.columns.splice($index, 1)"                                            
+                                            ng-class="{'selected': selectedCol === col}"                                            
+                                            >
                                             <td style="cursor:move;" class="drag-header">
                                                 <span class="fas fa-sort"></span>
                                             </td>

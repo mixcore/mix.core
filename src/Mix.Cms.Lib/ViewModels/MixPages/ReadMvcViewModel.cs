@@ -164,7 +164,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 {
                     ""
                     , MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture)??  MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateFolder)
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture)
+                        ??  MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateFolder)
                     , Template
                 });
             }

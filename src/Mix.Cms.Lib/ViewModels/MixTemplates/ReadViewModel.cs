@@ -29,8 +29,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         public int TemplateId { get; set; }
 
         [JsonIgnore]
-        [JsonProperty("templateName")]
-        public string TemplateName { get; set; }
+        [JsonProperty("themeName")]
+        public string ThemeName { get; set; }
 
         [JsonIgnore]
         [JsonProperty("folderType")]
@@ -101,7 +101,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.FileFolder,
                     MixConstants.Folder.TemplatesAssetFolder,
-                    TemplateName });
+                    ThemeName });
             }
         }
 
@@ -111,7 +111,10 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[] { MixConstants.Folder.TemplatesFolder, TemplateName });
+                return CommonHelper.GetFullPath(new string[] { 
+                    MixConstants.Folder.TemplatesFolder, 
+                    ThemeName 
+                    });
             }
         }
 
@@ -162,7 +165,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             FileFolder = CommonHelper.GetFullPath(new string[]
                 {
                     MixConstants.Folder.TemplatesFolder
-                    , TemplateName
+                    , ThemeName
                     , FolderType
                 });
             Content = Content?.Trim();

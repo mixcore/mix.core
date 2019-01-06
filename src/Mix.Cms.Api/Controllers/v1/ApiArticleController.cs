@@ -23,7 +23,6 @@ using Microsoft.Extensions.Caching.Memory;
 namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
     [Route("api/v1/{culture}/article")]
     public class ApiArticleController :
         BaseGenericApiController<MixCmsContext, MixArticle>

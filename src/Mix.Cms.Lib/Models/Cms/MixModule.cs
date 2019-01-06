@@ -20,6 +20,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Specificulture { get; set; }
         public string Description { get; set; }
         public string Fields { get; set; }
+        public string Thumbnail { get; set; }
         public string Image { get; set; }
         public string ModifiedBy { get; set; }
         public string Name { get; set; }
