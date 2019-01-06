@@ -9,6 +9,9 @@
                 ctrl.template = template;
                 $scope.$broadcast('updateContentCodeEditors', []);
             };
+            ctrl.new = function(){
+                ctrl.template.id = 0;
+            }
             ctrl.init = async function(){
                 if(ctrl.folderType && !ctrl.folderType){
                     var themeId = globalSettingsService.get('themeId');

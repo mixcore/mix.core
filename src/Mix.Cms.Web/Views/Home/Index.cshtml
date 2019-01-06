@@ -1,18 +1,24 @@
-﻿@{
-    ViewData["Title"] = Model.Title;
-    ViewData["SeoTitle"] = Model.SeoTitle;
-    ViewData["SeoKeywords"] = Model.SeoKeywords;
-    ViewData["SeoDescription"] = Model.SeoDescription;
+﻿@model Mix.Cms.Lib.ViewModels.MixPages.ReadMvcViewModel
+@{
     string lang = ViewBag.culture;
-
 }
-<div ng-controller="AppClientController" ng-init="init('@lang')">
+@section Seo{
+    <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @Model.Title</title>
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}")" />
+    <meta property="og:title" content="@Model.Title" />
+    <meta property="og:description"
+          content="@Model.SeoDescription" />
+    <meta property="og:image" content="@Model.ThumbnailUrl" />
+}
+<div>
+    <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
     @if (!string.IsNullOrEmpty(Model.TemplatePath))
     {
         @(MixService.GetConfig<string>("Phone", lang))
         try
         {
-            <partial name="@Model.TemplatePath" model="@Model" />
+            <partial name="@Model.TemplatePath" model="@Model"/>
         }
         catch (System.InvalidOperationException invalidOperationException)
         {
@@ -38,49 +44,10 @@
     }
 </div>
 @section Styles{
-    <base href="/@ViewBag.culture">
+    
     @Html.Raw(Model.View?.Styles)
-    @if (!string.IsNullOrEmpty(MixService.GetConfig<string>("GA_KEY", ViewBag.culture)))
-    {
-        <!-- Google Analytics -->
-        <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-        ga('create', '@(MixService.GetConfig<string>("GA_KEY", ViewBag.culture))', 'auto');
-        ga('send', 'pageview');
-        </script>
-        <!-- End Google Analytics -->
-    }
-    <div id="fb-root"></div><div id="fb-root"></div><div id="fb-root"></div>
-    <script>
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.1&appId=1471411989648473&autoLogAppEvents=1';
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));</script>
-
 }
-@section scripts{
-
-    <script>window.jQuery || document.write('<script src="/js/jquery.min.js"><\/script>')</script>
-
-     <script src="~/js/framework.min.js"></script>
-    <!-- <script src="~/js/bootstrap.min.js"></script> -->
-    <!-- <script src="~/js/shared.min.js"></script> -->
-
+@section Scripts{
+    
     @Html.Raw(Model.View?.Scripts)
-    
-    <script src="~/js/app-client.min.js"></script>
-    <script src="~/js/app-shared.min.js"></script>
-    
-    <!-- <script src="~/app-client/shared/controllers/app-client-controller.js"></script> -->
-    
-    <!--     Fonts and icons     -->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200|Open+Sans+Condensed:700" rel="stylesheet">
-    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
 }

@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
     app.controller('AppClientController', [ '$rootScope', '$scope', 'ngAppSettings', 'CommonService', 'AuthService'
-        , 'TranslatorService', 'ModuleDataService',
+        , 'TranslatorService', 'SharedModuleDataService',
         function ($rootScope, $scope, ngAppSettings, commonService, authService, translatorService, moduleDataService) {
             $scope.lang = '';
             $scope.isInit = false;
@@ -9,6 +9,7 @@
                 if (!$rootScope.isBusy) {
                     $rootScope.isBusy = true;
                     commonService.fillSettings(lang).then(function (response) {
+                        $rootScope.isInit = true;
                         $scope.isInit = true;
                         $rootScope.globalSettings = response;
                         if ($rootScope.globalSettings) {
@@ -29,7 +30,13 @@
             };
 
             $scope.translate = $rootScope.translate;
-
+            $scope.previewData = function(moduleId, id){
+                var obj = {
+                    moduleId: moduleId,
+                    id: id
+                };
+                $rootScope.preview('module-data', obj, null, 'modal-lg');
+            }
             $scope.initModuleForm = async function (name) {
                 var resp = null;
                 $scope.name = name;

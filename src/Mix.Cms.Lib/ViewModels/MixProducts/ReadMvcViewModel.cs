@@ -125,14 +125,14 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
         public MixTemplates.ReadViewModel View { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain") ?? "/"; } }
+        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl
         {
             get
             {
-                if (Image != null && (Image.IndexOf("http") == -1 && Image[0] != '/'))
+                if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
                     Domain,  Image
@@ -150,24 +150,15 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
         {
             get
             {
-                if (!string.IsNullOrEmpty(Thumbnail))
+                if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
-                    if (Thumbnail.IndexOf("http") == -1)
-                    {
-                        return CommonHelper.GetFullPath(new string[] {
-                            Domain,  Thumbnail
-
-                        });
-                    }
-                    else
-                    {
-                        return Thumbnail;
-                    }
-
+                    return CommonHelper.GetFullPath(new string[] {
+                    Domain,  Thumbnail
+                });
                 }
                 else
                 {
-                    return ImageUrl;
+                    return string.IsNullOrEmpty(Thumbnail) ? ImageUrl : Thumbnail;
                 }
             }
         }
@@ -180,7 +171,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
                 {
                     ""
                     , MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture) ?? "Default"
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture) ?? "Default"
                     , Template
                 });
             }

@@ -1,21 +1,94 @@
 <div id="sidebar" class="sw-sidebar" ng-init="$ctrl.init()">
-    <!--<portal-search />-->
-    <ul class="sw-links" id="sw-docs-nav" data-children=".sw-toc-item">
-        <!-- DASHBOARD -->
-        <!--<li class="sw-toc-item mt-1 mb-1">
-            <a asp-area="Portal" asp-controller="Dashboard" asp-action="Index" class="sw-toc-link">
-                <i class="mi mi-Tiles mi-lg mi-fw"></i>
-                <span class="text">Dashboard</span>
-            </a>
-        </li>-->
-
-        <!-- ARTICLE -->
-        <li ng-repeat="item in $ctrl.items">
-            <main-side-bar-item item="item"></main-side-bar-item>
-        </li>
-        <li class="sw-toc-item mt-1 mb-1"></li>
-        <li class="sw-toc-item mt-1 mb-1"></li>
-    </ul>
-    <div class="sidebar-background"></div>
-
-</div>
+        <div class="perfect-scroll">
+        <ul class="sw-links" id="sw-docs-nav" data-children=".sw-toc-item">
+            <!--<portal-search />-->
+            <form method="post" class="sw-search d-flex align-items-center ng-pristine ng-valid" action="/admin/search">
+                <input type="search" class="form-control" id="search-input" name="keyword" placeholder="Search for..." aria-label="Search for..." autocomplete="off">
+                <button class="btn btn-light sw-search-docs-toggle d-md-none p-0 ml-3" type="submit" data-toggle="collapse" data-target="#sw-docs-nav" aria-controls="sw-docs-nav" aria-expanded="false" aria-label="Toggle docs navigation">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30" height="30" focusable="false">
+                        <title>Menu</title>
+                        <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22"></path>
+                    </svg>
+                </button>
+                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KOuD896zE9FpXyo3z4qUnITyqLJObd-8sWCHWBMAbgKpoBDjCxTTaK-fn9pkbeyWi6aiOu15-1O4FCi0iYHV22A7_C_8nl1bjT9gWUpGWTRcxiso71cJhqbhcBxhsub88XHpqp3OAmg51CAe1EdWDBDA9MJ-Ei82UcnxV3Pa_P6peDY3ZqTytpkWhQlw7N7hA" autocomplete="off"></form>
+    
+            <!-- ARTICLE -->
+            <li ng-repeat="item in $ctrl.items">
+                <main-side-bar-item item="item"></main-side-bar-item>
+            </li>
+            <hr>
+    
+            <!-- SETTING -->
+            <li class="sw-toc-item mt-1 mb-1">
+    
+                <div class="inner">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                        <a href="#" class="btn btn-light" data-toggle="collapse" data-target="#collapseSettingSubMenus" aria-expanded="false" aria-controls="collapseSettingSubMenus">
+                            <span class="fas fa-chevron-right"></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="sw-toc-link" data-toggle="collapse" data-target="#collapseSettingSubMenus" aria-expanded="false" aria-controls="collapseSettingSubMenus">
+                    <i class="mi mi-Settings mi-lg mi-fw mi-spin"></i>
+                    <span class="text">Settings</span>
+                </div>
+                <ul id="collapseSettingSubMenus" class="collapse list-unstyled" data-parent="#sw-docs-nav">
+                    <li>
+                        <div class="sw-toc-sub-link mb-1">
+                            <i class="mi mi-Repair mi-fw"></i>
+                            <span class="text">Configurations</span>
+    
+                            <div class="inner">
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                                    <a class="btn btn-light" href="/vi-vn/portal/setting/configurations/create">
+                                        <span class="mi mi-Add"></span>
+                                    </a>
+                                    <a class="btn btn-light" href="/vi-vn/portal/setting/configurations">
+                                        <span class="mi mi-List"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="">
+                        <div class="sw-toc-sub-link mb-1">
+                            <i class="mi mi-TimeLanguage mi-fw"></i>
+                            <span class="text">Languages</span>
+                            <div class="inner">
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                                    <a class="btn btn-light" href="/vi-vn/portal/language/create">
+                                        <span class="mi mi-Add"></span>
+                                    </a>
+                                    <a class="btn btn-light" href="/vi-vn/portal/language/list">
+                                        <span class="mi mi-List"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="sw-toc-sub-link mb-1">
+                            <i class="mi mi-World mi-fw"></i>
+                            <span class="text">Cultures</span>
+    
+                            <div class="inner">
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                                    <a class="btn btn-light" href="/vi-vn/portal/culture/create">
+                                        <span class="mi mi-Add"></span>
+                                    </a>
+                                    <a class="btn btn-light" href="/vi-vn/portal/culture/index">
+                                        <span class="mi mi-List"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li class="sw-toc-item mt-1 mb-1"></li>
+            <li class="sw-toc-item mt-1 mb-1"></li>
+        </ul>
+    </div>
+        <div class="sidebar-background"></div>
+    
+    </div>

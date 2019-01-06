@@ -137,20 +137,25 @@
     },
     {
       "provider": "cdnjs",
-      "library": "Trumbowyg@2.11.1",
+      "library": "Trumbowyg@2.12.2",
       "destination": "wwwroot/lib/portal/Trumbowyg/",
       "files": [
         "trumbowyg.min.js",
-        "plugins/colors/trumbowyg.colors.min.js",
         "plugins/base64/trumbowyg.base64.min.js",
-        "plugins/colors/ui/trumbowyg.colors.min.css",
+        "plugins/colors/trumbowyg.colors.min.js",
         "plugins/emoji/trumbowyg.emoji.min.js",
         "plugins/emoji/ui/trumbowyg.emoji.min.css",
         "plugins/fontfamily/trumbowyg.fontfamily.min.js",
         "plugins/fontsize/trumbowyg.fontsize.min.js",
+        "plugins/highlight/trumbowyg.highlight.min.js",
+        "plugins/highlight/ui/trumbowyg.highlight.min.css",
         "plugins/history/trumbowyg.history.min.js",
+        "plugins/insertaudio/trumbowyg.insertaudio.min.js",
         "plugins/lineheight/trumbowyg.lineheight.min.js",
+        "plugins/pasteembed/trumbowyg.pasteembed.min.js",
+        "plugins/pasteimage/trumbowyg.pasteimage.min.js",
         "plugins/resizimg/trumbowyg.resizimg.min.js",
+        "plugins/preformatted/trumbowyg.preformatted.min.js",
         "plugins/table/trumbowyg.table.min.js",
         "plugins/table/ui/trumbowyg.table.min.css",
         "plugins/upload/trumbowyg.upload.min.js",
@@ -158,5 +163,6 @@
         "ui/trumbowyg.min.css"
       ]
     }
+
   ]
 }

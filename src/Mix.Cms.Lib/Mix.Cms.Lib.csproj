@@ -19,6 +19,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite" Version="2.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="3.0.0" />
   </ItemGroup>
 

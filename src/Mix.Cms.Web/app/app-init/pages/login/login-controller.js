@@ -25,6 +25,7 @@ app.controller('loginController', [ '$rootScope', '$scope', 'ngAppSettings', '$l
         var result = await authService.login($scope.loginData);
         if (result) {
             $rootScope.isBusy = false;
+            $scope.message = result.errors[0];
             $scope.$apply();
         }
     };

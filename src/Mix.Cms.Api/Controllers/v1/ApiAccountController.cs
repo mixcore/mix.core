@@ -414,6 +414,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 //UserData = user,
                 Issued = dtIssued,
                 Expires = dtExpired,
+                LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
             };
             return token;
         }
@@ -430,7 +431,8 @@ namespace Mix.Cms.Api.Controllers.v1
             JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
                 issuer: MixService.GetAuthConfig<string>("Issuer"),
                 audience: MixService.GetAuthConfig<string>("Audience"),
-                notBefore: DateTime.UtcNow,
+                notBefore: expires.AddMinutes(-MixService.GetAuthConfig<int>("CookieExpiration")),
+                
                 claims: claims,
                 // our token will live 1 hour, but you can change you token lifetime here
                 expires: expires,
@@ -467,7 +469,26 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             return new Claim(type, value, ClaimValueTypes.String);
         }
+        private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = MixService.GetAuthConfig<bool>("ValidateIssuer"),
+                ValidateAudience = MixService.GetAuthConfig<bool>("ValidateAudience"),
+                ValidateLifetime = MixService.GetAuthConfig<bool>("ValidateLifetime"),
+                ValidateIssuerSigningKey = MixService.GetAuthConfig<bool>("ValidateIssuerSigningKey"),
+                IssuerSigningKey = JwtSecurityKey.Create(MixService.GetAuthConfig<string>("SecretKey"))
+            };
 
+            var tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken securityToken;
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                throw new SecurityTokenException("Invalid token");
+
+            return principal;
+        }
         public static class JwtSecurityKey
         {
             public static SymmetricSecurityKey Create(string secret)

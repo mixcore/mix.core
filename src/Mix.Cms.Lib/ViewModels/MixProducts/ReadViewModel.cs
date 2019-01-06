@@ -125,14 +125,14 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
         #region Views
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain", Specificulture) ?? "/"; } }
+        public string Domain { get { return MixService.GetConfig<string>("Domain", Specificulture); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl
         {
             get
             {
-                if (Image != null && (Image.IndexOf("http") == -1 && Image[0] != '/'))
+                if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
                     Domain,  Image
@@ -144,7 +144,23 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
                 }
             }
         }
-
+        [JsonProperty("thumbnailUrl")]
+        public string ThumbnailUrl
+        {
+            get
+            {
+                if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
+                {
+                    return CommonHelper.GetFullPath(new string[] {
+                    Domain,  Thumbnail
+                });
+                }
+                else
+                {
+                    return string.IsNullOrEmpty(Thumbnail) ? ImageUrl : Thumbnail;
+                }
+            }
+        }
         [JsonProperty("strPrice")]
         public string StrPrice
         {
@@ -184,31 +200,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }
 
-        public string ThumbnailUrl
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(Thumbnail))
-                {
-                    if (Thumbnail.IndexOf("http") == -1)
-                    {
-                        return CommonHelper.GetFullPath(new string[] {
-                            Domain,  Thumbnail
-
-                        });
-                    }
-                    else
-                    {
-                        return Thumbnail;
-                    }
-
-                }
-                else
-                {
-                    return ImageUrl;
-                }
-            }
-        }
+        
         #endregion Views
 
         #endregion Properties

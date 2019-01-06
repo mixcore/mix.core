@@ -89,8 +89,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         #region Views
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }
-
-
+        
         [JsonProperty("view")]
         public MixTemplates.ReadViewModel View { get; set; }
 
@@ -98,14 +97,14 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         public List<ViewModels.MixModules.ReadMvcViewModel> Modules { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain") ?? "/"; } }
+        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl
         {
             get
             {
-                if (Image != null && (Image.IndexOf("http") == -1 && Image[0] != '/'))
+                if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
                     Domain,  Image
@@ -131,7 +130,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 }
                 else
                 {
-                    return Thumbnail;
+                    return string.IsNullOrEmpty(Thumbnail) ? ImageUrl : Thumbnail;
                 }
             }
         }
@@ -144,17 +143,22 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 {
                     ""
                     , MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture) ?? "Default"
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture) ?? "Default"
                     , Template
                 });
             }
         }
-
+        [JsonIgnore]
         public List<ExtraProperty> Properties { get; set; }
 
         [JsonProperty("mediaNavs")]
         public List<MixArticleMedias.ReadViewModel> MediaNavs { get; set; }
 
+        [JsonProperty("moduleNavs")]
+        public List<MixArticleModules.ReadViewModel> ModuleNavs { get; set; }
+                
+        [JsonProperty("articleNavs")]
+        public List<MixArticleArticles.ReadViewModel> ArticleNavs { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -176,7 +180,9 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             this.View = MixTemplates.ReadViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
+
             Properties = new List<ExtraProperty>();
+
             if (!string.IsNullOrEmpty(ExtraProperties))
             {
                 JArray arr = JArray.Parse(ExtraProperties);
@@ -192,16 +198,38 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 MediaNavs = getArticleMedia.Data.OrderBy(p => p.Priority).ToList();
                 MediaNavs.ForEach(n => n.IsActived = true);
             }
+
+            // Modules
+            var getArticleModule = MixArticleModules.ReadViewModel.Repository.GetModelListBy(
+                n => n.ArticleId == Id && n.Specificulture == Specificulture, _context, _transaction);
+            if (getArticleModule.IsSucceed)
+            {
+                ModuleNavs = getArticleModule.Data.OrderBy(p => p.Priority).ToList();
+                foreach (var item in ModuleNavs)
+                {
+                    item.IsActived = true;
+                    item.Module.LoadData(articleId: Id, _context: _context, _transaction: _transaction);
+                }
+            }
+
+            // Related Articles
+            ArticleNavs = MixArticleArticles.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
         }
 
         #endregion Overrides
 
         #region Expands
-
-        private string GetPropertyValue(string name)
+        //Get Property by name
+        public string Property(string name)
         {
             var prop = Properties.FirstOrDefault(p => p.Name.ToLower() == name.ToLower());
             return prop?.Value;
+
+        }
+
+        public MixModules.ReadMvcViewModel GetModule(string name)
+        {
+            return ModuleNavs.FirstOrDefault(m => m.Module.Name == name)?.Module;
         }
 
         #endregion Expands

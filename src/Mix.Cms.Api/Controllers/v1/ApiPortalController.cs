@@ -21,6 +21,10 @@ using static Mix.Cms.Lib.MixEnums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.Account;
 using Mix.Cms.Lib.ViewModels.MixInit;
+using System.Xml.Linq;
+using System.Text;
+using System.Xml;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -32,19 +36,28 @@ namespace Mix.Cms.Api.Controllers.v1
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IApplicationLifetime _appLifetime;
+        private readonly IHostingEnvironment _env;
         public ApiPortalController(
            UserManager<ApplicationUser> userManager,
            SignInManager<ApplicationUser> signInManager,
            RoleManager<IdentityRole> roleManager,
-            Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext
+            Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext,
+            IApplicationLifetime appLifetime,
+            IHostingEnvironment env
             )
             : base(hubContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _appLifetime = appLifetime;
         }
 
+        public async Task ShutdownSite()
+        {
+            _appLifetime.StopApplication();
+        }
         #region Get
 
         // GET api/category/id
@@ -61,7 +74,10 @@ namespace Mix.Cms.Api.Controllers.v1
                 ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, _lang),
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
-                Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList()
+                ModuleTypes = Enum.GetNames(typeof(MixModuleType)).ToList(),
+                DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
+                Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
+                LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
 
             };
             settings.LangIcon = culture?.Icon ?? MixService.GetConfig<string>("Language");
@@ -91,7 +107,10 @@ namespace Mix.Cms.Api.Controllers.v1
                 IsEncryptApi = MixService.GetConfig<bool>(MixConstants.ConfigurationKeyword.IsEncryptApi),
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
-                Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList()
+                ModuleTypes = Enum.GetNames(typeof(MixModuleType)).ToList(),
+                DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
+                Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
+                LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
             };
 
             configurations.LangIcon = culture?.Icon ?? MixService.GetConfig<string>("Language");
@@ -155,8 +174,10 @@ namespace Mix.Cms.Api.Controllers.v1
                 IsEncryptApi = MixService.GetConfig<bool>(MixConstants.ConfigurationKeyword.IsEncryptApi),
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
-                Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList()
-
+                ModuleTypes = Enum.GetNames(typeof(MixModuleType)).ToList(),
+                DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
+                Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
+                LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
             };
 
             configurations.LangIcon = culture?.Icon ?? MixService.GetConfig<string>("Language");
@@ -179,6 +200,93 @@ namespace Mix.Cms.Api.Controllers.v1
             };
         }
 
+        // GET api/category/id
+        [HttpGet, HttpOptions]
+        [Route("sitemap")]
+        public RepositoryResponse<FileViewModel> SiteMap()
+        {
+            try
+            {
+                var root = new XElement("urlset",
+                new XAttribute("xlmns", @"http://www.sitemaps.org/schemas/sitemap/0.9")
+                );
+                var pages = Lib.ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelList();
+                List<int> handledPageId = new List<int>();
+                foreach (var page in pages.Data)
+                {
+                        page.DetailsUrl = MixCmsHelper.GetRouterUrl(
+                                        "page", new { seoName = page.SeoName, culture = page.Specificulture }, Request, Url);
+                    var otherLanguages = pages.Data.Where(p => p.Id == page.Id && p.Specificulture != page.Specificulture);
+                    var lstOther = new List<SitemapLanguage>();
+                    foreach (var item in otherLanguages)
+                    {
+                        lstOther.Add(new SitemapLanguage() {
+                            HrefLang = item.Specificulture,
+                            Href= MixCmsHelper.GetRouterUrl(
+                                        "page", new { seoName = page.SeoName, culture = item.Specificulture }, Request, Url)
+                        } );
+                    }
+                    
+                    var sitemap = new SiteMap()
+                    {
+                        ChangeFreq = "monthly",
+                        LastMod = DateTime.UtcNow,
+                        Loc = page.DetailsUrl,
+                        Priority = 0.3,
+                        OtherLanguages = lstOther
+                    };
+                    root.Add(sitemap.ParseXElement());
+                }
+
+                var articles = Lib.ViewModels.MixArticles.ReadListItemViewModel.Repository.GetModelList();
+                foreach (var article in articles.Data)
+                {
+                    article.DetailsUrl = MixCmsHelper.GetRouterUrl(
+                                    "article", new { seoName = article.SeoName, culture = article.Specificulture }, Request, Url);
+                    var otherLanguages = pages.Data.Where(p => p.Id == article.Id && p.Specificulture != article.Specificulture);
+                    var lstOther = new List<SitemapLanguage>();
+                    foreach (var item in otherLanguages)
+                    {
+                        lstOther.Add(new SitemapLanguage()
+                        {
+                            HrefLang = item.Specificulture,
+                            Href = MixCmsHelper.GetRouterUrl(
+                                        "page", new { seoName = article.SeoName, culture = item.Specificulture }, Request, Url)
+                        });
+                    }
+                    var sitemap = new SiteMap()
+                    {
+                        ChangeFreq = "monthly",
+                        LastMod = DateTime.UtcNow,
+                        Loc = article.DetailsUrl,
+                        OtherLanguages = lstOther,
+                        Priority = 0.3
+                    };
+                    root.Add(sitemap.ParseXElement());
+                }
+
+                string folder = $"Sitemaps";
+                FileRepository.Instance.CreateDirectoryIfNotExist(folder);
+                string filename = $"sitemap";
+                string filePath = $"wwwroot/{folder}/{filename}.xml";
+                root.Save(filePath);
+                return new RepositoryResponse<FileViewModel>()
+                {
+                    IsSucceed = true,
+                    Data = new FileViewModel()
+                    {
+                        Extension = ".xml",
+                        Filename = filename,
+                        FileFolder = folder
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                return new RepositoryResponse<FileViewModel>() { Exception = ex };
+            }
+        }
+
         #endregion Get
 
         #region Post
@@ -189,7 +297,8 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("app-settings/details")]
         public RepositoryResponse<JObject> LoadAppSettings()
         {
-            return new RepositoryResponse<JObject>() { IsSucceed = true, Data = MixService.GetGlobalSetting() };
+            var settings = FileRepository.Instance.GetFile("appsettings", ".json", string.Empty, true, "{}");
+            return new RepositoryResponse<JObject>() { IsSucceed = true, Data = JObject.Parse(settings.Content) };
         }
 
         // POST api/category
@@ -203,9 +312,19 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 settings.Content = model.ToString();
                 FileRepository.Instance.SaveFile(settings);
-                //MixCmsService.Instance.RefreshConfigurations();
+                //if (!_env.IsDevelopment())
+                //{
+                //    _appLifetime.StopApplication();
+                //}
             }
             return new RepositoryResponse<JObject>() { IsSucceed = model != null, Data = model };
+        }
+
+        [HttpPost, HttpOptions]
+        [Route("sendmail")]
+        public void SendMail([FromBody]JObject model)
+        {
+            MixService.SendMail(model.Value<string>("subject"), model.Value<string>("body"), MixService.GetConfig<string>("ContactEmail", _lang));
         }
 
         // POST api/category
@@ -258,12 +377,13 @@ namespace Mix.Cms.Api.Controllers.v1
             var result = new RepositoryResponse<bool>();
 
             MixService.SetConnectionString(MixConstants.CONST_CMS_CONNECTION, model.ConnectionString);
+            MixService.SetConnectionString(MixConstants.CONST_MESSENGER_CONNECTION, model.ConnectionString);
             MixService.SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, model.ConnectionString);
             MixService.SetConfig(MixConstants.CONST_SETTING_IS_SQLITE, model.IsSqlite);
             MixService.SetConfig(MixConstants.CONST_SETTING_LANGUAGE, model.Culture.Specificulture);
 
             InitCmsService sv = new InitCmsService();
-            var initResult = await sv.InitCms(model.Culture);
+            var initResult = await sv.InitCms(model.SiteName, model.Culture);
             if (initResult.IsSucceed)
             {
                 await InitRolesAsync();
@@ -272,6 +392,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 MixService.SetConfig<bool>("IsInit", true);
                 MixService.SetConfig<string>("DefaultCulture", model.Culture.Specificulture);
                 MixService.Save();
+                MixService.Reload();
             }
             else
             {

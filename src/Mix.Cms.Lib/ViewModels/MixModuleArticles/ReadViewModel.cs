@@ -26,7 +26,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleArticles
         [JsonProperty("articleId")]
         public int ArticleId { get; set; }
 
-        [JsonProperty("ModuleId")]
+        [JsonProperty("moduleId")]
         public int ModuleId { get; set; }
 
         [JsonProperty("isActived")]
@@ -38,9 +38,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleArticles
         [JsonProperty("description")]
         public string Description { get; set; }
         [JsonProperty("status")]
-        public MixContentStatus Status { get; set; }
+        public MixEnums.MixContentStatus Status { get; set; }
         #region Views
-
+        [JsonProperty("article")]
         public MixArticles.ReadViewModel Article { get; set; }
 
         #endregion Views

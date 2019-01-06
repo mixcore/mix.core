@@ -85,9 +85,9 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         templateUrl: "/app/app-portal/pages/permission/details.html"
     });
 
-    $routeProvider.when("/portal/page/data/:id", {
-        controller: "PageController",
-        templateUrl: "/app/app-portal/pages/page/data.html"
+    $routeProvider.when("/portal/page/page-article/list/:id", {
+        controller: "PageArticleController",
+        templateUrl: "/app/app-portal/pages/page-article/list.html"
     });
 
     $routeProvider.when("/portal/page/create", {
@@ -105,19 +105,29 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         templateUrl: "/app/app-portal/pages/module/data.html"
     });
 
+    $routeProvider.when("/portal/module-article/list/:id", {
+        controller: "ModuleArticleController",
+        templateUrl: "/app/app-portal/pages/module-article/list.html"
+    });
+
     $routeProvider.when("/portal/module-data/details/:moduleId/:id", {
-        controller: "ModuleDataController",
+        controller: "SharedModuleDataController",
         templateUrl: "/app/app-portal/pages/moduleData/details.html"
     });
 
     $routeProvider.when("/portal/module-data/details/:moduleId", {
-        controller: "ModuleDataController",
+        controller: "SharedModuleDataController",
         templateUrl: "/app/app-portal/pages/moduleData/details.html"
     });
 
     $routeProvider.when("/portal/module/details/:id", {
         controller: "ModuleController",
         templateUrl: "/app/app-portal/pages/module/details.html"
+    });
+    
+    $routeProvider.when("/portal/module-data/list/:moduleId", {
+        controller: "ModuleDataController",
+        templateUrl: "/app/app-portal/pages/module-data/list.html"
     });
 
     $routeProvider.when("/portal/module/create", {
@@ -267,6 +277,11 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
     $routeProvider.when("/portal/culture/create", {
         controller: "CultureController",
         templateUrl: "/app/app-portal/pages/culture/details.html"
+    });
+    
+    $routeProvider.when("/portal/messenger", {
+        controller: "MessengerController",
+        templateUrl: "/app/app-portal/pages/messenger/index.html"
     });
 
     $routeProvider.otherwise({ redirectTo: "/portal" });

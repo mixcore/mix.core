@@ -1,4 +1,4 @@
-<!-- <section class="content container-fluid"> -->
+<section class="card manual">
     <div class="row">
         <div class="col-md-8">
             <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
@@ -74,6 +74,8 @@
                         <a href="/portal/file/list?folder={{item.assetFolder}}" class="btn btn-light">
                             <span class="fas fa-file text-secondary"></span>
                         </a>
+                        <a ng-click="export(item.id)" class="btn btn-sm btn-light d-inline-block">
+                            <span class="fas fa-arrow-down text-primary"></span></a>
                         <a ng-click="syncTemplates(item.id)" class="btn btn-sm btn-light d-inline-block"><span class="fas fa-sync-alt text-primary"></span></a>
 
                         <a href="/portal/theme/details/{{item.id}}" class="btn btn-light">
@@ -100,4 +102,4 @@
             </li>
         </ul>
     </nav>
-<!-- </section> -->
+</section>

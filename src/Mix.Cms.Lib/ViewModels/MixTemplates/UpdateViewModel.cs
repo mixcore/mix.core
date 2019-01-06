@@ -90,7 +90,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[] { MixConstants.Folder.TemplatesFolder, ThemeName });
+                return CommonHelper.GetFullPath(new string[] { 
+                    MixConstants.Folder.TemplatesFolder, ThemeName });
             }
         }
 
@@ -99,12 +100,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[]
-                {
-                    ""
-                    , TemplateFolder
-                    , FileFolder
-                });
+                return $"/{FileFolder}/{FileName}{Extension}";
             }
         }
 
@@ -137,6 +133,21 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             if (!string.IsNullOrWhiteSpace(file?.Content))
             {
                 Content = file.Content;
+            }
+        }
+
+        public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            base.Validate(_context, _transaction);
+            if (IsValid)
+            {
+                if (Id == 0)
+                {
+                    if (_context.MixTemplate.Any(t => t.FileName == FileName && t.ThemeId == ThemeId))
+                    {
+                        FileName = $"{FileName}_1";
+                    }
+                }
             }
         }
 

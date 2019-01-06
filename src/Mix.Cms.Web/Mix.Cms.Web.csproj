@@ -11,8 +11,11 @@
     <MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
     <GenerateProgramFile>false</GenerateProgramFile>
     <PublishWithAspNetCoreTargetManifest>False</PublishWithAspNetCoreTargetManifest>
+    
   </PropertyGroup>
-
+  <!-- <Target Name="MyPreCompileTarget" BeforeTargets="Build">
+    <Exec Command="gulp build" />
+  </Target> -->
   <ItemGroup>
     <Compile Remove="app-client\shared\controllers\**" />
     <Compile Remove="app-portal\**" />
@@ -46,5 +49,18 @@
     <ProjectReference Include="..\Mix.Cms.Hub\Mix.Cms.Hub.csproj" />
     <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\Home\PageAsync.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Shared\Templates\Default\Widgets\_Pagination.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="wwwroot\assets\icons.svg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+  
 
 </Project>

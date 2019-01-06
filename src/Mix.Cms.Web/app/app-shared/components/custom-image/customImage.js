@@ -4,8 +4,10 @@ modules.component('customImage', {
     templateUrl: '/app/app-shared/components/custom-image/customImage.html',
     controller: ['$rootScope', '$scope', 'ngAppSettings', 'MediaService', function ($rootScope, $scope, ngAppSettings, mediaService) {
         var ctrl = this;
+        var image_placeholder = '/images/image_placeholder.jpg';
         ctrl.init = function () {
-            ctrl.srcUrl = ctrl.srcUrl || '/images/image_placeholder.jpg';
+            ctrl.srcUrl = ctrl.srcUrl || image_placeholder;
+            ctrl.maxHeight = ctrl.maxHeight|| '200px';
             ctrl.id = Math.random();
         };
         ctrl.mediaFile = {
@@ -16,6 +18,16 @@ modules.component('customImage', {
             description: ''
         };
         ctrl.media = null;
+        /*ctrl.$doCheck = function () {
+            if (ctrl.src !== ctrl.srcUrl && ctrl.srcUrl != image_placeholder) {
+                ctrl.src = ctrl.srcUrl;
+            }
+        }.bind(ctrl);*/
+        ctrl.updateSrc = function () {
+            if (ctrl.src !== ctrl.srcUrl && ctrl.srcUrl != image_placeholder) {
+                ctrl.src = ctrl.srcUrl;
+            }
+        };
         ctrl.selectFile = function (file, errFiles) {
             if (file !== undefined && file !== null) {
                 ctrl.mediaFile.folder = ctrl.folder ? ctrl.folder : 'Media';
@@ -83,6 +95,7 @@ modules.component('customImage', {
                     ctrl.postedFile.extension = file.name.substring(file.name.lastIndexOf('.'));
                     ctrl.postedFile.fileStream = reader.result;
                     ctrl.srcUrl = reader.result;
+                    ctrl.src = reader.result;
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 };

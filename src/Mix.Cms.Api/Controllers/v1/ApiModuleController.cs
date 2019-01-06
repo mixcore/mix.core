@@ -73,6 +73,10 @@ namespace Mix.Cms.Api.Controllers.v1
                     if (id.HasValue)
                     {
                         var beResult = await ReadMvcViewModel.Repository.GetSingleModelAsync(model => model.Id == id && model.Specificulture == _lang).ConfigureAwait(false);
+                        if (beResult.IsSucceed)
+                        {
+                            beResult.Data.LoadData();
+                        }
                         return Ok(JObject.FromObject(beResult));
                     }
                     else
@@ -87,6 +91,7 @@ namespace Mix.Cms.Api.Controllers.v1
                                 Status = MixContentStatus.Preview,
                             }
                         };
+
                         return Ok(JObject.FromObject(result));
                     }
             }
@@ -143,12 +148,13 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<ActionResult<JObject>> GetList(
             [FromBody] RequestPaging request)
         {
-            var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
-            bool isLevel = int.TryParse(parsed.Get("level"), out int level);
+            var query = HttpUtility.ParseQueryString(request.Query ?? "");
+            bool isType = int.TryParse(query.Get("type"), out int moduleType) && moduleType >= 0;
             ParseRequestPagingDate(request);
             Expression<Func<MixModule, bool>> predicate = model =>
                         model.Specificulture == _lang
                         && (!request.Status.HasValue || model.Status == request.Status.Value)
+                        && (!isType || model.Type == moduleType)
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (model.Title.Contains(request.Keyword)
                             || model.Description.Contains(request.Keyword)))
@@ -158,7 +164,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         && (!request.ToDate.HasValue
                             || (model.CreatedDateTime <= request.ToDate.Value)
                         );
-            string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
+            string key = $"{request.Query}_{request.PageSize}_{request.PageIndex}";
             switch (request.Key)
             {
                 case "mvc":
@@ -176,6 +182,19 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
+        [HttpPost, HttpOptions]
+        [Route("update-infos")]
+        public async Task<RepositoryResponse<List<ReadListItemViewModel>>> UpdateInfos([FromBody]List<ReadListItemViewModel> models)
+        {
+            if (models != null)
+            {                
+                return await base.SaveListAsync(models, false);
+            }
+            else
+            {
+                return new RepositoryResponse<List<ReadListItemViewModel>>();
+            }
+        }
         #endregion Post
     }
 }

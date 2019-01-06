@@ -222,6 +222,7 @@ namespace Mix.Cms.Lib.Repositories
                     Extension = ext,
                     Content = defaultContent
                 };
+                SaveFile(result);
             }
 
             return result ?? new FileViewModel() { FileFolder = FileFolder };
@@ -280,7 +281,7 @@ namespace Mix.Cms.Lib.Repositories
 
         public bool CopyDirectory(string srcPath, string desPath)
         {
-            if (srcPath != desPath)
+            if (srcPath.ToLower() != desPath.ToLower())
             {
                 //Now Create all of the directories
                 foreach (string dirPath in Directory.GetDirectories(srcPath, "*", SearchOption.AllDirectories))
@@ -319,7 +320,8 @@ namespace Mix.Cms.Lib.Repositories
             return true;
         }
 
-        private void CreateDirectoryIfNotExist(string fullPath)
+        
+        public void CreateDirectoryIfNotExist(string fullPath)
         {
             if (!string.IsNullOrEmpty(fullPath) && !Directory.Exists(fullPath))
             {

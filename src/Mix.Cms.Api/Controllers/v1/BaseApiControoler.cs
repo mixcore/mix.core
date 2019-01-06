@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Memory;
@@ -77,7 +78,10 @@ namespace Mix.Cms.Api.Controllers.v1
             request.ToDate = request.ToDate.HasValue ? new DateTime(request.ToDate.Value.Year, request.ToDate.Value.Month, request.ToDate.Value.Day).ToUniversalTime().AddDays(1)
                 : default(DateTime?);
         }
-
+        protected QueryString ParseQuery(RequestPaging request)
+        {
+            return new QueryString(request.Query);
+        }
         /// <summary>
         /// Gets the language.
         /// </summary>

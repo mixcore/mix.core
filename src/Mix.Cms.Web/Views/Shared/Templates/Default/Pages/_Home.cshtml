@@ -1,28 +1,28 @@
 <div class="wrapper">
-    <!-- -->
-
+    
     <div>
         <!--     *********     HEADER 1      *********      -->
 
         <div class="header-1">
             <div class="page-header header-filter">
-                <div class="page-header-image" style="background-image: url('https://demos.creative-tim.com/now-ui-kit-pro/assets/img/bg16.jpg');"></div>
+                <div class="page-header-image" style="background-image: url('/content/templates/default/assets/img/bg50.jpg');"></div>
                 <div class="content-center">
                     <div class="container">
                         <div class="row">
                             <div class="col-md-7 ml-auto text-right">
-                                <h1 class="title">Mix @(MixService.Translate<string>("input_output", ViewBag.culture as string))</string></h1>
+                                <h2>Welcome to</h1>
+                                <h1 class="title">@(MixService.GetConfig<string>("SiteName", ViewBag.culture))</h1>
                                 <h4 class="description">mixcore is a free, open source, community-focused Content Management System (CMS) built on the ASP.NET Core | Dotnet Core platform software you can use to create a beautiful website, blog, forum, or app.</h4>
                                 <br />
 
                                 <div class="buttons">
-                                    <a href="https://www.facebook.com/Mix-IO-268388420255457/" class="btn btn-icon btn-link btn-neutral btn-lg">
+                                    <a href="https://www.facebook.com/mixcore.org/" class="btn btn-icon btn-link btn-neutral btn-lg">
                                         <i class="fab fa-facebook-square"></i>
                                     </a>
                                     <a href="https://github.com/Mix-IO/Mix-IO-Core" class="btn btn-icon btn-link btn-neutral btn-lg">
                                         <i class="fab fa-github"></i>
                                     </a>
-                                    <a href="http://docs.swastika.io/" class="btn btn-info btn-lg mr-3">
+                                    <a href="https://docs.mixcore.org/" class="btn btn-info btn-lg mr-3">
                                         <i class="fa fa-book"></i> Document
                                     </a>
                                     <a href="https://github.com/Mix-IO/Mix-IO-Core/releases" class="btn btn-info btn-lg mr-3">
@@ -105,3 +105,4 @@
 
         <!--     *********    END FEATURES 6      *********      -->
     </div>
+</div>

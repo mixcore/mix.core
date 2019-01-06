@@ -134,13 +134,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public FileStreamViewModel ImageFileStream { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain") ?? "/"; } }
+        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
         [JsonProperty("imageUrl")]
         public string ImageUrl
         {
             get
             {
-                if (Image != null && (Image.IndexOf("http") == -1 && Image[0] != '/'))
+                if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
                     Domain,  Image
@@ -166,7 +166,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 }
                 else
                 {
-                    return Thumbnail;
+                    return string.IsNullOrEmpty(Thumbnail) ? ImageUrl : Thumbnail;
                 }
             }
         }
@@ -180,11 +180,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public List<MixTemplates.UpdateViewModel> Templates { get; set; }// Article Templates
 
         [JsonIgnore]
-        public string ActivedTheme
+        public int ActivedTheme
         {
             get
             {
-                return MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture) ?? MixService.GetConfig<string>("DefaultTemplateFolder");
+                return MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
             }
         }
 
@@ -205,7 +205,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 return CommonHelper.GetFullPath(new string[]
                 {
                     MixConstants.Folder.TemplatesFolder
-                    , ActivedTheme
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture)
                     , TemplateFolderType
                 }
             );
@@ -235,7 +235,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public override MixPage ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             GenerateSEO();
-
+            
             var navParent = ParentNavs?.FirstOrDefault(p => p.IsActived);
 
             if (navParent != null)
@@ -253,6 +253,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 Id = Repository.Max(c => c.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
+            LastModified = DateTime.UtcNow;
+            if (!string.IsNullOrEmpty(Image) && Image[0] == '/') { Image = Image.Substring(1); }
+            if (!string.IsNullOrEmpty(Thumbnail) && Thumbnail[0] == '/') { Thumbnail = Thumbnail.Substring(1); }
             return base.ParseModel(_context, _transaction);
         }
 
@@ -265,7 +268,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             }
 
             this.Templates = this.Templates ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
-                t => t.Theme.Name == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
+                t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
             this.View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Pages, _context, _transaction);
             this.Template = CommonHelper.GetFullPath(new string[]
                {

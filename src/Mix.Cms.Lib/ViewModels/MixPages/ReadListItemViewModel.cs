@@ -38,6 +38,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("title")]
         public string Title { get; set; }
 
+         [JsonProperty("seoName")]
+        public string SeoName { get; set; }
+
         [JsonProperty("fields")]
         public string Fields { get; set; }
 
@@ -63,8 +66,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("image")]
         public string Image { get; set; }
 
-        [JsonProperty("seoName")]
-        public string SeoName { get; set; }
+        [JsonProperty("thumbnail")]
+        public string Thumbnail { get; set; }
 
         [JsonProperty("seoDescription")]
         public string SeoDescription { get; set; }
@@ -107,13 +110,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         #region Views
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain") ?? "/"; } }
+        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
         [JsonProperty("imageUrl")]
         public string ImageUrl
         {
             get
             {
-                if (Image != null && (Image.IndexOf("http") == -1 && Image[0] != '/'))
+                if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
                     Domain,  Image
@@ -125,9 +128,25 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 }
             }
         }
-
+        [JsonProperty("thumbnailUrl")]
+        public string ThumbnailUrl
+        {
+            get
+            {
+                if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
+                {
+                    return CommonHelper.GetFullPath(new string[] {
+                    Domain,  Thumbnail
+                });
+                }
+                else
+                {
+                    return string.IsNullOrEmpty(Thumbnail) ? ImageUrl : Thumbnail;
+                }
+            }
+        }
         [JsonProperty("childs")]
-        public List<ReadListItemViewModel> Childs { get; set; }
+        public List<MixPagePages.ReadViewModel> Childs { get; set; }
 
         [JsonProperty("totalArticle")]
         public int TotalArticle { get; set; }
@@ -161,10 +180,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getChilds = Repository.GetModelListBy
-                (p => p.MixPagePageMixPage.Any(c => c.ParentId == Id
-                && c.Specificulture == Specificulture)
-                );
+            var getChilds = MixPagePages.ReadViewModel.Repository.GetModelListBy(
+                p => p.ParentId == Id && p.Specificulture == Specificulture, _context, _transaction);
             if (getChilds.IsSucceed)
             {
                 Childs = getChilds.Data;

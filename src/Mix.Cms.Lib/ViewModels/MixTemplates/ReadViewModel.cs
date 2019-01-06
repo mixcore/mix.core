@@ -7,8 +7,9 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
+using System.Xml.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixTemplates
 {
@@ -28,8 +29,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         public int TemplateId { get; set; }
 
         [JsonIgnore]
-        [JsonProperty("templateName")]
-        public string TemplateName { get; set; }
+        [JsonProperty("themeName")]
+        public string ThemeName { get; set; }
 
         [JsonIgnore]
         [JsonProperty("folderType")]
@@ -57,6 +58,17 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         [JsonProperty("spaContent")]
         public string SpaContent { get; set; }
+
+        [JsonProperty("spaView")]
+        public XElement SpaView
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(SpaContent)
+                    ? XElement.Parse(Regex.Replace(SpaContent, "(?<!\r)\n|\r\n|\t", "").Trim())
+                    : new XElement("div");
+            }
+        }
 
         [JsonProperty("scripts")]
         public string Scripts { get; set; }
@@ -89,7 +101,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.FileFolder,
                     MixConstants.Folder.TemplatesAssetFolder,
-                    TemplateName });
+                    ThemeName });
             }
         }
 
@@ -99,7 +111,10 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[] { MixConstants.Folder.TemplatesFolder, TemplateName });
+                return CommonHelper.GetFullPath(new string[] {
+                    MixConstants.Folder.TemplatesFolder,
+                    ThemeName
+                    });
             }
         }
 
@@ -108,12 +123,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[]
-                {
-                    ""
-                    , TemplateFolder
-                    , FileFolder
-                });
+                return $"/{FileFolder}/{FileName}{Extension}";
             }
         }
 
@@ -150,7 +160,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             FileFolder = CommonHelper.GetFullPath(new string[]
                 {
                     MixConstants.Folder.TemplatesFolder
-                    , TemplateName
+                    , ThemeName
                     , FolderType
                 });
             Content = Content?.Trim();

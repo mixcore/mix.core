@@ -12,6 +12,7 @@ using System.Linq.Expressions;
 using Mix.Cms.Lib.ViewModels.MixModuleDatas;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json.Linq;
+using System.Web;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -197,11 +198,18 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<ActionResult<RepositoryResponse<PaginationModel<ReadViewModel>>>> GetList(
             [FromBody] RequestPaging request, int? level = 0)
         {
-            int.TryParse(request.Key, out int moduleId);
+            var query = HttpUtility.ParseQueryString(request.Query ?? "");
+            int.TryParse(query.Get("module_id"), out int moduleId);
+            int.TryParse(query.Get("article_id"), out int articleId);
+            int.TryParse(query.Get("product_id"), out int productId);
+            int.TryParse(query.Get("category_id"), out int categoryId);
             string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
             Expression<Func<MixModuleData, bool>> predicate = model =>
                 model.Specificulture == _lang
                 && model.ModuleId == moduleId
+                && (articleId==0 || model.ArticleId == articleId)
+                && (productId == 0 || model.ProductId == productId)
+                && (categoryId == 0 || model.CategoryId == categoryId)
                 && (!request.FromDate.HasValue
                     || (model.CreatedDateTime >= request.FromDate.Value.ToUniversalTime())
                 )
@@ -214,6 +222,22 @@ namespace Mix.Cms.Api.Controllers.v1
             return Ok(JObject.FromObject(portalResult));
         }
 
+        // POST api/PortalPage
+        [HttpPost, HttpOptions]
+        [Route("update-infos")]
+        public async Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfos([FromBody]List<ReadViewModel> models)
+        {
+            if (models != null)
+            {
+                RemoveCache();
+                return await ReadViewModel.UpdateInfosAsync(models);
+            }
+            else
+            {
+                return new RepositoryResponse<List<ReadViewModel>>();
+            }
+        }
+        
         #endregion Post
     }
 }

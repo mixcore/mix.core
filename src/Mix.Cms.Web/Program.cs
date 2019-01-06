@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Mix.Cms.Lib;
 
 namespace Mix.Cms.Web
 {
@@ -21,12 +17,14 @@ namespace Mix.Cms.Web
         {
             var config = new ConfigurationBuilder()
            .SetBasePath(Directory.GetCurrentDirectory())
-           .AddJsonFile("mixCmsSettings.json", optional: true, reloadOnChange: true)
+           .AddJsonFile(MixConstants.CONST_FILE_APPSETTING, optional: true, reloadOnChange: true)
            .Build();
 
             return WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(config)
-                .UseStartup<Startup>();
+                .UseSetting("https_port", "443")
+                .UseStartup<Startup>()
+                ;
         }
     }
 }

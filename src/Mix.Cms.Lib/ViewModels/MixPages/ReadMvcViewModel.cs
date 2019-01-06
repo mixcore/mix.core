@@ -8,12 +8,13 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixPages
 {
-    public class ReadMvcViewModel: ViewModelBase<MixCmsContext, MixPage, ReadMvcViewModel>
+    public class ReadMvcViewModel : ViewModelBase<MixCmsContext, MixPage, ReadMvcViewModel>
     {
         #region Properties
 
@@ -57,6 +58,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("image")]
         public string Image { get; set; }
+
+        [JsonProperty("thumbnail")]
+        public string Thumbnail { get; set; }
 
         [JsonProperty("content")]
         public string Content { get; set; }
@@ -104,14 +108,14 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public string DetailsUrl { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain") ?? "/"; } }
+        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl
         {
             get
             {
-                if (Image != null && (Image.IndexOf("http") == -1 && Image[0] != '/'))
+                if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
                     Domain,  Image
@@ -123,7 +127,23 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 }
             }
         }
-
+        [JsonProperty("thumbnailUrl")]
+        public string ThumbnailUrl
+        {
+            get
+            {
+                if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
+                {
+                    return CommonHelper.GetFullPath(new string[] {
+                    Domain,  Thumbnail
+                });
+                }
+                else
+                {
+                    return string.IsNullOrEmpty(Thumbnail) ? ImageUrl : Thumbnail;
+                }
+            }
+        }
         [JsonProperty("view")]
         public MixTemplates.ReadViewModel View { get; set; }
 
@@ -144,7 +164,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 {
                     ""
                     , MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture)??  MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateFolder)
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture)
+                        ??  MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateFolder)
                     , Template
                 });
             }
@@ -173,33 +194,26 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             this.View = MixTemplates.ReadViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
             if (View != null)
             {
-                switch (Type)
-                {
-                    case MixPageType.Home:
-                        GetSubModules(_context, _transaction);
-                        break;
+                GetSubModules(_context, _transaction);
+                //switch (Type)
+                //{
+                //    case MixPageType.Home:
+                //    case MixPageType.Blank:
+                //    case MixPageType.Article:
+                //    case MixPageType.Modules:
+                //        break;
 
-                    case MixPageType.Blank:
-                        break;
+                //    case MixPageType.ListArticle:
+                //        GetSubArticles(_context, _transaction);
+                //        break;
 
-                    case MixPageType.Article:
-                        break;
+                //    case MixPageType.ListProduct:
+                //        GetSubProducts(_context, _transaction);
+                //        break;
 
-                    case MixPageType.Modules:
-                        GetSubModules(_context, _transaction);
-                        break;
-
-                    case MixPageType.ListArticle:
-                        GetSubArticles(_context, _transaction);
-                        break;
-
-                    case MixPageType.ListProduct:
-                        GetSubProducts(_context, _transaction);
-                        break;
-
-                    default:
-                        break;
-                }
+                //    default:
+                //        break;
+                //}
             }
         }
 
@@ -208,6 +222,74 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         #region Expands
 
         #region Sync
+        public void LoadData(int? pageSize = null, int? pageIndex = null
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                pageSize = pageSize > 0 ? pageSize : PageSize;
+                pageIndex = pageIndex ?? 0;
+                Expression<Func<MixPageModule, bool>> dataExp = null;
+                Expression<Func<MixPageArticle, bool>> articleExp = null;
+                Expression<Func<MixPageProduct, bool>> productExp = null;
+                foreach (var item in Modules)
+                {
+                    item.Module.LoadData(pageSize: pageSize, pageIndex: pageIndex, _context: context, _transaction: transaction);
+                }
+                switch (Type)
+                {
+                    case MixPageType.ListArticle:
+                        articleExp = n => n.CategoryId == Id && n.Specificulture == Specificulture;
+                        break;
+                    case MixPageType.ListProduct:
+                        productExp = n => n.CategoryId == Id && n.Specificulture == Specificulture;
+                        break;
+                    default:
+                        dataExp = m => m.CategoryId == Id && m.Specificulture == Specificulture;
+                        articleExp = n => n.CategoryId == Id && n.Specificulture == Specificulture;
+                        productExp = m => m.CategoryId == Id && m.Specificulture == Specificulture;
+                        break;
+                }
+
+                if (articleExp != null)
+                {
+                    var getArticles = MixPageArticles.ReadViewModel.Repository
+                    .GetModelListBy(articleExp
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+                    , pageSize, pageIndex
+                    , _context: context, _transaction: transaction);
+                    if (getArticles.IsSucceed)
+                    {
+                        Articles = getArticles.Data;
+                    }
+                }
+                if (productExp != null)
+                {
+                    var getProducts = MixPageProducts.ReadViewModel.Repository
+                    .GetModelListBy(productExp
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+                    , pageSize, pageIndex
+                    , _context: context, _transaction: transaction);
+                    if (getProducts.IsSucceed)
+                    {
+                        Products = getProducts.Data;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                UnitOfWorkHelper<MixCmsContext>.HandleException<PaginationModel<ReadMvcViewModel>>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    context.Dispose();
+                }
+            }
+        }
 
         private void GetSubModules(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -224,8 +306,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     scripts.Append(nav.Module.View.Scripts);
                     styles.Append(nav.Module.View.Styles);
                 }
-                View.Scripts = scripts.ToString();
-                View.Styles = styles.ToString();
+                View.Scripts += scripts.ToString();
+                View.Styles += styles.ToString();
             }
         }
 
