@@ -1,4 +1,5 @@
 'use strict'
+
 function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
 
     $scope.request = angular.copy(ngAppSettings.request);
@@ -10,18 +11,28 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
     $scope.saveCallbackArgs = [];
     $scope.removeCallbackArgs = [];
     $scope.range = $rootScope.range;
-    
+    $scope.getSingleSuccessCallback = null;
+    $scope.getSingleFailCallback = null;
+    $scope.getListSuccessCallback = null;
+    $scope.getListFailCallback = null;
     $scope.getSingle = async function () {
         $rootScope.isBusy = true;
         var id = $routeParams.id;
         var resp = await service.getSingle([id, 'portal']);
         if (resp && resp.isSucceed) {
             $scope.activedData = resp.data;
+            if ($scope.getSingleSuccessCallback) {
+                $scope.getSingleSuccessCallback();
+            }
             $rootScope.isBusy = false;
             $scope.$apply();
-        }
-        else {
-            if (resp) { $rootScope.showErrors(resp.errors); }
+        } else {
+            if (resp) {
+                $rootScope.showErrors(resp.errors);
+            }
+            if ($scope.getSingleFailCallback) {
+                $scope.getSingleFailCallback();
+            }
             $rootScope.isBusy = false;
             $scope.$apply();
         }
@@ -50,11 +61,18 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
                     }
                 });
             });
+            if ($scope.getListSuccessCallback) {
+                $scope.getListSuccessCallback();
+            }
             $rootScope.isBusy = false;
             $scope.$apply();
-        }
-        else {
-            if (resp) { $rootScope.showErrors(resp.errors); }
+        } else {
+            if (resp) {
+                $rootScope.showErrors(resp.errors);
+            }
+            if ($scope.getListFailCallback) {
+                $scope.getListFailCallback();
+            }
             $rootScope.isBusy = false;
             $scope.$apply();
         }
@@ -72,8 +90,7 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
                 $rootScope.executeFunctionByName('removeCallback', $scope.removeCallbackArgs, $scope)
             }
             $scope.getList();
-        }
-        else {
+        } else {
             $rootScope.showMessage('failed');
             $rootScope.isBusy = false;
             $scope.$apply();
@@ -86,18 +103,32 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
         if (resp && resp.isSucceed) {
             $scope.activedData = resp.data;
             $rootScope.showMessage('success', 'success');
-            
+
             if ($scope.saveCallback) {
                 $rootScope.executeFunctionByName('saveCallback', $scope.saveCallbackArgs, $scope)
             }
             $rootScope.isBusy = false;
             $scope.$apply();
-        }
-        else {
-            if (resp) { $rootScope.showErrors(resp.errors); }
+        } else {
+            if (resp) {
+                $rootScope.showErrors(resp.errors);
+            }
             $rootScope.isBusy = false;
             $scope.$apply();
         }
     };
+    
+    $scope.shortString = function (msg, max) {
+        if (msg) {
+            var data = decodeURIComponent(msg);
 
+            if (max < data.length) {
+                return data.replace(/[+]/g, ' ').substr(0, max) + ' ...';
+            } else {
+                return data.replace(/[+]/g, ' ');
+            }
+        } else {
+            return '';
+        }
+    }
 }

@@ -12,7 +12,7 @@
                 var data = Model.Data.JsonItems[i];
                 <div class="carousel-item @(i==0?"active":"")">
                     <div class="page-header header-filter">
-                        <div class="page-header-image" style="background-image: url('@data["image"]');"></div>
+                        <div class="page-header-image" style="background-image: url('@data["image"]["value"]');"></div>
                         <div class="content-center">
                             <div class="container text-left">
                                 <div class="content-center">

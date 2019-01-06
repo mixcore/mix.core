@@ -90,7 +90,9 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[] { MixConstants.Folder.TemplatesFolder, ThemeName });
+                return CommonHelper.GetFullPath(new string[] { 
+                    MixConstants.Folder.TemplatesFolder, 
+                    ThemeName });
             }
         }
 
@@ -98,12 +100,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[]
-                {
-                    ""
-                    , TemplateFolder
-                    , FileFolder
-                });
+                return $"/{FileFolder}/{FileName}{Extension}";
             }
         }
 
@@ -128,15 +125,6 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         #region Overrides
 
         #region Common
-
-        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var file = FileRepository.Instance.GetFile(FileName, Extension, FileFolder);
-            if (!string.IsNullOrWhiteSpace(file?.Content))
-            {
-                Content = file.Content;
-            }
-        }
 
         public override MixTemplate ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

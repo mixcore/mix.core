@@ -6,6 +6,7 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixArticles
 {
@@ -80,6 +81,11 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         [JsonProperty("tags")]
         public string Tags { get; set; }
 
+        [JsonProperty("status")]
+        public MixContentStatus Status { get; set; }
+
+
+
         #endregion Models
 
         #region Views
@@ -91,14 +97,14 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         public ReadViewModel View { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain") ?? "/"; } }
+        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl
         {
             get
             {
-                if (Image != null && (Image.IndexOf("http") == -1 && Image[0] != '/'))
+                if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
                     Domain,  Image
@@ -124,7 +130,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 }
                 else
                 {
-                    return Thumbnail;
+                    return string.IsNullOrEmpty(Thumbnail) ? ImageUrl : Thumbnail;
                 }
             }
         }
@@ -137,7 +143,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 {
                     ""
                     , MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture) ?? "Default"
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture) ?? "Default"
                     , Template
                 });
             }

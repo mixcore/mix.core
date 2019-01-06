@@ -25,7 +25,7 @@ app.controller('LanguageController',
                 }
             ];
             $scope.cate = $scope.cates[0];
-            $scope.dataTypes = ngAppSettings.editorConfigurations.dataTypes;
+            $scope.dataTypes = ngAppSettings.dataTypes;
             
             $scope.saveCallback = function () {
                 commonService.initAllSettings().then(function () {

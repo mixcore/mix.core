@@ -8,11 +8,12 @@ modules.component('actions', {
         };
         ctrl.back = function () {
             ctrl.backUrl = ctrl.backUrl || '/admin';
-            $location.path(ctrl.backUrl);
+            $location.url(ctrl.backUrl);
         };
     }],
     bindings: {
         previewUrl: '=',
-        backUrl: '='
+        backUrl: '=',
+        contentUrl: '=',
     }
 });

@@ -25,7 +25,7 @@ function BaseHub($scope) {
     // the webSockets transport the function will fallback to the serverSentEvents transport and
     // if this does not work it will try longPolling. If the connection cannot be started using
     // any of the available transports the function will return a rejected Promise.
-    $scope.startConnection = function (hubName) {
+    $scope.startConnection =  async function (hubName, callback) {
 
         $scope.connection = new signalR.HubConnectionBuilder()
             .withUrl($scope.host + hubName)
@@ -39,7 +39,9 @@ function BaseHub($scope) {
         $scope.connection.start()
             .then(function () {
                 console.log('connection started', $scope.connection);
-
+                if(callback){
+                    callback();
+                }
                 //$scope.$apply();
             })
             .catch(function (error) {
@@ -71,7 +73,7 @@ function BaseHub($scope) {
                     console.log(`Cannot start the connection use transport.`, error);
                     return false;
                 });
-        }
+        };
     };
 
     $scope.$on("$destroy", function () {

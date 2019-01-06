@@ -4,26 +4,24 @@
 <head>
     <meta charset="utf-8" />
 
-    
+
     <link rel="icon" type="image/png" sizes="16x16" href="@(MixService.GetConfig<string>("Favicon", ViewBag.culture) ?? "/favicon-16x16.png")">
     @*<link rel="manifest" href="/manifest.json">*@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-    
+
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <meta property="fb:app_id" content="@(MixService.GetConfig<string>("FacebookAppId", ViewBag.culture))" />
     <script>document.write('<meta property="og:url" content="' + window.top.location + '" />')</script>
-    <meta property="og:type" content="article" />
-    <meta property="og:title" content="@ViewData["Title"]" />
-    <meta property="og:description"
-          content="@ViewData["Description"]" />
-    <meta property="og:image" content="@ViewData["Image"]" />
+    
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @ViewData["Title"]</title>
-
+    
+    
+    @RenderSection("Seo", false)
+    
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
-     <!--     Fonts and icons     -->
+    <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200|Open+Sans+Condensed:700" rel="stylesheet">
     <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
     <!-- CSS Files -->
@@ -33,55 +31,121 @@
     <link href="/Content/Templates/Default/assets/demo/demo.css" rel="stylesheet" />
     <!-- Google Tag Manager -->
     <script>
-    (function(w, d, s, l, i) {
-      w[l] = w[l] || [];
-      w[l].push({
-        'gtm.start': new Date().getTime(),
-        event: 'gtm.js'
-      });
-      var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s),
-        dl = l !== 'dataLayer' ? '&l=' + l : '';
-      j.async = true;
-      j.src =
-        'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-      f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-NKDMSK6');
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start': new Date().getTime(),
+                event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l !== 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-NKDMSK6');
     </script>
     <!-- End Google Tag Manager -->
+    
+    <!-- Load Facebook SDK for JavaScript -->
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
     <!--[STYLES]-->
     @RenderSection("Styles", false)
+    <link rel="stylesheet" href="~/css/app-vendor.min.css" />
+    <base href="/@ViewBag.culture">
+
+    @if (!string.IsNullOrEmpty(MixService.GetConfig<string>("Google_Analytic_Key", ViewBag.culture)))
+    {
+        <!-- Google Analytics -->
+        <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', '@(MixService.GetConfig<string>("Google_Analytic_Key", ViewBag.culture))', 'auto');
+        ga('send', 'pageview');
+        </script>
+        <!-- End Google Analytics -->
+    }
+
+    <script>
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.1&appId=1471411989648473&autoLogAppEvents=1';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+    @if (!string.IsNullOrEmpty(MixService.GetConfig<string>("FacebookAppId", ViewBag.culture)))
+    {
+        <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '@(MixService.GetConfig<string>("FacebookAppId", ViewBag.culture))',
+                autoLogAppEvents: true,
+                xfbml: true,
+                version: 'v3.2'
+            });
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+        </script>
+    }
 </head>
 
-<body class="@ViewData["PageClass"]">
+<body class="@ViewData["PageClass"]" 
+ 
+ ng-app="MixClient" ng-controller="AppClientController" ng-init="init('@ViewBag.culture')">
+    <div id="fb-root"></div>
+    
+<!-- Your customer chat code -->
+<div class="fb-customerchat"
+  attribution=setup_tool
+  page_id="506560219791763"
+  theme_color="#ff7e29">
+</div>
+
     <partial name="../Layouts/_Top_Nav.cshtml" />
     <div class="wrapper">
-        <partial name="../Layouts/_Header.cshtml" />
         @RenderBody()
         <partial name="../Layouts/_Footer.cshtml" />
     </div>
     <!--   Core JS Files   -->
-    <script src="/Content/Templates/Default/assets/js/core/jquery.min.js" type="text/javascript"></script>
-    <script src="/Content/Templates/Default/assets/js/core/popper.min.js" type="text/javascript"></script>
-    <script src="/Content/Templates/Default/assets/js/core/bootstrap.min.js" type="text/javascript"></script>
-    <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
-    <script src="/Content/Templates/Default/assets/js/plugins/bootstrap-switch.js"></script>
-    <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
-    <script src="/Content/Templates/Default/assets/js/plugins/nouislider.min.js" type="text/javascript"></script>
-    <!--  Plugin for the DatePicker, full documentation here: https://github.com/uxsolutions/bootstrap-datepicker -->
-    <script src="/Content/Templates/Default/assets/js/plugins/moment.min.js"></script>
-    <!--	Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
-    <script src="/Content/Templates/Default/assets/js/plugins/bootstrap-tagsinput.js"></script>
-    <!--	Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
-    <script src="/Content/Templates/Default/assets/js/plugins/bootstrap-selectpicker.js" type="text/javascript"></script>
-    <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
-    <script src="/Content/Templates/Default/assets/js/plugins/bootstrap-datetimepicker.js" type="text/javascript"></script>
-    <!--  Google Maps Plugin    -->
     
-    <!-- Control Center for Now Ui Kit: parallax effects, scripts for the example pages etc -->
+    <script src="~/js/framework.min.js"></script>
+    <!-- <script src="~/js/bootstrap.min.js"></script> -->
+    <!-- <script src="~/js/shared.min.js"></script> -->
+
+    <script src="~/js/app-client.min.js"></script>
+    <script src="~/js/app-shared.min.js"></script>
+
+    <!-- <script src="~/app-client/shared/controllers/app-client-controller.js"></script> -->
+    <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200|Open+Sans+Condensed:700" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">             
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script> -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script> -->
+
+    <!--  Google Maps Plugin    -->
+    <!o-- Control Center for Now Ui Kit: parallax effects, scripts for the example pages etc -->
     <script src="/Content/Templates/Default/assets/js/now-ui-kit.js?v=1.2.2" type="text/javascript"></script>
-  
+
     <!--[SCRIPTS]-->
     @RenderSection("Scripts", false)
 </body>

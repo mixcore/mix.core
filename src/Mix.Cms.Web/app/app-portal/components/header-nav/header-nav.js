@@ -1,11 +1,10 @@
 ﻿(function (angular) {
     app.component('headerNav', {
         templateUrl: '/app/app-portal/components/header-nav/headerNav.html',
-        controller: ['$rootScope', 'CommonService', 'AuthService', 'TranslatorService', 'GlobalSettingsService',
-            function ($rootScope, commonService, authService, translatorService, GlobalSettingsService) {
+        controller: ['$rootScope', '$location', 'CommonService', 'AuthService', 'TranslatorService', 'GlobalSettingsService',
+            function ($rootScope, $location, commonService, authService, translatorService, GlobalSettingsService) {
                 var ctrl = this;
-                if(authService.authentication)
-                {
+                if (authService.authentication) {
                     ctrl.avatar = authService.authentication.avatar;
                 }
                 GlobalSettingsService.fillGlobalSettings().then(function (response) {
@@ -27,6 +26,17 @@
                 ctrl.logOut = function () {
                     $rootScope.logOut();
                 };
+                ctrl.addFavorite = function () {
+                    $('#dlg-favorite').modal('show');
+                }
+                ctrl.toggleSidebar = function () {           
+                    $('#sidebar').toggleClass('active');
+                }
+                ctrl.generateSitemap = async function(){
+                    $rootScope.isBusy = true;
+                    var resp = await commonService.genrateSitemap();
+                    window.top.location.href = '/portal/file/details?folder=' + resp.fileFolder + '&filename=' + resp.fileName + resp.extension;
+                }
             }],
         bindings: {
             breadCrumbs: '=',

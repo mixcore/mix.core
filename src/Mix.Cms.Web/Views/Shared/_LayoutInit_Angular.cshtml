@@ -16,19 +16,25 @@
     <environment names="Development,Staging,Production">
         <!-- CSS Files -->
     </environment>
-    <link href="~/css/bootstrap.min.css" rel="stylesheet" />    
-    <link href="~/css/shared.min.css" rel="stylesheet" />    
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" /> 
+    <link href="~/css/app-vendor.min.css" rel="stylesheet" />       
+    <!-- <link href="~/css/shared.min.css" rel="stylesheet" />     -->
     <link href="~/css/now-ui.min.css" rel="stylesheet" />    
 </head>
 
 <body class="login-page" ng-app="MixPortal">
     <div class="loader-container" ng-show="isBusy">
-        <div id="loader"></div>
+       <div class="loader">
+            <span>{</span><span>}</span>
+        </div>
+        <!-- <div id="loader">
+           
+        </div> -->
     </div>
     <!-- End Navbar -->
     <div class="page-header" filter-color="purple">
-        <div class="page-header-image" style="background-image:url(/images/bgs/book-open.jpeg)"></div>
-        <div class="content">
+        <div class="page-header-image" style="background-image:url(/images/bgs/work-space.jpg)"></div>
+        <div class="content" style="margin-bottom:0">
             <div class="container">
                 @RenderBody()
             </div>
@@ -40,7 +46,7 @@
                     <script>
                         document.write(new Date().getFullYear())
                     </script>
-                    <a href="http://www.mixcore.org" target="_blank">mixcore</a>.
+                    Made with <span class="heart">❤</span> by<a href="http://www.mixcore.org" target="_blank"> mixcore</a>.
                 </div>
             </div>
         </footer>

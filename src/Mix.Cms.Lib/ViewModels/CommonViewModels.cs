@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.Models;
 using Mix.Domain.Core.ViewModels;
@@ -9,8 +10,10 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels
@@ -25,10 +28,10 @@ namespace Mix.Cms.Lib.ViewModels
 
         [JsonProperty("themeId")]
         public int ThemeId { get; set; }
-        
+
         [JsonProperty("apiEncryptKey")]
         public string ApiEncryptKey { get; set; }
-          
+
         [JsonProperty("apiEncryptIV")]
         public string ApiEncryptIV { get; set; }
 
@@ -41,8 +44,17 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("pageTypes")]
         public List<string> PageTypes { get; set; }
 
+        [JsonProperty("moduleTypes")]
+        public List<string> ModuleTypes { get; set; }
+
+        [JsonProperty("dataTypes")]
+        public List<string> DataTypes { get; set; }
+
         [JsonProperty("statuses")]
         public List<string> Statuses { get; set; }
+
+        [JsonProperty("lastUpdateConfiguration")]
+        public DateTime? LastUpdateConfiguration { get; set; }
     }
     public class FilePageViewModel
     {
@@ -117,6 +129,7 @@ namespace Mix.Cms.Lib.ViewModels
             get
             {
                 _webPath = CommonHelper.GetFullPath(new string[] {
+                     MixService.GetConfig<string>("Domain"),
                     FileFolder,
                     $"{Filename}{Extension}"
                 });
@@ -228,12 +241,12 @@ namespace Mix.Cms.Lib.ViewModels
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (IsUnique)
             {
-                string query = @"SELECT * FROM [Mix_module_data] WHERE JSON_VALUE([Value],'$.{0}.value') = '{1}'"; // AND Specificulture = '{2}' AND Id <> '{3}'
-                var temp = string.Format(query, Name, val);//, specificulture, id?.ToString()
-                int count = _context.MixModuleData.FromSql(query, Name, val).Count(d=>d.Specificulture == specificulture && d.Id != id.ToString());//, specificulture, id?.ToString()
+                //string query = @"SELECT * FROM [Mix_module_data] WHERE JSON_VALUE([Value],'$.{0}.value') = '{1}'"; // AND Specificulture = '{2}' AND Id <> '{3}'
+                //var temp = string.Format(query, Name, val);//, specificulture, id?.ToString()
+                //int count = _context.MixModuleData.FromSql(query, Name, val).Count(d=>d.Specificulture == specificulture && d.Id != id.ToString());//, specificulture, id?.ToString()
 
-                //string query = $"SELECT * FROM Mix_module_data WHERE JSON_VALUE([Value],'$.{Name}.value') = '{val}' AND Specificulture = '{specificulture}' AND Id != '{id}'";
-                //int count = _context.MixModuleData.FromSql(sql: new RawSqlString(query)).Count();
+                string query = $"SELECT * FROM Mix_module_data WHERE JSON_VALUE([Value],'$.{Name}.value') = '{val}' AND Specificulture = '{specificulture}' AND Id != '{id}'";
+                int count = _context.MixModuleData.FromSql(sql: new RawSqlString(query)).Count();
                 if (count > 0)
                 {
                     result.IsSucceed = false;
@@ -251,5 +264,120 @@ namespace Mix.Cms.Lib.ViewModels
             return result;
         }
     }
+    public class MobileComponent
+    {
+        [JsonProperty("id")]
+        public int Id { get; set; }
 
+        [JsonProperty("componentType")]
+        public string ComponentType { get; set; }
+
+        [JsonProperty("styleName")]
+        public string StyleName { get; set; }
+
+        [JsonProperty("dataType")]
+        public string DataType { get; set; }
+
+        [JsonProperty("dataValue")]
+        public string DataValue { get; set; }
+
+        [JsonProperty("dataSource")]
+        public List<MobileComponent> DataSource { get; set; }
+
+        public MobileComponent(XElement element)
+        {
+            if (element != null)
+            {
+                StyleName = element.Attribute("class")?.Value;
+
+                DataSource = new List<MobileComponent>();
+                var subElements = element.Elements();
+                if (subElements.Any())
+                {
+                    if (element.Attribute("data") != null)
+                    {
+                        ComponentType = "View";
+                        DataValue = element.Attribute("data")?.Value.Replace("Model.", "@Model.").Replace("{{", "").Replace("}}", "");
+                        DataType = "object_array";
+                    }
+                    else
+                    {
+                        ComponentType = "View";
+                        DataType = "component";
+                    }
+                    foreach (var subElement in subElements)
+                    {
+                        if (subElement.Name != "br")
+                        {
+                            DataSource.Add(new MobileComponent(subElement));
+                        }
+                    }
+                }
+                else
+                {
+                    switch (element.Name.LocalName)
+                    {
+                        case "img":
+                            ComponentType = "Image";
+                            DataType = "image_url";
+                            DataValue = element.Attribute("src")?.Value.Replace("Model.", "@Model.").Replace("{{", "").Replace("}}", "");
+                            break;
+
+                        case "br":
+                            break;
+
+                        default:
+                            ComponentType = "Text";
+
+                            string val = element.Value.Trim();
+                            if (val.Contains("{{") && val.Contains("}}"))
+                            {
+                                DataType = "object";
+                            }
+                            else
+                            {
+                                DataType = "string";
+                            }
+                            DataValue = element.Value.Trim().Replace("Model.", "@Model.").Replace("{{", "").Replace("}}", "");
+                            break;
+                    }
+                }
+            }
+        }
+    }
+    public class SiteMap
+    {
+        public DateTime? LastMod { get; set; }
+        public string ChangeFreq { get; set; }
+        public double Priority { get; set; }
+        public string Loc { get; set; }
+        public List<SitemapLanguage> OtherLanguages { get; set; }
+        public XElement ParseXElement()
+        {
+            XNamespace xhtml = "http://www.w3.org/1999/xhtml";
+            XNamespace ns = @"http://www.sitemaps.org/schemas/sitemap/0.9";
+            XNamespace xsi = @"http://www.w3.org/1999/xhtml";
+
+            var e = new XElement("url");
+            e.Add(new XElement("lastmod", LastMod.HasValue ? LastMod.Value : DateTime.UtcNow));
+            e.Add(new XElement("changefreq", ChangeFreq));
+            e.Add(new XElement("priority", Priority));
+            e.Add(new XElement("loc", Loc));
+            foreach (var item in OtherLanguages)
+            {
+                e.Add(new XElement(xsi + "link",
+                     new XAttribute(XNamespace.Xmlns + "xhtml", xsi.NamespaceName),
+                    new XAttribute("rel", "alternate"),
+                    new XAttribute("hreflang", item.HrefLang),
+                    new XAttribute("href", item.Href)
+                    ));
+            }
+            return e;
+        }
+    }
+    public class SitemapLanguage
+    {
+        public string HrefLang { get; set; }
+        public string Href { get; set; }
+    }
 }

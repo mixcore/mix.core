@@ -3,13 +3,13 @@
     <div class="modal-dialog {{$ctrl.previewObject.size}} modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header py-2">
-                <h5 class="modal-title">
+                <h5 class="modal-title" ng-if="$ctrl.previewObject.data.detailsUrl">
                     <i class="mi mi-PreviewLink"></i>
                     <span ng-bind="$ctrl.previewObject.title"></span> -
-                    <a class="text-primary" href="{{$ctrl.previewObject.data.detailsUrl ||$ctrl.previewObject.data}}" target="_blank"><i class="mi mi-NewWindow"></i> New Window</a>
-                    - <a class="text-primary btn" ng-if="$ctrl.previewObject.data.editUrl" ng-click="$ctrl.goToLink($ctrl.previewObject.data.editUrl)"><i class="mi mi-Pencil"></i> Edit</a>
+                    <a class="text-primary" ng-if="$ctrl.previewObject.data.detailsUrl" href="{{$ctrl.previewObject.data.detailsUrl ||$ctrl.previewObject.data}}" target="_blank"><i class="mi mi-NewWindow"></i> New Window</a>
+                    <a class="text-primary btn" ng-if="$ctrl.previewObject.data.editUrl" ng-click="$ctrl.goToLink($ctrl.previewObject.data.editUrl)"><i class="mi mi-Pencil"></i>- Edit</a>
                 </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="z-index:999;">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -31,7 +31,22 @@
                                     <p></p>
                                 </div>
                             </div>
+                            <div class="row">                                
+                                <div class="col-md-12" ng-bind-html="$ctrl.previewObject.data.content"></div>
+                            </div>
+                        </div>
+                        <div ng-switch-when="module-data" class="">
+                            <module-preview module-id="$ctrl.previewObject.data.moduleId" content-id="$ctrl.previewObject.data.id"></module-preview>
+                        </div>
+                        <div ng-switch-when="article" class="">
                             <div class="row">
+                                <div class="col-md-12 p-0">
+                                    
+                                    <img ng-src="{{$ctrl.previewObject.data.imageUrl}}">
+                                    <p></p>
+                                </div>
+                            </div>
+                            <div class="row">                                
                                 <div class="col-md-12" ng-bind-html="$ctrl.previewObject.data.content"></div>
                             </div>
                         </div>

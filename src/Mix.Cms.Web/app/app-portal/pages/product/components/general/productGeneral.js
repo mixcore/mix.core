@@ -5,7 +5,6 @@ app.component('productGeneral', {
         var ctrl = this;
         //ctrl.tags = ctrl.product.tags;
         ctrl.dataTypes = ngAppSettings.dataTypes;
-        ctrl.configurations = ngAppSettings.editorConfigurations;
         ctrl.addProperty = function (type) {
             var i = $(".property").length;
             ctrl.product.properties.push({

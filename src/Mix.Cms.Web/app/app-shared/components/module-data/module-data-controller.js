@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.controller('ModuleDataController', ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$timeout', '$location', 'AuthService', 'ModuleDataService',
+app.controller('SharedModuleDataController', ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$timeout', '$location', 'AuthService', 'SharedModuleDataService',
     function ($scope, $rootScope, ngAppSettings, $routeParams, $timeout, $location, authService, moduleDataService) {
         $scope.request = {
             pageSize: '10',
@@ -151,6 +151,6 @@ app.controller('ModuleDataController', ['$scope', '$rootScope', 'ngAppSettings',
                 $rootScope.isBusy = false;
                 $scope.$apply();
             }
-        };
+        };       
 
     }]);

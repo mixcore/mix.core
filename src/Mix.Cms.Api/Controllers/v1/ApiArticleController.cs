@@ -33,7 +33,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         #region Get
 
-        // GET api/article/id
+         // GET api/article/id
         [HttpGet, HttpOptions]
         [Route("delete/{id}")]
         public async Task<RepositoryResponse<MixArticle>> DeleteAsync(int id)
@@ -153,12 +153,19 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<ActionResult<JObject>> GetList(
             [FromBody] RequestPaging request)
         {
-            var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
-            bool isLevel = int.TryParse(parsed.Get("level"), out int level);
+            var query = HttpUtility.ParseQueryString(request.Query ?? "");
+            bool isPage = int.TryParse(query.Get("page_id"), out int pageId);
+            bool isNotPage = int.TryParse(query.Get("not_page_id"), out int notPageId);
+            bool isModule = int.TryParse(query.Get("module_id"), out int moduleId);
+            bool isNotModule = int.TryParse(query.Get("not_module_id"), out int notModuleId);
             ParseRequestPagingDate(request);
             Expression<Func<MixArticle, bool>> predicate = model =>
                         model.Specificulture == _lang
                         && (!request.Status.HasValue || model.Status == request.Status.Value)
+                        && (!isPage || model.MixPageArticle.Any(nav=>nav.CategoryId == pageId && nav.ArticleId== model.Id && nav.Specificulture == _lang))                        
+                        && (!isNotPage || !model.MixPageArticle.Any(nav=>nav.CategoryId == notPageId && nav.ArticleId== model.Id && nav.Specificulture == _lang))                        
+                        && (!isModule || model.MixModuleArticle.Any(nav=>nav.ModuleId == moduleId && nav.ArticleId== model.Id))
+                        && (!isNotModule || !model.MixModuleArticle.Any(nav=>nav.ModuleId == notModuleId && nav.ArticleId== model.Id))
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (model.Title.Contains(request.Keyword)
                             || model.Excerpt.Contains(request.Keyword)))
@@ -168,7 +175,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         && (!request.ToDate.HasValue
                             || (model.CreatedDateTime <= request.ToDate.Value)
                         );
-            string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
+            string key = $"{request.Key}_{request.Query}_{request.PageSize}_{request.PageIndex}";
             switch (request.Key)
             {
                 case "mvc":
@@ -210,7 +217,20 @@ namespace Mix.Cms.Api.Controllers.v1
                     return JObject.FromObject(listItemResult);
             }
         }
-
+        // POST api/update-infos
+        [HttpPost, HttpOptions]
+        [Route("update-infos")]
+        public async Task<RepositoryResponse<List<ReadListItemViewModel>>> UpdateInfos([FromBody]List<ReadListItemViewModel> models)
+        {
+            if (models != null)
+            {                
+                return await base.SaveListAsync(models, false);
+            }
+            else
+            {
+                return new RepositoryResponse<List<ReadListItemViewModel>>();
+            }
+        }
         #endregion Post
     }
 }

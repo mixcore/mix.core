@@ -7,11 +7,12 @@ namespace Mix.Cms.Lib
     public class MixConstants
     {
         public const string CONST_CMS_CONNECTION = "MixCmsConnection";
+        public const string CONST_MESSENGER_CONNECTION = "MixMessengerConnection";
         public const string CONST_ACCOUNT_CONNECTION = "MixAccountConnection";
         public const string CONST_SETTING_IS_SQLITE = "IsSqlite";
         public const string CONST_SETTING_LANGUAGE = "Language";
-        public const string CONST_CHAT_CONNECTION = "ChatConnection";
-        public const string CONST_FILE_APPSETTING = "mixCmsSettings.json";
+        public const string CONST_FILE_APPSETTING = "appsettings";
+        public const string CONST_DEFAULT_FILE_APPSETTING = "default.appsettings";
         public const string CONST_FILE_CONFIGURATIONS = "configurations.json";
         public const string CONST_FILE_LANGUAGES = "languages.json";
         public const string CONST_PATH_HOME_ACCESS_DENIED = "/home/access-denied";
@@ -39,6 +40,7 @@ namespace Mix.Cms.Lib
             public const string IsSqlite = "IsSqlite";
             public const string ThemeId = "ThemeId";
             public const string ThemeName= "ThemeName";
+            public const string ThemeFolder= "ThemeFolder";
             public const string ApiEncryptKey = "ApiEncryptKey";
             public const string ApiEncryptIV = "ApiEncryptIV";
             public const string IsEncryptApi = "IsEncryptApi";

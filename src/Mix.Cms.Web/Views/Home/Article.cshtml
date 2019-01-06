@@ -1,19 +1,26 @@
 ﻿@model Mix.Cms.Lib.ViewModels.MixArticles.ReadMvcViewModel
 @{
     string culture = ViewBag.culture;
-    ViewData["Title"] = Model.Title;
-    ViewData["SeoTitle"] = Model.SeoTitle;
-    ViewData["SeoKeywords"] = Model.SeoKeywords;
-    ViewData["SeoDescription"] = Model.SeoDescription;
+       
 }
-
+@section Seo{
+    <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @Model.Title</title>
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}")" />
+    <meta property="og:title" content="@Model.Title" />
+    <meta property="og:description"
+          content="@Model.SeoDescription" />
+    <meta property="og:image" content="@Model.ThumbnailUrl" />
+}
+<preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
 @if (!string.IsNullOrEmpty(Model.TemplatePath))
 {
     try
     {
+
         <partial name="@Model.TemplatePath" model="@Model" />
     }
-    catch(Exception ex)
+    catch (Exception ex)
     {
 
         <p class="danger text-center has-error">@ex.StackTrace</p>
@@ -25,13 +32,8 @@ else
         <h1>@MixService.Translate("Please choose template", ViewBag.culture)</h1>
     </section>
 }
-@section scripts{
-    @Html.Raw(Model.View?.Scripts)
-
-    <script src="~/js/angular.min.js"></script>
-    <script src="~/app/app-frontend.js"></script>
-    <script src="~/app/controllers/frontend-controller.js"></script>
-}
-@section styles{
+@section Styles{
+    
     @Html.Raw(Model.View?.Styles)
+    @Html.Raw(Model.View?.Scripts)
 }

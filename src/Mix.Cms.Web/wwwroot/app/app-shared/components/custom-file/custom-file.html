@@ -4,14 +4,14 @@
     <div class="form-group col-sm-5">
         <input type="text" placeholder="image url" ng-model="$ctrl.src" ng-change="$ctrl.srcUrl = $ctrl.src" class="form-control">
     </div>
-    <div class="form-group m-0 col-sm-5">
+    <div class="form-group m-0 col-sm-4">
         <div class="custom-file">
             <!-- <input type="file" class="custom-file-input" id="customFile"> -->
             <input id="{{$ctrl.id}}" type="file" name="pic" ngf-select="$ctrl.selectFile($file, $invalidFiles)" data-file="file.file" class="position-absolute" style="width:100%; /*height:130px;*/ cursor:pointer;">
             <label class="custom-file-label" for="{{$ctrl.id}}">Choose file</label>
         </div>
     </div>
-    <div class="col-md-2">
+    <div class="col-sm-3">
         <button type="button" ng-click="$ctrl.save({activedData: $ctrl.data})" class="btn btn-secondary form-control"><i class="mi mi-Upload"></i>
             Upload</button>
     </div>

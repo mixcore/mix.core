@@ -131,7 +131,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
         #region Views
 
         [JsonProperty("domain")]
-        public string Domain => MixService.GetConfig<string>("Domain") ?? "/";
+        public string Domain => MixService.GetConfig<string>("Domain");
 
         [JsonProperty("categories")]
         public List<MixPageProducts.ReadViewModel> Categories { get; set; }
@@ -172,11 +172,11 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
         public List<MixTemplates.UpdateViewModel> Templates { get; set; }// Product Templates
 
         [JsonIgnore]
-        public string ActivedTheme
+        public int ActivedTheme
         {
             get
             {
-                return MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture) ?? MixService.GetConfig<string>("DefaultTemplateFolder");
+                return MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
             }
         }
 
@@ -197,7 +197,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
                 return CommonHelper.GetFullPath(new string[]
                 {
                     MixConstants.Folder.TemplatesFolder
-                    , ActivedTheme
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture)
                     , TemplateFolderType
                 }
             );
@@ -211,7 +211,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
         {
             get
             {
-                if (Image != null && (Image.IndexOf("http") == -1 && Image[0] != '/'))
+                if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
                     Domain,  Image
@@ -237,7 +237,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
                 }
                 else
                 {
-                    return Thumbnail;
+                    return string.IsNullOrEmpty(Thumbnail) ? ImageUrl : Thumbnail;
                 }
             }
         }
@@ -289,7 +289,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
 
             //Get Templates
             this.Templates = this.Templates ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
-                t => t.Theme.Name == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
+                t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
             View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Products, _context, _transaction);
 
             this.View = View ?? Templates.FirstOrDefault();
@@ -322,6 +322,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
                 Id = Repository.Max(c => c.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
+            LastModified = DateTime.UtcNow;
             if (Properties != null && Properties.Count > 0)
             {
                 JArray arrProperties = new JArray();
@@ -361,7 +362,8 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
                     Image = CommonHelper.GetFullPath(new string[] { folder, filename });
                 }
             }
-
+            if (Image[0] == '/') { Image = Image.Substring(1); }
+            if (Thumbnail[0] == '/') { Thumbnail = Thumbnail.Substring(1); }
             Tags = ListTag.ToString(Newtonsoft.Json.Formatting.None);
             NormalPrice = MixCmsHelper.ReversePrice(StrNormalPrice);
             DealPrice = MixCmsHelper.ReversePrice(StrDealPrice);

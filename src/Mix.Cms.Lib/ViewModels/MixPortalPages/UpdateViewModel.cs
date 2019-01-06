@@ -228,7 +228,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         {
             var query = context.MixPortalPage
                 .Include(cp => cp.MixPortalPageNavigationParent)
-                .Where(PortalPage => PortalPage.Id != Id)
+                .Where(PortalPage => PortalPage.Id != Id && PortalPage.Level == 0)
                 .Select(PortalPage =>
                     new MixPortalPagePortalPages.UpdateViewModel()
                     {

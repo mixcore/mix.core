@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -28,6 +30,7 @@ namespace Mix.Cms.Lib.Services
         private JObject LocalSettings { get; set; }
         private JObject Translator { get; set; }
         private JObject Authentication { get; set; }
+        private JObject Smtp { get; set; }
         readonly FileSystemWatcher watcher = new FileSystemWatcher();
 
         public MixService()
@@ -60,10 +63,20 @@ namespace Mix.Cms.Lib.Services
 
         private void LoadConfiggurations()
         {
-            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, string.Empty, true, "{}");
-            JObject jsonSettings = JObject.Parse(settings.Content);
+            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, ".json", string.Empty, true, "{}");
+
+            string content = string.IsNullOrWhiteSpace(settings.Content) ? "{}" : settings.Content;
+            JObject jsonSettings = JObject.Parse(content);
+            if (jsonSettings["GlobalSettings"] == null)
+            {
+                settings = FileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, ".json", string.Empty, true, "{}");
+                jsonSettings = JObject.Parse(settings.Content);
+
+            }
+
             instance.ConnectionStrings = JObject.FromObject(jsonSettings["ConnectionStrings"]);
             instance.Authentication = JObject.FromObject(jsonSettings["Authentication"]);
+            instance.Smtp = JObject.FromObject(jsonSettings["Smtp"] ?? new JObject());
             instance.Translator = JObject.FromObject(jsonSettings["Translator"]);
             instance.GlobalSettings = JObject.FromObject(jsonSettings["GlobalSettings"]);
             instance.LocalSettings = JObject.FromObject(jsonSettings["LocalSettings"]);
@@ -96,11 +109,11 @@ namespace Mix.Cms.Lib.Services
         {
             Instance.Authentication[name] = value.ToString();
         }
-        
+
         public static T GetConfig<T>(string name)
         {
             var result = Instance.GlobalSettings[name];
-            return result!=null? result.Value<T>() : default(T);
+            return result != null ? result.Value<T>() : default(T);
         }
 
         public static void SetConfig<T>(string name, T value)
@@ -111,7 +124,7 @@ namespace Mix.Cms.Lib.Services
 
         public static T GetConfig<T>(string name, string culture)
         {
-            var result = !string.IsNullOrEmpty(culture) ? Instance.LocalSettings[culture][name]: null;
+            var result = !string.IsNullOrEmpty(culture) ? Instance.LocalSettings[culture][name] : null;
             return result != null ? result.Value<T>() : default(T);
         }
 
@@ -143,14 +156,18 @@ namespace Mix.Cms.Lib.Services
 
         public static bool Save()
         {
-            var settings = FileRepository.Instance.GetFile("mixCmsSettings", ".json", string.Empty, true, "{}");
+            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, ".json", string.Empty, true, "{}");
             if (settings != null)
             {
-                JObject jsonSettings = JObject.Parse(settings.Content);
+                JObject jsonSettings = !string.IsNullOrWhiteSpace(settings.Content)? JObject.Parse(settings.Content): new JObject();
+
                 jsonSettings["ConnectionStrings"] = instance.ConnectionStrings;
                 jsonSettings["GlobalSettings"] = instance.GlobalSettings;
+                jsonSettings["GlobalSettings"]["LastUpdateConfiguration"] = DateTime.UtcNow;
                 jsonSettings["Translator"] = instance.Translator;
                 jsonSettings["LocalSettings"] = instance.LocalSettings;
+                jsonSettings["Authentication"] = instance.Authentication;
+                jsonSettings["Smtp"] = instance.Smtp;
                 settings.Content = jsonSettings.ToString();
                 return FileRepository.Instance.SaveFile(settings);
             }
@@ -161,9 +178,9 @@ namespace Mix.Cms.Lib.Services
 
         }
         public static void Reload()
-        {            
+        {
             Instance.LoadConfiggurations();
-            
+
         }
         public static void LoadFromDatabase(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -339,8 +356,8 @@ namespace Mix.Cms.Lib.Services
         {
             var fullCipher = Convert.FromBase64String(cipherText);
 
-            
-            var cipher = new byte[16];            
+
+            var cipher = new byte[16];
             var key = Encoding.UTF8.GetBytes(keyString);
             var iv = Encoding.UTF8.GetBytes("2b7e151628aed2as");
             Buffer.BlockCopy(fullCipher, 0, iv, 0, iv.Length);
@@ -368,6 +385,23 @@ namespace Mix.Cms.Lib.Services
                     return result;
                 }
             }
+        }
+
+        public static void SendMail(string subject, string message, string to)
+        {
+            SmtpClient client = new SmtpClient(instance.Smtp.Value<string>("Server"));
+            client.UseDefaultCredentials = false;
+            client.Credentials = new NetworkCredential(instance.Smtp.Value<string>("User"), instance.Smtp.Value<string>("Password"));
+            client.Port = instance.Smtp.Value<int>("Port");
+            client.EnableSsl = instance.Smtp.Value<bool>("Ssl");
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.IsBodyHtml = true;
+            mailMessage.From = new MailAddress(instance.Smtp.Value<string>("From"));
+            mailMessage.To.Add(to);
+            mailMessage.Body = message;
+            mailMessage.Subject = subject;
+            client.Send(mailMessage);
+
         }
     }
 }

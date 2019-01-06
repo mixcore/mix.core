@@ -11,6 +11,7 @@ using static Mix.Cms.Lib.MixEnums;
 using Mix.Cms.Lib.Repositories;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using Mix.Cms.Messenger.Models.Data;
 
 namespace Mix.Cms.Lib.Services
 {
@@ -20,11 +21,12 @@ namespace Mix.Cms.Lib.Services
         {
         }
 
-        public async Task<RepositoryResponse<bool>> InitCms(InitCulture culture)
+        public async Task<RepositoryResponse<bool>> InitCms(string siteName, InitCulture culture)
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>();
             MixCmsContext context = null;
             MixCmsAccountContext accountContext = null;
+            MixChatServiceContext messengerContext;
             IDbContextTransaction transaction = null;
             IDbContextTransaction accTransaction = null;
             bool isSucceed = true;
@@ -34,8 +36,11 @@ namespace Mix.Cms.Lib.Services
                 {
                     context = new MixCmsContext();
                     accountContext = new MixCmsAccountContext();
+                    messengerContext = new MixChatServiceContext();
+                    //MixChatServiceContext._cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
                     await context.Database.MigrateAsync();
                     await accountContext.Database.MigrateAsync();
+                    await messengerContext.Database.MigrateAsync();
                     transaction = context.Database.BeginTransaction();
 
                     var countCulture = context.MixCulture.Count();
@@ -44,14 +49,14 @@ namespace Mix.Cms.Lib.Services
 
                     if (!isInit)
                     {
+                        MixService.SetConfig<string>("SiteName", siteName);
                         isSucceed = InitCultures(culture, context, transaction);
-
                         isSucceed = isSucceed && InitPositions(context, transaction);
-
-                        isSucceed = isSucceed && InitThemes(context, transaction);
-
-                        isSucceed = isSucceed && await InitConfigurationsAsync(culture, context, transaction);
+                        isSucceed = isSucceed && await InitConfigurationsAsync(siteName, culture, context, transaction);
                         isSucceed = isSucceed && await InitLanguagesAsync(culture, context, transaction);
+                        isSucceed = isSucceed && InitThemes(siteName, context, transaction);
+
+                        
                     }
                     else
                     {
@@ -146,12 +151,18 @@ namespace Mix.Cms.Lib.Services
         }
 
         
-        private async Task<bool> InitConfigurationsAsync(InitCulture culture, MixCmsContext context, IDbContextTransaction transaction)
+        private async Task<bool> InitConfigurationsAsync(string siteName, InitCulture culture, MixCmsContext context, IDbContextTransaction transaction)
         {
             /* Init Configs */
             var configurations = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_CONFIGURATIONS, "data", true, "{}");
             var obj = JObject.Parse(configurations.Content);
             var arrConfiguration = obj["data"].ToObject<List<MixConfiguration>>();
+            if (!string.IsNullOrEmpty(siteName))
+            {
+                arrConfiguration.Find(c => c.Keyword == "SiteName").Value = siteName;
+                arrConfiguration.Find(c => c.Keyword == "ThemeName").Value = siteName;
+                arrConfiguration.Find(c => c.Keyword == "ThemeFolder").Value = Common.Helper.SeoHelper.GetSEOString(siteName);
+            }
             var result = await ViewModels.MixConfigurations.ReadMvcViewModel.ImportConfigurations(arrConfiguration, culture.Specificulture,  context, transaction);
             return result.IsSucceed;
 
@@ -168,15 +179,15 @@ namespace Mix.Cms.Lib.Services
 
         }
 
-        private bool InitThemes(MixCmsContext context, IDbContextTransaction transaction)
+        private bool InitThemes(string siteName, MixCmsContext context, IDbContextTransaction transaction)
         {
             bool isSucceed = true;
-            var getThemes = ViewModels.MixThemes.UpdateViewModel.Repository.GetModelList(_context: context, _transaction: transaction);
+            var getThemes = ViewModels.MixThemes.InitViewModel.Repository.GetModelList(_context: context, _transaction: transaction);
             if (!context.MixTheme.Any())
             {
-                ViewModels.MixThemes.UpdateViewModel theme = new ViewModels.MixThemes.UpdateViewModel(new MixTheme()
+                ViewModels.MixThemes.InitViewModel theme = new ViewModels.MixThemes.InitViewModel(new MixTheme()
                 {
-                    Name = "Default",
+                    Title = siteName,
                     CreatedBy = "Admin",
                     Status = (int)MixContentStatus.Published
                 }, context, transaction);

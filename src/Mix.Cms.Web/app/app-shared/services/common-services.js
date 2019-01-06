@@ -25,6 +25,18 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
             else return true;
         };
 
+        var _sendMail = async function (subject, body) {
+                var url = '/portal/sendmail';
+                var req = {
+                    method: 'POST',
+                    url: url,
+                    data: { subject: subject, body: body }
+                };
+                return _getApiResult(req).then(function (response) {
+                    return response.data;
+                });
+        };
+
         var _getSettings = async function (culture) {
             var settings = localStorageService.get('settings');
             // && culture !== undefined && settings.lang === culture
@@ -45,6 +57,19 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
                     return response.data;
                 });
             }
+        };
+
+        var _genrateSitemap = async function () {
+
+            var url = '/portal';            
+            url += '/sitemap';
+            var req = {
+                method: 'GET',
+                url: url
+            };
+            return _getApiResult(req).then(function (response) {
+                return response.data;
+            });
         };
 
         var _setSettings = async function (settings) {
@@ -93,6 +118,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
 
         };
         var _getApiResult = async function (req, serviceBase) {
+            //console.log(req.data);
             $rootScope.isBusy = true;
             if (!authService.authentication) {
                 await authService.fillAuthData();
@@ -114,7 +140,12 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
             }
             req.headers.Authorization = 'Bearer ' + req.Authorization || '';
             return $http(req).then(function (resp) {
-                //var resp = results.data;
+                if(req.url.indexOf('settings')==-1 &&
+                    (!$rootScope.settings || 
+                    $rootScope.settings.lastUpdateConfiguration < resp.data.lastUpdateConfiguration)
+                ){
+                    _initAllSettings();
+                }
 
                 return resp.data;
             },
@@ -157,6 +188,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
                     }
                 });
         };
+        adminCommonFactory.sendMail = _sendMail;
         adminCommonFactory.getApiResult = _getApiResult;
         adminCommonFactory.getSettings = _getSettings;
         adminCommonFactory.setSettings = _setSettings;
@@ -167,6 +199,8 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
         adminCommonFactory.checkfile = _checkfile;
         adminCommonFactory.fillSettings = _fillSettings;
         adminCommonFactory.settings = _settings;
+        adminCommonFactory.genrateSitemap = _genrateSitemap;
         return adminCommonFactory;
 
     }]);
+    

@@ -237,12 +237,26 @@ ModelManifest.xml
 .fake/
 
 # Source
+/docs/demo-create-crickettour.mp4
+/docs/demo-create-crickettour.7z
+src/Mix.Cms.Web/appsettings.json
 src/Mix.Cms.Web/mixCmsSettings.json
-src/Mix.Cms.Web/wwwroot/css/app-vendor.min.css
-src/Mix.Cms.Web/wwwroot/css/bootstrap.min.css
-src/Mix.Cms.Web/wwwroot/css/now-ui.min.css
-src/Mix.Cms.Web/wwwroot/css/portal.min.css
 src/Mix.Cms.Web/wwwroot/js/app-portal.min.js
 src/Mix.Cms.Web/wwwroot/js/app-shared.min.js
 src/Mix.Cms.Web/wwwroot/js/portal.min.js
-src/Mix.Cms.Web/mixCmsSettings.json
+src/Mix.Cms.Web/wwwroot/css/portal.min.css
+src/Mix.Cms.Web/wwwroot/css/now-ui.min.css
+src/Mix.Cms.Web/wwwroot/css/bootstrap.min.css
+docs/videos/create-article-page.mp4
+docs/videos/demo-create-crickettour.mp4
+docs/videos/init-mixcore-cms.mp4
+docs/videos/demo-create-crickettour.7z
+docs/videos/create-article-page.mp4
+.gitignore
+/docs/videos
+/demo
+src/Mix.Cms.Web/appsettings.json
+/docs
+src/Mix.Cms.Web/appsettings.json
+src/Mix.Cms.Web/appsettings.json
+/src/Mix.Cms.Web/wwwroot/css/portal.min.css

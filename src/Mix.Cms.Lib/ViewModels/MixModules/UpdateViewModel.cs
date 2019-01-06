@@ -19,6 +19,7 @@ using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixModules
 {
+    //Use for update module info only => don't need to load data
     public class UpdateViewModel : ViewModelBase<MixCmsContext, MixModule, UpdateViewModel>
     {
         #region Properties
@@ -34,9 +35,18 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("image")]
         public string Image { get; set; }
+        
+        [JsonProperty("thumbnail")]
+        public string Thumbnail { get; set; }
 
         [JsonProperty("template")]
         public string Template { get; set; }
+
+        [JsonProperty("formTemplate")]
+        public string FormTemplate { get; set; }
+
+        [JsonProperty("edmTemplate")]
+        public string EdmTemplate { get; set; }
 
         [Required]
         [JsonProperty("title")]
@@ -49,7 +59,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public string Fields { get; set; }
 
         [JsonProperty("type")]
-        public ModuleType Type { get; set; }
+        public MixModuleType Type { get; set; }
 
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
@@ -72,6 +82,45 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #endregion Models
 
         #region Views
+        [JsonProperty("domain")]
+        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
+
+        [JsonProperty("imageUrl")]
+        public string ImageUrl
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
+                {
+                    return CommonHelper.GetFullPath(new string[] {
+                    Domain,  Image
+                });
+                }
+                else
+                {
+                    return Image;
+                }
+            }
+        }
+
+        [JsonProperty("thumbnailUrl")]
+        public string ThumbnailUrl
+        {
+            get
+            {
+                if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
+                {
+                    return CommonHelper.GetFullPath(new string[] {
+                    Domain,  Thumbnail
+                });
+                }
+                else
+                {
+                    return string.IsNullOrEmpty(Thumbnail) ? ImageUrl : Thumbnail;
+                }
+            }
+        }
+
         [JsonProperty("data")]
         public PaginationModel<MixModuleDatas.ReadViewModel> Data { get; set; } = new PaginationModel<MixModuleDatas.ReadViewModel>();
 
@@ -87,18 +136,18 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         {
             get
             {
-                return MixEnums.EnumTemplateFolder.Articles.ToString();
+                return MixEnums.EnumTemplateFolder.Modules.ToString();
             }
         }
         [JsonProperty("view")]
         public MixTemplates.UpdateViewModel View { get; set; }
 
         [JsonIgnore]
-        public string ActivedTheme
+        public int ActivedTheme
         {
             get
             {
-                return MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture) ?? MixService.GetConfig<string>("DefaultTheme");
+                return MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
             }
         }
 
@@ -113,7 +162,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 return CommonHelper.GetFullPath(new string[]
                 {
                     MixConstants.Folder.TemplatesFolder
-                    , ActivedTheme
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture)
                     , ThemeFolderType
                 }
             );
@@ -121,6 +170,71 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         }
 
         #endregion Template
+
+        #region Form
+        [JsonProperty("forms")]
+        public List<MixTemplates.UpdateViewModel> Forms { get; set; }// Article Forms
+
+        [JsonIgnore]
+        public string FormFolderType
+        {
+            get
+            {
+                return MixEnums.EnumTemplateFolder.Forms.ToString();
+            }
+        }
+        [JsonProperty("formView")]
+        public MixTemplates.UpdateViewModel FormView { get; set; }
+
+        [JsonProperty("formFolder")]
+        public string FormFolder
+        {
+            get
+            {
+                return CommonHelper.GetFullPath(new string[]
+                {
+                    MixConstants.Folder.TemplatesFolder
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture)
+                    , MixEnums.EnumTemplateFolder.Forms.ToString()
+                }
+            );
+            }
+        }
+
+        #endregion Form
+
+        #region Edm
+        [JsonProperty("edms")]
+        public List<MixTemplates.UpdateViewModel> Edms { get; set; }// Article Edms
+
+        [JsonIgnore]
+        public string EdmFolderType
+        {
+            get
+            {
+                return MixEnums.EnumTemplateFolder.Edms.ToString();
+            }
+        }
+
+        [JsonProperty("edmView")]
+        public MixTemplates.UpdateViewModel EdmView { get; set; }
+
+        [JsonProperty("edmFolder")]
+        public string EdmFolder
+        {
+            get
+            {
+                return CommonHelper.GetFullPath(new string[]
+                {
+                    MixConstants.Folder.TemplatesFolder
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture)
+                    , MixEnums.EnumTemplateFolder.Edms.ToString()
+                }
+            );
+            }
+        }
+
+        #endregion Edm
 
         //Parent Article Id
         [JsonProperty("articleId")]
@@ -157,11 +271,14 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 CreatedDateTime = DateTime.UtcNow;
             }
             Template = View != null ? string.Format(@"{0}/{1}{2}", View.FolderType, View.FileName, View.Extension) : Template;
+            FormTemplate = FormView != null ? string.Format(@"{0}/{1}{2}", FormView.FolderType, FormView.FileName, FormView.Extension) : FormTemplate;
+            EdmTemplate = EdmView != null ? string.Format(@"{0}/{1}{2}", EdmView.FolderType, EdmView.FileName, EdmView.Extension) : EdmTemplate;
+
             var arrField = Columns != null ? JArray.Parse(
                 Newtonsoft.Json.JsonConvert.SerializeObject(Columns.OrderBy(c => c.Priority).Where(
                     c => !string.IsNullOrEmpty(c.Name)))) : new JArray();
             Fields = arrField.ToString(Newtonsoft.Json.Formatting.None);
-
+            if (!string.IsNullOrEmpty(Image) && Image[0] == '/') { Image = Image.Substring(1); }            
             return base.ParseModel(_context, _transaction);
         }
 
@@ -190,19 +307,31 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 Columns.Add(thisField);
             }
             this.Templates = this.Templates ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
-                t => t.Theme.Name == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
-            int themeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
-            View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Modules, _context, _transaction);
-            if (this.View == null)
-            {
-                this.View = MixTemplates.UpdateViewModel.GetDefault(EnumTemplateFolder.Modules, Specificulture);
-            }
+                t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
+            this.View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Modules, _context, _transaction);
             this.Template = CommonHelper.GetFullPath(new string[]
                {
                     this.View?.FileFolder
                     , this.View?.FileName
                });
 
+            this.Forms = this.Forms ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
+                t => t.Theme.Id == ActivedTheme && t.FolderType == this.FormFolderType).Data;
+            this.FormView = MixTemplates.UpdateViewModel.GetTemplateByPath(FormTemplate, Specificulture, MixEnums.EnumTemplateFolder.Forms, _context, _transaction);
+            this.FormTemplate = CommonHelper.GetFullPath(new string[]
+               {
+                    this.FormView?.FileFolder
+                    , this.FormView?.FileName
+               });
+
+            this.Edms = this.Edms ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
+                t => t.Theme.Id == ActivedTheme && t.FolderType == this.EdmFolderType).Data;
+            this.EdmView = MixTemplates.UpdateViewModel.GetTemplateByPath(EdmTemplate, Specificulture, MixEnums.EnumTemplateFolder.Edms, _context, _transaction);
+            this.EdmTemplate = CommonHelper.GetFullPath(new string[]
+               {
+                    this.EdmView?.FileFolder
+                    , this.EdmView?.FileName
+               });
         }
 
         #region Async
@@ -214,7 +343,18 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixModule parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+
             var saveView = await View.SaveModelAsync(true, _context, _transaction);
+
+            if (saveView.IsSucceed && !string.IsNullOrEmpty(FormView.Content))
+            {
+                saveView = await FormView.SaveModelAsync(true, _context, _transaction);
+            }
+            if (saveView.IsSucceed && !string.IsNullOrEmpty(EdmView.Content))
+            {
+                saveView = await EdmView.SaveModelAsync(true, _context, _transaction);
+            }
+
             return new RepositoryResponse<bool>()
             {
                 IsSucceed = saveView.IsSucceed,
@@ -222,6 +362,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 Exception = saveView.Exception,
                 Errors = saveView.Errors
             };
+            
         }
 
         #endregion Async
@@ -269,7 +410,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             }
             return result;
         }
-        public void LoadData(int? articleId = null, int? categoryId = null
+        public void LoadData(int? articleId = null, int? productId= null, int? categoryId = null
             , int? pageSize = null, int? pageIndex = 0
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -277,14 +418,14 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
             switch (Type)
             {
-                case ModuleType.Root:
+                case MixModuleType.Content:
                     getDataResult = MixModuleDatas.ReadViewModel.Repository
                        .GetModelListBy(m => m.ModuleId == Id && m.Specificulture == Specificulture
                        , "Priority", 0, pageSize, pageIndex
                        , _context, _transaction);
                     break;
 
-                case ModuleType.SubPage:
+                case MixModuleType.SubPage:
                     getDataResult = MixModuleDatas.ReadViewModel.Repository
                        .GetModelListBy(m => m.ModuleId == Id && m.Specificulture == Specificulture
                        && (m.CategoryId == categoryId)
@@ -292,10 +433,17 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                        , _context, _transaction);
                     break;
 
-                case ModuleType.SubArticle:
+                case MixModuleType.SubArticle:
                     getDataResult = MixModuleDatas.ReadViewModel.Repository
                        .GetModelListBy(m => m.ModuleId == Id && m.Specificulture == Specificulture
                        && (m.ArticleId == articleId)
+                       , "Priority", 0, pageSize, pageIndex
+                       , _context, _transaction);
+                    break;
+                case MixModuleType.SubProduct:
+                    getDataResult = MixModuleDatas.ReadViewModel.Repository
+                       .GetModelListBy(m => m.ModuleId == Id && m.Specificulture == Specificulture
+                       && (m.ProductId == productId)
                        , "Priority", 0, pageSize, pageIndex
                        , _context, _transaction);
                     break;

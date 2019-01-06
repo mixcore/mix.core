@@ -1,20 +1,27 @@
-<!-- <section class="content container-fluid"> -->
+<section class="card manual">
     <filter-list request="request" callback="getList(pageIndex)"></filter-list>
-
+    <select ng-model="type" ng-change="getListByType(pageIndex)">
+        <option value="-1">All</option>
+        <option ng-repeat="type in settings.moduleTypes track by $index" ng-value="$index">{{type}}</option>
+    </select>
     <table class="table table-sm table-hover" cellspacing="0">
         <thead class="thead-light">
             <tr>
-                <th scope="col" style="width: 3%;">
+                <th scope="col" width="3%">
                     <span class="oi oi-sort-ascending"></span>
                 </th>
                 <!--<th scope="col" style="width: 4%;">
                     <span class="fas fa-sort-numeric-down"></span>
                 </th>-->
-                <th scope="col" style="width: 5%;">
+                <th scope="col" width="5%">
                     Priority
                 </th>
                 <th scope="col" width="35%">
                     Title
+                </th>
+                <th scope="col" width="10%">
+                <th scope="col" width="35%">
+                    Name
                 </th>
                 <th scope="col" width="10%">
                     Created Date
@@ -44,6 +51,10 @@
                     {{item.title}}
                 </td>
                 <td>
+                <td>
+                    {{item.name}}
+                </td>
+                <td>
                     <small>
                         {{item.lastModified | utcToLocal:'d.M.yyyy h:mm a'}}
                     </small>
@@ -59,7 +70,10 @@
                         <!--<a href="{{item.detailsUrl}}" target="_blank" class="btn btn-light">
                             <span class="oi oi-eye text-primary"></span>
                         </a>-->
-                        <a href="/portal/module/data/{{item.id}}" class="btn btn-light">
+                        <a ng-if="item.type==2" href="/portal/module-article/list/{{item.id}}" class="btn btn-light">
+                            <span class="fas fa-list text-info"></span>
+                        </a>                                
+                        <a ng-if="item.type==1" href="/portal/module/data/{{item.id}}" class="btn btn-light">
                             <span class="fas fa-list text-info"></span>
                         </a>                                
                         <a ng-click="remove(item.id);" class="btn btn-light">
@@ -71,4 +85,4 @@
         </tbody>
     </table>
     <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
-<!-- </section> -->
+</section>

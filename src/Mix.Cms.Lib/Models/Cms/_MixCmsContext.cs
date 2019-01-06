@@ -62,6 +62,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+
             //define the database to use
             string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
@@ -520,9 +521,11 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Description).HasMaxLength(4000);
 
+                entity.Property(e => e.EdmTemplate).HasMaxLength(250);
+
                 entity.Property(e => e.Fields).HasMaxLength(4000);
 
-                entity.Property(e => e.FormTemplate).HasMaxLength(4000);
+                entity.Property(e => e.FormTemplate).HasMaxLength(250);
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
@@ -537,6 +540,8 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.Template).HasMaxLength(250);
+
+                entity.Property(e => e.Thumbnail).HasMaxLength(250);
 
                 entity.Property(e => e.Title).HasMaxLength(250);
 
@@ -865,8 +870,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Description).HasMaxLength(250);
 
                 entity.Property(e => e.Image).HasMaxLength(250);
-
-                entity.Property(e => e.Priority).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
@@ -1268,6 +1271,10 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.ToTable("mix_related_article");
 
+                entity.HasIndex(e => new { e.DestinationId, e.Specificulture });
+
+                entity.HasIndex(e => new { e.SourceId, e.Specificulture });
+
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
@@ -1410,6 +1417,10 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.PreviewUrl).HasMaxLength(450);
 
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Thumbnail).HasMaxLength(250);
+
+                entity.Property(e => e.Title).HasMaxLength(250);
             });
 
             modelBuilder.Entity<MixUrlAlias>(entity =>

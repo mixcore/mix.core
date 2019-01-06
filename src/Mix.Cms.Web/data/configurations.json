@@ -5,7 +5,7 @@
       "keyword": "LanguageVersion",
       "category": "Site",
       "value": 1,
-      "dataType": 0,
+      "dataType": 7,
       "description": "Company Address",
       "priority": 0,
       "status": 2
@@ -14,7 +14,7 @@
       "keyword": "SettingVersion",
       "category": "Site",
       "value": 1,
-      "dataType": 0,
+      "dataType": 7,
       "description": "Company Address",
       "priority": 0,
       "status": 2
@@ -23,7 +23,7 @@
       "keyword": "ContactAddress",
       "category": "Site",
       "value": "",
-      "dataType": 0,
+      "dataType": 7,
       "description": "Company Address",
       "priority": 0,
       "status": 2
@@ -32,7 +32,7 @@
       "keyword": "ContactEmail",
       "category": "Site",
       "value": "Site Name",
-      "dataType": 0,
+      "dataType": 7,
       "description": "Email",
       "priority": 0,
       "status": 2
@@ -41,7 +41,7 @@
       "keyword": "ContactPhone",
       "category": "Site",
       "value": "",
-      "dataType": 0,
+      "dataType": 7,
       "description": "Hotline",
       "priority": 0,
       "status": 2
@@ -50,7 +50,7 @@
       "keyword": "Facebook",
       "category": "Site",
       "value": "",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "priority": 0,
       "status": 2
@@ -59,7 +59,25 @@
       "keyword": "FacebookAppId",
       "category": "Site",
       "value": "",
-      "dataType": 0,
+      "dataType": 7,
+      "description": null,
+      "priority": 0,
+      "status": 2
+    },
+    {
+      "keyword": "Facebook_Page_Id",
+      "category": "Site",
+      "value": "",
+      "dataType": 7,
+      "description": null,
+      "priority": 0,
+      "status": 2
+    },
+    {
+      "keyword": "Google_Analytic_Key",
+      "category": "Site",
+      "value": "",
+      "dataType": 7,
       "description": null,
       "priority": 0,
       "status": 2
@@ -68,7 +86,7 @@
       "keyword": "Favicon",
       "category": "Site",
       "value": "/css/portal/img/mixcore-logo-blue.png",
-      "dataType": 2,
+      "dataType": 16,
       "description": null,
       "priority": 0,
       "status": 2
@@ -77,7 +95,7 @@
       "keyword": "Logo",
       "category": "Site",
       "value": "/css/portal/img/mixcore-logo-blue.png",
-      "dataType": 2,
+      "dataType": 16,
       "description": null,
       "priority": 0,
       "status": 2
@@ -86,17 +104,26 @@
       "keyword": "SiteName",
       "category": "Site",
       "value": "Mix Core",
-      "dataType": 0,
+      "dataType": 7,
       "description": null,
       "priority": 0,
       "status": 2
     },
     {
-      "keyword": "Theme",
+      "keyword": "ThemeName",
       "category": "Site",
       "value": "Default",
-      "dataType": 0,
+      "dataType": 7,
       "description": "Cms Theme",
+      "priority": 0,
+      "status": 2
+    },
+    {
+      "keyword": "ThemeFolder",
+      "category": "Site",
+      "value": "Default",
+      "dataType": 7,
+      "description": "Cms Theme Folder",
       "priority": 0,
       "status": 2
     },
@@ -104,7 +131,7 @@
       "keyword": "ThemeId",
       "category": "Site",
       "value": "1",
-      "dataType": 0,
+      "dataType": 7,
       "description": "Cms Theme",
       "priority": 0,
       "status": 2

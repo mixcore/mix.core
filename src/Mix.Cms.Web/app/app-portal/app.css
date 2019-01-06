@@ -1,4 +1,24 @@
-﻿/**
+﻿/* GENERAL STYLE */
+html, body{
+    height: 100%;
+}
+body {
+    color: #212529!important;
+}
+
+#sidebar.sw-toc-sub-link{
+    color: #212529!important;
+}
+
+.display-4{
+    font-size: 2rem!important;
+}
+
+/* CARD STYLE */
+.card.manual{
+    padding: 20px 20px 0 20px;
+}
+/**
  * The dnd-list should always have a min-height,
  * otherwise you can't drop to it once it's empty
  */

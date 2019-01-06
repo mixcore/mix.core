@@ -80,6 +80,31 @@ namespace Mix.Cms.Api.Controllers.v1
                         RepositoryResponse<UpdateViewModel> result = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_default", null, model);
                         return Ok(JObject.FromObject(result));
                     }
+                case "listItem":
+                    if (id.HasValue)
+                    {
+                        var beResult = await ReadListItemViewModel.Repository.GetSingleModelAsync(model => model.Id == id && model.Specificulture == _lang).ConfigureAwait(false);
+                        if (beResult.IsSucceed)
+                        {
+                            beResult.Data.DetailsUrl = MixCmsHelper.GetRouterUrl("Page", new { beResult.Data.SeoName }, Request, Url);
+                        }
+                        return Ok(JObject.FromObject(beResult));
+                    }
+                    else
+                    {
+                        var model = new MixPage();
+                        RepositoryResponse<ReadListItemViewModel> result = new RepositoryResponse<ReadListItemViewModel>()
+                        {
+                            IsSucceed = true,
+                            Data = new ReadListItemViewModel(model)
+                            {
+                                Specificulture = _lang,
+                                Status = MixContentStatus.Preview,
+                                PageSize = 20
+                            }
+                        };
+                        return Ok(JObject.FromObject(result));
+                    }
                 default:
                     if (id.HasValue)
                     {
@@ -211,15 +236,29 @@ namespace Mix.Cms.Api.Controllers.v1
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
                                 "page", new { seoName = a.SeoName }, Request, Url);
-                            a.Childs.ForEach((Action<ReadListItemViewModel>)(c =>
+                            a.Childs.ForEach((Action<Lib.ViewModels.MixPagePages.ReadViewModel>)(c =>
                             {
-                                c.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                    "page", new { seoName = c.SeoName }, Request, Url);
+                                c.Page.DetailsUrl = MixCmsHelper.GetRouterUrl(
+                                    "page", new { seoName = c.Page.SeoName }, Request, Url);
                             }));
                         }));
                     }
 
                     return JObject.FromObject(listItemResult);
+            }
+        }
+
+        [HttpPost, HttpOptions]
+        [Route("update-infos")]
+        public async Task<RepositoryResponse<List<ReadListItemViewModel>>> UpdateInfos([FromBody]List<ReadListItemViewModel> models)
+        {
+            if (models != null)
+            {                
+                return await base.SaveListAsync(models, false);
+            }
+            else
+            {
+                return new RepositoryResponse<List<ReadListItemViewModel>>();
             }
         }
 

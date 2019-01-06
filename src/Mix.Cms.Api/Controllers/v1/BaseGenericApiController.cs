@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +21,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
     public class BaseGenericApiController<TDbContext, TModel> : Controller
         where TDbContext : DbContext
         where TModel : class
@@ -93,6 +97,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 }
                 AlertAsync("Add Cache", 200, cacheKey);
             }
+            data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
             return data;
         }
 
@@ -113,7 +118,7 @@ namespace Mix.Cms.Api.Controllers.v1
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
             var getData = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
-            var cacheKey = $"{typeof(TModel).Name}_list_{_lang}_{key}_{request.Status}_{request.Keyword}_{request.OrderBy}_{request.PageSize}_{request.PageIndex}";
+            var cacheKey = $"{typeof(TModel).Name}_list_{_lang}_{key}_{request.Status}_{request.Keyword}_{request.OrderBy}_{request.Direction}_{request.PageSize}_{request.PageIndex}_{request.Query}";
             var data = _memoryCache.Get<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
             if (data == null)
             {
@@ -134,7 +139,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 }
                 AlertAsync("Add Cache", 200, cacheKey);
             }
-
+            data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
             //AlertAsync("Get List Page", 200, $"Get {request.Key} list page");
             return data;
         }
@@ -149,6 +154,27 @@ namespace Mix.Cms.Api.Controllers.v1
                 return result;
             }
             return new RepositoryResponse<TView>();
+        }
+        
+        protected async Task<RepositoryResponse<List<TView>>> SaveListAsync<TView>(List<TView> lstVm, bool isSaveSubModel)
+            where TView : ViewModelBase<TDbContext, TModel, TView>
+        {
+            var result= new RepositoryResponse<List<TView>>(){ IsSucceed = true};
+            if (lstVm != null)
+            {
+                foreach (var vm in lstVm)
+                {
+                    var tmp = await vm.SaveModelAsync(isSaveSubModel).ConfigureAwait(false);                    
+                    result.IsSucceed = result.IsSucceed&& tmp.IsSucceed;
+                    if(!tmp.IsSucceed){
+                        result.Exception = tmp.Exception;
+                        result.Errors.AddRange(tmp.Errors);
+                    }
+                }
+                RemoveCache();
+                return result;
+            }
+            return result;
         }
 
         public JObject SaveEncrypt([FromBody] RequestEncrypted request)
@@ -188,7 +214,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 {
                     new JProperty("created_at", DateTime.UtcNow),
                     new JProperty("ip_address", Request.HttpContext.Connection.RemoteIpAddress.ToString()),
-                    new JProperty("user", User.Identity?.Name?? User.Claims.SingleOrDefault(c=>c.Subject.Name == "Username")?.Value),
+                    new JProperty("user", User.Identity?.Name?? User.Claims.SingleOrDefault(c=>c.Type == "Username")?.Value),
                     new JProperty("request_url", Request.Path.Value),
                     new JProperty("action", action),
                     new JProperty("status", status),
@@ -204,7 +230,10 @@ namespace Mix.Cms.Api.Controllers.v1
             request.ToDate = request.ToDate.HasValue ? new DateTime(request.ToDate.Value.Year, request.ToDate.Value.Month, request.ToDate.Value.Day).ToUniversalTime().AddDays(1)
                 : default(DateTime?);
         }
-
+        protected QueryString ParseQuery(RequestPaging request)
+        {
+            return new QueryString(request.Query);
+        }
         /// <summary>
         /// Gets the language.
         /// </summary>

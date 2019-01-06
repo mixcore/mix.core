@@ -25,7 +25,7 @@ namespace Mix.Cms.Lib
                     case MixPageType.Blank:
                         foreach (var child in cate.Childs)
                         {
-                            child.DetailsUrl = Url.RouteUrl("Page", new { culture, seoName = child.SeoName });
+                            child.Page.DetailsUrl = Url.RouteUrl("Page", new { culture, seoName = child.Page.SeoName });
                         }
                         break;
 
@@ -43,10 +43,10 @@ namespace Mix.Cms.Lib
                 }
                 cate.IsActived = (cate.DetailsUrl == activePath
                     || (cate.Type == MixPageType.Home && activePath == string.Format("/{0}/home", culture)));
-                cate.Childs.ForEach((Action<ViewModels.MixPages.ReadListItemViewModel>)(c =>
+                cate.Childs.ForEach((Action<ViewModels.MixPagePages.ReadViewModel>)(c =>
                 {
                     c.IsActived = (
-                    c.DetailsUrl == activePath);
+                    c.Page.DetailsUrl == activePath);
                     cate.IsActived = cate.IsActived || c.IsActived;
                 }));
             }
@@ -67,7 +67,7 @@ namespace Mix.Cms.Lib
                     case MixPageType.Blank:
                         foreach (var child in cate.Childs)
                         {
-                            child.DetailsUrl = Url.RouteUrl("Page", new { culture, pageName = child.SeoName });
+                            child.Page.DetailsUrl = Url.RouteUrl("Page", new { culture, pageName = child.Page.SeoName });
                         }
                         break;
 
@@ -88,16 +88,15 @@ namespace Mix.Cms.Lib
                     cate.DetailsUrl == activePath || (cate.Type == MixPageType.Home && activePath == string.Format("/{0}/home", culture))
                     );
 
-                cate.Childs.ForEach((Action<ViewModels.MixPages.ReadListItemViewModel>)(c =>
+                cate.Childs.ForEach((Action<ViewModels.MixPagePages.ReadViewModel>)(c =>
                 {
                     c.IsActived = (
-                    c.DetailsUrl == activePath);
+                    c.Page.DetailsUrl == activePath);
                     cate.IsActived = cate.IsActived || c.IsActived;
                 }));
             }
             return cates;
         }
-
 
         public static string GetRouterUrl(string routerName, object routeValues, HttpRequest request, IUrlHelper Url)
         {
@@ -105,7 +104,6 @@ namespace Mix.Cms.Lib
                         Url.RouteUrl(routerName, routeValues)
                         );
         }
-
 
         public static string FormatPrice(double? price, string oldPrice = "0")
         {
@@ -126,6 +124,7 @@ namespace Mix.Cms.Lib
             }
             return oldPrice;
         }
+
         public static bool CheckIsPrice(string number)
         {
             if (number == null)
@@ -151,6 +150,12 @@ namespace Mix.Cms.Lib
             {
                 return 0;
             }
+        }
+
+        public static ViewModels.MixModules.ReadMvcViewModel GetModule (string name, string culture)
+        {
+            var module = ViewModels.MixModules.ReadMvcViewModel.GetBy(m => m.Name == name && m.Specificulture == culture);
+            return module.Data;
         }
     }
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('MixClient', ['ngRoute', 'LocalStorageModule', 'components']);
+var app = angular.module('MixClient', ['ngRoute', 'LocalStorageModule', 'components', 'ngSanitize']);
 var serviceBase = '';
 
 app.directive('ngEnter', function () {
@@ -41,8 +41,8 @@ app.directive('ngEnter', function () {
     };
 }).filter('utcToLocal', Filter);
 
-app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthService', 'TranslatorService',
-    function ($rootScope, ngAppSettings, $location, commonService, authService, translatorService) {
+app.run(['$rootScope', 'ngAppSettings', 'GlobalSettingsService', 'CommonService', 'AuthService', 'TranslatorService',
+    function ($rootScope, ngAppSettings, globalSettingsService, commonService, authService, translatorService) {
         $rootScope.isBusy = false;
         $rootScope.translator = translatorService;
         $rootScope.message = {
@@ -64,7 +64,7 @@ app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthServi
             'Published',
             'Draft',
             'Schedule'
-        ]
+        ];
         ngAppSettings.orders = [
             {
                 value: 'CreatedDateTime',
@@ -90,13 +90,13 @@ app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthServi
                 value: '1',
                 title: 'Desc'
             }
-        ]
+        ];
         ngAppSettings.pageSizes = [
             '5',
             '10',
             '15',
             '20'
-        ]
+        ];
         ngAppSettings.request = {
             pageSize: '10',
             pageIndex: 0,
@@ -106,43 +106,6 @@ app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthServi
             fromDate: null,
             toDate: null,
             keyword: ''
-        };
-        ngAppSettings.editorConfigurations = {
-            core: {},
-            plugins: {
-                btnsDef: {
-                    // Customizables dropdowns
-                    image: {
-                        dropdown: ['insertImage', 'upload', 'base64', 'noembed'],
-                        ico: 'insertImage'
-                    }
-                },
-                btns: [
-                    ['viewHTML'],
-                    ['undo', 'redo'],
-                    ['formatting'],
-                    ['strong', 'em', 'del', 'underline'],
-                    ['link'],
-                    ['image'],
-                    ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
-                    ['unorderedList', 'orderedList'],
-                    ['foreColor', 'backColor'],
-                    ['preformatted'],
-                    ['horizontalRule'],
-                    ['fullscreen']
-                ],
-                plugins: {
-                    // Add imagur parameters to upload plugin
-                    upload: {
-                        serverPath: 'https://api.imgur.com/3/image',
-                        fileFieldName: 'image',
-                        headers: {
-                            'Authorization': 'Client-ID 9e57cb1c4791cea'
-                        },
-                        urlPropertyName: 'data.link'
-                    }
-                }
-            }
         };
         ngAppSettings.dataTypes = [
             { title: 'string', value: 0 },
@@ -154,8 +117,11 @@ app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthServi
             { title: 'boolean', value: 7 },
             { title: 'mdTextArea', value: 8 },
             { title: 'date', value: 9 },
-            { title: 'datetime', value: 10 },
+            { title: 'datetime', value: 10 }
         ];
+        globalSettingsService.fillGlobalSettings().then(function (response) {
+            $rootScope.settings = response;
+        });
         $rootScope.range = function (max) {
             var input = [];
             for (var i = 1; i <= max; i += 1) input.push(i);
@@ -206,14 +172,14 @@ app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthServi
             $.each(errors, function (i, e) {
                 $rootScope.showMessage(e, 'danger');
             });
-        }
+        };
 
         $rootScope.showMessage = function (content, type) {
             var from = 'bottom';
             var align = 'right';
             $.notify({
                 icon: "now-ui-icons ui-1_bell-53",
-                message: content,
+                message: content
 
             }, {
                     type: type,
@@ -223,7 +189,7 @@ app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthServi
                         align: align
                     }
                 });
-        }
+        };
 
         $rootScope.translate = function (keyword, defaultValue) {
             if ($rootScope.globalSettings && ($rootScope.translator || $rootScope.isBusy)) {
@@ -232,8 +198,10 @@ app.run(['$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthServi
             else {
                 return defaultValue || keyword;
             }
-        }
+        };
+
     }]);
+
 
 function Filter($filter) {
     return function (utcDateString, format) {
@@ -251,4 +219,5 @@ function Filter($filter) {
         return $filter('date')(utcDateString, format);
     };
 }
+
 var modules = angular.module('components', []);

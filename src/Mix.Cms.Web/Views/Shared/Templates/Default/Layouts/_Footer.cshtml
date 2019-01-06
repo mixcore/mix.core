@@ -9,7 +9,7 @@
         <nav>
             <ul>
                 @foreach (var cate in cates.OrderBy(c => c.Priority))
-                {
+                {                    
                     <li>
                         <a href="@cate.DetailsUrl">
                             @cate.Title
@@ -39,7 +39,7 @@
             <script>
                 document.write(new Date().getFullYear())
             </script>, Build with love by
-            <a href="https://www.swastika.io" target="_blank">mixcore</a>.
+            <a href="http://dev.mixcore.org/en-us/home" target="_blank">mixcore</a>.
         </div>
     </div>
 </footer>
