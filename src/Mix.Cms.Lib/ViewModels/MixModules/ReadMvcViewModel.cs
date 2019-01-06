@@ -29,6 +29,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("image")]
         public string Image { get; set; }
 
+        [JsonProperty("thumbnail")]
+        public string Thumbnail { get; set; }
+
         [JsonProperty("template")]
         public string Template { get; set; }
 
@@ -85,6 +88,23 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 }
             }
         }
+        [JsonProperty("thumbnailUrl")]
+        public string ThumbnailUrl
+        {
+            get
+            {
+                if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
+                {
+                    return CommonHelper.GetFullPath(new string[] {
+                    Domain,  Thumbnail
+                });
+                }
+                else
+                {
+                    return string.IsNullOrEmpty(Thumbnail) ? ImageUrl : Thumbnail;
+                }
+            }
+        }
 
         [JsonProperty("columns")]
         public List<ModuleFieldViewModel> Columns
@@ -113,7 +133,13 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         {
             get
             {
-                return string.Format("../{0}", Template);
+                return CommonHelper.GetFullPath(new string[]
+                {
+                    ""
+                    , MixConstants.Folder.TemplatesFolder
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture) ?? "Default"
+                    , Template
+                });
             }
         }
 

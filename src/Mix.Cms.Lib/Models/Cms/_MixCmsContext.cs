@@ -541,6 +541,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Template).HasMaxLength(250);
 
+                entity.Property(e => e.Thumbnail).HasMaxLength(250);
+
                 entity.Property(e => e.Title).HasMaxLength(250);
 
                 entity.Property(e => e.Type).HasDefaultValueSql("('0')");
@@ -1415,6 +1417,10 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.PreviewUrl).HasMaxLength(450);
 
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Thumbnail).HasMaxLength(250);
+
+                entity.Property(e => e.Title).HasMaxLength(250);
             });
 
             modelBuilder.Entity<MixUrlAlias>(entity =>

@@ -40,6 +40,7 @@ namespace Mix.Cms.Lib
             public const string IsSqlite = "IsSqlite";
             public const string ThemeId = "ThemeId";
             public const string ThemeName= "ThemeName";
+            public const string ThemeFolder= "ThemeFolder";
             public const string ApiEncryptKey = "ApiEncryptKey";
             public const string ApiEncryptIV = "ApiEncryptIV";
             public const string IsEncryptApi = "IsEncryptApi";

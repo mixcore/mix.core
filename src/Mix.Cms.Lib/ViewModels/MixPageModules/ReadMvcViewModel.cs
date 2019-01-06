@@ -33,7 +33,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPageModules
         public string Description { get; set; }
 
         #region Views
-
+    
+        [JsonProperty("module")]
         public MixModules.ReadMvcViewModel Module { get; set; }
 
         #endregion Views

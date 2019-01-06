@@ -119,6 +119,15 @@
       "status": 2
     },
     {
+      "keyword": "ThemeFolder",
+      "category": "Site",
+      "value": "Default",
+      "dataType": 7,
+      "description": "Cms Theme Folder",
+      "priority": 0,
+      "status": 2
+    },
+    {
       "keyword": "ThemeId",
       "category": "Site",
       "value": "1",

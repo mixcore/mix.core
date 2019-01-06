@@ -234,13 +234,6 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$r
             }
         };
         $scope.selectedCol = null;
-        $scope.updateColOrders = function (index, items) {
-            items.splice(index, 1);
-            // for (var i = 0; i < items.length; i++) {
-            //     items[i].priority = ctrl.min + i;
-            // }   
-            console.log(items);         
-        };
         $scope.dragoverCallback = function (index, item, external, type) {
             //console.log('drop ', index, item, external, type);
         }

@@ -30,6 +30,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         [JsonProperty("name")]
         public string Name { get; set; }
 
+        [Required]
+        [JsonProperty("title")]
+        public string Title { get; set; }
+
         [JsonProperty("image")]
         public string Image { get; set; }
 
@@ -82,7 +86,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.FileFolder,
                     MixConstants.Folder.TemplatesAssetFolder,
-                    SeoHelper.GetSEOString(Name)
+                    Name
                 });
             }
         }
@@ -93,7 +97,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.FileFolder,
                     MixConstants.Folder.UploadFolder,
-                    SeoHelper.GetSEOString(Name)
+                    Name
                 });
             }
         }
@@ -136,6 +140,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             if (Id == 0)
             {
+                Name = SeoHelper.GetSEOString(Title);
                 CreatedDateTime = DateTime.UtcNow;
             }
             return base.ParseModel(_context, _transaction);
@@ -158,6 +163,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             if (Id == 0)
             {
                 // Clone Default templates
+                Name = SeoHelper.GetSEOString(Title);
                 string defaultTemplateFolder = CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.TemplatesFolder,
                     "Default" });

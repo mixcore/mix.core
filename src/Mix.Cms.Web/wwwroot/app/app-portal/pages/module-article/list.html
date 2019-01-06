@@ -45,15 +45,15 @@
                 <input type="text" value="{{item.priority}}" class="item-priority form-control form-control-sm d-inline" style="width:40px;">
             </td>
             <td>
-                {{item.article.title}}
+                <small>
+                    <span ng-bind-html="item.article.title"></span>
+                </small>
             </td>
             <td>
                 <div ng-if="item.article.image!=''">
-                    <img height="50" ng-src="{{item.article.imageUrl}}">
+                    <preview-image img-height="50" img-src="item.article.imageUrl"></preview-image>
                 </div>
-                <small>
-                    <span ng-bind-html="item.article.excerpt"></span>
-                </small>
+
             </td>
             <td>
                 <small>
