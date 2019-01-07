@@ -255,7 +255,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 foreach (var file in files)
                 {
                     string content = file.Content.Replace($"/Content/Templates/Default/",
-                    $"/Content/Templates/{SeoHelper.GetSEOString(Name)}/");
+                    $"/Content/Templates/{Name}/");
                     MixTemplates.InitViewModel template = new MixTemplates.InitViewModel(
                         new MixTemplate()
                         {
