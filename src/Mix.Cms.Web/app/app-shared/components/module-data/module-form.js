@@ -48,9 +48,18 @@
                     $scope.$apply();
                 }
             };
+            ctrl.submitFormData = async function(){
+                if($('.g-recaptcha').length>0)
+                {
 
+                }
+                else{
+                    ctrl.saveModuleData();
+                }
+            }
             ctrl.saveModuleData = async function () {
                 var form = $('#module-' + ctrl.data.moduleId);
+                
                 $.each(ctrl.data.dataProperties, function (i, e) {
                     switch (e.dataType) {
                         case 5:

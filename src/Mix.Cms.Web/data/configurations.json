@@ -83,6 +83,24 @@
       "status": 2
     },
     {
+      "keyword": "Recaptcha_Key",
+      "category": "Site",
+      "value": "",
+      "dataType": 7,
+      "description": null,
+      "priority": 0,
+      "status": 2
+    },
+    {
+      "keyword": "Recaptcha_Secret",
+      "category": "Site",
+      "value": "",
+      "dataType": 7,
+      "description": null,
+      "priority": 0,
+      "status": 2
+    },
+    {
       "keyword": "Favicon",
       "category": "Site",
       "value": "/css/portal/img/mixcore-logo-blue.png",

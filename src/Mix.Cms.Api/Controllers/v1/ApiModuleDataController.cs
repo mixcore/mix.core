@@ -13,6 +13,7 @@ using Mix.Cms.Lib.ViewModels.MixModuleDatas;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json.Linq;
 using System.Web;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -106,6 +107,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/module-data/create/id
+        [AllowAnonymous]
         [HttpGet, HttpOptions]
         [Route("init-by-name/{moduleName}")]
         public async Task<RepositoryResponse<UpdateViewModel>> InitViewAsync(string moduleName)
@@ -140,7 +142,8 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/module-data/create/id
-        [HttpGet, HttpOptions]
+        [AllowAnonymous]
+        [HttpGet, HttpOptions]        
         [Route("init/{moduleId}")]
         public async Task<RepositoryResponse<UpdateViewModel>> InitByIdAsync(int moduleId)
         {
@@ -184,7 +187,7 @@ namespace Mix.Cms.Api.Controllers.v1
         #region Post
 
         // POST api/moduleData
-
+        [AllowAnonymous]
         [HttpPost, HttpOptions]
         [Route("save")]
         public async Task<RepositoryResponse<UpdateViewModel>> Post([FromBody]UpdateViewModel data)
