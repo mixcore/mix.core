@@ -3,7 +3,7 @@
     controller: ['$rootScope', '$scope', 'ngAppSettings',
         function ($rootScope, $scope, ngAppSettings) {
             var ctrl = this;
-            ctrl.previousId;
+            ctrl.previousId = null;
             ctrl.editor = null;
             ctrl.id = Math.floor(Math.random() * 100) + 1;
             ctrl.$onChanges = (changes) => {
@@ -13,7 +13,7 @@
             };
 
             this.$doCheck = function () {
-                if (ctrl.previousId && ctrl.previousId !== ctrl.contentId) {
+                if (ctrl.previousId != null && ctrl.previousId !== ctrl.contentId) {
                     ctrl.previousId = ctrl.contentId;
                     ctrl.updateEditors();
                 }
