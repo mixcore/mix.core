@@ -13,9 +13,9 @@
     <PublishWithAspNetCoreTargetManifest>False</PublishWithAspNetCoreTargetManifest>
     
   </PropertyGroup>
-  <!-- <Target Name="MyPreCompileTarget" BeforeTargets="Build">
+  <Target Name="PortalViews" BeforeTargets="Build">
     <Exec Command="gulp build" />
-  </Target> -->
+  </Target>
   <ItemGroup>
     <Compile Remove="app-client\shared\controllers\**" />
     <Compile Remove="app-portal\**" />

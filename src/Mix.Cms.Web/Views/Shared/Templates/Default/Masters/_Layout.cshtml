@@ -48,21 +48,14 @@
     </script>
     <!-- End Google Tag Manager -->
     
-    <!-- Load Facebook SDK for JavaScript -->
-
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
     <!--[STYLES]-->
     @RenderSection("Styles", false)
     <link rel="stylesheet" href="~/css/app-vendor.min.css" />
     <base href="/@ViewBag.culture">
-
+     @if (!string.IsNullOrEmpty(MixService.GetConfig<string>("Recaptcha_Key", ViewBag.culture)))
+    {
+        <script src='https://www.google.com/recaptcha/api.js?render=@(MixService.GetConfig<string>("Recaptcha_Key", ViewBag.culture))'></script>
+    }
     @if (!string.IsNullOrEmpty(MixService.GetConfig<string>("Google_Analytic_Key", ViewBag.culture)))
     {
         <!-- Google Analytics -->
@@ -113,13 +106,7 @@
  
  ng-app="MixClient" ng-controller="AppClientController" ng-init="init('@ViewBag.culture')">
     <div id="fb-root"></div>
-    
-<!-- Your customer chat code -->
-<div class="fb-customerchat"
-  attribution=setup_tool
-  page_id="506560219791763"
-  theme_color="#ff7e29">
-</div>
+   
 
     <partial name="../Layouts/_Top_Nav.cshtml" />
     <div class="wrapper">

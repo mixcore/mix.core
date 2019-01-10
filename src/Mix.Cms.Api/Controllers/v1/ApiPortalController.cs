@@ -61,6 +61,7 @@ namespace Mix.Cms.Api.Controllers.v1
         #region Get
 
         // GET api/category/id
+        [AllowAnonymous]
         [HttpGet, HttpOptions]
         [Route("{culture}/settings")]
         [Route("settings")]
@@ -89,6 +90,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/category/id
+        [AllowAnonymous]
         [HttpGet, HttpOptions]
         [Route("{culture}/all-settings")]
         [Route("all-settings")]
@@ -156,6 +158,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/configurations/id
+        [AllowAnonymous]
         [HttpGet, HttpOptions]
         [Route("{culture}/global-settings")]
         [Route("global-settings")]

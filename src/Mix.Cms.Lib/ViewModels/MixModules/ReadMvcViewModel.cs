@@ -142,6 +142,32 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 });
             }
         }
+        public string FormTemplatePath
+        {
+            get
+            {
+                return CommonHelper.GetFullPath(new string[]
+                {
+                    ""
+                    , MixConstants.Folder.TemplatesFolder
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture) ?? "Default"
+                    , FormTemplate
+                });
+            }
+        }
+        public string EdmTemplatePath
+        {
+            get
+            {
+                return CommonHelper.GetFullPath(new string[]
+                {
+                    ""
+                    , MixConstants.Folder.TemplatesFolder
+                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture) ?? "Default"
+                    , EdmTemplate
+                });
+            }
+        }
 
         #endregion Views
 
