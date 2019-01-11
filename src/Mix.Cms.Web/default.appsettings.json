@@ -6,9 +6,9 @@
     "DefaultConnection": null
   },
   "Authentication": {
-    "ClockSkew": 1,
+    "ClockSkew": 10,
     "CookieExpiration": 2,
-    "RefreshTokenExpiration": 10,
+    "RefreshTokenExpiration": 120,
     "ValidateIssuer": false,
     "ValidateAudience": false,
     "ValidateLifetime": true,
