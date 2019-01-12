@@ -68,7 +68,7 @@ app.controller('PageArticleController',
             $scope.updateInfos = async function (index) {
                 $scope.data.items.splice(index, 1);
                 $rootScope.isBusy = true;
-                var startIndex = $scope.data.items[0].priority-1;
+                var startIndex = $scope.data.items[0].priority -1;
                 for (var i = 0; i < $scope.data.items.length; i++) {
                     $scope.data.items[i].priority = startIndex + i + 1;
                 }

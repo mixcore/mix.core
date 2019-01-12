@@ -1,7 +1,8 @@
 <section class="card manual">
     <filter-list request="request" callback="getList(pageIndex)"></filter-list>
-
-    <table id="list-page" class="table table-sm table-hover sortable" cellspacing="0" ng-init="getList()">
+    <p ng-if="canDrag"><span class="text-warning" ng-bind="translate('warning_can_not_drag_drop',true, '(**Drag Drop only allow when order by priority asc)')"></span></p>
+    <table id="list-page" class="table table-sm table-hover" dnd-list="data.items" dnd-disable-if="canDrag" cellspacing="0"
+        ng-init="getList()">
         <thead class="thead-light">
             <tr>
                 <th scope="col" width="4%">
@@ -19,24 +20,15 @@
                 <th scope="col" width="10%">
                     By
                 </th>
-                <th scope="col" width="15%">
-                    Childs
-                </th>
                 <th scope="col" width="5%" class="text-right">Actions</th>
             </tr>
         </thead>
 
-        <tbody class="sortable-item" ng-repeat="item in data.items track by $index" style="border: 1px;">
-            <tr class="" sort-model="category" sort-model-id="{{item.id}}" data-toggle="collapse" href="#collapse-page{{item.id}}-childs"
-                role="button" aria-expanded="false" aria-controls="collapse-page{{item.id}}-childs">
-
-
-                <td class="drag-header">
-
-                    <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-light"><span class="oi oi-chevron-top small"></span></button>
-                        <button type="button" class="btn btn-light"><span class="oi oi-chevron-bottom small"></span></button>
-                    </div>
+        <tbody ng-repeat="item in data.items" dnd-draggable="item" dnd-effect-allowed="move" dnd-selected="selected = item"
+            dnd-moved="updateInfos($index)" ng-class="{'selected': selected === item}" style="border: 1px;">
+            <tr class="" sort-model="category" sort-model-id="{{item.id}}">
+                <td style="cursor:move;" class="drag-header">
+                    <span class="fas fa-sort"></span>
                 </td>
 
                 <td>
@@ -56,22 +48,19 @@
                     {{item.createdBy}}
                 </td>
                 <td>
-                   <a href="/portal/page/page-article/list/{{item.id}}">Articles</a> 
-                </td>
-                <td>
                     <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
 
-                        <a ng-if="item.childs.length>0" class="btn btn-light" data-toggle="collapse" href="" role="button"
-                            aria-expanded="false" aria-controls="collapse-page{{item.id}}-childs">
+                        <a ng-if="item.childs.length>0" class="btn btn-light" data-toggle="collapse" role="button"
+                            ng-click="showChilds(item.id)">
                             <span class="oi oi-list text-primary"></span>
                         </a>
-                      
+
                         <a href="/portal/page/details/{{item.id}}" class="btn btn-light"><span class="oi oi-pencil text-primary"></span></a>
                         <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-light"><span class="oi oi-eye text-primary"></span></a>
-                       <a ng-if="item.type==2" href="/portal/page/page-article/list/{{item.id}}" class="btn btn-light">
+                        <a ng-if="item.type==2" href="/portal/page/page-article/list/{{item.id}}" class="btn btn-light">
                             <span class="fas fa-list text-info"></span>
-                        </a> 
-                         <!-- 
+                        </a>
+                        <!-- 
                         <a ng-if="item.type==2" href="#" data-toggle="modal" data-target="#modal-articles" class="btn btn-light">
                             <span class="fas fa-list text-info"></span>
                         </a>-->
@@ -83,15 +72,15 @@
             </tr>
             <tr>
                 <td colspan="7" style="padding:0">
-                    <div class="collapse" id="collapse-page{{item.id}}-childs" data-parent="#list-page">
+                    <div class="collapse" id="childs-{{item.id}}">
                         <table class="table table-sm table-hover mb-0" cellspacing="0" style="background-color: #f5f5f5;"
                             ng-if="item.childs.length>0">
                             <thead style="font-size:small; font-weight:normal">
                                 <tr>
 
-                                    <th scope="col" width="3%">
-                                        <span class="oi oi-sort-ascending"></span>
-                                    </th>
+                                    <td style="cursor:move;" class="drag-header">
+                                        <span class="fas fa-sort"></span>
+                                    </td>
                                     <th scope="col" width="20%">
                                         Title
                                     </th>
@@ -109,15 +98,15 @@
                                 </tr>
                             </thead>
 
-                            <tbody class="sortable">
-                                <tr class="sortable-item" ng-repeat="c in item.childs track by $index">
+                            <tbody>
+                                <tr ng-repeat="c in item.childs">
 
                                     <td style="cursor:move;" class="drag-header">
 
 
                                         <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                                            <button type="button" class="btn btn-link"><span class="oi oi-chevron-top small"></span></button>
-                                            <button type="button" class="btn btn-link"><span class="oi oi-chevron-bottom small"></span></button>
+                                            <button ng-click="goUp(item.childs, $index)" type="button" class="btn btn-link"><span class="oi oi-chevron-top small"></span></button>
+                                            <button ng-click="goDown(item.childs, $index)" type="button" class="btn btn-link"><span class="oi oi-chevron-bottom small"></span></button>
                                         </div>
                                     </td>
                                     <td>
@@ -141,7 +130,7 @@
                                             <a href="/portal/page/details/{{c.id}}" class="btn btn-light"><span class="oi oi-pencil text-primary small"></span></a>
                                             <a href="{{c.detailsUrl}}" target="_blank" class="btn btn-light"><span
                                                     class="oi oi-eye text-primary small"></span></a>
-                                            <a ng-if="item.type==2" href="/portal/page/page-article/list/{{c.id}}"
+                                            <a ng-if="c.page.type==2" href="/portal/page/page-article/list/{{c.page.id}}"
                                                 class="btn btn-light">
                                                 <span class="fas fa-list text-info"></span>
                                             </a>
