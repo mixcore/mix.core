@@ -517,6 +517,8 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     foreach (var item in Pages)
                     {
                         item.ArticleId = parent.Id;
+                        item.Description = parent.Title;
+                        item.Image = ThumbnailUrl;
                         item.Status = MixEnums.MixContentStatus.Published;
                         if (item.IsActived)
                         {
@@ -547,6 +549,8 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     foreach (var item in Modules)
                     {
                         item.ArticleId = parent.Id;
+                        item.Description = parent.Title;
+                        item.Image = ThumbnailUrl;
                         item.Status = MixEnums.MixContentStatus.Published;
                         if (item.IsActived)
                         {

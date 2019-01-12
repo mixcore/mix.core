@@ -67,8 +67,9 @@
                             <div class="card-body">
                                 <p>
                                 <fb-send class="hide-on-mb" app-id="'@(MixService.GetConfig<string>("FacebookAppId", ViewBag.culture as string))'"></fb-send>
-                                <fb-share></fb-share>
+                                <fb-share></fb-share>                                
                                 </p>
+								<p><fb-like href="'@Model.DetailsUrl'"></fb-like></p>
                                 @Html.Raw(Model.Excerpt)
                             </div>
                         </div>
