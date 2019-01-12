@@ -1,18 +1,18 @@
 <div class="tab-pane">
     <div class="form-group">
-        <label>@translator.Get("SeoName")</label>
+        <label ng-bind="$ctrl.translate('SeoName')"></label>
         <input type="text" class="form-control form-control-lg" ng-model="$ctrl.page.seoName">
     </div>
     <div class="form-group">
-        <label>@translator.Get("SeoTitle")</label>
+        <label ng-bind="$ctrl.translate('SeoTitle')"></label>
         <input type="text" class="form-control form-control-lg" ng-model="$ctrl.page.seoTitle">
     </div>
     <div class="form-group">
-        <label>@translator.Get("SeoDescription")</label>
+        <label ng-bind="$ctrl.translate('SeoDescription')"></label>
         <input type="text" class="form-control form-control-lg" ng-model="$ctrl.page.seoDescription">
     </div>
     <div class="form-group">
-        <label>@translator.Get("SeoKeywords")</label>
+        <label ng-bind="$ctrl.translate('SeoKeywords')"></label>
         <input type="text" class="form-control form-control-lg" ng-model="$ctrl.page.seoKeywords">
     </div>
 </div>
