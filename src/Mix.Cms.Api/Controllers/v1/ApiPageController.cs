@@ -99,7 +99,7 @@ namespace Mix.Cms.Api.Controllers.v1
                             Data = new ReadListItemViewModel(model)
                             {
                                 Specificulture = _lang,
-                                Status = MixContentStatus.Preview,
+                                Status = MixEnums.PageStatus.Preview,
                                 PageSize = 20
                             }
                         };

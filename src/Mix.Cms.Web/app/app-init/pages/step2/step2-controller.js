@@ -18,7 +18,7 @@ app.controller('Step2Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
                 var result = await services.register($scope.user);
                 if (result.isSucceed) {
                     $rootScope.isBusy = false;
-                    window.location.href = '/';
+                    window.location.href = '/init/login';
                 } else {
                     if (result) {
                         $rootScope.showErrors(result.errors);

@@ -26,7 +26,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPageArticles
         [JsonProperty("articleId")]
         public int ArticleId { get; set; }
 
-        [JsonProperty("categoryId")]
+        [JsonProperty("pageId")]
         public int CategoryId { get; set; }
 
         [JsonProperty("isActived")]
