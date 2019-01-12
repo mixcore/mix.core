@@ -13,9 +13,7 @@
     <PublishWithAspNetCoreTargetManifest>False</PublishWithAspNetCoreTargetManifest>
     
   </PropertyGroup>
-  <Target Name="PortalViews" BeforeTargets="Build">
-    <Exec Command="gulp build" />
-  </Target>
+  
   <ItemGroup>
     <Compile Remove="app-client\shared\controllers\**" />
     <Compile Remove="app-portal\**" />
