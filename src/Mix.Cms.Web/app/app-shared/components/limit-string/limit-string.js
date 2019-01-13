@@ -36,6 +36,7 @@ modules.component('limitString', {
         }],
     bindings: {
         content: '=',
+        showData: '=',
         max: '=',
         moduleId: '=',
         contentId: '='
