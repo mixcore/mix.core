@@ -160,7 +160,7 @@ namespace Mix.Cms.Lib.Services
             if (!string.IsNullOrEmpty(siteName))
             {
                 arrConfiguration.Find(c => c.Keyword == "SiteName").Value = siteName;
-                arrConfiguration.Find(c => c.Keyword == "ThemeName").Value = siteName;
+                arrConfiguration.Find(c => c.Keyword == "ThemeName").Value = Common.Helper.SeoHelper.GetSEOString(siteName);
                 arrConfiguration.Find(c => c.Keyword == "ThemeFolder").Value = Common.Helper.SeoHelper.GetSEOString(siteName);
             }
             var result = await ViewModels.MixConfigurations.ReadMvcViewModel.ImportConfigurations(arrConfiguration, culture.Specificulture,  context, transaction);

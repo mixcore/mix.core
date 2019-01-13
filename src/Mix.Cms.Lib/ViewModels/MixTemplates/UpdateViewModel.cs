@@ -277,7 +277,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                     , folderType.ToString()
                     });
             var defaulTemplate = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
-                t => t.Theme.Title == activedTheme && t.FolderType == folderType.ToString()).Data?.FirstOrDefault();
+                t => t.Theme.Name == activedTheme && t.FolderType == folderType.ToString()).Data?.FirstOrDefault();
             return defaulTemplate ?? new UpdateViewModel(new MixTemplate()
             {
                 ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, specificulture),
