@@ -1,5 +1,6 @@
 'use strict';
 app.filter('utcToLocal', FilterUtcDate)
+    .filter('utcToLocalTime', FilterUtcDateTime)
     .filter('phoneNumber', FilterPhoneNumber)
     .constant('ngAppSettings', {
         serviceBase: '',
@@ -1347,6 +1348,23 @@ app.filter('utcToLocal', FilterUtcDate)
 function FilterUtcDate($filter) {
     return function (utcDateString, format) {
         format = format || 'MM.dd.yyyy - hh:mm:ss a';
+        // return if input date is null or undefined
+        if (!utcDateString) {
+            return;
+        }
+
+        // append 'Z' to the date string to indicate UTC time if the timezone isn't already specified
+        if (utcDateString.indexOf('Z') === -1 && utcDateString.indexOf('+') === -1) {
+            utcDateString += 'Z';
+        }
+
+        // convert and format date using the built in angularjs date filter
+        return $filter('date')(utcDateString, format);
+    };
+}
+function FilterUtcDateTime($filter) {
+    return function (utcDateString, format) {
+        format = format || 'yyyy-MM-ddThh:mm';
         // return if input date is null or undefined
         if (!utcDateString) {
             return;

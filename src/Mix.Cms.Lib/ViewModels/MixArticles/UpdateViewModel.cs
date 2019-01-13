@@ -78,6 +78,9 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
 
+        [JsonProperty("publishedDateTime")]
+        public DateTime? PublishedDateTime { get; set; }
+
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
 
@@ -359,6 +362,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 CreatedDateTime = DateTime.UtcNow;
             }
             LastModified = DateTime.UtcNow;
+            PublishedDateTime = PublishedDateTime?.ToUniversalTime();
             if (Properties != null && Properties.Count > 0)
             {
                 JArray arrProperties = new JArray();
@@ -402,7 +406,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             if(!string.IsNullOrEmpty(Thumbnail) && Thumbnail[0] == '/'){ Thumbnail = Thumbnail.Substring(1);}
             Tags = ListTag.ToString(Newtonsoft.Json.Formatting.None);
             GenerateSEO();
-
+            
             return base.ParseModel(_context, _transaction);
         }
 

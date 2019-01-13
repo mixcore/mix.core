@@ -104,6 +104,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.ModifiedBy).HasMaxLength(250);
 
+                entity.Property(e => e.PublishedDateTime).HasColumnType("datetime");
+
                 entity.Property(e => e.SeoDescription).HasMaxLength(4000);
 
                 entity.Property(e => e.SeoKeywords).HasMaxLength(4000);

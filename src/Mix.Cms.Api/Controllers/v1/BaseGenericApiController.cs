@@ -176,6 +176,26 @@ namespace Mix.Cms.Api.Controllers.v1
             }
             return result;
         }
+        protected RepositoryResponse<List<TView>> SaveList<TView>(List<TView> lstVm, bool isSaveSubModel)
+            where TView : ViewModelBase<TDbContext, TModel, TView>
+        {
+            var result= new RepositoryResponse<List<TView>>(){ IsSucceed = true};
+            if (lstVm != null)
+            {
+                foreach (var vm in lstVm)
+                {
+                    var tmp = vm.SaveModel(isSaveSubModel);
+                    result.IsSucceed = result.IsSucceed&& tmp.IsSucceed;
+                    if(!tmp.IsSucceed){
+                        result.Exception = tmp.Exception;
+                        result.Errors.AddRange(tmp.Errors);
+                    }
+                }
+                RemoveCache();
+                return result;
+            }
+            return result;
+        }
 
         public JObject SaveEncrypt([FromBody] RequestEncrypted request)
         {

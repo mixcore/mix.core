@@ -41,8 +41,9 @@
                     <div class="card-body">
                         <div class="form-group">
                             <div class="btn-group btn-group-sm btn-group-toggle d-flex w-100">
-                                <label ng-repeat="stt in contentStatuses track by $index" ng-switch="stt" ng-class="{active: $index === activedData.status}" class="btn btn-outline-primary btn-block mt-0">
-                                    <input ng-model="activedData.status" type="radio" value="{{$index}}" class="custom-control-input" id="page_status_{{$index}}">
+                                <input ng-model="activedData.status" type="radio">
+                                <label ng-repeat="stt in contentStatuses track by $index" ng-switch="stt" ng-class="{active: $index === activedData.status}" ng-if="stt !== 'Preview'" class="btn btn-outline-primary btn-block mt-0">
+                                    
                                     <i ng-switch-when="Deleted" class="mi mi-Delete mi-lg mi-fw" title="{{stt}}"></i>
                                     <i ng-switch-when="Preview" class="mi mi-Preview mi-lg mi-fw" title="{{stt}}"></i>
                                     <i ng-switch-when="Published" class="mi mi-Page mi-lg mi-fw" title="{{stt}}"></i>
