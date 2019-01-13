@@ -1,7 +1,7 @@
 [
   {
     "outputFileName": "wwwroot/js/framework.min.js",
-    "inputFiles": [      
+    "inputFiles": [
       "wwwroot/js/angularjs/angular.min.js",
       "wwwroot/js/angularjs/angular-route.min.js",
       "wwwroot/js/angularjs/angular-animate.min.js",
@@ -93,7 +93,6 @@
   {
     "outputFileName": "wwwroot/css/app-vendor.min.css",
     "inputFiles": [
-
       "app/app-shared/**/*.css",
       "app/app-portal/**/*.css",
       "app/app-client/**/*.css",
@@ -154,7 +153,7 @@
     ],
     "minify": {
       "enabled": false,
-      "renameLocals": false 
+      "renameLocals": false
     },
     "sourceMap": false
   }
