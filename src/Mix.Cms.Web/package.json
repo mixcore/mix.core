@@ -1,18 +1,18 @@
 {
   "devDependencies": {
-    "gulp": "",
+    "browser-sync": "^2.26.3",
+    "gulp": "^3.9.1",
+    "gulp-babel": "",
     "gulp-concat": "",
     "gulp-cssmin": "",
-    "gulp-htmlmin": "",
     "gulp-fontmin": "",
+    "gulp-htmlmin": "",
     "gulp-uglify": "",
-    "gulp-babel": "",
-    "uglify-es": "",
     "pump": "",
-    "rimraf": ""
+    "rimraf": "",
+    "uglify-es": ""
   },
   "dependencies": {
-    "bundle": "^2.1.0",
-    "gulp": "^3.9.1"
+    "bundle": "^2.1.0"
   }
 }

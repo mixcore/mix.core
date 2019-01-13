@@ -65,8 +65,8 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
             // ... you could trigger something here ...
             $scope.pageTagName =$location.$$path.toString().split('/')[2];
             $scope.pageTagTypeName =$location.$$path.toString().split('/')[3];
-            if($scope.pageTagTypeName == 'list') $scope.pageTagType =0;
-            if($scope.pageTagTypeName == 'create') $scope.pageTagType =1;
+            if($scope.pageTagTypeName == 'list') $scope.pageTagType =1;
+            if($scope.pageTagTypeName == 'create') $scope.pageTagType =2;
           });
         $rootScope.limString = function(str, max){
             return str.substring(0, max);
