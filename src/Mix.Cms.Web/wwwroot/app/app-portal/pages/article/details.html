@@ -48,34 +48,35 @@
                         Info
                     </h6>
                     <div class="card-body">
-                        <statuses status="activedData.status">
-                            <div class="form-group">
-                                <span class="switch">
-                                    <label>
-                                        <input type="checkbox" ng-model="activedData.isClone" class="switch">
-                                        Clone
-                                    </label>
-                                </span>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label">Created Date Time</label>
-                                <div class="input-group input-group-sm mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon1"><i class="mi mi-Calendar"></i></span>
-                                    </div>
-                                    <input ng-model="activedData.createdDateTime" type="text" class="form-control" readonly="readonly">
+                        <statuses status="activedData.status"></statuses>
+                        <div class="form-group" ng-if="activedData.status == 4">
+                            <label class="control-label">Published Date Time</label>
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1"><i class="mi mi-Calendar"></i></span>
                                 </div>
+                                <input value="{{activedData.publishedDateTime}}" ng-model="activedData.publishedDateTime" type="datetime-local" class="form-control">
                             </div>
-                            <div class="form-group">
-                                <label class="control-label">Created By</label>
-                                <div class="input-group input-group-sm mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon1"><i class="mi mi-Contact"></i></span>
-                                    </div>
-                                    <input ng-model="activedData.createdBy" class="form-control" readonly="readonly">
+                        </div>                        
+                        <div class="form-group">
+                            <label class="control-label">Created Date Time</label>
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1"><i class="mi mi-Calendar"></i></span>
                                 </div>
+                                <input ng-model="activedData.createdDateTime" type="text" class="form-control" readonly="readonly">
                             </div>
-                        </statuses>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Created By</label>
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1"><i class="mi mi-Contact"></i></span>
+                                </div>
+                                <input ng-model="activedData.createdBy" class="form-control" readonly="readonly">
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <custom-image header="'Image'" type="'Articles'" folder="activedData.seoName" src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>

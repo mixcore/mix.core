@@ -22,6 +22,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string SetAttributeData { get; set; }
         public string Content { get; set; }
         public string CreatedBy { get; set; }
+        public DateTime? PublishedDateTime { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public string Excerpt { get; set; }
         public string ExtraProperties { get; set; }

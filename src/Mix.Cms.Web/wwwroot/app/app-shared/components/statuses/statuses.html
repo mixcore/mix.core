@@ -1,10 +1,11 @@
 <div class="btn-group btn-group-sm btn-group-toggle d-flex w-100">
-    <label ng-repeat="stt in $ctrl.contentStatuses track by $index" ng-switch="stt" ng-class="{active: $index === $ctrl.status}" class="btn btn-outline-primary btn-block mt-0">
-        <input ng-model="$ctrl.status" type="radio" value="{{$index}}" class="custom-control-input" id="pageType_{{$index}}">
-        <i ng-switch-when="Deleted" class="mi mi-Delete mi-lg mi-fw" title="{{stt}}"></i>
-        <i ng-switch-when="Preview" class="mi mi-Preview mi-lg mi-fw" title="{{stt}}"></i>
-        <i ng-switch-when="Published" class="mi mi-Page mi-lg mi-fw" title="{{stt}}"></i>
-        <i ng-switch-when="Draft" class="fas fa-pencil-alt mi-lg mi-flip-horizontal" title="{{stt}}"></i>
-        <i ng-switch-when="Schedule" class="mi mi-Calendar mi-lg mi-flip-horizontal" title="{{stt}}"></i>
+    <input ng-model="$ctrl.status" type="radio" class="custom-control-input">
+    <label ng-repeat="stt in $ctrl.contentStatuses" ng-switch="stt" ng-class="{active: $index === $ctrl.status}" ng-if="stt !== 'Preview'" class="btn btn-outline-primary btn-block mt-0">
+
+        <i ng-switch-when="Deleted" ng-click="$ctrl.status = $index" class="mi mi-Delete mi-lg mi-fw" title="{{stt}}"></i>
+        <i ng-switch-when="Preview" ng-click="$ctrl.status = $index" class="mi mi-Preview mi-lg mi-fw" title="{{stt}}"></i>
+        <i ng-switch-when="Published" ng-click="$ctrl.status = $index" class="mi mi-Page mi-lg mi-fw" title="{{stt}}"></i>
+        <i ng-switch-when="Draft" ng-click="$ctrl.status = $index" class="fas fa-pencil-alt mi-lg mi-flip-horizontal" title="{{stt}}"></i>
+        <i ng-switch-when="Schedule" ng-click="$ctrl.status = $index" class="mi mi-Calendar mi-lg mi-flip-horizontal" title="{{stt}}"></i>
     </label>
 </div>

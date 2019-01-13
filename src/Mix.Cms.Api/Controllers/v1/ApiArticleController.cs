@@ -33,7 +33,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         #region Get
 
-         // GET api/article/id
+        // GET api/article/id
         [HttpGet, HttpOptions]
         [Route("delete/{id}")]
         public async Task<RepositoryResponse<MixArticle>> DeleteAsync(int id)
@@ -117,6 +117,16 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 model.CreatedBy = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
                 var result = await base.SaveAsync<UpdateViewModel>(model, true);
+                if (result.IsSucceed)
+                {
+                    if (model.Status == MixEnums.MixContentStatus.Schedule)
+                    {
+                        DateTime dtPublish = DateTime.UtcNow;
+                        
+                        MixService.SetConfig(MixConstants.ConfigurationKeyword.NextSyncContent, dtPublish);
+                        MixService.Save();
+                    }
+                }
                 return result;
             }
             return new RepositoryResponse<UpdateViewModel>() { Status = 501 };
@@ -162,10 +172,10 @@ namespace Mix.Cms.Api.Controllers.v1
             Expression<Func<MixArticle, bool>> predicate = model =>
                         model.Specificulture == _lang
                         && (!request.Status.HasValue || model.Status == request.Status.Value)
-                        && (!isPage || model.MixPageArticle.Any(nav=>nav.CategoryId == pageId && nav.ArticleId== model.Id && nav.Specificulture == _lang))                        
-                        && (!isNotPage || !model.MixPageArticle.Any(nav=>nav.CategoryId == notPageId && nav.ArticleId== model.Id && nav.Specificulture == _lang))                        
-                        && (!isModule || model.MixModuleArticle.Any(nav=>nav.ModuleId == moduleId && nav.ArticleId== model.Id))
-                        && (!isNotModule || !model.MixModuleArticle.Any(nav=>nav.ModuleId == notModuleId && nav.ArticleId== model.Id))
+                        && (!isPage || model.MixPageArticle.Any(nav => nav.CategoryId == pageId && nav.ArticleId == model.Id && nav.Specificulture == _lang))
+                        && (!isNotPage || !model.MixPageArticle.Any(nav => nav.CategoryId == notPageId && nav.ArticleId == model.Id && nav.Specificulture == _lang))
+                        && (!isModule || model.MixModuleArticle.Any(nav => nav.ModuleId == moduleId && nav.ArticleId == model.Id))
+                        && (!isNotModule || !model.MixModuleArticle.Any(nav => nav.ModuleId == notModuleId && nav.ArticleId == model.Id))
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (model.Title.Contains(request.Keyword)
                             || model.Excerpt.Contains(request.Keyword)))
@@ -175,7 +185,10 @@ namespace Mix.Cms.Api.Controllers.v1
                         && (!request.ToDate.HasValue
                             || (model.CreatedDateTime <= request.ToDate.Value)
                         );
-            string key = $"{request.Key}_{request.Query}_{request.PageSize}_{request.PageIndex}";
+
+            var nextSync = PublishArticles();
+            string key = $"{nextSync}_{request.Key}_{request.Query}_{request.PageSize}_{request.PageIndex}";
+
             switch (request.Key)
             {
                 case "mvc":
@@ -210,7 +223,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         listItemResult.Data.Items.ForEach((Action<ReadListItemViewModel>)(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                "article", new { seoName = a.SeoName }, Request, Url);                            
+                                "article", new { seoName = a.SeoName }, Request, Url);
                         }));
                     }
 
@@ -223,7 +236,7 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<RepositoryResponse<List<ReadListItemViewModel>>> UpdateInfos([FromBody]List<ReadListItemViewModel> models)
         {
             if (models != null)
-            {                
+            {
                 return await base.SaveListAsync(models, false);
             }
             else
@@ -232,5 +245,28 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
         #endregion Post
+
+        DateTime? PublishArticles()
+        {
+            var nextSync = MixService.GetConfig<DateTime?>(MixConstants.ConfigurationKeyword.NextSyncContent);
+            if (nextSync.HasValue && nextSync.Value <= DateTime.UtcNow)
+            {
+                var publishedArticles = ReadListItemViewModel.Repository.GetModelListBy(
+                    a => a.Status == (int)MixContentStatus.Schedule
+                        && (!a.PublishedDateTime.HasValue || a.PublishedDateTime.Value <= DateTime.UtcNow)
+                        );
+                publishedArticles.Data.ForEach(a => a.Status = MixContentStatus.Published);
+                base.SaveList(publishedArticles.Data, false);
+                var next = ReadListItemViewModel.Repository.Min(a => a.Type == (int)MixContentStatus.Schedule,
+                            a => a.PublishedDateTime);
+                nextSync = next.Data;
+                MixService.SetConfig(MixConstants.ConfigurationKeyword.NextSyncContent, nextSync);
+                return nextSync;
+            }
+            else
+            {
+                return nextSync;
+            }
+        }
     }
 }

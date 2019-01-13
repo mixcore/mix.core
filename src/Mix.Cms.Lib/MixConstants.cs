@@ -49,6 +49,7 @@ namespace Mix.Cms.Lib
             public const string DefaultTemplate = "DefaultTemplate";
             public const string DefaultTemplateContent = "DefaultTemplateContent";
             public const string DefaultContentStatus = "DefaultContentStatus";
+            public const string NextSyncContent = "NextSyncContent";
         }
 
         public static class Folder

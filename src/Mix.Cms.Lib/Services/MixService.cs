@@ -118,7 +118,7 @@ namespace Mix.Cms.Lib.Services
 
         public static void SetConfig<T>(string name, T value)
         {
-            Instance.GlobalSettings[name] = value.ToString();
+            Instance.GlobalSettings[name] = value != null ? JToken.FromObject(value) : null;
         }
 
 
@@ -159,7 +159,7 @@ namespace Mix.Cms.Lib.Services
             var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, ".json", string.Empty, true, "{}");
             if (settings != null)
             {
-                JObject jsonSettings = !string.IsNullOrWhiteSpace(settings.Content)? JObject.Parse(settings.Content): new JObject();
+                JObject jsonSettings = !string.IsNullOrWhiteSpace(settings.Content) ? JObject.Parse(settings.Content) : new JObject();
 
                 jsonSettings["ConnectionStrings"] = instance.ConnectionStrings;
                 jsonSettings["GlobalSettings"] = instance.GlobalSettings;
