@@ -26,7 +26,7 @@ var paths = {
     cssOptions: {}, //showLog : (True, false) to trun on or off of the log
     fontOptions: { fontPath: dest + '/wwwroot/fonts' }
 };
-
+var browserSync = require('browser-sync').create();
 paths.portal = {
     src: [
         paths.webapp + "app-portal/app.js",
@@ -210,4 +210,27 @@ gulp.task('watch:html', function () {
     gulp.watch('./app/**/**/*.css', ['min:css']);
 });
 
-// [Watch Portal] View & Portal's js & CSS > gulp watch:html
+// [Watch Portal] View & Portal's js & CSS > gulp watch:html 
+
+gulp.task('portalView-watch', ['min:views'], function (done) {
+    browserSync.reload();
+    done();
+});
+gulp.task('portalJS-watch', ['min:portal'], function (done) {
+    browserSync.reload();
+    done();
+});
+gulp.task('portalCSS-watch', ['min:css'], function (done) {
+    browserSync.reload();
+    done();
+});
+
+gulp.task('serve', function () {  
+    browserSync.init({
+        
+        proxy: "https://localhost:5001/"
+    });
+    gulp.watch('./app/**/**/*.html', ['portalView-watch']);
+    gulp.watch('./app/**/**/*.js', ['portalJS-watch']);
+    gulp.watch('./app/**/**/*.css', ['portalCSS-watch']);
+});
