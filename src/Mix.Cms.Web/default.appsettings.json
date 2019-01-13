@@ -51,6 +51,7 @@
     "SiteName": "Site Name",
     "DefaultCulture": "en-us",
     "DefaultTemplate": "_Default",
+    "DefaultTemplateContent": "<div></div>",
     "DefaultTheme": "Default_Blank",
     "DefaultContentStatus": "2",
     "DefaultTemplateFolder": "Default_Blank",

@@ -277,11 +277,11 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                     , folderType.ToString()
                     });
             var defaulTemplate = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
-                t => t.Theme.Name == activedTheme && t.FolderType == folderType.ToString()).Data?.FirstOrDefault();
+                t => t.Theme.Title == activedTheme && t.FolderType == folderType.ToString()).Data?.FirstOrDefault();
             return defaulTemplate ?? new UpdateViewModel(new MixTemplate()
             {
                 ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, specificulture),
-                ThemeName = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, specificulture),
+                ThemeName = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, specificulture),
                 FileName = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplate),
                 Extension = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.TemplateExtension),
                 Content = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateContent),
