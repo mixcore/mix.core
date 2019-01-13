@@ -209,3 +209,5 @@ gulp.task('watch:html', function () {
     gulp.watch('./app/**/**/*.js', ['min:portal']);
     gulp.watch('./app/**/**/*.css', ['min:css']);
 });
+
+// [Watch Portal] View & Portal's js & CSS > gulp watch:html
