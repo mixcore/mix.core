@@ -122,9 +122,13 @@ namespace Mix.Cms.Api.Controllers.v1
                     if (model.Status == MixEnums.MixContentStatus.Schedule)
                     {
                         DateTime dtPublish = DateTime.UtcNow;
-                        
+                        if (model.PublishedDateTime.HasValue)
+                        {
+                            dtPublish = model.PublishedDateTime.Value;
+                        }
                         MixService.SetConfig(MixConstants.ConfigurationKeyword.NextSyncContent, dtPublish);
                         MixService.Save();
+                        MixService.Reload();
                     }
                 }
                 return result;
@@ -261,6 +265,8 @@ namespace Mix.Cms.Api.Controllers.v1
                             a => a.PublishedDateTime);
                 nextSync = next.Data;
                 MixService.SetConfig(MixConstants.ConfigurationKeyword.NextSyncContent, nextSync);
+                MixService.Save();
+                MixService.Reload();
                 return nextSync;
             }
             else
