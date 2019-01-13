@@ -1,0 +1,50 @@
+<div class="cd-section" id="blogs-5">
+   
+ <!--     *********    END BLOGS 5      *********      -->
+    <div class="blogs-5" data-background-color="gray">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 ml-auto mr-auto">
+                    <h2 class="title">@Model.Title</h2>
+                    <p class="description">@Html.Raw(Model.Description)</p>
+                    <div class="row">
+                        @foreach(var item in Model.Articles.Items)
+                        {
+                            if(Model.Articles.Items.IndexOf(item)>2){
+                                break;
+                            }
+                            var article = item.Article;
+                            <div class="col-md-4">
+                                <div class="card card-blog">
+                                    <div class="card-image">
+                                        <a href="@article.DetailsUrl">
+                                           <img class="img rounded" src="@article.ImageUrl">
+                                       </a>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6 class="category text-primary">@article.Icon</h6>
+                                        <h5 class="card-title">
+                                            <a href="@article.DetailsUrl">
+                                            @article.Title
+                                            </a>
+                                        </h5>
+                                        <p class="card-description">
+                                            @Html.Raw(article.Excerpt)
+                                        </p>
+                                                                            
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a class="float-right" href="/@ViewBag.culture/hot-tours">View More</a>
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--     *********    END BLOGS 5      *********      -->
+</div>

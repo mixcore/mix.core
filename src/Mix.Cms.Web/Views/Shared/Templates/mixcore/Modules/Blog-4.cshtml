@@ -1,0 +1,27 @@
+<!--     *********    END BLOGS 4      *********      -->
+    <div class="blogs-4" id="blogs-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 ml-auto mr-auto">
+                    @foreach (var nav in Model.Products.Items)
+                    {
+                        var product = nav.Product;
+                        <div class="card card-plain card-blog">
+                            <div class="card-image">
+                                <a href="@product.DetailsUrl">
+                                    <img class="img img-raised rounded" src="@product.ImageUrl" />
+                                </a>
+                            </div>
+                            <h3 class="card-title">
+                                <a href="@product.DetailsUrl">@product.Title</a>
+                            </h3>
+                            <h5 class="card-description">
+                                @Html.Raw(product.Excerpt)
+                            </h5>
+                            <a href="@product.DetailsUrl" class="btn btn-primary btn-round">Read More</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>

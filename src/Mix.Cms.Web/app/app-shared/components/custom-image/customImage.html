@@ -2,7 +2,7 @@
     <h6 class="card-header">
         {{$ctrl.header }}
     </h6>
-    <div class="card-body p-0" style="background:url(/images/upload-image-thumbnail.png) no-repeat center;  cursor:pointer;">        
+    <div class="card-body p-0" style="background:url(/images/upload-image-thumbnail.png) no-repeat center;  cursor:pointer; min-height: 200px;">        
         <img imageonload ng-src="{{$ctrl.srcUrl}}"  ng-if="$ctrl.srcUrl" name="pic" 
         class="custom-file-img d-block ng-scope ml-auto mr-auto" style="max-height: {{$ctrl.maxHeight}};" accept="image/*">
         <input type="hidden" value="{{$ctrl.type}}/{{$ctrl.folder}}" class="folder-val">
