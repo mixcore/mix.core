@@ -1,21 +1,10 @@
 ﻿@model Mix.Cms.Lib.ViewModels.MixPages.ReadMvcViewModel
-@{
-    string lang = ViewBag.culture;
-}
-@section Seo{
-    <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @Model.Title</title>
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}")" />
-    <meta property="og:title" content="@Model.Title" />
-    <meta property="og:description"
-          content="@Model.SeoDescription" />
-    <meta property="og:image" content="@Model.ThumbnailUrl" />
-}
+
 <div>
     <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
     @if (!string.IsNullOrEmpty(Model.TemplatePath))
     {
-        @(MixService.GetConfig<string>("Phone", lang))
+        @(MixService.GetConfig<string>("Phone", ViewBag.culture))
         try
         {
             <partial name="@Model.TemplatePath" model="@Model"/>
@@ -43,6 +32,21 @@
         </section>
     }
 </div>
+@{
+    string url = ViewData["OgUrl"] != null ? (string)ViewData["OgUrl"] : $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}";
+    string title = ViewData["OgTitle"] != null ? (string)ViewData["OgTitle"] : Model.SeoTitle;
+    string desc = ViewData["OgDescription"] != null ? (string)ViewData["OgDescription"] : Model.SeoDescription;
+    string image = ViewData["OgImage"] != null ? (string)ViewData["OgImage"] : Model.ThumbnailUrl;
+}
+@section Seo{
+    <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @Model.Title</title>
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="@url" />
+    <meta property="og:title" content="@title" />
+    <meta property="og:description"
+          content="@desc" />
+    <meta property="og:image" content="@image" />
+}
 @section Styles{
     
     @Html.Raw(Model.View?.Styles)

@@ -1,20 +1,22 @@
 'use strict';
 app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', '$location'
-    , 'CommonService', 'AuthService', 'TranslatorService', 'GlobalSettingsService', 'RoleService',
-    function ($rootScope, $scope, ngAppSettings, $location, commonService, authService, translatorService, configurationService, roleServices) {
+        , 'CommonService', 'AuthService', 'TranslatorService', 'GlobalSettingsService', 'RoleService',
+    function ($rootScope, $scope, ngAppSettings, $location
+        , commonService, authService, translatorService, globalSettingsService, roleServices) {
         $scope.isInit = false;
         $scope.pageTagName ='';
         $scope.pageTagTypeName ='';
         $scope.pageTagType =0;
         $scope.isAdmin = false;
         $scope.translator = translatorService;
-        $scope.configurationService = configurationService;
+        $rootScope.globalSettingsService = globalSettingsService;
         $scope.lang = '';
         $scope.settings = {};
         $scope.init = function () {            
             if (!$rootScope.isBusy) {
                 $rootScope.isBusy = true;
-                $rootScope.configurationService.fillGlobalSettings().then(function (response) {
+                
+                $rootScope.globalSettingsService.fillGlobalSettings().then(function (response) {
                     $scope.isInit = true;
                     $rootScope.isInit = true;
                     $rootScope.globalSettings = response;

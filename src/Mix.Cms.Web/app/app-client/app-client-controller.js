@@ -1,36 +1,41 @@
 (function (angular) {
     'use strict';
-    app.controller('AppClientController', [ '$rootScope', '$scope', 'ngAppSettings', 'CommonService', 'AuthService'
+    app.controller('AppClientController', ['$rootScope', '$scope', 'GlobalSettingsService', 'CommonService', 'AuthService'
         , 'TranslatorService', 'SharedModuleDataService',
-        function ($rootScope, $scope, ngAppSettings, commonService, authService, translatorService, moduleDataService) {
+        function ($rootScope, $scope, globalSettingsService, commonService, authService, translatorService, moduleDataService) {
             $scope.lang = '';
             $scope.isInit = false;
             $scope.init = async function (lang) {
                 if (!$rootScope.isBusy) {
                     $rootScope.isBusy = true;
-                    commonService.fillSettings(lang).then(function (response) {
-                        $rootScope.isInit = true;
-                        $scope.isInit = true;
-                        $rootScope.globalSettings = response;
-                        if ($rootScope.globalSettings) {
-                            $scope.settings = $rootScope.globalSettings;
-                            $rootScope.translator.fillTranslator(lang).then(function () {
-                                authService.fillAuthData().then(function (response) {
-                                    $rootScope.authentication = authService.authentication;
-                                });
-                                $rootScope.isBusy = false;
-                                $scope.$apply();
-                            });
+                    globalSettingsService.fillGlobalSettings().then(function (response) {
 
-                        } else {
-                            $rootScope.isBusy = false;
-                        }
+                        commonService.fillSettings(lang).then(function (response) {
+                            $rootScope.isInit = true;
+                            $scope.isInit = true;
+                            $rootScope.globalSettings = response;
+                            if ($rootScope.globalSettings) {
+                                $scope.settings = $rootScope.globalSettings;
+                                $rootScope.translator.fillTranslator(lang).then(function () {
+                                    authService.fillAuthData().then(function (response) {
+                                        $rootScope.authentication = authService.authentication;
+                                    });
+                                    $rootScope.isBusy = false;
+                                    $scope.$apply();
+                                });
+
+                            } else {
+                                $rootScope.isBusy = false;
+                            }
+                        });
+                        $rootScope.settings = response;
                     });
+
                 }
             };
 
             $scope.translate = $rootScope.translate;
-            $scope.previewData = function(moduleId, id){
+            $scope.previewData = function (moduleId, id) {
                 var obj = {
                     moduleId: moduleId,
                     id: id
