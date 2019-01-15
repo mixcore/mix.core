@@ -104,8 +104,6 @@
     "inputFiles": [
       "app/app-portal/app.js",
       "app/app-portal/app-portal-controller.js",
-      "app/app-portal/app.directive.js",
-      "app/app-portal/app.filter.js",
       "app/app-portal/app.route.js",
       "app/app-portal/demo.js",
       "app/app-portal/pages/**/*.js",
