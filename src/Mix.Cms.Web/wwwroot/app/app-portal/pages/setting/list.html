@@ -1,6 +1,8 @@
 <!-- <section class="content container-fluid"> -->
+<div class="card-header">
     <filter-list request="request" callback="loadProducts(pageIndex)"></filter-list>
-
+</div>
+<div class="card-body">
     <table class="table table-sm table-hover" cellspacing="0">
         <thead class="thead-light">
             <tr>
@@ -74,13 +76,16 @@
                             <span class="fas fa-times text-danger"></span>
                         </button>
                         <div class="popover-body d-none">
-                            <a href="/{{currentLanguage}}/portal/products/delete/{{item.id}}" class="btn btn btn-danger">Yes, I want to delete!</a>
+                            <a href="/{{currentLanguage}}/portal/products/delete/{{item.id}}" class="btn btn btn-danger">Yes,
+                                I want to delete!</a>
                         </div>
                     </div>
                 </td>
             </tr>
         </tbody>
     </table>
+</div>
+<div class="card-footer">
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-end">
             <li class="page-item">
@@ -94,4 +99,9 @@
             </li>
         </ul>
     </nav>
+</div>
+
+
+
+
 <!-- </section> -->
