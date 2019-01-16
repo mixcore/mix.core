@@ -152,6 +152,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             }
         }
 
+        [JsonIgnore]
         public List<ExtraProperty> Properties { get; set; }
 
         #endregion Views
@@ -169,5 +170,34 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         }
 
         #endregion Contructors
+
+        #region Overrides
+
+        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            Properties = new List<ExtraProperty>();
+
+            if (!string.IsNullOrEmpty(ExtraProperties))
+            {
+                JArray arr = JArray.Parse(ExtraProperties);
+                foreach (JToken item in arr)
+                {
+                    Properties.Add(item.ToObject<ExtraProperty>());
+                }
+            }
+        }
+
+        #endregion Overrides
+
+        #region Expands
+        //Get Property by name
+        public string Property(string name)
+        {
+            var prop = Properties.FirstOrDefault(p => p.Name.ToLower() == name.ToLower());
+            return prop?.Value;
+
+        }
+
+        #endregion Expands
     }
 }

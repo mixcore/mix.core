@@ -1,6 +1,6 @@
 <header class="navbar navbar-expand flex-column flex-md-row sw-navbar position-sticky">
     <a class="navbar-brand mr-0 mr-md-2" href="/{{$ctrl.settings.lang}}" target="_blank" aria-label="mixcore">
-        <img src="/css/portal/img/mixcore-logo-blue.png" alt="mixcore" width="35">
+        <img ng-src="{{$ctrl.settings.data.Logo}}" alt="mixcore" width="35">
     </a>
 
     <span class="navbar-brand" ng-bind="$ctrl.getConfiguration('SiteName',false,'mixcore')"></span>
