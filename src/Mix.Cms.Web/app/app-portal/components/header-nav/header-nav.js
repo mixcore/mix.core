@@ -4,6 +4,7 @@
         controller: ['$rootScope', '$location', 'CommonService', 'AuthService', 'TranslatorService', 'GlobalSettingsService',
             function ($rootScope, $location, commonService, authService, translatorService, globalSettingsService) {
                 var ctrl = this;
+                ctrl.globalSettings = $rootScope.globalSettings;
                 if (authService.authentication) {
                     ctrl.avatar = authService.authentication.avatar;
                 }
