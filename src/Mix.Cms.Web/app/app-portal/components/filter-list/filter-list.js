@@ -39,6 +39,7 @@ modules.component('filterList', {
     }],
     bindings: {
         request: '=',
+        createUrl: '=',
         callback: '&'
     }
 });

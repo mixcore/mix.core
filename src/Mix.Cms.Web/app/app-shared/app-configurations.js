@@ -1604,5 +1604,5 @@ app.run(['$rootScope', 'ngAppSettings','GlobalSettingsService', 'CommonService',
         }      
     }]);
     if($.trumbowyg){
-    $.trumbowyg.svgPath = '/assets/icons.svg';
+        $.trumbowyg.svgPath = '/assets/icons.svg';
     }
