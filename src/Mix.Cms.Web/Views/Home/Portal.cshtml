@@ -13,44 +13,41 @@
     <header-nav settings="settings" bread-crumbs="breadCrumbs"></header-nav>
     <div class="container-fluid wrapper">
         <div class="row flex-xl-nowrap">
-            <main-side-bar ng-if="isAdmin"></main-side-bar>
-
+            <div class="col-md-3">
+                <main-side-bar ng-if="isAdmin"></main-side-bar>
                 <main-side-bar-dynamic ng-if="roles" roles="roles" actived-role="roles[0]"></main-side-bar-dynamic>
-            <div class="col-md-2">
-
-                
             </div>
             
             
-            <div class="col-md-10">
-            <!-- <main class="py-md-4 px-md-2 sw-content" role="main"> -->
-            <main class="py-md-3 px-md-2 sw-content w-100 position-relative" role="main">
-                <section class="content container">
-                    <jumbotrons ng-if="isInit" tag-name="pageTagName" tag-type="pageTagType"></jumbotrons>
-                    <div class="{{pageClass}}" ng-view>
-                         
-                    </div>
-                    <medias ng-if="isInit"></medias>
-                    <hub-messages ng-if="isInit"></hub-messages>
-                    <message ng-if="isInit" message="message"></message>
-                    <confirm ng-if="isInit" message="confirmMessage"></confirm>
-                    <modal-favorite ng-if="isInit"></modal-favorite>
-                    <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
-                </section>
+            <div class="col-md-9">
+                <!-- <main class="py-md-4 px-md-2 sw-content" role="main"> -->
+                <main class="py-md-3 px-md-2 sw-content w-100 position-relative" role="main">
+                    <section class="content container">
+                        <jumbotrons ng-if="isInit" tag-name="pageTagName" tag-type="pageTagType"></jumbotrons>
+                        <div class="{{pageClass}}" ng-view>
+                            
+                        </div>
+                        <medias ng-if="isInit"></medias>
+                        <hub-messages ng-if="isInit"></hub-messages>
+                        <message ng-if="isInit" message="message"></message>
+                        <confirm ng-if="isInit" message="confirmMessage"></confirm>
+                        <modal-favorite ng-if="isInit"></modal-favorite>
+                        <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
+                    </section>
 
-                <footer class="footer d-block">
-                    <div class="container-fluid">
-                        <nav>
-                            <p class="copyright text-center">
-                                <script>
-                                    document.write(new Date().getFullYear());
-                                </script>
-                                <a href="http://www.mixcore.org">mixcore</a>, made on Earth by humans.
-                            </p>
-                        </nav>
-                    </div>
-                </footer>
-            </main>
+                    <footer class="footer d-block">
+                        <div class="container-fluid">
+                            <nav>
+                                <p class="copyright text-center">
+                                    <script>
+                                        document.write(new Date().getFullYear());
+                                    </script>
+                                    <a href="http://www.mixcore.org">mixcore</a>, made on Earth by humans.
+                                </p>
+                            </nav>
+                        </div>
+                    </footer>
+                </main>
             </div>
         </div>
     </div>
