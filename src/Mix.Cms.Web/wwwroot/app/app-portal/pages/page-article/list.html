@@ -1,4 +1,5 @@
 <!-- <section class="content container-fluid"> -->
+<div class="card-header">
     <div class="row">
         <div class="col-md-12">
             <filter-list request="request" callback="getList(pageIndex)"></filter-list>
@@ -10,6 +11,8 @@
         </div>
         <modal-nav-articles save="saveOthers()" src-field="'pageId'" src-id="pageId" selected="others" query="'not_page_id='"></modal-nav-articles>
     </div>
+</div>
+<div class="card-body">
     <table id="list-page" class="table table-sm table-hover sortable" cellspacing="0" ng-init="getList()">
         <thead class="thead-light">
             <tr>
@@ -31,11 +34,11 @@
                 <th scope="col" style="width: 10%;">
                     Created By
                 </th>
-    
+
                 <th scope="col" style="width: 5%;">Actions</th>
             </tr>
         </thead>
-    
+
         <tbody class="sortable" dnd-list="data.items" dnd-disable-if="canDrag">
             <tr ng-if="canDrag">
                 <td colspan="7"><span class="text-warning" ng-bind="translate('warning_can_not_drag_drop',true, '(**Drag Drop only allow when order by priority asc)')"></span></td>
@@ -56,7 +59,7 @@
                     <div ng-if="item.article.image!=''">
                         <preview-image img-height="50" img-src="item.article.imageUrl"></preview-image>
                     </div>
-    
+
                 </td>
                 <td>
                     <small>
@@ -66,7 +69,7 @@
                 <td>
                     {{item.article.createdBy}}
                 </td>
-    
+
                 <td>
                     <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
                         <a href="/portal/article/details/{{item.article.id}}" class="btn btn-light">
@@ -75,7 +78,7 @@
                         <a href="{{item.article.detailsUrl}}" target="_blank" class="btn btn-light">
                             <span class="fas fa-eye text-info"></span>
                         </a>
-    
+
                         <a ng-click="remove(item.pageId,item.articleId);" class="btn btn-light">
                             <span class="fas fa-times text-danger"></span>
                         </a>
@@ -84,5 +87,11 @@
             </tr>
         </tbody>
     </table>
+</div>
+<div class="card-footer">
     <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end" a-class="page-link" paging-action="getList(page-1)" scroll-top="true"></paging>
-    <!-- </section> -->
+</div>
+
+
+
+<!-- </section> -->
