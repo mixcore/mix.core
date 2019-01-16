@@ -51,7 +51,7 @@
             ctrl.submitFormData = async function(){
                 if($('.g-recaptcha').length>0)
                 {
-
+                    
                 }
                 else{
                     ctrl.saveModuleData();
