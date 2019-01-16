@@ -1603,3 +1603,4 @@ app.run(['$rootScope', 'ngAppSettings','GlobalSettingsService', 'CommonService',
             return null;
         }      
     }]);
+    $.trumbowyg.svgPath = '/assets/icons.svg';
