@@ -52,11 +52,11 @@
                         <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
 
                             <a ng-if="item.childs.length>0" class="btn btn-light" data-toggle="collapse" role="button" ng-click="showChilds(item.id)">
-                                <span class="oi oi-list text-primary"></span>
+                                <span class="fa fa-list text-primary"></span>
                             </a>
 
-                            <a href="/portal/page/details/{{item.id}}" class="btn btn-light"><span class="oi oi-pencil text-primary"></span></a>
-                            <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-light"><span class="oi oi-eye text-primary"></span></a>
+                            <a href="/portal/page/details/{{item.id}}" class="btn btn-light"><span class="fa fa-pen text-primary"></span></a>
+                            <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-light"><span class="fa fa-eye text-primary"></span></a>
                             <a ng-if="item.type==2" href="/portal/page/page-article/list/{{item.id}}" class="btn btn-light">
                                 <span class="fas fa-list text-info"></span>
                             </a>
@@ -65,7 +65,7 @@
                                             <span class="fas fa-list text-info"></span>
                                         </a>-->
                             <a href="#" class="btn btn-light" ng-click="remove(item.id)">
-                                <span class="oi oi-x text-danger"></span>
+                                <span class="fa fa-times text-danger"></span>
                             </a>
                         </div>
                     </td>
@@ -125,8 +125,8 @@
 
                                         <td>
                                             <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                                                <a href="/portal/page/details/{{c.id}}" class="btn btn-light"><span class="oi oi-pencil text-primary small"></span></a>
-                                                <a href="{{c.detailsUrl}}" target="_blank" class="btn btn-light"><span class="oi oi-eye text-primary small"></span></a>
+                                                <a href="/portal/page/details/{{c.id}}" class="btn btn-light"><span class="fa fa-pen text-primary small"></span></a>
+                                                <a href="{{c.detailsUrl}}" target="_blank" class="btn btn-light"><span class="fa fa-eye text-primary small"></span></a>
                                                 <a ng-if="c.page.type==2" href="/portal/page/page-article/list/{{c.page.id}}" class="btn btn-light">
                                                     <span class="fas fa-list text-info"></span>
                                                 </a>
