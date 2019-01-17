@@ -76,15 +76,15 @@
                     <td>
                         <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
                             <a href="/portal/media/details/{{item.id}}" class="btn btn-light">
-                                <span class="oi oi-pencil text-primary"></span>
+                                <span class="fa fa-pen text-primary"></span>
                             </a>
                             <a href="{{item.fullPath}}" target="_blank" class="btn btn-light">
-                                <span class="oi oi-eye text-primary"></span>
+                                <span class="fa fa-eye text-primary"></span>
                             </a>
                             <a ng-click="clone(item.id)" class="btn btn-sm btn-light d-inline-block"><span class="fas fa-sync-alt text-primary"></span></a>
 
                             <button type="button" class="btn btn-light del-popover" ng-click="remove(item.id)">
-                                <span class="oi oi-x text-danger"></span>
+                                <span class="fa fa-times text-danger"></span>
                             </button>
                             <div class="popover-body d-none">
                                 <a href="/{{currentLanguage}}/portal/medias/delete/{{item.id}}" class="btn btn btn-danger">Yes,
