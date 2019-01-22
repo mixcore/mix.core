@@ -8,7 +8,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <module-main module="activedData">
-                    </div>
+                    </module-main></div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
@@ -43,16 +43,8 @@
                                             <th scope="col" width="5%"></th>
                                         </tr>
                                     </thead>
-                                    <tbody class="sortable" dnd-list="activedData.columns" 
-                                        >
-                                        <tr class="sortable-item module-column" 
-                                            ng-repeat="col in activedData.columns"
-                                            dnd-draggable="col" 
-                                            dnd-effect-allowed="move" 
-                                            dnd-selected="selectedCol = col" 
-                                            dnd-moved="activedData.columns.splice($index, 1)"                                            
-                                            ng-class="{'selected': selectedCol === col}"                                            
-                                            >
+                                    <tbody class="sortable" dnd-list="activedData.columns">
+                                        <tr class="sortable-item module-column" ng-repeat="col in activedData.columns" dnd-draggable="col" dnd-effect-allowed="move" dnd-selected="selectedCol = col" dnd-moved="activedData.columns.splice($index, 1)" ng-class="{'selected': selectedCol === col}">
                                             <td style="cursor:move;" class="drag-header">
                                                 <span class="fas fa-sort"></span>
                                             </td>
@@ -61,15 +53,13 @@
                                             </td>-->
 
                                             <td>
-                                                <input ng-model="col.title" placeholder="Title" ng-change="generateName(col)"
-                                                    class="form-control form-control-sm">
+                                                <input ng-model="col.title" placeholder="Title" ng-change="generateName(col)" class="form-control form-control-sm">
                                                 <small class="form-text text-muted">Field Name: <span ng-bind="col.name"></span></small>
                                                 <!--<input ng-model="col.name" placeholder="Field Name" class="form-control form-control-sm" />-->
                                             </td>
                                             <td>
                                                 <select class="form-control form-control-sm" ng-model="col.dataType">
-                                                    <option ng-repeat="item in settings.dataTypes track by $index"
-                                                        ng-value="$index">{{item}}</option>
+                                                    <option ng-repeat="item in settings.dataTypes track by $index" ng-value="$index">{{item}}</option>
                                                 </select>
                                             </td>
                                             <!--<td>
@@ -77,15 +67,13 @@
                                             </td>-->
                                             <td>
                                                 <span class="switch">
-                                                    <input id="isUnique_{{$index}}" type="checkbox" class="switch"
-                                                        ng-model="col.isUnique">
+                                                    <input id="isUnique_{{$index}}" type="checkbox" class="switch" ng-model="col.isUnique">
                                                     <label for="isUnique_{{$index}}">&nbsp;</label>
                                                 </span>
                                             </td>
                                             <td>
                                                 <span class="switch">
-                                                    <input id="isRequired_{{$index}}" type="checkbox" class="checkbox"
-                                                        ng-model="col.isRequired">
+                                                    <input id="isRequired_{{$index}}" type="checkbox" class="checkbox" ng-model="col.isRequired">
                                                     <label for="isRequired_{{$index}}">&nbsp;</label>
                                                 </span>
                                             </td>
@@ -97,15 +85,13 @@
                                             </td>-->
                                             <td>
                                                 <span class="switch">
-                                                    <input id="isSelect_{{$index}}" type="checkbox" class="switch"
-                                                        ng-model="col.isSelect">
+                                                    <input id="isSelect_{{$index}}" type="checkbox" class="switch" ng-model="col.isSelect">
                                                     <label for="isSelect_{{$index}}">&nbsp;</label>
                                                 </span>
                                             </td>
                                             <td>
                                                 <span class="switch">
-                                                    <input id="isDisplay_{{$index}}" type="checkbox" class="switch"
-                                                        ng-model="col.isDisplay">
+                                                    <input id="isDisplay_{{$index}}" type="checkbox" class="switch" ng-model="col.isDisplay">
                                                     <label for="isDisplay_{{$index}}">&nbsp;</label>
                                                 </span>
                                             </td>
@@ -115,8 +101,7 @@
                                                 </a>
                                             </td>
                                         </tr>
-                                        <tr class="module-column" ng-repeat="col in activedData.columns track by $index"
-                                            ng-if="col.isSelect">
+                                        <tr class="module-column" ng-repeat="col in activedData.columns track by $index" ng-if="col.isSelect">
                                             <td colspan="8">
                                                 <div class="col-12">
                                                     <!-- <div class="col-12">
@@ -124,11 +109,9 @@
                                                         <input type="text" id="option_{{$index}}" ng-enter="addOption(col,$index)" placeholder="fill then enter to add options" class="form-control">
                                                     </div> -->
                                                     <div class="form-group row mb-0">
-                                                        <label for="staticEmail" class="col-sm-2 col-form-label"
-                                                            ng-bind="col.title"></label>
+                                                        <label for="staticEmail" class="col-sm-2 col-form-label" ng-bind="col.title"></label>
                                                         <div class="col-sm-10">
-                                                            <input type="text" class="form-control form-control-sm" id="option_{{$index}}"
-                                                                ng-enter="addOption(col,$index)" placeholder="fill then enter to add options">
+                                                            <input type="text" class="form-control form-control-sm" id="option_{{$index}}" ng-enter="addOption(col,$index)" placeholder="fill then enter to add options">
                                                         </div>
                                                     </div>
                                                     <div class="row pb-1" ng-repeat="opt in col.options track by $index">
@@ -174,41 +157,39 @@
                         Info
                     </h6>
                     <div class="card-body">
-                        <statuses status="activedData.status"></statuses>
-                        <div class="form-group">
-                            <span class="switch">
-                                <label>
-                                    <input type="checkbox" ng-model="activedData.isClone" class="switch">
-                                    Clone
-                                </label>
-                            </span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Created Date Time</label>
-                            <div class="input-group input-group-sm mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1"><i class="mi mi-Calendar"></i></span>
-                                </div>
-                                <input ng-model="activedData.createdDateTime" type="text" class="form-control" readonly="readonly">
+                        <statuses status="activedData.status">
+                            <div class="form-group">
+                                <span class="switch">
+                                    <label>
+                                        <input type="checkbox" ng-model="activedData.isClone" class="switch">
+                                        Clone
+                                    </label>
+                                </span>
                             </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="control-label">Created By</label>
-                            <div class="input-group input-group-sm mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1"><i class="mi mi-Contact"></i></span>
+                            <div class="form-group">
+                                <label class="control-label">Created Date Time</label>
+                                <div class="input-group input-group-sm mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1"><i class="mi mi-Calendar"></i></span>
+                                    </div>
+                                    <input ng-model="activedData.createdDateTime" type="text" class="form-control" readonly="readonly">
                                 </div>
-                                <input ng-model="activedData.createdBy" class="form-control" readonly="readonly">
                             </div>
-                        </div>
-                        </div>
-                        </div>
-                        
-                        <custom-image header="'Image'" type="'Modules'" folder="activedData.seoName" src-url="activedData.image"
-                    src="activedData.image" auto="'true'"></custom-image>
-                <custom-image header="'Thumnail'" type="'Modules'" folder="activedData.seoName" src-url="activedData.thumbnail"
-                    src="activedData.thumbnail" auto="'true'"></custom-image>
+
+                            <div class="form-group">
+                                <label class="control-label">Created By</label>
+                                <div class="input-group input-group-sm mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1"><i class="mi mi-Contact"></i></span>
+                                    </div>
+                                    <input ng-model="activedData.createdBy" class="form-control" readonly="readonly">
+                                </div>
+                            </div>
+                    </statuses></div>
+                </div>
+
+                <custom-image header="'Image'" type="'Modules'" folder="activedData.seoName" src-url="activedData.image" src="activedData.image" auto="'true'"></custom-image>
+                <custom-image header="'Thumnail'" type="'Modules'" folder="activedData.seoName" src-url="activedData.thumbnail" src="activedData.thumbnail" auto="'true'"></custom-image>
             </section>
         </div>
     </form>

@@ -43,8 +43,8 @@
                                 <!--<span class="fas fa-sort"></span>-->
             
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                                    <button type="button" class="btn btn-light"><span class="oi oi-chevron-top small"></span></button>
-                                    <button type="button" class="btn btn-light"><span class="oi oi-chevron-bottom small"></span></button>
+                                    <button type="button" class="btn btn-light"><span class="fa fa-sort-up small"></span></button>
+                                    <button type="button" class="btn btn-light"><span class="fa fa-sort-down small"></span></button>
                                 </div>
                             </td>
                             <td>
@@ -68,10 +68,10 @@
                             <td>
                                 <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
                                     <a href="/portal/module/details/{{item.id}}" class="btn btn-light">
-                                        <span class="oi oi-pencil text-primary"></span>
+                                        <span class="fa fa-pen text-primary"></span>
                                     </a>
                                     <!--<a href="{{item.detailsUrl}}" target="_blank" class="btn btn-light">
-                                        <span class="oi oi-eye text-primary"></span>
+                                        <span class="fa fa-eye text-primary"></span>
                                     </a>-->
                                     <a ng-if="item.type==2" href="/portal/module-article/list/{{item.id}}" class="btn btn-light">
                                         <span class="fas fa-list text-info"></span>
