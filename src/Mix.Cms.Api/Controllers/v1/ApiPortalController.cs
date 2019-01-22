@@ -53,7 +53,6 @@ namespace Mix.Cms.Api.Controllers.v1
             _roleManager = roleManager;
             _appLifetime = appLifetime;
         }
-
         public async Task ShutdownSite()
         {
             _appLifetime.StopApplication();
@@ -290,10 +289,6 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
-        #endregion Get
-
-        #region Post
-
         // GET 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpGet, HttpOptions]
@@ -304,6 +299,34 @@ namespace Mix.Cms.Api.Controllers.v1
             return new RepositoryResponse<JObject>() { IsSucceed = true, Data = JObject.Parse(settings.Content) };
         }
 
+        #endregion Get
+
+        #region Post
+        [AllowAnonymous]
+        [HttpPost, HttpOptions]
+        [Route("encrypt")]
+        public RepositoryResponse<CryptoViewModel<string>> Encrypt([FromBody]JObject model)
+        {
+            string data = model.GetValue("data").Value<string>();
+            var encrypted = new JObject(new JProperty("encrypted", data));
+            return new RepositoryResponse<CryptoViewModel<string>>() {
+                
+                Data = MixService.EncryptStringToBytes_Aes(encrypted)
+            };
+        }
+        [AllowAnonymous]
+        [HttpPost, HttpOptions]
+        [Route("decrypt")]
+        public RepositoryResponse<CryptoViewModel<JObject>> Decrypt([FromBody]JObject model)
+        {
+            string data = model.GetValue("data").Value<string>();
+            string key = model.GetValue("key").Value<string>();
+            string iv = model.GetValue("iv").Value<string>();
+            return new RepositoryResponse<CryptoViewModel<JObject>>() {
+                
+                Data = MixService.DecryptStringFromBytes_Aes(data, key, iv)
+            };
+        }
         // POST api/category
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]

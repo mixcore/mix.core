@@ -91,7 +91,15 @@ namespace Mix.Cms.Lib.ViewModels
         public string Value { get; set; }
 
     }
-
+    public class CryptoViewModel<T>
+    {
+        [JsonProperty("base64Key")]
+        public string Base64Key { get; set; }
+        [JsonProperty("base64IV")]
+        public string Base64IV { get; set; }
+        [JsonProperty("data")]
+        public T Data { get; set; }
+    }
     public class DataValueViewModel
     {
         [JsonProperty("dataType")]
