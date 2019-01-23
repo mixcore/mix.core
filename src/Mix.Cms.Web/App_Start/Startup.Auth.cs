@@ -71,8 +71,10 @@ namespace Mix.Cms.Web
                                  ValidateAudience = MixService.GetAuthConfig<bool>("ValidateAudience"),
                                  ValidateLifetime = MixService.GetAuthConfig<bool>("ValidateLifetime"),
                                  ValidateIssuerSigningKey = MixService.GetAuthConfig<bool>("ValidateIssuerSigningKey"),
-                                 ValidIssuer = MixService.GetAuthConfig<string>("Issuer"),
-                                 ValidAudience = MixService.GetAuthConfig<string>("Audience"),
+                                 //ValidIssuer = MixService.GetAuthConfig<string>("Issuer"),
+                                 //ValidAudience = MixService.GetAuthConfig<string>("Audience"),
+                                 ValidIssuers = MixService.GetAuthConfig<string>("Issuers").Split(','),
+                                 ValidAudiences = MixService.GetAuthConfig<string>("Audiences").Split(','),
                                  IssuerSigningKey = JwtSecurityKey.Create(MixService.GetAuthConfig<string>("SecretKey"))
                              };
                         options.Events = new JwtBearerEvents

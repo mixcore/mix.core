@@ -5,7 +5,7 @@ app.factory('SharedModuleDataService', ['$http', '$rootScope', 'CommonService', 
     var moduleDatasServiceFactory = {};
 
     var _updateInfos = async function (pages) {
-        var apiUrl = '/' + $rootScope.settings.lang + '/module-data';
+        var apiUrl = '/' + $rootScope.globalSettingsService.get('lang') + '/module-data';
         var req = {
             method: 'POST',
             url: apiUrl + '/update-infos',
@@ -15,7 +15,7 @@ app.factory('SharedModuleDataService', ['$http', '$rootScope', 'CommonService', 
     };
 
     var _getModuleData = async function (moduleId, id, type) {
-        var apiUrl = '/' + $rootScope.settings.lang + '/module-data/';
+        var apiUrl = '/' + $rootScope.globalSettingsService.get('lang') + '/module-data/';
         var url = apiUrl + 'details/' + type;
         if (id) {
             url += '/' + moduleId + '/' + id;
@@ -31,7 +31,7 @@ app.factory('SharedModuleDataService', ['$http', '$rootScope', 'CommonService', 
 
 
     var _getModuleDatas = async function (request) {
-        var apiUrl = '/' + $rootScope.settings.lang + '/module-data/';
+        var apiUrl = '/' + $rootScope.globalSettingsService.get('lang') + '/module-data/';
         var req = {
             method: 'POST',
             url: apiUrl + 'list',
@@ -43,7 +43,7 @@ app.factory('SharedModuleDataService', ['$http', '$rootScope', 'CommonService', 
 
     var _initModuleForm = async function (name) {
        
-        var apiUrl = '/' + $rootScope.settings.lang + '/module-data/';
+        var apiUrl = '/' + $rootScope.globalSettingsService.get('lang') + '/module-data/';
         var req = {
             method: 'GET',
             url: apiUrl + 'init-by-name/' + name,
@@ -53,7 +53,7 @@ app.factory('SharedModuleDataService', ['$http', '$rootScope', 'CommonService', 
     };
 
     var _removeModuleData = async function (id) {
-        var apiUrl = '/' + $rootScope.settings.lang + '/module-data/';
+        var apiUrl = '/' + $rootScope.globalSettingsService.get('lang') + '/module-data/';
         var req = {
             method: 'GET',
             url: apiUrl + 'delete/' + id
@@ -62,7 +62,7 @@ app.factory('SharedModuleDataService', ['$http', '$rootScope', 'CommonService', 
     };
 
     var _saveModuleData = async function (moduleData) {
-        var apiUrl = '/' + $rootScope.settings.lang + '/module-data/';
+        var apiUrl = '/' + $rootScope.globalSettingsService.get('lang') + '/module-data/';
         var req = {
             method: 'POST',
             url: apiUrl + 'save',
@@ -71,7 +71,7 @@ app.factory('SharedModuleDataService', ['$http', '$rootScope', 'CommonService', 
         return await commonService.getApiResult(req);
     };
     var _saveFields = async function (id, propertyName, propertyValue) {
-        var apiUrl = '/' + $rootScope.settings.lang + '/module-data/';
+        var apiUrl = '/' + $rootScope.globalSettingsService.get('lang') + '/module-data/';
         var field = [
             {
                 propertyName: propertyName,

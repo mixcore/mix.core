@@ -40,6 +40,7 @@ modules.component('trumbowyg', {
         plugins: {
           removeformatPasted: true,
           imageWidthModalEdit: true,
+          semantic: false,
           btnsDef: {
             // Customizables dropdowns
             image: {

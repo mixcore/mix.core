@@ -64,6 +64,7 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
             if ($scope.getListSuccessCallback) {
                 $scope.getListSuccessCallback();
             }
+            $("html, body").animate({ "scrollTop": "0px" }, 500);
             $rootScope.isBusy = false;
             $scope.$apply();
         } else {
@@ -92,7 +93,7 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
             $scope.getList();
         } else {
             $rootScope.showMessage('failed');
-            $rootScope.isBusy = false;
+            $rootScope.isBusy = false;            
             $scope.$apply();
         }
     };
