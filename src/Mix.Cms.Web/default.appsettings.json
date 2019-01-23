@@ -65,8 +65,6 @@
     "ThemeId": "1",
     "Domain": "",
     "TemplateExtension": ".cshtml",
-    "ApiEncryptKey": "2b7e151628aed2a6abf7158809cf4f3c",
-    "ApiEncryptIV": "2b7e151628aed2as",
     "IsEncryptApi": true,
     "LastUpdateConfiguration": null
   },
