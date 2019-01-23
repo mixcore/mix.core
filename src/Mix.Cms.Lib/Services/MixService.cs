@@ -9,6 +9,7 @@ using System.Threading;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
+using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
 using Newtonsoft.Json.Linq;
 
@@ -63,16 +64,18 @@ namespace Mix.Cms.Lib.Services
 
         private void LoadConfiggurations()
         {
-            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, ".json", string.Empty, true, "{}");
-
-            string content = string.IsNullOrWhiteSpace(settings.Content) ? "{}" : settings.Content;
-            JObject jsonSettings = JObject.Parse(content);
-            if (jsonSettings["GlobalSettings"] == null)
+            // Load configurations from appSettings.json
+            JObject jsonSettings = new JObject();
+            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, ".json", string.Empty, true);
+            
+            if (string.IsNullOrEmpty(settings.Content))
             {
                 settings = FileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, ".json", string.Empty, true, "{}");
-                jsonSettings = JObject.Parse(settings.Content);
-
             }
+
+            string content = string.IsNullOrWhiteSpace(settings.Content) ? "{}" : settings.Content;
+            jsonSettings = JObject.Parse(content);
+
 
             instance.ConnectionStrings = JObject.FromObject(jsonSettings["ConnectionStrings"]);
             instance.Authentication = JObject.FromObject(jsonSettings["Authentication"]);
@@ -231,15 +234,18 @@ namespace Mix.Cms.Lib.Services
             }
         }
 
-        public static string EncryptStringToBytes_Aes(string plainText, byte[] Key, byte[] IV)
+        public static CryptoViewModel<string> EncryptStringToBytes_Aes(JObject plainText)
         {
+            var result = new CryptoViewModel<string>();
+            //var Key = Convert.FromBase64String(keyString);
+            //var IV = Convert.FromBase64String(iv);
             // Check arguments.
-            if (plainText == null || plainText.Length <= 0)
+            if (plainText == null)
                 throw new ArgumentNullException("plainText");
-            if (Key == null || Key.Length <= 0)
-                throw new ArgumentNullException("Key");
-            if (IV == null || IV.Length <= 0)
-                throw new ArgumentNullException("IV");
+            //if (Key == null || Key.Length <= 0)
+            //    throw new ArgumentNullException("Key");
+            //if (IV == null || IV.Length <= 0)
+            //    throw new ArgumentNullException("IV");
             byte[] encrypted;
 
             // Create an Aes object
@@ -248,8 +254,11 @@ namespace Mix.Cms.Lib.Services
             {
                 aesAlg.Mode = CipherMode.ECB;
                 aesAlg.Padding = PaddingMode.PKCS7;
-                aesAlg.Key = Key;
-                aesAlg.IV = IV;
+                //aesAlg.Key = Key;
+                //aesAlg.IV = IV;
+
+                result.Base64Key = Convert.ToBase64String(aesAlg.Key);
+                result.Base64IV = Convert.ToBase64String(aesAlg.IV);
 
                 // Create an encryptor to perform the stream transform.
                 ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
@@ -269,11 +278,19 @@ namespace Mix.Cms.Lib.Services
                 }
             }
             // Return the encrypted bytes from the memory stream.
-            return Convert.ToBase64String(encrypted);
+            result.Data = Convert.ToBase64String(encrypted);
+            return result;
         }
 
-        public static string DecryptStringFromBytes_Aes(string cipherText, byte[] Key, byte[] IV)
+        public static CryptoViewModel<JObject> DecryptStringFromBytes_Aes(string cipherText, string keyString, string iv)
         {
+            CryptoViewModel<JObject> result = new CryptoViewModel<JObject>()
+            {
+                Base64Key = keyString,
+                Base64IV = iv
+            };
+            var Key = Convert.FromBase64String(keyString);
+            var IV = Convert.FromBase64String(iv);
             // Check arguments.
             if (cipherText == null || cipherText.Length <= 0)
                 throw new ArgumentNullException("cipherText");
@@ -313,21 +330,17 @@ namespace Mix.Cms.Lib.Services
                 }
 
             }
-
-            return plaintext;
+            result.Data = JObject.Parse(plaintext);
+            return result;
 
         }
 
-        public static string EncryptString(string text, string keyString)
+        public static string EncryptString(string text, string keyString, string strIV)
         {
             var key = Encoding.UTF8.GetBytes(keyString);
-            var iv = Encoding.UTF8.GetBytes("2b7e151628aed2as");
+
             using (var aesAlg = Aes.Create())
             {
-                aesAlg.Mode = CipherMode.ECB;
-                aesAlg.Padding = PaddingMode.PKCS7;
-                aesAlg.Key = key;
-                aesAlg.IV = iv;
                 using (var encryptor = aesAlg.CreateEncryptor(key, aesAlg.IV))
                 {
                     using (var msEncrypt = new MemoryStream())
@@ -338,6 +351,69 @@ namespace Mix.Cms.Lib.Services
                             swEncrypt.Write(text);
                         }
 
+                        var iv = aesAlg.IV;
+
+                        var decryptedContent = msEncrypt.ToArray();
+
+                        var result = new byte[iv.Length + decryptedContent.Length];
+
+                        Buffer.BlockCopy(iv, 0, result, 0, iv.Length);
+                        Buffer.BlockCopy(decryptedContent, 0, result, iv.Length, decryptedContent.Length);
+
+                        return Convert.ToBase64String(result);
+                    }
+                }
+            }
+        }
+
+        public static string DecryptString(string cipherText, string keyString, string strIV)
+        {
+            var fullCipher = Convert.FromBase64String(cipherText);
+
+            var iv = new byte[16];
+            var cipher = new byte[16];
+
+            Buffer.BlockCopy(fullCipher, 0, iv, 0, iv.Length);
+            Buffer.BlockCopy(fullCipher, iv.Length, cipher, 0, iv.Length);
+            var key = Encoding.UTF8.GetBytes(keyString);
+
+            using (var aesAlg = Aes.Create())
+            {
+                using (var decryptor = aesAlg.CreateDecryptor(key, iv))
+                {
+                    string result;
+                    using (var msDecrypt = new MemoryStream(cipher))
+                    {
+                        using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                        {
+                            using (var srDecrypt = new StreamReader(csDecrypt))
+                            {
+                                result = srDecrypt.ReadToEnd();
+                            }
+                        }
+                    }
+
+                    return result;
+                }
+            }
+        }
+        public static string EncryptString(string text, string keyString)
+        {
+            var key = Encoding.UTF8.GetBytes(keyString);
+
+            using (var aesAlg = Aes.Create())
+            {
+                using (var encryptor = aesAlg.CreateEncryptor(key, aesAlg.IV))
+                {
+                    using (var msEncrypt = new MemoryStream())
+                    {
+                        using (var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                        using (var swEncrypt = new StreamWriter(csEncrypt))
+                        {
+                            swEncrypt.Write(text);
+                        }
+
+                        var iv = aesAlg.IV;
 
                         var decryptedContent = msEncrypt.ToArray();
 
@@ -356,18 +432,15 @@ namespace Mix.Cms.Lib.Services
         {
             var fullCipher = Convert.FromBase64String(cipherText);
 
-
+            var iv = new byte[16];
             var cipher = new byte[16];
-            var key = Encoding.UTF8.GetBytes(keyString);
-            var iv = Encoding.UTF8.GetBytes("2b7e151628aed2as");
+
             Buffer.BlockCopy(fullCipher, 0, iv, 0, iv.Length);
             Buffer.BlockCopy(fullCipher, iv.Length, cipher, 0, iv.Length);
-            using (var aesAlg = new AesManaged())
+            var key = Encoding.UTF8.GetBytes(keyString);
+
+            using (var aesAlg = Aes.Create())
             {
-                aesAlg.Mode = CipherMode.ECB;
-                aesAlg.Padding = PaddingMode.PKCS7;
-                aesAlg.Key = key;
-                aesAlg.IV = iv;
                 using (var decryptor = aesAlg.CreateDecryptor(key, iv))
                 {
                     string result;

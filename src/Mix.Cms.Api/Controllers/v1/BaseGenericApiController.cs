@@ -199,17 +199,17 @@ namespace Mix.Cms.Api.Controllers.v1
 
         public JObject SaveEncrypt([FromBody] RequestEncrypted request)
         {
-            var key = Convert.FromBase64String(request.Key); //Encoding.UTF8.GetBytes(request.Key);
-            var iv = Convert.FromBase64String(request.IV); //Encoding.UTF8.GetBytes(request.IV);
+            //var key = Convert.FromBase64String(request.Key); //Encoding.UTF8.GetBytes(request.Key);
+            //var iv = Convert.FromBase64String(request.IV); //Encoding.UTF8.GetBytes(request.IV);
             string encrypted = string.Empty;
             string decrypt = string.Empty;
             if (!string.IsNullOrEmpty(request.PlainText))
             {
-                encrypted = MixService.EncryptStringToBytes_Aes(request.PlainText, key, iv).ToString();
+                encrypted = MixService.EncryptStringToBytes_Aes(new JObject()).ToString();
             }
             if (!string.IsNullOrEmpty(request.Encrypted))
             {
-                decrypt = MixService.DecryptStringFromBytes_Aes(request.Encrypted, key, iv);
+                //decrypt = MixService.DecryptStringFromBytes_Aes(request.Encrypted, request.Key, request.IV);
             }
             JObject data = new JObject(
                 new JProperty("key", request.Key),
