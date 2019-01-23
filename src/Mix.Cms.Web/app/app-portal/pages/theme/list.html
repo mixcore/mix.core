@@ -1,16 +1,10 @@
 <section class="card manual">
-    <div class="card-header">
+    <div class="card-header">        
         <div class="row">
-            <div class="col-md-8">
-                <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-                    <div class="btn-group mr-2" role="group" aria-label="First group">
-                        <a href="/portal/theme/create" class="btn btn-secondary">
-                            <i class="fas fa-plus"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
+            <div class="col-md-12">
+                <filter-list request="request" 
+                    create-url="'/portal/theme/create'"
+                    callback="getList(pageIndex)"></filter-list>
             </div>
         </div>
     </div>
@@ -102,9 +96,4 @@
             </ul>
         </nav>
     </div>
-
-    <filter-list request="request" callback="getList(pageIndex)"></filter-list>
-
-
-
 </section>

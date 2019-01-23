@@ -16,7 +16,9 @@
     "TokenType": "Bearer",
     "Audience": "mix-core",
     "SecretKey": "mixcore-secret-key",
-    "Issuer": "mix-core"
+    "Issuer": "mix-core",
+    "Issuers": "mix-core",
+    "Audiences": "mix-core"
   },
   "Smtp": {
     "Server": "",

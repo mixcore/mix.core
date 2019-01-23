@@ -1,5 +1,5 @@
 <div class="row" ng-init="$ctrl.init()">
-    <div class="col-md-5"> 
+    <div class="col-md-5">
         <div class="" role="toolbar" aria-label="Toolbar with button groups">
             <div class="input-group input-group-sm mr-2" role="group" aria-label="First group">
 
@@ -33,5 +33,12 @@
             </div>
             <input ng-model="$ctrl.request.keyword" ng-enter="$ctrl.callback()" type="text" class="form-control" placeholder="Search..." aria-label="Search..." aria-describedby="btnGroupAddon">
         </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <a ng-if="$ctrl.createUrl" href="{{$ctrl.createUrl}}" class="btn btn-secondary">
+            <i class="fas fa-plus"></i>
+        </a>
     </div>
 </div>

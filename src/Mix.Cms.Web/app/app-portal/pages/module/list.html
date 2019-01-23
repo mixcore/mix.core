@@ -40,12 +40,7 @@
                     <tbody class="sortable" ng-init="getList()">
                         <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="module" sort-model-id="{{item.id}}">
                             <td style="cursor:move;" class="drag-header">
-                                <!--<span class="fas fa-sort"></span>-->
-            
-                                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                                    <button type="button" class="btn btn-light"><span class="fa fa-sort-up small"></span></button>
-                                    <button type="button" class="btn btn-light"><span class="fa fa-sort-down small"></span></button>
-                                </div>
+                                <span class="fas fa-sort"></span>
                             </td>
                             <td>
                                 {{item.priority}}

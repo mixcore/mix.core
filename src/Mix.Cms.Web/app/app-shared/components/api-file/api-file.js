@@ -3,8 +3,9 @@ modules.component('apiFile', {
     templateUrl: '/app/app-shared/components/api-file/api-file.html',
     controller: ['$rootScope', '$scope', 'ngAppSettings', function PortalTemplateController($rootScope, $scope) {
         var ctrl = this;
+        ctrl.accept = ctrl.accept || 'application/zip';
         ctrl.selectFile = function (file, errFiles) {
-            if (file !== undefined && file !== null) {
+            if (file !== undefined && file !== null && ctrl.isBase64) {
                 ctrl.getBase64(file);
             }
         };
@@ -63,7 +64,9 @@ modules.component('apiFile', {
     }],
     bindings: {
         header: '=',
+        accept: '=',
         title: '=',
         postedFile: '=',
+        isBase64: '=',
     }
 });

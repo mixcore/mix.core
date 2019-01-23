@@ -5,6 +5,7 @@
         function ($rootScope, $scope, globalSettingsService, commonService, authService, translatorService, moduleDataService) {
             $scope.lang = '';
             $scope.isInit = false;
+            $rootScope.globalSettingsService = globalSettingsService;
             $scope.init = async function (lang) {
                 if (!$rootScope.isBusy) {
                     $rootScope.isBusy = true;
