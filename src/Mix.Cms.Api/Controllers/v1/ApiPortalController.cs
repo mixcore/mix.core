@@ -209,9 +209,8 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             try
             {
-                var root = new XElement("urlset",
-                new XAttribute("xmlns", @"http://www.sitemaps.org/schemas/sitemap/0.9")
-                );
+                XNamespace aw = "http://www.sitemaps.org/schemas/sitemap/0.9";
+                var root = new XElement(aw+ "urlset");
                 var pages = Lib.ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelList();
                 List<int> handledPageId = new List<int>();
                 foreach (var page in pages.Data)

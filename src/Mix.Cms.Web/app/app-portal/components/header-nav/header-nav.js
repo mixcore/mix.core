@@ -38,7 +38,14 @@
                 ctrl.generateSitemap = async function(){
                     $rootScope.isBusy = true;
                     var resp = await commonService.genrateSitemap();
-                    window.top.location.href = '/portal/file/details?folder=' + resp.fileFolder + '&filename=' + resp.fileName + resp.extension;
+                    if(resp)
+                    {
+                        window.top.location.href = '/portal/file/details?folder=' + resp.fileFolder + '&filename=' + resp.fileName + resp.extension;
+                    }
+                    else{
+                        $rootScope.isBusy = false;
+                        $rootScope.showErrors(['Server error']);
+                    }
                 }
             }],
         bindings: {
