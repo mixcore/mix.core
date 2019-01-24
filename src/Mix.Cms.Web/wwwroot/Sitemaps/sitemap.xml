@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url xmlns="">
+    <lastmod>2019-01-24T01:37:25.1276105Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/en-us/home</loc>
+  </url>
+  <url xmlns="">
+    <lastmod>2019-01-24T01:37:25.1377385Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url xmlns="">
+    <lastmod>2019-01-24T01:37:25.463118Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/en-us/article/khu-cong-vien-trung-tam-can-ho-3-phong-ngu--day-du-tien-nghi-va-sang-bong-va-khong-ti-vet-space</loc>
+  </url>
+  <url xmlns="">
+    <lastmod>2019-01-24T01:37:25.4635312Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/en-us/article/khu-cong-vien-trung-tam-can-ho-3-phong-ngu--day-du-tien-nghi-va-hien-dai-va-quyen-ru-khong-gian</loc>
+  </url>
+  <url xmlns="">
+    <lastmod>2019-01-24T01:37:25.4636037Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/en-us/article/khu-cong-vien-trung-tam-can-ho-3-phong-ngu--day-du-tien-nghi-va-du-anh-sang-va-duoc-yeu-thich</loc>
+  </url>
+</urlset>
