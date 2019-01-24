@@ -1,5 +1,5 @@
 <ul class="nav">
-    <li class="col-sm-12" ng-repeat="cate in $ctrl.page.parentNavs track by $index">
+    <li class="col-sm-12" ng-repeat="cate in $ctrl.page.parentNavs">
         <span class="switch switch-sm">
             <input type="checkbox" ng-model="cate.isActived" id="cate_{{$index}}" class="switch">
             <label class="switch" for="cate_{{$index}}">
