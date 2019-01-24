@@ -36,6 +36,10 @@ app.controller('PermissionController',
                 $scope.activedData.url = $location.path();
                 $scope.$applyAsync();
             };
+
+            $scope.saveCallback = function(){
+                $scope.getSingle();
+            }
             
             $scope.updateInfos = async function (items) {
                 $rootScope.isBusy = true;
