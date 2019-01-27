@@ -83,6 +83,21 @@ app.controller('MediaController', ['$scope', '$rootScope', 'ngAppSettings', '$ro
             }
         };
         $scope.saveCallback = function(){
+            $scope.activedData = {
+                title: '',
+                description: '',
+                status: 2,
+                mediaFile: {
+                    file: null,
+                    fullPath: '',
+                    folderName: 'Media',
+                    fileFolder: '',
+                    fileName: '',
+                    extension: '',
+                    content: '',
+                    fileStream: ''
+                }
+            };
             $scope.getList();
         }
         $scope.removeCallback = function(){

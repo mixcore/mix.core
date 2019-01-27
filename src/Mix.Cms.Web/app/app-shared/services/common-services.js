@@ -48,13 +48,40 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
                 if (culture) {
                     url += '/' + culture;
                 }
-                url += '/all-settings';
+                url += '/settings';
                 var req = {
                     method: 'GET',
                     url: url
                 };
                 return _getApiResult(req).then(function (response) {
                     return response.data;
+                });
+            }
+        };
+        var _getAllSettings = async function (culture) {
+            var settings = localStorageService.get('settings');
+            var globalSettings = localStorageService.get('globalSettings');
+            // && culture !== undefined && settings.lang === culture
+            if (settings) {
+                return settings;
+            }
+            else {
+                var url = '/portal';
+                if (culture) {
+                    url += '/' + culture;
+                }
+                url += '/all-settings';
+                var req = {
+                    method: 'GET',
+                    url: url
+                };
+                return _getApiResult(req).then(function (response) {
+                    localStorageService.set('settings', response.data.settings);
+                    localStorageService.set('globalSettings', response.data.globalSettings);
+                    localStorageService.set('translator', response.data.translator);
+                    $rootScope.settings = response.data.settings;
+                    $rootScope.globalSettings = response.data.globalSettings; 
+                    $rootScope.translator.translator = response.data.translator;                   
                 });
             }
         };
@@ -114,6 +141,23 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
                 localStorageService.set('settings', settings);
                 //window.top.location = location.href;
                 return settings;
+            }
+
+        };
+        var _fillAllSettings = async function (culture) {
+            var settings = localStorageService.get('settings');
+            var globalSettings = localStorageService.get('globalSettings');
+            if (settings && settings.lang === culture) {
+                _settings = settings;
+                $rootScope.settings = settings;
+                $rootScope.globalSettings = globalSettings;
+            }
+            else {
+                if (culture !== undefined && settings && settings.lang !== culture) {
+                    await _removeSettings();
+                    await _removeTranslator();
+                }
+                await _getAllSettings(culture);                
             }
 
         };
@@ -193,6 +237,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
         adminCommonFactory.getSettings = _getSettings;
         adminCommonFactory.setSettings = _setSettings;
         adminCommonFactory.initAllSettings = _initAllSettings;
+        adminCommonFactory.fillAllSettings = _fillAllSettings;
         adminCommonFactory.removeSettings = _removeSettings;
         adminCommonFactory.removeTranslator = _removeTranslator;
         adminCommonFactory.showAlertMsg = _showAlertMsg;
