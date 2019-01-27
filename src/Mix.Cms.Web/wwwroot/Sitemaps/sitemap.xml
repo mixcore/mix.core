@@ -1,33 +1,71 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url xmlns="">
-    <lastmod>2019-01-24T01:40:50.2082715Z</lastmod>
+    <lastmod>2019-01-27T09:21:55.1810335Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/home</loc>
+    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="vi-vn" href="https://localhost:5001/vi-vn/home" />
   </url>
   <url xmlns="">
-    <lastmod>2019-01-24T01:40:50.2083868Z</lastmod>
+    <lastmod>2019-01-27T09:21:55.1973204Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/vi-vn/home</loc>
+    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-us" href="https://localhost:5001/en-us/home" />
+  </url>
+  <url xmlns="">
+    <lastmod>2019-01-27T09:21:55.1974072Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="vi-vn" href="https://localhost:5001" />
+  </url>
+  <url xmlns="">
+    <lastmod>2019-01-27T09:21:55.1974363Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-us" href="https://localhost:5001" />
+  </url>
+  <url xmlns="">
+    <lastmod>2019-01-27T09:21:55.6155812Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="vi-vn" href="https://localhost:5001/vi-vn/khu-cong-vien-trung-tam-can-ho-3-phong-ngu--day-du-tien-nghi-va-sang-bong-va-khong-ti-vet-space" />
+  </url>
+  <url xmlns="">
+    <lastmod>2019-01-27T09:21:55.6182195Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-us" href="https://localhost:5001/en-us/khu-cong-vien-trung-tam-can-ho-3-phong-ngu--day-du-tien-nghi-va-sang-bong-va-khong-ti-vet-space" />
+  </url>
+  <url xmlns="">
+    <lastmod>2019-01-27T09:21:55.6186113Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="vi-vn" href="https://localhost:5001/vi-vn/khu-cong-vien-trung-tam-can-ho-3-phong-ngu--day-du-tien-nghi-va-hien-dai-va-quyen-ru-khong-gian" />
+  </url>
+  <url xmlns="">
+    <lastmod>2019-01-27T09:21:55.6188136Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-us" href="https://localhost:5001/en-us/khu-cong-vien-trung-tam-can-ho-3-phong-ngu--day-du-tien-nghi-va-hien-dai-va-quyen-ru-khong-gian" />
+  </url>
+  <url xmlns="">
+    <lastmod>2019-01-27T09:21:55.6189101Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001</loc>
   </url>
   <url xmlns="">
-    <lastmod>2019-01-24T01:40:50.4630344Z</lastmod>
+    <lastmod>2019-01-27T09:21:55.6189682Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001/en-us/article/khu-cong-vien-trung-tam-can-ho-3-phong-ngu--day-du-tien-nghi-va-sang-bong-va-khong-ti-vet-space</loc>
-  </url>
-  <url xmlns="">
-    <lastmod>2019-01-24T01:40:50.4630949Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001/en-us/article/khu-cong-vien-trung-tam-can-ho-3-phong-ngu--day-du-tien-nghi-va-hien-dai-va-quyen-ru-khong-gian</loc>
-  </url>
-  <url xmlns="">
-    <lastmod>2019-01-24T01:40:50.4631265Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001/en-us/article/khu-cong-vien-trung-tam-can-ho-3-phong-ngu--day-du-tien-nghi-va-du-anh-sang-va-duoc-yeu-thich</loc>
+    <loc>https://localhost:5001</loc>
   </url>
 </urlset>

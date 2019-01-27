@@ -7,7 +7,7 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService', 'AppS
             this.modelName = modelName;
             if(!isGlobal)
             {
-                this.lang = $rootScope.globalSettingsService.get('lang');
+                this.lang = $rootScope.settings.lang;
                 this.prefixUrl = '/' + this.lang + '/' + modelName;
             }
             else{

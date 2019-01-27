@@ -1579,12 +1579,26 @@ app.run(['$rootScope', 'ngAppSettings','GlobalSettingsService', 'CommonService',
             }
         };
 
+        $rootScope.waitForInit = async function () {
+            if(!$rootScope.isInit){
+                () => {
+                    setTimeout(() => {
+                        $rootScope.waitForInit();
+                    }, 200);
+                }
+            }
+            else{
+                return true;
+            }
+        }
+
         $rootScope.$watch('isBusy', function (newValue, oldValue) {
             if (newValue) {
                 $rootScope.message.content = '';
                 $rootScope.errors = [];
             }
         });
+        
         $rootScope.filterArray = function (array, key, value){
             var result = [];
             for (var i = 0; i < array.length; i++) {

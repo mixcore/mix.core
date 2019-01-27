@@ -13,16 +13,15 @@
                         
                         commonService.fillAllSettings(lang).then(function (response) {                            
                             if ($rootScope.globalSettings) {
-                                $scope.globalSettings = $rootScope.globalSettings;
-                                $rootScope.translator.fillTranslator(lang).then(function () {
                                     authService.fillAuthData().then(function (response) {
                                         $rootScope.authentication = authService.authentication;
+                                        $scope.isInit = true;
+                                        $rootScope.isInit = true;
+                                        $rootScope.isBusy = false;
+                                        $scope.$apply();
                                     });
-                                    $scope.isInit = true;
-                                    $rootScope.isInit = true;
-                                    $rootScope.isBusy = false;
-                                    $scope.$apply();
-                                });                                
+                                    
+                                // });                                
                             } else {
                                 $scope.isInit = true;
                                 $rootScope.isInit = true;
