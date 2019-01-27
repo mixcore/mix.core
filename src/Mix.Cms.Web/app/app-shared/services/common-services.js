@@ -61,9 +61,11 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
         var _getAllSettings = async function (culture) {
             var settings = localStorageService.get('settings');
             var globalSettings = localStorageService.get('globalSettings');
-            // && culture !== undefined && settings.lang === culture
-            if (settings) {
-                return settings;
+            var translator = localStorageService.get('translator');
+            if (settings && globalSettings && translator && settings.lang === culture) {                
+                $rootScope.settings = settings;
+                $rootScope.globalSettings = globalSettings;
+                $rootScope.translator.translator = translator;                
             }
             else {
                 var url = '/portal';
@@ -133,7 +135,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
                 return settings;
             }
             else {
-                if (culture !== undefined && settings && settings.lang !== culture) {
+                if (culture && settings && settings.lang !== culture) {
                     await _removeSettings();
                     await _removeTranslator();
                 }
@@ -147,13 +149,14 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
         var _fillAllSettings = async function (culture) {
             var settings = localStorageService.get('settings');
             var globalSettings = localStorageService.get('globalSettings');
-            if (settings && settings.lang === culture) {
-                _settings = settings;
+            var translator = localStorageService.get('translator');
+            if (settings && globalSettings && translator && (!culture || settings.lang === culture)) {                
                 $rootScope.settings = settings;
                 $rootScope.globalSettings = globalSettings;
+                 $rootScope.translator.translator = translator;                
             }
             else {
-                if (culture !== undefined && settings && settings.lang !== culture) {
+                if (culture && settings && settings.lang !== culture) {
                     await _removeSettings();
                     await _removeTranslator();
                 }

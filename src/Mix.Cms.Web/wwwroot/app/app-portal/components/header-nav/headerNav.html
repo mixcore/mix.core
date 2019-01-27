@@ -1,5 +1,5 @@
 <header class="navbar navbar-expand flex-column flex-md-row sw-navbar position-sticky">
-    
+
     <a class="navbar-brand mr-0 mr-md-2" href="/{{$ctrl.settings.lang}}" target="_blank" aria-label="mixcore">
         <img ng-src="/css/portal/img/mixcore-logo-blue.png" alt="mixcore" width="35">
     </a>
@@ -36,14 +36,16 @@
             </a>
         </li>
         <li class="nav-item dropdown mr-2">
-            <a class="nav-link p-2" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                <span class="flag-icon {{$ctrl.settings.langIcon}}"></span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" ng-repeat="culture in $ctrl.settings.cultures" ng-class="{active: culture.specificulture === $ctrl.settings.lang}" href="#" ng-click="$ctrl.changeLang(culture.specificulture, culture.icon);">
-                    <span class="flag-icon {{culture.icon}}"></span>
-                    <span ng-bind="culture.description"></span>
+            <div class="language-switcher">
+                <a class="nav-link p-2" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <span class="flag-icon {{$ctrl.settings.langIcon}}"></span>
                 </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="" ng-repeat="culture in $ctrl.settings.cultures" ng-class="{active: culture.specificulture === $ctrl.settings.lang}" ng-click="$ctrl.changeLang(culture.specificulture, culture.icon);">
+                        <span class="flag-icon {{culture.icon}}"></span>
+                        <span ng-bind="culture.description"></span>
+                    </a>
+                </div>
             </div>
         </li>
 
