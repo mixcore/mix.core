@@ -62,11 +62,11 @@ namespace Mix.Cms.Web.Controllers
             }
         }
 
-        [Route("article/{seoName}")]
-        [Route("{culture}/article/{seoName}")]
-        public async System.Threading.Tasks.Task<IActionResult> Article(string culture, string seoName)
+        [Route("article/{id}/{seoName}")]
+        [Route("{culture}/article/{id}/{seoName}")]
+        public async System.Threading.Tasks.Task<IActionResult> Article(int id, string culture, string seoName)
         {
-            return await ArticleViewAsync(seoName);
+            return await ArticleViewAsync(id, seoName);
         }
 
         [Route("product/{seoName}")]
@@ -181,7 +181,7 @@ namespace Mix.Cms.Web.Controllers
             }
         }
 
-        async System.Threading.Tasks.Task<IActionResult> ArticleViewAsync(string seoName)
+        async System.Threading.Tasks.Task<IActionResult> ArticleViewAsync(int id, string seoName)
         {
             ViewData["TopPages"] = GetCategory(CatePosition.Nav, seoName);
             ViewData["HeaderPages"] = GetCategory(CatePosition.Top, seoName);
@@ -209,13 +209,14 @@ namespace Mix.Cms.Web.Controllers
                 else
                 {
                     predicate = p =>
-                    p.SeoName == seoName
-                    && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+                    p.Id == id
+                    && p.Status == (int)MixContentStatus.Published 
+                    && p.Specificulture == _culture;
                 }
 
                 getArticle = await Lib.ViewModels.MixArticles.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
                 if(getArticle.IsSucceed){                    
-                    getArticle.Data.DetailsUrl = GenerateDetailsUrl("Article", new { seoName = getArticle.Data.SeoName });
+                    getArticle.Data.DetailsUrl = GenerateDetailsUrl("Article", new { id = getArticle.Data.Id, seoName = getArticle.Data.SeoName });
                     _memoryCache.Set(cacheKey, getArticle.Data);
                 }
                 if (!MixConstants.cachedKeys.Contains(cacheKey))
@@ -304,7 +305,7 @@ namespace Mix.Cms.Web.Controllers
                 {
                     if (articleNav.Article != null)
                     {
-                        articleNav.Article.DetailsUrl = GenerateDetailsUrl("Article", new { seoName = articleNav.Article.SeoName });
+                        articleNav.Article.DetailsUrl = GenerateDetailsUrl("Article", new { id = articleNav.ArticleId, seoName = articleNav.Article.SeoName });
                     }
                 }
             }
@@ -338,7 +339,7 @@ namespace Mix.Cms.Web.Controllers
                 {
                     if (articleNav.Article != null)
                     {
-                        articleNav.Article.DetailsUrl = GenerateDetailsUrl("Article", new { seoName = articleNav.Article.SeoName });
+                        articleNav.Article.DetailsUrl = GenerateDetailsUrl("Article", new { id = articleNav.ArticleId, seoName = articleNav.Article.SeoName });
                     }
                 }
             }

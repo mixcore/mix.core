@@ -33,7 +33,7 @@ namespace Mix.Cms.Web
                     template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/portal/file");
                 routes.MapRoute(
                     name: "article",
-                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/article/{seoName}");
+                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/article/{id}/{seoName}");
                 routes.MapRoute(
                     name: "product",
                     template: @"{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + @"}/product/{seoName}");

@@ -20,6 +20,11 @@
                     // commonService.fillSettings(lang).then(function () {
                     //     translatorService.reset(lang).then(function () {
                             var url = $location.$$absUrl;
+                            if(url.indexOf(oldLang)==-1)
+                            {
+                                url+=lang;
+                            
+                            }
                             window.top.location = url.replace(oldLang, lang);
                     //     });
                     // });
