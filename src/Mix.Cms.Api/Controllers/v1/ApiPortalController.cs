@@ -127,6 +127,8 @@ namespace Mix.Cms.Api.Controllers.v1
             var settings = new JObject()
             {
                 new JProperty("lang",_lang),
+                new JProperty("langIcon",configurations.LangIcon),
+                
                 new JProperty("data", MixService.GetLocalSettings(_lang))
             };
             JObject result = new JObject()
@@ -210,7 +212,7 @@ namespace Mix.Cms.Api.Controllers.v1
             try
             {
                 XNamespace aw = "http://www.sitemaps.org/schemas/sitemap/0.9";
-                var root = new XElement(aw+ "urlset");
+                var root = new XElement(aw + "urlset");
                 var pages = Lib.ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelList();
                 List<int> handledPageId = new List<int>();
                 foreach (var page in pages.Data)

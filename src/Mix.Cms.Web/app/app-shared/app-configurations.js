@@ -1562,7 +1562,7 @@ app.run(['$rootScope', 'ngAppSettings','GlobalSettingsService', 'CommonService',
         }
         
         $rootScope.translate = function (keyword, isWrap, defaultText) {
-            if ($rootScope.globalSettings && ($rootScope.translator || $rootScope.isBusy)) {
+            if ($rootScope.globalSettings && ($rootScope.translator)) {
                 return $rootScope.translator.get(keyword, isWrap, defaultText);
             }
             else {

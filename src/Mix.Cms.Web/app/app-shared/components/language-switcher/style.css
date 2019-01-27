@@ -1,0 +1,8 @@
+.language-switcher {
+    position: relative;
+    width: 250px;    
+}
+.language-switcher .dropdown-menu{
+    width: 250px;
+    overflow: hidden!important;
+}

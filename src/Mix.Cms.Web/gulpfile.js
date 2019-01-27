@@ -109,6 +109,13 @@ paths.portalCss = {
     ],
     dest: paths.webroot + "css/portal.min.css"
 };
+paths.sharedCss = {
+    src: [        
+        "./lib/css/shared/**/*.css",
+      "./lib/css/shared/**/*.*.css"
+    ],
+    dest: paths.webroot + "css/shared.min.css"
+};
 
 paths.views = {
     src: [
@@ -184,6 +191,12 @@ gulp.task("min:portalCss", function (cb) {
         .pipe(cssmin(paths.appCssOptions))
         .pipe(gulp.dest(dest));
 });
+gulp.task("min:sharedCss", function (cb) {
+    return gulp.src(paths.sharedCss.src, { base: "." })
+        .pipe(concat(paths.sharedCss.dest))
+        .pipe(cssmin(paths.appCssOptions))
+        .pipe(gulp.dest(dest));
+});
 
 gulp.task("min:views", function (cb) {
     return gulp.src(paths.views.src, { base: "." })
@@ -225,6 +238,9 @@ gulp.task("clean:appCss", function (cb) {
 gulp.task("clean:portalCss", function (cb) {
     rimraf(paths.portalCss.dest, cb);
 });
+gulp.task("clean:sharedCss", function (cb) {
+    rimraf(paths.sharedCss.dest, cb);
+});
 
 gulp.task("clean:js", [
 
@@ -232,12 +248,12 @@ gulp.task("clean:js", [
     , "clean:portalApp", "clean:clientApp", "clean:sharedApp","clean:initApp"    
 ]);
 gulp.task("clean:css", [
-    , "clean:appCss", "clean:portalCss"
+    , "clean:appCss", "clean:portalCss", "clean:sharedCss"
 ]);
 gulp.task("min:js", ["min:portalApp", "min:initApp", "min:clientApp", "min:sharedApp"
 , "min:shared", "min:portal", "min:framework"
 ]);
-gulp.task("min:css", ['min:appCss','min:portalCss']);
+gulp.task("min:css", ['min:appCss','min:portalCss', 'min:sharedCss']);
 
 gulp.task("build", ['clean:js', 
     'min:js', 'min:css', "min:views"]);//["clean", "min:views", "min"]);
