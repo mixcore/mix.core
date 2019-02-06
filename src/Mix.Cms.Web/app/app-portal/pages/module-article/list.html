@@ -4,10 +4,18 @@
         <div class="col-md-12">
             <filter-list request="request" callback="getList(pageIndex)"></filter-list>
         </div>
+
         <div class="col-md-12">
-            <a href="#" data-toggle="modal" data-target="#modal-nav-articles-{{moduleId}}" class="btn btn-light">
-                <span class="fas fa-plus-square text-info"></span>
-            </a>
+            <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group mr-2" role="group" aria-label="First group">
+                    <a data-toggle="modal" data-target="#modal-nav-articles-{{moduleId}}" class="btn btn-secondary">
+                        <i class="fas fa-plus"></i>
+                    </a>
+                    <a href="/portal/module/details/{{moduleId}}" class="btn btn-secondary">
+                        <i class="fas fa-pencil-alt"></i>
+                    </a>
+                </div>
+            </div>
         </div>
         <modal-nav-articles save="saveOthers()" src-field="'moduleId'" src-id="moduleId" selected="others" query="'not_module_id='"></modal-nav-articles>
     </div>

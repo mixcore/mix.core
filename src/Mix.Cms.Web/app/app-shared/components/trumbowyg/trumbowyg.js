@@ -38,7 +38,7 @@ modules.component('trumbowyg', {
       this.editorConfigurations = {
         core: {},
         plugins: {
-          removeformatPasted: true,
+          removeformatPasted: false,
           imageWidthModalEdit: true,
           semantic: false,
           btnsDef: {

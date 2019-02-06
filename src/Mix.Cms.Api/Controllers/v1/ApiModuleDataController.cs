@@ -14,6 +14,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json.Linq;
 using System.Web;
 using Microsoft.AspNetCore.Authorization;
+using Mix.Common.Helper;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -196,6 +197,51 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/moduleData
+        [AllowAnonymous]
+        [HttpPost, HttpOptions]
+        [Route("export")]
+        public async Task<ActionResult<RepositoryResponse<PaginationModel<ReadViewModel>>>> ExportData(
+            [FromBody] RequestPaging request)
+        {
+            var query = HttpUtility.ParseQueryString(request.Query ?? "");
+            int.TryParse(query.Get("module_id"), out int moduleId);
+            int.TryParse(query.Get("article_id"), out int articleId);
+            int.TryParse(query.Get("product_id"), out int productId);
+            int.TryParse(query.Get("category_id"), out int categoryId);
+            string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
+            Expression<Func<MixModuleData, bool>> predicate = model =>
+                model.Specificulture == _lang
+                && model.ModuleId == moduleId
+                && (articleId == 0 || model.ArticleId == articleId)
+                && (productId == 0 || model.ProductId == productId)
+                && (categoryId == 0 || model.CategoryId == categoryId)
+                && (!request.FromDate.HasValue
+                    || (model.CreatedDateTime >= request.FromDate.Value.ToUniversalTime())
+                )
+                && (!request.ToDate.HasValue
+                    || (model.CreatedDateTime <= request.ToDate.Value.ToUniversalTime())
+                )
+                    ;
+            var portalResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);
+            foreach (var item in portalResult.Data.Items)
+            {
+                portalResult.Data.JsonItems.Add(item.JItem);
+            }
+            string exportPath = $"Exports/Module/{moduleId}";
+            try
+            {
+                var result = CommonHelper.ExportJObjectToExcel(portalResult.Data.JsonItems, string.Empty, exportPath, moduleId.ToString(), null);
+            }
+            catch (Exception ex)
+            {
+                portalResult.Exception = ex;
+            }
+            
+            return Ok(JObject.FromObject(portalResult));
+        }
+
+        // GET api/moduleData
+        [AllowAnonymous]
         [HttpPost, HttpOptions]
         [Route("list")]
         public async Task<ActionResult<RepositoryResponse<PaginationModel<ReadViewModel>>>> GetList(

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -26,6 +27,7 @@ namespace Mix.Cms.Lib.Services
         /// </summary>
         private static volatile MixService instance;
 
+        private List<string> Cultures { get; set; }
         private JObject GlobalSettings { get; set; }
         private JObject ConnectionStrings { get; set; }
         private JObject LocalSettings { get; set; }

@@ -29,7 +29,7 @@
                             description: e.title,
                             articleId: e.id,                            
                             image: e.thumbnailUrl,
-                            specificulture: $rootScope.globalSettingsService.get('lang'),
+                            specificulture: e.specificulture,
                             article: e,
                             status: 2,
                             isActived: false

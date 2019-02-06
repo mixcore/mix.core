@@ -41,6 +41,17 @@ app.factory('SharedModuleDataService', ['$http', '$rootScope', 'CommonService', 
         return await commonService.getApiResult(req);
     };
 
+    var _exportModuleData = async function (request) {
+        var apiUrl = '/' + $rootScope.settings.lang + '/module-data/';
+        var req = {
+            method: 'POST',
+            url: apiUrl + 'export',
+            data: JSON.stringify(request)
+        };
+        
+        return await commonService.getApiResult(req);
+    };
+
     var _initModuleForm = async function (name) {
        
         var apiUrl = '/' + $rootScope.settings.lang + '/module-data/';
@@ -87,6 +98,7 @@ app.factory('SharedModuleDataService', ['$http', '$rootScope', 'CommonService', 
     };
     moduleDatasServiceFactory.getModuleData = _getModuleData;
     moduleDatasServiceFactory.getModuleDatas = _getModuleDatas;
+    moduleDatasServiceFactory.exportModuleData = _exportModuleData;
     moduleDatasServiceFactory.removeModuleData = _removeModuleData;
     moduleDatasServiceFactory.saveModuleData = _saveModuleData;
     moduleDatasServiceFactory.initModuleForm = _initModuleForm;

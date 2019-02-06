@@ -109,6 +109,7 @@ namespace Mix.Cms.Web.Controllers
 
         [HttpGet]
         [Route("404")]
+        [Route("{culture}/404")]
         public async System.Threading.Tasks.Task<IActionResult> PageNotFound()
         {
             return await PageAsync("404");
@@ -177,7 +178,7 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return NotFound();
+                return RedirectToAction("Index", "Home", new { culture = _culture, seoName = "404" });
             }
         }
 
@@ -237,7 +238,7 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return RedirectToAction("PageNotFound", "Home");
+                return RedirectToAction("Index", "Home", new { culture = _culture, seoName = "404" });
             }
         }
 
@@ -293,7 +294,7 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return RedirectToAction("PageNotFound", "Home");
+                return RedirectToAction("Index", "Home", new { culture = _culture, seoName = "404" });
             }
         }
 

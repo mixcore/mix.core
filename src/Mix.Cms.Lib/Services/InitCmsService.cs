@@ -98,6 +98,7 @@ namespace Mix.Cms.Lib.Services
                         {
                             Id = 2,
                             Title = "404",
+                            SeoName= "404",
                             Level = 0,
                             Specificulture = culture.Specificulture,
                             Template = "Pages/_404.cshtml",

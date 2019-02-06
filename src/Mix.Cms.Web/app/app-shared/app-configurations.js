@@ -23,6 +23,7 @@ app.constant('ngAppSettings', {
         'USD'
     ],
     pageSizes: [
+        '',
         '5',
         '10',
         '15',
