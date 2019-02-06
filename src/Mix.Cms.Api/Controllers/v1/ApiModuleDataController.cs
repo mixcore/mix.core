@@ -228,16 +228,8 @@ namespace Mix.Cms.Api.Controllers.v1
                 portalResult.Data.JsonItems.Add(item.JItem);
             }
             string exportPath = $"Exports/Module/{moduleId}";
-            try
-            {
-                var result = CommonHelper.ExportJObjectToExcel(portalResult.Data.JsonItems, string.Empty, exportPath, moduleId.ToString(), null);
-            }
-            catch (Exception ex)
-            {
-                portalResult.Exception = ex;
-            }
-            
-            return Ok(JObject.FromObject(portalResult));
+            var result = CommonHelper.ExportJObjectToExcel(portalResult.Data.JsonItems, string.Empty, exportPath, moduleId.ToString(), null);
+            return Ok(JObject.FromObject(result));
         }
 
         // GET api/moduleData
