@@ -5,7 +5,6 @@
     "gulp-babel": "",
     "gulp-concat": "",
     "gulp-cssmin": "",
-    "gulp-fontmin": "",
     "gulp-htmlmin": "",
     "gulp-uglify": "",
     "pump": "",

@@ -9,9 +9,11 @@ app.controller('ModuleArticleController',
             $scope.moduleId = $routeParams.id;
             $scope.canDrag = $scope.request.orderBy !== 'Priority' || $scope.request.direction !== '0';
             $scope.translate = $rootScope.translate;
+            $scope.moduleId = $routeParams.id;
             $scope.getList = async function () {
                 $rootScope.isBusy = true;
                 var id = $routeParams.id;
+                $scope.moduleId = $routeParams.id;
                 $scope.request.query = '&module_id=' + id;
                 $scope.canDrag = $scope.request.orderBy !== 'Priority' || $scope.request.direction !== '0';
                 var response = await service.getList($scope.request);

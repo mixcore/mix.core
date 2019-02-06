@@ -1,7 +1,7 @@
-.dropdown-menu{
+.mix-sel-icons .dropdown-menu{
     left:-90px !important;
 }
-.dropdown-menu.show{
+.mix-sel-icons .dropdown-menu.show{
     max-height: 250px;
     overflow: scroll;
 }

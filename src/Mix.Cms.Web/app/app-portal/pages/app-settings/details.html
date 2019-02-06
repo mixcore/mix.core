@@ -11,6 +11,10 @@
                     <div class="row">
                         <section class="col-lg-12">
                             <div class="form-group">
+                                <label class="control-label">Domain</label>
+                                <input type="text" ng-model="appSettings.GlobalSettings.Domain" id="Domain" class="form-control">
+                            </div>
+                            <div class="form-group">
                                 <span class="switch switch-sm">
                                     <input type="checkbox" ng-model="appSettings.GlobalSettings.IsInit" id="IsInit"
                                         class="switch ng-pristine ng-untouched ng-valid ng-empty">
@@ -18,10 +22,6 @@
                                         <span>IsInit</span>
                                     </label>
                                 </span>
-
-                                <!-- 
-                                <label class="control-label">IsInit {{appSettings.GlobalSettings.IsInit}}</label>
-                                <input type="checkbox" class="form-control" ng-model="appSettings.GlobalSettings.IsInit"></input> -->
                             </div>
                             <div class="form-group">
                                 <div class="form-group">

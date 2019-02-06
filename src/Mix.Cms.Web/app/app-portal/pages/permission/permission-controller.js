@@ -32,11 +32,26 @@ app.controller('PermissionController',
                 },
             ];
             $scope.initCurrentPath = async function(){
-                await $scope.getSingle();
-                $scope.activedData.url = $location.path();
-                $scope.$applyAsync();
+                
+                var resp = await service.getSingle([null, 'portal']);
+                if (resp && resp.isSucceed) { 
+                    $scope.activedData = resp.data;
+                    $scope.activedData.url = $location.path();
+                    $rootScope.isBusy = false;
+                    $scope.$applyAsync();
+                }
+                else { 
+                    if (resp) {
+                        $rootScope.showErrors(resp.errors);
+                    }
+                    if ($scope.getSingleFailCallback) {
+                        $scope.getSingleFailCallback();
+                    }
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                }
+                
             };
-
             $scope.saveCallback = function(){
                 $scope.getSingle();
             }

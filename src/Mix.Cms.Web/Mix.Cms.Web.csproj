@@ -17,16 +17,45 @@
   <ItemGroup>
     <Compile Remove="app-client\shared\controllers\**" />
     <Compile Remove="app-portal\**" />
+    <Compile Remove="Views\Shared\Templates\cricket\**" />
+    <Compile Remove="Views\Shared\Templates\Default\**" />
+    <Compile Remove="Views\Shared\Templates\Default_Blank\**" />
+    <Compile Remove="Views\Shared\Templates\mixcore\**" />
+    <Compile Remove="Views\Shared\Templates\muong-247\**" />
+    <Compile Remove="Views\Shared\Templates\p7p-apartment\**" />
+    <Compile Remove="wwwroot\content\**" />
     <Content Remove="app-client\shared\controllers\**" />
     <Content Remove="app-portal\**" />
+    <Content Remove="Views\Shared\Templates\cricket\**" />
+    <Content Remove="Views\Shared\Templates\Default\**" />
+    <Content Remove="Views\Shared\Templates\Default_Blank\**" />
+    <Content Remove="Views\Shared\Templates\mixcore\**" />
+    <Content Remove="Views\Shared\Templates\muong-247\**" />
+    <Content Remove="Views\Shared\Templates\p7p-apartment\**" />
+    <Content Remove="wwwroot\content\**" />
     <EmbeddedResource Remove="app-client\shared\controllers\**" />
     <EmbeddedResource Remove="app-portal\**" />
+    <EmbeddedResource Remove="Views\Shared\Templates\cricket\**" />
+    <EmbeddedResource Remove="Views\Shared\Templates\Default\**" />
+    <EmbeddedResource Remove="Views\Shared\Templates\Default_Blank\**" />
+    <EmbeddedResource Remove="Views\Shared\Templates\mixcore\**" />
+    <EmbeddedResource Remove="Views\Shared\Templates\muong-247\**" />
+    <EmbeddedResource Remove="Views\Shared\Templates\p7p-apartment\**" />
+    <EmbeddedResource Remove="wwwroot\content\**" />
     <None Remove="app-client\shared\controllers\**" />
     <None Remove="app-portal\**" />
+    <None Remove="Views\Shared\Templates\cricket\**" />
+    <None Remove="Views\Shared\Templates\Default\**" />
+    <None Remove="Views\Shared\Templates\Default_Blank\**" />
+    <None Remove="Views\Shared\Templates\mixcore\**" />
+    <None Remove="Views\Shared\Templates\muong-247\**" />
+    <None Remove="Views\Shared\Templates\p7p-apartment\**" />
+    <None Remove="wwwroot\content\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
+    <PackageReference Include="EPPlus" Version="4.5.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.ApiExplorer" Version="2.1.3" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.0.1916590" />
@@ -129,9 +158,6 @@
 
   <ItemGroup>
     <Content Update="Views\Home\PageAsync.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Views\Shared\Templates\Default\Widgets\_Pagination.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="wwwroot\assets\icons.svg">

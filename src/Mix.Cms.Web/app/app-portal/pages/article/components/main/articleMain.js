@@ -4,6 +4,7 @@ app.component('articleMain', {
     controller: ['$rootScope', '$scope',
         function ($rootScope, $scope) {
             var ctrl = this;
+            ctrl.translate = $rootScope.translate;
             ctrl.generateSeo = function () {
                 if (ctrl.article) {
                     if (ctrl.article.seoName === null || ctrl.article.seoName === '') {

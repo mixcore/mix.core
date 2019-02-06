@@ -89,10 +89,10 @@ namespace Mix.Cms.Api.Controllers.v1
             foreach (var item in roles)
             {
                 var role = await _roleManager.FindByNameAsync(item.Value);
-                var temp = await ReadViewModel.Repository.GetModelListByAsync(r => r.Id == role.Id);
+                var temp = await ReadViewModel.Repository.GetModelListByAsync(r => r.Id == role.Id, "Priority", 0, null, null, null, null);
                 if (temp.IsSucceed)
                 {
-                    permissions.Data.AddRange(temp.Data);
+                    permissions.Data.AddRange(temp.Data.Items);
                 }
             }
             return JObject.FromObject(permissions);

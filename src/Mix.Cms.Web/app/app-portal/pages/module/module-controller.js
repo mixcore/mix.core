@@ -86,6 +86,32 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$r
                 $scope.$apply();
             }
         };
+        $scope.exportModuleData = async function (pageIndex) {
+            $scope.request.query = '&module_id=' + $scope.activedData.id;
+            if (pageIndex !== undefined) {
+                $scope.request.pageIndex = pageIndex;
+            }
+            if ($scope.request.fromDate !== null) {
+                var d = new Date($scope.request.fromDate);
+                $scope.request.fromDate = d.toISOString();
+            }
+            if ($scope.request.toDate !== null) {
+                var d = new Date($scope.request.toDate);
+                $scope.request.toDate = d.toISOString();
+            }
+            $rootScope.isBusy = true;
+            var resp = await moduleDataService.exportModuleData($scope.request);
+            if (resp && resp.isSucceed) {
+                window.top.location = resp.data;
+                $rootScope.isBusy = false;
+                $scope.$apply();
+            }
+            else {
+                if (resp) { $rootScope.showErrors(resp.errors); }
+                $rootScope.isBusy = false;
+                $scope.$apply();
+            }
+        };
         $scope.addAttr = function () {
             if ($scope.activedData) {
                 var t = angular.copy($scope.defaultAttr);
