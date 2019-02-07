@@ -5,7 +5,7 @@ var gulp = require("gulp"),
     rimraf = require("rimraf"),
     concat = require("gulp-concat"),
     cssmin = require("gulp-cssmin"),
-    fontmin = require("gulp-fontmin"),
+    //fontmin = require("gulp-fontmin"),
     htmlmin = require("gulp-htmlmin"),
 
     uglify = require("gulp-uglify");
@@ -16,7 +16,7 @@ var composer = require('gulp-uglify/composer');
 var pump = require('pump');
 
 var minify = composer(uglifyjs, console);
-var dest = '.';//For publish folder use "./bin/Release/PublishOutput/"; 
+var dest = '.';//For publish folder use "./bin/Release/PublishOutput/";
 //C:\\Git\\GitHub\\Queen-Beauty\\QueenBeauty\\
 var paths = {
     webroot: "./wwwroot/",///wwwroot
@@ -68,26 +68,26 @@ paths.sharedApp = {
 };
 
 paths.framework = {
-    src: [        
+    src: [
         paths.scriptLib + "angularjs/angular.min.js",
         paths.scriptLib + "angularjs/angular-route.min.js",
         paths.scriptLib + "angularjs/angular-animate.min.js",
-        paths.scriptLib +"angularjs/angular-sanitize.min.js"
-    ],    
+        paths.scriptLib + "angularjs/angular-sanitize.min.js"
+    ],
     dest: paths.webroot + "js/framework.min.js"
 };
 paths.shared = {
     src: [
         paths.scriptLib + "shared/**/*.js",
         paths.scriptLib + "shared/**/*.*.js"
-    ],    
+    ],
     dest: paths.webroot + "js/shared.min.js"
 };
 paths.portal = {
     src: [
         paths.scriptLib + "portal/**/*.js",
         paths.scriptLib + "portal/**/*.*.js"
-    ],    
+    ],
     dest: paths.webroot + "js/portal.min.js"
 };
 
@@ -101,18 +101,18 @@ paths.appCss = {
     dest: paths.webroot + "css/app-vendor.min.css"
 };
 paths.portalCss = {
-    src: [        
+    src: [
         "./lib/css/portal/**/*.css",
-      "./lib/css/portal/**/*.*.css",
-      "./lib/js/portal/**/*.css",
-      "./lib/js/portal/**/*.*.css"
+        "./lib/css/portal/**/*.*.css",
+        "./lib/js/portal/**/*.css",
+        "./lib/js/portal/**/*.*.css"
     ],
     dest: paths.webroot + "css/portal.min.css"
 };
 paths.sharedCss = {
-    src: [        
+    src: [
         "./lib/css/shared/**/*.css",
-      "./lib/css/shared/**/*.*.css"
+        "./lib/css/shared/**/*.*.css"
     ],
     dest: paths.webroot + "css/shared.min.css"
 };
@@ -127,12 +127,11 @@ paths.views = {
     dest: './wwwroot/'
 };
 
-gulp.task("min:portalApp", function (cb) {    
+gulp.task("min:portalApp", function (cb) {
     return gulp.src(paths.appPortal.src, { base: "." })
         .pipe(concat(paths.appPortal.dest))
         // .pipe(minify(paths.jsOptions))
         .pipe(gulp.dest(dest));
-
 });
 
 gulp.task("min:initApp", function (cb) {
@@ -140,7 +139,6 @@ gulp.task("min:initApp", function (cb) {
         .pipe(concat(paths.initApp.dest))
         //.pipe(minify(paths.jsOptions))
         .pipe(gulp.dest(dest));
-
 });
 
 gulp.task("min:clientApp", function (cb) {
@@ -148,7 +146,6 @@ gulp.task("min:clientApp", function (cb) {
         .pipe(concat(paths.clientApp.dest))
         //.pipe(minify(paths.jsOptions))
         .pipe(gulp.dest(dest));
-
 });
 
 gulp.task("min:sharedApp", function (cb) {
@@ -156,28 +153,24 @@ gulp.task("min:sharedApp", function (cb) {
         .pipe(concat(paths.sharedApp.dest))
         //.pipe(minify(paths.jsOptions))
         .pipe(gulp.dest(dest));
-
 });
 gulp.task("min:framework", function (cb) {
     return gulp.src(paths.framework.src, { base: "." })
         .pipe(concat(paths.framework.dest))
         .pipe(minify(paths.jsOptions))
         .pipe(gulp.dest(dest));
-
 });
 gulp.task("min:shared", function (cb) {
     return gulp.src(paths.shared.src, { base: "." })
         .pipe(concat(paths.shared.dest))
         //.pipe(minify(paths.jsOptions))
         .pipe(gulp.dest(dest));
-
 });
 gulp.task("min:portal", function (cb) {
     return gulp.src(paths.portal.src, { base: "." })
         .pipe(concat(paths.portal.dest))
         //.pipe(minify(paths.jsOptions))
         .pipe(gulp.dest(dest));
-
 });
 gulp.task("min:appCss", function (cb) {
     return gulp.src(paths.appCss.src, { base: "." })
@@ -203,7 +196,6 @@ gulp.task("min:views", function (cb) {
         .pipe(htmlmin(paths.htmlOptions))
         .pipe(gulp.dest(paths.views.dest));
 });
-
 
 gulp.task("clean:shared", function (cb) {
     rimraf(paths.shared.dest, cb);
@@ -245,32 +237,32 @@ gulp.task("clean:sharedCss", function (cb) {
 gulp.task("clean:js", [
 
     "clean:framework", "clean:portal", "clean:shared"
-    , "clean:portalApp", "clean:clientApp", "clean:sharedApp","clean:initApp"    
+    , "clean:portalApp", "clean:clientApp", "clean:sharedApp", "clean:initApp"
 ]);
 gulp.task("clean:css", [
     , "clean:appCss", "clean:portalCss", "clean:sharedCss"
 ]);
 gulp.task("min:js", ["min:portalApp", "min:initApp", "min:clientApp", "min:sharedApp"
-, "min:shared", "min:portal", "min:framework"
+    , "min:shared", "min:portal", "min:framework"
 ]);
-gulp.task("min:css", ['min:appCss','min:portalCss', 'min:sharedCss']);
+gulp.task("min:css", ['min:appCss', 'min:portalCss', 'min:sharedCss']);
 
-gulp.task("build", ['clean:js', 
+gulp.task("build", ['clean:js',
     'min:js', 'min:css', "min:views"]);//["clean", "min:views", "min"]);
 
-gulp.task('watch:html', function () {  
+gulp.task('watch:html', function () {
     gulp.watch('./app/**/**/*.html', ['min:views']);
     gulp.watch('./app/**/**/*.js', ['min:portalApp']);
     gulp.watch('./app/**/**/*.css', ['min:appCss']);
 });
 
-// [Watch Portal] View & Portal's js & CSS > gulp watch:html 
+// [Watch Portal] View & Portal's js & CSS > gulp watch:html
 
 gulp.task('portalView-watch', ['min:views'], function (done) {
     browserSync.reload();
     done();
 });
-gulp.task('portalJS-watch', ['clean:js','min:js'], function (done) {
+gulp.task('portalJS-watch', ['clean:js', 'min:js'], function (done) {
     browserSync.reload();
     done();
 });
@@ -279,9 +271,8 @@ gulp.task('portalCSS-watch', ['min:css'], function (done) {
     done();
 });
 
-gulp.task('serve', function () {  
+gulp.task('serve', function () {
     browserSync.init({
-        
         proxy: "https://localhost:5001/"
     });
     gulp.watch('./app/**/**/*.html', ['portalView-watch']);
