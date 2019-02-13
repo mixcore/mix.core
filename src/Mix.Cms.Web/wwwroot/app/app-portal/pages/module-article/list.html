@@ -8,10 +8,13 @@
         <div class="col-md-12">
             <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
                 <div class="btn-group mr-2" role="group" aria-label="First group">
-                    <a data-toggle="modal" data-target="#modal-nav-articles-{{moduleId}}" class="btn btn-secondary">
+                    <a href="/portal/article/create?module_id={{moduleId}}" class="btn btn-light">
                         <i class="fas fa-plus"></i>
                     </a>
-                    <a href="/portal/module/details/{{moduleId}}" class="btn btn-secondary">
+                    <a data-toggle="modal" data-target="#modal-nav-articles-{{moduleId}}" class="btn btn-light">
+                        <i class="fas fa-search"></i>
+                    </a>
+                    <a href="/portal/module/details/{{moduleId}}" class="btn btn-light">
                         <i class="fas fa-pencil-alt"></i>
                     </a>
                 </div>

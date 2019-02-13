@@ -1,6 +1,8 @@
 ﻿@model Mix.Cms.Lib.ViewModels.MixArticles.ReadMvcViewModel
 
 <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
+<input type="hidden" id="view-type" value="Article" />
+<input type="hidden" id="view-id" value="@Model.Id" />
 @if (!string.IsNullOrEmpty(Model.TemplatePath))
 {
     try
@@ -26,7 +28,7 @@ else
     string title = ViewData["OgTitle"] != null ? (string)ViewData["OgTitle"] : Model.SeoTitle;
     string desc = ViewData["OgDescription"] != null ? (string)ViewData["OgDescription"] : Model.SeoDescription;
     string image = ViewData["OgImage"] != null ? (string)ViewData["OgImage"] : Model.ThumbnailUrl;
-       
+
 }
 @section Seo{
     <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @Model.Title</title>
@@ -39,7 +41,7 @@ else
 }
 
 @section Styles{
-    
+
     @Html.Raw(Model.View?.Styles)
     @Html.Raw(Model.View?.Scripts)
 }

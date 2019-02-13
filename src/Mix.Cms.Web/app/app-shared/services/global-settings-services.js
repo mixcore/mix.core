@@ -52,15 +52,17 @@ app.factory('GlobalSettingsService', ['$rootScope', 'CommonService', 'localStora
             await _getglobalSettings(lang);
         };
         var _get = function (keyword, isWrap, defaultText) {
-            if ($rootScope.waitForInit()) {
-                if (!this.globalSettings && $rootScope.globalSettings) {
-                    $rootScope.isBusy = true;
-                        $rootScope.isBusy = false;
-                        return $rootScope.translator.translator[keyword] || defaultText || getLinkCreateLanguage(keyword, isWrap);
-                } else {
-                    return this.globalSettings[keyword] || defaultText || getLinkCreateLanguage(keyword, isWrap);
-                }
+            if($rootScope.waitForInit()){
+            if (!this.globalSettings && $rootScope.globalSettings) {
+                $rootScope.isBusy = true;
+                this.fillGlobalSettings($rootScope.globalSettings.lang).then(function (response) {
+                    $rootScope.isBusy = false;
+                    return response[keyword] || defaultText || getLinkCreateLanguage(keyword, isWrap);
+                });
+            } else {
+                return this.globalSettings[keyword] || defaultText || getLinkCreateLanguage(keyword, isWrap);
             }
+        }
 
         };
 

@@ -3,7 +3,8 @@
         templateUrl: '/app/app-shared/components/language-switcher/language-switcher.html',
         controller: ['$rootScope','$scope', '$location',
             'CommonService', 'TranslatorService', 'GlobalSettingsService',
-            function ($rootScope, $scope, $location, commonService, translatorService, globalSettingsService) {
+            function ($rootScope, $scope, $location, 
+                commonService, translatorService, globalSettingsService) {
                 var ctrl = this;
                 ctrl.settings = {};
                 this.$onInit = function(){
@@ -19,13 +20,9 @@
                     // await commonService.removeTranslator();
                     // commonService.fillSettings(lang).then(function () {
                     //     translatorService.reset(lang).then(function () {
-                            var url = $location.$$absUrl;
-                            if(url.indexOf(oldLang)==-1)
-                            {
-                                url+=lang;
-                            
-                            }
-                            window.top.location = url.replace(oldLang, lang);
+                            var url = await translatorService.translateUrl(lang);
+                            translatorService.translateUrl(lang);                           
+                            window.top.location = url;
                     //     });
                     // });
                 };

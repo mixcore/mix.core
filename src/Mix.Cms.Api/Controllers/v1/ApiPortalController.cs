@@ -300,6 +300,62 @@ namespace Mix.Cms.Api.Controllers.v1
             return new RepositoryResponse<JObject>() { IsSucceed = true, Data = JObject.Parse(settings.Content) };
         }
 
+        // GET api/category/id
+        [HttpGet, HttpOptions]
+        [Route("translate-url/{culture}/{type}/{id}")]
+        public async Task<RepositoryResponse<string>> TranslateUrlAsync(string culture, string type, int id)
+        {
+            switch (type)
+            {
+                case "Article":
+                    var getArticle = await Lib.ViewModels.MixArticles.ReadListItemViewModel.Repository.GetSingleModelAsync(
+                        a => a.Id == id && a.Specificulture == culture);
+                    if (getArticle.IsSucceed)
+                    {
+                        return new RepositoryResponse<string>()
+                        {
+                            IsSucceed = getArticle.IsSucceed,
+                            Data = MixCmsHelper.GetRouterUrl("Article", new { id = getArticle.Data.Id, getArticle.Data.SeoName }, Request, Url)
+                        };
+                    }
+                    else
+                    {
+                        return new RepositoryResponse<string>()
+                        {
+                            IsSucceed = getArticle.IsSucceed,
+                            Data = $"/{culture}"
+                        };
+                    }
+
+                case "Page":
+                    var getPage = await Lib.ViewModels.MixPages.ReadListItemViewModel.Repository.GetSingleModelAsync(
+                        a => a.Id == id && a.Specificulture == culture);
+                    if (getPage.IsSucceed)
+                    {
+                        return new RepositoryResponse<string>()
+                        {
+                            IsSucceed = getPage.IsSucceed,
+                            Data = MixCmsHelper.GetRouterUrl("Page", new { getPage.Data.SeoName }, Request, Url)
+                        };
+                    
+                    }
+                    else
+                    {
+                        return new RepositoryResponse<string>()
+                        {
+                            IsSucceed = true,
+                            Data = $"/{culture}"
+                        };
+                    }
+                default:
+                    return new RepositoryResponse<string>()
+                    {
+                        IsSucceed = true,
+                        Data = $"/{culture}"
+                    };
+            }
+        }
+
         #endregion Get
 
         #region Post

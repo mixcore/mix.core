@@ -39,7 +39,7 @@ app.component('articleModules', {
                 }
                 var response = await moduleDataService.getModuleDatas(request);
                 if (response.isSucceed) {
-                    var nav = findObjectByKey(ctrl.article.moduleNavs, 'moduleId', id);
+                    var nav = $rootScope.findObjectByKey(ctrl.article.moduleNavs, 'moduleId', id);
                     if (nav) {
                         nav.module.data = response.data;
                     }
