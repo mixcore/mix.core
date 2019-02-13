@@ -1609,9 +1609,9 @@ app.run(['$rootScope', 'ngAppSettings','GlobalSettingsService', 'CommonService',
             }
             return result;
         };
-        function findObjectByKey(array, key, value) {
+        $rootScope.findObjectByKey = function (array, key, value) {
             for (var i = 0; i < array.length; i++) {
-                if (array[i][key] === value) {
+                if (array[i][key] == value) {
                     return array[i];
                 }
             }

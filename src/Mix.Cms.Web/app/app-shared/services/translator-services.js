@@ -8,6 +8,7 @@ app.factory('TranslatorService', ['$rootScope', 'CommonService', 'localStorageSe
     var _init = function (translator) {
         this._translator = translator;
     };
+
     var _fillTranslator = async function (culture) {
         this.translator = localStorageService.get('translator');
         if (this.translator && this.translator.data && this.translator.lang === culture) {
@@ -78,12 +79,23 @@ app.factory('TranslatorService', ['$rootScope', 'CommonService', 'localStorageSe
         //return '<span data-key="/portal/language/details?k=' + keyword + '">[' + keyword + ']</span>';
         return isWrap ? '[' + keyword + ']' : keyword;
     };
-
+    var _translateUrl = async function(culture){
+        var viewType = document.getElementById('view-type').value;
+        var viewId = document.getElementById('view-id').value;
+        var url = '/portal/translate-url/' + culture + '/' + viewType + '/' + viewId;
+        var req = {
+            method: 'GET',
+            url: url
+        };
+        var getData = await commonService.getApiResult(req);
+        return getData.data;
+    }
     factory.getAsync = _getAsync;
     factory.get = _get;
     factory.init = _init;
     factory.reset = _reset;
     factory.translator = _translator;
     factory.fillTranslator = _fillTranslator;
+    factory.translateUrl = _translateUrl;
     return factory;
 }]);

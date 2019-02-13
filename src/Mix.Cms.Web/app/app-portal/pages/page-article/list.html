@@ -5,8 +5,11 @@
             <filter-list request="request" callback="getList(pageIndex)"></filter-list>
         </div>
         <div class="col-md-12">
+            <a href="/portal/article/create?page_id={{pageId}}" class="btn btn-light">
+                <i class="fas fa-plus"></i>
+            </a>
             <a href="#" data-toggle="modal" data-target="#modal-nav-articles-{{pageId}}" class="btn btn-light">
-                <span class="fas fa-plus-square text-info"></span>
+                <i class="fas fa-search"></i>
             </a>
         </div>
         <modal-nav-articles save="saveOthers()" src-field="'pageId'" src-id="pageId" selected="others" query="'not_page_id='"></modal-nav-articles>
