@@ -253,6 +253,18 @@ namespace Mix.Cms.Lib.Repositories
             return true;
         }
 
+        public bool DeleteWebFile(string name, string extension, string FileFolder)
+        {
+            string fullPath = string.Format(@"{0}/{1}/{2}{3}", MixConstants.Folder.WebRootPath, FileFolder, name, extension);
+
+            if (File.Exists(fullPath))
+            {
+                CommonHelper.RemoveFile(fullPath);
+            }
+            return true;
+        }
+
+
         public bool DeleteFile(string fullPath)
         {
             if (File.Exists(fullPath))

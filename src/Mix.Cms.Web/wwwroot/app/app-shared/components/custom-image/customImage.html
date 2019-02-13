@@ -3,7 +3,8 @@
         {{$ctrl.header }}
     </h6>
     <div class="card-body p-0" style="background:url(/images/upload-image-thumbnail.png) no-repeat center;  cursor:pointer; min-height: 200px;">        
-        <img imageonload ng-src="{{$ctrl.srcUrl}}" ng-if="$ctrl.srcUrl" name="pic" class="custom-file-img d-block ng-scope ml-auto mr-auto" style="max-height: {{$ctrl.maxHeight}};" accept="image/*">
+        <img ng-if="$ctrl.isImage" imageonload ng-src="{{$ctrl.srcUrl}}" ng-if="$ctrl.srcUrl" name="pic" class="custom-file-img d-block ng-scope ml-auto mr-auto" accept="image/*">
+        <a ng-if="!$ctrl.isImage && $ctrl.srcUrl" href="{{$ctrl.srcUrl}}" target="_blank">View</a>
         <input type="hidden" value="{{$ctrl.type}}/{{$ctrl.folder}}" class="folder-val">
     </div>
     <div class="card-footer">

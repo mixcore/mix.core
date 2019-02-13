@@ -341,7 +341,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
             // Related Articles
             ArticleNavs = GetRelated(_context, _transaction);
-            var otherArticles = MixArticles.ReadListItemViewModel.Repository.GetModelListBy(m => !ArticleNavs.Any(n => n.SourceId == m.Id), "CreatedDateTime", 1, 10, 0, _context, _transaction);
+            var otherArticles = MixArticles.ReadListItemViewModel.Repository.GetModelListBy(m => !ArticleNavs.Any(n => n.SourceId == m.Id) && m.Specificulture == Specificulture, "CreatedDateTime", 1, 10, 0, _context, _transaction);
             foreach (var item in otherArticles.Data.Items)
             {
                 ArticleNavs.Add(new MixArticleArticles.ReadViewModel()
