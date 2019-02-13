@@ -48,6 +48,7 @@ This project has been developed using:
 * [BrowserStack](https://www.browserstack.com/)
 * [Micon](http://xtoolkit.github.io/Micon/icons/)
 * [.NET](https://www.microsoft.com/net/core)
+* [Designed by Freepik](https://www.freepik.com)
 * And more...
 
 
