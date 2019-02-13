@@ -121,7 +121,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         {
             if (MediaFile?.FileStream != null)
             {
-                MediaFile.Filename = SeoHelper.GetSEOString(MediaFile.Filename);
+                MediaFile.Filename = SeoHelper.GetSEOString(MediaFile.Filename) + Guid.NewGuid().ToString("N");
                 MediaFile.FileFolder = CommonHelper.GetFullPath(new[] {
                     MixService.GetConfig<string>("UploadFolder"),
                     DateTime.UtcNow.ToString("MM-yyyy")
@@ -154,14 +154,14 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         {
             var result = new RepositoryResponse<bool>
             {
-                IsSucceed = FileRepository.Instance.DeleteFile(FileName, Extension, FileFolder)
+                IsSucceed = FileRepository.Instance.DeleteWebFile(FileName, Extension, FileFolder)
             };
             return result;
         }
 
         public override Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            FileRepository.Instance.DeleteFile(FileName, Extension, FileFolder);
+            FileRepository.Instance.DeleteWebFile(FileName, Extension, FileFolder);
             return base.RemoveRelatedModelsAsync(view, _context, _transaction);
         }
 

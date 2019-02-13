@@ -1,10 +1,9 @@
 <header class="navbar navbar-expand flex-column flex-md-row sw-navbar position-sticky">
-    <h1>{{$ctrl.settings}}</h1>
-    <a class="navbar-brand mr-0 mr-md-2" href="/{{$ctrl.settings.lang}}" target="_blank" aria-label="mixcore">
-        <img ng-src="{{$ctrl.settings.data.Logo}}" alt="mixcore" width="35">
-    </a>
 
-    <span class="navbar-brand" ng-bind="{{$ctrl.settings.data.SiteName}}"></span>
+    <a class="navbar-brand mr-0 mr-md-2" href="/{{$ctrl.settings.lang}}" target="_blank" aria-label="mixcore">
+        <img ng-src="{{$ctrl.settings.data.Favicon}}" alt="mixcore" width="35">
+    </a>
+    <span class="navbar-brand" ng-bind="$ctrl.settings.data.SiteName"></span>
 
     <button type="button" id="sidebarCollapse" data-toggle="collapse" data-target="#sw-docs-nav" aria-controls="sw-docs-nav" class="btn btn-link" ng-click="$ctrl.toggleSidebar()">
         <span class="mi mi-List"></span>
