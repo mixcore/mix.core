@@ -2,9 +2,16 @@
     <div class="row">
         <div class="col-12">
             <h6>Selected items</h6>
-            <navs data="$ctrl.mediaNavs" prefix="media_navs"></navs>             
+            <navs data="$ctrl.mediaNavs" prefix="media_navs"></navs>
         </div>
-    </div><!--activeMedias-->
+    </div>
+    <!--activeMedias-->
+    <div class="row">
+        <div class="col-12">
+            <media-upload on-update="$ctrl.loadMedias()"></media-upload>
+        </div>
+
+    </div>
     <hr>
     <div class="row mb-3">
         <!-- <div class="col-12">
@@ -12,7 +19,7 @@
         </div> -->
         <div class="col-md-8">
             <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-                
+
             </div>
         </div>
         <div class="col-md-4">
@@ -34,12 +41,13 @@
                 </label>
             </span>
             <div class="btn-group btn-group-sm position-absolute m-1" role="group" aria-label="Basic example" style="z-index:3; right:0;">
-                <button class="btn btn-light custom-file-cropper" data-toggle="modal" data-target=".image-crop-modal-lg" data-imgsrc="{{media.fullPath}}" data-imgid="{{media.id}}">
+                <!--<button class="btn btn-light custom-file-cropper" data-toggle="modal" data-target=".image-crop-modal-lg" data-imgsrc="{{media.fullPath}}" data-imgid="{{media.id}}">
                     <i class="mi mi-Crop"></i>
                 </button>
                 <button class="btn btn-light btn-sm" data-imgsrc="{{media.fullPath}}" data-imgid="{{media.id}}" ng-click="removeMedia(media.id)">
                     <i class="mi mi-Delete"></i>
                 </button>
+                -->
             </div>
             <a href="#" data-toggle="modal" data-target=".image-preview-modal-lg" data-imgsrc="{{media.fullPath}}">
                 <img class="card-img-top" ng-src="{{media.fullPath}}" alt="{{media.title}}">

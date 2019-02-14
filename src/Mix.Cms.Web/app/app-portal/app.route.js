@@ -54,7 +54,15 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         controller: "ArticleController",
         templateUrl: "/app/app-portal/pages/article/details.html"
     });
-
+   
+    $routeProvider.when("/portal/article/gallery-details/:id", {
+        controller: "ArticleController",
+        templateUrl: "/app/app-portal/pages/article/gallery-details.html"
+    });
+    $routeProvider.when("/portal/article/create-gallery", {
+        controller: "ArticleController",
+        templateUrl: "/app/app-portal/pages/article/gallery-details.html"
+    });
     $routeProvider.when("/portal/article/create", {
         controller: "ArticleController",
         templateUrl: "/app/app-portal/pages/article/details.html"
@@ -89,6 +97,11 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         controller: "PageArticleController",
         templateUrl: "/app/app-portal/pages/page-article/list.html"
     });
+   
+    $routeProvider.when("/portal/page/page-gallery/list/:id", {
+        controller: "PageGalleryController",
+        templateUrl: "/app/app-portal/pages/page-gallery/list.html"
+    });
 
     $routeProvider.when("/portal/page/create", {
         controller: "PageController",
@@ -108,6 +121,11 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
     $routeProvider.when("/portal/module-article/list/:id", {
         controller: "ModuleArticleController",
         templateUrl: "/app/app-portal/pages/module-article/list.html"
+    });
+   
+    $routeProvider.when("/portal/module-gallery/list/:id", {
+        controller: "ModuleGalleryController",
+        templateUrl: "/app/app-portal/pages/module-gallery/list.html"
     });
 
     $routeProvider.when("/portal/module-data/details/:moduleId/:id", {

@@ -27,5 +27,21 @@ app.controller('ArticleController', ['$scope', '$rootScope', '$location','$filte
             }
             $scope.activedData.publishedDateTime = $filter('utcToLocalTime')($scope.activedData.publishedDateTime);
         }
+        $scope.generateSeo = function () {
+            if ($scope.activedData) {
+                if ($scope.activedData.seoName === null || $scope.activedData.seoName === '') {
+                    $scope.activedData.seoName = $rootScope.generateKeyword($scope.activedData.title, '-');
+                }
+                if ($scope.activedData.seoTitle === null || $scope.activedData.seoTitle === '') {
+                    $scope.activedData.seoTitle = $rootScope.generateKeyword($scope.activedData.title, '-');
+                }
+                if ($scope.activedData.seoDescription === null || $scope.activedData.seoDescription === '') {
+                    $scope.activedData.seoDescription = $rootScope.generateKeyword($scope.activedData.title, '-');
+                }
+                if ($scope.activedData.seoKeywords === null || $scope.activedData.seoKeywords === '') {
+                    $scope.activedData.seoKeywords = $rootScope.generateKeyword($scope.activedData.title, '-');
+                }
+            }
+        }
     }
 ]);

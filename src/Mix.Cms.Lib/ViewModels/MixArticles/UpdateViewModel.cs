@@ -278,7 +278,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 });
             }
             var otherModules = MixModules.ReadListItemViewModel.Repository.GetModelListBy(
-                m => (m.Type == (int)MixEnums.MixModuleType.Content || m.Type == (int)MixEnums.MixModuleType.ListArticle) 
+                m => (m.Type == (int)MixEnums.MixModuleType.Content || m.Type == (int)MixEnums.MixModuleType.ListArticle)
                 && m.Specificulture == Specificulture
                 && !Modules.Any(n => n.ModuleId == m.Id && n.Specificulture == m.Specificulture)
                 , "CreatedDateTime", 1, null, 0, _context, _transaction);
@@ -341,7 +341,10 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
             // Related Articles
             ArticleNavs = GetRelated(_context, _transaction);
-            var otherArticles = MixArticles.ReadListItemViewModel.Repository.GetModelListBy(m => !ArticleNavs.Any(n => n.SourceId == m.Id) && m.Specificulture == Specificulture, "CreatedDateTime", 1, 10, 0, _context, _transaction);
+            var otherArticles = MixArticles.ReadListItemViewModel.Repository.GetModelListBy(
+                m => m.Id != Id && m.Specificulture == Specificulture 
+                    && !ArticleNavs.Any(n => n.SourceId == Id)
+                    , "CreatedDateTime", 1, 10, 0, _context, _transaction);
             foreach (var item in otherArticles.Data.Items)
             {
                 ArticleNavs.Add(new MixArticleArticles.ReadViewModel()
@@ -402,11 +405,11 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     Image = CommonHelper.GetFullPath(new string[] { folder, filename });
                 }
             }
-            if(!string.IsNullOrEmpty(Image) && Image[0] == '/'){ Image = Image.Substring(1);}
-            if(!string.IsNullOrEmpty(Thumbnail) && Thumbnail[0] == '/'){ Thumbnail = Thumbnail.Substring(1);}
+            if (!string.IsNullOrEmpty(Image) && Image[0] == '/') { Image = Image.Substring(1); }
+            if (!string.IsNullOrEmpty(Thumbnail) && Thumbnail[0] == '/') { Thumbnail = Thumbnail.Substring(1); }
             Tags = ListTag.ToString(Newtonsoft.Json.Formatting.None);
             GenerateSEO();
-            
+
             return base.ParseModel(_context, _transaction);
         }
 

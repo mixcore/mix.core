@@ -196,7 +196,7 @@ namespace Mix.Cms.Web.Controllers
             if (data != null && MixService.GetConfig<bool>("IsCache"))
             {
                 getArticle.IsSucceed = true;
-                getArticle.Data = data;                
+                getArticle.Data = data;
             }
             else
             {
@@ -211,12 +211,13 @@ namespace Mix.Cms.Web.Controllers
                 {
                     predicate = p =>
                     p.Id == id
-                    && p.Status == (int)MixContentStatus.Published 
+                    && p.Status == (int)MixContentStatus.Published
                     && p.Specificulture == _culture;
                 }
 
                 getArticle = await Lib.ViewModels.MixArticles.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
-                if(getArticle.IsSucceed){                    
+                if (getArticle.IsSucceed)
+                {
                     getArticle.Data.DetailsUrl = GenerateDetailsUrl("Article", new { id = getArticle.Data.Id, seoName = getArticle.Data.SeoName });
                     _memoryCache.Set(cacheKey, getArticle.Data);
                 }

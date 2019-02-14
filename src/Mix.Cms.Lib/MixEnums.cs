@@ -97,7 +97,8 @@ namespace Mix.Cms.Lib
             Home = 3,
             StaticUrl = 4,
             Modules = 5,
-            ListProduct = 6
+            ListProduct = 6,
+            Gallery = 7
         }
 
         public enum MixModuleType
@@ -108,7 +109,8 @@ namespace Mix.Cms.Lib
             SubPage = 3,
             SubArticle = 4,
             SubProduct = 5,
-            ListProduct = 6,            
+            ListProduct = 6,
+            Gallery = 7
         }
 
         public enum MixDataType

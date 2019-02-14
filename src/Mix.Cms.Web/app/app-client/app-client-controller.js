@@ -81,6 +81,12 @@
                     $scope.$apply();
                 }
             };
+            $scope.shareFB = function (url){
+                FB.ui({
+                    method: 'share',
+                    href: url,
+                }, function (response) { });
+            }
         }]);
 
 

@@ -2,6 +2,14 @@
     <div class="card-header">
         <div ng-init="getSingle()" class="row">
             <div class="col-md-12">
+                <div class="form-group">
+                    <label ng-bind="translate('portal_title')"></label>
+                    <input type="text" class="form-control form-control-lg" ng-model="activedData.title" ng-blur="$ctrl.generateSEO()">
+                </div>
+                <div class="form-group">
+                    <label>Excerpt</label>
+                    <textarea class="form-control form-control-lg" ng-model="activedData.description">{{activedData.excerpt}}</textarea>
+                </div>
                 <custom-file header="''" folder="'Medias'" media-file="activedData.mediaFile" data="activedData" src-url="activedData.mediaFile.fullPath" on-update="getList()" save="save(activedData)" auto="'false'" class=""></custom-file>
             </div>
         </div>
