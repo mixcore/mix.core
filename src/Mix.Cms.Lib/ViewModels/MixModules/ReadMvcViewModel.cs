@@ -124,10 +124,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public PaginationModel<ViewModels.MixModuleDatas.ReadViewModel> Data { get; set; } = new PaginationModel<ViewModels.MixModuleDatas.ReadViewModel>();
 
         [JsonProperty("articles")]
-        public PaginationModel<MixModuleArticles.ReadViewModel> Articles { get; set; } = new PaginationModel<MixModuleArticles.ReadViewModel>();
+        public PaginationModel<MixModuleArticles.ReadMvcViewModel> Articles { get; set; } = new PaginationModel<MixModuleArticles.ReadMvcViewModel>();
 
         [JsonProperty("products")]
-        public PaginationModel<MixModuleProducts.ReadViewModel> Products { get; set; } = new PaginationModel<MixModuleProducts.ReadViewModel>();
+        public PaginationModel<MixModuleProducts.ReadMvcViewModel> Products { get; set; } = new PaginationModel<MixModuleProducts.ReadMvcViewModel>();
 
         public string TemplatePath
         {
@@ -192,9 +192,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            this.View = MixTemplates.ReadViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
-            this.FormView = MixTemplates.ReadViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
-            this.EdmView = MixTemplates.ReadViewModel.GetTemplateByPath(EdmTemplate, Specificulture, _context, _transaction).Data;
+            //this.View = MixTemplates.ReadViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
+            //this.FormView = MixTemplates.ReadViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
+            //this.EdmView = MixTemplates.ReadViewModel.GetTemplateByPath(EdmTemplate, Specificulture, _context, _transaction).Data;
             // call load data from controller for padding parameter (articleId, productId, ...)
         }
 
@@ -279,7 +279,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 }
                 if (articleExp != null)
                 {
-                    var getArticles = MixModuleArticles.ReadViewModel.Repository
+                    var getArticles = MixModuleArticles.ReadMvcViewModel.Repository
                     .GetModelListBy(articleExp
                     , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
                     , pageSize, pageIndex
@@ -291,7 +291,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 }
                 if (productExp != null)
                 {
-                    var getProducts = MixModuleProducts.ReadViewModel.Repository
+                    var getProducts = MixModuleProducts.ReadMvcViewModel.Repository
                     .GetModelListBy(productExp
                     , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
                     , PageSize, pageIndex
