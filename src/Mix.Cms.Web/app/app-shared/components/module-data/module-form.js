@@ -1459,7 +1459,7 @@ modules.component('moduleFormEditor', {
                 });
             }, 200);
         };
-    }
+       }
     ],
     bindings: {
         data: '=',

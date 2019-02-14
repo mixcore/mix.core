@@ -1616,7 +1616,12 @@ app.run(['$rootScope', 'ngAppSettings','GlobalSettingsService', 'CommonService',
                 }
             }
             return null;
-        }      
+        }
+        $rootScope.changeLang = async function (lang) {
+            var url = await translatorService.translateUrl(lang);
+            translatorService.translateUrl(lang);
+            window.top.location = url;
+        };   
     }]);
     if($.trumbowyg){
         $.trumbowyg.svgPath = '/assets/icons.svg';

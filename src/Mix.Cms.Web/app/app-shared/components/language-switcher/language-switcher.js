@@ -13,7 +13,6 @@
                 };
                 
                 ctrl.changeLang = async function (lang, langIcon) {
-                    var oldLang = ctrl.settings.lang;
                     ctrl.settings.lang = lang;
                     ctrl.settings.langIcon = langIcon;
                     // await commonService.removeSettings();

@@ -1,7 +1,4 @@
 ﻿@model Mix.Cms.Lib.ViewModels.MixArticles.ReadMvcViewModel
-@{
-    var url =MixCmsHelper.GetRouterUrl("Page", new { }, Context.Request, Url)
-}
 
 <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
 <input type="hidden" id="view-type" value="Article" />
@@ -28,8 +25,8 @@ else
 
 @{
     string url = ViewData["OgUrl"] != null ? (string)ViewData["OgUrl"] : $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}";
-    string title = ViewData["OgTitle"] != null ? (string)ViewData["OgTitle"] : Model.SeoTitle;
-    string desc = ViewData["OgDescription"] != null ? (string)ViewData["OgDescription"] : Model.SeoDescription;
+    string title = ViewData["OgTitle"] != null ? (string)ViewData["OgTitle"] : Model.Title;
+    string desc = ViewData["OgDescription"] != null ? (string)ViewData["OgDescription"] : Model.Excerpt;
     string image = ViewData["OgImage"] != null ? (string)ViewData["OgImage"] : Model.ThumbnailUrl;
 
 }
