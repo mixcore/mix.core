@@ -1,4 +1,7 @@
 ﻿@model Mix.Cms.Lib.ViewModels.MixArticles.ReadMvcViewModel
+@{
+    var url =MixCmsHelper.GetRouterUrl("Page", new { }, Context.Request, Url)
+}
 
 <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
 <input type="hidden" id="view-type" value="Article" />

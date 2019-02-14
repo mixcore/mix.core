@@ -15,6 +15,7 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
     $scope.getSingleFailCallback = null;
     $scope.getListSuccessCallback = null;
     $scope.getListFailCallback = null;
+    $scope.translate = $rootScope.translate;   
     $scope.getSingle = async function () {
         $rootScope.isBusy = true;
         var id = $routeParams.id;

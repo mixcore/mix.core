@@ -29,7 +29,7 @@ app.component('articleMedias', {
                 media.isHidden = true;
                 ctrl.article.mediaNavs.push(currentItem);
             }
-        }
+        }        
     },
     bindings: {
         article: '=',

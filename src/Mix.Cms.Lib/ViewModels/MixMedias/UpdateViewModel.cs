@@ -113,7 +113,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
                 Cultures = Cultures ?? LoadCultures(Specificulture, _context, _transaction);
                 Cultures.ForEach(c => c.IsSupported = true);
             }
-            if (FileFolder[0] == '/') { FileFolder = FileFolder.Substring(1); }            
+            if (FileFolder[0] == '/') { FileFolder = FileFolder.Substring(1); }
             return base.ParseModel(_context, _transaction);
         }
 
@@ -156,13 +156,15 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
             {
                 IsSucceed = FileRepository.Instance.DeleteWebFile(FileName, Extension, FileFolder)
             };
+            result.IsSucceed = Repository.RemoveListModel(m => m.Id == Id && m.Specificulture != Specificulture, _context, _transaction).IsSucceed;
             return result;
         }
 
-        public override Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             FileRepository.Instance.DeleteWebFile(FileName, Extension, FileFolder);
-            return base.RemoveRelatedModelsAsync(view, _context, _transaction);
+            await Repository.RemoveListModelAsync(m => m.Id == Id && m.Specificulture != Specificulture, _context, _transaction);
+            return await base.RemoveRelatedModelsAsync(view, _context, _transaction);
         }
 
         #endregion Overrides

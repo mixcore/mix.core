@@ -216,7 +216,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             }
 
             // Related Articles
-            ArticleNavs = MixArticleArticles.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
+            ArticleNavs = MixArticleArticles.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;            
         }
 
         #endregion Overrides

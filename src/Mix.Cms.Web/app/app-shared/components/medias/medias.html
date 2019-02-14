@@ -46,9 +46,11 @@
                             <td width="15%">
 
                                 <div class="input-group input-group-sm">
-                                    <input id="path-modal-{{$index}}" value="{{item.fullPath}}" onclick="this.select()" class="form-control form-control-sm" readonly="readonly">
+                                    <input id="path-modal-{{$index}}" value="{{item.fullPath}}" onclick="this.select()"
+                                        class="form-control form-control-sm" readonly="readonly">
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary btn-clipboard" type="button" data-clipboard-target="#path-modal-{{$index}}"><i class="mi mi-Copy"></i></button>
+                                        <button class="btn btn-outline-secondary btn-clipboard" type="button"
+                                            data-clipboard-target="#path-modal-{{$index}}"><i class="mi mi-Copy"></i></button>
                                     </div>
                                 </div>
                             </td>
@@ -74,13 +76,11 @@
             <div class="modal-footer">
 
                 <div class="col-md-7">
-                    <div class="col-md-12" role="toolbar" aria-label="Toolbar with button groups">
-                            <custom-file header="''" folder="'Medias'" media-file="activedData.mediaFile" data="activedData"
-                            src-url="activedData.mediaFile.fullPath" save="save(activedData)"
-                                auto="'false'" class=""></custom-file>
-                    </div>
+                    <media-upload on-update="getList()"></media-upload>
                 </div>
-                <paging class="small col-md-5" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
+                <paging class="small col-md-5" page="data.page" page-size="data.pageSize" total="data.totalItems"
+                    ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)"
+                    scroll-top="true">
             </div>
         </div>
         <!-- /.modal-content -->

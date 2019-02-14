@@ -157,5 +157,11 @@ namespace Mix.Cms.Lib
             var module = ViewModels.MixModules.ReadMvcViewModel.GetBy(m => m.Name == name && m.Specificulture == culture);
             return module.Data;
         }
+
+        public static ViewModels.MixPages.ReadMvcViewModel GetPage(int id, string culture)
+        {
+            var page = ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModel(m => m.Id == id&& m.Specificulture == culture);
+            return page.Data;
+        }
     }
 }
