@@ -219,6 +219,11 @@ namespace Mix.Cms.Web.Controllers
                 if (getArticle.IsSucceed)
                 {
                     getArticle.Data.DetailsUrl = GenerateDetailsUrl("Article", new { id = getArticle.Data.Id, seoName = getArticle.Data.SeoName });
+                    //Generate details url for related articles
+                    if (getArticle.Data.ArticleNavs != null && getArticle.Data.ArticleNavs.Count > 0)
+                    {
+                        getArticle.Data.ArticleNavs.ForEach(n => n.RelatedArticle.DetailsUrl = GenerateDetailsUrl("Article", new { id = n.RelatedArticle.Id, seoName = n.RelatedArticle.SeoName }));
+                    }
                     _memoryCache.Set(cacheKey, getArticle.Data);
                 }
                 if (!MixConstants.cachedKeys.Contains(cacheKey))
