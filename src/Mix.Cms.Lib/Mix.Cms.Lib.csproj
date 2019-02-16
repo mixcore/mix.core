@@ -23,12 +23,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Mix.Heart" Version="0.0.2" />
+    <PackageReference Include="Mix.Identity" Version="0.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="3.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\mix.heart\src\Mix.Heart\Mix.Heart.csproj" />
-    <ProjectReference Include="..\..\..\mix.identity\src\Mix.Identity\Mix.Identity.csproj" />
   </ItemGroup>
 
   <ItemGroup>
