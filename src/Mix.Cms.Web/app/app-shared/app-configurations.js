@@ -1580,16 +1580,16 @@ app.run(['$rootScope', 'ngAppSettings','GlobalSettingsService', 'CommonService',
             }
         };
 
-        $rootScope.waitForInit = async function () {
+        $rootScope.waitForInit = async function (functionName, args, scope ) {
             if(!$rootScope.isInit){
                 () => {
                     setTimeout(() => {
-                        $rootScope.waitForInit();
+                        $rootScope.waitForInit(functionName, args, scope);
                     }, 200);
                 }
             }
             else{
-                return true;
+                $rootScope.executeFunctionByName(functionName, args, scope);
             }
         }
 
