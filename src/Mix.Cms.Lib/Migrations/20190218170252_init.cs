@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Mix.Cms.Lib.Migrations
 {
-    public partial class initall : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -23,8 +23,8 @@ namespace Mix.Cms.Lib.Migrations
                     PhoneNumber = table.Column<string>(maxLength: 50, nullable: true),
                     Priority = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
-                    Username = table.Column<string>(maxLength: 250, nullable: true),
-                    Email = table.Column<string>(maxLength: 250, nullable: true)
+                    Username = table.Column<string>(maxLength: 256, nullable: true),
+                    Email = table.Column<string>(maxLength: 256, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -51,8 +51,7 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_culture",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(nullable: false),
                     Alias = table.Column<string>(maxLength: 150, nullable: true),
                     Description = table.Column<string>(maxLength: 250, nullable: true),
                     FullName = table.Column<string>(maxLength: 150, nullable: true),
@@ -75,9 +74,9 @@ namespace Mix.Cms.Lib.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false),
-                    UserId = table.Column<string>(maxLength: 250, nullable: true),
-                    Username = table.Column<string>(maxLength: 250, nullable: true),
-                    Email = table.Column<string>(maxLength: 250, nullable: true),
+                    UserId = table.Column<string>(maxLength: 256, nullable: true),
+                    Username = table.Column<string>(maxLength: 256, nullable: true),
+                    Email = table.Column<string>(maxLength: 256, nullable: true),
                     FirstName = table.Column<string>(maxLength: 50, nullable: true),
                     MiddleName = table.Column<string>(maxLength: 50, nullable: true),
                     LastName = table.Column<string>(maxLength: 50, nullable: true),
@@ -127,7 +126,7 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_parameter",
                 columns: table => new
                 {
-                    Name = table.Column<string>(maxLength: 250, nullable: false),
+                    Name = table.Column<string>(maxLength: 256, nullable: false),
                     Description = table.Column<string>(nullable: true),
                     Priority = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
@@ -163,8 +162,7 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_position",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(nullable: false),
                     Description = table.Column<string>(maxLength: 250, nullable: false),
                     Priority = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false)
@@ -197,11 +195,12 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_theme",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(nullable: false),
                     CreatedBy = table.Column<string>(maxLength: 250, nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Thumbnail = table.Column<string>(maxLength: 250, nullable: true),
                     Image = table.Column<string>(maxLength: 250, nullable: true),
+                    Title = table.Column<string>(maxLength: 250, nullable: true),
                     Name = table.Column<string>(maxLength: 250, nullable: false),
                     Priority = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
@@ -273,18 +272,20 @@ namespace Mix.Cms.Lib.Migrations
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
                     Description = table.Column<string>(maxLength: 4000, nullable: true),
                     Fields = table.Column<string>(maxLength: 4000, nullable: true),
+                    Thumbnail = table.Column<string>(maxLength: 250, nullable: true),
                     Image = table.Column<string>(maxLength: 250, nullable: true),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     ModifiedBy = table.Column<string>(maxLength: 250, nullable: true),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Priority = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     Template = table.Column<string>(maxLength: 250, nullable: true),
-                    FormTemplate = table.Column<string>(maxLength: 4000, nullable: true),
+                    FormTemplate = table.Column<string>(maxLength: 250, nullable: true),
+                    EdmTemplate = table.Column<string>(maxLength: 250, nullable: true),
                     Title = table.Column<string>(maxLength: 250, nullable: true),
                     Type = table.Column<int>(nullable: false),
                     PageSize = table.Column<int>(nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false)
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -433,6 +434,7 @@ namespace Mix.Cms.Lib.Migrations
                     SetAttributeData = table.Column<string>(nullable: true),
                     Content = table.Column<string>(nullable: true),
                     CreatedBy = table.Column<string>(maxLength: 250, nullable: true),
+                    PublishedDateTime = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     Excerpt = table.Column<string>(nullable: true),
                     ExtraProperties = table.Column<string>(nullable: true),
@@ -614,8 +616,7 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_template",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(nullable: false),
                     Content = table.Column<string>(nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     Extension = table.Column<string>(maxLength: 50, nullable: false),

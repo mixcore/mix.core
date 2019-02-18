@@ -36,8 +36,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Excerpt");
 
-                    b.Property<string>("ExtraProperties")
-                        ;//.HasColumnType("ntext");
+                    b.Property<string>("ExtraProperties");
 
                     b.Property<string>("Icon");
 
@@ -68,17 +67,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("SeoTitle")
                         .HasMaxLength(4000);
 
-                    b.Property<string>("SetAttributeData")
-                        ;//.HasColumnType("ntext");
+                    b.Property<string>("SetAttributeData");
 
                     b.Property<int?>("SetAttributeId");
 
                     b.Property<string>("Source")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.Property<string>("Tags")
                         .HasMaxLength(500);
@@ -124,9 +120,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.HasKey("MediaId", "ArticleId", "Specificulture");
 
@@ -156,9 +150,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.HasKey("ModuleId", "ArticleId", "Specificulture");
 
@@ -186,7 +178,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(250);
+                        .HasMaxLength(256);
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(50);
@@ -202,12 +194,10 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.Property<string>("Username")
-                        .HasMaxLength(250);
+                        .HasMaxLength(256);
 
                     b.HasKey("Id");
 
@@ -251,9 +241,7 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Specificulture")
                         .HasMaxLength(10);
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.Property<string>("UpdatedBy")
                         .HasMaxLength(250);
@@ -287,9 +275,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(50);
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
+                        .HasColumnType("datetime");
 
                     b.Property<int>("DataType");
 
@@ -298,9 +284,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.Property<string>("Value");
 
@@ -324,9 +308,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.Property<string>("Value");
 
@@ -337,9 +319,7 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCulture", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("Id");
 
                     b.Property<string>("Alias")
                         .HasMaxLength(150);
@@ -348,9 +328,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(50);
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("Description")
                         .HasMaxLength(250);
@@ -371,9 +349,7 @@ namespace Mix.Cms.Lib.Migrations
                         .IsRequired()
                         .HasMaxLength(10);
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.HasKey("Id");
 
@@ -404,7 +380,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(250);
+                        .HasMaxLength(256);
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(50);
@@ -425,15 +401,13 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.Property<string>("UserId")
-                        .HasMaxLength(250);
+                        .HasMaxLength(256);
 
                     b.Property<string>("Username")
-                        .HasMaxLength(250);
+                        .HasMaxLength(256);
 
                     b.HasKey("Id");
 
@@ -447,8 +421,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Content")
-                        .IsRequired()
-                        ;//.HasColumnType("ntext");
+                        .IsRequired();
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -477,9 +450,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.Property<int?>("ThemeId");
 
@@ -509,9 +480,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(50);
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
+                        .HasColumnType("datetime");
 
                     b.Property<int>("DataType");
 
@@ -523,9 +492,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.Property<string>("Value");
 
@@ -578,9 +545,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.Property<string>("Tags")
                         .HasMaxLength(400);
@@ -632,9 +597,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.Property<string>("Template")
                         .HasMaxLength(250);
@@ -645,9 +608,7 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Title")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Type")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("('0')");
+                    b.Property<int>("Type");
 
                     b.HasKey("Id", "Specificulture");
 
@@ -673,9 +634,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.HasKey("ArticleId", "ModuleId", "Specificulture");
 
@@ -708,9 +667,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.Property<DateTime?>("UpdatedDateTime")
                         .HasColumnType("datetime");
@@ -741,8 +698,7 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<int>("DataType");
 
                     b.Property<string>("DefaultValue")
-                        .IsRequired()
-                        ;//.HasColumnType("ntext");
+                        .IsRequired();
 
                     b.Property<int>("ModuleId");
 
@@ -751,9 +707,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.Property<string>("Title")
                         .HasMaxLength(250);
@@ -792,9 +746,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int?>("ProductId");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.Property<DateTime?>("UpdatedDateTime")
                         .HasColumnType("datetime");
@@ -832,9 +784,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.HasKey("ProductId", "ModuleId", "Specificulture");
 
@@ -897,9 +847,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Quantity");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.HasKey("ProductId", "OrderId", "Specificulture");
 
@@ -971,17 +919,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("SeoTitle")
                         .HasMaxLength(4000);
 
-                    b.Property<string>("SetAttributeData")
-                        ;//.HasColumnType("ntext");
+                    b.Property<string>("SetAttributeData");
 
                     b.Property<int?>("SetAttributeId");
 
                     b.Property<string>("StaticUrl")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.Property<string>("Tags")
                         .HasMaxLength(500);
@@ -1022,9 +967,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.HasKey("ArticleId", "CategoryId", "Specificulture");
 
@@ -1055,9 +998,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.HasKey("ModuleId", "CategoryId", "Specificulture");
 
@@ -1086,9 +1027,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.HasKey("Id", "ParentId", "Specificulture");
 
@@ -1113,9 +1052,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.HasKey("PositionId", "CategoryId", "Specificulture");
 
@@ -1142,9 +1079,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.HasKey("ProductId", "CategoryId", "Specificulture");
 
@@ -1159,15 +1094,13 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixParameter", b =>
                 {
                     b.Property<string>("Name")
-                        .HasMaxLength(250);
+                        .HasMaxLength(256);
 
                     b.Property<string>("Description");
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.Property<string>("Value")
                         .IsRequired();
@@ -1197,9 +1130,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.Property<string>("TextDefault")
                         .HasMaxLength(250);
@@ -1229,9 +1160,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.HasKey("Id", "ParentId");
 
@@ -1251,9 +1180,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.HasKey("PositionId", "PortalPageId");
 
@@ -1277,9 +1204,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.HasKey("RoleId", "PageId");
 
@@ -1290,9 +1215,7 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPosition", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("Id");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -1300,9 +1223,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.HasKey("Id");
 
@@ -1317,8 +1238,6 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(10);
 
                     b.Property<string>("Code")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("(N'')")
                         .HasMaxLength(50);
 
                     b.Property<string>("Content");
@@ -1329,16 +1248,13 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<double?>("DealPrice")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((0))");
+                    b.Property<double?>("DealPrice");
 
                     b.Property<double>("Discount");
 
                     b.Property<string>("Excerpt");
 
-                    b.Property<string>("ExtraProperties")
-                        ;//.HasColumnType("ntext");
+                    b.Property<string>("ExtraProperties");
 
                     b.Property<string>("Icon");
 
@@ -1358,9 +1274,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<double>("NormalPrice");
 
-                    b.Property<int>("PackageCount")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("PackageCount");
 
                     b.Property<double>("Price");
 
@@ -1382,17 +1296,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("SeoTitle")
                         .HasMaxLength(4000);
 
-                    b.Property<string>("SetAttributeData")
-                        ;//.HasColumnType("ntext");
+                    b.Property<string>("SetAttributeData");
 
                     b.Property<int?>("SetAttributeId");
 
                     b.Property<string>("Source")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.Property<string>("Tags")
                         .HasMaxLength(500);
@@ -1443,9 +1354,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.HasKey("MediaId", "ProductId", "Specificulture");
 
@@ -1475,9 +1384,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.HasKey("ModuleId", "ProductId", "Specificulture");
 
@@ -1582,13 +1489,10 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixTemplate", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("Id");
 
                     b.Property<string>("Content")
-                        .IsRequired()
-                        ;//.HasColumnType("ntext");
+                        .IsRequired();
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -1612,26 +1516,20 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("MobileContent")
-                        ;//.HasColumnType("ntext");
+                    b.Property<string>("MobileContent");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(250);
 
                     b.Property<int>("Priority");
 
-                    b.Property<string>("Scripts")
-                        ;//.HasColumnType("ntext");
+                    b.Property<string>("Scripts");
 
-                    b.Property<string>("SpaContent")
-                        ;//.HasColumnType("ntext");
+                    b.Property<string>("SpaContent");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
-                    b.Property<string>("Styles")
-                        ;//.HasColumnType("ntext");
+                    b.Property<string>("Styles");
 
                     b.Property<int>("ThemeId");
 
@@ -1649,9 +1547,7 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixTheme", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("Id");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -1672,9 +1568,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
                     b.Property<string>("Thumbnail")
                         .HasMaxLength(250);
@@ -1708,13 +1602,9 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("SourceId")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                    b.Property<int>("Status");
 
-                    b.Property<int>("Type")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("('0')");
+                    b.Property<int>("Type");
 
                     b.HasKey("Id", "Specificulture");
 

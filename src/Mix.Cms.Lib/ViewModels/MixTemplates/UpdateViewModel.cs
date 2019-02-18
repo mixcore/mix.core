@@ -90,7 +90,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[] { 
+                return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.TemplatesFolder, SeoHelper.GetSEOString(ThemeName) });
             }
         }
@@ -155,6 +155,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             if (Id == 0)
             {
+                Id = Repository.Max(m => m.Id).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
             FileFolder = CommonHelper.GetFullPath(new string[]

@@ -148,6 +148,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             if (Id == 0)
             {
+                Id = Repository.Max(m => m.Id).Data + 1;
                 Name = SeoHelper.GetSEOString(Title);
                 CreatedDateTime = DateTime.UtcNow;
             }

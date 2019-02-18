@@ -51,7 +51,7 @@ namespace Mix.Cms.Lib.Models.Account
             {
                 if (MixService.GetConfig<bool>("IsMysql"))
                 {
-                    optionsBuilder.UseSqlite(cnn);
+                    optionsBuilder.UseMySql(cnn);
                 }
                 else
                 {
