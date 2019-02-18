@@ -259,6 +259,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                     MixTemplates.InitViewModel template = new MixTemplates.InitViewModel(
                         new MixTemplate()
                         {
+                            Id = MixTemplates.ReadListItemViewModel.Repository.Max(t => t.Id, _context, _transaction).Data + 1,
                             FileFolder = file.FileFolder,
                             FileName = file.Filename,
                             Content = content,

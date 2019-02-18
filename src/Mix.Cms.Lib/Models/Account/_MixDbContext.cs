@@ -49,7 +49,7 @@ namespace Mix.Cms.Lib.Models.Account
             string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {
-                if (MixService.GetConfig<bool>("IsSqlite"))
+                if (MixService.GetConfig<bool>("IsMysql"))
                 {
                     optionsBuilder.UseSqlite(cnn);
                 }

@@ -11,10 +11,18 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
         [JsonProperty("connectionString")]
         public string ConnectionString
         {
+            // If use local db  => return local db cnn string
+            // Else If use remote db 
+            // => return: if use mysql => return mysql cnn string
+            //              else return remote mssql cnn string
             get
             {
                 return IsUseLocal
-                    ? IsSqlite ? SqliteDbConnectionString : LocalDbConnectionString
+                    ? LocalDbConnectionString
+                    
+                    : IsMysql ? $"Server={DataBaseServer};Database={DataBaseName}" +
+                    $";User={DataBaseUser};Password={DataBasePassword};"
+                    
                     : $"Server={DataBaseServer};Database={DataBaseName}" +
                     $";UID={DataBaseUser};Pwd={DataBasePassword};MultipleActiveResultSets=true;"
                     ;
@@ -52,8 +60,8 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
         [JsonProperty("lang")]
         public string Lang { get; set; }
 
-        [JsonProperty("isSqlite")]
-        public bool IsSqlite { get; set; }
+        [JsonProperty("isMysql")]
+        public bool IsMysql { get; set; }
 
         [JsonProperty("culture")]
         public InitCulture Culture { get; set; }

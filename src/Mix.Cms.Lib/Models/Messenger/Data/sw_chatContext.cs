@@ -35,7 +35,7 @@ namespace Mix.Cms.Messenger.Models.Data
                 //string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
                 //if (!string.IsNullOrEmpty(cnn))
                 //{
-                //    if (MixService.GetConfig<bool>("IsSqlite"))
+                //    if (MixService.GetConfig<bool>("IsMysql"))
                 //    {
                 //        optionsBuilder.UseSqlite(cnn);
                 //    }

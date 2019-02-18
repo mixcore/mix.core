@@ -462,7 +462,7 @@ namespace Mix.Cms.Api.Controllers.v1
             MixService.SetConnectionString(MixConstants.CONST_CMS_CONNECTION, model.ConnectionString);
             MixService.SetConnectionString(MixConstants.CONST_MESSENGER_CONNECTION, model.ConnectionString);
             MixService.SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, model.ConnectionString);
-            MixService.SetConfig(MixConstants.CONST_SETTING_IS_SQLITE, model.IsSqlite);
+            MixService.SetConfig(MixConstants.CONST_SETTING_IS_SQLITE, model.IsMysql);
             MixService.SetConfig(MixConstants.CONST_SETTING_LANGUAGE, model.Culture.Specificulture);
 
             InitCmsService sv = new InitCmsService();
