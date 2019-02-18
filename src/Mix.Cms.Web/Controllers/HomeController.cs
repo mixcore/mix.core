@@ -161,7 +161,7 @@ namespace Mix.Cms.Web.Controllers
                 }
             }
 
-            if (getPage.IsSucceed && getPage.Data.View != null)
+            if (getPage.IsSucceed)// && getPage.Data.View != null
             {
                 GeneratePageDetailsUrls(getPage.Data);
                 if (!MixConstants.cachedKeys.Contains(cacheKey))

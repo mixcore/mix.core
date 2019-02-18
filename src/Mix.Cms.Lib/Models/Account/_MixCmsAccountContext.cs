@@ -39,11 +39,7 @@ namespace Mix.Cms.Lib.Models.Account
             {
                 if (MixService.GetConfig<bool>("IsMysql"))
                 {
-                    optionsBuilder.UseMySql(cnn,
-                        mySqlOptions =>
-                        {
-                            mySqlOptions.ServerVersion(new System.Version(5, 6, 38), Pomelo.EntityFrameworkCore.MySql.Infrastructure.ServerType.MySql); // replace with your Server Version and Type
-                        });
+                    optionsBuilder.UseMySql(cnn);
                 }
                 else
                 {

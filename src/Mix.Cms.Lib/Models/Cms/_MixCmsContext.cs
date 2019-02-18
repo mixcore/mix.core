@@ -69,11 +69,7 @@ namespace Mix.Cms.Lib.Models.Cms
             {
                 if (MixService.GetConfig<bool>("IsMysql"))
                 {
-                    optionsBuilder.UseMySql(cnn,
-                        mySqlOptions =>
-                        {
-                            mySqlOptions.ServerVersion(new System.Version(5, 6, 38), Pomelo.EntityFrameworkCore.MySql.Infrastructure.ServerType.MySql); // replace with your Server Version and Type
-                        });
+                    optionsBuilder.UseMySql(cnn);
                 }
                 else
                 {
@@ -100,8 +96,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.ExtraProperties);//.HasColumnType("ntext");
-
                 entity.Property(e => e.Image).HasMaxLength(250);
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
@@ -120,11 +114,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.SeoTitle).HasMaxLength(4000);
 
-                entity.Property(e => e.SetAttributeData);//.HasColumnType("ntext");
-
                 entity.Property(e => e.Source).HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.Tags).HasMaxLength(500);
 
@@ -163,8 +153,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
                 entity.HasOne(d => d.MixArticle)
                     .WithMany(p => p.MixArticleMedia)
                     .HasForeignKey(d => new { d.ArticleId, d.Specificulture })
@@ -194,8 +182,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
                 entity.HasOne(d => d.MixArticle)
                     .WithMany(p => p.MixArticleModule)
                     .HasForeignKey(d => new { d.ArticleId, d.Specificulture })
@@ -222,7 +208,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Email).HasMaxLength(250);
+                entity.Property(e => e.Email).HasMaxLength(256);
 
                 entity.Property(e => e.FirstName).HasMaxLength(50);
 
@@ -232,9 +218,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.PhoneNumber).HasMaxLength(50);
 
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.Username).HasMaxLength(250);
+                entity.Property(e => e.Username).HasMaxLength(256);
             });
 
             modelBuilder.Entity<MixComment>(entity =>
@@ -258,8 +242,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.FullName).HasMaxLength(250);
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.UpdatedBy).HasMaxLength(250);
 
@@ -297,13 +279,9 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.CreatedBy).HasMaxLength(50);
 
-                entity.Property(e => e.CreatedDateTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.Description).HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.SpecificultureNavigation)
                     .WithMany(p => p.MixConfiguration)
@@ -323,8 +301,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Keyword).HasMaxLength(250);
 
                 entity.Property(e => e.Note).HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
             });
 
             modelBuilder.Entity<MixCulture>(entity =>
@@ -335,13 +311,13 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasName("IX_Mix_Culture")
                     .IsUnique();
 
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
                 entity.Property(e => e.Alias).HasMaxLength(150);
 
                 entity.Property(e => e.CreatedBy).HasMaxLength(50);
 
-                entity.Property(e => e.CreatedDateTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.Description).HasMaxLength(250);
 
@@ -356,8 +332,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Specificulture)
                     .IsRequired()
                     .HasMaxLength(10);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
             });
 
             modelBuilder.Entity<MixCustomer>(entity =>
@@ -376,7 +350,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Email).HasMaxLength(250);
+                entity.Property(e => e.Email).HasMaxLength(256);
 
                 entity.Property(e => e.FirstName).HasMaxLength(50);
 
@@ -388,11 +362,9 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.PhoneNumber).HasMaxLength(50);
 
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+                entity.Property(e => e.UserId).HasMaxLength(256);
 
-                entity.Property(e => e.UserId).HasMaxLength(250);
-
-                entity.Property(e => e.Username).HasMaxLength(250);
+                entity.Property(e => e.Username).HasMaxLength(256);
             });
 
             modelBuilder.Entity<MixFile>(entity =>
@@ -401,9 +373,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => e.ThemeId);
 
-                entity.Property(e => e.Content)
-                    .IsRequired();
-                    //.HasColumnType("ntext");
+                entity.Property(e => e.Content).IsRequired();
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
@@ -426,8 +396,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy).HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.ThemeName)
                     .IsRequired()
@@ -455,15 +423,11 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.CreatedBy).HasMaxLength(50);
 
-                entity.Property(e => e.CreatedDateTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.DefaultValue).HasMaxLength(250);
 
                 entity.Property(e => e.Description).HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.SpecificultureNavigation)
                     .WithMany(p => p.MixLanguage)
@@ -506,8 +470,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.ModifiedBy).HasMaxLength(250);
 
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
                 entity.Property(e => e.Tags).HasMaxLength(400);
 
                 entity.Property(e => e.Title).HasMaxLength(4000);
@@ -543,15 +505,11 @@ namespace Mix.Cms.Lib.Models.Cms
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
                 entity.Property(e => e.Template).HasMaxLength(250);
 
                 entity.Property(e => e.Thumbnail).HasMaxLength(250);
 
                 entity.Property(e => e.Title).HasMaxLength(250);
-
-                entity.Property(e => e.Type).HasDefaultValueSql("('0')");
 
                 entity.HasOne(d => d.SpecificultureNavigation)
                     .WithMany(p => p.MixModule)
@@ -575,8 +533,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Description).HasMaxLength(250);
 
                 entity.Property(e => e.Image).HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.MixArticle)
                     .WithMany(p => p.MixModuleArticle)
@@ -612,8 +568,6 @@ namespace Mix.Cms.Lib.Models.Cms
                     .IsRequired()
                     .HasMaxLength(4000);
 
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
                 entity.Property(e => e.UpdatedDateTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.MixModule)
@@ -642,13 +596,9 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
-                entity.Property(e => e.DefaultValue)
-                    .IsRequired();
-                    //.HasColumnType("ntext");
+                entity.Property(e => e.DefaultValue).IsRequired();
 
                 entity.Property(e => e.Name).HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.Title).HasMaxLength(250);
 
@@ -683,8 +633,6 @@ namespace Mix.Cms.Lib.Models.Cms
                     .IsRequired()
                     .HasMaxLength(4000);
 
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
                 entity.Property(e => e.UpdatedDateTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.MixModule)
@@ -718,8 +666,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Description).HasMaxLength(250);
 
                 entity.Property(e => e.Image).HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.MixModule)
                     .WithMany(p => p.MixModuleProduct)
@@ -780,8 +726,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.PriceUnit).HasMaxLength(50);
 
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
                 entity.HasOne(d => d.MixOrder)
                     .WithMany(p => p.MixOrderItem)
                     .HasForeignKey(d => new { d.OrderId, d.Specificulture })
@@ -835,11 +779,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.SeoTitle).HasMaxLength(4000);
 
-                entity.Property(e => e.SetAttributeData);//.HasColumnType("ntext");
-
                 entity.Property(e => e.StaticUrl).HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.Tags).HasMaxLength(500);
 
@@ -877,8 +817,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
                 entity.HasOne(d => d.MixArticle)
                     .WithMany(p => p.MixPageArticle)
                     .HasForeignKey(d => new { d.ArticleId, d.Specificulture })
@@ -909,8 +847,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
                 entity.HasOne(d => d.MixPage)
                     .WithMany(p => p.MixPageModule)
                     .HasForeignKey(d => new { d.CategoryId, d.Specificulture })
@@ -939,8 +875,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
                 entity.HasOne(d => d.MixPage)
                     .WithMany(p => p.MixPagePageMixPage)
                     .HasForeignKey(d => new { d.Id, d.Specificulture })
@@ -966,8 +900,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
                 entity.Property(e => e.Description).HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.Position)
                     .WithMany(p => p.MixPagePosition)
@@ -998,8 +930,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
                 entity.HasOne(d => d.MixPage)
                     .WithMany(p => p.MixPageProduct)
                     .HasForeignKey(d => new { d.CategoryId, d.Specificulture })
@@ -1020,10 +950,8 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.ToTable("mix_parameter");
 
                 entity.Property(e => e.Name)
-                    .HasMaxLength(250)
+                    .HasMaxLength(256)
                     .ValueGeneratedNever();
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.Value).IsRequired();
             });
@@ -1041,8 +969,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Description).HasMaxLength(450);
 
                 entity.Property(e => e.Icon).HasMaxLength(50);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.TextDefault).HasMaxLength(250);
 
@@ -1062,8 +988,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Description).HasMaxLength(250);
 
                 entity.Property(e => e.Image).HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.IdNavigation)
                     .WithMany(p => p.MixPortalPageNavigationIdNavigation)
@@ -1087,8 +1011,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.HasIndex(e => e.PortalPageId);
 
                 entity.Property(e => e.Description).HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.PortalPage)
                     .WithMany(p => p.MixPortalPagePosition)
@@ -1116,8 +1038,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
                 entity.HasOne(d => d.Page)
                     .WithMany(p => p.MixPortalPageRole)
                     .HasForeignKey(d => d.PageId)
@@ -1128,11 +1048,11 @@ namespace Mix.Cms.Lib.Models.Cms
             {
                 entity.ToTable("mix_position");
 
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
                 entity.Property(e => e.Description)
                     .IsRequired()
                     .HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
             });
 
             modelBuilder.Entity<MixProduct>(entity =>
@@ -1147,17 +1067,11 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
-                entity.Property(e => e.Code)
-                    .HasMaxLength(50)
-                    .HasDefaultValueSql("(N'')");
+                entity.Property(e => e.Code).HasMaxLength(50);
 
                 entity.Property(e => e.CreatedBy).HasMaxLength(250);
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.DealPrice).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.ExtraProperties);//.HasColumnType("ntext");
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
@@ -1166,8 +1080,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Material).HasMaxLength(250);
 
                 entity.Property(e => e.ModifiedBy).HasMaxLength(250);
-
-                entity.Property(e => e.PackageCount).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.PrivacyId).HasMaxLength(10);
 
@@ -1181,11 +1093,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.SeoTitle).HasMaxLength(4000);
 
-                entity.Property(e => e.SetAttributeData);//.HasColumnType("ntext");
-
                 entity.Property(e => e.Source).HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.Tags).HasMaxLength(500);
 
@@ -1226,8 +1134,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
                 entity.HasOne(d => d.MixMedia)
                     .WithMany(p => p.MixProductMedia)
                     .HasForeignKey(d => new { d.MediaId, d.Specificulture })
@@ -1256,8 +1162,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Description).HasMaxLength(250);
 
                 entity.Property(e => e.Image).HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.MixModule)
                     .WithMany(p => p.MixProductModule)
@@ -1357,9 +1261,9 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.HasIndex(e => e.ThemeId)
                     .HasName("IX_mix_template_file_TemplateId");
 
-                entity.Property(e => e.Content)
-                    .IsRequired();
-                    //.HasColumnType("ntext");
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Content).IsRequired();
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
@@ -1381,17 +1285,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
-                entity.Property(e => e.MobileContent);//.HasColumnType("ntext");
-
                 entity.Property(e => e.ModifiedBy).HasMaxLength(250);
-
-                entity.Property(e => e.Scripts);//.HasColumnType("ntext");
-
-                entity.Property(e => e.SpaContent);//.HasColumnType("ntext");
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.Styles);//.HasColumnType("ntext");
 
                 entity.Property(e => e.ThemeName)
                     .IsRequired()
@@ -1408,6 +1302,8 @@ namespace Mix.Cms.Lib.Models.Cms
             {
                 entity.ToTable("mix_theme");
 
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
                 entity.Property(e => e.CreatedBy)
                     .IsRequired()
                     .HasMaxLength(250);
@@ -1421,8 +1317,6 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasMaxLength(250);
 
                 entity.Property(e => e.PreviewUrl).HasMaxLength(450);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.Thumbnail).HasMaxLength(250);
 
@@ -1446,10 +1340,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Description).HasMaxLength(4000);
 
                 entity.Property(e => e.SourceId).HasMaxLength(250);
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.Type).HasDefaultValueSql("('0')");
 
                 entity.HasOne(d => d.SpecificultureNavigation)
                     .WithMany(p => p.MixUrlAlias)

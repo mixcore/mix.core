@@ -135,17 +135,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         #endregion Contructors
 
         #region Overrides
-
-        public override MixTheme ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            if (Id == 0)
-            {
-                Name = SeoHelper.GetSEOString(Title);
-                CreatedDateTime = DateTime.UtcNow;
-            }
-            return base.ParseModel(_context, _transaction);
-        }
-
+        
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Templates = MixTemplates.InitViewModel.Repository.GetModelListBy(t => t.ThemeId == Id,
@@ -160,8 +150,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>() { IsSucceed = true };
 
-            if (Id == 0)
-            {
                 // Clone Default templates
                 Name = SeoHelper.GetSEOString(Title);
                 string defaultTemplateFolder = CommonHelper.GetFullPath(new string[] {
@@ -205,7 +193,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                         break;
                     }
                 }
-            }
 
             return result;
         }
@@ -234,7 +221,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             RepositoryResponse<bool> result = new RepositoryResponse<bool>() { IsSucceed = true };
 
             // Create default template if create new without import template assets
-            if (Id == 0 && (TemplateAsset.Content == null && TemplateAsset.FileStream == null))
+            if (TemplateAsset.Content == null && TemplateAsset.FileStream == null)
             {
 
                 string defaultFolder = CommonHelper.GetFullPath(new string[] {

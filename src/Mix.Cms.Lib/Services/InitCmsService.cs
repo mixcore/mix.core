@@ -12,6 +12,7 @@ using Mix.Cms.Lib.Repositories;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using Mix.Cms.Messenger.Models.Data;
+using Mix.Common.Helper;
 
 namespace Mix.Cms.Lib.Services
 {
@@ -38,8 +39,8 @@ namespace Mix.Cms.Lib.Services
                     accountContext = new MixCmsAccountContext();
                     messengerContext = new MixChatServiceContext();
                     //MixChatServiceContext._cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+                    await context.Database.MigrateAsync();
                     await accountContext.Database.MigrateAsync();
-                    await context.Database.MigrateAsync();                    
                     await messengerContext.Database.MigrateAsync();
                     transaction = context.Database.BeginTransaction();
 
@@ -56,14 +57,14 @@ namespace Mix.Cms.Lib.Services
                         isSucceed = isSucceed && await InitLanguagesAsync(culture, context, transaction);
                         isSucceed = isSucceed && InitThemes(siteName, context, transaction);
 
-                        
+
                     }
                     else
                     {
                         isSucceed = true;
                     }
 
-                    if (isSucceed && context.MixPage.Count()==0)
+                    if (isSucceed && context.MixPage.Count() == 0)
                     {
                         var cate = new MixPage()
                         {
@@ -98,7 +99,7 @@ namespace Mix.Cms.Lib.Services
                         {
                             Id = 2,
                             Title = "404",
-                            SeoName= "404",
+                            SeoName = "404",
                             Level = 0,
                             Specificulture = culture.Specificulture,
                             Template = "Pages/_404.cshtml",
@@ -151,7 +152,7 @@ namespace Mix.Cms.Lib.Services
             }
         }
 
-        
+
         private async Task<bool> InitConfigurationsAsync(string siteName, InitCulture culture, MixCmsContext context, IDbContextTransaction transaction)
         {
             /* Init Configs */
@@ -164,7 +165,7 @@ namespace Mix.Cms.Lib.Services
                 arrConfiguration.Find(c => c.Keyword == "ThemeName").Value = Common.Helper.SeoHelper.GetSEOString(siteName);
                 arrConfiguration.Find(c => c.Keyword == "ThemeFolder").Value = Common.Helper.SeoHelper.GetSEOString(siteName);
             }
-            var result = await ViewModels.MixConfigurations.ReadMvcViewModel.ImportConfigurations(arrConfiguration, culture.Specificulture,  context, transaction);
+            var result = await ViewModels.MixConfigurations.ReadMvcViewModel.ImportConfigurations(arrConfiguration, culture.Specificulture, context, transaction);
             return result.IsSucceed;
 
         }
@@ -175,7 +176,7 @@ namespace Mix.Cms.Lib.Services
             var configurations = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_LANGUAGES, "data", true, "{}");
             var obj = JObject.Parse(configurations.Content);
             var arrLanguage = obj["data"].ToObject<List<MixLanguage>>();
-            var result = await ViewModels.MixLanguages.ReadMvcViewModel.ImportLanguages(arrLanguage, culture.Specificulture,  context, transaction);
+            var result = await ViewModels.MixLanguages.ReadMvcViewModel.ImportLanguages(arrLanguage, culture.Specificulture, context, transaction);
             return result.IsSucceed;
 
         }
@@ -188,10 +189,12 @@ namespace Mix.Cms.Lib.Services
             {
                 ViewModels.MixThemes.InitViewModel theme = new ViewModels.MixThemes.InitViewModel(new MixTheme()
                 {
+                    Id = 1,
                     Title = siteName,
+                    Name = SeoHelper.GetSEOString(siteName),
+                    CreatedDateTime = DateTime.UtcNow,
                     CreatedBy = "Admin",
                     Status = (int)MixContentStatus.Published,
-                    CreatedDateTime = DateTime.UtcNow
                 }, context, transaction);
 
                 isSucceed = isSucceed && theme.SaveModel(true, context, transaction).IsSucceed;
@@ -212,6 +215,7 @@ namespace Mix.Cms.Lib.Services
 
                     var enCulture = new MixCulture()
                     {
+                        Id = 1,
                         Specificulture = culture.Specificulture,
                         FullName = culture.FullName,
                         Description = culture.Description,
@@ -238,33 +242,29 @@ namespace Mix.Cms.Lib.Services
             var count = context.MixPortalPage.Count();
             if (count == 0)
             {
-                int id = 1;
                 var p = new MixPosition()
                 {
-                    Id = id,
-                    Description = nameof(MixEnums.CatePosition.Nav),
+                    Id = 1,
+                    Description = nameof(MixEnums.CatePosition.Nav)
                 };
                 context.Entry(p).State = EntityState.Added;
-                id++;
                 p = new MixPosition()
                 {
-                    Id = id,
+                    Id = 2,
                     Description = nameof(MixEnums.CatePosition.Top)
                 };
-                id++;
                 context.Entry(p).State = EntityState.Added;
                 p = new MixPosition()
                 {
-                    Id = id,
+                    Id = 3,
                     Description = nameof(MixEnums.CatePosition.Left)
                 };
                 context.Entry(p).State = EntityState.Added;
-                id++;
                 p = new MixPosition()
                 {
-                    Id = id,
+                    Id = 4,
                     Description = nameof(MixEnums.CatePosition.Footer)
-                };                
+                };
                 context.Entry(p).State = EntityState.Added;
 
                 context.SaveChanges();

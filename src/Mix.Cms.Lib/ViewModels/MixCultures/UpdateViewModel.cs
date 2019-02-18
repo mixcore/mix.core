@@ -43,7 +43,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
 
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-        
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
         #endregion Models
@@ -71,8 +71,9 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
         #region Overrides
         public override MixCulture ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (Id==0)
+            if (Id == 0)
             {
+                Id = Repository.Max(m => m.Id).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
             return base.ParseModel(_context, _transaction);
