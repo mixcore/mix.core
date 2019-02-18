@@ -22,9 +22,9 @@ namespace Mix.Cms.Lib.Migrations
                     MiddleName = table.Column<string>(maxLength: 50, nullable: true),
                     PhoneNumber = table.Column<string>(maxLength: 50, nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
-                    Username = table.Column<string>(maxLength: 256, nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true)
+                    Status = table.Column<int>(nullable: false),
+                    Username = table.Column<string>(maxLength: 250, nullable: true),
+                    Email = table.Column<string>(maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -39,7 +39,7 @@ namespace Mix.Cms.Lib.Migrations
                     Keyword = table.Column<string>(maxLength: 250, nullable: false),
                     Note = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    Status = table.Column<int>(nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -60,8 +60,8 @@ namespace Mix.Cms.Lib.Migrations
                     LCID = table.Column<string>(maxLength: 50, nullable: true),
                     Priority = table.Column<int>(nullable: false),
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())"),
+                    Status = table.Column<int>(nullable: false),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     CreatedBy = table.Column<string>(maxLength: 50, nullable: true)
                 },
                 constraints: table =>
@@ -75,9 +75,9 @@ namespace Mix.Cms.Lib.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false),
-                    UserId = table.Column<string>(maxLength: 256, nullable: true),
-                    Username = table.Column<string>(maxLength: 256, nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true),
+                    UserId = table.Column<string>(maxLength: 250, nullable: true),
+                    Username = table.Column<string>(maxLength: 250, nullable: true),
+                    Email = table.Column<string>(maxLength: 250, nullable: true),
                     FirstName = table.Column<string>(maxLength: 50, nullable: true),
                     MiddleName = table.Column<string>(maxLength: 50, nullable: true),
                     LastName = table.Column<string>(maxLength: 50, nullable: true),
@@ -86,7 +86,7 @@ namespace Mix.Cms.Lib.Migrations
                     Avatar = table.Column<string>(maxLength: 250, nullable: true),
                     Address = table.Column<string>(maxLength: 450, nullable: true),
                     PhoneNumber = table.Column<string>(maxLength: 50, nullable: true),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    Status = table.Column<int>(nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     CreatedBy = table.Column<string>(maxLength: 50, nullable: true),
                     Priority = table.Column<int>(nullable: false),
@@ -114,7 +114,7 @@ namespace Mix.Cms.Lib.Migrations
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     ModifiedBy = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    Status = table.Column<int>(nullable: false),
                     Title = table.Column<string>(maxLength: 4000, nullable: true),
                     Tags = table.Column<string>(maxLength: 400, nullable: true)
                 },
@@ -127,10 +127,10 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_parameter",
                 columns: table => new
                 {
-                    Name = table.Column<string>(maxLength: 256, nullable: false),
+                    Name = table.Column<string>(maxLength: 250, nullable: false),
                     Description = table.Column<string>(nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    Status = table.Column<int>(nullable: false),
                     Value = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -148,7 +148,7 @@ namespace Mix.Cms.Lib.Migrations
                     Priority = table.Column<int>(nullable: false),
                     Icon = table.Column<string>(maxLength: 50, nullable: true),
                     TextKeyword = table.Column<string>(maxLength: 250, nullable: true),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    Status = table.Column<int>(nullable: false),
                     Url = table.Column<string>(maxLength: 250, nullable: true),
                     Description = table.Column<string>(maxLength: 450, nullable: true),
                     TextDefault = table.Column<string>(maxLength: 250, nullable: true),
@@ -167,7 +167,7 @@ namespace Mix.Cms.Lib.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Description = table.Column<string>(maxLength: 250, nullable: false),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))")
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -204,7 +204,7 @@ namespace Mix.Cms.Lib.Migrations
                     Image = table.Column<string>(maxLength: 250, nullable: true),
                     Name = table.Column<string>(maxLength: 250, nullable: false),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    Status = table.Column<int>(nullable: false),
                     PreviewUrl = table.Column<string>(maxLength: 450, nullable: true)
                 },
                 constraints: table =>
@@ -222,9 +222,9 @@ namespace Mix.Cms.Lib.Migrations
                     DataType = table.Column<int>(nullable: false),
                     Description = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    Status = table.Column<int>(nullable: false),
                     Value = table.Column<string>(nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())"),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     CreatedBy = table.Column<string>(maxLength: 50, nullable: true)
                 },
                 constraints: table =>
@@ -248,10 +248,10 @@ namespace Mix.Cms.Lib.Migrations
                     DataType = table.Column<int>(nullable: false),
                     Description = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    Status = table.Column<int>(nullable: false),
                     Value = table.Column<string>(nullable: true),
                     DefaultValue = table.Column<string>(maxLength: 250, nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())"),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     CreatedBy = table.Column<string>(maxLength: 50, nullable: true)
                 },
                 constraints: table =>
@@ -278,11 +278,11 @@ namespace Mix.Cms.Lib.Migrations
                     ModifiedBy = table.Column<string>(maxLength: 250, nullable: true),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    Status = table.Column<int>(nullable: false),
                     Template = table.Column<string>(maxLength: 250, nullable: true),
                     FormTemplate = table.Column<string>(maxLength: 4000, nullable: true),
                     Title = table.Column<string>(maxLength: 250, nullable: true),
-                    Type = table.Column<int>(nullable: false, defaultValueSql: "('0')"),
+                    Type = table.Column<int>(nullable: false),
                     PageSize = table.Column<int>(nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
@@ -304,10 +304,10 @@ namespace Mix.Cms.Lib.Migrations
                     Id = table.Column<int>(nullable: false),
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
                     SourceId = table.Column<string>(maxLength: 250, nullable: true),
-                    Type = table.Column<int>(nullable: false, defaultValueSql: "('0')"),
+                    Type = table.Column<int>(nullable: false),
                     Description = table.Column<string>(maxLength: 4000, nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    Status = table.Column<int>(nullable: false),
                     Alias = table.Column<string>(maxLength: 250, nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
@@ -355,7 +355,7 @@ namespace Mix.Cms.Lib.Migrations
                     Description = table.Column<string>(maxLength: 250, nullable: true),
                     Image = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))")
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -383,7 +383,7 @@ namespace Mix.Cms.Lib.Migrations
                     PageId = table.Column<int>(nullable: false),
                     Priority = table.Column<int>(nullable: false),
                     RoleId = table.Column<string>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))")
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -404,7 +404,7 @@ namespace Mix.Cms.Lib.Migrations
                     PortalPageId = table.Column<int>(nullable: false),
                     Description = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))")
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -430,12 +430,12 @@ namespace Mix.Cms.Lib.Migrations
                     Id = table.Column<int>(nullable: false),
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
                     SetAttributeId = table.Column<int>(nullable: true),
-                    SetAttributeData = table.Column<string>(type: "ntext", nullable: true),
+                    SetAttributeData = table.Column<string>(nullable: true),
                     Content = table.Column<string>(nullable: true),
                     CreatedBy = table.Column<string>(maxLength: 250, nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     Excerpt = table.Column<string>(nullable: true),
-                    ExtraProperties = table.Column<string>(type: "ntext", nullable: true),
+                    ExtraProperties = table.Column<string>(nullable: true),
                     Icon = table.Column<string>(nullable: true),
                     Image = table.Column<string>(maxLength: 250, nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -446,7 +446,7 @@ namespace Mix.Cms.Lib.Migrations
                     SeoName = table.Column<string>(unicode: false, maxLength: 500, nullable: true),
                     SeoTitle = table.Column<string>(maxLength: 4000, nullable: true),
                     Source = table.Column<string>(maxLength: 250, nullable: true),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    Status = table.Column<int>(nullable: false),
                     Tags = table.Column<string>(maxLength: 500, nullable: true),
                     Template = table.Column<string>(maxLength: 250, nullable: true),
                     Thumbnail = table.Column<string>(maxLength: 250, nullable: true),
@@ -478,7 +478,7 @@ namespace Mix.Cms.Lib.Migrations
                     Id = table.Column<int>(nullable: false),
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
                     SetAttributeId = table.Column<int>(nullable: true),
-                    SetAttributeData = table.Column<string>(type: "ntext", nullable: true),
+                    SetAttributeData = table.Column<string>(nullable: true),
                     Content = table.Column<string>(nullable: true),
                     CreatedBy = table.Column<string>(maxLength: 250, nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -496,7 +496,7 @@ namespace Mix.Cms.Lib.Migrations
                     SeoName = table.Column<string>(unicode: false, maxLength: 500, nullable: true),
                     SeoTitle = table.Column<string>(maxLength: 4000, nullable: true),
                     StaticUrl = table.Column<string>(maxLength: 250, nullable: true),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    Status = table.Column<int>(nullable: false),
                     Tags = table.Column<string>(maxLength: 500, nullable: true),
                     Template = table.Column<string>(maxLength: 250, nullable: true),
                     Title = table.Column<string>(maxLength: 4000, nullable: true),
@@ -528,13 +528,13 @@ namespace Mix.Cms.Lib.Migrations
                     Id = table.Column<int>(nullable: false),
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
                     SetAttributeId = table.Column<int>(nullable: true),
-                    SetAttributeData = table.Column<string>(type: "ntext", nullable: true),
+                    SetAttributeData = table.Column<string>(nullable: true),
                     Content = table.Column<string>(nullable: true),
                     Unit = table.Column<string>(maxLength: 50, nullable: true),
                     CreatedBy = table.Column<string>(maxLength: 250, nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     Excerpt = table.Column<string>(nullable: true),
-                    ExtraProperties = table.Column<string>(type: "ntext", nullable: true),
+                    ExtraProperties = table.Column<string>(nullable: true),
                     Icon = table.Column<string>(nullable: true),
                     Image = table.Column<string>(maxLength: 250, nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -547,20 +547,20 @@ namespace Mix.Cms.Lib.Migrations
                     SeoName = table.Column<string>(unicode: false, maxLength: 500, nullable: true),
                     SeoTitle = table.Column<string>(maxLength: 4000, nullable: true),
                     Source = table.Column<string>(maxLength: 250, nullable: true),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    Status = table.Column<int>(nullable: false),
                     Tags = table.Column<string>(maxLength: 500, nullable: true),
                     Template = table.Column<string>(maxLength: 250, nullable: true),
                     Thumbnail = table.Column<string>(maxLength: 250, nullable: true),
                     Title = table.Column<string>(maxLength: 4000, nullable: true),
                     Type = table.Column<int>(nullable: false),
                     Views = table.Column<int>(nullable: true),
-                    Code = table.Column<string>(maxLength: 50, nullable: true, defaultValueSql: "(N'')"),
-                    DealPrice = table.Column<double>(nullable: true, defaultValueSql: "((0))"),
+                    Code = table.Column<string>(maxLength: 50, nullable: true),
+                    DealPrice = table.Column<double>(nullable: true),
                     Discount = table.Column<double>(nullable: false),
                     ImportPrice = table.Column<double>(nullable: false),
                     Material = table.Column<string>(maxLength: 250, nullable: true),
                     NormalPrice = table.Column<double>(nullable: false),
-                    PackageCount = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    PackageCount = table.Column<int>(nullable: false),
                     TotalSaled = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -586,7 +586,7 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Content = table.Column<string>(type: "ntext", nullable: false),
+                    Content = table.Column<string>(nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     Extension = table.Column<string>(maxLength: 50, nullable: false),
                     FileFolder = table.Column<string>(maxLength: 250, nullable: false),
@@ -595,7 +595,7 @@ namespace Mix.Cms.Lib.Migrations
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     ModifiedBy = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    Status = table.Column<int>(nullable: false),
                     ThemeId = table.Column<int>(nullable: true),
                     ThemeName = table.Column<string>(maxLength: 250, nullable: false)
                 },
@@ -616,20 +616,20 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Content = table.Column<string>(type: "ntext", nullable: false),
+                    Content = table.Column<string>(nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     Extension = table.Column<string>(maxLength: 50, nullable: false),
                     FileFolder = table.Column<string>(maxLength: 250, nullable: false),
                     FileName = table.Column<string>(maxLength: 250, nullable: false),
                     FolderType = table.Column<string>(maxLength: 50, nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    MobileContent = table.Column<string>(type: "ntext", nullable: true),
+                    MobileContent = table.Column<string>(nullable: true),
                     ModifiedBy = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    Scripts = table.Column<string>(type: "ntext", nullable: true),
-                    SpaContent = table.Column<string>(type: "ntext", nullable: true),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
-                    Styles = table.Column<string>(type: "ntext", nullable: true),
+                    Scripts = table.Column<string>(nullable: true),
+                    SpaContent = table.Column<string>(nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    Styles = table.Column<string>(nullable: true),
                     ThemeId = table.Column<int>(nullable: false),
                     ThemeName = table.Column<string>(maxLength: 250, nullable: false)
                 },
@@ -655,7 +655,7 @@ namespace Mix.Cms.Lib.Migrations
                     Image = table.Column<string>(maxLength: 250, nullable: true),
                     Position = table.Column<int>(nullable: false),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))")
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -685,7 +685,7 @@ namespace Mix.Cms.Lib.Migrations
                     Image = table.Column<string>(maxLength: 250, nullable: true),
                     Position = table.Column<int>(nullable: false),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))")
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -714,7 +714,7 @@ namespace Mix.Cms.Lib.Migrations
                     Description = table.Column<string>(maxLength: 250, nullable: true),
                     Image = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))")
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -772,8 +772,8 @@ namespace Mix.Cms.Lib.Migrations
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
                     Description = table.Column<string>(maxLength: 250, nullable: true),
                     Image = table.Column<string>(maxLength: 250, nullable: true),
-                    Priority = table.Column<int>(nullable: false, defaultValueSql: "((0))"),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))")
+                    Priority = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -803,7 +803,7 @@ namespace Mix.Cms.Lib.Migrations
                     Image = table.Column<string>(maxLength: 250, nullable: true),
                     Position = table.Column<int>(nullable: false),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))")
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -832,7 +832,7 @@ namespace Mix.Cms.Lib.Migrations
                     Description = table.Column<string>(maxLength: 250, nullable: true),
                     Image = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))")
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -860,7 +860,7 @@ namespace Mix.Cms.Lib.Migrations
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
                     Description = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))")
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -898,7 +898,7 @@ namespace Mix.Cms.Lib.Migrations
                     IsVisible = table.Column<bool>(nullable: true),
                     Rating = table.Column<double>(nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    Status = table.Column<int>(nullable: false),
                     UpdatedBy = table.Column<string>(maxLength: 250, nullable: true),
                     UpdatedDateTime = table.Column<DateTime>(type: "datetime", nullable: true)
                 },
@@ -935,7 +935,7 @@ namespace Mix.Cms.Lib.Migrations
                     Description = table.Column<string>(maxLength: 250, nullable: true),
                     Image = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))")
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -966,7 +966,7 @@ namespace Mix.Cms.Lib.Migrations
                     PriceUnit = table.Column<string>(maxLength: 50, nullable: true),
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
                     Description = table.Column<string>(maxLength: 4000, nullable: true),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))")
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -995,7 +995,7 @@ namespace Mix.Cms.Lib.Migrations
                     Description = table.Column<string>(maxLength: 250, nullable: true),
                     Image = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))")
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1025,7 +1025,7 @@ namespace Mix.Cms.Lib.Migrations
                     Image = table.Column<string>(maxLength: 250, nullable: true),
                     Position = table.Column<int>(nullable: false),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))")
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1055,7 +1055,7 @@ namespace Mix.Cms.Lib.Migrations
                     Image = table.Column<string>(maxLength: 250, nullable: true),
                     Position = table.Column<int>(nullable: false),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))")
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1116,7 +1116,7 @@ namespace Mix.Cms.Lib.Migrations
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     Fields = table.Column<string>(maxLength: 4000, nullable: false),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    Status = table.Column<int>(nullable: false),
                     UpdatedDateTime = table.Column<DateTime>(type: "datetime", nullable: true),
                     Value = table.Column<string>(nullable: true)
                 },
@@ -1156,7 +1156,7 @@ namespace Mix.Cms.Lib.Migrations
                     Fields = table.Column<string>(maxLength: 4000, nullable: false),
                     Priority = table.Column<int>(nullable: false),
                     ProductId = table.Column<int>(nullable: true),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    Status = table.Column<int>(nullable: false),
                     UpdatedDateTime = table.Column<DateTime>(type: "datetime", nullable: true),
                     Value = table.Column<string>(nullable: true)
                 },
@@ -1191,11 +1191,11 @@ namespace Mix.Cms.Lib.Migrations
                     AttributeSetId = table.Column<Guid>(nullable: false),
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
                     DataType = table.Column<int>(nullable: false),
-                    DefaultValue = table.Column<string>(type: "ntext", nullable: false),
+                    DefaultValue = table.Column<string>(nullable: false),
                     ModuleId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    Status = table.Column<int>(nullable: false),
                     Title = table.Column<string>(maxLength: 250, nullable: true),
                     Width = table.Column<int>(nullable: false)
                 },

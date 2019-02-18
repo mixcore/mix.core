@@ -48,10 +48,10 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                     b.Property<string>("ConcurrencyStamp");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(256);
+                        .HasMaxLength(250);
 
                     b.Property<string>("NormalizedName")
-                        .HasMaxLength(256);
+                        .HasMaxLength(250);
 
                     b.HasKey("Id");
 
@@ -144,7 +144,7 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                         .HasColumnName("DOB");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(256);
+                        .HasMaxLength(250);
 
                     b.Property<bool>("EmailConfirmed");
 
@@ -169,10 +169,10 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                     b.Property<string>("NickName");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256);
+                        .HasMaxLength(250);
 
                     b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256);
+                        .HasMaxLength(250);
 
                     b.Property<string>("PasswordHash");
 
@@ -187,7 +187,7 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                     b.Property<bool>("TwoFactorEnabled");
 
                     b.Property<string>("UserName")
-                        .HasMaxLength(256);
+                        .HasMaxLength(250);
 
                     b.HasKey("Id");
 

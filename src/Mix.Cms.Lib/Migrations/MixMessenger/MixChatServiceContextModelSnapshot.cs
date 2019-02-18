@@ -27,7 +27,7 @@ namespace Mix.Cms.Messenger.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("ntext");
+                        ;//.HasColumnType("ntext");
 
                     b.Property<string>("HostId")
                         .HasMaxLength(128);
@@ -56,7 +56,7 @@ namespace Mix.Cms.Messenger.Migrations
                     b.Property<Guid>("Id");
 
                     b.Property<string>("Content")
-                        .HasColumnType("ntext");
+                        ;//.HasColumnType("ntext");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime");
@@ -138,7 +138,7 @@ namespace Mix.Cms.Messenger.Migrations
 
                     b.Property<bool?>("IsOpen")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                        ;//.HasDefaultValueSql("((1))");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -174,7 +174,7 @@ namespace Mix.Cms.Messenger.Migrations
 
                     b.Property<int>("Status")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((1))");
+                        ;//.HasDefaultValueSql("((1))");
 
                     b.HasKey("Id");
 

@@ -43,7 +43,7 @@
     "DefaultTemplateLayout": "_Layout",
     "OrderBy": "Priority",
     "DefaultStatus": "2",
-    "IsSqlite": "False",
+    "IsMysql": "False",
     "Language": "en-us",
     "UploadFolder": "Content/Uploads",
     "ThemeId": "1",
@@ -65,6 +65,6 @@
     "Audience": "sw-client"
   },
   "AllowedHosts": "*",
-  "IsSqlite": false,
+  "IsMysql": false,
   "Language": "en-us"
 }

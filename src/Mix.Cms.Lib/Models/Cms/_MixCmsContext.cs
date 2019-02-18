@@ -67,9 +67,13 @@ namespace Mix.Cms.Lib.Models.Cms
             string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {
-                if (MixService.GetConfig<bool>("IsSqlite"))
+                if (MixService.GetConfig<bool>("IsMysql"))
                 {
-                    optionsBuilder.UseSqlite(cnn);
+                    optionsBuilder.UseMySql(cnn,
+                        mySqlOptions =>
+                        {
+                            mySqlOptions.ServerVersion(new System.Version(5, 6, 38), Pomelo.EntityFrameworkCore.MySql.Infrastructure.ServerType.MySql); // replace with your Server Version and Type
+                        });
                 }
                 else
                 {
@@ -96,7 +100,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.ExtraProperties).HasColumnType("ntext");
+                entity.Property(e => e.ExtraProperties);//.HasColumnType("ntext");
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
@@ -116,7 +120,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.SeoTitle).HasMaxLength(4000);
 
-                entity.Property(e => e.SetAttributeData).HasColumnType("ntext");
+                entity.Property(e => e.SetAttributeData);//.HasColumnType("ntext");
 
                 entity.Property(e => e.Source).HasMaxLength(250);
 
@@ -218,7 +222,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Email).HasMaxLength(256);
+                entity.Property(e => e.Email).HasMaxLength(250);
 
                 entity.Property(e => e.FirstName).HasMaxLength(50);
 
@@ -230,7 +234,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
-                entity.Property(e => e.Username).HasMaxLength(256);
+                entity.Property(e => e.Username).HasMaxLength(250);
             });
 
             modelBuilder.Entity<MixComment>(entity =>
@@ -372,7 +376,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Email).HasMaxLength(256);
+                entity.Property(e => e.Email).HasMaxLength(250);
 
                 entity.Property(e => e.FirstName).HasMaxLength(50);
 
@@ -386,9 +390,9 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
-                entity.Property(e => e.UserId).HasMaxLength(256);
+                entity.Property(e => e.UserId).HasMaxLength(250);
 
-                entity.Property(e => e.Username).HasMaxLength(256);
+                entity.Property(e => e.Username).HasMaxLength(250);
             });
 
             modelBuilder.Entity<MixFile>(entity =>
@@ -398,8 +402,8 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.HasIndex(e => e.ThemeId);
 
                 entity.Property(e => e.Content)
-                    .IsRequired()
-                    .HasColumnType("ntext");
+                    .IsRequired();
+                    //.HasColumnType("ntext");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
@@ -639,8 +643,8 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
                 entity.Property(e => e.DefaultValue)
-                    .IsRequired()
-                    .HasColumnType("ntext");
+                    .IsRequired();
+                    //.HasColumnType("ntext");
 
                 entity.Property(e => e.Name).HasMaxLength(250);
 
@@ -831,7 +835,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.SeoTitle).HasMaxLength(4000);
 
-                entity.Property(e => e.SetAttributeData).HasColumnType("ntext");
+                entity.Property(e => e.SetAttributeData);//.HasColumnType("ntext");
 
                 entity.Property(e => e.StaticUrl).HasMaxLength(250);
 
@@ -1016,7 +1020,7 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.ToTable("mix_parameter");
 
                 entity.Property(e => e.Name)
-                    .HasMaxLength(256)
+                    .HasMaxLength(250)
                     .ValueGeneratedNever();
 
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");
@@ -1153,7 +1157,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.DealPrice).HasDefaultValueSql("((0))");
 
-                entity.Property(e => e.ExtraProperties).HasColumnType("ntext");
+                entity.Property(e => e.ExtraProperties);//.HasColumnType("ntext");
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
@@ -1177,7 +1181,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.SeoTitle).HasMaxLength(4000);
 
-                entity.Property(e => e.SetAttributeData).HasColumnType("ntext");
+                entity.Property(e => e.SetAttributeData);//.HasColumnType("ntext");
 
                 entity.Property(e => e.Source).HasMaxLength(250);
 
@@ -1354,8 +1358,8 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasName("IX_mix_template_file_TemplateId");
 
                 entity.Property(e => e.Content)
-                    .IsRequired()
-                    .HasColumnType("ntext");
+                    .IsRequired();
+                    //.HasColumnType("ntext");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
@@ -1377,17 +1381,17 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
-                entity.Property(e => e.MobileContent).HasColumnType("ntext");
+                entity.Property(e => e.MobileContent);//.HasColumnType("ntext");
 
                 entity.Property(e => e.ModifiedBy).HasMaxLength(250);
 
-                entity.Property(e => e.Scripts).HasColumnType("ntext");
+                entity.Property(e => e.Scripts);//.HasColumnType("ntext");
 
-                entity.Property(e => e.SpaContent).HasColumnType("ntext");
+                entity.Property(e => e.SpaContent);//.HasColumnType("ntext");
 
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
-                entity.Property(e => e.Styles).HasColumnType("ntext");
+                entity.Property(e => e.Styles);//.HasColumnType("ntext");
 
                 entity.Property(e => e.ThemeName)
                     .IsRequired()

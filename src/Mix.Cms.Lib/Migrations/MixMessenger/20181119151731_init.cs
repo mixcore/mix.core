@@ -14,7 +14,7 @@ namespace Mix.Cms.Messenger.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     Avatar = table.Column<string>(maxLength: 250, nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Description = table.Column<string>(type: "ntext", nullable: true),
+                    Description = table.Column<string>(nullable: true),
                     HostId = table.Column<string>(maxLength: 128, nullable: true),
                     IsOpen = table.Column<bool>(nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -35,7 +35,7 @@ namespace Mix.Cms.Messenger.Migrations
                     Avatar = table.Column<string>(maxLength: 250, nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     HostId = table.Column<string>(maxLength: 128, nullable: true),
-                    IsOpen = table.Column<bool>(nullable: true, defaultValueSql: "((1))"),
+                    IsOpen = table.Column<bool>(nullable: true),
                     Name = table.Column<string>(maxLength: 250, nullable: false),
                     Type = table.Column<int>(nullable: false)
                 },
@@ -54,7 +54,7 @@ namespace Mix.Cms.Messenger.Migrations
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     Name = table.Column<string>(maxLength: 250, nullable: false),
-                    Status = table.Column<int>(nullable: false, defaultValueSql: "((1))")
+                    Status = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true)
                 },
                 constraints: table =>
@@ -83,7 +83,7 @@ namespace Mix.Cms.Messenger.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Content = table.Column<string>(type: "ntext", nullable: true),
+                    Content = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     RoomId = table.Column<Guid>(nullable: true),
                     TeamId = table.Column<int>(nullable: true),

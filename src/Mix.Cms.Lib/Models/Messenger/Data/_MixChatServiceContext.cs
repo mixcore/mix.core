@@ -53,9 +53,13 @@ namespace Mix.Cms.Messenger.Models.Data
                 string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
                 if (!string.IsNullOrEmpty(cnn))
                 {
-                    if (MixService.GetConfig<bool>("IsSqlite"))
+                    if (MixService.GetConfig<bool>("IsMysql"))
                     {
-                        optionsBuilder.UseSqlite(cnn);
+                        optionsBuilder.UseMySql(cnn,
+                            mySqlOptions =>
+                            {
+                                mySqlOptions.ServerVersion(new System.Version(5, 6, 38), Pomelo.EntityFrameworkCore.MySql.Infrastructure.ServerType.MySql); // replace with your Server Version and Type
+                        });
                     }
                     else
                     {

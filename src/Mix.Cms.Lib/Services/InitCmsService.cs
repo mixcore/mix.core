@@ -38,8 +38,8 @@ namespace Mix.Cms.Lib.Services
                     accountContext = new MixCmsAccountContext();
                     messengerContext = new MixChatServiceContext();
                     //MixChatServiceContext._cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
-                    await context.Database.MigrateAsync();
                     await accountContext.Database.MigrateAsync();
+                    await context.Database.MigrateAsync();                    
                     await messengerContext.Database.MigrateAsync();
                     transaction = context.Database.BeginTransaction();
 
@@ -190,7 +190,8 @@ namespace Mix.Cms.Lib.Services
                 {
                     Title = siteName,
                     CreatedBy = "Admin",
-                    Status = (int)MixContentStatus.Published
+                    Status = (int)MixContentStatus.Published,
+                    CreatedDateTime = DateTime.UtcNow
                 }, context, transaction);
 
                 isSucceed = isSucceed && theme.SaveModel(true, context, transaction).IsSucceed;
@@ -216,7 +217,8 @@ namespace Mix.Cms.Lib.Services
                         Description = culture.Description,
                         Icon = culture.Icon,
                         Alias = culture.Alias,
-                        Status = (int)MixEnums.MixContentStatus.Published
+                        Status = (int)MixEnums.MixContentStatus.Published,
+                        CreatedDateTime = DateTime.UtcNow
                     };
                     context.Entry(enCulture).State = EntityState.Added;
 
@@ -236,25 +238,33 @@ namespace Mix.Cms.Lib.Services
             var count = context.MixPortalPage.Count();
             if (count == 0)
             {
+                int id = 1;
                 var p = new MixPosition()
                 {
-                    Description = nameof(MixEnums.CatePosition.Nav)
+                    Id = id,
+                    Description = nameof(MixEnums.CatePosition.Nav),
                 };
                 context.Entry(p).State = EntityState.Added;
+                id++;
                 p = new MixPosition()
                 {
+                    Id = id,
                     Description = nameof(MixEnums.CatePosition.Top)
                 };
+                id++;
                 context.Entry(p).State = EntityState.Added;
                 p = new MixPosition()
                 {
+                    Id = id,
                     Description = nameof(MixEnums.CatePosition.Left)
                 };
                 context.Entry(p).State = EntityState.Added;
+                id++;
                 p = new MixPosition()
                 {
+                    Id = id,
                     Description = nameof(MixEnums.CatePosition.Footer)
-                };
+                };                
                 context.Entry(p).State = EntityState.Added;
 
                 context.SaveChanges();

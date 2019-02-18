@@ -9,7 +9,7 @@ namespace Mix.Cms.Lib
         public const string CONST_CMS_CONNECTION = "MixCmsConnection";
         public const string CONST_MESSENGER_CONNECTION = "MixMessengerConnection";
         public const string CONST_ACCOUNT_CONNECTION = "MixAccountConnection";
-        public const string CONST_SETTING_IS_SQLITE = "IsSqlite";
+        public const string CONST_SETTING_IS_SQLITE = "IsMysql";
         public const string CONST_SETTING_LANGUAGE = "Language";
         public const string CONST_FILE_APPSETTING = "appsettings";
         public const string CONST_DEFAULT_FILE_APPSETTING = "default.appsettings";
@@ -37,7 +37,7 @@ namespace Mix.Cms.Lib
             public const string Language = "Language";
             public const string DefaultStatus = "DefaultStatus";
             public const string DefaultCulture = "DefaultCulture";
-            public const string IsSqlite = "IsSqlite";
+            public const string IsMysql = "IsMysql";
             public const string ThemeId = "ThemeId";
             public const string ThemeName= "ThemeName";
             public const string ThemeFolder= "ThemeFolder";

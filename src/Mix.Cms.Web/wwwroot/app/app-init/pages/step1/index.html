@@ -7,26 +7,20 @@
                     </div>
                 </div> -->
                           
-                        <!-- <div class="col form-check hidden">
+                        <div class="col form-check">
                             <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" ng-model="initCmsModel.isSqlite">
+                                <input class="form-check-input" type="checkbox" ng-model="initCmsModel.isMysql">
                                 <span class="form-check-sign"></span>
-                                Use SQLite Database
+                                Use Mysql Database
                             </label>
-                        </div> -->
+                        </div>
                         <div ng-show="initCmsModel.isUseLocal">
                                 <h5 class="card-description text-white">Local Server</h5>
-                            <!--<label class="form-check-label hidden">
-                                <input class="form-check-input" type="checkbox" ng-model="initCmsModel.isSqlite" />
-                                <span class="form-check-sign"></span>
-                                Use Sqlite
-                            </label>-->
                             <div class="input-group no-border input-lg">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="now-ui-icons business_chart-pie-36"></i></span>
                                     </div>
-                                    <input ng-show="!initCmsModel.isSqlite" ng-model="initCmsModel.localDbConnectionString" style="border-top-right-radius: 30px;border-bottom-right-radius: 30px;" class="form-control" placeholder="Connection string">
-                                    <input ng-show="initCmsModel.isSqlite" ng-model="initCmsModel.sqliteDbConnectionString" style="border-top-right-radius: 30px;border-bottom-right-radius: 30px;" class="form-control" placeholder="Connection string">
+                                    <input ng-model="initCmsModel.localDbConnectionString" style="border-top-right-radius: 30px;border-bottom-right-radius: 30px;" class="form-control" placeholder="Connection string">
                             </div>
                             <div class="input-group no-border input-lg">
 
@@ -78,9 +72,9 @@
                
                 <div class="footerButton">
                     <div class="card-footer text-center">
-                        <button ng-if="!initCmsModel.isUseLocal" ng-click="initCms();" class="btn btn-primary btn-round btn-lg btn-block" ng-disabled="!initCmsModel.dataBaseServer || !initCmsModel.dataBaseName || !initCmsModel.dataBaseUser || !initCmsModel.dataBasePassword || !initCmsModel.siteName || !initCmsModel.culture">
-                            <span ng-if="!initCmsModel.dataBaseServer || !initCmsModel.dataBaseName || !initCmsModel.dataBaseUser || !initCmsModel.dataBasePassword || !initCmsModel.siteName || !initCmsModel.culture">Setting...</span>
-                            <span ng-if="initCmsModel.dataBaseServer && initCmsModel.dataBaseName && initCmsModel.dataBaseUser && initCmsModel.dataBasePassword && initCmsModel.siteName && initCmsModel.culture">Connect</span>
+                        <button ng-if="!initCmsModel.isUseLocal" ng-click="initCms();" class="btn btn-primary btn-round btn-lg btn-block" ng-disabled="!initCmsModel.dataBaseServer || !initCmsModel.dataBaseName || !initCmsModel.dataBaseUser || !initCmsModel.siteName || !initCmsModel.culture">
+                            <span ng-if="!initCmsModel.dataBaseServer || !initCmsModel.dataBaseName || !initCmsModel.dataBaseUser || !initCmsModel.siteName || !initCmsModel.culture">Setting...</span>
+                            <span ng-if="initCmsModel.dataBaseServer && initCmsModel.dataBaseName && initCmsModel.dataBaseUser && initCmsModel.siteName && initCmsModel.culture">Connect</span>
                         </button>
                         <button ng-if="initCmsModel.isUseLocal" ng-click="initCms();" class="btn btn-primary btn-round btn-lg btn-block" ng-disabled="!initCmsModel.sqliteDbConnectionString || !initCmsModel.localDbName|| !initCmsModel.siteName">
                                 <span ng-if="!initCmsModel.sqliteDbConnectionString || !initCmsModel.localDbName|| !initCmsModel.siteName">Setting...</span>

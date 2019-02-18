@@ -39,7 +39,7 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Excerpt");
 
                     b.Property<string>("ExtraProperties")
-                        .HasColumnType("ntext");
+                        ;//.HasColumnType("ntext");
 
                     b.Property<string>("Icon");
 
@@ -68,7 +68,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(4000);
 
                     b.Property<string>("SetAttributeData")
-                        .HasColumnType("ntext");
+                        ;//.HasColumnType("ntext");
 
                     b.Property<int?>("SetAttributeId");
 
@@ -185,7 +185,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(256);
+                        .HasMaxLength(250);
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(50);
@@ -206,7 +206,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasDefaultValueSql("((1))");
 
                     b.Property<string>("Username")
-                        .HasMaxLength(256);
+                        .HasMaxLength(250);
 
                     b.HasKey("Id");
 
@@ -403,7 +403,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(256);
+                        .HasMaxLength(250);
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(50);
@@ -429,10 +429,10 @@ namespace Mix.Cms.Lib.Migrations
                         .HasDefaultValueSql("((1))");
 
                     b.Property<string>("UserId")
-                        .HasMaxLength(256);
+                        .HasMaxLength(250);
 
                     b.Property<string>("Username")
-                        .HasMaxLength(256);
+                        .HasMaxLength(250);
 
                     b.HasKey("Id");
 
@@ -447,7 +447,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("ntext");
+                        ;//.HasColumnType("ntext");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -735,7 +735,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("DefaultValue")
                         .IsRequired()
-                        .HasColumnType("ntext");
+                        ;//.HasColumnType("ntext");
 
                     b.Property<int>("ModuleId");
 
@@ -965,7 +965,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(4000);
 
                     b.Property<string>("SetAttributeData")
-                        .HasColumnType("ntext");
+                        ;//.HasColumnType("ntext");
 
                     b.Property<int?>("SetAttributeId");
 
@@ -1154,7 +1154,7 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixParameter", b =>
                 {
                     b.Property<string>("Name")
-                        .HasMaxLength(256);
+                        .HasMaxLength(250);
 
                     b.Property<string>("Description");
 
@@ -1333,7 +1333,7 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Excerpt");
 
                     b.Property<string>("ExtraProperties")
-                        .HasColumnType("ntext");
+                        ;//.HasColumnType("ntext");
 
                     b.Property<string>("Icon");
 
@@ -1378,7 +1378,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(4000);
 
                     b.Property<string>("SetAttributeData")
-                        .HasColumnType("ntext");
+                        ;//.HasColumnType("ntext");
 
                     b.Property<int?>("SetAttributeId");
 
@@ -1583,7 +1583,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("ntext");
+                        ;//.HasColumnType("ntext");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -1608,7 +1608,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("MobileContent")
-                        .HasColumnType("ntext");
+                        ;//.HasColumnType("ntext");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(250);
@@ -1616,17 +1616,17 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<int>("Priority");
 
                     b.Property<string>("Scripts")
-                        .HasColumnType("ntext");
+                        ;//.HasColumnType("ntext");
 
                     b.Property<string>("SpaContent")
-                        .HasColumnType("ntext");
+                        ;//.HasColumnType("ntext");
 
                     b.Property<int>("Status")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("((1))");
 
                     b.Property<string>("Styles")
-                        .HasColumnType("ntext");
+                        ;//.HasColumnType("ntext");
 
                     b.Property<int>("ThemeId");
 

@@ -119,7 +119,7 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
             dataBasePassword: '',
             adminPassword: '',
             lang: 'en-us',
-            isSqlite: false,
+            isMysql: false,
             culture: $scope.settings.cultures[0]
         };
         $scope.updateLocalDbName = function () {

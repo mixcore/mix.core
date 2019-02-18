@@ -14,8 +14,8 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                 {
                     Id = table.Column<string>(nullable: false),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(maxLength: 256, nullable: true)
+                    Name = table.Column<string>(maxLength: 250, nullable: true),
+                    NormalizedName = table.Column<string>(maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -33,7 +33,7 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                     CountryId = table.Column<int>(nullable: false),
                     Culture = table.Column<string>(nullable: true),
                     DOB = table.Column<DateTime>(nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true),
+                    Email = table.Column<string>(maxLength: 250, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
                     Gender = table.Column<string>(nullable: true),
@@ -45,15 +45,15 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     ModifiedBy = table.Column<string>(nullable: true),
                     NickName = table.Column<string>(nullable: true),
-                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(maxLength: 250, nullable: true),
+                    NormalizedUserName = table.Column<string>(maxLength: 250, nullable: true),
                     PasswordHash = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
                     RegisterType = table.Column<string>(nullable: true),
                     SecurityStamp = table.Column<string>(nullable: true),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    UserName = table.Column<string>(maxLength: 256, nullable: true)
+                    UserName = table.Column<string>(maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
