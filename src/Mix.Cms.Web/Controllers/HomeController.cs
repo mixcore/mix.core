@@ -178,7 +178,7 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Home", new { culture = _culture, seoName = "404" });
+                return RedirectToAction("Index", "Home", new { culture = MixService.GetConfig<string>("DefaultCulture"), seoName = "404" });
             }
         }
 
@@ -244,7 +244,7 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Home", new { culture = _culture, seoName = "404" });
+                return RedirectToAction("Index", "Home", new { culture = MixService.GetConfig<string>("DefaultCulture"), seoName = "404" });
             }
         }
 
@@ -300,7 +300,7 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Home", new { culture = _culture, seoName = "404" });
+                return RedirectToAction("Index", "Home", new { culture = MixService.GetConfig<string>("DefaultCulture"), seoName = "404" });
             }
         }
 
