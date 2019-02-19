@@ -950,7 +950,7 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.ToTable("mix_parameter");
 
                 entity.Property(e => e.Name)
-                    .HasMaxLength(256)
+                    .HasMaxLength(50)
                     .ValueGeneratedNever();
 
                 entity.Property(e => e.Value).IsRequired();
