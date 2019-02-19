@@ -502,6 +502,64 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.ToTable("mix_language");
                 });
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModule", b =>
+            {
+                b.Property<int>("Id");
+
+                b.Property<string>("Specificulture")
+                    .HasMaxLength(10);
+
+                b.Property<DateTime>("CreatedDateTime")
+                    .HasColumnType("datetime");
+
+                b.Property<string>("Description")
+                    .HasMaxLength(4000);
+
+                b.Property<string>("EdmTemplate")
+                    .HasMaxLength(250);
+
+                b.Property<string>("Fields")
+                    .HasMaxLength(4000);
+
+                b.Property<string>("FormTemplate")
+                    .HasMaxLength(250);
+
+                b.Property<string>("Image")
+                    .HasMaxLength(250);
+
+                b.Property<DateTime?>("LastModified")
+                    .HasColumnType("datetime");
+
+                b.Property<string>("ModifiedBy")
+                    .HasMaxLength(250);
+
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                b.Property<int?>("PageSize");
+
+                b.Property<int>("Priority");
+
+                b.Property<int>("Status");
+
+                b.Property<string>("Template")
+                    .HasMaxLength(250);
+
+                b.Property<string>("Thumbnail")
+                    .HasMaxLength(250);
+
+                b.Property<string>("Title")
+                    .HasMaxLength(250);
+
+                b.Property<int>("Type");
+
+                b.HasKey("Id", "Specificulture");
+
+                b.HasIndex("Specificulture");
+
+                b.ToTable("mix_module");
+            });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixMedia", b =>
                 {
@@ -558,65 +616,7 @@ namespace Mix.Cms.Lib.Migrations
                     b.ToTable("mix_media");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModule", b =>
-                {
-                    b.Property<int>("Id");
-
-                    b.Property<string>("Specificulture")
-                        .HasMaxLength(10);
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(4000);
-
-                    b.Property<string>("EdmTemplate")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Fields")
-                        .HasMaxLength(4000);
-
-                    b.Property<string>("FormTemplate")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Image")
-                        .HasMaxLength(250);
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<int?>("PageSize");
-
-                    b.Property<int>("Priority");
-
-                    b.Property<int>("Status");
-
-                    b.Property<string>("Template")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Thumbnail")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Title")
-                        .HasMaxLength(250);
-
-                    b.Property<int>("Type");
-
-                    b.HasKey("Id", "Specificulture");
-
-                    b.HasIndex("Specificulture");
-
-                    b.ToTable("mix_module");
-                });
-
+            
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleArticle", b =>
                 {
                     b.Property<int>("ArticleId");
@@ -1094,7 +1094,7 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixParameter", b =>
                 {
                     b.Property<string>("Name")
-                        .HasMaxLength(256);
+                        .HasMaxLength(50);
 
                     b.Property<string>("Description");
 

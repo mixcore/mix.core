@@ -126,7 +126,7 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_parameter",
                 columns: table => new
                 {
-                    Name = table.Column<string>(maxLength: 256, nullable: false),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
                     Description = table.Column<string>(nullable: true),
                     Priority = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),

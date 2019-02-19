@@ -1096,7 +1096,7 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixParameter", b =>
                 {
                     b.Property<string>("Name")
-                        .HasMaxLength(256);
+                        .HasMaxLength(50);
 
                     b.Property<string>("Description");
 
