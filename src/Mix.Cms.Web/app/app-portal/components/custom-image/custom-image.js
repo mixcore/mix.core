@@ -6,11 +6,12 @@ modules.component('customImage', {
         var ctrl = this;
         var image_placeholder = '/images/image_placeholder.jpg';
         ctrl.isImage = false;
+        ctrl.mediaNavs = [];
         ctrl.init = function () {
             ctrl.srcUrl = ctrl.srcUrl || image_placeholder;
             ctrl.isImage = ctrl.srcUrl.match(/([/|.|\w|\s|-])*\.(?:jpg|gif|png)/g);
             ctrl.maxHeight = ctrl.maxHeight|| '200px';
-            ctrl.id = Math.random();
+            ctrl.id = Math.floor(Math.random() * 100);
         };
         
         ctrl.mediaFile = {

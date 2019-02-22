@@ -18,7 +18,7 @@ app.component('mediaNavs', {
         ctrl.medias = [];
         ctrl.activeMedia = function (media) {
             var currentItem = null;
-            if (ctrl.mediaNavs === null) {
+            if (ctrl.mediaNavs === null || ctrl.isSingle) {
                 ctrl.mediaNavs = [];
             }
             $.each(ctrl.mediaNavs, function (i, e) {
@@ -41,9 +41,15 @@ app.component('mediaNavs', {
                 };
                 ctrl.mediaNavs.push(currentItem);
             }
+            if(ctrl.isSingle){
+                ctrl.output = ctrl.mediaNavs[0].image;
+                ctrl.loadMedias(ctrl.request.pageIndex);
+            }
         };
         ctrl.loadMedias = async function (pageIndex) {
-            
+            if(!ctrl.prefix){
+                ctrl.prefix = 'media_navs';
+            }
             if (pageIndex !== undefined) {
                 ctrl.request.pageIndex = pageIndex;
             }
@@ -80,7 +86,10 @@ app.component('mediaNavs', {
     }],
     bindings: {
         mediaNavs: '=',
-        sourceFieldName:'=',
+        prefix: '=',
+        sourceFieldName:'=',        
+        isSingle: '=',
+        output: '=',
         loadMedia: '&',
         onDelete: '&',
         onUpdate: '&'
