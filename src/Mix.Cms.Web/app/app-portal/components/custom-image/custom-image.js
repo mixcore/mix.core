@@ -1,7 +1,7 @@
 ﻿
 //modules.controller('ImageController', );
 modules.component('customImage', {
-    templateUrl: '/app/app-shared/components/custom-image/customImage.html',
+    templateUrl: '/app/app-portal/components/custom-image/custom-image.html',
     controller: ['$rootScope', '$scope', 'ngAppSettings', 'MediaService', function ($rootScope, $scope, ngAppSettings, mediaService) {
         var ctrl = this;
         var image_placeholder = '/images/image_placeholder.jpg';
