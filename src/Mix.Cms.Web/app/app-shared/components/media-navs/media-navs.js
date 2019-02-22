@@ -42,8 +42,14 @@ app.component('mediaNavs', {
                 ctrl.mediaNavs.push(currentItem);
             }
             if(ctrl.isSingle){
-                ctrl.output = ctrl.mediaNavs[0].image;
-                ctrl.loadMedias(ctrl.request.pageIndex);
+                if(!media.isActived){
+                    ctrl.output = '';
+                    ctrl.mediaNavs = [];
+                }
+                else{
+                    ctrl.output = ctrl.mediaNavs[0].image;
+                    ctrl.loadMedias(ctrl.request.pageIndex);
+                }
             }
         };
         ctrl.loadMedias = async function (pageIndex) {
