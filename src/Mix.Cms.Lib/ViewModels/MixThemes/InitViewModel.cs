@@ -5,13 +5,10 @@ using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
-using Mix.Cms.Lib.ViewModels.MixSystem;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
@@ -156,8 +153,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                     MixConstants.Folder.TemplatesFolder,
                     "Default" });
                 bool copyResult = FileRepository.Instance.CopyDirectory(defaultTemplateFolder, TemplateFolder);
-
-
                 string defaultAssetsFolder = CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.WebRootPath,
                     MixConstants.Folder.FileFolder,
@@ -184,7 +179,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                             FolderType = file.FolderName,
                             ModifiedBy = CreatedBy
                         }, _context, _transaction);
-                    var saveResult = template.SaveModel(true, _context, _transaction);
+                    var saveResult = await template.SaveModelAsync(true, _context, _transaction);
                     result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
                     if (!saveResult.IsSucceed)
                     {

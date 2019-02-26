@@ -52,8 +52,9 @@ namespace Mix.Cms.Api.Controllers.v1
             _signInManager = signInManager;
             _roleManager = roleManager;
             _appLifetime = appLifetime;
+            _env = env;
         }
-        public async Task ShutdownSite()
+        public void ShutdownSite()
         {
             _appLifetime.StopApplication();
         }

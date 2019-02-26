@@ -468,7 +468,7 @@ namespace Mix.Cms.Lib.Services
             client.UseDefaultCredentials = false;
             client.Credentials = new NetworkCredential(instance.Smtp.Value<string>("User"), instance.Smtp.Value<string>("Password"));
             client.Port = instance.Smtp.Value<int>("Port");
-            client.EnableSsl = instance.Smtp.Value<bool>("Ssl");
+            client.EnableSsl = instance.Smtp.Value<bool>("SSL");
             MailMessage mailMessage = new MailMessage();
             mailMessage.IsBodyHtml = true;
             mailMessage.From = new MailAddress(instance.Smtp.Value<string>("From"));
