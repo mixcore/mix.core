@@ -6,8 +6,8 @@
     "DefaultConnection": null
   },
   "Authentication": {
-    "ClockSkew": 10,
-    "CookieExpiration": 2,
+    "ClockSkew": 20,
+    "CookieExpiration": 20,
     "RefreshTokenExpiration": 120,
     "ValidateIssuer": false,
     "ValidateAudience": false,
@@ -23,6 +23,7 @@
   "Smtp": {
     "Server": "",
     "Port": 587,
+    "SSL": true,
     "User": "",
     "Password": "",
     "From": "support@mixcore.org",

@@ -24,7 +24,6 @@ namespace Mix.Cms.Messenger.Models.Data
         public virtual DbSet<MixMessengerUser> MixMessengerUser { get; set; }
         public virtual DbSet<MixMessengerUserDevice> MixMessengerUserDevice { get; set; }
 
-        private static string _cnn = "Server=(localdb)\\mssqllocaldb;Database=mix-messenger.db;Trusted_Connection=True;MultipleActiveResultSets=true";
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
