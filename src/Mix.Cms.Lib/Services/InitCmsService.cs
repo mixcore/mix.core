@@ -52,12 +52,22 @@ namespace Mix.Cms.Lib.Services
                     {
                         MixService.SetConfig<string>("SiteName", siteName);
                         isSucceed = InitCultures(culture, context, transaction);
-                        isSucceed = isSucceed && InitPositions(context, transaction);
-                        isSucceed = isSucceed && await InitConfigurationsAsync(siteName, culture, context, transaction);
-                        isSucceed = isSucceed && await InitLanguagesAsync(culture, context, transaction);
-                        isSucceed = isSucceed && InitThemes(siteName, context, transaction);
-
-
+                        if (isSucceed)
+                        {
+                            isSucceed = isSucceed && InitPositions(context, transaction);
+                        }
+                        if (isSucceed)
+                        {
+                            isSucceed = isSucceed && await InitConfigurationsAsync(siteName, culture, context, transaction);
+                        }
+                        if (isSucceed)
+                        {
+                            isSucceed = isSucceed && await InitLanguagesAsync(culture, context, transaction);
+                        }
+                        if (isSucceed)
+                        {
+                            isSucceed = isSucceed && InitThemes(siteName, context, transaction);
+                        }
                     }
                     else
                     {

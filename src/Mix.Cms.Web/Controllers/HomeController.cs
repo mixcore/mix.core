@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -26,8 +27,9 @@ namespace Mix.Cms.Web.Controllers
         public HomeController(IHostingEnvironment env,
             IMemoryCache memoryCache,
              UserManager<ApplicationUser> userManager,
-             IApiDescriptionGroupCollectionProvider apiExplorer
-            ) : base(env, memoryCache)
+             IApiDescriptionGroupCollectionProvider apiExplorer,
+            IHttpContextAccessor accessor
+            ) : base(env, memoryCache, accessor)
         {
             this._userManager = userManager;
             _apiExplorer = apiExplorer;
@@ -44,6 +46,10 @@ namespace Mix.Cms.Web.Controllers
         public async System.Threading.Tasks.Task<IActionResult> Index(
             string culture, string seoName)
         {
+            if (_forbidden)
+            {
+                return await PageNotFound();
+            }
             if (MixService.GetConfig<bool>("IsInit"))
             {
                 //Go to landing page
@@ -66,6 +72,10 @@ namespace Mix.Cms.Web.Controllers
         [Route("{culture}/article/{id}/{seoName}")]
         public async System.Threading.Tasks.Task<IActionResult> Article(int id, string culture, string seoName)
         {
+            if (_forbidden)
+            {
+                return await PageNotFound();
+            }
             return await ArticleViewAsync(id, seoName);
         }
 
@@ -73,6 +83,10 @@ namespace Mix.Cms.Web.Controllers
         [Route("{culture}/product/{seoName}")]
         public async System.Threading.Tasks.Task<IActionResult> Product(string culture, string seoName)
         {
+            if (_forbidden)
+            {
+                return await PageNotFound();
+            }
             return await ProductViewAsync(seoName);
         }
 
@@ -86,16 +100,24 @@ namespace Mix.Cms.Web.Controllers
         [Route("portal/{pageName}/{type}/{param}/{param1}/{param2}")]
         [Route("portal/{pageName}/{type}/{param}/{param1}/{param2}/{param3}")]
         [Route("portal/{pageName}/{type}/{param}/{param1}/{param2}/{param3}/{param4}")]
-        public IActionResult Portal()
+        public async System.Threading.Tasks.Task<IActionResult> Portal()
         {
+            if (_forbidden)
+            {
+                return await PageNotFound();
+            }
             return View();
         }
 
         [HttpGet]
         [Route("init")]
         [Route("init/{page}")]
-        public IActionResult Init(string page)
+        public async System.Threading.Tasks.Task<IActionResult> Init(string page)
         {
+            if (_forbidden)
+            {
+                return await PageNotFound();
+            }
             if (string.IsNullOrEmpty(page) && MixService.GetConfig<bool>("IsInit"))
             {
                 return Redirect($"/init/login");

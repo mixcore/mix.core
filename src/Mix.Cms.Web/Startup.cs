@@ -87,7 +87,7 @@ namespace Mix.Cms.Web
             services.AddTransient<IEmailSender, AuthEmailMessageSender>();
             services.AddTransient<ISmsSender, AuthSmsMessageSender>();
             services.AddSingleton<MixService>();
-
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             // add signalr
             services.AddSignalR();
 
