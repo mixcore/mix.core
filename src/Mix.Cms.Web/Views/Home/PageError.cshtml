@@ -1,5 +1,6 @@
 ﻿@{
     string lang = ViewBag.culture;
+    Layout = null;
 }
 @section Seo{
     <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @Model.Title</title>

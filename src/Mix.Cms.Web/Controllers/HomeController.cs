@@ -48,7 +48,7 @@ namespace Mix.Cms.Web.Controllers
         {
             if (_forbidden)
             {
-                return await PageNotFound();
+                return Redirect($"/error/403");
             }
             if (MixService.GetConfig<bool>("IsInit"))
             {
@@ -74,7 +74,7 @@ namespace Mix.Cms.Web.Controllers
         {
             if (_forbidden)
             {
-                return await PageNotFound();
+                return Redirect($"/error/403");
             }
             return await ArticleViewAsync(id, seoName);
         }
@@ -85,7 +85,7 @@ namespace Mix.Cms.Web.Controllers
         {
             if (_forbidden)
             {
-                return await PageNotFound();
+                return Redirect($"/error/403");
             }
             return await ProductViewAsync(seoName);
         }
@@ -100,11 +100,11 @@ namespace Mix.Cms.Web.Controllers
         [Route("portal/{pageName}/{type}/{param}/{param1}/{param2}")]
         [Route("portal/{pageName}/{type}/{param}/{param1}/{param2}/{param3}")]
         [Route("portal/{pageName}/{type}/{param}/{param1}/{param2}/{param3}/{param4}")]
-        public async System.Threading.Tasks.Task<IActionResult> Portal()
+        public IActionResult Portal()
         {
             if (_forbidden)
             {
-                return await PageNotFound();
+                return Redirect($"/error/403");
             }
             return View();
         }
@@ -112,11 +112,11 @@ namespace Mix.Cms.Web.Controllers
         [HttpGet]
         [Route("init")]
         [Route("init/{page}")]
-        public async System.Threading.Tasks.Task<IActionResult> Init(string page)
+        public IActionResult Init(string page)
         {
             if (_forbidden)
             {
-                return await PageNotFound();
+                return Redirect($"/error/403");
             }
             if (string.IsNullOrEmpty(page) && MixService.GetConfig<bool>("IsInit"))
             {
@@ -130,11 +130,10 @@ namespace Mix.Cms.Web.Controllers
         }
 
         [HttpGet]
-        [Route("404")]
-        [Route("{culture}/404")]
-        public async System.Threading.Tasks.Task<IActionResult> PageNotFound()
+        [Route("error/{page}")]
+        public async System.Threading.Tasks.Task<IActionResult> PageError(string page = "404")
         {
-            return await PageAsync("404");
+            return await PageAsync(page);
         }
 
         async System.Threading.Tasks.Task<IActionResult> PageAsync(string seoName)//Expression<Func<MixPage, bool>> predicate, int? pageIndex = null, int pageSize = 10)
@@ -200,7 +199,7 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Home", new { culture = MixService.GetConfig<string>("DefaultCulture"), seoName = "404" });
+                return Redirect($"/error/404");
             }
         }
 
@@ -266,7 +265,7 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Home", new { culture = MixService.GetConfig<string>("DefaultCulture"), seoName = "404" });
+                return Redirect($"/error/404");
             }
         }
 
@@ -322,7 +321,7 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Home", new { culture = MixService.GetConfig<string>("DefaultCulture"), seoName = "404" });
+                return Redirect($"/error/404");
             }
         }
 

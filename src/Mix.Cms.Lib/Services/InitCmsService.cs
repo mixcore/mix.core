@@ -133,6 +133,35 @@ namespace Mix.Cms.Lib.Services
 
                         var create404 = await context.SaveChangesAsync().ConfigureAwait(false);
                         isSucceed = create404 > 0;
+
+                        var cate403 = new MixPage()
+                        {
+                            Id = 2,
+                            Title = "403",
+                            SeoName = "403",
+                            Level = 0,
+                            Specificulture = culture.Specificulture,
+                            Template = "Pages/_403.cshtml",
+                            Type = (int)MixPageType.Article,
+                            CreatedBy = "Admin",
+                            CreatedDateTime = DateTime.UtcNow,
+                            Status = (int)PageStatus.Published
+                        };
+
+                        var alias403 = new MixUrlAlias()
+                        {
+                            Id = 2,
+                            SourceId = "2",
+                            Type = (int)UrlAliasType.Page,
+                            Specificulture = culture.Specificulture,
+                            CreatedDateTime = DateTime.UtcNow,
+                            Alias = cate403.Title.ToLower()
+                        };
+                        context.Entry(cate403).State = EntityState.Added;
+                        context.Entry(alias403).State = EntityState.Added;
+
+                        var create403 = await context.SaveChangesAsync().ConfigureAwait(false);
+                        isSucceed = create403 > 0;
                     }
 
                     if (isSucceed)
