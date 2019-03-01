@@ -30,6 +30,11 @@
         </span>
     </div>
     <div class="form-group" ng-if="$ctrl.appSettings.GlobalSettings.IsRetrictIp">
+        <label class="control-label">Allowed Portal Ips</label>
+        <input type="text" ng-model="$ctrl.appSettings.GlobalSettings.AllowedPortalIps" class="form-control">
+    </div>
+    <div class="form-group" ng-if="$ctrl.appSettings.GlobalSettings.IsRetrictIp">
+    <div class="form-group" ng-if="$ctrl.appSettings.GlobalSettings.IsRetrictIp">
         <label class="control-label">Allowed Ips</label>
         <input type="text" ng-model="$ctrl.appSettings.GlobalSettings.AllowedIps" class="form-control">
     </div>

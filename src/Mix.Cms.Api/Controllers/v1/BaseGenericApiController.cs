@@ -35,6 +35,19 @@ namespace Mix.Cms.Api.Controllers.v1
         /// </summary>
         protected string _lang;
 
+        protected bool _forbidden = false;
+        protected bool _forbiddenPortal {
+            get {
+                string allowedIps = MixService.GetConfig<string>("AllowedPortalIps");
+                string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+                return _forbidden || (
+                    // allow localhost
+                    remoteIp != "::1" &&
+                    (allowedIps != "*" && !allowedIps.Contains(remoteIp))
+                );
+            }
+        }
+
         /// <summary>
         /// The domain
         /// </summary>
@@ -51,6 +64,7 @@ namespace Mix.Cms.Api.Controllers.v1
             _hubContext = hubContext;
             _memoryCache = memoryCache;
         }
+        
 
         #region Overrides
 
@@ -62,6 +76,21 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             GetLanguage();
             AlertAsync("Executing request", 200);
+            if (MixService.GetConfig<bool>("IsRetrictIp"))
+            {
+                string allowedIps = MixService.GetConfig<string>("AllowedIps");
+                string exceptIps = MixService.GetConfig<string>("ExceptIps");
+                string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+                if (
+                    // allow localhost
+                    remoteIp != "::1" &&
+                    (allowedIps != "*" && !allowedIps.Contains(remoteIp))
+                    || (exceptIps.Contains(remoteIp))
+                    )
+                {
+                    _forbidden = true;
+                }
+            }
             base.OnActionExecuting(context);
         }
 

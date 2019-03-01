@@ -16,6 +16,19 @@ namespace Mix.Cms.Web.Controllers
     {
         protected string _domain;
         protected bool _forbidden = false;
+        protected bool _forbiddenPortal
+        {
+            get
+            {
+                string allowedIps = MixService.GetConfig<string>("AllowedPortalIps");
+                string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+                return _forbidden || (
+                    // allow localhost
+                    remoteIp != "::1" &&
+                    (allowedIps != "*" && !allowedIps.Contains(remoteIp))
+                );
+            }
+        }
         protected IConfiguration _configuration;
         protected IHostingEnvironment _env;
         protected readonly IMemoryCache _memoryCache;
