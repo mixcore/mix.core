@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Mix.Cms.Lib;
+using Mix.Cms.Lib.MiddleWares;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Web.Mvc.App_Start.Validattors;
@@ -92,6 +93,7 @@ namespace Mix.Cms.Web
                             
                         };
                     });
+            services.Configure<IpSecuritySettings>(Configuration.GetSection("IpSecuritySettings"));
         }
 
         protected void ConfigCookieAuth(IServiceCollection services, IConfiguration Configuration)

@@ -18,6 +18,7 @@ using Mix.Cms.Hub;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Cms.Messenger.Hubs;
+using Mix.Cms.Lib.MiddleWares;
 
 namespace Mix.Cms.Web
 {
@@ -125,9 +126,12 @@ namespace Mix.Cms.Web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error/404");
                 app.UseHsts();
             }
+            // add Ip Filter
+            app.UseMiddleware<IpRestrictionMiddleware>();
+
             if (MixService.GetConfig<bool>("IsHttps"))
             {
                 app.UseHttpsRedirection();

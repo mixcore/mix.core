@@ -53,6 +53,7 @@
     "IsHttps": false,
     "IsCache": true,
     "IsRetrictIp": false,
+    "AllowedPortalIps": "*",
     "AllowedIps": "*",
     "ExceptIps": "",
     "SiteName": "Site Name",

@@ -102,7 +102,7 @@ namespace Mix.Cms.Web.Controllers
         [Route("portal/{pageName}/{type}/{param}/{param1}/{param2}/{param3}/{param4}")]
         public IActionResult Portal()
         {
-            if (_forbidden)
+            if (_forbiddenPortal)
             {
                 return Redirect($"/error/403");
             }
