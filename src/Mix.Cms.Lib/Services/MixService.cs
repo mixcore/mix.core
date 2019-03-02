@@ -33,6 +33,7 @@ namespace Mix.Cms.Lib.Services
         private JObject LocalSettings { get; set; }
         private JObject Translator { get; set; }
         private JObject Authentication { get; set; }
+        private JObject IpSecuritySettings { get; set; }
         private JObject Smtp { get; set; }
         readonly FileSystemWatcher watcher = new FileSystemWatcher();
 
@@ -81,6 +82,7 @@ namespace Mix.Cms.Lib.Services
 
             instance.ConnectionStrings = JObject.FromObject(jsonSettings["ConnectionStrings"]);
             instance.Authentication = JObject.FromObject(jsonSettings["Authentication"]);
+            instance.IpSecuritySettings = JObject.FromObject(jsonSettings["IpSecuritySettings"]);
             instance.Smtp = JObject.FromObject(jsonSettings["Smtp"] ?? new JObject());
             instance.Translator = JObject.FromObject(jsonSettings["Translator"]);
             instance.GlobalSettings = JObject.FromObject(jsonSettings["GlobalSettings"]);
@@ -113,6 +115,16 @@ namespace Mix.Cms.Lib.Services
         public static void SetAuthConfig<T>(string name, T value)
         {
             Instance.Authentication[name] = value.ToString();
+        }
+        public static T GetIpConfig<T>(string name)
+        {
+            var result = Instance.IpSecuritySettings[name];
+            return result != null ? result.Value<T>() : default(T);
+        }
+
+        public static void SetIpConfig<T>(string name, T value)
+        {
+            Instance.IpSecuritySettings[name] = value.ToString();
         }
 
         public static T GetConfig<T>(string name)
@@ -172,6 +184,7 @@ namespace Mix.Cms.Lib.Services
                 jsonSettings["Translator"] = instance.Translator;
                 jsonSettings["LocalSettings"] = instance.LocalSettings;
                 jsonSettings["Authentication"] = instance.Authentication;
+                jsonSettings["IpSecuritySettings"] = instance.IpSecuritySettings;
                 jsonSettings["Smtp"] = instance.Smtp;
                 settings.Content = jsonSettings.ToString();
                 return FileRepository.Instance.SaveFile(settings);

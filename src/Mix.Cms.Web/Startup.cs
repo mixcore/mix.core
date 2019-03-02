@@ -130,7 +130,7 @@ namespace Mix.Cms.Web
                 app.UseHsts();
             }
             // add Ip Filter
-            app.UseMiddleware<IpRestrictionMiddleware>();
+            //app.UseMiddleware<IpRestrictionMiddleware>();
 
             if (MixService.GetConfig<bool>("IsHttps"))
             {

@@ -21,6 +21,12 @@
     "Audiences": "mix-core",
     "AllowedIps": ""
   },
+  "IpSecuritySettings": {
+    "IsRetrictIp": true,
+    "AllowedPortalIps": [],
+    "AllowedIps": [],
+    "ExceptIps": []
+  },
   "Smtp": {
     "Server": "",
     "Port": 587,
@@ -43,7 +49,7 @@
       "Favicon": "",
       "LanguageVersion": "1",
       "Logo": "",
-      "SettingVersion": "1",      
+      "SettingVersion": "1",
       "Theme": "Default",
       "ThemeId": "1"
     }
@@ -52,10 +58,6 @@
     "IsInit": false,
     "IsHttps": false,
     "IsCache": true,
-    "IsRetrictIp": false,
-    "AllowedPortalIps": "*",
-    "AllowedIps": "*",
-    "ExceptIps": "",
     "SiteName": "Site Name",
     "DefaultCulture": "en-us",
     "DefaultTemplate": "_Default",
@@ -67,14 +69,14 @@
     "OrderBy": "Priority",
     "DefaultStatus": "2",
     "Language": "en-us",
-    "UploadFolder": "Content/Uploads",    
+    "UploadFolder": "Content/Uploads",
     "ThemeId": "1",
     "Domain": "",
     "TemplateExtension": ".cshtml",
     "IsEncryptApi": true,
     "LastUpdateConfiguration": null
   },
-  
+
   "Logging": {
     "IncludeScopes": false,
     "LogLevel": {

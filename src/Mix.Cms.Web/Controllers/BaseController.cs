@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Linq;
 using AutoMapper.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
+using Newtonsoft.Json.Linq;
 
 namespace Mix.Cms.Web.Controllers
 {
@@ -20,12 +22,15 @@ namespace Mix.Cms.Web.Controllers
         {
             get
             {
-                string allowedIps = MixService.GetConfig<string>("AllowedPortalIps");
+                var allowedIps = MixService.GetIpConfig<JArray>("AllowedPortalIps");
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 return _forbidden || (
                     // allow localhost
-                    remoteIp != "::1" &&
-                    (allowedIps != "*" && !allowedIps.Contains(remoteIp))
+                    //remoteIp != "::1" &&
+                    (
+                        allowedIps.Count > 0  && 
+                        !allowedIps.Any(t => t["text"].Value<string>() == remoteIp)
+                    )
                 );
             }
         }
@@ -54,7 +59,7 @@ namespace Mix.Cms.Web.Controllers
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
         }
-      
+
         public ViewContext ViewContext { get; set; }
 
         protected string _culture
@@ -66,16 +71,20 @@ namespace Mix.Cms.Web.Controllers
         {
             ViewBag.culture = _culture;
             _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
-            if (MixService.GetConfig<bool>("IsRetrictIp"))
+            if (MixService.GetIpConfig<bool>("IsRetrictIp"))
             {
-                string allowedIps = MixService.GetConfig<string>("AllowedIps");
-                string exceptIps = MixService.GetConfig<string>("ExceptIps");
-                string remoteIp = _accessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+                var allowedIps = MixService.GetIpConfig<JArray>("AllowedIps");
+                var exceptIps = MixService.GetIpConfig<JArray>("ExceptIps");
+                string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 if (
                     // allow localhost
-                    remoteIp != "::1" &&
-                    (allowedIps != "*" && !allowedIps.Contains(remoteIp))
-                    || (exceptIps.Contains(remoteIp))
+                    //remoteIp != "::1" &&                    
+                        allowedIps.Count > 0 && 
+                        !allowedIps.Any(t => t["text"].Value<string>() == remoteIp) ||
+                        (
+                            exceptIps.Count  > 0 && 
+                            exceptIps.Any(t => t["text"].Value<string>() == remoteIp)
+                        )
                     )
                 {
                     _forbidden = true;
@@ -86,7 +95,7 @@ namespace Mix.Cms.Web.Controllers
 
         protected void GetLanguage()
         {
-            
+
         }
 
     }
