@@ -26,7 +26,6 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$r
         $scope.type='-1';
         
         $scope.settings = $rootScope.globalSettings;
-        //$scope.dataTypes = ngAppSettings.dataTypes;
         $scope.activedData = null;
         $scope.editDataUrl = '';
 

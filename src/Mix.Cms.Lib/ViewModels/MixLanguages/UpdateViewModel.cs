@@ -83,6 +83,10 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         public override MixLanguage ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Value = Property.Value ?? Value;
+            if (CreatedDateTime == default(DateTime))
+            {
+                CreatedDateTime = DateTime.UtcNow;
+            }
             return base.ParseModel(_context, _transaction);
         }
         public override UpdateViewModel ParseView(bool isExpand = true, MixCmsContext _context = null, IDbContextTransaction _transaction = null)

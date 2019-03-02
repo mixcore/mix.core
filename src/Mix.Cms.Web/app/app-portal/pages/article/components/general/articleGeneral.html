@@ -50,7 +50,7 @@
                                 </td>
                                 <td>
                                     <select class="form-control form-control-sm" ng-model="prop.dataType">
-                                        <option ng-repeat="item in $ctrl.dataTypes" ng-value="item.value">{{item.title}}</option>
+                                        <option ng-repeat="item in $ctrl.dataTypes track by $index" ng-value="$index">{{item}}</option>
                                     </select>
                                 </td>
                                 <td class="prop-value-container">
