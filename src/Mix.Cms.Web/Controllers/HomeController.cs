@@ -34,6 +34,9 @@ namespace Mix.Cms.Web.Controllers
             this._userManager = userManager;
             _apiExplorer = apiExplorer;
         }
+
+        #region Routes
+
         [Route("doc")]
         public IActionResult Documentation()
         {
@@ -50,6 +53,11 @@ namespace Mix.Cms.Web.Controllers
             {
                 return Redirect($"/error/403");
             }
+            if (MixService.GetConfig<bool>("IsMaintenance"))
+            {
+                return Redirect($"/maintenance");
+            }
+
             if (MixService.GetConfig<bool>("IsInit"))
             {
                 //Go to landing page
@@ -135,6 +143,16 @@ namespace Mix.Cms.Web.Controllers
         {
             return await PageAsync(page);
         }
+
+        [HttpGet]
+        [Route("maintenance")]
+        public async System.Threading.Tasks.Task<IActionResult> Maintenance()
+        {
+            return await PageAsync("Maintenance");
+        }
+
+        #endregion
+        #region Helper
 
         async System.Threading.Tasks.Task<IActionResult> PageAsync(string seoName)//Expression<Func<MixPage, bool>> predicate, int? pageIndex = null, int pageSize = 10)
         {
@@ -389,6 +407,7 @@ namespace Mix.Cms.Web.Controllers
             return MixCmsHelper.GetRouterUrl(type, routeValues, Request, Url);
         }
 
+        #endregion
         List<Lib.ViewModels.MixPages.ReadListItemViewModel> GetCategory(MixEnums.CatePosition position, string seoName)
         {
             var result = new List<Lib.ViewModels.MixPages.ReadListItemViewModel>();

@@ -105,6 +105,33 @@ namespace Mix.Cms.Lib.Services
                         var createVNHome = await context.SaveChangesAsync().ConfigureAwait(false);
                         isSucceed = createVNHome > 0;
 
+                        var cateMaintenance = new MixPage()
+                        {
+                            Id = 2,
+                            Title = "Maintenance",
+                            SeoName = "Maintenance",
+                            Level = 0,
+                            Specificulture = culture.Specificulture,
+                            Template = "Pages/_Maintenance.cshtml",
+                            Image = "/images/bgs/maintenance.jpg",
+                            Type = (int)MixPageType.Article,
+                            CreatedBy = "Admin",
+                            CreatedDateTime = DateTime.UtcNow,
+                            Status = (int)PageStatus.Published
+                        };
+
+                        var aliasMaintenance = new MixUrlAlias()
+                        {
+                            Id = 2,
+                            SourceId = "2",
+                            Type = (int)UrlAliasType.Page,
+                            Specificulture = culture.Specificulture,
+                            CreatedDateTime = DateTime.UtcNow,
+                            Alias = cateMaintenance.Title.ToLower()
+                        };
+                        context.Entry(cateMaintenance).State = EntityState.Added;
+                        context.Entry(aliasMaintenance).State = EntityState.Added;
+
                         var cate404 = new MixPage()
                         {
                             Id = 2,
@@ -113,6 +140,7 @@ namespace Mix.Cms.Lib.Services
                             Level = 0,
                             Specificulture = culture.Specificulture,
                             Template = "Pages/_404.cshtml",
+                            Image = "/images/bgs/404.jpg",
                             Type = (int)MixPageType.Article,
                             CreatedBy = "Admin",
                             CreatedDateTime = DateTime.UtcNow,
@@ -142,6 +170,7 @@ namespace Mix.Cms.Lib.Services
                             Level = 0,
                             Specificulture = culture.Specificulture,
                             Template = "Pages/_403.cshtml",
+                            Image = "/images/bgs/403.png",
                             Type = (int)MixPageType.Article,
                             CreatedBy = "Admin",
                             CreatedDateTime = DateTime.UtcNow,

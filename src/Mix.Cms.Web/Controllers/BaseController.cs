@@ -22,13 +22,13 @@ namespace Mix.Cms.Web.Controllers
         {
             get
             {
-                var allowedIps = MixService.GetIpConfig<JArray>("AllowedPortalIps");
+                var allowedIps = MixService.GetIpConfig<JArray>("AllowedPortalIps") ?? new JArray();
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 return _forbidden || (
                     // allow localhost
                     //remoteIp != "::1" &&
                     (
-                        allowedIps.Count > 0  && 
+                        allowedIps.Count > 0 &&
                         !allowedIps.Any(t => t["text"].Value<string>() == remoteIp)
                     )
                 );
@@ -73,16 +73,16 @@ namespace Mix.Cms.Web.Controllers
             _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
             if (MixService.GetIpConfig<bool>("IsRetrictIp"))
             {
-                var allowedIps = MixService.GetIpConfig<JArray>("AllowedIps");
-                var exceptIps = MixService.GetIpConfig<JArray>("ExceptIps");
+                var allowedIps = MixService.GetIpConfig<JArray>("AllowedIps") ?? new JArray();
+                var exceptIps = MixService.GetIpConfig<JArray>("ExceptIps") ?? new JArray();
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 if (
-                    // allow localhost
-                    //remoteIp != "::1" &&                    
-                        allowedIps.Count > 0 && 
+                        // allow localhost
+                        //remoteIp != "::1" &&                    
+                        allowedIps.Count > 0 &&
                         !allowedIps.Any(t => t["text"].Value<string>() == remoteIp) ||
                         (
-                            exceptIps.Count  > 0 && 
+                            exceptIps.Count > 0 &&
                             exceptIps.Any(t => t["text"].Value<string>() == remoteIp)
                         )
                     )
