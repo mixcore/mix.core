@@ -134,7 +134,7 @@ namespace Mix.Cms.Lib.Services
 
                         var cate404 = new MixPage()
                         {
-                            Id = 2,
+                            Id = 3,
                             Title = "404",
                             SeoName = "404",
                             Level = 0,
@@ -149,8 +149,8 @@ namespace Mix.Cms.Lib.Services
 
                         var alias404 = new MixUrlAlias()
                         {
-                            Id = 2,
-                            SourceId = "2",
+                            Id = 3,
+                            SourceId = "3",
                             Type = (int)UrlAliasType.Page,
                             Specificulture = culture.Specificulture,
                             CreatedDateTime = DateTime.UtcNow,
@@ -164,7 +164,7 @@ namespace Mix.Cms.Lib.Services
 
                         var cate403 = new MixPage()
                         {
-                            Id = 2,
+                            Id = 4,
                             Title = "403",
                             SeoName = "403",
                             Level = 0,
@@ -179,8 +179,8 @@ namespace Mix.Cms.Lib.Services
 
                         var alias403 = new MixUrlAlias()
                         {
-                            Id = 2,
-                            SourceId = "2",
+                            Id = 4,
+                            SourceId = "4",
                             Type = (int)UrlAliasType.Page,
                             Specificulture = culture.Specificulture,
                             CreatedDateTime = DateTime.UtcNow,
