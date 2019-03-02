@@ -67,6 +67,7 @@
     "DefaultContentStatus": "2",
     "DefaultTemplateFolder": "Default_Blank",
     "DefaultTemplateLayout": "_Layout",
+    "DefaultArticleAttr": null,
     "OrderBy": "Priority",
     "DefaultStatus": "2",
     "Language": "en-us",

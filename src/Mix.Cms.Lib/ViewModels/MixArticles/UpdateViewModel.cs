@@ -231,6 +231,10 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            if (Id == 0)
+            {
+                ExtraProperties = MixService.GetConfig<string>("DefaultArticleAttr");
+            }
             Cultures = LoadCultures(Specificulture, _context, _transaction);
 
             if (!string.IsNullOrEmpty(this.Tags))
@@ -238,6 +242,8 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 ListTag = JArray.Parse(this.Tags);
             }
             Properties = new List<ExtraProperty>();
+           
+
             if (!string.IsNullOrEmpty(ExtraProperties))
             {
                 JArray arr = JArray.Parse(ExtraProperties);
@@ -246,7 +252,6 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     Properties.Add(item.ToObject<ExtraProperty>());
                 }
             }
-
             //Get Templates
             this.Templates = this.Templates ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
@@ -342,7 +347,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             // Related Articles
             ArticleNavs = GetRelated(_context, _transaction);
             var otherArticles = MixArticles.ReadListItemViewModel.Repository.GetModelListBy(
-                m => m.Id != Id && m.Specificulture == Specificulture 
+                m => m.Id != Id && m.Specificulture == Specificulture
                     && !ArticleNavs.Any(n => n.SourceId == Id)
                     , "CreatedDateTime", 1, 10, 0, _context, _transaction);
             foreach (var item in otherArticles.Data.Items)
