@@ -134,7 +134,7 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
                 window.location.href = '/init/step2';
             }
             else {
-                if (result) { $rootScope.showMessage('', result.errors, 'danger'); }
+                if (result) { $rootScope.showErrors(result.errors); }
                 $rootScope.isBusy = false;
                 $scope.$apply();
             }

@@ -480,7 +480,11 @@ namespace Mix.Cms.Api.Controllers.v1
             }
             else
             {
+                // if cannot init cms 
+                //  => reload from default settings
+                //  => save to appSettings
                 MixService.Reload();
+                MixService.Save();
                 if (initResult.Exception != null)
                 {
                     result.Errors.Add(initResult.Exception.Message);
