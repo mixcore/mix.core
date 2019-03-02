@@ -40,7 +40,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             get
             {
-                var allowedIps = MixService.GetIpConfig<JArray>("AllowedPortalIps");
+                var allowedIps = MixService.GetIpConfig<JArray>("AllowedPortalIps") ?? new JArray();
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 return _forbidden || (
                     // allow localhost
@@ -80,8 +80,8 @@ namespace Mix.Cms.Api.Controllers.v1
             AlertAsync("Executing request", 200);
             if (MixService.GetIpConfig<bool>("IsRetrictIp"))
             {
-                var allowedIps = MixService.GetIpConfig<JArray>("AllowedIps");
-                var exceptIps = MixService.GetIpConfig<JArray>("ExceptIps");
+                var allowedIps = MixService.GetIpConfig<JArray>("AllowedIps") ?? new JArray();
+                var exceptIps = MixService.GetIpConfig<JArray>("ExceptIps") ?? new JArray();
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 if (
                     // allow localhost
