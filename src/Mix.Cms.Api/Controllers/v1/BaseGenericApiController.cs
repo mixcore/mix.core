@@ -36,14 +36,16 @@ namespace Mix.Cms.Api.Controllers.v1
         protected string _lang;
 
         protected bool _forbidden = false;
-        protected bool _forbiddenPortal {
-            get {
-                string allowedIps = MixService.GetConfig<string>("AllowedPortalIps");
+        protected bool _forbiddenPortal
+        {
+            get
+            {
+                var allowedIps = MixService.GetIpConfig<JArray>("AllowedPortalIps");
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 return _forbidden || (
                     // allow localhost
-                    remoteIp != "::1" &&
-                    (allowedIps != "*" && !allowedIps.Contains(remoteIp))
+                    //remoteIp != "::1" &&
+                    (allowedIps != null && !allowedIps.Any(t => t.Value<string>() == "*") && !allowedIps.Contains(remoteIp))
                 );
             }
         }
@@ -64,7 +66,7 @@ namespace Mix.Cms.Api.Controllers.v1
             _hubContext = hubContext;
             _memoryCache = memoryCache;
         }
-        
+
 
         #region Overrides
 
@@ -76,16 +78,16 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             GetLanguage();
             AlertAsync("Executing request", 200);
-            if (MixService.GetConfig<bool>("IsRetrictIp"))
+            if (MixService.GetIpConfig<bool>("IsRetrictIp"))
             {
-                string allowedIps = MixService.GetConfig<string>("AllowedIps");
-                string exceptIps = MixService.GetConfig<string>("ExceptIps");
+                var allowedIps = MixService.GetIpConfig<JArray>("AllowedIps");
+                var exceptIps = MixService.GetIpConfig<JArray>("ExceptIps");
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 if (
                     // allow localhost
-                    remoteIp != "::1" &&
-                    (allowedIps != "*" && !allowedIps.Contains(remoteIp))
-                    || (exceptIps.Contains(remoteIp))
+                    //remoteIp != "::1" &&
+                    (!allowedIps.Any(t => t.Value<string>() == "*") && !allowedIps.Contains(remoteIp)) ||
+                    (exceptIps.Any(t => t.Value<string>() == remoteIp))
                     )
                 {
                     _forbidden = true;
@@ -184,18 +186,19 @@ namespace Mix.Cms.Api.Controllers.v1
             }
             return new RepositoryResponse<TView>();
         }
-        
+
         protected async Task<RepositoryResponse<List<TView>>> SaveListAsync<TView>(List<TView> lstVm, bool isSaveSubModel)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-            var result= new RepositoryResponse<List<TView>>(){ IsSucceed = true};
+            var result = new RepositoryResponse<List<TView>>() { IsSucceed = true };
             if (lstVm != null)
             {
                 foreach (var vm in lstVm)
                 {
-                    var tmp = await vm.SaveModelAsync(isSaveSubModel).ConfigureAwait(false);                    
-                    result.IsSucceed = result.IsSucceed&& tmp.IsSucceed;
-                    if(!tmp.IsSucceed){
+                    var tmp = await vm.SaveModelAsync(isSaveSubModel).ConfigureAwait(false);
+                    result.IsSucceed = result.IsSucceed && tmp.IsSucceed;
+                    if (!tmp.IsSucceed)
+                    {
                         result.Exception = tmp.Exception;
                         result.Errors.AddRange(tmp.Errors);
                     }
@@ -208,14 +211,15 @@ namespace Mix.Cms.Api.Controllers.v1
         protected RepositoryResponse<List<TView>> SaveList<TView>(List<TView> lstVm, bool isSaveSubModel)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-            var result= new RepositoryResponse<List<TView>>(){ IsSucceed = true};
+            var result = new RepositoryResponse<List<TView>>() { IsSucceed = true };
             if (lstVm != null)
             {
                 foreach (var vm in lstVm)
                 {
                     var tmp = vm.SaveModel(isSaveSubModel);
-                    result.IsSucceed = result.IsSucceed&& tmp.IsSucceed;
-                    if(!tmp.IsSucceed){
+                    result.IsSucceed = result.IsSucceed && tmp.IsSucceed;
+                    if (!tmp.IsSucceed)
+                    {
                         result.Exception = tmp.Exception;
                         result.Errors.AddRange(tmp.Errors);
                     }

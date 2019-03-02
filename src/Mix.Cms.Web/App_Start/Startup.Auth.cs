@@ -93,7 +93,7 @@ namespace Mix.Cms.Web
                             
                         };
                     });
-            services.Configure<IpSecuritySettings>(Configuration.GetSection("IpSecuritySettings"));
+            //services.Configure<IpSecuritySettings>(Configuration.GetSection("IpSecuritySettings"));
         }
 
         protected void ConfigCookieAuth(IServiceCollection services, IConfiguration Configuration)
