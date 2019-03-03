@@ -146,7 +146,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixTheme parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>() { IsSucceed = true };
-
+            try
+            {
                 // Clone Default templates
                 Name = SeoHelper.GetSEOString(Title);
                 string defaultTemplateFolder = CommonHelper.GetFullPath(new string[] {
@@ -163,11 +164,14 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
                 var files = FileRepository.Instance.GetFilesWithContent(TemplateFolder);
                 //TODO: Create default asset
+                int id = 0;
                 foreach (var file in files)
                 {
+                    id++;
                     MixTemplates.InitViewModel template = new MixTemplates.InitViewModel(
                         new MixTemplate()
                         {
+                            Id = id,
                             FileFolder = file.FileFolder,
                             FileName = file.Filename,
                             Content = file.Content,
@@ -188,8 +192,16 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                         break;
                     }
                 }
-
-            return result;
+                return result;
+            }
+            catch(Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Errors.Add(ex.Message);
+                result.Exception = ex;
+                return result;
+            }
+            
         }
 
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(InitViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -209,81 +221,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         }
 
         #endregion Async
-        #region Sync
-
-        public override RepositoryResponse<bool> SaveSubModels(MixTheme parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            RepositoryResponse<bool> result = new RepositoryResponse<bool>() { IsSucceed = true };
-
-            // Create default template if create new without import template assets
-            if (TemplateAsset.Content == null && TemplateAsset.FileStream == null)
-            {
-
-                string defaultFolder = CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.TemplatesFolder,
-                    "Default"
-                     });
-                bool copyResult = FileRepository.Instance.CopyDirectory(defaultFolder, TemplateFolder);
-                string defaultAssetsFolder = CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.WebRootPath,
-                    MixConstants.Folder.FileFolder,
-                    MixConstants.Folder.TemplatesAssetFolder,
-                    "Default" });
-                copyResult = FileRepository.Instance.CopyDirectory(defaultAssetsFolder, CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.WebRootPath,AssetFolder }));
-
-                var files = FileRepository.Instance.GetFilesWithContent(TemplateFolder);
-                //TODO: Create default asset
-                foreach (var file in files)
-                {
-                    string content = file.Content.Replace($"/Content/Templates/Default/",
-                    $"/Content/Templates/{Name}/");
-                    MixTemplates.InitViewModel template = new MixTemplates.InitViewModel(
-                        new MixTemplate()
-                        {
-                            Id = MixTemplates.ReadListItemViewModel.Repository.Max(t => t.Id, _context, _transaction).Data + 1,
-                            FileFolder = file.FileFolder,
-                            FileName = file.Filename,
-                            Content = content,
-                            Extension = file.Extension,
-                            CreatedDateTime = DateTime.UtcNow,
-                            LastModified = DateTime.UtcNow,
-                            ThemeId = Model.Id,
-                            ThemeName = Model.Name,
-                            FolderType = file.FolderName,
-                            ModifiedBy = CreatedBy
-                        }, _context, _transaction);
-                    var saveResult = template.SaveModel(true, _context, _transaction);
-                    result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
-                    if (!saveResult.IsSucceed)
-                    {
-                        result.Exception = saveResult.Exception;
-                        result.Errors.AddRange(saveResult.Errors);
-                        break;
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        public override RepositoryResponse<bool> RemoveRelatedModels(InitViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var result = MixTemplates.InitViewModel.Repository.RemoveListModel(t => t.ThemeId == Id);
-            if (result.IsSucceed)
-            {
-                FileRepository.Instance.DeleteWebFolder(AssetFolder);
-                FileRepository.Instance.DeleteFolder(TemplateFolder);
-            }
-            return new RepositoryResponse<bool>()
-            {
-                IsSucceed = result.IsSucceed,
-                Errors = result.Errors,
-                Exception = result.Exception
-            };
-        }
-
-        #endregion
 
         #endregion Overrides
 
