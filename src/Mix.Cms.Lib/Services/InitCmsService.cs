@@ -56,17 +56,36 @@ namespace Mix.Cms.Lib.Services
                         {
                             isSucceed = isSucceed && InitPositions(context, transaction);
                         }
+                        else
+                        {
+                            result.Errors.Add("Cannot init Cultures");
+                        }
                         if (isSucceed)
                         {
                             isSucceed = isSucceed && await InitConfigurationsAsync(siteName, culture, context, transaction);
+                        }
+                        else
+                        {
+                            result.Errors.Add("Cannot init Positions");
                         }
                         if (isSucceed)
                         {
                             isSucceed = isSucceed && await InitLanguagesAsync(culture, context, transaction);
                         }
+                        else
+                        {
+                            result.Errors.Add("Cannot init Configurations");
+                        }
                         if (isSucceed)
                         {
-                            isSucceed = isSucceed && InitThemes(siteName, context, transaction);
+                            var initTheme = await InitThemesAsync(siteName, context, transaction);
+                            isSucceed = isSucceed && initTheme.IsSucceed;
+                            result.Errors.AddRange(initTheme.Errors);
+                            result.Exception = initTheme.Exception;
+                        }
+                        else
+                        {                            
+                            result.Errors.Add("Cannot init Languages");
                         }
                     }
                     else
@@ -76,21 +95,25 @@ namespace Mix.Cms.Lib.Services
 
                     if (isSucceed && context.MixPage.Count() == 0)
                     {
-                        await InitPage("Home", "Pages/_Home.cshtml", "/assets/img/home.jpg"
+                        int id = 0;
+                        InitPage(ref id, "Home", "Pages/_Home.cshtml", "/assets/img/bgs/home.jpeg"
                             , MixPageType.Home, culture.Specificulture, context, transaction);
-                        await InitPage("Tag", "Pages/_Tag.cshtml", "/assets/img/tag.jpg"
-                            , MixPageType.Home, culture.Specificulture, context, transaction);
-                        await InitPage("Search", "Pages/_Search.cshtml", "/assets/img/search.jpg"
-                            , MixPageType.Home, culture.Specificulture, context, transaction);
-                        await InitPage("Maintenance", "Pages/_Maintenance.cshtml", "/assets/img/bgs/maintenance.jpg"
+                        InitPage(ref id, "Tag", "Pages/_Tag.cshtml", "/assets/img/bgs/tag.jpg"
                             , MixPageType.Article, culture.Specificulture, context, transaction);
-                        await InitPage("404", "Pages/_404.cshtml", "/assets/img/bgs/404.jpg"
+                        InitPage(ref id, "Search", "Pages/_Search.cshtml", "/assets/img/bgs/search.jpg"
                             , MixPageType.Article, culture.Specificulture, context, transaction);
-                        await InitPage("403", "Pages/_403.cshtml", "/assets/img/bgs/403.jpg"
+                        InitPage(ref id, "Maintenance", "Pages/_Maintenance.cshtml", "/assets/img/bgs/maintenance.jpg"
+                            , MixPageType.Article, culture.Specificulture, context, transaction);
+                        InitPage(ref id, "404", "Pages/_404.cshtml", "/assets/img/bgs/404.jpg"
+                            , MixPageType.Article, culture.Specificulture, context, transaction);
+                        InitPage(ref id, "403", "Pages/_403.cshtml", "/assets/img/bgs/403.jpg"
                             , MixPageType.Article, culture.Specificulture, context, transaction);
                         isSucceed = (await context.SaveChangesAsync().ConfigureAwait(false)) > 0;
                     }
-
+                    else
+                    {
+                        result.Errors.Add("Cannot init Themes");
+                    }
                     if (isSucceed)
                     {
                         transaction.Commit();
@@ -147,9 +170,8 @@ namespace Mix.Cms.Lib.Services
 
         }
 
-        private bool InitThemes(string siteName, MixCmsContext context, IDbContextTransaction transaction)
+        private async Task<RepositoryResponse<ViewModels.MixThemes.InitViewModel>> InitThemesAsync(string siteName, MixCmsContext context, IDbContextTransaction transaction)
         {
-            bool isSucceed = true;
             var getThemes = ViewModels.MixThemes.InitViewModel.Repository.GetModelList(_context: context, _transaction: transaction);
             if (!context.MixTheme.Any())
             {
@@ -163,10 +185,10 @@ namespace Mix.Cms.Lib.Services
                     Status = (int)MixContentStatus.Published,
                 }, context, transaction);
 
-                isSucceed = isSucceed && theme.SaveModel(true, context, transaction).IsSucceed;
+                return await theme.SaveModelAsync(true, context, transaction);
             }
 
-            return isSucceed;
+            return new RepositoryResponse<ViewModels.MixThemes.InitViewModel>() { IsSucceed = true };
         }
 
         protected bool InitCultures(InitCulture culture, MixCmsContext context, IDbContextTransaction transaction)
@@ -238,10 +260,10 @@ namespace Mix.Cms.Lib.Services
             return isSucceed;
         }
 
-        protected async Task<bool> InitPage(string title, string template, string image, MixPageType type, string culture
+        protected void InitPage(ref int id, string title, string template, string image, MixPageType type, string culture
             , MixCmsContext context, IDbContextTransaction transaction)
         {
-            var id = context.MixPage.Count() + 1;
+            id += 1;
             var cate = new MixPage()
             {
                 Id = id,
@@ -266,8 +288,6 @@ namespace Mix.Cms.Lib.Services
                 Alias = cate.Title.ToLower()
             };
             context.Entry(alias).State = EntityState.Added;
-
-            return (await context.SaveChangesAsync().ConfigureAwait(false)) > 0;
         }
     }
 }
