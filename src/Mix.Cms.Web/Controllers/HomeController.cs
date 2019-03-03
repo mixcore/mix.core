@@ -16,6 +16,7 @@ using Mix.Cms.Lib.Services;
 using Mix.Cms.Web.Models;
 using Mix.Domain.Core.ViewModels;
 using Mix.Identity.Models;
+using Newtonsoft.Json.Linq;
 using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Web.Controllers
@@ -74,6 +75,16 @@ namespace Mix.Cms.Web.Controllers
                     return Redirect($"/init/step2");
                 }
             }
+        }
+
+        [Route("{culture}/tag/{tagName}")]
+        public async System.Threading.Tasks.Task<IActionResult> Tag(string culture, string tagName)
+        {
+            if (_forbidden)
+            {
+                return Redirect($"/error/403");
+            }
+            return await TagAsync(tagName);
         }
 
         [Route("article/{id}/{seoName}")]
@@ -154,7 +165,7 @@ namespace Mix.Cms.Web.Controllers
         #endregion
         #region Helper
 
-        async System.Threading.Tasks.Task<IActionResult> PageAsync(string seoName)//Expression<Func<MixPage, bool>> predicate, int? pageIndex = null, int pageSize = 10)
+        async System.Threading.Tasks.Task<IActionResult> PageAsync(string seoName)
         {
             ViewData["TopPages"] = GetCategory(CatePosition.Nav, seoName);
             ViewData["HeaderPages"] = GetCategory(CatePosition.Top, seoName);
@@ -192,6 +203,127 @@ namespace Mix.Cms.Web.Controllers
                 if (getPage.Data != null)
                 {
                     getPage.Data.LoadData(pageIndex: pageIndex, pageSize: pageSize);
+                }
+                _memoryCache.Set(cacheKey, getPage.Data);
+                if (!MixConstants.cachedKeys.Contains(cacheKey))
+                {
+                    MixConstants.cachedKeys.Add(cacheKey);
+                }
+            }
+
+            if (getPage.IsSucceed)// && getPage.Data.View != null
+            {
+                GeneratePageDetailsUrls(getPage.Data);
+                if (!MixConstants.cachedKeys.Contains(cacheKey))
+                {
+                    MixConstants.cachedKeys.Add(cacheKey);
+                }
+                ViewData["Title"] = getPage.Data.SeoTitle;
+                ViewData["Description"] = getPage.Data.SeoDescription;
+                ViewData["Keywords"] = getPage.Data.SeoKeywords;
+                ViewData["Image"] = getPage.Data.ImageUrl;
+                ViewData["PageClass"] = getPage.Data.CssClass;
+                getPage.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+                return View(getPage.Data);
+            }
+            else
+            {
+                return Redirect($"/error/404");
+            }
+        }
+
+        async System.Threading.Tasks.Task<IActionResult> TagAsync(string tagName)
+        {
+            string seoName = "tag";
+            ViewData["TopPages"] = GetCategory(CatePosition.Nav, seoName);
+            ViewData["HeaderPages"] = GetCategory(CatePosition.Top, seoName);
+            ViewData["FooterPages"] = GetCategory(CatePosition.Footer, seoName);
+            ViewData["LeftPages"] = GetCategory(CatePosition.Left, seoName);
+
+            int? pageSize = MixService.GetConfig<int?>("TagPageSize");
+            string orderBy = MixService.GetConfig<string>("OrderBy");
+            int orderDirection = MixService.GetConfig<int>("OrderDirection");
+            int.TryParse(Request.Query["pageIndex"], out int pageIndex);
+            var getPage = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
+            var cacheKey = $"tag_{_culture}_{tagName}_{pageSize}_{pageIndex}";
+            var data = _memoryCache.Get<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
+            if (data != null && MixService.GetConfig<bool>("IsCache"))
+            {
+                getPage.IsSucceed = true;
+                getPage.Data = data;
+            }
+            else
+            {
+                Expression<Func<MixPage, bool>> predicate;
+
+                predicate = p =>
+                p.SeoName == "tag"
+                && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+
+                getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+                if (getPage.Data != null)
+                {
+                    getPage.Data.LoadDataByTag(tagName, orderBy,orderDirection, pageIndex: pageIndex, pageSize: pageSize);
+                }
+                _memoryCache.Set(cacheKey, getPage.Data);
+                if (!MixConstants.cachedKeys.Contains(cacheKey))
+                {
+                    MixConstants.cachedKeys.Add(cacheKey);
+                }
+            }
+
+            if (getPage.IsSucceed)// && getPage.Data.View != null
+            {
+                GeneratePageDetailsUrls(getPage.Data);
+                if (!MixConstants.cachedKeys.Contains(cacheKey))
+                {
+                    MixConstants.cachedKeys.Add(cacheKey);
+                }
+                ViewData["Title"] = getPage.Data.SeoTitle;
+                ViewData["Description"] = getPage.Data.SeoDescription;
+                ViewData["Keywords"] = getPage.Data.SeoKeywords;
+                ViewData["Image"] = getPage.Data.ImageUrl;
+                ViewData["PageClass"] = getPage.Data.CssClass;
+                getPage.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+                return View(getPage.Data);
+            }
+            else
+            {
+                return Redirect($"/error/404");
+            }
+        }
+        async System.Threading.Tasks.Task<IActionResult> SearchAsync(string keyword)
+        {
+            string seoName = "search";
+            ViewData["TopPages"] = GetCategory(CatePosition.Nav, seoName);
+            ViewData["HeaderPages"] = GetCategory(CatePosition.Top, seoName);
+            ViewData["FooterPages"] = GetCategory(CatePosition.Footer, seoName);
+            ViewData["LeftPages"] = GetCategory(CatePosition.Left, seoName);
+
+            int? pageSize = MixService.GetConfig<int?>("SearchPageSize");
+            string orderBy = MixService.GetConfig<string>("OrderBy");
+            int orderDirection = MixService.GetConfig<int>("OrderDirection");
+            int.TryParse(Request.Query["pageIndex"], out int pageIndex);
+            var getPage = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
+            var cacheKey = $"search_{_culture}_{keyword}_{pageSize}_{pageIndex}";
+            var data = _memoryCache.Get<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
+            if (data != null && MixService.GetConfig<bool>("IsCache"))
+            {
+                getPage.IsSucceed = true;
+                getPage.Data = data;
+            }
+            else
+            {
+                Expression<Func<MixPage, bool>> predicate;
+
+                predicate = p =>
+                p.SeoName == "search"
+                && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+
+                getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+                if (getPage.Data != null)
+                {
+                    getPage.Data.LoadDataByKeyword(keyword, orderBy,orderDirection, pageIndex: pageIndex, pageSize: pageSize);
                 }
                 _memoryCache.Set(cacheKey, getPage.Data);
                 if (!MixConstants.cachedKeys.Contains(cacheKey))

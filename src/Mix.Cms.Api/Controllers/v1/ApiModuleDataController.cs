@@ -15,6 +15,8 @@ using Newtonsoft.Json.Linq;
 using System.Web;
 using Microsoft.AspNetCore.Authorization;
 using Mix.Common.Helper;
+using Mix.Cms.Lib.Services;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -46,7 +48,8 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         ModuleId = moduleId,
                         Specificulture = _lang,
-                        Fields = getModule.Data.Fields
+                        Fields = getModule.Data.Fields,
+                        Status = MixService.GetConfig<int>("DefaultContentStatus")
                     };
                     RepositoryResponse<UpdateViewModel> result = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_default", null, model);
 

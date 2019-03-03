@@ -57,6 +57,7 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
         }
         $scope.$on('$routeChangeStart', function ($event, next, current) {
             // ... you could trigger something here ...
+            $rootScope.referrerUrl = current ? $location.$$path :'/portal';
             $scope.pageTagName = $location.$$path.toString().split('/')[2];
             $scope.pageTagTypeName = $location.$$path.toString().split('/')[3];
             if ($scope.pageTagTypeName == 'list') $scope.pageTagType = 1;

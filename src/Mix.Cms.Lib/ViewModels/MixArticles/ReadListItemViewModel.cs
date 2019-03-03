@@ -157,6 +157,9 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         [JsonIgnore]
         public List<ExtraProperty> Properties { get; set; }
 
+        [JsonProperty("listTag")]
+        public JArray ListTag { get => JArray.Parse(Tags ?? "[]"); }
+
         #endregion Views
 
         #endregion Properties

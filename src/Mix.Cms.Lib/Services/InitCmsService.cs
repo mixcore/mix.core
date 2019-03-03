@@ -76,121 +76,19 @@ namespace Mix.Cms.Lib.Services
 
                     if (isSucceed && context.MixPage.Count() == 0)
                     {
-                        var cate = new MixPage()
-                        {
-                            Id = 1,
-                            Level = 0,
-                            Title = "Home",
-                            Specificulture = culture.Specificulture,
-                            Template = "Pages/_Home.cshtml",
-                            Type = (int)MixPageType.Home,
-                            CreatedBy = "Admin",
-                            CreatedDateTime = DateTime.UtcNow,
-                            Status = (int)PageStatus.Published
-                        };
-
-
-                        context.Entry(cate).State = EntityState.Added;
-                        var alias = new MixUrlAlias()
-                        {
-                            Id = 1,
-                            SourceId = "1",
-                            Type = (int)UrlAliasType.Page,
-                            Specificulture = culture.Specificulture,
-                            CreatedDateTime = DateTime.UtcNow,
-                            Alias = cate.Title.ToLower()
-                        };
-                        context.Entry(alias).State = EntityState.Added;
-
-                        var createVNHome = await context.SaveChangesAsync().ConfigureAwait(false);
-                        isSucceed = createVNHome > 0;
-
-                        var cateMaintenance = new MixPage()
-                        {
-                            Id = 2,
-                            Title = "Maintenance",
-                            SeoName = "Maintenance",
-                            Level = 0,
-                            Specificulture = culture.Specificulture,
-                            Template = "Pages/_Maintenance.cshtml",
-                            Image = "/images/bgs/maintenance.jpg",
-                            Type = (int)MixPageType.Article,
-                            CreatedBy = "Admin",
-                            CreatedDateTime = DateTime.UtcNow,
-                            Status = (int)PageStatus.Published
-                        };
-
-                        var aliasMaintenance = new MixUrlAlias()
-                        {
-                            Id = 2,
-                            SourceId = "2",
-                            Type = (int)UrlAliasType.Page,
-                            Specificulture = culture.Specificulture,
-                            CreatedDateTime = DateTime.UtcNow,
-                            Alias = cateMaintenance.Title.ToLower()
-                        };
-                        context.Entry(cateMaintenance).State = EntityState.Added;
-                        context.Entry(aliasMaintenance).State = EntityState.Added;
-
-                        var cate404 = new MixPage()
-                        {
-                            Id = 3,
-                            Title = "404",
-                            SeoName = "404",
-                            Level = 0,
-                            Specificulture = culture.Specificulture,
-                            Template = "Pages/_404.cshtml",
-                            Image = "/images/bgs/404.jpg",
-                            Type = (int)MixPageType.Article,
-                            CreatedBy = "Admin",
-                            CreatedDateTime = DateTime.UtcNow,
-                            Status = (int)PageStatus.Published
-                        };
-
-                        var alias404 = new MixUrlAlias()
-                        {
-                            Id = 3,
-                            SourceId = "3",
-                            Type = (int)UrlAliasType.Page,
-                            Specificulture = culture.Specificulture,
-                            CreatedDateTime = DateTime.UtcNow,
-                            Alias = cate404.Title.ToLower()
-                        };
-                        context.Entry(cate404).State = EntityState.Added;
-                        context.Entry(alias404).State = EntityState.Added;
-
-                        var create404 = await context.SaveChangesAsync().ConfigureAwait(false);
-                        isSucceed = create404 > 0;
-
-                        var cate403 = new MixPage()
-                        {
-                            Id = 4,
-                            Title = "403",
-                            SeoName = "403",
-                            Level = 0,
-                            Specificulture = culture.Specificulture,
-                            Template = "Pages/_403.cshtml",
-                            Image = "/images/bgs/403.png",
-                            Type = (int)MixPageType.Article,
-                            CreatedBy = "Admin",
-                            CreatedDateTime = DateTime.UtcNow,
-                            Status = (int)PageStatus.Published
-                        };
-
-                        var alias403 = new MixUrlAlias()
-                        {
-                            Id = 4,
-                            SourceId = "4",
-                            Type = (int)UrlAliasType.Page,
-                            Specificulture = culture.Specificulture,
-                            CreatedDateTime = DateTime.UtcNow,
-                            Alias = cate403.Title.ToLower()
-                        };
-                        context.Entry(cate403).State = EntityState.Added;
-                        context.Entry(alias403).State = EntityState.Added;
-
-                        var create403 = await context.SaveChangesAsync().ConfigureAwait(false);
-                        isSucceed = create403 > 0;
+                        await InitPage("Home", "Pages/_Home.cshtml", "/assets/img/home.jpg"
+                            , MixPageType.Home, culture.Specificulture, context, transaction);
+                        await InitPage("Tag", "Pages/_Tag.cshtml", "/assets/img/tag.jpg"
+                            , MixPageType.Home, culture.Specificulture, context, transaction);
+                        await InitPage("Search", "Pages/_Search.cshtml", "/assets/img/search.jpg"
+                            , MixPageType.Home, culture.Specificulture, context, transaction);
+                        await InitPage("Maintenance", "Pages/_Maintenance.cshtml", "/assets/img/bgs/maintenance.jpg"
+                            , MixPageType.Article, culture.Specificulture, context, transaction);
+                        await InitPage("404", "Pages/_404.cshtml", "/assets/img/bgs/404.jpg"
+                            , MixPageType.Article, culture.Specificulture, context, transaction);
+                        await InitPage("403", "Pages/_403.cshtml", "/assets/img/bgs/403.jpg"
+                            , MixPageType.Article, culture.Specificulture, context, transaction);
+                        isSucceed = (await context.SaveChangesAsync().ConfigureAwait(false)) > 0;
                     }
 
                     if (isSucceed)
@@ -340,5 +238,36 @@ namespace Mix.Cms.Lib.Services
             return isSucceed;
         }
 
+        protected async Task<bool> InitPage(string title, string template, string image, MixPageType type, string culture
+            , MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var id = context.MixPage.Count() + 1;
+            var cate = new MixPage()
+            {
+                Id = id,
+                Level = 0,
+                Title = title,
+                Specificulture = culture,
+                Template = template,
+                Image = image,
+                Type = (int)type,
+                CreatedBy = "Admin",
+                CreatedDateTime = DateTime.UtcNow,
+                Status = (int)PageStatus.Published
+            };
+            context.Entry(cate).State = EntityState.Added;
+            var alias = new MixUrlAlias()
+            {
+                Id = id,
+                SourceId = id.ToString(),
+                Type = (int)UrlAliasType.Page,
+                Specificulture = culture,
+                CreatedDateTime = DateTime.UtcNow,
+                Alias = cate.Title.ToLower()
+            };
+            context.Entry(alias).State = EntityState.Added;
+
+            return (await context.SaveChangesAsync().ConfigureAwait(false)) > 0;
+        }
     }
 }

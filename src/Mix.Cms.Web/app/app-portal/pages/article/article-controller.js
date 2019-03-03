@@ -7,8 +7,12 @@ app.controller('ArticleController', ['$scope', '$rootScope', '$location','$filte
             item.editUrl = '/portal/article/details/' + item.id;
             $rootScope.preview('article', item, item.title, 'modal-lg');
         };
+        $scope.referrerUrl = $rootScope.referrerUrl;
         $scope.saveCallback = function () {
-            $location.url('/portal/article/list');
+            if($rootScope.referrerUrl)
+            {
+                $location.url($rootScope.referrerUrl);
+            }
         }
         $scope.getSingleSuccessCallback = function () {
             var moduleId = $routeParams.module_id;

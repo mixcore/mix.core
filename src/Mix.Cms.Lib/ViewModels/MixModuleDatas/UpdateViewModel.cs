@@ -79,7 +79,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
             if (string.IsNullOrEmpty(Id))
             {
                 Id = Guid.NewGuid().ToString();
-                CreatedDateTime = DateTime.UtcNow;
+                CreatedDateTime = DateTime.UtcNow;                
             }
             else
             {
