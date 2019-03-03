@@ -162,6 +162,9 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 
         [JsonProperty("articleNavs")]
         public List<MixArticleArticles.ReadViewModel> ArticleNavs { get; set; }
+        
+        [JsonProperty("listTag")]
+        public JArray ListTag { get => JArray.Parse(Tags ?? "[]"); }
         #endregion Views
 
         #endregion Properties

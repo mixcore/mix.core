@@ -5,6 +5,7 @@ using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -276,6 +277,116 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                         Products = getProducts.Data;
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                UnitOfWorkHelper<MixCmsContext>.HandleException<PaginationModel<ReadMvcViewModel>>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    context.Dispose();
+                }
+            }
+        }
+
+        public void LoadDataByTag(string tagName
+            , string orderBy, int orderDirection
+            , int? pageSize = null, int? pageIndex = null            
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                pageSize = pageSize > 0 ? pageSize : PageSize;
+                pageIndex = pageIndex ?? 0;
+                Expression<Func<MixArticle, bool>> articleExp = null;
+                JObject obj = new JObject(new JProperty("text", tagName));
+
+                articleExp = n => n.Tags.Contains(obj.ToString(Newtonsoft.Json.Formatting.None)) && n.Specificulture == Specificulture;
+
+                if (articleExp != null)
+                {
+                    var getArticles = MixArticles.ReadListItemViewModel.Repository
+                    .GetModelListBy(articleExp
+                    , MixService.GetConfig<string>(orderBy), 0
+                    , pageSize, pageIndex
+                    , _context: context, _transaction: transaction);
+                    if (getArticles.IsSucceed)
+                    {
+                        Articles.Items = new List<MixPageArticles.ReadViewModel>();
+                        Articles.PageIndex = getArticles.Data.PageIndex;
+                        Articles.PageSize = getArticles.Data.PageSize;
+                        Articles.TotalItems = getArticles.Data.TotalItems;
+                        Articles.TotalPage = getArticles.Data.TotalPage;
+                        foreach (var article in getArticles.Data.Items)
+                        {
+                            Articles.Items.Add(new MixPageArticles.ReadViewModel()
+                            {
+                                CategoryId = Id,
+                                ArticleId = article.Id,
+                                Article = article
+                            });
+                        }
+                    }
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                UnitOfWorkHelper<MixCmsContext>.HandleException<PaginationModel<ReadMvcViewModel>>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    context.Dispose();
+                }
+            }
+        }
+         public void LoadDataByKeyword(string keyword
+            , string orderBy, int orderDirection
+            , int? pageSize = null, int? pageIndex = null            
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                pageSize = pageSize > 0 ? pageSize : PageSize;
+                pageIndex = pageIndex ?? 0;
+                Expression<Func<MixArticle, bool>> articleExp = null;
+
+                articleExp = n => n.Title.Contains(keyword) && n.Specificulture == Specificulture;
+
+                if (articleExp != null)
+                {
+                    var getArticles = MixArticles.ReadListItemViewModel.Repository
+                    .GetModelListBy(articleExp
+                    , MixService.GetConfig<string>(orderBy), 0
+                    , pageSize, pageIndex
+                    , _context: context, _transaction: transaction);
+                    if (getArticles.IsSucceed)
+                    {
+                        Articles.Items = new List<MixPageArticles.ReadViewModel>();
+                        Articles.PageIndex = getArticles.Data.PageIndex;
+                        Articles.PageSize = getArticles.Data.PageSize;
+                        Articles.TotalItems = getArticles.Data.TotalItems;
+                        Articles.TotalPage = getArticles.Data.TotalPage;
+                        foreach (var article in getArticles.Data.Items)
+                        {
+                            Articles.Items.Add(new MixPageArticles.ReadViewModel()
+                            {
+                                CategoryId = Id,
+                                ArticleId = article.Id,
+                                Article = article
+                            });
+                        }
+                    }
+                }
+                
             }
             catch (Exception ex)
             {

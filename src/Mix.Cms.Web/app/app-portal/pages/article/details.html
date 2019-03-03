@@ -2,7 +2,7 @@
 <!-- <jumbotrons tag-name="'Article'" tag-type="'1'"></jumbotrons> -->
 <section class="" ng-init="getSingle()">
     <form ng-class="{'submitted': submitted}" ng-submit="save(activedData)">
-        <actions preview-url="activedData.detailsUrl" back-url="'/portal/article/list'"></actions>
+        <actions preview-url="activedData.detailsUrl" back-url="referrerUrl"></actions>
         <div class="row">
             <section class="col-sm-8">
                 <div class="row">
@@ -30,7 +30,10 @@
                             </div>
                         </pane-v>
                         <pane-v title="Medias">
-                            <article-medias article="activedData" medias="activedData.mediaNavs"></article-medias>
+                            <article-medias article="activedData" 
+                                medias="activedData.mediaNavs"
+                                
+                                ></article-medias>
                             <!--<navigation data="activedData.mediaNavs" prefix="media"></navigation>-->
                             <!--<navs data="activedData.mediaNavs" prefix="'media'" model="'nav-article-media'"></navs>-->
                         </pane-v>

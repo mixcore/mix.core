@@ -4,7 +4,10 @@
         var ctrl = this;
         ctrl.isImage= false;
         ctrl.init = function(){
-            ctrl.isImage = ctrl.imgSrc.match(/([/|.|\w|\s|-])*\.(?:jpg|gif|png)/g);
+            if(ctrl.imgSrc)
+            {
+                ctrl.isImage = ctrl.imgSrc.match(/([/|.|\w|\s|-])*\.(?:jpg|gif|png)/g);
+            }
         }
         ctrl.showImage = async function (functionName, args, context) {
             $rootScope.preview('img', ctrl.imgSrc);
