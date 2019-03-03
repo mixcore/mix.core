@@ -81,6 +81,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             get
             {
                 return CommonHelper.GetFullPath(new string[] {
+                    MixConstants.Folder.WebRootPath,
                     MixConstants.Folder.FileFolder,
                     MixConstants.Folder.TemplatesAssetFolder,
                     Name
@@ -156,9 +157,9 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 bool copyResult = FileRepository.Instance.CopyDirectory(defaultTemplateFolder, TemplateFolder);
                 string defaultAssetsFolder = CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.WebRootPath,
-                    MixConstants.Folder.FileFolder,
+                    "assets",
                     MixConstants.Folder.TemplatesAssetFolder,
-                    "Default"
+                    "default"
                 });
                 copyResult = FileRepository.Instance.CopyDirectory(defaultAssetsFolder, AssetFolder);
 
