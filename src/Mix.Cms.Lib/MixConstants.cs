@@ -54,9 +54,9 @@ namespace Mix.Cms.Lib
 
         public static class Folder
         {
-            public const string FileFolder = @"Content";
+            public const string FileFolder = @"assets";
             public const string TemplateExtension = @".cshtml";
-            public const string TemplatesAssetFolder = @"Templates";
+            public const string TemplatesAssetFolder = @"templates";
             public const string TemplatesFolder = @"Views/Shared/Templates";
             public const string UploadFolder = @"Content/Uploads";
             public const string WebRootPath = @"wwwroot";

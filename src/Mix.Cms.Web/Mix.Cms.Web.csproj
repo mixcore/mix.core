@@ -44,18 +44,6 @@
     <None Remove="Views\Shared\Templates\p7p-apartment\**" />
     <None Remove="wwwroot\content\**" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <Content Include="wwwroot\content\templates\Default\assets\css\bootstrap.min.css" />
-    <Content Include="wwwroot\content\templates\Default\assets\css\demo.css" />
-    <Content Include="wwwroot\content\templates\Default\assets\css\now-ui-kit.css" />
-    <Content Include="wwwroot\content\templates\Default\assets\css\now-ui-kit.min.css" />
-    <Content Include="wwwroot\content\templates\Default\assets\demo\demo.css" />
-    <Content Include="wwwroot\content\templates\Default\assets\fonts\nucleo-outline.eot" />
-    <Content Include="wwwroot\content\templates\Default\assets\fonts\nucleo-outline.ttf" />
-    <Content Include="wwwroot\content\templates\Default\assets\fonts\nucleo-outline.woff" />
-    <Content Include="wwwroot\content\templates\Default\assets\img\bg50.jpg" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
@@ -71,6 +59,7 @@
 
   <ItemGroup>
     <Folder Include="app\app-portal\pages\moduleData\components\" />
+    <Folder Include="wwwroot\content\" />
     <Folder Include="wwwroot\lib\portal\Trumbowyg\" />
    
   </ItemGroup>
@@ -231,30 +220,38 @@
     <None Include="Views\Shared\Templates\Default_Blank\Products\_Default.cshtml" />
     <None Include="Views\Shared\Templates\Default_Blank\Widgets\_Comments_Facebook.cshtml" />
     <None Include="Views\Shared\Templates\Default_Blank\Widgets\_Pagination.cshtml" />
-    <None Include="wwwroot\content\templates\Default\assets\css\bootstrap.min.css.map" />
-    <None Include="wwwroot\content\templates\Default\assets\css\now-ui-kit.css.map" />
-    <None Include="wwwroot\content\templates\Default\assets\fonts\nucleo-license.md" />
-    <None Include="wwwroot\content\templates\Default\assets\fonts\nucleo-outline.woff2" />
-    <None Include="wwwroot\content\templates\Default\assets\js\core\bootstrap.min.js" />
-    <None Include="wwwroot\content\templates\Default\assets\js\core\jquery.min.js" />
-    <None Include="wwwroot\content\templates\Default\assets\js\core\popper.min.js" />
-    <None Include="wwwroot\content\templates\Default\assets\js\now-ui-kit.js" />
-    <None Include="wwwroot\content\templates\Default\assets\js\now-ui-kit.js.map" />
-    <None Include="wwwroot\content\templates\Default\assets\js\now-ui-kit.min.js" />
-    <None Include="wwwroot\content\templates\Default\assets\js\plugins\bootstrap-datetimepicker.js" />
-    <None Include="wwwroot\content\templates\Default\assets\js\plugins\bootstrap-selectpicker.js" />
-    <None Include="wwwroot\content\templates\Default\assets\js\plugins\bootstrap-switch.js" />
-    <None Include="wwwroot\content\templates\Default\assets\js\plugins\bootstrap-tagsinput.js" />
-    <None Include="wwwroot\content\templates\Default\assets\js\plugins\jasny-bootstrap.min.js" />
-    <None Include="wwwroot\content\templates\Default\assets\js\plugins\moment.min.js" />
-    <None Include="wwwroot\content\templates\Default\assets\js\plugins\nouislider.min.js" />
-    <None Include="wwwroot\content\templates\Default\assets\js\plugins\presentation-page\rellax.min.js" />
+    <None Include="wwwroot\assets\templates\Default\assets\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\assets\templates\Default\assets\css\now-ui-kit.css.map" />
+    <None Include="wwwroot\assets\templates\Default\assets\fonts\nucleo-license.md" />
+    <None Include="wwwroot\assets\templates\Default\assets\fonts\nucleo-outline.woff2" />
+    <None Include="wwwroot\assets\templates\Default\assets\js\core\bootstrap.min.js" />
+    <None Include="wwwroot\assets\templates\Default\assets\js\core\jquery.min.js" />
+    <None Include="wwwroot\assets\templates\Default\assets\js\core\popper.min.js" />
+    <None Include="wwwroot\assets\templates\Default\assets\js\now-ui-kit.js" />
+    <None Include="wwwroot\assets\templates\Default\assets\js\now-ui-kit.js.map" />
+    <None Include="wwwroot\assets\templates\Default\assets\js\now-ui-kit.min.js" />
+    <None Include="wwwroot\assets\templates\Default\assets\js\plugins\bootstrap-datetimepicker.js" />
+    <None Include="wwwroot\assets\templates\Default\assets\js\plugins\bootstrap-selectpicker.js" />
+    <None Include="wwwroot\assets\templates\Default\assets\js\plugins\bootstrap-switch.js" />
+    <None Include="wwwroot\assets\templates\Default\assets\js\plugins\bootstrap-tagsinput.js" />
+    <None Include="wwwroot\assets\templates\Default\assets\js\plugins\jasny-bootstrap.min.js" />
+    <None Include="wwwroot\assets\templates\Default\assets\js\plugins\moment.min.js" />
+    <None Include="wwwroot\assets\templates\Default\assets\js\plugins\nouislider.min.js" />
+    <None Include="wwwroot\assets\templates\Default\assets\js\plugins\presentation-page\rellax.min.js" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Mix.Cms.Api\Mix.Cms.Api.csproj" />
     <ProjectReference Include="..\Mix.Cms.Hub\Mix.Cms.Hub.csproj" />
     <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -273,6 +270,13 @@
     <Content Update="wwwroot\assets\icons.svg">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   
 
