@@ -239,6 +239,7 @@ namespace Mix.Cms.Web.Controllers
             ViewData["HeaderPages"] = GetCategory(CatePosition.Top, seoName);
             ViewData["FooterPages"] = GetCategory(CatePosition.Footer, seoName);
             ViewData["LeftPages"] = GetCategory(CatePosition.Left, seoName);
+            ViewData["TagName"] = tagName;
 
             int? pageSize = MixService.GetConfig<int?>("TagPageSize");
             string orderBy = MixService.GetConfig<string>("OrderBy");

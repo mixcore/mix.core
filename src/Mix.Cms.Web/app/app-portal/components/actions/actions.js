@@ -7,8 +7,9 @@ modules.component('actions', {
             return $rootScope.translate(keyword);
         };
         ctrl.back = function () {
-            ctrl.backUrl = ctrl.backUrl || '/admin';
-            $location.url(ctrl.backUrl);
+            // ctrl.backUrl = ctrl.backUrl || '/admin';
+            // $location.url(ctrl.backUrl);
+            window.location.href = ctrl.backUrl;
         };
     }],
     bindings: {

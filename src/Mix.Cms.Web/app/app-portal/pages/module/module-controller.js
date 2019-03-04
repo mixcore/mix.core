@@ -1,7 +1,7 @@
 ﻿'use strict';
-app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$routeParams',
+app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$location', '$routeParams',
     'ModuleService', 'SharedModuleDataService',
-    function ($scope, $rootScope, ngAppSettings, $routeParams, moduleServices, moduleDataService) {
+    function ($scope, $rootScope, ngAppSettings, $location, $routeParams, moduleServices, moduleDataService) {
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, moduleServices, 'product');
         $scope.contentUrl = '';
         $scope.getSingleSuccessCallback = function () {
@@ -241,7 +241,9 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$r
                 $scope.$apply();
             }
         };
-
+        $scope.saveCallback = function () {
+            $location.url($scope.referrerUrl);
+        }
         $scope.loadArticles = async function () {
             $rootScope.isBusy = true;
             var id = $routeParams.id;

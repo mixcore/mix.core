@@ -15,7 +15,13 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
     $scope.getSingleFailCallback = null;
     $scope.getListSuccessCallback = null;
     $scope.getListFailCallback = null;
-    $scope.translate = $rootScope.translate;   
+    $scope.translate = $rootScope.translate;
+    if ($rootScope.referrerUrl) {
+        $scope.referrerUrl = $rootScope.referrerUrl;
+    }
+    else {
+        $scope.referrerUrl = document.referrer.substr(document.referrer.indexOf('/portal'));
+    }
     $scope.getSingle = async function () {
         $rootScope.isBusy = true;
         var id = $routeParams.id;
@@ -94,7 +100,7 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
             $scope.getList();
         } else {
             $rootScope.showMessage('failed');
-            $rootScope.isBusy = false;            
+            $rootScope.isBusy = false;
             $scope.$apply();
         }
     };
@@ -119,7 +125,7 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
             $scope.$apply();
         }
     };
-    
+
     $scope.shortString = function (msg, max) {
         if (msg) {
             var data = decodeURIComponent(msg);

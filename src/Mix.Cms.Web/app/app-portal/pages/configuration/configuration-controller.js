@@ -7,12 +7,12 @@ app.controller('ConfigurationController',
             $scope.settings = $rootScope.globalSettings;
             $scope.saveCallback = function () {
                 commonService.initAllSettings().then(function () {
-                    $location.path('/portal/configuration/list');
+                    $location.url($scope.referrerUrl);
                 });
             }
             $scope.removeCallback = function () {
                 commonService.initAllSettings().then(function () {
-                    $location.path('/portal/configuration/list');
+                    $location.url($scope.referrerUrl);
                 });
             }
         }]);
