@@ -53,7 +53,7 @@ app.controller('PermissionController',
                 
             };
             $scope.saveCallback = function(){
-                $scope.getSingle();
+                $scope.getSingle();                
             }
             
             $scope.updateInfos = async function (items) {

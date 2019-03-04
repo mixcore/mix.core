@@ -29,12 +29,12 @@ app.controller('LanguageController',
             
             $scope.saveCallback = function () {
                 commonService.initAllSettings().then(function () {
-                    $location.path('/portal/language/list');
+                    $location.url($scope.referrerUrl);
                 });
             }
             $scope.removeCallback = function () {
                 commonService.initAllSettings().then(function () {
-                    $location.path('/portal/language/list');
+                    $location.url($scope.referrerUrl);
                 });
             }
             $scope.generateDefault = function (text, cate) {

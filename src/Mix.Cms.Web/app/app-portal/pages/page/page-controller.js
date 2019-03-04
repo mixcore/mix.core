@@ -1,8 +1,7 @@
 ﻿'use strict';
-app.controller('PageController', 
-            ['$scope', '$rootScope', '$routeParams', 'ngAppSettings', 
+app.controller('PageController', ['$scope', '$rootScope', 'ngAppSettings', '$location', '$routeParams',
             'PageService','PageArticleService','PagePageService',
-    function ($scope, $rootScope, $routeParams, ngAppSettings, 
+    function ($scope, $rootScope, ngAppSettings, $location, $routeParams, 
             service, pageArticleService, pagePageService) {
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);        
         $scope.request.query = 'level=0';       
@@ -79,5 +78,7 @@ app.controller('PageController',
                 $scope.$apply();
             }          
         }
-        
+        $scope.saveCallback = function () {
+            $location.url($scope.referrerUrl);
+        }
     }]);

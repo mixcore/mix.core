@@ -57,10 +57,8 @@ app.controller('ModuleDataController',
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 }
-            };
-        
-            $scope.saveCallback = function () {               
-            }
+            };       
+           
             $scope.removeCallback = function () {
             }
             
