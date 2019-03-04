@@ -254,6 +254,28 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 }
             }
 
+            if (result.IsSucceed)
+            {
+                // Clone PagePosition from Default culture
+                var getPagePositions = await MixPagePositions.ReadListItemViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
+                if (getPagePositions.IsSucceed)
+                {
+                    foreach (var c in getPagePositions.Data)
+                    {
+                        c.Specificulture = Specificulture;
+                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
+                        result.IsSucceed = saveResult.IsSucceed;
+                        if (!saveResult.IsSucceed)
+                        {
+                            result.Errors.Add("Error: Clone Page Position");
+                            result.Errors.AddRange(saveResult.Errors);
+                            result.Exception = saveResult.Exception;
+                            break;
+                        }
+                    }
+                }
+            }
+
             // Clone PageArticle from Default culture
             if (result.IsSucceed)
             {
@@ -352,6 +374,27 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
 
             var languages = _context.MixLanguage.Where(l => l.Specificulture == Specificulture).ToList();
             languages.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+
+            var PageModules = _context.MixPageModule.Where(l => l.Specificulture == Specificulture).ToList();
+            PageModules.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+
+            var PagePositions = _context.MixPagePosition.Where(l => l.Specificulture == Specificulture).ToList();
+            PagePositions.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+
+            var PageArticles = _context.MixPageArticle.Where(l => l.Specificulture == Specificulture).ToList();
+            PageArticles.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+
+            var ModuleArticles = _context.MixModuleArticle.Where(l => l.Specificulture == Specificulture).ToList();
+            ModuleArticles.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+
+            var ArticleMedias = _context.MixArticleMedia.Where(l => l.Specificulture == Specificulture).ToList();
+            ArticleMedias.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+
+            var ModuleDatas = _context.MixModuleData.Where(l => l.Specificulture == Specificulture).ToList();
+            ModuleDatas.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+
+            var ArticleArticles = _context.MixRelatedArticle.Where(l => l.Specificulture == Specificulture).ToList();
+            ArticleArticles.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
             var cates = _context.MixPage.Where(c => c.Specificulture == Specificulture).ToList();
             cates.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
