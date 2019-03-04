@@ -2,7 +2,7 @@
 @{
     int index = (int)this.ViewData["Index"];
     var i = index %2;
-    string thumb = Model.ThumbnailUrl;
+    string thumb = !string.IsNullOrEmpty(Model.Thumbnail) ? Model.Thumbnail : Model.Image;
     var rowIndex = (index/2)%2;
 }
 
@@ -78,7 +78,7 @@
         </div>
     </div>
     <div class="col-md-3 px-0">
-        <div class="card card-fashion card-background" style="background-image: url('@thumb')">
+        <div class="card card-fashion card-background" style="background-image: url('/assets/img/project11.jpg')">
         </div>
     </div>
     }
@@ -118,7 +118,7 @@ else{
         </div>
     </div>
     <div class="col-md-3 px-0">
-        <div class="card card-fashion card-background" style="background-image: url('@thumb')">
+        <div class="card card-fashion card-background" style="background-image: url('../assets/img/project11.jpg')">
         </div>
     </div>
     }
