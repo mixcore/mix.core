@@ -31,9 +31,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         public string Value { get; set; }
 
         [JsonProperty("articleId")]
-        public int ArticleId { get; set; }
+        public int? ArticleId { get; set; }
         [JsonProperty("productId")]
-        public int ProductId { get; set; }
+        public int? ProductId { get; set; }
         [JsonProperty("categoryId")]
         public int? CategoryId { get; set; }
         [JsonProperty("createdDateTime")]

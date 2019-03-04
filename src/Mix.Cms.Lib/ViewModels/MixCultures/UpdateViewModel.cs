@@ -113,6 +113,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                     result.IsSucceed = saveResult.IsSucceed;
                     if (!saveResult.IsSucceed)
                     {
+                        result.Errors.Add("Error: Clone Pages");
                         result.Errors.AddRange(saveResult.Errors);
                         result.Exception = saveResult.Exception;
                         break;
@@ -132,6 +133,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                         result.IsSucceed = saveResult.IsSucceed;
                         if (!saveResult.IsSucceed)
                         {
+                            result.Errors.Add("Error: Clone Configurations");
                             result.Errors.AddRange(saveResult.Errors);
                             result.Exception = saveResult.Exception;
                             break;
@@ -153,6 +155,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                         result.IsSucceed = saveResult.IsSucceed;
                         if (!saveResult.IsSucceed)
                         {
+                            result.Errors.Add("Error: Clone Languages");
                             result.Errors.AddRange(saveResult.Errors);
                             result.Exception = saveResult.Exception;
                             break;
@@ -160,134 +163,183 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                     }
                 }
             }
-            // Clone Module from Default culture
-            var getModules = await MixModules.ReadListItemViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-            if (getModules.IsSucceed)
+            if (result.IsSucceed)
             {
-                foreach (var c in getModules.Data)
+                // Clone Module from Default culture
+                var getModules = await MixModules.ReadListItemViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
+                if (getModules.IsSucceed)
                 {
-                    c.Specificulture = Specificulture;
-                    c.CreatedDateTime = DateTime.UtcNow;
-                    c.LastModified = DateTime.UtcNow;
-                    var saveResult = await c.SaveModelAsync(false, _context, _transaction);
-                    result.IsSucceed = saveResult.IsSucceed;
-                    if (!saveResult.IsSucceed)
+                    foreach (var c in getModules.Data)
                     {
-                        result.Errors.AddRange(saveResult.Errors);
-                        result.Exception = saveResult.Exception;
-                        break;
+                        c.Specificulture = Specificulture;
+                        c.CreatedDateTime = DateTime.UtcNow;
+                        c.LastModified = DateTime.UtcNow;
+                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
+                        result.IsSucceed = saveResult.IsSucceed;
+                        if (!saveResult.IsSucceed)
+                        {
+                            result.Errors.Add("Error: Clone Module");
+                            result.Errors.AddRange(saveResult.Errors);
+                            result.Exception = saveResult.Exception;
+                            break;
+                        }
                     }
                 }
             }
+
             // Clone ModuleData from Default culture
-            var getModuleDatas = await MixModuleDatas.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-            if (getModuleDatas.IsSucceed)
+            if (result.IsSucceed)
             {
-                foreach (var c in getModuleDatas.Data)
+                var getModuleDatas = await MixModuleDatas.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
+                if (getModuleDatas.IsSucceed)
                 {
-                    c.Specificulture = Specificulture;
-                    c.CreatedDateTime = DateTime.UtcNow;
-                    var saveResult = await c.SaveModelAsync(false, _context, _transaction);
-                    result.IsSucceed = saveResult.IsSucceed;
-                    if (!saveResult.IsSucceed)
+                    foreach (var c in getModuleDatas.Data)
                     {
-                        result.Errors.AddRange(saveResult.Errors);
-                        result.Exception = saveResult.Exception;
-                        break;
+                        c.Specificulture = Specificulture;
+                        c.CreatedDateTime = DateTime.UtcNow;
+                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
+                        result.IsSucceed = saveResult.IsSucceed;
+                        if (!saveResult.IsSucceed)
+                        {
+                            result.Errors.Add("Error: Clone Module Data");
+                            result.Errors.AddRange(saveResult.Errors);
+                            result.Exception = saveResult.Exception;
+                            break;
+                        }
                     }
                 }
             }
-            
             // Clone Article from Default culture
-            var getArticles = await MixArticles.ReadListItemViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-            if (getArticles.IsSucceed)
+            if (result.IsSucceed)
             {
-                foreach (var c in getArticles.Data)
+                var getArticles = await MixArticles.ReadListItemViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
+                if (getArticles.IsSucceed)
                 {
-                    c.Specificulture = Specificulture;
-                    c.CreatedDateTime = DateTime.UtcNow;
-                    c.LastModified = DateTime.UtcNow;
-                    var saveResult = await c.SaveModelAsync(false, _context, _transaction);
-                    result.IsSucceed = saveResult.IsSucceed;
-                    if (!saveResult.IsSucceed)
+                    foreach (var c in getArticles.Data)
                     {
-                        result.Errors.AddRange(saveResult.Errors);
-                        result.Exception = saveResult.Exception;
-                        break;
+                        c.Specificulture = Specificulture;
+                        c.CreatedDateTime = DateTime.UtcNow;
+                        c.LastModified = DateTime.UtcNow;
+                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
+                        result.IsSucceed = saveResult.IsSucceed;
+                        if (!saveResult.IsSucceed)
+                        {
+                            result.Errors.Add("Error: Clone Articles");
+                            result.Errors.AddRange(saveResult.Errors);
+                            result.Exception = saveResult.Exception;
+                            break;
+                        }
                     }
                 }
             }
-            // Clone PageArticle from Default culture
-            var getPageArticles = await MixPageArticles.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-            if (getPageArticles.IsSucceed)
+            if (result.IsSucceed)
             {
-                foreach (var c in getPageArticles.Data)
+                // Clone PageModule from Default culture
+                var getPageModules = await MixPageModules.ReadMvcViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
+                if (getPageModules.IsSucceed)
                 {
-                    c.Specificulture = Specificulture;
-                    var saveResult = await c.SaveModelAsync(false, _context, _transaction);
-                    result.IsSucceed = saveResult.IsSucceed;
-                    if (!saveResult.IsSucceed)
+                    foreach (var c in getPageModules.Data)
                     {
-                        result.Errors.AddRange(saveResult.Errors);
-                        result.Exception = saveResult.Exception;
-                        break;
+                        c.Specificulture = Specificulture;
+                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
+                        result.IsSucceed = saveResult.IsSucceed;
+                        if (!saveResult.IsSucceed)
+                        {
+                            result.Errors.Add("Error: Clone Page Module");
+                            result.Errors.AddRange(saveResult.Errors);
+                            result.Exception = saveResult.Exception;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Clone PageArticle from Default culture
+            if (result.IsSucceed)
+            {
+                var getPageArticles = await MixPageArticles.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
+                if (getPageArticles.IsSucceed)
+                {
+                    foreach (var c in getPageArticles.Data)
+                    {
+                        c.Specificulture = Specificulture;
+                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
+                        result.IsSucceed = saveResult.IsSucceed;
+                        if (!saveResult.IsSucceed)
+                        {
+                            result.Errors.Add("Error: Clone Page Article");
+                            result.Errors.AddRange(saveResult.Errors);
+                            result.Exception = saveResult.Exception;
+                            break;
+                        }
                     }
                 }
             }
             // Clone ModuleArticle from Default culture
-            var getModuleArticles = await MixModuleArticles.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-            if (getModuleArticles.IsSucceed)
+            if (result.IsSucceed)
             {
-                foreach (var c in getModuleArticles.Data)
+
+                var getModuleArticles = await MixModuleArticles.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
+                if (getModuleArticles.IsSucceed)
                 {
-                    c.Specificulture = Specificulture;
-                    var saveResult = await c.SaveModelAsync(false, _context, _transaction);
-                    result.IsSucceed = saveResult.IsSucceed;
-                    if (!saveResult.IsSucceed)
+                    foreach (var c in getModuleArticles.Data)
                     {
-                        result.Errors.AddRange(saveResult.Errors);
-                        result.Exception = saveResult.Exception;
-                        break;
+                        c.Specificulture = Specificulture;
+                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
+                        result.IsSucceed = saveResult.IsSucceed;
+                        if (!saveResult.IsSucceed)
+                        {
+                            result.Errors.Add("Error: Clone Module Article");
+                            result.Errors.AddRange(saveResult.Errors);
+                            result.Exception = saveResult.Exception;
+                            break;
+                        }
                     }
                 }
             }
-            
             // Clone ArticleArticle from Default culture
-            var getArticleArticles = await MixArticleArticles.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-            if (getArticleArticles.IsSucceed)
+            if (result.IsSucceed)
             {
-                foreach (var c in getArticleArticles.Data)
+                var getArticleArticles = await MixArticleArticles.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
+                if (getArticleArticles.IsSucceed)
                 {
-                    c.Specificulture = Specificulture;
-                    var saveResult = await c.SaveModelAsync(false, _context, _transaction);
-                    result.IsSucceed = saveResult.IsSucceed;
-                    if (!saveResult.IsSucceed)
+                    foreach (var c in getArticleArticles.Data)
                     {
-                        result.Errors.AddRange(saveResult.Errors);
-                        result.Exception = saveResult.Exception;
-                        break;
+                        c.Specificulture = Specificulture;
+                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
+                        result.IsSucceed = saveResult.IsSucceed;
+                        if (!saveResult.IsSucceed)
+                        {
+                            result.Errors.Add("Error: Clone Article Article");
+                            result.Errors.AddRange(saveResult.Errors);
+                            result.Exception = saveResult.Exception;
+                            break;
+                        }
                     }
                 }
             }
-            
+
             // Clone ArticleMedia from Default culture
-            var getArticleMedias = await MixArticleMedias.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-            if (getArticleMedias.IsSucceed)
+            if (result.IsSucceed)
             {
-                foreach (var c in getArticleMedias.Data)
+                var getArticleMedias = await MixArticleMedias.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
+                if (getArticleMedias.IsSucceed)
                 {
-                    c.Specificulture = Specificulture;
-                    var saveResult = await c.SaveModelAsync(false, _context, _transaction);
-                    result.IsSucceed = saveResult.IsSucceed;
-                    if (!saveResult.IsSucceed)
+                    foreach (var c in getArticleMedias.Data)
                     {
-                        result.Errors.AddRange(saveResult.Errors);
-                        result.Exception = saveResult.Exception;
-                        break;
+                        c.Specificulture = Specificulture;
+                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
+                        result.IsSucceed = saveResult.IsSucceed;
+                        if (!saveResult.IsSucceed)
+                        {
+                            result.Errors.Add("Error: Clone Article Media");
+                            result.Errors.AddRange(saveResult.Errors);
+                            result.Exception = saveResult.Exception;
+                            break;
+                        }
                     }
                 }
             }
-            _context.SaveChanges();
             return result;
         }
 
