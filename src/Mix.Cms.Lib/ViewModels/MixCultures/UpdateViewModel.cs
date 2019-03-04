@@ -101,84 +101,193 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixCulture parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            if (Id == 0)
+            var getPages = await MixPages.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
+            if (getPages.IsSucceed)
             {
-                var getPages = await MixPages.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-                if (getPages.IsSucceed)
+                foreach (var p in getPages.Data)
                 {
-                    foreach (var p in getPages.Data)
+                    p.Specificulture = Specificulture;
+                    p.CreatedDateTime = DateTime.UtcNow;
+                    p.LastModified = DateTime.UtcNow;
+                    var saveResult = await p.SaveModelAsync(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!saveResult.IsSucceed)
                     {
-                        var page = new MixPage()
-                        {
-                            Specificulture = Specificulture,
-                            Id = p.Id,
-                            Content = p.Content,
-                            CreatedBy = p.CreatedBy,
-                            CreatedDateTime = DateTime.UtcNow,
-                            Layout = p.Layout,
-                            CssClass = p.CssClass,
-                            Excerpt = p.Excerpt,
-                            Icon = p.Icon,
-                            Image = p.Image,
-                            Level = p.Level,
-                            ModifiedBy = p.ModifiedBy,
-                            PageSize = p.PageSize,
-                            Priority = p.Priority,
-                            SeoDescription = p.SeoDescription,
-                            SeoKeywords = p.SeoKeywords,
-                            SeoName = p.SeoName,
-                            SeoTitle = p.SeoTitle,
-                            StaticUrl = p.StaticUrl,
-                            Status = (int)p.Status,
-                            Tags = p.Tags,
-                            Template = p.Template,
-                            Title = p.Title,
-                            Type = (int)p.Type,
-                        };
-                        _context.Entry(page).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                        result.Errors.AddRange(saveResult.Errors);
+                        result.Exception = saveResult.Exception;
+                        break;
                     }
                 }
+            }
+            if (result.IsSucceed)
+            {
                 var getConfigurations = await MixConfigurations.ReadMvcViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
                 if (getConfigurations.IsSucceed)
                 {
                     foreach (var c in getConfigurations.Data)
                     {
-                        var cnf = new MixConfiguration()
+                        c.Specificulture = Specificulture;
+                        c.CreatedDateTime = DateTime.UtcNow;
+                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
+                        result.IsSucceed = saveResult.IsSucceed;
+                        if (!saveResult.IsSucceed)
                         {
-                            Keyword = c.Keyword,
-                            Specificulture = Specificulture,
-                            Category = c.Category,
-                            DataType = (int)c.DataType,
-                            Description = c.Description,
-                            Priority = c.Priority,
-                            Status = (int)c.Status,
-                            Value = c.Value
-                        };
-                        _context.Entry(cnf).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                            result.Errors.AddRange(saveResult.Errors);
+                            result.Exception = saveResult.Exception;
+                            break;
+                        }
                     }
                 }
 
+            }
+            if (result.IsSucceed)
+            {
                 var getLanguages = await MixLanguages.ReadMvcViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
                 if (getLanguages.IsSucceed)
                 {
                     foreach (var c in getLanguages.Data)
                     {
-                        var cnf = new MixLanguage()
+                        c.Specificulture = Specificulture;
+                        c.CreatedDateTime = DateTime.UtcNow;
+                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
+                        result.IsSucceed = saveResult.IsSucceed;
+                        if (!saveResult.IsSucceed)
                         {
-                            Keyword = c.Keyword,
-                            Specificulture = Specificulture,
-                            Category = c.Category,
-                            DataType = (int)c.DataType,
-                            Description = c.Description,
-                            Priority = c.Priority,
-                            Status = (int)c.Status,
-                            DefaultValue = c.DefaultValue
-                        };
-                        _context.Entry(cnf).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                            result.Errors.AddRange(saveResult.Errors);
+                            result.Exception = saveResult.Exception;
+                            break;
+                        }
                     }
                 }
-                _context.SaveChanges();
             }
+            // Clone Module from Default culture
+            var getModules = await MixModules.ReadListItemViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
+            if (getModules.IsSucceed)
+            {
+                foreach (var c in getModules.Data)
+                {
+                    c.Specificulture = Specificulture;
+                    c.CreatedDateTime = DateTime.UtcNow;
+                    c.LastModified = DateTime.UtcNow;
+                    var saveResult = await c.SaveModelAsync(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!saveResult.IsSucceed)
+                    {
+                        result.Errors.AddRange(saveResult.Errors);
+                        result.Exception = saveResult.Exception;
+                        break;
+                    }
+                }
+            }
+            // Clone ModuleData from Default culture
+            var getModuleDatas = await MixModuleDatas.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
+            if (getModuleDatas.IsSucceed)
+            {
+                foreach (var c in getModuleDatas.Data)
+                {
+                    c.Specificulture = Specificulture;
+                    c.CreatedDateTime = DateTime.UtcNow;
+                    var saveResult = await c.SaveModelAsync(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!saveResult.IsSucceed)
+                    {
+                        result.Errors.AddRange(saveResult.Errors);
+                        result.Exception = saveResult.Exception;
+                        break;
+                    }
+                }
+            }
+            
+            // Clone Article from Default culture
+            var getArticles = await MixArticles.ReadListItemViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
+            if (getArticles.IsSucceed)
+            {
+                foreach (var c in getArticles.Data)
+                {
+                    c.Specificulture = Specificulture;
+                    c.CreatedDateTime = DateTime.UtcNow;
+                    c.LastModified = DateTime.UtcNow;
+                    var saveResult = await c.SaveModelAsync(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!saveResult.IsSucceed)
+                    {
+                        result.Errors.AddRange(saveResult.Errors);
+                        result.Exception = saveResult.Exception;
+                        break;
+                    }
+                }
+            }
+            // Clone PageArticle from Default culture
+            var getPageArticles = await MixPageArticles.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
+            if (getPageArticles.IsSucceed)
+            {
+                foreach (var c in getPageArticles.Data)
+                {
+                    c.Specificulture = Specificulture;
+                    var saveResult = await c.SaveModelAsync(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!saveResult.IsSucceed)
+                    {
+                        result.Errors.AddRange(saveResult.Errors);
+                        result.Exception = saveResult.Exception;
+                        break;
+                    }
+                }
+            }
+            // Clone ModuleArticle from Default culture
+            var getModuleArticles = await MixModuleArticles.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
+            if (getModuleArticles.IsSucceed)
+            {
+                foreach (var c in getModuleArticles.Data)
+                {
+                    c.Specificulture = Specificulture;
+                    var saveResult = await c.SaveModelAsync(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!saveResult.IsSucceed)
+                    {
+                        result.Errors.AddRange(saveResult.Errors);
+                        result.Exception = saveResult.Exception;
+                        break;
+                    }
+                }
+            }
+            
+            // Clone ArticleArticle from Default culture
+            var getArticleArticles = await MixArticleArticles.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
+            if (getArticleArticles.IsSucceed)
+            {
+                foreach (var c in getArticleArticles.Data)
+                {
+                    c.Specificulture = Specificulture;
+                    var saveResult = await c.SaveModelAsync(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!saveResult.IsSucceed)
+                    {
+                        result.Errors.AddRange(saveResult.Errors);
+                        result.Exception = saveResult.Exception;
+                        break;
+                    }
+                }
+            }
+            
+            // Clone ArticleMedia from Default culture
+            var getArticleMedias = await MixArticleMedias.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
+            if (getArticleMedias.IsSucceed)
+            {
+                foreach (var c in getArticleMedias.Data)
+                {
+                    c.Specificulture = Specificulture;
+                    var saveResult = await c.SaveModelAsync(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!saveResult.IsSucceed)
+                    {
+                        result.Errors.AddRange(saveResult.Errors);
+                        result.Exception = saveResult.Exception;
+                        break;
+                    }
+                }
+            }
+            _context.SaveChanges();
             return result;
         }
 

@@ -6,13 +6,13 @@
             ctrl.isPlay = false;
             ctrl.loadVideo = function () {
                 ctrl.isPlay = false;
-                ctrl.src= '';
+                ctrl.src = '';
                 ctrl.img = "https://img.youtube.com/vi/" + ctrl.code + "/sddefault.jpg";
-            }
+            };
             ctrl.playVideo = function () {
                 ctrl.isPlay = true;
-                ctrl.src= $sce.trustAsResourceUrl("https://www.youtube.com/embed/" + ctrl.code + "?rel=0&showinfo=0&autoplay=1");
-            }
+                ctrl.src = $sce.trustAsResourceUrl("https://www.youtube.com/embed/" + ctrl.code + "?rel=0&showinfo=0&autoplay=1");
+            };
         }
     ],
     bindings: {

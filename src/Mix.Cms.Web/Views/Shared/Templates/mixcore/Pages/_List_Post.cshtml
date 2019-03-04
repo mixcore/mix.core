@@ -1,4 +1,16 @@
 @model Mix.Cms.Lib.ViewModels.MixPages.ReadMvcViewModel
+@{
+    var listTags = Model.Articles.Items.Where(a => !string.IsNullOrEmpty(a.Article.Tags)).Select(a => a.Article.Tags).ToList();
+    string tags = string.Empty;
+    if (listTags.Count > 0)
+    {
+        for (int i = 0; i < listTags.Count; i++)
+        {
+            tags += listTags[i] + ",";
+        }
+    }
+    string culture = ViewBag.culture;
+}
 
 <div class="blog-posts">
     <div class="page-header page-header-small">
@@ -8,6 +20,12 @@
             <div class="row">
                 <div class="col-md-8 ml-auto mr-auto text-center">
                     <h2 class="title">@Model.Title</h2>
+                    <a href="#button" class="btn btn-primary btn-round  btn-icon">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#button" class="btn btn-primary btn-round  btn-icon">
+                        <i class="fab fa-instagram"></i>
+                    </a>
                 </div>
             </div>
         </div>

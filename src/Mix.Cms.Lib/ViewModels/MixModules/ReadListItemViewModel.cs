@@ -60,6 +60,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
+        public DateTime CreatedDateTime { get; set; }
         #endregion Models
 
         [JsonProperty("imageUrl")]
