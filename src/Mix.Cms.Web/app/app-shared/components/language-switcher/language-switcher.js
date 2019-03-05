@@ -19,9 +19,11 @@
                     // await commonService.removeTranslator();
                     // commonService.fillSettings(lang).then(function () {
                     //     translatorService.reset(lang).then(function () {
-                            var url = await translatorService.translateUrl(lang);
-                            translatorService.translateUrl(lang);                           
-                            window.top.location = url;
+                        commonService.fillAllSettings(lang).then(function (response) {
+                            translatorService.translateUrl(lang).then(function(url){
+                                window.top.location = url;
+                            });
+                        });
                     //     });
                     // });
                 };

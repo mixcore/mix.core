@@ -33,6 +33,7 @@
     
     <!--[STYLES]-->
     @RenderSection("Styles", false)
+    <link rel="stylesheet" href="~/css/shared.min.css" />
     <link rel="stylesheet" href="~/css/app-vendor.min.css" />
     <base href="/@ViewBag.culture">
      @if (!string.IsNullOrEmpty(MixService.GetConfig<string>("Recaptcha_Key", ViewBag.culture)))
