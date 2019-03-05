@@ -163,6 +163,28 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                     }
                 }
             }
+            
+            if (result.IsSucceed)
+            {
+                var getMedias = await MixMedias.UpdateViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
+                if (getMedias.IsSucceed)
+                {
+                    foreach (var c in getMedias.Data)
+                    {
+                        c.Specificulture = Specificulture;
+                        c.CreatedDateTime = DateTime.UtcNow;
+                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
+                        result.IsSucceed = saveResult.IsSucceed;
+                        if (!saveResult.IsSucceed)
+                        {
+                            result.Errors.Add("Error: Clone Medias");
+                            result.Errors.AddRange(saveResult.Errors);
+                            result.Exception = saveResult.Exception;
+                            break;
+                        }
+                    }
+                }
+            }
             if (result.IsSucceed)
             {
                 // Clone Module from Default culture
@@ -396,8 +418,11 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             var ArticleArticles = _context.MixRelatedArticle.Where(l => l.Specificulture == Specificulture).ToList();
             ArticleArticles.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
+            var medias = _context.MixMedia.Where(c => c.Specificulture == Specificulture).ToList();
+            medias.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+            
             var cates = _context.MixPage.Where(c => c.Specificulture == Specificulture).ToList();
-            cates.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+            medias.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
             var modules = _context.MixModule.Where(c => c.Specificulture == Specificulture).ToList();
             modules.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
