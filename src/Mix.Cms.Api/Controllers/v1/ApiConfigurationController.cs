@@ -36,8 +36,13 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("delete/{keyword}")]
         public async Task<RepositoryResponse<MixConfiguration>> DeleteAsync(string keyword)
         {
-            return await base.DeleteAsync<UpdateViewModel>(
+            var result = await base.DeleteAsync<UpdateViewModel>(
                 model => model.Keyword == keyword && model.Specificulture == _lang, true);
+            if (result.IsSucceed)
+            {
+                MixService.SetConfig("LastUpdateConfiguration", DateTime.UtcNow);
+            }
+            return result;
         }
 
         // GET api/configurations/keyword
@@ -106,6 +111,7 @@ namespace Mix.Cms.Api.Controllers.v1
             var result = await base.SaveAsync<UpdateViewModel>(model, true);
             if (result.IsSucceed)
             {
+                MixService.SetConfig("LastUpdateConfiguration", DateTime.UtcNow);
                 MixService.LoadFromDatabase();
                 MixService.Save();
             }

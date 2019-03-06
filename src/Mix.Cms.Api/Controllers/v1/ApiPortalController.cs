@@ -395,11 +395,9 @@ namespace Mix.Cms.Api.Controllers.v1
             if (model != null)
             {
                 settings.Content = model.ToString();
-                FileRepository.Instance.SaveFile(settings);
-                //if (!_env.IsDevelopment())
-                //{
-                //    _appLifetime.StopApplication();
-                //}
+                FileRepository.Instance.SaveFile(settings);                            
+                MixService.SetConfig("LastUpdateConfiguration", DateTime.UtcNow);
+            
             }
             return new RepositoryResponse<JObject>() { IsSucceed = model != null, Data = model };
         }

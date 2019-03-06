@@ -328,6 +328,29 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet, HttpOptions]
+        [Route("my-profile")]
+        public async Task<JObject> MyProfile()
+        {
+            string id = User.Claims.SingleOrDefault(c => c.Type == "Id")?.Value;
+            if (!string.IsNullOrEmpty(id))
+            {
+                var beResult = await Lib.ViewModels.Account.MixUsers.UpdateViewModel.Repository.GetSingleModelAsync(
+                    model => model.Id == id).ConfigureAwait(false);
+                return JObject.FromObject(beResult);
+            }
+            else
+            {
+                RepositoryResponse<Lib.ViewModels.Account.MixUsers.UpdateViewModel> result = new RepositoryResponse<Lib.ViewModels.Account.MixUsers.UpdateViewModel>()
+                {
+                    IsSucceed = false,
+                    Data = null
+                };
+                return JObject.FromObject(result);
+            }
+
+        }
 
         // POST api/template
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -339,6 +362,27 @@ namespace Mix.Cms.Api.Controllers.v1
             if (model != null)
             {
                 var result = await model.SaveModelAsync(true).ConfigureAwait(false);
+                if (model.IsChangePassword)
+                {
+                    var user = await _userManager.FindByNameAsync(model.Username);
+                    if (user != null)
+                    {
+                        var tmp  = await _userManager.ChangePasswordAsync(user, model.ChangePassword.CurrentPassword, model.ChangePassword.NewPassword);
+                        result.IsSucceed = tmp.Succeeded;
+                        if (!result.IsSucceed)
+                        {
+                            foreach (var err in tmp.Errors)
+                            {
+                                result.Errors.Add(err.Description);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Request.HttpContext.Response.StatusCode = 401;
+                    }
+
+                }
                 return result;
             }
             return new RepositoryResponse<UserInfoViewModel>();
@@ -432,7 +476,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 issuer: MixService.GetAuthConfig<string>("Issuer"),
                 audience: MixService.GetAuthConfig<string>("Audience"),
                 notBefore: expires.AddMinutes(-MixService.GetAuthConfig<int>("CookieExpiration")),
-                
+
                 claims: claims,
                 // our token will live 1 hour, but you can change you token lifetime here
                 expires: expires,

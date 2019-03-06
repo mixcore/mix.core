@@ -37,8 +37,13 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("delete/{id}")]
         public async Task<RepositoryResponse<MixCulture>> DeleteAsync(int id)
         {
-            return await base.DeleteAsync<UpdateViewModel>(
+            var result = await base.DeleteAsync<UpdateViewModel>(
                 model => model.Id == id, true);
+            if (result.IsSucceed)
+            {
+                MixService.SetConfig("LastUpdateConfiguration", DateTime.UtcNow);
+            }
+            return result;
         }
 
         // GET api/cultures/id
@@ -107,6 +112,9 @@ namespace Mix.Cms.Api.Controllers.v1
                 model.CreatedBy = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
                 // Only savesubmodels when create new => clone data from default culture
                 var result = await base.SaveAsync<UpdateViewModel>(model, model.Id == 0);
+                if(result.IsSucceed){
+                    MixService.SetConfig("LastUpdateConfiguration", DateTime.UtcNow);
+                }
                 return result;
             }
             return new RepositoryResponse<UpdateViewModel>() { Status = 501 };
