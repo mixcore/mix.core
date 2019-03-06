@@ -30,6 +30,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Mix.Heart" Version="0.0.2" />
     <PackageReference Include="Mix.Identity" Version="0.0.2" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.4" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="3.0.0" />
@@ -38,10 +39,6 @@
   <ItemGroup>
     <Folder Include="Interfaces\" />
     <Folder Include="ViewModels\MixRolePortalPages\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\mix.heart\src\Mix.Heart\Mix.Heart.csproj" />
   </ItemGroup>
 
 </Project>
