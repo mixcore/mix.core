@@ -55,6 +55,19 @@ app.factory('UserServices', ['$http', 'CommonService', 'ngAppSettings'
         };
         return await commonService.getApiResult(req)
     };
+    
+    var _getMyProfile = async function (id, viewType) {
+        var apiUrl = '/account/';
+        var url = apiUrl + 'my-profile';
+        if (id) {
+            url += '/' + id;
+        }
+        var req = {
+            method: 'GET',
+            url: url
+        };
+        return await commonService.getApiResult(req)
+    };
 
     var _updateRoleStatus = function (userInRole) {
 
@@ -101,6 +114,7 @@ app.factory('UserServices', ['$http', 'CommonService', 'ngAppSettings'
     usersServiceFactory.importUsers = _importUsers;
     usersServiceFactory.getUsers = _getUsers;
     usersServiceFactory.getUser = _getUser;
+    usersServiceFactory.getMyProfile = _getMyProfile;
     usersServiceFactory.saveUser = _saveUser;
     usersServiceFactory.register = _register;
     usersServiceFactory.removeUser = _removeUser;

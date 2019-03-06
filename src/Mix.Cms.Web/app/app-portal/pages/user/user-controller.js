@@ -50,6 +50,22 @@ app.controller('UserController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
                 $scope.$apply();
             }
         };
+        
+        $scope.loadMyProfile = async function () {
+            $rootScope.isBusy = true;
+            var id = $routeParams.id;
+            var response = await userServices.getMyProfile(id, 'portal');
+            if (response.isSucceed) {
+                $scope.activedUser = response.data;
+                $rootScope.isBusy = false;
+                $scope.$apply();
+            }
+            else {
+                $rootScope.showErrors(response.errors);
+                $rootScope.isBusy = false;
+                $scope.$apply();
+            }
+        };
 
         $scope.loadUsers = async function (pageIndex) {
             if (pageIndex !== undefined) {

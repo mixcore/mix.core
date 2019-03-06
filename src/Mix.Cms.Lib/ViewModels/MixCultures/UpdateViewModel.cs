@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
@@ -391,50 +392,48 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
 
-            var configs = _context.MixConfiguration.Where(c => c.Specificulture == Specificulture).ToList();
+            var configs = await _context.MixConfiguration.Where(c => c.Specificulture == Specificulture).ToListAsync();
             configs.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var languages = _context.MixLanguage.Where(l => l.Specificulture == Specificulture).ToList();
+            var languages = await _context.MixLanguage.Where(l => l.Specificulture == Specificulture).ToListAsync();
             languages.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var PageModules = _context.MixPageModule.Where(l => l.Specificulture == Specificulture).ToList();
+            var PageModules = await _context.MixPageModule.Where(l => l.Specificulture == Specificulture).ToListAsync();
             PageModules.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var PagePositions = _context.MixPagePosition.Where(l => l.Specificulture == Specificulture).ToList();
+            var PagePositions = await _context.MixPagePosition.Where(l => l.Specificulture == Specificulture).ToListAsync();
             PagePositions.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var PageArticles = _context.MixPageArticle.Where(l => l.Specificulture == Specificulture).ToList();
+            var PageArticles = await _context.MixPageArticle.Where(l => l.Specificulture == Specificulture).ToListAsync();
             PageArticles.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var ModuleArticles = _context.MixModuleArticle.Where(l => l.Specificulture == Specificulture).ToList();
+            var ModuleArticles = await _context.MixModuleArticle.Where(l => l.Specificulture == Specificulture).ToListAsync();
             ModuleArticles.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var ArticleMedias = _context.MixArticleMedia.Where(l => l.Specificulture == Specificulture).ToList();
+            var ArticleMedias = await _context.MixArticleMedia.Where(l => l.Specificulture == Specificulture).ToListAsync();
             ArticleMedias.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var ModuleDatas = _context.MixModuleData.Where(l => l.Specificulture == Specificulture).ToList();
+            var ModuleDatas = await _context.MixModuleData.Where(l => l.Specificulture == Specificulture).ToListAsync();
             ModuleDatas.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var ArticleArticles = _context.MixRelatedArticle.Where(l => l.Specificulture == Specificulture).ToList();
+            var ArticleArticles = await _context.MixRelatedArticle.Where(l => l.Specificulture == Specificulture).ToListAsync();
             ArticleArticles.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var medias = _context.MixMedia.Where(c => c.Specificulture == Specificulture).ToList();
+            var medias = await _context.MixMedia.Where(c => c.Specificulture == Specificulture).ToListAsync();
             medias.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
             
-            var cates = _context.MixPage.Where(c => c.Specificulture == Specificulture).ToList();
-            medias.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+            var cates = await _context.MixPage.Where(c => c.Specificulture == Specificulture).ToListAsync();
+            cates.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var modules = _context.MixModule.Where(c => c.Specificulture == Specificulture).ToList();
+            var modules = await _context.MixModule.Where(c => c.Specificulture == Specificulture).ToListAsync();
             modules.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var articles = _context.MixArticle.Where(c => c.Specificulture == Specificulture).ToList();
+            var articles = await _context.MixArticle.Where(c => c.Specificulture == Specificulture).ToListAsync();
             articles.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var products = _context.MixProduct.Where(c => c.Specificulture == Specificulture).ToList();
+            var products = await _context.MixProduct.Where(c => c.Specificulture == Specificulture).ToListAsync();
             products.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
-
-            await _context.SaveChangesAsync();
-
+            result.IsSucceed = (await _context.SaveChangesAsync() > 0);
             return result;
         }
 

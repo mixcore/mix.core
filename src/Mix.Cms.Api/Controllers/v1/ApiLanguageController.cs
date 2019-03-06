@@ -36,8 +36,12 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("delete/{keyword}")]
         public async Task<RepositoryResponse<MixLanguage>> DeleteAsync(string keyword)
         {
-            return await base.DeleteAsync<UpdateViewModel>(
+            var result = await base.DeleteAsync<UpdateViewModel>(
                 model => model.Keyword == keyword && model.Specificulture == _lang, true);
+            if(result.IsSucceed){
+                MixService.SetConfig("LastUpdateConfiguration", DateTime.UtcNow);
+            }
+            return result;
         }
 
         // GET api/languages/keyword
@@ -106,6 +110,9 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 model.CreatedBy = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
                 var result = await base.SaveAsync<UpdateViewModel>(model, true);
+                if(result.IsSucceed){
+                    MixService.SetConfig("LastUpdateConfiguration", DateTime.UtcNow);
+                }
                 return result;
             }
             return new RepositoryResponse<UpdateViewModel>() { Status = 501 };

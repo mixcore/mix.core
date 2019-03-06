@@ -268,6 +268,11 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         controller: "UserController",
         templateUrl: "/app/app-portal/pages/user/details.html"
     });
+    
+    $routeProvider.when("/portal/my-profile", {
+        controller: "UserController",
+        templateUrl: "/app/app-portal/pages/user/my-profile.html"
+    });
 
     $routeProvider.when("/portal/user/create", {
         controller: "UserController",
