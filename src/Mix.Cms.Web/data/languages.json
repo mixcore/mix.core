@@ -46,6 +46,17 @@
       "status": 2
     },
     {
+      "keyword": "portal_title",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Title",
+      "defaultValue": "Title",
+      "cultures": null,
+      "priority": 0,
+      "status": 2
+    },
+    {
       "keyword": "portal_permissions",
       "category": "Portal",
       "dataType": 7,
