@@ -44,8 +44,8 @@
                             </div>
                         </div>
 
-                        <label class="control-label">Active roles</label>
-                        <div class="tab-pane" ng-if="activedUser.userRoles.length>0">
+                        <label ng-if="isAdmin" class="control-label">Active roles</label>
+                        <div ng-if="isAdmin" class="tab-pane" ng-if="activedUser.userRoles.length>0">
                             <navs data="activedUser.userRoles" callback="updateRoleStatus(nav)"></navs>
                         </div>
 

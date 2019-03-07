@@ -11,8 +11,6 @@ namespace Mix.Cms.Hub
         public void Configure(IWebHostBuilder builder)
         {
             Console.Write(builder);
-            //MixChatServiceContext context = new MixChatServiceContext();
-            //context.Database.Migrate();
         }
     }
 }
