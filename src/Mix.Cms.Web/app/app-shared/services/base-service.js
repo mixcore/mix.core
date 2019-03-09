@@ -78,6 +78,17 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService', 'AppS
             };
             return await commonService.getApiResult(req);
         };
+        var _ajaxSubmitForm = async function (form, url) {            
+            var req = {
+                method: 'POST',
+                url: url,
+                headers: {'Content-Type': undefined},
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: form
+            };
+            return await commonService.getApiResult(req);            
+        };
         serviceFactory.lang = '';
         serviceFactory.prefixUrl = '';
         serviceFactory.init = _init;
@@ -87,6 +98,7 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService', 'AppS
         serviceFactory.saveList = _saveList;
         serviceFactory.delete = _delete;
         serviceFactory.updateInfos = _updateInfos;
+        serviceFactory.ajaxSubmitForm = _ajaxSubmitForm;
         return serviceFactory;
 
     }]);

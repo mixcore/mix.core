@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
+using System.IO;
 
 namespace Mix.Cms.Lib.ViewModels.MixThemes
 {
@@ -169,11 +170,11 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>() { IsSucceed = true };
 
-            if (TemplateAsset.Content != null || TemplateAsset.FileStream != null)
+            if (!string.IsNullOrEmpty(TemplateAsset.Filename))
             {
-                TemplateAsset.FileFolder = $"Import/Themes/{DateTime.UtcNow.ToShortDateString()}/{Name}";
                 ImportTheme(_context, _transaction);
             }
+
             if (Asset.Content != null || Asset.FileStream != null)
             {
                 Asset.FileFolder = AssetFolder;
@@ -512,9 +513,9 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         RepositoryResponse<bool> ImportTheme(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            TemplateAsset.Filename = Name;
-            if (FileRepository.Instance.SaveWebFile(TemplateAsset))
-            {
+            string fileName = $"wwwroot/{TemplateAsset.FileFolder}/{TemplateAsset.Filename}{TemplateAsset.Extension}";
+            if (File.Exists(fileName)) { 
+
                 FileRepository.Instance.UnZipFile($"{TemplateAsset.Filename}{TemplateAsset.Extension}", TemplateAsset.FileFolder);
                 FileRepository.Instance.CopyWebDirectory($"{TemplateAsset.FileFolder}/Assets", AssetFolder);
                 FileRepository.Instance.CopyDirectory($"{MixConstants.Folder.WebRootPath}/{TemplateAsset.FileFolder}/Templates", TemplateFolder);

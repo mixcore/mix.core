@@ -39,6 +39,13 @@
         ctrl.toggleChildNavs = function(nav){
             nav.showChildNavs = nav.childNavs.length>0 && !nav.showChildNavs;
         }
+        ctrl.view = function (moduleId, contentId) {
+            var obj = {
+                moduleId: moduleId,
+                id: contentId
+            };
+            $rootScope.preview('module-data', obj, null, 'modal-lg');
+        }
     }],
     bindings: {
         moduleId: '=',

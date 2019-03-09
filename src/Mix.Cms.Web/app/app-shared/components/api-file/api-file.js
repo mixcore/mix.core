@@ -1,13 +1,12 @@
 ﻿
 modules.component('apiFile', {
     templateUrl: '/app/app-shared/components/api-file/api-file.html',
-    controller: ['$rootScope', '$scope', 'ngAppSettings', function PortalTemplateController($rootScope, $scope) {
+    controller: ['$rootScope', '$scope','Upload', 
+        function PortalTemplateController($rootScope, $scope, uploader) {
         var ctrl = this;
         ctrl.accept = ctrl.accept || 'application/zip';
         ctrl.selectFile = function (file, errFiles) {
-            if (file !== undefined && file !== null && ctrl.isBase64) {
-                ctrl.getBase64(file);
-            }
+            ctrl.postedFile = file;            
         };
 
         ctrl.uploadFile = function (file) {
@@ -24,7 +23,7 @@ modules.component('apiFile', {
             files.append('title', title);
             files.append('description', description);
             $.ajax({
-                url: '/' + SW.Common.currentLanguage + '/media/upload', //'/tts/UploadImage',
+                url: '/' + $rootScope.settings.lang + '/media/upload', //'/tts/UploadImage',
                 type: "POST",
                 contentType: false, // Not to set any content header
                 processData: false, // Not to process data
@@ -67,6 +66,7 @@ modules.component('apiFile', {
         accept: '=',
         title: '=',
         postedFile: '=',
+        formName: '=',
         isBase64: '=',
     }
 });

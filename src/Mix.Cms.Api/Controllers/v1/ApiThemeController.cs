@@ -20,6 +20,8 @@ using Microsoft.Extensions.Caching.Memory;
 using System.Collections.Generic;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Repositories;
+using Mix.Cms.Lib.Attributes;
+using Microsoft.AspNetCore.Http;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -151,16 +153,32 @@ namespace Mix.Cms.Api.Controllers.v1
         #region Post
 
         // POST api/theme
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
+        [AllowAnonymous]
         [HttpPost, HttpOptions]
+        [RequestFormSizeLimit(valueCountLimit: 214748364)] // 200Mb
         [Route("save")]
-        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromBody]UpdateViewModel model)
+        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromForm]string model, [FromForm]IFormFile assets, [FromForm]IFormFile theme)
         {
-            if (model != null)
+            var json = JObject.Parse(model);
+            var data = json.ToObject<UpdateViewModel>();
+            if (assets!=null)
             {
-                model.CreatedBy = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
-                model.Specificulture = _lang;
-                var result = await base.SaveAsync<UpdateViewModel>(model, true);
+                FileRepository.Instance.SaveWebFile(assets, data.AssetFolder);
+            }
+            if (theme!=null)
+            {
+                string importFolder = $"Import/Themes/{DateTime.UtcNow.ToShortDateString()}/{data.Name}";
+                data.TemplateAsset = new Lib.ViewModels.FileViewModel(theme, importFolder);
+                FileRepository.Instance.SaveWebFile(theme, importFolder);
+            }
+
+
+            if (data != null)
+            {
+                //data.CreatedBy = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
+                data.Specificulture = _lang;
+                var result = await base.SaveAsync<UpdateViewModel>(data, true);
                 if (result.IsSucceed)
                 {
                     MixService.LoadFromDatabase();
