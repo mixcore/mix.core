@@ -96,54 +96,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("all-settings")]
         public RepositoryResponse<JObject> AllSettingsAsync()
         {
-            var cultures = CommonRepository.Instance.LoadCultures();
-            var culture = cultures.FirstOrDefault(c => c.Specificulture == _lang);
-
-            // Get Settings
-            GlobalSettingsViewModel configurations = new GlobalSettingsViewModel()
-            {
-                Lang = _lang,
-                ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, _lang),
-                ApiEncryptKey = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ApiEncryptKey),
-                ApiEncryptIV = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ApiEncryptIV),
-                IsEncryptApi = MixService.GetConfig<bool>(MixConstants.ConfigurationKeyword.IsEncryptApi),
-                Cultures = cultures,
-                PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
-                ModuleTypes = Enum.GetNames(typeof(MixModuleType)).ToList(),
-                DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
-                Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
-                LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
-            };
-
-            configurations.LangIcon = culture?.Icon ?? MixService.GetConfig<string>("Language");
-
-            // Get translator
-            var translator = new JObject()
-            {
-                new JProperty("lang",_lang),
-                new JProperty("data", MixService.GetTranslator(_lang))
-            };
-
-            // Get Configurations
-            var settings = new JObject()
-            {
-                new JProperty("lang",_lang),
-                new JProperty("langIcon",configurations.LangIcon),
-                
-                new JProperty("data", MixService.GetLocalSettings(_lang))
-            };
-            JObject result = new JObject()
-            {
-                new JProperty("globalSettings", JObject.FromObject(configurations)),
-                new JProperty("translator", translator),
-                new JProperty("settings", JObject.FromObject(settings))
-            };
-
-            return new RepositoryResponse<JObject>()
-            {
-                IsSucceed = true,
-                Data = result
-            };
+            return getAllSettings();
         }
 
         // GET api/category/id
@@ -203,6 +156,24 @@ namespace Mix.Cms.Api.Controllers.v1
                 IsSucceed = true,
                 Data = new DashboardViewModel()
             };
+        }
+
+        // GET api/v1/portal/check-config
+        [AllowAnonymous]
+        [HttpGet, HttpOptions]
+        [Route("check-config/{lastSync}")]
+        public RepositoryResponse<JObject> checkConfig(DateTime lastSync)
+        {
+            var lastUpdate = MixService.GetConfig<DateTime>("LastUpdateConfiguration");
+            if(lastSync.ToUniversalTime() < lastUpdate){
+                return getAllSettings();
+            }
+            else{
+                return new RepositoryResponse<JObject>()
+                {
+                    IsSucceed = true,                
+                };
+            }
         }
 
         // GET api/category/id
@@ -454,6 +425,57 @@ namespace Mix.Cms.Api.Controllers.v1
         #endregion Post
 
         #region Helpers
+        private RepositoryResponse<JObject> getAllSettings(){
+            var cultures = CommonRepository.Instance.LoadCultures();
+            var culture = cultures.FirstOrDefault(c => c.Specificulture == _lang);
+
+            // Get Settings
+            GlobalSettingsViewModel configurations = new GlobalSettingsViewModel()
+            {
+                Lang = _lang,
+                ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, _lang),
+                ApiEncryptKey = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ApiEncryptKey),
+                ApiEncryptIV = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ApiEncryptIV),
+                IsEncryptApi = MixService.GetConfig<bool>(MixConstants.ConfigurationKeyword.IsEncryptApi),
+                Cultures = cultures,
+                PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
+                ModuleTypes = Enum.GetNames(typeof(MixModuleType)).ToList(),
+                DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
+                Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
+                LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
+            };
+
+            configurations.LangIcon = culture?.Icon ?? MixService.GetConfig<string>("Language");
+
+            // Get translator
+            var translator = new JObject()
+            {
+                new JProperty("lang",_lang),
+                new JProperty("data", MixService.GetTranslator(_lang))
+            };
+
+            // Get Configurations
+            var settings = new JObject()
+            {
+                new JProperty("lang",_lang),
+                new JProperty("langIcon",configurations.LangIcon),
+                
+                new JProperty("data", MixService.GetLocalSettings(_lang))
+            };
+            JObject result = new JObject()
+            {
+                new JProperty("globalSettings", JObject.FromObject(configurations)),
+                new JProperty("translator", translator),
+                new JProperty("settings", JObject.FromObject(settings))
+            };
+
+            return new RepositoryResponse<JObject>()
+            {
+                IsSucceed = true,
+                Data = result
+            };
+        }
+
         private async Task<RepositoryResponse<bool>> InitCmsAsync(InitCmsViewModel model)
         {
             var result = new RepositoryResponse<bool>();
