@@ -83,7 +83,7 @@ app.constant('ngAppSettings', {
 
     ]
     , miIcons: [
-        
+
         'fas fa-500px',
         'fas fa-accessible-icon',
         'fas fa-accusoft',
@@ -1345,9 +1345,9 @@ app.constant('ngAppSettings', {
         'fas fa-zhihu'
     ]
 });
-app.run(['$rootScope', 'ngAppSettings','GlobalSettingsService', 'CommonService', 'AuthService', 'TranslatorService',
+app.run(['$rootScope', 'ngAppSettings', 'GlobalSettingsService', 'CommonService', 'AuthService', 'TranslatorService',
     function ($rootScope, ngAppSettings, globalSettingsService, commonService, authService, translatorService,
-        ) {        
+    ) {
         $rootScope.currentContext = $rootScope;
         $rootScope.isBusy = false;
         $rootScope.translator = translatorService;
@@ -1517,12 +1517,12 @@ app.run(['$rootScope', 'ngAppSettings','GlobalSettingsService', 'CommonService',
                     }
                 });
         };
-        $rootScope.encrypt = function (message) {            
+        $rootScope.encrypt = function (message) {
             var keySize = 256;
             var ivSize = 128;
             var iterations = 100;
             var salt = CryptoJS.lib.WordArray.random(128 / 8);
-            var pass= 'secret-key';
+            var pass = 'secret-key';
             var key = CryptoJS.PBKDF2(pass, salt, {
                 keySize: keySize / 32,
                 iterations: iterations
@@ -1561,7 +1561,7 @@ app.run(['$rootScope', 'ngAppSettings','GlobalSettingsService', 'CommonService',
                 options);
             return decrypted.toString(CryptoJS.enc.Utf8);
         }
-        
+
         $rootScope.translate = function (keyword, isWrap, defaultText) {
             if ($rootScope.globalSettings && ($rootScope.translator)) {
                 return $rootScope.translator.get(keyword, isWrap, defaultText);
@@ -1580,15 +1580,15 @@ app.run(['$rootScope', 'ngAppSettings','GlobalSettingsService', 'CommonService',
             }
         };
 
-        $rootScope.waitForInit = async function (functionName, args, scope ) {
-            if(!$rootScope.isInit){
+        $rootScope.waitForInit = async function (functionName, args, scope) {
+            if (!$rootScope.isInit) {
                 () => {
                     setTimeout(() => {
                         $rootScope.waitForInit(functionName, args, scope);
                     }, 200);
                 }
             }
-            else{
+            else {
                 $rootScope.executeFunctionByName(functionName, args, scope);
             }
         }
@@ -1599,8 +1599,8 @@ app.run(['$rootScope', 'ngAppSettings','GlobalSettingsService', 'CommonService',
                 $rootScope.errors = [];
             }
         });
-        
-        $rootScope.filterArray = function (array, key, value){
+
+        $rootScope.filterArray = function (array, key, value) {
             var result = [];
             for (var i = 0; i < array.length; i++) {
                 if (array[i][key] === value) {
@@ -1621,8 +1621,22 @@ app.run(['$rootScope', 'ngAppSettings','GlobalSettingsService', 'CommonService',
             var url = await translatorService.translateUrl(lang);
             translatorService.translateUrl(lang);
             window.top.location = url;
-        };   
+        };
+        // upload on file select or drop
+        $rootScope.upload = function (file, url) {
+            Upload.upload({
+                url: 'upload/url',
+                data: { file: file, 'username': $scope.username }
+            }).then(function (resp) {
+                console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+            }, function (resp) {
+                console.log('Error status: ' + resp.status);
+            }, function (evt) {
+                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+            });
+        };
     }]);
-    if($.trumbowyg){
-        $.trumbowyg.svgPath = '/assets/icons.svg';
-    }
+if ($.trumbowyg) {
+    $.trumbowyg.svgPath = '/assets/icons.svg';
+}

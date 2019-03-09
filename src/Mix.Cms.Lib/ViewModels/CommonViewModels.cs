@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -160,6 +161,17 @@ namespace Mix.Cms.Lib.ViewModels
         public string Content { get; set; }
         [JsonProperty("fileStream")]
         public string FileStream { get; set; }
+
+        public FileViewModel()
+        {
+
+        }
+        public FileViewModel(IFormFile file, string folder)
+        {
+            Filename = file.FileName.Substring(0, file.FileName.LastIndexOf('.'));
+            Extension= file.FileName.Substring(file.FileName.LastIndexOf('.'));
+            FileFolder = folder;
+        }
     }
 
     public class TemplateViewModel
@@ -387,5 +399,9 @@ namespace Mix.Cms.Lib.ViewModels
     {
         public string HrefLang { get; set; }
         public string Href { get; set; }
+    }
+    public class FileInputModel
+    {
+        public IFormFile FileToUpload { get; set; }
     }
 }

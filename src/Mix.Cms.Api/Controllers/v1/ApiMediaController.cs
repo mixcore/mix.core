@@ -149,6 +149,8 @@ namespace Mix.Cms.Api.Controllers.v1
         /// <param name="file">The file.</param>
         /// <param name="folderPath">The folder path.</param>
         /// <returns></returns>
+        [HttpPost]
+        [Route("media/upload")]
         protected async Task<string> UploadFileAsync(IFormFile file, string folderPath)
         {
             if (file?.Length > 0)
