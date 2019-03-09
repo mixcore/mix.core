@@ -153,8 +153,7 @@ namespace Mix.Cms.Api.Controllers.v1
         #region Post
 
         // POST api/theme
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]        
         [HttpPost, HttpOptions]
         [RequestFormSizeLimit(valueCountLimit: 214748364)] // 200Mb
         [Route("save")]
