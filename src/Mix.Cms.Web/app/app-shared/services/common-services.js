@@ -87,6 +87,38 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
                 });
             }
         };
+        
+        var _checkConfig = async function (lastSync) {
+            if(lastSync)
+            {
+                var url = '/portal/check-config/' +  lastSync;
+                var req = {
+                    method: 'GET',
+                    url: url
+                };
+                return _getApiResult(req).then(function (response) {
+                    if(response.data){
+                        _removeSettings().then(
+                            ()=>{
+                                _removeTranslator().then(()=>{
+                                    localStorageService.set('settings', response.data.settings);
+                                    localStorageService.set('globalSettings', response.data.globalSettings);
+                                    localStorageService.set('translator', response.data.translator);
+                                    $rootScope.settings = response.data.settings;
+                                    $rootScope.globalSettings = response.data.globalSettings; 
+                                    $rootScope.translator.translator = response.data.translator;                   
+                                });
+                            }
+                        );
+                    }
+                    else{
+                        $rootScope.settings = localStorageService.get('settings');
+                        $rootScope.globalSettings = localStorageService.get('globalSettings'); 
+                        $rootScope.translator.translator = localStorageService.get('translator');                   
+                    }
+                });
+            }
+        };
 
         var _genrateSitemap = async function () {
 
@@ -153,7 +185,8 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
             if (settings && globalSettings && translator && (!culture || settings.lang === culture)) {                
                 $rootScope.settings = settings;
                 $rootScope.globalSettings = globalSettings;
-                 $rootScope.translator.translator = translator;                
+                $rootScope.translator.translator = translator;       
+                await _checkConfig(globalSettings.lastUpdateConfiguration);         
             }
             else {
                 if (culture && settings && settings.lang !== culture) {
