@@ -450,7 +450,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                         if (!result.IsSucceed)
                         {
                             result.Exception = saveResult.Exception;
-                            Errors.AddRange(saveResult.Errors);
+                            result.Errors.AddRange(saveResult.Errors);
                             break;
                         }
                     }
@@ -713,7 +713,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                         if (!result.IsSucceed)
                         {
                             result.Exception = saveResult.Exception;
-                            Errors.AddRange(saveResult.Errors);
+                            result.Errors.AddRange(saveResult.Errors);
                             break;
                         }
                     }

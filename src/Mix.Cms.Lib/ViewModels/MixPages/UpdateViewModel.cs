@@ -293,7 +293,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             var result = new RepositoryResponse<bool> { IsSucceed = true };
             var saveTemplate = View.SaveModel(true, _context, _transaction);
             result.IsSucceed = result.IsSucceed && saveTemplate.IsSucceed;
-            if (saveTemplate.IsSucceed)
+            if (!saveTemplate.IsSucceed)
             {
                 result.Errors.AddRange(saveTemplate.Errors);
                 result.Exception = saveTemplate.Exception;
@@ -310,7 +310,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     if (!result.IsSucceed)
                     {
                         result.Exception = saveResult.Exception;
-                        Errors.AddRange(saveResult.Errors);
+                        result.Errors.AddRange(saveResult.Errors);
                         break;
                     }
                 }
@@ -438,7 +438,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             var result = new RepositoryResponse<bool> { IsSucceed = true };
             var saveTemplate = await View.SaveModelAsync(true, _context, _transaction);
             result.IsSucceed = result.IsSucceed && saveTemplate.IsSucceed;
-            if (saveTemplate.IsSucceed)
+            if (!saveTemplate.IsSucceed)
             {
                 result.Errors.AddRange(saveTemplate.Errors);
                 result.Exception = saveTemplate.Exception;
@@ -455,7 +455,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     if (!result.IsSucceed)
                     {
                         result.Exception = saveResult.Exception;
-                        Errors.AddRange(saveResult.Errors);
+                        result.Errors.AddRange(saveResult.Errors);
                         break;
                     }
                 }
