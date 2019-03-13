@@ -51,7 +51,7 @@ namespace Mix.Cms.Web.Controllers
             string alias, int pageIndex, int pageSize = 10)
         {
             string seoName = Request.Query["alias"];
-if (_forbidden)
+            if (_forbidden)
             {
                 return Redirect($"/error/403");
             }
@@ -252,7 +252,7 @@ if (_forbidden)
 
         async System.Threading.Tasks.Task<IActionResult> PageAsync(string seoName)
         {
-            
+
             // Home Page
             int.TryParse(Request.Query["pageSize"], out int pageSize);
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
@@ -346,7 +346,7 @@ if (_forbidden)
                 if (getPage.Data != null)
                 {
                     getPage.Data.LoadData(pageIndex: pageIndex, pageSize: pageSize);
-
+                    getPage.Data.DetailsUrl = GenerateDetailsUrl("Page", new { seoName = getPage.Data.SeoName });
                 }
 
                 _memoryCache.Set(cacheKey, getPage.Data);
