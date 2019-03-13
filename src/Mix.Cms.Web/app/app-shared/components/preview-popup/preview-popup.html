@@ -19,7 +19,7 @@
                         <div class="row" ng-switch-when="img">
                             <div class="col-md-12 p-0">
                                 <a class="" href="{{$ctrl.previewObject.data}}" target="_blank">
-                                    <img class="img" ng-src="{{$ctrl.previewObject.data}}">
+                                    <img class="img mr-auto ml-auto" style="display: block" ng-src="{{$ctrl.previewObject.data}}">
                                 </a>
                             </div>
                         </div>
@@ -40,9 +40,9 @@
                         </div>
                         <div ng-switch-when="article" class="">
                             <div class="row">
-                                <div class="col-md-12 p-0">
-                                    
-                                    <img ng-src="{{$ctrl.previewObject.data.imageUrl}}">
+                                <div class="col-md-12">
+                                    <h1 ng-bind="$ctrl.previewObject.data.title"></h1>
+                                    <img class="img mr-auto ml-auto" style="display: block" ng-src="{{$ctrl.previewObject.data.imageUrl}}">
                                     <p></p>
                                 </div>
                             </div>

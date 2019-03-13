@@ -28,6 +28,10 @@ app.controller('PageArticleController',
                     $scope.$apply();
                 }
             };
+            $scope.preview = function (item) {
+                item.editUrl = '/portal/article/details/' + item.id;
+                $rootScope.preview('article', item, item.title, 'modal-lg');
+            };
             $scope.remove = function (pageId, articleId) {
                 $rootScope.showConfirm($scope, 'removeConfirmed', [pageId, articleId], null, 'Remove', 'Are you sure');
             };

@@ -1,9 +1,13 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="card">
-            <h6 class="card-header">
+            <div class="card-header">
+                <p>
                     Slug Info
-            </h6>
+                    <a ng-click="$ctrl.remove()" class="btn d-inline text-danger float-right">X</a>
+                </p>
+
+            </div>
             <div class="card-body" ng-if="$ctrl.urlAlias">
                 <div class="form-group">
                     <label class="control-label">Slug</label>

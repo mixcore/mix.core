@@ -1,10 +1,10 @@
 ﻿'use strict';
-app.controller('PagePageController',
+app.controller('UrlAliasController',
     [
         '$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$location',
-        'PageArticleService', 'ArticleService', 'CommonService',
+        'UrlAliasService', 'CommonService',
         function ($scope, $rootScope, ngAppSettings, $routeParams, $location,
-            service, articleService, commonService) {
+            service, commonService) {
             BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
             $scope.cates = ['Site', 'System'];
             $scope.others=[];
@@ -28,13 +28,13 @@ app.controller('PagePageController',
                     $scope.$apply();
                 }
             };
-            $scope.remove = function (pageId, articleId) {
-                $rootScope.showConfirm($scope, 'removeConfirmed', [pageId, articleId], null, 'Remove', 'Are you sure');
+            $scope.remove = function (id) {
+                $rootScope.showConfirm($scope, 'removeConfirmed', [id], null, 'Remove', 'Are you sure');
             };
 
-            $scope.removeConfirmed = async function (pageId, articleId) {
+            $scope.removeConfirmed = async function (id) {
                 $rootScope.isBusy = true;
-                var result = await service.delete(pageId, articleId);
+                var result = await service.delete(id);
                 if (result.isSucceed) {
                     if ($scope.removeCallback) {
                         $rootScope.executeFunctionByName('removeCallback', $scope.removeCallbackArgs, $scope)
@@ -53,18 +53,6 @@ app.controller('PagePageController',
             $scope.removeCallback = function () {
             }
 
-            $scope.saveOthers = async function(){                
-                var response = await service.saveList($scope.others);
-                if (response.isSucceed) {
-                    $scope.getList();
-                    $scope.$apply();
-                }
-                else {
-                    $rootScope.showErrors(response.errors);
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
-                }
-            }
             $scope.updateInfos = async function (index) {
                 $scope.data.items.splice(index, 1);
                 $rootScope.isBusy = true;

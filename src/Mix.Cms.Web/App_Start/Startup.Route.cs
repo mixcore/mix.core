@@ -3,9 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.IdentityModel.Tokens;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
+using RewriteRules;
+using System.IO;
 using System.Text;
 
 namespace Mix.Cms.Web
@@ -13,7 +16,25 @@ namespace Mix.Cms.Web
     public partial class Startup
     {
         protected void ConfigRoutes(IApplicationBuilder app)
-        {            
+        {
+            using (StreamReader apacheModRewriteStreamReader =
+        File.OpenText("ApacheModRewrite.txt"))
+            using (StreamReader iisUrlRewriteStreamReader =
+                File.OpenText("IISUrlRewrite.xml"))
+            {
+                var options = new RewriteOptions()
+                    .AddRedirect("redirect-rule/(.*)", "redirected/$1")
+                    .AddRewrite(@"^rewrite-rule/(\d+)/(\d+)", "rewritten?var1=$1&var2=$2",
+                        skipRemainingRules: true)
+                    .AddApacheModRewrite(apacheModRewriteStreamReader)
+                    .AddIISUrlRewrite(iisUrlRewriteStreamReader)
+                    .Add(MethodRules.RedirectXMLRequests);
+                //.Add(new RedirectImageRequests(".png", "/png-images"))
+                //.Add(new RedirectImageRequests(".jpg", "/jpg-images"));
+
+                app.UseRewriter(options);
+            }
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

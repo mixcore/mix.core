@@ -289,7 +289,8 @@ namespace Mix.Cms.Lib.Services
                 Type = (int)UrlAliasType.Page,
                 Specificulture = culture,
                 CreatedDateTime = DateTime.UtcNow,
-                Alias = cate.Title.ToLower()
+                Alias = cate.Title.ToLower(),
+                Status = (int)MixContentStatus.Published
             };
             context.Entry(alias).State = EntityState.Added;
         }

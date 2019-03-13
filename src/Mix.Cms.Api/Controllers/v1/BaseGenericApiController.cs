@@ -135,7 +135,6 @@ namespace Mix.Cms.Api.Controllers.v1
         protected async Task<RepositoryResponse<TModel>> DeleteAsync<TView>(Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-            var getPage = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
             var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
             if (data.IsSucceed)
             {

@@ -214,6 +214,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         #endregion Template
 
+        [JsonProperty("urlAliases")]
+        public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
+
         #endregion Views
 
         #endregion Properties
@@ -280,6 +283,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             this.ParentNavs = GetParentNavs(_context, _transaction);
             this.ChildNavs = GetChildNavs(_context, _transaction);
             this.PositionNavs = GetPositionNavs(_context, _transaction);
+            this.UrlAliases = GetAliases(_context, _transaction);
         }
 
         #region Sync
@@ -294,7 +298,23 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 result.Errors.AddRange(saveTemplate.Errors);
                 result.Exception = saveTemplate.Exception;
             }
-
+            if (result.IsSucceed)
+            {
+                foreach (var item in UrlAliases)
+                {
+                    item.SourceId = parent.Id.ToString();
+                    item.Type = UrlAliasType.Page;
+                    item.Specificulture = Specificulture;
+                    var saveResult = item.SaveModel(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!result.IsSucceed)
+                    {
+                        result.Exception = saveResult.Exception;
+                        Errors.AddRange(saveResult.Errors);
+                        break;
+                    }
+                }
+            }
             if (result.IsSucceed)
             {
                 foreach (var item in ModuleNavs)
@@ -423,7 +443,23 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 result.Errors.AddRange(saveTemplate.Errors);
                 result.Exception = saveTemplate.Exception;
             }
-
+            if (result.IsSucceed)
+            {
+                foreach (var item in UrlAliases)
+                {
+                    item.SourceId = parent.Id.ToString();
+                    item.Type = UrlAliasType.Page;
+                    item.Specificulture = Specificulture;
+                    var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!result.IsSucceed)
+                    {
+                        result.Exception = saveResult.Exception;
+                        Errors.AddRange(saveResult.Errors);
+                        break;
+                    }
+                }
+            }
             if (result.IsSucceed)
             {
                 foreach (var item in ModuleNavs)
@@ -616,6 +652,20 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                   });
 
             return query.OrderBy(m => m.Priority).ToList();
+        }
+
+        public List<MixUrlAliases.UpdateViewModel> GetAliases (MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = MixUrlAliases.UpdateViewModel.Repository.GetModelListBy(p => p.Specificulture == Specificulture
+                        && p.SourceId == Id.ToString() && p.Type == (int)MixEnums.UrlAliasType.Page, context, transaction);
+            if (result.IsSucceed)
+            {
+                return result.Data;
+            }
+            else
+            {
+                return new List<MixUrlAliases.UpdateViewModel>();
+            }
         }
 
         public List<MixPageModules.ReadMvcViewModel> GetModuleNavs(MixCmsContext context, IDbContextTransaction transaction)

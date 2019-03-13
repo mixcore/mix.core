@@ -211,6 +211,9 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }
 
+        [JsonProperty("urlAliases")]
+        public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
+
         #endregion Views
 
         #endregion Properties
@@ -236,13 +239,13 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 ExtraProperties = MixService.GetConfig<string>("DefaultArticleAttr");
             }
             Cultures = LoadCultures(Specificulture, _context, _transaction);
-
+            UrlAliases = GetAliases(_context, _transaction);
             if (!string.IsNullOrEmpty(this.Tags))
             {
                 ListTag = JArray.Parse(this.Tags);
             }
             Properties = new List<ExtraProperty>();
-           
+
 
             if (!string.IsNullOrEmpty(ExtraProperties))
             {
@@ -437,6 +440,23 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 }
                 if (result.IsSucceed)
                 {
+                    foreach (var item in UrlAliases)
+                    {
+                        item.SourceId = parent.Id.ToString();
+                        item.Type = MixEnums.UrlAliasType.Article;
+                        item.Specificulture = Specificulture;
+                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+                        result.IsSucceed = saveResult.IsSucceed;
+                        if (!result.IsSucceed)
+                        {
+                            result.Exception = saveResult.Exception;
+                            Errors.AddRange(saveResult.Errors);
+                            break;
+                        }
+                    }
+                }
+                if (result.IsSucceed)
+                {
                     foreach (var navMedia in MediaNavs)
                     {
                         navMedia.ArticleId = parent.Id;
@@ -606,6 +626,269 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
             if (result.IsSucceed)
             {
+                var navCate = _context.MixPageArticle.Where(n => n.ArticleId == Id && n.Specificulture == Specificulture).AsEnumerable();
+                foreach (var item in navCate)
+                {
+                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                }
+            }
+
+            if (result.IsSucceed)
+            {
+                var navModule = _context.MixModuleArticle.Where(n => n.ArticleId == Id && n.Specificulture == Specificulture).AsEnumerable();
+                foreach (var item in navModule)
+                {
+                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                }
+            }
+
+            if (result.IsSucceed)
+            {
+                var navMedia = _context.MixArticleMedia.Where(n => n.ArticleId == Id && n.Specificulture == Specificulture).AsEnumerable();
+                foreach (var item in navMedia)
+                {
+                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                }
+            }
+            if (result.IsSucceed)
+            {
+                var navModule = _context.MixArticleModule.Where(n => n.ArticleId == Id && n.Specificulture == Specificulture).AsEnumerable();
+                foreach (var item in navModule)
+                {
+                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                }
+            }
+
+            if (result.IsSucceed)
+            {
+                var navRelated = _context.MixArticleMedia.Where(n => n.ArticleId == Id && n.Specificulture == Specificulture).AsEnumerable();
+                foreach (var item in navRelated)
+                {
+                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                }
+            }
+
+            if (result.IsSucceed)
+            {
+                var navs = _context.MixUrlAlias.Where(n => n.SourceId == Id.ToString() && n.Type == (int)MixEnums.UrlAliasType.Article && n.Specificulture == Specificulture).AsEnumerable();
+                foreach (var item in navs)
+                {
+                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                }
+            }
+
+            var taskSource = new TaskCompletionSource<RepositoryResponse<bool>>();
+            taskSource.SetResult(result);
+            return taskSource.Task;
+        }
+
+        #endregion Async Methods
+
+        #region Sync Methods
+
+        public override RepositoryResponse<bool> SaveSubModels(
+            MixArticle parent
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                // Save Template
+                var saveTemplate = View.SaveModel(true, _context, _transaction);
+                result.IsSucceed = result.IsSucceed && saveTemplate.IsSucceed;
+                if (!saveTemplate.IsSucceed)
+                {
+                    result.Errors.AddRange(saveTemplate.Errors);
+                    result.Exception = saveTemplate.Exception;
+                }
+                if (result.IsSucceed)
+                {
+                    foreach (var item in UrlAliases)
+                    {
+                        item.SourceId = parent.Id.ToString();
+                        item.Type = MixEnums.UrlAliasType.Article;
+                        item.Specificulture = Specificulture;
+                        var saveResult = item.SaveModel(false, _context, _transaction);
+                        result.IsSucceed = saveResult.IsSucceed;
+                        if (!result.IsSucceed)
+                        {
+                            result.Exception = saveResult.Exception;
+                            Errors.AddRange(saveResult.Errors);
+                            break;
+                        }
+                    }
+                }
+                if (result.IsSucceed)
+                {
+                    foreach (var navMedia in MediaNavs)
+                    {
+                        navMedia.ArticleId = parent.Id;
+                        navMedia.Specificulture = parent.Specificulture;
+
+                        if (navMedia.IsActived)
+                        {
+                            var saveResult = navMedia.SaveModel(false, _context, _transaction);
+                            result.IsSucceed = saveResult.IsSucceed;
+                            if (!result.IsSucceed)
+                            {
+                                result.Exception = saveResult.Exception;
+                                Errors.AddRange(saveResult.Errors);
+                            }
+                        }
+                        else
+                        {
+                            var saveResult = navMedia.RemoveModel(false, _context, _transaction);
+                            result.IsSucceed = saveResult.IsSucceed;
+                            if (!result.IsSucceed)
+                            {
+                                result.Exception = saveResult.Exception;
+                                Errors.AddRange(saveResult.Errors);
+                            }
+                        }
+                    }
+                }
+                if (result.IsSucceed)
+                {
+                    foreach (var navModule in ModuleNavs)
+                    {
+                        navModule.ArticleId = parent.Id;
+                        navModule.Specificulture = parent.Specificulture;
+                        navModule.Status = MixEnums.MixContentStatus.Published;
+                        if (navModule.IsActived)
+                        {
+                            var saveResult = navModule.SaveModel(false, _context, _transaction);
+                            result.IsSucceed = saveResult.IsSucceed;
+                            if (!result.IsSucceed)
+                            {
+                                result.Exception = saveResult.Exception;
+                                Errors.AddRange(saveResult.Errors);
+                            }
+                        }
+                        else
+                        {
+                            var saveResult = navModule.RemoveModel(false, _context, _transaction);
+                            result.IsSucceed = saveResult.IsSucceed;
+                            if (!result.IsSucceed)
+                            {
+                                result.Exception = saveResult.Exception;
+                                Errors.AddRange(saveResult.Errors);
+                            }
+                        }
+                    }
+                }
+
+                if (result.IsSucceed)
+                {
+                    foreach (var navArticle in ArticleNavs)
+                    {
+                        navArticle.SourceId = parent.Id;
+                        navArticle.Status = MixEnums.MixContentStatus.Published;
+                        navArticle.Specificulture = parent.Specificulture;
+                        if (navArticle.IsActived)
+                        {
+                            var saveResult = navArticle.SaveModel(false, _context, _transaction);
+                            result.IsSucceed = saveResult.IsSucceed;
+                            if (!result.IsSucceed)
+                            {
+                                result.Exception = saveResult.Exception;
+                                Errors.AddRange(saveResult.Errors);
+                            }
+                        }
+                        else
+                        {
+                            var saveResult = navArticle.RemoveModel(false, _context, _transaction);
+                            result.IsSucceed = saveResult.IsSucceed;
+                            if (!result.IsSucceed)
+                            {
+                                result.Exception = saveResult.Exception;
+                                Errors.AddRange(saveResult.Errors);
+                            }
+                        }
+                    }
+                }
+                if (result.IsSucceed)
+                {
+                    // Save Parent Category
+                    foreach (var item in Pages)
+                    {
+                        item.ArticleId = parent.Id;
+                        item.Description = parent.Title;
+                        item.Image = ThumbnailUrl;
+                        item.Status = MixEnums.MixContentStatus.Published;
+                        if (item.IsActived)
+                        {
+                            var saveResult = item.SaveModel(false, _context, _transaction);
+                            result.IsSucceed = saveResult.IsSucceed;
+                            if (!result.IsSucceed)
+                            {
+                                result.Exception = saveResult.Exception;
+                                Errors.AddRange(saveResult.Errors);
+                            }
+                        }
+                        else
+                        {
+                            var saveResult = item.RemoveModel(false, _context, _transaction);
+                            result.IsSucceed = saveResult.IsSucceed;
+                            if (!result.IsSucceed)
+                            {
+                                result.Exception = saveResult.Exception;
+                                Errors.AddRange(saveResult.Errors);
+                            }
+                        }
+                    }
+                }
+
+                if (result.IsSucceed)
+                {
+                    // Save Parent Modules
+                    foreach (var item in Modules)
+                    {
+                        item.ArticleId = parent.Id;
+                        item.Description = parent.Title;
+                        item.Image = ThumbnailUrl;
+                        item.Status = MixEnums.MixContentStatus.Published;
+                        if (item.IsActived)
+                        {
+                            var saveResult = item.SaveModel(false, _context, _transaction);
+                            result.IsSucceed = saveResult.IsSucceed;
+                            if (!result.IsSucceed)
+                            {
+                                result.Exception = saveResult.Exception;
+                                Errors.AddRange(saveResult.Errors);
+                            }
+                        }
+                        else
+                        {
+                            var saveResult = item.RemoveModel(false, _context, _transaction);
+                            result.IsSucceed = saveResult.IsSucceed;
+                            if (!result.IsSucceed)
+                            {
+                                result.Exception = saveResult.Exception;
+                                Errors.AddRange(saveResult.Errors);
+                            }
+                        }
+                    }
+                }
+
+                return result;
+            }
+            catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                return result;
+            }
+        }
+
+        public override RepositoryResponse<bool> RemoveRelatedModels(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            RepositoryResponse<bool> result = new RepositoryResponse<bool>()
+            {
+                IsSucceed = true
+            };
+
+            if (result.IsSucceed)
+            {
                 var navCate = _context.MixPageArticle.AsEnumerable();
                 foreach (var item in navCate)
                 {
@@ -647,12 +930,10 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
                 }
             }
-            var taskSource = new TaskCompletionSource<RepositoryResponse<bool>>();
-            taskSource.SetResult(result);
-            return taskSource.Task;
+            return result;
         }
 
-        #endregion Async Methods
+        #endregion  Methods
 
         #endregion Overrides
 
@@ -719,6 +1000,19 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             var navs = MixArticleArticles.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, context, transaction).Data;
             navs.ForEach(n => n.IsActived = true);
             return navs.OrderBy(p => p.Priority).ToList();
+        }
+        public List<MixUrlAliases.UpdateViewModel> GetAliases(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = MixUrlAliases.UpdateViewModel.Repository.GetModelListBy(p => p.Specificulture == Specificulture
+                        && p.SourceId == Id.ToString() && p.Type == (int)MixEnums.UrlAliasType.Article, context, transaction);
+            if (result.IsSucceed)
+            {
+                return result.Data;
+            }
+            else
+            {
+                return new List<MixUrlAliases.UpdateViewModel>();
+            }
         }
         #endregion Expands
     }
