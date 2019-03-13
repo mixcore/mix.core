@@ -13,6 +13,14 @@
     </div>    
     <div class="form-group">
         <span class="switch switch-sm">
+            <input type="checkbox" ng-model="$ctrl.appSettings.GlobalSettings.IsRewrite" id="IsRewrite" class="switch ng-pristine ng-untouched ng-valid ng-empty">
+            <label class="switch mb-0" for="IsRewrite">
+                <span>Rewrite Url</span>
+            </label>
+        </span>
+    </div>    
+    <div class="form-group">
+        <span class="switch switch-sm">
             <input type="checkbox" ng-model="$ctrl.appSettings.GlobalSettings.IsHttps" id="IsHttps" class="switch ng-pristine ng-untouched ng-valid ng-empty">
             <label class="switch mb-0" for="IsHttps">
                 <span>Https</span>

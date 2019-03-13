@@ -58,6 +58,7 @@
   "GlobalSettings": {
     "IsInit": false,
     "IsMaintenance": false,
+    "IsRewrite": true,
     "IsHttps": false,
     "IsCache": true,
     "SiteName": "Site Name",

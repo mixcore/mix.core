@@ -17,26 +17,29 @@ namespace Mix.Cms.Web
     {
         protected void ConfigRoutes(IApplicationBuilder app)
         {
-            using (StreamReader apacheModRewriteStreamReader =
-        File.OpenText("ApacheModRewrite.txt"))
-            using (StreamReader iisUrlRewriteStreamReader =
-                File.OpenText("IISUrlRewrite.xml"))
+            if (MixService.GetConfig<bool>("IsRewrite"))
             {
-                var options = new RewriteOptions()
-                    .AddRedirect("redirect-rule/(.*)", "redirected/$1")
-                    .AddRewrite(@"^rewrite-rule/(\d+)/(\d+)", "rewritten?var1=$1&var2=$2",
-                        skipRemainingRules: true)
-                    .AddApacheModRewrite(apacheModRewriteStreamReader)
-                    .AddIISUrlRewrite(iisUrlRewriteStreamReader)
-                    .Add(MethodRules.RedirectXMLRequests);
-                //.Add(new RedirectImageRequests(".png", "/png-images"))
-                //.Add(new RedirectImageRequests(".jpg", "/jpg-images"));
+                using (StreamReader apacheModRewriteStreamReader =
+            File.OpenText("ApacheModRewrite.txt"))
+                using (StreamReader iisUrlRewriteStreamReader =
+                    File.OpenText("IISUrlRewrite.xml"))
+                {
+                    var options = new RewriteOptions()
+                        .AddRedirect("redirect-rule/(.*)", "redirected/$1")
+                        .AddRewrite(@"^rewrite-rule/(\d+)/(\d+)", "rewritten?var1=$1&var2=$2",
+                            skipRemainingRules: true)
+                        .AddApacheModRewrite(apacheModRewriteStreamReader)
+                        .AddIISUrlRewrite(iisUrlRewriteStreamReader)
+                        .Add(MethodRules.RedirectXMLRequests);
+                    //.Add(new RedirectImageRequests(".png", "/png-images"))
+                    //.Add(new RedirectImageRequests(".jpg", "/jpg-images"));
 
-                app.UseRewriter(options);
+                    app.UseRewriter(options);
+                }
+                //    app.Run(context => context.Response.WriteAsync(
+                //$"Rewritten or Redirected Url: " +
+                //$"{context.Request.Path + context.Request.QueryString}"));
             }
-        //    app.Run(context => context.Response.WriteAsync(
-        //$"Rewritten or Redirected Url: " +
-        //$"{context.Request.Path + context.Request.QueryString}"));
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
