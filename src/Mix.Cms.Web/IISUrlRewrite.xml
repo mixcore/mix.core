@@ -1,6 +1,48 @@
 <rewrite>
   <rules>
-   
 
+    <rule name="Rewrite segment to id querystring" stopProcessing="true">
+      <match url="^admin(.*)$" />
+      <action type="Rewrite" url="portal/{R:1}" appendQueryString="false"/>
+    </rule>
+
+    <rule name="Not rewrite" stopProcessing="true">
+      <match url="^swagger|portal|api|portal|error|Content|lib|css|js|app-shared|app-client|app-portal|app-init|images(\/(.*)){2,8}$" />
+      <action type="None" appendQueryString="false"/>
+    </rule>
+
+    <rule name="Not rewrite portal" stopProcessing="true">
+      <match url="^portal(\/(.*)){1,8}$" />
+      <action type="None" appendQueryString="false"/>
+    </rule>
+
+    <rule name="Not rewrite article details" stopProcessing="true">
+      <match url="^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))/article(\/(.*)){1,8}$" />
+      <action type="None" appendQueryString="false"/>
+    </rule>
+
+    <rule name="Not rewrite content" stopProcessing="true">
+      <match url="^Content/(.*)$" />
+      <action type="None" appendQueryString="false"/>
+    </rule>
+    <rule name="Rewrite to alias splash" stopProcessing="true">
+      <match url="^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))$" />
+      <action type="Redirect" url="/{R:1}/" appendQueryString="true"/>
+    </rule>
+
+    <rule name="Rewrite to alias page" stopProcessing="true">
+      <match url="^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/\w$" />
+      <action type="Rewrite" url="/{R:1}/alias/{R:5}" appendQueryString="true"/>
+    </rule>
+
+    <rule name="Rewrite to alias page paging" stopProcessing="true">
+      <match url="^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/(.*)\/(\d+)\/(\d+)$" />
+      <action type="Rewrite" url="/{R:1}/alias?alias={R:5}&amp;pageSize={R:6}&amp;pageIndex={R:7}" appendQueryString="false"/>
+    </rule>
+
+    <rule name="Rewrite to alias page" stopProcessing="true">
+      <match url="^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/(.*)$" />
+      <action type="Rewrite" url="/{R:1}/alias?alias={R:5}" appendQueryString="false"/>
+    </rule>
   </rules>
 </rewrite>

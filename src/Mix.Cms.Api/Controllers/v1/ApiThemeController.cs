@@ -175,7 +175,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
             if (data != null)
             {
-                //data.CreatedBy = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
+                data.CreatedBy = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
                 data.Specificulture = _lang;
                 var result = await base.SaveAsync<UpdateViewModel>(data, true);
                 if (result.IsSucceed)

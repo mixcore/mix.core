@@ -86,7 +86,7 @@
                         <a href="/portal/article/details/{{item.article.id}}" class="btn btn-light">
                             <span class="fas fa-pencil-alt text-primary"></span>
                         </a>
-                        <a href="{{item.article.detailsUrl}}" target="_blank" class="btn btn-light">
+                        <a ng-click="preview(item.article)" target="_blank" class="btn btn-light">
                             <span class="fas fa-eye text-info"></span>
                         </a>
 

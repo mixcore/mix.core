@@ -1,8 +1,8 @@
 ﻿'use strict';
 app.controller('PageController', ['$scope', '$rootScope', 'ngAppSettings', '$location', '$routeParams',
-            'PageService','PageArticleService','PagePageService',
+            'PageService','PageArticleService','PagePageService', 'UrlAliasService',
     function ($scope, $rootScope, ngAppSettings, $location, $routeParams, 
-            service, pageArticleService, pagePageService) {
+            service, pageArticleService, pagePageService, urlAliasService) {
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);        
         $scope.request.query = 'level=0';       
         $scope.pageData={
@@ -81,4 +81,24 @@ app.controller('PageController', ['$scope', '$rootScope', 'ngAppSettings', '$loc
         $scope.saveCallback = function () {
             $location.url($scope.referrerUrl);
         }
+
+        $scope.addAlias = async function(){
+            var getAlias = await urlAliasService.getSingle();
+            if(getAlias.isSucceed){                
+                $scope.activedData.urlAliases.push(getAlias.data);
+                $rootScope.isBusy = false;
+                $scope.$apply();
+            }
+            else{
+                $rootScope.showErrors(getAlias.errors);
+                $rootScope.isBusy = false;
+                $scope.$apply();
+            }
+        }
+        
+        $scope.removeAliasCallback = async function(index){
+            $scope.activedData.urlAliases.splice(index, 1);
+            $scope.$apply();
+        }
+        
     }]);

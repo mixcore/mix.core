@@ -34,20 +34,15 @@
             </section>
             <section class="col-sm-4" style="padding-left:0">
                 <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
+                <a class="btn btn-secondary btn-sm" ng-click="addAlias()">Add Alias</a>
+                <url-alias ng-repeat="alias in activedData.urlAliases" 
+                    index="$index" url-alias="alias" remove-callback="removeAliasCallback(index)"></url-alias>
                 <div class="card">
                     <h6 class="card-header">
                         Info
                     </h6>
                     <div class="card-body">
                         <statuses status="activedData.status"></statuses>
-                        <!--div class="form-group">
-                            <span class="switch">
-                                <label>
-                                    <input type="checkbox" ng-model="activedData.isClone" class="switch">
-                                    Clone
-                                </label>
-                            </span>
-                        </div-->
                         <div class="form-group">
                             <label class="control-label">Created Date Time</label>
                             <div class="input-group input-group-sm mb-3">

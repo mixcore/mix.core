@@ -307,5 +307,14 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         templateUrl: "/app/app-portal/pages/messenger/index.html"
     });
 
+    $routeProvider.when("/portal/url-alias/list", {
+        controller: "UrlAliasController",
+        templateUrl: "/app/app-portal/pages/url-alias/list.html"
+    });
+    
+    $routeProvider.when("/portal/url-alias/details/:id", {
+        controller: "UrlAliasController",
+        templateUrl: "/app/app-portal/pages/url-alias/details.html"
+    });
     $routeProvider.otherwise({ redirectTo: "/portal" });
 });

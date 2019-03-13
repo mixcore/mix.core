@@ -18,21 +18,18 @@
     <Compile Remove="app-client\shared\controllers\**" />
     <Compile Remove="app-portal\**" />
     <Compile Remove="Views\Shared\Templates\cricket\**" />
-    <Compile Remove="Views\Shared\Templates\mixcore\**" />
     <Compile Remove="Views\Shared\Templates\muong-247\**" />
     <Compile Remove="Views\Shared\Templates\p7p-apartment\**" />
     <Compile Remove="wwwroot\content\**" />
     <Content Remove="app-client\shared\controllers\**" />
     <Content Remove="app-portal\**" />
     <Content Remove="Views\Shared\Templates\cricket\**" />
-    <Content Remove="Views\Shared\Templates\mixcore\**" />
     <Content Remove="Views\Shared\Templates\muong-247\**" />
     <Content Remove="Views\Shared\Templates\p7p-apartment\**" />
     <Content Remove="wwwroot\content\**" />
     <EmbeddedResource Remove="app-client\shared\controllers\**" />
     <EmbeddedResource Remove="app-portal\**" />
     <EmbeddedResource Remove="Views\Shared\Templates\cricket\**" />
-    <EmbeddedResource Remove="Views\Shared\Templates\mixcore\**" />
     <EmbeddedResource Remove="Views\Shared\Templates\muong-247\**" />
     <EmbeddedResource Remove="Views\Shared\Templates\p7p-apartment\**" />
     <EmbeddedResource Remove="wwwroot\content\**" />
@@ -61,6 +58,81 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Shared\Templates\mixcore\Articles\_Default.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Edms\_Default.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Forms\_Default.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Forms\_Subscribe.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Layouts\_Advanced.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Layouts\_Comments_Facebook.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Layouts\_Footer.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Layouts\_Header.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Layouts\_Top_Nav.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Masters\_Layout.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\7__things_we_promise.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Blog-1.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Blog-2.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Blog-3.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Blog-4.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Blog-5.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Feature-4.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\features-1.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Features-2.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Features-3.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Features-4.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Features-5.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Features-6.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Features-7.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Features-8.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Foodee_Home_About.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Foodee_Modules_Reservation.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\header-1.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Header-2.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Header-3.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Header_1.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Project-1.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Social.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\Testimonials-3.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\who_we_are.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\_Banners.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\_blank.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\_Default.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\_Ecommerce_Offers.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\_Ecommerce_Products.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\_Home_AboutUs.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\_Home_Banners.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\_Home_Contact_Us.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\_Home_Header.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\_Home_Header_1.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\_Home_Pricing.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\_Home_What_Is_Alpha.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\_Home_Work_With_Us.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\_Latest_Blogposts.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\_MainNavi.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\_Subscribe_1.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Modules\_What_Clients_Say.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Pages\List_Article.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Pages\List_Post_Article.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Pages\What_Clients_Say.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Pages\_403.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Pages\_404.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Pages\_AboutUs.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Pages\_Article.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Pages\_Default.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Pages\_Ecommerce.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Pages\_Home.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Pages\_List_Post.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Pages\_List_Post_Item.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Pages\_Maintenance.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Pages\_Modules.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Pages\_Search.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Pages\_Tag.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Products\_Default.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Widgets\_Comments_Facebook.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Widgets\_Pagination.cshtml" />
+    <None Include="Views\Shared\Templates\mixcore\Widgets\_Related_Articles.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Mix.Cms.Api\Mix.Cms.Api.csproj" />
     <ProjectReference Include="..\Mix.Cms.Hub\Mix.Cms.Hub.csproj" />
     <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
@@ -75,6 +147,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Views\Home\Alias.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Home\Search.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
