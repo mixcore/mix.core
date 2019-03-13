@@ -34,7 +34,9 @@ namespace Mix.Cms.Web
 
                 app.UseRewriter(options);
             }
-
+        //    app.Run(context => context.Response.WriteAsync(
+        //$"Rewritten or Redirected Url: " +
+        //$"{context.Request.Path + context.Request.QueryString}"));
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

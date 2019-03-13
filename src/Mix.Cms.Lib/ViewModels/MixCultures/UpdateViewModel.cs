@@ -385,6 +385,28 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                     }
                 }
             }
+            
+            // Clone ArticleMedia from Default culture
+            if (result.IsSucceed)
+            {
+                var getUrlAlias = await MixUrlAliases.UpdateViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
+                if (getUrlAlias.IsSucceed)
+                {
+                    foreach (var c in getUrlAlias.Data)
+                    {
+                        c.Specificulture = Specificulture;
+                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
+                        result.IsSucceed = saveResult.IsSucceed;
+                        if (!saveResult.IsSucceed)
+                        {
+                            result.Errors.Add("Error: Clone Article Media");
+                            result.Errors.AddRange(saveResult.Errors);
+                            result.Exception = saveResult.Exception;
+                            break;
+                        }
+                    }
+                }
+            }
             return result;
         }
 
@@ -433,6 +455,10 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
 
             var products = await _context.MixProduct.Where(c => c.Specificulture == Specificulture).ToListAsync();
             products.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+
+            var aliases = await _context.MixUrlAlias.Where(c => c.Specificulture == Specificulture).ToListAsync();
+            aliases.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+
             result.IsSucceed = (await _context.SaveChangesAsync() > 0);
             return result;
         }
