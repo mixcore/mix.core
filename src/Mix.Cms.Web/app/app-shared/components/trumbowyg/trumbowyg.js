@@ -13,6 +13,7 @@ modules.component('trumbowyg', {
     onOpenfullscreen: '&?',
     onClosefullscreen: '&?',
     onClose: '&?',
+    removeformatPasted: '=',
   },
   require: {
     ngModel: 'ngModel'
@@ -23,6 +24,7 @@ modules.component('trumbowyg', {
     '$attrs',
     'ngAppSettings',
     function ($element, $scope, $attrs) {
+      var ctrl = this;
       const TBW_EVENTS = [
         'focus',
         'blur',
@@ -35,7 +37,7 @@ modules.component('trumbowyg', {
         'close'
       ],
         EVENTS_PREFIX = 'tbw';
-      this.editorConfigurations = {
+      ctrl.editorConfigurations = {
         core: {},
         plugins: {
           removeformatPasted: false,
@@ -89,63 +91,66 @@ modules.component('trumbowyg', {
           }
         }
       };
-      this.getElementReference = () => angular.element($element.find('> div'));
+      ctrl.getElementReference = () => angular.element($element.find('> div'));
 
-      this.getEditorReference = () => this.getElementReference().find('.trumbowyg-editor');
+      ctrl.getEditorReference = () => ctrl.getElementReference().find('.trumbowyg-editor');
 
-      this.updateModelValue = () => {
+      ctrl.updateModelValue = () => {
         $scope.$applyAsync(() => {
-          const value = this.getEditorReference().trumbowyg('html');
-          this.ngModel.$setViewValue(value)
+          const value = ctrl.getEditorReference().trumbowyg('html');
+          ctrl.ngModel.$setViewValue(value)
         });
       }
 
-      this.emitEvent = (event) => {
+      ctrl.emitEvent = (event) => {
         const attr = $attrs.$normalize(`on-${event}`);
         if (angular.isFunction(this[attr])) {
           $scope.$applyAsync(() => this[attr]());
         }
       }
 
-      this.initializeEditor = (element, options) => {
-        element.trumbowyg(this.editorConfigurations.plugins)
-          .on('tbwchange', () => this.updateModelValue())
-          .on('tbwpaste', () => this.updateModelValue());
+      ctrl.initializeEditor = (element, options) => {
+        if(ctrl.removeformatPasted){
+          ctrl.editorConfigurations.plugins.removeformatPasted = ctrl.removeformatPasted == 'true';
+        }
+        element.trumbowyg(ctrl.editorConfigurations.plugins)
+          .on('tbwchange', () => ctrl.updateModelValue())
+          .on('tbwpaste', () => ctrl.updateModelValue());
         angular.forEach(TBW_EVENTS, (event) => {
-          element.on(`${EVENTS_PREFIX}${event}`, () => this.emitEvent(event));
+          element.on(`${EVENTS_PREFIX}${event}`, () => ctrl.emitEvent(event));
         })
-        this.ngModel.$render();
+        ctrl.ngModel.$render();
       }
 
-      this.$onDestroy = () => {
-        this.getElementReference().trumbowyg('destroy');
+      ctrl.$onDestroy = () => {
+        ctrl.getElementReference().trumbowyg('destroy');
       };
 
-      this.$onChanges = (changes) => {
-        const element = this.getElementReference();
+      ctrl.$onChanges = (changes) => {
+        const element = ctrl.getElementReference();
 
         if (changes.options && !changes.options.isFirstChange()) {
           element.trumbowyg('destroy');
         }
 
         if (changes.options) {
-          this.initializeEditor(element, angular.extend({}, this.options));
+          ctrl.initializeEditor(element, angular.extend({}, ctrl.options));
         }
 
         if (changes.ngDisabled) {
-          element.trumbowyg(this.ngDisabled ? 'disable' : 'enable');
+          element.trumbowyg(ctrl.ngDisabled ? 'disable' : 'enable');
         }
 
         if (changes.placeholder) {
-          this.getEditorReference().attr('placeholder', this.placeholder);
+          ctrl.getEditorReference().attr('placeholder', ctrl.placeholder);
         }
       };
 
-      this.$onInit = () => {
-        this.ngModel.$render = () => {
-          const element = this.getEditorReference();
-          element.trumbowyg('html', this.ngModel.$modelValue);
-        };
+      ctrl.$onInit = () => {
+        ctrl.ngModel.$render = () => {
+          const element = ctrl.getEditorReference();
+          element.trumbowyg('html', ctrl.ngModel.$modelValue);
+        };        
       };
     }
   ]
