@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixSystem;
 using Mix.Common.Helper;
@@ -617,7 +617,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             }
         }
 
-        public override Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>()
             {
@@ -626,7 +626,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
             if (result.IsSucceed)
             {
-                var navCate = _context.MixPageArticle.Where(n => n.ArticleId == Id && n.Specificulture == Specificulture).AsEnumerable();
+                var navCate = await _context.MixPageArticle.Where(n => n.ArticleId == Id && n.Specificulture == Specificulture).ToListAsync();
                 foreach (var item in navCate)
                 {
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
@@ -635,7 +635,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
             if (result.IsSucceed)
             {
-                var navModule = _context.MixModuleArticle.Where(n => n.ArticleId == Id && n.Specificulture == Specificulture).AsEnumerable();
+                var navModule = await _context.MixModuleArticle.Where(n => n.ArticleId == Id && n.Specificulture == Specificulture).ToListAsync();
                 foreach (var item in navModule)
                 {
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
@@ -644,7 +644,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
             if (result.IsSucceed)
             {
-                var navMedia = _context.MixArticleMedia.Where(n => n.ArticleId == Id && n.Specificulture == Specificulture).AsEnumerable();
+                var navMedia = await _context.MixArticleMedia.Where(n => n.ArticleId == Id && n.Specificulture == Specificulture).ToListAsync();
                 foreach (var item in navMedia)
                 {
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
@@ -652,7 +652,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             }
             if (result.IsSucceed)
             {
-                var navModule = _context.MixArticleModule.Where(n => n.ArticleId == Id && n.Specificulture == Specificulture).AsEnumerable();
+                var navModule = await _context.MixArticleModule.Where(n => n.ArticleId == Id && n.Specificulture == Specificulture).ToListAsync();
                 foreach (var item in navModule)
                 {
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
@@ -661,7 +661,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
             if (result.IsSucceed)
             {
-                var navRelated = _context.MixArticleMedia.Where(n => n.ArticleId == Id && n.Specificulture == Specificulture).AsEnumerable();
+                var navRelated = await _context.MixArticleMedia.Where(n => n.ArticleId == Id && n.Specificulture == Specificulture).ToListAsync();
                 foreach (var item in navRelated)
                 {
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
@@ -670,16 +670,15 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
             if (result.IsSucceed)
             {
-                var navs = _context.MixUrlAlias.Where(n => n.SourceId == Id.ToString() && n.Type == (int)MixEnums.UrlAliasType.Article && n.Specificulture == Specificulture).AsEnumerable();
+                var navs = await _context.MixUrlAlias.Where(n => n.SourceId == Id.ToString() && n.Type == (int)MixEnums.UrlAliasType.Article && n.Specificulture == Specificulture).ToListAsync();
                 foreach (var item in navs)
                 {
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
                 }
             }
 
-            var taskSource = new TaskCompletionSource<RepositoryResponse<bool>>();
-            taskSource.SetResult(result);
-            return taskSource.Task;
+            result.IsSucceed = (await _context.SaveChangesAsync() > 0);
+            return result;
         }
 
         #endregion Async Methods
@@ -889,7 +888,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
             if (result.IsSucceed)
             {
-                var navCate = _context.MixPageArticle.AsEnumerable();
+                var navCate = _context.MixPageArticle.Where(n => n.ArticleId == Id && n.Specificulture == Specificulture).ToList();
                 foreach (var item in navCate)
                 {
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
@@ -898,7 +897,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
             if (result.IsSucceed)
             {
-                var navModule = _context.MixModuleArticle.AsEnumerable();
+                var navModule = _context.MixModuleArticle.Where(n => n.ArticleId == Id && n.Specificulture == Specificulture).ToList();
                 foreach (var item in navModule)
                 {
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
@@ -907,7 +906,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
             if (result.IsSucceed)
             {
-                var navMedia = _context.MixArticleMedia.AsEnumerable();
+                var navMedia = _context.MixArticleMedia.Where(n => n.ArticleId == Id && n.Specificulture == Specificulture).ToList();
                 foreach (var item in navMedia)
                 {
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
@@ -915,7 +914,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             }
             if (result.IsSucceed)
             {
-                var navModule = _context.MixArticleModule.AsEnumerable();
+                var navModule = _context.MixArticleModule.Where(n => n.ArticleId == Id && n.Specificulture == Specificulture).ToList();
                 foreach (var item in navModule)
                 {
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
@@ -924,12 +923,23 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
             if (result.IsSucceed)
             {
-                var navRelated = _context.MixArticleMedia.AsEnumerable();
+                var navRelated = _context.MixArticleMedia.Where(n => n.ArticleId == Id && n.Specificulture == Specificulture).ToList();
                 foreach (var item in navRelated)
                 {
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
                 }
             }
+
+            if (result.IsSucceed)
+            {
+                var navs = _context.MixUrlAlias.Where(n => n.SourceId == Id.ToString() && n.Type == (int)MixEnums.UrlAliasType.Article && n.Specificulture == Specificulture).ToList();
+                foreach (var item in navs)
+                {
+                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                }
+            }
+
+            result.IsSucceed = (_context.SaveChanges() > 0);
             return result;
         }
 

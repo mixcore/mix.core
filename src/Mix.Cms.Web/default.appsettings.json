@@ -81,7 +81,9 @@
     "TagPageSize": "20",
     "SearchPageSize": "20",
     "IsEncryptApi": true,
-    "LastUpdateConfiguration": null
+    "LastUpdateConfiguration": null,
+    "IsMysql": false,
+    "DatabaseProvider": "MSSQL"
   },
 
   "Logging": {
@@ -95,7 +97,6 @@
     "Issuer": "sw-cms",
     "Audience": "sw-client"
   },
-  "AllowedHosts": "*",
-  "IsMysql": false,
+  "AllowedHosts": "*",  
   "Language": "en-us"
 }

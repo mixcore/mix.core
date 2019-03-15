@@ -71,6 +71,7 @@ namespace Mix.Cms.Api.Controllers.v1
             var culture = cultures.FirstOrDefault(c => c.Specificulture == _lang);
             GlobalSettingsViewModel settings = new GlobalSettingsViewModel()
             {
+                Domain = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.Domain),
                 Lang = _lang,
                 ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, _lang),
                 Cultures = cultures,
@@ -125,6 +126,7 @@ namespace Mix.Cms.Api.Controllers.v1
             // Get Settings
             GlobalSettingsViewModel configurations = new GlobalSettingsViewModel()
             {
+                Domain = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.Domain),
                 Lang = _lang,
                 ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, _lang),
                 ApiEncryptKey = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ApiEncryptKey),
@@ -432,6 +434,7 @@ namespace Mix.Cms.Api.Controllers.v1
             // Get Settings
             GlobalSettingsViewModel configurations = new GlobalSettingsViewModel()
             {
+                Domain = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.Domain),
                 Lang = _lang,
                 ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, _lang),
                 ApiEncryptKey = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ApiEncryptKey),
@@ -483,7 +486,8 @@ namespace Mix.Cms.Api.Controllers.v1
             MixService.SetConnectionString(MixConstants.CONST_CMS_CONNECTION, model.ConnectionString);
             MixService.SetConnectionString(MixConstants.CONST_MESSENGER_CONNECTION, model.ConnectionString);
             MixService.SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, model.ConnectionString);
-            MixService.SetConfig(MixConstants.CONST_SETTING_IS_SQLITE, model.IsMysql);
+            MixService.SetConfig(MixConstants.CONST_SETTING_IS_MYSQL, model.IsMysql);
+            MixService.SetConfig(MixConstants.CONST_SETTING_DATABASE_PROVIDER, model.DatabaseProvider);
             MixService.SetConfig(MixConstants.CONST_SETTING_LANGUAGE, model.Culture.Specificulture);
 
             InitCmsService sv = new InitCmsService();

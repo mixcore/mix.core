@@ -17,15 +17,23 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
             //              else return remote mssql cnn string
             get
             {
-                return IsUseLocal
+                switch (DatabaseProvider)
+                {
+                    case MixEnums.DatabaseProvider.MSSQL:
+                        return IsUseLocal
                     ? LocalDbConnectionString
-                    
-                    : IsMysql ? $"Server={DataBaseServer};Database={DataBaseName}" +
-                    $";User={DataBaseUser};Password={DataBasePassword};"
-                    
+
                     : $"Server={DataBaseServer};Database={DataBaseName}" +
                     $";UID={DataBaseUser};Pwd={DataBasePassword};MultipleActiveResultSets=true;"
                     ;
+                    case MixEnums.DatabaseProvider.MySQL:
+                        return $"Server={DataBaseServer};Database={DataBaseName}" +
+                      $";User={DataBaseUser};Password={DataBasePassword};";
+
+                    default:
+                        return string.Empty;
+                }
+
             }
         }
 
@@ -62,6 +70,9 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
 
         [JsonProperty("isMysql")]
         public bool IsMysql { get; set; }
+
+        [JsonProperty("databaseProvider")]
+        public MixEnums.DatabaseProvider DatabaseProvider { get; set; }
 
         [JsonProperty("culture")]
         public InitCulture Culture { get; set; }

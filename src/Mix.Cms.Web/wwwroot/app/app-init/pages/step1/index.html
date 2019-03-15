@@ -27,13 +27,9 @@
             <div ng-hide="initCmsModel.isUseLocal">
 
                 <h5 class="card-description text-white">Remote Server</h5>
-                <div class="col form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" ng-model="initCmsModel.isMysql">
-                        <span class="form-check-sign"></span>
-                        Use Mysql Database
-                    </label>
-                </div>
+                    <h5 class="card-description text-white">Database Provider</h5>
+                    <select class="btn btn-secondary custom-select input-lg" ng-options="item.value as item.text for item in settings.providers" ng-model="initCmsModel.databaseProvider"></select>
+
                 <div class="input-group no-border input-lg">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="now-ui-icons business_chart-pie-36"></i></span>

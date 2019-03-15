@@ -4,6 +4,10 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
     function ($scope, $rootScope, ngAppSettings, $timeout, $location, $http, commonService, step1Services) {
         var rand = Math.random();
         $scope.settings = {
+            providers: [
+                {text: 'MSSQL', value:'MSSQL'},
+                {text: 'MySQL', value:'MySQL'}
+            ],
             cultures: [
                 { specificulture: 'en-us', fullName: 'United States - English (Default)', icon: 'flag-icon-us' },
                 { specificulture: 'fr-dz', fullName: 'Algeria - Français', icon: 'flag-icon-dz' },
@@ -120,6 +124,7 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
             adminPassword: '',
             lang: 'en-us',
             isMysql: false,
+            databaseProvider:  $scope.settings.providers[0].value,
             culture: $scope.settings.cultures[0]
         };
         $scope.updateLocalDbName = function () {
