@@ -55,7 +55,9 @@
                                 <span class="fa fa-list text-primary"></span>
                             </a>
 
-                            <a href="/portal/page/details/{{item.id}}" class="btn btn-light"><span class="fa fa-pen text-primary"></span></a>
+                            <a href="/portal/page/details/{{item.id}}" class="btn btn-light">
+                                <span class="fas fa-pencil-alt text-primary"></span>
+                            </a>
                             <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-light"><span class="fa fa-eye text-primary"></span></a>
                             <a ng-if="item.type==2" href="/portal/page/page-article/list/{{item.id}}" class="btn btn-light">
                                 <span class="fas fa-list text-info"></span>

@@ -21,7 +21,10 @@ namespace Mix.Cms.Lib.ViewModels
 {
     public class GlobalSettingsViewModel
     {
-        [JsonProperty("lang")]
+        [JsonProperty("domain")]
+        public string Domain { get; set; }
+
+         [JsonProperty("lang")]
         public string Lang { get; set; }
 
         [JsonProperty("langIcon")]

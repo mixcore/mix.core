@@ -4,6 +4,13 @@ modules.component('urlAlias', {
     controller: ['$rootScope', '$scope', 'UrlAliasService',
         function ($rootScope, $scope, service) {
             var ctrl = this;
+            ctrl.$onInit = function(){
+                ctrl.updateUrl();
+            }
+            ctrl.updateUrl =  function(){
+                ctrl.url = $rootScope.globalSettings.domain + '/'
+                 + $rootScope.settings.lang + '/'  + ctrl.urlAlias.alias;
+            }
             ctrl.remove = function () {
                 if (ctrl.urlAlias.id > 0) {
                     $rootScope.showConfirm(ctrl, 'removeConfirmed', [ctrl.urlAlias.id], null, 'Remove', 'Are you sure');

@@ -7,6 +7,13 @@ namespace Mix.Cms.Lib
     public class MixEnums
     {
         #region Common
+
+        public enum DatabaseProvider
+        {
+            MSSQL = 1,
+            MySQL = 2
+        }
+
         public enum CatePosition
         {
             Nav = 1,
