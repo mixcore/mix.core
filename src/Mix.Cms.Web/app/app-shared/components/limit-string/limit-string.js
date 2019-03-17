@@ -16,7 +16,7 @@ modules.component('limitString', {
                 }
             };
             ctrl.shortString = function () {
-                var data = decodeURIComponent(ctrl.content);
+                var data = ctrl.content;//decodeURIComponent(ctrl.content);
                 if (data) {
                     if (ctrl.max < data.length) {
                         ctrl.shortenString = data.replace(/[+]/g, ' ').substr(0, ctrl.max) + ' ...';

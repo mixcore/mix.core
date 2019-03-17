@@ -6,8 +6,7 @@
 @if (!string.IsNullOrEmpty(Model.TemplatePath))
 {
     try
-    {
-
+    {        
         <partial name="@Model.TemplatePath" model="@Model" />
     }
     catch (Exception ex)

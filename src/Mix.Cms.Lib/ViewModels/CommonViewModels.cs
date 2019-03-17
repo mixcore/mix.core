@@ -24,7 +24,7 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("domain")]
         public string Domain { get; set; }
 
-         [JsonProperty("lang")]
+        [JsonProperty("lang")]
         public string Lang { get; set; }
 
         [JsonProperty("langIcon")]
@@ -172,7 +172,7 @@ namespace Mix.Cms.Lib.ViewModels
         public FileViewModel(IFormFile file, string folder)
         {
             Filename = file.FileName.Substring(0, file.FileName.LastIndexOf('.'));
-            Extension= file.FileName.Substring(file.FileName.LastIndexOf('.'));
+            Extension = file.FileName.Substring(file.FileName.LastIndexOf('.'));
             FileFolder = folder;
         }
     }
@@ -261,15 +261,18 @@ namespace Mix.Cms.Lib.ViewModels
         {
 
             string val = jItem[Name]["value"].Value<string>();
+            var jVal = new JProperty(Name, jItem[Name]);
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (IsUnique)
             {
                 //string query = @"SELECT * FROM [Mix_module_data] WHERE JSON_VALUE([Value],'$.{0}.value') = '{1}'"; // AND Specificulture = '{2}' AND Id <> '{3}'
                 //var temp = string.Format(query, Name, val);//, specificulture, id?.ToString()
                 //int count = _context.MixModuleData.FromSql(query, Name, val).Count(d=>d.Specificulture == specificulture && d.Id != id.ToString());//, specificulture, id?.ToString()
-
-                string query = $"SELECT * FROM Mix_module_data WHERE JSON_VALUE([Value],'$.{Name}.value') = '{val}' AND Specificulture = '{specificulture}' AND Id != '{id}'";
-                int count = _context.MixModuleData.FromSql(sql: new RawSqlString(query)).Count();
+                //string query = $"SELECT * FROM Mix_module_data WHERE JSON_VALUE([Value],'$.{Name}.value') = '{val}' AND Specificulture = '{specificulture}' AND Id != '{id}'";
+                //int count = _context.MixModuleData.FromSql(sql: new RawSqlString(query)).Count();
+                var strId = id?.ToString();
+                int count = _context.MixModuleData.Count(d => d.Specificulture == specificulture
+                    && d.Value.Contains(jVal.ToString(Formatting.None)) && d.Id != strId);
                 if (count > 0)
                 {
                     result.IsSucceed = false;

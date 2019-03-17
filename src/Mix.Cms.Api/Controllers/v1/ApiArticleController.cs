@@ -202,7 +202,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         mvcResult.Data.Items.ForEach(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                "article", new { id = a.Id, seoName = a.SeoName }, Request, Url);
+                                "Article", new { id = a.Id, seoName = a.SeoName }, Request, Url);
                         });
                     }
 
@@ -214,7 +214,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         portalResult.Data.Items.ForEach(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                "article", new { id = a.Id, seoName = a.SeoName }, Request, Url);
+                                "Article", new { id = a.Id, seoName = a.SeoName }, Request, Url);
                         });
                     }
 
@@ -227,7 +227,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         listItemResult.Data.Items.ForEach((Action<ReadListItemViewModel>)(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                "article", new { id = a.Id, seoName = a.SeoName }, Request, Url);
+                                "Article", new { id = a.Id, seoName = a.SeoName }, Request, Url);
                         }));
                     }
 

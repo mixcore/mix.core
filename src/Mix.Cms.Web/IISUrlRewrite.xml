@@ -17,7 +17,7 @@
     </rule>
 
     <rule name="Not rewrite article details" stopProcessing="true">
-      <match url="^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))/article(\/(.*)){1,8}$" />
+      <match url="^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))/article|tag|page|search(\/(.*)){1,8}$" />
       <action type="None" appendQueryString="false"/>
     </rule>
 

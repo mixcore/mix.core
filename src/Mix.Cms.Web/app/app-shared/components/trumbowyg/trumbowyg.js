@@ -40,7 +40,7 @@ modules.component('trumbowyg', {
       ctrl.editorConfigurations = {
         core: {},
         plugins: {
-          removeformatPasted: false,
+          removeformatPasted: true,
           imageWidthModalEdit: true,
           semantic: false,
           btnsDef: {

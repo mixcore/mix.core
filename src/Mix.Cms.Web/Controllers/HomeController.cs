@@ -120,6 +120,16 @@ namespace Mix.Cms.Web.Controllers
             return await TagAsync(tagName);
         }
 
+        [Route("{culture}/search/{keyword}")]
+        public async System.Threading.Tasks.Task<IActionResult> Search(string culture, string keyword)
+        {
+            if (_forbidden)
+            {
+                return Redirect($"/error/403");
+            }
+            return await SearchAsync(keyword);
+        }
+
         [Route("article/{id}/{seoName}")]
         [Route("{culture}/article/{id}/{seoName}")]
         public async System.Threading.Tasks.Task<IActionResult> Article(int id, string culture, string seoName)

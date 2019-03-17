@@ -381,7 +381,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 {
                     arrProperties.Add(JObject.FromObject(p));
                 }
-                ExtraProperties = arrProperties.ToString(Formatting.None);
+                ExtraProperties = arrProperties.ToString(Formatting.None)?.Trim();
             }
 
             Template = View != null ? string.Format(@"{0}/{1}{2}", View.FolderType, View.FileName, View.Extension) : Template;
