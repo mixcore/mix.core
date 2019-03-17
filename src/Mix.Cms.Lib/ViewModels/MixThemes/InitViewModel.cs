@@ -133,7 +133,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         #endregion Contructors
 
         #region Overrides
-        
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Templates = MixTemplates.InitViewModel.Repository.GetModelListBy(t => t.ThemeId == Id,
@@ -169,13 +169,14 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 foreach (var file in files)
                 {
                     id++;
+                    string content = file.Content.Replace("/assets/templates/default", $"/{ MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{Name}");
                     MixTemplates.InitViewModel template = new MixTemplates.InitViewModel(
                         new MixTemplate()
                         {
                             Id = id,
                             FileFolder = file.FileFolder,
                             FileName = file.Filename,
-                            Content = file.Content,
+                            Content = content,
                             Extension = file.Extension,
                             CreatedDateTime = DateTime.UtcNow,
                             LastModified = DateTime.UtcNow,
@@ -195,14 +196,14 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 }
                 return result;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result.IsSucceed = false;
                 result.Errors.Add(ex.Message);
                 result.Exception = ex;
                 return result;
             }
-            
+
         }
 
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(InitViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)

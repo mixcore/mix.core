@@ -185,7 +185,8 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            //this.View = MixTemplates.ReadViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
+            //Load Template + Style +  Scripts for views
+            this.View = MixTemplates.ReadViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
 
             Properties = new List<ExtraProperty>();
 
