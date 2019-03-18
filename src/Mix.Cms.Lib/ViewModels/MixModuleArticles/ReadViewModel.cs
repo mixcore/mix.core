@@ -41,7 +41,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleArticles
         public MixEnums.MixContentStatus Status { get; set; }
         #region Views
         [JsonProperty("article")]
-        public MixArticles.ReadViewModel Article { get; set; }
+        public MixArticles.ReadListItemViewModel Article { get; set; }
 
         #endregion Views
 
@@ -49,7 +49,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleArticles
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getArticle = MixArticles.ReadViewModel.Repository.GetSingleModel(p => p.Id == ArticleId && p.Specificulture == Specificulture
+            var getArticle = MixArticles.ReadListItemViewModel.Repository.GetSingleModel(p => p.Id == ArticleId && p.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction
             );
             if (getArticle.IsSucceed)

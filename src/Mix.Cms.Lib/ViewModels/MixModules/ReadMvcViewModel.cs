@@ -124,10 +124,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public PaginationModel<ViewModels.MixModuleDatas.ReadViewModel> Data { get; set; } = new PaginationModel<ViewModels.MixModuleDatas.ReadViewModel>();
 
         [JsonProperty("articles")]
-        public PaginationModel<MixModuleArticles.ReadMvcViewModel> Articles { get; set; } = new PaginationModel<MixModuleArticles.ReadMvcViewModel>();
-
-        [JsonProperty("products")]
-        public PaginationModel<MixModuleProducts.ReadMvcViewModel> Products { get; set; } = new PaginationModel<MixModuleProducts.ReadMvcViewModel>();
+        public PaginationModel<MixModuleArticles.ReadViewModel> Articles { get; set; } = new PaginationModel<MixModuleArticles.ReadViewModel>();
 
         public string TemplatePath
         {
@@ -241,7 +238,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                     case MixModuleType.SubPage:
                         dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture && (m.CategoryId == categoryId);
                         articleExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
-                        productExp = m => m.ModuleId == Id && m.Specificulture == Specificulture;
                         break;
 
                     case MixModuleType.SubArticle:
@@ -259,7 +255,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                     default:
                         dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture;
                         articleExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
-                        productExp = m => m.ModuleId == Id && m.Specificulture == Specificulture;
                         break;
                 }
 
@@ -280,7 +275,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 }
                 if (articleExp != null)
                 {
-                    var getArticles = MixModuleArticles.ReadMvcViewModel.Repository
+                    var getArticles = MixModuleArticles.ReadViewModel.Repository
                     .GetModelListBy(articleExp
                     , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
                     , pageSize, pageIndex
@@ -288,18 +283,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                     if (getArticles.IsSucceed)
                     {
                         Articles = getArticles.Data;
-                    }
-                }
-                if (productExp != null)
-                {
-                    var getProducts = MixModuleProducts.ReadMvcViewModel.Repository
-                    .GetModelListBy(productExp
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
-                    , PageSize, pageIndex
-                    , _context: context, _transaction: transaction);
-                    if (getProducts.IsSucceed)
-                    {
-                        Products = getProducts.Data;
                     }
                 }
             }
