@@ -165,7 +165,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
                 var files = FileRepository.Instance.GetFilesWithContent(TemplateFolder);
                 //TODO: Create default asset
-                int id = 0;
+                int id = 0; 
                 foreach (var file in files)
                 {
                     id++;

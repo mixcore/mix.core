@@ -376,6 +376,12 @@ namespace Mix.Cms.Api.Controllers.v1
                                 result.Errors.Add(err.Description);
                             }
                         }
+                        else
+                        {
+                            // Remove other token if change password success
+                            var refreshToken = User.Claims.SingleOrDefault(c => c.Type == "RefreshToken")?.Value;
+                            await RefreshTokenViewModel.Repository.RemoveModelAsync(r => r.Id != refreshToken);
+                        }
                     }
                     else
                     {

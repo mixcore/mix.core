@@ -38,6 +38,7 @@ app.controller('CultureController', ['$scope', '$rootScope', 'ngAppSettings', '$
             { specificulture: 'en-ie', fullName: 'Ireland - English', icon: 'flag-icon-ie' },
             { specificulture: 'is-is', fullName: 'Ísland - Íslenska', icon: 'flag-icon-is' },
             { specificulture: 'it-it', fullName: 'Italia - Italiano', icon: 'flag-icon-it' },
+            { specificulture: 'ja-jp', fullName: 'Japanese - 日本語', icon: 'flag-icon-jp' },
             { specificulture: 'en-jo', fullName: 'Jordan - English', icon: 'flag-icon-jo' },
             { specificulture: 'lv-lv', fullName: 'Latvija - Latviešu', icon: 'flag-icon-lv' },
             { specificulture: 'en-lb', fullName: 'Lebanon - English', icon: 'flag-icon-lb' },

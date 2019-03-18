@@ -743,17 +743,6 @@ namespace Mix.Cms.Web.Controllers
                     }
                 }
             }
-            if (module.Products != null)
-            {
-
-                foreach (var productNav in module.Products.Items)
-                {
-                    if (productNav.Product != null)
-                    {
-                        productNav.Product.DetailsUrl = GenerateDetailsUrl("Product", new { seoName = productNav.Product.SeoName });
-                    }
-                }
-            }
         }
 
         string GenerateDetailsUrl(string type, object routeValues)
