@@ -5,14 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="7.6.0.7024">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\mix.heart\src\Mix.Heart\Mix.Heart.csproj" />
+    <PackageReference Include="Mix.Heart" Version="0.0.3" />
   </ItemGroup>
 
 </Project>
