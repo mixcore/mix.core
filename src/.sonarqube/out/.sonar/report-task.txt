@@ -1,7 +1,0 @@
-organization=mixcore
-projectKey=mix.core
-serverUrl=https://sonarcloud.io
-serverVersion=7.4.0.17856
-dashboardUrl=https://sonarcloud.io/dashboard?id=mix.core
-ceTaskId=AWZIjI_UMw52PrQC0Ppt
-ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AWZIjI_UMw52PrQC0Ppt
