@@ -14,6 +14,7 @@ app.controller('SocialFeedController',
             page_id: null,
             app_secret: null,
             access_token:'',
+            page:[],
             show_login: true,
             errors:[]
         };
@@ -50,7 +51,7 @@ app.controller('SocialFeedController',
             if (response.status === 'connected') {
                 // Logged into your app and Facebook.
                 $scope.exchangeToken(response);
-                $scope.loadFeeds();
+                $scope.loadPages();
                 //window.location = '/bo/feed?code=' + response.authResponse.accessToken;
             } else {
                 alert('Login failed');
@@ -79,6 +80,21 @@ app.controller('SocialFeedController',
                     $scope.socialSettings.data = response.data;
                     $scope.socialSettings.nextUrl = response.paging.next;
                     $scope.socialSettings.prevUrl = response.paging.previous;
+                    $scope.$apply();
+                }
+                else {
+                    $scope.socialSettings.show_login = true;
+                    $scope.socialSettings.errors = response;
+                }
+                console.log(response);
+            });
+        }
+        $scope.loadPages = function () {
+            $scope.socialSettings.errors = '';
+            var url = '/me/accounts?access_token=' + $scope.socialSettings.access_token + '&fields=id,name';
+            FB.api(url, function (response) {
+                if (response.data) {
+                    $scope.socialSettings.pages = response.data;
                     $scope.$apply();
                 }
                 else {
