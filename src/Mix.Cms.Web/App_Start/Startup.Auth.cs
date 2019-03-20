@@ -23,10 +23,16 @@ namespace Mix.Cms.Web
     //Ref: https://www.blinkingcaret.com/2017/09/06/secure-web-api-in-asp-net-core/
     public partial class Startup
     {
-        protected void ConfigIdentity(IServiceCollection services, IConfiguration Configuration, string connectionName)
+        protected void ConfigAuthorization(IServiceCollection services, IConfiguration Configuration)
         {
-            services.AddDbContext<MixDbContext>();
+            ConfigIdentity(services, Configuration);
+            ConfigCookieAuth(services, Configuration);
+            ConfigJWTToken(services, Configuration);
 
+        }
+
+        private void ConfigIdentity(IServiceCollection services, IConfiguration Configuration)
+        {
             PasswordOptions pOpt = new PasswordOptions()
             {
                 RequireDigit = false,
@@ -43,7 +49,7 @@ namespace Mix.Cms.Web
                 .AddEntityFrameworkStores<MixDbContext>()
                 .AddDefaultTokenProviders()
                 .AddUserManager<UserManager<ApplicationUser>>()
-                
+
                 ;
             services.AddAuthorization(options =>
             {
@@ -93,6 +99,7 @@ namespace Mix.Cms.Web
                             
                         };
                     });
+            services.AddAuthentication("Bearer");
             //services.Configure<IpSecuritySettings>(Configuration.GetSection("IpSecuritySettings"));
         }
 
