@@ -14,6 +14,8 @@
   </div>
   <div class="form-group">
     <label class="control-label">Page Id</label>
+    <select ng-options="item as item.name for item socialSettings.pages  track by item.id"
+            ng-model="socialSettings.page_id"></select>
     <input type="text" class="form-control" ng-model="socialSettings.page_id">
   </div>
 <pre>
