@@ -316,5 +316,10 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         controller: "UrlAliasController",
         templateUrl: "/app/app-portal/pages/url-alias/details.html"
     });
+   
+    $routeProvider.when("/portal/social-feed", {
+        controller: "SocialFeedController",
+        templateUrl: "/app/app-portal/pages/social-feed/social-feed.html"
+    });
     $routeProvider.otherwise({ redirectTo: "/portal" });
 });
