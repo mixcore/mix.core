@@ -1,0 +1,22 @@
+<div ng-init="init()">
+  <a class="btn" ng-click="login()">Login</a>
+  <div class="form-group">
+    <label class="control-label">App Id</label>
+    <input type="text" class="form-control" ng-model="socialSettings.app_id">
+  </div>
+  <div class="form-group">
+    <label class="control-label">App Secret</label>
+    <input type="password" class="form-control" ng-model="socialSettings.app_secret">
+  </div>
+  <div class="form-group">
+    <label class="control-label">Access Token</label>
+    <textarea class="form-control" ng-model="socialSettings.access_token"></textarea>
+  </div>
+  <div class="form-group">
+    <label class="control-label">Page Id</label>
+    <input type="text" class="form-control" ng-model="socialSettings.page_id">
+  </div>
+<pre>
+  {{prettyJsonObj(socialSettings)}}
+</pre>
+</div>
