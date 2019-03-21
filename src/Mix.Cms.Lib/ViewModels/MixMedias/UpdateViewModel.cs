@@ -74,11 +74,13 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         {
             get
             {
-                return string.IsNullOrEmpty(FileName) ? string.Empty : CommonHelper.GetFullPath(new string[]{
-                    Domain,
-                    FileFolder,
-                    $"{FileName}{Extension}"
-                });
+                if(!string.IsNullOrEmpty(FileName)){
+                    return FileFolder.IndexOf("http") > 0 ? $"{FileFolder}/{FileName}{Extension}"
+                        :$"{Domain}/{FileFolder}/{FileName}{Extension}";
+                }
+                else{
+                    return string.Empty;
+                }                
             }
         }
 
@@ -113,7 +115,10 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
                 Cultures = Cultures ?? LoadCultures(Specificulture, _context, _transaction);
                 Cultures.ForEach(c => c.IsSupported = true);
             }
-            if (FileFolder[0] == '/') { FileFolder = FileFolder.Substring(1); }
+            if (FileFolder.IndexOf("http") < 0)
+            {
+                if (FileFolder[0] == '/') { FileFolder = FileFolder.Substring(1); }
+            }
             return base.ParseModel(_context, _transaction);
         }
 
@@ -162,7 +167,10 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
 
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            FileRepository.Instance.DeleteWebFile(FileName, Extension, FileFolder);
+            // Remove local file
+            if (FileFolder.IndexOf("http") < 0){
+                FileRepository.Instance.DeleteWebFile(FileName, Extension, FileFolder);
+            }
             await Repository.RemoveListModelAsync(m => m.Id == Id && m.Specificulture != Specificulture, _context, _transaction);
             return await base.RemoveRelatedModelsAsync(view, _context, _transaction);
         }
