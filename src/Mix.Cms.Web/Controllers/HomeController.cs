@@ -16,7 +16,6 @@ using Mix.Cms.Lib.Services;
 using Mix.Cms.Web.Models;
 using Mix.Domain.Core.ViewModels;
 using Mix.Identity.Models;
-using Newtonsoft.Json.Linq;
 using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Web.Controllers
@@ -37,12 +36,6 @@ namespace Mix.Cms.Web.Controllers
         }
 
         #region Routes
-
-        [Route("doc")]
-        public IActionResult Documentation()
-        {
-            return View(_apiExplorer);
-        }
 
         [Route("")]
         [Route("{culture}")]
