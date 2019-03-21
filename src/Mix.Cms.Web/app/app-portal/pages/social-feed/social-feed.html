@@ -1,5 +1,4 @@
 <div ng-init="init()">
-  <a class="btn" ng-click="login()">Login</a>
   <div class="form-group">
     <label class="control-label">App Id</label>
     <input type="text" class="form-control" ng-model="socialSettings.app_id">
@@ -14,11 +13,74 @@
   </div>
   <div class="form-group">
     <label class="control-label">Page Id</label>
-    <select ng-options="item as item.name for item socialSettings.pages  track by item.id"
-            ng-model="socialSettings.page_id"></select>
+    <select class="btn btn-secondary custom-select" ng-options="item.id as item.name for item in socialSettings.pages"
+      ng-model="socialSettings.page_id"></select>
     <input type="text" class="form-control" ng-model="socialSettings.page_id">
   </div>
-<pre>
-  {{prettyJsonObj(socialSettings)}}
-</pre>
+  <div class="form-group">
+    <a class="btn btn-primary text-white" ng-click="login()">Login</a>
+    <a class="btn btn-primary text-white" ng-if="socialSettings.page_id" ng-click="loadFeeds()">Load Data</a>
+  </div>
+  <table class="table table-sm table-hover" cellspacing="0">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col-1" style="width: 25%;">
+          Type
+        </th>
+        <th scope="col-3" style="width: 25%;">
+          Title
+        </th>
+        <th scope="col-2" width="10%">
+          Image
+        </th>
+        <th scope="col-2" style="width: 10%;">
+          Story
+        </th>
+        <th scope="col-3" width="10%">
+          Created Date
+        </th>
+
+        <th scope="col-1" style="width: 5%;">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="sortable" ng-init="getList()">
+      <tr ng-repeat="item in socialSettings.data track by $index" class="sortable-item" sort-model="article"
+        sort-model-id="{{item.id}}">
+        <td>
+          {{item.type}}
+        </td>
+        <td>
+          {{item.name}}
+        </td>
+        <td>
+          <preview-image img-height="25" ng-if="item.full_picture" img-src="item.full_picture"></preview-image>
+        </td>
+        <td>
+          {{item.story}}
+        </td>
+        <td>
+          <small>
+            {{item.created_time | utcToLocal}}
+          </small>
+        </td>
+
+
+        <td>
+          <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
+            <a href="{{item.permalink_url}}" target="_blank" class="btn btn-light">
+              <span class="fas fa-eye text-info"></span>
+            </a>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="6">
+          <a class="btn btn-primary text-white" ng-if="socialSettings.prevUrl"
+            ng-click="loadFeeds(socialSettings.prevUrl)">Prev</a>
+          <a class="btn btn-primary text-white float-right" ng-if="socialSettings.nextUrl"
+            ng-click="loadFeeds(socialSettings.nextUrl)">Next</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
