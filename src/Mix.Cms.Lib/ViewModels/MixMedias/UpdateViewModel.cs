@@ -48,6 +48,12 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         [JsonProperty("description")]
         public string Description { get; set; }
 
+        [JsonProperty("targetUrl")]
+        public string TargetUrl { get; set; }
+
+        [JsonProperty("source")]
+        public string Source { get; set; }
+
         [JsonProperty("tags")]
         public string Tags { get; set; }
 
@@ -115,7 +121,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
                 Cultures = Cultures ?? LoadCultures(Specificulture, _context, _transaction);
                 Cultures.ForEach(c => c.IsSupported = true);
             }
-            if (FileFolder.IndexOf("http") < 0)
+            if (string.IsNullOrEmpty(TargetUrl))
             {
                 if (FileFolder[0] == '/') { FileFolder = FileFolder.Substring(1); }
             }

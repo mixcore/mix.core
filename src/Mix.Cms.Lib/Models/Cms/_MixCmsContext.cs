@@ -88,6 +88,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => e.SetAttributeId);
 
+                entity.Property(e => e.ExtraFields).HasMaxLength(4000);
+
                 entity.HasIndex(e => e.Specificulture);
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
@@ -448,6 +450,10 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Description).HasMaxLength(4000);
 
+                entity.Property(e => e.TargetUrl).HasMaxLength(250);
+
+                entity.Property(e => e.Source).HasMaxLength(250);
+
                 entity.Property(e => e.Extension)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -746,6 +752,8 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.ToTable("mix_page");
 
                 entity.HasIndex(e => e.SetAttributeId);
+
+                entity.Property(e => e.ExtraFields).HasMaxLength(4000);
 
                 entity.HasIndex(e => e.Specificulture);
 
