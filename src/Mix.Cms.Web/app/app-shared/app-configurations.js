@@ -1388,13 +1388,15 @@ app.run(['$rootScope', 'ngAppSettings', 'GlobalSettingsService', 'CommonService'
         };
 
         $rootScope.generateKeyword = function (src, character) {
-            return src.replace(/[^a-zA-Z0-9]+/g, character)
-                .replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2')
-                .replace(/([a-z])([A-Z])/g, '$1-$2')
-                .replace(/([0-9])([^0-9])/g, '$1-$2')
-                .replace(/([^0-9])([0-9])/g, '$1-$2')
-                .replace(/-+/g, character)
-                .toLowerCase();
+            if (src) {
+                return src.replace(/[^a-zA-Z0-9]+/g, character)
+                    .replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2')
+                    .replace(/([a-z])([A-Z])/g, '$1-$2')
+                    .replace(/([0-9])([^0-9])/g, '$1-$2')
+                    .replace(/([^0-9])([0-9])/g, '$1-$2')
+                    .replace(/-+/g, character)
+                    .toLowerCase();
+            }
         };
 
         $rootScope.generatePhone = function (src) {
