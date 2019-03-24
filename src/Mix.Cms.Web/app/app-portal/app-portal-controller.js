@@ -57,7 +57,7 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
         }
         $scope.$on('$routeChangeStart', function ($event, next, current) {
             // ... you could trigger something here ...
-            if(current){
+            if(current && current.$$route){
                 $rootScope.referrerUrl = current.$$route.originalPath;
                 Object.keys(current.params).forEach(function(key,index) {
                     // key: the name of the object key
