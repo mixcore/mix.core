@@ -82,8 +82,8 @@ namespace Mix.Cms.Lib.ViewModels
     }
     public class ExtraProperty
     {
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
+        [JsonProperty("title")]
+        public string Title { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -93,7 +93,6 @@ namespace Mix.Cms.Lib.ViewModels
 
         [JsonProperty("value")]
         public string Value { get; set; }
-
     }
     public class CryptoViewModel<T>
     {

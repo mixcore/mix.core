@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Migrations
 {
     [DbContext(typeof(MixCmsContext))]
-    partial class MixCmsContextModelSnapshot : ModelSnapshot
+    [Migration("20190322132959_upd_media_targeturl_source")]
+    partial class upd_media_targeturl_source
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,9 +37,6 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("Excerpt");
-
-                    b.Property<string>("ExtraFields")
-                        .HasMaxLength(4000);
 
                     b.Property<string>("ExtraProperties");
 
@@ -893,9 +892,6 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(50);
 
                     b.Property<string>("Excerpt");
-
-                    b.Property<string>("ExtraFields")
-                        .HasMaxLength(4000);
 
                     b.Property<string>("Icon")
                         .HasMaxLength(50);

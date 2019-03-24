@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixArticles
 {
@@ -36,6 +37,10 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
         [JsonProperty("image")]
         public string Image { get; set; }
+
+        [JsonIgnore]
+        [JsonProperty("extraFields")]
+        public string ExtraFields { get; set; } = "[]";
 
         [JsonIgnore]
         [JsonProperty("extraProperties")]
@@ -208,12 +213,15 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
         [JsonProperty("properties")]
         public List<ExtraProperty> Properties { get; set; }
+
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }
 
         [JsonProperty("urlAliases")]
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
 
+        [JsonProperty("columns")]
+        public List<ModuleFieldViewModel> Columns { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -236,7 +244,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         {
             if (Id == 0)
             {
-                ExtraProperties = MixService.GetConfig<string>("DefaultArticleAttr");
+                ExtraFields = MixService.GetConfig<string>("DefaultArticleAttr");
             }
             Cultures = LoadCultures(Specificulture, _context, _transaction);
             UrlAliases = GetAliases(_context, _transaction);
@@ -244,8 +252,31 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             {
                 ListTag = JArray.Parse(this.Tags);
             }
-            Properties = new List<ExtraProperty>();
 
+            // Parsing Extra Properties fields
+            Columns = new List<ModuleFieldViewModel>();
+            JArray arrField = !string.IsNullOrEmpty(ExtraFields) ? JArray.Parse(ExtraFields) : new JArray();
+            foreach (var field in arrField)
+            {
+                ModuleFieldViewModel thisField = new ModuleFieldViewModel()
+                {
+                    Name = CommonHelper.ParseJsonPropertyName(field["name"].ToString()),
+                    Title = field["title"]?.ToString(),
+                    Options = field["options"] != null ? field["options"].Value<JArray>() : new JArray(),
+                    Priority = field["priority"] != null ? field["priority"].Value<int>() : 0,
+                    DataType = (MixDataType)(int)field["dataType"],
+                    Width = field["width"] != null ? field["width"].Value<int>() : 3,
+                    IsUnique = field["isUnique"] != null ? field["isUnique"].Value<bool>() : true,
+                    IsRequired = field["isRequired"] != null ? field["isRequired"].Value<bool>() : true,
+                    IsDisplay = field["isDisplay"] != null ? field["isDisplay"].Value<bool>() : true,
+                    IsSelect = field["isSelect"] != null ? field["isSelect"].Value<bool>() : false,
+                    IsGroupBy = field["isGroupBy"] != null ? field["isGroupBy"].Value<bool>() : false,
+                };
+                Columns.Add(thisField);
+            }
+
+            // Parsing Extra Properties value
+            Properties = new List<ExtraProperty>();
 
             if (!string.IsNullOrEmpty(ExtraProperties))
             {
@@ -308,17 +339,6 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 MediaNavs = getArticleMedia.Data.OrderBy(p => p.Priority).ToList();
                 MediaNavs.ForEach(n => n.IsActived = true);
             }
-            // var otherMedias = MixMedias.UpdateViewModel.Repository.GetModelListBy(m => !MediaNavs.Any(n => n.MediaId == m.Id), "CreatedDateTime", 1, 10, 0, _context, _transaction);
-            // foreach (var item in otherMedias.Data.Items)
-            // {
-            //     MediaNavs.Add(new MixArticleMedias.ReadViewModel()
-            //     {
-            //         MediaId = item.Id,
-            //         Image = item.FullPath,
-            //         ArticleId = Id,
-            //         Description = item.Title
-            //     });
-            // }
             // Modules
             var getArticleModule = MixArticleModules.ReadViewModel.Repository.GetModelListBy(
                 n => n.ArticleId == Id && n.Specificulture == Specificulture, _context, _transaction);
@@ -374,10 +394,18 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             }
             LastModified = DateTime.UtcNow;
             PublishedDateTime = PublishedDateTime?.ToUniversalTime();
+
+            //  Parsing Extra Fields to json string
+            var arrField = Columns != null ? JArray.Parse(
+                Newtonsoft.Json.JsonConvert.SerializeObject(Columns.OrderBy(c => c.Priority).Where(
+                    c => !string.IsNullOrEmpty(c.Name)))) : new JArray();
+            ExtraFields = arrField.ToString(Newtonsoft.Json.Formatting.None);
+
+            // Parsing Extra Properties value
             if (Properties != null && Properties.Count > 0)
             {
                 JArray arrProperties = new JArray();
-                foreach (var p in Properties.Where(p => !string.IsNullOrEmpty(p.Value) && !string.IsNullOrEmpty(p.Name)).OrderBy(p => p.Priority))
+                foreach (var p in Properties.Where(p => !string.IsNullOrEmpty(p.Value) && !string.IsNullOrEmpty(p.Name)))
                 {
                     arrProperties.Add(JObject.FromObject(p));
                 }
@@ -413,6 +441,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     Image = CommonHelper.GetFullPath(new string[] { folder, filename });
                 }
             }
+
             if (!string.IsNullOrEmpty(Image) && Image[0] == '/') { Image = Image.Substring(1); }
             if (!string.IsNullOrEmpty(Thumbnail) && Thumbnail[0] == '/') { Thumbnail = Thumbnail.Substring(1); }
             Tags = ListTag.ToString(Newtonsoft.Json.Formatting.None);

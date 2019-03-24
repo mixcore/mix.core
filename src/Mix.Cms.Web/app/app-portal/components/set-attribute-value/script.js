@@ -24,31 +24,30 @@ modules.component('setAttributeValue', {
             ctrl.settings = $rootScope.globalSettings;
 
             ctrl.$doCheck = function () {
-                if (ctrl.trackedColumns != ctrl.columns) {
+                if (angular.toJson(ctrl.columns) != angular.toJson(ctrl.trackedColumns)) {
                     ctrl.trackedColumns = angular.copy(ctrl.columns);
+                    ctrl.trackedProperties = angular.copy(ctrl.properties);
                     ctrl.loadEditors();
                 }
             }.bind(ctrl);
-            
-            ctrl.loadEditors = function(){
-                angular.forEach(ctrl.columns, function(col){
-                    var prop = $rootScope.findObjectByKey(ctrl.properties, 'name', col.name)
-                    if(prop){
-                        prop.dataType = col.dataType;
-                        prop.options = col.options
-                    }
-                    else{
-                        ctrl.properties.push({
-                            title: col.title,
-                            name: col.name,
-                            dataType: col.dataType,
-                            value: col.defaultValue,
-                            options: col.options
-                        });
-                    }
-                })
+
+            ctrl.loadEditors = function () {
+                ctrl.properties = [];
+                for (let i = 0; i < ctrl.columns.length; i++) {
+                    var col = ctrl.columns[i];
+                    var oldObj = $rootScope.findObjectByKey(ctrl.trackedProperties, 'name', col.name) || {};
+
+                    ctrl.properties.push({
+                        title: col.title,
+                        name: col.name,
+                        dataType: col.dataType,
+                        value: oldObj.value || col.defaultValue,
+                        options: col.options
+                    });
+
+                }
             };
-            
+
             ctrl.addAttr = function () {
                 if (ctrl.columns) {
                     var t = angular.copy(ctrl.defaultAttr);
