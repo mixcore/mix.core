@@ -326,7 +326,7 @@ namespace Mix.Cms.Lib.ViewModels.MixProducts
             if (Properties != null && Properties.Count > 0)
             {
                 JArray arrProperties = new JArray();
-                foreach (var p in Properties.Where(p => !string.IsNullOrEmpty(p.Value) && !string.IsNullOrEmpty(p.Name)).OrderBy(p => p.Priority))
+                foreach (var p in Properties.Where(p => !string.IsNullOrEmpty(p.Value) && !string.IsNullOrEmpty(p.Name)))
                 {
                     arrProperties.Add(JObject.FromObject(p));
                 }
