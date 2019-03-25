@@ -1,0 +1,26 @@
+<div class="row" ng-init="initModuleForm('contact_us');">
+    <div class="col-sm-12">
+        <form ng-class="{'submitted': submitted}" ng-submit="saveModuleData()" id="module-{{activedModuleData.moduleId}}">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4 class="card-title"></h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div ng-repeat="prop in activedModuleData.dataProperties track by $index">
+                                <module-form-editor is-show-title="'true'" title="prop.title" data="activedModuleData.jItem[prop.name]" ng-if="!prop.isSelect"></module-form-editor>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="submit" class="btn btn-primary btn-round pull-right">Submit</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>

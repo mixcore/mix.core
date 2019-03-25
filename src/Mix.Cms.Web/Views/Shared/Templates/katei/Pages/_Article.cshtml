@@ -1,0 +1,44 @@
+@model Mix.Cms.Lib.ViewModels.MixPages.ReadMvcViewModel
+<div class="page-header page-header-small">
+    <div class="page-header-image" data-parallax="true" style="background-image: url('@Model.Image') ;">
+    </div>
+    <div class="content-center">
+        <div class="row">
+            <div class="col-md-8 ml-auto mr-auto text-center">
+                <h2 class="title">@Model.Title</h2>
+                <h4>@Model.Excerpt</h4>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="button-container">
+                    <a href="#pablo" class="btn btn-primary btn-round btn-lg">
+                        <i class="now-ui-icons text_align-left"></i> Read Article
+                    </a>
+                    <a href="#pablo" class="btn btn-icon btn-lg btn-twitter btn-round">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#pablo" class="btn btn-icon btn-lg btn-facebook btn-round">
+                        <i class="fab fa-facebook-square"></i>
+                    </a>
+                    <a href="#pablo" class="btn btn-icon btn-lg btn-google btn-round">
+                        <i class="fab fa-google"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 ml-auto mr-auto">
+                    @Html.Raw(Model.Content)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
