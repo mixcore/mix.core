@@ -1,0 +1,39 @@
+<!--     *********     BLOGS 3      *********      -->
+<div class="blogs-3">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-10 ml-auto mr-auto">
+                <h2 class="title">@Model.Title</h2>
+
+                <br />
+                @foreach(var item in Model.Articles.Items)
+                {
+                    var article = item.Article;
+                <div class="card card-plain card-blog">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card-image">
+                                <img class="img img-raised rounded" src="@article.ThumbnailUrl" />
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <h3 class="card-title">
+                                <a href="@article.DetailsUrl">@article.Title</a>
+                            </h3>
+                            <p class="card-description">
+                                @article.Excerpt <a href="@article.DetailsUrl"> Read More </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!--     *********    END BLOGS 3      *********      -->

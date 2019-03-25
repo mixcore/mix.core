@@ -1,0 +1,35 @@
+<div class="about-description text-center">
+    <div class="features-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 mr-auto ml-auto">
+                    <h2 class="title">@Model.Title</h2>
+                    <h4 class="description">
+                        @Model.Description
+                    </h4>
+                </div>
+            </div>
+            <div class="row">
+                 @foreach (var item in Model.Data.Items)
+                {
+                    // string cl = Model.Data.Items.IndexOf(item) == 0 ? "active" : string.Empty;
+                    string icon = item.GetValue<string>("Icon");
+                    string title = item.GetValue<string>("Title");
+                    string excerpt = item.GetValue<string>("Excerpt");
+                    
+                    <div class="col-md-4">
+                        <div class="info info-hover">
+                            <div class="icon icon-success icon-circle">
+                                <i class="now-ui-icons @icon"></i>
+                            </div>
+                            <h4 class="info-title">@title</h4>
+                            <p class="description">
+                                @excerpt
+                            </p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

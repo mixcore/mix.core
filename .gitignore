@@ -263,3 +263,6 @@ src/Mix.Cms.Web/appsettings.json
 /src/Mix.Cms.Web/Exports
 /src/Mix.Cms.Web/wwwroot/content/Uploads
 /src/Mix.Cms.Web/wwwroot/content/Uploads
+src/Mix.Cms.Web/package-lock.json
+src/Mix.Cms.Web/.vscode/tasks.json
+src/Mix.Cms.Web/.vscode/launch.json
