@@ -25,6 +25,7 @@ using System.Xml.Linq;
 using System.Text;
 using System.Xml;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -385,24 +386,43 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST api/category
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
-        [Route("import/{type}")]
-        [Route("{culture}/import/{type}")]
-        public async Task<RepositoryResponse<bool>> SaveAppSettingsAsync(string type, [FromBody]FileViewModel model)
+        [Route("import")]
+        [Route("{culture}/import")]
+        public async Task<RepositoryResponse<bool>> ImportAsync([FromForm]IFormFile assets)
         {
-            var result = FileRepository.Instance.SaveWebFile(model);
-            if (result)
+            string importFolder = $"Imports/Structures/{_lang}";
+            var result = new RepositoryResponse<bool>();
+            var model = FileRepository.Instance.SaveWebFile(assets, importFolder);
+            if (model != null)
             {
                 var fileContent = FileRepository.Instance.GetWebFile($"{model.Filename}{model.Extension}", model.FileFolder);
                 var obj = JObject.Parse(fileContent.Content);
-                switch (type)
+                switch (obj["type"].Value<string>())
                 {
                     case "Language":
                         var arrLanguage = obj["data"].ToObject<List<MixLanguage>>();
-                        return await Lib.ViewModels.MixLanguages.ReadMvcViewModel.ImportLanguages(arrLanguage, _lang);
+                        result = await Lib.ViewModels.MixLanguages.ReadMvcViewModel.ImportLanguages(arrLanguage, _lang);
+                        if (result.IsSucceed)
+                        {
+                            base.RemoveCache();
+                        }
+                        return result;
                     case "Configuration":
                         var arrConfiguration = obj["data"].ToObject<List<MixConfiguration>>();
-                        return await Lib.ViewModels.MixConfigurations.ReadMvcViewModel.ImportConfigurations(arrConfiguration, _lang);
-
+                        result = await Lib.ViewModels.MixConfigurations.ReadMvcViewModel.ImportConfigurations(arrConfiguration, _lang);
+                        if (result.IsSucceed)
+                        {
+                            base.RemoveCache();
+                        }
+                        return result;
+                    case "Module":
+                        var arrModule = obj["data"].ToObject<List<MixModule>>();
+                        result = await Lib.ViewModels.MixModules.UpdateViewModel.Import(arrModule, _lang);
+                        if (result.IsSucceed)
+                        {
+                            base.RemoveCache();
+                        }
+                        return result;
                     default:
                         return new RepositoryResponse<bool>() { IsSucceed = false };
                 }

@@ -649,7 +649,7 @@ namespace Mix.Cms.Lib.Repositories
             }
         }
 
-        public string SaveWebFile(IFormFile file, string folder)
+        public FileViewModel SaveWebFile(IFormFile file, string folder)
         {
             try
             {
@@ -657,11 +657,17 @@ namespace Mix.Cms.Lib.Repositories
                     MixConstants.Folder.WebRootPath,
                     folder
                 });
-                return SaveFile(file, fullPath);
+                string filename = SaveFile(file, fullPath);
+                return new FileViewModel()
+                {
+                    Filename = file.FileName.Substring(0, file.FileName.LastIndexOf('.')),
+                    Extension = file.FileName.Substring(file.FileName.LastIndexOf('.')),
+                    FileFolder = folder
+                };
             }
             catch
             {
-                return string.Empty;
+                return null;
             }
         }
 

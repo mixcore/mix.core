@@ -15,6 +15,11 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
     $scope.getSingleFailCallback = null;
     $scope.getListSuccessCallback = null;
     $scope.getListFailCallback = null;
+    $scope.selectedList = {
+        action: '',
+        data: []
+    };
+    $scope.actions = ['Delete', 'Publish', 'Export'];
     $scope.translate = $rootScope.translate;
     if ($rootScope.referrerUrl) {
         $scope.referrerUrl = $rootScope.referrerUrl;
@@ -125,6 +130,55 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
             $scope.$apply();
         }
     };
+    $scope.select = function (id, isSelected) {
+        if (isSelected) {
+            $scope.selectedList.data.push(id);
+        }
+        else {
+            $scope.removeObject($scope.selectedList.data, id);
+        }
+    }
+    $scope.selectAll = function (isSelected) {
+        $scope.selectedList.data = [];
+        angular.forEach($scope.data.items, function (e) {
+            e.isSelected = isSelected;
+            if (isSelected) {
+                $scope.selectedList.data.push(e.id);
+            }
+        });
+
+    }
+    $scope.applyList = async function () {
+        $rootScope.showConfirm($scope, 'applyListConfirmed', [], null, 'Remove', 'Are you sure to' + $scope.selectedList.action + ' these items');
+    };
+
+    $scope.applyListConfirmed = async function () {
+        $rootScope.isBusy = true;
+        var resp = await service.applyList($scope.selectedList);
+        if (resp && resp.isSucceed) {
+            $scope.activedData = resp.data;
+            $rootScope.showMessage('success', 'success');
+            switch ($scope.selectedList.action) {
+                case 'Delete':
+                    $scope.selectedList.isSelectAll = false;
+                    $scope.selectedList.data = [];
+                    $scope.getList();
+                    break;
+                case 'Export':
+                    window.open(resp.data.webPath, '_blank');
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                    break;
+            }
+        } else {
+            if (resp) {
+                $rootScope.showErrors(resp.errors);
+            }
+            $rootScope.isBusy = false;
+            $scope.$apply();
+        }
+    }
+
 
     $scope.shortString = function (msg, max) {
         if (msg) {

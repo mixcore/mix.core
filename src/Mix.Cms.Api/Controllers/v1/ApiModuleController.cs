@@ -18,6 +18,7 @@ using System.Linq.Expressions;
 using System.Web;
 using Mix.Cms.Lib.ViewModels.MixModules;
 using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib.ViewModels;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -193,6 +194,25 @@ namespace Mix.Cms.Api.Controllers.v1
             else
             {
                 return new RepositoryResponse<List<ReadListItemViewModel>>();
+            }
+        }
+
+        [HttpPost, HttpOptions]
+        [Route("apply-list")]
+        public async Task<ActionResult<JObject>> ListActionAsync([FromBody]ListAction<int> data)
+        {
+            Expression<Func<MixModule, bool>> predicate = model =>
+                       model.Specificulture == _lang
+                       && data.Data.Contains(model.Id);
+            var result = new RepositoryResponse<bool>();
+            switch (data.Action)
+            {
+                case "Delete":
+                    return Ok(JObject.FromObject(await base.DeleteListAsync<UpdateViewModel>(true, predicate, false)));
+                case "Export":
+                    return Ok(JObject.FromObject(await base.ExportListAsync(predicate, MixStructureType.Module)));
+                default:
+                    return JObject.FromObject(new RepositoryResponse<bool>());
             }
         }
         #endregion Post

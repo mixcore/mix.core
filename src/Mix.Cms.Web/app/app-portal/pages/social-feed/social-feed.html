@@ -18,6 +18,7 @@
     <input type="text" class="form-control" ng-model="socialSettings.page_id">
   </div>
   <div class="form-group">
+    <a class="btn btn-primary text-white" ng-if="socialSettings.posts.length>0" ng-click="syncPosts()">Sync</a>
     <a class="btn btn-primary text-white" ng-click="login()">Login</a>
     <a class="btn btn-primary text-white" ng-if="socialSettings.page_id" ng-click="loadFeeds()">Load Data</a>
   </div>
@@ -41,17 +42,16 @@
       </tr>
     </thead>
     <tbody class="sortable" ng-init="getList()">
-      <tr ng-repeat="item in socialSettings.articles track by $index" class="sortable-item" sort-model="article"
+      <tr ng-repeat="item in socialSettings.posts track by $index" class="sortable-item" sort-model="post"
         sort-model-id="{{item.id}}">
         <td>
-          {{item.title}}
+            <input type="text" class="form-control sm" ng-model="item.title"/>
         </td>
         <td>
-          {{item.Excerpt}}
+          <textarea class="form-control sm" ng-model="item.Excerpt"></textarea>
         </td>
         <td>
-          <preview-image img-height="25" ng-if="item.image" img-src="item.image"></preview-image>
-          
+          <preview-image img-height="25" ng-if="item.image" img-src="item.image"></preview-image>          
         </td>
         <td>
           <small>

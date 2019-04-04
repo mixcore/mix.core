@@ -372,6 +372,49 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #endregion Overrides
 
         #region Expand
+        public static async Task<RepositoryResponse<bool>> Import(List<MixModule> arrModule, string destCulture,
+           MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            bool isRoot = _context == null;
+            var context = _context ?? new MixCmsContext();
+            var transaction = _transaction ?? context.Database.BeginTransaction();
+
+            try
+            {
+                int id = ModelRepository.Max(m => m.Id, context, transaction).Data + 1;
+                foreach (var item in arrModule)
+                {
+                    item.Id = id;
+                    item.CreatedDateTime = DateTime.UtcNow;
+                    item.Specificulture = destCulture;
+                    context.MixModule.Add(item);
+                    id++;
+                }
+                await context.SaveChangesAsync();
+                result.Data = true;
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+            }
+            catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
+            {
+
+                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<ReadMvcViewModel>(ex, isRoot, transaction);
+                result.IsSucceed = false;
+                result.Errors = error.Errors;
+                result.Exception = error.Exception;
+            }
+            finally
+            {
+                //if current Context is Root
+                if (isRoot)
+                {
+                    context?.Dispose();
+                }
+
+            }
+            return result;
+        }
+
         List<SupportedCulture> LoadCultures(string initCulture = null, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getCultures = SystemCultureViewModel.Repository.GetModelList(_context, _transaction);

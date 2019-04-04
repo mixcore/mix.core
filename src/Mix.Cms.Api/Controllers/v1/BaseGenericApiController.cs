@@ -8,7 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Hub;
 using Mix.Cms.Lib;
+using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
@@ -18,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -144,6 +147,47 @@ namespace Mix.Cms.Api.Controllers.v1
             return new RepositoryResponse<TModel>() { IsSucceed = false };
         }
 
+        protected async Task<RepositoryResponse<List<TModel>>> DeleteListAsync<TView>(bool isRemoveRelatedModel, Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
+            where TView : ViewModelBase<TDbContext, TModel, TView>
+        {
+            var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.RemoveListModelAsync(isRemoveRelatedModel, predicate);
+            if (data.IsSucceed)
+            {
+                RemoveCache();
+
+            }
+            return data;
+        }
+
+
+        protected async Task<RepositoryResponse<FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate, MixStructureType type)
+        {
+            var getData = await DefaultModelRepository<TDbContext, TModel>.Instance.GetModelListByAsync(predicate);
+            if (getData.IsSucceed)
+            {
+                string exportPath = $"Exports/Structures/{typeof(TModel).Name}/{_lang}";
+                string filename = $"{type.ToString()}_{DateTime.UtcNow.ToString("ddMMyyyy")}";
+                var objContent = new JObject(
+                    new JProperty("type", type.ToString()),
+                    new JProperty("data", JArray.FromObject(getData.Data))
+                    );
+                var file = new FileViewModel()
+                {
+                    Filename = filename,
+                    Extension = ".json",
+                    FileFolder = exportPath,
+                    Content = objContent.ToString()
+                };
+                // Copy current templates file
+                FileRepository.Instance.SaveWebFile(file);
+                return new RepositoryResponse<FileViewModel>()
+                {
+                    IsSucceed = true,
+                    Data = file,
+                };
+            }
+            return new RepositoryResponse<FileViewModel>();
+        }
         protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync<TView>(string key, RequestPaging request, Expression<Func<TModel, bool>> predicate = null, TModel model = null)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {

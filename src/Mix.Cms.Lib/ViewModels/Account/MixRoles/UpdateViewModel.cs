@@ -66,7 +66,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
         }
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var result = await UserRoleViewModel.Repository.RemoveListModelAsync(ur => ur.RoleId == Id, _context, _transaction);
+            var result = await UserRoleViewModel.Repository.RemoveListModelAsync(false, ur => ur.RoleId == Id, _context, _transaction);
             return new RepositoryResponse<bool>()
             {
                 IsSucceed = result.IsSucceed,

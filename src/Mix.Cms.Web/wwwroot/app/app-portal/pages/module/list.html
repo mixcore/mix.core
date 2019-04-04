@@ -1,10 +1,16 @@
 <section class="card manual">
     <div class="card-header">
             <filter-list request="request" callback="getList(pageIndex)"></filter-list>
-            <select ng-model="type" ng-change="getListByType(pageIndex)">
+            <select class="btn custom-select custom-select-sm col-3" ng-model="type" ng-change="getListByType(pageIndex)">
                     <option value="-1">All</option>
                     <option ng-repeat="type in settings.moduleTypes track by $index" ng-value="$index">{{type}}</option>
                 </select>
+             
+            <select class="btn custom-select custom-select-sm col-3" ng-model="selectedList.action">
+                    <option ng-repeat="item in actions" ng-value="item">{{item}}</option>
+                </select>
+                <a class="btn btn-primary text-white" ng-if="selectedList.data.length > 0 && selectedList.action" ng-click="applyList()">Apply</a>
+             
     </div>
     <div class="card-body">
             <table class="table table-sm table-hover" cellspacing="0">
@@ -13,9 +19,9 @@
                             <th scope="col" width="3%">
                                 <span class="oi oi-sort-ascending"></span>
                             </th>
-                            <!--<th scope="col" style="width: 4%;">
-                                <span class="fas fa-sort-numeric-down"></span>
-                            </th>-->
+                            <th scope="col" style="width: 4%;">
+                                <input type="checkbox" ng-model="isSelectAll" ng-change="selectAll(isSelectAll)">
+                            </th>
                             <th scope="col" width="5%">
                                 Priority
                             </th>
@@ -43,6 +49,9 @@
                                 <span class="fas fa-sort"></span>
                             </td>
                             <td>
+                                <input type="checkbox" ng-model="item.isSelected" ng-change="select(item.id, item.isSelected)">
+                            </td>
+                            <td>
                                 {{item.priority}}
                             </td>
                             <td>
@@ -68,7 +77,7 @@
                                     <!--<a href="{{item.detailsUrl}}" target="_blank" class="btn btn-light">
                                         <span class="fa fa-eye text-primary"></span>
                                     </a>-->
-                                    <a ng-if="item.type==2" href="/portal/module-article/list/{{item.id}}" class="btn btn-light">
+                                    <a ng-if="item.type==2" href="/portal/module-post/list/{{item.id}}" class="btn btn-light">
                                         <span class="fas fa-list text-info"></span>
                                     </a>                                
                                     <a ng-if="item.type==1" href="/portal/module/data/{{item.id}}" class="btn btn-light">

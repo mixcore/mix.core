@@ -400,6 +400,13 @@ namespace Mix.Cms.Lib.ViewModels
             return e;
         }
     }
+    public class ListAction<T>
+    {
+        [JsonProperty("action")]
+        public string Action { get; set; }
+        [JsonProperty("data")]
+        public List<T> Data { get; set; }
+    }
     public class SitemapLanguage
     {
         public string HrefLang { get; set; }

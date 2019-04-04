@@ -209,6 +209,13 @@ namespace Mix.Cms.Lib
             Module,
             Page
         }
+
+        public enum MixStructureType
+        {
+            Page,
+            Module,
+            Post
+        }
         #endregion
 
         public enum ResponseKey
