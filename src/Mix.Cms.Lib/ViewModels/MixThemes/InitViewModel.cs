@@ -208,7 +208,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(InitViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var result = await MixTemplates.InitViewModel.Repository.RemoveListModelAsync(t => t.ThemeId == Id);
+            var result = await MixTemplates.InitViewModel.Repository.RemoveListModelAsync(false,  t => t.ThemeId == Id);
             if (result.IsSucceed)
             {
                 FileRepository.Instance.DeleteWebFolder(AssetFolder);

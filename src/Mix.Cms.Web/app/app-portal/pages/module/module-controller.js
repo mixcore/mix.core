@@ -183,4 +183,5 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$l
         $scope.insertColCallback = function (index, item, external, type) {
             console.log('insert ', index, item, external, type);
         }
+        
     }]);

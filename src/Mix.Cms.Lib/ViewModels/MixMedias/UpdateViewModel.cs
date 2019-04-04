@@ -80,12 +80,12 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         {
             get
             {
-                if(!string.IsNullOrEmpty(FileName)){
+                if(!string.IsNullOrEmpty(FileName) && string.IsNullOrEmpty(TargetUrl)){
                     return FileFolder.IndexOf("http") > 0 ? $"{FileFolder}/{FileName}{Extension}"
                         :$"{Domain}/{FileFolder}/{FileName}{Extension}";
                 }
                 else{
-                    return string.Empty;
+                    return TargetUrl;
                 }                
             }
         }
@@ -167,7 +167,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
             {
                 IsSucceed = FileRepository.Instance.DeleteWebFile(FileName, Extension, FileFolder)
             };
-            result.IsSucceed = Repository.RemoveListModel(m => m.Id == Id && m.Specificulture != Specificulture, _context, _transaction).IsSucceed;
+            result.IsSucceed = Repository.RemoveListModel(false, m => m.Id == Id && m.Specificulture != Specificulture, _context, _transaction).IsSucceed;
             return result;
         }
 
@@ -177,7 +177,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
             if (FileFolder.IndexOf("http") < 0){
                 FileRepository.Instance.DeleteWebFile(FileName, Extension, FileFolder);
             }
-            await Repository.RemoveListModelAsync(m => m.Id == Id && m.Specificulture != Specificulture, _context, _transaction);
+            await Repository.RemoveListModelAsync(false, m => m.Id == Id && m.Specificulture != Specificulture, _context, _transaction);
             return await base.RemoveRelatedModelsAsync(view, _context, _transaction);
         }
 

@@ -1619,6 +1619,13 @@ app.run(['$rootScope', 'ngAppSettings', 'GlobalSettingsService', 'CommonService'
             }
             return null;
         }
+        $rootScope.removeObject = function (array, value) {
+            for (var i = 0; i < array.length; i++) {
+                if (array[i] == value) {
+                    array.splice(i,1);
+                }
+            }            
+        }
         $rootScope.changeLang = async function (lang) {
             var url = await translatorService.translateUrl(lang);
             translatorService.translateUrl(lang);

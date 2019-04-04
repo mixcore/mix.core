@@ -1,23 +1,20 @@
 ﻿'use strict';
-app.factory('ImportFileServices', ['$http', '$rootScope', 'CommonService', function ($http, $rootScope, commonService) {
+app.factory('ImportFileServices', ['$rootScope', 'BaseService',
+     function ($rootScope, baseService) {
 
     //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 
-    var importFilesServiceFactory = {};
+    var serviceFactory = {};
 
     var settings = $rootScope.globalSettings;
-
-    var _saveImportFile = async function (importFile, type) {
-        var apiUrl = '/portal/' + settings.lang + '/import/' + type;
-        var req = {
-            method: 'POST',
-            url: apiUrl,
-            data: JSON.stringify(importFile)
-        };
-        return await commonService.getApiResult(req);
+    var serviceFactory = Object.create(baseService);
+    serviceFactory.init('portal',true);
+    var _saveImportFile = async function (frm) {
+        var apiUrl = this.prefixUrl + '/' + settings.lang + '/import';
+        return await this.ajaxSubmitForm(frm, apiUrl);
     };
 
-    importFilesServiceFactory.saveImportFile = _saveImportFile;
-    return importFilesServiceFactory;
+    serviceFactory.saveImportFile = _saveImportFile;
+    return serviceFactory;
 
 }]);

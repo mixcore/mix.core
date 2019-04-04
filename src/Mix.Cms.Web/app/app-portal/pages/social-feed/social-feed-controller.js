@@ -22,7 +22,7 @@ app.controller('SocialFeedController',
                 access_token: '',
                 page: [],
                 data: [],
-                articles: [],
+                posts: [],
                 show_login: true,
                 errors: []
             };
@@ -92,15 +92,15 @@ app.controller('SocialFeedController',
             }
             $scope.loadFeeds = function (url) {
                 $scope.socialSettings.errors = '';
-                $scope.socialSettings.articles = [];
+                $scope.socialSettings.posts = [];
                 url = url || '/' + $scope.socialSettings.page_id + '/posts?access_token=' + $scope.socialSettings.access_token + '&fields=type,name,story,full_picture,created_time,permalink_url,message,description,caption,attachments{media,type,target,subattachments},shares.summary(true).limit(0),likes.summary(true).limit(0),comments.summary(true).limit(0)&limit=10';
                 $rootScope.isBusy = true;
                 FB.api(url, function (response) {
                     if (response.data) {
                         $scope.socialSettings.data = response.data;
                         angular.forEach(response.data, function (e, i) {
-                            var article = $scope.parsePost(e);
-                            $scope.socialSettings.articles.push(article);
+                            var post = $scope.parsePost(e);
+                            $scope.socialSettings.posts.push(post);
                         });
                         if (response.paging) {
                             $scope.socialSettings.nextUrl = response.paging.next;
@@ -138,9 +138,9 @@ app.controller('SocialFeedController',
             $scope.parsePost = function (post) {
                 var article = angular.copy($scope.defaultArticle);
                 var prop =  angular.copy($scope.defaultProperty);
-                prop.title="Facebook Id";
-                prop.name="facebook_id";
-                prop.value= post.id;
+                article.title="Facebook Id";
+                article.name="facebook_id";
+                article.value= post.id;
                 article.properties.push(prop);
 
                 article.title = post.name || post.id;
@@ -148,6 +148,7 @@ app.controller('SocialFeedController',
                 article.content = post.description;
                 article.source = 'Facebook';
                 article.image = post.full_picture;
+                article.detailsUrl  = post.permalink_url
                 var attachments = post.attachments.data[0];
 
                 if (attachments.media) {
@@ -229,7 +230,19 @@ app.controller('SocialFeedController',
                         return null;
                     }
                 }
-
-
+            }
+            $scope.syncPosts = async function () {
+                $rootScope.isBusy = true;
+                var resp = await articleService.saveList($scope.socialSettings.posts);
+                if (resp && resp.isSucceed) {
+                    $rootScope.showMessage('success', 'success');
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                }
+                else {
+                    if (resp) { $rootScope.showErrors(resp.errors); }
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                }
             }
         }]);

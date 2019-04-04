@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Hub;
+using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1
@@ -54,7 +56,15 @@ namespace Mix.Cms.Api.Controllers.v1
 
 
         #endregion
-
+        protected void RemoveCache()
+        {
+            foreach (var item in MixConstants.cachedKeys)
+            {
+                _memoryCache.Remove(item);
+            }
+            MixConstants.cachedKeys = new List<string>();
+            AlertAsync("Empty Cache", 200);
+        }
 
         protected void AlertAsync(string action, int status, string message = null)
         {
