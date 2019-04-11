@@ -26,6 +26,7 @@ using System.Text;
 using System.Xml;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -45,9 +46,10 @@ namespace Mix.Cms.Api.Controllers.v1
            RoleManager<IdentityRole> roleManager,
             Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext,
             IApplicationLifetime appLifetime,
-            IHostingEnvironment env
+            IHostingEnvironment env,
+            IMemoryCache memoryCache
             )
-            : base(hubContext)
+            : base(memoryCache, hubContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;

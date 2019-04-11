@@ -209,6 +209,7 @@ app.controller('SocialFeedController',
                                 var filename = src.substring(index + 1, eIndex);
                                 var media = {
                                     fileName: filename,
+                                    fileFolder: 'Facebook',
                                     extension: ext,
                                     targetUrl: src,
                                     fullPath: src,

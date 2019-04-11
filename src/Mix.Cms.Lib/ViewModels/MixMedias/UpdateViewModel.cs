@@ -80,13 +80,15 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         {
             get
             {
-                if(!string.IsNullOrEmpty(FileName) && string.IsNullOrEmpty(TargetUrl)){
+                if (!string.IsNullOrEmpty(FileName) && string.IsNullOrEmpty(TargetUrl))
+                {
                     return FileFolder.IndexOf("http") > 0 ? $"{FileFolder}/{FileName}{Extension}"
-                        :$"{Domain}/{FileFolder}/{FileName}{Extension}";
+                        : $"{Domain}/{FileFolder}/{FileName}{Extension}";
                 }
-                else{
+                else
+                {
                     return TargetUrl;
-                }                
+                }
             }
         }
 
@@ -113,9 +115,9 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
 
         public override MixMedia ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (Id == 0)
+            if (CreatedDateTime == default(DateTime))
             {
-                Id = UpdateViewModel.Repository.Max(c => c.Id).Data + 1;
+                Id = Id > 0 ? Id : UpdateViewModel.Repository.Max(c => c.Id).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
                 IsClone = true;
                 Cultures = Cultures ?? LoadCultures(Specificulture, _context, _transaction);
@@ -174,7 +176,8 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             // Remove local file
-            if (FileFolder.IndexOf("http") < 0){
+            if (FileFolder.IndexOf("http") < 0)
+            {
                 FileRepository.Instance.DeleteWebFile(FileName, Extension, FileFolder);
             }
             await Repository.RemoveListModelAsync(false, m => m.Id == Id && m.Specificulture != Specificulture, _context, _transaction);

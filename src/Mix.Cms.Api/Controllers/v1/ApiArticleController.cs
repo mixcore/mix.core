@@ -139,15 +139,15 @@ namespace Mix.Cms.Api.Controllers.v1
 
         [HttpPost, HttpOptions]
         [Route("save-list")]
-        public async Task<RepositoryResponse<List<UpdateViewModel>>> SaveList([FromBody]List<UpdateViewModel> models)
+        public async Task<RepositoryResponse<List<SyncViewModel>>> SaveList([FromBody]List<SyncViewModel> models)
         {
             if (models != null)
             {
-                return await base.SaveListAsync(models, false);
+                return await base.SaveListAsync(models, true);
             }
             else
             {
-                return new RepositoryResponse<List<UpdateViewModel>>();
+                return new RepositoryResponse<List<SyncViewModel>>();
             }
         }
         // POST api/article
