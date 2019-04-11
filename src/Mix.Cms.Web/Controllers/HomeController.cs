@@ -692,6 +692,7 @@ namespace Mix.Cms.Web.Controllers
 
         void GeneratePageDetailsUrls(Lib.ViewModels.MixPages.ReadMvcViewModel page)
         {
+            page.DetailsUrl = GenerateDetailsUrl("Alias", new { seoName = page.SeoName });
             if (page.Articles != null)
             {
                 foreach (var articleNav in page.Articles.Items)

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Mix.Cms.Hub;
 using Mix.Cms.Lib.Models.Account;
@@ -34,7 +35,8 @@ namespace Mix.Cms.Api.Controllers.v1
             RoleManager<IdentityRole> roleManager,
             IEmailSender emailSender,
             ILogger<ApiRoleController> logger,
-            IHubContext<PortalHub> hubContext) : base(hubContext)
+            IMemoryCache memoryCache,
+            IHubContext<PortalHub> hubContext) : base(memoryCache, hubContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;

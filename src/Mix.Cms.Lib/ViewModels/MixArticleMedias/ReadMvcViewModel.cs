@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixMedias;
+using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 
@@ -51,9 +53,32 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleMedias
                 Media = getMedia.Data;
             }
         }
-
+        public override RepositoryResponse<bool> SaveSubModels(MixArticleMedia parent, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            var saveMedia = Media.SaveModel(false, _context, _transaction);
+            if (!saveMedia.IsSucceed)
+            {
+                result.IsSucceed = false;
+                result.Exception = saveMedia.Exception;
+                result.Errors = saveMedia.Errors;
+            }
+            return result;
+        }
         #region Async
 
+        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixArticleMedia parent, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            var saveMedia = await Media.SaveModelAsync(false, _context, _transaction);
+            if (!saveMedia.IsSucceed)
+            {
+                result.IsSucceed = false;
+                result.Exception = saveMedia.Exception;
+                result.Errors = saveMedia.Errors;
+            }
+            return result;
+        }
         #endregion Async
 
         #endregion overrides

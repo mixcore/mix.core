@@ -36,9 +36,10 @@ namespace Mix.Cms.Api.Controllers.v1
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseApiController"/> class.
         /// </summary>
-        public BaseApiController(IHubContext<PortalHub> hubContext)
+        public BaseApiController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext)
         {
             _hubContext = hubContext;
+            _memoryCache = memoryCache;
         }
 
         #region Overrides
@@ -58,12 +59,15 @@ namespace Mix.Cms.Api.Controllers.v1
         #endregion
         protected void RemoveCache()
         {
-            foreach (var item in MixConstants.cachedKeys)
+            if (_memoryCache != null)
             {
-                _memoryCache.Remove(item);
+                foreach (var item in MixConstants.cachedKeys)
+                {
+                    _memoryCache.Remove(item);
+                }
+                MixConstants.cachedKeys = new List<string>();
+                AlertAsync("Empty Cache", 200);
             }
-            MixConstants.cachedKeys = new List<string>();
-            AlertAsync("Empty Cache", 200);
         }
 
         protected void AlertAsync(string action, int status, string message = null)

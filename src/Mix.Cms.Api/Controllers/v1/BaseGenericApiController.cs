@@ -11,6 +11,7 @@ using Mix.Cms.Lib;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
+using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
@@ -233,21 +234,10 @@ namespace Mix.Cms.Api.Controllers.v1
         protected async Task<RepositoryResponse<List<TView>>> SaveListAsync<TView>(List<TView> lstVm, bool isSaveSubModel)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-            var result = new RepositoryResponse<List<TView>>() { IsSucceed = true };
-            if (lstVm != null)
+            var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.SaveListModelAsync(lstVm, isSaveSubModel);
+            if (result.IsSucceed)
             {
-                foreach (var vm in lstVm)
-                {
-                    var tmp = await vm.SaveModelAsync(isSaveSubModel).ConfigureAwait(false);
-                    result.IsSucceed = result.IsSucceed && tmp.IsSucceed;
-                    if (!tmp.IsSucceed)
-                    {
-                        result.Exception = tmp.Exception;
-                        result.Errors.AddRange(tmp.Errors);
-                    }
-                }
                 RemoveCache();
-                return result;
             }
             return result;
         }
