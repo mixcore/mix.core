@@ -262,6 +262,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 {
                     Name = CommonHelper.ParseJsonPropertyName(field["name"].ToString()),
                     Title = field["title"]?.ToString(),
+                    DefaultValue = field["defaultValue"]?.ToString(),
                     Options = field["options"] != null ? field["options"].Value<JArray>() : new JArray(),
                     Priority = field["priority"] != null ? field["priority"].Value<int>() : 0,
                     DataType = (MixDataType)(int)field["dataType"],
@@ -283,7 +284,8 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 JArray arr = JArray.Parse(ExtraProperties);
                 foreach (JToken item in arr)
                 {
-                    Properties.Add(item.ToObject<ExtraProperty>());
+                    var property = item.ToObject<ExtraProperty>();
+                    Properties.Add(property);
                 }
             }
             //Get Templates

@@ -30,6 +30,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/module-data/id
+        [AllowAnonymous]
         [HttpGet, HttpOptions]
         [Route("details/{viewType}/{moduleId}/{id}")]
         [Route("details/{viewType}/{moduleId}")]

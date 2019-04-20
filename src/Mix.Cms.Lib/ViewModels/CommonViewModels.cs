@@ -197,6 +197,9 @@ namespace Mix.Cms.Lib.ViewModels
 
         [JsonProperty("title")]
         public string Title { get; set; }
+        
+        [JsonProperty("defaultValue")]
+        public string DefaultValue { get; set; }
 
         [JsonProperty("options")]
         public JArray Options { get; set; } = new JArray();

@@ -1,155 +1,6 @@
-﻿modules.component('moduleForm', {
-    templateUrl: '/app/app-shared/components/module-data/module-form.html',
-    controller: ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$timeout', '$location', 'AuthService', 'SharedModuleDataService',
-        function ($scope, $rootScope, ngAppSettings, $routeParams, $timeout, $location, authService, moduleDataService) {
-            var ctrl = this;
-            $rootScope.isBusy = false;
-
-            ctrl.initModuleForm = async function () {
-                var resp = null;
-                if (!$rootScope.isInit) {
-                    setTimeout(function () { ctrl.initModuleForm(); }, 500);
-                } else {
-                    if (!ctrl.moduleId) {
-                        resp = await moduleDataService.initModuleForm(ctrl.name);
-                    }
-                    else {
-                        resp = await moduleDataService.getModuleData(ctrl.moduleId, ctrl.d, 'portal');
-                    }
-                    if (resp && resp.isSucceed) {
-                        ctrl.data = resp.data;
-                        ctrl.data.articleId = ctrl.articleId;
-                        ctrl.data.productId = ctrl.productId;
-                        ctrl.data.categoryId = ctrl.categoryId;
-                        $rootScope.isBusy = false;
-                        $scope.$apply();
-                        //ctrl.initEditor();
-                    }
-                    else {
-                        if (resp) { $rootScope.showErrors(resp.errors); }
-                        $scope.$apply();
-                    }
-                }
-            };
-
-            ctrl.loadModuleData = async function () {
-                $rootScope.isBusy = true;
-                var id = $routeParams.id;
-                var response = await moduleDataService.getModuleData(ctrl.moduleId, ctrl.d, 'portal');
-                if (response.isSucceed) {
-                    ctrl.data = response.data;
-                    //$rootScope.initEditor();
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
-                }
-                else {
-                    $rootScope.showErrors(response.errors);
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
-                }
-            };
-            ctrl.submitFormData = async function(){
-                if($('.g-recaptcha').length>0)
-                {
-                    
-                }
-                else{
-                    ctrl.saveModuleData();
-                }
-            }
-            ctrl.saveModuleData = async function () {
-                var form = $('#module-' + ctrl.data.moduleId);
-                
-                $.each(ctrl.data.dataProperties, function (i, e) {
-                    switch (e.dataType) {
-                        case 5:
-                            e.value = $(form).find('.' + e.name).val();
-                            break;
-                        default:
-                            e.value = e.value ? e.value.toString() : null;
-                            break;
-                    }
-                });
-                var resp = await moduleDataService.saveModuleData(ctrl.data);
-                if (resp && resp.isSucceed) {
-                    ctrl.data = resp.data;
-                    ctrl.initModuleForm();
-                    var msg = $rootScope.translate('success');
-                    $rootScope.showMessage(msg, 'success');
-                    if (ctrl.saveCallback) {
-                        ctrl.saveCallback({ data: ctrl.data });
-                    }
-                    else {
-                        $rootScope.isBusy = false;
-                        $scope.$apply();
-                    }
-                    //$location.path('/portal/moduleData/details/' + resp.data.id);
-                }
-                else {
-                    if (resp) { $rootScope.showErrors(resp.errors); }
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
-                }
-            };
-
-
-        }],
-    bindings: {
-        moduleId: '=',
-        categoryId: '=',
-        productId: '=',
-        articleId: '=',
-        d: '=',
-        title: '=',
-        name: '=',
-        submitText: '=',
-        isShowTitle: '=',
-        backUrl: '=',
-        saveCallback: '&',
-    }
-});
-
-modules.component('modulePreview', {
-    templateUrl: '/app/app-shared/components/module-data/module-preview.html',
-    controller: ['$scope', '$rootScope', 'SharedModuleDataService',
-        function ($scope, $rootScope, moduleDataService) {
-            var ctrl = this;
-            $rootScope.isBusy = false;
-            ctrl.previousContentId = undefined;
-
-            this.$onInit = () => { ctrl.previousContentId = angular.copy(ctrl.contentId) };
-
-            this.$doCheck = () => {
-                if (ctrl.contentId !== ctrl.previousContentId) {
-                    ctrl.loadModuleData();
-                    ctrl.previousContentId = ctrl.contentId;
-                }
-            };
-            
-            ctrl.loadModuleData = async function () {
-                $rootScope.isBusy = true;                
-                var response = await moduleDataService.getModuleData(ctrl.moduleId, ctrl.contentId, 'portal');
-                if (response.isSucceed) {
-                    ctrl.data = response.data;
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
-                }
-                else {
-                    $rootScope.showErrors(response.errors);
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
-                }
-            };
-        }],
-    bindings: {
-        moduleId: '=',
-        contentId: '='
-    }
-});
-
-
+﻿
 modules.component('moduleFormEditor', {
-    templateUrl: '/app/app-shared/components/module-data/module-form-editor.html',
+    templateUrl: '/app/app-shared/components/module-form-editor/view.html',
     controller: ['$rootScope', '$scope', 'ngAppSettings', function ($rootScope, $scope, ngAppSettings) {
         var ctrl = this;
 
@@ -1426,6 +1277,7 @@ modules.component('moduleFormEditor', {
             'mdTextArea': 8
         };
         ctrl.initEditor = function () {
+            ctrl.data.value = ctrl.data.default || null;
             setTimeout(function () {
                 // Init Code editor
                 $.each($('.code-editor'), function (i, e) {
@@ -1466,17 +1318,5 @@ modules.component('moduleFormEditor', {
         inputClass: '=',
         isShowTitle: '=',
         title: '='
-    }
-});
-
-modules.component('moduleDataPreview', {
-    templateUrl: '/app/app-shared/components/module-data/module-data-preview.html',
-    controller: ['$rootScope', function ($rootScope) {
-        var ctrl = this;
-    }
-    ],
-    bindings: {
-        data: '=',
-        width: '=',
     }
 });

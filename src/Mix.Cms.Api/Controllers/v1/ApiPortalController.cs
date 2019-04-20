@@ -27,6 +27,7 @@ using System.Xml;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib.Helpers;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -336,6 +337,33 @@ namespace Mix.Cms.Api.Controllers.v1
         #endregion Get
 
         #region Post
+
+        [AllowAnonymous]
+        [HttpPost, HttpOptions]
+        [Route("encrypt-rsa")]
+        public RepositoryResponse<string> EncryptRsa([FromBody]JObject model)
+        {
+            string data = model.GetValue("data").Value<string>();
+            return new RepositoryResponse<string>()
+            {
+
+                Data = RSAEncryptionHelper.GetEncryptedText(data)
+            };
+        }
+
+        [AllowAnonymous]
+        [HttpPost, HttpOptions]
+        [Route("decrypt-rsa")]
+        public RepositoryResponse<string> DecryptRsa([FromBody]JObject model)
+        {
+            string data = model.GetValue("data").Value<string>();
+            return new RepositoryResponse<string>()
+            {
+
+                Data = RSAEncryptionHelper.GetDecryptedText(data)
+            };
+        }
+
         [AllowAnonymous]
         [HttpPost, HttpOptions]
         [Route("encrypt")]
@@ -345,7 +373,7 @@ namespace Mix.Cms.Api.Controllers.v1
             var encrypted = new JObject(new JProperty("encrypted", data));
             return new RepositoryResponse<CryptoViewModel<string>>() {
                 
-                Data = MixService.EncryptStringToBytes_Aes(encrypted)
+                Data = AesEncryptionHelper.EncryptStringToBytes_Aes(encrypted)
             };
         }
         [AllowAnonymous]
@@ -358,7 +386,7 @@ namespace Mix.Cms.Api.Controllers.v1
             string iv = model.GetValue("iv").Value<string>();
             return new RepositoryResponse<CryptoViewModel<JObject>>() {
                 
-                Data = MixService.DecryptStringFromBytes_Aes(data, key, iv)
+                Data = AesEncryptionHelper.DecryptStringFromBytes_Aes(data, key, iv)
             };
         }
         // POST api/category
@@ -378,6 +406,7 @@ namespace Mix.Cms.Api.Controllers.v1
             return new RepositoryResponse<JObject>() { IsSucceed = model != null, Data = model };
         }
 
+        [AllowAnonymous]
         [HttpPost, HttpOptions]
         [Route("sendmail")]
         public void SendMail([FromBody]JObject model)

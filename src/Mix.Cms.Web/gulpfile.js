@@ -8,7 +8,7 @@ var gulp = require("gulp"),
     //fontmin = require("gulp-fontmin"),
     htmlmin = require("gulp-htmlmin"),
 
-    uglify = require("gulp-uglify");
+    uglify = require("gulp-uglify-es").default;
 
 var uglifyjs = require('uglify-es'); // can be a git checkout
 // or another module (such as `uglify-es` for ES6 support)
@@ -130,6 +130,7 @@ paths.views = {
 gulp.task("min:portalApp", function (cb) {
     return gulp.src(paths.appPortal.src, { base: "." })
         .pipe(concat(paths.appPortal.dest))
+        //.pipe(uglify())
         // .pipe(minify(paths.jsOptions))
         .pipe(gulp.dest(dest));
 });
@@ -137,6 +138,7 @@ gulp.task("min:portalApp", function (cb) {
 gulp.task("min:initApp", function (cb) {
     return gulp.src(paths.initApp.src, { base: "." })
         .pipe(concat(paths.initApp.dest))
+        //.pipe(uglify())
         //.pipe(minify(paths.jsOptions))
         .pipe(gulp.dest(dest));
 });
@@ -144,6 +146,7 @@ gulp.task("min:initApp", function (cb) {
 gulp.task("min:clientApp", function (cb) {
     return gulp.src(paths.clientApp.src, { base: "." })
         .pipe(concat(paths.clientApp.dest))
+        //.pipe(uglify())
         //.pipe(minify(paths.jsOptions))
         .pipe(gulp.dest(dest));
 });
@@ -151,6 +154,7 @@ gulp.task("min:clientApp", function (cb) {
 gulp.task("min:sharedApp", function (cb) {
     return gulp.src(paths.sharedApp.src, { base: "." })
         .pipe(concat(paths.sharedApp.dest))
+        //.pipe(uglify())
         //.pipe(minify(paths.jsOptions))
         .pipe(gulp.dest(dest));
 });

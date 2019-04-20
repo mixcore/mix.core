@@ -24,7 +24,17 @@
                 <span ng-bind="prop.title"></span>
             </td>
             <td class="prop-value-container">
-                <module-form-editor title="prop.name" data="prop"></module-form-editor>
+                <module-form-editor ng-if="!prop.options.length" title="prop.name" data="prop"></module-form-editor>
+                <div ng-if="prop.options.length" class="form-group">
+                                    
+                    <label class="control-label" ng-if="$ctrl.isShowTitle" ng-bind="prop.title"></label>                                    
+                    <mix-select-icons ng-if="prop.dataType==19" options="prop.options" data="prop.value"></mix-select-icons>
+                    
+                    <select ng-if="prop.dataType!=19" class="btn custom-select form-control" ng-model="prop.value">
+                        <option ng-repeat="item in prop.options track by $index" ng-value="item">{{item}}</option>
+                    </select>
+                    <br/>                    
+                </div>
             </td>
         </tr>
     </tbody>

@@ -22,7 +22,7 @@
         </tr>
     </thead>
     <tbody class="sortable" dnd-list="$ctrl.columns">
-        <tr class="sortable-item module-column" ng-repeat="col in $ctrl.columns" dnd-draggable="col" dnd-effect-allowed="move" dnd-selected="selectedCol = col" dnd-moved="$ctrl.columns.splice($index, 1)" ng-class="{'selected': $ctrl.selectedCol === col}">
+        <tr class="sortable-item module-column" ng-repeat="col in $ctrl.columns track by $index" dnd-draggable="col" dnd-effect-allowed="move" dnd-selected="selectedCol = col" dnd-moved="$ctrl.columns.splice($index, 1)" ng-class="{'selected': $ctrl.selectedCol === col}">
             <td style="cursor:move;" class="drag-header">
                 <span class="fas fa-sort"></span>
             </td>
@@ -71,16 +71,16 @@
                         <input type="text" id="option_{{$index}}" ng-enter="addOption(col,$index)" placeholder="fill then enter to add options" class="form-control">
                     </div> -->
                     <div class="form-group row mb-0">
-                        <label for="staticEmail" class="col-sm-2 col-form-label" ng-bind="col.title"></label>
-                        <div class="col-sm-10">
+                        <label for="staticEmail" class="col-sm-3 col-form-label" ng-bind="col.title"></label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control form-control-sm" id="option_{{$index}}" ng-enter="$ctrl.addOption(col,$index)" placeholder="fill then enter to add options">
                         </div>
                     </div>
                     <div class="row pb-1" ng-repeat="opt in col.options track by $index">
-                        <div class="col-8">
+                        <div class="col-11">
                             <input type="text" class="form-control form-control-sm" ng-model="col.options[$index]">
                         </div>
-                        <div class="col-4">
+                        <div class="col-1">
                             <a class="btn" ng-click="col.options.splice($index,1)">
                                 <span class="fas fa-times text-danger"></span>
                             </a>

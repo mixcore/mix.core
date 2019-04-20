@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Hub;
 using Mix.Cms.Lib;
+using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
@@ -271,7 +272,7 @@ namespace Mix.Cms.Api.Controllers.v1
             string decrypt = string.Empty;
             if (!string.IsNullOrEmpty(request.PlainText))
             {
-                encrypted = MixService.EncryptStringToBytes_Aes(new JObject()).ToString();
+                encrypted = AesEncryptionHelper.EncryptStringToBytes_Aes(new JObject()).ToString();
             }
             if (!string.IsNullOrEmpty(request.Encrypted))
             {
