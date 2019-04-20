@@ -36,7 +36,7 @@ namespace Mix.Cms.Lib.Services
         private JObject IpSecuritySettings { get; set; }
         private JObject Smtp { get; set; }
         readonly FileSystemWatcher watcher = new FileSystemWatcher();
-
+        
         public MixService()
         {
             watcher.Path = System.IO.Directory.GetCurrentDirectory();
@@ -265,6 +265,16 @@ namespace Mix.Cms.Lib.Services
             mailMessage.Subject = subject;
             client.Send(mailMessage);
 
+        }
+
+        public static string GetTemplateFolder(string culture)
+        {
+            return $"content/templates/{Instance.LocalSettings[culture][MixConstants.ConfigurationKeyword.ThemeFolder]}";
+        }
+
+        public static string GetTemplateUploadFolder(string culture)
+        {
+            return $"content/templates/{Instance.LocalSettings[culture][MixConstants.ConfigurationKeyword.ThemeFolder]}/uploads";
         }
     }
 }

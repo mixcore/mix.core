@@ -136,7 +136,8 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
             {
                 MediaFile.Filename = SeoHelper.GetSEOString(MediaFile.Filename) + Guid.NewGuid().ToString("N");
                 MediaFile.FileFolder = CommonHelper.GetFullPath(new[] {
-                    MixService.GetConfig<string>("UploadFolder"),
+                    //MixService.GetConfig<string>("UploadFolder"),
+                    MixService.GetTemplateUploadFolder(Specificulture),
                     DateTime.UtcNow.ToString("MM-yyyy")
                 }); ;
                 var isSaved = FileRepository.Instance.SaveWebFile(MediaFile);
