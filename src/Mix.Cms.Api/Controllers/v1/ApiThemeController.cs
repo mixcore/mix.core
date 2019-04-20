@@ -22,6 +22,8 @@ using Mix.Cms.Lib;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Attributes;
 using Microsoft.AspNetCore.Http;
+using Mix.Domain.Data.Repository;
+using Mix.Cms.Lib.ViewModels;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -60,18 +62,39 @@ namespace Mix.Cms.Api.Controllers.v1
             var getTemplate = await ReadViewModel.Repository.GetSingleModelAsync(
                  theme => theme.Id == id).ConfigureAwait(false);
             string exportPath = $"Exports/Themes/{getTemplate.Data.Name}";
-            
+
+            // Export site structures
+            var siteStructures = new SiteStructureViewModel(_lang);
+            string filename = $"{getTemplate.Data.Name}_structures_{DateTime.UtcNow.ToString("ddMMyyyy")}";
+            var file = new FileViewModel()
+            {
+                Filename = filename,
+                Extension = ".json",
+                FileFolder = $"{exportPath}/Data",
+                Content = JObject.FromObject(siteStructures).ToString()
+            };
+
             // Delete Existing folder
             FileRepository.Instance.DeleteFolder(exportPath);
             // Copy current templates file
             FileRepository.Instance.CopyDirectory($"{getTemplate.Data.TemplateFolder}", $"{exportPath}/Templates");
             // Copy current assets files
-            FileRepository.Instance.CopyDirectory($"wwwroot/{getTemplate.Data.AssetFolder}", $"{exportPath}/Assets");
+            FileRepository.Instance.CopyDirectory($"wwwroot/{getTemplate.Data.AssetFolder}", $"{exportPath}/Assets");            
+            // Copy current uploads files
+            FileRepository.Instance.CopyDirectory($"wwwroot/{getTemplate.Data.UploadFolder}", $"{exportPath}/Uploads");
+            // Save Site Structures
+            FileRepository.Instance.SaveFile(file);
+
             // Zip to [theme_name].zip
             string filePath = FileRepository.Instance.ZipFolder($"{exportPath}", getTemplate.Data.Name);
+
+            
+
             // Delete temp folder
             FileRepository.Instance.DeleteWebFolder($"{exportPath}/Assets");
+            FileRepository.Instance.DeleteWebFolder($"{exportPath}/Uploads");
             FileRepository.Instance.DeleteWebFolder($"{exportPath}/Templates");
+            FileRepository.Instance.DeleteWebFolder($"{exportPath}/Data");
 
             return new RepositoryResponse<string>()
             {

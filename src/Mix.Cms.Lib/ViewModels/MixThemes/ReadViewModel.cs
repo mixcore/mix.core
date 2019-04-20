@@ -89,11 +89,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.FileFolder,
-                    MixConstants.Folder.TemplatesAssetFolder,
-                    Name
-                });
+                return $"{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{Name}";
             }
         }
 
@@ -102,7 +98,16 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[] { MixConstants.Folder.TemplatesFolder, Name });
+                return $"{MixConstants.Folder.TemplatesFolder}/{Name}";
+            }
+        }
+
+        [JsonProperty("uploadFolder")]
+        public string UploadFolder
+        {
+            get
+            {
+                return $"content/templates/{Name}/uploads";                
             }
         }
 
