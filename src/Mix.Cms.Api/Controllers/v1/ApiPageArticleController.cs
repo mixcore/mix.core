@@ -167,6 +167,20 @@ namespace Mix.Cms.Api.Controllers.v1
                 return new RepositoryResponse<List<ReadViewModel>>();
             }
         }
+        // POST api/update-infos
+        [HttpPost, HttpOptions]
+        [Route("save-list")]
+        public async Task<RepositoryResponse<List<ReadViewModel>>> SaveList([FromBody]List<ReadViewModel> models)
+        {
+            if (models != null)
+            {
+                return await base.SaveListAsync(models, false);
+            }
+            else
+            {
+                return new RepositoryResponse<List<ReadViewModel>>();
+            }
+        }
         #endregion Post
     }
 }

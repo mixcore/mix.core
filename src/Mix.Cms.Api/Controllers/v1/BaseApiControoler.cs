@@ -38,7 +38,7 @@ namespace Mix.Cms.Api.Controllers.v1
         /// </summary>
         public BaseApiController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext)
         {
-            _hubContext = hubContext;
+            _hubContext = hubContext; 
             _memoryCache = memoryCache;
         }
 

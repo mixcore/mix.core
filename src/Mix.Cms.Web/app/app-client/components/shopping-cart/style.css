@@ -1,0 +1,13 @@
+.frm-cart-nav{
+    position: absolute;
+    top: 50px;
+    right: 0;
+    z-index: 3;
+    width: 90vw;
+    background: #ffffff;
+    padding: 10px;
+    color:black;
+}
+.frm-cart-nav a:hover{
+    cursor: pointer;
+}

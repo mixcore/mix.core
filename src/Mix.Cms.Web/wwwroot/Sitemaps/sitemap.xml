@@ -1,185 +1,39 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.1220982Z</lastmod>
+    <lastmod>2019-04-15T07:30:43.0534156Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/home</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="fr-be" href="https://localhost:5001/fr-be/home" />
   </url>
   <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.1337599Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001/fr-be/home</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-us" href="https://localhost:5001/en-us/home" />
-  </url>
-  <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.1339402Z</lastmod>
+    <lastmod>2019-04-15T07:30:43.0585793Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/tag</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="fr-be" href="https://localhost:5001/fr-be/tag" />
   </url>
   <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.1340221Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001/fr-be/tag</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-us" href="https://localhost:5001/en-us/tag" />
-  </url>
-  <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.1340941Z</lastmod>
+    <lastmod>2019-04-15T07:30:43.0586222Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/search</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="fr-be" href="https://localhost:5001/fr-be/search" />
   </url>
   <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.1341932Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001/fr-be/search</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-us" href="https://localhost:5001/en-us/search" />
-  </url>
-  <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.1342947Z</lastmod>
+    <lastmod>2019-04-15T07:30:43.0586357Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/maintenance</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="fr-be" href="https://localhost:5001/fr-be/maintenance" />
   </url>
   <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.1344069Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001/fr-be/maintenance</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-us" href="https://localhost:5001/en-us/maintenance" />
-  </url>
-  <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.1344871Z</lastmod>
+    <lastmod>2019-04-15T07:30:43.0586464Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/404</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="fr-be" href="https://localhost:5001/fr-be/404" />
   </url>
   <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.134545Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001/fr-be/404</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-us" href="https://localhost:5001/en-us/404" />
-  </url>
-  <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.1345985Z</lastmod>
+    <lastmod>2019-04-15T07:30:43.0586561Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/403</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="fr-be" href="https://localhost:5001/fr-be/403" />
-  </url>
-  <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.1346544Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001/fr-be/403</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-us" href="https://localhost:5001/en-us/403" />
-  </url>
-  <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.1347116Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001/en-us/blogs</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="fr-be" href="https://localhost:5001/fr-be/blogs" />
-  </url>
-  <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.1347753Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001/fr-be/blogs</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-us" href="https://localhost:5001/en-us/blogs" />
-  </url>
-  <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.1349496Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001/en-us/ecommerce</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="fr-be" href="https://localhost:5001/fr-be/ecommerce" />
-  </url>
-  <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.1350534Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001/fr-be/ecommerce</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-us" href="https://localhost:5001/en-us/ecommerce" />
-  </url>
-  <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.9288418Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="fr-be" href="https://localhost:5001/fr-be/aaaa" />
-  </url>
-  <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.9289162Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-us" href="https://localhost:5001/en-us/aaaa" />
-  </url>
-  <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.9289489Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="fr-be" href="https://localhost:5001/fr-be/test" />
-  </url>
-  <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.9289787Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-us" href="https://localhost:5001/en-us/test" />
-  </url>
-  <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.9290076Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="fr-be" href="https://localhost:5001/fr-be/saint-laurent" />
-  </url>
-  <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.9290348Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-us" href="https://localhost:5001/en-us/saint-laurent" />
-  </url>
-  <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.9290626Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="fr-be" href="https://localhost:5001/fr-be/tomford" />
-  </url>
-  <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.9290899Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-us" href="https://localhost:5001/en-us/tomford" />
-  </url>
-  <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.9291164Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="fr-be" href="https://localhost:5001/fr-be/wooyoungmi" />
-  </url>
-  <url xmlns="">
-    <lastmod>2019-03-12T05:37:58.9291438Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-us" href="https://localhost:5001/en-us/wooyoungmi" />
   </url>
 </urlset>

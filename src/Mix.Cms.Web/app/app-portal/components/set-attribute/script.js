@@ -8,7 +8,7 @@ modules.component('setAttribute', {
             ctrl.defaultAttr = {
                 title: '',
                 name: '',
-                default: null,
+                defaultValue: null,
                 options: [],
                 priority: 0,
                 dataType: 7,

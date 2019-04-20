@@ -44,6 +44,7 @@ namespace Mix.Cms.Web.Controllers
             string alias, int pageIndex, int pageSize = 10)
         {
             string seoName = Request.Query["alias"];
+            seoName = seoName ?? alias;
             if (_forbidden)
             {
                 return Redirect($"/error/403");

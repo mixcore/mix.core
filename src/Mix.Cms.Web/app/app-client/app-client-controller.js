@@ -1,17 +1,31 @@
 (function (angular) {
     'use strict';
-    app.controller('AppClientController', ['$rootScope', '$scope', 'GlobalSettingsService', 'CommonService', 'AuthService'
-        , 'TranslatorService', 'SharedModuleDataService',
-        function ($rootScope, $scope, globalSettingsService, commonService, authService, translatorService, moduleDataService) {
+    app.controller('AppClientController', 
+        ['$rootScope', '$scope', 'GlobalSettingsService', 'CommonService', 'AuthService'
+        , 'localStorageService', 'TranslatorService', 'SharedModuleDataService',
+        function ($rootScope, $scope, globalSettingsService, commonService, authService,
+            localStorageService, translatorService, moduleDataService) {
             $scope.lang = '';
-            $scope.isInit = false;           
+            $scope.isInit = false;       
+            $scope.cartData = {
+                items: [],
+                totalItems:0,
+                total:0,
+            };
             $rootScope.globalSettingsService = globalSettingsService;
             $scope.changeLang = $rootScope.changeLang;
-            $scope.init = async function (lang) {
+            $scope.init = function (lang) {
                 if (!$rootScope.isBusy) {
                     $rootScope.isBusy = true;
                     // globalSettingsService.fillGlobalSettings().then(function (response) {
-                        
+                        $scope.cartData = localStorageService.get('shoppingCart');
+                        if(!$scope.cartData){
+                            $scope.cartData = {
+                                items: [],
+                                totalItems:0,
+                                total:0,
+                            };
+                        }
                         commonService.fillAllSettings(lang).then(function (response) {                            
                             if ($rootScope.globalSettings) {
                                     authService.fillAuthData().then(function (response) {
@@ -96,6 +110,10 @@
                 var win = window.open(shareUrl, 'ShareOnTwitter', getWindowOptions());
                 win.opener = null; // 2
             }
+            $scope.saveShoppingCart = function(){
+                localStorageService.set('shoppingCart', $scope.cartData);
+            }
+
             var getWindowOptions = function() {
                 var width = 500;
                 var height = 350;

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.IdentityModel.Tokens;
 using Mix.Cms.Lib;
@@ -36,9 +37,9 @@ namespace Mix.Cms.Web
 
                     app.UseRewriter(options);
                 }
-                //    app.Run(context => context.Response.WriteAsync(
-                //$"Rewritten or Redirected Url: " +
-                //$"{context.Request.Path + context.Request.QueryString}"));
+            //    app.Run(context => context.Response.WriteAsync(
+            //$"Rewritten or Redirected Url: " +
+            //$"{context.Request.Path + context.Request.QueryString}"));
             }
             app.UseMvc(routes =>
             {

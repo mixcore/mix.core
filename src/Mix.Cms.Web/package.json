@@ -7,11 +7,13 @@
     "gulp-cssmin": "",
     "gulp-htmlmin": "",
     "gulp-uglify": "",
+    "gulp-uglify-es": "",
     "pump": "",
     "rimraf": "",
     "uglify-es": ""
   },
   "dependencies": {
-    "bundle": "^2.1.0"
+    "bundle": "^2.1.0",
+    "gulp-uglify-es": "^1.0.4"
   }
 }
