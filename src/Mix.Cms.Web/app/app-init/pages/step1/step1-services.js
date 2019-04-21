@@ -6,6 +6,13 @@ app.factory('Step1Services', ['$http', '$rootScope', 'AppSettings'
 
         var step1ServiceFactory = {};
         var apiUrl = '/portal/';
+        var _saveDefaultSettings = async function () {
+            var req = {
+                method: 'GET',
+                url: '/portal/app-settings/save-default'
+            };
+            return await _getApiResult(req);
+        };
         var _initCms = async function (data) {
             var req = {
                 method: 'POST',
@@ -29,6 +36,7 @@ app.factory('Step1Services', ['$http', '$rootScope', 'AppSettings'
                 });
         };
         step1ServiceFactory.initCms = _initCms;
+        step1ServiceFactory.saveDefaultSettings = _saveDefaultSettings;
         return step1ServiceFactory;
 
     }]);

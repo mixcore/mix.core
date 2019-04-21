@@ -128,7 +128,7 @@ namespace Mix.Cms.Api.Controllers.v1
                             dtPublish = model.PublishedDateTime.Value;
                         }
                         MixService.SetConfig(MixConstants.ConfigurationKeyword.NextSyncContent, dtPublish);
-                        MixService.Save();
+                        MixService.SaveSettings();
                         MixService.Reload();
                     }
                 }
@@ -298,7 +298,7 @@ namespace Mix.Cms.Api.Controllers.v1
                             a => a.PublishedDateTime);
                 nextSync = next.Data;
                 MixService.SetConfig(MixConstants.ConfigurationKeyword.NextSyncContent, nextSync);
-                MixService.Save();
+                MixService.SaveSettings();
                 MixService.Reload();
                 return nextSync;
             }

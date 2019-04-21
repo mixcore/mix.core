@@ -284,7 +284,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Cultures = LoadCultures(Specificulture, _context, _transaction);
+            Cultures = MixModules.Helper.LoadCultures(Id, Specificulture, _context, _transaction);
             Cultures.ForEach(c => c.IsSupported = _context.MixModule.Any(m => m.Id == Id && m.Specificulture == c.Specificulture));
             Columns = new List<ModuleFieldViewModel>();
             JArray arrField = !string.IsNullOrEmpty(Fields) ? JArray.Parse(Fields) : new JArray();
@@ -372,87 +372,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #endregion Overrides
 
         #region Expand
-        public static async Task<RepositoryResponse<bool>> Import(List<MixModule> arrModule, string destCulture,
-           MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            bool isRoot = _context == null;
-            var context = _context ?? new MixCmsContext();
-            var transaction = _transaction ?? context.Database.BeginTransaction();
-
-            try
-            {
-                int id = ModelRepository.Max(m => m.Id, context, transaction).Data + 1;
-                foreach (var item in arrModule)
-                {
-                    item.Id = id;
-                    item.CreatedDateTime = DateTime.UtcNow;
-                    item.Specificulture = destCulture;
-                    context.MixModule.Add(item);
-                    id++;
-                }
-                await context.SaveChangesAsync();
-                result.Data = true;
-                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
-            }
-            catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
-            {
-
-                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<ReadMvcViewModel>(ex, isRoot, transaction);
-                result.IsSucceed = false;
-                result.Errors = error.Errors;
-                result.Exception = error.Exception;
-            }
-            finally
-            {
-                //if current Context is Root
-                if (isRoot)
-                {
-                    context?.Dispose();
-                }
-
-            }
-            return result;
-        }
-
-        List<SupportedCulture> LoadCultures(string initCulture = null, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var getCultures = SystemCultureViewModel.Repository.GetModelList(_context, _transaction);
-            var result = new List<SupportedCulture>();
-            if (getCultures.IsSucceed)
-            {
-                foreach (var culture in getCultures.Data)
-                {
-                    result.Add(
-                        new SupportedCulture()
-                        {
-                            Icon = culture.Icon,
-                            Specificulture = culture.Specificulture,
-                            Alias = culture.Alias,
-                            FullName = culture.FullName,
-                            Description = culture.FullName,
-                            Id = culture.Id,
-                            Lcid = culture.Lcid,
-                            IsSupported = culture.Specificulture == initCulture || _context.MixModule.Any(p => p.Id == Id && p.Specificulture == culture.Specificulture)
-                        });
-
-                }
-            }
-            return result;
-        }
-
-        public static RepositoryResponse<UpdateViewModel> GetBy(
-            Expression<Func<MixModule, bool>> predicate, string articleId = null, string productId = null, int categoryId = 0
-             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var result = Repository.GetSingleModel(predicate, _context, _transaction);
-            if (result.IsSucceed)
-            {
-                result.Data.ArticleId = articleId;
-                result.Data.CategoryId = categoryId;
-            }
-            return result;
-        }
+        
         public void LoadData(int? articleId = null, int? productId= null, int? categoryId = null
             , int? pageSize = null, int? pageIndex = 0
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)

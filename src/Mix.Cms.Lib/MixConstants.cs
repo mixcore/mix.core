@@ -16,6 +16,7 @@ namespace Mix.Cms.Lib
         public const string CONST_DEFAULT_FILE_APPSETTING = "default.appsettings";
         public const string CONST_FILE_CONFIGURATIONS = "configurations.json";
         public const string CONST_FILE_LANGUAGES = "languages.json";
+        public const string CONST_FILE_PAGES = "pages.json";
         public const string CONST_PATH_HOME_ACCESS_DENIED = "/home/access-denied";
         public const string CONST_PATH_HOME_ERROR = "/Home/Error";
         public const string CONST_SECTION_LOGGING = "Logging";

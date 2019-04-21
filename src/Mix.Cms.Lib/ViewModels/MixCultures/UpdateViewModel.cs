@@ -94,7 +94,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             if (result.IsSucceed)
             {
                 MixService.LoadFromDatabase();
-                MixService.Save();
+                MixService.SaveSettings();
             }
             return result;
         }
@@ -471,7 +471,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 if (result.IsSucceed)
                 {
                     MixService.LoadFromDatabase();
-                    MixService.Save();
+                    MixService.SaveSettings();
                 }
             }
             return result;
