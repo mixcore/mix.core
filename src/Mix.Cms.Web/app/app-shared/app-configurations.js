@@ -1345,8 +1345,8 @@ app.constant('ngAppSettings', {
         'fas fa-zhihu'
     ]
 });
-app.run(['$rootScope', 'ngAppSettings', 'GlobalSettingsService', 'CommonService', 'AuthService', 'TranslatorService',
-    function ($rootScope, ngAppSettings, globalSettingsService, commonService, authService, translatorService,
+app.run(['$http', '$rootScope', 'ngAppSettings', 'GlobalSettingsService', 'CommonService', 'AuthService', 'TranslatorService',
+    function ($http, $rootScope, ngAppSettings, globalSettingsService, commonService, authService, translatorService,
     ) {
         $rootScope.currentContext = $rootScope;
         $rootScope.isBusy = false;
@@ -1380,7 +1380,12 @@ app.run(['$rootScope', 'ngAppSettings', 'GlobalSettingsService', 'CommonService'
             lblCancel: 'Cancel',
             context: $rootScope
         };
-
+        $rootScope.loadFile = function(url){
+            $http.get(url)
+            .then(function (data) {
+                return data;
+            });
+        };
         $rootScope.range = function (max) {
             var input = [];
             for (var i = 1; i <= max; i += 1) input.push(i);
