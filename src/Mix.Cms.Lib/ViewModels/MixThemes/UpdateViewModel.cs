@@ -261,8 +261,15 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 {
                     config.Value = Name;
                 }
-
                 var saveConfigResult = await config.SaveModelAsync(false, _context, _transaction);
+
+                SystemConfigurationViewModel configFolder = (await SystemConfigurationViewModel.Repository.GetSingleModelAsync(
+                    c => c.Keyword == MixConstants.ConfigurationKeyword.ThemeFolder && c.Specificulture == Specificulture
+                    , _context, _transaction)).Data;
+                
+                configFolder.Value = Name;
+                
+                saveConfigResult = await configFolder.SaveModelAsync(false, _context, _transaction);
                 if (!saveConfigResult.IsSucceed)
                 {
                     Errors.AddRange(saveConfigResult.Errors);
@@ -561,15 +568,16 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             string fileName = $"wwwroot/{TemplateAsset.FileFolder}/{TemplateAsset.Filename}{TemplateAsset.Extension}";
-            if (File.Exists(fileName)) { 
-
+            if (File.Exists(fileName)) {
+                
+                string assetFolder = $"{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{TemplateAsset.Filename}";
                 FileRepository.Instance.UnZipFile($"{TemplateAsset.Filename}{TemplateAsset.Extension}", TemplateAsset.FileFolder);
                 //Move Unzip Asset folder
-                FileRepository.Instance.CopyWebDirectory($"{TemplateAsset.FileFolder}/Assets", AssetFolder);
+                FileRepository.Instance.CopyWebDirectory($"{TemplateAsset.FileFolder}/Assets", assetFolder);
                 //Move Unzip Templates folder
                 FileRepository.Instance.CopyDirectory($"{MixConstants.Folder.WebRootPath}/{TemplateAsset.FileFolder}/Templates", TemplateFolder);
                 //Move Unzip Uploads folder
-                FileRepository.Instance.CopyDirectory($"{MixConstants.Folder.WebRootPath}/{TemplateAsset.FileFolder}/Uploads", TemplateFolder);
+                FileRepository.Instance.CopyDirectory($"{MixConstants.Folder.WebRootPath}/{TemplateAsset.FileFolder}/Uploads", assetFolder);
                 // Get SiteStructure
                 var strSchema = FileRepository.Instance.GetWebFile("schema.json", $"{TemplateAsset.FileFolder}/Data");
                 var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteStructureViewModel>();
