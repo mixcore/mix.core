@@ -405,6 +405,14 @@ namespace Mix.Cms.Api.Controllers.v1
             }
             return new RepositoryResponse<JObject>() { IsSucceed = model != null, Data = model };
         }
+        
+        // POST api/category
+        [HttpGet, HttpOptions]
+        [Route("app-settings/save-default")]
+        public RepositoryResponse<bool> SaveDefaultAppSettings()
+        {
+            return new RepositoryResponse<bool>() { IsSucceed = true, Data = MixService.SaveSettings() };
+        }
 
         [AllowAnonymous]
         [HttpPost, HttpOptions]
@@ -448,7 +456,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         return result;
                     case "Module":
                         var arrModule = obj["data"].ToObject<List<MixModule>>();
-                        result = await Lib.ViewModels.MixModules.UpdateViewModel.Import(arrModule, _lang);
+                        result = await Lib.ViewModels.MixModules.Helper.Import(arrModule, _lang);
                         if (result.IsSucceed)
                         {
                             base.RemoveCache();
@@ -550,7 +558,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 MixService.LoadFromDatabase();
                 MixService.SetConfig<bool>("IsInit", true);
                 MixService.SetConfig<string>("DefaultCulture", model.Culture.Specificulture);
-                MixService.Save();
+                MixService.SaveSettings();
                 MixService.Reload();
             }
             else
@@ -559,7 +567,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 //  => reload from default settings
                 //  => save to appSettings
                 MixService.Reload();
-                MixService.Save();
+                MixService.SaveSettings();
                 if (initResult.Exception != null)
                 {
                     result.Errors.Add(initResult.Exception.Message);

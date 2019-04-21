@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixThemes
 {
@@ -563,39 +564,52 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             if (File.Exists(fileName)) { 
 
                 FileRepository.Instance.UnZipFile($"{TemplateAsset.Filename}{TemplateAsset.Extension}", TemplateAsset.FileFolder);
+                //Move Unzip Asset folder
                 FileRepository.Instance.CopyWebDirectory($"{TemplateAsset.FileFolder}/Assets", AssetFolder);
+                //Move Unzip Templates folder
                 FileRepository.Instance.CopyDirectory($"{MixConstants.Folder.WebRootPath}/{TemplateAsset.FileFolder}/Templates", TemplateFolder);
+                //Move Unzip Uploads folder
+                FileRepository.Instance.CopyDirectory($"{MixConstants.Folder.WebRootPath}/{TemplateAsset.FileFolder}/Uploads", TemplateFolder);
+                // Get SiteStructure
+                var strSchema = FileRepository.Instance.GetWebFile("schema.json", $"{TemplateAsset.FileFolder}/Data");
+                var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteStructureViewModel>();
                 FileRepository.Instance.DeleteWebFolder(TemplateAsset.FileFolder);
 
-                // Save template files to db                
-                var files = FileRepository.Instance.GetFilesWithContent(TemplateFolder);
-                //TODO: Create default asset
-                foreach (var file in files)
+                //Import Site Structures
+                result =  await MixPages.Helper.ImportAsync(siteStructures.Pages, Specificulture);
+                if (result.IsSucceed)
                 {
-                    string content = file.Content.Replace($"/Content/Templates/{TemplateAsset.Filename}/",
-                    $"/Content/Templates/{Name}/");
-                    MixTemplates.UpdateViewModel template = new MixTemplates.UpdateViewModel(
-                        new MixTemplate()
-                        {
-                            FileFolder = file.FileFolder,
-                            FileName = file.Filename,
-                            Content = file.Content,
-                            Extension = file.Extension,
-                            CreatedDateTime = DateTime.UtcNow,
-                            LastModified = DateTime.UtcNow,
-                            ThemeId = parent.Id,
-                            ThemeName = parent.Name,
-                            FolderType = file.FolderName,
-                            ModifiedBy = CreatedBy
-                        });
-                    var saveResult = await template.SaveModelAsync(true, _context, _transaction);
-                    result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
-                    if (!saveResult.IsSucceed)
+
+                    // Save template files to db                
+                    var files = FileRepository.Instance.GetFilesWithContent(TemplateFolder);
+                    //TODO: Create default asset
+                    foreach (var file in files)
                     {
-                        result.IsSucceed = false;
-                        result.Exception = saveResult.Exception;
-                        result.Errors.AddRange(saveResult.Errors);
-                        break;
+                        string content = file.Content.Replace($"/Content/Templates/{TemplateAsset.Filename}/",
+                        $"/Content/Templates/{Name}/");
+                        MixTemplates.UpdateViewModel template = new MixTemplates.UpdateViewModel(
+                            new MixTemplate()
+                            {
+                                FileFolder = file.FileFolder,
+                                FileName = file.Filename,
+                                Content = file.Content,
+                                Extension = file.Extension,
+                                CreatedDateTime = DateTime.UtcNow,
+                                LastModified = DateTime.UtcNow,
+                                ThemeId = parent.Id,
+                                ThemeName = parent.Name,
+                                FolderType = file.FolderName,
+                                ModifiedBy = CreatedBy
+                            });
+                        var saveResult = await template.SaveModelAsync(true, _context, _transaction);
+                        result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
+                        if (!saveResult.IsSucceed)
+                        {
+                            result.IsSucceed = false;
+                            result.Exception = saveResult.Exception;
+                            result.Errors.AddRange(saveResult.Errors);
+                            break;
+                        }
                     }
                 }
             }

@@ -71,18 +71,8 @@ namespace Mix.Cms.Lib.Repositories
 
         public FileViewModel GetWebFile(string filename, string folder)
         {
-            string fullPath = CommonHelper.GetFullPath(new string[]
-            {
-                MixConstants.Folder.WebRootPath,
-                folder,
-                filename
-            });
-            string folderPath = CommonHelper.GetFullPath(new string[]
-            {
-                MixConstants.Folder.WebRootPath,
-                MixConstants.Folder.FileFolder,
-                folder
-            });
+            string fullPath = $"{MixConstants.Folder.WebRootPath}/{folder}/{filename}";
+            string folderPath = $"{MixConstants.Folder.WebRootPath}/{MixConstants.Folder.FileFolder}/{folder}";
             FileInfo file = new FileInfo(fullPath);
             FileViewModel result = null;
             try

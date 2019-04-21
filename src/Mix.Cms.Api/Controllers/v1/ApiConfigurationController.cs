@@ -113,7 +113,7 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 MixService.SetConfig("LastUpdateConfiguration", DateTime.UtcNow);
                 MixService.LoadFromDatabase();
-                MixService.Save();
+                MixService.SaveSettings();
             }
             return result;
         }

@@ -129,7 +129,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
             if (result.IsSucceed)
             {
                 MixService.LoadFromDatabase();
-                MixService.Save();
+                MixService.SaveSettings();
             }
             return result;
         }
@@ -142,7 +142,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
                 if (result.IsSucceed)
                 {
                     MixService.LoadFromDatabase();
-                    MixService.Save();
+                    MixService.SaveSettings();
                 }
             }
             return result;

@@ -7,6 +7,7 @@ using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
@@ -36,7 +37,7 @@ namespace Mix.Cms.Lib.Services
         private JObject IpSecuritySettings { get; set; }
         private JObject Smtp { get; set; }
         readonly FileSystemWatcher watcher = new FileSystemWatcher();
-        
+
         public MixService()
         {
             watcher.Path = System.IO.Directory.GetCurrentDirectory();
@@ -70,7 +71,7 @@ namespace Mix.Cms.Lib.Services
             // Load configurations from appSettings.json
             JObject jsonSettings = new JObject();
             var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, ".json", string.Empty, true);
-            
+
             if (string.IsNullOrEmpty(settings.Content))
             {
                 settings = FileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, ".json", string.Empty, true, "{}");
@@ -87,6 +88,7 @@ namespace Mix.Cms.Lib.Services
             instance.Translator = JObject.FromObject(jsonSettings["Translator"]);
             instance.GlobalSettings = JObject.FromObject(jsonSettings["GlobalSettings"]);
             instance.LocalSettings = JObject.FromObject(jsonSettings["LocalSettings"]);
+
         }
 
         private void OnChanged(object sender, FileSystemEventArgs e)
@@ -171,28 +173,51 @@ namespace Mix.Cms.Lib.Services
             return JObject.FromObject(Instance.GlobalSettings);
         }
 
-        public static bool Save()
+        public static bool SaveSettings()
         {
             var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, ".json", string.Empty, true, "{}");
             if (settings != null)
             {
-                JObject jsonSettings = !string.IsNullOrWhiteSpace(settings.Content) ? JObject.Parse(settings.Content) : new JObject();
+                if (string.IsNullOrWhiteSpace(settings.Content))
+                {
+                    var defaultSettings = FileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, ".json", string.Empty, true, "{}");
+                    settings = new FileViewModel()
+                    {
+                        Filename = MixConstants.CONST_FILE_APPSETTING,
+                        Extension = ".json",
+                        Content = defaultSettings.Content
+                    };
+                    return FileRepository.Instance.SaveFile(settings);
 
-                jsonSettings["ConnectionStrings"] = instance.ConnectionStrings;
-                jsonSettings["GlobalSettings"] = instance.GlobalSettings;
-                jsonSettings["GlobalSettings"]["LastUpdateConfiguration"] = DateTime.UtcNow;
-                jsonSettings["Translator"] = instance.Translator;
-                jsonSettings["LocalSettings"] = instance.LocalSettings;
-                jsonSettings["Authentication"] = instance.Authentication;
-                jsonSettings["IpSecuritySettings"] = instance.IpSecuritySettings;
-                jsonSettings["Smtp"] = instance.Smtp;
-                settings.Content = jsonSettings.ToString();
-                return FileRepository.Instance.SaveFile(settings);
+                }
+                else
+                {
+                    JObject jsonSettings = JObject.Parse(settings.Content);
+
+                    jsonSettings["ConnectionStrings"] = instance.ConnectionStrings;
+                    jsonSettings["GlobalSettings"] = instance.GlobalSettings;
+                    jsonSettings["GlobalSettings"]["LastUpdateConfiguration"] = DateTime.UtcNow;
+                    jsonSettings["Translator"] = instance.Translator;
+                    jsonSettings["LocalSettings"] = instance.LocalSettings;
+                    jsonSettings["Authentication"] = instance.Authentication;
+                    jsonSettings["IpSecuritySettings"] = instance.IpSecuritySettings;
+                    jsonSettings["Smtp"] = instance.Smtp;
+                    settings.Content = jsonSettings.ToString();
+                    return FileRepository.Instance.SaveFile(settings);
+                }
             }
             else
             {
                 return false;
             }
+
+        }
+        public static bool SaveSettings(string content)
+        {
+            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, ".json", string.Empty, true, "{}");
+
+            settings.Content = content;
+            return FileRepository.Instance.SaveFile(settings);
 
         }
         public static void Reload()
@@ -249,7 +274,7 @@ namespace Mix.Cms.Lib.Services
             }
         }
 
-        
+
         public static void SendMail(string subject, string message, string to)
         {
             SmtpClient client = new SmtpClient(instance.Smtp.Value<string>("Server"));

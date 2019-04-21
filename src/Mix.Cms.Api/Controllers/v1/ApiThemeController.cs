@@ -64,8 +64,9 @@ namespace Mix.Cms.Api.Controllers.v1
             string exportPath = $"Exports/Themes/{getTemplate.Data.Name}";
 
             // Export site structures
-            var siteStructures = new SiteStructureViewModel(_lang);
-            string filename = $"{getTemplate.Data.Name}_structures_{DateTime.UtcNow.ToString("ddMMyyyy")}";
+            var siteStructures = new SiteStructureViewModel();
+            await siteStructures.InitAsync(_lang);
+            string filename = $"schema";
             var file = new FileViewModel()
             {
                 Filename = filename,
@@ -204,7 +205,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 if (result.IsSucceed)
                 {
                     MixService.LoadFromDatabase();
-                    MixService.Save();
+                    MixService.SaveSettings();
                 }
                 return result;
             }

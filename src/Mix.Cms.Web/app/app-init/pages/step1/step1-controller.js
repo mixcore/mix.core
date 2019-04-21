@@ -110,6 +110,10 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
 
             ]
         };
+        $scope.loadSettings = function () {
+            step1Services.saveDefaultSettings();
+            $rootScope.isBusy = false;
+        };
         $scope.initCmsModel = {
             isUseLocal: false,
             localDbConnectionString: '',

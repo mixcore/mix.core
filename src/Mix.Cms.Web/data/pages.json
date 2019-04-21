@@ -1,0 +1,50 @@
+{
+  "specificulture": "en-us",
+  "data": [
+    {
+      "id": 1,
+      "level": 0,
+      "title": "Home",
+      "image": "/assets/img/bgs/home.jpeg",
+      "template": "Pages/_Home.cshtml",
+      "Type": 3,
+      "status": 2
+    },
+    {
+      "id": 2,
+      "level": 0,
+      "title": "Tag",
+      "image": "/assets/img/bgs/tag.jpg",
+      "template": "Pages/_Tag.cshtml",
+      "Type": 2,
+      "status": 2
+    },
+    {
+      "id": 3,
+      "level": 0,
+      "title": "Search",
+      "image": "/assets/img/bgs/search.jpg",
+      "template": "Pages/_Search.cshtml",
+      "Type": 2,
+      "status": 2
+    },
+    {
+      "id": 4,
+      "level": 0,
+      "title": "404",
+      "image": "/assets/img/bgs/404.jpg",
+      "template": "Pages/_404.cshtml",
+      "Type": 1,
+      "status": 2
+    },
+    {
+      "id": 5,
+      "level": 0,
+      "title": "403",
+      "image": "/assets/img/bgs/403.jpg",
+      "template": "Pages/_403.cshtml",
+      "Type": 1,
+      "status": 2
+    }
+  ]
+}

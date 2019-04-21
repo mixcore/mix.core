@@ -95,19 +95,7 @@ namespace Mix.Cms.Lib.Services
 
                     if (isSucceed && context.MixPage.Count() == 0)
                     {
-                        int id = 0;
-                        InitPage(ref id, "Home", "Pages/_Home.cshtml", "/assets/img/bgs/home.jpeg"
-                            , MixPageType.Home, culture.Specificulture, context, transaction);
-                        InitPage(ref id, "Tag", "Pages/_Tag.cshtml", "/assets/img/bgs/tag.jpg"
-                            , MixPageType.Article, culture.Specificulture, context, transaction);
-                        InitPage(ref id, "Search", "Pages/_Search.cshtml", "/assets/img/bgs/search.jpg"
-                            , MixPageType.Article, culture.Specificulture, context, transaction);
-                        InitPage(ref id, "Maintenance", "Pages/_Maintenance.cshtml", "/assets/img/bgs/maintenance.jpg"
-                            , MixPageType.Article, culture.Specificulture, context, transaction);
-                        InitPage(ref id, "404", "Pages/_404.cshtml", "/assets/img/bgs/404.jpg"
-                            , MixPageType.Article, culture.Specificulture, context, transaction);
-                        InitPage(ref id, "403", "Pages/_403.cshtml", "/assets/img/bgs/403.jpg"
-                            , MixPageType.Article, culture.Specificulture, context, transaction);
+                        InitPages(culture.Specificulture, context, transaction);
                         isSucceed = (await context.SaveChangesAsync().ConfigureAwait(false)) > 0;
                     }
                     else
@@ -260,39 +248,34 @@ namespace Mix.Cms.Lib.Services
             return isSucceed;
         }
 
-        protected void InitPage(ref int id, string title, string template, string image, MixPageType type, string culture
-            , MixCmsContext context, IDbContextTransaction transaction)
+        protected void InitPages(string culture, MixCmsContext context, IDbContextTransaction transaction)
         {
-            id += 1;
-            var cate = new MixPage()
+            /* Init Languages */
+            var pages = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, "data", true, "{}");
+            var obj = JObject.Parse(pages.Content);
+            var arrPage = obj["data"].ToObject<List<MixPage>>();
+            foreach (var page in arrPage)
             {
-                Id = id,
-                Level = 0,
-                Title = title,
-                SeoName = title.ToLower(),
-                SeoDescription = title.ToLower(),
-                SeoKeywords = title.ToLower(),
-                SeoTitle = title.ToLower(),
-                Specificulture = culture,
-                Template = template,
-                Image = image,
-                Type = (int)type,
-                CreatedBy = "Admin",
-                CreatedDateTime = DateTime.UtcNow,
-                Status = (int)PageStatus.Published
-            };
-            context.Entry(cate).State = EntityState.Added;
-            var alias = new MixUrlAlias()
-            {
-                Id = id,
-                SourceId = id.ToString(),
-                Type = (int)UrlAliasType.Page,
-                Specificulture = culture,
-                CreatedDateTime = DateTime.UtcNow,
-                Alias = cate.Title.ToLower(),
-                Status = (int)MixContentStatus.Published
-            };
-            context.Entry(alias).State = EntityState.Added;
+                page.Specificulture = culture;
+                page.SeoTitle = page.Title.ToLower();
+                page.SeoName = SeoHelper.GetSEOString(page.Title);
+                page.SeoDescription = page.Title.ToLower();
+                page.SeoKeywords = page.Title.ToLower();
+                page.CreatedDateTime = DateTime.UtcNow;
+                page.CreatedBy = "SuperAdmin";
+                context.Entry(page).State = EntityState.Added;
+                var alias = new MixUrlAlias()
+                {
+                    Id = page.Id,
+                    SourceId = page.Id.ToString(),
+                    Type = (int)UrlAliasType.Page,
+                    Specificulture = culture,
+                    CreatedDateTime = DateTime.UtcNow,
+                    Alias = page.Title.ToLower(),
+                    Status = (int)MixContentStatus.Published
+                };
+                context.Entry(alias).State = EntityState.Added;
+            }
         }
     }
 }
