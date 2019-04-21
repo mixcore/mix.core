@@ -151,3 +151,6 @@
         opacity: 0.5;
     }
 }
+.app-init .form-control{
+    background-color:white;
+}
