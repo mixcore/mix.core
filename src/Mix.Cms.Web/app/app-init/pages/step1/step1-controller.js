@@ -112,9 +112,12 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
         };
         $scope.loadSettings = function () {
             step1Services.saveDefaultSettings();
+            $scope.dbProvider = $scope.settings.providers[0];
+            $scope.initCmsModel.databaseProvider = $scope.dbProvider.value;
             $rootScope.isBusy = false;
+            $scope.$apply();
         };
-        $scope.dbProvider = $scope.settings.providers[0];
+        
         $scope.initCmsModel = {
             isUseLocal: false,
             localDbConnectionString: '',
@@ -129,7 +132,7 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
             adminPassword: '',
             lang: 'en-us',
             isMysql: false,
-            databaseProvider: $scope.dbProvider.value,
+            databaseProvider: '',
             culture: $scope.settings.cultures[0]
         };
         

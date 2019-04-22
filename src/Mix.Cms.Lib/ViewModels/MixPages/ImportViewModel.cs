@@ -170,29 +170,31 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 foreach (var item in ModuleNavs)
                 {
-                    //  Force to create new module
-                    item.Module.Id = 0;
-                    item.Module.Specificulture = parent.Specificulture;                    
-                    var saveModule = await item.Module.SaveModelAsync(true, _context, _transaction);
-                    ViewModelHelper.HandleResult(saveModule, ref result);
-                    if (!result.IsSucceed)
+                    if (!MixModules.ImportViewModel.Repository.CheckIsExists(m => m.Name == item.Module.Name && m.Specificulture == parent.Specificulture))
                     {
-                        break;
-                    }
-                    else // Save Module Success
-                    {
-                        item.CategoryId = parent.Id;
-                        item.ModuleId = saveModule.Data.Id;
-                        item.Specificulture = parent.Specificulture;
-                        item.Description = saveModule.Data.Title;
-                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
+                        //  Force to create new module
+                        item.Module.Id = 0;
+                        item.Module.Specificulture = parent.Specificulture;
+                        var saveModule = await item.Module.SaveModelAsync(true, _context, _transaction);
+                        ViewModelHelper.HandleResult(saveModule, ref result);
                         if (!result.IsSucceed)
                         {
                             break;
                         }
+                        else // Save Module Success
+                        {
+                            item.CategoryId = parent.Id;
+                            item.ModuleId = saveModule.Data.Id;
+                            item.Specificulture = parent.Specificulture;
+                            item.Description = saveModule.Data.Title;
+                            var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+                            ViewModelHelper.HandleResult(saveResult, ref result);
+                            if (!result.IsSucceed)
+                            {
+                                break;
+                            }
+                        }
                     }
-
                 }
 
             }

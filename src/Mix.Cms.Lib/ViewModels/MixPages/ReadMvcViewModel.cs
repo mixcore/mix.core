@@ -161,14 +161,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[]
-                {
-                    ""
-                    , MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture)
-                        ??  MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateFolder)
-                    , Template
-                });
+                return $"/{MixConstants.Folder.TemplatesFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture)}/{Template}";                
             }
         }
 
@@ -414,8 +407,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 StringBuilder styles = new StringBuilder();
                 foreach (var nav in getNavs.Data.OrderBy(n => n.Priority).ToList())
                 {
-                    scripts.Append(nav.Module.View.Scripts);
-                    styles.Append(nav.Module.View.Styles);
+                    scripts.Append(nav.Module.View?.Scripts);
+                    styles.Append(nav.Module.View?.Styles);
                 }
                 View.Scripts += scripts.ToString();
                 View.Styles += styles.ToString();

@@ -22,7 +22,7 @@
     <link href="~/css/app-vendor.min.css" rel="stylesheet" />  
 </head>
 
-<body class="login-page app-init" ng-app="MixPortal">
+<body class="login-page app-init" ng-app="MixPortal" style="background-image: url('/assets/img/bgs/work-space.jpg');">
     <div class="loader-container" ng-show="isBusy">
        <div class="loader">
             <span>{</span><span>}</span>
@@ -31,7 +31,9 @@
            
         </div> -->
     </div>
+    <div class="container">
     @RenderBody()
+    </div>
     <!-- <div class="page-header" filter-color="purple">
         <div class="page-header-image" style="background-image:url(/images/bgs/work-space.jpg)"></div>
         <div class="container">

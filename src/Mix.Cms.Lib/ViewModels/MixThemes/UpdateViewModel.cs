@@ -570,14 +570,13 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             string fileName = $"wwwroot/{TemplateAsset.FileFolder}/{TemplateAsset.Filename}{TemplateAsset.Extension}";
             if (File.Exists(fileName)) {
                 
-                string assetFolder = $"{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{TemplateAsset.Filename}";
                 FileRepository.Instance.UnZipFile($"{TemplateAsset.Filename}{TemplateAsset.Extension}", TemplateAsset.FileFolder);
                 //Move Unzip Asset folder
-                FileRepository.Instance.CopyWebDirectory($"{TemplateAsset.FileFolder}/Assets", assetFolder);
+                FileRepository.Instance.CopyWebDirectory($"{TemplateAsset.FileFolder}/Assets", AssetFolder);
                 //Move Unzip Templates folder
                 FileRepository.Instance.CopyDirectory($"{MixConstants.Folder.WebRootPath}/{TemplateAsset.FileFolder}/Templates", TemplateFolder);
                 //Move Unzip Uploads folder
-                FileRepository.Instance.CopyDirectory($"{MixConstants.Folder.WebRootPath}/{TemplateAsset.FileFolder}/Uploads", assetFolder);
+                FileRepository.Instance.CopyDirectory($"{MixConstants.Folder.WebRootPath}/{TemplateAsset.FileFolder}/Uploads", AssetFolder);
                 // Get SiteStructure
                 var strSchema = FileRepository.Instance.GetWebFile("schema.json", $"{TemplateAsset.FileFolder}/Data");
                 var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteStructureViewModel>();
