@@ -154,3 +154,6 @@
 .app-init .form-control{
     background-color:white;
 }
+.app-init .card-title,.app-init label{
+    color:white;
+}

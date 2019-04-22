@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Mix.Cms.Lib.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,10 @@ namespace Mix.Cms.Lib
 {
     public class MixCmsHelper
     {
+        public static string GetAssetFolder(string culture)
+        {
+            return $"/{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, culture)}";
+        }
         public static List<ViewModels.MixPages.ReadListItemViewModel> GetCategory(IUrlHelper Url, string culture, MixEnums.CatePosition position, string activePath = "")
         {
             var getTopCates = ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelListBy

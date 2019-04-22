@@ -22,6 +22,7 @@ app.controller('ThemeController', ['$scope', '$rootScope', 'ngAppSettings', '$ro
             if (response.isSucceed) {
                 $scope.activedData = response.data;
                 $rootScope.isBusy = false;
+                $location.url($scope.referrerUrl);
                 $scope.$apply();
             }
             else {

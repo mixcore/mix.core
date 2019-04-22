@@ -1,4 +1,4 @@
-<div class="header-3">
+<div class="header-3" ng-init="loadSettings()">
     <nav class="navbar navbar-expand-lg navbar-transparent bg-primary navbar-absolute">
         <div class="container">
             <div class="navbar-translate">
@@ -11,7 +11,7 @@
         <div class="carousel-inner" role="listbox">
             <div class="carousel-item active">
                 <div class="page-header header-filter">
-                    <div class="page-header-image" style="background-image: url(/assets/img/bgs/work-space.jpg);"></div>
+                    <div class="page-header-image"></div>
                     <div class="content-center">
                         <div class="container text-left">
                             <div class="content-center">
@@ -23,7 +23,7 @@
 
                                     <div class="col-md-6 ml-auto mr-auto text-right">
 
-                                        <form>
+                                        
                                             <div class="form-group">
                                                 <label>Site Name</label>
                                                 <input ng-model="initCmsModel.siteName" type="text" class="form-control"
@@ -40,7 +40,7 @@
                                                         ng-model="initCmsModel.culture"></select>
                                                 </div>
                                             </div>
-                                        </form>
+                                        
                                         <hr />
                                         <h5>
                                             <a class="link" ng-click="initCmsModel.isUseLocal=!initCmsModel.isUseLocal">
@@ -49,7 +49,7 @@
                                             </a>
                                         </h5>
                                         <form>
-                                            <div class="form-group" ng-if="!initCmsModel.isUseLocal">
+                                            <div class="form-group" ng-show="!initCmsModel.isUseLocal">
                                                 <label>Database Type</label>
                                                 <select class="custom-select form-control"
                                                     ng-options="item as item.text for item in settings.providers"
@@ -62,9 +62,7 @@
 
                                             <mssql-local-info ng-if="initCmsModel.isUseLocal"
                                                 init-cms-model="initCmsModel"></mssql-local-info>
-                                        </form>
-                                        <hr />
-                                        <form>
+                                            <hr />
                                             <button ng-if="!initCmsModel.isUseLocal" ng-click="initCms();"
                                                 class="btn btn-primary btn-round"
                                                 ng-disabled="!initCmsModel.dataBaseServer || !initCmsModel.dataBaseName || !initCmsModel.dataBaseUser || !initCmsModel.siteName || !initCmsModel.culture">
@@ -93,7 +91,7 @@
             </div>
             <div class="carousel-item">
                 <div class="page-header header-filter">
-                    <div class="page-header-image" style="background-image: url('assets/img/bg15.jpg');"></div>
+                    <div class="page-header-image"></div>
                     <div class="content-center">
                         <div class="container">
                             <div class="content-center">
