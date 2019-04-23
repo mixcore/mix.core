@@ -16,6 +16,9 @@
             ctrl.init = function () {
                 
             };
+            ctrl.showShoppingCart = function(){
+                $('#modal-shopping-cart').modal('show');
+            }
             ctrl.calculate = function(){
                 ctrl.cartData.total = 0;
                 ctrl.cartData.totalItems = ctrl.cartData.items.length;
