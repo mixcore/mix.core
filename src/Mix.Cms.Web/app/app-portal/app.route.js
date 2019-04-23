@@ -223,6 +223,11 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         controller: "ThemeController",
         templateUrl: "/app/app-portal/pages/theme/details.html"
     });
+    
+    $routeProvider.when("/portal/theme/export/:id", {
+        controller: "ThemeController",
+        templateUrl: "/app/app-portal/pages/theme/export.html"
+    });
 
     $routeProvider.when("/portal/theme/create", {
         controller: "ThemeController",

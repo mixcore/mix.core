@@ -57,22 +57,33 @@ namespace Mix.Cms.Api.Controllers.v1
         // GET api/theme/id
         [HttpGet, HttpOptions]
         [Route("export/{id}")]
-        public async Task<RepositoryResponse<string>> Export(int id)
+        public async Task<RepositoryResponse<SiteStructureViewModel>> Export(int id)
+        {
+            var siteStructures = new SiteStructureViewModel();
+            await siteStructures.InitAsync(_lang);
+            return new RepositoryResponse<SiteStructureViewModel>()
+            {
+                IsSucceed = true,
+                Data = siteStructures
+            };
+        }
+        
+        // GET api/theme/id
+        [HttpPost, HttpOptions]
+        [Route("export/{id}")]
+        public async Task<RepositoryResponse<string>> Export(int id, [FromBody]SiteStructureViewModel data)
         {
             var getTemplate = await ReadViewModel.Repository.GetSingleModelAsync(
                  theme => theme.Id == id).ConfigureAwait(false);
             string exportPath = $"Exports/Themes/{getTemplate.Data.Name}";
 
-            // Export site structures
-            var siteStructures = new SiteStructureViewModel();
-            await siteStructures.InitAsync(_lang);
             string filename = $"schema";
             var file = new FileViewModel()
             {
                 Filename = filename,
                 Extension = ".json",
                 FileFolder = $"{exportPath}/Data",
-                Content = JObject.FromObject(siteStructures).ToString()
+                Content = JObject.FromObject(data).ToString()
             };
 
             // Delete Existing folder
