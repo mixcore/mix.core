@@ -4,6 +4,7 @@ app.controller('ThemeController', ['$scope', '$rootScope', 'ngAppSettings', '$ro
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
         $scope.exportData = null;
         $scope.selectedExport = {};
+        
         $scope.getSingleSuccessCallback = function () {
             $scope.assets = null;
             $scope.theme = null;
@@ -47,6 +48,7 @@ app.controller('ThemeController', ['$scope', '$rootScope', 'ngAppSettings', '$ro
                 $scope.$apply();
             }
         };
+        
         $scope.export = async function () {
             var id = $routeParams.id;
             $rootScope.isBusy = true;
@@ -94,4 +96,7 @@ app.controller('ThemeController', ['$scope', '$rootScope', 'ngAppSettings', '$ro
                 e.moduleNavs = angular.copy($rootScope.filterArray(e.moduleNavs, 'isActived', true));
             });
         };
+        $scope.generateSEO = function(){
+            $scope.activedData.name = $rootScope.generateKeyword($scope.activedData.title, '-');
+        }
     }]);

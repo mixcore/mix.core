@@ -201,11 +201,12 @@ namespace Mix.Cms.Api.Controllers.v1
             var data = json.ToObject<UpdateViewModel>();
             if (assets!=null)
             {
+                data.Asset = new Lib.ViewModels.FileViewModel(assets, data.AssetFolder);
                 FileRepository.Instance.SaveWebFile(assets, data.AssetFolder);
             }
             if (theme!=null)
             {
-                string importFolder = $"Import/Themes/{DateTime.UtcNow.ToShortDateString()}/{data.Name}";
+                string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToShortDateString()}/{data.Name}";
                 data.TemplateAsset = new Lib.ViewModels.FileViewModel(theme, importFolder);
                 FileRepository.Instance.SaveWebFile(theme, importFolder);
             }
