@@ -1,0 +1,54 @@
+<div class="tab-pane fade active show" id="pills-general" role="tabpanel" aria-labelledby="pills-general-tab">
+    <div class="form-group">
+        <label class="control-label">ClockSkew</label>
+        <input type="number" ng-model="$ctrl.appSettings.Authentication.ClockSkew" class="form-control">
+    </div>
+    <div class="form-group">
+        <label class="control-label">Cookie Expiration</label>
+        <input type="number" ng-model="$ctrl.appSettings.Authentication.CookieExpiration" class="form-control">
+    </div>
+    <div class="form-group">
+        <label class="control-label">Refresh Token Expiration</label>
+        <input type="number" ng-model="$ctrl.appSettings.Authentication.RefreshTokenExpiration" class="form-control">
+    </div>
+    <div class="form-group">
+        <span class="switch switch-sm">
+            <input type="checkbox" ng-model="$ctrl.appSettings.Authentication.ValidateIssuer" id="ValidateIssuer" class="switch ng-pristine ng-untouched ng-valid ng-empty">
+            <label class="switch mb-0" for="ValidateIssuer">
+                <span>Validate Issuer</span>
+            </label>
+        </span>
+    </div>
+    <div class="form-group">
+        <span class="switch switch-sm">
+            <input type="checkbox" ng-model="$ctrl.appSettings.Authentication.ValidateAudience" id="ValidateAudience" class="switch ng-pristine ng-untouched ng-valid ng-empty">
+            <label class="switch mb-0" for="ValidateAudience">
+                <span>Validate Audience</span>
+            </label>
+        </span>
+    </div>
+    <div class="form-group">
+        <span class="switch switch-sm">
+            <input type="checkbox" ng-model="$ctrl.appSettings.Authentication.ValidateLifetime" id="ValidateLifetime" class="switch ng-pristine ng-untouched ng-valid ng-empty">
+            <label class="switch mb-0" for="ValidateLifetime">
+                <span>Validate Lifetime</span>
+            </label>
+        </span>
+    </div>
+    <div class="form-group">
+        <span class="switch switch-sm">
+            <input type="checkbox" ng-model="$ctrl.appSettings.Authentication.ValidateIssuerSigningKey" id="ValidateIssuerSigningKey" class="switch ng-pristine ng-untouched ng-valid ng-empty">
+            <label class="switch mb-0" for="ValidateIssuerSigningKey">
+                <span>Validate Issuer Signing Key</span>
+            </label>
+        </span>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Audience</label>
+        <input type="text" ng-model="$ctrl.appSettings.Authentication.Audience" class="form-control">
+    </div>
+    <div class="form-group">
+        <label class="control-label">Issuer</label>
+        <input type="text" ng-model="$ctrl.appSettings.Authentication.Issuer" class="form-control">
+    </div>
+</div>
