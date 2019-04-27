@@ -104,11 +104,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.FileFolder,
-                    MixConstants.Folder.TemplatesAssetFolder,
-                    Name
-                });
+                return $"{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{Name}";
             }
         }
 
@@ -171,167 +167,33 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>() { IsSucceed = true };
 
+            //Import From existing Theme (zip)
             if (!string.IsNullOrEmpty(TemplateAsset.Filename))
             {
                 result = await ImportThemeAsync(parent, _context, _transaction);
             }
 
-            if (result.IsSucceed && Asset.Content != null || Asset.FileStream != null)
+            // Import Assets
+            if (result.IsSucceed && !string.IsNullOrEmpty(Asset.Filename))
             {
-                Asset.FileFolder = AssetFolder;
-                Asset.Filename = "assets";
-                string fullPath = CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.WebRootPath,
-                    Asset.FileFolder
-                });
-                FileRepository.Instance.EmptyFolder(fullPath);
-                var isSaved = FileRepository.Instance.SaveWebFile(Asset);
-                result.IsSucceed = isSaved;
-                if (isSaved)
-                {
-                    result.IsSucceed = FileRepository.Instance.UnZipFile(Asset);
-                    if (!result.IsSucceed)
-                    {
-                        result.Errors.Add("Cannot unzip file");
-                    }
-
-                }
-                else
-                {
-                    result.Errors.Add("Cannot saved asset file");
-                }
-
+                result = ImportAssetsAsync(_context, _transaction);
             }
-            if (Id == 0 && (TemplateAsset.Content == null && TemplateAsset.FileStream == null))
+
+            // New themes without import existing theme => create from default folder
+            if (result.IsSucceed && !Directory.Exists(TemplateFolder) && string.IsNullOrEmpty(TemplateAsset.Filename))
             {
-
-                string defaultFolder = CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.TemplatesFolder,
-                    MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateFolder) });
-                bool copyResult = FileRepository.Instance.CopyDirectory(defaultFolder, TemplateFolder);
-
-                var files = FileRepository.Instance.GetFilesWithContent(TemplateFolder);
-                //TODO: Create default asset
-                foreach (var file in files)
-                {
-                    MixTemplates.InitViewModel template = new MixTemplates.InitViewModel(
-                        new MixTemplate()
-                        {
-                            FileFolder = file.FileFolder,
-                            FileName = file.Filename,
-                            Content = file.Content,
-                            Extension = file.Extension,
-                            CreatedDateTime = DateTime.UtcNow,
-                            LastModified = DateTime.UtcNow,
-                            ThemeId = Model.Id,
-                            ThemeName = Model.Name,
-                            FolderType = file.FolderName,
-                            ModifiedBy = CreatedBy
-                        }, _context, _transaction);
-                    var saveResult = template.SaveModel(true, _context, _transaction);
-                    result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
-                    if (!saveResult.IsSucceed)
-                    {
-                        result.Exception = saveResult.Exception;
-                        result.Errors.AddRange(saveResult.Errors);
-                        break;
-                    }
-                }
+                result = CreateDefaultThemeTemplates(_context, _transaction);
             }
 
             // Actived Theme
             if (IsActived)
             {
-                SystemConfigurationViewModel config = (await SystemConfigurationViewModel.Repository.GetSingleModelAsync(
-                    c => c.Keyword == MixConstants.ConfigurationKeyword.ThemeName && c.Specificulture == Specificulture
-                    , _context, _transaction)).Data;
-                if (config == null)
-                {
-                    config = new SystemConfigurationViewModel()
-                    {
-                        Keyword = MixConstants.ConfigurationKeyword.ThemeName,
-                        Specificulture = Specificulture,
-                        Category = "Site",
-                        DataType = MixDataType.Text,
-                        Description = "Cms Theme",
-                        Value = Name
-                    };
-                }
-                else
-                {
-                    config.Value = Name;
-                }
-                var saveConfigResult = await config.SaveModelAsync(false, _context, _transaction);
-
-                SystemConfigurationViewModel configFolder = (await SystemConfigurationViewModel.Repository.GetSingleModelAsync(
-                    c => c.Keyword == MixConstants.ConfigurationKeyword.ThemeFolder && c.Specificulture == Specificulture
-                    , _context, _transaction)).Data;
-                
-                configFolder.Value = Name;
-                
-                saveConfigResult = await configFolder.SaveModelAsync(false, _context, _transaction);
-                if (!saveConfigResult.IsSucceed)
-                {
-                    Errors.AddRange(saveConfigResult.Errors);
-                }
-                result.IsSucceed = result.IsSucceed && saveConfigResult.IsSucceed;
-
-                SystemConfigurationViewModel configId = (await SystemConfigurationViewModel.Repository.GetSingleModelAsync(
-                      c => c.Keyword == MixConstants.ConfigurationKeyword.ThemeId && c.Specificulture == Specificulture, _context, _transaction)).Data;
-                if (configId == null)
-                {
-                    configId = new SystemConfigurationViewModel()
-                    {
-                        Keyword = MixConstants.ConfigurationKeyword.ThemeId,
-                        Specificulture = Specificulture,
-                        Category = "Site",
-                        DataType = MixDataType.Text,
-                        Description = "Cms Theme Id",
-                        Value = Model.Id.ToString()
-                    };
-                }
-                else
-                {
-                    configId.Value = Model.Id.ToString();
-                }
-                var saveResult = await configId.SaveModelAsync(false, _context, _transaction);
-                if (!saveResult.IsSucceed)
-                {
-                    Errors.AddRange(saveResult.Errors);
-                }
-                result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
+                result = await ActivedThemeAsync(_context, _transaction);
             }
-
-            if (Asset.Content != null || Asset.FileStream != null)
-            {
-                var files = FileRepository.Instance.GetWebFiles(AssetFolder);
-                StringBuilder strStyles = new StringBuilder();
-
-                foreach (var css in files.Where(f => f.Extension == ".css"))
-                {
-                    strStyles.Append($"   <link href='{css.FileFolder}/{css.Filename}{css.Extension}' rel='stylesheet'/>");
-                }
-                StringBuilder strScripts = new StringBuilder();
-                foreach (var js in files.Where(f => f.Extension == ".js"))
-                {
-                    strScripts.Append($"  <script src='{js.FileFolder}/{js.Filename}{js.Extension}'></script>");
-                }
-                var layout = MixTemplates.InitViewModel.Repository.GetSingleModel(
-                    t => t.FileName == "_Layout" && t.ThemeId == Model.Id
-                    , _context, _transaction);
-                layout.Data.Content = layout.Data.Content.Replace("<!--[STYLES]-->"
-                    , string.Format(@"{0}"
-                    , strStyles));
-                layout.Data.Content = layout.Data.Content.Replace("<!--[SCRIPTS]-->"
-                    , string.Format(@"{0}"
-                    , strScripts));
-
-                await layout.Data.SaveModelAsync(true, _context, _transaction);
-            }
-
             return result;
         }
 
+       
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = await MixTemplates.InitViewModel.Repository.RemoveListModelAsync(false,  t => t.ThemeId == Id);
@@ -350,151 +212,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         #endregion Async
         #region Sync
-
-        public override RepositoryResponse<bool> SaveSubModels(MixTheme parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            RepositoryResponse<bool> result = new RepositoryResponse<bool>() { IsSucceed = true };
-            // import templates  + assets
-            if (TemplateAsset.Content != null || TemplateAsset.FileStream != null)
-            {
-                result = ImportTheme(parent, _context, _transaction);
-            }
-
-            // Create default template if create new without import template assets
-            if (result.IsSucceed && Id == 0 && (TemplateAsset.Content == null && TemplateAsset.FileStream == null))
-            {
-
-                string defaultFolder = CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.TemplatesFolder,
-                    Name == "Default"? "Default":
-                    MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateFolder) });
-                bool copyResult = FileRepository.Instance.CopyDirectory(defaultFolder, TemplateFolder);
-                var files = FileRepository.Instance.GetFilesWithContent(TemplateFolder);
-                //TODO: Create default asset
-                foreach (var file in files)
-                {
-                    MixTemplates.InitViewModel template = new MixTemplates.InitViewModel(
-                        new MixTemplate()
-                        {
-                            FileFolder = file.FileFolder,
-                            FileName = file.Filename,
-                            Content = file.Content,
-                            Extension = file.Extension,
-                            CreatedDateTime = DateTime.UtcNow,
-                            LastModified = DateTime.UtcNow,
-                            ThemeId = Model.Id,
-                            ThemeName = Model.Name,
-                            FolderType = file.FolderName,
-                            ModifiedBy = CreatedBy
-                        }, _context, _transaction);
-                    var saveResult = template.SaveModel(true, _context, _transaction);
-                    result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
-                    if (!saveResult.IsSucceed)
-                    {
-                        result.Exception = saveResult.Exception;
-                        result.Errors.AddRange(saveResult.Errors);
-                        break;
-                    }
-                }
-            }
-
-            // Actived Theme
-            if (result.IsSucceed && IsActived)
-            {
-                SystemConfigurationViewModel config = (SystemConfigurationViewModel.Repository.GetSingleModel(
-                    c => c.Keyword == MixConstants.ConfigurationKeyword.ThemeName && c.Specificulture == Specificulture
-                    , _context, _transaction)).Data;
-
-                if (config == null)
-                {
-                    config = new SystemConfigurationViewModel(new MixConfiguration()
-                    {
-                        Keyword = MixConstants.ConfigurationKeyword.ThemeName,
-                        Specificulture = Specificulture,
-                        Category = "Site",
-                        DataType = (int)DataType.Text,
-                        Description = "Cms Theme",
-                        Value = Name
-                    }, _context, _transaction)
-                    ;
-                }
-                else
-                {
-                    config.Value = Name;
-                }
-
-                var saveConfigResult = config.SaveModel(false, _context, _transaction);
-                if (!saveConfigResult.IsSucceed)
-                {
-                    Errors.AddRange(saveConfigResult.Errors);
-                }
-                else
-                {
-                    //MixCmsService.Instance.RefreshConfigurations(_context, _transaction);
-                }
-                result.IsSucceed = result.IsSucceed && saveConfigResult.IsSucceed;
-
-                SystemConfigurationViewModel configId = (SystemConfigurationViewModel.Repository.GetSingleModel(
-                      c => c.Keyword == MixConstants.ConfigurationKeyword.ThemeId && c.Specificulture == Specificulture, _context, _transaction)).Data;
-                if (configId == null)
-                {
-                    configId = new SystemConfigurationViewModel(new MixConfiguration()
-                    {
-                        Keyword = MixConstants.ConfigurationKeyword.ThemeId,
-                        Specificulture = Specificulture,
-                        Category = "Site",
-                        DataType = (int)DataType.Text,
-                        Description = "Cms Theme Id",
-                        Value = Model.Id.ToString()
-                    }, _context, _transaction)
-                    ;
-                }
-                else
-                {
-                    configId.Value = Model.Id.ToString();
-                }
-                var saveResult = configId.SaveModel(false, _context, _transaction);
-                if (!saveResult.IsSucceed)
-                {
-                    Errors.AddRange(saveResult.Errors);
-                }
-                else
-                {
-                    //MixCmsService.Instance.RefreshConfigurations(_context, _transaction);
-                }
-                result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
-            }
-
-
-            if (result.IsSucceed && TemplateAsset.Content != null || TemplateAsset.FileStream != null)
-            {
-                var files = FileRepository.Instance.GetWebFiles(AssetFolder);
-                StringBuilder strStyles = new StringBuilder();
-
-                foreach (var css in files.Where(f => f.Extension == ".css"))
-                {
-                    strStyles.Append($"   <link href='{css.FileFolder}/{css.Filename}{css.Extension}' rel='stylesheet'/>");
-                }
-                StringBuilder strScripts = new StringBuilder();
-                foreach (var js in files.Where(f => f.Extension == ".js"))
-                {
-                    strScripts.Append($"  <script src='{js.FileFolder}/{js.Filename}{js.Extension}'></script>");
-                }
-                var layout = MixTemplates.InitViewModel.Repository.GetSingleModel(
-                    t => t.FileName == "_Layout" && t.ThemeId == Model.Id
-                    , _context, _transaction);
-                layout.Data.Content = layout.Data.Content.Replace("<!--[STYLES]-->"
-                    , string.Format(@"{0}"
-                    , strStyles));
-                layout.Data.Content = layout.Data.Content.Replace("<!--[SCRIPTS]-->"
-                    , string.Format(@"{0}"
-                    , strScripts));
-
-                layout.Data.SaveModel(true, _context, _transaction);
-            }
-
-            return result;
-        }
 
         public override RepositoryResponse<bool> RemoveRelatedModels(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -517,53 +234,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         #endregion Overrides
 
         #region Expand
-
-        RepositoryResponse<bool> ImportTheme(MixTheme parent, MixCmsContext _context, IDbContextTransaction _transaction)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            string fileName = $"wwwroot/{TemplateAsset.FileFolder}/{TemplateAsset.Filename}{TemplateAsset.Extension}";
-            if (File.Exists(fileName)) { 
-
-                FileRepository.Instance.UnZipFile($"{TemplateAsset.Filename}{TemplateAsset.Extension}", TemplateAsset.FileFolder);
-                FileRepository.Instance.CopyWebDirectory($"{TemplateAsset.FileFolder}/Assets", AssetFolder);
-                FileRepository.Instance.CopyDirectory($"{MixConstants.Folder.WebRootPath}/{TemplateAsset.FileFolder}/Templates", TemplateFolder);
-                FileRepository.Instance.DeleteWebFolder(TemplateAsset.FileFolder);
-
-                // Save template files to db                
-                var files = FileRepository.Instance.GetFilesWithContent(TemplateFolder);
-                //TODO: Create default asset
-                foreach (var file in files)
-                {
-                    string content = file.Content.Replace($"/Content/Templates/{TemplateAsset.Filename}/",
-                    $"/Content/Templates/{Name}/");
-                    MixTemplates.UpdateViewModel template = new MixTemplates.UpdateViewModel(
-                        new MixTemplate()
-                        {
-                            FileFolder = file.FileFolder,
-                            FileName = file.Filename,
-                            Content = file.Content,
-                            Extension = file.Extension,
-                            CreatedDateTime = DateTime.UtcNow,
-                            LastModified = DateTime.UtcNow,
-                            ThemeId = parent.Id,
-                            ThemeName = parent.Name,
-                            FolderType = file.FolderName,
-                            ModifiedBy = CreatedBy
-                        });
-                    var saveResult = template.SaveModel(true, _context, _transaction);
-                    result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
-                    if (!saveResult.IsSucceed)
-                    {
-                        result.IsSucceed = false;
-                        result.Exception = saveResult.Exception;
-                        result.Errors.AddRange(saveResult.Errors);
-                        break;
-                    }
-                }
-            }
-            return result;
-        }
-
         async Task<RepositoryResponse<bool>> ImportThemeAsync(MixTheme parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -622,6 +292,153 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             }
             return result;
         }
+
+        private async Task<RepositoryResponse<bool>> ActivedThemeAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>();
+            SystemConfigurationViewModel config = (await SystemConfigurationViewModel.Repository.GetSingleModelAsync(
+                    c => c.Keyword == MixConstants.ConfigurationKeyword.ThemeName && c.Specificulture == Specificulture
+                    , _context, _transaction)).Data;
+            if (config == null)
+            {
+                config = new SystemConfigurationViewModel()
+                {
+                    Keyword = MixConstants.ConfigurationKeyword.ThemeName,
+                    Specificulture = Specificulture,
+                    Category = "Site",
+                    DataType = MixDataType.Text,
+                    Description = "Cms Theme",
+                    Value = Name
+                };
+            }
+            else
+            {
+                config.Value = Name;
+            }
+            var saveConfigResult = await config.SaveModelAsync(false, _context, _transaction);
+            if (saveConfigResult.IsSucceed)
+            {
+                SystemConfigurationViewModel configFolder = (await SystemConfigurationViewModel.Repository.GetSingleModelAsync(
+                c => c.Keyword == MixConstants.ConfigurationKeyword.ThemeFolder && c.Specificulture == Specificulture
+                , _context, _transaction)).Data;
+                configFolder.Value = Name;
+
+                saveConfigResult = await configFolder.SaveModelAsync(false, _context, _transaction);
+            }
+
+            ViewModelHelper.HandleResult(saveConfigResult, ref result);
+
+            if (result.IsSucceed)
+            {
+
+                SystemConfigurationViewModel configId = (await SystemConfigurationViewModel.Repository.GetSingleModelAsync(
+                      c => c.Keyword == MixConstants.ConfigurationKeyword.ThemeId && c.Specificulture == Specificulture, _context, _transaction)).Data;
+                if (configId == null)
+                {
+                    configId = new SystemConfigurationViewModel()
+                    {
+                        Keyword = MixConstants.ConfigurationKeyword.ThemeId,
+                        Specificulture = Specificulture,
+                        Category = "Site",
+                        DataType = MixDataType.Text,
+                        Description = "Cms Theme Id",
+                        Value = Model.Id.ToString()
+                    };
+                }
+                else
+                {
+                    configId.Value = Model.Id.ToString();
+                }
+                var saveResult = await configId.SaveModelAsync(false, _context, _transaction);
+                ViewModelHelper.HandleResult(saveResult, ref result);
+            }
+            return result;
+        }
+
+        private RepositoryResponse<bool> CreateDefaultThemeTemplates(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>();
+            string defaultFolder = CommonHelper.GetFullPath(new string[] {
+                    MixConstants.Folder.TemplatesFolder,
+                    MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateFolder) });
+            bool copyResult = FileRepository.Instance.CopyDirectory(defaultFolder, TemplateFolder);
+
+            var files = FileRepository.Instance.GetFilesWithContent(TemplateFolder);
+            //TODO: Create default asset
+            foreach (var file in files)
+            {
+                MixTemplates.InitViewModel template = new MixTemplates.InitViewModel(
+                    new MixTemplate()
+                    {
+                        FileFolder = file.FileFolder,
+                        FileName = file.Filename,
+                        Content = file.Content,
+                        Extension = file.Extension,
+                        CreatedDateTime = DateTime.UtcNow,
+                        LastModified = DateTime.UtcNow,
+                        ThemeId = Model.Id,
+                        ThemeName = Model.Name,
+                        FolderType = file.FolderName,
+                        ModifiedBy = CreatedBy
+                    }, _context, _transaction);
+                var saveResult = template.SaveModel(true, _context, _transaction);
+                ViewModelHelper.HandleResult(saveResult, ref result);
+                if (!result.IsSucceed)
+                {
+                    break;
+                }
+            }
+            return result;
+        }
+
+        private RepositoryResponse<bool> ImportAssetsAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>();
+            string fullPath = $"{MixConstants.Folder.WebRootPath}/{Asset.FileFolder}/{Asset.Filename}{Asset.Extension}";
+            if (File.Exists(fullPath))
+            {
+                FileRepository.Instance.UnZipFile($"{Asset.Filename}{Asset.Extension}", Asset.FileFolder);
+                //InitAssetStyle();
+                result.IsSucceed = true;
+
+            }
+            else
+            {
+                result.Errors.Add("Cannot saved asset file");
+            }
+
+
+            return result;
+        }
+
+        private async Task InitAssetStyleAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+
+            var files = FileRepository.Instance.GetWebFiles(AssetFolder);
+            StringBuilder strStyles = new StringBuilder();
+
+            foreach (var css in files.Where(f => f.Extension == ".css"))
+            {
+                strStyles.Append($"   <link href='{css.FileFolder}/{css.Filename}{css.Extension}' rel='stylesheet'/>");
+            }
+            StringBuilder strScripts = new StringBuilder();
+            foreach (var js in files.Where(f => f.Extension == ".js"))
+            {
+                strScripts.Append($"  <script src='{js.FileFolder}/{js.Filename}{js.Extension}'></script>");
+            }
+            var layout = MixTemplates.InitViewModel.Repository.GetSingleModel(
+                t => t.FileName == "_Layout" && t.ThemeId == Model.Id
+                , _context, _transaction);
+            layout.Data.Content = layout.Data.Content.Replace("<!--[STYLES]-->"
+                , string.Format(@"{0}"
+                , strStyles));
+            layout.Data.Content = layout.Data.Content.Replace("<!--[SCRIPTS]-->"
+                , string.Format(@"{0}"
+                , strScripts));
+
+            await layout.Data.SaveModelAsync(true, _context, _transaction);
+        }
+
         #endregion
     }
 }
