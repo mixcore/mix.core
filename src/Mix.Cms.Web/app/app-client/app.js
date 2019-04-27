@@ -1,6 +1,7 @@
 'use strict';
 
-var app = angular.module('MixClient', ['ngRoute', 'LocalStorageModule', 'components', 'ngSanitize']);
+var app = angular.module('MixClient', ['ngRoute', 'LocalStorageModule'
+    , 'components', 'cart', 'ngSanitize']);
 var serviceBase = '';
 
 app.directive('ngEnter', function () {
@@ -59,3 +60,4 @@ function Filter($filter) {
 }
 
 var modules = angular.module('components', []);
+var cart = angular.module('cart', []);

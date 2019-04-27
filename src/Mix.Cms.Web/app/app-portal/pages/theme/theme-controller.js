@@ -3,6 +3,7 @@ app.controller('ThemeController', ['$scope', '$rootScope', 'ngAppSettings', '$ro
     function ($scope, $rootScope, ngAppSettings, $routeParams, $location, service, commonService) {
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
         $scope.exportData = null;
+        $scope.selectedExport = {};
         $scope.getSingleSuccessCallback = function () {
             $scope.assets = null;
             $scope.theme = null;
@@ -46,9 +47,10 @@ app.controller('ThemeController', ['$scope', '$rootScope', 'ngAppSettings', '$ro
                 $scope.$apply();
             }
         };
-        $scope.export = async function (id) {
+        $scope.export = async function () {
+            var id = $routeParams.id;
             $rootScope.isBusy = true;
-            var response = await service.export(id);
+            var response = await service.export(id, $scope.selectedExport);
             if (response.isSucceed) {
                 $rootScope.isBusy = false;
                 window.open(response.data, '_blank');
@@ -85,5 +87,12 @@ app.controller('ThemeController', ['$scope', '$rootScope', 'ngAppSettings', '$ro
                 $rootScope.isBusy = false;
                 $scope.$apply();
             }          
-        }
+        };
+        $scope.updatePageExport = function(page){
+            $scope.selectedExport.pages = angular.copy($rootScope.filterArray($scope.exportData.pages, 'isActived', true)); 
+            if(page.isActived){
+                var selectedPage = $rootScope.findObjectByKey($scope.selectedExport.pages,'id',page.id);
+                selectedPage.moduleNavs = angular.copy($rootScope.filterArray(page.moduleNavs, 'isActived', true));
+            }
+        };
     }]);

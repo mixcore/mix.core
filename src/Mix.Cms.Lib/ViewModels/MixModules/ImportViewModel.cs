@@ -35,7 +35,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("image")]
         public string Image { get; set; }
-        
+
         [JsonProperty("thumbnail")]
         public string Thumbnail { get; set; }
 
@@ -82,10 +82,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #endregion Models
 
         #region Views
-       
+
         [JsonProperty("data")]
         public PaginationModel<MixModuleDatas.ReadViewModel> Data { get; set; } = new PaginationModel<MixModuleDatas.ReadViewModel>();
-        
+
         //Parent Article Id
         [JsonProperty("articleId")]
         public string ArticleId { get; set; }
@@ -111,7 +111,19 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #endregion Contructors
 
         #region Overrides
-
+        public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            base.Validate(_context, _transaction);
+            if (IsValid && Id == 0)
+            {
+                IsValid = !Repository.CheckIsExists(m => m.Name == Name && m.Specificulture == Specificulture
+                , _context, _transaction);
+                if (!IsValid)
+                {
+                    Errors.Add("Module Name Existed");
+                }
+            }
+        }
         public override MixModule ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)
@@ -137,7 +149,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #endregion Overrides
 
         #region Expand
-        
+
         public void LoadData(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             RepositoryResponse<PaginationModel<MixModuleDatas.ReadViewModel>> getDataResult = new RepositoryResponse<PaginationModel<MixModuleDatas.ReadViewModel>>();
@@ -145,7 +157,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                        .GetModelListBy(m => m.ModuleId == Id && m.Specificulture == Specificulture
                        , "Priority", 0, null, null
                        , _context, _transaction);
-            
+
         }
 
         #endregion Expand
