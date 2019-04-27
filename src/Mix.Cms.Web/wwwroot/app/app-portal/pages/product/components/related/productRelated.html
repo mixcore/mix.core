@@ -1,0 +1,49 @@
+<div id="pills-rel" class="tab-pane">
+    <div class="row">
+        <div class="col-12">
+            <h6>Selected items</h6>
+            <table class="table table-sm table-hover" id="tbl-related-products">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col" width="5%">
+                            <span class="oi oi-move"></span>
+                        </th>
+                        <th scope="col" width="5%">
+                            <span class="oi oi-sort-ascending"></span>
+                        </th>
+                        <th scope="col">Title</th>
+                        <th scope="col" width="15%">Image</th>
+                        <th scope="col" width="5%">Showing?</th>
+                    </tr>
+                </thead>
+                <tbody class="sortable product-navs" ng-init="">
+
+                    <tr class="sortable-item" ng-repeat="item in $ctrl.product.productNavs track by $index">
+                        <td style="cursor:move;">
+                            <span class="oi oi-move"></span>
+                        </td>
+                        <td>
+                            <input type="text" name="ProductNavs[{{$index}}].Priority" value="{{item.priority}}" class="item-priority form-control form-control-sm d-inline" style="width:40px;">
+                        </td>
+                        <td>
+                            {{item.relatedProduct.title}}
+                        </td>
+                        <td>
+                            <a href="#" ng-if="item.relatedProduct.image!=''" data-toggle="modal" data-target=".image-preview-modal-lg" data-imgsrc="{{item.relatedProduct.image}}">
+                                <img imageonload class="" ng-src="{{item.relatedProduct.image}}" alt="{{item.relatedProduct.title}}" style="max-height: 50px;">
+                            </a>
+                        </td>
+                        <td style="position:relative">
+                            <span class="switch switch-sm" style="position: absolute;top: 10px;">
+                                <input type="checkbox" class="switch" data-val="{{item.isActived}}" id="ProductNavs_{{item.relatedProductId}}" name="ProductNavs[{{$index}}].IsActived" ng-model="item.isActived" value="{{item.isActived}}">
+                                <label class="switch" for="ProductNavs_{{item.relatedProductId}}">
+                                </label>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div><!--activeProducts-->
+
+</div>

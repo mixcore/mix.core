@@ -1,0 +1,50 @@
+<div class="card" ng-init="$ctrl.init()">
+    <h6 class="card-header">
+        {{$ctrl.header }}
+    </h6>
+    <div class="card-body p-0" style="background:url(/images/upload-image-thumbnail.png) no-repeat center;  cursor:pointer; min-height: 200px;">        
+        <img ng-if="$ctrl.isImage" imageonload ng-src="{{$ctrl.srcUrl}}" ng-if="$ctrl.srcUrl" name="pic" class="custom-file-img d-block ng-scope ml-auto mr-auto" accept="image/*">
+        <a ng-if="!$ctrl.isImage && $ctrl.srcUrl" href="{{$ctrl.srcUrl}}" target="_blank">View</a>
+        <input type="hidden" value="{{$ctrl.type}}/{{$ctrl.folder}}" class="folder-val">
+    </div>
+    <div class="card-footer">
+            <div class="form-group">
+                <label>From URL</label>
+                <input type="text" onclick="this.select()" ng-model="$ctrl.srcUrl" class="form-control">
+            </div>
+            <div class="form-group m-0 row">                
+                <div class="col-sm-4">
+                    <a class="nav-link p-2" href="#" data-toggle="modal" data-target="#modal-files-search-{{$ctrl.id}}">
+                        <i class="fa fa-search"></i>
+                    </a>
+                </div>
+                <div class="custom-file col-sm-8">
+                        <!-- <input type="file" class="custom-file-input" id="customFile"> -->
+                        <input id="{{$ctrl.id}}" type="file" name="pic" ngf-select="$ctrl.selectFile($file, $invalidFiles)" data-file="file.file" class="position-absolute hidden">
+                        <label class="custom-file-label" for="{{$ctrl.id}}">Choose file</label>
+                    </div>
+            </div>
+    </div>
+</div>
+
+<div class="modal modal-default fade show" id="modal-files-search-{{$ctrl.id}}" ng-init="getListMedias()">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><i class="mi mi-Media"></i> Quick media upload</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- <div class="modal-body" style="height: calc(100vh - 143px);overflow-y: auto;"> -->
+            <div class="modal-body">
+                <media-navs prefix="$ctrl.id" data="$ctrl.mediaNavs" is-single="'true'" output="$ctrl.srcUrl"></media-navs>
+            </div>
+            <div class="modal-footer">
+                <paging class="small col-md-12" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
+            </paging></div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
