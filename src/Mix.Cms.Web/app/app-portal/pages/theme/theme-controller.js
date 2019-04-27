@@ -90,9 +90,8 @@ app.controller('ThemeController', ['$scope', '$rootScope', 'ngAppSettings', '$ro
         };
         $scope.updatePageExport = function(page){
             $scope.selectedExport.pages = angular.copy($rootScope.filterArray($scope.exportData.pages, 'isActived', true)); 
-            if(page.isActived){
-                var selectedPage = $rootScope.findObjectByKey($scope.selectedExport.pages,'id',page.id);
-                selectedPage.moduleNavs = angular.copy($rootScope.filterArray(page.moduleNavs, 'isActived', true));
-            }
+            angular.forEach($scope.selectedExport.pages,function(e){
+                e.moduleNavs = angular.copy($rootScope.filterArray(e.moduleNavs, 'isActived', true));
+            });
         };
     }]);

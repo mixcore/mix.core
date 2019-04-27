@@ -706,24 +706,24 @@ namespace Mix.Cms.Lib.Repositories
             }
         }
 
-        public string ZipFolder(string srcFolder, string fileName)
+        public string ZipFolder(string tmpPath, string outputPath, string fileName)
         {
             try
             {
-                string tmpPath = $"{MixConstants.Folder.WebRootPath}/{srcFolder}/tmp";
-                string outputFile = $"{srcFolder}/{fileName}.zip";
-                string outputFilePath = $"{MixConstants.Folder.WebRootPath}/{outputFile}";
+                //string tmpPath = $"wwwroot/Exports/temp/{fileName}-{DateTime.UtcNow.ToShortDateString()}";
+                string outputFile = $"wwwroot/{outputPath}/{fileName}.zip";
+                string outputFilePath = $"{outputPath}/{fileName}.zip";
 
-                if (Directory.Exists(srcFolder))
+                if (Directory.Exists(tmpPath))
                 {
-                    CopyDirectory(srcFolder, tmpPath);
-                    if (File.Exists(outputFilePath))
+                    //CopyDirectory(srcFolder, tmpPath);
+                    if (File.Exists(outputFile))
                     {
-                        File.Delete(outputFilePath);
+                        File.Delete(outputFile);
                     }
-                    ZipFile.CreateFromDirectory(tmpPath, outputFilePath);
+                    ZipFile.CreateFromDirectory(tmpPath, outputFile);
                     DeleteFolder(tmpPath);
-                    return outputFile;
+                    return outputFilePath;
                 }
                 else
                 {

@@ -75,42 +75,45 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             var getTemplate = await ReadViewModel.Repository.GetSingleModelAsync(
                  theme => theme.Id == id).ConfigureAwait(false);
-            string exportPath = $"Exports/Themes/{getTemplate.Data.Name}";
+            
+            //path to temporary folder
+            string tempPath = $"wwwroot/Exports/Themes/{getTemplate.Data.Name}/temp";
+            string outputPath = $"Exports/Themes/{getTemplate.Data.Name}";
 
             string filename = $"schema";
             var file = new FileViewModel()
             {
                 Filename = filename,
                 Extension = ".json",
-                FileFolder = $"{exportPath}/Data",
+                FileFolder = $"{tempPath}/Data",
                 Content = JObject.FromObject(data).ToString()
             };
 
             // Delete Existing folder
-            FileRepository.Instance.DeleteFolder(exportPath);
+            FileRepository.Instance.DeleteFolder(outputPath);
             // Copy current templates file
-            FileRepository.Instance.CopyDirectory($"{getTemplate.Data.TemplateFolder}", $"{exportPath}/Templates");
+            FileRepository.Instance.CopyDirectory($"{getTemplate.Data.TemplateFolder}", $"{tempPath}/Templates");
             // Copy current assets files
-            FileRepository.Instance.CopyDirectory($"wwwroot/{getTemplate.Data.AssetFolder}", $"{exportPath}/Assets");            
+            FileRepository.Instance.CopyDirectory($"wwwroot/{getTemplate.Data.AssetFolder}", $"{tempPath}/Assets");            
             // Copy current uploads files
-            FileRepository.Instance.CopyDirectory($"wwwroot/{getTemplate.Data.UploadFolder}", $"{exportPath}/Uploads");
+            FileRepository.Instance.CopyDirectory($"wwwroot/{getTemplate.Data.UploadFolder}", $"{tempPath}/Uploads");
             // Save Site Structures
             FileRepository.Instance.SaveFile(file);
 
-            // Zip to [theme_name].zip
-            string filePath = FileRepository.Instance.ZipFolder($"{exportPath}", getTemplate.Data.Name);
+            // Zip to [theme_name].zip ( wwwroot for web path)
+            string filePath = FileRepository.Instance.ZipFolder($"{tempPath}", outputPath, getTemplate.Data.Name);
 
             
 
             // Delete temp folder
-            FileRepository.Instance.DeleteWebFolder($"{exportPath}/Assets");
-            FileRepository.Instance.DeleteWebFolder($"{exportPath}/Uploads");
-            FileRepository.Instance.DeleteWebFolder($"{exportPath}/Templates");
-            FileRepository.Instance.DeleteWebFolder($"{exportPath}/Data");
+            FileRepository.Instance.DeleteWebFolder($"{outputPath}/Assets");
+            FileRepository.Instance.DeleteWebFolder($"{outputPath}/Uploads");
+            FileRepository.Instance.DeleteWebFolder($"{outputPath}/Templates");
+            FileRepository.Instance.DeleteWebFolder($"{outputPath}/Data");
 
             return new RepositoryResponse<string>()
             {
-                IsSucceed = !string.IsNullOrEmpty(exportPath),
+                IsSucceed = !string.IsNullOrEmpty(outputPath),
                 Data = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/{filePath}"
             };
         }
