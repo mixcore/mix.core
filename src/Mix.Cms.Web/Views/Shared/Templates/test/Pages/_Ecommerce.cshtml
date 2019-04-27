@@ -1,0 +1,24 @@
+@model Mix.Cms.Lib.ViewModels.MixPages.ReadMvcViewModel
+@{
+    var slider = Model.GetModule("slider");
+    var products = Model.GetModule("products");
+    var offers = Model.GetModule("lastest_offers");
+    var subscribe = Model.GetModule("subscribe");
+}
+@if(slider != null){
+    <partial name="@slider.TemplatePath" model="@slider"/>
+}
+
+<div class="main">
+    @if(products != null){
+        <partial name="@products.TemplatePath" model="@products"/>
+    }
+    <!-- products -->
+    @if(offers != null){
+        <partial name="@offers.TemplatePath" model="@offers"/>
+    }
+    <!-- section -->
+    @if(subscribe != null){
+        <partial name="@subscribe.TemplatePath" model="@subscribe"/>
+    }
+</div>
