@@ -115,7 +115,6 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
             $scope.dbProvider = $scope.settings.providers[0];
             $scope.initCmsModel.databaseProvider = $scope.dbProvider.value;
             $rootScope.isBusy = false;
-            $scope.$apply();
         };
         
         $scope.initCmsModel = {
