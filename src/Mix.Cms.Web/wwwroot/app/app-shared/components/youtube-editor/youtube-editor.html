@@ -1,0 +1,11 @@
+<div class="form-group">
+    <label class="control-label" ng-if="$ctrl.isShowTitle">Youtube code</label>    
+    <input class="form-control" type="text" placeholder="youtube code" ng-change="$ctrl.loadVideo()" ng-model="$ctrl.code">
+</div>
+<div class="youtube" data-embed="{{$ctrl.src}}" ng-init="$ctrl.loadVideo()">        
+    <div ng-if="$ctrl.isPlay">
+            <iframe frameborder="0" allowfullscreen="" ng-src="{{$ctrl.src}}"></iframe>
+    </div>
+    <img ng-if="!$ctrl.isPlay" ng-src="{{$ctrl.img}}">
+        <div ng-if="!$ctrl.isPlay" class="play-button" ng-click="$ctrl.playVideo()"></div>
+</div>
