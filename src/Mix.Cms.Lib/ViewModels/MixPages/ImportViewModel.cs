@@ -170,7 +170,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 foreach (var item in ModuleNavs)
                 {
-                    if (!MixModules.ImportViewModel.Repository.CheckIsExists(m => m.Name == item.Module.Name && m.Specificulture == parent.Specificulture))
+                    if (!MixModules.ImportViewModel.Repository.CheckIsExists(m => m.Name == item.Module.Name && m.Specificulture == parent.Specificulture,
+                            _context,_transaction))
                     {
                         //  Force to create new module
                         item.Module.Id = 0;

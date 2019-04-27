@@ -261,7 +261,19 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #endregion Contructors
 
         #region Overrides
-
+        public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            base.Validate(_context, _transaction);
+            if (IsValid && Id == 0)
+            {
+                IsValid = !Repository.CheckIsExists(m => m.Name == Name && m.Specificulture == Specificulture
+                , _context, _transaction);
+                if (!IsValid)
+                {
+                    Errors.Add("Module Name Existed");
+                }
+            }
+        }
         public override MixModule ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)

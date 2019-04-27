@@ -13,13 +13,14 @@ app.factory('ThemeService', ['CommonService', 'BaseService',
             };
             return await commonService.getApiResult(req, '');
         };
-        var _export = async function (id) {
+        var _export = async function (id, objData) {
             var url = this.prefixUrl + '/export/' + id;
             var req = {
-                method: 'GET',
-                url: url
+                method: 'POST',
+                url: url,
+                data: JSON.stringify(objData)
             };
-            return await commonService.getApiResult(req, '');
+            return await commonService.getApiResult(req);
         };
         var _getExportData = async function (id) {
             var url = (this.prefixUrl || '/' + this.lang + '/' + this.modelName) + '/export/'+ id;
