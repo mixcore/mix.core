@@ -1,7 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@{ 
+    string assetFolder = MixCmsHelper.GetAssetFolder(ViewBag.culture);
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    
+    <!-- START SEO -->
+    @RenderSection("Seo", false)
+    <!-- END SEO -->
+
     <!--[STYLES]-->
     @RenderSection("Styles", false)
 </head>
