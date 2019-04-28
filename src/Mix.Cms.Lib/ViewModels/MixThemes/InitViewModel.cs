@@ -151,9 +151,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             {
                 // Clone Default templates
                 Name = SeoHelper.GetSEOString(Title);
-                string defaultTemplateFolder = CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.TemplatesFolder,
-                    "Default" });
+                string defaultTemplateFolder = $"{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateFolder) }";
                 bool copyResult = FileRepository.Instance.CopyDirectory(defaultTemplateFolder, TemplateFolder);
                 string defaultAssetsFolder = CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.WebRootPath,

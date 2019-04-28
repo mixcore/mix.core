@@ -182,7 +182,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             // New themes without import existing theme => create from default folder
             if (result.IsSucceed && !Directory.Exists(TemplateFolder) && string.IsNullOrEmpty(TemplateAsset.Filename))
             {
-                result = CreateDefaultThemeTemplates(_context, _transaction);
+                result = await CreateDefaultThemeTemplatesAsync(_context, _transaction);
             }
 
             // Actived Theme
@@ -355,21 +355,25 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             return result;
         }
 
-        private RepositoryResponse<bool> CreateDefaultThemeTemplates(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        private async Task<RepositoryResponse<bool>> CreateDefaultThemeTemplatesAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var result = new RepositoryResponse<bool>();
-            string defaultFolder = CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.TemplatesFolder,
-                    MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateFolder) });
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            string defaultFolder = $"{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultBlankTemplateFolder) }";
+                
+                //CommonHelper.GetFullPath(new string[] {
+                //    MixConstants.Folder.TemplatesFolder,
+                //    MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateFolder) });
             bool copyResult = FileRepository.Instance.CopyDirectory(defaultFolder, TemplateFolder);
 
             var files = FileRepository.Instance.GetFilesWithContent(TemplateFolder);
+            var id = _context.MixTemplate.Count()+1;
             //TODO: Create default asset
             foreach (var file in files)
-            {
+            {                
                 MixTemplates.InitViewModel template = new MixTemplates.InitViewModel(
                     new MixTemplate()
                     {
+                        Id= id,
                         FileFolder = file.FileFolder,
                         FileName = file.Filename,
                         Content = file.Content,
@@ -381,11 +385,15 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                         FolderType = file.FolderName,
                         ModifiedBy = CreatedBy
                     }, _context, _transaction);
-                var saveResult = template.SaveModel(true, _context, _transaction);
+                var saveResult = await template.SaveModelAsync(true, _context, _transaction);
                 ViewModelHelper.HandleResult(saveResult, ref result);
                 if (!result.IsSucceed)
                 {
                     break;
+                }
+                else
+                {
+                    id += 1;
                 }
             }
             return result;

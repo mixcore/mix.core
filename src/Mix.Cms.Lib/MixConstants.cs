@@ -35,6 +35,7 @@ namespace Mix.Cms.Lib
         {
             public const string ConnectionString = "ConnectionString";
             public const string OrderBy = "OrderBy";
+            public const string DefaultBlankTemplateFolder = "DefaultTemplateFolder";
             public const string DefaultTemplateFolder = "DefaultTemplateFolder";
             public const string Language = "Language";
             public const string DefaultStatus = "DefaultStatus";
