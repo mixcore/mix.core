@@ -295,7 +295,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         private async Task<RepositoryResponse<bool>> ActivedThemeAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var result = new RepositoryResponse<bool>();
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
             SystemConfigurationViewModel config = (await SystemConfigurationViewModel.Repository.GetSingleModelAsync(
                     c => c.Keyword == MixConstants.ConfigurationKeyword.ThemeName && c.Specificulture == Specificulture
                     , _context, _transaction)).Data;
