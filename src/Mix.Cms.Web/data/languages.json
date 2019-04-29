@@ -194,8 +194,8 @@
       "category": "Portal",
       "dataType": 7,
       "description": null,
-      "value": "Articles",
-      "defaultValue": "Articles",
+      "value": "Posts",
+      "defaultValue": "Posts",
       "cultures": null,
       "priority": 0,
       "status": 2

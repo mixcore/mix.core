@@ -70,6 +70,7 @@ namespace Mix.Cms.Web.Controllers
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             ViewBag.culture = _culture;
+            ViewBag.assetFolder = MixCmsHelper.GetAssetFolder(_culture);
             _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
             if (MixService.GetIpConfig<bool>("IsRetrictIp"))
             {

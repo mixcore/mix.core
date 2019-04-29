@@ -86,7 +86,10 @@
     "IsMysql": false,
     "DatabaseProvider": "MSSQL"
   },
-
+  "Socials":{
+    "Facebook":{},
+    "Instagram":{}
+  },
   "Logging": {
     "IncludeScopes": false,
     "LogLevel": {
