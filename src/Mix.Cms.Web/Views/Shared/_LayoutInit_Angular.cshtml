@@ -16,13 +16,16 @@
     <environment names="Development,Staging,Production">
         <!-- CSS Files -->
     </environment>
-    <link href="~/css/bootstrap.min.css" rel="stylesheet" />          
+    <!-- <link href="~/css/bootstrap.min.css" rel="stylesheet" />           -->
     <!-- <link href="~/css/shared.min.css" rel="stylesheet" />     -->
-    <link href="~/css/now-ui.min.css" rel="stylesheet" />    
-    <link href="~/css/app-vendor.min.css" rel="stylesheet" />  
+    <!-- <link href="~/css/now-ui.min.css" rel="stylesheet" />     -->
+    <!-- <link href="~/css/app-vendor.min.css" rel="stylesheet" />   -->
+    <link href="~/plugins/tabler-0.0.32/css/dashboard.css" rel="stylesheet" />
+
 </head>
 
-<body class="login-page app-init" ng-app="MixPortal" style="background-image: url('/assets/img/bgs/work-space.jpg');">
+<body class="login-page app-init" ng-app="MixPortal">
+     <!-- style="background-image: url('/assets/img/bgs/work-space.jpg');" -->
     <div class="loader-container" ng-show="isBusy">
        <div class="loader">
             <span>{</span><span>}</span>
@@ -31,35 +34,28 @@
            
         </div> -->
     </div>
-    <div class="container">
-    @RenderBody()
-    </div>
-    <!-- <div class="page-header" filter-color="purple">
-        <div class="page-header-image" style="background-image:url(/images/bgs/work-space.jpg)"></div>
+    <div class="page">
+      <div class="page-single">
         <div class="container">
-            @RenderBody()
-        </div>
-        <footer class="footer">
-            <div class="container">
-                <div class="copyright">
-                    &copy;
-                    <script>
-                        document.write(new Date().getFullYear())
-                    </script>
-                    Made with <span class="heart">❤</span> by<a href="http://www.mixcore.org" target="_blank"> mixcore</a>.
-                </div>
+          <div class="row">
+            <div class="col col-login mx-auto">
+                @RenderBody()
             </div>
-        </footer>
-    </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+
     <environment names="Development">
     </environment>
     <script>window.jQuery || document.write('<script src="/js/jquery/jquery.min.js"><\/script>')</script>
     <script src="~/js/framework.min.js"></script>
-    <script src="~/js/bootstrap.min.js"></script>
-    <script src="~/js/now-ui.min.js"></script>
+    <!-- <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/now-ui.min.js"></script> -->
+    <script src="~/plugins/tabler-0.0.32/js/dashboard.js"></script>   
     <script src="~/js/app-init.min.js"></script>
-    <script src="~/js/app-shared.min.js"></script>    
-
+    <script src="~/js/app-shared.min.js"></script>   
     @RenderSection("Scripts", required: false)
 
     <!-- Modal -->
