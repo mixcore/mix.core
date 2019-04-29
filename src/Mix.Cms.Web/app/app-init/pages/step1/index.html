@@ -1,11 +1,9 @@
-
-
 <div class="text-center mb-6">
     <img src="/assets/mixcore-logo-full-blue-text.png" class="h-6" alt="">
 </div>
 <div class="card">
     <div class="card-body p-6">
-        <div class="card-title">Database Configuration</div>
+        <div class="card-title">Site information</div>
 
 
         <div class="form-group">
@@ -21,15 +19,16 @@
                 ng-model="initCmsModel.culture"></select>
         </div>
 
-        <hr />
+        <div class="card-title pt-2">Database Configuration</div>
         <div class="form-group">
-            <button class="btn btn-primary btn-block form-control" ng-click="initCmsModel.isUseLocal=!initCmsModel.isUseLocal">
+            <button class="btn btn-primary btn-block form-control"
+                ng-click="initCmsModel.isUseLocal=!initCmsModel.isUseLocal">
                 <span ng-if="!initCmsModel.isUseLocal">Use local database</span>
                 <span ng-if="initCmsModel.isUseLocal">Use remote database</span>
             </button>
         </div>
 
-        <form class="form-footer">
+        <form>
             <div class="form-group" ng-show="!initCmsModel.isUseLocal">
                 <label>Database Type</label>
                 <select class="custom-select form-control" ng-options="item as item.text for item in settings.providers"
