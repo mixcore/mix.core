@@ -121,7 +121,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 m => m.Name == moduleName && m.Specificulture == _lang).ConfigureAwait(false);
             if (getModule.IsSucceed)
             {
-                var ModuleData = new UpdateViewModel(
+                var moduleData = new UpdateViewModel(
                     new MixModuleData()
                     {
                         ModuleId = getModule.Data.Id,
@@ -131,8 +131,43 @@ namespace Mix.Cms.Api.Controllers.v1
                 return new RepositoryResponse<UpdateViewModel>()
                 {
                     IsSucceed = true,
-                    Data = ModuleData
+                    Data = moduleData
                 };
+            }
+            else
+            {
+                return new RepositoryResponse<UpdateViewModel>()
+                {
+                    IsSucceed = false,
+                    Data = null,
+                    Exception = getModule.Exception,
+                    Errors = getModule.Errors
+                };
+            }
+        }
+        
+        // GET api/module-data/create/id
+        [AllowAnonymous]
+        [HttpPost, HttpOptions]
+        [Route("save/{moduleName}")]
+        public async Task<RepositoryResponse<UpdateViewModel>> SaveByName(string moduleName, [FromBody] JObject data)
+        {
+            var getModule = await Lib.ViewModels.MixModules.ReadListItemViewModel.Repository.GetSingleModelAsync(
+                m => m.Name == moduleName && m.Specificulture == _lang).ConfigureAwait(false);
+            if (getModule.IsSucceed)
+            {
+                var moduleData = new UpdateViewModel(
+                    new MixModuleData()
+                    {
+                        ModuleId = getModule.Data.Id,
+                        Specificulture = _lang,
+                        Fields = getModule.Data.Fields
+                    });
+                foreach (var item in moduleData.DataProperties)
+                {
+                    moduleData.JItem[item.Name] = data[item.Name].Value<string>();
+                }
+                return await moduleData.SaveModelAsync();
             }
             else
             {
