@@ -1,7 +1,8 @@
 <div class="text-center mb-6">
     <img src="/assets/mixcore-logo-full-white-text.png" alt="">
 </div>
-<form class="card" action="" method="post">
+<form class="card frm-login" action="" 
+    ng-class="{'submitted': submitted}" ng-submit="login()">
     <div class="card-body p-6">
         <div class="card-title">Login to your account</div>
         <div class="form-group">
@@ -26,10 +27,10 @@
             </label>
         </div>
         <div class="form-footer">
-            <button ng-click="login()" class="btn btn-primary btn-block"
+            <a ng-click="login()" class="btn btn-primary btn-block"
                 ng-disabled="!loginData.password || !loginData.username">
                 Login
-            </button>
+            </a>
         </div>
 
         <div class="mt-1 text-center text-muted">
