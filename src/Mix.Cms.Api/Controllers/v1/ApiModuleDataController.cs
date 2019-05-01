@@ -165,7 +165,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     });
                 foreach (var item in moduleData.DataProperties)
                 {
-                    moduleData.JItem[item.Name] = data[item.Name].Value<string>();
+                    moduleData.JItem[item.Name]["value"] = data[item.Name]?.Value<string>();
                 }
                 return await moduleData.SaveModelAsync();
             }
