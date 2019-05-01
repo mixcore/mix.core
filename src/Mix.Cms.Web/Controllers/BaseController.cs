@@ -64,13 +64,19 @@ namespace Mix.Cms.Web.Controllers
 
         protected string _culture
         {
-            get => RouteData?.Values["culture"]?.ToString().ToLower() ?? MixService.GetConfig<string>("DefaultCulture");
+            get => RouteData?.Values["culture"]?.ToString().ToLower() ==null
+                    || RouteData?.Values["culture"]?.ToString().ToLower() == "init" 
+                ? MixService.GetConfig<string>("DefaultCulture")
+                : RouteData?.Values["culture"].ToString();
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             ViewBag.culture = _culture;
-            ViewBag.assetFolder = MixCmsHelper.GetAssetFolder(_culture);
+            if (!string.IsNullOrEmpty(_culture))
+            {
+                ViewBag.assetFolder = MixCmsHelper.GetAssetFolder(_culture);
+            }
             _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
             if (MixService.GetIpConfig<bool>("IsRetrictIp"))
             {

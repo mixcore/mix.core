@@ -35,7 +35,7 @@
                                 @foreach (var childNav in cate.Childs)
                                 {
                                     activedClass = childNav.IsActived ? "active" : string.Empty;
-                                    <a href="@childNav.DetailsUrl" class="dropdown-item @activedClass">@childNav.Title</a>
+                                    <a href="@childNav.Page.DetailsUrl" class="dropdown-item @activedClass">@childNav.Page.Title</a>
                                 }
                             </div>
                         </li>

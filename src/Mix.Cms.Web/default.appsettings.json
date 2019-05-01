@@ -68,7 +68,7 @@
     "DefaultTheme": "Default_Blank",
     "DefaultContentStatus": "2",
     "DefaultBlankTemplateFolder": "Themes/Default_Blank",
-    "DefaultTemplateFolder": "Themes/Default_Blank",
+    "DefaultTemplateFolder": "Themes/Default",
     "DefaultTemplateLayout": "_Layout",
     "DefaultArticleAttr": "[]",
     "OrderBy": "Priority",
