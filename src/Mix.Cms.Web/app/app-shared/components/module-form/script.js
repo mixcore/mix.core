@@ -74,19 +74,26 @@
                 if (resp && resp.isSucceed) {
                     ctrl.data = resp.data;
                     ctrl.initModuleForm();
-                    var msg = $rootScope.translate('success');
-                    $rootScope.showMessage(msg, 'success');
                     if (ctrl.saveCallback) {
                         ctrl.saveCallback({ data: ctrl.data });
                     }
                     else {
+                        var msg = $rootScope.translate('success');
+                        $rootScope.showMessage(msg, 'success');
                         $rootScope.isBusy = false;
                         $scope.$apply();
                     }
                     //$location.path('/portal/moduleData/details/' + resp.data.id);
                 }
                 else {
-                    if (resp) { $rootScope.showErrors(resp.errors); }
+                    if (resp) { 
+                        if(ctrl.errorCallback){
+                            ctrl.errorCallback({ response: resp });
+                        }
+                        else{
+                            $rootScope.showErrors(resp.errors); 
+                        }
+                    }
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 }
@@ -106,5 +113,6 @@
         isShowTitle: '=',
         backUrl: '=',
         saveCallback: '&',
+        errorCallback: '&',
     }
 });

@@ -92,8 +92,7 @@ paths.portal = {
 };
 
 paths.appCss = {
-    src: [
-        paths.webapp + "app-shared/**/*.css",
+    src: [        
         paths.webapp + "app-portal/**/*.css",
         paths.webapp + "app-client/**/*.css",
         paths.webapp + "app-init/**/*.css"
@@ -111,6 +110,7 @@ paths.portalCss = {
 };
 paths.sharedCss = {
     src: [
+        paths.webapp + "app-shared/**/*.css",
         "./lib/css/shared/**/*.css",
         "./lib/css/shared/**/*.*.css"
     ],
