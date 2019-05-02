@@ -10,7 +10,6 @@ shim: {
 },
 paths: {
     'core': 'plugins/tabler-0.0.32/js/core',
-'jquery': 'plugins/tabler-0.0.32/js/vendors/jquery-3.2.1.min',
 'bootstrap': 'plugins/tabler-0.0.32/js/vendors/bootstrap.bundle.min',
 'sparkline': 'plugins/tabler-0.0.32/js/vendors/jquery.sparkline.min',
 'selectize': 'plugins/tabler-0.0.32/js/vendors/selectize.min',
