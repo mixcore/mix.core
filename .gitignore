@@ -265,3 +265,5 @@ src/Mix.Cms.Web/appsettings.json
 /src/Mix.Cms.Web/wwwroot/content/Uploads
 src/Mix.Cms.Web/.vscode/launch.json
 src/Mix.Cms.Web/.vscode/tasks.json
+/src/Mix.Cms.Web/Views/Shared/Templates
+/src/Mix.Cms.Web/wwwroot/content
