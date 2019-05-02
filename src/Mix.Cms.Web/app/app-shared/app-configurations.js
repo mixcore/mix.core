@@ -1510,20 +1510,7 @@ app.run(['$http', '$rootScope', 'ngAppSettings', 'GlobalSettingsService', 'Commo
         };
         $rootScope.showMessage = function (content, type) {
             alert(content);
-            // var from = 'bottom';
-            // var align = 'right';
-            // $.notify({
-            //     icon: "now-ui-icons ui-1_bell-53",
-            //     message: $rootScope.translate(content)
-
-            // }, {
-            //         type: type,
-            //         timer: 2000,
-            //         placement: {
-            //             from: from,
-            //             align: align
-            //         }
-            //     });
+            
         };
         $rootScope.encrypt = function (message) {
             var keySize = 256;
