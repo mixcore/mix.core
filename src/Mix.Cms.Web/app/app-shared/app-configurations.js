@@ -1449,10 +1449,11 @@ app.run(['$http', '$rootScope', 'ngAppSettings', 'GlobalSettingsService', 'Commo
             $('#dlg-confirm-msg').modal('show');
         };
 
-        $rootScope.preview = function (type, data, title, size) {
+        $rootScope.preview = function (type, data, title, size, objClass) {
             $rootScope.previewObject = {
                 title: title || 'Preview',
                 size: size || 'modal-md',
+                objClass: objClass,
                 type: type,
                 data: data
             };
@@ -1509,8 +1510,20 @@ app.run(['$http', '$rootScope', 'ngAppSettings', 'GlobalSettingsService', 'Commo
             }
         };
         $rootScope.showMessage = function (content, type) {
-            alert(content);
-            
+            var from = 'bottom';
+            var align = 'right';
+            $.notify({
+                icon: "now-ui-icons ui-1_bell-53",
+                message: $rootScope.translate(content)
+
+            }, {
+                    type: type,
+                    timer: 2000,
+                    placement: {
+                        from: from,
+                        align: align
+                    }
+                });
         };
         $rootScope.encrypt = function (message) {
             var keySize = 256;

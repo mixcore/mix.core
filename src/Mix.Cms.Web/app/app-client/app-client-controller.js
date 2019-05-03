@@ -85,7 +85,8 @@
                 var resp = await moduleDataService.saveModuleData($scope.activedModuleData);
                 if (resp && resp.isSucceed) {
                     $scope.activedModuleData = resp.data;
-                    $rootScope.showMessage('Success', 'success');
+                    var msg = $rootScope.translate('success');
+                    $rootScope.showMessage(msg, 'success');
                     $rootScope.isBusy = false;
                     $scope.initModuleForm($scope.name);
                     $rootScope.isBusy = false;

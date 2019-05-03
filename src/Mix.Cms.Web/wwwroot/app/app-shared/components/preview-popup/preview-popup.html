@@ -50,6 +50,13 @@
                                 <div class="col-md-12" ng-bind-html="$ctrl.previewObject.data.content"></div>
                             </div>
                         </div>
+                        <div ng-switch-when="message">
+                            <div class="row col-md-12">
+                                <span ng-bind="$ctrl.previewObject.data" class="text-{{$ctrl.previewObject.objClass}}">
+
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
