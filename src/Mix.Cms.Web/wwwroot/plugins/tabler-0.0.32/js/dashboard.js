@@ -9,6 +9,7 @@ shim: {
 'core': ['bootstrap', 'jquery'],
 },
 paths: {
+    'jquery': 'js/jquery/jquery.min',
     'core': 'plugins/tabler-0.0.32/js/core',
 'bootstrap': 'plugins/tabler-0.0.32/js/vendors/bootstrap.bundle.min',
 'sparkline': 'plugins/tabler-0.0.32/js/vendors/jquery.sparkline.min',
