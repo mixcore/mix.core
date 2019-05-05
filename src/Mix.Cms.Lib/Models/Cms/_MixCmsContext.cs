@@ -1354,6 +1354,23 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasForeignKey(d => d.Specificulture)
                     .HasConstraintName("FK_Mix_Url_Alias_Mix_Culture");
             });
+            modelBuilder.Entity<MixCache>(entity =>
+            {
+                entity.ToTable("mix_cache");
+
+                entity.HasIndex(e => e.ExpiredDateTime)
+                    .HasName("Index_ExpiresAtTime");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(250)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.ExpiredDateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Value).IsRequired();
+            });
         }
     }
 }

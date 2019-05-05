@@ -210,7 +210,8 @@ namespace Mix.Cms.Web.Controllers
             var getAlias = new RepositoryResponse<Lib.ViewModels.MixUrlAliases.UpdateViewModel>();
             var cacheKey = $"alias_{_culture}_{seoName}_{pageSize}_{pageIndex}";
 
-            var data = _memoryCache.Get<Lib.ViewModels.MixUrlAliases.UpdateViewModel>(cacheKey);
+            //var data = await MixCacheService.GetAsync<Lib.ViewModels.MixUrlAliases.UpdateViewModel>(cacheKey);
+            var data = await MixCacheService.GetAsync<Lib.ViewModels.MixUrlAliases.UpdateViewModel>(cacheKey);
             if (data != null && MixService.GetConfig<bool>("IsCache"))
             {
                 getAlias.IsSucceed = true;
@@ -226,11 +227,7 @@ namespace Mix.Cms.Web.Controllers
 
                 getAlias = await Lib.ViewModels.MixUrlAliases.UpdateViewModel.Repository.GetSingleModelAsync(predicate);
 
-                _memoryCache.Set(cacheKey, getAlias.Data);
-                if (!MixConstants.cachedKeys.Contains(cacheKey))
-                {
-                    MixConstants.cachedKeys.Add(cacheKey);
-                }
+                await MixCacheService.SetAsync(cacheKey, data);
             }
 
             if (getAlias.IsSucceed)// && getPage.Data.View != null
@@ -263,7 +260,8 @@ namespace Mix.Cms.Web.Controllers
             var getPage = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
             var cacheKey = $"page_{_culture}_{seoName}_{pageSize}_{pageIndex}";
 
-            var data = _memoryCache.Get<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
+            //var data = await MixCacheService.GetAsync<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
+            var data = await MixCacheService.GetAsync<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
             if (data != null && MixService.GetConfig<bool>("IsCache"))
             {
                 getPage.IsSucceed = true;
@@ -290,24 +288,21 @@ namespace Mix.Cms.Web.Controllers
                 {
                     getPage.Data.LoadData(pageIndex: pageIndex, pageSize: pageSize);
                 }
-                _memoryCache.Set(cacheKey, getPage.Data);
-                if (!MixConstants.cachedKeys.Contains(cacheKey))
-                {
-                    MixConstants.cachedKeys.Add(cacheKey);
-                }
+                await MixCacheService.SetAsync(cacheKey, getPage.Data);
+                
             }
 
             if (getPage.IsSucceed)// && getPage.Data.View != null
             {
                 GeneratePageDetailsUrls(getPage.Data);
-                if (!MixConstants.cachedKeys.Contains(cacheKey))
-                {
-                    MixConstants.cachedKeys.Add(cacheKey);
-                }
-                ViewData["TopPages"] = GetCategory(CatePosition.Nav, seoName);
-                ViewData["HeaderPages"] = GetCategory(CatePosition.Top, seoName);
-                ViewData["FooterPages"] = GetCategory(CatePosition.Footer, seoName);
-                ViewData["LeftPages"] = GetCategory(CatePosition.Left, seoName);
+                //if (!MixConstants.cachedKeys.Contains(cacheKey))
+                //{
+                //    MixConstants.cachedKeys.Add(cacheKey);
+                //}
+                ViewData["TopPages"] = await GetCategoryAsync(CatePosition.Nav, seoName);
+                ViewData["HeaderPages"] = await GetCategoryAsync(CatePosition.Top, seoName);
+                ViewData["FooterPages"] = await GetCategoryAsync(CatePosition.Footer, seoName);
+                ViewData["LeftPages"] = await GetCategoryAsync(CatePosition.Left, seoName);
 
                 ViewData["Title"] = getPage.Data.SeoTitle;
                 ViewData["Description"] = getPage.Data.SeoDescription;
@@ -331,7 +326,8 @@ namespace Mix.Cms.Web.Controllers
             var getPage = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
             var cacheKey = $"page_{_culture}_{pageId}_{pageSize}_{pageIndex}";
 
-            var data = _memoryCache.Get<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
+            var data = await MixCacheService.GetAsync<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
+            //var data = await MixCacheService.GetAsync<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
             if (data != null && MixService.GetConfig<bool>("IsCache"))
             {
                 getPage.IsSucceed = true;
@@ -353,19 +349,16 @@ namespace Mix.Cms.Web.Controllers
                     getPage.Data.DetailsUrl = GenerateDetailsUrl("Page", new { seoName = getPage.Data.SeoName });
                 }
 
-                _memoryCache.Set(cacheKey, getPage.Data);
-                if (!MixConstants.cachedKeys.Contains(cacheKey))
-                {
-                    MixConstants.cachedKeys.Add(cacheKey);
-                }
+                await MixCacheService.SetAsync(cacheKey, getPage.Data);
+                
             }
 
             if (getPage.IsSucceed)// && getPage.Data.View != null
             {
-                ViewData["TopPages"] = GetCategory(CatePosition.Nav, getPage.Data.SeoName);
-                ViewData["HeaderPages"] = GetCategory(CatePosition.Top, getPage.Data.SeoName);
-                ViewData["FooterPages"] = GetCategory(CatePosition.Footer, getPage.Data.SeoName);
-                ViewData["LeftPages"] = GetCategory(CatePosition.Left, getPage.Data.SeoName);
+                ViewData["TopPages"] = await GetCategoryAsync(CatePosition.Nav, getPage.Data.SeoName);
+                ViewData["HeaderPages"] = await GetCategoryAsync(CatePosition.Top, getPage.Data.SeoName);
+                ViewData["FooterPages"] = await GetCategoryAsync(CatePosition.Footer, getPage.Data.SeoName);
+                ViewData["LeftPages"] = await GetCategoryAsync(CatePosition.Left, getPage.Data.SeoName);
 
                 ViewData["Title"] = getPage.Data.SeoTitle;
                 ViewData["Description"] = getPage.Data.SeoDescription;
@@ -374,10 +367,10 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["PageClass"] = getPage.Data.CssClass;
 
                 GeneratePageDetailsUrls(getPage.Data);
-                if (!MixConstants.cachedKeys.Contains(cacheKey))
-                {
-                    MixConstants.cachedKeys.Add(cacheKey);
-                }
+                //if (!MixConstants.cachedKeys.Contains(cacheKey))
+                //{
+                //    MixConstants.cachedKeys.Add(cacheKey);
+                //}
 
                 getPage.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
                 return View(getPage.Data);
@@ -391,10 +384,10 @@ namespace Mix.Cms.Web.Controllers
         async System.Threading.Tasks.Task<IActionResult> TagAsync(string tagName)
         {
             string seoName = "tag";
-            ViewData["TopPages"] = GetCategory(CatePosition.Nav, seoName);
-            ViewData["HeaderPages"] = GetCategory(CatePosition.Top, seoName);
-            ViewData["FooterPages"] = GetCategory(CatePosition.Footer, seoName);
-            ViewData["LeftPages"] = GetCategory(CatePosition.Left, seoName);
+            ViewData["TopPages"] = await GetCategoryAsync(CatePosition.Nav, seoName);
+            ViewData["HeaderPages"] = await GetCategoryAsync(CatePosition.Top, seoName);
+            ViewData["FooterPages"] = await GetCategoryAsync(CatePosition.Footer, seoName);
+            ViewData["LeftPages"] = await GetCategoryAsync(CatePosition.Left, seoName);
             ViewData["TagName"] = tagName;
 
             int? pageSize = MixService.GetConfig<int?>("TagPageSize");
@@ -403,7 +396,9 @@ namespace Mix.Cms.Web.Controllers
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
             var getPage = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
             var cacheKey = $"tag_{_culture}_{tagName}_{pageSize}_{pageIndex}";
-            var data = _memoryCache.Get<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
+
+            var data = await MixCacheService.GetAsync<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
+            //var data = await MixCacheService.GetAsync<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
             if (data != null && MixService.GetConfig<bool>("IsCache"))
             {
                 getPage.IsSucceed = true;
@@ -422,20 +417,13 @@ namespace Mix.Cms.Web.Controllers
                 {
                     getPage.Data.LoadDataByTag(tagName, orderBy, orderDirection, pageIndex: pageIndex, pageSize: pageSize);
                 }
-                _memoryCache.Set(cacheKey, getPage.Data);
-                if (!MixConstants.cachedKeys.Contains(cacheKey))
-                {
-                    MixConstants.cachedKeys.Add(cacheKey);
-                }
+                await MixCacheService.SetAsync(cacheKey, getPage.Data);
+                
             }
 
             if (getPage.IsSucceed)// && getPage.Data.View != null
             {
                 GeneratePageDetailsUrls(getPage.Data);
-                if (!MixConstants.cachedKeys.Contains(cacheKey))
-                {
-                    MixConstants.cachedKeys.Add(cacheKey);
-                }
                 ViewData["Title"] = getPage.Data.SeoTitle;
                 ViewData["Description"] = getPage.Data.SeoDescription;
                 ViewData["Keywords"] = getPage.Data.SeoKeywords;
@@ -452,10 +440,10 @@ namespace Mix.Cms.Web.Controllers
         async System.Threading.Tasks.Task<IActionResult> SearchAsync(string keyword)
         {
             string seoName = "search";
-            ViewData["TopPages"] = GetCategory(CatePosition.Nav, seoName);
-            ViewData["HeaderPages"] = GetCategory(CatePosition.Top, seoName);
-            ViewData["FooterPages"] = GetCategory(CatePosition.Footer, seoName);
-            ViewData["LeftPages"] = GetCategory(CatePosition.Left, seoName);
+            ViewData["TopPages"] = await GetCategoryAsync(CatePosition.Nav, seoName);
+            ViewData["HeaderPages"] = await GetCategoryAsync(CatePosition.Top, seoName);
+            ViewData["FooterPages"] = await GetCategoryAsync(CatePosition.Footer, seoName);
+            ViewData["LeftPages"] = await GetCategoryAsync(CatePosition.Left, seoName);
 
             int? pageSize = MixService.GetConfig<int?>("SearchPageSize");
             string orderBy = MixService.GetConfig<string>("OrderBy");
@@ -463,7 +451,8 @@ namespace Mix.Cms.Web.Controllers
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
             var getPage = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
             var cacheKey = $"search_{_culture}_{keyword}_{pageSize}_{pageIndex}";
-            var data = _memoryCache.Get<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
+            var data = await MixCacheService.GetAsync<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
+            //var data = await MixCacheService.GetAsync<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
             if (data != null && MixService.GetConfig<bool>("IsCache"))
             {
                 getPage.IsSucceed = true;
@@ -482,20 +471,12 @@ namespace Mix.Cms.Web.Controllers
                 {
                     getPage.Data.LoadDataByKeyword(keyword, orderBy, orderDirection, pageIndex: pageIndex, pageSize: pageSize);
                 }
-                _memoryCache.Set(cacheKey, getPage.Data);
-                if (!MixConstants.cachedKeys.Contains(cacheKey))
-                {
-                    MixConstants.cachedKeys.Add(cacheKey);
-                }
+                await MixCacheService.SetAsync(cacheKey, getPage.Data);                
             }
 
-            if (getPage.IsSucceed)// && getPage.Data.View != null
+            if (getPage.IsSucceed)
             {
                 GeneratePageDetailsUrls(getPage.Data);
-                if (!MixConstants.cachedKeys.Contains(cacheKey))
-                {
-                    MixConstants.cachedKeys.Add(cacheKey);
-                }
                 ViewData["Title"] = getPage.Data.SeoTitle;
                 ViewData["Description"] = getPage.Data.SeoDescription;
                 ViewData["Keywords"] = getPage.Data.SeoKeywords;
@@ -517,7 +498,7 @@ namespace Mix.Cms.Web.Controllers
 
             var cacheKey = $"article_{_culture}_{id}";
 
-            var data = _memoryCache.Get<Lib.ViewModels.MixArticles.ReadMvcViewModel>(cacheKey);
+            var data = await MixCacheService.GetAsync<Lib.ViewModels.MixArticles.ReadMvcViewModel>(cacheKey);
             if (data != null && MixService.GetConfig<bool>("IsCache"))
             {
                 getArticle.IsSucceed = true;
@@ -541,21 +522,17 @@ namespace Mix.Cms.Web.Controllers
                     {
                         getArticle.Data.ArticleNavs.ForEach(n => n.RelatedArticle.DetailsUrl = GenerateDetailsUrl("Article", new { id = n.RelatedArticle.Id, seoName = n.RelatedArticle.SeoName }));
                     }
-                    _memoryCache.Set(cacheKey, getArticle.Data);
-                }
-                if (!MixConstants.cachedKeys.Contains(cacheKey))
-                {
-                    MixConstants.cachedKeys.Add(cacheKey);
+                    await MixCacheService.SetAsync(cacheKey, getArticle.Data);
                 }
 
             }
 
             if (getArticle.IsSucceed)
             {
-                ViewData["TopPages"] = GetCategory(CatePosition.Nav, getArticle.Data.SeoName);
-                ViewData["HeaderPages"] = GetCategory(CatePosition.Top, getArticle.Data.SeoName);
-                ViewData["FooterPages"] = GetCategory(CatePosition.Footer, getArticle.Data.SeoName);
-                ViewData["LeftPages"] = GetCategory(CatePosition.Left, getArticle.Data.SeoName);
+                ViewData["TopPages"] = await GetCategoryAsync(CatePosition.Nav, getArticle.Data.SeoName);
+                ViewData["HeaderPages"] = await GetCategoryAsync(CatePosition.Top, getArticle.Data.SeoName);
+                ViewData["FooterPages"] = await GetCategoryAsync(CatePosition.Footer, getArticle.Data.SeoName);
+                ViewData["LeftPages"] = await GetCategoryAsync(CatePosition.Left, getArticle.Data.SeoName);
 
                 ViewData["Title"] = getArticle.Data.SeoTitle;
                 ViewData["Description"] = getArticle.Data.SeoDescription;
@@ -571,15 +548,15 @@ namespace Mix.Cms.Web.Controllers
         }
         async System.Threading.Tasks.Task<IActionResult> ArticleViewAsync(int id, string seoName)
         {
-            ViewData["TopPages"] = GetCategory(CatePosition.Nav, seoName);
-            ViewData["HeaderPages"] = GetCategory(CatePosition.Top, seoName);
-            ViewData["FooterPages"] = GetCategory(CatePosition.Footer, seoName);
-            ViewData["LeftPages"] = GetCategory(CatePosition.Left, seoName);
+            ViewData["TopPages"] = await GetCategoryAsync(CatePosition.Nav, seoName);
+            ViewData["HeaderPages"] = await GetCategoryAsync(CatePosition.Top, seoName);
+            ViewData["FooterPages"] = await GetCategoryAsync(CatePosition.Footer, seoName);
+            ViewData["LeftPages"] = await GetCategoryAsync(CatePosition.Left, seoName);
             var getArticle = new RepositoryResponse<Lib.ViewModels.MixArticles.ReadMvcViewModel>();
 
             var cacheKey = $"article_{_culture}_{seoName}";
 
-            var data = _memoryCache.Get<Lib.ViewModels.MixArticles.ReadMvcViewModel>(cacheKey);
+            var data = await MixCacheService.GetAsync<Lib.ViewModels.MixArticles.ReadMvcViewModel>(cacheKey);
             if (data != null && MixService.GetConfig<bool>("IsCache"))
             {
                 getArticle.IsSucceed = true;
@@ -611,13 +588,8 @@ namespace Mix.Cms.Web.Controllers
                     {
                         getArticle.Data.ArticleNavs.ForEach(n => n.RelatedArticle.DetailsUrl = GenerateDetailsUrl("Article", new { id = n.RelatedArticle.Id, seoName = n.RelatedArticle.SeoName }));
                     }
-                    _memoryCache.Set(cacheKey, getArticle.Data);
+                    await MixCacheService.SetAsync(cacheKey, getArticle.Data);
                 }
-                if (!MixConstants.cachedKeys.Contains(cacheKey))
-                {
-                    MixConstants.cachedKeys.Add(cacheKey);
-                }
-
             }
 
             if (getArticle.IsSucceed)
@@ -637,15 +609,15 @@ namespace Mix.Cms.Web.Controllers
 
         async System.Threading.Tasks.Task<IActionResult> ProductViewAsync(string seoName)
         {
-            ViewData["TopPages"] = GetCategory(CatePosition.Nav, seoName);
-            ViewData["HeaderPages"] = GetCategory(CatePosition.Top, seoName);
-            ViewData["FooterPages"] = GetCategory(CatePosition.Footer, seoName);
-            ViewData["LeftPages"] = GetCategory(CatePosition.Left, seoName);
+            ViewData["TopPages"] = await GetCategoryAsync(CatePosition.Nav, seoName);
+            ViewData["HeaderPages"] = await GetCategoryAsync(CatePosition.Top, seoName);
+            ViewData["FooterPages"] = await GetCategoryAsync(CatePosition.Footer, seoName);
+            ViewData["LeftPages"] = await GetCategoryAsync(CatePosition.Left, seoName);
             var getProduct = new RepositoryResponse<Lib.ViewModels.MixProducts.ReadMvcViewModel>();
 
             var cacheKey = $"product_{_culture}_{seoName}";
 
-            var data = _memoryCache.Get<Lib.ViewModels.MixProducts.ReadMvcViewModel>(cacheKey);
+            var data = await MixCacheService.GetAsync<Lib.ViewModels.MixProducts.ReadMvcViewModel>(cacheKey);
             if (data != null && MixService.GetConfig<bool>("IsCache"))
             {
                 getProduct.IsSucceed = true;
@@ -668,12 +640,8 @@ namespace Mix.Cms.Web.Controllers
                 }
 
                 getProduct = await Lib.ViewModels.MixProducts.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
-                _memoryCache.Set(cacheKey, getProduct.Data);
-                if (!MixConstants.cachedKeys.Contains(cacheKey))
-                {
-                    MixConstants.cachedKeys.Add(cacheKey);
-                }
-
+                await MixCacheService.SetAsync(cacheKey, getProduct.Data);
+                
             }
 
             if (getProduct.IsSucceed)
@@ -746,12 +714,12 @@ namespace Mix.Cms.Web.Controllers
         }
 
         #endregion
-        List<Lib.ViewModels.MixPages.ReadListItemViewModel> GetCategory(MixEnums.CatePosition position, string seoName)
+        async System.Threading.Tasks.Task<List<Lib.ViewModels.MixPages.ReadListItemViewModel>> GetCategoryAsync(MixEnums.CatePosition position, string seoName)
         {
             var result = new List<Lib.ViewModels.MixPages.ReadListItemViewModel>();
             var cacheKey = $"page_position_{position}";
 
-            var data = _memoryCache.Get<List<Lib.ViewModels.MixPages.ReadListItemViewModel>>(cacheKey);
+            var data = await MixCacheService.GetAsync<List<Lib.ViewModels.MixPages.ReadListItemViewModel>>(cacheKey);
             if (data != null && MixService.GetConfig<bool>("IsCache"))
             {
                 result = data;
