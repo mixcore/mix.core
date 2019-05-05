@@ -109,14 +109,16 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             var getPage = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
             var cacheKey = $"{typeof(TModel).Name}_details_{_lang}_{key}";
-
-            if (!_memoryCache.TryGetValue<RepositoryResponse<TView>>(cacheKey, out RepositoryResponse<TView> data))
+            var data = await MixCacheService.GetAsync< RepositoryResponse<TView>>(cacheKey);
+            //if (!_memoryCache.TryGetValue<RepositoryResponse<TView>>(cacheKey, out RepositoryResponse<TView> data))
+            if(data==null)
             {
 
                 if (predicate != null)
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
-                    _memoryCache.Set(cacheKey, data);
+                    //_memoryCache.Set(cacheKey, data);
+                    await MixCacheService.SetAsync(cacheKey, data);
                 }
                 else
                 {
@@ -127,10 +129,10 @@ namespace Mix.Cms.Api.Controllers.v1
                     };
 
                 }
-                if (!MixConstants.cachedKeys.Contains(cacheKey))
-                {
-                    MixConstants.cachedKeys.Add(cacheKey);
-                }
+                //if (!MixConstants.cachedKeys.Contains(cacheKey))
+                //{
+                //    MixConstants.cachedKeys.Add(cacheKey);
+                //}
                 AlertAsync("Add Cache", 200, cacheKey);
             }
             data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
@@ -143,7 +145,7 @@ namespace Mix.Cms.Api.Controllers.v1
             var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
             if (data.IsSucceed)
             {
-                RemoveCache();
+                await MixCacheService.RemoveCacheAsync();
                 return await data.Data.RemoveModelAsync(isDeleteRelated).ConfigureAwait(false);
             }
             return new RepositoryResponse<TModel>() { IsSucceed = false };
@@ -155,7 +157,7 @@ namespace Mix.Cms.Api.Controllers.v1
             var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.RemoveListModelAsync(isRemoveRelatedModel, predicate);
             if (data.IsSucceed)
             {
-                RemoveCache();
+                await MixCacheService.RemoveCacheAsync();
 
             }
             return data;
@@ -195,24 +197,27 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             var getData = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
             var cacheKey = $"{typeof(TModel).Name}_list_{_lang}_{key}_{request.Status}_{request.Keyword}_{request.OrderBy}_{request.Direction}_{request.PageSize}_{request.PageIndex}_{request.Query}";
-            var data = _memoryCache.Get<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
+            //var data = _memoryCache.Get<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
+            var data = await MixCacheService.GetAsync<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
             if (data == null)
             {
                 if (predicate != null)
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-                    _memoryCache.Set(cacheKey, data);
+                    //_memoryCache.Set(cacheKey, data);
+                    await MixCacheService.SetAsync(cacheKey, data);
                 }
                 else
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-                    _memoryCache.Set(cacheKey, data);
+                    //_memoryCache.Set(cacheKey, data);
+                    await MixCacheService.SetAsync(cacheKey, data);
 
                 }
-                if (!MixConstants.cachedKeys.Contains(cacheKey))
-                {
-                    MixConstants.cachedKeys.Add(cacheKey);
-                }
+                //if (!MixConstants.cachedKeys.Contains(cacheKey))
+                //{
+                //    MixConstants.cachedKeys.Add(cacheKey);
+                //}
                 AlertAsync("Add Cache", 200, cacheKey);
             }
             data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
@@ -226,7 +231,7 @@ namespace Mix.Cms.Api.Controllers.v1
             if (vm != null)
             {
                 var result = await vm.SaveModelAsync(isSaveSubModel).ConfigureAwait(false);
-                RemoveCache();
+                await MixCacheService.RemoveCacheAsync();
                 return result;
             }
             return new RepositoryResponse<TView>();
@@ -238,7 +243,7 @@ namespace Mix.Cms.Api.Controllers.v1
             var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.SaveListModelAsync(lstVm, isSaveSubModel);
             if (result.IsSucceed)
             {
-                RemoveCache();
+                await MixCacheService.RemoveCacheAsync();
             }
             return result;
         }
@@ -258,7 +263,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         result.Errors.AddRange(tmp.Errors);
                     }
                 }
-                RemoveCache();
+                MixCacheService.RemoveCacheAsync();
                 return result;
             }
             return result;
