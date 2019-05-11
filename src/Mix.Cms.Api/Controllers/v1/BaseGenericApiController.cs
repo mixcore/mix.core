@@ -145,8 +145,12 @@ namespace Mix.Cms.Api.Controllers.v1
             var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
             if (data.IsSucceed)
             {
-                await MixCacheService.RemoveCacheAsync();
-                return await data.Data.RemoveModelAsync(isDeleteRelated).ConfigureAwait(false);
+                var result = await data.Data.RemoveModelAsync(isDeleteRelated).ConfigureAwait(false);
+                if (result.IsSucceed)
+                {
+                    await MixCacheService.RemoveCacheAsync();
+                }
+                return result;
             }
             return new RepositoryResponse<TModel>() { IsSucceed = false };
         }

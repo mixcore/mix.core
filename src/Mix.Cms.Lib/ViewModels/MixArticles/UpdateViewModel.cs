@@ -712,6 +712,10 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             return result;
         }
 
+        public override Task<RepositoryResponse<List<UpdateViewModel>>> CloneAsync(MixArticle model, List<SupportedCulture> cloneCultures, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            return base.CloneAsync(model, cloneCultures, _context, _transaction);
+        }
         #endregion Async Methods
 
         #region Sync Methods
