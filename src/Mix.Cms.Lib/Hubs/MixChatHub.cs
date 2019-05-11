@@ -6,10 +6,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mix.Cms.Messenger;
 using static Mix.Cms.Messenger.MixChatEnums;
+using Mix.UI.Core.SignalR;
 
-namespace Mix.Cms.Messenger.Hubs
+namespace Mix.Cms.Lib.Hubs
 {
-    public class MixChatHub : Hub
+    public class MixChatHub : BaseSignalRHub
     {
         const string receiveMethod = "ReceiveMessage";
         const string defaultRoom = "public";
@@ -518,6 +519,7 @@ namespace Mix.Cms.Messenger.Hubs
         #endregion
 
         #region Overrides
+
         public override async Task OnConnectedAsync()
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, "SignalR Users");

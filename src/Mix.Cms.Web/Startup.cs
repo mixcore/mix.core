@@ -11,9 +11,8 @@ using Microsoft.Extensions.WebEncoders;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Identity.Services;
-using Mix.Cms.Hub;
-using Mix.Cms.Messenger.Hubs;
 using Mix.Cms.Lib.Models.Account;
+using Mix.Cms.Hub;
 
 namespace Mix.Cms.Web
 {
@@ -146,7 +145,7 @@ namespace Mix.Cms.Web
             app.UseSignalR(route =>
             {
                 route.MapHub<PortalHub>("/portalhub");
-                route.MapHub<MixChatHub>("/MixChatHub");
+                //route.MapHub<MixChatHub>("/MixChatHub");
             });
 
             app.UseAuthentication();

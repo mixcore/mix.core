@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mix.Cms.Hub\Mix.Cms.Hub.csproj" />
     <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
   </ItemGroup>
 

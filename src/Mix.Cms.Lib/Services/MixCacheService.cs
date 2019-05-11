@@ -90,7 +90,7 @@ namespace Mix.Cms.Lib.Services
 
         public  static async Task RemoveCacheAsync()
         {
-            await Instance.Repository.RemoveListModelAsync(c => c.CreatedDateTime < DateTime.UtcNow);
+            await Instance.Repository.RemoveListModelAsync(c => !string.IsNullOrEmpty(c.Id));
         }
     }
 }
