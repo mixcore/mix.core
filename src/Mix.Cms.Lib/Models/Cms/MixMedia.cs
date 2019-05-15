@@ -15,8 +15,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Specificulture { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public string Description { get; set; }
-        public string TargetUrl { get; set; }
-        public string Source { get; set; }
         public string Extension { get; set; }
         public string FileFolder { get; set; }
         public string FileName { get; set; }
@@ -29,8 +27,10 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Status { get; set; }
         public string Title { get; set; }
         public string Tags { get; set; }
+        public string Source { get; set; }
+        public string TargetUrl { get; set; }
 
-        public ICollection<MixArticleMedia> MixArticleMedia { get; set; }
-        public ICollection<MixProductMedia> MixProductMedia { get; set; }
+        public virtual ICollection<MixArticleMedia> MixArticleMedia { get; set; }
+        public virtual ICollection<MixProductMedia> MixProductMedia { get; set; }
     }
 }

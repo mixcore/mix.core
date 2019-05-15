@@ -20,8 +20,8 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Specificulture { get; set; }
         public int Status { get; set; }
 
-        public MixCustomer Customer { get; set; }
-        public ICollection<MixComment> MixComment { get; set; }
-        public ICollection<MixOrderItem> MixOrderItem { get; set; }
+        public virtual MixCustomer Customer { get; set; }
+        public virtual ICollection<MixComment> MixComment { get; set; }
+        public virtual ICollection<MixOrderItem> MixOrderItem { get; set; }
     }
 }

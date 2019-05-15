@@ -28,6 +28,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Priority { get; set; }
         public bool IsAgreeNotified { get; set; }
 
-        public ICollection<MixOrder> MixOrder { get; set; }
+        public virtual ICollection<MixOrder> MixOrder { get; set; }
     }
 }

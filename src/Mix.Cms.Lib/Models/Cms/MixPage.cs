@@ -8,6 +8,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public MixPage()
         {
             MixPageArticle = new HashSet<MixPageArticle>();
+            MixPageAttributeData = new HashSet<MixPageAttributeData>();
             MixPageModule = new HashSet<MixPageModule>();
             MixPagePageMixPage = new HashSet<MixPagePage>();
             MixPagePageMixPageNavigation = new HashSet<MixPagePage>();
@@ -18,7 +19,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Id { get; set; }
         public string Specificulture { get; set; }
         public int? SetAttributeId { get; set; }
-        public string ExtraFields { get; set; }
         public string SetAttributeData { get; set; }
         public string Content { get; set; }
         public string CreatedBy { get; set; }
@@ -44,14 +44,17 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Type { get; set; }
         public int? Views { get; set; }
         public int? PageSize { get; set; }
+        public string ExtraFields { get; set; }
 
-        public MixSetAttribute SetAttribute { get; set; }
-        public MixCulture SpecificultureNavigation { get; set; }
-        public ICollection<MixPageArticle> MixPageArticle { get; set; }
-        public ICollection<MixPageModule> MixPageModule { get; set; }
-        public ICollection<MixPagePage> MixPagePageMixPage { get; set; }
-        public ICollection<MixPagePage> MixPagePageMixPageNavigation { get; set; }
-        public ICollection<MixPagePosition> MixPagePosition { get; set; }
-        public ICollection<MixPageProduct> MixPageProduct { get; set; }
+        public virtual MixAttributeSet SetAttribute { get; set; }
+        public virtual MixSetAttribute SetAttributeNavigation { get; set; }
+        public virtual MixCulture SpecificultureNavigation { get; set; }
+        public virtual ICollection<MixPageArticle> MixPageArticle { get; set; }
+        public virtual ICollection<MixPageAttributeData> MixPageAttributeData { get; set; }
+        public virtual ICollection<MixPageModule> MixPageModule { get; set; }
+        public virtual ICollection<MixPagePage> MixPagePageMixPage { get; set; }
+        public virtual ICollection<MixPagePage> MixPagePageMixPageNavigation { get; set; }
+        public virtual ICollection<MixPagePosition> MixPagePosition { get; set; }
+        public virtual ICollection<MixPageProduct> MixPageProduct { get; set; }
     }
 }

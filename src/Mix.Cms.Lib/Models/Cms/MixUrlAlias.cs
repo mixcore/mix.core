@@ -15,6 +15,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Alias { get; set; }
         public DateTime CreatedDateTime { get; set; }
 
-        public MixCulture SpecificultureNavigation { get; set; }
+        public virtual MixCulture SpecificultureNavigation { get; set; }
     }
 }

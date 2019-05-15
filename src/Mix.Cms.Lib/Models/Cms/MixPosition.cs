@@ -16,7 +16,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Priority { get; set; }
         public int Status { get; set; }
 
-        public ICollection<MixPagePosition> MixPagePosition { get; set; }
-        public ICollection<MixPortalPagePosition> MixPortalPagePosition { get; set; }
+        public virtual ICollection<MixPagePosition> MixPagePosition { get; set; }
+        public virtual ICollection<MixPortalPagePosition> MixPortalPagePosition { get; set; }
     }
 }

@@ -9,6 +9,7 @@ namespace Mix.Cms.Lib.Models.Cms
         {
             MixArticleModule = new HashSet<MixArticleModule>();
             MixModuleArticle = new HashSet<MixModuleArticle>();
+            MixModuleAttributeData = new HashSet<MixModuleAttributeData>();
             MixModuleAttributeSet = new HashSet<MixModuleAttributeSet>();
             MixModuleData = new HashSet<MixModuleData>();
             MixModuleProduct = new HashSet<MixModuleProduct>();
@@ -18,6 +19,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
         public int Id { get; set; }
         public string Specificulture { get; set; }
+        public int? SetAttributeId { get; set; }
         public string Description { get; set; }
         public string Fields { get; set; }
         public string Thumbnail { get; set; }
@@ -35,13 +37,15 @@ namespace Mix.Cms.Lib.Models.Cms
         public DateTime CreatedDateTime { get; set; }
         public DateTime? LastModified { get; set; }
 
-        public MixCulture SpecificultureNavigation { get; set; }
-        public ICollection<MixArticleModule> MixArticleModule { get; set; }
-        public ICollection<MixModuleArticle> MixModuleArticle { get; set; }
-        public ICollection<MixModuleAttributeSet> MixModuleAttributeSet { get; set; }
-        public ICollection<MixModuleData> MixModuleData { get; set; }
-        public ICollection<MixModuleProduct> MixModuleProduct { get; set; }
-        public ICollection<MixPageModule> MixPageModule { get; set; }
-        public ICollection<MixProductModule> MixProductModule { get; set; }
+        public virtual MixAttributeSet SetAttribute { get; set; }
+        public virtual MixCulture SpecificultureNavigation { get; set; }
+        public virtual ICollection<MixArticleModule> MixArticleModule { get; set; }
+        public virtual ICollection<MixModuleArticle> MixModuleArticle { get; set; }
+        public virtual ICollection<MixModuleAttributeData> MixModuleAttributeData { get; set; }
+        public virtual ICollection<MixModuleAttributeSet> MixModuleAttributeSet { get; set; }
+        public virtual ICollection<MixModuleData> MixModuleData { get; set; }
+        public virtual ICollection<MixModuleProduct> MixModuleProduct { get; set; }
+        public virtual ICollection<MixPageModule> MixPageModule { get; set; }
+        public virtual ICollection<MixProductModule> MixProductModule { get; set; }
     }
 }

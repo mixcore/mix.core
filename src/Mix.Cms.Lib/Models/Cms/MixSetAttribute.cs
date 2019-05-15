@@ -22,8 +22,8 @@ namespace Mix.Cms.Lib.Models.Cms
         public DateTime CreatedDateTime { get; set; }
         public string CreatedBy { get; set; }
 
-        public ICollection<MixArticle> MixArticle { get; set; }
-        public ICollection<MixPage> MixPage { get; set; }
-        public ICollection<MixProduct> MixProduct { get; set; }
+        public virtual ICollection<MixArticle> MixArticle { get; set; }
+        public virtual ICollection<MixPage> MixPage { get; set; }
+        public virtual ICollection<MixProduct> MixProduct { get; set; }
     }
 }

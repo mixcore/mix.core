@@ -29,6 +29,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("id")]
         public int Id { get; set; }
 
+        [JsonProperty("setAttributeId")]
+        public int? SetAttributeId { get; set; }
+
         [Required]
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -82,6 +85,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #endregion Models
 
         #region Views
+        #region Attributes
+        [JsonProperty("attributeSet")]
+        public MixAttributeSets.UpdateViewModel AttributeSet { get; set; }
+        #endregion
         [JsonProperty("domain")]
         public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
@@ -344,6 +351,13 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                     this.EdmView?.FileFolder
                     , this.EdmView?.FileName
                });
+            if (SetAttributeId.HasValue) {
+                AttributeSet = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(s => s.Id == SetAttributeId.Value).Data;
+            }
+            else
+            {
+                AttributeSet = new MixAttributeSets.UpdateViewModel();
+            }
         }
 
         #region Async

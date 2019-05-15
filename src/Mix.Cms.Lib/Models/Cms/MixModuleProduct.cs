@@ -13,7 +13,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Priority { get; set; }
         public int Status { get; set; }
 
-        public MixModule MixModule { get; set; }
-        public MixProduct MixProduct { get; set; }
+        public virtual MixModule MixModule { get; set; }
+        public virtual MixProduct MixProduct { get; set; }
     }
 }

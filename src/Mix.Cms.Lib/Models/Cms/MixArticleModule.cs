@@ -20,9 +20,9 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Priority { get; set; }
         public int Status { get; set; }
 
-        public MixArticle MixArticle { get; set; }
-        public MixModule MixModule { get; set; }
-        public ICollection<MixModuleAttributeSet> MixModuleAttributeSet { get; set; }
-        public ICollection<MixModuleData> MixModuleData { get; set; }
+        public virtual MixArticle MixArticle { get; set; }
+        public virtual MixModule MixModule { get; set; }
+        public virtual ICollection<MixModuleAttributeSet> MixModuleAttributeSet { get; set; }
+        public virtual ICollection<MixModuleData> MixModuleData { get; set; }
     }
 }

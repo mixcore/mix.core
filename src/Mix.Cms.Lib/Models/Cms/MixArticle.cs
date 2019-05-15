@@ -7,6 +7,7 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixArticle()
         {
+            MixArticleAttributeData = new HashSet<MixArticleAttributeData>();
             MixArticleMedia = new HashSet<MixArticleMedia>();
             MixArticleModule = new HashSet<MixArticleModule>();
             MixComment = new HashSet<MixComment>();
@@ -19,7 +20,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Id { get; set; }
         public string Specificulture { get; set; }
         public int? SetAttributeId { get; set; }
-        public string ExtraFields { get; set; }
         public string SetAttributeData { get; set; }
         public string Content { get; set; }
         public string CreatedBy { get; set; }
@@ -44,15 +44,18 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Title { get; set; }
         public int Type { get; set; }
         public int? Views { get; set; }
+        public string ExtraFields { get; set; }
 
-        public MixSetAttribute SetAttribute { get; set; }
-        public MixCulture SpecificultureNavigation { get; set; }
-        public ICollection<MixArticleMedia> MixArticleMedia { get; set; }
-        public ICollection<MixArticleModule> MixArticleModule { get; set; }
-        public ICollection<MixComment> MixComment { get; set; }
-        public ICollection<MixModuleArticle> MixModuleArticle { get; set; }
-        public ICollection<MixPageArticle> MixPageArticle { get; set; }
-        public ICollection<MixRelatedArticle> MixRelatedArticleMixArticle { get; set; }
-        public ICollection<MixRelatedArticle> MixRelatedArticleS { get; set; }
+        public virtual MixAttributeSet SetAttribute { get; set; }
+        public virtual MixSetAttribute SetAttributeNavigation { get; set; }
+        public virtual MixCulture SpecificultureNavigation { get; set; }
+        public virtual ICollection<MixArticleAttributeData> MixArticleAttributeData { get; set; }
+        public virtual ICollection<MixArticleMedia> MixArticleMedia { get; set; }
+        public virtual ICollection<MixArticleModule> MixArticleModule { get; set; }
+        public virtual ICollection<MixComment> MixComment { get; set; }
+        public virtual ICollection<MixModuleArticle> MixModuleArticle { get; set; }
+        public virtual ICollection<MixPageArticle> MixPageArticle { get; set; }
+        public virtual ICollection<MixRelatedArticle> MixRelatedArticleMixArticle { get; set; }
+        public virtual ICollection<MixRelatedArticle> MixRelatedArticleS { get; set; }
     }
 }

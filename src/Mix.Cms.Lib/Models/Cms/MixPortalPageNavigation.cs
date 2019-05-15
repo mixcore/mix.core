@@ -12,7 +12,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Priority { get; set; }
         public int Status { get; set; }
 
-        public MixPortalPage IdNavigation { get; set; }
-        public MixPortalPage Parent { get; set; }
+        public virtual MixPortalPage IdNavigation { get; set; }
+        public virtual MixPortalPage Parent { get; set; }
     }
 }

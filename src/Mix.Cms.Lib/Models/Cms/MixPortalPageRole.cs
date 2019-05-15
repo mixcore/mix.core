@@ -12,6 +12,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public string RoleId { get; set; }
         public int Status { get; set; }
 
-        public MixPortalPage Page { get; set; }
+        public virtual MixPortalPage Page { get; set; }
     }
 }

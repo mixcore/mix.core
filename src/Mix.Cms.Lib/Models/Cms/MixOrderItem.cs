@@ -15,7 +15,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Description { get; set; }
         public int Status { get; set; }
 
-        public MixOrder MixOrder { get; set; }
-        public MixProduct MixProduct { get; set; }
+        public virtual MixOrder MixOrder { get; set; }
+        public virtual MixProduct MixProduct { get; set; }
     }
 }

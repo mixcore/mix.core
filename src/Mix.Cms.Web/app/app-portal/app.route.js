@@ -183,6 +183,22 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         controller: "LanguageController",
         templateUrl: "/app/app-portal/pages/language/details.html"
     });
+    /* attribute set */
+    $routeProvider.when("/portal/attribute-set/list", {
+        controller: "AttributeSetController",
+        templateUrl: "/app/app-portal/pages/attribute-set/list.html"
+    });
+
+    $routeProvider.when("/portal/attribute-set/details/:id", {
+        controller: "AttributeSetController",
+        templateUrl: "/app/app-portal/pages/attribute-set/details.html"
+    });
+
+    $routeProvider.when("/portal/attribute-set/create", {
+        controller: "AttributeSetController",
+        templateUrl: "/app/app-portal/pages/attribute-set/details.html"
+    });
+    /* end attribute set*/
 
     $routeProvider.when("/portal/configuration/list", {
         controller: "ConfigurationController",

@@ -24,8 +24,8 @@ namespace Mix.Cms.Lib.Models.Cms
         public string UpdatedBy { get; set; }
         public DateTime? UpdatedDateTime { get; set; }
 
-        public MixArticle MixArticle { get; set; }
-        public MixOrder MixOrder { get; set; }
-        public MixProduct MixProduct { get; set; }
+        public virtual MixArticle MixArticle { get; set; }
+        public virtual MixOrder MixOrder { get; set; }
+        public virtual MixProduct MixProduct { get; set; }
     }
 }

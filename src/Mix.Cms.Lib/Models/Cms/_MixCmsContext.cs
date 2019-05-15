@@ -6,8 +6,13 @@ namespace Mix.Cms.Lib.Models.Cms
     public partial class MixCmsContext : DbContext
     {
         public virtual DbSet<MixArticle> MixArticle { get; set; }
+        public virtual DbSet<MixArticleAttributeData> MixArticleAttributeData { get; set; }
+        public virtual DbSet<MixArticleAttributeValue> MixArticleAttributeValue { get; set; }
         public virtual DbSet<MixArticleMedia> MixArticleMedia { get; set; }
         public virtual DbSet<MixArticleModule> MixArticleModule { get; set; }
+        public virtual DbSet<MixAttributeField> MixAttributeField { get; set; }
+        public virtual DbSet<MixAttributeSet> MixAttributeSet { get; set; }
+        public virtual DbSet<MixCache> MixCache { get; set; }
         public virtual DbSet<MixCmsUser> MixCmsUser { get; set; }
         public virtual DbSet<MixComment> MixComment { get; set; }
         public virtual DbSet<MixConfiguration> MixConfiguration { get; set; }
@@ -19,6 +24,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual DbSet<MixMedia> MixMedia { get; set; }
         public virtual DbSet<MixModule> MixModule { get; set; }
         public virtual DbSet<MixModuleArticle> MixModuleArticle { get; set; }
+        public virtual DbSet<MixModuleAttributeData> MixModuleAttributeData { get; set; }
         public virtual DbSet<MixModuleAttributeSet> MixModuleAttributeSet { get; set; }
         public virtual DbSet<MixModuleAttributeValue> MixModuleAttributeValue { get; set; }
         public virtual DbSet<MixModuleData> MixModuleData { get; set; }
@@ -27,6 +33,8 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual DbSet<MixOrderItem> MixOrderItem { get; set; }
         public virtual DbSet<MixPage> MixPage { get; set; }
         public virtual DbSet<MixPageArticle> MixPageArticle { get; set; }
+        public virtual DbSet<MixPageAttributeData> MixPageAttributeData { get; set; }
+        public virtual DbSet<MixPageAttributeValue> MixPageAttributeValue { get; set; }
         public virtual DbSet<MixPageModule> MixPageModule { get; set; }
         public virtual DbSet<MixPagePage> MixPagePage { get; set; }
         public virtual DbSet<MixPagePosition> MixPagePosition { get; set; }
@@ -79,6 +87,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasAnnotation("ProductVersion", "2.2.3-servicing-35854");
+
             modelBuilder.Entity<MixArticle>(entity =>
             {
                 entity.HasKey(e => new { e.Id, e.Specificulture });
@@ -87,8 +97,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => e.SetAttributeId);
 
-                entity.Property(e => e.ExtraFields).HasMaxLength(4000);
-
                 entity.HasIndex(e => e.Specificulture);
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
@@ -96,6 +104,8 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.CreatedBy).HasMaxLength(250);
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.ExtraFields).HasMaxLength(4000);
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
@@ -128,6 +138,11 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.HasOne(d => d.SetAttribute)
                     .WithMany(p => p.MixArticle)
                     .HasForeignKey(d => d.SetAttributeId)
+                    .HasConstraintName("FK_mix_article_mix_attribute_set");
+
+                entity.HasOne(d => d.SetAttributeNavigation)
+                    .WithMany(p => p.MixArticle)
+                    .HasForeignKey(d => d.SetAttributeId)
                     .HasConstraintName("FK_mix_article_mix_set_attribute");
 
                 entity.HasOne(d => d.SpecificultureNavigation)
@@ -136,6 +151,70 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasForeignKey(d => d.Specificulture)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Mix_Article_Mix_Culture");
+            });
+
+            modelBuilder.Entity<MixArticleAttributeData>(entity =>
+            {
+                entity.ToTable("mix_article_attribute_data");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Fields)
+                    .IsRequired()
+                    .HasMaxLength(4000);
+
+                entity.Property(e => e.Specificulture)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.UpdatedDateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Value).HasMaxLength(4000);
+
+                entity.HasOne(d => d.MixArticle)
+                    .WithMany(p => p.MixArticleAttributeData)
+                    .HasForeignKey(d => new { d.ArticleId, d.Specificulture })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_mix_article_attribute_data_mix_article");
+            });
+
+            modelBuilder.Entity<MixArticleAttributeValue>(entity =>
+            {
+                entity.ToTable("mix_article_attribute_value");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.AttributeName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.CustomClass).HasMaxLength(50);
+
+                entity.Property(e => e.DataId)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.DateTimeValue).HasColumnType("datetime");
+
+                entity.Property(e => e.Specificulture)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.StringValue).HasMaxLength(4000);
+
+                entity.HasOne(d => d.Data)
+                    .WithMany(p => p.MixArticleAttributeValue)
+                    .HasForeignKey(d => d.DataId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_mix_article_attribute_value_mix_article_attribute_data");
             });
 
             modelBuilder.Entity<MixArticleMedia>(entity =>
@@ -193,6 +272,72 @@ namespace Mix.Cms.Lib.Models.Cms
                     .WithMany(p => p.MixArticleModule)
                     .HasForeignKey(d => new { d.ModuleId, d.Specificulture })
                     .HasConstraintName("FK_Mix_Article_Module_Mix_Module1");
+            });
+
+            modelBuilder.Entity<MixAttributeField>(entity =>
+            {
+                entity.HasKey(e => new { e.Id, e.AttributeSetId });
+
+                entity.ToTable("mix_attribute_field");
+
+                entity.Property(e => e.DefaultValue).IsRequired();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Title).HasMaxLength(250);
+
+                entity.HasOne(d => d.AttributeSet)
+                    .WithMany(p => p.MixAttributeField)
+                    .HasForeignKey(d => d.AttributeSetId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_mix_attribute_field_mix_attribute_set");
+            });
+
+            modelBuilder.Entity<MixAttributeSet>(entity =>
+            {
+                entity.ToTable("mix_attribute_set");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Description)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.Fields)
+                    .IsRequired()
+                    .HasMaxLength(4000);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.UpdatedDateTime).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<MixCache>(entity =>
+            {
+                entity.ToTable("mix_cache");
+
+                entity.HasIndex(e => e.ExpiredDateTime)
+                    .HasName("Index_ExpiresAtTime");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(250)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.ExpiredDateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Value).IsRequired();
             });
 
             modelBuilder.Entity<MixCmsUser>(entity =>
@@ -449,10 +594,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Description).HasMaxLength(4000);
 
-                entity.Property(e => e.TargetUrl).HasMaxLength(250);
-
-                entity.Property(e => e.Source).HasMaxLength(250);
-
                 entity.Property(e => e.Extension)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -475,7 +616,11 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.ModifiedBy).HasMaxLength(250);
 
+                entity.Property(e => e.Source).HasMaxLength(250);
+
                 entity.Property(e => e.Tags).HasMaxLength(400);
+
+                entity.Property(e => e.TargetUrl).HasMaxLength(250);
 
                 entity.Property(e => e.Title).HasMaxLength(4000);
             });
@@ -516,6 +661,11 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Title).HasMaxLength(250);
 
+                entity.HasOne(d => d.SetAttribute)
+                    .WithMany(p => p.MixModule)
+                    .HasForeignKey(d => d.SetAttributeId)
+                    .HasConstraintName("FK_mix_module_mix_attribute_set");
+
                 entity.HasOne(d => d.SpecificultureNavigation)
                     .WithMany(p => p.MixModule)
                     .HasPrincipalKey(p => p.Specificulture)
@@ -550,6 +700,33 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasForeignKey(d => new { d.ModuleId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Mix_Module_Article_Mix_Module");
+            });
+
+            modelBuilder.Entity<MixModuleAttributeData>(entity =>
+            {
+                entity.ToTable("mix_module_attribute_data");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Fields)
+                    .IsRequired()
+                    .HasMaxLength(4000);
+
+                entity.Property(e => e.Specificulture)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.UpdatedDateTime).HasColumnType("datetime");
+
+                entity.HasOne(d => d.MixModule)
+                    .WithMany(p => p.MixModuleAttributeData)
+                    .HasForeignKey(d => new { d.ModuleId, d.Specificulture })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_mix_module_attribute_data_mix_module");
             });
 
             modelBuilder.Entity<MixModuleAttributeSet>(entity =>
@@ -593,24 +770,37 @@ namespace Mix.Cms.Lib.Models.Cms
 
             modelBuilder.Entity<MixModuleAttributeValue>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.AttributeSetId, e.Specificulture });
-
                 entity.ToTable("mix_module_attribute_value");
 
-                entity.HasIndex(e => new { e.AttributeSetId, e.ModuleId, e.Specificulture });
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .ValueGeneratedNever();
 
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
+                entity.Property(e => e.AttributeName)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
-                entity.Property(e => e.DefaultValue).IsRequired();
+                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Name).HasMaxLength(250);
+                entity.Property(e => e.CustomClass).HasMaxLength(50);
 
-                entity.Property(e => e.Title).HasMaxLength(250);
+                entity.Property(e => e.DataId)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
-                entity.HasOne(d => d.MixModuleAttributeSet)
+                entity.Property(e => e.DateTimeValue).HasColumnType("datetime");
+
+                entity.Property(e => e.Specificulture)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.StringValue).HasMaxLength(4000);
+
+                entity.HasOne(d => d.Data)
                     .WithMany(p => p.MixModuleAttributeValue)
-                    .HasForeignKey(d => new { d.AttributeSetId, d.ModuleId, d.Specificulture })
-                    .HasConstraintName("FK_mix_module_attribute_value_mix_module_attribute_set");
+                    .HasForeignKey(d => d.DataId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_mix_module_attribute_value_mix_module_attribute_data");
             });
 
             modelBuilder.Entity<MixModuleData>(entity =>
@@ -752,8 +942,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => e.SetAttributeId);
 
-                entity.Property(e => e.ExtraFields).HasMaxLength(4000);
-
                 entity.HasIndex(e => e.Specificulture);
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
@@ -765,6 +953,8 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.CssClass).HasMaxLength(50);
+
+                entity.Property(e => e.ExtraFields).HasMaxLength(4000);
 
                 entity.Property(e => e.Icon).HasMaxLength(50);
 
@@ -795,6 +985,11 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Title).HasMaxLength(4000);
 
                 entity.HasOne(d => d.SetAttribute)
+                    .WithMany(p => p.MixPage)
+                    .HasForeignKey(d => d.SetAttributeId)
+                    .HasConstraintName("FK_mix_page_mix_attribute_set");
+
+                entity.HasOne(d => d.SetAttributeNavigation)
                     .WithMany(p => p.MixPage)
                     .HasForeignKey(d => d.SetAttributeId)
                     .HasConstraintName("FK_mix_page_mix_set_attribute");
@@ -835,6 +1030,70 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasForeignKey(d => new { d.CategoryId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Mix_Page_Article_Mix_Page");
+            });
+
+            modelBuilder.Entity<MixPageAttributeData>(entity =>
+            {
+                entity.ToTable("mix_page_attribute_data");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Fields)
+                    .IsRequired()
+                    .HasMaxLength(4000);
+
+                entity.Property(e => e.Specificulture)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.UpdatedDateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Value).HasMaxLength(4000);
+
+                entity.HasOne(d => d.MixPage)
+                    .WithMany(p => p.MixPageAttributeData)
+                    .HasForeignKey(d => new { d.PageId, d.Specificulture })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_mix_page_attribute_data_mix_page");
+            });
+
+            modelBuilder.Entity<MixPageAttributeValue>(entity =>
+            {
+                entity.ToTable("mix_page_attribute_value");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.AttributeName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.CustomClass).HasMaxLength(50);
+
+                entity.Property(e => e.DataId)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.DateTimeValue).HasColumnType("datetime");
+
+                entity.Property(e => e.Specificulture)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.StringValue).HasMaxLength(4000);
+
+                entity.HasOne(d => d.Data)
+                    .WithMany(p => p.MixPageAttributeValue)
+                    .HasForeignKey(d => d.DataId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_mix_page_attribute_value_mix_page_attribute_data");
             });
 
             modelBuilder.Entity<MixPageModule>(entity =>
@@ -1353,23 +1612,6 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasPrincipalKey(p => p.Specificulture)
                     .HasForeignKey(d => d.Specificulture)
                     .HasConstraintName("FK_Mix_Url_Alias_Mix_Culture");
-            });
-            modelBuilder.Entity<MixCache>(entity =>
-            {
-                entity.ToTable("mix_cache");
-
-                entity.HasIndex(e => e.ExpiredDateTime)
-                    .HasName("Index_ExpiresAtTime");
-
-                entity.Property(e => e.Id)
-                    .HasMaxLength(250)
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.ExpiredDateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.Value).IsRequired();
             });
         }
     }
