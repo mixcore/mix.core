@@ -25,9 +25,9 @@ namespace Mix.Cms.Lib.Models.Cms
         public string TextDefault { get; set; }
         public int Level { get; set; }
 
-        public ICollection<MixPortalPageNavigation> MixPortalPageNavigationIdNavigation { get; set; }
-        public ICollection<MixPortalPageNavigation> MixPortalPageNavigationParent { get; set; }
-        public ICollection<MixPortalPagePosition> MixPortalPagePosition { get; set; }
-        public ICollection<MixPortalPageRole> MixPortalPageRole { get; set; }
+        public virtual ICollection<MixPortalPageNavigation> MixPortalPageNavigationIdNavigation { get; set; }
+        public virtual ICollection<MixPortalPageNavigation> MixPortalPageNavigationParent { get; set; }
+        public virtual ICollection<MixPortalPagePosition> MixPortalPagePosition { get; set; }
+        public virtual ICollection<MixPortalPageRole> MixPortalPageRole { get; set; }
     }
 }

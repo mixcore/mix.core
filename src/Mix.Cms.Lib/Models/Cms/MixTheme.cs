@@ -22,7 +22,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Status { get; set; }
         public string PreviewUrl { get; set; }
 
-        public ICollection<MixFile> MixFile { get; set; }
-        public ICollection<MixTemplate> MixTemplate { get; set; }
+        public virtual ICollection<MixFile> MixFile { get; set; }
+        public virtual ICollection<MixTemplate> MixTemplate { get; set; }
     }
 }

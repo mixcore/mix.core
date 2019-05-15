@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <DockerTargetOS>Windows</DockerTargetOS>
-    <RuntimeFrameworkVersion>2.2.3</RuntimeFrameworkVersion>
     <UserSecretsId>8d8e7493-9576-4341-89be-19d4e1c62ac2</UserSecretsId>
   </PropertyGroup>
 
@@ -12,8 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />    
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>

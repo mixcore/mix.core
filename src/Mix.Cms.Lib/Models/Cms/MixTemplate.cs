@@ -23,6 +23,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public int ThemeId { get; set; }
         public string ThemeName { get; set; }
 
-        public MixTheme Theme { get; set; }
+        public virtual MixTheme Theme { get; set; }
     }
 }

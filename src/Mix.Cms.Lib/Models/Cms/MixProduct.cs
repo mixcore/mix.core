@@ -55,15 +55,15 @@ namespace Mix.Cms.Lib.Models.Cms
         public int PackageCount { get; set; }
         public int TotalSaled { get; set; }
 
-        public MixSetAttribute SetAttribute { get; set; }
-        public MixCulture SpecificultureNavigation { get; set; }
-        public ICollection<MixComment> MixComment { get; set; }
-        public ICollection<MixModuleProduct> MixModuleProduct { get; set; }
-        public ICollection<MixOrderItem> MixOrderItem { get; set; }
-        public ICollection<MixPageProduct> MixPageProduct { get; set; }
-        public ICollection<MixProductMedia> MixProductMedia { get; set; }
-        public ICollection<MixProductModule> MixProductModule { get; set; }
-        public ICollection<MixRelatedProduct> MixRelatedProductMixProduct { get; set; }
-        public ICollection<MixRelatedProduct> MixRelatedProductS { get; set; }
+        public virtual MixSetAttribute SetAttribute { get; set; }
+        public virtual MixCulture SpecificultureNavigation { get; set; }
+        public virtual ICollection<MixComment> MixComment { get; set; }
+        public virtual ICollection<MixModuleProduct> MixModuleProduct { get; set; }
+        public virtual ICollection<MixOrderItem> MixOrderItem { get; set; }
+        public virtual ICollection<MixPageProduct> MixPageProduct { get; set; }
+        public virtual ICollection<MixProductMedia> MixProductMedia { get; set; }
+        public virtual ICollection<MixProductModule> MixProductModule { get; set; }
+        public virtual ICollection<MixRelatedProduct> MixRelatedProductMixProduct { get; set; }
+        public virtual ICollection<MixRelatedProduct> MixRelatedProductS { get; set; }
     }
 }

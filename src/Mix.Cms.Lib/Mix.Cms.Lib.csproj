@@ -21,6 +21,7 @@
     <Compile Remove="Migrations\20190106051357_update_themes_module.Designer.cs" />
     <Compile Remove="Migrations\20190113142418_add-article-publisheddat.cs" />
     <Compile Remove="Migrations\20190113142418_add-article-publisheddat.Designer.cs" />
+    <Compile Remove="Migrations\20190514022718_add-attr.cs" />
     <Compile Remove="Services\CmsConfiguration.cs" />
     <Compile Remove="Services\CmsCultureConfiguration.cs" />
   </ItemGroup>

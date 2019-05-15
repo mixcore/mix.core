@@ -28,12 +28,12 @@ namespace Mix.Cms.Lib.Models.Cms
         public DateTime CreatedDateTime { get; set; }
         public string CreatedBy { get; set; }
 
-        public ICollection<MixArticle> MixArticle { get; set; }
-        public ICollection<MixConfiguration> MixConfiguration { get; set; }
-        public ICollection<MixLanguage> MixLanguage { get; set; }
-        public ICollection<MixModule> MixModule { get; set; }
-        public ICollection<MixPage> MixPage { get; set; }
-        public ICollection<MixProduct> MixProduct { get; set; }
-        public ICollection<MixUrlAlias> MixUrlAlias { get; set; }
+        public virtual ICollection<MixArticle> MixArticle { get; set; }
+        public virtual ICollection<MixConfiguration> MixConfiguration { get; set; }
+        public virtual ICollection<MixLanguage> MixLanguage { get; set; }
+        public virtual ICollection<MixModule> MixModule { get; set; }
+        public virtual ICollection<MixPage> MixPage { get; set; }
+        public virtual ICollection<MixProduct> MixProduct { get; set; }
+        public virtual ICollection<MixUrlAlias> MixUrlAlias { get; set; }
     }
 }

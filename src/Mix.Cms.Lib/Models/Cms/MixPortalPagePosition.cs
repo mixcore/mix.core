@@ -11,7 +11,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Priority { get; set; }
         public int Status { get; set; }
 
-        public MixPortalPage PortalPage { get; set; }
-        public MixPosition Position { get; set; }
+        public virtual MixPortalPage PortalPage { get; set; }
+        public virtual MixPosition Position { get; set; }
     }
 }
