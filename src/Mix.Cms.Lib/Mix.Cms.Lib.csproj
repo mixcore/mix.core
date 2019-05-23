@@ -21,7 +21,19 @@
     <Compile Remove="Migrations\20190106051357_update_themes_module.Designer.cs" />
     <Compile Remove="Migrations\20190113142418_add-article-publisheddat.cs" />
     <Compile Remove="Migrations\20190113142418_add-article-publisheddat.Designer.cs" />
+    <Compile Remove="Migrations\20190218170252_init.cs" />
+    <Compile Remove="Migrations\20190218170252_init.Designer.cs" />
+    <Compile Remove="Migrations\20190322132959_upd_media_targeturl_source.cs" />
+    <Compile Remove="Migrations\20190322132959_upd_media_targeturl_source.Designer.cs" />
+    <Compile Remove="Migrations\20190323033158_upd-page-article.cs" />
+    <Compile Remove="Migrations\20190323033158_upd-page-article.Designer.cs" />
+    <Compile Remove="Migrations\20190505130011_add-cache.cs" />
+    <Compile Remove="Migrations\20190505130011_add-cache.Designer.cs" />
     <Compile Remove="Migrations\20190514022718_add-attr.cs" />
+    <Compile Remove="Migrations\20190523082752_add-attr.cs" />
+    <Compile Remove="Migrations\20190523082752_add-attr.Designer.cs" />
+    <Compile Remove="Migrations\20190523083122_update-maytisa.cs" />
+    <Compile Remove="Migrations\20190523083122_update-maytisa.Designer.cs" />
     <Compile Remove="Services\CmsConfiguration.cs" />
     <Compile Remove="Services\CmsCultureConfiguration.cs" />
   </ItemGroup>

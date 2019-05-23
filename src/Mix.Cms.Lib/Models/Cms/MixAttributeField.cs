@@ -11,6 +11,8 @@ namespace Mix.Cms.Lib.Models.Cms
         public int DataType { get; set; }
         public string DefaultValue { get; set; }
         public string Name { get; set; }
+        public string Options { get; set; }
+        public DateTime CreatedDateTime { get; set; }
         public int Priority { get; set; }
         public int Status { get; set; }
 

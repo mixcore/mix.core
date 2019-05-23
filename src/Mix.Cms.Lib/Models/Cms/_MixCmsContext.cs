@@ -87,7 +87,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.3-servicing-35854");
+            modelBuilder.HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
 
             modelBuilder.Entity<MixArticle>(entity =>
             {
@@ -196,8 +196,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.CustomClass).HasMaxLength(50);
-
                 entity.Property(e => e.DataId)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -280,11 +278,15 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.ToTable("mix_attribute_field");
 
+                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
+
                 entity.Property(e => e.DefaultValue).IsRequired();
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.Options).HasMaxLength(4000);
 
                 entity.Property(e => e.Title).HasMaxLength(250);
 
@@ -782,8 +784,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.CustomClass).HasMaxLength(50);
-
                 entity.Property(e => e.DataId)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -1074,8 +1074,6 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasMaxLength(50);
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.CustomClass).HasMaxLength(50);
 
                 entity.Property(e => e.DataId)
                     .IsRequired()
