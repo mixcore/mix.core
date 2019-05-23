@@ -140,7 +140,7 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
             $scope.initCmsModel.sqliteDbConnectionString = 'Data Source=' + $scope.initCmsModel.localDbName;
         };
         $scope.initCms = async function () {
-            $rootScope.isBusy = true;
+            $rootScope.isBusy = true;            
             var result = await step1Services.initCms($scope.initCmsModel);
             if (result.isSucceed) {
                 $rootScope.isBusy = false;
@@ -148,8 +148,7 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
             }
             else {
                 if (result) { $rootScope.showErrors(result.errors); }
-                $rootScope.isBusy = false;
-                $scope.$apply();
+                $rootScope.isBusy = false;                
             }
         }
     }]);
