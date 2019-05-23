@@ -17,7 +17,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public bool? BooleanValue { get; set; }
         public int Priority { get; set; }
         public int Status { get; set; }
-        public string CustomClass { get; set; }
         public DateTime CreatedDateTime { get; set; }
 
         public virtual MixArticleAttributeData Data { get; set; }
