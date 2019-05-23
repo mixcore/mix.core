@@ -99,6 +99,12 @@ paths.appCss = {
     ],
     dest: paths.webroot + "css/app-vendor.min.css"
 };
+paths.appInitCss = {
+    src: [        
+        paths.webapp + "app-init/**/*.css"
+    ],
+    dest: paths.webroot + "css/app-init.min.css"
+};
 paths.portalCss = {
     src: [
         "./lib/css/portal/**/*.css",
@@ -182,6 +188,12 @@ gulp.task("min:appCss", function (cb) {
         .pipe(cssmin(paths.appCssOptions))
         .pipe(gulp.dest(dest));
 });
+gulp.task("min:appInitCss", function (cb) {
+    return gulp.src(paths.appInitCss.src, { base: "." })
+        .pipe(concat(paths.appInitCss.dest))
+        .pipe(cssmin(paths.appInitCss))
+        .pipe(gulp.dest(dest));
+});
 gulp.task("min:portalCss", function (cb) {
     return gulp.src(paths.portalCss.src, { base: "." })
         .pipe(concat(paths.portalCss.dest))
@@ -231,6 +243,10 @@ gulp.task("clean:appCss", function (cb) {
     rimraf(paths.appCss.dest, cb);
 });
 
+gulp.task("clean:appInitCss", function (cb) {
+    rimraf(paths.appInitCss.dest, cb);
+});
+
 gulp.task("clean:portalCss", function (cb) {
     rimraf(paths.portalCss.dest, cb);
 });
@@ -244,12 +260,12 @@ gulp.task("clean:js", [
     , "clean:portalApp", "clean:clientApp", "clean:sharedApp", "clean:initApp"
 ]);
 gulp.task("clean:css", [
-    , "clean:appCss", "clean:portalCss", "clean:sharedCss"
+    , "clean:appCss", "clean:appInitCss", "clean:portalCss", "clean:sharedCss"
 ]);
 gulp.task("min:js", ["min:portalApp", "min:initApp", "min:clientApp", "min:sharedApp"
     , "min:shared", "min:portal", "min:framework"
 ]);
-gulp.task("min:css", ['min:appCss', 'min:portalCss', 'min:sharedCss']);
+gulp.task("min:css", ['min:appCss', "min:appInitCss", 'min:portalCss', 'min:sharedCss']);
 
 gulp.task("build", ['clean:js',
     'min:js', 'min:css', "min:views"]);//["clean", "min:views", "min"]);
@@ -257,7 +273,7 @@ gulp.task("build", ['clean:js',
 gulp.task('watch:html', function () {
     gulp.watch('./app/**/**/*.html', ['min:views']);
     gulp.watch('./app/**/**/*.js', ['min:portalApp']);
-    gulp.watch('./app/**/**/*.css', ['min:appCss']);
+    gulp.watch('./app/**/**/*.css', ['min:appCss','min:appInitCss']);
 });
 
 // [Watch Portal] View & Portal's js & CSS > gulp watch:html
