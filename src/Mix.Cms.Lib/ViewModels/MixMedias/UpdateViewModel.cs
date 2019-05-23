@@ -83,7 +83,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
                 if (!string.IsNullOrEmpty(FileName) && string.IsNullOrEmpty(TargetUrl))
                 {
                     return FileFolder.IndexOf("http") > 0 ? $"{FileFolder}/{FileName}{Extension}"
-                        : $"{Domain}/{FileFolder}/{FileName}{Extension}";
+                        : $"{FileFolder}/{FileName}{Extension}";
                 }
                 else
                 {
