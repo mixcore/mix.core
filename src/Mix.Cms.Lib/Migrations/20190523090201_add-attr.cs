@@ -7,107 +7,7 @@ namespace Mix.Cms.Lib.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_mix_module_attribute_value_mix_module_attribute_set",
-                table: "mix_module_attribute_value");
-
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_mix_module_attribute_value",
-                table: "mix_module_attribute_value");
-
-            migrationBuilder.DropIndex(
-                name: "IX_mix_module_attribute_value_AttributeSetId_ModuleId_Specificulture",
-                table: "mix_module_attribute_value");
-
-            migrationBuilder.DropColumn(
-                name: "AttributeSetId",
-                table: "mix_module_attribute_value");
-
-            migrationBuilder.DropColumn(
-                name: "DataType",
-                table: "mix_module_attribute_value");
-
-            migrationBuilder.DropColumn(
-                name: "DefaultValue",
-                table: "mix_module_attribute_value");
-
-            migrationBuilder.DropColumn(
-                name: "Name",
-                table: "mix_module_attribute_value");
-
-            migrationBuilder.DropColumn(
-                name: "Title",
-                table: "mix_module_attribute_value");
-
-            migrationBuilder.DropColumn(
-                name: "Width",
-                table: "mix_module_attribute_value");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Id",
-                table: "mix_module_attribute_value",
-                maxLength: 50,
-                nullable: false,
-                oldClrType: typeof(Guid));
-
-            migrationBuilder.AddColumn<string>(
-                name: "AttributeName",
-                table: "mix_module_attribute_value",
-                maxLength: 50,
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<bool>(
-                name: "BooleanValue",
-                table: "mix_module_attribute_value",
-                nullable: true);
-
-            migrationBuilder.AddColumn<DateTime>(
-                name: "CreatedDateTime",
-                table: "mix_module_attribute_value",
-                type: "datetime",
-                nullable: false,
-                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
-
-            migrationBuilder.AddColumn<string>(
-                name: "DataId",
-                table: "mix_module_attribute_value",
-                maxLength: 50,
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<DateTime>(
-                name: "DateTimeValue",
-                table: "mix_module_attribute_value",
-                type: "datetime",
-                nullable: true);
-
-            migrationBuilder.AddColumn<double>(
-                name: "DoubleValue",
-                table: "mix_module_attribute_value",
-                nullable: true);
-
-            migrationBuilder.AddColumn<int>(
-                name: "IntegerValue",
-                table: "mix_module_attribute_value",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "StringValue",
-                table: "mix_module_attribute_value",
-                maxLength: 4000,
-                nullable: true);
-
-            migrationBuilder.AddColumn<int>(
-                name: "SetAttributeId",
-                table: "mix_module",
-                nullable: true);
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_mix_module_attribute_value",
-                table: "mix_module_attribute_value",
-                column: "Id");
-
+            
             migrationBuilder.CreateTable(
                 name: "mix_article_attribute_data",
                 columns: table => new
@@ -290,11 +190,7 @@ namespace Mix.Cms.Lib.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_module_attribute_value_DataId",
-                table: "mix_module_attribute_value",
-                column: "DataId");
-
+           
             migrationBuilder.CreateIndex(
                 name: "IX_mix_module_SetAttributeId",
                 table: "mix_module",
@@ -346,14 +242,7 @@ namespace Mix.Cms.Lib.Migrations
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_mix_module_attribute_value_mix_module_attribute_data",
-                table: "mix_module_attribute_value",
-                column: "DataId",
-                principalTable: "mix_module_attribute_data",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-
+            
             migrationBuilder.AddForeignKey(
                 name: "FK_mix_page_mix_attribute_set",
                 table: "mix_page",
@@ -373,10 +262,7 @@ namespace Mix.Cms.Lib.Migrations
                 name: "FK_mix_module_mix_attribute_set",
                 table: "mix_module");
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_mix_module_attribute_value_mix_module_attribute_data",
-                table: "mix_module_attribute_value");
-
+            
             migrationBuilder.DropForeignKey(
                 name: "FK_mix_page_mix_attribute_set",
                 table: "mix_page");
@@ -402,114 +288,12 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.DropTable(
                 name: "mix_page_attribute_data");
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_mix_module_attribute_value",
-                table: "mix_module_attribute_value");
-
-            migrationBuilder.DropIndex(
-                name: "IX_mix_module_attribute_value_DataId",
-                table: "mix_module_attribute_value");
-
+           
             migrationBuilder.DropIndex(
                 name: "IX_mix_module_SetAttributeId",
                 table: "mix_module");
 
-            migrationBuilder.DropColumn(
-                name: "AttributeName",
-                table: "mix_module_attribute_value");
-
-            migrationBuilder.DropColumn(
-                name: "BooleanValue",
-                table: "mix_module_attribute_value");
-
-            migrationBuilder.DropColumn(
-                name: "CreatedDateTime",
-                table: "mix_module_attribute_value");
-
-            migrationBuilder.DropColumn(
-                name: "DataId",
-                table: "mix_module_attribute_value");
-
-            migrationBuilder.DropColumn(
-                name: "DateTimeValue",
-                table: "mix_module_attribute_value");
-
-            migrationBuilder.DropColumn(
-                name: "DoubleValue",
-                table: "mix_module_attribute_value");
-
-            migrationBuilder.DropColumn(
-                name: "IntegerValue",
-                table: "mix_module_attribute_value");
-
-            migrationBuilder.DropColumn(
-                name: "StringValue",
-                table: "mix_module_attribute_value");
-
-            migrationBuilder.DropColumn(
-                name: "SetAttributeId",
-                table: "mix_module");
-
-            migrationBuilder.AlterColumn<Guid>(
-                name: "Id",
-                table: "mix_module_attribute_value",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldMaxLength: 50);
-
-            migrationBuilder.AddColumn<Guid>(
-                name: "AttributeSetId",
-                table: "mix_module_attribute_value",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
-
-            migrationBuilder.AddColumn<int>(
-                name: "DataType",
-                table: "mix_module_attribute_value",
-                nullable: false,
-                defaultValue: 0);
-
-            migrationBuilder.AddColumn<string>(
-                name: "DefaultValue",
-                table: "mix_module_attribute_value",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<string>(
-                name: "Name",
-                table: "mix_module_attribute_value",
-                maxLength: 250,
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "Title",
-                table: "mix_module_attribute_value",
-                maxLength: 250,
-                nullable: true);
-
-            migrationBuilder.AddColumn<int>(
-                name: "Width",
-                table: "mix_module_attribute_value",
-                nullable: false,
-                defaultValue: 0);
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_mix_module_attribute_value",
-                table: "mix_module_attribute_value",
-                columns: new[] { "Id", "AttributeSetId", "Specificulture" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_module_attribute_value_AttributeSetId_ModuleId_Specificulture",
-                table: "mix_module_attribute_value",
-                columns: new[] { "AttributeSetId", "ModuleId", "Specificulture" });
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_mix_module_attribute_value_mix_module_attribute_set",
-                table: "mix_module_attribute_value",
-                columns: new[] { "AttributeSetId", "ModuleId", "Specificulture" },
-                principalTable: "mix_module_attribute_set",
-                principalColumns: new[] { "Id", "ModuleId", "Specificulture" },
-                onDelete: ReferentialAction.Cascade);
+            
         }
     }
 }
