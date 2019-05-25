@@ -1,0 +1,62 @@
+<div class="tab-pane fade active show" id="pills-general" role="tabpanel" aria-labelledby="pills-general-tab">
+    <div class="form-group">
+        <label class="control-label">Domain</label>
+        <input type="text" ng-model="$ctrl.appSettings.GlobalSettings.Domain" class="form-control">
+    </div>
+    <div class="form-group">
+        <span class="switch switch-sm">
+            <input type="checkbox" ng-model="$ctrl.appSettings.GlobalSettings.IsMaintenance" id="IsMaintenance" class="switch ng-pristine ng-untouched ng-valid ng-empty">
+            <label class="switch mb-0" for="IsMaintenance">
+                <span>Maintenance</span>
+            </label>
+        </span>
+    </div>    
+    <div class="form-group">
+        <span class="switch switch-sm">
+            <input type="checkbox" ng-model="$ctrl.appSettings.GlobalSettings.IsRewrite" id="IsRewrite" class="switch ng-pristine ng-untouched ng-valid ng-empty">
+            <label class="switch mb-0" for="IsRewrite">
+                <span>Rewrite Url</span>
+            </label>
+        </span>
+    </div>    
+    <div class="form-group">
+        <span class="switch switch-sm">
+            <input type="checkbox" ng-model="$ctrl.appSettings.GlobalSettings.IsHttps" id="IsHttps" class="switch ng-pristine ng-untouched ng-valid ng-empty">
+            <label class="switch mb-0" for="IsHttps">
+                <span>Https</span>
+            </label>
+        </span>
+    </div>        
+    <div class="form-group">
+        <span class="switch switch-sm">
+            <input type="checkbox" ng-model="$ctrl.appSettings.IpSecuritySettings.IsRetrictIp" id="IsRetrictIp" class="switch ng-pristine ng-untouched ng-valid ng-empty">
+            <label class="switch mb-0" for="IsRetrictIp">
+                <span>Retrict Ip</span>
+            </label>
+        </span>
+    </div>
+    <div class="form-group" ng-if="$ctrl.appSettings.IpSecuritySettings.IsRetrictIp">
+        <label class="control-label">Allowed Portal Ips</label>        
+        <tags-input ng-model="$ctrl.appSettings.IpSecuritySettings.AllowedPortalIps">
+        </tags-input>
+    </div>
+    <div class="form-group" ng-if="$ctrl.appSettings.IpSecuritySettings.IsRetrictIp">
+    <div class="form-group" ng-if="$ctrl.appSettings.IpSecuritySettings.IsRetrictIp">
+        <label class="control-label">Allowed Ips</label>
+        <tags-input ng-model="$ctrl.appSettings.IpSecuritySettings.AllowedIps">
+        </tags-input>
+    </div>
+    <div class="form-group" ng-if="$ctrl.appSettings.IpSecuritySettings.IsRetrictIp">
+        <label class="control-label">Except Ips</label>        
+        <tags-input ng-model="$ctrl.appSettings.IpSecuritySettings.ExceptIps">
+        </tags-input>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Connection Strings for CMS</label>
+        <textarea rows="5" class="form-control" ng-model="$ctrl.appSettings.ConnectionStrings.MixCmsConnection"></textarea>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Connection Strings for Account</label>
+        <textarea rows="5" class="form-control" ng-model="$ctrl.appSettings.ConnectionStrings.MixAccountConnection"></textarea>
+    </div>
+</div></div>
