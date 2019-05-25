@@ -19,7 +19,7 @@
     <link href="~/css/bootstrap.min.css" rel="stylesheet" />          
     <!-- <link href="~/css/shared.min.css" rel="stylesheet" />     -->
     <!-- <link href="~/css/now-ui.min.css" rel="stylesheet" />     -->
-    <link href="~/css/app-init.min.css" rel="stylesheet" />  
+    <!-- <link href="~/css/app-vendor.min.css" rel="stylesheet" />   -->
     <link href="~/css/shared.min.css" rel="stylesheet" />  
     <link href="~/plugins/tabler-0.0.32/css/dashboard.css" rel="stylesheet" />
 
@@ -27,7 +27,7 @@
 
 <body class="login-page app-init" ng-app="MixPortal" style="background-image: url('/assets/img/bgs/celebrate.jpg');background-size: cover;">
      <!-- style="background-image: url('/assets/img/bgs/work-space.jpg');" -->
-     <mix-loader ng-show="isBusy"></mix-loader>    
+    <mix-loader is-show="isBusy"></mix-loader>
     <div class="page">
       <div class="page-single">
         <div class="container">
@@ -43,9 +43,9 @@
 
     <environment names="Development">
     </environment>
-    <script src="/js/jquery/jquery.min.js"></script>
+    <script></script>window.jQuery || document.write('<script src="/js/jquery/jquery.min.js"><\/script>')</script>
     <script src="~/js/framework.min.js"></script>
-    <script src="~/js/shared.min.js"></script>
+    
     <!-- <script src="~/js/now-ui.min.js"></script> -->
     
     <script src="~/js/app-init.min.js"></script>
