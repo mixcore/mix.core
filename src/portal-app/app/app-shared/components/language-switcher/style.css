@@ -1,0 +1,32 @@
+
+@media (min-width: 992px){
+    .language-switcher {
+        display: inline;
+        position: absolute;        
+        right: 150px;
+        bottom: 15px;
+    }
+    .language-switcher.portal{
+        bottom:0;
+    }
+    .language-switcher .dropdown-menu{
+        right:0;
+    }
+}
+@media screen and (max-width: 991px){
+    .language-switcher {
+        display: inline;
+        position: absolute;        
+        left: 20px;
+    }
+    .language-switcher .dropdown-menu{
+        left:0;
+    }
+}
+.language-switcher .dropdown-menu{
+    width: 250px;
+    overflow: hidden!important;
+}
+.navbar-collapse .dropdown-menu .dropdown-item{
+    color:#444;
+}

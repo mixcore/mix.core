@@ -1,0 +1,17 @@
+#modal-shopping-cart .modal-title{
+    margin-top:0;
+}
+#modal-shopping-cart .cart-item{
+    margin:10px 0;
+}
+#modal-shopping-cart .modal-dialog{
+    max-width: unset;
+    margin: 20px;
+}
+#modal-shopping-cart{
+    color:#5c4b43;
+    z-index: 1060;
+}
+#modal-shopping-cart  .modal-footer button{
+    margin: 0 10px;
+}
