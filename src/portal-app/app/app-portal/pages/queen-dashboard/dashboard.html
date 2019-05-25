@@ -1,0 +1,69 @@
+<style>
+    .panel-header {
+    height: 260px;
+    padding-top: 80px;
+    padding-bottom: 45px;
+    background: #141E30;
+    /* fallback for old browsers */
+    background: -webkit-gradient(linear, left top, right top, from(#0c2646), color-stop(60%, #204065), to(#2a5788));
+    background: linear-gradient(to right, #0c2646 0%, #204065 60%, #2a5788 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+    .panel-header .header .title {
+        color: #FFFFFF;
+    }
+
+    .panel-header .header .category {
+        max-width: 600px;
+        color: rgba(255, 255, 255, 0.5);
+        margin: 0 auto;
+        font-size: 13px;
+    }
+
+        .panel-header .header .category a {
+            color: #FFFFFF;
+        }
+
+.panel-header-sm {
+    height: 135px;
+}
+
+.panel-header-lg {
+    height: 380px;
+}
+
+</style>
+<section class="content container-fluid" ng-init="getDashboardInfo()">
+    <div class="row sortable ui-sortable">
+        <div class="col-sm-4 ui-sortable-handle">
+            <div class="card">
+                <div class="card-body">
+                    <i class="mi mi-ReadingList mi-5x mi-fw text-primary"></i> <span class="display-3" ng-bind="data.totalPage"></span>
+                    <h1>Categories</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 ui-sortable-handle">
+            <div class="card">
+                <div class="card-body">
+                    <i class="mi mi-People mi-5x mi-fw text-primary"></i> <span class="display-3" ng-bind="data.totalCustomer"></span>
+                    <h1>Customers</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 ui-sortable-handle">
+            <div class="card">
+                <div class="card-body">
+                    <i class="mi mi-Package mi-5x mi-fw text-primary"></i> <span class="display-3" ng-bind="data.totalProduct"></span>
+                    <h1>Services</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-header panel-header-lg">
+        <canvas id="bigDashboardChart"></canvas>
+    </div>
+</section>

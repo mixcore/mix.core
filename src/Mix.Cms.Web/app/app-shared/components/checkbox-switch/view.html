@@ -1,0 +1,8 @@
+<span class="switch switch-sm">
+    <input type="checkbox" ng-change="$ctrl.callback({data: data})" ng-model="$ctrl.data.isActived"
+        id="{{$ctrl.guid}}" class="switch">
+    <label class="switch m-0" for="{{$ctrl.guid}}" ng-bind="$ctrl.limString($ctrl.description, 15)">
+
+    </label>
+    
+</span>

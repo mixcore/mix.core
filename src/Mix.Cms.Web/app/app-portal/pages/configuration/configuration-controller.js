@@ -1,0 +1,18 @@
+﻿'use strict';
+app.controller('ConfigurationController',
+    ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$location', 'ConfigurationService', 'CommonService',
+        function ($scope, $rootScope, ngAppSettings, $routeParams, $location, service, commonService) {
+            BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
+            $scope.cates = ['Site', 'System'];
+            $scope.settings = $rootScope.globalSettings;
+            $scope.saveCallback = function () {
+                commonService.initAllSettings().then(function () {
+                    $location.url($scope.referrerUrl);
+                });
+            }
+            $scope.removeCallback = function () {
+                commonService.initAllSettings().then(function () {
+                    $location.url($scope.referrerUrl);
+                });
+            }
+        }]);

@@ -1,0 +1,28 @@
+<div class="sw-toc-item" is-active-menu>
+    <div class="inner">
+        <div class="btn-group btn-group-sm" role="group" ng-if="$ctrl.item.childPages.length > 0">
+            <!--<a ng-repeat="m in $ctrl.item.childPages" href="{{m.page.url}}" class="btn btn-light">
+                <span class="mi {{m.page.icon}} mi-fw"></span>
+            </a>-->
+            <a href="#" class="btn btn-light" data-toggle="collapse" data-target="#{{$ctrl.item.title}}" role="button"
+                aria-expanded="false" aria-controls="{{$ctrl.item.title}}">
+                <span class="fas fa-chevron-down"></span>
+            </a>
+        </div>
+
+    </div>
+    <div class="{{$ctrl.itemStyle}}" data-toggle="collapse" data-target="#permission-{{$ctrl.item.id}}" role="button"
+        aria-expanded="false" aria-controls="{{$ctrl.item.textDefault}}">
+
+        <a href="{{$ctrl.item.url}}" class="text {{$ctrl.linkStyle}}">
+            <i class="mi {{$ctrl.item.icon}} {{$ctrl.iconSize}} mi-fw"></i>
+            <span ng-bind="$ctrl.translate($ctrl.item.textKeyword, false, $ctrl.item.textDefault)"></span>
+        </a>
+    </div>
+    <ul ng-if="$ctrl.item.childPages.length > 0" id="permission-{{$ctrl.item.id}}" class="collapse list-unstyled" role="tabpanel"
+        data-parent="#sw-docs-nav">
+        <li ng-repeat="m in $ctrl.item.childPages">
+            <main-side-bar-item-dynamic item="m.page" link-style="'sw-toc-sub-link mb-1'"></main-side-bar-item-dynamic>
+        </li>
+    </ul>
+</div>

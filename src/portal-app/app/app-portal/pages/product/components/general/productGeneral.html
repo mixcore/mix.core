@@ -1,0 +1,77 @@
+<div class="tab-pane fade active show" id="pills-general" role="tabpanel" aria-labelledby="pills-general-tab">
+
+    <div class="form-group">
+        <label class="control-label">Source</label>
+        <input type="text" class="form-control" ng-model="$ctrl.product.source">
+    </div>
+    <div class="form-group">
+        <label class="control-label">Tags</label>
+        <tags input="$ctrl.product.listTag">
+            <!--<auto-complete source="$ctrl.loadTags($query)"></auto-complete>-->
+        </tags>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <h6 class="card-header">
+                    Components (<label class="control-label">ExtraProperties)</label>)
+                    <a class="btn btn-primary btn-sm float-right text-white" ng-click="$ctrl.addProperty('$ctrl.product')">
+                        Add New
+                    </a>
+                </h6>
+                <div class="card-body p-1">
+                    <table class="table table-sm table-hover" id="tbl-properties">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col" width="5%">
+                                    <span class="oi oi-move"></span>
+                                </th>
+                                <th scope="col" width="5%">
+                                    <span class="oi oi-sort-ascending"></span>
+                                </th>
+                                <th scope="col">Name</th>
+                                <th scope="col" width="20%">Data Type</th>
+                                <th scope="col">Value</th>
+                            </tr>
+                        </thead>
+                        <tbody class="sortable">
+                            <tr ng-repeat="prop in $ctrl.product.properties track by $index" class="sortable-item $ctrl.product-property">
+                                <td style="cursor:move;">
+                                    <span class="oi oi-move"></span>
+                                </td>
+                                <td>
+                                    <input type="text" ng-model="prop.priority" class="item-priority form-control form-control-sm d-inline" style="width:40px;">
+                                </td>
+                                <td>
+                                    <input ng-model="prop.name" class="form-control form-control-sm">
+                                </td>
+                                <td>
+                                    <select ng-model="prop.dataType" class="form-control form-control-sm prop-data-type">
+                                        <option ng-repeat="type in $ctrl.dataTypes track by $index" value="{{type.value}}">{{type.title}}</option>
+                                    </select>
+                                </td>
+                                <td class="prop-value-container">
+                                    <div class="animate-switch-container" ng-switch on="prop.dataType">
+                                        <div class="animate-switch" ng-switch-when="1">
+                                            <input class="form-control form-control-sm" type="number" ng-model="prop.value">
+                                        </div>
+                                        <div class="animate-switch" ng-switch-when="2">
+                                            <custom-file header="'Image'" folder="'Products/Properties'" src="prop.value" auto="'true'"></custom-file>
+                                        </div>
+                                        <div class="animate-switch" ng-switch-when="7">
+                                            <input class="form-control form-control-sm" type="checkbox" ng-true-value="'true'" ng-model="prop.value">
+                                        </div>
+                                        <div class="animate-switch" ng-switch-default>
+                                            <input class="form-control form-control-sm" type="text" ng-model="prop.value">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
