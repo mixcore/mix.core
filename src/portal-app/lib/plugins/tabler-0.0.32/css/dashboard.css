@@ -12829,11 +12829,6 @@ a.icon:hover {
   transition: .3s color;
 }
 
-.close:before {
-  content: '\ea00';
-  font-family: "feather";
-}
-
 .badge {
   color: #fff;
 }

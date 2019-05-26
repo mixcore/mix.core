@@ -243,7 +243,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
                                 authService.authentication.token = null;
                                 authService.authentication.refresh_token = null;
                                 authService.referredUrl = $location.$$url;
-                                window.top.location.href = '/init/login';
+                                window.top.location.href = '/security/login';
                             });
                         }, function (err) {
 
@@ -253,14 +253,14 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
                             authService.authentication.token = null;
                             authService.authentication.refresh_token = null;
                             authService.referredUrl = $location.$$url;
-                            window.top.location.href = '/init/login';
+                            window.top.location.href = '/security/login';
                             return t;
                         }
                         );
                     }
                     else if (error.status === 403) {
                         var t = { isSucceed: false, errors: ['Forbidden'] };
-                        window.top.location.href = '/init/login';
+                        window.top.location.href = '/security/login';
                         return t;
                     }
                     else {

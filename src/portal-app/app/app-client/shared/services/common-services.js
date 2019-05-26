@@ -98,7 +98,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
                             authService.authentication.token = null;
                             authService.authentication.refresh_token = null;
                             authService.referredUrl = $location.$$url;
-                            $location.path('/init/login');
+                            $location.path('/security/login');
                         });
                     }, function (err) {
 
@@ -108,7 +108,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
                         authService.authentication.token = null;
                         authService.authentication.refresh_token = null;
                         authService.referredUrl = $location.$$url;
-                        $location.path('/init/login');
+                        $location.path('/security/login');
                         return t;
                     }
                     );
