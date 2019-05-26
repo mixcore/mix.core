@@ -7,7 +7,7 @@
     </rule>
 
     <rule name="Not rewrite" stopProcessing="true">
-      <match url="^plugins|init|data|swagger|portal|api|portal|error|Content|lib|css|js|app-shared|app-client|app-portal|app-init|images(\/(.*)){2,8}$" />
+      <match url="^plugins|init|security|data|swagger|portal|api|portal|error|Content|lib|css|js|app-shared|app-client|app-portal|app-init|images(\/(.*)){2,8}$" />
       <action type="None" appendQueryString="false"/>
     </rule>
 

@@ -22,6 +22,16 @@ app.factory('AuthService',
                 });
 
             };
+            var _forgotPassword = function (data) {
+                return $http.post('/account/forgot-password', data).then(function (response) {
+                    return response;
+                });
+            };
+            var _resetPassword = function (data) {
+                return $http.post('/account/reset-password', data).then(function (response) {
+                    return response;
+                });
+            };
 
             var _login = async function (loginData) {
                 var data = {
@@ -273,6 +283,8 @@ app.factory('AuthService',
             };
 
             authServiceFactory.saveRegistration = _saveRegistration;
+            authServiceFactory.forgotPassword = _forgotPassword;
+            authServiceFactory.resetPassword = _resetPassword;
             authServiceFactory.login = _login;
             authServiceFactory.logOut = _logOut;
             authServiceFactory.referredUrl = _referredUrl;

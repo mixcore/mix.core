@@ -429,6 +429,63 @@ namespace Mix.Cms.Api.Controllers.v1
             return data;
         }
 
+        [HttpPost, HttpOptions]
+        [Route("forgot-password")]
+        public async Task<RepositoryResponse<string>> ForgotPassword(string email)
+        {
+            var result = new RepositoryResponse<string>() { IsSucceed = true };
+            if (string.IsNullOrEmpty(email))
+            {
+                result.IsSucceed = false;
+                result.Data = "Invalid Email";
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                result.IsSucceed = false;
+                result.Data = "Email Not Exist";
+            }
+
+            //if (!await _userManager.IsEmailConfirmedAsync(user))
+            //    result.Data = "Invalid Email";
+
+            var confrimationCode =
+                    await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var callbackurl = $"{MixService.GetConfig<string>("Domain")}/init/reset-password/{user.Id}/{confrimationCode}";
+
+            MixService.SendMail(
+                to: user.Email,
+                subject: "Reset Password",
+                message: callbackurl);
+
+            return result;
+        }
+
+        [HttpPost]
+        [Route("reset-password")]
+        public async Task<RepositoryResponse<string>> ResetPassword(ResetPasswordViewModel model)
+        {
+            var result = new RepositoryResponse<string>() { IsSucceed = true };
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                result.IsSucceed = false;
+                result.Data = "Invalid User";
+            }
+
+            var idRresult = await _userManager.ResetPasswordAsync(
+                                        user, model.Code, model.Password);
+            result.IsSucceed = idRresult.Succeeded;
+            foreach (var err in idRresult.Errors)
+            {
+                result.Errors.Add($"{err.Code}: {err.Description}");
+            }
+
+            return result;
+        }
+
         private async Task<AccessTokenViewModel> GenerateAccessTokenAsync(ApplicationUser user, bool isRemember)
         {
             var dtIssued = DateTime.UtcNow;

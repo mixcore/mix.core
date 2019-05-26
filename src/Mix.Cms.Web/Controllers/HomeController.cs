@@ -184,6 +184,24 @@ namespace Mix.Cms.Web.Controllers
             }
 
         }
+        [HttpGet]
+        [Route("security/{page}")]
+        public IActionResult Security(string page)
+        {
+            if (_forbidden)
+            {
+                return Redirect($"/error/403");
+            }
+            if (string.IsNullOrEmpty(page) && MixService.GetConfig<bool>("IsInit"))
+            {
+                return Redirect($"/init/login");
+            }
+            else
+            {
+                return View();
+            }
+
+        }
 
         [HttpGet]
         [Route("error/{page}")]

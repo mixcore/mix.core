@@ -37,7 +37,7 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
                                 }
                             }
                             else {
-                                window.top.location.href = '/init/login';
+                                window.top.location.href = '/security/login';
                             }
                         });
                         $rootScope.isInit = true;
@@ -47,7 +47,7 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
 
 
                     } else {
-                        window.top.location.href = '/init/login';
+                        window.top.location.href = '/security/login';
                     }
                 });
             }

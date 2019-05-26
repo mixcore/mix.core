@@ -50,6 +50,15 @@ paths.initApp = {
     dest: paths.webroot + "js/app-init.min.js"
 };
 
+paths.securityApp = {
+    src: [
+        paths.webapp + "app-security/app.js",
+        paths.webapp + "app-security/app.route.js",
+        paths.webapp + "app-security/pages/**/*.js"
+    ],
+    dest: paths.webroot + "js/app-security.min.js"
+};
+
 paths.clientApp = {
     src: [
         paths.webapp + "app-client/app.js",
@@ -122,18 +131,17 @@ paths.appInitCss = {
 };
 paths.portalCss = {
     src: [
-        "./lib/css/portal/**/*.css",
-        "./lib/css/portal/**/*.*.css",
-        "./lib/js/portal/**/*.css",
-        "./lib/js/portal/**/*.*.css"
+        "./lib/portal/**/*.css",
+        "./lib/portal/**/*.*.css",
     ],
     dest: paths.webroot + "css/portal.min.css"
 };
 paths.sharedCss = {
     src: [
         paths.webapp + "app-shared/**/*.css",
-        "./lib/css/shared/**/*.css",
-        "./lib/css/shared/**/*.*.css"
+        "./lib/bootstrap/css/bootstrap.min.css",
+        "./lib/shared/**/*.css",
+        "./lib/shared/**/*.*.css"
     ],
     dest: paths.webroot + "css/shared.min.css"
 };
@@ -150,7 +158,8 @@ paths.views = {
         "./app/app-shared/**/*.html",
         "./app/app-portal/**/*.html",
         "./app/app-client/**/*.html",
-        "./app/app-init/**/*.html"
+        "./app/app-init/**/*.html",
+        "./app/app-security/**/*.html",
     ],
     dest: paths.webroot
 };
@@ -166,6 +175,13 @@ gulp.task("min:portalApp", function (cb) {
 gulp.task("min:initApp", function (cb) {
     return gulp.src(paths.initApp.src, { base: "." })
         .pipe(concat(paths.initApp.dest))
+        //.pipe(uglify())
+        //.pipe(minify(paths.jsOptions))
+        .pipe(gulp.dest(dest));
+});
+gulp.task("min:securityApp", function (cb) {
+    return gulp.src(paths.securityApp.src, { base: "." })
+        .pipe(concat(paths.securityApp.dest))
         //.pipe(uglify())
         //.pipe(minify(paths.jsOptions))
         .pipe(gulp.dest(dest));
@@ -273,6 +289,10 @@ gulp.task("clean:initApp", function (cb) {
     rimraf(paths.initApp.dest, cb);
 });
 
+gulp.task("clean:securityApp", function (cb) {
+    rimraf(paths.securityApp.dest, cb);
+});
+
 gulp.task("clean:tablerJs", function (cb) {
     rimraf(paths.tablerJs.dest, cb);
 });
@@ -298,12 +318,12 @@ gulp.task("clean:sharedCss", function (cb) {
 gulp.task("clean:js", [
 
     "clean:framework", "clean:portal", "clean:shared","clean:tablerJs"
-    , "clean:portalApp", "clean:clientApp", "clean:sharedApp", "clean:initApp"
+    , "clean:portalApp", "clean:clientApp", "clean:sharedApp", "clean:initApp", "clean:securityApp"
 ]);
 gulp.task("clean:css", [
     , "clean:appCss","clean:tablerCss", "clean:appInitCss", "clean:portalCss", "clean:sharedCss"
 ]);
-gulp.task("min:js", ["min:portalApp", "min:initApp", "min:clientApp", "min:sharedApp"
+gulp.task("min:js", ["min:portalApp", "min:initApp", "min:securityApp", "min:clientApp", "min:sharedApp"
     , "min:shared","min:tablerJs", "min:portal", "min:framework"
 ]);
 gulp.task("min:css", ['min:appCss','min:tablerCss', "min:appInitCss", 'min:portalCss', 'min:sharedCss']);
