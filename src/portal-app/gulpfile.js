@@ -117,6 +117,7 @@ paths.portal = {
 
 paths.appCss = {
     src: [        
+        paths.webapp + "app-shared/**/*.css",
         paths.webapp + "app-portal/**/*.css",
         paths.webapp + "app-client/**/*.css",
         paths.webapp + "app-init/**/*.css"
@@ -137,9 +138,7 @@ paths.portalCss = {
     dest: paths.webroot + "css/portal.min.css"
 };
 paths.sharedCss = {
-    src: [
-        paths.webapp + "app-shared/**/*.css",
-        "./lib/bootstrap/css/bootstrap.min.css",
+    src: [        
         "./lib/shared/**/*.css",
         "./lib/shared/**/*.*.css"
     ],
