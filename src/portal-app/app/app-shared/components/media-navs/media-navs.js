@@ -31,7 +31,7 @@ app.component('mediaNavs', {
             if (currentItem === null) {
                 currentItem = {
                     description: media.description !== 'undefined' ? media.description : '',
-                    image: media.fullPath,
+                    image: media.filePath,
                     mediaId: media.id,
                     product: ctrl.id,
                     specificulture: media.specificulture,
@@ -48,7 +48,7 @@ app.component('mediaNavs', {
                 }
                 else{
                     ctrl.output = ctrl.data[0].image;
-                    ctrl.loadMedias(ctrl.request.pageIndex);
+                    //ctrl.loadMedias(ctrl.request.pageIndex);
                 }
             }
         };
@@ -80,10 +80,12 @@ app.component('mediaNavs', {
                         });
                     }
                     $rootScope.isBusy = false;
+                    $scope.$apply();
                 }
                 else {
                     if (resp) { $rootScope.showErrors(resp.errors); }
                     $rootScope.isBusy = false;
+                    $scope.$apply();
                 }
             }
         };

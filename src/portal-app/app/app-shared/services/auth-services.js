@@ -22,15 +22,25 @@ app.factory('AuthService',
                 });
 
             };
-            var _forgotPassword = function (data) {
-                return $http.post('/account/forgot-password', data).then(function (response) {
-                    return response;
-                });
+            var _forgotPassword = async function (data) {
+                var apiUrl = '/account/forgot-password';
+                var req = {
+                    method: 'POST',
+                    url: apiUrl,
+                    data: JSON.stringify(data)
+                };
+                var resp = await _getApiResult(req);
+                return resp;
             };
-            var _resetPassword = function (data) {
-                return $http.post('/account/reset-password', data).then(function (response) {
-                    return response;
-                });
+            var _resetPassword = async function (data) {
+                var apiUrl = '/account/reset-password';
+                var req = {
+                    method: 'POST',
+                    url: apiUrl,
+                    data: JSON.stringify(data)
+                };
+                var resp = await _getApiResult(req);
+                return resp;               
             };
 
             var _login = async function (loginData) {
