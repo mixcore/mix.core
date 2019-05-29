@@ -4,11 +4,7 @@
     Layout = "_LayoutPortal_Angular";
 }
 <div ng-app="MixPortal" ng-init="init()" ng-controller="AppPortalController">
-    <div class="loader-container" ng-show="isBusy">
-       <div class="loader">
-            <span>{</span><span>}</span>
-        </div>
-    </div>
+    <mix-loader ng-show="isBusy"></mix-loader>
     <header-nav ng-if="isInit" settings="settings" bread-crumbs="breadCrumbs"></header-nav>
     <div class="container-fluid wrapper">
         <div class="row flex-xl-nowrap">
