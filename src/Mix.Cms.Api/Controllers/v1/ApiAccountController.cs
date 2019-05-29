@@ -431,16 +431,17 @@ namespace Mix.Cms.Api.Controllers.v1
 
         [HttpPost, HttpOptions]
         [Route("forgot-password")]
-        public async Task<RepositoryResponse<string>> ForgotPassword(string email)
+        public async Task<RepositoryResponse<string>> ForgotPassword([FromBody]Mix.Identity.Models.AccountViewModels.ForgotPasswordViewModel model)
         {
             var result = new RepositoryResponse<string>() { IsSucceed = true };
-            if (string.IsNullOrEmpty(email))
+            if (string.IsNullOrEmpty(model.Email))
             {
                 result.IsSucceed = false;
                 result.Data = "Invalid Email";
+                return result;
             }
 
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
                 result.IsSucceed = false;
@@ -473,6 +474,7 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 result.IsSucceed = false;
                 result.Data = "Invalid User";
+                return result;
             }
 
             var idRresult = await _userManager.ResetPasswordAsync(

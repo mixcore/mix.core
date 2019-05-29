@@ -156,6 +156,20 @@ namespace Mix.Cms.Lib
                 return 0;
             }
         }
+        public static async System.Threading.Tasks.Task<ViewModels.MixModules.ReadMvcViewModel> GetModuleAsync (string name, string culture)
+        {
+            string cachekey = $"module_{culture}_{name}";
+            var module = await MixCacheService.GetAsync<Mix.Domain.Core.ViewModels.RepositoryResponse<ViewModels.MixModules.ReadMvcViewModel>>(cachekey);
+            if (module==null)
+            {
+                module = ViewModels.MixModules.ReadMvcViewModel.GetBy(m => m.Name == name && m.Specificulture == culture);
+                if (module.IsSucceed)
+                {
+                    await MixCacheService.SetAsync(cachekey, module);
+                }
+            }
+            return module.Data;
+        }
 
         public static ViewModels.MixModules.ReadMvcViewModel GetModule (string name, string culture)
         {

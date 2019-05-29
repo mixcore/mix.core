@@ -91,6 +91,22 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
                 }
             }
         }
+[JsonProperty("filePath")]
+        public string FilePath
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(FileName) && string.IsNullOrEmpty(TargetUrl))
+                {
+                    return FileFolder.IndexOf("http") > 0 ? $"{FileFolder}/{FileName}{Extension}"
+                        : $"/{FileFolder}/{FileName}{Extension}";
+                }
+                else
+                {
+                    return TargetUrl;
+                }
+            }
+        }
 
         [JsonProperty("mediaFile")]
         public FileViewModel MediaFile { get; set; }

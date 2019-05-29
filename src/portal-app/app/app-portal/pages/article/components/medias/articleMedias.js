@@ -18,7 +18,7 @@ app.component('articleMedias', {
             if (currentItem === null) {
                 currentItem = {
                     description: media.description !== 'undefined' ? media.description : '',
-                    image: media.fullPath,
+                    image: media.filePath,
                     mediaId: media.id,
                     article: ctrl.article.id,
                     specificulture: media.specificulture,
