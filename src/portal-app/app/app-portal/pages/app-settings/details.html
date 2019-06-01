@@ -1,5 +1,6 @@
 <section class="" ng-init="loadAppSettings()">
-    <form ng-if="appSettings" ng-class="{'submitted': submitted}" ng-submit="saveAppSettings(appSettings)">
+    <form ng-if="appSettings" ng-class="{'submitted': submitted}" ng-submit="saveAppSettings(appSettings)"
+    autocomplete="new-password" >
         <actions preview-url="appSettings.fullPath" back-url="'/portal/configuration/list'"></actions>
 
         <div class="row">
