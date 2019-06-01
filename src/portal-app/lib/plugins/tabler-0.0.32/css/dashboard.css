@@ -167,7 +167,7 @@ sup {
 }
 
 a {
-  color: #467fcf;
+  color: #467fcf;  
   text-decoration: none;
   background-color: transparent;
   -webkit-text-decoration-skip: objects;
@@ -175,6 +175,7 @@ a {
 
 a:hover {
   color: #295a9f;
+  cursor: pointer;
   text-decoration: underline;
 }
 

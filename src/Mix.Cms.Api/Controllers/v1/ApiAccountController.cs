@@ -490,6 +490,32 @@ namespace Mix.Cms.Api.Controllers.v1
 
             return result;
         }
+        [HttpGet]
+        [Authorize(Roles = "SuperAdmin")]
+        [Route("remove-user/{id}")]
+        public async Task<RepositoryResponse<string>> RemoveUser(string id)
+        {
+            var result = new RepositoryResponse<string>() { IsSucceed = true };
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                result.IsSucceed = false;
+                result.Data = "Invalid User";
+                return result;
+            }
+            var idRresult = await _userManager.DeleteAsync(user);
+            result.IsSucceed = idRresult.Succeeded;
+            if (idRresult.Succeeded)
+            {
+                await UserInfoViewModel.Repository.RemoveModelAsync(u => u.Id == id);
+            }
+            foreach (var err in idRresult.Errors)
+            {
+                result.Errors.Add($"{err.Code}: {err.Description}");
+            }
+
+            return result;
+        }
 
         private async Task<AccessTokenViewModel> GenerateAccessTokenAsync(ApplicationUser user, bool isRemember)
         {

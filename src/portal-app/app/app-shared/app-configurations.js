@@ -1345,8 +1345,8 @@ app.constant('ngAppSettings', {
         'fas fa-zhihu'
     ]
 });
-app.run(['$http', '$rootScope', 'ngAppSettings', 'GlobalSettingsService', 'CommonService', 'AuthService', 'TranslatorService',
-    function ($http, $rootScope, ngAppSettings, globalSettingsService, commonService, authService, translatorService,
+app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'GlobalSettingsService', 'CommonService', 'AuthService', 'TranslatorService',
+    function ($http, $rootScope, ngAppSettings, $location, globalSettingsService, commonService, authService, translatorService,
     ) {
         $rootScope.currentContext = $rootScope;
         $rootScope.isBusy = false;
@@ -1661,6 +1661,9 @@ app.run(['$http', '$rootScope', 'ngAppSettings', 'GlobalSettingsService', 'Commo
                 console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
             });
         };
+        $rootScope.goToSiteUrl = function(url){
+            window.top.location = url;
+        }
     }]);
 if ($.trumbowyg) {
     $.trumbowyg.svgPath = '/assets/icons.svg';

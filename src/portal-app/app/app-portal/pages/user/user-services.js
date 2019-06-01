@@ -101,11 +101,10 @@ app.factory('UserServices', ['$http', 'CommonService', 'ngAppSettings'
         return await commonService.getApiResult(req)
     };
 
-    var _removeUser = function (user) {
+    var _removeUser = function (userId) {
         var req = {
-            method: 'POST',
-            url: apiUrl + 'remove-user',
-            data: JSON.stringify(user)
+            method: 'GET',
+            url: apiUrl + 'remove-user/'+userId
         };
 
         return commonService.getApiResult(req);
