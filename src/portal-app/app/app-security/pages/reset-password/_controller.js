@@ -1,7 +1,7 @@
 ﻿'use strict';
 app.controller('ResetPasswordController',
-    ['$scope', '$rootScope', 'AuthService',
-        function ($scope, $rootScope, service) {
+    ['$scope', '$rootScope', 'AuthService','$routeParams',
+        function ($scope, $rootScope, service, $routeParams) {
             $scope.user = {
                 email: '',
                 password: '',
@@ -9,7 +9,7 @@ app.controller('ResetPasswordController',
                 code: '',
             }
             $scope.init = function(){
-
+                $scope.user.code = $routeParams.token;
             };
             $scope.submit = async function () {
 

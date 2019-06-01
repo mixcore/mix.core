@@ -19,7 +19,7 @@ app.controller('LoginController', [ '$rootScope', '$scope', 'ngAppSettings', '$l
     });
     $scope.login = async function () {
         
-        if (authService.referredUrl === "/security/login") {
+        if (authService.referredUrl.indexOf('security') > 0) {
             authService.referredUrl = "/portal";
         }
         var result = await authService.login($scope.loginData);

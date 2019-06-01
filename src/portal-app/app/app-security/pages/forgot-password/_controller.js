@@ -4,9 +4,8 @@ app.controller('ForgotPasswordController', [ '$rootScope', '$scope', 'ngAppSetti
         authService.referredUrl = $location.path();
         $location.path('/portal');
     }
-
     $scope.pageClass = 'page-forgot-password';
-
+    $scope.isSucceed = false;
     $scope.activedData = {
         email:  null
     };
@@ -14,17 +13,19 @@ app.controller('ForgotPasswordController', [ '$rootScope', '$scope', 'ngAppSetti
     $scope.message = "";
     $scope.$on('$viewContentLoaded', function () {
         $rootScope.isBusy = false;
+        authService.referredUrl = "/security/login";
     });
-    $scope.submit = async function () {
+    $scope.submit = async function () {        
         
-        if (authService.referredUrl === "/security/forgot-password") {
-            authService.referredUrl = "/portal";
-        }
         var result = await authService.forgotPassword($scope.activedData);
-        if (result) {
+        if (result.isSucceed) {
             $rootScope.isBusy = false;
-            $scope.message = result.errors[0];
+            $scope.isSucceed = true;
             $scope.$apply();
+        }
+        else{
+            $rootScope.isBusy = false;
+            $rootScope.showErrors(result.errors);
         }
     };
 

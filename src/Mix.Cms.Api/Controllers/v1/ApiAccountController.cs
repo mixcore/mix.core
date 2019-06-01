@@ -438,6 +438,7 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 result.IsSucceed = false;
                 result.Data = "Invalid Email";
+                result.Errors.Add("Invalid Email");
                 return result;
             }
 
@@ -446,6 +447,8 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 result.IsSucceed = false;
                 result.Data = "Email Not Exist";
+                result.Errors.Add("Email Not Exist");
+                return result;
             }
 
             //if (!await _userManager.IsEmailConfirmedAsync(user))
@@ -454,7 +457,7 @@ namespace Mix.Cms.Api.Controllers.v1
             var confrimationCode =
                     await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            var callbackurl = $"{MixService.GetConfig<string>("Domain")}/init/reset-password/{user.Id}/{confrimationCode}";
+            var callbackurl = $"{Request.Scheme}://{Request.Host}/security/reset-password/?token={System.Web.HttpUtility.UrlEncode(confrimationCode)}";
 
             MixService.SendMail(
                 to: user.Email,
@@ -466,7 +469,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         [HttpPost]
         [Route("reset-password")]
-        public async Task<RepositoryResponse<string>> ResetPassword(ResetPasswordViewModel model)
+        public async Task<RepositoryResponse<string>> ResetPassword([FromBody]Mix.Identity.Models.AccountViewModels.ResetPasswordViewModel model)
         {
             var result = new RepositoryResponse<string>() { IsSucceed = true };
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -476,7 +479,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 result.Data = "Invalid User";
                 return result;
             }
-
+            string code = System.Web.HttpUtility.UrlDecode(model.Code).Replace(' ', '+');
             var idRresult = await _userManager.ResetPasswordAsync(
                                         user, model.Code, model.Password);
             result.IsSucceed = idRresult.Succeeded;

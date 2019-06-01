@@ -3,7 +3,6 @@
   "ConnectionStrings": {
     "MixAccountConnection": null,
     "MixCmsConnection": null,
-    "MixMessengerConnection": null,
     "DefaultConnection": null
   },
   "Authentication": {
@@ -84,7 +83,7 @@
     "IsEncryptApi": true,
     "LastUpdateConfiguration": null,
     "IsMysql": false,
-    "DatabaseProvider": "MSSQL"
+    "DatabaseProvider": 1
   },
   "Socials":{
     "Facebook":{},
