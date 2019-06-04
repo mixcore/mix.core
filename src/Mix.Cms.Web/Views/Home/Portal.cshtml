@@ -8,16 +8,15 @@
     <header-nav ng-if="isInit" settings="settings" bread-crumbs="breadCrumbs"></header-nav>
     <div class="container-fluid wrapper">
         <div class="row flex-xl-nowrap">
-            <div class="col-md-3 m-0 p-0">
+            
                 <main-side-bar ng-if="isAdmin"></main-side-bar>
                 <main-side-bar-dynamic ng-if="roles" roles="roles" actived-role="roles[0]"></main-side-bar-dynamic>
-            </div>
             
             
-            <div class="col-md-9">
+            
                 <!-- <main class="py-md-4 px-md-2 sw-content" role="main"> -->
-                <main class="py-md-3 px-md-2 sw-content w-100 position-relative" role="main">
-                    <section class="content container">
+                <main class="py-md-3 px-md-2 sw-content w-100" role="main" style="">
+                    <section class="content container-fluid">
                         <!--<jumbotrons ng-if="isInit" tag-name="pageTagName" tag-type="pageTagType"></jumbotrons>-->
                         <div class="{{pageClass}}" ng-view>
                             
@@ -43,7 +42,6 @@
                         </div>
                     </footer>
                 </main>
-            </div>
         </div>
     </div>
 </div>

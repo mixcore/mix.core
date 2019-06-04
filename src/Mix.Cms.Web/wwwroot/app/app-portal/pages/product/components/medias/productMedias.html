@@ -63,7 +63,7 @@
         </div>
     </div>
     <div class="card-columns" style="column-count: 3 !important;column-gap: 0.75rem;">
-        <div class="card" ng-repeat="media in $ctrl.medias.items" ng-hide="media.isHidden">
+        <div class="card mb-3" ng-repeat="media in $ctrl.medias.items" ng-hide="media.isHidden">
             <span class="switch switch-sm position-absolute m-1">
                 <input type="checkbox" class="switch" ng-model="media.isActived" ng-change="$ctrl.activeMedia(media)" id="Media_Image_{{media.id}}" value="true">
                 <label class="switch m-0" for="Media_Image_{{media.id}}">
