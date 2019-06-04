@@ -24,6 +24,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         public string DefaultValue { get; set; }
         [JsonProperty("name")]
         public string Name { get; set; }
+        [JsonProperty("isRequire")]
+        public bool IsRequire { get; set; }
+        [JsonProperty("isEncrypt")]
+        public bool IsEncrypt { get; set; }
+        [JsonProperty("isSelect")]
+        public bool IsSelect { get; set; }
+        [JsonProperty("isUnique")]
+        public bool IsUnique { get; set; }
         [JsonProperty("status")]
         public int Status { get; set; }
 
