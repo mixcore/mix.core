@@ -10620,6 +10620,7 @@ a.text-dark:hover, a.text-dark:focus {
 
 .sw-sidebar.active .sw-toc-item .sw-toc-link .text {
   text-indent: -9999px;
+  color: #fff !important;
 }
 
 .sw-sidebar.active .sw-toc-item .sw-toc-link span:first-child {
@@ -10633,6 +10634,10 @@ a.text-dark:hover, a.text-dark:focus {
 
 .sw-sidebar.active .sw-toc-item .sw-toc-link:hover span:first-child {
   color: #fff;
+}
+
+.sw-sidebar.active .sw-toc-item .sw-toc-link:hover a {
+  color: #fff !important;
 }
 
 .sw-sidebar.active .sw-toc-item .text {
@@ -10654,6 +10659,10 @@ a.text-dark:hover, a.text-dark:focus {
 .sw-sidebar.active .sw-toc-item:hover .sw-toc-link .mi {
   color: #2196f3;
   font-size: 2em;
+}
+
+.sw-sidebar.active .sw-toc-item:hover .sw-toc-link a {
+  color: #fff !important;
 }
 
 .sw-sidebar.active .sw-search {
@@ -10826,6 +10835,11 @@ a.text-dark:hover, a.text-dark:focus {
 
 .sw-sidebar .sw-toc-item .sw-toc-link:hover .btn-group {
   opacity: 1;
+}
+
+.sw-sidebar .sw-toc-item .sw-toc-link:hover a {
+  color: #fff;
+  text-decoration: none;
 }
 
 .sw-sidebar .sw-toc-item .sw-toc-link .mi {
