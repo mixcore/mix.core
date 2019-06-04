@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 {
@@ -54,6 +56,57 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         {
             Attributes = MixAttributeFields.UpdateViewModel
                 .Repository.GetModelListBy(a => a.AttributeSetId == Id).Data;
+        }
+        public override MixAttributeSet ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            if (Id==0)
+            {
+                Id = Repository.Max(s => s.Id).Data + 1;
+                CreatedDateTime = DateTime.UtcNow;
+            }
+            return base.ParseModel(_context, _transaction);
+        }
+
+        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSet parent, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            if (result.IsSucceed)
+            {
+                foreach (var item in Attributes)
+                {
+                    if (result.IsSucceed)
+                    {
+                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+                        ViewModelHelper.HandleResult(saveResult, ref result);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            return result;
+        }
+
+        public override  RepositoryResponse<bool> SaveSubModels(MixAttributeSet parent, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            if (result.IsSucceed)
+            {
+                foreach (var item in Attributes)
+                {
+                    if (result.IsSucceed)
+                    {
+                        var saveResult =  item.SaveModel(false, _context, _transaction);
+                        ViewModelHelper.HandleResult(saveResult, ref result);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            return result;
         }
         #endregion
     }

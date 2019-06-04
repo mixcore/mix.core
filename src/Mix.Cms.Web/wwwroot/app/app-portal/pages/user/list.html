@@ -43,8 +43,8 @@
 
                     </td>
                     <td>
-                        <img class="rounded-circle" imageonload ng-src="{{item.avatarUrl}}" height="30">
-                    </td>
+                        <preview-image img-height="25" img-src="item.avatarUrl"></preview-image>
+                    </td>                    
                     <td>
                         <small>
                             {{item.createdDateTime | utcToLocal:'d.M.yyyy h:mm a'}}

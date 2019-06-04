@@ -260,6 +260,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("DefaultValue")
                         .IsRequired();
 
+                    b.Property<bool>("IsEncrypt");
+
+                    b.Property<bool>("IsRequire");
+
+                    b.Property<bool>("IsSelect");
+
+                    b.Property<bool>("IsUnique");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50);
@@ -920,15 +928,21 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("AttributeName")
                         .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("(N'')")
                         .HasMaxLength(50);
 
                     b.Property<bool?>("BooleanValue");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("('0001-01-01T00:00:00.0000000')");
 
                     b.Property<string>("DataId")
                         .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("(N'')")
                         .HasMaxLength(50);
 
                     b.Property<DateTime?>("DateTimeValue")

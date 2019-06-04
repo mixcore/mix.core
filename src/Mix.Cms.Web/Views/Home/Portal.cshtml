@@ -16,10 +16,10 @@
             
             <div class="col-md-9">
                 <!-- <main class="py-md-4 px-md-2 sw-content" role="main"> -->
-                <main class="py-md-3 px-md-2 sw-content w-100 position-relative" role="main">
-                    <section class="content container">
+                <main class="row py-md-3 px-md-2 sw-content w-100 position-relative" role="main">
+                    <section class="content container ">
                         <!--<jumbotrons ng-if="isInit" tag-name="pageTagName" tag-type="pageTagType"></jumbotrons>-->
-                        <div class="{{pageClass}}" ng-view>
+                        <div class="{{pageClass}} w-100" ng-view>
                             
                         </div>
                         <medias ng-if="isInit"></medias>
@@ -30,7 +30,7 @@
                         <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
                     </section>
 
-                    <footer class="footer d-block">
+                    <footer class="footer d-block col-12">
                         <div class="container-fluid">
                             <nav>
                                 <p class="copyright text-center">

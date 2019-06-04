@@ -19,7 +19,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
         public int Id { get; set; }
         public string Specificulture { get; set; }
-        public int? SetAttributeId { get; set; }
         public string Description { get; set; }
         public string Fields { get; set; }
         public string Thumbnail { get; set; }
@@ -36,6 +35,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public int? PageSize { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public DateTime? LastModified { get; set; }
+        public int? SetAttributeId { get; set; }
 
         public virtual MixAttributeSet SetAttribute { get; set; }
         public virtual MixCulture SpecificultureNavigation { get; set; }

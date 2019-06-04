@@ -157,6 +157,8 @@ namespace Mix.Cms.Lib.Models.Cms
             {
                 entity.ToTable("mix_article_attribute_data");
 
+                entity.HasIndex(e => new { e.ArticleId, e.Specificulture });
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
                     .ValueGeneratedNever();
@@ -185,6 +187,8 @@ namespace Mix.Cms.Lib.Models.Cms
             modelBuilder.Entity<MixArticleAttributeValue>(entity =>
             {
                 entity.ToTable("mix_article_attribute_value");
+
+                entity.HasIndex(e => e.DataId);
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
@@ -633,6 +637,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.ToTable("mix_module");
 
+                entity.HasIndex(e => e.SetAttributeId);
+
                 entity.HasIndex(e => e.Specificulture);
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
@@ -708,6 +714,8 @@ namespace Mix.Cms.Lib.Models.Cms
             {
                 entity.ToTable("mix_module_attribute_data");
 
+                entity.HasIndex(e => new { e.ModuleId, e.Specificulture });
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
                     .ValueGeneratedNever();
@@ -774,19 +782,25 @@ namespace Mix.Cms.Lib.Models.Cms
             {
                 entity.ToTable("mix_module_attribute_value");
 
+                entity.HasIndex(e => e.DataId);
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
                     .ValueGeneratedNever();
 
                 entity.Property(e => e.AttributeName)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasMaxLength(50)
+                    .HasDefaultValueSql("(N'')");
 
-                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
+                entity.Property(e => e.CreatedDateTime)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("('0001-01-01T00:00:00.0000000')");
 
                 entity.Property(e => e.DataId)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasMaxLength(50)
+                    .HasDefaultValueSql("(N'')");
 
                 entity.Property(e => e.DateTimeValue).HasColumnType("datetime");
 
@@ -1036,6 +1050,8 @@ namespace Mix.Cms.Lib.Models.Cms
             {
                 entity.ToTable("mix_page_attribute_data");
 
+                entity.HasIndex(e => new { e.PageId, e.Specificulture });
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
                     .ValueGeneratedNever();
@@ -1064,6 +1080,8 @@ namespace Mix.Cms.Lib.Models.Cms
             modelBuilder.Entity<MixPageAttributeValue>(entity =>
             {
                 entity.ToTable("mix_page_attribute_value");
+
+                entity.HasIndex(e => e.DataId);
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
