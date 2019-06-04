@@ -123,7 +123,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }
-        [JsonIgnore]
+        [JsonProperty("properties")]
         public List<ExtraProperty> Properties { get; set; }
         #endregion Views
 

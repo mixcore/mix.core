@@ -154,7 +154,6 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             }
         }
 
-        [JsonIgnore]
         public List<ExtraProperty> Properties { get; set; }
 
         [JsonProperty("listTag")]
