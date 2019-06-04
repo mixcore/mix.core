@@ -151,7 +151,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 });
             }
         }
-        [JsonIgnore]
+        [JsonProperty("properties")]
         public List<ExtraProperty> Properties { get; set; }
 
         [JsonProperty("mediaNavs")]
