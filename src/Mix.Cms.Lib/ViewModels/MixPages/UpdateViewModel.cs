@@ -177,7 +177,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public MixTemplates.UpdateViewModel View { get; set; }
 
         [JsonProperty("templates")]
-        public List<MixTemplates.UpdateViewModel> Templates { get; set; }// Article Templates
+        public List<MixTemplates.UpdateViewModel> Templates { get; set; }
+
+        [JsonProperty("master")]
+        public MixTemplates.UpdateViewModel Master { get; set; }
+
+        [JsonProperty("masters")]
+        public List<MixTemplates.UpdateViewModel> Masters { get; set; }
 
         [JsonIgnore]
         public int ActivedTheme
@@ -251,6 +257,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             }
 
             Template = View != null ? string.Format(@"{0}/{1}{2}", View.FolderType, View.FileName, View.Extension) : Template;
+            Layout = Master != null ? string.Format(@"{0}/{1}", Master.FolderType, Master.FileName) : null;
             if (Id == 0)
             {
                 Id = Repository.Max(c => c.Id, _context, _transaction).Data + 1;
@@ -270,14 +277,21 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 ListTag = JArray.Parse(this.Tags);
             }
 
+            // Load page views
             this.Templates = this.Templates ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
-                t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
+                t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType, _context, _transaction).Data;
             this.View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Pages, _context, _transaction);
             this.Template = CommonHelper.GetFullPath(new string[]
                {
                     this.View?.FileFolder
                     , this.View?.FileName
                });
+
+            // Load master views
+            this.Masters  = this.Masters ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
+                t => t.Theme.Id == ActivedTheme && t.FolderType == MixEnums.EnumTemplateFolder.Masters.ToString(), _context, _transaction).Data;
+            this.Master = MixTemplates.UpdateViewModel.GetTemplateByPath($"{Layout}.cshtml", Specificulture, MixEnums.EnumTemplateFolder.Masters, _context, _transaction);
+            this.Layout = $"{this.Master?.FileFolder}/{this.Master?.FileName}";
 
             this.ModuleNavs = GetModuleNavs(_context, _transaction);
             this.ParentNavs = GetParentNavs(_context, _transaction);
@@ -298,6 +312,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 result.Errors.AddRange(saveTemplate.Errors);
                 result.Exception = saveTemplate.Exception;
             }
+
+            if (Master != null)
+            {
+                var saveLayout = Master.SaveModel(true, _context, _transaction);
+                ViewModelHelper.HandleResult(saveLayout, ref result);
+            }
+
             if (result.IsSucceed)
             {
                 foreach (var item in UrlAliases)

@@ -4,7 +4,7 @@
         function ($scope, $rootScope, $routeParams, ngAppSettings, globalSettingsService, service) {
             BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
             var ctrl = this;
-            
+            ctrl.isNull = false;
             ctrl.selectTemplate = function (template) {
                 ctrl.template = template;
                 $scope.$broadcast('updateContentCodeEditors', []);
