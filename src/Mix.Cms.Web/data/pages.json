@@ -34,6 +34,7 @@
       "title": "404",
       "image": "/assets/img/bgs/404.jpg",
       "template": "Pages/_404.cshtml",
+      "layout": "Masters/_Blank",
       "Type": 1,
       "status": 2
     },
@@ -41,8 +42,19 @@
       "id": 5,
       "level": 0,
       "title": "403",
-      "image": "/assets/img/bgs/403.jpg",
+      "image": "/assets/img/bgs/403.png",
       "template": "Pages/_403.cshtml",
+      "layout": "Masters/_Blank",
+      "Type": 1,
+      "status": 2
+    },
+    {
+      "id": 6,
+      "level": 0,
+      "title": "Maintenance",
+      "image": "/assets/img/bgs/Maintenance.jpg",
+      "template": "Pages/_Maintenance.cshtml",
+      "layout": "Masters/_Blank",
       "Type": 1,
       "status": 2
     }
