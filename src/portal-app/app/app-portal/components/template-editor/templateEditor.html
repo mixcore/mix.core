@@ -1,6 +1,12 @@
 <div ng-if="$ctrl.template" ng-init="$ctrl.init()">
     <div class="form-group">
-        <h6>Layout {{$ctrl.folderType}}</h6>
+        <h6>Layout {{$ctrl.folderType}}
+            <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
+                <a href="/portal/template/details/{{$ctrl.template.themeId}}/{{$ctrl.template.folderType}}/{{$ctrl.template.id}}" class="btn btn-light">
+                    <span class="fas fa-pencil-alt text-primary"></span>
+                </a>                
+            </div>
+        </h6>
         <div class="input-group mb-3">
             <select class="btn btn-outline-secondary custom-select col-sm-4" ng-options="item as item.fileName for item in $ctrl.templates track by item.id"
                 ng-model="$ctrl.template" ng-change="$ctrl.selectTemplate($ctrl.template)"></select>

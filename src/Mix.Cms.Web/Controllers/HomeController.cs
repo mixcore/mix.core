@@ -51,7 +51,7 @@ namespace Mix.Cms.Web.Controllers
             }
             if (MixService.GetConfig<bool>("IsMaintenance"))
             {
-                return Redirect($"/maintenance");
+                return await PageAsync("maintenance");
             }
 
             if (MixService.GetConfig<bool>("IsInit"))
@@ -83,7 +83,7 @@ namespace Mix.Cms.Web.Controllers
             }
             if (MixService.GetConfig<bool>("IsMaintenance"))
             {
-                return Redirect($"/maintenance");
+                return await PageAsync("maintenance");
             }
 
             if (MixService.GetConfig<bool>("IsInit"))

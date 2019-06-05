@@ -244,7 +244,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public override MixPage ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             GenerateSEO();
-            
+
             var navParent = ParentNavs?.FirstOrDefault(p => p.IsActived);
 
             if (navParent != null)
@@ -288,7 +288,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                });
 
             // Load master views
-            this.Masters  = this.Masters ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
+            this.Masters = this.Masters ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == MixEnums.EnumTemplateFolder.Masters.ToString(), _context, _transaction).Data;
             this.Master = MixTemplates.UpdateViewModel.GetTemplateByPath($"{Layout}.cshtml", Specificulture, MixEnums.EnumTemplateFolder.Masters, _context, _transaction);
             this.Layout = $"{this.Master?.FileFolder}/{this.Master?.FileName}";
@@ -306,32 +306,27 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             var result = new RepositoryResponse<bool> { IsSucceed = true };
             var saveTemplate = View.SaveModel(true, _context, _transaction);
-            result.IsSucceed = result.IsSucceed && saveTemplate.IsSucceed;
-            if (!saveTemplate.IsSucceed)
-            {
-                result.Errors.AddRange(saveTemplate.Errors);
-                result.Exception = saveTemplate.Exception;
-            }
+            ViewModelHelper.HandleResult(saveTemplate, ref result);
 
-            if (Master != null)
+            if (result.IsSucceed && Master != null)
             {
                 var saveLayout = Master.SaveModel(true, _context, _transaction);
                 ViewModelHelper.HandleResult(saveLayout, ref result);
             }
-
             if (result.IsSucceed)
             {
                 foreach (var item in UrlAliases)
                 {
-                    item.SourceId = parent.Id.ToString();
-                    item.Type = UrlAliasType.Page;
-                    item.Specificulture = Specificulture;
-                    var saveResult = item.SaveModel(false, _context, _transaction);
-                    result.IsSucceed = saveResult.IsSucceed;
-                    if (!result.IsSucceed)
+                    if (result.IsSucceed)
                     {
-                        result.Exception = saveResult.Exception;
-                        result.Errors.AddRange(saveResult.Errors);
+                        item.SourceId = parent.Id.ToString();
+                        item.Type = UrlAliasType.Page;
+                        item.Specificulture = Specificulture;
+                        var saveResult = item.SaveModel(false, _context, _transaction);
+                        ViewModelHelper.HandleResult(saveResult, ref result);
+                    }
+                    else
+                    {
                         break;
                     }
                 }
@@ -341,25 +336,16 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 foreach (var item in ModuleNavs)
                 {
                     item.CategoryId = parent.Id;
+
                     if (item.IsActived)
                     {
                         var saveResult = item.SaveModel(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Exception = saveResult.Exception;
-                            Errors.AddRange(saveResult.Errors);
-                        }
+                        ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                     else
                     {
                         var saveResult = item.RemoveModel(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Exception = saveResult.Exception;
-                            Errors.AddRange(saveResult.Errors);
-                        }
+                        ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                 }
             }
@@ -372,22 +358,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     if (item.IsActived)
                     {
                         var saveResult = item.SaveModel(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Exception = saveResult.Exception;
-                            Errors.AddRange(saveResult.Errors);
-                        }
+                        ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                     else
                     {
                         var saveResult = item.RemoveModel(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Exception = saveResult.Exception;
-                            Errors.AddRange(saveResult.Errors);
-                        }
+                        ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                 }
             }
@@ -400,22 +376,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     if (item.IsActived)
                     {
                         var saveResult = item.SaveModel(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Exception = saveResult.Exception;
-                            Errors.AddRange(saveResult.Errors);
-                        }
+                        ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                     else
                     {
                         var saveResult = item.RemoveModel(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Exception = saveResult.Exception;
-                            Errors.AddRange(saveResult.Errors);
-                        }
+                        ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                 }
             }
@@ -428,22 +394,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     if (item.IsActived)
                     {
                         var saveResult = item.SaveModel(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Exception = saveResult.Exception;
-                            Errors.AddRange(saveResult.Errors);
-                        }
+                        ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                     else
                     {
                         var saveResult = item.RemoveModel(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Exception = saveResult.Exception;
-                            Errors.AddRange(saveResult.Errors);
-                        }
+                        ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                 }
             }
@@ -458,25 +414,27 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             var result = new RepositoryResponse<bool> { IsSucceed = true };
             var saveTemplate = await View.SaveModelAsync(true, _context, _transaction);
-            result.IsSucceed = result.IsSucceed && saveTemplate.IsSucceed;
-            if (!saveTemplate.IsSucceed)
+            ViewModelHelper.HandleResult(saveTemplate, ref result);
+
+            if (result.IsSucceed && Master != null)
             {
-                result.Errors.AddRange(saveTemplate.Errors);
-                result.Exception = saveTemplate.Exception;
+                var saveLayout = Master.SaveModel(true, _context, _transaction);
+                ViewModelHelper.HandleResult(saveLayout, ref result);
             }
             if (result.IsSucceed)
             {
                 foreach (var item in UrlAliases)
                 {
-                    item.SourceId = parent.Id.ToString();
-                    item.Type = UrlAliasType.Page;
-                    item.Specificulture = Specificulture;
-                    var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                    result.IsSucceed = saveResult.IsSucceed;
-                    if (!result.IsSucceed)
+                    if (result.IsSucceed)
                     {
-                        result.Exception = saveResult.Exception;
-                        result.Errors.AddRange(saveResult.Errors);
+                        item.SourceId = parent.Id.ToString();
+                        item.Type = UrlAliasType.Page;
+                        item.Specificulture = Specificulture;
+                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+                        ViewModelHelper.HandleResult(saveResult, ref result);
+                    }
+                    else
+                    {
                         break;
                     }
                 }
@@ -490,22 +448,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     if (item.IsActived)
                     {
                         var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Exception = saveResult.Exception;
-                            Errors.AddRange(saveResult.Errors);
-                        }
+                        ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                     else
                     {
                         var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Exception = saveResult.Exception;
-                            Errors.AddRange(saveResult.Errors);
-                        }
+                        ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                 }
             }
@@ -518,22 +466,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     if (item.IsActived)
                     {
                         var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Exception = saveResult.Exception;
-                            Errors.AddRange(saveResult.Errors);
-                        }
+                        ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                     else
                     {
                         var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Exception = saveResult.Exception;
-                            Errors.AddRange(saveResult.Errors);
-                        }
+                        ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                 }
             }
@@ -546,22 +484,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     if (item.IsActived)
                     {
                         var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Exception = saveResult.Exception;
-                            Errors.AddRange(saveResult.Errors);
-                        }
+                        ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                     else
                     {
                         var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Exception = saveResult.Exception;
-                            Errors.AddRange(saveResult.Errors);
-                        }
+                        ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                 }
             }
@@ -574,22 +502,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     if (item.IsActived)
                     {
                         var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Exception = saveResult.Exception;
-                            Errors.AddRange(saveResult.Errors);
-                        }
+                        ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                     else
                     {
                         var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Exception = saveResult.Exception;
-                            Errors.AddRange(saveResult.Errors);
-                        }
+                        ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                 }
             }
@@ -601,7 +519,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         #endregion Overrides
 
         #region Expands
-        
+
         private void GenerateSEO()
         {
             if (string.IsNullOrEmpty(this.SeoName))
@@ -650,7 +568,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             return query.OrderBy(m => m.Priority).ToList();
         }
 
-        public List<MixUrlAliases.UpdateViewModel> GetAliases (MixCmsContext context, IDbContextTransaction transaction)
+        public List<MixUrlAliases.UpdateViewModel> GetAliases(MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = MixUrlAliases.UpdateViewModel.Repository.GetModelListBy(p => p.Specificulture == Specificulture
                         && p.SourceId == Id.ToString() && p.Type == (int)MixEnums.UrlAliasType.Page, context, transaction);
