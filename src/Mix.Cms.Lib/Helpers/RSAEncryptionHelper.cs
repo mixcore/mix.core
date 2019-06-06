@@ -9,7 +9,7 @@ namespace Mix.Cms.Lib.Helpers
     {
         static UnicodeEncoding ByteConverter = new UnicodeEncoding();
         static RSACryptoServiceProvider RSA = new RSACryptoServiceProvider();
-
+        
         public static string GetEncryptedText(string text)
         {
             byte[] arrPlaintext = ByteConverter.GetBytes(text);

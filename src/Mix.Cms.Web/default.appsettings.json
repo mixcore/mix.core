@@ -60,6 +60,7 @@
     "IsRewrite": true,
     "IsHttps": false,
     "IsCache": true,
+    "IsRegistration": true,
     "SiteName": "Site Name",
     "DefaultCulture": "en-us",
     "DefaultTemplate": "_Default",

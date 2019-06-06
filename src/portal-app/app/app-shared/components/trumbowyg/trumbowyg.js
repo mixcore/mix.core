@@ -91,12 +91,15 @@ modules.component('trumbowyg', {
           }
         }
       };
-      ctrl.getElementReference = () => angular.element($element.find('> div'));
-
-      ctrl.getEditorReference = () => ctrl.getElementReference().find('.trumbowyg-editor');
-
+      ctrl.getElementReference = function () {
+        return $($element.find('div'));
+      };
+  
+      ctrl.getEditorReference = function () {
+        return ctrl.getElementReference().find('.trumbowyg-editor');
+      };
       ctrl.updateModelValue = () => {
-        $scope.$applyAsync(() => {
+        $scope.$applyAsync(() => {          
           const value = ctrl.getEditorReference().trumbowyg('html');
           ctrl.ngModel.$setViewValue(value)
         });

@@ -143,7 +143,7 @@ namespace Mix.Cms.Lib.Services
 
         public static T GetConfig<T>(string name, string culture)
         {
-            var result = !string.IsNullOrEmpty(culture) && Instance.LocalSettings[culture]  != null ? Instance.LocalSettings[culture][name] : null;
+            var result = !string.IsNullOrEmpty(culture) && Instance.LocalSettings[culture] != null ? Instance.LocalSettings[culture][name] : null;
             return result != null ? result.Value<T>() : default(T);
         }
 
@@ -277,19 +277,34 @@ namespace Mix.Cms.Lib.Services
 
         public static void SendMail(string subject, string message, string to)
         {
-            SmtpClient client = new SmtpClient(instance.Smtp.Value<string>("Server"));
-            client.UseDefaultCredentials = false;
-            client.Credentials = new NetworkCredential(instance.Smtp.Value<string>("User"), instance.Smtp.Value<string>("Password"));
-            client.Port = instance.Smtp.Value<int>("Port");
-            client.EnableSsl = instance.Smtp.Value<bool>("SSL");
             MailMessage mailMessage = new MailMessage();
             mailMessage.IsBodyHtml = true;
             mailMessage.From = new MailAddress(instance.Smtp.Value<string>("From"));
             mailMessage.To.Add(to);
             mailMessage.Body = message;
             mailMessage.Subject = subject;
-            client.Send(mailMessage);
+            try
+            {
+                SmtpClient client = new SmtpClient(instance.Smtp.Value<string>("Server"));
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(instance.Smtp.Value<string>("User"), instance.Smtp.Value<string>("Password"));
+                client.Port = instance.Smtp.Value<int>("Port");
+                client.EnableSsl = instance.Smtp.Value<bool>("SSL");
 
+                client.Send(mailMessage);
+            }
+            catch
+            {
+                try
+                {
+                    SmtpClient smtpClient = new SmtpClient();
+                    smtpClient.UseDefaultCredentials = true;
+                    smtpClient.Send(mailMessage);
+                }
+                catch {
+                    // ToDo: cannot send mail
+                }
+            }
         }
 
         public static string GetTemplateFolder(string culture)

@@ -13,6 +13,14 @@
     </div>    
     <div class="form-group">
         <span class="switch switch-sm">
+            <input type="checkbox" ng-model="$ctrl.appSettings.GlobalSettings.IsRegistration" id="IsRegistration" class="switch ng-pristine ng-untouched ng-valid ng-empty">
+            <label class="switch mb-0" for="IsRegistration">
+                <span>Registration</span>
+            </label>
+        </span>
+    </div>    
+    <div class="form-group">
+        <span class="switch switch-sm">
             <input type="checkbox" ng-model="$ctrl.appSettings.GlobalSettings.IsMaintenance" id="IsMaintenance" class="switch ng-pristine ng-untouched ng-valid ng-empty">
             <label class="switch mb-0" for="IsMaintenance">
                 <span>Maintenance</span>
