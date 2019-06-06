@@ -216,7 +216,7 @@ gulp.task("min:shared", function (cb) {
 gulp.task("min:portal", function (cb) {
     return gulp.src(paths.portal.src, { base: "." })
         .pipe(concat(paths.portal.dest))
-        .pipe(minify(paths.jsOptions))
+        //.pipe(minify(paths.jsOptions))
         .pipe(gulp.dest(dest));
 });
 gulp.task("min:tablerJs", function (cb) {
