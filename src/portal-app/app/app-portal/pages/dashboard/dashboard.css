@@ -39,9 +39,3 @@
 .alert.position-sticky{
     bottom: 10px;
 }
-
-/* CHART */
-canvas{
-    width:400px !important;
-    height:400px !important;
-}

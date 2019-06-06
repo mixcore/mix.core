@@ -1,0 +1,8 @@
+Google Pay API Integration Support Request Form
+https://services.google.com/fb/forms/googlepayAPIsupport/
+Google Pay API Integration Support Request Form
+https://services.google.com/fb/forms/googlepayAPIsupport/
+
+Token:
+- direct 
+    + https://developers.google.com/pay/api/web/guides/resources/payment-data-cryptography
