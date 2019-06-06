@@ -51,6 +51,16 @@
     {
       "id": 6,
       "level": 0,
+      "title": "500",
+      "image": "/assets/img/bgs/500.png",
+      "template": "Pages/_403.cshtml",
+      "layout": "Masters/_Blank",
+      "Type": 1,
+      "status": 2
+    },
+    {
+      "id": 7,
+      "level": 0,
       "title": "Maintenance",
       "image": "/assets/img/bgs/Maintenance.jpg",
       "template": "Pages/_Maintenance.cshtml",

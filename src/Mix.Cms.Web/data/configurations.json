@@ -153,6 +153,24 @@
       "description": "Cms Theme",
       "priority": 0,
       "status": 2
+    },
+    {
+      "keyword": "DateTimeFormat",
+      "category": "Site",
+      "value": "dd-MM-yyyy HH:mm:ss",
+      "dataType": 7,
+      "description": "Date Time Format",
+      "priority": 0,
+      "status": 2
+    },
+    {
+      "keyword": "StartWeekOn",
+      "category": "Site",
+      "value": "Monday",
+      "dataType": 7,
+      "description": "",
+      "priority": 0,
+      "status": 2
     }
   ]
 }

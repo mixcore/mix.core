@@ -290,14 +290,14 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             // Load master views
             this.Masters = this.Masters ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == MixEnums.EnumTemplateFolder.Masters.ToString(), _context, _transaction).Data;
-            this.Master = MixTemplates.UpdateViewModel.GetTemplateByPath($"{Layout}.cshtml", Specificulture, MixEnums.EnumTemplateFolder.Masters, _context, _transaction);
+            this.Master = MixTemplates.UpdateViewModel.GetTemplateByPath($"{Layout ?? "_Layout"}.cshtml", Specificulture, MixEnums.EnumTemplateFolder.Masters, _context, _transaction);
             this.Layout = $"{this.Master?.FileFolder}/{this.Master?.FileName}";
 
             this.ModuleNavs = GetModuleNavs(_context, _transaction);
             this.ParentNavs = GetParentNavs(_context, _transaction);
             this.ChildNavs = GetChildNavs(_context, _transaction);
             this.PositionNavs = GetPositionNavs(_context, _transaction);
-            this.UrlAliases = GetAliases(_context, _transaction);
+            this.UrlAliases = GetAliases(_context, _transaction) ?? new List<MixUrlAliases.UpdateViewModel>();
         }
 
         #region Sync

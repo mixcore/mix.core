@@ -46,7 +46,7 @@
                 ctrl.paymentDataRequest.merchantInfo = {
                   // @todo a merchant ID is available for a production environment after approval by Google
                   // See {@link https://developers.google.com/pay/api/web/guides/test-and-deploy/integration-checklist|Integration checklist}
-                  // merchantId: '01234567890123456789',
+                  merchantId: '01234567890123456789',
                   merchantName: 'Example Merchant'
                 };
                 return ctrl.paymentDataRequest;
@@ -80,10 +80,10 @@
               };
               ctrl.getGoogleTransactionInfo = function() {
                 return {
-                  currencyCode: 'USD',
-                  totalPriceStatus: 'FINAL',
+                  currencyCode: ctrl.currencyCode || 'USD',
+                  totalPriceStatus: ctrl.totalPriceStatus || 'FINAL',
                   // set to cart total
-                  totalPrice: '1.00'
+                  totalPrice: ctrl.totalPrice || '0.00'
                 };
               };
               ctrl.prefetchGooglePaymentData = function() {
@@ -125,9 +125,8 @@
         }
     ],
     bindings: {
-        propertyId: '=',
-        propertyName: '=',
-        price: '=',
-        quantity: '=',
+        totalPriceStatus: '=',
+        currencyCode: '=',
+        totalPrice: '='
     }
 });
