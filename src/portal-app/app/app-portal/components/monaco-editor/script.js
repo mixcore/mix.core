@@ -34,7 +34,7 @@
                     //var container = $(this);
                     if (e) {
                         var model = {
-                            value: ctrl.content,                            
+                            value: ctrl.content || ctrl.defaultContent,                            
                             contextmenu: false
                         };
                         switch (ctrl.ext) {
@@ -80,6 +80,7 @@
     ],
     bindings: {
         content: '=',
+        defaultContent: '=?',        
         contentId: '=',
         ext: '='
     }

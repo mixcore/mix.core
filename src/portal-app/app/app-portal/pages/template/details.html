@@ -9,7 +9,8 @@
                     <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
                         <div class="btn-group mr-2" role="group" aria-label="First group">
                             <select class="btn custom-select" ng-model="activedData.folderType">
-                                <option ng-repeat="item in folderTypes track by $index" ng-value="item">{{item}}</option>
+                                <option ng-repeat="item in folderTypes track by $index" ng-value="item">{{item}}
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -23,10 +24,11 @@
                         <monaco-editor content="activedData.content"></monaco-editor>
                     </pane-v>
                     <pane-v title="Scripts">
-                        <monaco-editor content="activedData.scripts"></monaco-editor>
+                        <monaco-editor content="activedData.scripts" default-content="'<script>\n\n</script>'"></monaco-editor>
                     </pane-v>
                     <pane-v title="Styles">
-                        <monaco-editor content="activedData.styles"></monaco-editor>
+                        <monaco-editor content="activedData.styles" default-content="'<style>\n\n</style>'">
+                        </monaco-editor>
                     </pane-v>
                 </tabs-v>
             </div>
