@@ -13,6 +13,10 @@ app.controller('TemplateController', ['$scope', '$rootScope', '$routeParams', '$
             'Articles',
             'Widgets',
         ];
+        $scope.activedPane = null;
+        $scope.selectPane=function(pane){
+            $scope.activedPane = pane;
+        }
         $scope.loadFolder = function (d) {
             $location.url('/portal/template/list/' + $routeParams.themeId + '?folderType=' + encodeURIComponent(d));
         }

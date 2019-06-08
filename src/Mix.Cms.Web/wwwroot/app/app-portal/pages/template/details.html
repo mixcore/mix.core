@@ -19,15 +19,16 @@
                 </div>
             </div>
             <div class="col-md-12">
-                <tabs-v>
+                <tabs-v select-callback="selectPane(pane)">
                     <pane-v title="Razor Template">
-                        <monaco-editor content="activedData.content"></monaco-editor>
+                        <monaco-editor is-visible="activedPane.title == 'Razor Template'" content="activedData.content">
+                        </monaco-editor>
                     </pane-v>
                     <pane-v title="Scripts">
-                        <monaco-editor content="activedData.scripts" default-content="'<script>\n\n</script>'"></monaco-editor>
+                        <monaco-editor is-visible="activedPane.title == 'Scripts'" content="activedData.scripts" default-content="'<script>\n\n</script>'"></monaco-editor>
                     </pane-v>
                     <pane-v title="Styles">
-                        <monaco-editor content="activedData.styles" default-content="'<style>\n\n</style>'">
+                        <monaco-editor is-visible="activedPane.title == 'Styles'" content="activedData.styles" default-content="'<style>\n\n</style>'">
                         </monaco-editor>
                     </pane-v>
                 </tabs-v>

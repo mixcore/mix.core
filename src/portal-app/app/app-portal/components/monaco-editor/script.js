@@ -1,13 +1,17 @@
 ﻿modules.component('monacoEditor', {
     templateUrl: '/app/app-portal/components/monaco-editor/view.html',
-    controller: ['$rootScope', '$scope', 'ngAppSettings',
-        function ($rootScope, $scope, ngAppSettings) {
+    controller: ['$rootScope', '$scope', '$element',
+        function ($rootScope, $scope, $element) {
             var ctrl = this;
             ctrl.previousId = null;
             ctrl.editor = null;
+            ctrl.isVisible = false;
             ctrl.id = Math.floor(Math.random() * 100) + 1;
             ctrl.$onChanges = (changes) => {
                 if (changes.content) {
+                    ctrl.updateContent(changes.content);
+                }
+                if(changes.isVisible){
                     ctrl.updateEditors();
                 }
             };
@@ -15,10 +19,19 @@
             this.$doCheck = function () {
                 if (ctrl.previousId != null && ctrl.previousId !== ctrl.contentId) {
                     ctrl.previousId = ctrl.contentId;
-                    ctrl.updateEditors();
+                    ctrl.updateContent(ctrl.content);
+                }
+                if(ctrl.isVisible && ctrl.editor){
+                    setTimeout(() => {
+                        var h = ctrl.editor.getModel().getLineCount() * 18;
+                        $($element).height(h);
+                        ctrl.editor.layout();        
+                    }, 200);                    
+                    
                 }
             }.bind(this);
             ctrl.initEditor = function () {
+                
                 setTimeout(() => {
                     ctrl.previousId = ctrl.contentId;
                     ctrl.updateEditors();
@@ -28,9 +41,12 @@
             };
             ctrl.updateContent = function (content) {
                 ctrl.editor.setValue(content);
+                var h = ctrl.editor.getModel().getLineCount() * 18;
+                $($element).height(h);
+                ctrl.editor.layout();    
             };
             ctrl.updateEditors = function () {
-                $.each($('#code-editor-' + ctrl.id), function (i, e) {
+                $.each($($element).find('.code-editor'), function (i, e) {
                     //var container = $(this);
                     if (e) {
                         var model = {
@@ -82,6 +98,7 @@
         content: '=',
         defaultContent: '=?',        
         contentId: '=',
+        isVisible: '=',
         ext: '='
     }
 });
