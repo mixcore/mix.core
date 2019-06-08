@@ -26,15 +26,12 @@
         </tr>
     </thead>
     <tbody class="sortable" dnd-list="$ctrl.attributes">
-        <tr class="sortable-item module-column" ng-repeat="col in $ctrl.attributes track by $index" dnd-draggable="col"
-            dnd-effect-allowed="move" dnd-selected="selectedCol = col" dnd-moved="$ctrl.attributes.splice($index, 1)"
-            ng-class="{'selected': $ctrl.selectedCol === col}">
+        <tr class="sortable-item module-column" ng-repeat="col in $ctrl.attributes track by $index" dnd-draggable="col" dnd-effect-allowed="move" dnd-selected="selectedCol = col" dnd-moved="$ctrl.attributes.splice($index, 1)" ng-class="{'selected': $ctrl.selectedCol === col}">
             <td style="cursor:move;" class="drag-header">
                 <span class="fas fa-sort"></span>
             </td>
             <td>
-                <input ng-model="col.title" placeholder="Title" ng-change="$ctrl.generateName(col)"
-                    class="form-control form-control-sm">
+                <input ng-model="col.title" placeholder="Title" ng-change="$ctrl.generateName(col)" class="form-control form-control-sm">
                 <small class="form-text text-muted">Name: <span ng-bind="col.name"></span></small>
             </td>
             <td>
@@ -67,8 +64,7 @@
                     <div class="form-group row mb-0">
                         <label class="col-sm-3 col-form-label" ng-bind="col.title"></label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm" id="option_{{$index}}"
-                                ng-enter="$ctrl.addOption(col,$index)" placeholder="fill then enter to add options">
+                            <input type="text" class="form-control form-control-sm" id="option_{{$index}}" ng-enter="$ctrl.addOption(col,$index)" placeholder="fill then enter to add options">
                         </div>
                     </div>
                     <div class="row pb-1" ng-repeat="opt in col.options track by $index">

@@ -201,67 +201,67 @@
                         }
                     ]
                 },
-                {
-                    title: 'portal_import',
-                    shortTitle: 'portal_short_import',
-                    icon: 'mi mi-Upload',
-                    href: '/portal/import',
-                    subMenus: []
-                },
-                {
-                    title: 'language',
-                    shortTitle: 'Language',
-                    icon: 'mi mi-TimeLanguage',
-                    href: '#',
-                    subMenus: [
-                        {
-                            title: 'portal_create',
-                            href: '/portal/language/create',
-                            icon: 'mi mi-Add'
-                        },
-                        {
-                            title: 'List',
-                            href: '/portal/language/list',
-                            icon: 'mi mi-List'
-                        }
-                    ]
-                },
-                {
-                    title: 'portal_cultures',
-                    shortTitle: 'portal_short_cultures',
-                    icon: 'mi mi-Globe mi-spin',
-                    href: '#',
-                    subMenus: [
-                        {
-                            title: ('portal_create'),
-                            href: '/portal/culture/create',
-                            icon: 'mi mi-Add'
-                        },
-                        {
-                            title: 'portal_list',
-                            href: '/portal/culture/list',
-                            icon: 'mi mi-List'
-                        }
-                    ]
-                },
-                {
-                    title: 'portal_permissions',
-                    shortTitle: 'portal_short_portal_permissions',
-                    icon: 'mi mi-LockscreenDesktop',
-                    href: '#',
-                    subMenus: [
-                        {
-                            title: ('portal_create'),
-                            href: '/portal/permission/create',
-                            icon: 'mi mi-Add'
-                        },
-                        {
-                            title: 'portal_list',
-                            href: '/portal/permission/list',
-                            icon: 'mi mi-List'
-                        }
-                    ]
-                }
+                // {
+                //     title: 'portal_import',
+                //     shortTitle: 'portal_short_import',
+                //     icon: 'mi mi-Upload',
+                //     href: '/portal/import',
+                //     subMenus: []
+                // },
+                // {
+                //     title: 'language',
+                //     shortTitle: 'Language',
+                //     icon: 'mi mi-TimeLanguage',
+                //     href: '#',
+                //     subMenus: [
+                //         {
+                //             title: 'portal_create',
+                //             href: '/portal/language/create',
+                //             icon: 'mi mi-Add'
+                //         },
+                //         {
+                //             title: 'List',
+                //             href: '/portal/language/list',
+                //             icon: 'mi mi-List'
+                //         }
+                //     ]
+                // },
+                // {
+                //     title: 'portal_cultures',
+                //     shortTitle: 'portal_short_cultures',
+                //     icon: 'mi mi-Globe mi-spin',
+                //     href: '#',
+                //     subMenus: [
+                //         {
+                //             title: ('portal_create'),
+                //             href: '/portal/culture/create',
+                //             icon: 'mi mi-Add'
+                //         },
+                //         {
+                //             title: 'portal_list',
+                //             href: '/portal/culture/list',
+                //             icon: 'mi mi-List'
+                //         }
+                //     ]
+                // },
+                // {
+                //     title: 'portal_permissions',
+                //     shortTitle: 'portal_short_portal_permissions',
+                //     icon: 'mi mi-LockscreenDesktop',
+                //     href: '#',
+                //     subMenus: [
+                //         {
+                //             title: ('portal_create'),
+                //             href: '/portal/permission/create',
+                //             icon: 'mi mi-Add'
+                //         },
+                //         {
+                //             title: 'portal_list',
+                //             href: '/portal/permission/list',
+                //             icon: 'mi mi-List'
+                //         }
+                //     ]
+                // }
             ];
         };
     }],

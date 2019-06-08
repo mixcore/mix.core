@@ -1,0 +1,28 @@
+
+    <div class="card">
+        <h6 class="card-header">
+            Main Content
+        </h6>
+        <div class="card-body">
+
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" class="form-control form-control-lg" ng-model="$ctrl.model.title" ng-blur="$ctrl.gennerateName()">
+            </div>
+            <div class="form-group">
+                <label>System Name</label>
+                <input type="text" class="form-control" ng-model="$ctrl.model.name">
+            </div>
+            <div class="form-group">
+                    <label class="control-label">Attribute Set types</label>
+                    <div class="btn-group btn-group-sm btn-group-toggle d-flex w-100" role="group" data-toggle="buttons">
+                        <label ng-repeat="type in $ctrl.settings.modelTypes track by $index" ng-switch="type" ng-class="{active: $index === $ctrl.model.type}" class="btn btn-outline-primary btn-block mt-0" ng-click="$ctrl.page.type=$index;">
+                            <input ng-model="$ctrl.model.type" type="radio" value="{{$index}}" class="custom-control-input" id="model_type_{{$index}}">
+                            <span ng-switch-when="SubPage" class="" title="{{type}}">Sub Page</span>
+                            <span ng-switch-when="SubArticle" class="" title="{{type}}">Sub Article</span>
+                            <span ng-switch-when="SubProduct" class="" title="{{type}}">Sub Product</span>
+                        </label>
+                    </div>
+                </div>    
+        </div>
+    </div>

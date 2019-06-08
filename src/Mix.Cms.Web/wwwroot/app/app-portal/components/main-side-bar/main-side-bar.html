@@ -13,7 +13,11 @@
                 <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KOuD896zE9FpXyo3z4qUnITyqLJObd-8sWCHWBMAbgKpoBDjCxTTaK-fn9pkbeyWi6aiOu15-1O4FCi0iYHV22A7_C_8nl1bjT9gWUpGWTRcxiso71cJhqbhcBxhsub88XHpqp3OAmg51CAe1EdWDBDA9MJ-Ei82UcnxV3Pa_P6peDY3ZqTytpkWhQlw7N7hA" autocomplete="off"></form> -->
 
             <!-- ARTICLE -->
-            <li ng-repeat="item in $ctrl.items">
+            <li ng-repeat="item in $ctrl.items" ng-if="!$last">
+                <main-side-bar-item item="item"></main-side-bar-item>
+            </li>
+            <hr>
+            <li ng-repeat="item in $ctrl.items" ng-if="$last">
                 <main-side-bar-item item="item"></main-side-bar-item>
             </li>
         </ul>
