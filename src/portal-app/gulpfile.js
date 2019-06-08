@@ -336,6 +336,12 @@ gulp.task('watch:html', function () {
     gulp.watch('./app/**/**/*.css', ['min:appCss','min:appInitCss']);
 });
 
+gulp.task('watch', function () {
+    gulp.watch('./app/**/**/*.html', ['min:views']);
+    gulp.watch('./app/**/**/*.js', ['min:portalApp']);
+    gulp.watch('./app/**/**/*.css', ['min:appCss','min:appInitCss']);
+});
+
 // [Watch Portal] View & Portal's js & CSS > gulp watch:html
 
 gulp.task('portalView-watch', ['min:views'], function (done) {
