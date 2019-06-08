@@ -1,31 +1,45 @@
-<div ng-if="$ctrl.template" ng-init="$ctrl.init()">
-    <div class="form-group">
+<div ng-if="$ctrl.template" ng-init="$ctrl.init()" class="card">
+    <div class="card-header">
         <h6>Layout {{$ctrl.folderType}}
-            <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                <a href="/portal/template/details/{{$ctrl.template.themeId}}/{{$ctrl.template.folderType}}/{{$ctrl.template.id}}" class="btn btn-light">
-                    <span class="fas fa-pencil-alt text-primary"></span>
-                </a>                
-            </div>
+            <a href="/portal/template/details/{{$ctrl.template.themeId}}/{{$ctrl.template.folderType}}/{{$ctrl.template.id}}"
+                class="btn btn-link text-primary btn-sm float-right py-0">
+                <span class="fas fa-pencil-alt text-primary"></span> Edit template
+            </a>
+
+            <button class="btn btn-link text-primary btn-sm float-right py-0" type="button" data-toggle="collapse"
+                data-target="#module-attr-table" aria-controls="module-attr-table" aria-expanded="false"
+                aria-label="Toggle navigation"><span class="fas fa-code text-primary"></span> Quick editor</button>
+
         </h6>
-        <div class="input-group mb-3">
-            <select class="btn btn-outline-secondary custom-select col-sm-4" ng-options="item as item.fileName for item in $ctrl.templates track by item.id"
-                ng-model="$ctrl.template" ng-change="$ctrl.selectTemplate($ctrl.template)"></select>
-            <input class="form-control sel-filename" ng-change="$ctrl.new()" type="text" ng-model="$ctrl.template.fileName"
-                value="{{$ctrl.template.fileName}}" placeholder="Input template name here...">
-            <input class="template-id" type="hidden" ng-model="$ctrl.template.id" value="{{$ctrl.template.id}}">
-        </div>
+
     </div>
-    <tabs-v>
-        <pane-v title="Razor Template">
-            <monaco-editor content-id="$ctrl.template.id" content="$ctrl.template.content"></monaco-editor>
-        </pane-v>
-        <pane-v title="Scripts">
-            <monaco-editor content-id="$ctrl.template.id" content="$ctrl.template.scripts"
-                default-content="'<script>\n</script>'"></monaco-editor>
-        </pane-v>
-        <pane-v title="Styles">
-            <monaco-editor content-id="$ctrl.template.id" content="$ctrl.template.styles"
-                default-content="'<style>\n</style>'"></monaco-editor>
-        </pane-v>
-    </tabs-v>
+    <div class="card-body">
+
+            <div class="form-group">
+
+                    <div class="input-group input-group-sm mb-3">
+                        <select class="btn btn-outline-secondary custom-select col-sm-4"
+                            ng-options="item as item.fileName for item in $ctrl.templates track by item.id"
+                            ng-model="$ctrl.template" ng-change="$ctrl.selectTemplate($ctrl.template)"></select>
+                            <input class="template-id" type="hidden" ng-model="$ctrl.template.id" value="{{$ctrl.template.id}}">
+                            <input class="form-control sel-filename" ng-change="$ctrl.new()" type="text"
+                            ng-model="$ctrl.template.fileName" value="{{$ctrl.template.fileName}}"
+                            placeholder="Input template name here...">
+                        
+                    </div>
+                </div>
+                <tabs-v>
+                    <pane-v title="Razor Template">
+                        <monaco-editor content-id="$ctrl.template.id" content="$ctrl.template.content"></monaco-editor>
+                    </pane-v>
+                    <pane-v title="Scripts">
+                        <monaco-editor content-id="$ctrl.template.id" content="$ctrl.template.scripts"
+                            default-content="'<script>\n</script>'"></monaco-editor>
+                    </pane-v>
+                    <pane-v title="Styles">
+                        <monaco-editor content-id="$ctrl.template.id" content="$ctrl.template.styles"
+                            default-content="'<style>\n</style>'"></monaco-editor>
+                    </pane-v>
+                </tabs-v>
+    </div>
 </div>
