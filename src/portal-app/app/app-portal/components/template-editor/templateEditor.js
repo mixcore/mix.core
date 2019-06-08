@@ -5,6 +5,9 @@
             BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
             var ctrl = this;
             ctrl.isNull = false;
+            ctrl.selectPane = function(pane){
+                ctrl.activedPane = pane;
+            }
             ctrl.selectTemplate = function (template) {
                 ctrl.template = template;
                 $scope.$broadcast('updateContentCodeEditors', []);

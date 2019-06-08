@@ -4,7 +4,7 @@
             <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
                 <a href="/portal/template/details/{{$ctrl.template.themeId}}/{{$ctrl.template.folderType}}/{{$ctrl.template.id}}" class="btn btn-light">
                     <span class="fas fa-pencil-alt text-primary"></span>
-                </a>                
+                </a>
             </div>
         </h6>
         <div class="input-group mb-3">
@@ -13,15 +13,19 @@
             <input class="template-id" type="hidden" ng-model="$ctrl.template.id" value="{{$ctrl.template.id}}">
         </div>
     </div>
-    <tabs-v>
+    <tabs-v select-callback="$ctrl.selectPane(pane)">
         <pane-v title="Razor Template">
-            <monaco-editor content-id="$ctrl.template.id" content="$ctrl.template.content"></monaco-editor>
+            <monaco-editor content-id="$ctrl.template.id" is-visible="$ctrl.activedPane.title == 'Razor Template'" content="$ctrl.template.content">
+            </monaco-editor>
         </pane-v>
         <pane-v title="Scripts">
-            <monaco-editor content-id="$ctrl.template.id" content="$ctrl.template.scripts" default-content="'<script>\n</script>'"></monaco-editor>
+            <monaco-editor content-id="$ctrl.template.id" is-visible="$ctrl.activedPane.title == 'Scripts'" content="$ctrl.template.scripts" default-content="'<script>\n\n</script>'"></monaco-editor>
         </pane-v>
         <pane-v title="Styles">
-            <monaco-editor content-id="$ctrl.template.id" content="$ctrl.template.styles" default-content="'<style>\n</style>'"></monaco-editor>
+            <monaco-editor content-id="$ctrl.template.id" is-visible="$ctrl.activedPane.title == 'Styles'" content="$ctrl.template.styles" default-content="'<style>\n\n</style>'">
+            </monaco-editor>
         </pane-v>
+        
     </tabs-v>
+
 </div>
