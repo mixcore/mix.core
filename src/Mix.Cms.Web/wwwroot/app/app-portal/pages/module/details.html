@@ -14,14 +14,11 @@
                 </div>
                 <div class="row" ng-if="isAdmin">
                     <div class="col-sm-12">
-                        <div class="card mb-3">
-                            <div class="card-body p-1">
-                                <input type="hidden" asp-for="Id">
-                                <input type="hidden" asp-for="Specificulture">
-                                <input type="hidden" asp-for="Priority">
-                                <set-attribute title="'Module Attributes'" columns="activedData.columns"></set-attribute>
-                            </div>
-                        </div>
+                        <input type="hidden" asp-for="Id">
+                        <input type="hidden" asp-for="Specificulture">
+                        <input type="hidden" asp-for="Priority">
+                        <set-attribute title="'Module Attributes'" columns="activedData.columns" class="card mb-3">
+                        </set-attribute>
                     </div>
                 </div>
                 <div class="row" ng-if="isAdmin">

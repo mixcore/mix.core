@@ -169,17 +169,17 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
     });
 
 
-    $routeProvider.when("/portal/language/list", {
+    $routeProvider.when("/portal/localize/list", {
         controller: "LanguageController",
         templateUrl: "/app/app-portal/pages/language/list.html"
     });
 
-    $routeProvider.when("/portal/language/details/:id", {
+    $routeProvider.when("/portal/localize/details/:id", {
         controller: "LanguageController",
         templateUrl: "/app/app-portal/pages/language/details.html"
     });
 
-    $routeProvider.when("/portal/language/create", {
+    $routeProvider.when("/portal/localize/create", {
         controller: "LanguageController",
         templateUrl: "/app/app-portal/pages/language/details.html"
     });
@@ -310,15 +310,15 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         templateUrl: "/app/app-portal/pages/import/details.html"
     });
 
-    $routeProvider.when("/portal/culture/list", {
+    $routeProvider.when("/portal/language/list", {
         controller: "CultureController",
         templateUrl: "/app/app-portal/pages/culture/list.html"
     });
-    $routeProvider.when("/portal/culture/details/:id", {
+    $routeProvider.when("/portal/language/details/:id", {
         controller: "CultureController",
         templateUrl: "/app/app-portal/pages/culture/details.html"
     });
-    $routeProvider.when("/portal/culture/create", {
+    $routeProvider.when("/portal/language/create", {
         controller: "CultureController",
         templateUrl: "/app/app-portal/pages/culture/details.html"
     });
