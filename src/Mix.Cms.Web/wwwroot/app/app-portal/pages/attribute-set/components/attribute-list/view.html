@@ -1,8 +1,12 @@
-<h6 class="card-header">
-    <span ng-bind="$ctrl.title"></span>
-    <a ng-click="$ctrl.addAttr()" class="btn btn-primary btn-sm float-right text-white">Add New</a>
-    <!-- <a ng-click="$ctrl.generateForm()" class="btn btn-primary btn-sm float-right text-white mr-2">Generate Form</a> -->
-</h6>
+<div class="card-header">
+    <h6>
+        <span ng-bind="$ctrl.title"></span>
+        <a ng-click="$ctrl.addAttr()" class="btn btn-primary btn-sm float-right text-white">Add New</a>
+        <!-- <a ng-click="$ctrl.generateForm()" class="btn btn-primary btn-sm float-right text-white mr-2">Generate Form</a> -->
+    </h6>
+    <p class="text-muted">Add a title and description to see how this product might
+        appear in a search engine listing.</p>
+</div>
 <table class="table table-sm" id="Table">
     <thead class="thead-light">
         <tr>
