@@ -1,22 +1,92 @@
 <!-- Main content -->
 <section class="" ng-init="getSingle()">
     <form ng-class="{'submitted': submitted}" ng-submit="save(activedData)">
-        
+
         <actions preview-url="activedData.detailsUrl" back-url="'/portal/page/list'"></actions>
         <div class="row">
-            <section class="col-sm-8">                
+            <section class="col-sm-8">
                 <div class="row">
                     <div class="col-lg-12">
                         <page-main page="activedData">
                     </div>
                 </div>
-                <div class="row">
+
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h6>General
+                            <button class="btn btn-link text-primary btn-sm float-right" type="button"
+                                data-toggle="collapse" data-target="#general-setting" aria-controls="general-setting"
+                                aria-expanded="false" aria-label="Toggle navigation"><span
+                                    class="far fa-edit text-primary"></span> Edit general settings</button>
+                        </h6>
+                        <p class="text-muted">...</p>
+                    </div>
+                    <div id="general-setting" class="card-body collapse">
+                        <page-general page="activedData"></page-general>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h6>Search engine listing preview
+                            <button class="btn btn-link text-primary btn-sm float-right" type="button"
+                                data-toggle="collapse" data-target="#seo-setting" aria-controls="seo-setting"
+                                aria-expanded="false" aria-label="Toggle navigation"><span
+                                    class="far fa-edit text-primary"></span> Edit website SEO</button>
+                        </h6>
+                        <p class="text-muted">Add a title and description to see how this product might appear in a
+                            search engine listing.</p>
+                    </div>
+                    <div id="seo-setting" class="card-body collapse">
+                        <page-seo page="activedData"></page-seo>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h6>Plug & Play
+                            <button class="btn btn-link text-primary btn-sm float-right" type="button"
+                                data-toggle="collapse" data-target="#plugplay-setting" aria-controls="plugplay-setting"
+                                aria-expanded="false" aria-label="Toggle navigation"><span
+                                    class="far fa-edit text-primary"></span> Edit p&p settings</button>
+                        </h6>
+                        <p class="text-muted">...</p>
+                    </div>
+                    <div id="plugplay-setting" class="card-body collapse">
+                        <page-plug-play page="activedData"></page-plug-play>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h6>Modules
+                            <button class="btn btn-link text-primary btn-sm float-right" type="button"
+                                data-toggle="collapse" data-target="#module-setting" aria-controls="module-setting"
+                                aria-expanded="false" aria-label="Toggle navigation"><span
+                                    class="far fa-edit text-primary"></span> Edit modules setting</button>
+                        </h6>
+                        <p class="text-muted">...</p>
+                    </div>
+                    <div id="module-setting" class="card-body collapse">
+                        <page-modules page="activedData"></page-modules>
+                    </div>
+                </div>
+
+                <template-editor folder-type="'Pages'" template="activedData.view" templates="activedData.templates">
+                </template-editor>
+
+
+                <template-editor folder-type="'Masters'" template="activedData.master" templates="activedData.masters">
+                </template-editor>
+
+               <!--  <div class="row">
                     <tabs-v class="col-lg-12">
                         <pane-v title="General">
-                            <page-general page="activedData"></page-general>
+<page-general page="activedData"></page-general>
                         </pane-v>
                         <pane-v title="Seo">
-                            <page-seo page="activedData"></page-seo>
+<page-seo page="activedData"></page-seo>
                         </pane-v>
                         <pane-v title="Plug & Play">
                             <page-plug-play page="activedData"></page-plug-play>
@@ -26,22 +96,39 @@
                         </pane-v>
                         <pane-v title="Layout">
                             <div class="tab-pane">
-                                <template-editor folder-type="'Pages'" template="activedData.view" templates="activedData.templates"></template-editor>
+                                <template-editor folder-type="'Pages'" template="activedData.view"
+                                    templates="activedData.templates"></template-editor>
                             </div>
                         </pane-v>
                         <pane-v title="Master">
                             <div class="tab-pane">
-                                <template-editor folder-type="'Masters'" template="activedData.master" templates="activedData.masters"></template-editor>
+                                <template-editor folder-type="'Masters'" template="activedData.master"
+                                    templates="activedData.masters"></template-editor>
                             </div>
-                        </pane-v>
+                        </pane-v> 
                     </tabs-v>
-                </div>
+                </div>-->
             </section>
             <section class="col-sm-4" style="padding-left:0">
                 <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
-                <a class="btn btn-secondary btn-sm" ng-click="addAlias()">Add Alias</a>
-                <url-alias ng-repeat="alias in activedData.urlAliases" 
-                    index="$index" url-alias="alias" remove-callback="removeAliasCallback(index)"></url-alias>
+
+
+                <div class="card mb-3">
+                    <h6 class="card-header">URL slugs
+                        <button class="btn btn-link text-primary btn-sm float-right py-0" type="button"
+                            data-toggle="collapse" data-target="#slug-tab" aria-controls="slug-tab"
+                            aria-expanded="false" aria-label="Toggle navigation"><span
+                                class="far fa-minus-square text-primary"></span> Show/Hide</button>
+                        <button class="btn btn-link text-primary btn-sm float-right py-0" type="button"
+                            ng-click="addAlias()"><span class="fas fa-plus text-primary"></span> Add slugs</button>
+
+                    </h6>
+                    <div id="slug-tab" class="card-body collapse">
+                        <url-alias ng-repeat="alias in activedData.urlAliases" index="$index" url-alias="alias"
+                            remove-callback="removeAliasCallback(index)"></url-alias>
+                    </div>
+                </div>
+
                 <div class="card mb-3">
                     <h6 class="card-header">
                         Info
@@ -52,9 +139,11 @@
                             <label class="control-label">Created Date Time</label>
                             <div class="input-group input-group-sm mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1"><i class="mi mi-Calendar"></i></span>
+                                    <span class="input-group-text" id="basic-addon1"><i
+                                            class="mi mi-Calendar"></i></span>
                                 </div>
-                                <input ng-model="activedData.createdDateTime" type="text" class="form-control" readonly="readonly">
+                                <input ng-model="activedData.createdDateTime" type="text" class="form-control"
+                                    readonly="readonly">
                             </div>
                         </div>
 
@@ -62,7 +151,8 @@
                             <label class="control-label">Created By</label>
                             <div class="input-group input-group-sm mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1"><i class="mi mi-Contact"></i></span>
+                                    <span class="input-group-text" id="basic-addon1"><i
+                                            class="mi mi-Contact"></i></span>
                                 </div>
                                 <input ng-model="activedData.createdBy" class="form-control" readonly="readonly">
                             </div>
@@ -70,7 +160,8 @@
                     </div>
                 </div>
 
-                <custom-image header="'Image'" type="'Pages'" folder="activedData.seoName" src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
+                <custom-image header="'Image'" type="'Pages'" folder="activedData.seoName"
+                    src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
             </section>
         </div>
     </form>
