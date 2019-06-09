@@ -51,7 +51,8 @@
                     if (e) {
                         var model = {
                             value: ctrl.content || ctrl.defaultContent,                            
-                            contextmenu: false
+                            contextmenu: false,
+                            theme: "vs-dark"
                         };
                         switch (ctrl.ext) {
                             case '.json':
