@@ -297,7 +297,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             this.ParentNavs = GetParentNavs(_context, _transaction);
             this.ChildNavs = GetChildNavs(_context, _transaction);
             this.PositionNavs = GetPositionNavs(_context, _transaction);
-            this.UrlAliases = GetAliases(_context, _transaction) ?? new List<MixUrlAliases.UpdateViewModel>();
+            this.UrlAliases = GetAliases(_context, _transaction);
         }
 
         #region Sync
@@ -572,7 +572,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             var result = MixUrlAliases.UpdateViewModel.Repository.GetModelListBy(p => p.Specificulture == Specificulture
                         && p.SourceId == Id.ToString() && p.Type == (int)MixEnums.UrlAliasType.Page, context, transaction);
-            if (result.IsSucceed)
+            if (result.IsSucceed && result.Data!=null)
             {
                 return result.Data;
             }
