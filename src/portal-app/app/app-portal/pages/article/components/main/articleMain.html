@@ -6,12 +6,12 @@
 
         <div class="form-group">
             <label>Title</label>
-            <input type="text" class="form-control form-control-lg" ng-model="$ctrl.article.title" ng-blur="$ctrl.generateSEO()">
+            <input type="text" class="form-control" ng-model="$ctrl.article.title" ng-blur="$ctrl.generateSEO()" placeholder="Your post title here..." required>
         </div>
         <div class="form-group">
             <label>Excerpt</label>
-            <textarea class="form-control form-control-lg" ng-model="$ctrl.article.excerpt">{{$ctrl.article.excerpt}}</textarea>
-            
+            <textarea class="form-control" ng-model="$ctrl.article.excerpt">{{$ctrl.article.excerpt}}</textarea>
+
             <!-- <trumbowyg ng-model="$ctrl.article.excerpt"
                         placeholder="Start typing some text..."
                         options="{}">
@@ -19,12 +19,10 @@
         </div>
         <div class="form-group">
             <label>Body content</label>
-            <trumbowyg ng-model="$ctrl.article.content"
-                        removeformat-pasted="'true'"
-                        placeholder="Start typing some text..."
-                        options="{}">
-                      </trumbowyg>
-            
+            <trumbowyg ng-model="$ctrl.article.content" removeformat-pasted="'true'"
+                placeholder="Start typing some text..." options="{}">
+            </trumbowyg>
+
         </div>
     </div>
 </div>
