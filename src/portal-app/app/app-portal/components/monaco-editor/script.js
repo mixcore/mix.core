@@ -11,7 +11,7 @@
                 if (changes.content) {
                     ctrl.updateContent(changes.content);
                 }
-                if(changes.isVisible){
+                if (changes.isVisible) {
                     ctrl.updateEditors();
                 }
             };
@@ -21,17 +21,17 @@
                     ctrl.previousId = ctrl.contentId;
                     ctrl.updateContent(ctrl.content);
                 }
-                if(ctrl.isVisible && ctrl.editor){
+                if (ctrl.isVisible && ctrl.editor) {
                     setTimeout(() => {
                         var h = ctrl.editor.getModel().getLineCount() * 18;
                         $($element).height(h);
-                        ctrl.editor.layout();        
-                    }, 200);                    
-                    
+                        ctrl.editor.layout();
+                    }, 200);
+
                 }
             }.bind(this);
             ctrl.initEditor = function () {
-                
+
                 setTimeout(() => {
                     ctrl.previousId = ctrl.contentId;
                     ctrl.updateEditors();
@@ -43,14 +43,14 @@
                 ctrl.editor.setValue(content);
                 var h = ctrl.editor.getModel().getLineCount() * 18;
                 $($element).height(h);
-                ctrl.editor.layout();    
+                ctrl.editor.layout();
             };
             ctrl.updateEditors = function () {
                 $.each($($element).find('.code-editor'), function (i, e) {
                     //var container = $(this);
                     if (e) {
                         var model = {
-                            value: ctrl.content || ctrl.defaultContent,                            
+                            value: ctrl.content || ctrl.defaultContent,
                             contextmenu: false
                         };
                         switch (ctrl.ext) {
@@ -75,20 +75,20 @@
                                 break;
                         }
                         ctrl.editor = monaco.editor.create(e, model);
-                        
-                        ctrl.editor.model.onDidChangeContent(()=>{
+
+                        ctrl.editor.model.onDidChangeContent(() => {
                             ctrl.content = ctrl.editor.model.getValue();
                         });
-                        ctrl.editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, function() {
+                        ctrl.editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, function () {
                             var btn = document.getElementById('btnToSubmit');
                             btn.click();
                         });
                         setTimeout(() => {
                             var h = ctrl.editor.getModel().getLineCount() * 18;
                             $(e).height(h);
-                            ctrl.editor.layout();    
+                            ctrl.editor.layout();
                         }, 200);
-                        
+
                     }
                 });
             };
@@ -96,7 +96,7 @@
     ],
     bindings: {
         content: '=',
-        defaultContent: '=?',        
+        defaultContent: '=?',
         contentId: '=',
         isVisible: '=',
         ext: '='
