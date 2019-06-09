@@ -6,24 +6,18 @@
 
         <div class="form-group">
             <label>Title</label>
-            <input type="text" class="form-control form-control-lg" ng-model="$ctrl.page.title" ng-blur="$ctrl.generateSeo()">
+            <input type="text" class="form-control" ng-model="$ctrl.page.title" ng-blur="$ctrl.generateSeo()" placeholder="Your page title..." required>
+            <small class="form-text text-muted">This page title will show on..</small>
         </div>
         <div class="form-group">
-                <label>Static Url</label>
-                <input type="text" class="form-control form-control-lg" ng-model="$ctrl.page.staticUrl">
-            </div>
-            
-        <div class="form-group">
-            <label>PageSize</label>
-            <input type="number" class="form-control form-control-lg" ng-model="$ctrl.page.pageSize">
+            <label>Redirect to URL <small>(Optional)</small></label>
+            <input type="text" class="form-control" ng-model="$ctrl.page.staticUrl" placeholder="https://your-external-link...">
+            <small class="form-text text-muted">This page will auto redirect to an external link instead.</small>
         </div>
+
         <div class="form-group">
             <label>Excerpt</label>
-            <textarea class="form-control form-control-lg" ng-model="$ctrl.page.excerpt">{{$ctrl.page.excerpt}}</textarea>
-        </div>
-        <div class="form-group">
-            <label>Body content</label>
-            <trumbowyg options="{}" ng-model="$ctrl.page.content"></trumbowyg>
+            <textarea class="form-control" ng-model="$ctrl.page.excerpt">{{$ctrl.page.excerpt}}</textarea>
         </div>
         <div class="form-group">
             <label class="control-label">Page types</label>
@@ -40,6 +34,10 @@
                     <i ng-switch-when="Modules" class="mi mi-ResolutionLegacy mi-lg mi-flip-horizontal" title="{{type}}"></i>
                 </label>
             </div>
+        </div>
+        <div class="form-group">
+            <label class="mb-0">Body content</label>
+            <trumbowyg options="{}" ng-model="$ctrl.page.content"></trumbowyg>
         </div>
     </div>
 </div>
