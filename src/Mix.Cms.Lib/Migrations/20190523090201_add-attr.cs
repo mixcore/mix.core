@@ -144,7 +144,6 @@ namespace Mix.Cms.Lib.Migrations
                     Name = table.Column<string>(maxLength: 250, nullable: false),
                     Description = table.Column<string>(maxLength: 250, nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Fields = table.Column<string>(maxLength: 4000, nullable: false),
                     Priority = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     UpdatedDateTime = table.Column<DateTime>(type: "datetime", nullable: true)

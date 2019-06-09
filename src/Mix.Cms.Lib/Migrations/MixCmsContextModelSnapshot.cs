@@ -300,10 +300,6 @@ namespace Mix.Cms.Lib.Migrations
                         .IsRequired()
                         .HasMaxLength(250);
 
-                    b.Property<string>("Fields")
-                        .IsRequired()
-                        .HasMaxLength(4000);
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(250);

@@ -284,8 +284,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.DefaultValue).IsRequired();
-
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -309,13 +307,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Description)
-                    .IsRequired()
-                    .HasMaxLength(250);
-
-                entity.Property(e => e.Fields)
-                    .IsRequired()
-                    .HasMaxLength(4000);
+                entity.Property(e => e.Description).HasMaxLength(250);
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -1629,6 +1621,7 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasForeignKey(d => d.Specificulture)
                     .HasConstraintName("FK_Mix_Url_Alias_Mix_Culture");
             });
+
         }
     }
 }

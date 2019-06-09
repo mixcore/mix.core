@@ -7,79 +7,88 @@
     <p class="text-muted">Add a title and description to see how this product might
         appear in a search engine listing.</p>
 </div>
-<table class="table table-sm" id="Table">
-    <thead class="thead-light">
-        <tr>
-            <th>
-                <span class="fas fa-sort-numeric-down"></span>
-            </th>
-            <th>Title</th>
-            <!--<th >Name</th>-->
-            <th>Type</th>
-            <!--<th >Width</th>-->
-            <th>Unique</th>
-            <th>Required</th>
-            <!--<th >GroupBy</th>-->
-            <th>Select</th>
-            <th>Display</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody class="sortable" dnd-list="$ctrl.attributes">
-        <tr class="sortable-item module-column" ng-repeat="col in $ctrl.attributes track by $index" dnd-draggable="col" dnd-effect-allowed="move" dnd-selected="selectedCol = col" dnd-moved="$ctrl.attributes.splice($index, 1)" ng-class="{'selected': $ctrl.selectedCol === col}">
-            <td style="cursor:move;" class="drag-header">
-                <span class="fas fa-sort"></span>
-            </td>
-            <td>
+<div ng-repeat="col in $ctrl.attributes track by $index" dnd-draggable="col" dnd-effect-allowed="move" dnd-selected="selectedCol = col" dnd-moved="$ctrl.attributes.splice($index, 1)" ng-class="{'selected': $ctrl.selectedCol === col}" class="mb-3">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="control-label">Title</label>
                 <input ng-model="col.title" placeholder="Title" ng-change="$ctrl.generateName(col)" class="form-control form-control-sm">
                 <small class="form-text text-muted">Name: <span ng-bind="col.name"></span></small>
-            </td>
-            <td>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="control-label">Type</label>
                 <select class="form-control form-control-sm" ng-model="col.dataType">
                     <option ng-repeat="item in $ctrl.settings.dataTypes track by $index" ng-value="$index">{{item}}
                     </option>
                 </select>
-            </td>
-            <td>
-                <input class="" type="checkbox" ng-model="col.isUnique">
-            </td>
-            <td>
-                <input class="" type="checkbox" ng-model="col.isRequired">
-            </td>
-            <td>
-                <input class="" type="checkbox" ng-model="col.isSelect">
-            </td>
-            <td>
-                <input class="" type="checkbox" ng-model="col.isDisplay">
-            </td>
-            <td>
-                <a class="btn btn-sm btn-light del-popover" ng-click="$ctrl.removeAttr($index);">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="control-label">Default Value</label>
+                <input ng-model="col.defaultValue" placeholder="Default Value" class="form-control form-control-sm">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <a href="" class="btn-lnk" ng-click="col.showAdvanced = !col.showAdvanced">
+                Advanced
+            </a>
+        </div>
+    </div>
+    <div class="row" ng-show="col.showAdvanced">
+        <div class="form-group col-md-3">
+            <span class="switch switch-sm">
+                <input type="checkbox" ng-model="col.isEncrypt">
+                <label class="switch mb-0">
+                    <span>Encrypt</span>
+                </label>
+            </span>
+        </div>
+        <div class="form-group col-md-3">
+            <span class="switch switch-sm">
+                <input type="checkbox" ng-model="col.isUnique">
+                <label class="switch mb-0">
+                    <span>Unique</span>
+                </label>
+            </span>
+        </div>
+        <div class="form-group col-md-3">
+            <span class="switch switch-sm">
+                <input type="checkbox" ng-model="col.isRequired">
+                <label class="switch mb-0">
+                    <span>Required</span>
+                </label>
+            </span>
+        </div>
+        <div class="form-group col-md-3">
+            <span class="switch switch-sm">
+                <input type="checkbox" ng-model="col.isSelect">
+                <label class="switch mb-0">
+                    <span>Select</span>
+                </label>
+            </span>
+        </div>
+    </div>
+    <div ng-show="col.isSelect">
+        <div class="row">
+            <label class="col-sm-3 col-form-label">Title</label>
+            <div class="col-sm-7">
+                <input type="text" class="form-control form-control-sm" id="option_{{$index}}" ng-enter="$ctrl.addOption(col,$index)" placeholder="fill then enter to add options">
+            </div>
+        </div>
+        <div class="row" ng-repeat="opt in col.options track by $index">
+            <div class="col-md-10">
+                <input type="text" class="form-control form-control-sm" ng-model="col.options[$index]">
+
+            </div>
+            <div class="col-md-2">
+                <a class="btn" ng-click="col.options.splice($index,1)">
                     <span class="fas fa-times text-danger"></span>
                 </a>
-            </td>
-        </tr>
-        <tr class="module-column" ng-repeat="col in $ctrl.attributes track by $index" ng-if="col.isSelect">
-            <td colspan="8">
-                <div class="col-12">
-                    <div class="form-group row mb-0">
-                        <label class="col-sm-3 col-form-label" ng-bind="col.title"></label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm" id="option_{{$index}}" ng-enter="$ctrl.addOption(col,$index)" placeholder="fill then enter to add options">
-                        </div>
-                    </div>
-                    <div class="row pb-1" ng-repeat="opt in col.options track by $index">
-                        <div class="col-11">
-                            <input type="text" class="form-control form-control-sm" ng-model="col.options[$index]">
-                        </div>
-                        <div class="col-1">
-                            <a class="btn" ng-click="col.options.splice($index,1)">
-                                <span class="fas fa-times text-danger"></span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+            </div>
+        </div>
 
-            </td>
-        </tr>
-    </tbody>
-</table>
+    </div>
+</div>

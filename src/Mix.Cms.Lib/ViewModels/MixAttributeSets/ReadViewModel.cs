@@ -24,8 +24,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         public string Description { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-        [JsonProperty("fields")]
-        public string Fields { get; set; }
         [JsonProperty("status")]
         public int Status { get; set; }
         [JsonProperty("updatedDateTime")]

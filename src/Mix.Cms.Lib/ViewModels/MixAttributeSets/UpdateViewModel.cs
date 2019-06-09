@@ -27,8 +27,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         public string Description { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-        [JsonProperty("fields")]
-        public string Fields { get; set; }
         [JsonProperty("status")]
         public int Status { get; set; }
         [JsonProperty("updatedDateTime")]
@@ -55,13 +53,13 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Attributes = MixAttributeFields.UpdateViewModel
-                .Repository.GetModelListBy(a => a.AttributeSetId == Id).Data;
+                .Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data;
         }
         public override MixAttributeSet ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id==0)
             {
-                Id = Repository.Max(s => s.Id).Data + 1;
+                Id = Repository.Max(s => s.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
             return base.ParseModel(_context, _transaction);
@@ -76,6 +74,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
                 {
                     if (result.IsSucceed)
                     {
+                        item.AttributeSetId = parent.Id;
                         var saveResult = await item.SaveModelAsync(false, _context, _transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
                     }
@@ -97,6 +96,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
                 {
                     if (result.IsSucceed)
                     {
+                        item.AttributeSetId = parent.Id;
                         var saveResult =  item.SaveModel(false, _context, _transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
                     }
