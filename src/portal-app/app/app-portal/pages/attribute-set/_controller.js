@@ -10,6 +10,7 @@ app.controller('AttributeSetController', [
             var getDefaultAttr = await attributeFieldService.getSingle([null, 'portal']);
             if (getDefaultAttr.isSucceed) {
                 $scope.defaultAttr = getDefaultAttr.data;
+                $scope.defaultAttr.options = [];
             }
             $scope.$apply();
         }

@@ -98,9 +98,8 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST api/attribute-set
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]        
         [HttpPost, HttpOptions]
-        [RequestFormSizeLimit(valueCountLimit: 214748364)] // 200Mb
         [Route("save")]
-        public async Task<RepositoryResponse<UpdateViewModel>> Save(UpdateViewModel data)
+        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromBody]UpdateViewModel data)
         {
             if (data != null)
             {

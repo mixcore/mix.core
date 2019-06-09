@@ -1,7 +1,8 @@
 <!-- <jumbotrons tag-name="'Article'" tag-type="'0'"></jumbotrons> -->
 <section class="card mb-3 manual">
     <div class="card-header">
-        <filter-list request="request" callback="getList(pageIndex)"></filter-list>
+        <filter-list request="request" callback="getList(pageIndex)"
+            create-url="'/portal/article/create'"></filter-list>
         <select class="btn custom-select custom-select-sm col-3" ng-model="selectedList.action">
             <option ng-repeat="item in actions" ng-value="item">{{item}}</option>
         </select>

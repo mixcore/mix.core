@@ -34,7 +34,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         public bool IsUnique { get; set; }
         [JsonProperty("status")]
         public int Status { get; set; }
-
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
         #endregion Models
         #endregion Properties
 
@@ -49,5 +50,16 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         }
 
         #endregion Contructors
+        #region Overrides
+        public override MixAttributeField ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            if (Id == 0)
+            {
+                Id = Repository.Max(s => s.Id, _context, _transaction).Data + 1;
+                CreatedDateTime = DateTime.UtcNow;
+            }
+            return base.ParseModel(_context, _transaction);
+        }
+        #endregion
     }
 }

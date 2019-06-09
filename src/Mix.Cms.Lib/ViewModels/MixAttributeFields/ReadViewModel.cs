@@ -34,6 +34,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         public bool IsUnique { get; set; }
         [JsonProperty("status")]
         public int Status { get; set; }
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
 
         #endregion Models
         #endregion Properties
