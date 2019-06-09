@@ -20,7 +20,7 @@
         <label class="control-label">@translator.Get("Modules Data")</label>
         <div ng-repeat="child in $ctrl.product.moduleNavs track by $index" ng-class="{hidden: !child.isActived}" class="col-md-12 module-data-{{child.moduleId}}">
             <h1>{{child.module.title}}</h1>
-            @*<a href="#" class="btn btn-success AddObject" moduleid="@module.Id">Add new</a>*@
+            @*<a href="#" class="btn btn-success AddObject" moduleid="@module.Id"><span class="fas fa-plus text-primary"></span> Add new</a>*@
             <table class="table table-hover table-striped" id="module-{{child.module.id}}">
                 <thead class="thead-light">
                     <tr ng-repeat="col in child.module.columns">
