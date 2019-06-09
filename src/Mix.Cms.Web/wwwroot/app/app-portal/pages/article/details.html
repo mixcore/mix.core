@@ -43,7 +43,20 @@
             <section class="col-sm-4" style="padding-left:0">
                 <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
                 <a class="btn btn-secondary btn-sm" ng-click="addAlias()">Add Alias</a>
-                <url-alias ng-repeat="alias in activedData.urlAliases" index="$index" url-alias="alias" remove-callback="removeAliasCallback(index)"></url-alias>
+
+
+                <div class="card mb-3">
+
+                    <h6 class="card-header">URL slugs
+                        <button class="btn btn-link text-primary btn-sm float-right py-0" type="button" data-toggle="collapse" data-target="#slug-tab" aria-controls="slug-tab" aria-expanded="false" aria-label="Toggle navigation"><span class="fas fa-plus text-primary"></span> Add slugs</button>
+
+                    </h6>
+
+                    <div id="slug-tab" class="card-body collapse">
+                        <url-alias ng-repeat="alias in activedData.urlAliases" index="$index" url-alias="alias" remove-callback="removeAliasCallback(index)"></url-alias>
+                    </div>
+                </div>
+
                 <div class="card mb-3">
                     <h6 class="card-header">
                         Info
@@ -58,7 +71,7 @@
                                 </div>
                                 <input value="{{activedData.publishedDateTime}}" ng-model="activedData.publishedDateTime" type="datetime-local" class="form-control">
                             </div>
-                        </div>                        
+                        </div>
                         <div class="form-group">
                             <label class="control-label">Created Date Time</label>
                             <div class="input-group input-group-sm mb-3">
