@@ -88,6 +88,21 @@ modules.component('attributeList', {
                     ctrl.attributes.splice(index, 1);
                 }
             }
+            ctrl.updateOrders = function(index){
+                if(index> ctrl.dragStartIndex){
+                    ctrl.attributes.splice(ctrl.dragStartIndex, 1);
+                }
+                else{
+                    ctrl.attributes.splice(ctrl.dragStartIndex+1, 1);
+                }
+                angular.forEach(ctrl.attributes, function(e,i){
+                    e.priority = i;
+                });
+            } 
+           
+            ctrl.dragStart = function(index){
+                ctrl.dragStartIndex = index;
+            }            
         }],
     bindings: {
         title: '=',
