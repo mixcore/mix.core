@@ -1,7 +1,6 @@
 <!-- Main content -->
 <section class="" ng-init="getSingle()">
     <form ng-class="{'submitted': submitted}" ng-submit="save(activedData)">
-        <actions preview-url="activedData.detailsUrl" back-url="'/portal/page/list'"></actions>
         <div class="row">
             <section class="col-sm-8">
                 <div class="row">
@@ -96,6 +95,8 @@
                 </div>-->
             </section>
             <section class="col-sm-4" style="padding-left:0">
+
+                <actions preview-url="activedData.detailsUrl" back-url="'/portal/page/list'"></actions>
                 <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
 
 
