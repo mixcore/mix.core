@@ -3,7 +3,7 @@
         <filter-list request="request" callback="getList(pageIndex)"></filter-list>
     </div>
     <div class="card-body">
-        <p ng-if="canDrag"><span class="text-warning" ng-bind="translate('warning_can_not_drag_drop',true, '(**Drag Drop only allow when order by priority asc)')"></span></p>
+        <small ng-if="canDrag"><span class="text-warning" ng-bind="translate('warning_can_not_drag_drop',true, '(Drag Drop only allow when order by priority asc)')"></span></small>
         <table id="list-page" class="table table-sm table-hover" dnd-list="data.items" dnd-disable-if="canDrag" cellspacing="0" ng-init="getList()">
             <thead class="thead-light">
                 <tr>
@@ -58,7 +58,7 @@
                             <a href="/portal/page/details/{{item.id}}" class="btn btn-light">
                                 <span class="fas fa-pencil-alt text-primary"></span>
                             </a>
-                            <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-light"><span class="fa fa-eye text-primary"></span></a>
+                            <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-light"><span class="far fa-eye text-primary"></span></a>
                             <a ng-if="item.type==2" href="/portal/page/page-article/list/{{item.id}}" class="btn btn-light">
                                 <span class="fas fa-list text-info"></span>
                             </a>
@@ -128,7 +128,7 @@
                                         <td>
                                             <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
                                                 <a href="/portal/page/details/{{c.id}}" class="btn btn-light"><span class="fa fa-pen text-primary small"></span></a>
-                                                <a href="{{c.detailsUrl}}" target="_blank" class="btn btn-light"><span class="fa fa-eye text-primary small"></span></a>
+                                                <a href="{{c.detailsUrl}}" target="_blank" class="btn btn-light"><span class="far fa-eye text-primary small"></span></a>
                                                 <a ng-if="c.page.type==2" href="/portal/page/page-article/list/{{c.page.id}}" class="btn btn-light">
                                                     <span class="fas fa-list text-info"></span>
                                                 </a>
