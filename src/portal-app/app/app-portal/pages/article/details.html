@@ -11,7 +11,55 @@
                 </div>
 
 
-                <div class="card mb-3">
+                <hr>
+                <tabs-v select-callback="selectPane(pane)" class="mb-3">
+                    <pane-v title="General" class="card">
+                        <div class="card-body">
+                            <article-general article="activedData"></article-general>
+                        </div>
+                    </pane-v>
+                    <pane-v title="Search Engine" class="card">
+
+
+                        <div class="card-body">
+                            <p class="text-muted">Add a title and description to see how this product might appear in a
+                                search engine listing.</p>
+
+                                <article-seo article="activedData"></article-seo>
+                        </div>
+
+                    </pane-v>
+                    <pane-v title="Parents" class="card">
+
+                        <div class="card-body">
+                            <article-parents article="activedData"></article-parents>
+                        </div>
+                    </pane-v>
+                    <pane-v title="Module" class="card">
+
+                        <div class="card-body">
+                            <article-modules article="activedData"></article-modules>
+                        </div>
+                    </pane-v>
+                    <pane-v title="Medias">
+                        <article-medias article="activedData" medias="activedData.mediaNavs"></article-medias>
+                        <!--<navigation data="activedData.mediaNavs" prefix="media"></navigation>-->
+                        <!--<navs data="activedData.mediaNavs" prefix="'media'" model="'nav-article-media'"></navs>-->
+
+                    </pane-v>
+                    <pane-v title="Related Posts">
+
+                        <related-navs request="request" source-id="activedData.id" culture="activedData.specificulture"
+                            prefix="'article'" navs="activedData.articleNavs" data="data"
+                            load-data="getList(pageIndex)"></related-navs>
+
+                    </pane-v>
+                    
+                </tabs-v>
+
+                <template-editor folder-type="'Articles'" template="activedData.view" templates="activedData.templates">
+                </template-editor>
+                <!-- <div class="card mb-3">
                     <div class="card-header">
                         <h6>General
                             <button class="btn btn-link text-primary btn-sm float-right" type="button"
@@ -83,9 +131,7 @@
                         <p class="text-muted">...</p>
                     </div>
                     <div id="medias-setting" class="card-body collapse">
-                        <article-medias article="activedData" medias="activedData.mediaNavs"></article-medias>
-                        <!--<navigation data="activedData.mediaNavs" prefix="media"></navigation>-->
-                        <!--<navs data="activedData.mediaNavs" prefix="'media'" model="'nav-article-media'"></navs>-->
+                        
                     </div>
                 </div>
 
@@ -107,7 +153,7 @@
                 </div>
 
                 <template-editor folder-type="'Articles'" template="activedData.view" templates="activedData.templates">
-                </template-editor>
+                </template-editor> -->
                 <!-- 
                 <tabs-v>
                     <pane-v title="General">
