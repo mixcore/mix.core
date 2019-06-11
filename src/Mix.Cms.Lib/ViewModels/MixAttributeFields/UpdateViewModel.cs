@@ -2,6 +2,7 @@
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
@@ -22,6 +23,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         public int DataType { get; set; }
         [JsonProperty("defaultValue")]
         public string DefaultValue { get; set; }
+        [JsonProperty("options")]
+        public JArray Options { get; set; } = new JArray();
         [JsonProperty("name")]
         public string Name { get; set; }
         [JsonProperty("isRequire")]

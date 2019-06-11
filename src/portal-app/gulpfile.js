@@ -338,7 +338,9 @@ gulp.task('watch:html', function () {
 
 gulp.task('watch', function () {
     gulp.watch('./app/**/**/*.html', ['min:views']);
-    gulp.watch('./app/**/**/*.js', ['min:portalApp']);
+    gulp.watch('./app/app-portal/**/*.js', ['min:portalApp']);
+    gulp.watch('./app/app-shared/**/*.js', ['min:sharedApp']);
+    gulp.watch('./app/app-/**/*.js', ['min:sharedApp']);
     gulp.watch('./app/**/**/*.css', ['min:appCss','min:appInitCss']);
 });
 
