@@ -1,19 +1,15 @@
 <div ng-if="$ctrl.template" ng-init="$ctrl.init()" class="card mb-3">
     <div class="card-header">
 
-        <h6>{{$ctrl.folderType}} Layout
-            <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                <button class="btn btn-link text-primary btn-sm float-right py-0" type="button" data-toggle="collapse"
-                    data-target="#quick-{{$ctrl.folderType}}-layout-editor" aria-controls="quick-{{$ctrl.folderType}}-layout-editor" aria-expanded="false"
-                    aria-label="Toggle navigation"><span class="fas fa-code text-primary"></span> Quick Editor</button>
-                <a href="/portal/template/details/{{$ctrl.template.themeId}}/{{$ctrl.template.folderType}}/{{$ctrl.template.id}}"
-                    class="btn btn-link text-primary btn-sm float-right py-0">
-                    <span class="fas fa-pencil-alt text-primary"></span> Edit {{$ctrl.folderType}} Layout
-                </a>
-            </div>
+        <h6>Quick {{$ctrl.folderType}} Layout Editor
+
+            <a href="/portal/template/details/{{$ctrl.template.themeId}}/{{$ctrl.template.folderType}}/{{$ctrl.template.id}}"
+                class="btn btn-link text-primary btn-sm float-right py-0">
+                <span class="fas fa-pencil-alt text-primary"></span> Edit {{$ctrl.folderType}} Layout
+            </a>
         </h6>
     </div>
-    <div id="quick-{{$ctrl.folderType}}-layout-editor" class="card-body collapse">
+    <div id="quick-{{$ctrl.folderType}}-layout-editor" class="card-body">
         <div class="form-group">
             <div class="input-group mb-3">
                 <select class="btn btn-outline-secondary custom-select col-sm-4"
