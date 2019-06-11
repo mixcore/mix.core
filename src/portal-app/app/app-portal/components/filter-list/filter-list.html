@@ -1,7 +1,7 @@
 <div class="row" ng-init="$ctrl.init()">
     <div class="col-md-5">
         <div class="" role="toolbar" aria-label="Toolbar with button groups">
-            <div class="input-group input-group-sm mr-2" role="group" aria-label="First group">
+            <div class="input-group input-group-sm mr-2">
 
                 <select class="btn custom-select custom-select-sm col-6" ng-model="$ctrl.request.status" ng-change="$ctrl.callback({pageIndex: 0})">
                     <option ng-repeat="item in $ctrl.statuses track by $index" value="{{item.value}}">{{item.title}}</option>
@@ -20,7 +20,7 @@
     </div>
     <div class="col-md-4">
         <div class="" role="toolbar" aria-label="Toolbar with button groups">
-            <div class="input-group input-group-sm" role="group" aria-label="First group">
+            <div class="input-group input-group-sm">
                 <input type="date" data-date-format="dd.MM.yyyy" ng-model="$ctrl.dateRange.fromDate" class="form-control form-control-sm"
                     ng-change="$ctrl.updateDate()">
                 <input type="date" data-date-format="dd.MM.yyyy" ng-model="$ctrl.dateRange.toDate" class="form-control form-control-sm"
