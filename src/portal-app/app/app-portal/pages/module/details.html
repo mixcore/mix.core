@@ -10,6 +10,36 @@
                         </module-main>
                     </div>
                 </div>
+
+
+                <hr>
+                <tabs-v select-callback="selectPane(pane)" class="mb-3">
+                    <pane-v title="Attributes" class="card" ng-if="isAdmin">
+                        <div class="card-body">
+                            <input type="hidden" asp-for="Id">
+                            <input type="hidden" asp-for="Specificulture">
+                            <input type="hidden" asp-for="Priority">
+                            <set-attribute title="'Module Attributes'" columns="activedData.columns">
+                            </set-attribute>
+                        </div>
+                    </pane-v>
+                    <pane-v title="Modules Layout" ng-if="isAdmin">
+
+                        <template-editor folder-type="'Modules'" template="activedData.view"
+                            templates="activedData.templates"></template-editor>
+                    </pane-v>
+                    <pane-v title="Form Layout" ng-if="isAdmin">
+
+                        <template-editor folder-type="'Forms'" template="activedData.formView"
+                            templates="activedData.forms"></template-editor>
+                    </pane-v>
+                    <pane-v title="eDM Layout" ng-if="isAdmin">
+
+                        <template-editor folder-type="'Edms'" template="activedData.edmView"
+                            templates="activedData.edms"></template-editor>
+                    </pane-v>
+                </tabs-v>
+                <!-- 
                 <div class="row" ng-if="isAdmin">
                     <div class="col-sm-12">
                         <input type="hidden" asp-for="Id">
@@ -36,11 +66,11 @@
                         <template-editor folder-type="'Edms'" template="activedData.edmView"
                             templates="activedData.edms"></template-editor>
                     </div>
-                </div>
+                </div> -->
             </section>
             <section class="col-4" style="padding-left:0">
                 <actions preview-url="activedData.detailsUrl" content-url="contentUrl" back-url="'/portal/module/list'">
-                </actions>        
+                </actions>
 
                 <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
                 <div class="card mb-3">
