@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -147,6 +148,7 @@ namespace Mix.Cms.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route("portal")]
         [Route("admin")]
         [Route("portal/{pageName}")]

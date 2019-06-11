@@ -26,9 +26,8 @@ namespace Mix.Cms.Web
         protected void ConfigAuthorization(IServiceCollection services, IConfiguration Configuration)
         {
             ConfigIdentity(services, Configuration);
-            ConfigCookieAuth(services, Configuration);
             ConfigJWTToken(services, Configuration);
-
+            //ConfigCookieAuth(services, Configuration);
         }
 
         private void ConfigIdentity(IServiceCollection services, IConfiguration Configuration)
@@ -51,6 +50,7 @@ namespace Mix.Cms.Web
                 .AddUserManager<UserManager<ApplicationUser>>()
 
                 ;
+            
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("AddEditUser", policy =>
@@ -66,7 +66,7 @@ namespace Mix.Cms.Web
         protected void ConfigJWTToken(IServiceCollection services, IConfiguration Configuration)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(options =>
+                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                     {
                         options.RequireHttpsMetadata = false;
                         options.SaveToken = true;
@@ -99,31 +99,22 @@ namespace Mix.Cms.Web
                             
                         };
                     });
-            services.AddAuthentication("Bearer");
-            //services.Configure<IpSecuritySettings>(Configuration.GetSection("IpSecuritySettings"));
+            //services.AddAuthentication("Bearer");
         }
 
         protected void ConfigCookieAuth(IServiceCollection services, IConfiguration Configuration)
-        {           
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(
-                options =>
-                {
-                    // Cookie settings
-                    options.Cookie.HttpOnly = true;
-                    options.Cookie.MaxAge = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>("CookieExpiration"));
-                    options.Cookie.Expiration = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>("CookieExpiration"));
-                    options.LoginPath = "/" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "/Portal/Auth/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
-                    options.LogoutPath = "/" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "/Portal/Auth/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
-                    options.AccessDeniedPath = "/"; // If the MixConstants.Default.DefaultCulture is not set here, ASP.NET Core will default to /Account/AccessDenied
-                    options.SlidingExpiration = true;
+        {
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.Cookie.MaxAge = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>("CookieExpiration"));
+                options.Cookie.Expiration = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>("CookieExpiration"));
+                options.LoginPath = "/security/login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
+                options.LogoutPath = "/"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
+                options.AccessDeniedPath = "/security/login"; // If the MixConstants.Default.DefaultCulture is not set here, ASP.NET Core will default to /Account/AccessDenied
+                options.SlidingExpiration = true;
 
-                    options.Events = new CookieAuthenticationEvents()
-                    {
-                        OnValidatePrincipal = CookieValidator.ValidateAsync
-                    };
-                }
-                );
+            });
         }
 
         protected static class JwtSecurityKey
