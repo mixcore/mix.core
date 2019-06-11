@@ -55,14 +55,12 @@ namespace Mix.Cms.Api.Controllers.v1
 
         //
         // POST: /Account/Logout
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("Logout")]
         [HttpGet, HttpPost, HttpOptions]
         public async Task<RepositoryResponse<bool>> Logout()
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true, Data = true };
             await _signInManager.SignOutAsync().ConfigureAwait(false);
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).ConfigureAwait(false);
             await RefreshTokenViewModel.Repository.RemoveModelAsync(r => r.Username == User.Identity.Name);
             return result;
         }

@@ -105,11 +105,19 @@ app.factory('AuthService',
             };
 
 
-            var _logOut = function () {
-
-                localStorageService.remove('authorizationData');
-
-                _authentication = null;
+            var _logOut = async function () {
+                var apiUrl = '/account/logout';
+                var req = {
+                    method: 'GET',
+                    url: apiUrl
+                };
+                var resp = await _getApiResult(req);
+                if(resp.isSucceed){
+                    localStorageService.remove('authorizationData');
+                    _authentication = null;
+                    window.top.location.href = '/security/login';
+                }
+                
 
             };
 

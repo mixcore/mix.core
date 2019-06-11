@@ -1409,8 +1409,7 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'GlobalSettingsSer
         }
 
         $rootScope.logOut = function () {
-            authService.logOut();
-            window.top.location.href = '/security/login';
+            authService.logOut();            
         };
 
         $rootScope.updateSettings = function () {

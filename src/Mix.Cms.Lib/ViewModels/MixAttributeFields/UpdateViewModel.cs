@@ -23,8 +23,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         public int DataType { get; set; }
         [JsonProperty("defaultValue")]
         public string DefaultValue { get; set; }
+        [JsonIgnore]
+        public string Options { get; set; } = "[]";
         [JsonProperty("options")]
-        public JArray Options { get; set; } = new JArray();
+        public JArray JOptions { get; set; }
         [JsonProperty("name")]
         public string Name { get; set; }
         [JsonProperty("isRequire")]
@@ -61,7 +63,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
                 Id = Repository.Max(s => s.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
+            Options = JOptions.ToString();
             return base.ParseModel(_context, _transaction);
+        }
+        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            JOptions = JArray.Parse(Options);
         }
         #endregion
     }
