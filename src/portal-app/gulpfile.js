@@ -316,16 +316,16 @@ gulp.task("clean:sharedCss", function (cb) {
 
 gulp.task("clean:js", [
 
-    "clean:framework", "clean:portal", "clean:shared","clean:tablerJs"
+    "clean:framework", "clean:portal", "clean:shared"
     , "clean:portalApp", "clean:clientApp", "clean:sharedApp", "clean:initApp", "clean:securityApp"
 ]);
 gulp.task("clean:css", [
-    , "clean:appCss","clean:tablerCss", "clean:appInitCss", "clean:portalCss", "clean:sharedCss"
+    , "clean:appCss", "clean:appInitCss", "clean:portalCss", "clean:sharedCss"
 ]);
 gulp.task("min:js", ["min:portalApp", "min:initApp", "min:securityApp", "min:clientApp", "min:sharedApp"
-    , "min:shared","min:tablerJs", "min:portal", "min:framework"
+    , "min:shared", "min:portal", "min:framework"
 ]);
-gulp.task("min:css", ['min:appCss','min:tablerCss', "min:appInitCss", 'min:portalCss', 'min:sharedCss']);
+gulp.task("min:css", ['min:appCss', "min:appInitCss", 'min:portalCss', 'min:sharedCss']);
 
 gulp.task("build", ['clean:js',
     'min:js', 'min:css', "min:views"]);//["clean", "min:views", "min"]);

@@ -1,0 +1,14 @@
+<div class="card mb-3 col-md-12">
+    <div class="card-header">
+        <h6>
+            {{title}}
+            <a class="btn-link text-primary btn-sm float-right py-0" ng-click="collape = !collape">
+                            <span class="far fa-minus-square text-primary"></span> 
+                            Show/Hide</a>
+            <button class="btn btn-link text-primary btn-sm float-right py-0" type="button" ng-click="addCallback()"><span class="fas fa-plus text-primary"></span> Add slugs</button>
+        </h6>
+    </div>
+    <div class="card-body" ng-show="!collape">
+        <div class="tab-content" ng-transclude></div>
+    </div>
+</div>

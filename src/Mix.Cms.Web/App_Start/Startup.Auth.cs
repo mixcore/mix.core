@@ -2,17 +2,13 @@
 // The mixcore Foundation licenses this file to you under the GNU General Public License v3.0 license.
 // See the LICENSE file in the project root for more information.
 
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Mix.Cms.Lib;
-using Mix.Cms.Lib.MiddleWares;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Web.Mvc.App_Start.Validattors;
 using Mix.Identity.Models;
 using System;
 using System.Text;
@@ -27,7 +23,7 @@ namespace Mix.Cms.Web
         {
             ConfigIdentity(services, Configuration);
             ConfigJWTToken(services, Configuration);
-            //ConfigCookieAuth(services, Configuration);
+            ConfigCookieAuth(services, Configuration);
         }
 
         private void ConfigIdentity(IServiceCollection services, IConfiguration Configuration)
