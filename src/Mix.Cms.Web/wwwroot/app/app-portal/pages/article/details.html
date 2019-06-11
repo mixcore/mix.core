@@ -2,7 +2,6 @@
 <!-- <jumbotrons tag-name="'Article'" tag-type="'1'"></jumbotrons> -->
 <section class="" ng-init="getSingle()">
     <form ng-class="{'submitted': submitted}" ng-submit="save(activedData)">
-        <actions preview-url="activedData.detailsUrl" back-url="referrerUrl"></actions>
         <div class="row">
             <section class="col-sm-8">
                 <div class="row">
@@ -89,7 +88,7 @@
 
                 <template-editor folder-type="'Articles'" template="activedData.view" templates="activedData.templates">
                 </template-editor>
-<!-- 
+                <!-- 
                 <tabs-v>
                     <pane-v title="General">
                         <article-general article="activedData"></article-general>
@@ -121,12 +120,15 @@
                 </tabs-v> -->
             </section>
             <section class="col-sm-4" style="padding-left:0">
+
+                <actions preview-url="activedData.detailsUrl" back-url="referrerUrl"></actions>
                 <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
+                
                 <collape-container title="'URL slugs'" actived-data="activedData" add-callback="addAlias()">
                     <pane-collape>
                             <url-alias ng-repeat="alias in activedData.urlAliases" index="$index" url-alias="alias" remove-callback="removeAliasCallback(index)"></url-alias>
                     </pane-collape>
-                </collape-container>                
+                </collape-container>          
 
                 <div class="card mb-3">
                     <h6 class="card-header">
