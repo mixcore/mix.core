@@ -7,10 +7,11 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixAttributeSet()
         {
-            MixArticle = new HashSet<MixArticle>();
+            MixArticleAttributeSet = new HashSet<MixArticleAttributeSet>();
             MixAttributeField = new HashSet<MixAttributeField>();
-            MixModule = new HashSet<MixModule>();
-            MixPage = new HashSet<MixPage>();
+            MixModuleAttributeData = new HashSet<MixModuleAttributeData>();
+            MixModuleAttributeSet = new HashSet<MixModuleAttributeSet>();
+            MixPageAttributeSet = new HashSet<MixPageAttributeSet>();
         }
 
         public int Id { get; set; }
@@ -21,11 +22,11 @@ namespace Mix.Cms.Lib.Models.Cms
         public DateTime CreatedDateTime { get; set; }
         public int Priority { get; set; }
         public int Status { get; set; }
-        public DateTime? UpdatedDateTime { get; set; }
 
-        public virtual ICollection<MixArticle> MixArticle { get; set; }
+        public virtual ICollection<MixArticleAttributeSet> MixArticleAttributeSet { get; set; }
         public virtual ICollection<MixAttributeField> MixAttributeField { get; set; }
-        public virtual ICollection<MixModule> MixModule { get; set; }
-        public virtual ICollection<MixPage> MixPage { get; set; }
+        public virtual ICollection<MixModuleAttributeData> MixModuleAttributeData { get; set; }
+        public virtual ICollection<MixModuleAttributeSet> MixModuleAttributeSet { get; set; }
+        public virtual ICollection<MixPageAttributeSet> MixPageAttributeSet { get; set; }
     }
 }

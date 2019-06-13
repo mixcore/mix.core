@@ -119,6 +119,13 @@ namespace Mix.Cms.Lib
             ListProduct = 6,
             Gallery = 7
         }
+        
+        public enum MixAttributeSetType
+        {
+            SubPage = 1,
+            SubArticle = 2,
+            SubProduct = 3,
+        }
 
         public enum MixDataType
         {

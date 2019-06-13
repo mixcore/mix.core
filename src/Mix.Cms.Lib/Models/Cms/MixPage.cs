@@ -7,8 +7,10 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixPage()
         {
+            MixModuleData = new HashSet<MixModuleData>();
             MixPageArticle = new HashSet<MixPageArticle>();
             MixPageAttributeData = new HashSet<MixPageAttributeData>();
+            MixPageAttributeSet = new HashSet<MixPageAttributeSet>();
             MixPageModule = new HashSet<MixPageModule>();
             MixPagePageMixPage = new HashSet<MixPagePage>();
             MixPagePageMixPageNavigation = new HashSet<MixPagePage>();
@@ -46,11 +48,12 @@ namespace Mix.Cms.Lib.Models.Cms
         public int? PageSize { get; set; }
         public string ExtraFields { get; set; }
 
-        public virtual MixAttributeSet SetAttribute { get; set; }
-        public virtual MixSetAttribute SetAttributeNavigation { get; set; }
+        public virtual MixSetAttribute SetAttribute { get; set; }
         public virtual MixCulture SpecificultureNavigation { get; set; }
+        public virtual ICollection<MixModuleData> MixModuleData { get; set; }
         public virtual ICollection<MixPageArticle> MixPageArticle { get; set; }
         public virtual ICollection<MixPageAttributeData> MixPageAttributeData { get; set; }
+        public virtual ICollection<MixPageAttributeSet> MixPageAttributeSet { get; set; }
         public virtual ICollection<MixPageModule> MixPageModule { get; set; }
         public virtual ICollection<MixPagePage> MixPagePageMixPage { get; set; }
         public virtual ICollection<MixPagePage> MixPagePageMixPageNavigation { get; set; }

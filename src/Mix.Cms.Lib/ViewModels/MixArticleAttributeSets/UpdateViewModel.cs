@@ -1,25 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.ViewModels.MixModules;
+using Mix.Cms.Lib.ViewModels.MixAttributeSets;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 
-namespace Mix.Cms.Lib.ViewModels.MixArticleModules
+namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeSets
 {
-    public class ReadViewModel
-       : ViewModelBase<MixCmsContext, MixArticleModule, ReadViewModel>
+    public class UpdateViewModel
+       : ViewModelBase<MixCmsContext, MixArticleAttributeSet, UpdateViewModel>
     {
-        public ReadViewModel(MixArticleModule model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public UpdateViewModel(MixArticleAttributeSet model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
 
-        public ReadViewModel() : base()
+        public UpdateViewModel() : base()
         {
         }
 
-        [JsonProperty("moduleId")]
-        public int ModuleId { get; set; }
+        [JsonProperty("attributeSetId")]
+        public int AttributeSetId { get; set; }
 
         [JsonProperty("articleId")]
         public int ArticleId { get; set; }
@@ -37,7 +37,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleModules
         public MixEnums.MixContentStatus Status { get; set; }
         #region Views
         [JsonProperty("module")]
-        public MixModules.ReadMvcViewModel Module { get; set; }
+        public MixAttributeSets.ReadViewModel AttributeSet { get; set; }
 
         #endregion Views
 
@@ -45,12 +45,11 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleModules
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getModule = MixModules.ReadMvcViewModel.Repository.GetSingleModel(p => p.Id == ModuleId && p.Specificulture == Specificulture
-                , _context: _context, _transaction: _transaction
+            var getAttributeSet = MixAttributeSets.ReadViewModel.Repository.GetSingleModel(p => p.Id == AttributeSetId, _context: _context, _transaction: _transaction
             );
-            if (getModule.IsSucceed)
+            if (getAttributeSet.IsSucceed)
             {
-                Module = getModule.Data;
+                AttributeSet = getAttributeSet.Data;
             }
         }
 

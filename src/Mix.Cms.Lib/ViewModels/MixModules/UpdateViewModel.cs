@@ -417,7 +417,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 case MixModuleType.SubPage:
                     getDataResult = MixModuleDatas.ReadViewModel.Repository
                        .GetModelListBy(m => m.ModuleId == Id && m.Specificulture == Specificulture
-                       && (m.CategoryId == categoryId)
+                       && (m.PageId == categoryId)
                        , "Priority", 0, pageSize, pageIndex
                        , _context, _transaction);
                     break;
@@ -429,14 +429,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                        , "Priority", 0, pageSize, pageIndex
                        , _context, _transaction);
                     break;
-                case MixModuleType.SubProduct:
-                    getDataResult = MixModuleDatas.ReadViewModel.Repository
-                       .GetModelListBy(m => m.ModuleId == Id && m.Specificulture == Specificulture
-                       && (m.ProductId == productId)
-                       , "Priority", 0, pageSize, pageIndex
-                       , _context, _transaction);
-                    break;
-
                 default:
                     break;
             }

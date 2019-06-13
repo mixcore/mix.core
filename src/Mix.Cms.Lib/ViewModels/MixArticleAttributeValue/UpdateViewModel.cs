@@ -3,11 +3,12 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
 {
-    public class ReadViewModel
-      : ViewModelBase<MixCmsContext, MixArticleAttributeValue, ReadViewModel>
+    public class UpdateViewModel
+      : ViewModelBase<MixCmsContext, MixArticleAttributeValue, UpdateViewModel>
     {
         #region Properties
 
@@ -39,19 +40,32 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
 
         #endregion Models
 
-       
+        #region Views
+        [JsonProperty("fields")]
+        public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
+        #endregion
+
         #endregion Properties
 
         #region Contructors
 
-        public ReadViewModel() : base()
+        public UpdateViewModel() : base()
         {
         }
 
-        public ReadViewModel(MixArticleAttributeValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public UpdateViewModel(MixArticleAttributeValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
         #endregion Contructors
+
+        #region Overrides
+
+        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == Id).Data;
+        }
+
+        #endregion
     }
 }

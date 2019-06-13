@@ -26,8 +26,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         public DateTime CreatedDateTime { get; set; }
         [JsonProperty("status")]
         public int Status { get; set; }
-        [JsonProperty("updatedDateTime")]
-        public DateTime? UpdatedDateTime { get; set; }
 
         #endregion Models
         #endregion Properties
@@ -43,5 +41,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         }
 
         #endregion Contructors
+
+
     }
 }

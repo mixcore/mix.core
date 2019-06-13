@@ -8,6 +8,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Id { get; set; }
         public string Specificulture { get; set; }
         public int ModuleId { get; set; }
+        public int DataType { get; set; }
         public int Priority { get; set; }
         public int Status { get; set; }
         public string AttributeName { get; set; }
