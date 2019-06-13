@@ -7,7 +7,6 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixPageModule()
         {
-            MixModuleAttributeSet = new HashSet<MixModuleAttributeSet>();
             MixModuleData = new HashSet<MixModuleData>();
         }
 
@@ -22,7 +21,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
         public virtual MixModule MixModule { get; set; }
         public virtual MixPage MixPage { get; set; }
-        public virtual ICollection<MixModuleAttributeSet> MixModuleAttributeSet { get; set; }
         public virtual ICollection<MixModuleData> MixModuleData { get; set; }
     }
 }

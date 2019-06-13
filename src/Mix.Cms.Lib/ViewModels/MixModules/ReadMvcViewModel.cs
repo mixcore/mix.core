@@ -236,15 +236,12 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                         break;
 
                     case MixModuleType.SubPage:
-                        dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture && (m.CategoryId == categoryId);
+                        dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture && (m.PageId == categoryId);
                         articleExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
                         break;
 
                     case MixModuleType.SubArticle:
                         dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture && (m.ArticleId == articleId);
-                        break;
-                    case MixModuleType.SubProduct:
-                        dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture && (m.ProductId == productId);
                         break;
                     case MixModuleType.ListArticle:
                         articleExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;

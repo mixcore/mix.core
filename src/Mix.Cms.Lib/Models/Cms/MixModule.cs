@@ -35,9 +35,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public int? PageSize { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public DateTime? LastModified { get; set; }
-        public int? SetAttributeId { get; set; }
 
-        public virtual MixAttributeSet SetAttribute { get; set; }
         public virtual MixCulture SpecificultureNavigation { get; set; }
         public virtual ICollection<MixArticleModule> MixArticleModule { get; set; }
         public virtual ICollection<MixModuleArticle> MixModuleArticle { get; set; }

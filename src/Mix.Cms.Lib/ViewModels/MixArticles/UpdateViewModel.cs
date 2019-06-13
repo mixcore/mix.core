@@ -123,6 +123,9 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         [JsonProperty("articleNavs")]
         public List<MixArticleArticles.ReadViewModel> ArticleNavs { get; set; }
 
+        [JsonProperty("attributeSetNavs")]
+        public List<MixArticleAttributeSets.UpdateViewModel> AttributeSetNavs { get; set; }
+
         [JsonProperty("listTag")]
         public JArray ListTag { get; set; } = new JArray();
 
@@ -253,140 +256,28 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 ListTag = JArray.Parse(this.Tags);
             }
 
-            // Parsing Extra Properties fields
-            Columns = new List<ModuleFieldViewModel>();
-            JArray arrField = !string.IsNullOrEmpty(ExtraFields) ? JArray.Parse(ExtraFields) : new JArray();
-            foreach (var field in arrField)
-            {
-                ModuleFieldViewModel thisField = new ModuleFieldViewModel()
-                {
-                    Name = CommonHelper.ParseJsonPropertyName(field["name"].ToString()),
-                    Title = field["title"]?.ToString(),
-                    DefaultValue = field["defaultValue"]?.ToString(),
-                    Options = field["options"] != null ? field["options"].Value<JArray>() : new JArray(),
-                    Priority = field["priority"] != null ? field["priority"].Value<int>() : 0,
-                    DataType = (MixDataType)(int)field["dataType"],
-                    Width = field["width"] != null ? field["width"].Value<int>() : 3,
-                    IsUnique = field["isUnique"] != null ? field["isUnique"].Value<bool>() : true,
-                    IsRequired = field["isRequired"] != null ? field["isRequired"].Value<bool>() : true,
-                    IsDisplay = field["isDisplay"] != null ? field["isDisplay"].Value<bool>() : true,
-                    IsSelect = field["isSelect"] != null ? field["isSelect"].Value<bool>() : false,
-                    IsGroupBy = field["isGroupBy"] != null ? field["isGroupBy"].Value<bool>() : false,
-                };
-                Columns.Add(thisField);
-            }
+            AttributeSetNavs = MixArticleAttributeSets.UpdateViewModel.Repository.GetModelListBy(
+                    a => a.ArticleId == Id, _context, _transaction).Data;
 
-            // Parsing Extra Properties value
-            Properties = new List<ExtraProperty>();
+            LoadExtraProperties();
 
-            if (!string.IsNullOrEmpty(ExtraProperties))
-            {
-                JArray arr = JArray.Parse(ExtraProperties);
-                foreach (JToken item in arr)
-                {
-                    var property = item.ToObject<ExtraProperty>();
-                    Properties.Add(property);
-                }
-            }
             //Get Templates
-            this.Templates = this.Templates ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
-                t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
-            View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Articles, _context, _transaction);
+            LoadTemplates(_context, _transaction);
 
-            this.Template = CommonHelper.GetFullPath(new string[]
-               {
-                    this.View?.FileFolder
-                    , this.View?.FileName
-               });
+            LoadParentPage(_context,_transaction);
 
-            var getPageArticle = MixPageArticles.ReadViewModel.GetPageArticleNavAsync(Id, Specificulture, _context, _transaction);
-            if (getPageArticle.IsSucceed)
-            {
-                this.Pages = getPageArticle.Data;
-                this.Pages.ForEach(c =>
-                {
-                    c.IsActived = MixPageArticles.ReadViewModel.Repository.CheckIsExists(n => n.CategoryId == c.CategoryId && n.ArticleId == Id, _context, _transaction);
-                });
-            }
-
-            var getModuleArticle = MixModuleArticles.ReadViewModel.GetModuleArticleNavAsync(Id, Specificulture, _context, _transaction);
-            if (getModuleArticle.IsSucceed)
-            {
-                this.Modules = getModuleArticle.Data;
-                this.Modules.ForEach(c =>
-                {
-                    c.IsActived = MixModuleArticles.ReadViewModel.Repository.CheckIsExists(n => n.ModuleId == c.ModuleId && n.ArticleId == Id, _context, _transaction);
-                });
-            }
-            var otherModules = MixModules.ReadListItemViewModel.Repository.GetModelListBy(
-                m => (m.Type == (int)MixEnums.MixModuleType.Content || m.Type == (int)MixEnums.MixModuleType.ListArticle)
-                && m.Specificulture == Specificulture
-                && !Modules.Any(n => n.ModuleId == m.Id && n.Specificulture == m.Specificulture)
-                , "CreatedDateTime", 1, null, 0, _context, _transaction);
-            foreach (var item in otherModules.Data.Items)
-            {
-                Modules.Add(new MixModuleArticles.ReadViewModel()
-                {
-                    ModuleId = item.Id,
-                    Image = item.Image,
-                    ArticleId = Id,
-                    Description = Title
-                });
-            }
+            LoadParentModules(_context, _transaction);
 
             // Medias
-            var getArticleMedia = MixArticleMedias.ReadViewModel.Repository.GetModelListBy(n => n.ArticleId == Id && n.Specificulture == Specificulture, _context, _transaction);
-            if (getArticleMedia.IsSucceed)
-            {
-                MediaNavs = getArticleMedia.Data.OrderBy(p => p.Priority).ToList();
-                MediaNavs.ForEach(n => n.IsActived = true);
-            }
-            // Modules
-            var getArticleModule = MixArticleModules.ReadViewModel.Repository.GetModelListBy(
-                n => n.ArticleId == Id && n.Specificulture == Specificulture, _context, _transaction);
-            if (getArticleModule.IsSucceed)
-            {
-                ModuleNavs = getArticleModule.Data.OrderBy(p => p.Priority).ToList();
-                foreach (var item in ModuleNavs)
-                {
-                    item.IsActived = true;
-                    item.Module.LoadData(articleId: Id, _context: _context, _transaction: _transaction);
-                }
-            }
-            var otherModuleNavs = MixModules.ReadMvcViewModel.Repository.GetModelListBy(
-                m => (m.Type == (int)MixEnums.MixModuleType.SubArticle) && m.Specificulture == Specificulture
-                && !ModuleNavs.Any(n => n.ModuleId == m.Id), "CreatedDateTime", 1, null, 0, _context, _transaction);
-            foreach (var item in otherModuleNavs.Data.Items)
-            {
-                item.LoadData(articleId: Id, _context: _context, _transaction: _transaction);
-                ModuleNavs.Add(new MixArticleModules.ReadViewModel()
-                {
-                    ModuleId = item.Id,
-                    Image = item.Image,
-                    ArticleId = Id,
-                    Description = item.Title,
-                    Module = item
-                });
-            }
+            LoadMedias(_context, _transaction);
+
+            // Sub Modules
+            LoadSubModules(_context, _transaction);
 
             // Related Articles
-            ArticleNavs = GetRelated(_context, _transaction);
-            var otherArticles = MixArticles.ReadListItemViewModel.Repository.GetModelListBy(
-                m => m.Id != Id && m.Specificulture == Specificulture
-                    && !ArticleNavs.Any(n => n.SourceId == Id)
-                    , "CreatedDateTime", 1, 10, 0, _context, _transaction);
-            foreach (var item in otherArticles.Data.Items)
-            {
-                ArticleNavs.Add(new MixArticleArticles.ReadViewModel()
-                {
-                    SourceId = Id,
-                    Image = item.ImageUrl,
-                    DestinationId = item.Id,
-                    Description = item.Title
-                });
-            }
+            LoadRelatedArticle(_context, _transaction);
         }
-
+        
         public override MixArticle ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)
@@ -983,6 +874,161 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         #endregion Overrides
 
         #region Expands
+
+        private void LoadRelatedArticle(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            ArticleNavs = GetRelated(_context, _transaction);
+            var otherArticles = MixArticles.ReadListItemViewModel.Repository.GetModelListBy(
+                m => m.Id != Id && m.Specificulture == Specificulture
+                    && !ArticleNavs.Any(n => n.SourceId == Id)
+                    , "CreatedDateTime", 1, 10, 0, _context, _transaction);
+            foreach (var item in otherArticles.Data.Items)
+            {
+                ArticleNavs.Add(new MixArticleArticles.ReadViewModel()
+                {
+                    SourceId = Id,
+                    Image = item.ImageUrl,
+                    DestinationId = item.Id,
+                    Description = item.Title
+                });
+            }
+        }
+
+        private void LoadSubModules(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var getArticleModule = MixArticleModules.ReadViewModel.Repository.GetModelListBy(
+                n => n.ArticleId == Id && n.Specificulture == Specificulture, _context, _transaction);
+            if (getArticleModule.IsSucceed)
+            {
+                ModuleNavs = getArticleModule.Data.OrderBy(p => p.Priority).ToList();
+                foreach (var item in ModuleNavs)
+                {
+                    item.IsActived = true;
+                    item.Module.LoadData(articleId: Id, _context: _context, _transaction: _transaction);
+                }
+            }
+            var otherModuleNavs = MixModules.ReadMvcViewModel.Repository.GetModelListBy(
+                m => (m.Type == (int)MixEnums.MixModuleType.SubArticle) && m.Specificulture == Specificulture
+                && !ModuleNavs.Any(n => n.ModuleId == m.Id), "CreatedDateTime", 1, null, 0, _context, _transaction);
+            foreach (var item in otherModuleNavs.Data.Items)
+            {
+                item.LoadData(articleId: Id, _context: _context, _transaction: _transaction);
+                ModuleNavs.Add(new MixArticleModules.ReadViewModel()
+                {
+                    ModuleId = item.Id,
+                    Image = item.Image,
+                    ArticleId = Id,
+                    Description = item.Title,
+                    Module = item
+                });
+            }
+        }
+
+        private void LoadMedias(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var getArticleMedia = MixArticleMedias.ReadViewModel.Repository.GetModelListBy(n => n.ArticleId == Id && n.Specificulture == Specificulture, _context, _transaction);
+            if (getArticleMedia.IsSucceed)
+            {
+                MediaNavs = getArticleMedia.Data.OrderBy(p => p.Priority).ToList();
+                MediaNavs.ForEach(n => n.IsActived = true);
+            }
+        }
+
+        private void LoadParentModules(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var getModuleArticle = MixModuleArticles.ReadViewModel.GetModuleArticleNavAsync(Id, Specificulture, _context, _transaction);
+            if (getModuleArticle.IsSucceed)
+            {
+                this.Modules = getModuleArticle.Data;
+                this.Modules.ForEach(c =>
+                {
+                    c.IsActived = MixModuleArticles.ReadViewModel.Repository.CheckIsExists(n => n.ModuleId == c.ModuleId && n.ArticleId == Id, _context, _transaction);
+                });
+            }
+            var otherModules = MixModules.ReadListItemViewModel.Repository.GetModelListBy(
+                m => (m.Type == (int)MixEnums.MixModuleType.Content || m.Type == (int)MixEnums.MixModuleType.ListArticle)
+                && m.Specificulture == Specificulture
+                && !Modules.Any(n => n.ModuleId == m.Id && n.Specificulture == m.Specificulture)
+                , "CreatedDateTime", 1, null, 0, _context, _transaction);
+            foreach (var item in otherModules.Data.Items)
+            {
+                Modules.Add(new MixModuleArticles.ReadViewModel()
+                {
+                    ModuleId = item.Id,
+                    Image = item.Image,
+                    ArticleId = Id,
+                    Description = Title
+                });
+            }
+
+        }
+
+        private void LoadParentPage(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var getPageArticle = MixPageArticles.ReadViewModel.GetPageArticleNavAsync(Id, Specificulture, _context, _transaction);
+            if (getPageArticle.IsSucceed)
+            {
+                this.Pages = getPageArticle.Data;
+                this.Pages.ForEach(c =>
+                {
+                    c.IsActived = MixPageArticles.ReadViewModel.Repository.CheckIsExists(n => n.CategoryId == c.CategoryId && n.ArticleId == Id, _context, _transaction);
+                });
+            }
+        }
+
+        private void LoadTemplates(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            this.Templates = this.Templates ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
+                t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
+            View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Articles, _context, _transaction);
+
+            this.Template = CommonHelper.GetFullPath(new string[]
+               {
+                    this.View?.FileFolder
+                    , this.View?.FileName
+               });
+
+        }
+
+        private void LoadExtraProperties()
+        {
+            // Parsing Extra Properties fields
+            Columns = new List<ModuleFieldViewModel>();
+            JArray arrField = !string.IsNullOrEmpty(ExtraFields) ? JArray.Parse(ExtraFields) : new JArray();
+            foreach (var field in arrField)
+            {
+                ModuleFieldViewModel thisField = new ModuleFieldViewModel()
+                {
+                    Name = CommonHelper.ParseJsonPropertyName(field["name"].ToString()),
+                    Title = field["title"]?.ToString(),
+                    DefaultValue = field["defaultValue"]?.ToString(),
+                    Options = field["options"] != null ? field["options"].Value<JArray>() : new JArray(),
+                    Priority = field["priority"] != null ? field["priority"].Value<int>() : 0,
+                    DataType = (MixDataType)(int)field["dataType"],
+                    Width = field["width"] != null ? field["width"].Value<int>() : 3,
+                    IsUnique = field["isUnique"] != null ? field["isUnique"].Value<bool>() : true,
+                    IsRequired = field["isRequired"] != null ? field["isRequired"].Value<bool>() : true,
+                    IsDisplay = field["isDisplay"] != null ? field["isDisplay"].Value<bool>() : true,
+                    IsSelect = field["isSelect"] != null ? field["isSelect"].Value<bool>() : false,
+                    IsGroupBy = field["isGroupBy"] != null ? field["isGroupBy"].Value<bool>() : false,
+                };
+                Columns.Add(thisField);
+            }
+
+            // Parsing Extra Properties value
+            Properties = new List<ExtraProperty>();
+
+            if (!string.IsNullOrEmpty(ExtraProperties))
+            {
+                JArray arr = JArray.Parse(ExtraProperties);
+                foreach (JToken item in arr)
+                {
+                    var property = item.ToObject<ExtraProperty>();
+                    Properties.Add(property);
+                }
+            }
+        }
+
         List<SupportedCulture> LoadCultures(string initCulture = null, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getCultures = SystemCultureViewModel.Repository.GetModelList(_context, _transaction);

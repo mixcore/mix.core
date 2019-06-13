@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixModuleAttributeSet
+    public partial class MixPageAttributeSet
     {
-        public int ModuleId { get; set; }
+        public int PageId { get; set; }
         public string Specificulture { get; set; }
         public int AttributeSetId { get; set; }
         public string Description { get; set; }
@@ -14,7 +14,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Status { get; set; }
 
         public virtual MixAttributeSet AttributeSet { get; set; }
-        public virtual MixArticleModule MixArticleModule { get; set; }
-        public virtual MixModule MixModule { get; set; }
+        public virtual MixPage MixPage { get; set; }
     }
 }

@@ -8,10 +8,12 @@ namespace Mix.Cms.Lib.Models.Cms
         public MixArticle()
         {
             MixArticleAttributeData = new HashSet<MixArticleAttributeData>();
+            MixArticleAttributeSet = new HashSet<MixArticleAttributeSet>();
             MixArticleMedia = new HashSet<MixArticleMedia>();
             MixArticleModule = new HashSet<MixArticleModule>();
             MixComment = new HashSet<MixComment>();
             MixModuleArticle = new HashSet<MixModuleArticle>();
+            MixModuleData = new HashSet<MixModuleData>();
             MixPageArticle = new HashSet<MixPageArticle>();
             MixRelatedArticleMixArticle = new HashSet<MixRelatedArticle>();
             MixRelatedArticleS = new HashSet<MixRelatedArticle>();
@@ -46,14 +48,15 @@ namespace Mix.Cms.Lib.Models.Cms
         public int? Views { get; set; }
         public string ExtraFields { get; set; }
 
-        public virtual MixAttributeSet SetAttribute { get; set; }
-        public virtual MixSetAttribute SetAttributeNavigation { get; set; }
+        public virtual MixSetAttribute SetAttribute { get; set; }
         public virtual MixCulture SpecificultureNavigation { get; set; }
         public virtual ICollection<MixArticleAttributeData> MixArticleAttributeData { get; set; }
+        public virtual ICollection<MixArticleAttributeSet> MixArticleAttributeSet { get; set; }
         public virtual ICollection<MixArticleMedia> MixArticleMedia { get; set; }
         public virtual ICollection<MixArticleModule> MixArticleModule { get; set; }
         public virtual ICollection<MixComment> MixComment { get; set; }
         public virtual ICollection<MixModuleArticle> MixModuleArticle { get; set; }
+        public virtual ICollection<MixModuleData> MixModuleData { get; set; }
         public virtual ICollection<MixPageArticle> MixPageArticle { get; set; }
         public virtual ICollection<MixRelatedArticle> MixRelatedArticleMixArticle { get; set; }
         public virtual ICollection<MixRelatedArticle> MixRelatedArticleS { get; set; }

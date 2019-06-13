@@ -246,14 +246,13 @@ namespace Mix.Cms.Api.Controllers.v1
             int.TryParse(query.Get("module_id"), out int moduleId);
             int.TryParse(query.Get("article_id"), out int articleId);
             int.TryParse(query.Get("product_id"), out int productId);
-            int.TryParse(query.Get("category_id"), out int categoryId);
+            int.TryParse(query.Get("category_id"), out int pageId);
             string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
             Expression<Func<MixModuleData, bool>> predicate = model =>
                 model.Specificulture == _lang
                 && model.ModuleId == moduleId
                 && (articleId == 0 || model.ArticleId == articleId)
-                && (productId == 0 || model.ProductId == productId)
-                && (categoryId == 0 || model.CategoryId == categoryId)
+                && (pageId == 0 || model.PageId == pageId)
                 && (!request.FromDate.HasValue
                     || (model.CreatedDateTime >= request.FromDate.Value.ToUniversalTime())
                 )
@@ -282,14 +281,13 @@ namespace Mix.Cms.Api.Controllers.v1
             int.TryParse(query.Get("module_id"), out int moduleId);
             int.TryParse(query.Get("article_id"), out int articleId);
             int.TryParse(query.Get("product_id"), out int productId);
-            int.TryParse(query.Get("category_id"), out int categoryId);
+            int.TryParse(query.Get("category_id"), out int pageId);
             string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
             Expression<Func<MixModuleData, bool>> predicate = model =>
                 model.Specificulture == _lang
                 && model.ModuleId == moduleId
                 && (articleId==0 || model.ArticleId == articleId)
-                && (productId == 0 || model.ProductId == productId)
-                && (categoryId == 0 || model.CategoryId == categoryId)
+                && (pageId == 0 || model.PageId == pageId)
                 && (!request.FromDate.HasValue
                     || (model.CreatedDateTime >= request.FromDate.Value.ToUniversalTime())
                 )

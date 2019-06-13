@@ -14,10 +14,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Specificulture { get; set; }
         public int PageId { get; set; }
         public DateTime CreatedDateTime { get; set; }
-        public string Value { get; set; }
-        public string Fields { get; set; }
         public int Priority { get; set; }
-        public int? ProductId { get; set; }
         public int Status { get; set; }
         public DateTime? UpdatedDateTime { get; set; }
 
