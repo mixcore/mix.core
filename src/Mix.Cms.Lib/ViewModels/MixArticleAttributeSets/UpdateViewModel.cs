@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixAttributeSets;
+using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 
@@ -36,8 +38,8 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeSets
         [JsonProperty("status")]
         public MixEnums.MixContentStatus Status { get; set; }
         #region Views
-        [JsonProperty("module")]
-        public MixAttributeSets.ReadViewModel AttributeSet { get; set; }
+        [JsonProperty("attributeSet")]
+        public MixAttributeSets.ContentUpdateViewModel AttributeSet { get; set; }
 
         #endregion Views
 
@@ -45,7 +47,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeSets
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getAttributeSet = MixAttributeSets.ReadViewModel.Repository.GetSingleModel(p => p.Id == AttributeSetId, _context: _context, _transaction: _transaction
+            var getAttributeSet = MixAttributeSets.ContentUpdateViewModel.Repository.GetSingleModel(p => p.Id == AttributeSetId, _context: _context, _transaction: _transaction
             );
             if (getAttributeSet.IsSucceed)
             {
@@ -54,6 +56,16 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeSets
         }
 
         #region Async
+
+        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixArticleAttributeSet parent, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+
+            //Save current set attribute
+            var saveResult = await AttributeSet.SaveModelAsync(true, _context, _transaction);
+            ViewModelHelper.HandleResult(saveResult, ref result);
+            return result;
+        }
 
         #endregion Async
 

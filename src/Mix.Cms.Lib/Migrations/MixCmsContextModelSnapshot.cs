@@ -70,10 +70,6 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("SeoTitle")
                         .HasMaxLength(4000);
 
-                    b.Property<string>("SetAttributeData");
-
-                    b.Property<int?>("SetAttributeId");
-
                     b.Property<string>("Source")
                         .HasMaxLength(250);
 
@@ -97,8 +93,6 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasKey("Id", "Specificulture");
 
-                    b.HasIndex("SetAttributeId");
-
                     b.HasIndex("Specificulture");
 
                     b.ToTable("mix_article");
@@ -111,6 +105,8 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("ArticleId");
 
+                    b.Property<int>("AttributeSetId");
+
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
@@ -121,9 +117,6 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(10);
 
                     b.Property<int>("Status");
-
-                    b.Property<DateTime?>("UpdatedDateTime")
-                        .HasColumnType("datetime");
 
                     b.HasKey("Id");
 
@@ -184,6 +177,14 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<double?>("DoubleValue");
+
+                    b.Property<string>("EncryptKey")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("EncryptType");
+
+                    b.Property<string>("EncryptValue")
+                        .HasMaxLength(4000);
 
                     b.Property<int?>("IntegerValue");
 
@@ -942,6 +943,14 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<double?>("DoubleValue");
 
+                    b.Property<string>("EncryptKey")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("EncryptType");
+
+                    b.Property<string>("EncryptValue")
+                        .HasMaxLength(4000);
+
                     b.Property<int?>("IntegerValue");
 
                     b.Property<int>("ModuleId");
@@ -1162,10 +1171,6 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("SeoTitle")
                         .HasMaxLength(4000);
 
-                    b.Property<string>("SetAttributeData");
-
-                    b.Property<int?>("SetAttributeId");
-
                     b.Property<string>("StaticUrl")
                         .HasMaxLength(250);
 
@@ -1185,8 +1190,6 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<int?>("Views");
 
                     b.HasKey("Id", "Specificulture");
-
-                    b.HasIndex("SetAttributeId");
 
                     b.HasIndex("Specificulture");
 
@@ -1226,6 +1229,8 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(50);
+
+                    b.Property<int>("AttributeSetId");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -1298,6 +1303,14 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<double?>("DoubleValue");
+
+                    b.Property<string>("EncryptKey")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("EncryptType");
+
+                    b.Property<string>("EncryptValue")
+                        .HasMaxLength(4000);
 
                     b.Property<int?>("IntegerValue");
 
@@ -1957,11 +1970,6 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixArticle", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixSetAttribute", "SetAttribute")
-                        .WithMany("MixArticle")
-                        .HasForeignKey("SetAttributeId")
-                        .HasConstraintName("FK_mix_article_mix_set_attribute");
-
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixCulture", "SpecificultureNavigation")
                         .WithMany("MixArticle")
                         .HasForeignKey("Specificulture")
@@ -1979,7 +1987,7 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixArticleAttributeSet", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "MixAttributeSet")
                         .WithMany("MixArticleAttributeSet")
                         .HasForeignKey("AttributeSetId")
                         .HasConstraintName("FK_mix_article_attribute_set_mix_attribute_set");
@@ -2027,7 +2035,7 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeField", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "MixAttributeSet")
                         .WithMany("MixAttributeField")
                         .HasForeignKey("AttributeSetId")
                         .HasConstraintName("FK_mix_attribute_field_mix_attribute_set");
@@ -2104,7 +2112,7 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleAttributeData", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "MixAttributeSet")
                         .WithMany("MixModuleAttributeData")
                         .HasForeignKey("AttributeSetId")
                         .HasConstraintName("FK_mix_module_attribute_data_mix_attribute_set");
@@ -2117,7 +2125,7 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleAttributeSet", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "MixAttributeSet")
                         .WithMany("MixModuleAttributeSet")
                         .HasForeignKey("AttributeSetId")
                         .HasConstraintName("FK_mix_module_attribute_set_mix_attribute_set");
@@ -2201,11 +2209,6 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPage", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixSetAttribute", "SetAttribute")
-                        .WithMany("MixPage")
-                        .HasForeignKey("SetAttributeId")
-                        .HasConstraintName("FK_mix_page_mix_set_attribute");
-
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixCulture", "SpecificultureNavigation")
                         .WithMany("MixPage")
                         .HasForeignKey("Specificulture")
@@ -2236,7 +2239,7 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageAttributeSet", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "MixAttributeSet")
                         .WithMany("MixPageAttributeSet")
                         .HasForeignKey("AttributeSetId")
                         .HasConstraintName("FK_mix_page_attribute_set_mix_attribute_set");

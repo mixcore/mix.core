@@ -12,6 +12,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
         public string Id { get; set; }
         public string Specificulture { get; set; }
+        public int AttributeSetId { get; set; }
         public int PageId { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public int Priority { get; set; }

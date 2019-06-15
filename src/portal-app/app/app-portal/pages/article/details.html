@@ -56,7 +56,7 @@
                     </pane-v>
 
                 </tabs-v>
-
+                <article-attribute-sets article="activedData"></article-attribute-sets>
                 <template-editor folder-type="'Articles'" template="activedData.view" templates="activedData.templates">
                 </template-editor>
                 <!-- <div class="card mb-3">
@@ -189,8 +189,8 @@
 
                 <actions preview-url="activedData.detailsUrl" back-url="referrerUrl"></actions>
                 <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
-
-                <collape-container title="'URL slugs'" actived-data="activedData" add-callback="addAlias()">
+                
+                <collape-container title="'URL slugs'" actived-data="activedData">
                     <pane-collape>
                         <url-alias ng-repeat="alias in activedData.urlAliases" index="$index" url-alias="alias"
                             remove-callback="removeAliasCallback(index)"></url-alias>

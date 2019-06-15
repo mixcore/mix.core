@@ -269,7 +269,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         result.Errors.AddRange(tmp.Errors);
                     }
                 }
-                MixCacheService.RemoveCacheAsync();
+                Task.Run(()=> MixCacheService.RemoveCacheAsync());
                 return result;
             }
             return result;

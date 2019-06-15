@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -35,6 +36,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         #region Views
         [JsonProperty("attributes")]
         public List<MixAttributeFields.UpdateViewModel> Attributes { get; set; }
+
+        [JsonProperty("articleData")]
+        public PaginationModel<MixArticleAttributeDatas.UpdateViewModel> ArticleData { get;set;}
         #endregion
         #endregion Properties
         #region Contructors
@@ -106,6 +110,24 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
                 }
             }
             return result;
+        }
+        #endregion
+
+        #region Expand
+        public void LoadArticleData(int articleId, string specificulture, int? pageSize = null, int? pageIndex = 0
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var getData = MixArticleAttributeDatas.UpdateViewModel.Repository
+            .GetModelListBy(
+                m => m.ArticleId == articleId && m.Specificulture == specificulture
+                , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+                , pageSize, pageIndex
+                , _context: _context, _transaction: _transaction);
+            if (!getData.IsSucceed || getData.Data == null || ArticleData.TotalItems == 0)
+            {
+                ArticleData = new PaginationModel<MixArticleAttributeDatas.UpdateViewModel>() { TotalItems = 1};
+                ArticleData.Items.Add(new MixArticleAttributeDatas.UpdateViewModel(Id, Attributes));
+            }
         }
         #endregion
     }
