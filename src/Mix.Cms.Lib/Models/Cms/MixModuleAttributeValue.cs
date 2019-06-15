@@ -19,6 +19,9 @@ namespace Mix.Cms.Lib.Models.Cms
         public double? DoubleValue { get; set; }
         public int? IntegerValue { get; set; }
         public string StringValue { get; set; }
+        public string EncryptValue { get; set; }
+        public string EncryptKey { get; set; }
+        public int EncryptType { get; set; }
 
         public virtual MixModuleAttributeData Data { get; set; }
     }

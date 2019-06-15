@@ -35,6 +35,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         #region Views
         [JsonProperty("attributes")]
         public List<MixAttributeFields.UpdateViewModel> Attributes { get; set; }
+
+        [JsonProperty("articleData")]
+        public PaginationModel<MixArticleAttributeValues.UpdateViewModel> ArticleData { get;set;}
         #endregion
         #endregion Properties
         #region Contructors
