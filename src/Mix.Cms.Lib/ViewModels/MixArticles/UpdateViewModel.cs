@@ -256,16 +256,19 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 ListTag = JArray.Parse(this.Tags);
             }
 
-            AttributeSetNavs = MixArticleAttributeSets.UpdateViewModel.Repository.GetModelListBy(
-                    a => a.ArticleId == Id, _context, _transaction).Data;
-
+            // Load Properties
             LoadExtraProperties();
+
+            // Load Attribute Sets
+            LoadAttributeSets(_context, _transaction);
 
             //Get Templates
             LoadTemplates(_context, _transaction);
 
+            // Load Parent Pages
             LoadParentPage(_context,_transaction);
 
+            // Load Parent Modules
             LoadParentModules(_context, _transaction);
 
             // Medias
@@ -344,7 +347,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         }
 
         #region Async Methods
-
+        #region Save Sub Models Async
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(
             MixArticle parent
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -355,178 +358,45 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 // Save Template
                 var saveTemplate = await View.SaveModelAsync(true, _context, _transaction);
                 result.IsSucceed = result.IsSucceed && saveTemplate.IsSucceed;
-                if (!saveTemplate.IsSucceed)
-                {
-                    result.Errors.AddRange(saveTemplate.Errors);
-                    result.Exception = saveTemplate.Exception;
-                }
-                if (result.IsSucceed)
-                {
-                    foreach (var item in UrlAliases)
-                    {
-                        item.SourceId = parent.Id.ToString();
-                        item.Type = MixEnums.UrlAliasType.Article;
-                        item.Specificulture = Specificulture;
-                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Exception = saveResult.Exception;
-                            result.Errors.AddRange(saveResult.Errors);
-                            break;
-                        }
-                    }
-                }
-                if (result.IsSucceed)
-                {
-                    foreach (var navMedia in MediaNavs)
-                    {
-                        navMedia.ArticleId = parent.Id;
-                        navMedia.Specificulture = parent.Specificulture;
+                ViewModelHelper.HandleResult(saveTemplate, ref result);
 
-                        if (navMedia.IsActived)
-                        {
-                            var saveResult = await navMedia.SaveModelAsync(false, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Exception = saveResult.Exception;
-                                Errors.AddRange(saveResult.Errors);
-                            }
-                        }
-                        else
-                        {
-                            var saveResult = await navMedia.RemoveModelAsync(false, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Exception = saveResult.Exception;
-                                Errors.AddRange(saveResult.Errors);
-                            }
-                        }
-                    }
+                if (result.IsSucceed)
+                {
+                    // Save Alias
+                    result = await SaveUrlAliasAsync(parent.Id, _context, _transaction);
                 }
                 if (result.IsSucceed)
                 {
-                    foreach (var navModule in ModuleNavs)
-                    {
-                        navModule.ArticleId = parent.Id;
-                        navModule.Specificulture = parent.Specificulture;
-                        navModule.Status = MixEnums.MixContentStatus.Published;
-                        if (navModule.IsActived)
-                        {
-                            var saveResult = await navModule.SaveModelAsync(false, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Exception = saveResult.Exception;
-                                Errors.AddRange(saveResult.Errors);
-                            }
-                        }
-                        else
-                        {
-                            var saveResult = await navModule.RemoveModelAsync(false, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Exception = saveResult.Exception;
-                                Errors.AddRange(saveResult.Errors);
-                            }
-                        }
-                    }
+                    // Save Medias
+                    result = await SaveMediasAsync(parent.Id, _context, _transaction);
+                }
+                if (result.IsSucceed)
+                {
+                    // Save Sub Modules
+                    result = await SaveSubModulesAsync(parent.Id, _context, _transaction);
                 }
 
                 if (result.IsSucceed)
                 {
-                    foreach (var navArticle in ArticleNavs)
-                    {
-                        navArticle.SourceId = parent.Id;
-                        navArticle.Status = MixEnums.MixContentStatus.Published;
-                        navArticle.Specificulture = parent.Specificulture;
-                        if (navArticle.IsActived)
-                        {
-                            var saveResult = await navArticle.SaveModelAsync(false, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Exception = saveResult.Exception;
-                                Errors.AddRange(saveResult.Errors);
-                            }
-                        }
-                        else
-                        {
-                            var saveResult = await navArticle.RemoveModelAsync(false, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Exception = saveResult.Exception;
-                                Errors.AddRange(saveResult.Errors);
-                            }
-                        }
-                    }
+                    // Save related articles
+                    result = await SaveRelatedArticleAsync(parent.Id, _context, _transaction);
                 }
                 if (result.IsSucceed)
                 {
                     // Save Parent Category
-                    foreach (var item in Pages)
-                    {
-                        item.ArticleId = parent.Id;
-                        item.Description = parent.Title;
-                        item.Image = ThumbnailUrl;
-                        item.Status = MixEnums.MixContentStatus.Published;
-                        if (item.IsActived)
-                        {
-                            var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Exception = saveResult.Exception;
-                                Errors.AddRange(saveResult.Errors);
-                            }
-                        }
-                        else
-                        {
-                            var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Exception = saveResult.Exception;
-                                Errors.AddRange(saveResult.Errors);
-                            }
-                        }
-                    }
+                    result = await SaveParentPagesAsync(parent.Id, _context, _transaction);
                 }
 
                 if (result.IsSucceed)
                 {
                     // Save Parent Modules
-                    foreach (var item in Modules)
-                    {
-                        item.ArticleId = parent.Id;
-                        item.Description = parent.Title;
-                        item.Image = ThumbnailUrl;
-                        item.Status = MixEnums.MixContentStatus.Published;
-                        if (item.IsActived)
-                        {
-                            var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Exception = saveResult.Exception;
-                                Errors.AddRange(saveResult.Errors);
-                            }
-                        }
-                        else
-                        {
-                            var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Exception = saveResult.Exception;
-                                Errors.AddRange(saveResult.Errors);
-                            }
-                        }
-                    }
+                    result = await SaveParentModulesAsync(parent.Id, _context, _transaction);
+                }
+
+                if (result.IsSucceed)
+                {
+                    // Save Attribute Set Values
+                    result = await SaveAttributeSetDataAsync(parent.Id, _context, _transaction);
                 }
 
                 return result;
@@ -538,6 +408,210 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 return result;
             }
         }
+        private async Task<RepositoryResponse<bool>> SaveParentModulesAsync(int id, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var item in Modules)
+            {
+                item.ArticleId = id;
+                item.Description = Title;
+                item.Image = ThumbnailUrl;
+                item.Status = MixEnums.MixContentStatus.Published;
+                if (item.IsActived)
+                {
+                    var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!result.IsSucceed)
+                    {
+                        result.Exception = saveResult.Exception;
+                        Errors.AddRange(saveResult.Errors);
+                    }
+                }
+                else
+                {
+                    var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!result.IsSucceed)
+                    {
+                        result.Exception = saveResult.Exception;
+                        Errors.AddRange(saveResult.Errors);
+                    }
+                }
+            }
+            return result;
+        }
+
+        private async Task<RepositoryResponse<bool>> SaveParentPagesAsync(int id, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var item in Pages)
+            {
+                item.ArticleId = id;
+                item.Description = Title;
+                item.Image = ThumbnailUrl;
+                item.Status = MixEnums.MixContentStatus.Published;
+                if (item.IsActived)
+                {
+                    var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!result.IsSucceed)
+                    {
+                        result.Exception = saveResult.Exception;
+                        Errors.AddRange(saveResult.Errors);
+                    }
+                }
+                else
+                {
+                    var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!result.IsSucceed)
+                    {
+                        result.Exception = saveResult.Exception;
+                        Errors.AddRange(saveResult.Errors);
+                    }
+                }
+            }
+            return result;
+        }
+
+        private async Task<RepositoryResponse<bool>> SaveRelatedArticleAsync(int id, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var navArticle in ArticleNavs)
+            {
+                navArticle.SourceId = id;
+                navArticle.Status = MixEnums.MixContentStatus.Published;
+                navArticle.Specificulture = Specificulture;
+                if (navArticle.IsActived)
+                {
+                    var saveResult = await navArticle.SaveModelAsync(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!result.IsSucceed)
+                    {
+                        result.Exception = saveResult.Exception;
+                        Errors.AddRange(saveResult.Errors);
+                    }
+                }
+                else
+                {
+                    var saveResult = await navArticle.RemoveModelAsync(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!result.IsSucceed)
+                    {
+                        result.Exception = saveResult.Exception;
+                        Errors.AddRange(saveResult.Errors);
+                    }
+                }
+            }
+            return result;
+        }
+
+        private async Task<RepositoryResponse<bool>> SaveSubModulesAsync(int id, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var navModule in ModuleNavs)
+            {
+                navModule.ArticleId = id;
+                navModule.Specificulture = Specificulture;
+                navModule.Status = MixEnums.MixContentStatus.Published;
+                if (navModule.IsActived)
+                {
+                    var saveResult = await navModule.SaveModelAsync(false, _context, _transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                }
+                else
+                {
+                    var saveResult = await navModule.RemoveModelAsync(false, _context, _transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                }
+            }
+            return result;
+        }
+
+        private async Task<RepositoryResponse<bool>> SaveMediasAsync(int id, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var navMedia in MediaNavs)
+            {
+                navMedia.ArticleId = id;
+                navMedia.Specificulture = Specificulture;
+
+                if (navMedia.IsActived)
+                {
+                    var saveResult = await navMedia.SaveModelAsync(false, _context, _transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                }
+                else
+                {
+                    var saveResult = await navMedia.RemoveModelAsync(false, _context, _transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                }
+            }
+            return result;
+        }
+
+        private async Task<RepositoryResponse<bool>> SaveUrlAliasAsync(int parentId, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var item in UrlAliases)
+            {
+                item.SourceId = parentId.ToString();
+                item.Type = MixEnums.UrlAliasType.Article;
+                item.Specificulture = Specificulture;
+                var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+                ViewModelHelper.HandleResult(saveResult, ref result);
+                if (!result.IsSucceed)
+                {
+                    break;
+                }
+            }
+            return result;
+        }
+
+        private async Task<RepositoryResponse<bool>> SaveAttributeSetDataAsync(int parentId, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var nav in AttributeSetNavs)
+            {
+                nav.ArticleId = parentId;
+                nav.Specificulture = Specificulture;
+
+                if (nav.IsActived)
+                {
+                    // Save Navigation Article - Attribute Set
+                    var saveResult = await nav.SaveModelAsync(true, _context, _transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                    if (result.IsSucceed)
+                    {
+                        // Save article Data
+                        foreach (var item in nav.AttributeSet.ArticleData.Items)
+                        {
+                            item.ArticleId = parentId;
+                            item.AttributeSetId = nav.AttributeSetId;
+                            item.Specificulture = Specificulture;
+                            if (result.IsSucceed)
+                            {
+                                var saveData = await item.SaveModelAsync(true, _context, _transaction);
+                                ViewModelHelper.HandleResult(saveData, ref result);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+
+                    }
+                }
+                else
+                {
+                    var saveResult = await nav.RemoveModelAsync(false, _context, _transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                }
+            }
+            return result;
+        }
+
+        #endregion
 
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -611,6 +685,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
         #region Sync Methods
 
+        #region Save Sub Models
         public override RepositoryResponse<bool> SaveSubModels(
             MixArticle parent
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -621,178 +696,39 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 // Save Template
                 var saveTemplate = View.SaveModel(true, _context, _transaction);
                 result.IsSucceed = result.IsSucceed && saveTemplate.IsSucceed;
-                if (!saveTemplate.IsSucceed)
-                {
-                    result.Errors.AddRange(saveTemplate.Errors);
-                    result.Exception = saveTemplate.Exception;
-                }
-                if (result.IsSucceed)
-                {
-                    foreach (var item in UrlAliases)
-                    {
-                        item.SourceId = parent.Id.ToString();
-                        item.Type = MixEnums.UrlAliasType.Article;
-                        item.Specificulture = Specificulture;
-                        var saveResult = item.SaveModel(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Exception = saveResult.Exception;
-                            result.Errors.AddRange(saveResult.Errors);
-                            break;
-                        }
-                    }
-                }
-                if (result.IsSucceed)
-                {
-                    foreach (var navMedia in MediaNavs)
-                    {
-                        navMedia.ArticleId = parent.Id;
-                        navMedia.Specificulture = parent.Specificulture;
+                ViewModelHelper.HandleResult(saveTemplate, ref result);
 
-                        if (navMedia.IsActived)
-                        {
-                            var saveResult = navMedia.SaveModel(false, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Exception = saveResult.Exception;
-                                Errors.AddRange(saveResult.Errors);
-                            }
-                        }
-                        else
-                        {
-                            var saveResult = navMedia.RemoveModel(false, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Exception = saveResult.Exception;
-                                Errors.AddRange(saveResult.Errors);
-                            }
-                        }
-                    }
+                if (result.IsSucceed)
+                {
+                    // Save Alias
+                    result = SaveUrlAlias(parent.Id, _context, _transaction);
                 }
                 if (result.IsSucceed)
                 {
-                    foreach (var navModule in ModuleNavs)
-                    {
-                        navModule.ArticleId = parent.Id;
-                        navModule.Specificulture = parent.Specificulture;
-                        navModule.Status = MixEnums.MixContentStatus.Published;
-                        if (navModule.IsActived)
-                        {
-                            var saveResult = navModule.SaveModel(false, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Exception = saveResult.Exception;
-                                Errors.AddRange(saveResult.Errors);
-                            }
-                        }
-                        else
-                        {
-                            var saveResult = navModule.RemoveModel(false, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Exception = saveResult.Exception;
-                                Errors.AddRange(saveResult.Errors);
-                            }
-                        }
-                    }
+                    // Save Medias
+                    result = SaveMedias(parent.Id, _context, _transaction);
+                }
+                if (result.IsSucceed)
+                {
+                    // Save Sub Modules
+                    result = SaveSubModules(parent.Id, _context, _transaction);
                 }
 
                 if (result.IsSucceed)
                 {
-                    foreach (var navArticle in ArticleNavs)
-                    {
-                        navArticle.SourceId = parent.Id;
-                        navArticle.Status = MixEnums.MixContentStatus.Published;
-                        navArticle.Specificulture = parent.Specificulture;
-                        if (navArticle.IsActived)
-                        {
-                            var saveResult = navArticle.SaveModel(false, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Exception = saveResult.Exception;
-                                Errors.AddRange(saveResult.Errors);
-                            }
-                        }
-                        else
-                        {
-                            var saveResult = navArticle.RemoveModel(false, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Exception = saveResult.Exception;
-                                Errors.AddRange(saveResult.Errors);
-                            }
-                        }
-                    }
+                    // Save related articles
+                    result = SaveRelatedArticle(parent.Id, _context, _transaction);
                 }
                 if (result.IsSucceed)
                 {
                     // Save Parent Category
-                    foreach (var item in Pages)
-                    {
-                        item.ArticleId = parent.Id;
-                        item.Description = parent.Title;
-                        item.Image = ThumbnailUrl;
-                        item.Status = MixEnums.MixContentStatus.Published;
-                        if (item.IsActived)
-                        {
-                            var saveResult = item.SaveModel(false, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Exception = saveResult.Exception;
-                                Errors.AddRange(saveResult.Errors);
-                            }
-                        }
-                        else
-                        {
-                            var saveResult = item.RemoveModel(false, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Exception = saveResult.Exception;
-                                Errors.AddRange(saveResult.Errors);
-                            }
-                        }
-                    }
+                    result = SaveParentPages(parent.Id, _context, _transaction);
                 }
 
                 if (result.IsSucceed)
                 {
                     // Save Parent Modules
-                    foreach (var item in Modules)
-                    {
-                        item.ArticleId = parent.Id;
-                        item.Description = parent.Title;
-                        item.Image = ThumbnailUrl;
-                        item.Status = MixEnums.MixContentStatus.Published;
-                        if (item.IsActived)
-                        {
-                            var saveResult = item.SaveModel(false, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Exception = saveResult.Exception;
-                                Errors.AddRange(saveResult.Errors);
-                            }
-                        }
-                        else
-                        {
-                            var saveResult = item.RemoveModel(false, _context, _transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            if (!result.IsSucceed)
-                            {
-                                result.Exception = saveResult.Exception;
-                                Errors.AddRange(saveResult.Errors);
-                            }
-                        }
-                    }
+                    result = SaveParentModules(parent.Id, _context, _transaction);
                 }
 
                 return result;
@@ -804,6 +740,167 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 return result;
             }
         }
+        private RepositoryResponse<bool> SaveParentModules(int id, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var item in Modules)
+            {
+                item.ArticleId = id;
+                item.Description = Title;
+                item.Image = ThumbnailUrl;
+                item.Status = MixEnums.MixContentStatus.Published;
+                if (item.IsActived)
+                {
+                    var saveResult = item.SaveModel(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!result.IsSucceed)
+                    {
+                        result.Exception = saveResult.Exception;
+                        Errors.AddRange(saveResult.Errors);
+                    }
+                }
+                else
+                {
+                    var saveResult = item.RemoveModel(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!result.IsSucceed)
+                    {
+                        result.Exception = saveResult.Exception;
+                        Errors.AddRange(saveResult.Errors);
+                    }
+                }
+            }
+            return result;
+        }
+
+        private RepositoryResponse<bool> SaveParentPages(int id, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var item in Pages)
+            {
+                item.ArticleId = id;
+                item.Description = Title;
+                item.Image = ThumbnailUrl;
+                item.Status = MixEnums.MixContentStatus.Published;
+                if (item.IsActived)
+                {
+                    var saveResult = item.SaveModel(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!result.IsSucceed)
+                    {
+                        result.Exception = saveResult.Exception;
+                        Errors.AddRange(saveResult.Errors);
+                    }
+                }
+                else
+                {
+                    var saveResult = item.RemoveModel(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!result.IsSucceed)
+                    {
+                        result.Exception = saveResult.Exception;
+                        Errors.AddRange(saveResult.Errors);
+                    }
+                }
+            }
+            return result;
+        }
+
+        private RepositoryResponse<bool> SaveRelatedArticle(int id, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var navArticle in ArticleNavs)
+            {
+                navArticle.SourceId = id;
+                navArticle.Status = MixEnums.MixContentStatus.Published;
+                navArticle.Specificulture = Specificulture;
+                if (navArticle.IsActived)
+                {
+                    var saveResult = navArticle.SaveModel(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!result.IsSucceed)
+                    {
+                        result.Exception = saveResult.Exception;
+                        Errors.AddRange(saveResult.Errors);
+                    }
+                }
+                else
+                {
+                    var saveResult = navArticle.RemoveModel(false, _context, _transaction);
+                    result.IsSucceed = saveResult.IsSucceed;
+                    if (!result.IsSucceed)
+                    {
+                        result.Exception = saveResult.Exception;
+                        Errors.AddRange(saveResult.Errors);
+                    }
+                }
+            }
+            return result;
+        }
+
+        private RepositoryResponse<bool> SaveSubModules(int id, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var navModule in ModuleNavs)
+            {
+                navModule.ArticleId = id;
+                navModule.Specificulture = Specificulture;
+                navModule.Status = MixEnums.MixContentStatus.Published;
+                if (navModule.IsActived)
+                {
+                    var saveResult = navModule.SaveModel(false, _context, _transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                }
+                else
+                {
+                    var saveResult = navModule.RemoveModel(false, _context, _transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                }
+            }
+            return result;
+        }
+
+        private RepositoryResponse<bool> SaveMedias(int id, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var navMedia in MediaNavs)
+            {
+                navMedia.ArticleId = id;
+                navMedia.Specificulture = Specificulture;
+
+                if (navMedia.IsActived)
+                {
+                    var saveResult = navMedia.SaveModel(false, _context, _transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                }
+                else
+                {
+                    var saveResult = navMedia.RemoveModel(false, _context, _transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                }
+            }
+            return result;
+        }
+
+        private RepositoryResponse<bool> SaveUrlAlias(int parentId, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var item in UrlAliases)
+            {
+                item.SourceId = parentId.ToString();
+                item.Type = MixEnums.UrlAliasType.Article;
+                item.Specificulture = Specificulture;
+                var saveResult = item.SaveModel(false, _context, _transaction);
+                ViewModelHelper.HandleResult(saveResult, ref result);
+                if (!result.IsSucceed)
+                {
+                    break;
+                }
+            }
+            return result;
+        }
+
+        #endregion
 
         public override RepositoryResponse<bool> RemoveRelatedModels(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -920,6 +1017,40 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     ArticleId = Id,
                     Description = item.Title,
                     Module = item
+                });
+            }
+        }
+
+        private void LoadAttributeSets(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var getArticleAttributeSet = MixArticleAttributeSets.UpdateViewModel.Repository.GetModelListBy(
+                n => n.ArticleId == Id, _context, _transaction);
+            if (getArticleAttributeSet.IsSucceed)
+            {
+                AttributeSetNavs = getArticleAttributeSet.Data.OrderBy(p => p.Priority).ToList();
+                foreach (var item in AttributeSetNavs)
+                {
+                    item.IsActived = true;
+                    item.AttributeSet.LoadArticleData(
+                        articleId: Id, specificulture: Specificulture
+                        , _context: _context, _transaction: _transaction);
+                }
+            }
+            var otherAttributeSetNavs = MixAttributeSets.ContentUpdateViewModel.Repository.GetModelListBy(
+                m => !AttributeSetNavs.Any(n => n.AttributeSetId == m.Id)
+                    //&& (m.Type == (int)MixEnums.MixAttributeSetType.SubArticle)
+                , "CreatedDateTime", 1, null, 0, _context, _transaction);
+            foreach (var item in otherAttributeSetNavs.Data.Items)
+            {
+                item.LoadArticleData(
+                        articleId: Id, specificulture: Specificulture
+                        , _context: _context, _transaction: _transaction);
+                AttributeSetNavs.Add(new MixArticleAttributeSets.UpdateViewModel()
+                {
+                    AttributeSetId = item.Id,
+                    ArticleId = Id,
+                    Description = item.Title,
+                    AttributeSet = item
                 });
             }
         }

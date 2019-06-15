@@ -20,6 +20,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Priority { get; set; }
         public int Status { get; set; }
 
-        public virtual MixAttributeSet AttributeSet { get; set; }
+        public virtual MixAttributeSet MixAttributeSet { get; set; }
     }
 }

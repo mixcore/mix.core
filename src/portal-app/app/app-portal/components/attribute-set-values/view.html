@@ -1,0 +1,31 @@
+<h6 class="card-header">
+    <span ng-bind="$ctrl.title"></span>
+    <!-- <a ng-click="$ctrl.addAttr()" class="btn btn-primary btn-sm float-right text-white">Add New</a> -->
+    <!-- <a ng-click="$ctrl.generateForm()" class="btn btn-primary btn-sm float-right text-white mr-2">Generate Form</a> -->
+</h6>
+<table class="table table-sm" id="Table">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col" width="5%">
+                <span class="oi oi-move"></span>
+            </th>
+            <th scope="col">Title</th>
+            <th scope="col">Value</th>
+        </tr>
+    </thead>
+    <tbody class="sortable" dnd-list="$ctrl.attributes">
+        <tr class="sortable-item module-column" ng-repeat="prop in $ctrl.attributes track by $index" 
+            dnd-draggable="col" dnd-effect-allowed="move" dnd-selected="$ctrl.selectedProp = col" 
+            dnd-moved="$ctrl.attributes.splice($index, 1)" ng-class="{'selected': $ctrl.selectedProp === col}">
+            <td style="cursor:move;">
+                <span class="oi oi-move"></span>
+            </td>
+            <td>
+                <span ng-bind="prop.title"></span>
+            </td>
+            <td class="prop-value-container">                 
+                <attribute-value-editor attribute-value="$ctrl.data[$index]" attribute="prop"></attribute-value-editor>                
+            </td>
+        </tr>
+    </tbody>
+</table>

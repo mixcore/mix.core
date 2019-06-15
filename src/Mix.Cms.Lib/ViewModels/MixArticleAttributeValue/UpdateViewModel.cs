@@ -14,7 +14,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
 
         #region Models
         [JsonProperty("id")]
-        public int Id { get; set; }
+        public string Id { get; set; }
         [JsonProperty("dataId")]
         public string DataId { get; set; }
         [JsonProperty("dataType")]
@@ -33,6 +33,12 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
         public DateTime? DateTimeValue { get; set; }
         [JsonProperty("booleanValue")]
         public bool? BooleanValue { get; set; }
+        [JsonProperty("encryptValue")]
+        public string EncryptValue { get; set; }
+        [JsonProperty("encryptKey")]
+        public string EncryptKey { get; set; }
+        [JsonProperty("encryptType")]
+        public int EncryptType { get; set; }
         [JsonProperty("status")]
         public int Status { get; set; }
         [JsonProperty("createdDateTime")]
@@ -61,11 +67,15 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
 
         #region Overrides
 
-        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixArticleAttributeValue ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == Id).Data;
+            if (string.IsNullOrEmpty(Id))
+            {
+                Id = Guid.NewGuid().ToString();
+                CreatedDateTime = DateTime.UtcNow;
+            }
+            return base.ParseModel(_context, _transaction);
         }
-
         #endregion
     }
 }

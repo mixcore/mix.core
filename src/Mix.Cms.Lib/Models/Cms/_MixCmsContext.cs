@@ -97,8 +97,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.ToTable("mix_article");
 
-                entity.HasIndex(e => e.SetAttributeId);
-
                 entity.HasIndex(e => e.Specificulture);
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
@@ -137,11 +135,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Title).HasMaxLength(4000);
 
-                entity.HasOne(d => d.SetAttribute)
-                    .WithMany(p => p.MixArticle)
-                    .HasForeignKey(d => d.SetAttributeId)
-                    .HasConstraintName("FK_mix_article_mix_set_attribute");
-
                 entity.HasOne(d => d.SpecificultureNavigation)
                     .WithMany(p => p.MixArticle)
                     .HasPrincipalKey(p => p.Specificulture)
@@ -166,8 +159,6 @@ namespace Mix.Cms.Lib.Models.Cms
                     .IsRequired()
                     .HasMaxLength(10);
 
-                entity.Property(e => e.UpdatedDateTime).HasColumnType("datetime");
-
                 entity.HasOne(d => d.MixArticle)
                     .WithMany(p => p.MixArticleAttributeData)
                     .HasForeignKey(d => new { d.ArticleId, d.Specificulture })
@@ -187,7 +178,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
-                entity.HasOne(d => d.AttributeSet)
+                entity.HasOne(d => d.MixAttributeSet)
                     .WithMany(p => p.MixArticleAttributeSet)
                     .HasForeignKey(d => d.AttributeSetId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -221,6 +212,10 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasMaxLength(50);
 
                 entity.Property(e => e.DateTimeValue).HasColumnType("datetime");
+
+                entity.Property(e => e.EncryptKey).HasMaxLength(50);
+
+                entity.Property(e => e.EncryptValue).HasMaxLength(4000);
 
                 entity.Property(e => e.Specificulture)
                     .IsRequired()
@@ -308,7 +303,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Title).HasMaxLength(250);
 
-                entity.HasOne(d => d.AttributeSet)
+                entity.HasOne(d => d.MixAttributeSet)
                     .WithMany(p => p.MixAttributeField)
                     .HasForeignKey(d => d.AttributeSetId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -725,7 +720,7 @@ namespace Mix.Cms.Lib.Models.Cms
                     .IsRequired()
                     .HasMaxLength(10);
 
-                entity.HasOne(d => d.AttributeSet)
+                entity.HasOne(d => d.MixAttributeSet)
                     .WithMany(p => p.MixModuleAttributeData)
                     .HasForeignKey(d => d.AttributeSetId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -756,7 +751,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
-                entity.HasOne(d => d.AttributeSet)
+                entity.HasOne(d => d.MixAttributeSet)
                     .WithMany(p => p.MixModuleAttributeSet)
                     .HasForeignKey(d => d.AttributeSetId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -800,6 +795,10 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasDefaultValueSql("(N'')");
 
                 entity.Property(e => e.DateTimeValue).HasColumnType("datetime");
+
+                entity.Property(e => e.EncryptKey).HasMaxLength(50);
+
+                entity.Property(e => e.EncryptValue).HasMaxLength(4000);
 
                 entity.Property(e => e.Specificulture)
                     .IsRequired()
@@ -951,8 +950,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.ToTable("mix_page");
 
-                entity.HasIndex(e => e.SetAttributeId);
-
                 entity.HasIndex(e => e.Specificulture);
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
@@ -994,11 +991,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Template).HasMaxLength(250);
 
                 entity.Property(e => e.Title).HasMaxLength(4000);
-
-                entity.HasOne(d => d.SetAttribute)
-                    .WithMany(p => p.MixPage)
-                    .HasForeignKey(d => d.SetAttributeId)
-                    .HasConstraintName("FK_mix_page_mix_set_attribute");
 
                 entity.HasOne(d => d.SpecificultureNavigation)
                     .WithMany(p => p.MixPage)
@@ -1075,7 +1067,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
-                entity.HasOne(d => d.AttributeSet)
+                entity.HasOne(d => d.MixAttributeSet)
                     .WithMany(p => p.MixPageAttributeSet)
                     .HasForeignKey(d => d.AttributeSetId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -1109,6 +1101,10 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasMaxLength(50);
 
                 entity.Property(e => e.DateTimeValue).HasColumnType("datetime");
+
+                entity.Property(e => e.EncryptKey).HasMaxLength(50);
+
+                entity.Property(e => e.EncryptValue).HasMaxLength(4000);
 
                 entity.Property(e => e.Specificulture)
                     .IsRequired()

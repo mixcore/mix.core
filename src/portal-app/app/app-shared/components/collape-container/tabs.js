@@ -16,7 +16,7 @@ modules.directive('collapeContainer', function () {
                     pane.selected = false;
                 });
                 pane.selected = true;
-                this.addCallback();
+                //this.addCallback();
             }
 
             this.addPane = function (pane) {

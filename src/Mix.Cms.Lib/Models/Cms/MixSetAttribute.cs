@@ -7,8 +7,6 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixSetAttribute()
         {
-            MixArticle = new HashSet<MixArticle>();
-            MixPage = new HashSet<MixPage>();
             MixProduct = new HashSet<MixProduct>();
         }
 
@@ -22,8 +20,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public DateTime CreatedDateTime { get; set; }
         public string CreatedBy { get; set; }
 
-        public virtual ICollection<MixArticle> MixArticle { get; set; }
-        public virtual ICollection<MixPage> MixPage { get; set; }
         public virtual ICollection<MixProduct> MixProduct { get; set; }
     }
 }
