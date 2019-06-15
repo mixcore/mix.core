@@ -2,13 +2,13 @@
 html, body{
     height: 100%;
 }
-body {
+/* body {
     color: #212529!important;
 }
 
 #sidebar.sw-toc-sub-link{
     color: #212529!important;
-}
+} */
 
 .display-4{
     font-size: 2rem!important;
