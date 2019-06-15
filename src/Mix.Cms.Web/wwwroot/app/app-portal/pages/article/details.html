@@ -25,7 +25,7 @@
                             <p class="text-muted">Add a title and description to see how this product might appear in a
                                 search engine listing.</p>
 
-                                <article-seo article="activedData"></article-seo>
+                            <article-seo article="activedData"></article-seo>
                         </div>
 
                     </pane-v>
@@ -52,7 +52,7 @@
                         <related-navs request="request" source-id="activedData.id" culture="activedData.specificulture" prefix="'article'" navs="activedData.articleNavs" data="data" load-data="getList(pageIndex)"></related-navs>
 
                     </pane-v>
-                    
+
                 </tabs-v>
 
                 <template-editor folder-type="'Articles'" template="activedData.view" templates="activedData.templates">
@@ -187,12 +187,12 @@
 
                 <actions preview-url="activedData.detailsUrl" back-url="referrerUrl"></actions>
                 <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
-                
+
                 <collape-container title="'URL slugs'" actived-data="activedData" add-callback="addAlias()">
                     <pane-collape>
-                            <url-alias ng-repeat="alias in activedData.urlAliases" index="$index" url-alias="alias" remove-callback="removeAliasCallback(index)"></url-alias>
+                        <url-alias ng-repeat="alias in activedData.urlAliases" index="$index" url-alias="alias" remove-callback="removeAliasCallback(index)"></url-alias>
                     </pane-collape>
-                </collape-container>          
+                </collape-container>
 
                 <div class="card mb-3">
                     <h6 class="card-header">
