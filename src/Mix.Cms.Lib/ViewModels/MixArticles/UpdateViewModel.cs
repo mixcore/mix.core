@@ -393,6 +393,12 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     result = await SaveParentModulesAsync(parent.Id, _context, _transaction);
                 }
 
+                if (result.IsSucceed)
+                {
+                    // Save Attribute Set Values
+                    result = await SaveAttributeSetDataAsync(parent.Id, _context, _transaction);
+                }
+
                 return result;
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
@@ -562,8 +568,51 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             return result;
         }
 
+        private async Task<RepositoryResponse<bool>> SaveAttributeSetDataAsync(int parentId, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var nav in AttributeSetNavs)
+            {
+                nav.ArticleId = parentId;
+                nav.Specificulture = Specificulture;
+
+                if (nav.IsActived)
+                {
+                    // Save Navigation Article - Attribute Set
+                    var saveResult = await nav.SaveModelAsync(true, _context, _transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                    if (result.IsSucceed)
+                    {
+                        // Save article Data
+                        foreach (var item in nav.AttributeSet.ArticleData.Items)
+                        {
+                            item.ArticleId = parentId;
+                            item.AttributeSetId = nav.AttributeSetId;
+                            item.Specificulture = Specificulture;
+                            if (result.IsSucceed)
+                            {
+                                var saveData = await item.SaveModelAsync(true, _context, _transaction);
+                                ViewModelHelper.HandleResult(saveData, ref result);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+
+                    }
+                }
+                else
+                {
+                    var saveResult = await nav.RemoveModelAsync(false, _context, _transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                }
+            }
+            return result;
+        }
+
         #endregion
-        
+
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>()
@@ -982,19 +1031,20 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 foreach (var item in AttributeSetNavs)
                 {
                     item.IsActived = true;
-                    item.AttributeSet.ArticleData = MixAttributeSets.Helper.LoadArticleData(
+                    item.AttributeSet.LoadArticleData(
                         articleId: Id, specificulture: Specificulture
-                        , _context: _context, _transaction: _transaction).Data;
+                        , _context: _context, _transaction: _transaction);
                 }
             }
-            var otherAttributeSetNavs = MixAttributeSets.UpdateViewModel.Repository.GetModelListBy(
+            var otherAttributeSetNavs = MixAttributeSets.ContentUpdateViewModel.Repository.GetModelListBy(
                 m => !AttributeSetNavs.Any(n => n.AttributeSetId == m.Id)
                     //&& (m.Type == (int)MixEnums.MixAttributeSetType.SubArticle)
                 , "CreatedDateTime", 1, null, 0, _context, _transaction);
             foreach (var item in otherAttributeSetNavs.Data.Items)
             {
-                //item.LoadData(articleId: Id, _context: _context, _transaction: _transaction);
-                item.ArticleData = new PaginationModel<MixArticleAttributeValues.UpdateViewModel>();
+                item.LoadArticleData(
+                        articleId: Id, specificulture: Specificulture
+                        , _context: _context, _transaction: _transaction);
                 AttributeSetNavs.Add(new MixArticleAttributeSets.UpdateViewModel()
                 {
                     AttributeSetId = item.Id,

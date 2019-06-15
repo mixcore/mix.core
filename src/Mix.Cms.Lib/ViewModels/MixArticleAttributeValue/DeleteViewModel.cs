@@ -3,18 +3,17 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
 {
-    public class UpdateViewModel
-      : ViewModelBase<MixCmsContext, MixArticleAttributeValue, UpdateViewModel>
+    public class DeleteViewModel
+      : ViewModelBase<MixCmsContext, MixArticleAttributeValue, DeleteViewModel>
     {
         #region Properties
 
         #region Models
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public int Id { get; set; }
         [JsonProperty("dataId")]
         public string DataId { get; set; }
         [JsonProperty("dataType")]
@@ -46,36 +45,19 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
 
         #endregion Models
 
-        #region Views
-        [JsonProperty("fields")]
-        public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
-        #endregion
-
+       
         #endregion Properties
 
         #region Contructors
 
-        public UpdateViewModel() : base()
+        public DeleteViewModel() : base()
         {
         }
 
-        public UpdateViewModel(MixArticleAttributeValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public DeleteViewModel(MixArticleAttributeValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
         #endregion Contructors
-
-        #region Overrides
-
-        public override MixArticleAttributeValue ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            if (string.IsNullOrEmpty(Id))
-            {
-                Id = Guid.NewGuid().ToString();
-                CreatedDateTime = DateTime.UtcNow;
-            }
-            return base.ParseModel(_context, _transaction);
-        }
-        #endregion
     }
 }

@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 {
-    public class UpdateViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSet, UpdateViewModel>
+    public class ContentUpdateViewModel
+      : ViewModelBase<MixCmsContext, MixAttributeSet, ContentUpdateViewModel>
     {
         #region Properties
         #region Models
@@ -43,11 +43,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         #endregion Properties
         #region Contructors
 
-        public UpdateViewModel() : base()
+        public ContentUpdateViewModel() : base()
         {
         }
 
-        public UpdateViewModel(MixAttributeSet model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ContentUpdateViewModel(MixAttributeSet model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -68,49 +68,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             return base.ParseModel(_context, _transaction);
         }
 
-        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSet parent, MixCmsContext _context, IDbContextTransaction _transaction)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            if (result.IsSucceed)
-            {
-                foreach (var item in Attributes)
-                {
-                    if (result.IsSucceed)
-                    {
-                        item.AttributeSetId = parent.Id;
-                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-            return result;
-        }
-
-        public override  RepositoryResponse<bool> SaveSubModels(MixAttributeSet parent, MixCmsContext _context, IDbContextTransaction _transaction)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            if (result.IsSucceed)
-            {
-                foreach (var item in Attributes)
-                {
-                    if (result.IsSucceed)
-                    {
-                        item.AttributeSetId = parent.Id;
-                        var saveResult =  item.SaveModel(false, _context, _transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-            return result;
-        }
+       
         #endregion
 
         #region Expand
@@ -123,10 +81,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
                 , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
                 , pageSize, pageIndex
                 , _context: _context, _transaction: _transaction);
-            if (!getData.IsSucceed || getData.Data == null || ArticleData.TotalItems == 0)
+            if (!getData.IsSucceed || getData.Data == null || getData.Data.Items.Count==0)
             {
                 ArticleData = new PaginationModel<MixArticleAttributeDatas.UpdateViewModel>() { TotalItems = 1};
                 ArticleData.Items.Add(new MixArticleAttributeDatas.UpdateViewModel(Id, Attributes));
+            }
+            else
+            {
+                ArticleData = getData.Data;
             }
         }
         #endregion
