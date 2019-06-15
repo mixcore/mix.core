@@ -15,6 +15,9 @@ namespace Mix.Cms.Lib.Models.Cms
         public string StringValue { get; set; }
         public DateTime? DateTimeValue { get; set; }
         public bool? BooleanValue { get; set; }
+        public string EncryptValue { get; set; }
+        public string EncryptKey { get; set; }
+        public int EncryptType { get; set; }
         public int Priority { get; set; }
         public int Status { get; set; }
         public DateTime CreatedDateTime { get; set; }

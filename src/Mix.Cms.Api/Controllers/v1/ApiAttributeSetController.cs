@@ -36,7 +36,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("delete/{id}")]
         public async Task<RepositoryResponse<MixAttributeSet>> DeleteAsync(int id)
         {
-            return await base.DeleteAsync<UpdateViewModel>(
+            return await base.DeleteAsync<DeleteViewModel>(
                 model => model.Id == id, true);
         }
 

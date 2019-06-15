@@ -32,6 +32,12 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
         public DateTime? DateTimeValue { get; set; }
         [JsonProperty("booleanValue")]
         public bool? BooleanValue { get; set; }
+        [JsonProperty("encryptValue")]
+        public string EncryptValue { get; set; }
+        [JsonProperty("encryptKey")]
+        public string EncryptKey { get; set; }
+        [JsonProperty("encryptType")]
+        public int EncryptType { get; set; }
         [JsonProperty("status")]
         public int Status { get; set; }
         [JsonProperty("createdDateTime")]

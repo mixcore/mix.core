@@ -1,0 +1,12 @@
+<tabs-v select-callback="$ctrl.selectPane(pane)" class="mb-3">
+    <pane-v ng-repeat="set in $ctrl.article.attributeSetNavs" title="{{set.description}}" class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <attribute-set-values attributes="set.attributeSet.attributes">
+                    </attribute-set-values>
+                </div>
+            </div>
+        </div>
+    </pane-v>
+</tabs-v>

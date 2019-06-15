@@ -6,12 +6,10 @@ modules.component('attributeList', {
             ctrl.selectedCol = null;
             ctrl.settings = $rootScope.globalSettings;
             ctrl.$onInit = async function(){
-                if (!ctrl.defaultAttr) {
-                    var getDefaultAttr = await service.getSingle([null, 'portal']);
-                    if (getDefaultAttr.isSucceed) {
-                        ctrl.defaultAttr = getDefaultAttr.data;
-                        ctrl.defaultAttr.options = [];
-                    }
+                var getDefaultAttr = await service.getSingle([null, 'portal']);
+                if (getDefaultAttr.isSucceed) {
+                    ctrl.defaultAttr = getDefaultAttr.data;
+                    ctrl.defaultAttr.options = [];
                 }
             }
             ctrl.addAttr = function () {
@@ -118,7 +116,6 @@ modules.component('attributeList', {
         }],
     bindings: {
         title: '=',
-        attributes: '=',
-        defaultAttr: '='
+        attributes: '='
     }
 });

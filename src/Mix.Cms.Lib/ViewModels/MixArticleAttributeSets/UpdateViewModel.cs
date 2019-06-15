@@ -36,8 +36,8 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeSets
         [JsonProperty("status")]
         public MixEnums.MixContentStatus Status { get; set; }
         #region Views
-        [JsonProperty("module")]
-        public MixAttributeSets.ReadViewModel AttributeSet { get; set; }
+        [JsonProperty("attributeSet")]
+        public MixAttributeSets.UpdateViewModel AttributeSet { get; set; }
 
         #endregion Views
 
@@ -45,7 +45,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeSets
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getAttributeSet = MixAttributeSets.ReadViewModel.Repository.GetSingleModel(p => p.Id == AttributeSetId, _context: _context, _transaction: _transaction
+            var getAttributeSet = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(p => p.Id == AttributeSetId, _context: _context, _transaction: _transaction
             );
             if (getAttributeSet.IsSucceed)
             {
