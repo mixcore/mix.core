@@ -178,7 +178,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
-                entity.HasOne(d => d.AttributeSet)
+                entity.HasOne(d => d.MixAttributeSet)
                     .WithMany(p => p.MixArticleAttributeSet)
                     .HasForeignKey(d => d.AttributeSetId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -303,7 +303,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Title).HasMaxLength(250);
 
-                entity.HasOne(d => d.AttributeSet)
+                entity.HasOne(d => d.MixAttributeSet)
                     .WithMany(p => p.MixAttributeField)
                     .HasForeignKey(d => d.AttributeSetId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -720,7 +720,7 @@ namespace Mix.Cms.Lib.Models.Cms
                     .IsRequired()
                     .HasMaxLength(10);
 
-                entity.HasOne(d => d.AttributeSet)
+                entity.HasOne(d => d.MixAttributeSet)
                     .WithMany(p => p.MixModuleAttributeData)
                     .HasForeignKey(d => d.AttributeSetId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -751,7 +751,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
-                entity.HasOne(d => d.AttributeSet)
+                entity.HasOne(d => d.MixAttributeSet)
                     .WithMany(p => p.MixModuleAttributeSet)
                     .HasForeignKey(d => d.AttributeSetId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -1067,7 +1067,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
-                entity.HasOne(d => d.AttributeSet)
+                entity.HasOne(d => d.MixAttributeSet)
                     .WithMany(p => p.MixPageAttributeSet)
                     .HasForeignKey(d => d.AttributeSetId)
                     .OnDelete(DeleteBehavior.ClientSetNull)

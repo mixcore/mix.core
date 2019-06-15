@@ -1,9 +1,15 @@
 ﻿
 modules.component('attributeValueEditor', {
     templateUrl: '/app/app-portal/components/attribute-value-editor/view.html',
+    bindings: {
+        attributeValue: '=',
+        attribute: '=',
+        inputClass: '=',
+        isShowTitle: '=',
+        title: '='
+    },
     controller: ['$rootScope', '$scope', 'ngAppSettings', function ($rootScope, $scope, ngAppSettings) {
         var ctrl = this;
-
         ctrl.icons = [
             'fas fa-500px',
             'fas fa-accessible-icon',
@@ -1265,48 +1271,18 @@ modules.component('attributeValueEditor', {
             'fas fa-youtube-square',
             'fas fa-zhihu'
         ];
-        this.dataTypes = ngAppSettings.dataTypes;
-        ctrl.initEditor = function () {
-            $ctrl.attribute.value = $ctrl.attribute.default || null;
-            setTimeout(function () {
-                // Init Code editor
-                $.each($('.code-editor'), function (i, e) {
-                    var container = $(this);
-                    var editor = ace.edit(e);
-                    if (container.hasClass('json')) {
-                        editor.session.setMode("ace/mode/json");
-                    }
-                    else {
-                        editor.session.setMode("ace/mode/razor");
-                    }
-                    editor.setTheme("ace/theme/chrome");
-                    //editor.setReadOnly(true);
-
-                    editor.session.setUseWrapMode(true);
-                    editor.setOptions({
-                        maxLines: Infinity
-                    });
-                    editor.getSession().on('change', function (e) {
-                        // e.type, etc
-                        $(container).parent().find('.code-content').val(editor.getValue());
-                    });
-                })
-                $.each($('.editor-content'), function (i, e) {
-                    var $demoTextarea = $(e);
-                    $demoTextarea.trumbowyg({
-                        semantic: false
-                    }).on('tbwblur', function () {
-                        $ctrl.attribute.value = $demoTextarea.val();
-                    });
-                });
+        ctrl.dataTypes = $rootScope.globalSettings.dataTypes;
+        ctrl.$onInit = function(){
+            setTimeout(() => {
+                switch(ctrl.attribute.dataType){
+                    default:
+                        if(!ctrl.attributeValue.stringValue){
+                            ctrl.attributeValue.stringValue = ctrl.attribute.defaultValue;
+                            $scope.$apply();
+                        }
+                        break;
+                }
             }, 200);
         };
-       }
-    ],
-    bindings: {
-        attribute: '=',
-        inputClass: '=',
-        isShowTitle: '=',
-        title: '='
-    }
+    }]
 });

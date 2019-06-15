@@ -1,7 +1,7 @@
 ﻿'use strict';
 app.factory('ConfigurationService', ['BaseService','CommonService', function (baseService, commonService) {
 
-    var serviceFactory = Object.create(baseService);
+    var serviceFactory = angular.copy(baseService);
     serviceFactory.init('configuration');
 
     var _uploadConfiguration = async function (configurationFile) {

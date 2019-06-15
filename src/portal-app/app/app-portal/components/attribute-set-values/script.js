@@ -2,7 +2,8 @@ modules.component('attributeSetValues', {
     templateUrl: '/app/app-portal/components/attribute-set-values/view.html',
     bindings: {
         title: '=',
-        attributes: '='
+        attributes: '=',
+        data: '='
     },
     controller: ['$rootScope', '$scope',
         function ($rootScope, $scope) {
