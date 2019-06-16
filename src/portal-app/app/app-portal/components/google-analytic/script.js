@@ -94,6 +94,14 @@
                 },
                 vAxis: {
                   textStyle: { color: '#FFF' }
+                },
+                series: {
+                  0: { color: '#209e91' },
+                  1: { color: '#e7711b' },
+                  2: { color: '#f1ca3a' },
+                  3: { color: '#6f9654' },
+                  4: { color: '#1c91c0' },
+                  5: { color: '#43459d' },
                 }
               }
             }
