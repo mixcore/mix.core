@@ -55,24 +55,24 @@
                     </td>
                     <td>
                         <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                            <a ng-if="item.previewUrl" href="{{item.previewUrl}}" target="_blank" class="btn btn-light">
+                            <a ng-if="item.previewUrl" href="{{item.previewUrl}}" target="_blank" class="btn btn-dark">
                                 <span class="fas fa-eye text-info"></span>
                             </a>
-                            <a href="/portal/template/list/{{item.id}}" class="btn btn-light">
+                            <a href="/portal/template/list/{{item.id}}" class="btn btn-dark">
                                 <span class="fas fa-paint-brush text-info"></span>
                             </a>
-                            <a href="/portal/file/list?folder={{item.assetFolder}}" class="btn btn-light">
+                            <a href="/portal/file/list?folder={{item.assetFolder}}" class="btn btn-dark">
                                 <span class="fas fa-file text-secondary"></span>
                             </a>
-                            <a href="/portal/theme/export/{{item.id}}"  class="btn btn-sm btn-light d-inline-block">
+                            <a href="/portal/theme/export/{{item.id}}"  class="btn btn-sm btn-dark d-inline-block">
                                 <span class="fas fa-arrow-down text-primary"></span></a>
-                            <a ng-click="syncTemplates(item.id)" class="btn btn-sm btn-light d-inline-block"><span
+                            <a ng-click="syncTemplates(item.id)" class="btn btn-sm btn-dark d-inline-block"><span
                                     class="fas fa-sync-alt text-primary"></span></a>
 
-                            <a href="/portal/theme/details/{{item.id}}" class="btn btn-light">
+                            <a href="/portal/theme/details/{{item.id}}" class="btn btn-dark">
                                 <span class="fas fa-pencil-alt text-primary"></span>
                             </a>
-                            <a ng-click="remove(item.id);" class="btn btn-light">
+                            <a ng-click="remove(item.id);" class="btn btn-dark">
                                 <span class="fas fa-times text-danger"></span>
                             </a>
                         </div>
