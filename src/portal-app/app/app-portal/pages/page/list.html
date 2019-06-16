@@ -53,23 +53,23 @@
                     <td>
                         <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
 
-                            <a ng-if="item.childs.length>0" class="btn btn-light" data-toggle="collapse" role="button"
+                            <a ng-if="item.childs.length>0" class="btn btn-dark" data-toggle="collapse" role="button"
                                 ng-click="showChilds(item.id)">
                                 <span class="fa fa-list text-primary"></span>
                             </a>
 
-                            <a href="/portal/page/details/{{item.id}}" class="btn btn-light">
+                            <a href="/portal/page/details/{{item.id}}" class="btn btn-dark">
                                 <span class="fas fa-pencil-alt text-primary"></span>
                             </a>
-                            <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-light"><span class="far fa-eye text-primary"></span></a>
-                            <a ng-if="item.type==2" href="/portal/page/page-article/list/{{item.id}}" class="btn btn-light">
+                            <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-dark"><span class="far fa-eye text-primary"></span></a>
+                            <a ng-if="item.type==2" href="/portal/page/page-article/list/{{item.id}}" class="btn btn-dark">
                                 <span class="fas fa-list text-info"></span>
                             </a>
                             <!-- 
-                                        <a ng-if="item.type==2" href="#" data-toggle="modal" data-target="#modal-articles" class="btn btn-light">
+                                        <a ng-if="item.type==2" href="#" data-toggle="modal" data-target="#modal-articles" class="btn btn-dark">
                                             <span class="fas fa-list text-info"></span>
                                         </a>-->
-                            <a class="btn btn-light" ng-click="remove(item.id)">
+                            <a class="btn btn-dark" ng-click="remove(item.id)">
                                 <span class="fa fa-times text-danger"></span>
                             </a>
                         </div>
@@ -134,15 +134,15 @@
                                         <td>
                                             <div class="btn-group btn-group-sm btn-group-sm float-right" role="group"
                                                 aria-label="Actions">
-                                                <a href="/portal/page/details/{{c.id}}" class="btn btn-light"><span
+                                                <a href="/portal/page/details/{{c.id}}" class="btn btn-dark"><span
                                                         class="fa fa-pen text-primary small"></span></a>
-                                                <a href="{{c.detailsUrl}}" target="_blank" class="btn btn-light"><span
+                                                <a href="{{c.detailsUrl}}" target="_blank" class="btn btn-dark"><span
                                                         class="far fa-eye text-primary small"></span></a>
                                                 <a ng-if="c.page.type==2" href="/portal/page/page-article/list/{{c.page.id}}"
-                                                    class="btn btn-light">
+                                                    class="btn btn-dark">
                                                     <span class="fas fa-list text-info"></span>
                                                 </a>
-                                                <a ng-click="remove(item.id);" class="btn btn-light">
+                                                <a ng-click="remove(item.id);" class="btn btn-dark">
                                                     <span class="fas fa-times text-danger"></span>
                                                 </a>
                                             </div>

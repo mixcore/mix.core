@@ -65,14 +65,14 @@
             
                         <td>
                             <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                                <a href="/admin/product/details/{{item.id}}" class="btn btn-light">
+                                <a href="/admin/product/details/{{item.id}}" class="btn btn-dark">
                                     <span class="fas fa-pencil-alt text-primary"></span>
                                 </a>
-                                <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-light">
+                                <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-dark">
                                     <span class="fas fa-eye text-info"></span>
                                 </a>
             
-                                <button type="button" class="btn btn-light del-popover" ng-click="removeProduct(item.id)">
+                                <button type="button" class="btn btn-dark del-popover" ng-click="removeProduct(item.id)">
                                     <span class="fas fa-times text-danger"></span>
                                 </button>
                                 <div class="popover-body d-none">
