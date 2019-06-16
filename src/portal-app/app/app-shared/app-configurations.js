@@ -1663,6 +1663,10 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'GlobalSettingsSer
         $rootScope.goToSiteUrl = function(url){
             window.top.location = url;
         }
+        $rootScope.goToPath = function(url){
+            $rootScope.isBusy = true;
+            $location.url(url);
+        }
     }]);
 if ($.trumbowyg) {
     $.trumbowyg.svgPath = '/assets/icons.svg';
