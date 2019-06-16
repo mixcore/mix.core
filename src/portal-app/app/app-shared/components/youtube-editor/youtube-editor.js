@@ -7,7 +7,9 @@
             ctrl.loadVideo = function () {
                 ctrl.isPlay = false;
                 ctrl.src = '';
-                ctrl.img = "https://img.youtube.com/vi/" + ctrl.code + "/sddefault.jpg";
+                if(ctrl.code){
+                    ctrl.img = "https://img.youtube.com/vi/" + ctrl.code + "/sddefault.jpg";
+                }
             };
             ctrl.playVideo = function () {
                 ctrl.isPlay = true;
