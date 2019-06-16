@@ -40,7 +40,12 @@ paths.appPortal = {
     ],
     dest: paths.webroot + "js/app-portal.min.js"
 };
-
+paths.appPortalRequired = {
+    src: [
+        paths.webapp + "app-portal/shared/**/*.js"
+    ],
+    dest: paths.webroot + "js/app-portal-required.min.js"
+};
 paths.initApp = {
     src: [
         paths.webapp + "app-init/app.js",
@@ -63,10 +68,16 @@ paths.clientApp = {
     src: [
         paths.webapp + "app-client/app.js",
         paths.webapp + "app-client/app-client-controller.js",
-        paths.webapp + "app-client/components/**/*.js"
+        paths.webapp + "app-client/components/**/script.js"
     ],
     dest: paths.webroot + "js/app-client.min.js"
 };
+paths.clientAppRequired={
+    src: [
+        paths.webapp + "app-client/shared/**/*.js"
+    ],
+    dest: paths.webroot + "js/app-client-required.min.js"
+}
 
 paths.tablerJs = {
     src: [        
@@ -170,6 +181,13 @@ gulp.task("min:portalApp", function (cb) {
         // .pipe(minify(paths.jsOptions))
         .pipe(gulp.dest(dest));
 });
+gulp.task("min:portalAppRequired", function (cb) {
+    return gulp.src(paths.appPortalRequired.src, { base: "." })
+        .pipe(concat(paths.appPortalRequired.dest))
+        .pipe(uglify())
+         .pipe(minify(paths.jsOptions))
+        .pipe(gulp.dest(dest));
+});
 
 gulp.task("min:initApp", function (cb) {
     return gulp.src(paths.initApp.src, { base: "." })
@@ -191,6 +209,14 @@ gulp.task("min:clientApp", function (cb) {
         .pipe(concat(paths.clientApp.dest))
         //.pipe(uglify())
         //.pipe(minify(paths.jsOptions))
+        .pipe(gulp.dest(dest));
+});
+
+gulp.task("min:clientAppRequired", function (cb) {
+    return gulp.src(paths.clientAppRequired.src, { base: "." })
+        .pipe(concat(paths.clientAppRequired.dest))
+        .pipe(uglify())
+        .pipe(minify(paths.jsOptions))
         .pipe(gulp.dest(dest));
 });
 
@@ -275,9 +301,15 @@ gulp.task("clean:portal", function (cb) {
 gulp.task("clean:portalApp", function (cb) {
     rimraf(paths.appPortal.dest, cb);
 });
+gulp.task("clean:portalAppRequired", function (cb) {
+    rimraf(paths.appPortalRequired.dest, cb);
+});
 
 gulp.task("clean:clientApp", function (cb) {
     rimraf(paths.clientApp.dest, cb);
+});
+gulp.task("clean:clientAppRequired", function (cb) {
+    rimraf(paths.clientAppRequired.dest, cb);
 });
 
 gulp.task("clean:sharedApp", function (cb) {
@@ -317,12 +349,12 @@ gulp.task("clean:sharedCss", function (cb) {
 gulp.task("clean:js", [
 
     "clean:framework", "clean:portal", "clean:shared"
-    , "clean:portalApp", "clean:clientApp", "clean:sharedApp", "clean:initApp", "clean:securityApp"
+    , "clean:portalApp","clean:portalAppRequired", "clean:clientApp", "clean:clientAppRequired", "clean:sharedApp", "clean:initApp", "clean:securityApp"
 ]);
 gulp.task("clean:css", [
     , "clean:appCss", "clean:appInitCss", "clean:portalCss", "clean:sharedCss"
 ]);
-gulp.task("min:js", ["min:portalApp", "min:initApp", "min:securityApp", "min:clientApp", "min:sharedApp"
+gulp.task("min:js", ["min:portalApp","min:portalAppRequired", "min:initApp", "min:securityApp", "min:clientApp", "min:clientAppRequired", "min:sharedApp"
     , "min:shared", "min:portal", "min:framework"
 ]);
 gulp.task("min:css", ['min:appCss', "min:appInitCss", 'min:portalCss', 'min:sharedCss']);
@@ -332,13 +364,13 @@ gulp.task("build", ['clean:js',
 
 gulp.task('watch:html', function () {
     gulp.watch('./app/**/**/*.html', ['min:views']);
-    gulp.watch('./app/**/**/*.js', ['min:portalApp']);
+    gulp.watch('./app/**/**/*.js', ['min:portalApp','min:portalAppRequired']);
     gulp.watch('./app/**/**/*.css', ['min:appCss','min:appInitCss']);
 });
 
 gulp.task('watch', function () {
     gulp.watch('./app/**/**/*.html', ['min:views']);
-    gulp.watch('./app/app-portal/**/*.js', ['min:portalApp']);
+    gulp.watch('./app/app-portal/**/*.js', ['min:portalApp','min:portalAppRequired']);
     gulp.watch('./app/app-shared/**/*.js', ['min:sharedApp']);
     gulp.watch('./app/app-/**/*.js', ['min:sharedApp']);
     gulp.watch('./app/**/**/*.css', ['min:appCss','min:appInitCss']);
