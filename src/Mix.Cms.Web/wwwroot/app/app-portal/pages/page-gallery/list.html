@@ -5,10 +5,10 @@
             <filter-list request="request" callback="getList(pageIndex)"></filter-list>
         </div>
         <div class="col-md-12">
-            <a href="/portal/article/create-gallery?page_id={{pageId}}" class="btn btn-light">
+            <a href="/portal/article/create-gallery?page_id={{pageId}}" class="btn btn-dark">
                 <i class="fas fa-plus"></i>
             </a>
-            <a href="#" data-toggle="modal" data-target="#modal-nav-articles-{{pageId}}" class="btn btn-light">
+            <a href="#" data-toggle="modal" data-target="#modal-nav-articles-{{pageId}}" class="btn btn-dark">
                 <i class="fas fa-search"></i>
             </a>
         </div>
@@ -75,14 +75,14 @@
 
                 <td>
                     <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                        <a href="/portal/article/gallery-details/{{item.article.id}}" class="btn btn-light">
+                        <a href="/portal/article/gallery-details/{{item.article.id}}" class="btn btn-dark">
                             <span class="fas fa-pencil-alt text-primary"></span>
                         </a>
-                        <a href="{{item.article.detailsUrl}}" target="_blank" class="btn btn-light">
+                        <a href="{{item.article.detailsUrl}}" target="_blank" class="btn btn-dark">
                             <span class="fas fa-eye text-info"></span>
                         </a>
 
-                        <a ng-click="remove(item.pageId,item.articleId);" class="btn btn-light">
+                        <a ng-click="remove(item.pageId,item.articleId);" class="btn btn-dark">
                             <span class="fas fa-times text-danger"></span>
                         </a>
                     </div>

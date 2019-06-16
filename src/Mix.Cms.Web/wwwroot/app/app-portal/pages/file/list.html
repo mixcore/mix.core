@@ -47,14 +47,14 @@
                     </td>
                     <td>
                         <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                            <a href="/portal/file/details?folder={{item.fileFolder}}&filename={{item.fileName}}{{item.extension}}" class="btn btn-light">
+                            <a href="/portal/file/details?folder={{item.fileFolder}}&filename={{item.fileName}}{{item.extension}}" class="btn btn-dark">
                                 <span class="fa fa-pen text-primary"></span>
                             </a>
-                            <a href="{{item.webPath}}" target="_blank" class="btn btn-light">
+                            <a href="{{item.webPath}}" target="_blank" class="btn btn-dark">
                                 <span class="far fa-eye text-primary"></span>
                             </a>
 
-                            <button type="button" class="btn btn-light del-popover" ng-click="removeFile(item.id)">
+                            <button type="button" class="btn btn-dark del-popover" ng-click="removeFile(item.id)">
                                 <span class="fa fa-times text-danger"></span>
                             </button>
                             <div class="popover-body d-none">
