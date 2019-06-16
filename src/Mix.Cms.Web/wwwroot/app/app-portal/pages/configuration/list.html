@@ -1,58 +1,60 @@
 <section class="card mb-3 manual">
-    <div class="row">
-        <div class="col-md-12 mb-3">
-            <filter-list request="request" callback="getList(pageIndex)"></filter-list>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <filter-list request="request" callback="getList(pageIndex)"></filter-list>
+            </div>
         </div>
-    </div>
-    <table class="table table-sm table-hover" cellspacing="0">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col" width="20%">
-                    Keyword
-                </th>
-                <th scope="col" width="20%">
-                    Value
-                </th>
-                <th scope="col" width="20%">
-                    Description
-                </th>
-                <th scope="col" width="5%">
-                    Category
-                </th>
-                <th scope="col" width="5%" class="text-right">
-                    Actions
-                </th>
-            </tr>
-        </thead>
+        <table class="table table-sm table-hover" cellspacing="0">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col" width="20%">
+                        Keyword
+                    </th>
+                    <th scope="col" width="20%">
+                        Value
+                    </th>
+                    <th scope="col" width="20%">
+                        Description
+                    </th>
+                    <th scope="col" width="5%">
+                        Category
+                    </th>
+                    <th scope="col" width="5%" class="text-right">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
 
-        <tbody class="sortable" ng-init="getList()">
-            <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="configuration" sort-model-id="{{item.id}}">
-                <td>
-                    <small><span ng-bind="item.keyword"></span></small>
-                </td>
-                <td>
-                    <small>
-                        <module-data-preview data="item.property" width="50"></module-data-preview>
-                    </small>
-                </td>
-                <td>
-                    <small><span ng-bind="item.description"></span></small>
-                </td>
-                <td>
-                    <span ng-bind="item.category"></span>
-                </td>
-                <td>
-                    <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                        <a href="/portal/configuration/details/{{item.keyword}}" class="btn btn-dark">
-                            <span class="fa fa-pen text-primary"></span>
-                        </a>
-                        <a href="#" ng-click="remove(item.keyword);" class="btn btn-dark">
-                            <span class="fas fa-times text-danger"></span>
-                        </a>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
-</paging></section>
+            <tbody class="sortable" ng-init="getList()">
+                <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="configuration" sort-model-id="{{item.id}}">
+                    <td>
+                        <small><span ng-bind="item.keyword"></span></small>
+                    </td>
+                    <td>
+                        <small>
+                            <module-data-preview data="item.property" width="50"></module-data-preview>
+                        </small>
+                    </td>
+                    <td>
+                        <small><span ng-bind="item.description"></span></small>
+                    </td>
+                    <td>
+                        <span ng-bind="item.category"></span>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
+                            <a href="/portal/configuration/details/{{item.keyword}}" class="btn btn-dark">
+                                <span class="fa fa-pen text-primary"></span>
+                            </a>
+                            <a href="#" ng-click="remove(item.keyword);" class="btn btn-dark">
+                                <span class="fas fa-times text-danger"></span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
+    </paging></div>
+</section>
