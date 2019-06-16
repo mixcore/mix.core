@@ -85,7 +85,7 @@
               container: 'chart-1-container',
               type: 'LINE',
               options: {
-                width: '100%',
+                width: '95%',
                 legendTextStyle: { color: '#FFF' },
                 titleTextStyle: { color: '#FFF' },
                 backgroundColor: { fill: 'transparent' },
