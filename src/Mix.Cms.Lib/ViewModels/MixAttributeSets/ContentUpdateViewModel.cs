@@ -77,7 +77,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         {
             var getData = MixArticleAttributeDatas.UpdateViewModel.Repository
             .GetModelListBy(
-                m => m.ArticleId == articleId && m.Specificulture == specificulture
+                m => m.ArticleId == articleId && m.Specificulture == specificulture && m.AttributeSetId== Id
                 , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
                 , pageSize, pageIndex
                 , _context: _context, _transaction: _transaction);
