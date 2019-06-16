@@ -28,6 +28,14 @@ app.controller('SocialFeedController',
             };
             $scope.init = async function () {
 
+                window.fbAsyncInit = function () {
+                    FB.init({
+                        appId: $rootScope.getConfiguration('FacebookAppId'),
+                        autoLogAppEvents: true,
+                        xfbml: true,
+                        version: 'v3.2'
+                    });
+                };
                 $scope.socialSettings = {
                     app_id: $rootScope.settings.data.FacebookAppId,
                     page_id: $rootScope.settings.data.Facebook_Page_Id,

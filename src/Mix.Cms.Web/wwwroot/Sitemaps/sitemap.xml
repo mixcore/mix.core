@@ -1,45 +1,57 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url xmlns="">
-    <lastmod>2019-06-15T12:31:13.2490356Z</lastmod>
+    <lastmod>2019-06-16T04:46:53.7442664Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/home</loc>
   </url>
   <url xmlns="">
-    <lastmod>2019-06-15T12:31:13.2569054Z</lastmod>
+    <lastmod>2019-06-16T04:46:53.7556444Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/tag</loc>
   </url>
   <url xmlns="">
-    <lastmod>2019-06-15T12:31:13.2569989Z</lastmod>
+    <lastmod>2019-06-16T04:46:53.7557778Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/search</loc>
   </url>
   <url xmlns="">
-    <lastmod>2019-06-15T12:31:13.2570307Z</lastmod>
+    <lastmod>2019-06-16T04:46:53.755831Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/404</loc>
   </url>
   <url xmlns="">
-    <lastmod>2019-06-15T12:31:13.2570762Z</lastmod>
+    <lastmod>2019-06-16T04:46:53.7558663Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/403</loc>
   </url>
   <url xmlns="">
-    <lastmod>2019-06-15T12:31:13.2571407Z</lastmod>
+    <lastmod>2019-06-16T04:46:53.755897Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/500</loc>
   </url>
   <url xmlns="">
-    <lastmod>2019-06-15T12:31:13.2571784Z</lastmod>
+    <lastmod>2019-06-16T04:46:53.7559662Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/maintenance</loc>
+  </url>
+  <url xmlns="">
+    <lastmod>2019-06-16T04:46:54.0188805Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url xmlns="">
+    <lastmod>2019-06-16T04:46:54.0190246Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
   </url>
 </urlset>

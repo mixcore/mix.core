@@ -1,17 +1,18 @@
-<div class="tab-pane fade active show" id="pills-general" role="tabpanel" aria-labelledby="pills-general-tab">
+<div class="tab-pane fade active show" id="pills-general" role="tabpanel" 
+    aria-labelledby="pills-general-tab">
 
     <div class="form-group">
         <label class="control-label">Attribute Sets</label>
         <navs data="$ctrl.article.attributeSetNavs" prefix="'attribute_set'"></navs>
     </div>
-
     <tabs-v select-callback="$ctrl.selectPane(pane)" class="mb-3">
-        <pane-v title="General" class="card" ng-if="set.isActived">
+        <pane-v title="{{set.description}}" class="card" ng-repeat="set in $ctrl.article.attributeSetNavs track by $index"
+             ng-if="set.isActived">
             <div class="card-body">
                 <attribute-set-values ng-repeat="item in set.attributeSet.articleData.items track by $index"
                     attributes="set.attributeSet.attributes" data="item.data">
                 </attribute-set-values>
             </div>
         </pane-v>
-    </tabs-v>
+    </tabs-v>    
 </div>
