@@ -10440,6 +10440,21 @@ body {
   color: #cccccc;
 }
 
+.nav-tabs {
+  border-bottom: 1px solid #777;
+}
+
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
+  color: #209e91;
+  background-color: #1e1e1e;
+  border-color: #777 #777 #1e1e1e;
+}
+
+.nav-tabs .nav-link:hover, .nav-tabs .nav-tabs .nav-link:focus {
+  border-color: #444 #444 #777;
+}
+
 .sw-navbar {
   min-height: 4rem;
   background-color: #1e1e1e;
@@ -10819,6 +10834,10 @@ body {
   color: #cccccc;
 }
 
+.sw-sidebar .sw-toc-item .sw-toc-link .text {
+  color: #cccccc !important;
+}
+
 .sw-sidebar .sw-toc-item .sw-toc-link span:first-child {
   padding-right: 10px;
   color: #209e91;
@@ -10947,17 +10966,17 @@ body {
 }
 
 .table th {
-  font-weight: bold;
+  font-weight: normal;
   font-size: small;
   color: #cccccc;
 }
 
-.table tr {
-  border-bottom: 1px solid;
+.table tbody tr {
+  border: 0px;
 }
 
-.table tr td {
-  border: 0px;
+.table tbody tr td {
+  border-top: 1px solid #444;
 }
 
 .table-hover tbody tr:hover {
