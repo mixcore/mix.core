@@ -10941,4 +10941,20 @@ body {
 .dropdown-item {
   color: #cccccc;
 }
+
+.table {
+  color: #cccccc;
+}
+
+.table tr {
+  border-bottom: 1px solid;
+}
+
+.table tr td {
+  border: 0px;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #209e91;
+}
 /*# sourceMappingURL=mix.fe.portal-dark.css.map */

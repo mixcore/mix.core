@@ -4,11 +4,11 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label>Title</label>
-                    <input type="text" class="form-control form-control-lg" ng-model="activedData.title" ng-blur="$ctrl.generateSEO()">
+                    <input type="text" class="form-control" ng-model="activedData.title" ng-blur="$ctrl.generateSEO()">
                 </div>
                 <div class="form-group">
                     <label>Excerpt</label>
-                    <textarea class="form-control form-control-lg" ng-model="activedData.description">{{activedData.excerpt}}</textarea>
+                    <textarea class="form-control" ng-model="activedData.description">{{activedData.excerpt}}</textarea>
                 </div>
                 <custom-file header="''" folder="'Medias'" media-file="activedData.mediaFile" data="activedData"
                     src-url="activedData.mediaFile.fullPath" on-update="getList()" save="save(activedData)" auto="'false'"
@@ -23,7 +23,7 @@
     </div>
     <div class="card-body">
         <table class="table table-sm table-hover" cellspacing="0">
-            <thead class="thead-light">
+            <thead class="thead-dark">
                 <tr>
                     <th scope="col" style="width: 3%;">
                         <span class="oi oi-sort-ascending"></span>

@@ -1,9 +1,8 @@
 <!-- Main content -->
 <section class="" ng-init="getSingle()">
     <form id="frm-theme" ng-class="{'submitted': submitted}" ng-submit="save(activedData)" ng-if="activedData">
-        <actions preview-url="activedData.detailsUrl" back-url="'/portal/theme/list'"></actions>
         <div class="row justify-content-md-center">
-            <div class="col-6">
+            <div class="col-8">
                 <div class="card mb-3">
                     <h6 class="card-header">
                         Main Content
@@ -12,11 +11,11 @@
 
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
-                            <input type="text" ng-model="activedData.title" ng-change="generateSEO()" class="form-control form-control-lg" placeholder="Enter your theme name here...">
+                            <input type="text" ng-model="activedData.title" ng-change="generateSEO()" class="form-control" placeholder="Enter your theme name here...">
                         </div>
 
                         <div class="form-group">
-                            <input type="text" ng-model="activedData.previewUrl" class="form-control form-control-lg" placeholder="Preview Url">
+                            <input type="text" ng-model="activedData.previewUrl" class="form-control" placeholder="Preview Url">
                         </div>
 
                         <div class="form-group">
@@ -28,7 +27,7 @@
                             {{theme.name}}
                             <api-file form-name="'theme'" class="form-control" posted-file="theme"></api-file>
                         </div>
-                        <custom-image header="'Image'" type="'Themes'" folder="activedData.name" src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
+
                         <div class="form-group">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" ng-model="activedData.isActived" id="isActived">
@@ -39,6 +38,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="col-4">
+                <actions preview-url="activedData.detailsUrl" back-url="'/portal/theme/list'"></actions>
+                <custom-image header="'Image'" type="'Themes'" folder="activedData.name" src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
             </div>
         </div>
 
