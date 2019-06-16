@@ -67,8 +67,8 @@
         </div>
         <div ng-switch-when="16">
             <!--upload-->
-            <custom-image header="''" type="'Modules'" folder="activedPage.seoName" src-url="$ctrl.attributeValue.stringValue" ng-src="{{$ctrl.attribute.value}}" auto="'true'">
-        </custom-image></div>
+            <custom-image header="'Image'" type="'Articles'" folder="'Attributes'" src-url="$ctrl.attributeValue.stringValue" src="$ctrl.attributeValue.stringValue" auto="'true'"></custom-image>
+        </div>
         <div ng-switch-when="17">
             <!--Color-->
             <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="color" ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attribute.title}}">

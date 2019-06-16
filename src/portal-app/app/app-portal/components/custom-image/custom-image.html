@@ -2,22 +2,15 @@
     <h6 class="card-header">
         {{$ctrl.header}}
 
-        <a class="btn btn-link text-primary btn-sm float-right py-0" href="#" data-toggle="modal"
+        <a  class="btn btn-link text-primary btn-sm float-right py-0" data-toggle="modal"
             data-target="#modal-files-search-{{$ctrl.id}}">
             <i class="fa fa-folder-open"></i> Browse
         </a>
-        <button class="btn btn-link text-primary btn-sm float-right py-0" type="button" data-toggle="collapse"
-            data-target="#modal-files-search-{{$ctrl.id}}-toggle" aria-controls="modal-files-search-{{$ctrl.id}}-toggle"
-            aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-file-upload"></i> Upload</button>
+        <a class="btn btn-link text-primary btn-sm float-right py-0"
+            ng-click="$ctrl.isShowBrowser = !$ctrl.isShowBrowser"    
+        ><i class="fa fa-file-upload"></i> Upload</a>
     </h6>
-    <div class="card-body p-0"
-        style="background:url(/images/upload-image-thumbnail.png) no-repeat center;  cursor:pointer; min-height: 200px;">
-        <img ng-if="$ctrl.isImage" imageonload ng-src="{{$ctrl.srcUrl}}" ng-if="$ctrl.srcUrl" name="pic"
-            class="custom-file-img d-block ng-scope ml-auto mr-auto w-100" accept="image/*">
-        <a ng-if="!$ctrl.isImage && $ctrl.srcUrl" href="{{$ctrl.srcUrl}}" target="_blank">View</a>
-        <input type="hidden" value="{{$ctrl.type}}/{{$ctrl.folder}}" class="folder-val">
-    </div>
-    <div id="modal-files-search-{{$ctrl.id}}-toggle" class="card-footer collapse">
+    <div  ng-show="$ctrl.isShowBrowser" class="card-header">
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text">URL</span>
@@ -34,6 +27,14 @@
             </div>
         </div>
     </div>
+    <div class="card-body p-0"
+        style="background:url(/images/upload-image-thumbnail.png) no-repeat center;  cursor:pointer; min-height: 200px;">
+        <img ng-if="$ctrl.isImage" imageonload ng-src="{{$ctrl.srcUrl}}" ng-if="$ctrl.srcUrl" name="pic"
+            class="custom-file-img d-block ng-scope ml-auto mr-auto w-100" accept="image/*">
+        <a ng-if="!$ctrl.isImage && $ctrl.srcUrl" href="{{$ctrl.srcUrl}}" target="_blank">View</a>
+        <input type="hidden" value="{{$ctrl.type}}/{{$ctrl.folder}}" class="folder-val">
+    </div>
+    
 </div>
 
 <div class="modal modal-default fade show" id="modal-files-search-{{$ctrl.id}}" ng-init="getListMedias()">
