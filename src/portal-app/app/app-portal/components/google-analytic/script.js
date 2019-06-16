@@ -86,11 +86,20 @@
               type: 'LINE',
               options: {
                 width: '100%',
+                legendTextStyle: { color: '#FFF' },
+                titleTextStyle: { color: '#FFF' },
+                backgroundColor: { fill: 'transparent' },
+                hAxis: {
+                  textStyle: { color: '#FFF' }
+                },
+                vAxis: {
+                  textStyle: { color: '#FFF' }
+                }
               }
             }
           });
 
-          
+
           dataChart1.set({ query: { ids: $rootScope.settings.data.Google_Analytic_Ids } }).execute();
           activeUsers.set({ ids: $rootScope.settings.data.Google_Analytic_Ids }).execute();
 
