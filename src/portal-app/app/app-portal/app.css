@@ -15,9 +15,9 @@ html, body{
 }
 
 /* CARD STYLE */
-.card.manual{
+/* .card.manual{
     padding: 20px 20px 0 20px;
-}
+} */
 /**
  * The dnd-list should always have a min-height,
  * otherwise you can't drop to it once it's empty
