@@ -207,7 +207,7 @@ table {
 caption {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
-  color: #fff;
+  color: #444;
   text-align: left;
   caption-side: bottom;
 }
@@ -2174,7 +2174,7 @@ textarea.form-control {
 }
 
 .form-check-input:disabled ~ .form-check-label {
-  color: #fff;
+  color: #444;
 }
 
 .form-check-label {
@@ -10316,7 +10316,7 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 .text-muted {
-  color: #fff !important;
+  color: #444 !important;
 }
 
 .text-black-50 {
@@ -10961,6 +10961,25 @@ body {
 }
 
 .table-hover tbody tr:hover {
-  background-color: #209e91;
+  color: #9bfff3;
+  background-color: #151515;
+  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.modal {
+  z-index: 1072;
+}
+
+.modal-content {
+  background-color: #1e1e1e;
+}
+
+.modal-content .modal-footer {
+  border-color: #2b2c33;
+}
+
+.modal-content .modal-header {
+  border-color: #2b2c33;
 }
 /*# sourceMappingURL=mix.fe.portal-dark.css.map */
