@@ -36,13 +36,13 @@
                 </div>
                 <div class="col-sm-{{$ctrl.lastColWidth}}">
                     <div class="btn-group btn-group-sm float-right" role="group" aria-label="Actions">
-                        <a ng-if="nav.childNavs.length > 0" class="btn btn-light" ng-click="$ctrl.toggleChildNavs(nav)">
+                        <a ng-if="nav.childNavs.length > 0" class="btn btn-dark" ng-click="$ctrl.toggleChildNavs(nav)">
                             <span class="fa fa-list text-primary"></span>
                         </a>
-                        <a ng-if="$ctrl.editUrl" ng-click="$ctrl.goTo(nav.id)" class="btn btn-sm btn-light">
+                        <a ng-if="$ctrl.editUrl" ng-click="$ctrl.goTo(nav.id)" class="btn btn-sm btn-dark">
                             <span class="fas fa-pencil-alt text-primary"></span>
                         </a>
-                        <a ng-click="$ctrl.delete(nav.id);" class="btn btn-light del-popover" data-toggle="popover" data-html="true">
+                        <a ng-click="$ctrl.delete(nav.id);" class="btn btn-dark del-popover" data-toggle="popover" data-html="true">
                             <span class="fas fa-times text-danger"></span>
                         </a>
                     </div>
@@ -64,10 +64,10 @@
                         </div>
                         <div class="col-sm-{{$ctrl.lastColWidth}}">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Actions">
-                                <a ng-if="$ctrl.editUrl" ng-click="$ctrl.goTo(snav.id)" class="btn btn-sm btn-light">
+                                <a ng-if="$ctrl.editUrl" ng-click="$ctrl.goTo(snav.id)" class="btn btn-sm btn-dark">
                                     <span class="fas fa-pencil-alt text-primary"></span>
                                 </a>
-                                <a ng-click="$ctrl.delete(snav.id);" class="btn btn-light del-popover" data-toggle="popover" data-html="true">
+                                <a ng-click="$ctrl.delete(snav.id);" class="btn btn-dark del-popover" data-toggle="popover" data-html="true">
                                     <span class="fas fa-times text-danger"></span>
                                 </a>
                             </div>

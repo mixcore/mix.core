@@ -8,13 +8,13 @@
         <div class="col-md-12">
             <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
                 <div class="btn-group mr-2">
-                    <a href="/portal/article/create?module_id={{moduleId}}" class="btn btn-light">
+                    <a href="/portal/article/create?module_id={{moduleId}}" class="btn btn-dark">
                         <i class="fas fa-plus"></i>
                     </a>
-                    <a data-toggle="modal" data-target="#modal-nav-articles-{{moduleId}}" class="btn btn-light">
+                    <a data-toggle="modal" data-target="#modal-nav-articles-{{moduleId}}" class="btn btn-dark">
                         <i class="fas fa-search"></i>
                     </a>
-                    <a href="/portal/module/details/{{moduleId}}" class="btn btn-light">
+                    <a href="/portal/module/details/{{moduleId}}" class="btn btn-dark">
                         <i class="fas fa-pencil-alt"></i>
                     </a>
                 </div>
@@ -85,14 +85,14 @@
 
                 <td>
                     <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                        <a href="/portal/article/details/{{item.article.id}}" class="btn btn-light">
+                        <a href="/portal/article/details/{{item.article.id}}" class="btn btn-dark">
                             <span class="fas fa-pencil-alt text-primary"></span>
                         </a>
-                        <a ng-click="preview(item.article)" target="_blank" class="btn btn-light">
+                        <a ng-click="preview(item.article)" target="_blank" class="btn btn-dark">
                             <span class="fas fa-eye text-info"></span>
                         </a>
 
-                        <a ng-click="remove(item.moduleId,item.articleId);" class="btn btn-light">
+                        <a ng-click="remove(item.moduleId,item.articleId);" class="btn btn-dark">
                             <span class="fas fa-times text-danger"></span>
                         </a>
                     </div>
