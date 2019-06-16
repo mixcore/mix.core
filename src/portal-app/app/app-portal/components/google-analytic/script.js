@@ -119,7 +119,7 @@
                   viewSelector1.on('change', function(ids) {
                     dataChart1.set({query: {ids: ids}}).execute();
                     // Start tracking active users for this view.
-                    activeUsers.set({query: {ids: ids}}).execute();
+                    activeUsers.set({ids: ids}).execute();
                   });
                 
                   /**
