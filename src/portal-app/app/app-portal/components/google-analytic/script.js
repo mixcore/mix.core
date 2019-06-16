@@ -75,6 +75,7 @@
                    */
                   var dataChart1 = new gapi.analytics.googleCharts.DataChart({
                     query: {
+                      ids: $rootScope.settings.data.Google_Analytic_Ids,
                       metrics: 'ga:sessions',
                       dimensions: 'ga:date',
                       'start-date': '30daysAgo',
@@ -96,6 +97,7 @@
                    */
                   var dataChart2 = new gapi.analytics.googleCharts.DataChart({
                     query: {
+                      ids: $rootScope.settings.data.Google_Analytic_Ids,
                       metrics: 'ga:sessions',
                       dimensions: 'ga:country',
                       'start-date': '30daysAgo',
