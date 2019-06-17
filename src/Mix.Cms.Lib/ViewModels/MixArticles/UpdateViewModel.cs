@@ -604,8 +604,29 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 }
                 else
                 {
-                    var saveResult = await nav.RemoveModelAsync(false, _context, _transaction);
+                    var saveResult = await nav.RemoveModelAsync(false, _context, _transaction);                    
                     ViewModelHelper.HandleResult(saveResult, ref result);
+
+                    // Remove Article Attribute Data
+                    if (result.IsSucceed)
+                    {
+                        var data = await _context.MixArticleAttributeData.Where(n => n.ArticleId == Id
+                            && n.Specificulture == Specificulture).ToListAsync();
+                        foreach (var item in data)
+                        {
+                            var values = await _context.MixArticleAttributeValue.Where(n =>
+                                n.DataId==item.Id && n.ArticleId == Id
+                                && n.Specificulture == Specificulture).ToListAsync();
+                            foreach (var val in values)
+                            {
+                                _context.Entry(val).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                            }
+                            _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                        }
+                        await _context.SaveChangesAsync();
+
+                        ViewModelHelper.HandleResult(saveResult, ref result);
+                    }
                 }
             }
             return result;
