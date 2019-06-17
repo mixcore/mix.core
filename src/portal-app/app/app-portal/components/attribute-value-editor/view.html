@@ -81,10 +81,10 @@
                 ng-model="$ctrl.attributeValue.booleanValue" ng-checked="$ctrl.attributeValue.booleanValue=='true'" >
         </div>
         <div ng-switch-when="19">
-            <mix-select-icons prefix="'fab'" options="$ctrl.icons" data="$ctrl.attributeValue.booleanValue"></mix-select-icons>            
+            <mix-select-icons prefix="'fab'" options="$ctrl.icons" data="$ctrl.attributeValue.stringValue"></mix-select-icons>            
         </div>
         <div ng-switch-when="20">            
-            <youtube-editor code="$ctrl.attributeValue.booleanValue"></youtube-editor>
+            <youtube-editor code="$ctrl.attributeValue.stringValue"></youtube-editor>
         </div>
     </div>
 </div>

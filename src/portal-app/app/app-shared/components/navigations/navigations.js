@@ -22,7 +22,6 @@ modules.component('navs', {
         ctrl.logListEvent = function(action, index, external, type) {
             var message = external ? 'External ' : '';
             message += type + ' element was ' + action + ' position ' + index;
-            console.log(message);
         };
         ctrl.goToDetails = async function (nav) {
             $location.url(ctrl.detailsUrl + nav[ctrl.key]);

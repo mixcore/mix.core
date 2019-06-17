@@ -2,7 +2,7 @@
 
     <div class="form-group">
         <label class="control-label">Attribute Sets</label>
-        <navs data="$ctrl.article.attributeSetNavs" prefix="'attribute_set'"></navs>
+        <navs data="$ctrl.article.attributeSetNavs" prefix="'attribute_set'" details-url="'/portal/attribute-set/details/'" key="'attributeSetId'"></navs>
     </div>
     <tabs-v select-callback="$ctrl.selectPane(pane)" class="mb-3">
         <pane-v title="{{set.description}}" class="card" ng-repeat="set in $ctrl.article.attributeSetNavs track by $index" ng-if="set.isActived">
