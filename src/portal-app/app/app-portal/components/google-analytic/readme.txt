@@ -4,7 +4,7 @@ References
  - Api Documents
     + https://developers.google.com/analytics/devguides/reporting/embed/v1/
 
-1. Create Consense screen
+1. Create Consent screen
 https://console.developers.google.com/apis/credentials/consent
 
 2. Create OAuth ClientId

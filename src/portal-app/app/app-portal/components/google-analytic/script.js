@@ -16,7 +16,6 @@
             container: 'embed-api-auth-container',
             //REPLACE WITH YOUR CLIENT ID
             clientid: $rootScope.settings.data.Google_Analytic_Key
-            //secret: 'C1XJeorJGwTE5tLzgmSQP2_D'
           });
 
 

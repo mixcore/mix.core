@@ -13,8 +13,8 @@
             <th scope="col">Value</th>
         </tr>
     </thead>
-    <tbody class="sortable" dnd-list="$ctrl.attributes">
-        <tr class="sortable-item module-column" ng-repeat="prop in $ctrl.attributes track by $index" dnd-draggable="col" dnd-effect-allowed="move" dnd-selected="$ctrl.selectedProp = col" dnd-moved="$ctrl.attributes.splice($index, 1)" ng-class="{'selected': $ctrl.selectedProp === col}">
+    <tbody class="sortable">
+        <tr class="sortable-item module-column" ng-repeat="prop in $ctrl.attributes track by $index" ng-class="{'selected': $ctrl.selectedProp === col}">
             <td style="cursor:move;">
                 <span class="oi oi-move"></span>
             </td>
@@ -22,7 +22,7 @@
                 <span ng-bind="prop.title"></span>
             </td>
             <td class="prop-value-container">                 
-                <attribute-value-editor attribute-value="$ctrl.data[$index]" attribute="prop"></attribute-value-editor>                
+                <attribute-value-editor attribute-value="$ctrl.filterData(prop.name)" attribute="prop"></attribute-value-editor>                
             </td>
         </tr>
     </tbody>

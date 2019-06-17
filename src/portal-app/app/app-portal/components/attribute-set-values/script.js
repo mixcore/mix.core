@@ -54,5 +54,23 @@ modules.component('attributeSetValues', {
                     ctrl.columns.push(t);
                 }
             };
+
+            ctrl.filterData = function(attributeName){
+                return $rootScope.findObjectByKey(ctrl.data, 'attributeName', attributeName);
+            }
+            ctrl.dragStart = function(index){
+                ctrl.dragStartIndex = index;
+            };
+            ctrl.updateOrders = function(index){
+                if(index> ctrl.dragStartIndex){
+                    ctrl.attributes.splice(ctrl.dragStartIndex, 1);
+                }
+                else{
+                    ctrl.attributes.splice(ctrl.dragStartIndex+1, 1);
+                }
+                angular.forEach(ctrl.attributes, function(e,i){
+                    e.priority = i;
+                });
+            } 
         }]
 });
