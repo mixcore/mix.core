@@ -584,7 +584,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     if (result.IsSucceed)
                     {
                         // Save article Data
-                        foreach (var item in nav.AttributeSet.ArticleData.Items)
+                        foreach (var item in nav.MixAttributeSet.ArticleData.Items)
                         {
                             item.ArticleId = parentId;
                             item.AttributeSetId = nav.AttributeSetId;
@@ -610,7 +610,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     // Remove Article Attribute Data
                     if (result.IsSucceed)
                     {
-                        var data = await _context.MixArticleAttributeData.Where(n => n.ArticleId == Id
+                        var data = await _context.MixArticleAttributeData.Where(n => n.ArticleId == Id && n.AttributeSetId== nav.AttributeSetId
                             && n.Specificulture == Specificulture).ToListAsync();
                         foreach (var item in data)
                         {
@@ -1052,7 +1052,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 foreach (var item in AttributeSetNavs)
                 {
                     item.IsActived = true;
-                    item.AttributeSet.LoadArticleData(
+                    item.MixAttributeSet.LoadArticleData(
                         articleId: Id, specificulture: Specificulture
                         , _context: _context, _transaction: _transaction);
                 }
@@ -1071,7 +1071,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     AttributeSetId = item.Id,
                     ArticleId = Id,
                     Description = item.Title,
-                    AttributeSet = item
+                    MixAttributeSet = item
                 });
             }
         }

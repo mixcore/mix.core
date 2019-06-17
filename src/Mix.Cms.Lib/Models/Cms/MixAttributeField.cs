@@ -5,8 +5,16 @@ namespace Mix.Cms.Lib.Models.Cms
 {
     public partial class MixAttributeField
     {
+        public MixAttributeField()
+        {
+            MixArticleAttributeValue = new HashSet<MixArticleAttributeValue>();
+            MixModuleAttributeValue = new HashSet<MixModuleAttributeValue>();
+            MixPageAttributeValue = new HashSet<MixPageAttributeValue>();
+        }
+
         public int Id { get; set; }
         public int AttributeSetId { get; set; }
+        public string Regex { get; set; }
         public string Title { get; set; }
         public int DataType { get; set; }
         public string DefaultValue { get; set; }
@@ -20,6 +28,9 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Priority { get; set; }
         public int Status { get; set; }
 
-        public virtual MixAttributeSet MixAttributeSet { get; set; }
+        public virtual MixAttributeSet AttributeSet { get; set; }
+        public virtual ICollection<MixArticleAttributeValue> MixArticleAttributeValue { get; set; }
+        public virtual ICollection<MixModuleAttributeValue> MixModuleAttributeValue { get; set; }
+        public virtual ICollection<MixPageAttributeValue> MixPageAttributeValue { get; set; }
     }
 }

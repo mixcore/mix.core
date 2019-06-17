@@ -17,6 +17,8 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
         public string Id { get; set; }
         [JsonProperty("dataId")]
         public string DataId { get; set; }
+        [JsonProperty("attributeFieldId")]
+        public int AttributeFieldId { get; set; }
         [JsonProperty("dataType")]
         public int DataType { get; set; }
         [JsonProperty("attributeName")]
@@ -47,8 +49,8 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
         #endregion Models
 
         #region Views
-        [JsonProperty("fields")]
-        public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
+        [JsonProperty("field")]
+        public MixAttributeFields.UpdateViewModel Field { get; set; }
         #endregion
 
         #endregion Properties
@@ -66,13 +68,46 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
         #endregion Contructors
 
         #region Overrides
-
+        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            Field = MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId, _context, _transaction).Data;
+        }
+        public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            base.Validate(_context, _transaction);
+            if (IsValid)
+            {
+                if (Field.IsRequire)
+                {
+                    IsValid = IsValid && !string.IsNullOrEmpty(StringValue);
+                    if (!IsValid)
+                    {
+                        Errors.Add($"{Field.Title} is required");
+                    }
+                }
+                // validate unique
+                if (Field.IsUnique)
+                {
+                    IsValid = IsValid && !Repository.CheckIsExists(
+                        f => f.StringValue == StringValue && f.Specificulture == Specificulture);
+                    if (!IsValid)
+                    {
+                        Errors.Add($"{Field.Title} is existed");
+                    }
+                }
+            }
+        }
         public override MixArticleAttributeValue ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))
             {
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
+            }
+
+            if (Field.IsEncrypt)
+            {
+
             }
             return base.ParseModel(_context, _transaction);
         }

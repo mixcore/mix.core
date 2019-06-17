@@ -16,6 +16,8 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
         public int Id { get; set; }
         [JsonProperty("dataId")]
         public string DataId { get; set; }
+        [JsonProperty("attributeFieldId")]
+        public int AttributeFieldId { get; set; }
         [JsonProperty("dataType")]
         public int DataType { get; set; }
         [JsonProperty("attributeName")]
