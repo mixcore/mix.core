@@ -7,6 +7,7 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public string Id { get; set; }
         public string Specificulture { get; set; }
+        public int AttributeFieldId { get; set; }
         public string DataId { get; set; }
         public string AttributeName { get; set; }
         public int ArticleId { get; set; }
@@ -23,6 +24,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public DateTime CreatedDateTime { get; set; }
         public int DataType { get; set; }
 
+        public virtual MixAttributeField AttributeField { get; set; }
         public virtual MixArticleAttributeData Data { get; set; }
     }
 }

@@ -39,7 +39,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeSets
         public MixEnums.MixContentStatus Status { get; set; }
         #region Views
         [JsonProperty("attributeSet")]
-        public MixAttributeSets.ContentUpdateViewModel AttributeSet { get; set; }
+        public MixAttributeSets.ContentUpdateViewModel MixAttributeSet { get; set; }
 
         #endregion Views
 
@@ -51,7 +51,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeSets
             );
             if (getAttributeSet.IsSucceed)
             {
-                AttributeSet = getAttributeSet.Data;
+                MixAttributeSet = getAttributeSet.Data;
             }
         }
 
@@ -62,7 +62,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeSets
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
 
             //Save current set attribute
-            var saveResult = await AttributeSet.SaveModelAsync(true, _context, _transaction);
+            var saveResult = await MixAttributeSet.SaveModelAsync(true, _context, _transaction);
             ViewModelHelper.HandleResult(saveResult, ref result);
             return result;
         }

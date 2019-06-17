@@ -158,6 +158,8 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("ArticleId");
 
+                    b.Property<int>("AttributeFieldId");
+
                     b.Property<string>("AttributeName")
                         .IsRequired()
                         .HasMaxLength(50);
@@ -200,6 +202,8 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(4000);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AttributeFieldId");
 
                     b.HasIndex("DataId");
 
@@ -295,6 +299,9 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(4000);
 
                     b.Property<int>("Priority");
+
+                    b.Property<string>("Regex")
+                        .HasMaxLength(250);
 
                     b.Property<int>("Status");
 
@@ -917,6 +924,8 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Id")
                         .HasMaxLength(50);
 
+                    b.Property<int>("AttributeFieldId");
+
                     b.Property<string>("AttributeName")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -957,6 +966,9 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
+                    b.Property<string>("Regex")
+                        .HasMaxLength(250);
+
                     b.Property<string>("Specificulture")
                         .IsRequired()
                         .HasMaxLength(10);
@@ -967,6 +979,8 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(4000);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AttributeFieldId");
 
                     b.HasIndex("DataId");
 
@@ -1286,6 +1300,8 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Id")
                         .HasMaxLength(50);
 
+                    b.Property<int>("AttributeFieldId");
+
                     b.Property<string>("AttributeName")
                         .IsRequired()
                         .HasMaxLength(50);
@@ -1328,6 +1344,8 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(4000);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AttributeFieldId");
 
                     b.HasIndex("DataId");
 
@@ -1987,7 +2005,7 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixArticleAttributeSet", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "MixAttributeSet")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
                         .WithMany("MixArticleAttributeSet")
                         .HasForeignKey("AttributeSetId")
                         .HasConstraintName("FK_mix_article_attribute_set_mix_attribute_set");
@@ -2000,6 +2018,11 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixArticleAttributeValue", b =>
                 {
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeField", "AttributeField")
+                        .WithMany("MixArticleAttributeValue")
+                        .HasForeignKey("AttributeFieldId")
+                        .HasConstraintName("FK_mix_article_attribute_value_mix_attribute_field");
+
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixArticleAttributeData", "Data")
                         .WithMany("MixArticleAttributeValue")
                         .HasForeignKey("DataId")
@@ -2035,7 +2058,7 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeField", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "MixAttributeSet")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
                         .WithMany("MixAttributeField")
                         .HasForeignKey("AttributeSetId")
                         .HasConstraintName("FK_mix_attribute_field_mix_attribute_set");
@@ -2112,7 +2135,7 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleAttributeData", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "MixAttributeSet")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
                         .WithMany("MixModuleAttributeData")
                         .HasForeignKey("AttributeSetId")
                         .HasConstraintName("FK_mix_module_attribute_data_mix_attribute_set");
@@ -2125,7 +2148,7 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleAttributeSet", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "MixAttributeSet")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
                         .WithMany("MixModuleAttributeSet")
                         .HasForeignKey("AttributeSetId")
                         .HasConstraintName("FK_mix_module_attribute_set_mix_attribute_set");
@@ -2143,6 +2166,11 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleAttributeValue", b =>
                 {
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeField", "AttributeField")
+                        .WithMany("MixModuleAttributeValue")
+                        .HasForeignKey("AttributeFieldId")
+                        .HasConstraintName("FK_mix_module_attribute_value_mix_attribute_field");
+
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixModuleAttributeData", "Data")
                         .WithMany("MixModuleAttributeValue")
                         .HasForeignKey("DataId")
@@ -2239,7 +2267,7 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageAttributeSet", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "MixAttributeSet")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
                         .WithMany("MixPageAttributeSet")
                         .HasForeignKey("AttributeSetId")
                         .HasConstraintName("FK_mix_page_attribute_set_mix_attribute_set");
@@ -2252,6 +2280,11 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageAttributeValue", b =>
                 {
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeField", "AttributeField")
+                        .WithMany("MixPageAttributeValue")
+                        .HasForeignKey("AttributeFieldId")
+                        .HasConstraintName("FK_mix_page_attribute_value_mix_attribute_field");
+
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPageAttributeData", "Data")
                         .WithMany("MixPageAttributeValue")
                         .HasForeignKey("DataId")

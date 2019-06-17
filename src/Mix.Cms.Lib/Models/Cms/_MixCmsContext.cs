@@ -178,7 +178,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
-                entity.HasOne(d => d.MixAttributeSet)
+                entity.HasOne(d => d.AttributeSet)
                     .WithMany(p => p.MixArticleAttributeSet)
                     .HasForeignKey(d => d.AttributeSetId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -222,6 +222,12 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasMaxLength(10);
 
                 entity.Property(e => e.StringValue).HasMaxLength(4000);
+
+                entity.HasOne(d => d.AttributeField)
+                    .WithMany(p => p.MixArticleAttributeValue)
+                    .HasForeignKey(d => d.AttributeFieldId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_mix_article_attribute_value_mix_attribute_field");
 
                 entity.HasOne(d => d.Data)
                     .WithMany(p => p.MixArticleAttributeValue)
@@ -301,9 +307,11 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Options).HasMaxLength(4000);
 
+                entity.Property(e => e.Regex).HasMaxLength(250);
+
                 entity.Property(e => e.Title).HasMaxLength(250);
 
-                entity.HasOne(d => d.MixAttributeSet)
+                entity.HasOne(d => d.AttributeSet)
                     .WithMany(p => p.MixAttributeField)
                     .HasForeignKey(d => d.AttributeSetId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -720,7 +728,7 @@ namespace Mix.Cms.Lib.Models.Cms
                     .IsRequired()
                     .HasMaxLength(10);
 
-                entity.HasOne(d => d.MixAttributeSet)
+                entity.HasOne(d => d.AttributeSet)
                     .WithMany(p => p.MixModuleAttributeData)
                     .HasForeignKey(d => d.AttributeSetId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -751,7 +759,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
-                entity.HasOne(d => d.MixAttributeSet)
+                entity.HasOne(d => d.AttributeSet)
                     .WithMany(p => p.MixModuleAttributeSet)
                     .HasForeignKey(d => d.AttributeSetId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -800,11 +808,19 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.EncryptValue).HasMaxLength(4000);
 
+                entity.Property(e => e.Regex).HasMaxLength(250);
+
                 entity.Property(e => e.Specificulture)
                     .IsRequired()
                     .HasMaxLength(10);
 
                 entity.Property(e => e.StringValue).HasMaxLength(4000);
+
+                entity.HasOne(d => d.AttributeField)
+                    .WithMany(p => p.MixModuleAttributeValue)
+                    .HasForeignKey(d => d.AttributeFieldId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_mix_module_attribute_value_mix_attribute_field");
 
                 entity.HasOne(d => d.Data)
                     .WithMany(p => p.MixModuleAttributeValue)
@@ -1067,7 +1083,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
-                entity.HasOne(d => d.MixAttributeSet)
+                entity.HasOne(d => d.AttributeSet)
                     .WithMany(p => p.MixPageAttributeSet)
                     .HasForeignKey(d => d.AttributeSetId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -1111,6 +1127,12 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasMaxLength(10);
 
                 entity.Property(e => e.StringValue).HasMaxLength(4000);
+
+                entity.HasOne(d => d.AttributeField)
+                    .WithMany(p => p.MixPageAttributeValue)
+                    .HasForeignKey(d => d.AttributeFieldId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_mix_page_attribute_value_mix_attribute_field");
 
                 entity.HasOne(d => d.Data)
                     .WithMany(p => p.MixPageAttributeValue)

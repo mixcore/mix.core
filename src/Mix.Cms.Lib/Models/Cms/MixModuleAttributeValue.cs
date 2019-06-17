@@ -7,6 +7,8 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public string Id { get; set; }
         public string Specificulture { get; set; }
+        public int AttributeFieldId { get; set; }
+        public string Regex { get; set; }
         public int ModuleId { get; set; }
         public int DataType { get; set; }
         public int Priority { get; set; }
@@ -23,6 +25,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string EncryptKey { get; set; }
         public int EncryptType { get; set; }
 
+        public virtual MixAttributeField AttributeField { get; set; }
         public virtual MixModuleAttributeData Data { get; set; }
     }
 }

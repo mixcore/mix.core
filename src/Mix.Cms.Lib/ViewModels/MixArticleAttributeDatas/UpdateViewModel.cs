@@ -52,7 +52,8 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
                 {
                     Specificulture = Specificulture,
                     AttributeName = item.Name,
-                    DataType = item.DataType
+                    DataType = item.DataType,
+                    AttributeFieldId = item.Id
                 });
             }
         }
