@@ -37,6 +37,12 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         [JsonProperty("fileName")]
         public string FileName { get; set; }
 
+        [JsonProperty("scripts")]
+        public string Scripts { get; set; }
+
+        [JsonProperty("styles")]
+        public string Styles { get; set; }
+
         [JsonProperty("extension")]
         public string Extension { get; set; }
 
