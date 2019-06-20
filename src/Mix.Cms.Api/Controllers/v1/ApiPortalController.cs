@@ -223,7 +223,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 foreach (var article in articles.Data)
                 {
                     article.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                    "article", new { seoName = article.SeoName, culture = article.Specificulture }, Request, Url);
+                                    "article", new { id= article.Id, seoName = article.SeoName, culture = article.Specificulture }, Request, Url);
                     var otherLanguages = pages.Data.Where(p => p.Id == article.Id && p.Specificulture != article.Specificulture);
                     var lstOther = new List<SitemapLanguage>();
                     foreach (var item in otherLanguages)

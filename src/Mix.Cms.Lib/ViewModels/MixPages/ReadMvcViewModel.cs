@@ -151,9 +151,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("articles")]
         public PaginationModel<MixPageArticles.ReadViewModel> Articles { get; set; } = new PaginationModel<MixPageArticles.ReadViewModel>();
 
-        [JsonProperty("products")]
-        public PaginationModel<MixPageProducts.ReadViewModel> Products { get; set; } = new PaginationModel<MixPageProducts.ReadViewModel>();
-
         [JsonProperty("modules")]
         public List<MixPageModules.ReadMvcViewModel> Modules { get; set; } = new List<MixPageModules.ReadMvcViewModel>(); // Get All Module
 
@@ -226,7 +223,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 pageIndex = pageIndex ?? 0;
                 Expression<Func<MixPageModule, bool>> dataExp = null;
                 Expression<Func<MixPageArticle, bool>> articleExp = null;
-                Expression<Func<MixPageProduct, bool>> productExp = null;
                 foreach (var item in Modules)
                 {
                     item.Module.LoadData(pageSize: pageSize, pageIndex: pageIndex, _context: context, _transaction: transaction);
@@ -236,13 +232,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     case MixPageType.ListArticle:
                         articleExp = n => n.CategoryId == Id && n.Specificulture == Specificulture;
                         break;
-                    case MixPageType.ListProduct:
-                        productExp = n => n.CategoryId == Id && n.Specificulture == Specificulture;
-                        break;
                     default:
                         dataExp = m => m.CategoryId == Id && m.Specificulture == Specificulture;
                         articleExp = n => n.CategoryId == Id && n.Specificulture == Specificulture;
-                        productExp = m => m.CategoryId == Id && m.Specificulture == Specificulture;
                         break;
                 }
 
@@ -256,18 +248,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     if (getArticles.IsSucceed)
                     {
                         Articles = getArticles.Data;
-                    }
-                }
-                if (productExp != null)
-                {
-                    var getProducts = MixPageProducts.ReadViewModel.Repository
-                    .GetModelListBy(productExp
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
-                    , pageSize, pageIndex
-                    , _context: context, _transaction: transaction);
-                    if (getProducts.IsSucceed)
-                    {
-                        Products = getProducts.Data;
                     }
                 }
             }
@@ -426,20 +406,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             if (getArticles.IsSucceed)
             {
                 Articles = getArticles.Data;
-            }
-        }
-
-        private void GetSubProducts(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var getProducts = MixPageProducts.ReadViewModel.Repository.GetModelListBy(
-               m => m.CategoryId == Id && m.Specificulture == Specificulture
-           , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
-           , PageSize, 0
-               , _context: _context, _transaction: _transaction
-               );
-            if (getProducts.IsSucceed)
-            {
-                Products = getProducts.Data;
             }
         }
 
