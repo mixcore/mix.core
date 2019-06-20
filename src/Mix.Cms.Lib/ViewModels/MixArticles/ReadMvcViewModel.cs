@@ -94,7 +94,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         public string DetailsUrl { get; set; }
         
         [JsonProperty("view")]
-        public MixTemplates.ReadViewModel View { get; set; }
+        public MixTemplates.ReadListItemViewModel View { get; set; }
 
         [JsonProperty("modules")]
         public List<ViewModels.MixModules.ReadMvcViewModel> Modules { get; set; }
@@ -186,7 +186,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             //Load Template + Style +  Scripts for views
-            this.View = MixTemplates.ReadViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
+            this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
 
             Properties = new List<ExtraProperty>();
 
