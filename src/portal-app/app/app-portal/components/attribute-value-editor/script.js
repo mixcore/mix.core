@@ -1274,7 +1274,8 @@ modules.component('attributeValueEditor', {
         ctrl.dataTypes = $rootScope.globalSettings.dataTypes;
         ctrl.$onInit = function(){
             setTimeout(() => {
-                ctrl.attributeValue.priority = ctrl.attribute.priority;
+                ctrl.attributeValue.priority = ctrl.attribute.priority;                
+                console.log(ctrl.encryptedData, ctrl.decryptedData);
                 switch(ctrl.attribute.dataType){
                     default:
                         if(!ctrl.attributeValue.stringValue){

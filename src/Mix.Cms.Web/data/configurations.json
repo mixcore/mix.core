@@ -92,6 +92,15 @@
       "status": 2
     },
     {
+      "keyword": "Google_Client_Id",
+      "category": "Site",
+      "value": "",
+      "dataType": 7,
+      "description": null,
+      "priority": 0,
+      "status": 2
+    },
+    {
       "keyword": "Recaptcha_Key",
       "category": "Site",
       "value": "",

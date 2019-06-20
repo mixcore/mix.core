@@ -15,7 +15,7 @@
           gapi.analytics.auth.authorize({
             container: 'embed-api-auth-container',
             //REPLACE WITH YOUR CLIENT ID
-            clientid: $rootScope.settings.data.Google_Analytic_Key
+            clientid: $rootScope.settings.data.Google_Client_Id
           });
 
 

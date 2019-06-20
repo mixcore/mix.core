@@ -75,6 +75,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
         public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             base.Validate(_context, _transaction);
+            Field = Field ?? MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId, _context, _transaction).Data;
             if (IsValid)
             {
                 if (Field.IsRequire)

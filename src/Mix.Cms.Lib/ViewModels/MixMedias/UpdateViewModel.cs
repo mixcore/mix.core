@@ -150,7 +150,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         {
             if (MediaFile?.FileStream != null)
             {
-                MediaFile.Filename = SeoHelper.GetSEOString(MediaFile.Filename) + Guid.NewGuid().ToString("N");
+                MediaFile.Filename = SeoHelper.GetSEOString(MediaFile.Filename).ToLower() + Guid.NewGuid().ToString("N");
                 MediaFile.FileFolder = CommonHelper.GetFullPath(new[] {
                     //MixService.GetConfig<string>("UploadFolder"),
                     MixService.GetTemplateUploadFolder(Specificulture),
@@ -159,7 +159,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
                 var isSaved = FileRepository.Instance.SaveWebFile(MediaFile);
                 if (isSaved)
                 {
-                    Extension = MediaFile.Extension;
+                    Extension = MediaFile.Extension.ToLower();
                     FileName = MediaFile.Filename;
                     FileFolder = MediaFile.FileFolder;
                 }
