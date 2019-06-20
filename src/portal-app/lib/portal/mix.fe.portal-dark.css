@@ -1901,7 +1901,7 @@ pre code {
   background-color: rgba(0, 0, 0, 0.075);
 }
 
-.table .thead-dark th {
+.thead-dark {
   color: #fff;
   background-color: #343a40;
   border-color: #454d55;
