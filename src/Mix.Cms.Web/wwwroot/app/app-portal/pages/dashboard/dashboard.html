@@ -1,15 +1,5 @@
-<section ng-init="getDashboardInfo()">
-  <div id="adminDashboard" ng-if="!isAdmin">
-    <div class="jumbotron">
-      <div class="container">
-        <h1 class="display-3">Welcome to Mixcore!</h1>
-        <p>You can start do anything from here!
-        </p>
-        <!-- <p><a class="btn btn-primary btn-lg" href="#" role="button">Get Started »</a></p> -->
-      </div>
-    </div>
-  </div>
-  <div id="adminDashboard" ng-if="isAdmin">
+<section ng-init="getDashboardInfo()">  
+  <div id="adminDashboard">
     <google-analytic></google-analytic>
     <!-- <div class="jumbotron">
                         <div class="container">

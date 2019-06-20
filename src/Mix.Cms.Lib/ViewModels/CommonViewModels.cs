@@ -386,11 +386,11 @@ namespace Mix.Cms.Lib.ViewModels
             XNamespace ns = @"http://www.sitemaps.org/schemas/sitemap/0.9";
             XNamespace xsi = @"http://www.w3.org/1999/xhtml";
 
-            var e = new XElement("url");
-            e.Add(new XElement("lastmod", LastMod.HasValue ? LastMod.Value : DateTime.UtcNow));
-            e.Add(new XElement("changefreq", ChangeFreq));
-            e.Add(new XElement("priority", Priority));
-            e.Add(new XElement("loc", Loc));
+            var e = new XElement(ns+ "url");
+            e.Add(new XElement(ns + "lastmod", LastMod.HasValue ? LastMod.Value : DateTime.UtcNow));
+            e.Add(new XElement(ns + "changefreq", ChangeFreq));
+            e.Add(new XElement(ns + "priority", Priority));
+            e.Add(new XElement(ns + "loc", Loc));
             foreach (var item in OtherLanguages)
             {
                 e.Add(new XElement(xsi + "link",

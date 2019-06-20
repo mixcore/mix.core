@@ -146,7 +146,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             }
         }
         [JsonProperty("view")]
-        public MixTemplates.ReadViewModel View { get; set; }
+        public MixTemplates.ReadListItemViewModel View { get; set; }
 
         [JsonProperty("articles")]
         public PaginationModel<MixPageArticles.ReadViewModel> Articles { get; set; } = new PaginationModel<MixPageArticles.ReadViewModel>();
@@ -185,7 +185,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            this.View = MixTemplates.ReadViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
+            this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
             if (View != null)
             {
                 GetSubModules(_context, _transaction);

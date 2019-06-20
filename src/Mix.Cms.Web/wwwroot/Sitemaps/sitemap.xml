@@ -1,55 +1,217 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url xmlns="">
-    <lastmod>2019-06-16T04:46:53.7442664Z</lastmod>
+  <url>
+    <lastmod>2019-06-20T18:13:26.576421Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/home</loc>
   </url>
-  <url xmlns="">
-    <lastmod>2019-06-16T04:46:53.7556444Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001/en-us/tag</loc>
-  </url>
-  <url xmlns="">
-    <lastmod>2019-06-16T04:46:53.7557778Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <loc>https://localhost:5001/en-us/search</loc>
-  </url>
-  <url xmlns="">
-    <lastmod>2019-06-16T04:46:53.755831Z</lastmod>
+  <url>
+    <lastmod>2019-06-20T18:13:26.5801726Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/404</loc>
   </url>
-  <url xmlns="">
-    <lastmod>2019-06-16T04:46:53.7558663Z</lastmod>
+  <url>
+    <lastmod>2019-06-20T18:13:26.5802636Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001/en-us/403</loc>
+    <loc>https://localhost:5001/en-us/motobike-tours</loc>
   </url>
-  <url xmlns="">
-    <lastmod>2019-06-16T04:46:53.755897Z</lastmod>
+  <url>
+    <lastmod>2019-06-20T18:13:26.5802792Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001/en-us/500</loc>
+    <loc>https://localhost:5001/en-us/private-car-tour</loc>
   </url>
-  <url xmlns="">
-    <lastmod>2019-06-16T04:46:53.7559662Z</lastmod>
+  <url>
+    <lastmod>2019-06-20T18:13:26.5802908Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/en-us/what-clients-say</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:26.5803255Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/en-us/hot-tours</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:26.5803733Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/en-us/blogs</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:26.5804201Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/en-us/more</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:26.5804531Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/en-us/about-saigon</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:26.580485Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/en-us/eats-drinks</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:26.5805196Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/maintenance</loc>
   </url>
-  <url xmlns="">
-    <lastmod>2019-06-16T04:46:54.0188805Z</lastmod>
+  <url>
+    <lastmod>2019-06-20T18:13:29.3202877Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001</loc>
   </url>
-  <url xmlns="">
-    <lastmod>2019-06-16T04:46:54.0190246Z</lastmod>
+  <url>
+    <lastmod>2019-06-20T18:13:29.3205381Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.3205619Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.3205795Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.3205943Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.3206052Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.3206211Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.320635Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.3206491Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.3206619Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.320676Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.320691Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.3207044Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.320717Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.3207298Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.3207425Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.3207552Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.3207723Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.320786Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.3207987Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.3208114Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.3208244Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.3208788Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.3209184Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001</loc>
+  </url>
+  <url>
+    <lastmod>2019-06-20T18:13:29.3209322Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001</loc>
