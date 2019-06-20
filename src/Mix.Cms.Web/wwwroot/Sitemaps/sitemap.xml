@@ -1,219 +1,219 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <lastmod>2019-06-20T18:13:26.576421Z</lastmod>
+    <lastmod>2019-06-20T18:38:41.8885322Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/home</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:26.5801726Z</lastmod>
+    <lastmod>2019-06-20T18:38:41.8956365Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/404</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:26.5802636Z</lastmod>
+    <lastmod>2019-06-20T18:38:41.895741Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/motobike-tours</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:26.5802792Z</lastmod>
+    <lastmod>2019-06-20T18:38:41.8957711Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/private-car-tour</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:26.5802908Z</lastmod>
+    <lastmod>2019-06-20T18:38:41.8957932Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/what-clients-say</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:26.5803255Z</lastmod>
+    <lastmod>2019-06-20T18:38:41.89583Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/hot-tours</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:26.5803733Z</lastmod>
+    <lastmod>2019-06-20T18:38:41.8958665Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/blogs</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:26.5804201Z</lastmod>
+    <lastmod>2019-06-20T18:38:41.8958995Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/more</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:26.5804531Z</lastmod>
+    <lastmod>2019-06-20T18:38:41.8959215Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/about-saigon</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:26.580485Z</lastmod>
+    <lastmod>2019-06-20T18:38:41.8959431Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/eats-drinks</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:26.5805196Z</lastmod>
+    <lastmod>2019-06-20T18:38:41.8959884Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <loc>https://localhost:5001/en-us/maintenance</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.3202877Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9864761Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/1/the-sights-on-scooter--40-hours</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.3205381Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9866026Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/2/hidden-saigon-on-scooter--40-hours</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.3205619Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9866337Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/3/food--sights-on-scooter--45-hours</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.3205795Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9866593Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/4/morning-walking-tour--35-hours</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.3205943Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9866855Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/5/cu-chi-tunnels---mekong-delta</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.3206052Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9867098Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/6/cuchi-tunnels</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.3206211Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9867338Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/7/mekong-rural-life</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.320635Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9867575Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/8/mekong-floating-market</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.3206491Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9867826Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/9/city---cu-chi-tunnels</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.3206619Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9868084Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/10/cu-chi-tunnels---cao-dai-temple</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.320676Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9868335Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/11/authentic-mekong-delta---ben-tre-full-day</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.320691Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9868593Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/13/street-food-after-dark</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.3207044Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9868962Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/14/why-i-love-saigon</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.320717Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9869223Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/15/saigon-and-the-amazing-alleys</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.3207298Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9869472Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/16/saigon-ca-phe-sua-da</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.3207425Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9869713Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/17/the-unsleeping-city</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.3207552Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9869944Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/18/cricket-tours-and-street-food</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.3207723Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9870182Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/19/why-vietnam-10-reason-for-visiting-this-country</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.320786Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9870429Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/20/best-destination-around-vietnam</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.3207987Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9870708Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/21/TET%20HOLIDAY%20IN%20VIETNAM</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.3208114Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9870948Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/22/how-a-germany-tourist-talk-about-travel-in-vietnam-by-scooter</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.3208244Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9871207Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/23/vietnam--multicultural-country</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.3208788Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.987145Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/24/four-photos-of-vietnam-are-among-the-best-in-the-world</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.3209184Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9871682Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/25/CRICKET-TOURS</loc>
   </url>
   <url>
-    <lastmod>2019-06-20T18:13:29.3209322Z</lastmod>
+    <lastmod>2019-06-20T18:38:44.9871919Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001</loc>
+    <loc>https://localhost:5001/en-us/article/26/little-vintage-in-vietnam</loc>
   </url>
 </urlset>
