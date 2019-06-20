@@ -11001,4 +11001,28 @@ body {
 .modal-content .modal-header {
   border-color: #2b2c33;
 }
+
+.page-link {
+  position: relative;
+  display: block;
+  padding: 0.5rem 0.75rem;
+  margin-left: -1px;
+  line-height: 1.25;
+  color: #ffffff;
+  background-color: #333 !important;
+  border: 1px solid #2b2c33;
+}
+
+.page-link:hover {
+  border-color: #595959;
+}
+
+div[dnd-list] .dnd-item,
+ul[dnd-list] li {
+  background-color: #151515;
+  border: 1px solid #2b2c33;
+  display: block;
+  padding: 10px 15px;
+  margin-bottom: -1px;
+}
 /*# sourceMappingURL=mix.fe.portal-dark.css.map */
