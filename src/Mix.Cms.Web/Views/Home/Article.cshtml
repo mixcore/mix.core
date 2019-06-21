@@ -6,7 +6,14 @@
 @if (!string.IsNullOrEmpty(Model.TemplatePath))
 {
     try
-    {        
+    {
+        var set1 = Model.GetAttributeSet("set__3");
+        foreach (var item in set1.ArticleData.Items)
+        {
+            <h1>@item.GetStringValue("title")</h1>
+            <h1>@item.GetDecryptValue("title")</h1>
+        }
+        
         <partial name="@Model.TemplatePath" model="@Model" />
     }
     catch (Exception ex)
