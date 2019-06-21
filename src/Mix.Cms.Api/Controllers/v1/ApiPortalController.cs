@@ -379,15 +379,11 @@ namespace Mix.Cms.Api.Controllers.v1
         [AllowAnonymous]
         [HttpPost, HttpOptions]
         [Route("decrypt")]
-        public RepositoryResponse<CryptoViewModel<JObject>> Decrypt([FromBody]JObject model)
+        public RepositoryResponse<CryptoViewModel<string>> Decrypt([FromBody]JObject model)
         {
-            string data = model.GetValue("data").Value<string>();
-            string key = model.GetValue("key").Value<string>();
-            string iv = model.GetValue("iv").Value<string>();
-            return new RepositoryResponse<CryptoViewModel<JObject>>() {
-                
-                Data = AesEncryptionHelper.DecryptStringFromBytes_Aes(data, key, iv)
-            };
+            string data = model.GetValue("data")?.Value<string>();
+            string key = model.GetValue("key")?.Value<string>();
+            return AesEncryptionHelper.DecryptStringFromBytes_Aes(data, key);
         }
         // POST api/category
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]

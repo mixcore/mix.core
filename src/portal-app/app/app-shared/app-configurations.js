@@ -1549,13 +1549,13 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'GlobalSettingsSer
                 data: encrypted.ciphertext.toString(CryptoJS.enc.Base64)
             }
         }
-        $rootScope.decrypt = function (encryptedData, options) {
-
+        $rootScope.decrypt = function (encryptedData) {
+            var ivSize = 128;
             var cipherParams = CryptoJS.lib.CipherParams.create({
                 ciphertext: CryptoJS.enc.Base64.parse(encryptedData.data)
             });
             var key = CryptoJS.enc.Base64.parse(encryptedData.key);
-            var iv = CryptoJS.enc.Base64.parse(encryptedData.iv);
+            var iv = CryptoJS.lib.WordArray.random(ivSize / 8);
             var options = {
                 mode: CryptoJS.mode.ECB,
                 padding: CryptoJS.pad.Pkcs7,
@@ -1641,6 +1641,7 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'GlobalSettingsSer
                 }
             }            
         }
+        
         $rootScope.changeLang = async function (lang) {
             var url = await translatorService.translateUrl(lang);
             translatorService.translateUrl(lang);

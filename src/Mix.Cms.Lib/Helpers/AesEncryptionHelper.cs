@@ -1,4 +1,5 @@
 ﻿using Mix.Cms.Lib.ViewModels;
+using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -58,55 +59,65 @@ namespace Mix.Cms.Lib.Helpers
             return result;
         }
 
-        public static CryptoViewModel<JObject> DecryptStringFromBytes_Aes(string cipherText, string keyString, string iv)
+        public static RepositoryResponse<CryptoViewModel<string>> DecryptStringFromBytes_Aes(string cipherText, string keyString)
         {
-            CryptoViewModel<JObject> result = new CryptoViewModel<JObject>()
+            var result = new RepositoryResponse<CryptoViewModel<string>>();
+            try
             {
-                Base64Key = keyString,
-                Base64IV = iv
-            };
-            var Key = Convert.FromBase64String(keyString);
-            var IV = Convert.FromBase64String(iv);
-            // Check arguments.
-            if (cipherText == null || cipherText.Length <= 0)
-                throw new ArgumentNullException("cipherText");
-            if (Key == null || Key.Length <= 0)
-                throw new ArgumentNullException("Key");
-            if (IV == null || IV.Length <= 0)
-                throw new ArgumentNullException("IV");
+                var Key = Convert.FromBase64String(keyString);
+                //var IV = Convert.FromBase64String(iv);
+                // Check arguments.
+                if (cipherText == null || cipherText.Length <= 0)
+                    throw new ArgumentNullException("cipherText");
+                if (Key == null || Key.Length <= 0)
+                    throw new ArgumentNullException("Key");
+                //if (IV == null || IV.Length <= 0)
+                //    throw new ArgumentNullException("IV");
 
-            // Declare the string used to hold
-            // the decrypted text.
-            string plaintext = null;
-            var fullCipher = Convert.FromBase64String(cipherText);
-            // Create an Aes object
-            // with the specified key and IV.
-            using (AesManaged aesAlg = new AesManaged())
-            {
-                aesAlg.Mode = CipherMode.ECB;
-                aesAlg.Padding = PaddingMode.PKCS7;
-                aesAlg.Key = Key;
-                aesAlg.IV = IV;
-
-                // Create a decryptor to perform the stream transform.
-                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
-
-                // Create the streams used for decryption.
-                using (MemoryStream msDecrypt = new MemoryStream(fullCipher))
+                // Declare the string used to hold
+                // the decrypted text.
+                string plaintext = null;
+                var fullCipher = Convert.FromBase64String(cipherText);
+                // Create an Aes object
+                // with the specified key and IV.
+                using (AesManaged aesAlg = new AesManaged())
                 {
-                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    aesAlg.Mode = CipherMode.ECB;
+                    aesAlg.Padding = PaddingMode.PKCS7;
+                    aesAlg.Key = Key;
+                    //aesAlg.IV = IV;
+
+                    // Create a decryptor to perform the stream transform.
+                    ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+
+                    // Create the streams used for decryption.
+                    using (MemoryStream msDecrypt = new MemoryStream(fullCipher))
                     {
-                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                        using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
                         {
-                            // Read the decrypted bytes from the decrypting stream
-                            // and place them in a string.
-                            plaintext = srDecrypt.ReadToEnd();
+                            using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                            {
+                                // Read the decrypted bytes from the decrypting stream
+                                // and place them in a string.
+                                plaintext = srDecrypt.ReadToEnd();
+                            }
                         }
                     }
-                }
 
+                }
+                result.IsSucceed = true;
+                result.Data = new CryptoViewModel<string>()
+                {
+                    Base64Key = keyString,
+                    Data = plaintext
+                };
             }
-            result.Data = JObject.Parse(plaintext);
+            catch(Exception ex)
+            {
+                MixCmsHelper.LogException(ex);
+                result.IsSucceed = false;
+                result.Exception = ex;
+            }
             return result;
 
         }

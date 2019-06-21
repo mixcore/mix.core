@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Mix.Cms.Lib.Services;
+using Mix.Common.Helper;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using static Mix.Cms.Lib.MixEnums;
@@ -156,6 +159,49 @@ namespace Mix.Cms.Lib
                 return 0;
             }
         }
+
+        public static void LogException(Exception ex)
+        {
+            string fullPath = string.Format($"{Environment.CurrentDirectory}/logs");
+            if (!string.IsNullOrEmpty(fullPath) && !Directory.Exists(fullPath))
+            {
+                Directory.CreateDirectory(fullPath);
+            }
+            string filePath = $"{fullPath}/{DateTime.Now.ToString("YYYYMMDD")}/log_exceptions.json";
+
+            try
+            {
+                FileInfo file = new FileInfo(filePath);
+                string content = "[]";
+                if (file.Exists)
+                {
+                    using (StreamReader s = file.OpenText())
+                    {
+                        content = s.ReadToEnd();
+                    }
+                    File.Delete(filePath);
+                }
+
+                JArray arrExceptions = JArray.Parse(content);
+                JObject jex = new JObject
+                {
+                    new JProperty("CreatedDateTime", DateTime.UtcNow),
+                    new JProperty("Details", JObject.FromObject(ex))
+                };
+                arrExceptions.Add(jex);
+                content = arrExceptions.ToString();
+
+                using (var writer = File.CreateText(filePath))
+                {
+                    writer.WriteLine(content);
+                }
+            }
+            catch
+            {
+                // File invalid
+            }
+        }
+
         public static async System.Threading.Tasks.Task<ViewModels.MixModules.ReadMvcViewModel> GetModuleAsync (string name, string culture)
         {
             string cachekey = $"module_{culture}_{name}";
