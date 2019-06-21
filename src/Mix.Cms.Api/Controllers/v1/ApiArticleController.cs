@@ -35,6 +35,7 @@ namespace Mix.Cms.Api.Controllers.v1
         #region Get
 
         // GET api/article/id
+        
         [HttpGet, HttpOptions]
         [Route("delete/{id}")]
         public async Task<RepositoryResponse<MixArticle>> DeleteAsync(int id)
@@ -44,6 +45,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/articles/id
+        [AllowAnonymous]
         [HttpGet, HttpOptions]
         [Route("details/{id}/{viewType}")]
         [Route("details/{viewType}")]
