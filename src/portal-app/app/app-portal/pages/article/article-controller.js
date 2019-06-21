@@ -11,6 +11,13 @@ app.controller('ArticleController', ['$scope', '$rootScope', '$location', '$filt
         $scope.saveCallback = function () {
             $location.url($scope.referrerUrl);
         }
+        $scope.saveFailCallback = function(){
+            angular.forEach($scope.activedData.attributeSetNavs, function(nav){
+                if(nav.isActived){
+                    $scope.decryptAttributeSet(nav.attributeSet);
+                }
+            });
+        }
         $scope.getSingleSuccessCallback = function () {
             var moduleId = $routeParams.module_id;
             var pageId = $routeParams.page_id;
@@ -61,6 +68,43 @@ app.controller('ArticleController', ['$scope', '$rootScope', '$location', '$filt
         $scope.removeAliasCallback = async function (index) {
             $scope.activedData.urlAliases.splice(index, 1);
             $scope.$apply();
+        }
+        $scope.validate = function(){
+            angular.forEach($scope.activedData.attributeSetNavs, function(nav){
+                if(nav.isActived){
+                    $scope.encryptAttributeSet(nav.attributeSet);
+                }
+            });
+            return true;
+        }
+        $scope.encryptAttributeSet = function(attributeSet){
+            angular.forEach(attributeSet.attributes, function(attr){
+                if(attr.isEncrypt){
+                    angular.forEach(attributeSet.articleData.items, function(item){
+                        var fieldData = $rootScope.findObjectByKey(item.data, 'attributeName', attr.name);
+                        var encryptedData = $rootScope.encrypt(fieldData.stringValue);
+                        fieldData.stringValue = encryptedData.data;
+                        fieldData.encryptValue = encryptedData.data;
+                        fieldData.encryptKey = encryptedData.key;
+                        console.log(fieldData);
+                    });
+                }
+            });
+        }
+        $scope.decryptAttributeSet = function(attributeSet){
+            angular.forEach(attributeSet.attributes, function(attr){
+                if(attr.isEncrypt){
+                    angular.forEach(attributeSet.articleData.items, function(item){
+                        var fieldData = $rootScope.findObjectByKey(item.data, 'attributeName', attr.name);
+                        var encryptedData = {
+                            key: fieldData.encryptKey,
+                            data: fieldData.encryptValue
+                        };
+                        var decrypted = $rootScope.decrypt(encryptedData);
+                        fieldData.stringValue = decrypted;
+                    });
+                }
+            });
         }
     }
 ]);

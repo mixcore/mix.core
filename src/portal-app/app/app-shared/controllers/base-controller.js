@@ -7,14 +7,18 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
     $scope.activedData = null;
     $scope.data = null;
     $scope.isInit = false;
+    $scope.isValid = true;
     $scope.errors = [];
     $scope.saveCallbackArgs = [];
+    $scope.validateArgs = [];
     $scope.removeCallbackArgs = [];
     $scope.range = $rootScope.range;
+    $scope.validate = null;
     $scope.getSingleSuccessCallback = null;
     $scope.getSingleFailCallback = null;
     $scope.getListSuccessCallback = null;
     $scope.getListFailCallback = null;
+    $scope.saveFailCallback = null;
     $scope.selectedList = {
         action: '',
         data: []
@@ -112,20 +116,33 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
 
     $scope.save = async function (data) {
         $rootScope.isBusy = true;
-        var resp = await service.save(data);
-        if (resp && resp.isSucceed) {
-            $scope.activedData = resp.data;
-            $rootScope.showMessage('success', 'success');
+        if($scope.validate){
+            $scope.isValid = await $rootScope.executeFunctionByName('validate', $scope.validateArgs, $scope)
+        }
+        if($scope.isValid){
+            var resp = await service.save(data);
+            if (resp && resp.isSucceed) {
+                $scope.activedData = resp.data;
+                $rootScope.showMessage('success', 'success');
 
-            if ($scope.saveCallback) {
-                $rootScope.executeFunctionByName('saveCallback', $scope.saveCallbackArgs, $scope)
+                if ($scope.saveCallback) {
+                    $rootScope.executeFunctionByName('saveCallback', $scope.saveCallbackArgs, $scope)
+                }
+                $rootScope.isBusy = false;
+                $scope.$apply();
+            } else {
+                if($scope.saveFailCallback){
+                    $rootScope.executeFunctionByName('saveFailCallback', $scope.saveCallbackArgs, $scope)
+                }
+                if (resp) {
+                    $rootScope.showErrors(resp.errors);
+                }
+                $rootScope.isBusy = false;
+                $scope.$apply();
             }
-            $rootScope.isBusy = false;
-            $scope.$apply();
-        } else {
-            if (resp) {
-                $rootScope.showErrors(resp.errors);
-            }
+        }
+        else{
+            $rootScope.showErrors(['invalid model']);
             $rootScope.isBusy = false;
             $scope.$apply();
         }

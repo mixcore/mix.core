@@ -89,8 +89,10 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
                 // validate unique
                 if (Field.IsUnique)
                 {
-                    IsValid = IsValid && !Repository.CheckIsExists(
-                        f => f.StringValue == StringValue && f.Specificulture == Specificulture);
+                    IsValid = IsValid && Repository.Count(
+                        f => f.AttributeFieldId == AttributeFieldId && f.Id != Id 
+                        && f.StringValue == StringValue && f.Specificulture == Specificulture, _context, _transaction)
+                        .Data == 0;
                     if (!IsValid)
                     {
                         Errors.Add($"{Field.Title} is existed");

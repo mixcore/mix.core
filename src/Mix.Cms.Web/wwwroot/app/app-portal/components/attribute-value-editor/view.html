@@ -7,15 +7,15 @@
         </div>
         <div ng-switch-when="1">
             <!--datetime-->
-            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="datetime-local" ng-model="$ctrl.attributeValue.datetimeValue" placeholder="{{$ctrl.attribute.title}}">
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}" ng-change="$ctrl.updateStringValue($ctrl.attribute.dataType)" type="datetime-local" ng-model="$ctrl.attributeValue.dateObj" placeholder="{{$ctrl.attribute.title}}">
         </div>
         <div ng-switch-when="2">
             <!--date-->
-            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="date" ng-model="$ctrl.attributeValue.datetimeValue" placeholder="{{$ctrl.attribute.title}}">
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}" ng-change="$ctrl.updateStringValue($ctrl.attribute.dataType)" type="date" ng-model="$ctrl.attributeValue.dateObj" placeholder="{{$ctrl.attribute.title}}">
         </div>
         <div ng-switch-when="3">
             <!--time-->
-            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="time" ng-model="$ctrl.attributeValue.datetimeValue" placeholder="{{$ctrl.attribute.title}}">
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}" ng-change="$ctrl.updateStringValue($ctrl.attribute.dataType)" type="time" ng-model="$ctrl.attributeValue.dateObj" placeholder="{{$ctrl.attribute.title}}">
         </div>
         <div ng-switch-when="4">
             <!--duration-->
@@ -27,11 +27,11 @@
         </div>
         <div ng-switch-when="6">
             <!--Currency-->
-            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="number" ng-model="$ctrl.attributeValue.doubleValue" placeholder="{{$ctrl.attribute.title}}">
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}" ng-change="$ctrl.updateStringValue($ctrl.attribute.dataType)" type="number" ng-model="$ctrl.attributeValue.doubleValue" placeholder="{{$ctrl.attribute.title}}">
         </div>
         <div ng-switch-when="7">
             <!--Text-->
-            <input placeholder="{{$ctrl.attribute.title}}" class="form-control form-control-sm {{$ctrl.inputClass}}" type="text" ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attribute.title}}">
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="text" ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attribute.title}}">
         </div>
         <div ng-switch-when="8">
             <!--Html-->
@@ -76,7 +76,7 @@
         <div ng-switch-when="18">
             <!--Boolean-->
             
-            <input class="{{$ctrl.inputClass}}" type="checkbox" placeholder="{{$ctrl.attribute.title}}" ng-model="$ctrl.attributeValue.booleanValue" ng-checked="$ctrl.attributeValue.booleanValue=='true'">
+            <input class="{{$ctrl.inputClass}}" type="checkbox" placeholder="{{$ctrl.attribute.title}}" ng-change="$ctrl.updateStringValue($ctrl.attribute.dataType)" ng-model="$ctrl.attributeValue.booleanValue" ng-checked="$ctrl.attributeValue.booleanValue=='true'">
         </div>
         <div ng-switch-when="19">
             <mix-select-icons prefix="'fab'" options="$ctrl.icons" data="$ctrl.attributeValue.stringValue"></mix-select-icons>            
