@@ -33,7 +33,7 @@ namespace Mix.Cms.Lib
                     case MixPageType.Blank:
                         foreach (var child in cate.Childs)
                         {
-                            child.Page.DetailsUrl = Url.RouteUrl("Page", new { culture, seoName = child.Page.SeoName });
+                            child.Page.DetailsUrl = Url.RouteUrl("Alias", new { culture, seoName = child.Page.SeoName });
                         }
                         break;
 
@@ -46,7 +46,7 @@ namespace Mix.Cms.Lib
                     case MixPageType.Article:
                     case MixPageType.Modules:
                     default:
-                        cate.DetailsUrl = Url.RouteUrl("Page", new { culture, seoName = cate.SeoName });
+                        cate.DetailsUrl = Url.RouteUrl("Alias", new { culture, seoName = cate.SeoName });
                         break;
                 }
                 cate.IsActived = (cate.DetailsUrl == activePath
@@ -75,7 +75,7 @@ namespace Mix.Cms.Lib
                     case MixPageType.Blank:
                         foreach (var child in cate.Childs)
                         {
-                            child.Page.DetailsUrl = Url.RouteUrl("Page", new { culture, pageName = child.Page.SeoName });
+                            child.Page.DetailsUrl = Url.RouteUrl("Alias", new { culture, seoName = child.Page.SeoName });
                         }
                         break;
 
@@ -88,7 +88,7 @@ namespace Mix.Cms.Lib
                     case MixPageType.Article:
                     case MixPageType.Modules:
                     default:
-                        cate.DetailsUrl = Url.RouteUrl("Page", new { culture, pageName = cate.SeoName });
+                        cate.DetailsUrl = Url.RouteUrl("Alias", new { culture, seoName = cate.SeoName });
                         break;
                 }
 
@@ -202,18 +202,33 @@ namespace Mix.Cms.Lib
             }
         }
 
-        public static async System.Threading.Tasks.Task<ViewModels.MixModules.ReadMvcViewModel> GetModuleAsync (string name, string culture)
+        public static async System.Threading.Tasks.Task<ViewModels.MixModules.ReadMvcViewModel> GetModuleAsync (string name, string culture, IUrlHelper url = null)
         {
             string cachekey = $"module_{culture}_{name}";
-            var module = await MixCacheService.GetAsync<Mix.Domain.Core.ViewModels.RepositoryResponse<ViewModels.MixModules.ReadMvcViewModel>>(cachekey);
-            if (module==null)
+            var module = new Domain.Core.ViewModels.RepositoryResponse<ViewModels.MixModules.ReadMvcViewModel>();
+
+            // Load From Cache 
+            if (MixService.GetConfig<bool>("IsCache"))
+            {
+                module = await MixCacheService.GetAsync<Mix.Domain.Core.ViewModels.RepositoryResponse<ViewModels.MixModules.ReadMvcViewModel>>(cachekey);                
+            }
+
+            // If not cached yet => load from db
+            if (module== null || !module.IsSucceed)
             {
                 module = ViewModels.MixModules.ReadMvcViewModel.GetBy(m => m.Name == name && m.Specificulture == culture);
-                if (module.IsSucceed)
-                {
-                    await MixCacheService.SetAsync(cachekey, module);
-                }
             }
+
+            // If load successful => load details
+            if (module.IsSucceed)
+            {
+                if (url != null)
+                {
+                    module.Data.Articles.Items.ForEach(a => { a.Article.DetailsUrl = url.RouteUrl("Article", new { id = a.ArticleId, seoName = a.Article.SeoName }); });
+                }
+                await MixCacheService.SetAsync(cachekey, module);
+            }
+
             return module.Data;
         }
 
