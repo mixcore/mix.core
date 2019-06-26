@@ -39,7 +39,7 @@
                 </td>
                 <td>
                     <input ng-model="col.title" placeholder="Title" ng-change="$ctrl.generateName(col)" class="form-control form-control-sm">
-                    <small class="form-text text-muted">Name: <span ng-bind="col.name"></span></small>
+                    <small class="form-text text-muted">Name: <input type="text" class="input-sm" ng-model="col.name"></small>
                 </td>
                 <td>
                     <select class="form-control form-control-sm" ng-model="col.dataType">

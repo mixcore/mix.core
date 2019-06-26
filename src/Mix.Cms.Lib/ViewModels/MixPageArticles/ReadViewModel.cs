@@ -76,7 +76,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPageArticles
             var transaction = _transaction ?? context.Database.BeginTransaction();
             try
             {
-                var navCategoryArticleViewModels = context.MixPage.Include(cp => cp.MixPageArticle).Where(a => a.Specificulture == specificulture && a.Type == (int)MixEnums.MixPageType.ListArticle)
+                var navCategoryArticleViewModels = context.MixPage.Include(cp => cp.MixPageArticle).Where(a => a.Specificulture == specificulture
+                    && (a.Type == (int)MixEnums.MixPageType.ListArticle|| a.Type == (int)MixEnums.MixPageType.ListProduct)
+                    )
                     .Select(p => new MixPageArticles.ReadViewModel(
                         new MixPageArticle()
                         {
