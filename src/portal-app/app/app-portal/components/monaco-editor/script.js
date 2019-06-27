@@ -5,6 +5,7 @@
             var ctrl = this;
             ctrl.previousId = null;
             ctrl.editor = null;
+            ctrl.minHeight =  90;
             ctrl.isVisible = false;
             ctrl.id = Math.floor(Math.random() * 100) + 1;
             ctrl.$onChanges = (changes) => {
@@ -88,6 +89,7 @@
                         });
                         setTimeout(() => {
                             var h = ctrl.editor.getModel().getLineCount() * 18;
+                            h = h < ctrl.minHeight ? ctrl.minHeight : h;
                             $(e).height(h);
                             ctrl.editor.layout();    
                         }, 200);
