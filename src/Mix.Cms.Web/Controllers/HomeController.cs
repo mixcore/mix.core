@@ -483,7 +483,7 @@ namespace Mix.Cms.Web.Controllers
             }
 
             // If cannot load from cache => try query new data
-            if(!getPage.IsSucceed)
+            if(getPage!= null && !getPage.IsSucceed)
             {
                 Expression<Func<MixPage, bool>> predicate;
 
