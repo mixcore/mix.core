@@ -269,7 +269,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         public static UpdateViewModel GetDefault(MixEnums.EnumTemplateFolder folderType, string specificulture)
         {
-            string activedTheme = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, specificulture)
+            string activedTheme = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, specificulture)
                     ?? MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTheme);
             string folder = CommonHelper.GetFullPath(new string[]
                     {

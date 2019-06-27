@@ -54,8 +54,8 @@
                     </pane-v>
 
                 </tabs-v>
-                <article-attribute-sets article="activedData"></article-attribute-sets>
-                <template-editor folder-type="'Articles'" template="activedData.view" templates="activedData.templates">
+                <article-attribute-sets ng-if="isAdmin" article="activedData"></article-attribute-sets>
+                <template-editor ng-if="isAdmin" folder-type="'Articles'" template="activedData.view" templates="activedData.templates">
                 </template-editor>
                 <!-- <div class="card mb-3">
                     <div class="card-header">

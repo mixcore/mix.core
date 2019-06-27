@@ -996,9 +996,10 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         private void LoadRelatedArticle(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             ArticleNavs = GetRelated(_context, _transaction);
+            // Load other article ( != Id) and not actived (not in acticleNavs)
             var otherArticles = MixArticles.ReadListItemViewModel.Repository.GetModelListBy(
                 m => m.Id != Id && m.Specificulture == Specificulture
-                    && !ArticleNavs.Any(n => n.SourceId == Id)
+                    && !ArticleNavs.Any(n => n.DestinationId == m.Id)
                     , "CreatedDateTime", 1, 10, 0, _context, _transaction);
             foreach (var item in otherArticles.Data.Items)
             {

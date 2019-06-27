@@ -115,14 +115,17 @@ namespace Mix.Cms.Web.Controllers
             return await TagAsync(tagName);
         }
 
-        [Route("{culture}/search/{keyword}")]
-        public async System.Threading.Tasks.Task<IActionResult> Search(string culture, string keyword)
+        [HttpGet]
+        [Route("search")]
+        public async System.Threading.Tasks.Task<IActionResult> Search()
         {
+            string culture = Request.Query["culture"].ToString();
+            string keyword = Request.Query["keyword"].ToString();
             if (_forbidden)
             {
                 return Redirect($"/error/403");
             }
-            return await SearchAsync(keyword);
+            return await SearchAsync(culture, keyword);
         }
 
         [Route("article/{id}/{seoName}")]
@@ -457,7 +460,7 @@ namespace Mix.Cms.Web.Controllers
                 return Redirect($"/error/404");
             }
         }
-        async System.Threading.Tasks.Task<IActionResult> SearchAsync(string keyword)
+        async System.Threading.Tasks.Task<IActionResult> SearchAsync(string culture, string keyword)
         {
             string seoName = "search";
             ViewData["TopPages"] = await GetCategoryAsync(CatePosition.Nav, seoName);
@@ -470,28 +473,30 @@ namespace Mix.Cms.Web.Controllers
             int orderDirection = MixService.GetConfig<int>("OrderDirection");
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
             var getPage = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
-            var cacheKey = $"search_{_culture}_{keyword}_{pageSize}_{pageIndex}";
-            var data = await MixCacheService.GetAsync<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
-            //var data = await MixCacheService.GetAsync<Lib.ViewModels.MixPages.ReadMvcViewModel>(cacheKey);
-            if (data != null && MixService.GetConfig<bool>("IsCache"))
+            var cacheKey = $"search_{culture}_{keyword}_{pageSize}_{pageIndex}_{orderBy}_{orderDirection}";
+            var data = new Lib.ViewModels.MixPages.ReadMvcViewModel();
+            
+            // Try load data from cache
+            if (MixService.GetConfig<bool>("IsCache"))
             {
-                getPage.IsSucceed = true;
-                getPage.Data = data;
+                getPage = await MixCacheService.GetAsync< RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>>(cacheKey);
             }
-            else
+
+            // If cannot load from cache => try query new data
+            if(!getPage.IsSucceed)
             {
                 Expression<Func<MixPage, bool>> predicate;
 
                 predicate = p =>
                 p.SeoName == "search"
-                && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+                && p.Status == (int)MixContentStatus.Published && p.Specificulture == culture;
 
                 getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
                 if (getPage.Data != null)
                 {
                     getPage.Data.LoadDataByKeyword(keyword, orderBy, orderDirection, pageIndex: pageIndex, pageSize: pageSize);
                 }
-                await MixCacheService.SetAsync(cacheKey, getPage.Data);                
+                await MixCacheService.SetAsync(cacheKey, getPage);                
             }
 
             if (getPage.IsSucceed)
