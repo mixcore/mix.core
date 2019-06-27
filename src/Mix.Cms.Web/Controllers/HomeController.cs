@@ -483,7 +483,7 @@ namespace Mix.Cms.Web.Controllers
             }
 
             // If cannot load from cache => try query new data
-            if(getPage!= null && !getPage.IsSucceed)
+            if(getPage== null)
             {
                 Expression<Func<MixPage, bool>> predicate;
 
@@ -495,8 +495,8 @@ namespace Mix.Cms.Web.Controllers
                 if (getPage.Data != null)
                 {
                     getPage.Data.LoadDataByKeyword(keyword, orderBy, orderDirection, pageIndex: pageIndex, pageSize: pageSize);
-                }
-                await MixCacheService.SetAsync(cacheKey, getPage);                
+                    await MixCacheService.SetAsync(cacheKey, getPage);
+                }                
             }
 
             if (getPage.IsSucceed)
