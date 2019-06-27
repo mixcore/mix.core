@@ -115,17 +115,19 @@ namespace Mix.Cms.Web.Controllers
             return await TagAsync(tagName);
         }
 
+        /**
+         * Form action must be "{culture}/search/"
+         **/
         [HttpGet]
-        [Route("search")]
+        [Route("{culture}/search/")]
         public async System.Threading.Tasks.Task<IActionResult> Search()
         {
-            string culture = Request.Query["culture"].ToString();
             string keyword = Request.Query["keyword"].ToString();
             if (_forbidden)
             {
                 return Redirect($"/error/403");
             }
-            return await SearchAsync(culture, keyword);
+            return await SearchAsync(keyword);
         }
 
         [Route("article/{id}/{seoName}")]
@@ -460,7 +462,7 @@ namespace Mix.Cms.Web.Controllers
                 return Redirect($"/error/404");
             }
         }
-        async System.Threading.Tasks.Task<IActionResult> SearchAsync(string culture, string keyword)
+        async System.Threading.Tasks.Task<IActionResult> SearchAsync(string keyword)
         {
             string seoName = "search";
             ViewData["TopPages"] = await GetCategoryAsync(CatePosition.Nav, seoName);
@@ -473,7 +475,7 @@ namespace Mix.Cms.Web.Controllers
             int orderDirection = MixService.GetConfig<int>("OrderDirection");
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
             var getPage = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
-            var cacheKey = $"search_{culture}_{keyword}_{pageSize}_{pageIndex}_{orderBy}_{orderDirection}";
+            var cacheKey = $"search_{_culture}_{keyword}_{pageSize}_{pageIndex}_{orderBy}_{orderDirection}";
             var data = new Lib.ViewModels.MixPages.ReadMvcViewModel();
             
             // Try load data from cache
@@ -489,7 +491,7 @@ namespace Mix.Cms.Web.Controllers
 
                 predicate = p =>
                 p.SeoName == "search"
-                && p.Status == (int)MixContentStatus.Published && p.Specificulture == culture;
+                && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
 
                 getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
                 if (getPage.Data != null)
