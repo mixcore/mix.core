@@ -11,10 +11,25 @@
     <meta name="viewport" content="width=1920">
     <meta data-react-helmet="true" name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
     <link rel="icon" type="image/png" sizes="16x16" href="@(MixService.GetConfig<string>("Favicon", ViewBag.culture) ?? "/favicon-16x16.png")">        
+    <style>
+        :root {
+            --bg-color: #1e1e1e;
+            --border-color: #2b2c33;
+            --link-color: #209e91;
+            --text-color: #ccc;
+            --breakpoint-xs: 0;
+            --breakpoint-sm: 576px;
+            --breakpoint-md: 768px;
+            --breakpoint-lg: 992px;
+            --breakpoint-xl: 1200px;
+            --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+    </style>  
     <link rel="stylesheet" href="~/css/app-vendor.min.css" />
     <link rel="stylesheet" href="~/css/shared.min.css" />
     <link rel="stylesheet" href="~/css/portal.min.css" />
-    
+      
     <!-- <link rel="stylesheet" href="~/css/portal/mixcore.css" /> -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 

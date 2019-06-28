@@ -55,7 +55,7 @@ body {
   line-height: 1.5;
   color: #212529;
   text-align: left;
-  background-color: #1e1e1e;
+  background-color: var(--bg-color);
 }
 
 [tabindex="-1"]:focus {
@@ -479,7 +479,7 @@ mark,
 
 .img-thumbnail {
   padding: 0.25rem;
-  background-color: #1e1e1e;
+  background-color: var(--bg-color);
   border: 1px solid #dee2e6;
   border-radius: 0.25rem;
   max-width: 100%;
@@ -4128,16 +4128,16 @@ input[type="button"].btn-block {
 }
 
 .custom-range:focus::-webkit-slider-thumb {
-  -webkit-box-shadow: 0 0 0 1px #1e1e1e, 0 0 0 0.2rem rgba(32, 158, 145, 0.25);
-          box-shadow: 0 0 0 1px #1e1e1e, 0 0 0 0.2rem rgba(32, 158, 145, 0.25);
+  -webkit-box-shadow: 0 0 0 1px var(--bg-color), 0 0 0 0.2rem rgba(32, 158, 145, 0.25);
+          box-shadow: 0 0 0 1px var(--bg-color), 0 0 0 0.2rem rgba(32, 158, 145, 0.25);
 }
 
 .custom-range:focus::-moz-range-thumb {
-  box-shadow: 0 0 0 1px #1e1e1e, 0 0 0 0.2rem rgba(32, 158, 145, 0.25);
+  box-shadow: 0 0 0 1px var(--bg-color), 0 0 0 0.2rem rgba(32, 158, 145, 0.25);
 }
 
 .custom-range:focus::-ms-thumb {
-  box-shadow: 0 0 0 1px #1e1e1e, 0 0 0 0.2rem rgba(32, 158, 145, 0.25);
+  box-shadow: 0 0 0 1px var(--bg-color), 0 0 0 0.2rem rgba(32, 158, 145, 0.25);
 }
 
 .custom-range::-moz-focus-outer {
@@ -4354,8 +4354,8 @@ input[type="button"].btn-block {
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
   color: #495057;
-  background-color: #1e1e1e;
-  border-color: #dee2e6 #dee2e6 #1e1e1e;
+  background-color: var(--bg-color);
+  border-color: #dee2e6 #dee2e6 var(--bg-color);
 }
 
 .nav-tabs .dropdown-menu {
@@ -10447,8 +10447,8 @@ body {
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
   color: #209e91;
-  background-color: #1e1e1e;
-  border-color: #777 #777 #1e1e1e;
+  background-color: var(--bg-color);
+  border-color: #777 #777 var(--bg-color);
 }
 
 .nav-tabs .nav-link:hover, .nav-tabs .nav-tabs .nav-link:focus {
@@ -10457,7 +10457,7 @@ body {
 
 .sw-navbar {
   min-height: 4rem;
-  background-color: #1e1e1e;
+  background-color: var(--bg-color);
   -webkit-box-shadow: 0 0 5px black;
   box-shadow: 0 0 5px black;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -10594,7 +10594,7 @@ body {
   -webkit-box-ordinal-group: 1;
       -ms-flex-order: 0;
           order: 0;
-  background-color: #1e1e1e;
+  background-color: var(--bg-color);
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   color: #cccccc;
   padding-right: 15px;
@@ -10942,14 +10942,14 @@ body {
 
 .card {
   color: #cccccc;
-  background-color: #1e1e1e;
+  background-color: var(--bg-color);
   -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .dropdown-menu {
   color: #cccccc;
-  background-color: #1e1e1e;
+  background-color: var(--bg-color);
 }
 
 .dropdown-menu {
@@ -10991,7 +10991,7 @@ body {
 }
 
 .modal-content {
-  background-color: #1e1e1e;
+  background-color: var(--bg-color);
 }
 
 .modal-content .modal-footer {
