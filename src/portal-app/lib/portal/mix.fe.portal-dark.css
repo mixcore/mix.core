@@ -148,13 +148,13 @@ sup {
 }
 
 a {
-  color: #ffffff;
+  color: var(--link-color);
   text-decoration: none;
   background-color: transparent;
 }
 
 a:hover {
-  color: var(--text-color-hover);
+  color: var(--link-color-hover);
   text-decoration: underline;
 }
 
@@ -1902,7 +1902,7 @@ pre code {
 }
 
 .thead-dark {
-  color: #fff;
+  color: var(--text-color);
   background-color: var(--bg-color);
 }
 
@@ -1913,7 +1913,7 @@ pre code {
 }
 
 .table-dark {
-  color: #fff;
+  color: var(--text-color);
   background-color: var(--bg-color);
 }
 
@@ -2004,7 +2004,7 @@ pre code {
   font-weight: 400;
   line-height: 1.5;
   color: #495057;
-  background-color: var(--bg-color-hover);
+  background-color: var(--bg-color);
   background-clip: padding-box;
   border: 1px solid var(--border-color);
   border-radius: 0.25rem;
@@ -2027,7 +2027,7 @@ pre code {
 }
 
 .form-control:focus {
-  color: #fff;
+  /* color: #fff; */
   background-color: var(--bg-color-hover);
   border-color: #5fdfd1;
   outline: 0;
@@ -5163,17 +5163,17 @@ input[type="button"].btn-block {
   padding: 0.5rem 0.75rem;
   margin-left: -1px;
   line-height: 1.25;
-  color: #ffffff;
-  background-color: #fff;
-  border: 1px solid #dee2e6;
+  color: var(--link-color);
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
 }
 
 .page-link:hover {
   z-index: 2;
-  color: var(--text-color-hover);
+  color: var(--link-color-hover);
   text-decoration: none;
-  background-color: #e9ecef;
-  border-color: #dee2e6;
+  background-color: var(--bg-color-hover);
+  border-color: var(--border-color-hover);
 }
 
 .page-link:focus {
@@ -5196,9 +5196,9 @@ input[type="button"].btn-block {
 
 .page-item.active .page-link {
   z-index: 1;
-  color: #fff;
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
+  color: var(--link-color-hover);
+  background-color: var(--bg-color-hover)!important;
+  border-color: var(--border-color-hover);
 }
 
 .page-item.disabled .page-link {
@@ -10980,8 +10980,8 @@ body {
 .table-hover tbody tr:hover {
   color: var(--text-color-hover);
   background-color: var(--bg-color-hover);
-  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  /* -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); */
+  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); */
 }
 
 .modal {
@@ -11017,7 +11017,7 @@ body {
 
 div[dnd-list] .dnd-item,
 ul[dnd-list] li {
-  background-color: var(--bg-color-hover);
+  background-color: var(--bg-color);
   border: 1px solid var(--border-color);
   display: block;
   padding: 10px 15px;
