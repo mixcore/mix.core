@@ -1,9 +1,9 @@
 .ga-container {
-  background-color: #1e1e1e;
+  background-color: var(--bg-color);
 }
 
 /* .ActiveUsers {
-  background: #1e1e1e;
+  background: var(--bg-color);
   border: 1px solid #d4d2d0;
   border-radius: 4px;
   font-weight: 300;
