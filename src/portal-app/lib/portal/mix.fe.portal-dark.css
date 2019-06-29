@@ -2594,15 +2594,15 @@ fieldset:disabled a.btn {
 }
 
 .btn-primary {
-  color: #fff;
+  color: var(--text-color-hover);
   background-color: var(--primary-color);
   border-color: var(--primary-color);
 }
 
 .btn-primary:hover {
-  color: #fff;
-  background-color: #1a7e74;
-  border-color: #17746a;
+  color: var(--text-color-hover);
+  background-color:var(--bg-color-hover);
+  border-color: var(--border-color-hover);
 }
 
 .btn-primary:focus, .btn-primary.focus {
@@ -3159,6 +3159,7 @@ fieldset:disabled a.btn {
   font-weight: 400;
   color: #ffffff;
   text-decoration: none;
+  cursor:pointer;
 }
 
 .btn-link:hover {
@@ -5275,6 +5276,7 @@ a.badge:hover, a.badge:focus {
 .btn .badge {
   position: relative;
   top: -1px;
+  cursor: pointer;
 }
 
 .badge-pill {

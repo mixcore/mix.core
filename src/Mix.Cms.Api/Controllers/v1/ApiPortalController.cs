@@ -77,6 +77,7 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 Domain = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.Domain),
                 Lang = _lang,
+                PortalThemeSettings = MixService.GetConfig<JObject>(MixConstants.ConfigurationKeyword.PortalThemeSettings),
                 ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, _lang),
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
@@ -132,6 +133,7 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 Domain = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.Domain),
                 Lang = _lang,
+                PortalThemeSettings = MixService.GetConfig<JObject>(MixConstants.ConfigurationKeyword.PortalThemeSettings),
                 ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, _lang),
                 ApiEncryptKey = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ApiEncryptKey),
                 ApiEncryptIV = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ApiEncryptIV),
@@ -403,6 +405,25 @@ namespace Mix.Cms.Api.Controllers.v1
         }
         
         // POST api/category
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
+        [HttpPost, HttpOptions]
+        [Route("app-settings/save-global/{name}")]
+        public RepositoryResponse<string> SaveGlobalSettings(string name, [FromBody]JObject model)
+        {
+            switch (name)
+            {
+                case "PortalThemeSettings":
+                    MixService.SetConfig(name, model);
+                    break;
+                default:
+                    MixService.SetConfig(name, model["value"].ToString());
+                    break;
+            }
+            var result = MixService.SaveSettings();
+            return new RepositoryResponse<string>() { IsSucceed = result };
+        }
+        
+        // POST api/category
         [HttpGet, HttpOptions]
         [Route("app-settings/save-default")]
         public RepositoryResponse<bool> SaveDefaultAppSettings()
@@ -491,6 +512,7 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 Domain = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.Domain),
                 Lang = _lang,
+                PortalThemeSettings = MixService.GetConfig<JObject>(MixConstants.ConfigurationKeyword.PortalThemeSettings),
                 ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, _lang),
                 ApiEncryptKey = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ApiEncryptKey),
                 ApiEncryptIV = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ApiEncryptIV),

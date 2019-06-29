@@ -1,19 +1,16 @@
 ﻿(function (angular) {
     app.component('headerNav', {
         templateUrl: '/app/app-portal/components/header-nav/headerNav.html',
-        controller: ['$rootScope', '$location', 
+        controller: ['$rootScope','$scope', '$location', 
                     'CommonService', 'AuthService', 'TranslatorService', 'GlobalSettingsService',
-            function ($rootScope, $location, 
-                    commonService, authService, translatorService, globalSettingsService) {
+                    'AppSettingsServices',
+            function ($rootScope, $scope, $location, 
+                    commonService, authService, translatorService, globalSettingsService,appSettingsServices) {
                 var ctrl = this;
                 ctrl.globalSettings = $rootScope.globalSettings;
                 if (authService.authentication) {
                     ctrl.avatar = authService.authentication.avatar;
-                }
-                this.$onInit = function(){
-                    ctrl.settings = $rootScope.settings;
-                    ctrl.settings.cultures = $rootScope.globalSettings.cultures; 
-                }
+                }                
                 ctrl.translate = $rootScope.translate;
                 ctrl.getConfiguration = function (keyword, isWrap, defaultText) {
                     return  $rootScope.getConfiguration(keyword, isWrap, defaultText);

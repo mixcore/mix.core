@@ -33,6 +33,9 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("themeId")]
         public int ThemeId { get; set; }
 
+        [JsonProperty("portalThemeSettings")]
+        public JObject PortalThemeSettings { get; set; }
+
         [JsonProperty("apiEncryptKey")]
         public string ApiEncryptKey { get; set; }
 

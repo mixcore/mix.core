@@ -94,6 +94,7 @@
         <div ng-switch-when="17">
             <!--Color-->
             <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="color" 
+                value="{{$ctrl.attributeValue.stringValue}}"
                 ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attribute.title}}">
         </div>
         <div ng-switch-when="18">

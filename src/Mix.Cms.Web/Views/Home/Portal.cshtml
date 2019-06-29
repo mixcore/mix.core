@@ -3,7 +3,7 @@
     ViewData["Description"] = "Your powerful dashboard is here";
     Layout = "_LayoutPortal_Angular";
 }
-<div ng-app="MixPortal" ng-init="init()" ng-controller="AppPortalController">
+<div>
     <mix-loader ng-show="isBusy"></mix-loader>
     <header-nav ng-if="isInit" settings="settings" bread-crumbs="breadCrumbs"></header-nav>
     <div class="container-fluid wrapper">
@@ -21,6 +21,7 @@
                         <div class="{{pageClass}}" ng-view>
                             
                         </div>
+                        <portal-theme-settings></portal-theme-settings>
                         <medias ng-if="isInit"></medias>
                         <hub-messages ng-if="isInit"></hub-messages>
                         <message ng-if="isInit" message="message"></message>
