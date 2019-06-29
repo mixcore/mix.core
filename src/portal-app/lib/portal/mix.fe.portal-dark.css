@@ -3995,7 +3995,7 @@ input[type="button"].btn-block {
   color: #495057;
   vertical-align: middle;
   background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.75rem center/8px 10px;
-  background-color: var(--bg-color-hover);
+  background-color: var(--bg-color);
   border: 1px solid var(--border-color);
   border-radius: 0.25rem;
   -webkit-appearance: none;
@@ -4064,7 +4064,7 @@ input[type="button"].btn-block {
 }
 
 .custom-file-input:focus ~ .custom-file-label {
-  border-color: #5fdfd1;
+  border-color: var(--border-color-hover);
   -webkit-box-shadow: 0 0 0 0.2rem rgba(32, 158, 145, 0.25);
           box-shadow: 0 0 0 0.2rem rgba(32, 158, 145, 0.25);
 }
@@ -4091,8 +4091,8 @@ input[type="button"].btn-block {
   padding: 0.375rem 0.75rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #495057;
-  background-color: var(--bg-color-hover);
+  color: var(--text-color);
+  background-color: var(--bg-color);
   border: 1px solid var(--border-color);
   border-radius: 0.25rem;
 }
