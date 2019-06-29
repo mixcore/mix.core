@@ -12,11 +12,13 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
         $rootScope.globalSettingsService = globalSettingsService;
         $scope.lang = null;
         $scope.settings = {};
+        $scope.portalThemeSettings = {};
         $scope.init = function () {
             if (!$rootScope.isBusy) {
                 $rootScope.isBusy = true;
                 commonService.fillAllSettings($scope.lang).then(function (response) {
                     if ($rootScope.globalSettings) {
+                        $scope.portalThemeSettings = $rootScope.globalSettings.portalThemeSettings;
                         authService.fillAuthData().then(function (response) {
                             $rootScope.authentication = authService.authentication;
                             if (authService.authentication && authService.authentication.isAuth) {

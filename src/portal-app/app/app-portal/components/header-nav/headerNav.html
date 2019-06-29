@@ -1,5 +1,4 @@
-<header class="navbar navbar-expand flex-column flex-md-row sw-navbar position-sticky">
-
+<header class="navbar navbar-expand flex-column flex-md-row sw-navbar position-sticky">        
     <a class="mr-0 mr-md-2" href="/{{$ctrl.settings.lang}}" target="_blank" aria-label="mixcore">
         <img ng-src="{{$ctrl.settings.data.Logo}}" alt="mixcore" width="35">
     </a>
@@ -15,11 +14,13 @@
     </div> -->
 
     <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex" ng-if="$ctrl.settings">
-        <li class="nav-item mr-2">
-            <a class="nav-link p-2 btn" ng-click="$ctrl.generateSitemap()" alt="sitemap">
-                <i class="mi mi-AllApps"></i>
-            </a>
-        </li>
+        
+        <li class="nav-item mr-2 text-center">            
+            <a class="nav-link p-2" href="#" data-toggle="modal" 
+                data-target="#dlg-portal-theme-settings">
+                <i class="mi mi-Settings"></i>
+            </a>       
+        </li>        
         <li class="nav-item mr-2">
             <a class="nav-link p-2 btn" ng-click="$ctrl.addFavorite()">
                 <i class="mi mi-FavoriteList"></i>

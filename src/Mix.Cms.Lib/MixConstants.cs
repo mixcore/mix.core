@@ -42,6 +42,7 @@ namespace Mix.Cms.Lib
             public const string DefaultCulture = "DefaultCulture";
             public const string IsMysql = "IsMysql";
             public const string Domain = "Domain";
+            public const string PortalThemeSettings = "PortalThemeSettings";
             public const string ThemeId = "ThemeId";
             public const string ThemeName= "ThemeName";
             public const string ThemeFolder= "ThemeFolder";
