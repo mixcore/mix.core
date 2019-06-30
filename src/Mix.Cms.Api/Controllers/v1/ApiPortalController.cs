@@ -104,6 +104,19 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             return getAllSettings();
         }
+        
+        [AllowAnonymous]
+        [HttpGet, HttpOptions]
+        [Route("jarray-data/{name}")]
+        public RepositoryResponse<JArray> SupportedCultures(string name)
+        {
+            var cultures = FileRepository.Instance.GetFile(name, "data", true, "[]");
+            var obj = JObject.Parse(cultures.Content);
+            return new RepositoryResponse<JArray>() {
+                IsSucceed = true,
+                Data = obj["data"] as JArray
+            };
+        }
 
         // GET api/category/id
         [HttpGet, HttpOptions]
@@ -487,19 +500,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         }
 
-        // POST api/category
-        [HttpPost, HttpOptions]
-        [Route("init-cms")]
-        public async Task<RepositoryResponse<bool>> Post([FromBody]InitCmsViewModel model)
-        {
-            if (model != null)
-            {
-                var result = await InitCmsAsync(model).ConfigureAwait(false);
-                return result;
-            }
-            return new RepositoryResponse<bool>();
-        }
-
+       
         #endregion Post
 
         #region Helpers
@@ -556,64 +557,6 @@ namespace Mix.Cms.Api.Controllers.v1
             };
         }
 
-        private async Task<RepositoryResponse<bool>> InitCmsAsync(InitCmsViewModel model)
-        {
-            var result = new RepositoryResponse<bool>();
-
-            MixService.SetConnectionString(MixConstants.CONST_CMS_CONNECTION, model.ConnectionString);
-            MixService.SetConnectionString(MixConstants.CONST_MESSENGER_CONNECTION, model.ConnectionString);
-            MixService.SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, model.ConnectionString);
-            MixService.SetConfig(MixConstants.CONST_SETTING_IS_MYSQL, model.IsMysql);
-            MixService.SetConfig(MixConstants.CONST_SETTING_DATABASE_PROVIDER, model.DatabaseProvider);
-            MixService.SetConfig(MixConstants.CONST_SETTING_LANGUAGE, model.Culture.Specificulture);
-
-            InitCmsService sv = new InitCmsService();
-            var initResult = await sv.InitCms(model.SiteName, model.Culture);
-            if (initResult.IsSucceed)
-            {
-                await InitRolesAsync();
-                result.IsSucceed = true;
-                MixService.LoadFromDatabase();
-                MixService.SetConfig<bool>("IsInit", true);
-                MixService.SetConfig<string>("DefaultCulture", model.Culture.Specificulture);
-                MixService.SaveSettings();
-                MixService.Reload();
-            }
-            else
-            {
-                // if cannot init cms 
-                //  => reload from default settings
-                //  => save to appSettings
-                MixService.Reload();
-                MixService.SaveSettings();
-                if (initResult.Exception != null)
-                {
-                    result.Errors.Add(initResult.Exception.Message);
-                    result.Exception = initResult.Exception;
-                }
-                foreach (var item in initResult.Errors)
-                {
-                    result.Errors.Add(item);
-                }
-            }
-            return result;
-        }
-
-        private async Task<bool> InitRolesAsync()
-        {
-            bool isSucceed = true;
-            var getRoles = await RoleViewModel.Repository.GetModelListAsync();
-            if (getRoles.IsSucceed && getRoles.Data.Count == 0)
-            {
-                var saveResult = await _roleManager.CreateAsync(new IdentityRole()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = "SuperAdmin"
-                });
-                isSucceed = saveResult.Succeeded;
-            }
-            return isSucceed;
-        }
 
         #endregion
     }

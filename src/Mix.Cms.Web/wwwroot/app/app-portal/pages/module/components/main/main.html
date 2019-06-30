@@ -27,7 +27,7 @@
         </div>
         <div class="form-group">
             <label class="mb-0">Main content</label>
-            <trumbowyg class="trumbowyg-dark" options="{}" ng-model="$ctrl.module.description"></trumbowyg>
+            <trumbowyg options="{}" ng-model="$ctrl.module.description"></trumbowyg>
         </div>
         <div class="form-group">
             <label class="control-label">Module types</label>
@@ -44,6 +44,7 @@
                             <span ng-switch-when="SubArticle" class="" title="{{type}}">Sub Article</span>
                             <span ng-switch-when="SubProduct" class="" title="{{type}}">Sub Product</span>
                             <span ng-switch-when="ListProduct" class="" title="{{type}}">List Product</span>
+                            <span ng-switch-when="Gallery" class="" title="{{type}}">Gallery</span>
                         </label>
                     </div>
                 </div>

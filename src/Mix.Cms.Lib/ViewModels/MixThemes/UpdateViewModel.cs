@@ -237,23 +237,26 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         async Task<RepositoryResponse<bool>> ImportThemeAsync(MixTheme parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            string fileName = $"wwwroot/{TemplateAsset.FileFolder}/{TemplateAsset.Filename}{TemplateAsset.Extension}";
-            if (File.Exists(fileName)) {
-                
-                FileRepository.Instance.UnZipFile($"{TemplateAsset.Filename}{TemplateAsset.Extension}", TemplateAsset.FileFolder);
+            string filePath = $"wwwroot/{TemplateAsset.FileFolder}/{TemplateAsset.Filename}{TemplateAsset.Extension}";
+            if (File.Exists(filePath))
+            {
+                string outputFolder = $"wwwroot/{TemplateAsset.FileFolder}/Extract";
+                FileRepository.Instance.DeleteFolder(outputFolder);
+                FileRepository.Instance.CreateDirectoryIfNotExist(outputFolder);
+                FileRepository.Instance.UnZipFile(filePath, outputFolder);
                 //Move Unzip Asset folder
-                FileRepository.Instance.CopyWebDirectory($"{TemplateAsset.FileFolder}/Assets", AssetFolder);
+                FileRepository.Instance.CopyDirectory($"{outputFolder}/Assets", AssetFolder);
                 //Move Unzip Templates folder
-                FileRepository.Instance.CopyDirectory($"{MixConstants.Folder.WebRootPath}/{TemplateAsset.FileFolder}/Templates", TemplateFolder);
+                FileRepository.Instance.CopyDirectory($"{outputFolder}/Templates", TemplateFolder);
                 //Move Unzip Uploads folder
-                FileRepository.Instance.CopyDirectory($"{MixConstants.Folder.WebRootPath}/{TemplateAsset.FileFolder}/Uploads", AssetFolder);
+                FileRepository.Instance.CopyDirectory($"{outputFolder}/Uploads", AssetFolder);
                 // Get SiteStructure
-                var strSchema = FileRepository.Instance.GetWebFile("schema.json", $"{TemplateAsset.FileFolder}/Data");
+                var strSchema = FileRepository.Instance.GetFile("schema.json", $"{outputFolder}/Data");
                 var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteStructureViewModel>();
-                FileRepository.Instance.DeleteWebFolder(TemplateAsset.FileFolder);
+                FileRepository.Instance.DeleteFolder(outputFolder);
 
                 //Import Site Structures
-                result =  await MixPages.Helper.ImportAsync(siteStructures.Pages, Specificulture);
+                result = await MixPages.Helper.ImportAsync(siteStructures.Pages, Specificulture);
                 if (result.IsSucceed)
                 {
 

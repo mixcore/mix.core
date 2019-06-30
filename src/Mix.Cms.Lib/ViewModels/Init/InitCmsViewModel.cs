@@ -1,7 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mix.Cms.Lib.ViewModels.MixInit
 {
@@ -58,12 +55,6 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
 
         [JsonProperty("sqliteDbConnectionString")]
         public string SqliteDbConnectionString { get; set; } = $"Data Source=mix-cms.db";
-
-        [JsonProperty("superAdminsuperAdmin")]
-        public string SuperAdmin { get; set; }
-
-        [JsonProperty("adminPassword")]
-        public string AdminPassword { get; set; }
 
         [JsonProperty("lang")]
         public string Lang { get; set; }

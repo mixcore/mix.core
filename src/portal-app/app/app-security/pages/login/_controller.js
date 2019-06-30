@@ -8,9 +8,9 @@ app.controller('LoginController', [ '$rootScope', '$scope', 'ngAppSettings', '$l
     $scope.pageClass = 'page-login';
 
     $scope.loginData = {
-        username: "",
+        userName: "",
         password: "",
-        rememberme: false
+        rememberMe: false
     };
 
     $scope.message = "";

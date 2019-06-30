@@ -661,17 +661,8 @@ namespace Mix.Cms.Lib.Repositories
             }
         }
 
-        public void UnZipFile(string fileName, string folder)
+        public void UnZipFile(string filePath, string webFolder)
         {
-            string filePath = CommonHelper.GetFullPath(new string[] {
-                MixConstants.Folder.WebRootPath,
-                folder,
-                fileName });
-            string webFolder = CommonHelper.GetFullPath(new string[]
-            {
-                MixConstants.Folder.WebRootPath,
-                folder
-            });
             try
             {
                 ZipFile.ExtractToDirectory(filePath, webFolder);

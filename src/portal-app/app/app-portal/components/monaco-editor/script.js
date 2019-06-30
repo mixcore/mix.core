@@ -5,7 +5,7 @@
             var ctrl = this;
             ctrl.previousId = null;
             ctrl.editor = null;
-            ctrl.minHeight =  90;
+            ctrl.minHeight =  320;
             ctrl.isVisible = false;
             ctrl.id = Math.floor(Math.random() * 100) + 1;
             ctrl.$onChanges = (changes) => {

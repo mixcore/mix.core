@@ -45,9 +45,9 @@ app.factory('AuthService',
 
             var _login = async function (loginData) {
                 var data = {
-                    UserName: loginData.username,
+                    UserName: loginData.userName,
                     Password: loginData.password,
-                    RememberMe: loginData.rememberme,
+                    RememberMe: loginData.rememberMe,
                     Email: '',
                     ReturnUrl: ''
                 };

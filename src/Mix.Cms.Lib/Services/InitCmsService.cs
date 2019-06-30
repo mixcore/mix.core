@@ -22,7 +22,15 @@ namespace Mix.Cms.Lib.Services
         {
         }
 
-        public async Task<RepositoryResponse<bool>> InitCms(string siteName, InitCulture culture)
+        /// <summary>
+        /// Step 1
+        ///     - Init Culture
+        ///     - Init System pages
+        /// </summary>
+        /// <param name="siteName"></param>
+        /// <param name="culture"></param>
+        /// <returns></returns>
+        public static async Task<RepositoryResponse<bool>> InitCms(InitCulture culture)
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>();
             MixCmsContext context = null;
@@ -38,7 +46,6 @@ namespace Mix.Cms.Lib.Services
                     context = new MixCmsContext();
                     accountContext = new MixCmsAccountContext();
                     messengerContext = new MixChatServiceContext();
-                    //MixChatServiceContext._cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
                     await context.Database.MigrateAsync();
                     await accountContext.Database.MigrateAsync();
                     await messengerContext.Database.MigrateAsync();
@@ -46,61 +53,28 @@ namespace Mix.Cms.Lib.Services
 
                     var countCulture = context.MixCulture.Count();
 
-                    var isInit = countCulture > 0;
+                    var isInit = MixService.GetConfig<bool>("IsInit");
 
                     if (!isInit)
-                    {
-                        MixService.SetConfig<string>("SiteName", siteName);
+                    {                        
+                        
+                        /**
+                         * Init Selected Language as default 
+                         */
                         isSucceed = InitCultures(culture, context, transaction);
-                        if (isSucceed)
-                        {
-                            isSucceed = isSucceed && InitPositions(context, transaction);
-                        }
-                        else
-                        {
-                            result.Errors.Add("Cannot init Cultures");
-                        }
-                        if (isSucceed)
-                        {
-                            isSucceed = isSucceed && await InitConfigurationsAsync(siteName, culture, context, transaction);
-                        }
-                        else
-                        {
-                            result.Errors.Add("Cannot init Positions");
-                        }
-                        if (isSucceed)
-                        {
-                            isSucceed = isSucceed && await InitLanguagesAsync(culture, context, transaction);
-                        }
-                        else
-                        {
-                            result.Errors.Add("Cannot init Configurations");
-                        }
-                        if (isSucceed)
-                        {
-                            var initTheme = await InitThemesAsync(siteName, context, transaction);
-                            isSucceed = isSucceed && initTheme.IsSucceed;
-                            result.Errors.AddRange(initTheme.Errors);
-                            result.Exception = initTheme.Exception;
-                        }
-                        else
-                        {                            
-                            result.Errors.Add("Cannot init Languages");
-                        }
-                    }
-                    else
-                    {
-                        isSucceed = true;
-                    }
 
-                    if (isSucceed && context.MixPage.Count() == 0)
-                    {
-                        InitPages(culture.Specificulture, context, transaction);
-                        isSucceed = (await context.SaveChangesAsync().ConfigureAwait(false)) > 0;
-                    }
-                    else
-                    {
-                        result.Errors.Add("Cannot init Themes");
+                        /**
+                         * Init System Pages
+                         */
+                        if (isSucceed)
+                        {
+                            InitPages(culture.Specificulture, context, transaction);
+                            isSucceed = (await context.SaveChangesAsync().ConfigureAwait(false)) > 0;
+                        }
+                        else
+                        {
+                            result.Errors.Add("Cannot init Pages");
+                        }
                     }
                     if (isSucceed)
                     {
@@ -130,36 +104,71 @@ namespace Mix.Cms.Lib.Services
         }
 
 
-        private async Task<bool> InitConfigurationsAsync(string siteName, InitCulture culture, MixCmsContext context, IDbContextTransaction transaction)
+        /// <summary>
+        /// Step 2
+        ///     - Init Configurations
+        /// </summary>
+        /// <param name="siteName"></param>
+        /// <param name="specifiCulture"></param>
+        /// <param name="_context"></param>
+        /// <param name="_transaction"></param>
+        /// <returns></returns>
+        public async Task<RepositoryResponse<bool>> InitConfigurationsAsync(string specifiCulture, List<MixConfiguration> configurations
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             /* Init Configs */
-            var configurations = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_CONFIGURATIONS, "data", true, "{}");
-            var obj = JObject.Parse(configurations.Content);
-            var arrConfiguration = obj["data"].ToObject<List<MixConfiguration>>();
-            if (!string.IsNullOrEmpty(siteName))
+
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            var siteName = configurations.Find(c => c.Keyword == "SiteName");
+            if (!string.IsNullOrEmpty(siteName.Value))
             {
-                arrConfiguration.Find(c => c.Keyword == "SiteName").Value = siteName;
-                arrConfiguration.Find(c => c.Keyword == "ThemeName").Value = Common.Helper.SeoHelper.GetSEOString(siteName);
-                arrConfiguration.Find(c => c.Keyword == "ThemeFolder").Value = Common.Helper.SeoHelper.GetSEOString(siteName);
+                configurations.Find(c => c.Keyword == "ThemeName").Value = Common.Helper.SeoHelper.GetSEOString(siteName.Value);
+                configurations.Find(c => c.Keyword == "ThemeFolder").Value = Common.Helper.SeoHelper.GetSEOString(siteName.Value);
             }
-            var result = await ViewModels.MixConfigurations.ReadMvcViewModel.ImportConfigurations(arrConfiguration, culture.Specificulture, context, transaction);
-            return result.IsSucceed;
+            var result = await ViewModels.MixConfigurations.ReadMvcViewModel.ImportConfigurations(configurations, specifiCulture, context, transaction);
+
+            UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+
+            return result;
 
         }
+        
 
-        private async Task<bool> InitLanguagesAsync(InitCulture culture, MixCmsContext context, IDbContextTransaction transaction)
+        /// <summary>
+        /// Step 3
+        ///     - Init Languages for translate
+        /// </summary>
+        /// <param name="culture"></param>
+        /// <param name="_context"></param>
+        /// <param name="_transaction"></param>
+        /// <returns></returns>
+        public async Task<RepositoryResponse<bool>> InitLanguagesAsync(string specificulture, List<MixLanguage> languages
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             /* Init Languages */
-            var configurations = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_LANGUAGES, "data", true, "{}");
-            var obj = JObject.Parse(configurations.Content);
-            var arrLanguage = obj["data"].ToObject<List<MixLanguage>>();
-            var result = await ViewModels.MixLanguages.ReadMvcViewModel.ImportLanguages(arrLanguage, culture.Specificulture, context, transaction);
-            return result.IsSucceed;
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+
+            var result = await ViewModels.MixLanguages.ReadMvcViewModel.ImportLanguages(languages, specificulture, context, transaction);
+
+            UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+            return result;
 
         }
 
-        private async Task<RepositoryResponse<ViewModels.MixThemes.InitViewModel>> InitThemesAsync(string siteName, MixCmsContext context, IDbContextTransaction transaction)
+        
+        /// <summary>
+        /// Step 4 
+        ///     - Init default theme
+        /// </summary>
+        /// <param name="siteName"></param>
+        /// <param name="_context"></param>
+        /// <param name="_transaction"></param>
+        /// <returns></returns>
+        public async Task<RepositoryResponse<bool>> InitThemesAsync(string siteName
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            var result = new RepositoryResponse<bool>(){ IsSucceed = true };
             var getThemes = ViewModels.MixThemes.InitViewModel.Repository.GetModelList(_context: context, _transaction: transaction);
             if (!context.MixTheme.Any())
             {
@@ -173,13 +182,14 @@ namespace Mix.Cms.Lib.Services
                     Status = (int)MixContentStatus.Published,
                 }, context, transaction);
 
-                return await theme.SaveModelAsync(true, context, transaction);
+                var saveResult = await theme.SaveModelAsync(true, context, transaction);
+                ViewModelHelper.HandleResult(saveResult, ref result);
             }
-
-            return new RepositoryResponse<ViewModels.MixThemes.InitViewModel>() { IsSucceed = true };
+            UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+            return new RepositoryResponse<bool>() { IsSucceed = result.IsSucceed };
         }
 
-        protected bool InitCultures(InitCulture culture, MixCmsContext context, IDbContextTransaction transaction)
+        protected static bool InitCultures(InitCulture culture, MixCmsContext context, IDbContextTransaction transaction)
         {
             bool isSucceed = true;
             try
@@ -211,44 +221,7 @@ namespace Mix.Cms.Lib.Services
             }
             return isSucceed;
         }
-
-        protected bool InitPositions(MixCmsContext context, IDbContextTransaction transaction)
-        {
-            bool isSucceed = true;
-            var count = context.MixPortalPage.Count();
-            if (count == 0)
-            {
-                var p = new MixPosition()
-                {
-                    Id = 1,
-                    Description = nameof(MixEnums.CatePosition.Nav)
-                };
-                context.Entry(p).State = EntityState.Added;
-                p = new MixPosition()
-                {
-                    Id = 2,
-                    Description = nameof(MixEnums.CatePosition.Top)
-                };
-                context.Entry(p).State = EntityState.Added;
-                p = new MixPosition()
-                {
-                    Id = 3,
-                    Description = nameof(MixEnums.CatePosition.Left)
-                };
-                context.Entry(p).State = EntityState.Added;
-                p = new MixPosition()
-                {
-                    Id = 4,
-                    Description = nameof(MixEnums.CatePosition.Footer)
-                };
-                context.Entry(p).State = EntityState.Added;
-
-                context.SaveChanges();
-            }
-            return isSucceed;
-        }
-
-        protected void InitPages(string culture, MixCmsContext context, IDbContextTransaction transaction)
+        protected static void InitPages(string culture, MixCmsContext context, IDbContextTransaction transaction)
         {
             /* Init Languages */
             var pages = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, "data", true, "{}");
@@ -277,5 +250,18 @@ namespace Mix.Cms.Lib.Services
                 context.Entry(alias).State = EntityState.Added;
             }
         }
+        protected async Task<bool> InitPositionsAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            /* Init Positions */
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            var positions = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_POSITIONS, "data", true, "{}");
+            var obj = JObject.Parse(positions.Content);
+            var arrPosition = obj["data"].ToObject<List<MixPosition>>();
+            var result = await ViewModels.MixPositions.ReadViewModel.ImportPositions(arrPosition, context, transaction);
+            UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+            return result.IsSucceed;
+        }
+
+        
     }
 }

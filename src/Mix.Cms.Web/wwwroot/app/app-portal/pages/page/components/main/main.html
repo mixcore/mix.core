@@ -32,12 +32,14 @@
                     <i ng-switch-when="Home" class="mi mi-Home mi-lg mi-flip-horizontal" title="{{type}}"></i>
                     <i ng-switch-when="StaticUrl" class="mi mi-Go mi-lg mi-flip-horizontal" title="{{type}}"></i>
                     <i ng-switch-when="Modules" class="mi mi-ResolutionLegacy mi-lg mi-flip-horizontal" title="{{type}}"></i>
+                    <i ng-switch-when="Gallery" class="mi mi-Media mi-lg mi-flip-horizontal" title="{{type}}"></i>
+                    <i ng-switch-when="System" class="mi mi-Settings mi-lg mi-flip-horizontal" title="{{type}}"></i>
                 </label>
             </div>
         </div>
         <div class="form-group">
             <label class="mb-0">Body content</label>
-            <trumbowyg class="trumbowyg-dark" options="{}" ng-model="$ctrl.page.content"></trumbowyg>
+            <trumbowyg options="{}" ng-model="$ctrl.page.content"></trumbowyg>
         </div>
     </div>
 </div>
