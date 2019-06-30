@@ -55,13 +55,13 @@
 
                             <a ng-if="item.childs.length>0" class="btn btn-dark" data-toggle="collapse" role="button"
                                 ng-click="showChilds(item.id)">
-                                <span class="fa fa-list text-primary"></span>
+                                <span class="fa fa-list text-info"></span>
                             </a>
 
                             <a href="" ng-click="goToPath('/portal/page/details/' + item.id)" class="btn btn-dark">
-                                <span class="fas fa-pencil-alt text-primary"></span>
+                                <span class="fas fa-pencil-alt text-warning"></span>
                             </a>
-                            <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-dark"><span class="far fa-eye text-primary"></span></a>
+                            <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-dark"><span class="far fa-eye text-info"></span></a>
                             <a ng-if="item.type==2" href="/portal/page/page-article/list/{{item.id}}" class="btn btn-dark">
                                 <span class="fas fa-list text-info"></span>
                             </a>
@@ -136,9 +136,9 @@
                                                 aria-label="Actions">
                                                 <a href=""
                                                     ng-click="goToPath('/portal/page/details/' + c.id)" class="btn btn-dark"><span
-                                                        class="fa fa-pen text-primary small"></span></a>
+                                                        class="fa fa-pen text-warning small"></span></a>
                                                 <a href="{{c.detailsUrl}}" target="_blank" class="btn btn-dark"><span
-                                                        class="far fa-eye text-primary small"></span></a>
+                                                        class="far fa-eye text-info small"></span></a>
                                                 <a ng-if="c.page.type==2" href="/portal/page/page-article/list/{{c.page.id}}"
                                                     class="btn btn-dark">
                                                     <span class="fas fa-list text-info"></span>

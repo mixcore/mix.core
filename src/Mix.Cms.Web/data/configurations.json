@@ -1,45 +1,53 @@
 ﻿{
-  "specificulture": "en-us",
   "data": [
     {
+      "keyword": "SiteName",
+      "category": "Site_Common",
+      "value": "Mix Core",
+      "dataType": 7,
+      "description": "Site Name",
+      "priority": 0,
+      "status": 2
+    },
+    {
       "keyword": "LanguageVersion",
-      "category": "Site",
+      "category": "System",
       "value": 1,
       "dataType": 7,
-      "description": "Company Address",
+      "description": "Language Version",
       "priority": 0,
       "status": 2
     },
     {
       "keyword": "SettingVersion",
-      "category": "Site",
+      "category": "System",
       "value": 1,
       "dataType": 7,
-      "description": "Company Address",
+      "description": "Settings Version",
       "priority": 0,
       "status": 2
     },
     {
       "keyword": "ContactAddress",
-      "category": "Site",
+      "category": "Site_Common",
       "value": "",
       "dataType": 7,
-      "description": "Company Address",
+      "description": "Address",
       "priority": 0,
       "status": 2
     },
     {
       "keyword": "ContactEmail",
-      "category": "Site",
-      "value": "Site Name",
-      "dataType": 7,
+      "category": "Site_Common",
+      "value": "",
+      "dataType": 10,
       "description": "Email",
       "priority": 0,
       "status": 2
     },
     {
       "keyword": "ContactPhone",
-      "category": "Site",
+      "category": "Site_Common",
       "value": "",
       "dataType": 7,
       "description": "Hotline",
@@ -47,134 +55,126 @@
       "status": 2
     },
     {
-      "keyword": "Facebook",
-      "category": "Site",
+      "keyword": "Facebook_Token",
+      "category": "Social_Facebook",
       "value": "",
-      "dataType": 7,
-      "description": null,
+      "dataType": 9,
+      "description": "Facebook Access Token",
       "priority": 0,
       "status": 2
     },
     {
       "keyword": "FacebookAppId",
-      "category": "Site",
+      "category": "Social_Facebook",
       "value": "",
       "dataType": 7,
-      "description": null,
+      "description": "Facebook App Id",
       "priority": 0,
       "status": 2
     },
     {
       "keyword": "Facebook_Page_Id",
-      "category": "Site",
+      "category": "Social_Facebook",
       "value": "",
       "dataType": 7,
-      "description": null,
+      "description": "Facebook Page Id",
       "priority": 0,
       "status": 2
     },
     {
       "keyword": "Google_Analytic_Key",
-      "category": "Site",
+      "category": "Social_Google",
       "value": "",
       "dataType": 7,
-      "description": null,
+      "description": "Google Analytic Key",
       "priority": 0,
       "status": 2
     },
     {
       "keyword": "Google_Analytic_Ids",
-      "category": "Site",
+      "category": "Social_Google",
       "value": "",
       "dataType": 7,
-      "description": null,
+      "description": "Google Analytic Id",
       "priority": 0,
       "status": 2
     },
     {
       "keyword": "Google_Client_Id",
-      "category": "Site",
+      "category": "Social_Google",
       "value": "",
       "dataType": 7,
-      "description": null,
+      "description": "Google Client Id",
       "priority": 0,
       "status": 2
     },
     {
       "keyword": "Recaptcha_Key",
-      "category": "Site",
+      "category": "Social_Google",
       "value": "",
       "dataType": 7,
-      "description": null,
+      "description": "Recaptcha Key",
       "priority": 0,
       "status": 2
     },
     {
       "keyword": "Recaptcha_Secret",
-      "category": "Site",
+      "category": "Social_Google",
       "value": "",
       "dataType": 7,
-      "description": null,
+      "description": "Recaptcha Secret",
       "priority": 0,
       "status": 2
     },
     {
       "keyword": "Favicon",
-      "category": "Site",
+      "category": "Site_Common",
       "value": "/css/portal/img/mixcore-logo-green.png",
       "dataType": 16,
-      "description": null,
+      "description": "Favicon",
       "priority": 0,
       "status": 2
     },
     {
       "keyword": "Logo",
-      "category": "Site",
-      "value": "/css/portal/img/mixcore-logo-blue.png",
+      "category": "Site_Common",
+      "value": "/css/portal/img/mixcore-logo-green.png",
       "dataType": 16,
-      "description": null,
+      "description": "Logo",
       "priority": 0,
       "status": 2
     },
-    {
-      "keyword": "SiteName",
-      "category": "Site",
-      "value": "Mix Core",
-      "dataType": 7,
-      "description": null,
-      "priority": 0,
-      "status": 2
-    },
+   
     {
       "keyword": "ThemeName",
       "category": "Site",
       "value": "Default",
       "dataType": 7,
-      "description": "Cms Theme",
+      "description": "Theme Name",
       "priority": 0,
       "status": 2
     },
     {
       "keyword": "ThemeFolder",
-      "category": "Site",
+      "category": "Site_Settings",
       "value": "Default",
       "dataType": 7,
-      "description": "Cms Theme Folder",
+      "description": "Theme Folder",
       "priority": 0,
       "status": 2
     },
     {
       "keyword": "ThemeId",
-      "category": "Site",
+      "category": "Site_Settings",
       "value": "1",
       "dataType": 7,
-      "description": "Cms Theme",
+      "description": "Theme Id",
       "priority": 0,
       "status": 2
     },
     {
       "keyword": "DateTimeFormat",
-      "category": "Site",
+      "category": "System",
       "value": "dd-MM-yyyy HH:mm:ss",
       "dataType": 7,
       "description": "Date Time Format",
@@ -183,7 +183,7 @@
     },
     {
       "keyword": "StartWeekOn",
-      "category": "Site",
+      "category": "System",
       "value": "Monday",
       "dataType": 7,
       "description": "",

@@ -1380,12 +1380,6 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'GlobalSettingsSer
             lblCancel: 'Cancel',
             context: $rootScope
         };
-        $rootScope.loadFile = function(url){
-            $http.get(url)
-            .then(function (data) {
-                return data;
-            });
-        };
         $rootScope.range = function (max) {
             var input = [];
             for (var i = 1; i <= max; i += 1) input.push(i);

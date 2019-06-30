@@ -105,7 +105,8 @@ namespace Mix.Cms.Lib
             StaticUrl = 4,
             Modules = 5,
             ListProduct = 6,
-            Gallery = 7
+            Gallery = 7,
+            System = 8
         }
 
         public enum MixModuleType

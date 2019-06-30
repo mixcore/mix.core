@@ -27,6 +27,7 @@ namespace Mix.Cms.Lib.Services
         /// The instance
         /// </summary>
         private static volatile MixService instance;
+        private static volatile MixService defaultInstance;
 
         private List<string> Cultures { get; set; }
         private JObject GlobalSettings { get; set; }
@@ -66,6 +67,26 @@ namespace Mix.Cms.Lib.Services
             }
         }
 
+        public static MixService DefaultInstance
+        {
+            get
+            {
+                if (defaultInstance == null)
+                {
+                    lock (syncRoot)
+                    {
+                        if (defaultInstance == null)
+                        {
+                            defaultInstance = new MixService();
+                            defaultInstance.LoadDefaultConfiggurations();
+                        }
+                    }
+                }
+
+                return defaultInstance;
+            }
+        }
+
         private void LoadConfiggurations()
         {
             // Load configurations from appSettings.json
@@ -91,6 +112,26 @@ namespace Mix.Cms.Lib.Services
 
         }
 
+        private void LoadDefaultConfiggurations()
+        {
+            // Load configurations from appSettings.json
+            JObject jsonSettings = new JObject();
+            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, ".json", string.Empty, true);
+
+            string content = string.IsNullOrWhiteSpace(settings.Content) ? "{}" : settings.Content;
+            jsonSettings = JObject.Parse(content);
+
+
+            defaultInstance.ConnectionStrings = JObject.FromObject(jsonSettings["ConnectionStrings"]);
+            defaultInstance.Authentication = JObject.FromObject(jsonSettings["Authentication"]);
+            defaultInstance.IpSecuritySettings = JObject.FromObject(jsonSettings["IpSecuritySettings"]);
+            defaultInstance.Smtp = JObject.FromObject(jsonSettings["Smtp"] ?? new JObject());
+            defaultInstance.Translator = JObject.FromObject(jsonSettings["Translator"]);
+            defaultInstance.GlobalSettings = JObject.FromObject(jsonSettings["GlobalSettings"]);
+            defaultInstance.LocalSettings = JObject.FromObject(jsonSettings["LocalSettings"]);
+
+        }
+
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
             Thread.Sleep(500);
@@ -111,6 +152,10 @@ namespace Mix.Cms.Lib.Services
         public static T GetAuthConfig<T>(string name)
         {
             var result = Instance.Authentication[name];
+            if (result == null)
+            {
+                result = DefaultInstance.Authentication[name];
+            }
             return result != null ? result.Value<T>() : default(T);
         }
 
@@ -121,6 +166,10 @@ namespace Mix.Cms.Lib.Services
         public static T GetIpConfig<T>(string name)
         {
             var result = Instance.IpSecuritySettings[name];
+            if (result == null)
+            {
+                result = DefaultInstance.IpSecuritySettings[name];
+            }
             return result != null ? result.Value<T>() : default(T);
         }
 
@@ -132,6 +181,10 @@ namespace Mix.Cms.Lib.Services
         public static T GetConfig<T>(string name)
         {
             var result = Instance.GlobalSettings[name];
+            if (result==null)
+            {
+                result = DefaultInstance.GlobalSettings[name];
+            }
             return result != null ? result.Value<T>() : default(T);
         }
 
@@ -143,7 +196,15 @@ namespace Mix.Cms.Lib.Services
 
         public static T GetConfig<T>(string name, string culture)
         {
-            var result = !string.IsNullOrEmpty(culture) && Instance.LocalSettings[culture] != null ? Instance.LocalSettings[culture][name] : null;
+            JToken result = null;
+            if (!string.IsNullOrEmpty(culture) && Instance.LocalSettings[culture] != null)
+            {
+                result = Instance.LocalSettings[culture][name];
+                if (result == null)
+                {
+                    result = DefaultInstance.LocalSettings[culture][name];
+                }
+            }
             return result != null ? result.Value<T>() : default(T);
         }
 
@@ -155,6 +216,10 @@ namespace Mix.Cms.Lib.Services
         public static T Translate<T>(string name, string culture)
         {
             var result = Instance.Translator[culture][name];
+            if (result == null)
+            {
+                result = DefaultInstance.Translator[culture][name];
+            }
             return result != null ? result.Value<T>() : default(T);
         }
 

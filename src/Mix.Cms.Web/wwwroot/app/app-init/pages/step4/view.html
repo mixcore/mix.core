@@ -1,0 +1,23 @@
+<div class="text-center mb-6 mt-6">
+    <img src="/assets/mixcore-logo-full-white-text.png" alt="">
+</div>
+<div class="card mb-3" ng-init="init()">
+    <div class="card-body p-6">
+        <tabs-v select-callback="selectPane(pane)">
+            <pane-v title="Common" class="card">
+                <div class="card-body">
+                    <init-common-languages languages="data"></init-common-languages>
+                </div>
+            </pane-v>            
+            <pane-v title="Portal" class="card">
+                <div class="card-body">
+                    <init-portal-languages languages="data"></init-portal-languages>
+                </div>
+            </pane-v>            
+        </tabs-v>
+
+    </div>
+    <div class="card-footer">
+        <a ng-click="submit()" class="btn btn-primary">Save</a>
+    </div>
+</div>

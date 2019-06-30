@@ -94,13 +94,21 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                if (string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
+                var initStatus = MixService.GetConfig<int>("InitStatus");
+                switch (initStatus)
                 {
-                    return Redirect("Init");
-                }
-                else
-                {
-                    return Redirect($"/init/step2");
+                    case 0:
+                        return Redirect("Init");
+                    case 1:
+                        return Redirect($"/init/step2");
+                    case 2:
+                        return Redirect($"/init/step3");
+                    case 3:
+                        return Redirect($"/init/step4");
+                    case 4:
+                        return Redirect($"/init/step5");
+                    default:
+                        return Error();
                 }
             }
         }
@@ -187,6 +195,42 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
+                page = page ?? "";
+                var initStatus = MixService.GetConfig<int>("InitStatus");
+                switch (initStatus)
+                {
+                    case 0:
+                        if (page.ToLower() != "")
+                        {
+                            return Redirect($"/init");
+                        }
+                        break;
+                    case 1:
+                        if (page.ToLower() != "step2")
+                        {
+                            return Redirect($"/init/step2");
+                        }
+                        break;
+                    case 2:
+                        if (page.ToLower() != "step3")
+                        {
+                            return Redirect($"/init/step3");
+                        }
+                        break;
+                    case 3:
+                        if (page.ToLower() != "step4")
+                        {
+                            return Redirect($"/init/step4");
+                        }
+                        break;
+                    case 4:
+                        if (page.ToLower() != "step5")
+                        {
+                            return Redirect($"/init/step5");
+                        }
+                        break;
+                    
+                }
                 return View();
             }
 

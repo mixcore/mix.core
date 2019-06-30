@@ -1705,7 +1705,7 @@ pre code {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
-.table-hover tbody tr:hover {
+.table-hover tbody tr:hover, .dnd-item .row:hover {
   color: var(--text-color-hover);
   background-color:var(--bg-color-hover);
 }
@@ -2594,7 +2594,7 @@ fieldset:disabled a.btn {
 }
 
 .btn-primary {
-  color: var(--text-color-hover);
+  color: #fff;
   background-color: var(--primary-color);
   border-color: var(--primary-color);
 }
@@ -11022,7 +11022,7 @@ ul[dnd-list] li {
   background-color: var(--bg-color);
   border: 1px solid var(--border-color);
   display: block;
-  padding: 10px 15px;
+  padding: 0px 15px;
   margin-bottom: -1px;
 }
 /*# sourceMappingURL=mix.fe.portal-dark.css.map */

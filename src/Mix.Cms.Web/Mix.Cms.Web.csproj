@@ -17,24 +17,28 @@
   <ItemGroup>
     <Compile Remove="app-client\shared\controllers\**" />
     <Compile Remove="app-portal\**" />
+    <Compile Remove="app\**" />
     <Compile Remove="Views\Shared\Templates\cricket\**" />
     <Compile Remove="Views\Shared\Templates\muong-247\**" />
     <Compile Remove="Views\Shared\Templates\p7p-apartment\**" />
     <Compile Remove="wwwroot\content\**" />
     <Content Remove="app-client\shared\controllers\**" />
     <Content Remove="app-portal\**" />
+    <Content Remove="app\**" />
     <Content Remove="Views\Shared\Templates\cricket\**" />
     <Content Remove="Views\Shared\Templates\muong-247\**" />
     <Content Remove="Views\Shared\Templates\p7p-apartment\**" />
     <Content Remove="wwwroot\content\**" />
     <EmbeddedResource Remove="app-client\shared\controllers\**" />
     <EmbeddedResource Remove="app-portal\**" />
+    <EmbeddedResource Remove="app\**" />
     <EmbeddedResource Remove="Views\Shared\Templates\cricket\**" />
     <EmbeddedResource Remove="Views\Shared\Templates\muong-247\**" />
     <EmbeddedResource Remove="Views\Shared\Templates\p7p-apartment\**" />
     <EmbeddedResource Remove="wwwroot\content\**" />
     <None Remove="app-client\shared\controllers\**" />
     <None Remove="app-portal\**" />
+    <None Remove="app\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,7 +51,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="app\app-portal\pages\moduleData\components\" />
     <Folder Include="logs\" />
     <Folder Include="wwwroot\content\" />
     <Folder Include="wwwroot\lib\portal\Trumbowyg\" />

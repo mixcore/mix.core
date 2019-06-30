@@ -6,6 +6,13 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
             lang: '',
             cultures: []
         };
+        var _loadJArrayData = async function (name) {
+            var req = {
+                method: 'GET',
+                url: '/portal/jarray-data/'+ name
+            };
+            return await _getAnonymousApiResult(req);
+        };
         var _showAlertMsg = function (title, message) {
             $rootScope.message = {
                 title: title,
@@ -268,8 +275,24 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
                     }
                 });
         };
+
+        var _getAnonymousApiResult = async function (req) {
+            $rootScope.isBusy = true;
+            var serviceUrl = appSettings.serviceBase + '/api/' + appSettings.apiVersion;
+            req.url = serviceUrl + req.url;
+            req.headers = {
+                'Content-Type': 'application/json'
+            };
+            return $http(req).then(function (resp) {
+                return resp.data;
+            },
+                function (error) {
+                    return { isSucceed: false, errors: [error.statusText || error.status] };
+                });
+        };
         adminCommonFactory.sendMail = _sendMail;
         adminCommonFactory.getApiResult = _getApiResult;
+        adminCommonFactory.getAnonymousApiResult = _getAnonymousApiResult;
         adminCommonFactory.getSettings = _getSettings;
         adminCommonFactory.setSettings = _setSettings;
         adminCommonFactory.initAllSettings = _initAllSettings;
@@ -281,6 +304,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
         adminCommonFactory.fillSettings = _fillSettings;
         adminCommonFactory.settings = _settings;
         adminCommonFactory.genrateSitemap = _genrateSitemap;
+        adminCommonFactory.loadJArrayData = _loadJArrayData;
         return adminCommonFactory;
 
     }]);

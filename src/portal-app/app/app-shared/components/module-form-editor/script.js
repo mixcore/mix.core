@@ -1265,17 +1265,7 @@ modules.component('moduleFormEditor', {
             'fas fa-youtube-square',
             'fas fa-zhihu'
         ];
-        this.dataTypes = {
-            'string': 0,
-            'int': 1,
-            'image': 2,
-            'icon': 3,
-            'codeEditor': 4,
-            'html': 5,
-            'textArea': 6,
-            'boolean': 7,
-            'mdTextArea': 8
-        };
+        this.dataTypes = ngAppSettings.dataTypes;
         ctrl.initEditor = function () {
             ctrl.data.value = ctrl.data.default || null;
             setTimeout(function () {

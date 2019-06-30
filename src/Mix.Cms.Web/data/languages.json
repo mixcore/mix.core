@@ -1,13 +1,34 @@
 {
-  "specificulture": "en-us",
   "data": [
     {
       "keyword": "read_more",
       "category": "Common",
       "dataType": 7,
-      "description": null,
+      "description": "Read More",
       "value": "Read more",
       "defaultValue": "Read more",
+      "cultures": null,
+      "priority": 0,
+      "status": 2
+    },
+    {
+      "keyword": "success",
+      "category": "Common",
+      "dataType": 7,
+      "description": "Success",
+      "value": "Success",
+      "defaultValue": "Success",
+      "cultures": null,
+      "priority": 0,
+      "status": 2
+    },
+    {
+      "keyword": "fail",
+      "category": "Common",
+      "dataType": 7,
+      "description": "Fail",
+      "value": "Fail",
+      "defaultValue": "Fail",
       "cultures": null,
       "priority": 0,
       "status": 2
@@ -202,22 +223,11 @@
     },
     {
       "keyword": "language",
-      "category": "Common",
+      "category": "Portal",
       "dataType": 7,
       "description": null,
       "value": "Languages",
       "defaultValue": "Languages",
-      "cultures": null,
-      "priority": 0,
-      "status": 2
-    },
-    {
-      "keyword": "fe_site_name",
-      "category": "Frontend",
-      "dataType": 7,
-      "description": null,
-      "value": "Site name",
-      "defaultValue": "Site name",
       "cultures": null,
       "priority": 0,
       "status": 2
