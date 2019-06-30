@@ -189,9 +189,9 @@ namespace Mix.Cms.Web.Controllers
             {
                 return Redirect($"/error/403");
             }
-            if (string.IsNullOrEmpty(page) && MixService.GetConfig<bool>("IsInit"))
+            if (MixService.GetConfig<bool>("IsInit"))
             {
-                return Redirect($"/init/login");
+                return Redirect("/");
             }
             else
             {
