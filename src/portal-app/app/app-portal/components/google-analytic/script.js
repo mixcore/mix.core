@@ -95,7 +95,7 @@
                   textStyle: { color: '#FFF' }
                 },
                 series: {
-                  0: { color: 'var(--primary-color)' },
+                  0: { color: $rootScope.globalSettings.portalThemeSettings.primaryColor },
                   1: { color: '#e7711b' },
                   2: { color: '#f1ca3a' },
                   3: { color: '#6f9654' },
