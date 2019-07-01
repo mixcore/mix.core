@@ -1,0 +1,56 @@
+@model Mix.Cms.Lib.ViewModels.MixModules.ReadMvcViewModel
+<div class="cd-section pt-0 mt-0" id="contactus">
+<!--     *********    CONTACT US 1     *********      -->
+<div class="contactus-1 section-image" style="background-image: url('@Model.Image')">
+    <div id="gmap" class="map" style="width: 100%;height: 100%;position: absolute;top: 0;">
+       <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d244.9475988062257!2d106.66864220684754!3d10.798933754545754!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175292ee05740d3%3A0x1e0be94acb1cd624!2zMzA3LzE1IE5ndXnhu4VuIFbEg24gVHLhu5dpLCBQaMaw4budbmcgMSwgVMOibiBCw6xuaCwgSOG7kyBDaMOtIE1pbmg!5e0!3m2!1svi!2s!4v1561980707292!5m2!1svi!2s" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <h2 class="title">@Model.Title</h2>
+                <h4 class="description">@Model.Description</h4>
+                <div class="info info-horizontal">
+                    <div class="icon icon-primary">
+                        <i class="now-ui-icons location_pin"></i>
+                    </div>
+                    <div class="description">
+                        <h4 class="info-title">Địa chỉ</h4>
+                        <p class="description"> 
+                        <a target="_blank" href="https://www.google.com/maps/place/@System.Web.HttpUtility.UrlEncode(MixService.GetConfig<string>("ContactAddress", ViewBag.culture))">@(MixService.GetConfig<string>("ContactAddress", ViewBag.culture))</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="info info-horizontal">
+                    <div class="icon icon-primary">
+                        <i class="now-ui-icons tech_mobile"></i>
+                    </div>
+                    <div class="description">
+                        <h4 class="info-title">Điện thoại</h4>
+                        <p class="description"> 
+                             <a href="tel:@(MixService.GetConfig<string>("ContactPhone", ViewBag.culture))">@(MixService.GetConfig<string>("ContactPhone", ViewBag.culture))</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="info info-horizontal">
+                    <div class="icon icon-primary">
+                        <i class="now-ui-icons ui-1_email-85"></i>
+                    </div>
+                    <div class="description">
+                        <h4 class="info-title">Email</h4>
+                        <p class="description">                              
+                            <a href="mailto:@(MixService.GetConfig<string>("ContactEmail", ViewBag.culture))">@(MixService.GetConfig<string>("ContactEmail", ViewBag.culture))</a>                            
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 ml-auto mr-auto">
+                <div class="card card-contact card-raised">
+                    <partial name="@Model.FormTemplatePath" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--     *********    END CONTACT US 1      *********      -->
+</div>

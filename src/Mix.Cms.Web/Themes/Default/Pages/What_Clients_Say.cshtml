@@ -1,0 +1,21 @@
+@model Mix.Cms.Lib.ViewModels.MixPages.ReadMvcViewModel
+<div class="page-header page-header-small">
+    <div class="page-header-image" data-parallax="true" style="background-image: url('@Model.ImageUrl') ;">
+    </div>
+    <div class="content-center">
+        <div class="row">
+            <div class="col-md-8 ml-auto mr-auto text-center">
+                <h2 class="title">@Model.Title</h2>
+                
+            </div>
+        </div>
+    </div>
+</div>
+@foreach (var nav in Model.Modules.OrderBy(n => n.Priority))
+{
+    var module = nav.Module; 
+    if (module != null)
+    {
+        <partial name="../Modules/What_Clients_Say_Page.cshtml" model="@module" />
+    }
+}

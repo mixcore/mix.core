@@ -1,0 +1,48 @@
+<form ng-init="initModuleForm('get_in_touch');" ng-class="{'submitted': submitted}" ng-submit="saveModuleData()" id="module-{{activedModuleData.moduleId}}">
+    <div class="card-header text-center">
+        <h4 class="card-title">Liên hệ</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <label>Họ tên</label>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="now-ui-icons users_circle-08"></i>
+                    </span>
+                    <input type="text" ng-model="activedModuleData.jItem['full_name'].value" class="form-control" placeholder="Họ tên ...">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Điện thoại</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="now-ui-icons tech_mobile"></i>
+                </span>
+                <input type="text" placeholder="Số điện thoại ..." ng-model="activedModuleData.jItem['phone'].value" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="now-ui-icons ui-1_email-85"></i>
+                </span>
+                <input type="email" placeholder="Email ..." ng-model="activedModuleData.jItem['email'].value" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Lời nhắn</label>
+            <textarea name="message" ng-model="activedModuleData.jItem['message'].value" class="form-control" id="message" rows="6"></textarea>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+               
+            </div>
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-primary btn-round pull-right">Gửi</button>
+            </div>
+        </div>
+    </div>
+</form>
