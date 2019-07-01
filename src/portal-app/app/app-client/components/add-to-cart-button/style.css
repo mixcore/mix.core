@@ -182,15 +182,16 @@ li.message-right > .message-avatar {
 }
 
 .avatar {
-  width: 32px;
-  height: 32px;
   border-radius: 20px;
   font-size: 3.1em;
   line-height: 32px;
   text-align: center;
   overflow: hidden;
 }
-
+.avatar img{
+  width:auto;
+  height: 32px;
+}
 li.message-left .avatar {
   float: left;
   color: #9bc6b6;

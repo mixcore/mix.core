@@ -1,6 +1,27 @@
 ﻿@model Mix.Cms.Lib.ViewModels.MixPages.ReadMvcViewModel
 
 <div>
+    <style>
+        :root 
+        {
+            --primary-color: {{globalSettings.portalThemeSettings.primaryColor}};
+            --bg-color: {{globalSettings.portalThemeSettings.bgColor}};
+            --bg-color-hover: {{globalSettings.portalThemeSettings.bgColorHover}};
+            --border-color: {{globalSettings.portalThemeSettings.borderColor}};
+            --border-color-hover: {{globalSettings.portalThemeSettings.borderColorHover}};
+            --link-color: {{globalSettings.portalThemeSettings.linkColor}};
+            --link-color-hover: {{globalSettings.portalThemeSettings.linkColorHover}};
+            --text-color: {{globalSettings.portalThemeSettings.textColor}};
+            --text-color-hover: {{globalSettings.portalThemeSettings.textColorHover}};   
+            --breakpoint-xs: 0;
+            --breakpoint-sm: 576px;
+            --breakpoint-md: 768px;
+            --breakpoint-lg: 992px;
+            --breakpoint-xl: 1200px;
+            --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+    </style>
     <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
     <input type="hidden" id="view-type" value="Page"/>
     <input type="hidden" id="view-id" value="@Model.Id"/>
