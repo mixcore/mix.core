@@ -1,6 +1,6 @@
 ﻿
 modules.component('initValueEditor', {
-    templateUrl: '/app/app-init/pages/step2/components/init-value-editor/view.html',
+    templateUrl: '/app/app-init/pages/step3/components/init-value-editor/view.html',
     controller: ['$rootScope', '$scope', 'ngAppSettings','FileService'
         , function ($rootScope, $scope, ngAppSettings, fileService) {
         var ctrl = this;
