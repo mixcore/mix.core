@@ -6,7 +6,13 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$l
         $scope.contentUrl = '';
         $scope.getSingleSuccessCallback = function () {
             if ($scope.activedData.id > 0) {
-                $scope.contentUrl = '/portal/module/data/' + $scope.activedData.id;
+                // module => list article or list product
+                if($scope.activedData.type==2 || $scope.activedData.type==6){
+                    $scope.contentUrl = '/portal/module-article/list/' + $scope.activedData.id;
+                }
+                else{
+                    $scope.contentUrl = '/portal/module/data/' + $scope.activedData.id;
+                }
             }
         };
         $scope.getListByType = async function (pageIndex) {

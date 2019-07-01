@@ -87,13 +87,15 @@
                 }
                 else {
                     if (resp) { 
-                        if(ctrl.errorCallback){
-                            ctrl.errorCallback({ response: resp });
-                        }
-                        else{
-                            $rootScope.showErrors(resp.errors); 
-                        }
+                        // if(ctrl.failedCallback){
+                        //     ctrl.failedCallback({ response: resp });
+                        // }
+                        // else{
+                        //     $rootScope.showErrors(resp.errors);     
+                        // }                        
+                        $rootScope.showErrors(resp.errors);     
                     }
+                    
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 }
@@ -113,6 +115,6 @@
         isShowTitle: '=',
         backUrl: '=',
         saveCallback: '&',
-        errorCallback: '&',
+        failedCallback: '&',
     }
 });
