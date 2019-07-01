@@ -33,6 +33,7 @@ modules.component('limitString', {
                 };
                 $rootScope.preview('module-data', obj, null, 'modal-lg');
             }
+            ctrl.translate = $rootScope.translate;
         }],
     bindings: {
         content: '=',
