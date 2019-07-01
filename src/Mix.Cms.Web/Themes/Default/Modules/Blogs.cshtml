@@ -1,0 +1,30 @@
+<div class="projects-1 pb-0 pt-0 section-blog">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8 ml-auto mr-auto text-center">
+                <h2 class="title text-primary">@Model.Title</h2>
+                <p class="description">@Html.Raw(Model.Description)</p>
+            </div>
+        </div>
+        <div class="row">
+            @foreach(var nav in Model.Articles.Items)
+            {
+                <div class="col-md-6 mr-auto ml-auto px-0">
+                    <div class="card card-background card-background-product card-no-shadow" style="background-image: url('@nav.Article.ThumbnailUrl');height: 468px">
+                        <div class="card-body">
+                            <h3 class="card-title">
+                                @nav.Article.Title
+                            </h3>
+                            <div class="card-description" style="color:white;max-height: 150px;height:auto;overflow:hidden;margin-bottom: 20px;">
+                                @Html.Raw(nav.Article.Excerpt)
+                            </div>
+                            <a href="@nav.Article.DetailsUrl" class="btn btn-primary btn-round">
+                                <i class="now-ui-icons ui-1_send"></i> @(MixService.Translate<string>("read_more", ViewBag.culture))
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

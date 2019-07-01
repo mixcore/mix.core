@@ -1,4 +1,4 @@
-﻿@{ 
+@{ 
     string assetFolder = MixCmsHelper.GetAssetFolder(ViewBag.culture);
 }
 <!DOCTYPE html>
@@ -16,8 +16,6 @@
 
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <meta property="fb:app_id" content="@(MixService.GetConfig<string>("FacebookAppId", ViewBag.culture))" />
-    <script>document.write('<meta property="og:url" content="' + window.top.location + '" />')</script>
-    
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     
     
@@ -56,43 +54,45 @@
         </script>
         <!-- End Google Analytics -->
     }
-
-    <script>
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.1&appId=@(MixService.GetConfig<string>("FacebookAppId", ViewBag.culture))&autoLogAppEvents=1';
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- Facebook sdk -->
     @if (!string.IsNullOrEmpty(MixService.GetConfig<string>("FacebookAppId", ViewBag.culture)))
     {
         <script>
-        window.fbAsyncInit = function () {
-            FB.init({
-                appId: '@(MixService.GetConfig<string>("FacebookAppId", ViewBag.culture))',
-                autoLogAppEvents: true,
-                xfbml: true,
-                version: 'v3.2'
-            });
-        };
-
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) { return; }
-            js = d.createElement(s); js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
+            window.fbAsyncInit = function() {
+                FB.init({
+                appId            : '@(MixService.GetConfig<string>("FacebookAppId", ViewBag.culture))',
+                autoLogAppEvents : true,
+                xfbml            : true,
+                version          : 'v3.3'
+                });
+            };
+            
+            (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = "https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
         </script>
+        <script async defer src="https://connect.facebook.net/en_US/all.js"></script>
     }
+    <!-- End Facebook sdk -->
 </head>
 
 <body class="@ViewData["PageClass"]" 
  
  ng-app="MixClient" ng-controller="AppClientController" ng-init="init('@ViewBag.culture')">
     <div id="fb-root"></div>
-   
+    @if(!string.IsNullOrEmpty(MixService.GetConfig<string>("Facebook_Page_Id", ViewBag.culture))){
+        <!-- Your customer chat code -->
+    <fb-customer-chat
+    fb-page-id="'@(MixService.GetConfig<string>("Facebook_Page_Id", ViewBag.culture))'"
+    theme-color="'#47c5d1'"
+    in-greeting="'Chào Bạn !'"
+    out-greeting="'Chào Bạn !'">
+    </fb-customer-chat>
+    }
 
     <partial name="../Layouts/_Top_Nav.cshtml" />
     <div class="wrapper">
@@ -101,6 +101,7 @@
     </div>
    <!--   Core JS Files   -->
     <script src="~/js/framework.min.js"></script>
+    <script src="~/js/app-client-required.min.js"></script>
     <script src="~/js/app-client.min.js"></script>
     <script src="~/js/app-shared.min.js"></script>
     <!-- <script src="~/js/bootstrap.min.js"></script>
