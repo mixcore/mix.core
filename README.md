@@ -20,17 +20,19 @@ git clone https://github.com/mixcore/mix.core.git
 ```
 
 # Build & Run
-
+  - **Website**
 ```
 cd mix.core/src/Mix.Cms.Web
-
 npm install
-gulp build
 dotnet restore
-dotnet bundle
 dotnet build
 dotnet run
 ```
+  - **Modify Portal**
+````
+cd mix.core/src/portal-app
+gulp serve
+````
 
 > Note: If you facing any System.Data.SqlClient.SqlException error, please replace all content inside "appsettings.json" file with "{}".
 
