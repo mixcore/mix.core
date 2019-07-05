@@ -13,13 +13,13 @@ app.component('pageMain', {
                     ctrl.page.seoName = $rootScope.generateKeyword(ctrl.page.title, '-');
                 }
                 if (ctrl.page.seoTitle === null || ctrl.page.seoTitle === '') {
-                    ctrl.page.seoTitle = $rootScope.generateKeyword(ctrl.page.title, '-');
+                    ctrl.page.seoTitle = ctrl.page.title
                 }
                 if (ctrl.page.seoDescription === null || ctrl.page.seoDescription === '') {
-                    ctrl.page.seoDescription = $rootScope.generateKeyword(ctrl.page.title, '-');
+                    ctrl.page.seoDescription = ctrl.page.excerpt
                 }
                 if (ctrl.page.seoKeywords === null || ctrl.page.seoKeywords === '') {
-                    ctrl.page.seoKeywords = $rootScope.generateKeyword(ctrl.page.title, '-');
+                    ctrl.page.seoKeywords = ctrl.page.title
                 }
             }
         }

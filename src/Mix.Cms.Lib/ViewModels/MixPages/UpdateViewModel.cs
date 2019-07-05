@@ -295,7 +295,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
             this.ModuleNavs = GetModuleNavs(_context, _transaction);
             this.ParentNavs = GetParentNavs(_context, _transaction);
-            this.ChildNavs = GetChildNavs(_context, _transaction);
+            //this.ChildNavs = GetChildNavs(_context, _transaction);
             this.PositionNavs = GetPositionNavs(_context, _transaction);
             this.UrlAliases = GetAliases(_context, _transaction);
         }
@@ -386,23 +386,23 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 }
             }
 
-            if (result.IsSucceed)
-            {
-                foreach (var item in ChildNavs)
-                {
-                    item.ParentId = parent.Id;
-                    if (item.IsActived)
-                    {
-                        var saveResult = item.SaveModel(false, _context, _transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
-                    }
-                    else
-                    {
-                        var saveResult = item.RemoveModel(false, _context, _transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
-                    }
-                }
-            }
+            //if (result.IsSucceed)
+            //{
+            //    foreach (var item in ChildNavs)
+            //    {
+            //        item.ParentId = parent.Id;
+            //        if (item.IsActived)
+            //        {
+            //            var saveResult = item.SaveModel(false, _context, _transaction);
+            //            ViewModelHelper.HandleResult(saveResult, ref result);
+            //        }
+            //        else
+            //        {
+            //            var saveResult = item.RemoveModel(false, _context, _transaction);
+            //            ViewModelHelper.HandleResult(saveResult, ref result);
+            //        }
+            //    }
+            //}
             return result;
         }
 
@@ -494,23 +494,23 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 }
             }
 
-            if (result.IsSucceed)
-            {
-                foreach (var item in ChildNavs)
-                {
-                    item.ParentId = parent.Id;
-                    if (item.IsActived)
-                    {
-                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
-                    }
-                    else
-                    {
-                        var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
-                    }
-                }
-            }
+            //if (result.IsSucceed)
+            //{
+            //    foreach (var item in ChildNavs)
+            //    {
+            //        item.ParentId = parent.Id;
+            //        if (item.IsActived)
+            //        {
+            //            var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+            //            ViewModelHelper.HandleResult(saveResult, ref result);
+            //        }
+            //        else
+            //        {
+            //            var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
+            //            ViewModelHelper.HandleResult(saveResult, ref result);
+            //        }
+            //    }
+            //}
             return result;
         }
 

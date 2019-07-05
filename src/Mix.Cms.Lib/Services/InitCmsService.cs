@@ -250,7 +250,7 @@ namespace Mix.Cms.Lib.Services
                 context.Entry(alias).State = EntityState.Added;
             }
         }
-        protected async Task<bool> InitPositionsAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public async Task<bool> InitPositionsAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             /* Init Positions */
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
