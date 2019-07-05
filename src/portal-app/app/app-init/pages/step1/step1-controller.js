@@ -31,7 +31,7 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
         };
         
         $scope.initCmsModel = {
-            isUseLocal: false,
+            isUseLocal: true,
             localDbConnectionString: '',
             sqliteDbConnectionString: '',
             localDbConnectionString: 'Server=(localdb)\\MSSQLLocalDB;Initial Catalog=' + rand + 'mix-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True',
@@ -62,6 +62,7 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
             else {
                 if (result) { $rootScope.showErrors(result.errors); }
                 $rootScope.isBusy = false;                
-            }
+            }            
+           
         }
     }]);
