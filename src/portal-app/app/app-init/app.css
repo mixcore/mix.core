@@ -8,3 +8,8 @@
 .content>div{
     min-width: 400px;
 }
+
+.website-configuration{
+    position: relative;
+    margin-top: 6%;
+}
