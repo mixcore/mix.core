@@ -5,7 +5,7 @@
     <div class="card-body">
         <small ng-if="canDrag"><span class="text-warning" ng-bind="translate('warning_can_not_drag_drop',true, '(Drag Drop only allow when order by priority asc)')"></span></small>
         <table id="list-page" class="table table-sm table-hover" dnd-list="data.items" dnd-disable-if="canDrag" cellspacing="0" ng-init="getList()">
-            <thead class="thead-dark">
+            <thead class="thead-light">
                 <tr>
                     <th scope="col" width="4%">
                         <span class="oi oi-sort-ascending"></span>
@@ -51,22 +51,22 @@
                     <td>
                         <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
 
-                            <a ng-if="item.childs.length>0" class="btn btn-dark" data-toggle="collapse" role="button" ng-click="showChilds(item.id)">
+                            <a ng-if="item.childs.length>0" class="btn btn-link" data-toggle="collapse" role="button" ng-click="showChilds(item.id)">
                                 <span class="fa fa-list text-info"></span>
                             </a>
 
-                            <a href="" ng-click="goToPath('/portal/page/details/' + item.id)" class="btn btn-dark">
+                            <a href="" ng-click="goToPath('/portal/page/details/' + item.id)" class="btn btn-link">
                                 <span class="fas fa-pencil-alt text-warning"></span>
                             </a>
-                            <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-dark"><span class="far fa-eye text-info"></span></a>
-                            <a ng-if="item.type==2" ng-click="goToPath('/portal/page/page-article/list/' + item.id)" class="btn btn-dark">
+                            <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-link"><span class="far fa-eye text-info"></span></a>
+                            <a ng-if="item.type==2" ng-click="goToPath('/portal/page/page-article/list/' + item.id)" class="btn btn-link">
                                 <span class="fas fa-list text-info"></span>
                             </a>
                             <!-- 
-                                        <a ng-if="item.type==2" href="#" data-toggle="modal" data-target="#modal-articles" class="btn btn-dark">
+                                        <a ng-if="item.type==2" href="#" data-toggle="modal" data-target="#modal-articles" class="btn btn-link">
                                             <span class="fas fa-list text-info"></span>
                                         </a>-->
-                            <a class="btn btn-dark" ng-click="remove(item.id)">
+                            <a class="btn btn-link" ng-click="remove(item.id)">
                                 <span class="fa fa-times text-danger"></span>
                             </a>
                         </div>
@@ -127,12 +127,12 @@
 
                                         <td>
                                             <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                                                <a href="" ng-click="goToPath('/portal/page/details/' + c.id)" class="btn btn-dark"><span class="fa fa-pen text-warning small"></span></a>
-                                                <a href="{{c.detailsUrl}}" target="_blank" class="btn btn-dark"><span class="far fa-eye text-info small"></span></a>
-                                                <a ng-if="c.page.type==2" ng-click="goToPath('/portal/page/page-article/list/' + c.page.id)" class="btn btn-dark">
+                                                <a href="" ng-click="goToPath('/portal/page/details/' + c.id)" class="btn btn-link"><span class="fa fa-pen text-warning small"></span></a>
+                                                <a href="{{c.detailsUrl}}" target="_blank" class="btn btn-link"><span class="far fa-eye text-info small"></span></a>
+                                                <a ng-if="c.page.type==2" ng-click="goToPath('/portal/page/page-article/list/' + c.page.id)" class="btn btn-link">
                                                     <span class="fas fa-list text-info"></span>
                                                 </a>
-                                                <a ng-click="remove(item.id);" class="btn btn-dark">
+                                                <a ng-click="remove(item.id);" class="btn btn-link">
                                                     <span class="fas fa-times text-danger"></span>
                                                 </a>
                                             </div>

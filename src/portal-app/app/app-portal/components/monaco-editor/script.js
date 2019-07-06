@@ -53,7 +53,7 @@
                         var model = {
                             value: ctrl.content || ctrl.defaultContent,                            
                             contextmenu: false,
-                            theme: "vs-dark",
+                            // theme: "vs-dark",
                             formatOnType: true,
                             formatOnPaste: true,
                             wordWrap: 'on',
