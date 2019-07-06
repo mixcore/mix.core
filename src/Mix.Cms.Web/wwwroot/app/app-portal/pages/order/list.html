@@ -4,7 +4,7 @@
     </div>
     <div class="card-body">
         <table id="list-page" class="table table-sm table-hover sortable" cellspacing="0" ng-init="data = loadOrders()">
-            <thead class="thead-dark">
+            <thead class="thead-light">
                 <tr>
                     <th scope="col" width="4%">
                         <span class="oi oi-sort-ascending"></span>
@@ -41,8 +41,8 @@
                         <!--<span class="fas fa-sort"></span>-->
 
                         <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-dark"><span class="fa fa-sort-up small"></span></button>
-                            <button type="button" class="btn btn-dark"><span class="fa fa-sort-down small"></span></button>
+                            <button type="button" class="btn btn-link"><span class="fa fa-sort-up small"></span></button>
+                            <button type="button" class="btn btn-link"><span class="fa fa-sort-down small"></span></button>
                         </div>
                     </td>
                     <td>
@@ -87,7 +87,7 @@
                                     <!--<td>
                                                 <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
                                                     <a ng-click="removeOrder(item.id);"
-                                                       class="btn btn-dark">
+                                                       class="btn btn-link">
                                                         <span class="fas fa-times text-danger"></span>
                                                     </a>
                                                 </div>
@@ -99,9 +99,9 @@
                     <td>
                         <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
 
-                            <a href="/portal/order/details/{{item.id}}" class="btn btn-dark"><span class="fa fa-pen text-primary"></span></a>
-                            <!--<a href="{{item.detailsUrl}}" target="_blank" class="btn btn-dark"><span class="far fa-eye text-primary"></span></a>-->
-                            <a href="#" class="btn btn-dark" ng-click="removeOrder(item.id)">
+                            <a href="/portal/order/details/{{item.id}}" class="btn btn-link"><span class="fa fa-pen text-primary"></span></a>
+                            <!--<a href="{{item.detailsUrl}}" target="_blank" class="btn btn-link"><span class="far fa-eye text-primary"></span></a>-->
+                            <a href="#" class="btn btn-link" ng-click="removeOrder(item.id)">
                                 <span class="fa fa-times text-danger"></span>
                             </a>
                         </div>
