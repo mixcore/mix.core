@@ -1,5 +1,5 @@
 <section class="card mb-3 manual">
-    <div class="card-header">
+    <div class="card-header position-sticky" style="top: 3.90rem; z-index: 12;">
         <filter-list request="request" callback="getList(pageIndex)"></filter-list>
     </div>
     <div class="card-body">
@@ -147,7 +147,7 @@
         </table>
     </div>
     <div class="card-footer">
-        <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end" a-class="page-link" paging-action="getList(page-1)" scroll-top="true"></paging>
+        <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true"></paging>
     </div>
 
 
