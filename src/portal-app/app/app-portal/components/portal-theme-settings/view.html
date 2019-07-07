@@ -16,7 +16,8 @@
                             <input type="color" ng-change="$ctrl.applyThemeSettings()"
                                 value="{{$ctrl.portalThemeSettings.primaryColorHue}}"
                                 ng-model="$ctrl.portalThemeSettings.primaryColorHue">
-                            <input type="text" class="form-control-sm"
+                            <input type="text" class="form-control-sm" ng-change="$ctrl.applyThemeSettings()"
+                                value="{{$ctrl.portalThemeSettings.primaryColorHue}}"
                                 ng-model="$ctrl.portalThemeSettings.primaryColorHue" />
                         </div>
                         <div class="form-group">
@@ -24,7 +25,8 @@
                             <input type="color" ng-change="$ctrl.applyThemeSettings()"
                                 value="{{$ctrl.portalThemeSettings.primaryColorSaturation}}"
                                 ng-model="$ctrl.portalThemeSettings.primaryColorSaturation">
-                            <input type="text" class="form-control-sm"
+                            <input type="text" class="form-control-sm" ng-change="$ctrl.applyThemeSettings()"
+                                value="{{$ctrl.portalThemeSettings.primaryColorSaturation}}"
                                 ng-model="$ctrl.portalThemeSettings.primaryColorSaturation" />
                         </div>
                         <div class="form-group">
@@ -32,7 +34,8 @@
                             <input type="color" ng-change="$ctrl.applyThemeSettings()"
                                 value="{{$ctrl.portalThemeSettings.primaryColorBrightness}}"
                                 ng-model="$ctrl.portalThemeSettings.primaryColorBrightness">
-                            <input type="text" class="form-control-sm"
+                            <input type="text" class="form-control-sm" ng-change="$ctrl.applyThemeSettings()"
+                                value="{{$ctrl.portalThemeSettings.primaryColorBrightness}}"
                                 ng-model="$ctrl.portalThemeSettings.primaryColorBrightness" />
                         </div>
                         <div class="form-group">
