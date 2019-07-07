@@ -4,7 +4,7 @@
     </div>
     <div class="card-body">
         <table class="table table-sm table-hover" cellspacing="0" ng-init="loadCustomers()">
-            <thead class="thead-dark">
+            <thead class="thead-light">
                 <tr>
                     <th scope="col" style="width: 15%;">
                         First Name
@@ -63,11 +63,11 @@
                     </td>
                     <td>
                         <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                            <a href="/portal/customer/details/{{item.id}}" class="btn btn-dark">
+                            <a href="/portal/customer/details/{{item.id}}" class="btn btn-link">
                                 <span class="fas fa-eye text-info"></span>
                             </a>
 
-                            <a ng-click="removeCustomer(item.id);" class="btn btn-dark">
+                            <a ng-click="removeCustomer(item.id);" class="btn btn-link">
                                 <span class="fas fa-times text-danger"></span>
                             </a>
                         </div>
@@ -78,7 +78,7 @@
         </table>
     </div>
     <div class="card-footer">
-        <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end"
+        <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0"
             a-class="page-link" paging-action="loadCustomers(page-1)" scroll-top="true"></paging>
     </div>
 </section>

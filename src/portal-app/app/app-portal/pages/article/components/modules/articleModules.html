@@ -12,7 +12,7 @@
                 on-update-infos="$ctrl.updateDataInfos(child.module.data.items)">
             </mix-module-data-table>
             <paging class="small" page="child.module.data.page" page-size="child.module.data.pageSize" 
-            total="child.module.data.totalItems" ul-class="pagination justify-content-end"
+            total="child.module.data.totalItems" ul-class="pagination justify-content-end m-0"
                 a-class="page-link" paging-action="$ctrl.loadModuleDatas(child.moduleId, page-1)" scroll-top="true"></paging>
                 <div ng-if="!$ctrl.article.id">
                         <span class="text-warning" ng-bind="$ctrl.translate('warning_can_not_create_data',true, '(**Save article first then you can create data for it)')"></span>
