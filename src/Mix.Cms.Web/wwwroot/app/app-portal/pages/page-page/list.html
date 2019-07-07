@@ -5,7 +5,7 @@
             <filter-list request="request" callback="getList(pageIndex)"></filter-list>
         </div>
         <div class="col-md-12">
-            <a href="#" data-toggle="modal" data-target="#modal-nav-articles-{{pageId}}" class="btn btn-dark">
+            <a href="#" data-toggle="modal" data-target="#modal-nav-articles-{{pageId}}" class="btn btn-link">
                 <span class="fas fa-plus-square text-info"></span>
             </a>
         </div>
@@ -14,7 +14,7 @@
 </div>
 <div class="card-body">
     <table id="list-page" class="table table-sm table-hover sortable" cellspacing="0" ng-init="getList()">
-        <thead class="thead-dark">
+        <thead class="thead-light">
             <tr>
                 <th scope="col" style="width: 3%;">
                     <span class="fas fa-sort"></span>
@@ -72,14 +72,14 @@
 
                 <td>
                     <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                        <a href="/portal/article/details/{{item.article.id}}" class="btn btn-dark">
+                        <a href="/portal/article/details/{{item.article.id}}" class="btn btn-link">
                             <span class="fas fa-pencil-alt text-primary"></span>
                         </a>
-                        <a href="{{item.article.detailsUrl}}" target="_blank" class="btn btn-dark">
+                        <a href="{{item.article.detailsUrl}}" target="_blank" class="btn btn-link">
                             <span class="fas fa-eye text-info"></span>
                         </a>
 
-                        <a ng-click="remove(item.pageId,item.articleId);" class="btn btn-dark">
+                        <a ng-click="remove(item.pageId,item.articleId);" class="btn btn-link">
                             <span class="fas fa-times text-danger"></span>
                         </a>
                     </div>
@@ -90,7 +90,7 @@
 
 </div>
 <div class="card-footer">
-    <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end" a-class="page-link" paging-action="getList(page-1)" scroll-top="true"></paging>
+    <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true"></paging>
 </div>
 
 

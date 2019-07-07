@@ -22,7 +22,7 @@
             <h1>{{child.module.title}}</h1>
             @*<a href="#" class="btn btn-success AddObject" moduleid="@module.Id"><span class="fas fa-plus text-primary"></span> Add new</a>*@
             <table class="table table-hover table-striped" id="module-{{child.module.id}}">
-                <thead class="thead-dark">
+                <thead class="thead-light">
                     <tr ng-repeat="col in child.module.columns">
                         <th ng-if="col.isDisplay" class="col-sm-{{col.width}}">
                             {{col.name}}
