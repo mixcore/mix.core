@@ -1,5 +1,6 @@
 ﻿'use strict';
-app.controller('LoginController', [ '$rootScope', '$scope', 'ngAppSettings', '$location', 'AuthService', function ($rootScope, $scope, ngAppSettings, $location, authService) {
+app.controller('LoginController', [ '$rootScope', '$scope', '$routeParams', '$location', 'AuthService', 
+    function ($rootScope, $scope, $routeParams, $location, authService) {
     if (authService.authentication && authService.authentication.isAuth && authService.authentication && authService.authentication.isAdmin) {
         authService.referredUrl = $location.path();
         $location.path('/portal');

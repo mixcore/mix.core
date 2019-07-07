@@ -245,29 +245,36 @@ namespace Mix.Cms.Api.Controllers.v1
             var query = HttpUtility.ParseQueryString(request.Query ?? "");
             int.TryParse(query.Get("module_id"), out int moduleId);
             int.TryParse(query.Get("article_id"), out int articleId);
-            int.TryParse(query.Get("product_id"), out int productId);
-            int.TryParse(query.Get("category_id"), out int pageId);
+            int.TryParse(query.Get("category_id"), out int categoryId);
             string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
+
             Expression<Func<MixModuleData, bool>> predicate = model =>
                 model.Specificulture == _lang
                 && model.ModuleId == moduleId
                 && (articleId == 0 || model.ArticleId == articleId)
-                && (pageId == 0 || model.PageId == pageId)
+                && (categoryId == 0 || model.PageId == categoryId)
                 && (!request.FromDate.HasValue
                     || (model.CreatedDateTime >= request.FromDate.Value.ToUniversalTime())
                 )
                 && (!request.ToDate.HasValue
                     || (model.CreatedDateTime <= request.ToDate.Value.ToUniversalTime())
-                )
-                    ;
+                );
+
             var portalResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);
             foreach (var item in portalResult.Data.Items)
             {
+                item.JItem["created_date"] = new JObject()
+                {
+                    new JProperty("dataType", 1),
+                    new JProperty("value", item.CreatedDateTime.ToLocalTime().ToString("dd-MM-yyyy hh:mm:ss"))
+                };
                 portalResult.Data.JsonItems.Add(item.JItem);
             }
+
             string exportPath = $"Exports/Module/{moduleId}";
-            var result = CommonHelper.ExportJObjectToExcel(portalResult.Data.JsonItems, string.Empty, exportPath, moduleId.ToString(), null);
+            var result = CommonHelper.ExportJObjectToExcel(portalResult.Data.JsonItems, string.Empty, exportPath, Guid.NewGuid().ToString(), null);
             return Ok(JObject.FromObject(result));
+
         }
 
         // GET api/moduleData

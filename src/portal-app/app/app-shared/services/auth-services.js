@@ -1,7 +1,7 @@
 ﻿'use strict';
 app.factory('AuthService',
-    ['$http', '$rootScope', '$location', '$q', 'localStorageService', 'AppSettings',
-        function ($http, $rootScope, $location, $q, localStorageService, appSettings) {
+    ['$http', '$rootScope', '$routeParams', '$q', 'localStorageService', 'AppSettings',
+        function ($http, $rootScope, $routeParams, $q, localStorageService, appSettings) {
 
             var authServiceFactory = {};
             var _referredUrl = '';
@@ -90,9 +90,11 @@ app.factory('AuthService',
                     _initSettings().then(function () {
                         if (document.referrer && document.referrer.indexOf('init') === -1)
                         {
-                        window.location.href = document.referrer
+                            window.location.href = document.referrer;
                         }
-                        else{
+                        else if($routeParams.ReturnUrl){
+                            window.location.href = $routeParams.ReturnUrl;
+                        }else{
                             window.location.href = '/';
                         }
                     });

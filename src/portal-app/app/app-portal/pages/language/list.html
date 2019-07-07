@@ -1,5 +1,6 @@
 <div class="card-header">
-        <filter-list request="request" callback="getList(pageIndex)"></filter-list>
+        <filter-list request="request" callback="getList(pageIndex)"
+            create-url="'/portal/localize/create'"></filter-list>
 	</div>
     <div class="card-body">
             <table class="table table-sm table-hover" cellspacing="0">
@@ -40,7 +41,7 @@
                             
                             <td>
                                 <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                                    <a href="/portal/language/details/{{item.keyword}}" class="btn btn-dark">
+                                    <a href="/portal/localize/details/{{item.keyword}}" class="btn btn-dark">
                                         <span class="fa fa-pen text-primary"></span>
                                     </a>
                                     <a ng-click="remove(item.keyword);" class="btn btn-dark">
