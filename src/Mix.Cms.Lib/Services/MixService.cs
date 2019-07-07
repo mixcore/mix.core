@@ -202,7 +202,7 @@ namespace Mix.Cms.Lib.Services
                 result = Instance.LocalSettings[culture][name];
                 if (result == null)
                 {
-                    result = DefaultInstance.LocalSettings[culture][name];
+                    result = DefaultInstance.LocalSettings[MixService.GetConfig<string>("DefaultCulture")][name];
                 }
             }
             return result != null ? result.Value<T>() : default(T);

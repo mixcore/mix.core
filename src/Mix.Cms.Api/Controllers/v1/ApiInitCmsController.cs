@@ -71,6 +71,7 @@ namespace Mix.Cms.Api.Controllers.v1
         ///     - Init Cms Database
         ///     - Init Account Database
         ///     - Init Selected Culture as default
+        ///     - Init Menu Positions
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -84,6 +85,11 @@ namespace Mix.Cms.Api.Controllers.v1
                 if (MixService.GetConfig<int>("InitStatus") == 0)
                 {
                     result = await InitStep1Async(model).ConfigureAwait(false);
+                    if (result.IsSucceed)
+                    {
+                        InitCmsService sv = new InitCmsService();
+                        await sv.InitPositionsAsync();
+                    }
                 }
                 return result;
             }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
+using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
@@ -102,310 +103,466 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixCulture parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            var getPages = await MixPages.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-            if (getPages.IsSucceed)
-            {
-                foreach (var p in getPages.Data)
-                {
-                    p.Specificulture = Specificulture;
-                    p.CreatedDateTime = DateTime.UtcNow;
-                    p.LastModified = DateTime.UtcNow;
-                    var saveResult = await p.SaveModelAsync(false, _context, _transaction);
-                    result.IsSucceed = saveResult.IsSucceed;
-                    if (!saveResult.IsSucceed)
-                    {
-                        result.Errors.Add("Error: Clone Pages");
-                        result.Errors.AddRange(saveResult.Errors);
-                        result.Exception = saveResult.Exception;
-                        break;
-                    }
-                }
-            }
-            if (result.IsSucceed)
-            {
-                var getConfigurations = await MixConfigurations.ReadMvcViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-                if (getConfigurations.IsSucceed)
-                {
-                    foreach (var c in getConfigurations.Data)
-                    {
-                        c.Specificulture = Specificulture;
-                        c.CreatedDateTime = DateTime.UtcNow;
-                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!saveResult.IsSucceed)
-                        {
-                            result.Errors.Add("Error: Clone Configurations");
-                            result.Errors.AddRange(saveResult.Errors);
-                            result.Exception = saveResult.Exception;
-                            break;
-                        }
-                    }
-                }
 
-            }
+            // Clone Configurations
             if (result.IsSucceed)
             {
-                var getLanguages = await MixLanguages.ReadMvcViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-                if (getLanguages.IsSucceed)
-                {
-                    foreach (var c in getLanguages.Data)
-                    {
-                        c.Specificulture = Specificulture;
-                        c.CreatedDateTime = DateTime.UtcNow;
-                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!saveResult.IsSucceed)
-                        {
-                            result.Errors.Add("Error: Clone Languages");
-                            result.Errors.AddRange(saveResult.Errors);
-                            result.Exception = saveResult.Exception;
-                            break;
-                        }
-                    }
-                }
+                var cloneResult = await CloneConfigurationsAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
+            }
+
+            if (result.IsSucceed)
+            {
+                var cloneResult = await CloneLanguagesAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
             }
             
             if (result.IsSucceed)
             {
-                var getMedias = await MixMedias.UpdateViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-                if (getMedias.IsSucceed)
-                {
-                    foreach (var c in getMedias.Data)
-                    {
-                        c.Specificulture = Specificulture;
-                        c.CreatedDateTime = DateTime.UtcNow;
-                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!saveResult.IsSucceed)
-                        {
-                            result.Errors.Add("Error: Clone Medias");
-                            result.Errors.AddRange(saveResult.Errors);
-                            result.Exception = saveResult.Exception;
-                            break;
-                        }
-                    }
-                }
+                var cloneResult = await CloneMediasAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
             }
             if (result.IsSucceed)
             {
-                // Clone Module from Default culture
-                var getModules = await MixModules.ReadListItemViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-                if (getModules.IsSucceed)
-                {
-                    foreach (var c in getModules.Data)
-                    {
-                        c.Specificulture = Specificulture;
-                        c.CreatedDateTime = DateTime.UtcNow;
-                        c.LastModified = DateTime.UtcNow;
-                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!saveResult.IsSucceed)
-                        {
-                            result.Errors.Add("Error: Clone Module");
-                            result.Errors.AddRange(saveResult.Errors);
-                            result.Exception = saveResult.Exception;
-                            break;
-                        }
-                    }
-                }
+                var cloneResult = await CloneModulesAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
             }
 
-            // Clone ModuleData from Default culture
+            // Clone Pages 
             if (result.IsSucceed)
             {
-                var getModuleDatas = await MixModuleDatas.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-                if (getModuleDatas.IsSucceed)
-                {
-                    foreach (var c in getModuleDatas.Data)
-                    {
-                        c.Specificulture = Specificulture;
-                        c.CreatedDateTime = DateTime.UtcNow;
-                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!saveResult.IsSucceed)
-                        {
-                            result.Errors.Add("Error: Clone Module Data");
-                            result.Errors.AddRange(saveResult.Errors);
-                            result.Exception = saveResult.Exception;
-                            break;
-                        }
-                    }
-                }
+                var cloneResult = await ClonePagesAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
             }
+
+            
             // Clone Article from Default culture
             if (result.IsSucceed)
             {
-                var getArticles = await MixArticles.ReadListItemViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-                if (getArticles.IsSucceed)
-                {
-                    foreach (var c in getArticles.Data)
-                    {
-                        c.Specificulture = Specificulture;
-                        c.CreatedDateTime = DateTime.UtcNow;
-                        c.LastModified = DateTime.UtcNow;
-                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!saveResult.IsSucceed)
-                        {
-                            result.Errors.Add("Error: Clone Articles");
-                            result.Errors.AddRange(saveResult.Errors);
-                            result.Exception = saveResult.Exception;
-                            break;
-                        }
-                    }
-                }
+                var cloneResult = await CloneArticlesAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
             }
+            // Clone ModuleData from Default culture
             if (result.IsSucceed)
             {
-                // Clone PageModule from Default culture
-                var getPageModules = await MixPageModules.ReadMvcViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-                if (getPageModules.IsSucceed)
-                {
-                    foreach (var c in getPageModules.Data)
-                    {
-                        c.Specificulture = Specificulture;
-                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!saveResult.IsSucceed)
-                        {
-                            result.Errors.Add("Error: Clone Page Module");
-                            result.Errors.AddRange(saveResult.Errors);
-                            result.Exception = saveResult.Exception;
-                            break;
-                        }
-                    }
-                }
+                var cloneResult = await CloneModuleDatasAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
+            }
+            // Clone PageModules from Default culture
+            if (result.IsSucceed)
+            {
+                var cloneResult = await ClonePageModulesAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
             }
 
+            // Clone PagePosition from Default culture
             if (result.IsSucceed)
-            {
-                // Clone PagePosition from Default culture
-                var getPagePositions = await MixPagePositions.ReadListItemViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-                if (getPagePositions.IsSucceed)
-                {
-                    foreach (var c in getPagePositions.Data)
-                    {
-                        c.Specificulture = Specificulture;
-                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!saveResult.IsSucceed)
-                        {
-                            result.Errors.Add("Error: Clone Page Position");
-                            result.Errors.AddRange(saveResult.Errors);
-                            result.Exception = saveResult.Exception;
-                            break;
-                        }
-                    }
-                }
+            {                
+                var cloneResult = await ClonePagePositionsAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
             }
 
             // Clone PageArticle from Default culture
             if (result.IsSucceed)
             {
-                var getPageArticles = await MixPageArticles.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-                if (getPageArticles.IsSucceed)
-                {
-                    foreach (var c in getPageArticles.Data)
-                    {
-                        c.Specificulture = Specificulture;
-                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!saveResult.IsSucceed)
-                        {
-                            result.Errors.Add("Error: Clone Page Article");
-                            result.Errors.AddRange(saveResult.Errors);
-                            result.Exception = saveResult.Exception;
-                            break;
-                        }
-                    }
-                }
+                var cloneResult = await ClonePageArticlesAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
             }
             // Clone ModuleArticle from Default culture
             if (result.IsSucceed)
             {
-
-                var getModuleArticles = await MixModuleArticles.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-                if (getModuleArticles.IsSucceed)
-                {
-                    foreach (var c in getModuleArticles.Data)
-                    {
-                        c.Specificulture = Specificulture;
-                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!saveResult.IsSucceed)
-                        {
-                            result.Errors.Add("Error: Clone Module Article");
-                            result.Errors.AddRange(saveResult.Errors);
-                            result.Exception = saveResult.Exception;
-                            break;
-                        }
-                    }
-                }
+                var cloneResult = await CloneModuleArticlesAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
             }
             // Clone ArticleArticle from Default culture
             if (result.IsSucceed)
             {
-                var getArticleArticles = await MixArticleArticles.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-                if (getArticleArticles.IsSucceed)
-                {
-                    foreach (var c in getArticleArticles.Data)
-                    {
-                        c.Specificulture = Specificulture;
-                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!saveResult.IsSucceed)
-                        {
-                            result.Errors.Add("Error: Clone Article Article");
-                            result.Errors.AddRange(saveResult.Errors);
-                            result.Exception = saveResult.Exception;
-                            break;
-                        }
-                    }
-                }
+                var cloneResult = await CloneArticleArticlesAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
             }
 
             // Clone ArticleMedia from Default culture
             if (result.IsSucceed)
             {
-                var getArticleMedias = await MixArticleMedias.ReadViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-                if (getArticleMedias.IsSucceed)
-                {
-                    foreach (var c in getArticleMedias.Data)
-                    {
-                        c.Specificulture = Specificulture;
-                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!saveResult.IsSucceed)
-                        {
-                            result.Errors.Add("Error: Clone Article Media");
-                            result.Errors.AddRange(saveResult.Errors);
-                            result.Exception = saveResult.Exception;
-                            break;
-                        }
-                    }
-                }
+                var cloneResult = await CloneArticleMediasAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
             }
             
             // Clone ArticleMedia from Default culture
             if (result.IsSucceed)
             {
-                var getUrlAlias = await MixUrlAliases.UpdateViewModel.Repository.GetModelListByAsync(c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture), _context, _transaction);
-                if (getUrlAlias.IsSucceed)
+                var cloneResult = await CloneUrlAliasAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
+            }
+            return result;
+        }
+
+        public async Task<RepositoryResponse<bool>> CloneUrlAliasAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                var getPages = await DefaultModelRepository<MixCmsContext, MixUrlAlias>.Instance.GetModelListByAsync(
+                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
+                if (getPages.IsSucceed)
                 {
-                    foreach (var c in getUrlAlias.Data)
+                    foreach (var p in getPages.Data)
                     {
-                        c.Specificulture = Specificulture;
-                        var saveResult = await c.SaveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!saveResult.IsSucceed)
-                        {
-                            result.Errors.Add("Error: Clone Article Media");
-                            result.Errors.AddRange(saveResult.Errors);
-                            result.Exception = saveResult.Exception;
-                            break;
-                        }
+                        p.Specificulture = Specificulture;
+                        p.CreatedDateTime = DateTime.UtcNow;
+                        context.Entry(p).State = EntityState.Added;
                     }
+                    await context.SaveChangesAsync();
                 }
+            }
+            catch (Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
+            }
+            return result;
+        }
+
+        public async Task<RepositoryResponse<bool>> CloneModulesAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                var getPages = await DefaultModelRepository<MixCmsContext, MixModule>.Instance.GetModelListByAsync(
+                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
+                if (getPages.IsSucceed)
+                {
+                    foreach (var p in getPages.Data)
+                    {
+                        p.Specificulture = Specificulture;
+                        context.Entry(p).State = EntityState.Added;
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
+            }
+            return result;
+        }
+
+        public async Task<RepositoryResponse<bool>> CloneMediasAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                var getPages = await DefaultModelRepository<MixCmsContext, MixMedia>.Instance.GetModelListByAsync(
+                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
+                if (getPages.IsSucceed)
+                {
+                    foreach (var p in getPages.Data)
+                    {
+                        p.Specificulture = Specificulture;
+                        context.Entry(p).State = EntityState.Added;
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
+            }
+            return result;
+        }
+
+        public async Task<RepositoryResponse<bool>> CloneArticleMediasAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                var getPages = await DefaultModelRepository<MixCmsContext, MixArticleMedia>.Instance.GetModelListByAsync(
+                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
+                if (getPages.IsSucceed)
+                {
+                    foreach (var p in getPages.Data)
+                    {
+                        p.Specificulture = Specificulture;
+                        context.Entry(p).State = EntityState.Added;
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
+            }
+            return result;
+        }
+
+        public async Task<RepositoryResponse<bool>> CloneArticleArticlesAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                var getPages = await DefaultModelRepository<MixCmsContext, MixRelatedArticle>.Instance.GetModelListByAsync(
+                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
+                if (getPages.IsSucceed)
+                {
+                    foreach (var p in getPages.Data)
+                    {
+                        p.Specificulture = Specificulture;
+                        p.CreatedDateTime = DateTime.UtcNow;
+                        context.Entry(p).State = EntityState.Added;
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
+            }
+            return result;
+        }
+
+        public async Task<RepositoryResponse<bool>> CloneModuleArticlesAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                var getPages = await DefaultModelRepository<MixCmsContext, MixModuleArticle>.Instance.GetModelListByAsync(
+                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
+                if (getPages.IsSucceed)
+                {
+                    foreach (var p in getPages.Data)
+                    {
+                        p.Specificulture = Specificulture;
+                        context.Entry(p).State = EntityState.Added;
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
+            }
+            return result;
+        }
+
+        public async Task<RepositoryResponse<bool>> ClonePageArticlesAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                var getPages = await DefaultModelRepository<MixCmsContext, MixPageArticle>.Instance.GetModelListByAsync(
+                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
+                if (getPages.IsSucceed)
+                {
+                    foreach (var p in getPages.Data)
+                    {
+                        p.Specificulture = Specificulture;
+                        context.Entry(p).State = EntityState.Added;
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
+            }
+            return result;
+        }
+
+        public async Task<RepositoryResponse<bool>> ClonePagePositionsAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                var getPages = await DefaultModelRepository<MixCmsContext, MixPagePosition>.Instance.GetModelListByAsync(
+                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
+                if (getPages.IsSucceed)
+                {
+                    foreach (var p in getPages.Data)
+                    {
+                        p.Specificulture = Specificulture;
+                        context.Entry(p).State = EntityState.Added;
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
+            }
+            return result;
+        }
+
+        public async Task<RepositoryResponse<bool>> ClonePageModulesAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                var getPages = await DefaultModelRepository<MixCmsContext, MixPageModule>.Instance.GetModelListByAsync(
+                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
+                if (getPages.IsSucceed)
+                {
+                    foreach (var p in getPages.Data)
+                    {
+                        p.Specificulture = Specificulture;
+                        context.Entry(p).State = EntityState.Added;
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
+            }
+            return result;
+        }
+
+        public async Task<RepositoryResponse<bool>> CloneArticlesAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                var getPages = await DefaultModelRepository<MixCmsContext, MixArticle>.Instance.GetModelListByAsync(
+                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
+                if (getPages.IsSucceed)
+                {
+                    foreach (var p in getPages.Data)
+                    {
+                        p.Specificulture = Specificulture;
+                        context.Entry(p).State = EntityState.Added;
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
+            }
+            return result;
+        }
+
+        public async Task<RepositoryResponse<bool>> CloneModuleDatasAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                var getPages = await DefaultModelRepository<MixCmsContext, MixModuleArticle>.Instance.GetModelListByAsync(
+                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
+                if (getPages.IsSucceed)
+                {
+                    foreach (var p in getPages.Data)
+                    {
+                        p.Specificulture = Specificulture;
+                        context.Entry(p).State = EntityState.Added;
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
+            }
+            return result;
+        }
+
+        public async Task<RepositoryResponse<bool>> CloneLanguagesAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                var getPages = await DefaultModelRepository<MixCmsContext, MixLanguage>.Instance.GetModelListByAsync(
+                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
+                if (getPages.IsSucceed)
+                {
+                    foreach (var p in getPages.Data)
+                    {
+                        p.Specificulture = Specificulture;
+                        p.CreatedDateTime = DateTime.UtcNow;
+                        context.Entry(p).State = EntityState.Added;
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch(Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
+            }
+            return result;
+        }
+
+        public async Task<RepositoryResponse<bool>> CloneConfigurationsAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                var getPages = await DefaultModelRepository<MixCmsContext, MixConfiguration>.Instance.GetModelListByAsync(
+                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
+                if (getPages.IsSucceed)
+                {
+                    foreach (var p in getPages.Data)
+                    {
+                        p.Specificulture = Specificulture;
+                        p.CreatedDateTime = DateTime.UtcNow;
+                        context.Entry(p).State = EntityState.Added;
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch(Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
+            }
+            return result;
+        }
+
+        public async Task<RepositoryResponse<bool>> ClonePagesAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                var getPages = await DefaultModelRepository<MixCmsContext, MixPage>.Instance.GetModelListByAsync(
+                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
+                if (getPages.IsSucceed)
+                {
+                    foreach (var p in getPages.Data)
+                    {
+                        p.Specificulture = Specificulture;
+                        p.CreatedDateTime = DateTime.UtcNow;
+                        p.LastModified = DateTime.UtcNow;
+                        context.Entry(p).State = EntityState.Added;
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch(Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
             }
             return result;
         }

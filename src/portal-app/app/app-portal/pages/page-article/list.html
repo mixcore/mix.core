@@ -77,7 +77,7 @@
 
                 <td>
                     <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                        <a href="goToPath('/portal/article/details/' + item.article.id)" class="btn btn-dark">
+                        <a ng-click="goToPath('/portal/article/details/' + item.article.id)" class="btn btn-dark">
                             <span class="fas fa-pencil-alt text-primary"></span>
                         </a>
                         <a ng-click="preview(item.article)" target="_blank" class="btn btn-dark">
