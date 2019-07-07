@@ -1,5 +1,8 @@
 .data-table .header{
-    padding: 10px;
-    font-weight: 700;
-    background: lightgray;
+    padding: 5px;
+    color: #495057;
+    background-color: hsla(var(--primary-color-hue,211),100%,50%,.075);
+    border-color: #dee2e6;
+    font-weight: 400;
+    font-size: small;
 }
