@@ -40,7 +40,7 @@ app.factory('AuthService',
                     data: JSON.stringify(data)
                 };
                 var resp = await _getApiResult(req);
-                return resp;               
+                return resp;
             };
 
             var _login = async function (loginData) {
@@ -88,13 +88,13 @@ app.factory('AuthService',
                     });
                     this.authentication = _authentication;
                     _initSettings().then(function () {
-                        if (document.referrer && document.referrer.indexOf('init') === -1)
-                        {
-                            window.location.href = document.referrer;
-                        }
-                        else if($routeParams.ReturnUrl){
+                        if ($routeParams.ReturnUrl) {
                             window.location.href = $routeParams.ReturnUrl;
-                        }else{
+
+                        }
+                        else if (document.referrer && document.referrer.indexOf('init') === -1) {
+                            window.location.href = document.referrer;
+                        } else {
                             window.location.href = '/';
                         }
                     });
@@ -114,12 +114,12 @@ app.factory('AuthService',
                     url: apiUrl
                 };
                 var resp = await _getApiResult(req);
-                if(resp.isSucceed){
+                if (resp.isSucceed) {
                     localStorageService.remove('authorizationData');
                     _authentication = null;
                     window.top.location.href = '/security/login';
                 }
-                
+
 
             };
 
@@ -223,9 +223,8 @@ app.factory('AuthService',
                         authData.token = data.access_token;
                         authData.refresh_token = data.refresh_token;
                         _authentication.token = data.access_token;
-                        _authentication.refresh_token = data.refresh_token;        
-                        if(!$rootScope.globalSettings.lastUpdateConfiguration || $rootScope.globalSettings.lastUpdateConfiguration < data.lastUpdateConfiguration)
-                        {
+                        _authentication.refresh_token = data.refresh_token;
+                        if (!$rootScope.globalSettings.lastUpdateConfiguration || $rootScope.globalSettings.lastUpdateConfiguration < data.lastUpdateConfiguration) {
                             _initSettings();
                         }
                     }
