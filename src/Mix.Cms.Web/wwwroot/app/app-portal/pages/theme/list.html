@@ -1,8 +1,9 @@
 <section class="card mb-3 manual">
-    <div class="card-header">        
+    <div class="card-header">
         <div class="row">
             <div class="col-md-12">
-                <filter-list request="request" create-url="'/portal/theme/create'" callback="getList(pageIndex)"></filter-list>
+                <filter-list request="request" create-url="'/portal/theme/create'" callback="getList(pageIndex)">
+                </filter-list>
             </div>
         </div>
     </div>
@@ -61,9 +62,9 @@
                             <a href="/portal/file/list?folder={{item.assetFolder}}" class="btn btn-link">
                                 <span class="fas fa-file text-secondary"></span>
                             </a>
-                            <a href="/portal/theme/export/{{item.id}}" class="btn btn-sm btn-dark d-inline-block">
+                            <a href="/portal/theme/export/{{item.id}}" class="btn btn-sm btn-link d-inline-block">
                                 <span class="fas fa-arrow-down text-primary"></span></a>
-                            <a ng-click="syncTemplates(item.id)" class="btn btn-sm btn-dark d-inline-block"><span class="fas fa-sync-alt text-primary"></span></a>
+                            <a ng-click="syncTemplates(item.id)" class="btn btn-sm btn-link d-inline-block"><span class="fas fa-sync-alt text-primary"></span></a>
 
                             <a href="/portal/theme/details/{{item.id}}" class="btn btn-link">
                                 <span class="fas fa-pencil-alt text-primary"></span>
@@ -79,7 +80,7 @@
     </div>
     <div class="card-footer">
         <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-end">
+            <ul class="pagination justify-content-end m-0">
                 <li class="page-item">
                     <a class="page-link active" href="javascript:void(0)" ng-click="getList(data.pageIndex-1)" ng-hide="data.pageIndex==0">Prev</a>
                 </li>
