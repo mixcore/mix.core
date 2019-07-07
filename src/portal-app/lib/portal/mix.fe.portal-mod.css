@@ -1712,7 +1712,7 @@ pre code {
 
 .table-hover tbody tr:hover {
   color: var(--text-color, #212529);
-  background-color: rgba(0, 0, 0, 0.075);
+  background-color: hsla(var(--primary-color-hue,211), 100%, 50%, 0.035);
 }
 
 .table-primary,
@@ -1894,19 +1894,19 @@ pre code {
 .table-active,
 .table-active > th,
 .table-active > td {
-  background-color: rgba(0, 0, 0, 0.075);
+  background-color: hsla(var(--primary-color-hue,211), 100%, 50%, 0.035);
 }
 
 .table-hover .table-active:hover {
-  background-color: rgba(0, 0, 0, 0.075);
+  background-color: rgba(0, 111, 230, 0.035);
 }
 
 .table-hover .table-active:hover > td,
 .table-hover .table-active:hover > th {
-  background-color: rgba(0, 0, 0, 0.075);
+  background-color: rgba(0, 111, 230, 0.035);
 }
 
-.table .thead-light th {
+.table .thead-dark th {
   color: hsla(var(--primary-color-hue,211), var(--primary-color-saturation,100%), 100%, 1);
   background-color: #343a40;
   border-color: #454d55;
@@ -1914,7 +1914,7 @@ pre code {
 
 .table .thead-light th {
   color: #495057;
-  background-color: #e9ecef;
+  background-color: hsla(var(--primary-color-hue,211), 100%, 50%, 0.075);
   border-color: #dee2e6;
 }
 
@@ -2612,8 +2612,8 @@ fieldset:disabled a.btn {
 }
 
 .btn-primary:focus, .btn-primary.focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem hsla(var(--primary-color-hue,211), 100%, 50%, 0.5);
+          box-shadow: 0 0 0 0.2rem hsla(var(--primary-color-hue,211), 100%, 50%, 0.5);
 }
 
 .btn-primary.disabled, .btn-primary:disabled {
@@ -2631,8 +2631,8 @@ fieldset:disabled a.btn {
 
 .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-primary.dropdown-toggle:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem hsla(var(--primary-color-hue,211), 100%, 50%, 0.5);
+          box-shadow: 0 0 0 0.2rem hsla(var(--primary-color-hue,211), 100%, 50%, 0.5);
 }
 
 .btn-secondary {
@@ -10435,7 +10435,7 @@ a.text-dark:hover, a.text-dark:focus {
   .table-dark tbody + tbody {
     border-color: #dee2e6;
   }
-  .table .thead-light th {
+  .table .thead-dark th {
     color: inherit;
     border-color: #dee2e6;
   }
@@ -10899,6 +10899,10 @@ a.text-dark:hover, a.text-dark:focus {
   background-color: var(--bg-color, hsla(var(--primary-color-hue,211), var(--primary-color-saturation,100%), 100%, 1));
 }
 
+.card .card-header {
+  background-color: hsla(var(--primary-color-hue, 211), 100%, 50%, 0.03);
+}
+
 .dropdown-menu {
   -webkit-box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
@@ -10913,13 +10917,9 @@ a.text-dark:hover, a.text-dark:focus {
   border: 0px;
 }
 
-.table tbody tr td {
-  border-top: 1px solid #444;
-}
-
 .table-hover tbody tr:hover {
-  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .modal {
@@ -10960,6 +10960,7 @@ ul[dnd-list] li {
   margin-bottom: -1px;
 }
 /*# sourceMappingURL=mix.fe.portal-mod.css.map */
+
 
 
 
