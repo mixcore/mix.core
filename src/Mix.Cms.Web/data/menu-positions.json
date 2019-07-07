@@ -1,0 +1,28 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "description": "Nav",
+      "priority": 1,
+      "status": 2
+    },
+    {
+      "id": 2,
+      "description": "Top",
+      "priority": 2,
+      "status": 2
+    },
+    {
+      "id": 3,
+      "description": "Left",
+      "priority": 3,
+      "status": 2
+    },
+    {
+      "id": 4,
+      "description": "Footer",
+      "priority": 4,
+      "status": 2
+    }
+  ]
+}

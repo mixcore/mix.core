@@ -57,8 +57,11 @@
                 };
                 $rootScope.preview('module-data', obj, null, 'modal-lg');
             }
-            $scope.initModuleForm = async function (name) {
+            
+            $scope.initModuleForm = async function (name, successCallback, failCallback) {
                 var resp = null;
+                $scope.successCallback = successCallback;
+                $scope.failCallback = failCallback;
                 setTimeout(async () => {
                     $scope.name = name;
                     if ($scope.id) {
@@ -74,7 +77,14 @@
                         $scope.$apply();
                     }
                     else {
-                        if (resp) { $rootScope.showErrors(resp.errors); }
+                        if (resp) { 
+                            if($scope.errorCallback){
+                                $rootScope.executeFunctionByName($scope.errorCallback, [resp], window);
+                            }
+                            else{
+                                $rootScope.showErrors(resp.errors); 
+                            }
+                        }
                         $rootScope.isBusy = false;
                         $scope.$apply();
                     }
@@ -85,16 +95,28 @@
                 var resp = await moduleDataService.saveModuleData($scope.activedModuleData);
                 if (resp && resp.isSucceed) {
                     $scope.activedModuleData = resp.data;
-                    var msg = $rootScope.translate('success');
-                    $rootScope.showMessage(msg, 'success');
+                    if($scope.successCallback){
+                        $rootScope.executeFunctionByName($scope.successCallback, [resp], window);
+                    }
+                    else{
+                        var msg = $rootScope.translate('success');
+                        $rootScope.showMessage(msg, 'success');
+                    }
+                    
                     $rootScope.isBusy = false;
                     $scope.initModuleForm($scope.name);
                     $rootScope.isBusy = false;
                     $scope.$apply();
-                    //$location.path('/portal/moduleData/details/' + resp.data.id);
                 }
                 else {
-                    if (resp) { $rootScope.showErrors(resp.errors); }
+                    if (resp) { 
+                        if($scope.failCallback){
+                            $rootScope.executeFunctionByName($scope.failCallback, [resp], window);
+                        }
+                        else{
+                            $rootScope.showErrors(resp.errors); 
+                        }
+                    }
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 }

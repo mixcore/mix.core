@@ -2,6 +2,9 @@
 html, body{
     height: 100%;
 }
+.btn, .btn-link{
+    cursor: pointer;
+}
 /* body {
     color: #212529!important;
 }

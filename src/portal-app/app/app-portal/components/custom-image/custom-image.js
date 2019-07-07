@@ -2,6 +2,19 @@
 //modules.controller('ImageController', );
 modules.component('customImage', {
     templateUrl: '/app/app-portal/components/custom-image/custom-image.html',
+    bindings: {
+        header: '=',
+        title: '=',
+        description: '=',
+        src: '=',
+        srcUrl: '=',
+        postedFile: '=',
+        type: '=',
+        folder: '=',
+        auto: '=',
+        onDelete: '&',
+        onUpdate: '&'
+    },
     controller: ['$rootScope', '$scope', 'ngAppSettings', 'MediaService', function ($rootScope, $scope, ngAppSettings, mediaService) {
         var ctrl = this;
         var image_placeholder = '/images/image_placeholder.jpg';
@@ -17,9 +30,9 @@ modules.component('customImage', {
         ctrl.mediaFile = {
             file: null,
             fullPath: '',
-            folder: 'Media',
-            title: '',
-            description: ''
+            folder: ctrl.folder,
+            title: ctrl.title,
+            description: ctrl.description
         };
         ctrl.media = null;
         ctrl.$doCheck = function () {
@@ -57,12 +70,12 @@ modules.component('customImage', {
                 reader.onload = async function () {
                     var getMedia = await mediaService.getSingle(['portal']);
                     if (getMedia.isSucceed) {
-                        var index = reader.result.indexOf(',') + 1;
-                        var base64 = reader.result.substring(index);
                         ctrl.mediaFile.fileName = file.name.substring(0, file.name.lastIndexOf('.'));
                         ctrl.mediaFile.extension = file.name.substring(file.name.lastIndexOf('.'));
                         ctrl.mediaFile.fileStream = reader.result;
                         var media = getMedia.data;
+                        media.title = ctrl.title;
+                        media.description = ctrl.description;
                         media.mediaFile = ctrl.mediaFile;
                         var resp = await mediaService.save(media);
                         if (resp && resp.isSucceed) {
@@ -115,17 +128,5 @@ modules.component('customImage', {
         }
 
     }],
-    bindings: {
-        header: '=',
-        title: '=',
-        description: '=',
-        src: '=',
-        srcUrl: '=',
-        postedFile: '=',
-        type: '=',
-        folder: '=',
-        auto: '=',
-        onDelete: '&',
-        onUpdate: '&'
-    }
+    
 });

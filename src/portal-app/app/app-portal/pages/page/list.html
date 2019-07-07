@@ -62,7 +62,7 @@
                                 <span class="fas fa-pencil-alt text-warning"></span>
                             </a>
                             <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-dark"><span class="far fa-eye text-info"></span></a>
-                            <a ng-if="item.type==2" href="/portal/page/page-article/list/{{item.id}}" class="btn btn-dark">
+                            <a ng-if="item.type==2" ng-click="goToPath('/portal/page/page-article/list/' + item.id)" class="btn btn-dark">
                                 <span class="fas fa-list text-info"></span>
                             </a>
                             <!-- 
@@ -139,7 +139,7 @@
                                                         class="fa fa-pen text-warning small"></span></a>
                                                 <a href="{{c.detailsUrl}}" target="_blank" class="btn btn-dark"><span
                                                         class="far fa-eye text-info small"></span></a>
-                                                <a ng-if="c.page.type==2" href="/portal/page/page-article/list/{{c.page.id}}"
+                                                <a ng-if="c.page.type==2" ng-click="goToPath('/portal/page/page-article/list/' + c.page.id)"
                                                     class="btn btn-dark">
                                                     <span class="fas fa-list text-info"></span>
                                                 </a>
