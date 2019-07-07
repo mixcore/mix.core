@@ -10938,21 +10938,6 @@ a.text-dark:hover, a.text-dark:focus {
   border-color: rgba(0, 0, 0, 0.125);
 }
 
-.page-link {
-  position: relative;
-  display: block;
-  padding: 0.5rem 0.75rem;
-  margin-left: -1px;
-  line-height: 1.25;
-  color: hsla(var(--primary-color-hue,211), var(--primary-color-saturation,100%), 100%, 1)fff;
-  background-color: #333 !important;
-  border: 1px solid rgba(0, 0, 0, 0.125);
-}
-
-.page-link:hover {
-  border-color: #595959;
-}
-
 div[dnd-list] .dnd-item,
 ul[dnd-list] li {
   display: block;
