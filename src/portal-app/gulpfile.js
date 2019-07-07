@@ -346,13 +346,12 @@ gulp.task("clean:sharedCss", function (cb) {
     rimraf(paths.sharedCss.dest, cb);
 });
 
-gulp.task("clean:js", [
 
+gulp.task("clean:css", ["clean:appCss", "clean:appInitCss", "clean:portalCss", "clean:sharedCss"
+]);
+gulp.task("clean:js", [
     "clean:framework", "clean:portal", "clean:shared"
     , "clean:portalApp","clean:portalAppRequired", "clean:clientApp", "clean:clientAppRequired", "clean:sharedApp", "clean:initApp", "clean:securityApp"
-]);
-gulp.task("clean:css", [
-    , "clean:appCss", "clean:appInitCss", "clean:portalCss", "clean:sharedCss"
 ]);
 gulp.task("min:js", ["min:portalApp","min:portalAppRequired", "min:initApp", "min:securityApp", "min:clientApp", "min:clientAppRequired", "min:sharedApp"
     , "min:shared", "min:portal", "min:framework"

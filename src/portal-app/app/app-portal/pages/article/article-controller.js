@@ -1,7 +1,7 @@
 ﻿'use strict';
 app.controller('ArticleController', ['$scope', '$rootScope', '$location', '$filter',
-    'ngAppSettings', '$routeParams', 'ArticleService', 'UrlAliasService',
-    function ($scope, $rootScope, $location, $filter, ngAppSettings, $routeParams, service, urlAliasService) {
+    'ngAppSettings', '$routeParams', 'ArticleService', 'UrlAliasService', 'AttributeSetService',
+    function ($scope, $rootScope, $location, $filter, ngAppSettings, $routeParams, service, urlAliasService, attributeSetService) {
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
         $scope.preview = function (item) {
             item.editUrl = '/portal/article/details/' + item.id;
@@ -21,6 +21,7 @@ app.controller('ArticleController', ['$scope', '$rootScope', '$location', '$filt
         $scope.getSingleSuccessCallback = function () {
             var moduleId = $routeParams.module_id;
             var pageId = $routeParams.page_id;
+            var attrSetIds = $routeParams.attr_set_ids;
             if (moduleId) {
                 var moduleNav = $rootScope.findObjectByKey($scope.activedData.modules, 'moduleId', moduleId);
                 if (moduleNav) {
@@ -31,6 +32,17 @@ app.controller('ArticleController', ['$scope', '$rootScope', '$location', '$filt
                 var pageNav = $rootScope.findObjectByKey($scope.activedData.categories, 'pageId', pageId);
                 if (pageNav) {
                     pageNav.isActived = true;
+                }
+            }
+            if( $routeParams.attr_set_ids){
+                var req = angular.copy(ngAppSettings.request);
+                req.query = 'attr_set_ids='+  $routeParams.attr_set_ids;
+                var getData = attributeSetService.getList(req);
+                if(getData.isSucceed){
+                    angular.forEach(getData.data.items, function(e){
+                        e.isActived = true;
+                    });
+                    $scope.activedData.attributeSetNavs = getData.data;
                 }
             }
             $scope.activedData.publishedDateTime = $filter('utcToLocalTime')($scope.activedData.publishedDateTime);

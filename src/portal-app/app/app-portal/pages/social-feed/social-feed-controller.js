@@ -12,7 +12,7 @@ app.controller('SocialFeedController',
                 name: null,
                 dataType: 7,
                 value: ""
-            }        
+            }
             $scope.data = [];
             $scope.errors = [];
             $scope.socialSettings = {
@@ -145,10 +145,10 @@ app.controller('SocialFeedController',
             };
             $scope.parsePost = function (post) {
                 var article = angular.copy($scope.defaultArticle);
-                var prop =  angular.copy($scope.defaultProperty);
-                article.title="Facebook Id";
-                article.name="facebook_id";
-                article.value= post.id;
+                var prop = angular.copy($scope.defaultProperty);
+                article.title = "Facebook Id";
+                article.name = "facebook_id";
+                article.value = post.id;
                 article.properties.push(prop);
 
                 article.title = post.name || post.id;
@@ -156,7 +156,7 @@ app.controller('SocialFeedController',
                 article.content = post.description;
                 article.source = 'Facebook';
                 article.image = post.full_picture;
-                article.detailsUrl  = post.permalink_url
+                article.detailsUrl = post.permalink_url
                 var attachments = post.attachments.data[0];
 
                 if (attachments.media) {
@@ -234,7 +234,7 @@ app.controller('SocialFeedController',
                             return null;
                         }
                     }
-                    catch{
+                    catch (err) {
                         console.log('Cannot parse media', media);
                         return null;
                     }
