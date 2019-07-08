@@ -163,9 +163,9 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$l
                 $scope.$apply();
             }
         };
-        $scope.saveCallback = function () {
-            $location.url($scope.referrerUrl);
-        }
+        // $scope.saveCallback = function () {
+        //     $location.url($scope.referrerUrl);
+        // }
         $scope.loadArticles = async function () {
             $rootScope.isBusy = true;
             var id = $routeParams.id;

@@ -8,9 +8,9 @@ app.controller('ArticleController', ['$scope', '$rootScope', '$location', '$filt
             $rootScope.preview('article', item, item.title, 'modal-lg');
         };
 
-        $scope.saveCallback = function () {
-            $location.url($scope.referrerUrl);
-        }
+        // $scope.saveCallback = function () {
+        //     $location.url($scope.referrerUrl);
+        // }
         $scope.saveFailCallback = function(){
             angular.forEach($scope.activedData.attributeSetNavs, function(nav){
                 if(nav.isActived){

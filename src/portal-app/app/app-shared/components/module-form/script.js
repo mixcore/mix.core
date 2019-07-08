@@ -22,9 +22,12 @@
                         ctrl.data.productId = ctrl.productId;
                         ctrl.data.categoryId = ctrl.categoryId;
                         $rootScope.isBusy = false;
+                        $scope.$apply();
                     }
                     else {
                         if (resp) { $rootScope.showErrors(resp.errors); }
+                        $rootScope.isBusy = false;
+                        $scope.$apply();
                     }
                 }
             };
