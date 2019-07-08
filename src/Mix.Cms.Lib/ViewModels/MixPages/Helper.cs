@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
+using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixSystem;
 using Mix.Common.Helper;
 using Mix.Domain.Core.Models;
@@ -35,6 +36,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     {
                         item.Id = id;
                         item.CreatedDateTime = DateTime.UtcNow;
+                    }
+                    if(!string.IsNullOrEmpty(item.Image)){
+                        item.Image = item.Image.Replace("content/templates/default", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
+                    }
+                    if(!string.IsNullOrEmpty(item.Thumbnail)){
+                        item.Thumbnail = item.Thumbnail.Replace("content/templates/default", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
                     }
                     item.Specificulture = destCulture;
                     var saveResult = await item.SaveModelAsync(true, context, transaction);

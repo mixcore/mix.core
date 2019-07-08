@@ -33,7 +33,7 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
                                             $rootScope.isInit = true;
                                             $scope.roles = response.data;
                                             $rootScope.isBusy = false;
-                                            $scope.$apply();
+                                            // $scope.$apply();
                                         }
                                     });
                                 }
@@ -45,7 +45,7 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
                         $rootScope.isInit = true;
                         $scope.isInit = true;
                         $rootScope.isBusy = false;
-                        $scope.$apply();
+                        // $scope.$apply();
 
 
                     } else {

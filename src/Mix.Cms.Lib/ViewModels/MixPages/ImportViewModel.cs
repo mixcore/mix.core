@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -176,6 +177,15 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                         //  Force to create new module
                         item.Module.Id = 0;
                         item.Module.Specificulture = parent.Specificulture;
+                        if(!string.IsNullOrEmpty(item.Image)){
+                            item.Image = item.Image.Replace("content/templates/default", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", parent.Specificulture)}");
+                        }
+                        if(!string.IsNullOrEmpty(item.Module.Image)){
+                            item.Module.Image = item.Module.Image.Replace("content/templates/default", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", parent.Specificulture)}");
+                        }
+                        if(!string.IsNullOrEmpty(item.Module.Thumbnail)){
+                            item.Module.Thumbnail = item.Module.Thumbnail.Replace("content/templates/default", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", parent.Specificulture)}");
+                        }
                         var saveModule = await item.Module.SaveModelAsync(true, _context, _transaction);
                         ViewModelHelper.HandleResult(saveModule, ref result);
                         if (!result.IsSucceed)

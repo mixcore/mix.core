@@ -88,8 +88,8 @@
     "DatabaseProvider": 1,
     "PortalThemeSettings": {
       "primaryColorHue" : 211,
-      "primaryColorSaturation":"100%",
-      "primaryColorBrightness":"50%",
+      "primaryColorSaturation":100,
+      "primaryColorBrightness":50,
       "bgColor": "#e0e4e7",
       "textColor": "#404040",
       "primaryColor": "#47c5d1",

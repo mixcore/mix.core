@@ -53,13 +53,13 @@ app.controller('ArticleController', ['$scope', '$rootScope', '$location', '$filt
                     $scope.activedData.seoName = $rootScope.generateKeyword($scope.activedData.title, '-');
                 }
                 if ($scope.activedData.seoTitle === null || $scope.activedData.seoTitle === '') {
-                    $scope.activedData.seoTitle = $scope.activedData.title
+                    $scope.activedData.seoTitle = $scope.activedData.title;
                 }
                 if ($scope.activedData.seoDescription === null || $scope.activedData.seoDescription === '') {
-                    $scope.activedData.seoDescription = $scope.activedData.excerpt
+                    $scope.activedData.seoDescription = $scope.activedData.excerpt;
                 }
                 if ($scope.activedData.seoKeywords === null || $scope.activedData.seoKeywords === '') {
-                    $scope.activedData.seoKeywords = $scope.activedData.title
+                    $scope.activedData.seoKeywords = $scope.activedData.title;
                 }
             }
         }
