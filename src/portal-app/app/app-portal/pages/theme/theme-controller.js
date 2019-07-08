@@ -3,7 +3,10 @@ app.controller('ThemeController', ['$scope', '$rootScope', 'ngAppSettings', '$ro
     function ($scope, $rootScope, ngAppSettings, $routeParams, $location, service, commonService) {
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
         $scope.exportData = null;
-        $scope.selectedExport = {};
+        $scope.selectedExport = {
+            pages:[],
+            modules:[]
+        };
         
         $scope.getSingleSuccessCallback = function () {
             $scope.assets = null;
@@ -90,12 +93,7 @@ app.controller('ThemeController', ['$scope', '$rootScope', 'ngAppSettings', '$ro
                 $scope.$apply();
             }          
         };
-        $scope.updatePageExport = function(page){
-            $scope.selectedExport.pages = angular.copy($rootScope.filterArray($scope.exportData.pages, 'isActived', true)); 
-            angular.forEach($scope.selectedExport.pages,function(e){
-                e.moduleNavs = angular.copy($rootScope.filterArray(e.moduleNavs, 'isActived', true));
-            });
-        };
+        
         $scope.generateSEO = function(){
             $scope.activedData.name = $rootScope.generateKeyword($scope.activedData.title, '-');
         }

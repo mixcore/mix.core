@@ -2,3 +2,6 @@
     margin-right: 0px!important;
     margin-left: 0px!important;
 }
+.sw-sidebar a{
+    color:var(--text-color,#212529);
+}

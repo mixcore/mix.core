@@ -260,7 +260,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 FileRepository.Instance.DeleteFolder(outputFolder);
                 FileRepository.Instance.DeleteFile(filePath);
                 //Import Site Structures
-                result = await MixPages.Helper.ImportAsync(siteStructures.Pages, Specificulture);
+                result = await siteStructures.ImportAsync(Specificulture);
                 if (result.IsSucceed)
                 {
 
