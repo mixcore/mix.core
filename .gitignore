@@ -239,10 +239,10 @@ ModelManifest.xml
 # Source
 /docs/demo-create-crickettour.mp4
 /docs/demo-create-crickettour.7z
-src/Mix.Cms.Client.Mvc/*
 src/Mix.Cms.Web/appsettings.json
 src/Mix.Cms.Web/mixCmsSettings.json
 src/Mix.Cms.Web/wwwroot/content/*
+src/Mix.Cms.Web/wwwroot/Exports/*
 src/Mix.Cms.Web/wwwroot/js/app-portal.min.js
 src/Mix.Cms.Web/wwwroot/js/app-shared.min.js
 src/Mix.Cms.Web/wwwroot/js/portal.min.js

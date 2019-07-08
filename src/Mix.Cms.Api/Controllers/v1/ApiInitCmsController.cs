@@ -254,6 +254,14 @@ namespace Mix.Cms.Api.Controllers.v1
                         FileFolder= "Imports/Themes"
                     };
                 }
+                else
+                {
+                    data.TemplateAsset = new Lib.ViewModels.FileViewModel() {
+                        Filename="default_blank",
+                        Extension=".zip",
+                        FileFolder= "Imports/Themes"
+                    };
+                }
             }
 
 
