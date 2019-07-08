@@ -237,8 +237,6 @@ ModelManifest.xml
 .fake/
 
 # Source
-/docs/demo-create-crickettour.mp4
-/docs/demo-create-crickettour.7z
 src/Mix.Cms.Web/appsettings.json
 src/Mix.Cms.Web/mixCmsSettings.json
 src/Mix.Cms.Web/wwwroot/content/*
