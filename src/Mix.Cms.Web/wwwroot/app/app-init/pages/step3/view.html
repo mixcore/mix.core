@@ -1,15 +1,20 @@
-<div class="text-center mb-6 mt-6">
+<!-- <div class="text-center mb-6 mt-6">
     <img src="/assets/mixcore-logo-full-white-text.png" alt="">
-</div>
-<div class="card mb-3" ng-init="init()">
-    <div class="card-body p-6">
+</div> -->
+<div class="col-6 my-3" ng-init="init()">
+    <div class="">
+        <h1 class="display-4">Let's name your baby!</h1>
+        <p class="lead">
+            Please fill your site information to the form below. With Facebook/Google App keys will allow us to open many great features inside <strong>mixcore</strong> like Google Analytics, Facebook Messenger...
+        </p>
+        <hr>
         <tabs-v select-callback="selectPane(pane)">
-            <pane-v title="Site" class="card">
+            <pane-v title="Site Information" class="card">
                 <div class="card-body">
                     <init-site-configurations configurations="data"></init-site-configurations>
                 </div>
             </pane-v>
-            <pane-v title="System" class="card">
+            <pane-v title="General" class="card">
                 <div class="card-body">
                     <init-sys-configurations configurations="data"></init-sys-configurations>
                 </div>
@@ -27,7 +32,8 @@
         </tabs-v>
 
     </div>
-    <div class="card-footer">
-        <a ng-click="submit()" class="btn btn-primary">Save</a>
+    <hr>
+    <div class="form-footer">
+        <a ng-click="submit()" class="btn btn-primary btn-block">Continue...</a>
     </div>
 </div>
