@@ -78,9 +78,9 @@ app.controller('PageController', ['$scope', '$rootScope', 'ngAppSettings', '$loc
                 $scope.$apply();
             }          
         }
-        $scope.saveCallback = function () {
-            $location.url($scope.referrerUrl);
-        }
+        // $scope.saveCallback = function () {
+        //     $location.url($scope.referrerUrl);
+        // }
 
         $scope.addAlias = async function(){
             var getAlias = await urlAliasService.getSingle();

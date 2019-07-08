@@ -134,8 +134,36 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             }
             return base.ParseModel(_context, _transaction);
         }
+        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var getDataResult = MixModuleDatas.ReadViewModel.Repository
+                       .GetModelListBy(m => m.ModuleId == Id && m.Specificulture == Specificulture
+                       , "Priority", 0, null, null
+                       , _context, _transaction);
+            if (getDataResult.IsSucceed)
+            {
+                getDataResult.Data.JsonItems = new List<JObject>();
+                getDataResult.Data.Items.ForEach(d => getDataResult.Data.JsonItems.Add(d.JItem));
+                Data = getDataResult.Data;
+            }
+        }
+        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixModule parent, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool> { IsSucceed = true };
 
-
+            foreach (var item in Data.Items)
+            {
+                if (result.IsSucceed)
+                {
+                    item.Specificulture = parent.Specificulture;
+                    item.ModuleId = parent.Id;
+                    item.CreatedDateTime = DateTime.UtcNow;
+                    var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                }
+            }
+            return result;
+        }
         #region Async
 
         public override Task<RepositoryResponse<MixModule>> RemoveModelAsync(bool isRemoveRelatedModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
