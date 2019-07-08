@@ -1628,12 +1628,13 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'GlobalSettingsSer
             }
             return null;
         }
-        $rootScope.removeObject = function (array, value) {
+        $rootScope.removeObjectByKey = function (array, key, value) {
             for (var i = 0; i < array.length; i++) {
-                if (array[i] == value) {
+                if (array[i][key] == value) {
                     array.splice(i,1);
+                    break;
                 }
-            }            
+            }
         }
         
         $rootScope.changeLang = async function (lang) {
