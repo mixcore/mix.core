@@ -258,7 +258,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 var strSchema = FileRepository.Instance.GetFile("schema.json", $"{outputFolder}/Data");
                 var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteStructureViewModel>();
                 FileRepository.Instance.DeleteFolder(outputFolder);
-
+                FileRepository.Instance.DeleteFile(filePath);
                 //Import Site Structures
                 result = await MixPages.Helper.ImportAsync(siteStructures.Pages, Specificulture);
                 if (result.IsSucceed)
