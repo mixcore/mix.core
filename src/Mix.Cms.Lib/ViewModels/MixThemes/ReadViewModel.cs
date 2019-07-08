@@ -89,7 +89,14 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{Name}";
+                return $"wwwroot/content/templates/{Name}/assets";
+            }
+        }
+        public string UploadsFolder
+        {
+            get
+            {
+                return $"wwwroot/content/templates/{Name}/uploads";
             }
         }
 
@@ -99,15 +106,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             get
             {
                 return $"{MixConstants.Folder.TemplatesFolder}/{Name}";
-            }
-        }
-
-        [JsonProperty("uploadFolder")]
-        public string UploadFolder
-        {
-            get
-            {
-                return $"content/templates/{Name}/uploads";                
             }
         }
 

@@ -80,12 +80,12 @@ app.component('mediaNavs', {
                         });
                     }
                     $rootScope.isBusy = false;
-                    // $scope.$apply();
+                    $scope.$apply();
                 }
                 else {
                     if (resp) { $rootScope.showErrors(resp.errors); }
                     $rootScope.isBusy = false;
-                    // $scope.$apply();
+                    $scope.$apply();
                 }
             }
         };

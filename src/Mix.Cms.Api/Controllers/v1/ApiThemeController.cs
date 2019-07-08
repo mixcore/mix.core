@@ -96,7 +96,7 @@ namespace Mix.Cms.Api.Controllers.v1
             // Copy current assets files
             FileRepository.Instance.CopyDirectory($"wwwroot/{getTemplate.Data.AssetFolder}", $"{tempPath}/Assets");            
             // Copy current uploads files
-            FileRepository.Instance.CopyDirectory($"wwwroot/{getTemplate.Data.UploadFolder}", $"{tempPath}/Uploads");
+            FileRepository.Instance.CopyDirectory($"wwwroot/{getTemplate.Data.UploadsFolder}", $"{tempPath}/Uploads");
             // Save Site Structures
             FileRepository.Instance.SaveFile(file);
 
