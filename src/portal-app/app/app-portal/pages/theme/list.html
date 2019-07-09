@@ -1,13 +1,13 @@
-<section class="card mb-3 manual">
-    <div class="card-header">
-        <div class="row">
-            <div class="col-md-12">
-                <filter-list request="request" create-url="'/portal/theme/create'" callback="getList(pageIndex)">
-                </filter-list>
-            </div>
-        </div>
+<div class="row mb-3">
+    <div class="col-12">
+
+        <filter-list request="request" create-url="'/portal/theme/create'" callback="getList(pageIndex)">
+        </filter-list>
     </div>
-    <div class="card-body">
+</div>
+<div class="row">
+    <div class="col-12">
+
         <table class="table table-sm table-hover" cellspacing="0">
             <thead class="thead-light">
                 <tr>
@@ -79,8 +79,8 @@
                 </tr>
             </tbody>
         </table>
-    </div>
-    <div class="card-footer">
+        <hr>
+
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-end m-0">
                 <li class="page-item">
@@ -97,4 +97,4 @@
             </ul>
         </nav>
     </div>
-</section>
+</div>
