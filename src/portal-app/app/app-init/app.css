@@ -4,9 +4,9 @@
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (max-width: 600px) {
-  .container {
-    padding-top: 4%;
-    margin-bottom: 4%;
+  .container.init-pages {
+    padding-top: 10%;
+    margin-bottom: 10%;
   }
   .left-coloumn {
     padding: 1rem;
@@ -14,35 +14,38 @@
 }
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
-  .container {
+  .container.init-pages {
     padding-top: 4%;
   }
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
-  .container {
+  .container.init-pages {
     padding-top: 4%;
   }
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
-  .container {
-    padding-top: 1%;
+  .container.init-pages {
+    padding-top: 4%;
   }
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
-  .container {
-    padding-top: 2%;
+  .container.init-pages {
+    padding-top: 5%;
+  }
+  .card-header-nav-pills{
+    margin-bottom: 20px;
   }
 }
 
 /* FullHD devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 1900px) {
-  .container {
+  .container.init-pages {
     padding-top: 6%;
   }
 }
