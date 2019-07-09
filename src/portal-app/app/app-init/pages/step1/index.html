@@ -2,28 +2,127 @@
     <img src="/assets/mixcore-logo-blue.png" alt="">
 </div> -->
 <div ng-init="loadSettings()">
-    <!--<div class="py-4">
-        <img class="d-block my-auto mb-4" src="/assets/logo2.svg" alt="" height="70px">
+    <div class="container">
 
+        <div class="card o-hidden border-0 shadow-lg">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+
+                    <div class="col-lg-7">
+                        <div class="left-coloumn">
+                            <div class="">
+                                <h1 class="h4 text-gray-900">Hi there!<br />We're setting up your website's information.
+                                </h1>
+                                <!-- Thanks for being a part of the
+                                    <strong>mixcore</strong> lovers!  -->
+                                <p class="">
+                                    Please fill in following information below:
+                                </p>
+
+                            </div>
+                            <form class="needs-validation" novalidate>
+                                <p class="intruction-labels">
+                                    Choose your
+                                    <span style="cursor: pointer;"
+                                        ng-click="initCmsModel.isUseLocal=!initCmsModel.isUseLocal">
+                                        <span data-toggle="tooltip" data-placement="top"
+                                            title="Click to change to remote database."
+                                            style="text-decoration: underline;" ng-if="initCmsModel.isUseLocal">local <i
+                                                class="fa fa-angle-down" style="text-decoration: underline"></i></span>
+                                        <span data-toggle="tooltip" data-placement="top"
+                                            title="Click to change to local database."
+                                            style="text-decoration: underline;" ng-if="!initCmsModel.isUseLocal">remote
+                                            <i class="fa fa-angle-up" style="text-decoration: underline"></i></span>
+                                    </span>
+                                    database.<br />
+                                    Current country: <select id="inputState" class="form-control country-select"
+                                        style="height:unset; border: none; display: inline; width: auto; padding: 0;text-decoration: underline;"
+                                        ng-options="item as item.fullName for item in settings.cultures track by item.specificulture"
+                                        ng-model="initCmsModel.culture">
+
+                                    </select>
+                                    <!-- <span data-toggle="tooltip" data-placement="top"
+                                        title="Click to change to remote database."
+                                        style="text-decoration: underline; cursor: pointer;"
+                                        ng-bind="initCmsModel.culture.fullName"></span>. -->
+
+                                </p>
+
+                                <hr />
+                                <!-- <div class="form-group">
+                                    <label>Current Country</label>
+                                    <select class="custom-select form-control"
+                                        ng-options="item as item.fullName for item in settings.cultures track by item.specificulture"
+                                        ng-model="initCmsModel.culture"></select>
+                                </div> -->
+
+                                <form>
+                                    <div class="form-group" ng-show="!initCmsModel.isUseLocal">
+                                        <label>Database Type</label>
+                                        <select class="custom-select form-control"
+                                            ng-options="item as item.text for item in settings.providers"
+                                            ng-model="dbProvider"></select>
+                                    </div>
+                                    <mssql-info ng-if="!initCmsModel.isUseLocal && dbProvider.value=='MSSQL'"
+                                        init-cms-model="initCmsModel">
+                                    </mssql-info>
+                                    <mysql-info ng-if="!initCmsModel.isUseLocal && dbProvider.value=='MySQL'"
+                                        init-cms-model="initCmsModel">
+                                    </mysql-info>
+
+                                    <mssql-local-info ng-if="initCmsModel.isUseLocal" init-cms-model="initCmsModel">
+                                    </mssql-local-info>
+                                    <br />
+
+                                    <div class="text-center">
+                                        <button ng-if="!initCmsModel.isUseLocal" ng-click="initCms();"
+                                            class="btn btn-primary" style="width:250px"
+                                            ng-disabled="!initCmsModel.dataBaseServer || !initCmsModel.dataBaseName || !initCmsModel.dataBaseUser || !initCmsModel.culture">
+                                            <span
+                                                ng-if="!initCmsModel.dataBaseServer || !initCmsModel.dataBaseName || !initCmsModel.dataBaseUser || !initCmsModel.culture">Next...</span>
+                                            <span
+                                                ng-if="initCmsModel.dataBaseServer && initCmsModel.dataBaseName && initCmsModel.dataBaseUser  && initCmsModel.culture">Connect</span>
+                                        </button>
+                                        <button ng-if="initCmsModel.isUseLocal" ng-click="initCms();"
+                                            class="btn btn-primary" style="width:250px"
+                                            ng-disabled="!initCmsModel.sqliteDbConnectionString || !initCmsModel.localDbName">
+                                            <span
+                                                ng-if="!initCmsModel.sqliteDbConnectionString || !initCmsModel.localDbName">Next...</span>
+                                            <span
+                                                ng-if="initCmsModel.sqliteDbConnectionString && initCmsModel.localDbName ">Next...</span>
+                                        </button>
+                                    </div>
+                                </form>
+
+                            </form>
+                            <!-- <hr>
+                            <div class="text-center">
+                                <a class="small" href="forgot-password.html">Forgot Password?</a>
+                            </div>
+                            <div class="text-center">
+                                <a class="small" href="login.html">Already have an account? Login!</a>
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+                </div>
+            </div>
+        </div>
 
     </div>
-     <div class="mb-4">
-        <h2>Website Configuration</h1>
-
-    </div> -->
-    <div class="row website-configuration">
+    <!-- <div class="row website-configuration">
         <div class="col-md-6 order-md-2 mb-4">
 
         </div>
 
         <div class="col-md-6 order-md-1">
-            <!-- <h4 class="mb-3">Site information</h4> -->
             <form class="needs-validation" novalidate>
-                <!-- <div class="card-title pt-2">Database Configuration</div> -->
-                <h1 class="display-4">Hi there! Thanks for being a part of the <strong>mixcore</strong> lovers!<br />
+                <h1 class="display-4">Hi there! Thanks for being a part of the <strong>mixcore</strong>
+                    lovers!<br />
                 </h1>
-                <br/>
-                <h2  class="display-4">
+                <br />
+                <h2 class="display-4 label-using">
                     You are using a
                     <span style="cursor: pointer;" ng-click="initCmsModel.isUseLocal=!initCmsModel.isUseLocal"
                         data-toggle="collapse" data-target="#collapseOne">
@@ -33,7 +132,6 @@
                         <span data-toggle="tooltip" data-placement="top" title="Click to change to local database."
                             style="text-decoration: underline;" ng-if="!initCmsModel.isUseLocal">remote <i
                                 class="fa fa-angle-up" style="text-decoration: underline"></i></span>
-
                     </span>
                     database.
                 </h2>
@@ -43,25 +141,6 @@
 
                     Content
                 </div>
-                <!-- <div class="d-block my-3">                   
-                    <div class="custom-control custom-radio">
-                      <input ng-checked="initCmsModel.isUseLocal==true" ng-model="initCmsModel.isUseLocal" ng-value="true" id="local" name="databasetype" type="radio" class="custom-control-input">
-                      <label class="custom-control-label" for="local">Use local database</label>
-                    </div>
-                    <div class="custom-control custom-radio">
-                      <input data-toggle="collapse" data-target="#collapseOne" ng-checked="initCmsModel.isUseLocal==false" ng-model="initCmsModel.isUseLocal" ng-value="false" id="remote" name="databasetype" type="radio" class="custom-control-input">
-                      <label class="custom-control-label" for="remote">Use remote database</label>
-                    </div>
-                    
-                  </div> -->
-                <!-- <div class="form-group">
-            
-            <button class="btn btn-primary btn-block form-control"
-                ng-click="initCmsModel.isUseLocal=!initCmsModel.isUseLocal">
-                <span ng-if="!initCmsModel.isUseLocal">Use local database</span>
-                <span ng-if="initCmsModel.isUseLocal">Use remote database</span>
-            </button>
-        </div> -->
                 <hr />
                 <div class="form-group">
                     <label>Current Country</label>
@@ -84,7 +163,8 @@
                         init-cms-model="initCmsModel">
                     </mysql-info>
 
-                    <mssql-local-info ng-if="initCmsModel.isUseLocal" init-cms-model="initCmsModel"></mssql-local-info>
+                    <mssql-local-info ng-if="initCmsModel.isUseLocal" init-cms-model="initCmsModel">
+                    </mssql-local-info>
                     <br />
 
                     <div class="text-center">
@@ -108,8 +188,9 @@
                 </form>
 
             </form>
+
         </div>
-    </div>
+    </div> -->
 </div>
 <!-- <div class="card" ng-init="loadSettings()">
     <div class="card-body p-6">
