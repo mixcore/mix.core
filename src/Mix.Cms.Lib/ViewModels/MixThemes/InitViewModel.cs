@@ -87,14 +87,14 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"wwwroot/content/templates/{Name}/assets";
+                return $"content/templates/{Name}/assets";
             }
         }
         public string UploadsFolder
         {
             get
             {
-                return $"wwwroot/content/templates/{Name}/uploads";
+                return $"content/templates/{Name}/uploads";
             }
         }
 
@@ -178,11 +178,11 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 FileRepository.Instance.CreateDirectoryIfNotExist(outputFolder);
                 FileRepository.Instance.UnZipFile(filePath, outputFolder);
                 //Move Unzip Asset folder
-                FileRepository.Instance.CopyDirectory($"{outputFolder}/Assets", AssetFolder);
+                FileRepository.Instance.CopyDirectory($"{outputFolder}/Assets", $"wwwroot/{AssetFolder}");
                 //Move Unzip Templates folder
                 FileRepository.Instance.CopyDirectory($"{outputFolder}/Templates", TemplateFolder);
                 //Move Unzip Uploads folder
-                FileRepository.Instance.CopyDirectory($"{outputFolder}/Uploads", UploadsFolder);
+                FileRepository.Instance.CopyDirectory($"{outputFolder}/Uploads", $"wwwroot/{UploadsFolder}");
                 // Get SiteStructure
                 var strSchema = FileRepository.Instance.GetFile("schema.json", $"{outputFolder}/Data");
                 var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteStructureViewModel>();
