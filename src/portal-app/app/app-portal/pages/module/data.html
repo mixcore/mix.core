@@ -1,30 +1,41 @@
 <section ng-init="loadModuleDatas()">
+    <div class="row mb-3">
+        <div class="col-12">
+
+            <filter-list request="request" callback="loadMoreModuleDatas()"></filter-list>
+        </div>
+    </div>
     <div class="row">
-        <div class="col-md-8">
-            <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-                <div class="btn-group mr-2">
+        <div class="col-12">
+            <div class="btn-toolbar btn-toolbar-sm justify-content-end" role="toolbar"
+                aria-label="Toolbar with button groups">
+                <div class="btn-group  btn-group-sm mr-2">
                     <a href="/portal/module-data/details/{{activedData.id}}" class="btn btn-secondary">
-                        <i class="fas fa-plus"></i>
+                        <i class="fas fa-plus"></i> Add Data
                     </a>
                     <a href="/portal/module/details/{{activedData.id}}" class="btn btn-secondary">
-                        <i class="fas fa-pencil-alt"></i>
+                        <i class="fas fa-pencil-alt"></i> Edit Module
                     </a>
-                    <a ng-click="exportModuleData()" class="btn btn-secondary">
-                        <i class="fas fa-arrow-down"></i>
+                    <a ng-click="exportModuleData()" class="btn btn-secondary  text-light">
+                        <i class="fas fa-arrow-down"></i> Download Data
                     </a>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+    </div>
+    <div class="row">
+        <div class="col-12">
+
+            <mix-module-data-table data="activedData.data"
+                can-drag="request.orderBy === 'Priority' && request.direction === '0'" edit-url="editDataUrl"
+                columns="dataColumns" on-delete="removeData(id)"
+                on-update-infos="updateDataInfos(activedData.data.items)">
+            </mix-module-data-table>
+            <hr>
+            <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems"
+                ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)"
+                scroll-top="true"></paging>
         </div>
     </div>
-    <filter-list request="request" callback="loadMoreModuleDatas()"></filter-list>
-    <mix-module-data-table data="activedData.data" can-drag="request.orderBy === 'Priority' && request.direction === '0'"
-        edit-url="editDataUrl" columns="dataColumns" 
-        on-delete="removeData(id)" 
-        on-update-infos="updateDataInfos(activedData.data.items)">
-    </mix-module-data-table>
-    <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0"
-        a-class="page-link" paging-action="getList(page-1)" scroll-top="true"></paging>
-    
+
 </section>
