@@ -89,14 +89,14 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"wwwroot/content/templates/{Name}/assets";
+                return $"content/templates/{Name}/assets";
             }
         }
         public string UploadsFolder
         {
             get
             {
-                return $"wwwroot/content/templates/{Name}/uploads";
+                return $"content/templates/{Name}/uploads";
             }
         }
 
