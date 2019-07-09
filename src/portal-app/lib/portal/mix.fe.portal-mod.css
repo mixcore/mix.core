@@ -10653,7 +10653,6 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 .sw-sidebar.active .sw-toc-item:hover .sw-toc-link .mi {
-  color: hsla(var(--primary-color-hue,211), var(--primary-color-saturation,100%),var(--primary-color-brightness,50%), 1);
   font-size: 2em;
 }
 
@@ -10777,6 +10776,10 @@ a.text-dark:hover, a.text-dark:focus {
   color: hsla(var(--primary-color-hue,211), var(--primary-color-saturation,100%),var(--primary-color-brightness,50%), 1);
 }
 
+.sw-sidebar .sw-toc-item li .sw-toc-sub-link:hover .mi {
+  color: hsla(var(--primary-color-hue,211), var(--primary-color-saturation,100%), 100%, 1) !important;
+}
+
 .sw-sidebar .sw-toc-item li .sw-toc-sub-link:hover .inner .btn-group {
   opacity: 1;
 }
@@ -10811,6 +10814,10 @@ a.text-dark:hover, a.text-dark:focus {
   color: var(--bg-color, hsla(var(--primary-color-hue,211), var(--primary-color-saturation,100%), 100%, 1));
   text-decoration: none;
   background-color: hsla(var(--primary-color-hue,211), var(--primary-color-saturation,100%),var(--primary-color-brightness,50%), 1);
+}
+
+.sw-sidebar .sw-toc-item .sw-toc-link:hover .mi {
+  color: hsla(var(--primary-color-hue,211), var(--primary-color-saturation,100%), 100%, 1) !important;
 }
 
 .sw-sidebar .sw-toc-item .sw-toc-link:hover .btn-group {

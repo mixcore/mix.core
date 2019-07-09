@@ -1,7 +1,6 @@
 <!-- Main content -->
 <section class="" ng-init="loadUser()">
     <form ng-if="activedUser" ng-class="{'submitted': submitted}" ng-submit="register(activedUser)">
-        <actions preview-url="activedUser.fullPath" back-url="'/portal/user/list'"></actions>
         <div class="row">
             <div class="col-8">
                 <div class="card mb-3">
@@ -42,7 +41,10 @@
             </div>
 
             <div class="col-4">
-                <custom-image id="avatar" header="'Avatar'" type="'Users'" folder="'Avatars'" src-url="activedUser.avatarUrl" src="activedUser.avatar" posted-file="activedUser.mediaFile"></custom-image>
+
+                <actions preview-url="activedUser.fullPath" back-url="'/portal/user/list'"></actions>
+                <custom-image id="avatar" header="'Avatar'" type="'Users'" folder="'Avatars'" src-url="activedUser.avatarUrl" src="activedUser.avatar" posted-file="activedUser.mediaFile">
+                </custom-image>
             </div>
         </div>
     </form>
