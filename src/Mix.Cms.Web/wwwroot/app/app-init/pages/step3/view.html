@@ -1,12 +1,13 @@
 <!-- <div class="text-center mb-6 mt-6">
     <img src="/assets/mixcore-logo-full-white-text.png" alt="">
 </div> -->
+<div ng-init="loadProgress(50)"></div>
 <div ng-init="init()">
-    <div class="">
-        <h1 class="display-4">Let's name your baby!</h1>
+    <div class="" style="height: 455.44px">
+            <h1 class="display-4">Let's name your baby!
+            </h1>       
         <p class="lead">
-            Please fill your site information to the form below. With Facebook/Google App keys will allow us to open
-            many great features inside <strong>mixcore</strong> like Google Analytics, Facebook Messenger...
+            Please fill your site information to the form below. 
         </p>
         <hr>
         <tabs-v select-callback="selectPane(pane)">
@@ -33,8 +34,8 @@
         </tabs-v>
 
     </div>
-    <hr>
-    <div class="form-footer">
-        <a ng-click="submit()" class="btn btn-primary btn-block">Continue...</a>
+    
+    <div class="text-center form-footer">
+        <button ng-click="submit()" class="btn btn-primary mt-4">Continue <i class="fa fa-angle-right" style="font-size: 19px;"></i></button>
     </div>
 </div>

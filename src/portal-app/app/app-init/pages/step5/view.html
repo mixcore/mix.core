@@ -1,6 +1,7 @@
 <!-- <div class="text-center mb-6 mt-6">
     <img src="/assets/mixcore-logo-full-white-text.png" alt="">
 </div> -->
+<div ng-init="loadProgress(100)"></div>
 <div ng-init="init()">
 
     <h1 class="display-4">Hooray! Almost there...</h1>
@@ -27,8 +28,7 @@
 
         </form>
     </div>
-    <hr>
-    <div class="form-footer">
-        <a ng-click="submit()" class="btn btn-primary btn-block">Save</a>
+    <div class="text-center form-footer">
+        <button ng-click="submit()" class="btn btn-primary mt-4">Create and Login</button>
     </div>
 </div>

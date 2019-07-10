@@ -1,16 +1,18 @@
 <!-- <div class="text-center mb-6 mt-6">
     <img src="/assets/mixcore-logo-full-white-text.png" alt="">
 </div> -->
+<div ng-init="loadProgress(25)"></div>
 <form ng-class="{'submitted': submitted}" ng-submit="register()">
     <div class="">
-        <h1 class="display-4">Now, you can create the most powerful account!</h1>
+        <h1 class="display-4">Now, you can create the most powerful account!
+        </h1>       
         <p class="lead">
             Please keep this account credential safe and only share this account to the most trusted!
         </p>
         <hr>
         <div class="form-group">
-            <label class="form-label">Your Username</label>
-            <input ng-model="user.userName" class="form-control" required placeholder="handsome...">
+            <label class="form-label">Username</label>
+            <input ng-model="user.userName" class="form-control" required placeholder="Handsome...">
         </div>
         <div class="row">
             <div class="col">
@@ -19,7 +21,7 @@
                         Password
                     </label>
                     <input ng-model="user.password" type="password" required class="form-control"
-                        placeholder="MyM0stC0mpl3xP@ssw0rd...">
+                        placeholder="MyM0stC0mpl3xP@ssw0rd">
                 </div>
             </div>
             <div class="col">
@@ -28,15 +30,15 @@
                         Confirm Password
                     </label>
                     <input ng-model="user.confirmPassword" type="password" required class="form-control"
-                        placeholder="Re type the same...">
+                        placeholder="Re-type the password">
                 </div>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="form-label">Email address
+            <label class="form-label">Email Address
             </label>
-            <input ng-model="user.email" class="form-control" type="email" required placeholder="Email..." type="text">
+            <input ng-model="user.email" class="form-control" type="email" required placeholder="Email@mixcore.org" type="text">
         </div>
         <div class="form-group">
             <label class="custom-control custom-checkbox">
@@ -45,10 +47,18 @@
                     I agree to the <a href="#" data-toggle="modal" data-target="#termAndCondition">terms and
                         conditions</a>.</span>
             </label>
+            <div id="notTNCYetChecked" class="invalid-feedback" style="padding-left: 24px;">
+                    You must agree before submitting.
+                  </div>
         </div>
-        <div class="form-footer">
-            <button type="submit" class="btn btn-primary btn-block">Continue...</button>
+        <div class="text-center">
+        <button type="submit" class="btn btn-primary">Create and Login <i
+            class="fa fa-angle-right" style="font-size: 19px;" ></i></button>
+        <button type="button" class="btn btn-link" ng-click="advanceSetup()">Advance Setup</button>
         </div>
+        <!-- <div class="form-footer">
+            
+        </div> -->
     </div>
 
 </form>

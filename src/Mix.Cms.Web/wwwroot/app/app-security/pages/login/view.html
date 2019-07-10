@@ -1,12 +1,44 @@
-<div class="text-center mb-6">
-    <img src="/assets/mixcore-logo-full-white-text.png" alt="">
-</div>
-<form class="card mb-3 frm-login" action="" ng-class="{'submitted': submitted}" ng-submit="login()">
-    <div class="card-body p-6">
-        <div class="card-title">Login to your account</div>
+<form class="mb-3 frm-login" action="" ng-class="{'submitted': submitted}" ng-submit="login()">
+    <div class="p-5">
+            <h1 class="h4 text-gray-900 mb-3">Welcome Back!</h1>
+            <hr>
+            <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input class="form-control" placeholder="Username" ng-model="loginData.userName" required autofocus="" ng-enter="login()">
+        
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        Password   <a href="/security/forgot-password" class="float-right small">* Forgot password</a>                     
+                    </label>
+        
+                    <input type="password" class="form-control" placeholder="Password" ng-model="loginData.password" required ng-enter="login()">
+                        
+                </div>
+                <div class="form-group">
+                    <label class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" ng-model="loginData.rememberMe">
+                        <span class="custom-control-label">Remember me</span>
+                    </label>
+                    
+                </div>
+                <hr>
+                <div class="form-footer text-center">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Login
+                </button>
+                <button ng-click="goToSiteUrl('/')" type="button" class="btn btn-link">Back to Homepage</button>
+                </div>
+        
+                
+               
+          </div>
+        </form>
+    <!-- <div class="p-6">        
         <div class="form-group">
             <label class="form-label">Username</label>
-            <input class="form-control" placeholder="Username" ng-model="loginData.userName" required="" autofocus="" ng-enter="login()">
+            <input class="form-control" placeholder="Username" ng-model="loginData.userName" required="" autofocus=""
+                ng-enter="login()">
 
         </div>
         <div class="form-group">
@@ -15,16 +47,18 @@
                 <a href="/security/forgot-password" class="float-right small">I forgot password</a>
             </label>
 
-            <input type="password" class="form-control form-control-lg" placeholder="Password" ng-model="loginData.password" required="" ng-enter="login()">
+            <input type="password" class="form-control form-control-lg" placeholder="Password"
+                ng-model="loginData.password" required="" ng-enter="login()">
         </div>
         <div class="form-group">
             <label class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" ng-model="loginData.rememberMe">
+                <input type="checkbox" class="custom-control-input" ng-model="loginData.rememberMe" />
                 <span class="custom-control-label">Remember me</span>
             </label>
         </div>
         <div class="form-footer">
-            <a ng-click="login()" class="btn btn-primary btn-block" ng-disabled="!loginData.password || !loginData.userName">
+            <a ng-click="login()" class="btn btn-primary btn-block"
+                ng-disabled="!loginData.password || !loginData.userName">
                 Login
             </a>
         </div>
@@ -32,9 +66,9 @@
         <div class="mt-1 text-center">
                 Back to <a ng-click="goToSiteUrl('/')">homepage</a>
         </div>
-    </div>
+    </div> -->
 
-</form>
+
 
 <!-- 
 <div class="header-3" ng-init="loadSettings()">

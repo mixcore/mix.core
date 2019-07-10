@@ -13,6 +13,8 @@
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <environment names="Development,Staging,Production">
         <!-- CSS Files -->
     </environment>
@@ -21,24 +23,39 @@
     <!-- <link href="~/css/app-vendor.min.css" rel="stylesheet" />   -->
     <link href="~/css/app-vendor.min.css" rel="stylesheet" />  
     <link href="~/css/shared.min.css" rel="stylesheet" />  
-    <link href="~/css/tabler.min.css" rel="stylesheet" />  
+    <!-- <link href="~/css/tabler.min.css" rel="stylesheet" />   -->
     <link href="~/css/app-security.min.css" rel="stylesheet" />  
 
 </head>
 
-<body class="login-page app-security" ng-app="MixPortal" style="background-image: url('/assets/img/bgs/init.jpg');background-size: cover;">
+<body class="login-page app-security" ng-app="MixPortal" style="background-image: url('/assets/img/bgs/bg.png');background-position: center;background-repeat: no-repeat;background-size: cover;" >
      <!-- style="background-image: url('/assets/img/bgs/work-space.jpg');" -->
     <mix-loader ng-show="isBusy"></mix-loader>
-    <div class="page">
-      <div class="page-single">
-        <div class="container">
-          <div class="row">
-            <div class="col col-login mx-auto">
-                @RenderBody()
+
+        <div class="container init-pages">
+        
+        <div class="card o-hidden border-0 shadow-lg">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="progress" style="height: 2px;">
+                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                <div class="row no-gutters">
+                         <div class="col-lg-7 d-none d-lg-block bg-register-image">
+                           
+                    </div>
+                    <div class="col-lg-5">
+                            
+                        <div class="right-coloumn">
+                            
+                             @RenderBody()
+                        </div>
+                    </div>
+                   
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+               
     </div>
 
 
