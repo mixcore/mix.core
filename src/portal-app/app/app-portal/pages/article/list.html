@@ -1,6 +1,6 @@
-<!-- <jumbotrons tag-name="'Article'" tag-type="'0'"></jumbotrons> -->
-<section class="card mb-3 manual">
-    <div class="card-header">
+<div class="row">
+    <div class="col-12 mb-3">
+
         <filter-list request="request" callback="getList(pageIndex)" create-url="'/portal/article/create'">
         </filter-list>
         <select class="btn custom-select custom-select-sm col-3 mt-3" ng-model="selectedList.action">
@@ -9,7 +9,11 @@
         <a class="btn btn-link text-white" ng-if="selectedList.data.length > 0 && selectedList.action"
             ng-click="applyList()">Apply</a>
     </div>
-    <div class="card-body">
+</div>
+
+<div class="row">
+    <div class="col-12">
+
         <table class="table table-sm table-hover" cellspacing="0">
             <thead class="thead-light">
                 <tr>
@@ -79,10 +83,10 @@
             </tbody>
         </table>
     </div>
-    <div class="card-footer">
-        <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems"
-            ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)"
-            scroll-top="true">
-        </paging>
-    </div>
-</section>
+    <hr>
+
+    <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems"
+        ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)"
+        scroll-top="true">
+    </paging>
+</div>

@@ -1,9 +1,12 @@
-<section class="card mb-3 manual">
+<div class="row mb-3">
+    <div class="col-12">
 
-    <div class="card-header">
         <filter-list request="request" callback="loadFiles(pageIndex)"></filter-list>
     </div>
-    <div class="card-body">
+</div>
+<div class="row">
+    <div class="col-12">
+
         <table class="table table-sm table-hover" cellspacing="0">
             <thead class="thead-light">
                 <tr>
@@ -66,8 +69,8 @@
                 </tr>
             </tbody>
         </table>
-    </div>
-    <div class="card-footer">
+        <hr>
+
         <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="loadFiles(page-1)" scroll-top="true">
     </paging></div>
-</section>
+</div>

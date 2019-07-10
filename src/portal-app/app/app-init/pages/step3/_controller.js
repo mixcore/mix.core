@@ -19,7 +19,10 @@ app.controller('Step3Controller', ['$scope', '$rootScope', '$location',
             }
            
         };
-        
+        $scope.loadProgress = async function (percent) {
+            var elem = document.getElementsByClassName("progress-bar")[0]; 
+            elem.style.width = percent + '%'; 
+        };
         $scope.submit = async function () {
             $rootScope.isBusy = true;            
             var result = await service.submit($scope.data);

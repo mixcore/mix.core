@@ -2,7 +2,7 @@
 app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$timeout', '$location', '$http',
     'CommonService', 'Step1Services',
     function ($scope, $rootScope, ngAppSettings, $timeout, $location, $http, commonService, step1Services) {
-        var rand = Math.random();
+        var rand = Math.floor(Math.random() * 10000) + 1;
         $scope.settings = {
             providers: [
                 { text: 'Microsoft SQL Server', value: 'MSSQL', img: '/assets/img/mssql.jpg' },
@@ -29,14 +29,17 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
             }
            
         };
-        
+        $scope.loadProgress = async function (percent) {
+            var elem = document.getElementsByClassName("progress-bar")[0]; 
+            elem.style.width = percent + '%'; 
+        };
         $scope.initCmsModel = {
             isUseLocal: true,
             localDbConnectionString: '',
             sqliteDbConnectionString: '',
             localDbConnectionString: 'Server=(localdb)\\MSSQLLocalDB;Initial Catalog=' + rand + 'mix-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True',
-            sqliteDbConnectionString: 'Data Source=' + rand + 'mix-cms.db',
-            localDbName: rand + 'mix-cms.db',
+            sqliteDbConnectionString: 'Data Source=' + rand + 'mix-cms',
+            localDbName: rand + '-mix-cms',
             dataBaseServer: '',
             dataBaseName: '',
             dataBaseUser: '',
@@ -49,6 +52,7 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
         };
         
         $scope.updateLocalDbName = function () {
+            $scope.initCmsModel.localDbName = $scope.initCmsModel.localDbName+'.db';
             $scope.initCmsModel.localDbConnectionString = 'Server=(localdb)\\mssqllocaldb;Database=' + $scope.initCmsModel.localDbName + ';Trusted_Connection=True;MultipleActiveResultSets=true';
             $scope.initCmsModel.sqliteDbConnectionString = 'Data Source=' + $scope.initCmsModel.localDbName;
         };

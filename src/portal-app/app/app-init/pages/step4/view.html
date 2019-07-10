@@ -1,6 +1,7 @@
 <!-- <div class="text-center mb-6 mt-6">
     <img src="/assets/mixcore-logo-full-white-text.png" alt="">
 </div> -->
+<div ng-init="loadProgress(75)"></div>
 <div ng-init="init()">
     <div class="">
         <div class="">
@@ -24,8 +25,9 @@
             </tabs-v>
 
         </div>
-        <hr>
-        <div class="form-footer">
-            <a ng-click="submit()" class="btn btn-primary btn-block">Continue...</a>
+      
+        <div class="text-center form-footer">
+            <button ng-click="submit()" class="btn btn-primary mt-4">Continue <i
+                class="fa fa-angle-right" style="font-size: 19px;" ></i></button>
         </div>
     </div>

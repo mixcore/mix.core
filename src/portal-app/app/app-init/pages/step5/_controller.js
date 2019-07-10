@@ -10,7 +10,10 @@ app.controller('Step5Controller', ['$scope', '$rootScope',
         $scope.init = async function () {
            
         };
-        
+        $scope.loadProgress = async function (percent) {
+            var elem = document.getElementsByClassName("progress-bar")[0]; 
+            elem.style.width = percent + '%'; 
+        };
         $scope.submit = async function () {
             $rootScope.isBusy = true;            
             var form = document.getElementById('frm-theme');
