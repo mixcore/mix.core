@@ -19,7 +19,7 @@ app.controller('LoginController', [ '$rootScope', '$scope', '$routeParams', '$lo
         $rootScope.isBusy = false;
     });
     $scope.login = async function () {
-        
+        // console.log('test');
         if (authService.referredUrl.indexOf('security') > 0) {
             authService.referredUrl = "/portal";
         }
@@ -29,6 +29,7 @@ app.controller('LoginController', [ '$rootScope', '$scope', '$routeParams', '$lo
             $scope.message = result.errors[0];
             $scope.$apply();
         }
+        
     };
 
 $scope.authExternalProvider = function (provider) {

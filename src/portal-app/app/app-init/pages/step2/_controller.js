@@ -33,7 +33,7 @@ app.controller('Step2Controller',
                     var result = await authService.login(loginData);
                     if (result) {
                         $rootScope.isBusy = false;
-                        window.location.href = '/init/step5';
+                        $location.url('/init/step3');
                         $scope.$apply();
                     }
                     else{

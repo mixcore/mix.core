@@ -8,7 +8,7 @@
             {
                 ctrl.isImage = ctrl.imgSrc.toLowerCase().match(/([/|.|\w|\s|-])*\.(?:jpg|gif|png)/g);
             }
-        }
+        };
         ctrl.showImage = async function (functionName, args, context) {
             $rootScope.preview('img', ctrl.imgSrc);
         };
