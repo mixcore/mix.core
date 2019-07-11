@@ -2,6 +2,20 @@
   padding: 3rem;
 }
 
+/* Fading right column's image */
+.bg-register-image {
+  transition: background-image 0.2s ease-in-out;
+  background-image: url("../assets/img/bgs/right-bg.png");
+}
+
+/* .bg-register-image:hover {
+  background-image:url("../assets/img/bgs/NowUI-Demo.png");
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+} */
+
+
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (max-width: 600px) {
   .container.init-pages {
@@ -185,22 +199,23 @@ body .options {
     min-width: 360px;
   }
   body .options .option:nth-child(3) {
-    display: none;
+    /* display: none; */
   }
 }
 @media screen and (max-width: 478px) {
   body .options {
-    min-width: 280px;
+    min-width: 313px;
   }
   body .options .option:nth-child(2) {
-    display: none;
+    /* display: none; */
   }
 }
+
 body .options .option {
   position: relative;
   overflow: hidden;
   min-width: 60px;
-  margin: 10px;
+  margin: 10px 5px;
   background: var(--optionBackground, var(--defaultBackground, #e6e9ed));
   background-size: auto 120%;
   background-position: center;
@@ -230,7 +245,7 @@ body .options .option.active {
   -webkit-transform: scale(1);
   transform: scale(1);
   max-width: 600px;
-  margin: 0px;
+  margin: 0 5px;
   border-radius: 40px;
   background-size: auto 100%;
   /*&:active {
@@ -270,8 +285,9 @@ body .options .option .shadow {
   bottom: 0px;
   left: 0px;
   right: 0px;
-  height: 120px;
+  height: 435px;
   transition: 0.5s cubic-bezier(0.05, 0.61, 0.41, 0.95);
+  cursor: pointer;
 }
 body .options .option .label {
   display: flex;
@@ -296,7 +312,7 @@ body .options .option .label .info {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-left: 32px;
+  margin-left: 35px;
   color: white;
   white-space: pre;
 }
@@ -340,6 +356,6 @@ body .options .option .label .info .sub {
   color: black;
   padding: 0 0.5em;
   line-height: 1.5em;
-  color: #818078;
+  color: #212529;
   background-color: #fcfcfa;
 }
