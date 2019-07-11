@@ -5,8 +5,8 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
         var rand = Math.floor(Math.random() * 10000) + 1;
         $scope.settings = {
             providers: [
-                { text: 'Microsoft SQL Server', value: 'MSSQL', img: '/assets/img/mssql.jpg' },
-                { text: 'MySQL Server', value: 'MySQL', img: '/assets/img/mysql.jpg' }
+                { text: 'Microsoft SQL Server', value: 'MSSQL', port: null, img: '/assets/img/mssql.jpg' },
+                { text: 'MySQL Server', value: 'MySQL', port:'3306', img: '/assets/img/mysql.jpg' }
             ],
             cultures: []
         };
@@ -18,6 +18,7 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
                 $scope.initCmsModel.culture = $scope.settings.cultures[0];
                 $scope.dbProvider = $scope.settings.providers[0];
                 $scope.initCmsModel.databaseProvider = $scope.dbProvider.value;
+                $scope.initCmsModel.databasePort = $scope.dbProvider.port;
                 $rootScope.isBusy = false;
                 $scope.$apply();
             }else {
@@ -40,10 +41,11 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
             localDbConnectionString: 'Server=(localdb)\\MSSQLLocalDB;Initial Catalog=' + rand + 'mix-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True',
             sqliteDbConnectionString: 'Data Source=' + rand + 'mix-cms',
             localDbName: rand + '-mix-cms',
-            dataBaseServer: '',
-            dataBaseName: '',
-            dataBaseUser: '',
-            dataBasePassword: '',
+            databaseServer: '',
+            databasePort: '',
+            databaseName: '',
+            databaseUser: '',
+            databasePassword: '',
             adminPassword: '',
             lang: 'en-us',
             isMysql: false,
@@ -56,16 +58,23 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
             $scope.initCmsModel.localDbConnectionString = 'Server=(localdb)\\mssqllocaldb;Database=' + $scope.initCmsModel.localDbName + ';Trusted_Connection=True;MultipleActiveResultSets=true';
             $scope.initCmsModel.sqliteDbConnectionString = 'Data Source=' + $scope.initCmsModel.localDbName;
         };
+        $scope.updateDbProvider = function(){
+            $scope.initCmsModel.databaseProvider = $scope.dbProvider.value;
+            $scope.initCmsModel.databasePort = $scope.dbProvider.port;
+        }
         $scope.initCms = async function () {
             $rootScope.isBusy = true;            
+            
             var result = await step1Services.initCms($scope.initCmsModel);
             if (result.isSucceed) {
                 $rootScope.isBusy = false;
+                $scope.$apply();
                 window.location.href = '/init/step2';
             }
             else {
-                if (result) { $rootScope.showErrors(result.errors); }
+                if (result) { $rootScope.showErrors(result.errors); }                
                 $rootScope.isBusy = false;                
+                $scope.$apply();
             }            
            
         }

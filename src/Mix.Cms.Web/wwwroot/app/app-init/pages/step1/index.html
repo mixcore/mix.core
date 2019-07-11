@@ -34,7 +34,7 @@
     <form>
         <div class="form-group" ng-show="!initCmsModel.isUseLocal">
             <label>Database Type</label>
-            <select class="custom-select form-control" ng-options="item as item.text for item in settings.providers" ng-model="dbProvider"></select>
+            <select class="custom-select form-control" ng-options="item as item.text for item in settings.providers" ng-model="dbProvider" ng-change="updateDbProvider()"></select>
         </div>
         <mssql-info ng-if="!initCmsModel.isUseLocal && dbProvider.value=='MSSQL'" init-cms-model="initCmsModel">
         </mssql-info>
@@ -46,9 +46,9 @@
         <br>
 
         <div class="text-center">
-            <button ng-if="!initCmsModel.isUseLocal" ng-click="initCms();" class="btn btn-primary" style="width:250px" ng-disabled="!initCmsModel.dataBaseServer || !initCmsModel.dataBaseName || !initCmsModel.dataBaseUser || !initCmsModel.culture">
-                <span ng-if="!initCmsModel.dataBaseServer || !initCmsModel.dataBaseName || !initCmsModel.dataBaseUser || !initCmsModel.culture">Next...</span>
-                <span ng-if="initCmsModel.dataBaseServer && initCmsModel.dataBaseName && initCmsModel.dataBaseUser  && initCmsModel.culture">Connect</span>
+            <button ng-if="!initCmsModel.isUseLocal" ng-click="initCms();" class="btn btn-primary" style="width:250px" ng-disabled="!initCmsModel.databaseServer || !initCmsModel.databaseName || !initCmsModel.databaseUser || !initCmsModel.culture">
+                <span ng-if="!initCmsModel.databaseServer || !initCmsModel.databaseName || !initCmsModel.databaseUser || !initCmsModel.culture">Next...</span>
+                <span ng-if="initCmsModel.databaseServer && initCmsModel.databaseName && initCmsModel.databaseUser  && initCmsModel.culture">Connect</span>
             </button>
             <button ng-if="initCmsModel.isUseLocal" ng-click="initCms();" class="btn btn-primary" style="width:250px" ng-disabled="!initCmsModel.sqliteDbConnectionString || !initCmsModel.localDbName">
                 <span ng-if="!initCmsModel.sqliteDbConnectionString || !initCmsModel.localDbName">Next <i class="fa fa-angle-right" style="font-size: 19px;"></i></span>
@@ -135,11 +135,11 @@
                     <div class="text-center">
                         <button ng-if="!initCmsModel.isUseLocal" ng-click="initCms();" class="btn btn-primary"
                             style="width:250px"
-                            ng-disabled="!initCmsModel.dataBaseServer || !initCmsModel.dataBaseName || !initCmsModel.dataBaseUser || !initCmsModel.culture">
+                            ng-disabled="!initCmsModel.databaseServer || !initCmsModel.databaseName || !initCmsModel.databaseUser || !initCmsModel.culture">
                             <span
-                                ng-if="!initCmsModel.dataBaseServer || !initCmsModel.dataBaseName || !initCmsModel.dataBaseUser || !initCmsModel.culture">Next...</span>
+                                ng-if="!initCmsModel.databaseServer || !initCmsModel.databaseName || !initCmsModel.databaseUser || !initCmsModel.culture">Next...</span>
                             <span
-                                ng-if="initCmsModel.dataBaseServer && initCmsModel.dataBaseName && initCmsModel.dataBaseUser  && initCmsModel.culture">Connect</span>
+                                ng-if="initCmsModel.databaseServer && initCmsModel.databaseName && initCmsModel.databaseUser  && initCmsModel.culture">Connect</span>
                         </button>
                         <button ng-if="initCmsModel.isUseLocal" ng-click="initCms();" class="btn btn-primary"
                             style="width:250px"
@@ -190,11 +190,11 @@
             <mssql-local-info ng-if="initCmsModel.isUseLocal" init-cms-model="initCmsModel"></mssql-local-info>
             <hr />
             <button ng-if="!initCmsModel.isUseLocal" ng-click="initCms();" class="btn btn-primary btn-block"
-                ng-disabled="!initCmsModel.dataBaseServer || !initCmsModel.dataBaseName || !initCmsModel.dataBaseUser || !initCmsModel.culture">
+                ng-disabled="!initCmsModel.databaseServer || !initCmsModel.databaseName || !initCmsModel.databaseUser || !initCmsModel.culture">
                 <span
-                    ng-if="!initCmsModel.dataBaseServer || !initCmsModel.dataBaseName || !initCmsModel.dataBaseUser || !initCmsModel.culture">Next...</span>
+                    ng-if="!initCmsModel.databaseServer || !initCmsModel.databaseName || !initCmsModel.databaseUser || !initCmsModel.culture">Next...</span>
                 <span
-                    ng-if="initCmsModel.dataBaseServer && initCmsModel.dataBaseName && initCmsModel.dataBaseUser  && initCmsModel.culture">Connect</span>
+                    ng-if="initCmsModel.databaseServer && initCmsModel.databaseName && initCmsModel.databaseUser  && initCmsModel.culture">Connect</span>
             </button>
             <button ng-if="initCmsModel.isUseLocal" ng-click="initCms();" class="btn btn-primary btn-block"
                 ng-disabled="!initCmsModel.sqliteDbConnectionString || !initCmsModel.localDbName">
@@ -272,11 +272,11 @@
                                             <hr />
                                             <button ng-if="!initCmsModel.isUseLocal" ng-click="initCms();"
                                                 class="btn btn-primary btn-round"
-                                                ng-disabled="!initCmsModel.dataBaseServer || !initCmsModel.dataBaseName || !initCmsModel.dataBaseUser || !initCmsModel.culture">
+                                                ng-disabled="!initCmsModel.databaseServer || !initCmsModel.databaseName || !initCmsModel.databaseUser || !initCmsModel.culture">
                                                 <span
-                                                    ng-if="!initCmsModel.dataBaseServer || !initCmsModel.dataBaseName || !initCmsModel.dataBaseUser || !initCmsModel.culture">Next...</span>
+                                                    ng-if="!initCmsModel.databaseServer || !initCmsModel.databaseName || !initCmsModel.databaseUser || !initCmsModel.culture">Next...</span>
                                                 <span
-                                                    ng-if="initCmsModel.dataBaseServer && initCmsModel.dataBaseName && initCmsModel.dataBaseUser  && initCmsModel.culture">Connect</span>
+                                                    ng-if="initCmsModel.databaseServer && initCmsModel.databaseName && initCmsModel.databaseUser  && initCmsModel.culture">Connect</span>
                                             </button>
                                             <button ng-if="initCmsModel.isUseLocal" ng-click="initCms();"
                                                 class="btn btn-primary btn-round"
