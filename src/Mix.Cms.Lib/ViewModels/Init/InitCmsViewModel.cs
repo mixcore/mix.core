@@ -17,15 +17,16 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
                 switch (DatabaseProvider)
                 {
                     case MixEnums.DatabaseProvider.MSSQL:
+                    {
+                        string dbServer = !string.IsNullOrEmpty(DatabasePort) ? $"{DatabaseServer},{DatabasePort}": DatabaseServer;
                         return IsUseLocal
-                    ? LocalDbConnectionString
-
-                    : $"Server={DataBaseServer};Database={DataBaseName}" +
-                    $";UID={DataBaseUser};Pwd={DataBasePassword};MultipleActiveResultSets=true;"
-                    ;
+                            ? LocalDbConnectionString
+                            : $"Server={dbServer};Database={DatabaseName}" +
+                            $";UID={DatabaseUser};Pwd={DatabasePassword};MultipleActiveResultSets=true;";
+                    }
                     case MixEnums.DatabaseProvider.MySQL:
-                        return $"Server={DataBaseServer};Database={DataBaseName}" +
-                      $";User={DataBaseUser};Password={DataBasePassword};";
+                        return $"Server={DatabaseServer};port={DatabasePort};Database={DatabaseName}" +
+                      $";User={DatabaseUser};Password={DatabasePassword};";
 
                     default:
                         return string.Empty;
@@ -34,17 +35,20 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
             }
         }
 
-        [JsonProperty("dataBaseServer")]
-        public string DataBaseServer { get; set; }
+        [JsonProperty("databaseServer")]
+        public string DatabaseServer { get; set; }
+        
+        [JsonProperty("databasePort")]
+        public string DatabasePort { get; set; }
 
-        [JsonProperty("dataBaseName")]
-        public string DataBaseName { get; set; }
+        [JsonProperty("databaseName")]
+        public string DatabaseName { get; set; }
 
-        [JsonProperty("dataBaseUser")]
-        public string DataBaseUser { get; set; }
+        [JsonProperty("databaseUser")]
+        public string DatabaseUser { get; set; }
 
-        [JsonProperty("dataBasePassword")]
-        public string DataBasePassword { get; set; }
+        [JsonProperty("databasePassword")]
+        public string DatabasePassword { get; set; }
 
         [JsonProperty("isUseLocal")]
         public bool IsUseLocal { get; set; }
