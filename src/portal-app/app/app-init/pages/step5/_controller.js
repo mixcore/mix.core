@@ -1,21 +1,24 @@
 ﻿'use strict';
-app.controller('Step5Controller', ['$scope', '$rootScope', 
+app.controller('Step5Controller', ['$scope', '$rootScope',
     'CommonService', 'Step5Services',
     function ($scope, $rootScope, commonService, service) {
         var rand = Math.random();
         $scope.data = {
             isCreateDefault: true,
-            theme:null,
+            theme: null,
         };
         $scope.init = async function () {
-           
+            $(".option").click(function () {
+                $(".option").removeClass("active");
+                $(this).addClass("active");
+            });
         };
         $scope.loadProgress = async function (percent) {
-            var elem = document.getElementsByClassName("progress-bar")[0]; 
-            elem.style.width = percent + '%'; 
+            var elem = document.getElementsByClassName("progress-bar")[0];
+            elem.style.width = percent + '%';
         };
         $scope.submit = async function () {
-            $rootScope.isBusy = true;            
+            $rootScope.isBusy = true;
             var form = document.getElementById('frm-theme');
             var frm = new FormData();
             var url = '/init/init-cms/step-5';
@@ -30,13 +33,13 @@ app.controller('Step5Controller', ['$scope', '$rootScope',
             if (response.isSucceed) {
                 $scope.activedData = response.data;
                 $rootScope.isBusy = false;
-                window.top.location="/";
+                window.top.location = "/";
                 $scope.$apply();
-            }
-            else {
+            } else {
                 $rootScope.showErrors(response.errors);
                 $rootScope.isBusy = false;
                 $scope.$apply();
             }
         }
-    }]);
+    }
+]);
