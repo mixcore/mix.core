@@ -2,7 +2,7 @@
   "data": [
     {
       "keyword": "SiteName",
-      "category": "Site_Common",
+      "category": "Site",
       "value": "Mix Core",
       "dataType": 7,
       "description": "Site Name",

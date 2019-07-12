@@ -85,11 +85,6 @@ namespace Mix.Cms.Api.Controllers.v1
                 if (MixService.GetConfig<int>("InitStatus") == 0)
                 {
                     result = await InitStep1Async(model).ConfigureAwait(false);
-                    if (result.IsSucceed)
-                    {
-                        InitCmsService sv = new InitCmsService();
-                        await sv.InitPositionsAsync();
-                    }
                 }
                 return result;
             }
@@ -161,36 +156,36 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
 
-        /// <summary>
-        /// Step 3 Run when status = 2
-        ///     - Init Cms Configurations from files data/configuration.json
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [HttpPost, HttpOptions]
-        [Route("init-cms/step-3")]
-        public async Task<RepositoryResponse<bool>> InitConfigurations([FromBody]List<MixConfiguration> model)
-        {
-            if (model != null)
-            {
-                var result = new RepositoryResponse<bool>();
-                if (MixService.GetConfig<int>("InitStatus") == 2)
-                {
-                    string culture = MixService.GetConfig<string>("DefaultCulture");
-                    InitCmsService sv = new InitCmsService();
-                    result = await sv.InitConfigurationsAsync(culture, model);
-                    if (result.IsSucceed)
-                    {
-                        MixService.LoadFromDatabase();
-                        MixService.SetConfig("InitStatus", 3);
-                        MixService.SaveSettings();
-                        MixService.Reload();
-                    }
-                }
-                return result;
-            }
-            return new RepositoryResponse<bool>();
-        }
+        // /// <summary>
+        // /// Step 3 Run when status = 2
+        // ///     - Init Cms Configurations from files data/configuration.json
+        // /// </summary>
+        // /// <param name="model"></param>
+        // /// <returns></returns>
+        // [HttpPost, HttpOptions]
+        // [Route("init-cms/step-5")]
+        // public async Task<RepositoryResponse<bool>> InitConfigurations([FromBody]List<MixConfiguration> model)
+        // {
+        //     if (model != null)
+        //     {
+        //         var result = new RepositoryResponse<bool>();
+        //         if (MixService.GetConfig<int>("InitStatus") == 4)
+        //         {
+        //             string culture = MixService.GetConfig<string>("DefaultCulture");
+        //             InitCmsService sv = new InitCmsService();
+        //             result = await sv.InitConfigurationsAsync(culture, model);
+        //             if (result.IsSucceed)
+        //             {
+        //                 MixService.LoadFromDatabase();
+        //                 MixService.SetConfig("InitStatus", 5);
+        //                 MixService.SaveSettings();
+        //                 MixService.Reload();
+        //             }
+        //         }
+        //         return result;
+        //     }
+        //     return new RepositoryResponse<bool>();
+        // }
 
         /// <summary>
         /// Step 4 when status = 3
@@ -214,6 +209,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         MixService.LoadFromDatabase();
                         MixService.SetConfig("InitStatus", 4);
+                        MixService.SetConfig("IsInit", true);
                         MixService.SaveSettings();
                         MixService.Reload();
                     }
@@ -231,7 +227,7 @@ namespace Mix.Cms.Api.Controllers.v1
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost, HttpOptions]
-        [Route("init-cms/step-5")]
+        [Route("init-cms/step-3")]
         [RequestFormSizeLimit(valueCountLimit: 214748364)] // 200Mb
         public async Task<RepositoryResponse<Mix.Cms.Lib.ViewModels.MixThemes.InitViewModel>> Save([FromForm]string model, [FromForm]IFormFile assets, [FromForm]IFormFile theme)
         {
@@ -264,7 +260,6 @@ namespace Mix.Cms.Api.Controllers.v1
                 }
             }
 
-
             if (data != null)
             {
                 string culture = MixService.GetConfig<string>("DefaultCulture");
@@ -275,9 +270,9 @@ namespace Mix.Cms.Api.Controllers.v1
                 var result = await data.SaveModelAsync(true);
                 if (result.IsSucceed)
                 {
+                    // MixService.SetConfig<string>("SiteName", _lang, data.Title);
                     MixService.LoadFromDatabase();
-                    MixService.SetConfig("InitStatus", 5);
-                    MixService.SetConfig("IsInit", true);
+                    MixService.SetConfig("InitStatus", 3);
                     MixService.SaveSettings();
                     MixService.Reload();
                 }
@@ -300,7 +295,7 @@ namespace Mix.Cms.Api.Controllers.v1
             MixService.SetConfig(MixConstants.CONST_SETTING_DATABASE_PROVIDER, model.DatabaseProvider);
             MixService.SetConfig(MixConstants.CONST_SETTING_LANGUAGE, model.Culture.Specificulture);
 
-            var initResult = await InitCmsService.InitCms(model.Culture);
+            var initResult = await InitCmsService.InitCms(model.SiteName, model.Culture);
             if (initResult.IsSucceed)
             {
                 await InitRolesAsync();

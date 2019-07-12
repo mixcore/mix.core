@@ -1,128 +1,42 @@
 <!-- <div class="text-center mb-6 mt-6">
     <img src="/assets/mixcore-logo-full-white-text.png" alt="">
 </div> -->
-<div ng-init="loadProgress(100)"></div>
+<div ng-init="loadProgress(50)"></div>
 <div ng-init="init()">
-
-    <h1 class="display-4">Hooray! Almost there... </h1>    
-    <p class="lead">You can start <strong>mixcore</strong> with our beautiful themes.</p>
-
-    <hr>
-    <div class="">
-        <form id="frm-theme">
-               
-            <div class="options">
-                  
-                <div class="option active"
-                style="--optionBackground:url(../assets/img/bgs/thumb_theme1.png);">
-                    <label for="theme-1">                                         
-                    <div class="shadow"></div>
-                    <div class="label">
-                        <!-- <i class="fas fa-walking"></i> -->
-                        <div class="round">
-                            <input class="preventUncheck" type="checkbox" id="theme-1" ng-model="data.isCreateDefault" checked name="themes[1][]"/>
-                            <label ng-if="!data.is1Selected" for="theme-1"></label>
-                            <label ng-if="data.is1Selected" ng-click="submit()" for="theme-1"></label>
-                        </div>
-
-                        <div class="info">
-                            <div class="main">Now UI Kit Pro</div>
-                            <div class="sub">MVC App</div>
-                         
-                        </div>
-                    </div></label>
+    <div class="" style="height: 455.44px">
+            <h1 class="display-4">Let's name your baby!
+            </h1>       
+        <p class="lead">
+            Please fill your site information to the form below. 
+        </p>
+        <hr>
+        <tabs-v select-callback="selectPane(pane)">
+            <pane-v title="Site Information" class="card">
+                <div class="card-body">
+                    <init-site-configurations configurations="data"></init-site-configurations>
                 </div>
-           
-                <div class="option"
-                    style="--optionBackground:url(../assets/img/bgs/thumb_theme2.png);">
-                    <label for="theme-2">
-                    <div class="shadow"></div>
-                    <div class="label">
-                        <div class="round">
-                            <input class="preventUncheck" type="checkbox" id="theme-2" name="themes[1][]"/>
-                            <label for="theme-2"></label>
-                        </div>
-                        <div class="info">
-                            <div class="main">[ Theme's Name ]</div>
-                            <div class="sub">Onepage App</div>
-
-                        </div>
-                    </div>
-                </label>
+            </pane-v>
+            <pane-v title="General" class="card">
+                <div class="card-body">
+                    <init-sys-configurations configurations="data"></init-sys-configurations>
                 </div>
-
-                <div class="option"
-                    style="--optionBackground:url(../assets/img/bgs/thumb_owntheme.png);">
-                    <label for="theme-3">
-                    <div class="shadow"></div>
-                    <div class="label">
-                        <div class="round">
-                            <input class="preventUncheck" type="checkbox" id="theme-3" name="themes[1][]"/>
-                            <label for="theme-3"></label>
-                        </div>
-                        <div class="info">
-                            <div class="main">Your own theme</div>
-                            <div class="sub"><api-file form-name="'theme'" class="form-control" posted-file="theme" style="
-                                display: unset;
-                                padding: 0;
-                                background-color: unset;
-                                border: none;
-                                border-radius: 0;
-                                color: #fff;
-                            "></api-file></div>
-                        </div>
-                    </div>
-                </label>
+            </pane-v>
+            <pane-v title="Facebook" class="card">
+                <div class="card-body">
+                    <init-fb-configurations configurations="data"></init-fb-configurations>
                 </div>
-           
-            </div>
-            <!-- <div class="row no-gutters">
-                    <div class="card col-md-6">
-                        <img src="https://s3.amazonaws.com/creativetim_bucket/products/62/original/opt_nukp_thumbnail.jpg?1503343544"
-                            class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Now UI Kit Pro</h5>
-                            <p class="card-text">
-                                Theme proudly
-                                sponsored by Creative Tim.
-                            </p>
-                            <p class="card-text">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" ng-model="data.isCreateDefault"
-                                        id="isCreateDefault">
-                                    <label class="custom-control-label" for="isCreateDefault">Use</label>
-                                </div>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="card col-md-6">
-                        <img src="https://s3.amazonaws.com/creativetim_bucket/products/62/original/opt_nukp_thumbnail.jpg?1503343544"
-                            class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Now UI Kit Pro</h5>
-
-                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                        </div>
-                    </div>
-                </div> -->
-            <!-- <div class="form-group">
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" ng-model="data.isCreateDefault"
-                        id="isCreateDefault">
-                    <label class="custom-control-label" for="isCreateDefault">Using Now UI Kit Pro as your default
-                        time</label>
+            </pane-v>
+            <pane-v title="Google" class="card">
+                <div class="card-body">
+                    <init-gg-configurations configurations="data"></init-gg-configurations>
                 </div>
-            </div> -->
-            <!-- <div class="form-group">
-                <label>Or import your theme:</label><br />
-                <hr class="hr-text" data-content="OR">
-                <api-file form-name="'theme'" class="form-control" posted-file="theme"></api-file>
-            </div>
- -->
+            </pane-v>
+        </tabs-v>
 
-        </form>
     </div>
-    <!-- <div class="text-center form-footer">
-        <button ng-click="submit()" class="btn btn-primary mt-4">Create and Login</button>
-    </div> -->
+    
+    <div class="text-center form-footer">
+        <button ng-click="submit()" class="btn btn-primary mt-4">Continue <i
+            class="fa fa-angle-right" style="font-size: 19px;" ></i></button>
+    </div>
 </div>
