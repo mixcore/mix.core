@@ -30,7 +30,7 @@ namespace Mix.Cms.Lib.Services
         /// <param name="siteName"></param>
         /// <param name="culture"></param>
         /// <returns></returns>
-        public static async Task<RepositoryResponse<bool>> InitCms(InitCulture culture)
+        public static async Task<RepositoryResponse<bool>> InitCms(string siteName, InitCulture culture)
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>();
             MixCmsContext context = null;
@@ -75,6 +75,31 @@ namespace Mix.Cms.Lib.Services
                         {
                             result.Errors.Add("Cannot init Pages");
                         }
+                        
+                        /**
+                         * Init System Positions
+                         */
+                        if (isSucceed)
+                        {
+                            isSucceed =  await InitPositionsAsync(context, transaction);                            
+                        }
+                        else
+                        {
+                            result.Errors.Add("Cannot init Positions");
+                        }
+                        
+                        /**
+                         * Init System Configurations
+                         */
+                        if (isSucceed)
+                        {
+                            var saveResult = await InitConfigurationsAsync(siteName, culture.Specificulture, context, transaction);
+                            isSucceed = saveResult.IsSucceed;
+                        }
+                        else
+                        {
+                            result.Errors.Add("Cannot init Configurations");
+                        }
                     }
                     if (isSucceed)
                     {
@@ -113,17 +138,20 @@ namespace Mix.Cms.Lib.Services
         /// <param name="_context"></param>
         /// <param name="_transaction"></param>
         /// <returns></returns>
-        public async Task<RepositoryResponse<bool>> InitConfigurationsAsync(string specifiCulture, List<MixConfiguration> configurations
-            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public static async Task<RepositoryResponse<bool>> InitConfigurationsAsync(string siteName, string specifiCulture, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             /* Init Configs */
 
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            var siteName = configurations.Find(c => c.Keyword == "SiteName");
-            if (!string.IsNullOrEmpty(siteName.Value))
+            var getConfigs = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_CONFIGURATIONS, "data", true, "{}");
+            var obj = JObject.Parse(getConfigs.Content);
+            var configurations = obj["data"].ToObject<List<MixConfiguration>>();
+            var cnfSiteName = configurations.Find(c => c.Keyword == "SiteName");
+            cnfSiteName.Value = siteName;
+            if (!string.IsNullOrEmpty(cnfSiteName.Value))
             {
-                configurations.Find(c => c.Keyword == "ThemeName").Value = Common.Helper.SeoHelper.GetSEOString(siteName.Value);
-                configurations.Find(c => c.Keyword == "ThemeFolder").Value = Common.Helper.SeoHelper.GetSEOString(siteName.Value);
+                configurations.Find(c => c.Keyword == "ThemeName").Value = Common.Helper.SeoHelper.GetSEOString(cnfSiteName.Value);
+                configurations.Find(c => c.Keyword == "ThemeFolder").Value = Common.Helper.SeoHelper.GetSEOString(cnfSiteName.Value);
             }
             var result = await ViewModels.MixConfigurations.ReadMvcViewModel.ImportConfigurations(configurations, specifiCulture, context, transaction);
 
@@ -250,7 +278,7 @@ namespace Mix.Cms.Lib.Services
                 context.Entry(alias).State = EntityState.Added;
             }
         }
-        public async Task<bool> InitPositionsAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public static async Task<bool> InitPositionsAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             /* Init Positions */
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);

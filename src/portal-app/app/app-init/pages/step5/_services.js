@@ -2,6 +2,8 @@
 app.factory('Step5Services', ['CommonService'
     , function (commonService) {
 
+        //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
+
         var service = {};
         var _submit = async function (data) {
             var req = {
@@ -11,19 +13,7 @@ app.factory('Step5Services', ['CommonService'
             };
             return await commonService.getApiResult(req);
         };
-        var _ajaxSubmitForm = async function (form, url) {            
-            var req = {
-                method: 'POST',
-                url: url,
-                headers: {'Content-Type': undefined},
-                contentType: false, // Not to set any content header
-                processData: false, // Not to process data
-                data: form
-            };
-            return await commonService.getApiResult(req);            
-        };
         service.submit = _submit;
-        service.ajaxSubmitForm = _ajaxSubmitForm;
         return service;
 
     }]);

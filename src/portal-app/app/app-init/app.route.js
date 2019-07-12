@@ -10,7 +10,7 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         controller: "Step2Controller",
         templateUrl: "/app/app-init/pages/step2/view.html"
     });
-    $routeProvider.when("/init/step5", {
+    $routeProvider.when("/init/step3", {
         controller: "Step3Controller",
         templateUrl: "/app/app-init/pages/step3/view.html"
     });
@@ -18,7 +18,7 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         controller: "Step4Controller",
         templateUrl: "/app/app-init/pages/step4/view.html"
     });
-    $routeProvider.when("/init/step3", {
+    $routeProvider.when("/init/step5", {
         controller: "Step5Controller",
         templateUrl: "/app/app-init/pages/step5/view.html"
     });

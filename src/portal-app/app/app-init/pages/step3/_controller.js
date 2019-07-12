@@ -1,38 +1,67 @@
 ﻿'use strict';
-app.controller('Step3Controller', ['$scope', '$rootScope', '$location',
+app.controller('Step3Controller', ['$scope', '$rootScope',
     'CommonService', 'Step3Services',
-    function ($scope, $rootScope,$location, commonService, service) {
+    function ($scope, $rootScope, commonService, service) {
         var rand = Math.random();
-        $scope.data = [];
+        $scope.data = {
+            isCreateDefault: true,
+            theme: null,
+        };
         $scope.init = async function () {
-            var getData = await commonService.loadJArrayData('configurations.json');
-            if(getData.isSucceed){
-                $scope.data = getData.data;
-                $rootScope.isBusy = false;
-                $scope.$apply();
-            }else {
-                if (getData) {
-                    $rootScope.showErrors(getData.errors);
+            $('.preventUncheck').on('change', function(e) {
+                if ($('.preventUncheck:checked').length == 0 && !this.checked)
+                    this.checked = true;
+            });
+            $(".option").click(function () {
+                $(".option").removeClass("active");
+                $(this).addClass("active");
+            });
+            $("#theme-1").change(function() {                
+                $('.bg-register-image')[0].style.backgroundImage = "url('../assets/img/bgs/r_theme1.png')";                
+            });            
+            $("#theme-2").change(function() {                
+                $('.bg-register-image')[0].style.backgroundImage = "url('../assets/img/bgs/r_theme2.png')";                
+            });
+            $("#theme-3").change(function() {                
+                $('.bg-register-image')[0].style.backgroundImage = "url('../assets/img/bgs/right-bg.png')";                
+            });
+            $("input:checkbox").click(function() {
+                if ($(this).is(":checked")) {
+                    var group = "input:checkbox[name='" + $(this).attr("name") + "']";
+                    $(group).prop("checked", false);
+                    $(this).prop("checked", true);
+                } else {
+                    $(this).prop("checked", false);
                 }
-                $rootScope.isBusy = false;
-                $scope.$apply();
-            }
-           
+            });
         };
         $scope.loadProgress = async function (percent) {
-            var elem = document.getElementsByClassName("progress-bar")[0]; 
-            elem.style.width = percent + '%'; 
+            var elem = document.getElementsByClassName("progress-bar")[0];
+            elem.style.width = percent + '%';
         };
         $scope.submit = async function () {
-            $rootScope.isBusy = true;            
-            var result = await service.submit($scope.data);
-            if (result.isSucceed) {
-                $rootScope.isBusy = false;
-                $location.url('/init/step4');
-            }
-            else {
-                if (result) { $rootScope.showErrors(result.errors); }
+            $rootScope.isBusy = true;
+            var form = document.getElementById('frm-theme');
+            var frm = new FormData();
+            var url = '/init/init-cms/step-3';
+
+            $rootScope.isBusy = true;
+            // Looping over all files and add it to FormData object
+            frm.append('theme', form['theme'].files[0]);
+            // Adding one more key to FormData object
+            frm.append('model', angular.toJson($scope.data));
+
+            var response = await service.ajaxSubmitForm(frm, url);
+            if (response.isSucceed) {
+                $scope.activedData = response.data;
                 $rootScope.isBusy = false;                
+                $location.url('/init/step4');
+                $scope.$apply();
+            } else {
+                $rootScope.showErrors(response.errors);
+                $rootScope.isBusy = false;
+                $scope.$apply();
             }
-        }
-    }]);
+        };
+    }
+]);
