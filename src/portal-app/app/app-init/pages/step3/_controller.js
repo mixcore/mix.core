@@ -55,7 +55,7 @@ app.controller('Step3Controller', ['$scope', '$rootScope',
             if (response.isSucceed) {
                 $scope.activedData = response.data;
                 $rootScope.isBusy = false;                
-                $location.url('/init/step4');
+                window.location.href = '/init/step4';
                 $scope.$apply();
             } else {
                 $rootScope.showErrors(response.errors);
