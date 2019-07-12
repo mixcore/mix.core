@@ -64,18 +64,23 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
         }
         $scope.initCms = async function () {
             $rootScope.isBusy = true;            
-            
-            var result = await step1Services.initCms($scope.initCmsModel);
-            if (result.isSucceed) {
-                $rootScope.isBusy = false;
-                $scope.$apply();
-                window.location.href = '/init/step2';
-            }
-            else {
-                if (result) { $rootScope.showErrors(result.errors); }                
-                $rootScope.isBusy = false;                
-                $scope.$apply();
+            if($scope.initCmsModel.siteName && $scope.initCmsModel.siteName !='')
+            {
+                var result = await step1Services.initCms($scope.initCmsModel);
+                if (result.isSucceed) {
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                    window.location.href = '/init/step2';
+                }
+                else {
+                    if (result) { $rootScope.showErrors(result.errors); }                
+                    $rootScope.isBusy = false;                
+                    $scope.$apply();
+                }
             }            
+            else {
+                $rootScope.showErrors(["Site name is required"]); 
+            }  
            
         }
     }]);

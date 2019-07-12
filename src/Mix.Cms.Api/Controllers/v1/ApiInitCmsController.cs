@@ -121,6 +121,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
                         model.Id = user.Id;
                         model.CreatedDateTime = DateTime.UtcNow;
+                        model.Avatar = model.Avatar ?? MixService.GetConfig<string>("DefaultAvatar");
                         // Save to cms db context
 
                         await model.SaveModelAsync();
