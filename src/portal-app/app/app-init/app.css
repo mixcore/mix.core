@@ -1,5 +1,5 @@
 ﻿.left-coloumn {
-  padding: 3rem;
+  padding: 2rem;
 }
 
 /* Fading right column's image */
@@ -14,7 +14,6 @@
   background-repeat: no-repeat;
   background-size: cover;
 } */
-
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (max-width: 600px) {
@@ -173,43 +172,58 @@ body .options {
   flex-direction: row;
   align-items: stretch;
   overflow: hidden;
-  min-width: 551.5px;
-  max-width: 551.5px;
-  width: calc(100% - 100px);
+  min-width: 100%;
+  max-width: 100%;
+  /* width: calc(100% - 100px); */
   height: 400px;
 }
-@media screen and (max-width: 718px) {
+/* @media screen and (max-width: 1199px) {
   body .options {
-    min-width: 520px;
+    min-width: 523.98px;
   }
   body .options .option:nth-child(5) {
     display: none;
   }
 }
-@media screen and (max-width: 638px) {
+@media screen and (max-width: 991px) {
+  body .options {
+    min-width: 100%;
+  }
+} */
+/* @media screen and (max-width: 767px) {
+  body .options {
+    min-width: 414px;
+  }
+  body .options .option:nth-child(5) {
+    display: none;
+  }
+} */
+/* @media screen and (max-width: 718px) {
+  body .options {
+    min-width: 414px;
+  }
+  body .options .option:nth-child(5) {
+    display: none;
+  }
+} */
+/* @media screen and (max-width: 638px) {
   body .options {
     min-width: 440px;
   }
   body .options .option:nth-child(4) {
     display: none;
   }
-}
-@media screen and (max-width: 558px) {
+} */
+/* @media screen and (max-width: 600px) {
   body .options {
-    min-width: 360px;
+    min-width: 100%;
   }
-  body .options .option:nth-child(3) {
-    /* display: none; */
-  }
-}
-@media screen and (max-width: 478px) {
+} */
+/* @media screen and (max-width: 478px) {
   body .options {
     min-width: 313px;
-  }
-  body .options .option:nth-child(2) {
-    /* display: none; */
-  }
-}
+  }  
+} */
 
 body .options .option {
   position: relative;
@@ -285,7 +299,7 @@ body .options .option .shadow {
   bottom: 0px;
   left: 0px;
   right: 0px;
-  height: 435px;
+  height: 400px;
   transition: 0.5s cubic-bezier(0.05, 0.61, 0.41, 0.95);
   cursor: pointer;
 }
@@ -314,7 +328,7 @@ body .options .option .label .info {
   justify-content: center;
   margin-left: 35px;
   color: white;
-  white-space: pre;
+  /* white-space: pre; */
 }
 body .options .option .label .info > div {
   position: relative;
