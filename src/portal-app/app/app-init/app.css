@@ -148,11 +148,8 @@
   opacity: 1;
 }
 
-body {
-  background-color: #f1f2f3;
-}
 /*  */
-body {
+body.app-init {
   display: flex;
   flex-direction: row;
   justify-content: center;
