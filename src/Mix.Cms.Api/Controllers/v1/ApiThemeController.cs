@@ -73,13 +73,13 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("export/{id}")]
         public async Task<RepositoryResponse<string>> Export(int id, [FromBody]SiteStructureViewModel data)
         {
-            var getTemplate = await ReadViewModel.Repository.GetSingleModelAsync(
+            var getTheme = await ReadViewModel.Repository.GetSingleModelAsync(
                  theme => theme.Id == id).ConfigureAwait(false);
             
             //path to temporary folder
-            string tempPath = $"wwwroot/Exports/Themes/{getTemplate.Data.Name}/temp";
-            string outputPath = $"Exports/Themes/{getTemplate.Data.Name}";
-
+            string tempPath = $"wwwroot/Exports/Themes/{getTheme.Data.Name}/temp";
+            string outputPath = $"Exports/Themes/{getTheme.Data.Name}";
+            data.ThemeName = getTheme.Data.Name;
             string filename = $"schema";
             var file = new FileViewModel()
             {
@@ -92,16 +92,16 @@ namespace Mix.Cms.Api.Controllers.v1
             // Delete Existing folder
             FileRepository.Instance.DeleteFolder(outputPath);
             // Copy current templates file
-            FileRepository.Instance.CopyDirectory($"{getTemplate.Data.TemplateFolder}", $"{tempPath}/Templates");
+            FileRepository.Instance.CopyDirectory($"{getTheme.Data.TemplateFolder}", $"{tempPath}/Templates");
             // Copy current assets files
-            FileRepository.Instance.CopyDirectory($"{getTemplate.Data.AssetFolder}", $"{tempPath}/Assets");            
+            FileRepository.Instance.CopyDirectory($"{getTheme.Data.AssetFolder}", $"{tempPath}/Assets");            
             // Copy current uploads files
-            FileRepository.Instance.CopyDirectory($"{getTemplate.Data.UploadsFolder}", $"{tempPath}/Uploads");
+            FileRepository.Instance.CopyDirectory($"{getTheme.Data.UploadsFolder}", $"{tempPath}/Uploads");
             // Save Site Structures
             FileRepository.Instance.SaveFile(file);
 
             // Zip to [theme_name].zip ( wwwroot for web path)
-            string filePath = FileRepository.Instance.ZipFolder($"{tempPath}", outputPath, getTemplate.Data.Name);
+            string filePath = FileRepository.Instance.ZipFolder($"{tempPath}", outputPath, getTheme.Data.Name);
 
             
 

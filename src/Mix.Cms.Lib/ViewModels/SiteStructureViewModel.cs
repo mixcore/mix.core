@@ -18,7 +18,8 @@ namespace Mix.Cms.Lib.ViewModels
         public List<MixPages.ImportViewModel> Pages { get; set; }
         [JsonProperty("modules")]
         public List<MixModules.ImportViewModel> Modules { get; set; }
-
+        [JsonProperty("themeName")]
+        public string ThemeName { get; set; }
         public SiteStructureViewModel()
         {
 
@@ -36,18 +37,25 @@ namespace Mix.Cms.Lib.ViewModels
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                result = await ImportPagesAsync(Pages, destCulture, context, transaction);
+                if (Pages != null)
+                {
+                    result = await ImportPagesAsync(Pages, destCulture, context, transaction);
+                }
                 if (result.IsSucceed)
                 {
-                    foreach (var module in Modules)
+                    if (Modules != null)
                     {
-                        if (result.IsSucceed)
+                        foreach (var module in Modules)
                         {
-                            var saveResult = await module.SaveModelAsync(true, context, transaction);
-                            ViewModelHelper.HandleResult(saveResult, ref result);
+                            if (result.IsSucceed)
+                            {
+                                var saveResult = await module.SaveModelAsync(true, context, transaction);
+                                ViewModelHelper.HandleResult(saveResult, ref result);
+                            }
                         }
                     }
                 }
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
@@ -73,6 +81,7 @@ namespace Mix.Cms.Lib.ViewModels
           MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
+
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
@@ -89,11 +98,11 @@ namespace Mix.Cms.Lib.ViewModels
                     }
                     if (!string.IsNullOrEmpty(item.Image))
                     {
-                        item.Image = item.Image.Replace("content/templates/default", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
+                        item.Image = item.Image.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
                     }
                     if (!string.IsNullOrEmpty(item.Thumbnail))
                     {
-                        item.Thumbnail = item.Thumbnail.Replace("content/templates/default", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
+                        item.Thumbnail = item.Thumbnail.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
                     }
                     item.Specificulture = destCulture;
                     var saveResult = await item.SaveModelAsync(true, context, transaction);
