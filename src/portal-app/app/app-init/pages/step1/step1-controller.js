@@ -30,6 +30,9 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
             }
            
         };
+        $scope.changeTypeDB = async function (type) {
+            $scope.initCmsModel.isUseLocal = type;
+        };
         $scope.loadProgress = async function (percent) {
             var elem = document.getElementsByClassName("progress-bar")[0]; 
             elem.style.width = percent + '%'; 
@@ -38,8 +41,8 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
             isUseLocal: true,
             localDbConnectionString: '',
             sqliteDbConnectionString: '',
-            localDbConnectionString: 'Server=(localdb)\\MSSQLLocalDB;Initial Catalog=' + rand + 'mix-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True',
-            sqliteDbConnectionString: 'Data Source=' + rand + 'mix-cms',
+            localDbConnectionString: 'Server=(localdb)\\MSSQLLocalDB;Initial Catalog=' + rand + '-mix-cms.db;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True',
+            sqliteDbConnectionString: 'Data Source=' + rand + '-mix-cms',
             localDbName: rand + '-mix-cms',
             databaseServer: '',
             databasePort: '',
@@ -80,6 +83,8 @@ app.controller('Step1Controller', ['$scope', '$rootScope', 'ngAppSettings', '$ti
             }            
             else {
                 $rootScope.showErrors(["Site name is required"]); 
+                $rootScope.isBusy = false;   
+                $scope.$apply();       
             }  
            
         }

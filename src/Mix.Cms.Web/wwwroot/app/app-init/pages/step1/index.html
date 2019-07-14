@@ -8,30 +8,28 @@
         </h1>
         <!-- Thanks for being a part of the
                     <strong>mixcore</strong> lovers!  -->
-        <p>
+        <p class="mb-2">
             Please fill in following information below:
         </p>
     </div>
-    <div class="form-group">
-        <label>Your Site Name</label>
-        <input type="text" ng-model="initCmsModel.siteName" class="form-control" placeholder="Your Site Name ..." required>
-    </div>
     <p class="intruction-labels">
-        Choose your
-        <span style="cursor: pointer;" ng-click="initCmsModel.isUseLocal=!initCmsModel.isUseLocal">
-            <span data-toggle="tooltip" data-placement="top" title="Click to change to remote database." style="text-decoration: underline;" ng-if="initCmsModel.isUseLocal">local <i class="fa fa-angle-down" style="text-decoration: underline"></i></span>
-            <span data-toggle="tooltip" data-placement="top" title="Click to change to local database." style="text-decoration: underline;" ng-if="!initCmsModel.isUseLocal">remote
-                <i class="fa fa-angle-up" style="text-decoration: underline"></i></span>
-        </span>
-        database.<br>
-        Current country: <select id="inputState" class="form-control country-select" style="height:unset; border: none; display: inline; width: auto; padding: 0;text-decoration: underline;" ng-options="item as item.fullName for item in settings.cultures track by item.specificulture" ng-model="initCmsModel.culture">
+        Your website's name:
+        <input type="text" ng-model="initCmsModel.siteName" class="form-control input-site-name" required>
+        <br>       
+        Current country: <select id="inputState" class="form-control country-select" style="height:unset; border: none; display: inline; width: auto;color: #212529; padding: 0;text-decoration: underline;" ng-options="item as item.fullName for item in settings.cultures track by item.specificulture" ng-model="initCmsModel.culture">
 
         </select>
+        <br>
         <!-- <span data-toggle="tooltip" data-placement="top"
             title="Click to change to remote database."
             style="text-decoration: underline; cursor: pointer;"
             ng-bind="initCmsModel.culture.fullName"></span>. -->
-
+            Choose the type of your databse: 
+            <span style="cursor: pointer;" ng-click="initCmsModel.isUseLocal=!initCmsModel.isUseLocal">
+                <span data-toggle="tooltip" data-placement="top" title="Click to change to remote database." style="text-decoration: underline;" ng-if="initCmsModel.isUseLocal">local <i class="fa fa-angle-down" style="text-decoration: underline"></i></span>
+                <span data-toggle="tooltip" data-placement="top" title="Click to change to local database." style="text-decoration: underline;" ng-if="!initCmsModel.isUseLocal">remote
+                    <i class="fa fa-angle-up" style="text-decoration: underline"></i></span>
+            </span>            
     </p>
 
     <hr>
@@ -47,8 +45,7 @@
 
         <mssql-local-info ng-if="initCmsModel.isUseLocal" init-cms-model="initCmsModel">
         </mssql-local-info>
-        <br>
-
+       
         <div class="text-center">
             <button ng-if="!initCmsModel.isUseLocal" ng-click="initCms();" class="btn btn-primary" style="width:250px" ng-disabled="!initCmsModel.databaseServer || !initCmsModel.databaseName || !initCmsModel.databaseUser || !initCmsModel.culture">
                 <span ng-if="!initCmsModel.databaseServer || !initCmsModel.databaseName || !initCmsModel.databaseUser || !initCmsModel.culture">Next...</span>
