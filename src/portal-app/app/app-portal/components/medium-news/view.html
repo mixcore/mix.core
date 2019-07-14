@@ -1,18 +1,12 @@
 <div class="card mb-3 ga-container" ng-init="$ctrl.init()">
     <div class="card-header">
         <h6>
-            Google Analytics
-
-            <div id="active-users-container" class="float-right"></div>
+            Blog & News
         </h6>
     </div>
     <div class="card-body">
-        <div id="embed-api-auth-container"></div>
-
-        <!-- <div id="view-selector-1-container"></div> -->
-        <div id="chart-1-container"></div>
-
-        <div id="chart-2-container"></div>
-        <div id="view-selector-2-container"></div>
+        <div ng-repeat="item in $ctrl.items">
+            <p item="item"></p> 
+        </div>
     </div>
 </div>

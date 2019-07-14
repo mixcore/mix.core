@@ -9,7 +9,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
         var _loadJArrayData = async function (name) {
             var req = {
                 method: 'GET',
-                url: '/portal/jarray-data/'+ name
+                url: '/portal/jarray-data/' + name
             };
             return await _getAnonymousApiResult(req);
         };
@@ -33,15 +33,15 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
         };
 
         var _sendMail = async function (subject, body) {
-                var url = '/portal/sendmail';
-                var req = {
-                    method: 'POST',
-                    url: url,
-                    data: { subject: subject, body: body }
-                };
-                return _getApiResult(req).then(function (response) {
-                    return response.data;
-                });
+            var url = '/portal/sendmail';
+            var req = {
+                method: 'POST',
+                url: url,
+                data: { subject: subject, body: body }
+            };
+            return _getApiResult(req).then(function (response) {
+                return response.data;
+            });
         };
 
         var _getSettings = async function (culture) {
@@ -69,10 +69,10 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
             var settings = localStorageService.get('settings');
             var globalSettings = localStorageService.get('globalSettings');
             var translator = localStorageService.get('translator');
-            if (settings && globalSettings && translator && settings.lang === culture) {                
+            if (settings && globalSettings && translator && settings.lang === culture) {
                 $rootScope.settings = settings;
                 $rootScope.globalSettings = globalSettings;
-                $rootScope.translator.translator = translator;                
+                $rootScope.translator.translator = translator;
             }
             else {
                 var url = '/portal';
@@ -89,39 +89,38 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
                     localStorageService.set('globalSettings', response.data.globalSettings);
                     localStorageService.set('translator', response.data.translator);
                     $rootScope.settings = response.data.settings;
-                    $rootScope.globalSettings = response.data.globalSettings; 
-                    $rootScope.translator.translator = response.data.translator;                   
+                    $rootScope.globalSettings = response.data.globalSettings;
+                    $rootScope.translator.translator = response.data.translator;
                 });
             }
         };
-        
+
         var _checkConfig = async function (lastSync) {
-            if(lastSync)
-            {
-                var url = '/portal/check-config/' +  lastSync;
+            if (lastSync) {
+                var url = '/portal/check-config/' + lastSync;
                 var req = {
                     method: 'GET',
                     url: url
                 };
                 return _getApiResult(req).then(function (response) {
-                    if(response.data){
+                    if (response.data) {
                         _removeSettings().then(
-                            ()=>{
-                                _removeTranslator().then(()=>{
+                            () => {
+                                _removeTranslator().then(() => {
                                     localStorageService.set('settings', response.data.settings);
                                     localStorageService.set('globalSettings', response.data.globalSettings);
                                     localStorageService.set('translator', response.data.translator);
                                     $rootScope.settings = response.data.settings;
-                                    $rootScope.globalSettings = response.data.globalSettings; 
-                                    $rootScope.translator.translator = response.data.translator;                   
+                                    $rootScope.globalSettings = response.data.globalSettings;
+                                    $rootScope.translator.translator = response.data.translator;
                                 });
                             }
                         );
                     }
-                    else{
+                    else {
                         $rootScope.settings = localStorageService.get('settings');
-                        $rootScope.globalSettings = localStorageService.get('globalSettings'); 
-                        $rootScope.translator.translator = localStorageService.get('translator');                   
+                        $rootScope.globalSettings = localStorageService.get('globalSettings');
+                        $rootScope.translator.translator = localStorageService.get('translator');
                     }
                 });
             }
@@ -129,7 +128,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
 
         var _genrateSitemap = async function () {
 
-            var url = '/portal';            
+            var url = '/portal';
             url += '/sitemap';
             var req = {
                 method: 'GET',
@@ -189,18 +188,18 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
             var settings = localStorageService.get('settings');
             var globalSettings = localStorageService.get('globalSettings');
             var translator = localStorageService.get('translator');
-            if (settings && globalSettings && translator && (!culture || settings.lang === culture)) {                
+            if (settings && globalSettings && translator && (!culture || settings.lang === culture)) {
                 $rootScope.settings = settings;
                 $rootScope.globalSettings = globalSettings;
-                $rootScope.translator.translator = translator;       
-                await _checkConfig(globalSettings.lastUpdateConfiguration);         
+                $rootScope.translator.translator = translator;
+                await _checkConfig(globalSettings.lastUpdateConfiguration);
             }
             else {
                 if (culture && settings && settings.lang !== culture) {
                     await _removeSettings();
                     await _removeTranslator();
                 }
-                await _getAllSettings(culture);                
+                await _getAllSettings(culture);
             }
 
         };
@@ -227,10 +226,10 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
             }
             req.headers.Authorization = 'Bearer ' + req.Authorization || '';
             return $http(req).then(function (resp) {
-                if(req.url.indexOf('settings')==-1 &&
-                    (!$rootScope.settings || 
-                    $rootScope.settings.lastUpdateConfiguration < resp.data.lastUpdateConfiguration)
-                ){
+                if (req.url.indexOf('settings') == -1 &&
+                    (!$rootScope.settings ||
+                        $rootScope.settings.lastUpdateConfiguration < resp.data.lastUpdateConfiguration)
+                ) {
                     _initAllSettings();
                 }
 
@@ -308,4 +307,4 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
         return adminCommonFactory;
 
     }]);
-    
+
