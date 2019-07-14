@@ -6,7 +6,9 @@
     </div>
     <div class="card-body">
         <div ng-repeat="item in $ctrl.items">
-            <p item="item"></p> 
+<pre>
+{{item | json}}
+</pre>
         </div>
     </div>
 </div>
