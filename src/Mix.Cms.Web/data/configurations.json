@@ -129,7 +129,7 @@
     {
       "keyword": "Favicon",
       "category": "Site_Common",
-      "value": "/css/portal/img/mixcore-logo-green.png",
+      "value": "/css/portal/img/mixcore-logo-green-16x16.png",
       "dataType": 16,
       "description": "Favicon",
       "priority": 0,
@@ -144,7 +144,24 @@
       "priority": 0,
       "status": 2
     },
-   
+    {
+      "keyword": "LogoWhite",
+      "category": "Site_Common",
+      "value": "/css/portal/img/mixcore-logo-white.png",
+      "dataType": 16,
+      "description": "Logo White",
+      "priority": 0,
+      "status": 2
+    },
+    {
+      "keyword": "LogoBlack",
+      "category": "Site_Common",
+      "value": "/css/portal/img/mixcore-logo-black.png",
+      "dataType": 16,
+      "description": "Logo Black",
+      "priority": 0,
+      "status": 2
+    },   
     {
       "keyword": "ThemeName",
       "category": "Site",
