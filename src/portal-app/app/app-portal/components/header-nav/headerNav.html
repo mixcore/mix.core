@@ -1,26 +1,34 @@
-<header class="navbar navbar-expand flex-column flex-md-row sw-navbar position-sticky">        
-    <a class="mr-0 mr-md-2" href="/{{$ctrl.settings.lang}}" target="_blank" aria-label="mixcore">
-        <img ng-src="{{$ctrl.settings.data.Logo}}" alt="mixcore" width="35">
+<header class="navbar navbar-expand flex-column flex-md-row sw-navbar position-sticky">
+
+    <a class="navbar-brand ml-2" href="/{{$ctrl.settings.lang}}" target="_blank" aria-label="mixcore">
+        <div class="mixcore-logo"
+            style="width: 120px;height: 25px;background-color: hsla(var(--primary-color-hue,211),var(--primary-color-saturation,100%),var(--primary-color-brightness,50%),1);-webkit-mask:  url(../images/mixcore-logo-green.svg) no-repeat 50% 50%; mask: url(../images/mixcore-logo-green.svg) no-repeat 50% 50%;">
+        </div>
+        
+        <!-- <img src="assets/img/mixcore-logo-green.svg" alt="Kiwi standing on oval" height="25px"> -->
     </a>
-    <span class="navbar-brand" ng-bind="$ctrl.settings.data.SiteName"></span>
+    <!-- <a class="mr-0 mr-md-2" href="/{{$ctrl.settings.lang}}" target="_blank" aria-label="mixcore">
+        <img ng-src="{{$ctrl.settings.data.Logo}}" alt="mixcore" width="35">
+    </a> -->
 
     <button type="button" id="sidebarCollapse" data-toggle="collapse" data-target="#sw-docs-nav"
         aria-controls="sw-docs-nav" class="btn btn-link" ng-click="$ctrl.toggleSidebar()">
         <span class="mi mi-List"></span>
     </button>
 
+    <img ng-src="{{$ctrl.settings.data.Logo}}" alt="mixcore" height="25" class="mr-1">
+    <h6 class="mt-1" ng-bind="$ctrl.settings.data.SiteName"></h6>
     <!-- <div class="navbar-nav-scroll">
         <breadcrumbs bread-crumbs="$ctrl.breadCrumbs"></breadcrumbs>
     </div> -->
 
     <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex" ng-if="$ctrl.settings">
-        
-        <li class="nav-item mr-2 text-center">            
-            <a class="nav-link p-2" href="#" data-toggle="modal" 
-                data-target="#dlg-portal-theme-settings">
+
+        <li class="nav-item mr-2 text-center">
+            <a class="nav-link p-2" href="#" data-toggle="modal" data-target="#dlg-portal-theme-settings">
                 <i class="mi mi-Personalize"></i>
-            </a>       
-        </li>        
+            </a>
+        </li>
         <li class="nav-item mr-2">
             <a class="nav-link p-2" href="#" ng-click="$ctrl.addFavorite()">
                 <i class="mi mi-FavoriteList"></i>
