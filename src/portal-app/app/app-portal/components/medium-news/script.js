@@ -15,7 +15,7 @@
 
       ctrl.getMediumApiResult = async function (req) {
         return $http(req).then(function (resp) {
-          if(resp.status == 'ok')
+          if(resp.status == '200')
           {
               ctrl.items = resp.data.items;
           }
