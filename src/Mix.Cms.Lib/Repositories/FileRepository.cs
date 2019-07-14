@@ -541,11 +541,19 @@ namespace Mix.Cms.Lib.Repositories
                     else
                     {
                         string base64 = file.FileStream.Split(',')[1];
-                        byte[] bytes = Convert.FromBase64String(base64);
-                        using (var writer = File.Create(fileName))
+
+                        if (!string.IsNullOrEmpty(ImageResizer.getContentType(fileName)))
                         {
-                            writer.Write(bytes, 0, bytes.Length);
-                            return true;
+                            return ImageResizer.ResizeImage(Services.MixService.GetConfig<int>("ImageSize"), base64, fileName);
+                        }
+                        else
+                        {
+                            byte[] bytes = Convert.FromBase64String(base64);
+                            using (var writer = File.Create(fileName))
+                            {
+                                writer.Write(bytes, 0, bytes.Length);
+                                return true;
+                            }
                         }
                     }
                 }
