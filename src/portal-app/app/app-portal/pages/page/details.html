@@ -51,12 +51,10 @@
                     </pane-v>
                 </tabs-v>                
             </section>
-            <section class="col-sm-4" style="padding-left:0">
-
+            <section class="col-sm-4" style="padding-left:0">                    
                 <actions preview-url="activedData.detailsUrl" back-url="'/portal/page/list'"></actions>
                 <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
-
-
+                <navs data="activedData.positionNavs" prefix="'pos'"></navs>
                 <div class="card mb-3">
                     <h6 class="card-header">URL slugs
                         <button class="btn btn-link text-primary btn-sm float-right py-0" type="button"
