@@ -7,7 +7,18 @@
   transition: background-image 0.2s ease-in-out;
   background-image: url("../assets/img/bgs/right-bg.png");
 }
-
+/* Input Site name */
+.input-site-name{
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid #000000;
+  outline:none;
+  box-shadow:none;
+  display: inline;
+  width: 200px;
+  border-radius: 0;
+  padding: 0;
+}
 /* .bg-register-image:hover {
   background-image:url("../assets/img/bgs/NowUI-Demo.png");
   background-position: bottom;
@@ -156,7 +167,23 @@ body.app-init {
   align-items: center;
   overflow: hidden;
   height: 100vh;
-  font-family: "Roboto", sans-serif;
+  
+}
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (max-width: 600px) {
+  body.app-init {
+    display: unset;
+    flex-direction: unset;
+    justify-content: unset;
+    align-items: unset;
+    overflow: scroll;
+    /* height: 100vh; */
+    
+  }
+
+  .container.init-pages {
+    padding-top: 4%;
+  }
 }
 body .credit {
   position: absolute;
