@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels
@@ -49,8 +50,14 @@ namespace Mix.Cms.Lib.ViewModels
                         {
                             if (result.IsSucceed)
                             {
-                                var saveResult = await module.SaveModelAsync(true, context, transaction);
-                                ViewModelHelper.HandleResult(saveResult, ref result);
+                                if (!context.MixModule.Any(m=>m.Name == module.Name && m.Specificulture == destCulture))
+                                {
+                                    module.Id = context.MixModule.Max(m => m.Id) + 1;
+                                    module.CreatedDateTime = DateTime.UtcNow;
+                                    var saveResult = await module.SaveModelAsync(true, context, transaction);
+                                    ViewModelHelper.HandleResult(saveResult, ref result);
+                                }
+                                
                             }
                         }
                     }

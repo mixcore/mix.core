@@ -26,9 +26,9 @@ modules.component('setAttribute', {
             };
     
             ctrl.addOption = function (col, index) {
-                var val = angular.element('#option_' + index).val();
+                var val = $('#option_' + index).val();
                 col.options.push(val);
-                angular.element('#option_' + index).val('');
+                $('#option_' + index).val('');
             };
             ctrl.generateForm = function(){
                 var formHtml = document.createElement('module-form');

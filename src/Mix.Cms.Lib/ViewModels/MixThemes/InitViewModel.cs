@@ -198,7 +198,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                     //TODO: Create default asset
                     foreach (var file in files)
                     {
-                        string content = file.Content.Replace($"/Content/Templates/{TemplateAsset.Filename}/",
+                        string content = file.Content.Replace($"/Content/Templates/{siteStructures.ThemeName}/",
                         $"/Content/Templates/{Name}/");
                         MixTemplates.UpdateViewModel template = new MixTemplates.UpdateViewModel(
                             new MixTemplate()

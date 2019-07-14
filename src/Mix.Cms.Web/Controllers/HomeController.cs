@@ -37,8 +37,36 @@ namespace Mix.Cms.Web.Controllers
         }
 
         #region Routes
-
         [Route("")]
+        public async System.Threading.Tasks.Task<IActionResult> Index()
+        {
+            if (_forbidden)
+            {
+                return Redirect($"/error/403");
+            }
+            if (MixService.GetConfig<bool>("IsMaintenance"))
+            {
+                return Redirect($"/{_culture}/maintenance");
+            }
+
+            if (MixService.GetConfig<bool>("IsInit"))
+            {
+                //Go to landing page
+                return Redirect($"/{_culture}");
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
+                {
+                    return Redirect("Init");
+                }
+                else
+                {
+                    return Redirect($"/init/step2");
+                }
+            }
+        }
+
         [Route("{culture}")]
         [Route("{culture}/{alias}")]
         public async System.Threading.Tasks.Task<IActionResult> Alias(string culture,
