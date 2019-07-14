@@ -94,14 +94,14 @@ namespace Mix.Cms.Api.Controllers.v1
             // Copy current templates file
             FileRepository.Instance.CopyDirectory($"{getTheme.Data.TemplateFolder}", $"{tempPath}/Templates");
             // Copy current assets files
-            FileRepository.Instance.CopyDirectory($"{getTheme.Data.AssetFolder}", $"{tempPath}/Assets");            
+            FileRepository.Instance.CopyDirectory($"wwwroot/{getTheme.Data.AssetFolder}", $"{tempPath}/Assets");            
             // Copy current uploads files
-            FileRepository.Instance.CopyDirectory($"{getTheme.Data.UploadsFolder}", $"{tempPath}/Uploads");
+            FileRepository.Instance.CopyDirectory($"wwwroot/{getTheme.Data.UploadsFolder}", $"{tempPath}/Uploads");
             // Save Site Structures
             FileRepository.Instance.SaveFile(file);
 
             // Zip to [theme_name].zip ( wwwroot for web path)
-            string filePath = FileRepository.Instance.ZipFolder($"{tempPath}", outputPath, getTheme.Data.Name);
+            string filePath = FileRepository.Instance.ZipFolder($"{tempPath}", outputPath, $"{getTheme.Data.Name}-{Guid.NewGuid()}");
 
             
 
