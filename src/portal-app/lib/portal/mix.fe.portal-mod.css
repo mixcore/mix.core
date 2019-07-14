@@ -2042,22 +2042,22 @@ pre code {
 }
 
 .form-control::-webkit-input-placeholder {
-  color: #6c757d;
+  color: #adb5bd;
   opacity: 1;
 }
 
 .form-control:-ms-input-placeholder {
-  color: #6c757d;
+  color: #adb5bd;
   opacity: 1;
 }
 
 .form-control::-ms-input-placeholder {
-  color: #6c757d;
+  color: #adb5bd;
   opacity: 1;
 }
 
 .form-control::placeholder {
-  color: #6c757d;
+  color: #adb5bd;
   opacity: 1;
 }
 
@@ -10493,11 +10493,6 @@ a.text-dark:hover, a.text-dark:focus {
       z-index: 1040;
     }
   }
-}
-
-.sw-navbar .navbar-brand img {
-  -webkit-animation: mi-spin 30s infinite linear;
-          animation: mi-spin 30s infinite linear;
 }
 
 .sw-navbar .navbar-nav .nav-link {
