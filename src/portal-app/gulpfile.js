@@ -144,7 +144,7 @@ paths.appInitCss = {
 paths.portalCss = {
     src: [
         "./lib/portal/**/*.css",
-        "./lib/portal/**/*.*.css",
+        "./lib/portal/**/*.*.css"       
     ],
     dest: paths.webroot + "css/portal.min.css"
 };

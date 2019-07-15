@@ -1,6 +1,15 @@
 ﻿{
   "data": [
     {
+      "keyword": "Domain",
+      "category": "Site",
+      "value": "/",
+      "dataType": 7,
+      "description": "Domain",
+      "priority": 0,
+      "status": 2
+    },
+    {
       "keyword": "SiteName",
       "category": "Site",
       "value": "Mix Core",

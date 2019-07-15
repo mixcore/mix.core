@@ -3,6 +3,7 @@ app.filter('utcToLocal', FilterUtcDate)
     .filter('utcToLocalTime', FilterUtcDateTime)
     .filter('phoneNumber', FilterPhoneNumber)
     .filter('money', FilterMoney)
+    .filter('markdown', MarkdownToHtml)
     .constant('ngAppSettings', {
         serviceBase: '',
         clientId: 'ngAuthApp',
@@ -1346,6 +1347,13 @@ app.filter('utcToLocal', FilterUtcDate)
         ]
     });
 
+function MarkdownToHtml($filter){
+    return function(mdContent){
+        var converter = new showdown.Converter();
+        return converter.makeHtml(mdContent);
+    }
+}
+    
 function FilterUtcDate($filter) {
     return function (utcDateString, format) {
         format = format || 'MM.dd.yyyy - hh:mm:ss a';
