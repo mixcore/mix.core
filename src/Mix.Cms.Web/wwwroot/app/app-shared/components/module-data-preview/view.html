@@ -21,15 +21,18 @@
     <div ng-switch-when="5">
         <div ng-bind-html="$ctrl.data.value">
         </div>
-        </div>
-        <div ng-switch-when="6">
-            <p ng-bind-html="$ctrl.data.value">
-            </p>
-        </div>
-        <div ng-switch-when="18">
-            <input class="form-control" type="checkbox" ng-model="$ctrl.data.value">
-        </div>
-        <div ng-switch-when="8">
-            <p ng-bind-html="$ctrl.data.value"></p>
-        </div>
     </div>
+    <div ng-switch-when="6">
+        <p ng-bind-html="$ctrl.data.value">
+        </p>
+    </div>
+    <div ng-switch-when="18">
+        <input class="form-control" type="checkbox" ng-model="$ctrl.data.value">
+    </div>
+    <div ng-switch-when="8">
+        <p ng-bind-html="$ctrl.data.value"></p>
+    </div>
+    <div ng-switch-when="21">            
+        <div ng-bind-html="$ctrl.data.value | markdown"></div>
+    </div>
+</div>
