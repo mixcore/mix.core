@@ -13,6 +13,7 @@ using Mix.Cms.Lib.Services;
 using Mix.Identity.Services;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Hub;
+using Microsoft.AspNet.OData.Extensions;
 
 namespace Mix.Cms.Web
 {
@@ -85,7 +86,7 @@ namespace Mix.Cms.Web
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             // add signalr
             services.AddSignalR();
-
+            services.AddOData();
             // Config server caching
             services.AddMvc(options =>
             {

@@ -75,6 +75,16 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
         #endregion Contructors
 
         #region Overrides
+        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            switch (DataType)
+            {
+                // Convert  markdown value => html
+                case 21:
+                    StringValue = CommonMark.CommonMarkConverter.Convert(StringValue);
+                    break;
+            }
+        }
         #endregion
     }
 }
