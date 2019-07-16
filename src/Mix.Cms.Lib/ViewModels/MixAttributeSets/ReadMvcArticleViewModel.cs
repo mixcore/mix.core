@@ -29,7 +29,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         #endregion Models
         #region Views
         [JsonProperty("articleData")]
-        public PaginationModel<MixArticleAttributeDatas.ReadMvcViewModel> ArticleData { get;set;}
+        public PaginationModel<MixArticleAttributeDatas.ReadMvcViewModel> ArticleData { get; set; }
         #endregion
         #endregion Properties
         #region Contructors
@@ -46,6 +46,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         #region Overrides
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            ArticleData = MixArticleAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(
+                m => m.ArticleId == Id && m.Specificulture == Specificulture, "Priority", 0, null, null
+                    , _context, _transaction).Data;
         }
 
         #endregion

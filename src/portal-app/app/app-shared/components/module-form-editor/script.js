@@ -1307,6 +1307,6 @@ modules.component('moduleFormEditor', {
         data: '=',
         inputClass: '=',
         isShowTitle: '=',
-        title: '='
+        dataTitle: '='
     }
 });

@@ -2,6 +2,7 @@
 // The mixcore Foundation licenses this file to you under the GNU General Public License v3.0 license.
 // See the LICENSE file in the project root for more information.
 
+using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
@@ -64,6 +65,16 @@ namespace Mix.Cms.Web
                 routes.MapRoute(
                     name: "product",
                     template: @"{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + @"}/product/{seoName}");
+
+                
+                // uncomment the following line to Work-around for #1175 in beta1
+                routes.EnableDependencyInjection();
+                
+                // and this line to enable OData query option, for example $filter
+                routes.Select().Expand().Filter().OrderBy().MaxTop(100).Count();
+                //routes.MapODataServiceRoute("ODataRoute", "odata", builder.GetEdmModel());
+
+
             });
         }
 
