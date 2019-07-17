@@ -54,15 +54,15 @@ namespace Mix.Cms.Api.Controllers.OData.Pages
         {
             string msg = string.Empty;
             Expression<Func<MixPage, bool>> predicate = model => model.Specificulture == culture;
-            var portalResult = await ReadMvcViewModel.Repository.GetModelListByAsync(predicate);
+            var portalResult = await base.GetListAsync<ReadMvcViewModel>(predicate);
             if (portalResult.IsSucceed)
             {
-                foreach (var item in portalResult.Data)
+                foreach (var item in portalResult.Data.Items)
                 {
                     item.DetailsUrl = MixCmsHelper.GetRouterUrl("Page", new { id = item.Id, SeoName = item.SeoName }, Request, Url);
                 }
             }
-            return Ok(portalResult.Data);
+            return Ok(portalResult.Data.Items);
         }
 
 

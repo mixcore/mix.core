@@ -204,6 +204,7 @@ namespace Mix.Cms.Lib.Repositories
             }
             else if (isCreate)
             {
+                CreateDirectoryIfNotExist(FileFolder);
                 file.Create();
                 result = new FileViewModel()
                 {
