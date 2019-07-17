@@ -65,7 +65,6 @@ namespace Mix.Cms.Api.Controllers.OData.Pages
             return Ok(portalResult.Data.Items);
         }
 
-
         #endregion Get
 
     }
