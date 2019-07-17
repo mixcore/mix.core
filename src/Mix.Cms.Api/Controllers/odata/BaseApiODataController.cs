@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
@@ -166,34 +167,38 @@ namespace Mix.Cms.Api.Controllers.OData
             }
             return new RepositoryResponse<FileViewModel>();
         }
-        protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync<TView>(string key, RequestPaging request, Expression<Func<TModel, bool>> predicate = null, TModel model = null)
+        protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync<TView>(Expression<Func<TModel, bool>> predicate = null)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-            var getData = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
-            
-            var cacheKey = $"{typeof(TModel).Name}_list_{_lang}_{key}_{request.Status}_{request.Keyword}_{request.OrderBy}_{request.Direction}_{request.PageSize}_{request.PageIndex}_{request.Query}";
+            RequestPaging request = new RequestPaging()
+            {
+
+            };
+            var cacheKey = $"{typeof(TModel).Name}_list_{_lang}_{typeof(TView)}_{request.Status}_{request.Keyword}_{request.OrderBy}_{request.Direction}_{request.PageSize}_{request.PageIndex}_{request.Query}";
             RepositoryResponse<PaginationModel<TView>> data = null;
             if (MixService.GetConfig<bool>("IsCache"))
             {
                 data = await MixCacheService.GetAsync<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
             }
-            
+
             if (data == null)
             {
                 if (predicate != null)
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-                    //_memoryCache.Set(cacheKey, data);
-                    await MixCacheService.SetAsync(cacheKey, data);
+                    if (data.IsSucceed)
+                    {
+                        await MixCacheService.SetAsync(cacheKey, data);
+                    }
                 }
                 else
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-                    //_memoryCache.Set(cacheKey, data);
-                    await MixCacheService.SetAsync(cacheKey, data);
-
+                    if (data.IsSucceed)
+                    {
+                        await MixCacheService.SetAsync(cacheKey, data);
+                    }
                 }
-                AlertAsync("Add Cache", 200, cacheKey);
             }
             data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
             return data;
@@ -307,6 +312,132 @@ namespace Mix.Cms.Api.Controllers.OData
         {
             _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : MixService.GetConfig<string>("Language");
             _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
+        }
+
+
+        public class Poco
+        {
+            public int id { get; set; }
+            public string name { get; set; }
+            public string type { get; set; }
+        }
+        public class Rule
+        {
+            public string field { get; set; }
+            public string op { get; set; }
+            public string data { get; set; }
+        }
+        public static Expression<Func<TModel, bool>> FilterObjectSet(Rule rule, string name)
+        {
+            Type type = typeof(TModel);
+            var par = Expression.Parameter(type, name);
+
+            Type fieldPropertyType;
+            Expression fieldPropertyExpression;
+
+            FieldInfo fieldInfo = type.GetField(rule.field);
+
+            if (fieldInfo == null)
+            {
+                PropertyInfo propertyInfo = type.GetProperty(rule.field);
+
+                if (propertyInfo == null)
+                {
+                    throw new Exception();
+                }
+
+                fieldPropertyType = propertyInfo.PropertyType;
+                fieldPropertyExpression = Expression.Property(par, propertyInfo);
+            }
+            else
+            {
+                fieldPropertyType = fieldInfo.FieldType;
+                fieldPropertyExpression = Expression.Field(par, fieldInfo);
+            }
+
+            object data2 = Convert.ChangeType(rule.data, fieldPropertyType);
+            var eq = Expression.Equal(fieldPropertyExpression,
+                                      Expression.Constant(data2))
+
+                    ;
+
+            return Expression.Lambda<Func<TModel, bool>>(eq, par);
+        }
+        protected Expression<Func<T, bool>> AndAlso<T>(
+      Expression<Func<T, bool>> expr1,
+      Expression<Func<T, bool>> expr2)
+        {
+            var parameter = Expression.Parameter(typeof(T));
+
+            var leftVisitor = new ReplaceExpressionVisitor(expr1.Parameters[0], parameter);
+            var left = leftVisitor.Visit(expr1.Body);
+
+            var rightVisitor = new ReplaceExpressionVisitor(expr2.Parameters[0], parameter);
+            var right = rightVisitor.Visit(expr2.Body);
+
+            return Expression.Lambda<Func<T, bool>>(
+                Expression.AndAlso(left, right), parameter);
+        }
+        private class ReplaceExpressionVisitor
+        : ExpressionVisitor
+        {
+            private readonly Expression _oldValue;
+            private readonly Expression _newValue;
+
+            public ReplaceExpressionVisitor(Expression oldValue, Expression newValue)
+            {
+                _oldValue = oldValue;
+                _newValue = newValue;
+            }
+
+            public override Expression Visit(Expression node)
+            {
+                if (node == _oldValue)
+                    return _newValue;
+                return base.Visit(node);
+            }
+        }
+
+        protected Expression<Func<TModel, bool>> HandleRawFilter(string culture, string[] filters)
+        {
+            Expression<Func<TModel, bool>> expr1 = null;
+            var rule = new Rule()
+            {
+                field = "Specificulture",
+                op = "eq",
+                data = culture
+            };
+            expr1 = FilterObjectSet(rule, "var1");
+            foreach (var item in filters)
+            {
+                //return exp;
+                if (!string.IsNullOrEmpty(item))
+                {
+                    try
+                    {
+                        string[] arr = item.Split(' ');
+                        if (arr.Length >= 3)
+                        {
+                            rule = new Rule()
+                            {
+                                field = arr[0],
+                                op = arr[1],
+                                data = arr[2]
+                            };
+                            var expr2 = FilterObjectSet(rule, "var1");
+                            ParameterExpression param = expr1.Parameters[0];
+
+                            // simple version
+                            expr1 = AndAlso(expr1, expr2);
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                }
+            }
+            return expr1;
         }
     }
 }
