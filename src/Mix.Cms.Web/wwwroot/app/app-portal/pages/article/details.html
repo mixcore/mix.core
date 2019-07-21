@@ -54,7 +54,20 @@
                     </pane-v>
 
                 </tabs-v>
-                <article-attribute-sets ng-if="isAdmin" article="activedData"></article-attribute-sets>
+                <div class="tab-pane fade active show" id="pills-general" role="tabpanel" aria-labelledby="pills-general-tab">
+                
+                    <div class="form-group">
+                        <label class="control-label">Attribute Sets</label>
+                        <navs data="activedData.attributeSetNavs" prefix="'attribute_set'" details-url="'/portal/attribute-set/details/'" key="'attributeSetId'"></navs>
+                    </div>
+                    <tabs-v class="mb-3">
+                        <pane-v title="{{set.description}}" class="card" ng-repeat="set in activedData.attributeSetNavs track by $index" ng-if="set.isActived">
+                            <div class="card-body">
+                                <article-attribute-set ng-if="isAdmin" set="set"></article-attribute-set>
+                            </div>
+                        </pane-v>
+                    </tabs-v>
+                </div>
                 <template-editor ng-if="isAdmin" folder-type="'Articles'" template="activedData.view" templates="activedData.templates">
                 </template-editor>
                 <!-- <div class="card mb-3">

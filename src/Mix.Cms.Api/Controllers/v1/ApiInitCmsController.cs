@@ -32,7 +32,7 @@ namespace Mix.Cms.Api.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/init")]
     public class ApiInitCmsController :
-        BaseApiController
+        BaseApiController<MixCmsContext>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;

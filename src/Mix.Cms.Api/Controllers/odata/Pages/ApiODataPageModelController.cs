@@ -22,7 +22,7 @@ namespace Mix.Cms.Api.Controllers.OData.Pages
             MixCmsContext context, IMemoryCache memoryCache
             , Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
         {
-            this._context = context;
+            _context = context;
         }
 
         #region Get

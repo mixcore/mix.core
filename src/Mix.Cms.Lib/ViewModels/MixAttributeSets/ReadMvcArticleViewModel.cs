@@ -66,6 +66,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 
             ArticleData = getData.Data;
         }
+
         #endregion
     }
 }

@@ -163,8 +163,8 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         [JsonProperty("articleNavs")]
         public List<MixArticleArticles.ReadViewModel> ArticleNavs { get; set; }
 
-        [JsonProperty("attributeSetNavs")]
-        public List<MixArticleAttributeSets.ReadMvcViewModel> AttributeSetNavs { get; set; }
+        [JsonProperty("attributeSets")]
+        public List<MixAttributeSets.ReadMvcArticleViewModel> AttributeSets { get; set; } = new List<MixAttributeSets.ReadMvcArticleViewModel>();
         
         [JsonProperty("listTag")]
         public JArray ListTag { get => JArray.Parse(Tags ?? "[]"); }
@@ -226,7 +226,11 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             ArticleNavs = MixArticleArticles.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
             
             // Get Attribute Sets
-            AttributeSetNavs = MixArticleAttributeSets.ReadMvcViewModel.Repository.GetModelListBy(n => n.ArticleId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
+            var navs = MixArticleAttributeSets.ReadMvcViewModel.Repository.GetModelListBy(n => n.ArticleId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
+            foreach (var item in navs)
+            {
+                AttributeSets.Add(item.MixAttributeSet);
+            }
         }
 
         #endregion Overrides
@@ -247,7 +251,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
         public MixAttributeSets.ReadMvcArticleViewModel GetAttributeSet(string name)
         {
-            return AttributeSetNavs.FirstOrDefault(m => m.MixAttributeSet.Name == name)?.MixAttributeSet;
+            return AttributeSets.FirstOrDefault(m => m.Name == name);
         }
 
         #endregion Expands

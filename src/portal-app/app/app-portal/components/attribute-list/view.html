@@ -38,7 +38,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="form-group">
                     <label class="control-label">Default Value</label>
                     <input ng-model="col.defaultValue" placeholder="Default Value" class="form-control form-control-sm">
@@ -49,9 +49,15 @@
                     Advanced
                 </a>
             </div>
+            <div class="col-md-1">
+                <a class="btn" ng-click="$ctrl.removeAttribute(col, $index)">
+                    <span class="fas fa-times text-danger"></span>
+                </a>
+            </div>
         </div>
         <div class="row" ng-show="col.showAdvanced">
-            <div class="form-group col-md-3">
+            <div class="col-md-1"></div>
+            <div class="form-group col-md-2">
                 <span class="switch switch-sm">
                     <input type="checkbox" ng-model="col.isEncrypt">
                     <label class="switch mb-0">
@@ -59,7 +65,7 @@
                     </label>
                 </span>
             </div>
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-2">
                 <span class="switch switch-sm">
                     <input type="checkbox" ng-model="col.isUnique">
                     <label class="switch mb-0">
@@ -67,7 +73,7 @@
                     </label>
                 </span>
             </div>
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-2">
                 <span class="switch switch-sm">
                     <input type="checkbox" ng-model="col.isRequired">
                     <label class="switch mb-0">
@@ -75,7 +81,7 @@
                     </label>
                 </span>
             </div>
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-2">
                 <span class="switch switch-sm">
                     <input type="checkbox" ng-model="col.isSelect">
                     <label class="switch mb-0">

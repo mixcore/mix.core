@@ -18,7 +18,10 @@ modules.component('attributeList', {
                     ctrl.attributes.push(t);
                 }
             };
-    
+            ctrl.removeAttribute = function(attr, index){
+                ctrl.attributes.splice(index,1);
+                ctrl.removeAttributes.push(attr);
+            };
             ctrl.addOption = function (col, index) {
                 var val = $('#option_' + index).val();
                 col.options = col.options || [];
@@ -116,6 +119,7 @@ modules.component('attributeList', {
         }],
     bindings: {
         title: '=',
-        attributes: '='
+        attributes: '=',
+        removeAttributes: '='
     }
 });

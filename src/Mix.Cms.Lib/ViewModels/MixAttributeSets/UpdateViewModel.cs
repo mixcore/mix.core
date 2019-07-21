@@ -36,6 +36,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         #region Views
         [JsonProperty("attributes")]
         public List<MixAttributeFields.UpdateViewModel> Attributes { get; set; }
+        [JsonProperty("removeAttributes")]
+        public List<MixAttributeFields.UpdateViewModel> RemoveAttributes { get; set; } = new List<MixAttributeFields.UpdateViewModel>();
 
         [JsonProperty("articleData")]
         public PaginationModel<MixArticleAttributeDatas.UpdateViewModel> ArticleData { get;set;}
@@ -80,6 +82,21 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
                         item.AttributeSetId = parent.Id;
                         var saveResult = await item.SaveModelAsync(false, _context, _transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            if (result.IsSucceed)
+            {
+                foreach (var item in RemoveAttributes)
+                {
+                    if (result.IsSucceed)
+                    {
+                        var removeResult = await item.RemoveModelAsync(false, _context, _transaction);
+                        ViewModelHelper.HandleResult(removeResult, ref result);
                     }
                     else
                     {

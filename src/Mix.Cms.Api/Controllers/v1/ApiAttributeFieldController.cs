@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.SignalR;
 using Mix.Cms.Hub;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Attributes;
+using System.Collections.Generic;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -90,6 +91,15 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
+        // GET api/module-data/create/id
+        [AllowAnonymous]
+        [HttpGet, HttpOptions]
+        [Route("init-form/{setId}")]
+        public async Task<RepositoryResponse<List<UpdateViewModel>>> InitByName(int setId)
+        {
+            return await UpdateViewModel.Repository.GetModelListByAsync(
+                m => m.AttributeSetId == setId).ConfigureAwait(false);
+        }
 
         #endregion Get
 

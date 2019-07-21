@@ -1,76 +1,44 @@
 modules.component('attributeSetValues', {
     templateUrl: '/app/app-portal/components/attribute-set-values/view.html',
     bindings: {
-        title: '=',
-        attributes: '=',
-        data: '='
+        header: '=',
+        data: '=',
+        columns: '=?',
+        onUpdate:'&?'
     },
     controller: ['$rootScope', '$scope',
         function ($rootScope, $scope) {
             var ctrl = this;
-            ctrl.defaultAttr = {
-                title: '',
-                name: '',
-                default: null,
-                options: [],
-                priority: 0,
-                dataType: 7,
-                isGroupBy: false,
-                isSelect: false,
-                isDisplay: true,
-                width: 3
-            };
             ctrl.selectedProp = null;
+            
             ctrl.settings = $rootScope.globalSettings;
-
-            ctrl.$doCheck = function () {
-                if (angular.toJson(ctrl.columns) != angular.toJson(ctrl.trackedColumns)) {
-                    ctrl.trackedColumns = angular.copy(ctrl.columns);
-                    ctrl.trackedProperties = angular.copy(ctrl.properties);
-                    ctrl.loadEditors();
-                }
-            }.bind(ctrl);
-
-            ctrl.loadEditors = function () {
-                ctrl.properties = [];
-                for (let i = 0; i < ctrl.columns.length; i++) {
-                    var col = ctrl.columns[i];
-                    var oldObj = $rootScope.findObjectByKey(ctrl.trackedProperties, 'name', col.name) || {};
-
-                    ctrl.properties.push({
-                        title: col.title,
-                        name: col.name,
-                        dataType: col.dataType,
-                        value: oldObj.value || col.defaultValue,
-                        options: col.options
-                    });
-
+            ctrl.$onInit = function(){
+                if(ctrl.data.length && !ctrl.columns){
+                    ctrl.columns = ctrl.data[0].data;
                 }
             };
 
-            ctrl.addAttr = function () {
-                if (ctrl.columns) {
-                    var t = angular.copy(ctrl.defaultAttr);
-                    ctrl.columns.push(t);
-                }
+            ctrl.update = function(data){
+                ctrl.onUpdate({data: data});
             };
 
-            ctrl.filterData = function(attributeName){
-                return $rootScope.findObjectByKey(ctrl.data, 'attributeName', attributeName);
-            }
+            ctrl.filterData = function(item, attributeName){
+                return $rootScope.findObjectByKey(item.data, 'attributeName', attributeName);
+            };
+
             ctrl.dragStart = function(index){
                 ctrl.dragStartIndex = index;
             };
             ctrl.updateOrders = function(index){
                 if(index> ctrl.dragStartIndex){
-                    ctrl.attributes.splice(ctrl.dragStartIndex, 1);
+                    ctrl.data.splice(ctrl.dragStartIndex, 1);
                 }
                 else{
-                    ctrl.attributes.splice(ctrl.dragStartIndex+1, 1);
+                    ctrl.data.splice(ctrl.dragStartIndex+1, 1);
                 }
-                angular.forEach(ctrl.attributes, function(e,i){
+                angular.forEach(ctrl.data, function(e,i){
                     e.priority = i;
                 });
-            } 
+            };
         }]
 });

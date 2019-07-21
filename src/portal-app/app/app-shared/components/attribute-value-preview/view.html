@@ -1,0 +1,38 @@
+<div ng-switch="$ctrl.data.dataType">
+    <div ng-switch-default>
+        <p ng-bind="$ctrl.data.stringValue">
+        </p>
+    </div>
+    <div ng-switch-when="1">
+        <span ng-bind="$ctrl.data.stringValue">
+        </span>
+    </div>
+    <div ng-switch-when="16">
+        <preview-image img-height="50" img-src="$ctrl.data.stringValue"></preview-image>
+    </div>
+    <div ng-switch-when="3">
+        <i class="{{$ctrl.data.stringValue}}">
+        </i>
+    </div>
+    <div ng-switch-when="4">
+        <p ng-bind-html="$ctrl.data.stringValue">
+        </p>
+    </div>
+    <div ng-switch-when="5">
+        <div ng-bind-html="$ctrl.data.stringValue">
+        </div>
+    </div>
+    <div ng-switch-when="6">
+        <p ng-bind-html="$ctrl.data.stringValue">
+        </p>
+    </div>
+    <div ng-switch-when="18">
+        <input class="form-control" type="checkbox" ng-model="$ctrl.data.booleanValue">
+    </div>
+    <div ng-switch-when="8">
+        <p ng-bind-html="$ctrl.data.stringValue"></p>
+    </div>
+    <div ng-switch-when="21">            
+        <div ng-bind-html="$ctrl.data.stringValue | markdown"></div>
+    </div>
+</div>

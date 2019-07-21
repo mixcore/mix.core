@@ -11,12 +11,13 @@ using Mix.Common.Helper;
 using Microsoft.AspNetCore.SignalR;
 using Mix.Cms.Hub;
 using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
     [Route("api/v1/file")]
-    public class ApiFileController : BaseApiController
+    public class ApiFileController : BaseApiController<MixCmsContext>
     {
         public ApiFileController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext) : base(memoryCache, hubContext)
         {

@@ -70,7 +70,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         }
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            JOptions = JArray.Parse(Options);
+            if (!string.IsNullOrEmpty(Options))
+            {
+                JOptions = JArray.Parse(Options);
+            }
+            
         }
         #endregion
     }
