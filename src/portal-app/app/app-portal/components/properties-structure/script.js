@@ -1,5 +1,5 @@
-modules.component('setAttribute', {
-    templateUrl: '/app/app-portal/components/set-attribute/view.html',
+modules.component('propertiesStructure', {
+    templateUrl: '/app/app-portal/components/properties-structure/view.html',
     controller: ['$rootScope', '$scope',
         function ($rootScope, $scope) {
             var ctrl = this;

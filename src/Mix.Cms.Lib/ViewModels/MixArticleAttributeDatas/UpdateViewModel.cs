@@ -57,12 +57,51 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
                 });
             }
         }
+
+        public UpdateViewModel(int attributeSetId)
+        {
+            AttributeSetId = attributeSetId;
+            var attributes = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == attributeSetId).Data;
+            Data = new List<MixArticleAttributeValues.UpdateViewModel>();
+            foreach (var item in attributes)
+            {
+                Data.Add(new MixArticleAttributeValues.UpdateViewModel()
+                {
+                    Specificulture = Specificulture,
+                    AttributeName = item.Name,
+                    DataType = item.DataType,
+                    AttributeFieldId = item.Id
+                });
+            }
+        }
         #region overrides
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Data = MixArticleAttributeValues.UpdateViewModel.Repository.GetModelListBy(
+            if (!string.IsNullOrEmpty(Id))
+            {
+                Data = MixArticleAttributeValues.UpdateViewModel.Repository.GetModelListBy(
                     v => v.DataId == Id && v.Specificulture == Specificulture, _context, _transaction).Data;
+
+            }
+            else
+            {
+                var attributes = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId).Data;
+                Data = new List<MixArticleAttributeValues.UpdateViewModel>();
+                foreach (var item in attributes)
+                {
+                    Data.Add(new MixArticleAttributeValues.UpdateViewModel()
+                    {
+                        Specificulture = Specificulture,
+                        Priority = item.Priority,
+                        AttributeName = item.Name,                        
+                        DataType = item.DataType,
+                        AttributeFieldId = item.Id,
+                        Field = item
+                    });
+                }
+            }
+            
         }
         public override MixArticleAttributeData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

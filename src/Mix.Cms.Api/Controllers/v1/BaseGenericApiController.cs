@@ -131,10 +131,6 @@ namespace Mix.Cms.Api.Controllers.v1
                     };
 
                 }
-                //if (!MixConstants.cachedKeys.Contains(cacheKey))
-                //{
-                //    MixConstants.cachedKeys.Add(cacheKey);
-                //}
                 AlertAsync("Add Cache", 200, cacheKey);
             }
             data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");

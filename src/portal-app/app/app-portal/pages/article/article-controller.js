@@ -17,7 +17,7 @@ app.controller('ArticleController', ['$scope', '$rootScope', '$location', '$filt
                     $scope.decryptAttributeSet(nav.attributeSet);
                 }
             });
-        }
+        };
         $scope.getSingleSuccessCallback = function () {
             var moduleId = $routeParams.module_id;
             var pageId = $routeParams.page_id;
@@ -94,11 +94,12 @@ app.controller('ArticleController', ['$scope', '$rootScope', '$location', '$filt
                 if(attr.isEncrypt){
                     angular.forEach(attributeSet.articleData.items, function(item){
                         var fieldData = $rootScope.findObjectByKey(item.data, 'attributeName', attr.name);
-                        var encryptedData = $rootScope.encrypt(fieldData.stringValue);
-                        fieldData.stringValue = encryptedData.data;
-                        fieldData.encryptValue = encryptedData.data;
-                        fieldData.encryptKey = encryptedData.key;
-                        console.log(fieldData);
+                        if(fieldData){
+                            var encryptedData = $rootScope.encrypt(fieldData.stringValue);
+                            fieldData.stringValue = encryptedData.data;
+                            fieldData.encryptValue = encryptedData.data;
+                            fieldData.encryptKey = encryptedData.key;
+                        }
                     });
                 }
             });
@@ -108,12 +109,14 @@ app.controller('ArticleController', ['$scope', '$rootScope', '$location', '$filt
                 if(attr.isEncrypt){
                     angular.forEach(attributeSet.articleData.items, function(item){
                         var fieldData = $rootScope.findObjectByKey(item.data, 'attributeName', attr.name);
-                        var encryptedData = {
-                            key: fieldData.encryptKey,
-                            data: fieldData.encryptValue
-                        };
-                        var decrypted = $rootScope.decrypt(encryptedData);
-                        fieldData.stringValue = decrypted;
+                        if(fieldData){
+                            var encryptedData = {
+                                key: fieldData.encryptKey,
+                                data: fieldData.encryptValue
+                            };
+                            var decrypted = $rootScope.decrypt(encryptedData);
+                            fieldData.stringValue = decrypted;
+                        }
                     });
                 }
             });

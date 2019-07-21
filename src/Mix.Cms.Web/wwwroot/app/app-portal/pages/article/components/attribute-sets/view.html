@@ -3,11 +3,12 @@
     <div class="form-group">
         <label class="control-label">Attribute Sets</label>
         <navs data="$ctrl.article.attributeSetNavs" prefix="'attribute_set'" details-url="'/portal/attribute-set/details/'" key="'attributeSetId'"></navs>
-    </div>
+    </div>    
     <tabs-v select-callback="$ctrl.selectPane(pane)" class="mb-3">
         <pane-v title="{{set.description}}" class="card" ng-repeat="set in $ctrl.article.attributeSetNavs track by $index" ng-if="set.isActived">
             <div class="card-body">
-                <attribute-set-values ng-repeat="item in set.attributeSet.articleData.items track by $index" attributes="set.attributeSet.attributes" data="item.data">
+                <attribute-set-form save-data="$ctrl.saveData(data)" data="$ctrl.activedData" set-id="set.attributeSetId"></attribute-set-form>
+                <attribute-set-values header="set.title" data="set.attributeSet.articleData.items">
                 </attribute-set-values>
             </div>
         </pane-v>

@@ -1565,7 +1565,7 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'GlobalSettingsSer
 
         $rootScope.translate = function (keyword, isWrap, defaultText) {
             if ($rootScope.globalSettings && ($rootScope.translator)) {
-                return $rootScope.translator.get(keyword, isWrap, defaultText);
+                return $rootScope.translator.get(keyword, isWrap, defaultText) || keyword;
             }
             else {
                 return keyword || defaultText;

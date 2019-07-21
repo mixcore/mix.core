@@ -1,5 +1,5 @@
-modules.component('setAttributeValue', {
-    templateUrl: '/app/app-portal/components/set-attribute-value/view.html',
+modules.component('propertiesValue', {
+    templateUrl: '/app/app-portal/components/properties-value/view.html',
     bindings: {
         title: '=',
         columns: '=',

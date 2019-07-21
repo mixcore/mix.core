@@ -10,14 +10,7 @@
     @if (!string.IsNullOrEmpty(Model.TemplatePath))
     {
         try
-        {
-            foreach (var item in Model.AttributeSetNavs)
-            {
-                item.MixAttributeSet.ArticleData.Items.ForEach(a =>
-                {
-                    a.GetStringValue("description");
-                });
-            }
+        {            
             <partial name="@Model.TemplatePath" model="@Model"/>
         }
         catch (System.InvalidOperationException invalidOperationException)

@@ -201,6 +201,24 @@
                         }
                     ]
                 },
+                {
+                    title: 'portal_attributes',
+                    shortTitle: ('portal_attributes'),
+                    icon: 'mi mi-Set',
+                    href: '#',
+                    subMenus: [
+                        {
+                            title: ('portal_create'),
+                            href: '/portal/attribute-set/create',
+                            icon: 'mi mi-Add'
+                        },
+                        {
+                            title: 'portal_list',
+                            href: '/portal/attribute-set/list',
+                            icon: 'mi mi-List'
+                        }
+                    ]
+                },
                 // {
                 //     title: 'portal_import',
                 //     shortTitle: 'portal_short_import',

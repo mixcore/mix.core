@@ -115,7 +115,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [AllowAnonymous]
         [HttpGet, HttpOptions]
         [Route("init-by-name/{moduleName}")]
-        public async Task<RepositoryResponse<UpdateViewModel>> InitViewAsync(string moduleName)
+        public async Task<RepositoryResponse<UpdateViewModel>> InitByName(string moduleName)
         {
             var getModule = await Lib.ViewModels.MixModules.ReadListItemViewModel.Repository.GetSingleModelAsync(
                 m => m.Name == moduleName && m.Specificulture == _lang).ConfigureAwait(false);

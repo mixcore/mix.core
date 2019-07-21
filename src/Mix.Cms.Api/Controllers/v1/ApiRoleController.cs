@@ -12,6 +12,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Mix.Cms.Hub;
 using Mix.Cms.Lib.Models.Account;
+using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.Account;
 using Mix.Cms.Lib.ViewModels.Account.MixRoles;
 using Mix.Domain.Core.ViewModels;
@@ -22,7 +23,7 @@ namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
     [Route("api/v1/role")]
-    public class ApiRoleController : BaseApiController
+    public class ApiRoleController : BaseApiController<MixCmsContext>
     {
         protected readonly UserManager<ApplicationUser> _userManager;
         protected readonly SignInManager<ApplicationUser> _signInManager;

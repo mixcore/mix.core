@@ -83,8 +83,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
                 , _context: _context, _transaction: _transaction);
             if (!getData.IsSucceed || getData.Data == null || getData.Data.Items.Count==0)
             {
-                ArticleData = new PaginationModel<MixArticleAttributeDatas.UpdateViewModel>() { TotalItems = 1};
-                ArticleData.Items.Add(new MixArticleAttributeDatas.UpdateViewModel(Id, Attributes));
+                ArticleData = new PaginationModel<MixArticleAttributeDatas.UpdateViewModel>() { TotalItems = 1 };
+                //ArticleData.Items.Add(new MixArticleAttributeDatas.UpdateViewModel(Id, Attributes));
             }
             else
             {

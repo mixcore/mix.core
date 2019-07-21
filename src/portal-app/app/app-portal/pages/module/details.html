@@ -19,8 +19,8 @@
                             <input type="hidden" asp-for="Id">
                             <input type="hidden" asp-for="Specificulture">
                             <input type="hidden" asp-for="Priority">
-                            <set-attribute title="'Module Attributes'" columns="activedData.columns">
-                            </set-attribute>
+                            <properties-structure title="'Module Attributes'" columns="activedData.columns">
+                            </properties-structure>
                         </div>
                     </pane-v>
                     <pane-v title="Modules Layout" ng-if="isAdmin">
@@ -45,8 +45,8 @@
                         <input type="hidden" asp-for="Id">
                         <input type="hidden" asp-for="Specificulture">
                         <input type="hidden" asp-for="Priority">
-                        <set-attribute title="'Module Attributes'" columns="activedData.columns" class="card mb-3">
-                        </set-attribute>
+                        <properties-structure title="'Module Attributes'" columns="activedData.columns" class="card mb-3">
+                        </properties-structure>
                     </div>
                 </div>
                 <div class="row" ng-if="isAdmin">

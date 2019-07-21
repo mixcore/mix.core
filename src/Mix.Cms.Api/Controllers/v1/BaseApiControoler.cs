@@ -2,19 +2,24 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Hub;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
+using Mix.Domain.Data.Repository;
+using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
-    public class BaseApiController: Controller
+    public class BaseApiController<TDbContext>: Controller
+        where TDbContext: DbContext
     {
         protected readonly IHubContext<PortalHub> _hubContext;
 
@@ -69,7 +74,39 @@ namespace Mix.Cms.Api.Controllers.v1
                 AlertAsync("Empty Cache", 200);
             }
         }
+        protected async Task<RepositoryResponse<TView>> GetSingleAsync<TView, TModel>(string key, Expression<Func<TModel, bool>> predicate = null, TModel model = null)
+            where TView : ViewModelBase<TDbContext, TModel, TView>
+            where TModel: class
+        {
+            var cacheKey = $"{typeof(TModel).Name}_details_{_lang}_{key}";
+            RepositoryResponse<TView> data = null;
+            if (MixService.GetConfig<bool>("IsCache"))
+            {
+                data = await MixCacheService.GetAsync<RepositoryResponse<TView>>(cacheKey);
+            }
+            if (data == null)
+            {
 
+                if (predicate != null)
+                {
+                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
+                    //_memoryCache.Set(cacheKey, data);
+                    await MixCacheService.SetAsync(cacheKey, data);
+                }
+                else
+                {
+                    data = new RepositoryResponse<TView>()
+                    {
+                        IsSucceed = true,
+                        Data = DefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model)
+                    };
+
+                }
+                AlertAsync("Add Cache", 200, cacheKey);
+            }
+            data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+            return data;
+        }
         protected void AlertAsync(string action, int status, string message = null)
         {
             var logMsg = new JObject()

@@ -15,9 +15,9 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="mb-3">
-                <set-attribute  ng-if="isAdmin" title="'Extra Properties'" columns="$ctrl.article.columns"></set-attribute>
-                <set-attribute-value title="''" columns="$ctrl.article.columns" properties="$ctrl.article.properties">
-                    </set-attribute>
+                <properties-structure  ng-if="$ctrl.isAdmin" title="'Extra Properties'" columns="$ctrl.article.columns"></properties-structure>
+                <properties-value title="''" columns="$ctrl.article.columns" properties="$ctrl.article.properties">
+                    </properties-value>
             </div>
         </div>
     </div>
