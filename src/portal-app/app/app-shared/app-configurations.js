@@ -82,7 +82,7 @@ app.constant('ngAppSettings', {
         { title: 'Upload', value: 16 },
 
     ]
-    , miIcons: [
+    , icons: [
 
         'fas fa-500px',
         'fas fa-accessible-icon',

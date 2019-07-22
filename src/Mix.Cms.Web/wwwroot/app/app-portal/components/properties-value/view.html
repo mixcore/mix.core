@@ -22,7 +22,7 @@
                 <span ng-bind="prop.title"></span>
             </td>
             <td class="prop-value-container">
-                <module-form-editor ng-if="!prop.options.length" data-title="prop.name" data="prop"></module-form-editor>
+                <module-form-editor ng-if="!prop.options.length" field-title="prop.name" data="prop"></module-form-editor>
                 <div ng-if="prop.options.length" class="form-group">
                                     
                     <label class="control-label" ng-if="$ctrl.isShowTitle" ng-bind="prop.title"></label>                                    

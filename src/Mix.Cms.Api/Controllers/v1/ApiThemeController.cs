@@ -193,7 +193,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST api/theme
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]        
         [HttpPost, HttpOptions]
-        [RequestFormSizeLimit(valueCountLimit: 214748364)] // 200Mb
+        [RequestFormSizeLimit(100000000)] // 200Mb
         [Route("save")]
         public async Task<RepositoryResponse<UpdateViewModel>> Save([FromForm]string model, [FromForm]IFormFile assets, [FromForm]IFormFile theme)
         {

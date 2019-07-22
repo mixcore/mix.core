@@ -6,7 +6,7 @@
         ctrl.init = function(){
             if(ctrl.imgSrc)
             {
-                ctrl.isImage = ctrl.imgSrc.toLowerCase().match(/([/|.|\w|\s|-])*\.(?:jpg|gif|png)/g);
+                ctrl.isImage = ctrl.imgSrc.toLowerCase().match(/([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png|svg)/g);
             }
         };
         ctrl.showImage = async function (functionName, args, context) {

@@ -17,12 +17,13 @@ modules.component('customImage', {
     },
     controller: ['$rootScope', '$scope', 'ngAppSettings', 'MediaService', function ($rootScope, $scope, ngAppSettings, mediaService) {
         var ctrl = this;
+        ctrl.isAdmin = $rootScope.isAdmin;
         var image_placeholder = '/images/image_placeholder.jpg';
         ctrl.isImage = false;
         ctrl.mediaNavs = [];
         ctrl.init = function () {
             ctrl.srcUrl = ctrl.srcUrl || image_placeholder;
-            ctrl.isImage = ctrl.srcUrl.match(/([/|.|\w|\s|-])*\.(?:jpg|gif|png)/g);
+            ctrl.isImage = ctrl.srcUrl.toLowerCase().match(/([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png|svg)/g);
             ctrl.maxHeight = ctrl.maxHeight|| '200px';
             ctrl.id = Math.floor(Math.random() * 100);
         };
