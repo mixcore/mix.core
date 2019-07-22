@@ -52,6 +52,7 @@
 
   <ItemGroup>
     <Folder Include="logs\" />
+    <Folder Include="Views\Shared\Templates\" />
     <Folder Include="wwwroot\content\" />
     <Folder Include="wwwroot\lib\portal\Trumbowyg\" />
    

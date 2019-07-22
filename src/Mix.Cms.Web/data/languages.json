@@ -45,6 +45,17 @@
       "status": 2
     },
     {
+      "keyword": "portal_attributes",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Attributes",
+      "defaultValue": "Attributes",
+      "cultures": null,
+      "priority": 0,
+      "status": 2
+    },
+    {
       "keyword": "portal_list",
       "category": "Portal",
       "dataType": 7,
