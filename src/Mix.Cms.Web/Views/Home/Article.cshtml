@@ -38,12 +38,12 @@
 </div>
 @{
     string url = ViewData["OgUrl"] != null ? (string)ViewData["OgUrl"] : Model.DetailsUrl;
-    string title = ViewData["OgTitle"] != null ? (string)ViewData["OgTitle"] : Model.Title;
-    string desc = ViewData["OgDescription"] != null ? (string)ViewData["OgDescription"] : Model.Excerpt;
+    string title = ViewData["OgTitle"] != null ? (string)ViewData["OgTitle"] :  Model.SeoTitle;
+    string desc = ViewData["OgDescription"] != null ? (string)ViewData["OgDescription"] : Model.SeoDescription;
     string image = ViewData["OgImage"] != null ? (string)ViewData["OgImage"] : Model.ThumbnailUrl;
 }
 @section Seo{
-    <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @Model.Title</title>
+    <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @Model.SeoTitle</title>
     <meta property="og:type" content="article" />
     <!--points to the regular HTML version of the AMP HTML document or to itself if no such HTML version exists-->
     <link rel="canonical" href="@url">

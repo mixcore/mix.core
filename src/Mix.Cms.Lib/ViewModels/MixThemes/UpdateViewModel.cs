@@ -412,7 +412,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             string fullPath = $"{MixConstants.Folder.WebRootPath}/{Asset.FileFolder}/{Asset.Filename}{Asset.Extension}";
             if (File.Exists(fullPath))
             {
-                FileRepository.Instance.UnZipFile($"{Asset.Filename}{Asset.Extension}", Asset.FileFolder);
+                FileRepository.Instance.UnZipFile(fullPath, Asset.FileFolder);
                 //InitAssetStyle();
                 result.IsSucceed = true;
 

@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
 
 namespace Mix.Cms.Lib.Repositories
@@ -180,21 +181,26 @@ namespace Mix.Cms.Lib.Repositories
 
             string fullPath = Path.Combine(CurrentDirectory, FileFolder, string.Format("{0}{1}", name, ext));
 
-            FileInfo file = new FileInfo(fullPath);
+            FileInfo fileinfo = new FileInfo(fullPath);
 
-            if (file.Exists)
+            if (fileinfo.Exists)
             {
                 try
                 {
-                    using (StreamReader s = file.OpenText())
+                    using (var stream = File.Open(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
                     {
-                        result = new FileViewModel()
+
+                        using (StreamReader s = new StreamReader(stream))
                         {
-                            FileFolder = FileFolder,
-                            Filename = name,
-                            Extension = ext,
-                            Content = s.ReadToEnd()
-                        };
+                            result = new FileViewModel()
+                            {
+                                FileFolder = FileFolder,
+                                Filename = name,
+                                Extension = ext,
+                                Content = s.ReadToEnd()
+                            };
+                        }
+
                     }
                 }
                 catch
@@ -205,7 +211,7 @@ namespace Mix.Cms.Lib.Repositories
             else if (isCreate)
             {
                 CreateDirectoryIfNotExist(FileFolder);
-                file.Create();
+                fileinfo.Create();
                 result = new FileViewModel()
                 {
                     FileFolder = FileFolder,
@@ -302,7 +308,7 @@ namespace Mix.Cms.Lib.Repositories
             }
             return true;
         }
-         public bool CopyWebDirectory(string srcPath, string desPath)
+        public bool CopyWebDirectory(string srcPath, string desPath)
         {
             if (srcPath != desPath)
             {
@@ -323,7 +329,7 @@ namespace Mix.Cms.Lib.Repositories
             return true;
         }
 
-        
+
         public void CreateDirectoryIfNotExist(string fullPath)
         {
             if (!string.IsNullOrEmpty(fullPath) && !Directory.Exists(fullPath))
@@ -678,7 +684,7 @@ namespace Mix.Cms.Lib.Repositories
             }
             catch
             {
-                throw;
+                //throw;
             }
         }
 

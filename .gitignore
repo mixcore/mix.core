@@ -1973,3 +1973,5 @@ src/Mix.Cms.Web/wwwroot/js/portal.min.js
 src/Mix.Cms.Web/wwwroot/js/shared.min.js
 
 src/Mix\.Cms\.Web/Cache/
+/src/Mix.Cms.Web/content/templates
+/src/Mix.Cms.Web/Views/Shared/Templates

@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div ng-repeat="prop in $ctrl.data.dataProperties track by $index">
-                                <module-form-editor is-show-title="$ctrl.isShowTitle" title="prop.title" data="$ctrl.data.jItem[prop.name]" ng-if="!prop.isSelect"></module-form-editor>
+                                <module-form-editor is-show-title="$ctrl.isShowTitle" field-title="prop.title" data="$ctrl.data.jItem[prop.name]" ng-if="!prop.isSelect"></module-form-editor>
                                 <div ng-if="prop.isSelect" class="form-group">
                                     
                                     <label class="control-label" ng-if="$ctrl.isShowTitle" ng-bind="prop.title"></label>                                    
