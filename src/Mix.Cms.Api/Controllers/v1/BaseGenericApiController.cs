@@ -107,7 +107,7 @@ namespace Mix.Cms.Api.Controllers.v1
         protected async Task<RepositoryResponse<TView>> GetSingleAsync<TView>(string key, Expression<Func<TModel, bool>> predicate = null, TModel model = null)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-            var cacheKey = $"{typeof(TModel).Name}_details_{_lang}_{key}";
+            var cacheKey = $"api_{_lang}_{typeof(TModel).Name.ToLower()}_details_{key}";
             RepositoryResponse<TView> data = null;
             if (MixService.GetConfig<bool>("IsCache"))
             {
@@ -199,7 +199,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             var getData = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
             
-            var cacheKey = $"{typeof(TModel).Name}_list_{_lang}_{key}_{request.Status}_{request.Keyword}_{request.OrderBy}_{request.Direction}_{request.PageSize}_{request.PageIndex}_{request.Query}";
+            var cacheKey = $"api_{_lang}_{typeof(TModel).Name.ToLower()}_list_{key}_{request.Status}_{request.Keyword}_{request.OrderBy}_{request.Direction}_{request.PageSize}_{request.PageIndex}_{request.Query}";
             RepositoryResponse<PaginationModel<TView>> data = null;
             if (MixService.GetConfig<bool>("IsCache"))
             {
