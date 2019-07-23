@@ -28,11 +28,10 @@
 
 </head>
 
-<body class="login-page app-security" ng-app="MixPortal" style="background-image: url('/assets/img/bgs/bg.png');background-position: center;background-repeat: no-repeat;background-size: cover;" >
+<body class="login-page app-security app-init" ng-app="MixPortal" style="background-image: url('/assets/img/bgs/bg.png');background-position: center;background-repeat: no-repeat;background-size: cover;" >
      <!-- style="background-image: url('/assets/img/bgs/work-space.jpg');" -->
-    <mix-loader ng-show="isBusy"></mix-loader>
-
-        <div class="container init-pages">
+   <mix-loader ng-show="isBusy"></mix-loader>
+     <div class="container init-pages">
         
         <div class="card o-hidden border-0 shadow-lg">
             <div class="card-body p-0">
@@ -41,17 +40,17 @@
                         <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
                 <div class="row no-gutters">
-                         <div class="col-lg-7 d-none d-lg-block bg-register-image">
-                           
-                    </div>
-                    <div class="col-lg-5">
+                        
+                    <div class="col-lg-8">
                             
-                        <div class="right-coloumn">
+                        <div class="left-coloumn">
                             
                              @RenderBody()
                         </div>
                     </div>
-                   
+                    <div class="col-lg-4 d-none d-lg-block bg-register-image">
+                           
+                    </div>
                 </div>
             </div>
         </div>

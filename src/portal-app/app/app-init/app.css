@@ -8,16 +8,44 @@
   background-image: url("../assets/img/bgs/right-bg.png");
 }
 /* Input Site name */
-.input-site-name{
+.input-site-name {
   background: transparent;
   border: none;
-  border-bottom: 1.5px solid #000000;
-  outline:none;
-  box-shadow:none;
+  border-bottom: 1px solid #000000;
+  outline: none;
+  box-shadow: none;
   display: inline;
   width: 200px;
   border-radius: 0;
   padding: 0;
+}
+input.country-select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.label-country-select {
+  position: relative;
+}
+.label-country-select:after {
+  content: "\f107";
+  font-family: "FontAwesome";
+  font-size: 16px;
+  right: 4px;
+  padding: 0 0 2px;
+  position: absolute;
+  pointer-events: none;
+}
+.label-country-select:before {
+  content: "";
+  right: 4px;
+  top: 0px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  position: absolute;
+  pointer-events: none;
+  display: block;
 }
 /* .bg-register-image:hover {
   background-image:url("../assets/img/bgs/NowUI-Demo.png");
@@ -167,7 +195,6 @@ body.app-init {
   align-items: center;
   overflow: hidden;
   height: 100vh;
-  
 }
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (max-width: 600px) {
@@ -178,7 +205,6 @@ body.app-init {
     align-items: unset;
     overflow: scroll;
     /* height: 100vh; */
-    
   }
 
   .container.init-pages {
@@ -396,4 +422,8 @@ body .options .option .label .info .sub {
   line-height: 1.5em;
   color: #212529;
   background-color: #fcfcfa;
+}
+
+#inputState {
+  cursor: pointer;
 }

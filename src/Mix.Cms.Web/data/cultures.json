@@ -76,7 +76,7 @@
         { "specificulture": "fr-tn", "fullName": "Tunisia - Français", "icon": "flag-icon-tn" },
         { "specificulture": "tr-tr", "fullName": "Türkiye - Türkçe", "icon": "flag-icon-tr" },
         { "specificulture": "en-gb", "fullName": "United Kingdom - English", "icon": "flag-icon-gb" },
-        { "specificulture": "en-us", "fullName": "United States - English", "icon": "flag-icon-us" },
+        // { "specificulture": "en-us", "fullName": "United States - English", "icon": "flag-icon-us" },
         { "specificulture": "es-uy", "fullName": "Uruguay - Español", "icon": "flag-icon-uy" },
         { "specificulture": "es-ve", "fullName": "Venezuela - Español", "icon": "flag-icon-ve" },
         { "specificulture": "vi-vn", "fullName": "Việt Nam - Tiếng việt", "icon": "flag-icon-vn" },
