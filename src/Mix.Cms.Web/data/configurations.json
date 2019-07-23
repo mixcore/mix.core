@@ -156,7 +156,7 @@
     {
       "keyword": "LogoWhite",
       "category": "Site_Common",
-      "value": "/css/portal/img/mixcore-logo-white.png",
+      "value": "",
       "dataType": 16,
       "description": "Logo White",
       "priority": 0,
@@ -165,7 +165,7 @@
     {
       "keyword": "LogoBlack",
       "category": "Site_Common",
-      "value": "/css/portal/img/mixcore-logo-black.png",
+      "value": "",
       "dataType": 16,
       "description": "Logo Black",
       "priority": 0,

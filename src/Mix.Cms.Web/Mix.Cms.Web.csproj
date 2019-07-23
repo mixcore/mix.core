@@ -18,27 +18,27 @@
     <Compile Remove="app-client\shared\controllers\**" />
     <Compile Remove="app-portal\**" />
     <Compile Remove="app\**" />
-    <Compile Remove="Views\Shared\Templates\cricket\**" />
-    <Compile Remove="Views\Shared\Templates\muong-247\**" />
-    <Compile Remove="Views\Shared\Templates\p7p-apartment\**" />
+    <Compile Remove="Cache\**" />
+    <Compile Remove="Views\Shared\Templates\**" />
     <Compile Remove="wwwroot\content\**" />
     <Content Remove="app-client\shared\controllers\**" />
     <Content Remove="app-portal\**" />
     <Content Remove="app\**" />
-    <Content Remove="Views\Shared\Templates\cricket\**" />
-    <Content Remove="Views\Shared\Templates\muong-247\**" />
-    <Content Remove="Views\Shared\Templates\p7p-apartment\**" />
+    <Content Remove="Cache\**" />
+    <Content Remove="Views\Shared\Templates\**" />
     <Content Remove="wwwroot\content\**" />
     <EmbeddedResource Remove="app-client\shared\controllers\**" />
     <EmbeddedResource Remove="app-portal\**" />
     <EmbeddedResource Remove="app\**" />
-    <EmbeddedResource Remove="Views\Shared\Templates\cricket\**" />
-    <EmbeddedResource Remove="Views\Shared\Templates\muong-247\**" />
-    <EmbeddedResource Remove="Views\Shared\Templates\p7p-apartment\**" />
+    <EmbeddedResource Remove="Cache\**" />
+    <EmbeddedResource Remove="Views\Shared\Templates\**" />
     <EmbeddedResource Remove="wwwroot\content\**" />
     <None Remove="app-client\shared\controllers\**" />
     <None Remove="app-portal\**" />
     <None Remove="app\**" />
+    <None Remove="Cache\**" />
+    <None Remove="Views\Shared\Templates\**" />
+    <None Remove="wwwroot\content\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,8 +52,6 @@
 
   <ItemGroup>
     <Folder Include="logs\" />
-    <Folder Include="Views\Shared\Templates\" />
-    <Folder Include="wwwroot\content\" />
     <Folder Include="wwwroot\lib\portal\Trumbowyg\" />
    
   </ItemGroup>
@@ -105,6 +103,9 @@
     </None>
     <None Update="IISUrlRewrite.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="_run.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   
