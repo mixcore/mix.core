@@ -5,7 +5,7 @@
 <form ng-class="{'submitted': submitted}" ng-submit="register()">
     <div class="">
         <h1 class="display-4">Now, you can create the most powerful account!
-        </h1>       
+        </h1>
         <p class="lead">
             Please keep this account credential safe and only share this account to the most trusted!
         </p>
@@ -36,7 +36,7 @@
         <div class="form-group">
             <label class="form-label">Email Address
             </label>
-            <input ng-model="user.email" class="form-control" type="email" required placeholder="Email@mixcore.org" type="text">
+            <input ng-model="user.email" class="form-control" type="email" required placeholder="Email@mixcore.org">
         </div>
         <div class="form-group">
             <label class="custom-control custom-checkbox">
@@ -46,12 +46,12 @@
                         conditions</a>.</span>
             </label>
             <div id="notTNCYetChecked" class="invalid-feedback" style="padding-left: 24px;">
-                    You must agree before submitting.
-                  </div>
+                You must agree before submitting.
+            </div>
         </div>
         <div class="text-center">
-        <button type="submit" class="btn btn-primary">Create and Login <i class="fa fa-angle-right" style="font-size: 19px;"></i></button>
-        <button type="button" class="btn btn-link" ng-click="advanceSetup()">Advance Setup</button>
+            <button type="submit" class="btn btn-primary">Create <i class="fa fa-angle-right" style="font-size: 19px;"></i></button>
+            <!-- <button type="button" class="btn btn-link" ng-click="advanceSetup()">Advance Setup</button> -->
         </div>
         <!-- <div class="form-footer">
             
