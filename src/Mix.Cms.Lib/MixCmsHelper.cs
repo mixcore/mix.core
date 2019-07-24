@@ -203,7 +203,7 @@ namespace Mix.Cms.Lib
             }
         }
 
-        public static async System.Threading.Tasks.Task<ViewModels.MixModules.ReadMvcViewModel> GetModuleAsync (string name, string culture, IUrlHelper url = null)
+        public static async System.Threading.Tasks.Task<ViewModels.MixModules.ReadMvcViewModel> GetModuleAsync(string name, string culture, IUrlHelper url = null)
         {
             var cacheKey = $"vm_{culture}_module_{name}_mvc";
             var module = new Domain.Core.ViewModels.RepositoryResponse<ViewModels.MixModules.ReadMvcViewModel>();
@@ -211,11 +211,11 @@ namespace Mix.Cms.Lib
             // Load From Cache 
             if (MixService.GetConfig<bool>("IsCache"))
             {
-                module = await MixCacheService.GetAsync<Mix.Domain.Core.ViewModels.RepositoryResponse<ViewModels.MixModules.ReadMvcViewModel>>(cacheKey);                
+                module = await MixCacheService.GetAsync<Mix.Domain.Core.ViewModels.RepositoryResponse<ViewModels.MixModules.ReadMvcViewModel>>(cacheKey);
             }
 
             // If not cached yet => load from db
-            if (module== null || !module.IsSucceed)
+            if (module == null || !module.IsSucceed)
             {
                 module = ViewModels.MixModules.ReadMvcViewModel.GetBy(m => m.Name == name && m.Specificulture == culture);
             }
@@ -223,7 +223,7 @@ namespace Mix.Cms.Lib
             // If load successful => load details
             if (module.IsSucceed)
             {
-                if (url != null && module.Data.Articles!=null)
+                if (url != null && module.Data.Articles != null)
                 {
                     module.Data.Articles.Items.ForEach(a => { a.Article.DetailsUrl = url.RouteUrl("Article", new { id = a.ArticleId, seoName = a.Article.SeoName }); });
                 }
@@ -233,7 +233,7 @@ namespace Mix.Cms.Lib
             return module.Data;
         }
 
-        
+
         public static async System.Threading.Tasks.Task<ViewModels.MixPages.ReadMvcViewModel> GetPageAsync(int id, string culture)
         {
             var cacheKey = $"vm_{culture}_page_{id}_mvc";
@@ -252,7 +252,7 @@ namespace Mix.Cms.Lib
             }
 
             return getPage.Data;
-            
+
         }
 
         public static ViewModels.MixModules.ReadMvcViewModel GetModule(string name, string culture)
@@ -265,6 +265,32 @@ namespace Mix.Cms.Lib
         {
             var page = ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModel(m => m.Id == id && m.Specificulture == culture);
             return page.Data;
+        }
+
+        public static async System.Threading.Tasks.Task<ViewModels.MixTemplates.ReadListItemViewModel> GetTemplateByPath(string templatePath)
+        {
+            var cacheKey = $"vm_template_{templatePath}_listitem";
+            RepositoryResponse<ViewModels.MixTemplates.ReadListItemViewModel> getData = null;
+            if (MixService.GetConfig<bool>("IsCache"))
+            {
+                getData = await MixCacheService.GetAsync<RepositoryResponse<ViewModels.MixTemplates.ReadListItemViewModel>>(cacheKey);
+            }
+            if (getData == null)
+            {
+                string[] tmp = templatePath.Split('/');
+                if (tmp[1].IndexOf('.') > 0)
+                {
+                    tmp[1] = tmp[1].Substring(0, tmp[1].IndexOf('.'));
+                }
+                getData = ViewModels.MixTemplates.ReadListItemViewModel.Repository.GetSingleModel(m => m.FolderType == tmp[0] && m.FileName == tmp[1]);
+                if (getData.IsSucceed)
+                {
+                    await MixCacheService.SetAsync(cacheKey, getData);
+                }
+            }
+
+            return getData.Data;
+
         }
     }
 }

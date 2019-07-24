@@ -2,6 +2,7 @@
 @{ 
     string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, ViewBag.culture);
     Layout = $"Templates/{master}/Masters/_Layout";
+    var materTemplate = await MixCmsHelper.GetTemplateByPath("Masters/_Layout");
 }
 <div>
     <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
