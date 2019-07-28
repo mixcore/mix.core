@@ -199,7 +199,8 @@ namespace Mix.Cms.Lib
             Boolean = 18,
             Icon = 19,
             VideoYoutube = 20,
-            TuiEditor = 21
+            TuiEditor = 21,
+            Number = 21
         }
 
         public enum UrlAliasType

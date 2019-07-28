@@ -10,7 +10,7 @@ modules.component('attributeValueEditor', {
         ctrl.dataTypes = $rootScope.globalSettings.dataTypes;
         ctrl.previousId = null;
         ctrl.$doCheck = function () {
-            if (ctrl.previousId !== ctrl.attributeValue.id) {
+            if (ctrl.attributeValueEditor && ctrl.previousId !== ctrl.attributeValue.id) {
                 ctrl.previousId = ctrl.attributeValue.id;
                 ctrl.initData();
             }

@@ -4,7 +4,8 @@ modules.component('attributeSetValues', {
         header: '=',
         data: '=',
         columns: '=?',
-        onUpdate:'&?'
+        onUpdate:'&?',
+        onDelete:'&?',
     },
     controller: ['$rootScope', '$scope',
         function ($rootScope, $scope) {
@@ -20,6 +21,10 @@ modules.component('attributeSetValues', {
 
             ctrl.update = function(data){
                 ctrl.onUpdate({data: data});
+            };
+            
+            ctrl.delete = function(data){
+                ctrl.onDelete({data: data});
             };
 
             ctrl.filterData = function(item, attributeName){

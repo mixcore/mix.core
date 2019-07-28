@@ -11,6 +11,44 @@ app.controller('ArticleController', ['$scope', '$rootScope', '$location', '$filt
         // $scope.saveCallback = function () {
         //     $location.url($scope.referrerUrl);
         // }
+        $scope.getListRelated = async function(pageIndex){                 
+            if (pageIndex !== undefined) {
+                $scope.request.pageIndex = pageIndex;
+            }
+            if ($scope.request.fromDate !== null) {
+                var d = new Date($scope.request.fromDate);
+                $scope.request.fromDate = d.toISOString();
+            }
+            if ($scope.request.toDate !== null) {
+                var d = new Date($scope.request.toDate);
+                $scope.request.toDate = d.toISOString();
+            }
+            var resp = await service.getList($scope.request);
+            if (resp && resp.isSucceed) {
+       
+                $scope.activedData.articleNavs = $rootScope.filterArray($scope.activedData.articleNavs, 'isActived', true);
+                angular.forEach(resp.data.items, element => {
+                    var obj = {
+                        description: element.title,
+                        destinationId: element.id,
+                        image: element.image,
+                        isActived: false,
+                        sourceId: $scope.activedData.id,
+                        specificulture: $scope.activedData.specificulture,
+                        status: 2
+                    };
+                    $scope.activedData.articleNavs.push(obj);
+                });
+                $rootScope.isBusy = false;
+                $scope.$apply();
+            }
+            else {
+                $rootScope.showErrors(getData.errors);
+                $rootScope.isBusy = false;
+                $scope.$apply();
+            }
+            
+        };
         $scope.saveFailCallback = function(){
             angular.forEach($scope.activedData.attributeSetNavs, function(nav){
                 if(nav.isActived){

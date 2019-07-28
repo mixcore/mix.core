@@ -153,10 +153,10 @@ namespace Mix.Cms.Api.Controllers.v1
             return new RepositoryResponse<TModel>() { IsSucceed = false };
         }
 
-        protected async Task<RepositoryResponse<List<TModel>>> DeleteListAsync<TView>(bool isRemoveRelatedModel, Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
+        protected async Task<RepositoryResponse<List<TModel>>> DeleteListAsync<TView>(Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-            var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.RemoveListModelAsync(isRemoveRelatedModel, predicate);
+            var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.RemoveListModelAsync(isDeleteRelated, predicate);
             if (data.IsSucceed)
             {
                 await MixCacheService.RemoveCacheAsync();
