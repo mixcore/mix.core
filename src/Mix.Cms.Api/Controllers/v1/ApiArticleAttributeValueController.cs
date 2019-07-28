@@ -37,7 +37,7 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<RepositoryResponse<MixArticleAttributeValue>> DeleteAsync(string id)
         {
             return await base.DeleteAsync<DeleteViewModel>(
-                model => model.Id == id, true);
+                model => model.Id == id && model.Specificulture == _lang, true);
         }
 
         // GET api/article-attribute-values/id

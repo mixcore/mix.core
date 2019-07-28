@@ -208,7 +208,7 @@ namespace Mix.Cms.Api.Controllers.v1
             switch (data.Action)
             {
                 case "Delete":
-                    return Ok(JObject.FromObject(await base.DeleteListAsync<UpdateViewModel>(true, predicate, false)));
+                    return Ok(JObject.FromObject(await base.DeleteListAsync<UpdateViewModel>(predicate, true)));
                 case "Export":
                     return Ok(JObject.FromObject(await base.ExportListAsync(predicate, MixStructureType.Module)));
                 default:

@@ -28,6 +28,7 @@
         <div ng-switch-when="6">
             <!--Currency-->
             <input class="form-control form-control-sm {{$ctrl.inputClass}}" ng-change="$ctrl.updateStringValue($ctrl.attributeValue.field.dataType)" type="number" ng-model="$ctrl.attributeValue.doubleValue" placeholder="{{$ctrl.attributeValue.field.title}}">
+            <label class="control-label" ng-bind="$ctrl.attributeValue.doubleValue | currency:''"></label>
         </div>
         <div ng-switch-when="7">
             <!--Text-->
@@ -86,6 +87,9 @@
         </div>
         <div ng-switch-when="21">  
             <tui-editor content="$ctrl.attributeValue.stringValue"></tui-editor>
+        </div>
+        <div ng-switch-when="22">  <!-- Number -->
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="number" ng-model="$ctrl.attributeValue.doubleValue" placeholder="{{$ctrl.attributeValue.field.title}}">            
         </div>
     </div>
 </div>

@@ -65,12 +65,14 @@ modules.component('attributeSetForm', {
             };
 
             ctrl.filterData = function (attributeName) {
-                var attr =  $rootScope.findObjectByKey(ctrl.data.data, 'attributeName', attributeName);
-                if (!attr){
-                    attr = angular.copy($rootScope.findObjectByKey(ctrl.defaultData.data, 'attributeName', attributeName));
-                    ctrl.data.data.push(attr);
+                if(ctrl.data){
+                    var attr =  $rootScope.findObjectByKey(ctrl.data.data, 'attributeName', attributeName);
+                    if (!attr){
+                        attr = angular.copy($rootScope.findObjectByKey(ctrl.defaultData.data, 'attributeName', attributeName));
+                        ctrl.data.data.push(attr);
+                    }
+                    return attr;
                 }
-                return attr;
             }
             ctrl.dragStart = function (index) {
                 ctrl.dragStartIndex = index;
