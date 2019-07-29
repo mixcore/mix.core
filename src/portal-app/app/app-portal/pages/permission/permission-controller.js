@@ -52,7 +52,7 @@ app.controller('PermissionController',
                 }
                 
             };
-            $scope.saveCallback = function(){
+            $scope.saveSuccessCallback = function(){
                 $scope.getSingle();                
             }
             

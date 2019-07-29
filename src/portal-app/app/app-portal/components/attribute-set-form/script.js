@@ -4,23 +4,57 @@ modules.component('attributeSetForm', {
         setId: '=',
         data: '=',
         attributes: '=',
-        defaultData: '=',
+        defaultData: '=?',
         saveData: '&?'
     },
-    controller: ['$rootScope', '$scope', 
-        function ($rootScope, $scope) {
+    controller: ['$rootScope', '$scope', 'AttributeDataService',
+        function ($rootScope, $scope, service) {
             var ctrl = this;
-            ctrl.defaultData = {};
             ctrl.attributes = [];
             ctrl.selectedProp = null;
             ctrl.settings = $rootScope.globalSettings;
-            
+            ctrl.$onInit = async function () {
+                if (!ctrl.defaultData) {
+                    var getData = await service.getSingle(['post', ctrl.setId, 'portal']);
+                    if (getData.isSucceed) {
+                        ctrl.defaultData = getData.data;
+                        if (!ctrl.data) {
+                            ctrl.data = angular.copy(ctrl.defaultData);
+                        }
+                        $rootScope.isBusy = false;
+                        $scope.$apply();
+                    } else {
+                        if (getData) {
+                            $rootScope.showErrors(getData.errors);
+                        }
+                        $rootScope.isBusy = false;
+                        $scope.$apply();
+                    }
+
+                }else{
+                    if (!ctrl.data) {
+                        ctrl.data = angular.copy(ctrl.defaultData);
+                    }
+                }
+            };
             ctrl.submit = async function () {
+               
                 if (ctrl.saveData) {
-                    ctrl.saveData({ data: ctrl.data });
-                    ctrl.data = ctrl.defaultData;
+                    var result = await ctrl.saveData({ data: ctrl.data });
+                    if(result.isSucceed){
+                        ctrl.data = angular.copy(ctrl.defaultData);
+                    }
                 }
                 else {
+                    angular.forEach(ctrl.data.data, function(e){                    
+                        //Encrypt field before send
+                        if(e.field.isEncrypt){
+                            var encryptData = $rootScope.encrypt(e.stringValue);
+                            e.encryptKey = encryptData.key;
+                            e.encryptValue = encryptData.data;
+                            e.stringValue = null;
+                        }
+                    });
                     var saveResult = await service.save(ctrl.data);
                     if (saveResult.isSucceed) {
 
@@ -33,37 +67,8 @@ modules.component('attributeSetForm', {
                     }
 
                 }
-            }
-            ctrl.$doCheck = function () {
-                if (angular.toJson(ctrl.columns) != angular.toJson(ctrl.trackedColumns)) {
-                    ctrl.trackedColumns = angular.copy(ctrl.columns);
-                    ctrl.trackedProperties = angular.copy(ctrl.properties);
-                    ctrl.loadEditors();
-                }
-            }.bind(ctrl);
-
-            ctrl.loadEditors = function () {
-                ctrl.properties = [];
-                for (let i = 0; i < ctrl.columns.length; i++) {
-                    var col = ctrl.columns[i];
-                    var oldObj = $rootScope.findObjectByKey(ctrl.trackedProperties, 'name', col.name) || {};
-                    ctrl.properties.push({
-                        title: col.title,
-                        name: col.name,
-                        dataType: col.dataType,
-                        value: oldObj.value || col.defaultValue,
-                        options: col.options
-                    });
-                }
             };
-
-            ctrl.addAttr = function () {
-                if (ctrl.columns) {
-                    var t = angular.copy(ctrl.defaultAttr);
-                    ctrl.columns.push(t);
-                }
-            };
-
+           
             ctrl.filterData = function (attributeName) {
                 if(ctrl.data){
                     var attr =  $rootScope.findObjectByKey(ctrl.data.data, 'attributeName', attributeName);
@@ -73,20 +78,6 @@ modules.component('attributeSetForm', {
                     }
                     return attr;
                 }
-            }
-            ctrl.dragStart = function (index) {
-                ctrl.dragStartIndex = index;
-            };
-            ctrl.updateOrders = function (index) {
-                if (index > ctrl.dragStartIndex) {
-                    ctrl.attributes.splice(ctrl.dragStartIndex, 1);
-                }
-                else {
-                    ctrl.attributes.splice(ctrl.dragStartIndex + 1, 1);
-                }
-                angular.forEach(ctrl.attributes, function (e, i) {
-                    e.priority = i;
-                });
             };
         }]
 });

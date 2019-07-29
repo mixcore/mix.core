@@ -52,7 +52,7 @@ app.controller('PageArticleController',
                 }
             };
 
-            $scope.saveCallback = function () {
+            $scope.saveSuccessCallback = function () {
             }
             $scope.removeCallback = function () {
             }

@@ -1,6 +1,9 @@
 ﻿
 app.component('articleAttributeSet', {
     templateUrl: '/app/app-portal/pages/article/components/attribute-set/view.html',
+    bindings: {
+        set: '=',
+    },
     controller: ['$rootScope', '$scope', 'AttributeDataService', 'ArticleAttributeDataService',
         function ($rootScope, $scope, service, dataService) {
             var ctrl = this;
@@ -8,21 +11,7 @@ app.component('articleAttributeSet', {
             ctrl.activedData = null;
             ctrl.defaultData = null;
             ctrl.$onInit = async function () {
-                var getData = await service.getSingle(['post', ctrl.set.attributeSetId, 'portal']);
-                if (getData.isSucceed) {
-                    ctrl.defaultData = getData.data;
-                    if (!ctrl.activedData) {
-                        ctrl.activedData = angular.copy(ctrl.defaultData);
-                    }
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
-                } else {
-                    if (getData) {
-                        $rootScope.showErrors(getData.errors);
-                    }
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
-                }
+                
             };
             ctrl.update = function (data) {
                 ctrl.activedData = data;
@@ -46,23 +35,19 @@ app.component('articleAttributeSet', {
                     }
                 }
                 else {
-                    var i = ctrl.set.attributeSet.articleData.items.indexOf(data);
-                    console.log(i);
+                    var i = ctrl.set.attributeSet.articleData.items.indexOf(data);                    
                     if(i >=0){
                         ctrl.set.attributeSet.articleData.items.splice(i,1);
                     }
                 }
             };
 
-            ctrl.saveData = function (data) {
+            ctrl.saveData = async function (data) {                
                 if (!data.id && !data.isAdded) {
                     data.isAdded = true;
                     ctrl.set.attributeSet.articleData.items.push(data);
                 }
-                ctrl.activedData = angular.copy(ctrl.defaultData);
+                return { isSucceed: true }; 
             };
-        }],
-    bindings: {
-        set: '=',
-    }
+        }]
 });

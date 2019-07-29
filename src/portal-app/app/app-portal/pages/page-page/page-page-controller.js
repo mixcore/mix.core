@@ -48,7 +48,7 @@ app.controller('PagePageController',
                 }
             };
 
-            $scope.saveCallback = function () {
+            $scope.saveSuccessCallback = function () {
             }
             $scope.removeCallback = function () {
             }

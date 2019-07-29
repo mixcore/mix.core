@@ -48,7 +48,7 @@ app.controller('UrlAliasController',
                 }
             };
 
-            $scope.saveCallback = function () {
+            $scope.saveSuccessCallback = function () {
             }
             $scope.removeCallback = function () {
             }

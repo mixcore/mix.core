@@ -14,7 +14,7 @@ app.controller('AttributeSetController', [
             }
             $scope.$apply();
         }
-        $scope.saveCallback = function () {
+        $scope.saveSuccessCallback = function () {
             $location.url($scope.referrerUrl);
         };
     }

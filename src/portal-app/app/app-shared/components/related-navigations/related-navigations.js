@@ -36,7 +36,7 @@ modules.component('relatedNavs', {
             if (pageIndex) {
                 ctrl.request.pageIndex = pageIndex;
             }
-            ctrl.loadData({ pageIndex: ctrl.request.pageIndex });
+            // ctrl.loadData({ pageIndex: ctrl.request.pageIndex });
         };
         ctrl.checkActived = function (item) {
             if (ctrl.navs) {

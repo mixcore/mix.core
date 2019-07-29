@@ -25,24 +25,24 @@
 
                 <div class="row">
                     <tabs-v class="col-lg-12">
-                        <pane-v title="General">
+                        <pane-v header="General">
                             <article-general article="activedData"></article-general>
                         </pane-v>
-                        <pane-v title="Seo">
+                        <pane-v header="Seo">
                             <article-seo article="activedData"></article-seo>
                         </pane-v>
-                        <pane-v title="Parents">
+                        <pane-v header="Parents">
                             <article-parents article="activedData"></article-parents>
                         </pane-v>
-                        <pane-v title="Modules">
+                        <pane-v header="Modules">
                             <article-modules article="activedData"></article-modules>
                         </pane-v>
-                        <pane-v title="Layout">
+                        <pane-v header="Layout">
                             <div class="tab-pane">
                                 <template-editor folder-type="'Articles'" template="activedData.view" templates="activedData.templates"></template-editor>
                             </div>
                         </pane-v>
-                        <pane-v title="Related">
+                        <pane-v header="Related">
                             <related-navs request="request" source-id="activedData.id" culture="activedData.specificulture" prefix="'article'" navs="activedData.articleNavs" data="data" load-data="getList(pageIndex)"></related-navs>
                         </pane-v>
                     </tabs-v>

@@ -163,7 +163,7 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$l
                 $scope.$apply();
             }
         };
-        // $scope.saveCallback = function () {
+        // $scope.saveSuccessCallback = function () {
         //     $location.url($scope.referrerUrl);
         // }
         $scope.loadArticles = async function () {

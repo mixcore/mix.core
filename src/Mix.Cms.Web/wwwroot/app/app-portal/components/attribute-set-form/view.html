@@ -1,7 +1,5 @@
 <h6 class="card-header">
-    <span ng-bind="$ctrl.title"></span>
-    <!-- <a ng-click="$ctrl.addAttr()" class="btn btn-primary btn-sm float-right text-white">Add New</a> -->
-    <!-- <a ng-click="$ctrl.generateForm()" class="btn btn-primary btn-sm float-right text-white mr-2">Generate Form</a> -->
+    <span ng-bind="$ctrl.header"></span>    
 </h6>
 <form ng-class="{'submitted': submitted}">
 <table class="table table-sm" id="Table">
@@ -22,7 +20,7 @@
             <td>
                 <span ng-bind="attribute.title"></span>
             </td>
-            <td class="prop-value-container">
+            <td class="prop-value-container">                
                 <attribute-value-editor attribute-value="$ctrl.filterData(attribute.name)"></attribute-value-editor>                
             </td>
         </tr>

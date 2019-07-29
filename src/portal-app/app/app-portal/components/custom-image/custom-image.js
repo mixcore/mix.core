@@ -1,5 +1,4 @@
 ﻿
-//modules.controller('ImageController', );
 modules.component('customImage', {
     templateUrl: '/app/app-portal/components/custom-image/custom-image.html',
     bindings: {
@@ -18,7 +17,7 @@ modules.component('customImage', {
     controller: ['$rootScope', '$scope', 'ngAppSettings', 'MediaService', function ($rootScope, $scope, ngAppSettings, mediaService) {
         var ctrl = this;
         ctrl.isAdmin = $rootScope.isAdmin;
-        var image_placeholder = '/images/image_placeholder.jpg';
+        var image_placeholder = '/assets/img/image_placeholder.jpg';
         ctrl.isImage = false;
         ctrl.mediaNavs = [];
         ctrl.init = function () {
