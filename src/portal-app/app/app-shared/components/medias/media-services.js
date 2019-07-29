@@ -2,7 +2,7 @@
 app.factory('MediaService', ['$rootScope', 'CommonService', 'BaseService',
     function ($rootScope, commonService, baseService) {
 
-        var serviceFactory = Object.create(baseService);
+        var serviceFactory = angular.copy(baseService);
         serviceFactory.init('media');
         var _cloneMedia = async function (id) {
             var req = {

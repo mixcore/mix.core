@@ -5,7 +5,7 @@ app.controller('ConfigurationController',
             BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
             $scope.cates = ['Site', 'System'];
             $scope.settings = $rootScope.globalSettings;
-            $scope.saveCallback = function () {
+            $scope.saveSuccessCallback = function () {
                 commonService.initAllSettings().then(function () {
                     $location.url($scope.referrerUrl);
                 });

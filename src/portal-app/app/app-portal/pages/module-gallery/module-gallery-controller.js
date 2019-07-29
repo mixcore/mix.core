@@ -48,7 +48,7 @@ app.controller('ModuleGalleryController',
                 }
             };
 
-            $scope.saveCallback = function () {
+            $scope.saveSuccessCallback = function () {
             }
             $scope.removeCallback = function () {
             }

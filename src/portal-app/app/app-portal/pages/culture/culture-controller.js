@@ -105,7 +105,7 @@ app.controller('CultureController', ['$scope', '$rootScope', 'ngAppSettings', '$
         ];
         $scope.selected = null;
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
-        $scope.saveCallback = function () {
+        $scope.saveSuccessCallback = function () {
             commonService.initAllSettings().then(
                 () => commonService.fillAllSettings($scope.lang).then(
                     () => window.location.href = '/portal/culture/list')

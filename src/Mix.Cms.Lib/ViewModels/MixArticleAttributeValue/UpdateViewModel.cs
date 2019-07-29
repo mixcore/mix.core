@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
@@ -70,7 +72,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
         #region Overrides
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Field = MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId, _context, _transaction).Data;
+            Field = MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId, _context, _transaction).Data;            
             Priority = Field.Priority;
         }
         public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
@@ -99,6 +101,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
                         Errors.Add($"{Field.Title} is existed");
                     }
                 }
+                
             }
         }
         public override MixArticleAttributeValue ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -109,9 +112,14 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
                 CreatedDateTime = DateTime.UtcNow;
             }
 
-            if (Field.IsEncrypt)
+            if (Field.IsEncrypt && !string.IsNullOrEmpty(StringValue))
             {
-
+                if (string.IsNullOrEmpty(EncryptValue))
+                {
+                    EncryptKey = Guid.NewGuid().ToString("N");
+                    EncryptValue = AesEncryptionHelper.EncryptString(StringValue, EncryptKey);
+                }
+                StringValue = string.Empty;
             }
             return base.ParseModel(_context, _transaction);
         }

@@ -56,8 +56,8 @@ app.controller('ModuleFormController', [
                 $scope.data = resp.data;
                 $scope.initModuleForm();
                 $rootScope.showMessage('success', 'success');
-                if ($scope.saveCallback) {
-                    $scope.saveCallback({ data: $scope.data });
+                if ($scope.saveSuccessCallback) {
+                    $scope.saveSuccessCallback({ data: $scope.data });
                 }
                 else {
                     $rootScope.isBusy = false;

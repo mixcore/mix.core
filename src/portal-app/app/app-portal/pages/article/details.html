@@ -13,12 +13,12 @@
 
                 <hr>
                 <tabs-v select-callback="selectPane(pane)" class="mb-3">
-                    <pane-v title="General" class="card">
+                    <pane-v header="General" class="card">
                         <div class="card-body">
                             <article-general article="activedData"></article-general>
                         </div>
                     </pane-v>
-                    <pane-v title="Search Engine" class="card">
+                    <pane-v header="Search Engine" class="card">
 
 
                         <div class="card-body">
@@ -29,25 +29,25 @@
                         </div>
 
                     </pane-v>
-                    <pane-v title="Parents" class="card">
+                    <pane-v header="Parents" class="card">
 
                         <div class="card-body">
                             <article-parents article="activedData"></article-parents>
                         </div>
                     </pane-v>
-                    <pane-v title="Module" class="card">
+                    <pane-v header="Module" class="card">
 
                         <div class="card-body">
                             <article-modules article="activedData"></article-modules>
                         </div>
                     </pane-v>
-                    <pane-v title="Medias">
+                    <pane-v header="Medias">
                         <article-medias article="activedData" medias="activedData.mediaNavs"></article-medias>
                         <!--<navigation data="activedData.mediaNavs" prefix="media"></navigation>-->
                         <!--<navs data="activedData.mediaNavs" prefix="'media'" model="'nav-article-media'"></navs>-->
 
                     </pane-v>
-                    <pane-v title="Related Posts">
+                    <pane-v header="Related Posts">
 
                         <related-navs request="request" source-id="activedData.id" culture="activedData.specificulture"
                             prefix="'article'" navs="activedData.articleNavs" data="data"
@@ -64,7 +64,7 @@
                             details-url="'/portal/attribute-set/details/'" key="'attributeSetId'"></navs>
                     </div>
                     <tabs-v class="mb-3">
-                        <pane-v title="{{set.description}}" class="card"
+                        <pane-v header="{{set.description}}" class="card"
                             ng-repeat="set in activedData.attributeSetNavs track by $index" ng-if="set.isActived">
                             <div class="card-body">
                                 <article-attribute-set ng-if="isAdmin" set="set"></article-attribute-set>
@@ -171,29 +171,29 @@
                 </template-editor> -->
                 <!-- 
                 <tabs-v>
-                    <pane-v title="General">
+                    <pane-v header="General">
                         <article-general article="activedData"></article-general>
                     </pane-v>
-                    <pane-v title="Seo">
+                    <pane-v header="Seo">
                         <article-seo article="activedData"></article-seo>
                     </pane-v>
-                    <pane-v title="Parents">
+                    <pane-v header="Parents">
                         <article-parents article="activedData"></article-parents>
                     </pane-v>
-                    <pane-v title="Modules">
+                    <pane-v header="Modules">
                         <article-modules article="activedData"></article-modules>
                     </pane-v>
-                    <pane-v title="Layout">
+                    <pane-v header="Layout">
                         <div class="tab-pane">
                             <template-editor folder-type="'Articles'" template="activedData.view"
                                 templates="activedData.templates"></template-editor>
                         </div>
                     </pane-v>
-                    <pane-v title="Medias">
+                    <pane-v header="Medias">
                         <article-medias article="activedData" medias="activedData.mediaNavs"></article-medias>
                         
                     </pane-v>
-                    <pane-v title="Related">
+                    <pane-v header="Related">
                         <related-navs request="request" source-id="activedData.id" culture="activedData.specificulture"
                             prefix="'article'" navs="activedData.articleNavs" data="data"
                             load-data="getList(pageIndex)"></related-navs>

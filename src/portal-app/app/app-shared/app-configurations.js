@@ -1541,7 +1541,7 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'GlobalSettingsSer
                 key: key.toString(CryptoJS.enc.Base64),
                 iv: iv.toString(CryptoJS.enc.Base64),
                 data: encrypted.ciphertext.toString(CryptoJS.enc.Base64)
-            }
+            };
         }
         $rootScope.decrypt = function (encryptedData) {
             var ivSize = 128;
@@ -1658,11 +1658,43 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'GlobalSettingsSer
         };
         $rootScope.goToSiteUrl = function(url){
             window.top.location = url;
-        }
+        };
         $rootScope.goToPath = function(url){
             $rootScope.isBusy = true;
             $location.url(url);
+        };
+        $rootScope.encryptAttributeSet = function(attributes, data){
+            angular.forEach(attributes, function(attr){
+                if(attr.isEncrypt){
+                    angular.forEach(data, function(item){
+                        var fieldData = $rootScope.findObjectByKey(item.data, 'attributeName', attr.name);
+                        if(fieldData){
+                            var encryptedData = $rootScope.encrypt(fieldData.stringValue);
+                            fieldData.encryptValue = encryptedData.data;
+                            fieldData.encryptKey = encryptedData.key;
+                            fieldData.stringValue = '';
+                        }
+                    });
+                }
+            });
+        };
+        $rootScope.decryptAttributeSet = function(attributes, data){
+            angular.forEach(attributes, function(attr){
+                if(attr.isEncrypt){
+                    angular.forEach(data, function(item){
+                        var fieldData = $rootScope.findObjectByKey(item.data, 'attributeName', attr.name);
+                        if(fieldData){
+                            var encryptedData = {
+                                key: fieldData.encryptKey,
+                                data: fieldData.encryptValue
+                            };
+                            fieldData.stringValue =  $rootScope.decrypt(encryptedData);;
+                        }
+                    });
+                }
+            });
         }
+
     }]);
 if ($.trumbowyg) {
     $.trumbowyg.svgPath = '/assets/icons.svg';

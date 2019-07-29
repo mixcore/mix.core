@@ -78,7 +78,7 @@ app.controller('PageController', ['$scope', '$rootScope', 'ngAppSettings', '$loc
                 $scope.$apply();
             }          
         }
-        // $scope.saveCallback = function () {
+        // $scope.saveSuccessCallback = function () {
         //     $location.url($scope.referrerUrl);
         // }
 

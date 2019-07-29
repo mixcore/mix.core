@@ -73,8 +73,8 @@
                 var resp = await moduleDataService.saveModuleData(ctrl.data);
                 if (resp && resp.isSucceed) {
                     ctrl.data = resp.data;                    
-                    if (ctrl.saveCallback) {
-                        ctrl.saveCallback({ data: ctrl.data });
+                    if (ctrl.saveSuccessCallback) {
+                        ctrl.saveSuccessCallback({ data: ctrl.data });
                     }
                     else {
                         var msg = $rootScope.translate('success');

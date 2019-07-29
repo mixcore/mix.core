@@ -8,7 +8,7 @@ app.controller('ArticleController', ['$scope', '$rootScope', '$location', '$filt
             $rootScope.preview('article', item, item.title, 'modal-lg');
         };
 
-        // $scope.saveCallback = function () {
+        // $scope.saveSuccessCallback = function () {
         //     $location.url($scope.referrerUrl);
         // }
         $scope.getListRelated = async function(pageIndex){                 
@@ -52,14 +52,20 @@ app.controller('ArticleController', ['$scope', '$rootScope', '$location', '$filt
         $scope.saveFailCallback = function(){
             angular.forEach($scope.activedData.attributeSetNavs, function(nav){
                 if(nav.isActived){
-                    $scope.decryptAttributeSet(nav.attributeSet);
+                    $rootScope.decryptAttributeSet(nav.attributeSet.attributes, nav.attributeSet.articleData.items);
+                }
+            });
+        };
+        $scope.saveSuccessCallback = function(){
+            angular.forEach($scope.activedData.attributeSetNavs, function(nav){
+                if(nav.isActived){
+                    $rootScope.decryptAttributeSet(nav.attributeSet.attributes, nav.attributeSet.articleData.items);
                 }
             });
         };
         $scope.getSingleSuccessCallback = function () {
             var moduleId = $routeParams.module_id;
             var pageId = $routeParams.page_id;
-            var attrSetIds = $routeParams.attr_set_ids;
             if (moduleId) {
                 var moduleNav = $rootScope.findObjectByKey($scope.activedData.modules, 'moduleId', moduleId);
                 if (moduleNav) {
@@ -122,42 +128,10 @@ app.controller('ArticleController', ['$scope', '$rootScope', '$location', '$filt
         $scope.validate = function(){
             angular.forEach($scope.activedData.attributeSetNavs, function(nav){
                 if(nav.isActived){
-                    $scope.encryptAttributeSet(nav.attributeSet);
+                    $rootScope.encryptAttributeSet(nav.attributeSet.attributes, nav.attributeSet.articleData.items);
                 }
             });
             return true;
-        }
-        $scope.encryptAttributeSet = function(attributeSet){
-            angular.forEach(attributeSet.attributes, function(attr){
-                if(attr.isEncrypt){
-                    angular.forEach(attributeSet.articleData.items, function(item){
-                        var fieldData = $rootScope.findObjectByKey(item.data, 'attributeName', attr.name);
-                        if(fieldData){
-                            var encryptedData = $rootScope.encrypt(fieldData.stringValue);
-                            fieldData.stringValue = encryptedData.data;
-                            fieldData.encryptValue = encryptedData.data;
-                            fieldData.encryptKey = encryptedData.key;
-                        }
-                    });
-                }
-            });
-        }
-        $scope.decryptAttributeSet = function(attributeSet){
-            angular.forEach(attributeSet.attributes, function(attr){
-                if(attr.isEncrypt){
-                    angular.forEach(attributeSet.articleData.items, function(item){
-                        var fieldData = $rootScope.findObjectByKey(item.data, 'attributeName', attr.name);
-                        if(fieldData){
-                            var encryptedData = {
-                                key: fieldData.encryptKey,
-                                data: fieldData.encryptValue
-                            };
-                            var decrypted = $rootScope.decrypt(encryptedData);
-                            fieldData.stringValue = decrypted;
-                        }
-                    });
-                }
-            });
-        }
+        };        
     }
 ]);

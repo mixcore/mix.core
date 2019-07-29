@@ -9,7 +9,7 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
     $scope.isInit = false;
     $scope.isValid = true;
     $scope.errors = [];
-    $scope.saveCallbackArgs = [];
+    $scope.saveSuccessCallbackArgs = [];
     $scope.validateArgs = [];
     $scope.removeCallbackArgs = [];
     $scope.range = $rootScope.range;
@@ -125,14 +125,14 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
                 $scope.activedData = resp.data;
                 $rootScope.showMessage('success', 'success');
 
-                if ($scope.saveCallback) {
-                    $rootScope.executeFunctionByName('saveCallback', $scope.saveCallbackArgs, $scope)
+                if ($scope.saveSuccessCallback) {
+                    $rootScope.executeFunctionByName('saveSuccessCallback', $scope.saveSuccessCallbackArgs, $scope);
                 }
                 $rootScope.isBusy = false;
                 $scope.$apply();
             } else {
                 if($scope.saveFailCallback){
-                    $rootScope.executeFunctionByName('saveFailCallback', $scope.saveCallbackArgs, $scope)
+                    $rootScope.executeFunctionByName('saveFailCallback', $scope.saveSuccessCallbackArgs, $scope)
                 }
                 if (resp) {
                     $rootScope.showErrors(resp.errors);

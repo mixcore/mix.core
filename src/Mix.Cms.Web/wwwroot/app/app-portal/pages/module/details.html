@@ -14,7 +14,7 @@
 
                 <hr>
                 <tabs-v select-callback="selectPane(pane)" class="mb-3">
-                    <pane-v title="Attributes" class="card" ng-if="isAdmin">
+                    <pane-v header="Attributes" class="card" ng-if="isAdmin">
                         <div class="card-body">
                             <input type="hidden" asp-for="Id">
                             <input type="hidden" asp-for="Specificulture">
@@ -23,15 +23,15 @@
                             </properties-structure>
                         </div>
                     </pane-v>
-                    <pane-v title="Modules Layout" ng-if="isAdmin">
+                    <pane-v header="Modules Layout" ng-if="isAdmin">
 
                         <template-editor folder-type="'Modules'" template="activedData.view" templates="activedData.templates"></template-editor>
                     </pane-v>
-                    <pane-v title="Form Layout" ng-if="isAdmin">
+                    <pane-v header="Form Layout" ng-if="isAdmin">
 
                         <template-editor folder-type="'Forms'" template="activedData.formView" templates="activedData.forms"></template-editor>
                     </pane-v>
-                    <pane-v title="eDM Layout" ng-if="isAdmin">
+                    <pane-v header="eDM Layout" ng-if="isAdmin">
 
                         <template-editor folder-type="'Edms'" template="activedData.edmView" templates="activedData.edms"></template-editor>
                     </pane-v>

@@ -11,12 +11,12 @@
 
                 <hr>
                 <tabs-v select-callback="selectPane(pane)" class="mb-3">
-                    <pane-v title="General" class="card">
+                    <pane-v header="General" class="card">
                         <div class="card-body">
                             <page-general page="activedData"></page-general>
                         </div>
                     </pane-v>
-                    <pane-v title="Search Engine" class="card">
+                    <pane-v header="Search Engine" class="card">
 
 
                         <div class="card-body">
@@ -27,23 +27,23 @@
                         </div>
 
                     </pane-v>
-                    <pane-v title="Plug & Play" class="card">
+                    <pane-v header="Plug & Play" class="card">
                         <div class="card-body">
                             <page-plug-play page="activedData"></page-plug-play>
                         </div>
                     </pane-v>
-                    <pane-v title="Module" class="card">
+                    <pane-v header="Module" class="card">
 
                         <div class="card-body">
                             <page-modules page="activedData"></page-modules>
                         </div>
                     </pane-v>
-                    <pane-v title="Page Layout">
+                    <pane-v header="Page Layout">
 
                         <template-editor folder-type="'Pages'" template="activedData.view" templates="activedData.templates">
                         </template-editor>
                     </pane-v>
-                    <pane-v title="Master Layout">
+                    <pane-v header="Master Layout">
                         <template-editor folder-type="'Masters'" template="activedData.master" templates="activedData.masters">
                         </template-editor>
                     </pane-v>

@@ -82,7 +82,7 @@ app.controller('MediaController', ['$scope', '$rootScope', 'ngAppSettings', '$ro
                 $scope.$apply();
             }
         };
-        $scope.saveCallback = function(){
+        $scope.saveSuccessCallback = function(){
             $scope.activedData = {
                 title: '',
                 description: '',

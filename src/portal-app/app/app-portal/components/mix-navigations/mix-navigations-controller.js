@@ -82,7 +82,7 @@ app.controller('NavigationController', ['$scope', '$rootScope', 'ngAppSettings',
                 $scope.$apply();
             }
         };
-        $scope.saveCallback = function(){
+        $scope.saveSuccessCallback = function(){
             $scope.getList();
         }
         $scope.removeCallback = function(){

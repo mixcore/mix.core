@@ -27,7 +27,7 @@ app.controller('LanguageController',
             $scope.cate = $scope.cates[0];
             $scope.dataTypes = $rootScope.globalSettings.dataTypes;
             
-            $scope.saveCallback = function () {
+            $scope.saveSuccessCallback = function () {
                 commonService.initAllSettings().then(function () {
                     $location.url($scope.referrerUrl);
                 });

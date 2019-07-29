@@ -11,29 +11,29 @@
                 </div>
                 <div class="row">
                     <tabs-v class="col-lg-12">
-                        <pane-v title="General">
+                        <pane-v header="General">
                             <product-general product="activedData"></product-general>
                         </pane-v>
-                        <pane-v title="Seo">
+                        <pane-v header="Seo">
                             <product-seo product="activedData"></product-seo>
                         </pane-v>
-                        <pane-v title="Parents">
+                        <pane-v header="Parents">
                             <product-parents product="activedData"></product-parents>
                         </pane-v>
-                        <pane-v title="Modules">
+                        <pane-v header="Modules">
                             <product-modules product="activedData"></product-modules>
                         </pane-v>
-                        <pane-v title="Layout">
+                        <pane-v header="Layout">
                             <div class="tab-pane">
                                 <template-editor folder-type="'Products'" template="activedData.view" templates="activedData.templates"></template-editor>
                             </div>
                         </pane-v>
-                        <pane-v title="Medias">
+                        <pane-v header="Medias">
                                <media-navs data="activedData.mediaNavs"></media-navs>
                             <!--<navigation data="activedData.mediaNavs" prefix="media"></navigation>-->
                             <!--<navs data="activedData.mediaNavs" prefix="'media'" model="'nav-product-media'"></navs>-->
                         </pane-v>
-                        <pane-v title="Related">
+                        <pane-v header="Related">
                             <related-navs request="request" source-id="activedData.id" culture="activedData.specificulture" prefix="'product'" navs="activedData.productNavs" data="data" load-data="getList(pageIndex)"></related-navs>
                         
                         </pane-v>

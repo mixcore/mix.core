@@ -67,7 +67,7 @@ app.controller('ThemeController', ['$scope', '$rootScope', 'ngAppSettings', '$ro
                 $scope.$apply();
             }
         };
-        $scope.saveCallback = function () {
+        $scope.saveSuccessCallback = function () {
             commonService.initAllSettings().then(function () {
                 $location.path('/portal/theme/list');
             });
