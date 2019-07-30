@@ -1,7 +1,7 @@
 <div class="row" ng-init="$ctrl.loadModuleData()">
     <div class="col-sm-12" ng-if="$ctrl.data">
         <div ng-repeat="prop in $ctrl.data.dataProperties track by $index">
-            <module-data-preview is-show-title="$ctrl.isShowTitle" 
+            <module-data-preview  header="prop.title"
                 title="prop.title" data="$ctrl.data.jItem[prop.name]"></module-data-preview>
         </div>
     </div>

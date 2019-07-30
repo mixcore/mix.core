@@ -1,9 +1,7 @@
-﻿
-modules.component('customImage', {
+﻿modules.component('customImage', {
     templateUrl: '/app/app-portal/components/custom-image/custom-image.html',
     bindings: {
         header: '=',
-        title: '=',
         description: '=',
         src: '=',
         srcUrl: '=',
@@ -23,10 +21,9 @@ modules.component('customImage', {
         ctrl.init = function () {
             ctrl.srcUrl = ctrl.srcUrl || image_placeholder;
             ctrl.isImage = ctrl.srcUrl.toLowerCase().match(/([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png|svg)/g);
-            ctrl.maxHeight = ctrl.maxHeight|| '200px';
+            ctrl.maxHeight = ctrl.maxHeight || '200px';
             ctrl.id = Math.floor(Math.random() * 100);
         };
-        
         ctrl.mediaFile = {
             file: null,
             fullPath: '',
@@ -40,12 +37,7 @@ modules.component('customImage', {
                 ctrl.src = ctrl.srcUrl;
             }
         }.bind(ctrl);
-        // ctrl.updateSrc = function () {
-        //     alert('asdfa');
-        //     if (ctrl.src !== ctrl.srcUrl && ctrl.srcUrl != image_placeholder) {
-        //         ctrl.src = ctrl.srcUrl;
-        //     }
-        // };
+
         ctrl.selectFile = function (file, errFiles) {
             if (file !== undefined && file !== null) {
                 ctrl.mediaFile.folder = ctrl.folder ? ctrl.folder : 'Media';
@@ -99,8 +91,7 @@ modules.component('customImage', {
             else {
                 return null;
             }
-
-        }
+        };
         ctrl.getBase64 = function (file) {
             if (file !== null && ctrl.postedFile) {
                 $rootScope.isBusy = true;
@@ -125,8 +116,8 @@ modules.component('customImage', {
             else {
                 return null;
             }
-        }
+        };
 
     }],
-    
+
 });
