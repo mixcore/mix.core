@@ -1,4 +1,8 @@
 <div class="form-group">
+    <label class="control-label">Keyword</label>    
+    <input class="form-control" type="text" placeholder="Enter keyword and press enter" ng-model-options="{debounce: 1000}" ng-enter="$ctrl.searchVideo()" ng-model="$ctrl.keyword">
+</div>
+<div class="form-group">
     <label class="control-label" ng-if="$ctrl.isShowTitle">Youtube code</label>    
     <input class="form-control" type="text" placeholder="youtube code" ng-change="$ctrl.loadVideo()" ng-model="$ctrl.code">
 </div>

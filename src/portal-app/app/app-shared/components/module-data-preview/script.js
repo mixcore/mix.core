@@ -8,5 +8,6 @@ modules.component('moduleDataPreview', {
     bindings: {
         data: '=',
         width: '=',
+        header: '='
     }
 });

@@ -15,6 +15,13 @@
                 ctrl.isPlay = true;
                 ctrl.src = $sce.trustAsResourceUrl("https://www.youtube.com/embed/" + ctrl.code + "?rel=0&showinfo=0&autoplay=1");
             };
+            ctrl.searchVideo = function(){
+                // search 
+                $rootScope.preview(
+                    'message',
+                    'ToDo: Integrate youtube search (https://developers.google.com/youtube/v3/docs/search/list) \r\n PATH: portal-app/app/app-shared/components/youtube-editor/youtube-editor.js'
+                    );
+            };
         }
     ],
     bindings: {

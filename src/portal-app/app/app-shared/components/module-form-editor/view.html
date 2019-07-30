@@ -35,7 +35,7 @@
         </div>
         <div ng-switch-when="8">
             <!--Html-->
-            <trumbowyg class="trumbowyg-dark" options="{}" ng-model="$ctrl.data.value"></trumbowyg>
+            <trumbowyg options="{}" ng-model="$ctrl.data.value"></trumbowyg>
         </div>
         <div ng-switch-when="9">
             <!--TextArea-->
@@ -68,7 +68,7 @@
         <div ng-switch-when="16">
             <!--upload-->
             <custom-image header="'Image'" type="'ModuleDatas'" folder="'ModuleDatas'"
-                title="activedData.title" description="activedData.excerpt"    
+                description="activedData.excerpt"    
                 src-url="$ctrl.data.value" src="$ctrl.data.value" auto="'true'"></custom-image>
         </div>
         <div ng-switch-when="17">
@@ -77,7 +77,6 @@
         </div>
         <div ng-switch-when="18">
             <!--Boolean-->
-            
             <input class="{{$ctrl.inputClass}}" type="checkbox" placeholder="{{$ctrl.fieldTitle}}"
                 ng-model="$ctrl.data.value" ng-checked="$ctrl.data.value=='true'" >
         </div>
