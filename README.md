@@ -3,7 +3,7 @@
 ![Mixcore CMS](https://github.com/mixcore/mix.core/blob/master/assets/mixcore.png?raw=true "What is Mixcore CMS?")
 
 # Tutorials
-- Demo: http://dev.mixcore.org
+- Demo: http://stag.mixcore.org
 - Docs: https://docs.mixcore.org
 - Youtube: https://www.youtube.com/channel/UChqzh6JnC8HBUSQ9AWIcZAw
 - Twitter: https://twitter.com/mixcore_cms
