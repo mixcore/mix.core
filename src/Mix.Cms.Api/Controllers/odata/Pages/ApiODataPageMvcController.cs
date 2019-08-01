@@ -13,6 +13,7 @@ using Mix.Cms.Lib.ViewModels.MixPages;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNet.OData;
 using System.Collections.Generic;
+using Microsoft.AspNet.OData.Query;
 
 namespace Mix.Cms.Api.Controllers.OData.Pages
 {
@@ -47,22 +48,21 @@ namespace Mix.Cms.Api.Controllers.OData.Pages
         
         // GET api/pages/id
         [AllowAnonymous]
-        [EnableQuery]
+        [EnableQuery(MaxExpansionDepth = 4)]
         [HttpGet, HttpOptions]
         [Route("")]
-        public async Task<ActionResult<List<ReadMvcViewModel>>> List(string culture)
+        public async Task<ActionResult<List<ReadMvcViewModel>>> List(string culture, ODataQueryOptions<MixPage> queryOptions)
         {
             string msg = string.Empty;
-            Expression<Func<MixPage, bool>> predicate = model => model.Specificulture == culture;
-            var portalResult = await base.GetListAsync<ReadMvcViewModel>(predicate);
-            if (portalResult.IsSucceed)
+            var portalResult = await base.GetListAsync<ReadMvcViewModel>(queryOptions);
+            if (portalResult != null)
             {
-                foreach (var item in portalResult.Data.Items)
+                foreach (var item in portalResult)
                 {
                     item.DetailsUrl = MixCmsHelper.GetRouterUrl("Page", new { id = item.Id, SeoName = item.SeoName }, Request, Url);
                 }
             }
-            return Ok(portalResult.Data.Items);
+            return Ok(portalResult);
         }
 
         #endregion Get

@@ -164,7 +164,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (models != null)
             {
-                RemoveCache();
+                await MixCacheService.RemoveCacheAsync();
                 return await Lib.ViewModels.MixPortalPagePortalPages.ReadViewModel.UpdateInfosAsync(models);
             }
             else

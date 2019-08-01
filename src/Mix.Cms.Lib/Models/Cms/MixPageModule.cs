@@ -9,7 +9,7 @@ namespace Mix.Cms.Lib.Models.Cms
         {
             MixModuleData = new HashSet<MixModuleData>();
         }
-
+        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("MixModule")]
         public int ModuleId { get; set; }
         public int CategoryId { get; set; }
         public string Specificulture { get; set; }

@@ -197,7 +197,6 @@ namespace Mix.Cms.Api.Controllers.v1
         protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync<TView>(string key, RequestPaging request, Expression<Func<TModel, bool>> predicate = null, TModel model = null)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-            var getData = new RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>();
             
             var cacheKey = $"api_{_lang}_{typeof(TModel).Name.ToLower()}_list_{key}_{request.Status}_{request.Keyword}_{request.OrderBy}_{request.Direction}_{request.PageSize}_{request.PageIndex}_{request.Query}";
             RepositoryResponse<PaginationModel<TView>> data = null;
@@ -293,15 +292,6 @@ namespace Mix.Cms.Api.Controllers.v1
             return data;
         }
 
-        protected void RemoveCache()
-        {
-            foreach (var item in MixConstants.cachedKeys)
-            {
-                _memoryCache.Remove(item);
-            }
-            MixConstants.cachedKeys = new List<string>();
-            AlertAsync("Empty Cache", 200);
-        }
         protected void AlertAsync(string action, int status, string message = null)
         {
             var logMsg = new JObject()

@@ -40,7 +40,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
                 .GetModelListByAsync(
                     dataExp
                     , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
-                    , pageSize, pageIndex
+                    , pageSize, pageIndex, null, null
                     , _context: _context, _transaction: _transaction);
             if (getDataResult.Data.TotalItems == 0)
             {

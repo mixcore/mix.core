@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNet.OData;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Data.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.OData.UriParser;
 using Mix.Cms.Hub;
-using Mix.Cms.Lib;
 using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
@@ -71,8 +70,8 @@ namespace Mix.Cms.Api.Controllers.OData
         {
             _hubContext = hubContext;
             _memoryCache = memoryCache;
+            GetLanguage();
         }
-
 
         protected async Task<RepositoryResponse<TView>> GetSingleAsync<TView>(string key, Expression<Func<TModel, bool>> predicate = null, TModel model = null)
             where TView : ViewModelBase<TDbContext, TModel, TView>
@@ -167,40 +166,54 @@ namespace Mix.Cms.Api.Controllers.OData
             }
             return new RepositoryResponse<FileViewModel>();
         }
-        protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync<TView>(Expression<Func<TModel, bool>> predicate = null)
+        protected async Task<List<TView>> GetListAsync<TView>(ODataQueryOptions<TModel> queryOptions)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
+            Expression<Func<TModel, bool>> predicate = null;
+            if (queryOptions.Filter != null)
+            {
+                ODataHelper<TModel>.ParseFilter(queryOptions.Filter.FilterClause.Expression, ref predicate);
+            }
+
             RequestPaging request = new RequestPaging()
             {
-
+                Top = queryOptions.Top?.Value,
+                Skip = queryOptions.Skip?.Value
             };
-            var cacheKey = $"{typeof(TModel).Name}_list_{_lang}_{typeof(TView)}_{request.Status}_{request.Keyword}_{request.OrderBy}_{request.Direction}_{request.PageSize}_{request.PageIndex}_{request.Query}";
-            RepositoryResponse<PaginationModel<TView>> data = null;
+            var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_{SeoHelper.GetSEOString(queryOptions.Filter?.RawValue, '_')}_{queryOptions.Skip?.Value}_{queryOptions.Top?.Value}";
+            List<TView> data = null;
             if (MixService.GetConfig<bool>("IsCache"))
             {
-                data = await MixCacheService.GetAsync<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
+               var getData = await MixCacheService.GetAsync<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
+                if (getData!=null)
+                {
+                    data = getData.Data.Items;
+                }
             }
 
             if (data == null)
             {
                 if (predicate != null)
                 {
-                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-                    if (data.IsSucceed)
+                    var getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate, 
+                        request.OrderBy, request.Direction, request.PageSize, request.PageIndex, request.Skip, request.Top
+                        ).ConfigureAwait(false);
+                    if (getData.IsSucceed)
                     {
-                        await MixCacheService.SetAsync(cacheKey, data);
+                        await MixCacheService.SetAsync(cacheKey, getData);
+                        data = getData.Data.Items;
                     }
                 }
                 else
                 {
-                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-                    if (data.IsSucceed)
+                    var getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
+                    if (getData.IsSucceed)
                     {
-                        await MixCacheService.SetAsync(cacheKey, data);
+                        await MixCacheService.SetAsync(cacheKey, getData);
+                        data = getData.Data.Items;
                     }
                 }
             }
-            data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
             return data;
         }
 
@@ -270,15 +283,6 @@ namespace Mix.Cms.Api.Controllers.OData
             return data;
         }
 
-        protected void RemoveCache()
-        {
-            foreach (var item in MixConstants.cachedKeys)
-            {
-                _memoryCache.Remove(item);
-            }
-            MixConstants.cachedKeys = new List<string>();
-            AlertAsync("Empty Cache", 200);
-        }
         protected void AlertAsync(string action, int status, string message = null)
         {
             var logMsg = new JObject()
@@ -311,7 +315,6 @@ namespace Mix.Cms.Api.Controllers.OData
         protected void GetLanguage()
         {
             _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : MixService.GetConfig<string>("Language");
-            _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
         }
 
 
@@ -438,6 +441,144 @@ namespace Mix.Cms.Api.Controllers.OData
                 }
             }
             return expr1;
+        }
+
+        protected void HandleRawFilter(string culture, ODataQueryOptions<TModel> options)
+        {
+            // These validation settings prevent anything except an equals filter
+            ValidateODataRequest(options);
+
+            // Parsing a filter, e.g. /Products?$filter=Name eq 'beer'        
+            ParsingFilter(options);
+            
+        }
+        public static Expression<Func<TModel, bool>> FilterObjectSet(SingleValuePropertyAccessNode rule,
+            ConstantNode constant, BinaryOperatorKind OperatorKind)
+        {
+            Type type = typeof(TModel);
+            var par = Expression.Parameter(type, rule.Property.Name);
+
+            Type fieldPropertyType;
+            Expression fieldPropertyExpression;
+
+            FieldInfo fieldInfo = type.GetField(rule.Property.Name);
+
+            if (fieldInfo == null)
+            {
+                PropertyInfo propertyInfo = type.GetProperty(rule.Property.Name);
+
+                if (propertyInfo == null)
+                {
+                    throw new Exception();
+                }
+
+                fieldPropertyType = propertyInfo.PropertyType;
+                fieldPropertyExpression = Expression.Property(par, propertyInfo);
+            }
+            else
+            {
+                fieldPropertyType = fieldInfo.FieldType;
+                fieldPropertyExpression = Expression.Field(par, fieldInfo);
+            }
+
+            object data2 = Convert.ChangeType(constant.LiteralText, fieldPropertyType);
+            BinaryExpression eq = null;
+            switch (OperatorKind)
+            {
+                case BinaryOperatorKind.Or:
+                     eq = Expression.Or(fieldPropertyExpression,
+                                      Expression.Constant(data2));
+                    break;
+                case BinaryOperatorKind.And:
+                    eq = Expression.And(fieldPropertyExpression,
+                                      Expression.Constant(data2));
+                    break;
+                case BinaryOperatorKind.Equal:
+                    eq = Expression.Equal(fieldPropertyExpression,
+                                      Expression.Constant(data2));
+                    break;
+                case BinaryOperatorKind.NotEqual:
+                    eq = Expression.NotEqual(fieldPropertyExpression,
+                                      Expression.Constant(data2));
+                    break;
+                case BinaryOperatorKind.GreaterThan:
+                    eq = Expression.GreaterThan(fieldPropertyExpression,
+                                      Expression.Constant(data2));
+                    break;
+                case BinaryOperatorKind.GreaterThanOrEqual:
+                    eq = Expression.GreaterThanOrEqual(fieldPropertyExpression,
+                                      Expression.Constant(data2));
+                    break;
+                case BinaryOperatorKind.LessThan:
+                    eq = Expression.LessThan(fieldPropertyExpression,
+                                      Expression.Constant(data2));
+                    break;
+                case BinaryOperatorKind.LessThanOrEqual:
+                    eq = Expression.LessThanOrEqual(fieldPropertyExpression,
+                                      Expression.Constant(data2));
+                    break;
+                case BinaryOperatorKind.Add:
+                    eq = Expression.Add(fieldPropertyExpression,
+                                      Expression.Constant(data2));
+                    break;
+                case BinaryOperatorKind.Subtract:
+                    eq = Expression.Subtract(fieldPropertyExpression,
+                                      Expression.Constant(data2));
+                    break;
+                case BinaryOperatorKind.Multiply:
+                    eq = Expression.Multiply(fieldPropertyExpression,
+                                      Expression.Constant(data2));
+                    break;
+                case BinaryOperatorKind.Divide:
+                    eq = Expression.Divide(fieldPropertyExpression,
+                                      Expression.Constant(data2));
+                    break;
+                case BinaryOperatorKind.Modulo:
+                    eq = Expression.Modulo(fieldPropertyExpression,
+                                      Expression.Constant(data2));
+                    break;
+                case BinaryOperatorKind.Has:
+                    break;
+            }
+            return Expression.Lambda<Func<TModel, bool>>(eq, par);
+        }
+        private void ParsingFilter(ODataQueryOptions<TModel> options)
+        {
+            // Parsing a filter, e.g. /Products?$filter=Name eq 'beer'        
+
+            if (options.Filter != null && options.Filter.FilterClause != null)
+            {
+                var binaryOperator = options.Filter.FilterClause.Expression as BinaryOperatorNode;
+                if (binaryOperator != null)
+                {
+                    var property = binaryOperator.Left as SingleValuePropertyAccessNode ?? binaryOperator.Right as SingleValuePropertyAccessNode;
+                    var constant = binaryOperator.Left as ConstantNode ?? binaryOperator.Right as ConstantNode;
+
+                    if (property != null && property.Property != null && constant != null && constant.Value != null)
+                    {
+                        var exp = FilterObjectSet(property, constant, binaryOperator.OperatorKind);
+                    }
+                }
+            }
+        }
+
+        private void ValidateODataRequest(ODataQueryOptions<TModel> options)
+        {
+            var settings = new ODataValidationSettings
+            {
+                AllowedFunctions = AllowedFunctions.AllFunctions,
+                AllowedLogicalOperators = AllowedLogicalOperators.All,
+                AllowedArithmeticOperators = AllowedArithmeticOperators.All,
+                AllowedQueryOptions = AllowedQueryOptions.All
+            };
+            try
+            {
+                options.Validate(settings);
+            }
+            catch (ODataException ex)
+            {
+                
+            }
         }
     }
 }
