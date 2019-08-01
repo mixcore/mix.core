@@ -152,7 +152,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         public static async Task<RepositoryResponse<PaginationModel<ReadViewModel>>> GetModelListByCategoryAsync(
             int categoryId, string specificulture
             , string orderByPropertyName, int direction
-            , int? pageSize = 1, int? pageIndex = 0
+            , int? pageSize = 1, int? pageIndex = 0, int? skip = null, int? top = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             MixCmsContext context = _context ?? new MixCmsContext();
@@ -165,8 +165,9 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                     && ac.Status == (int)MixEnums.MixContentStatus.Published).Select(ac => ac.MixArticle);
                 PaginationModel<ReadViewModel> result = await Repository.ParsePagingQueryAsync(
                     query, orderByPropertyName
-                    , direction,
-                    pageSize, pageIndex, context, transaction
+                    , direction
+                    , pageSize, pageIndex, skip, top
+                    , context, transaction
                     );
                 return new RepositoryResponse<PaginationModel<ReadViewModel>>()
                 {

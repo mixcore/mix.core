@@ -13,7 +13,7 @@ using System.Linq;
 namespace Mix.Cms.Api.Controllers.OData.Pages
 {
     [Produces("application/json")]
-    [Route("api/odata/{culture}/page/model")]
+    [Route("api/odata/{culture}/post/model")]
     public class ApiODataPostModelController :
         BaseApiODataController<MixCmsContext, MixArticle>
     {

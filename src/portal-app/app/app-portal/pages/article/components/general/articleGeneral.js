@@ -5,7 +5,7 @@ app.component('articleGeneral', {
         var ctrl = this;
         ctrl.dataTypes = $rootScope.globalSettings.dataTypes;
         ctrl.$onInit = function(){
-            ctrl.isAdmin = $rootScope.isAdmin;
+            
         };
         ctrl.addProperty = function (type) {
             var i = $(".property").length;
@@ -19,6 +19,7 @@ app.component('articleGeneral', {
     }],
     bindings: {
         article: '=',
+        isAdmin: '=',
         onDelete: '&',
         onUpdate: '&'
     }

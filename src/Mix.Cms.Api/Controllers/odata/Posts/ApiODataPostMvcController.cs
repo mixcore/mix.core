@@ -13,6 +13,8 @@ using Mix.Cms.Lib.ViewModels.MixArticles;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNet.OData;
 using System.Collections.Generic;
+using Microsoft.AspNet.OData.Query;
+using Mix.Cms.Lib.Helpers;
 
 namespace Mix.Cms.Api.Controllers.OData.Posts
 {
@@ -30,7 +32,7 @@ namespace Mix.Cms.Api.Controllers.OData.Posts
 
         // GET api/pages/id
         [AllowAnonymous]
-        [EnableQuery]
+        [EnableQuery(MaxExpansionDepth = 4)]
         [HttpGet, HttpOptions]
         [Route("{id}")]
         public async Task<ActionResult<ReadMvcViewModel>> Details(string culture, int id)
@@ -47,22 +49,21 @@ namespace Mix.Cms.Api.Controllers.OData.Posts
 
         // GET api/pages/id
         [AllowAnonymous]
-        [EnableQuery]
+        [EnableQuery(MaxExpansionDepth = 4)]
         [HttpGet, HttpOptions]
         [Route("")]
-        public async Task<ActionResult<List<ReadMvcViewModel>>> List(string culture)
+        public async Task<ActionResult<List<ReadMvcViewModel>>> List(string culture, ODataQueryOptions<MixArticle> queryOptions)
         {
             string msg = string.Empty;
-            Expression<Func<MixArticle, bool>> predicate = model => model.Specificulture == culture;
-            var portalResult = await ReadMvcViewModel.Repository.GetModelListByAsync(predicate);
-            if (portalResult.IsSucceed)
+            var portalResult = await base.GetListAsync<ReadMvcViewModel>(queryOptions);
+            if (portalResult != null)
             {
-                foreach (var item in portalResult.Data)
+                foreach (var item in portalResult)
                 {
                     item.DetailsUrl = MixCmsHelper.GetRouterUrl("Page", new { id = item.Id, SeoName = item.SeoName }, Request, Url);
                 }
             }
-            return Ok(portalResult.Data);
+            return Ok(portalResult);
         }
 
 

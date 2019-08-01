@@ -32,12 +32,12 @@
 
   <ItemGroup>
     <PackageReference Include="CommonMark.NET" Version="0.15.1" />
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Mix.Heart" Version="0.0.4.3" />
     <PackageReference Include="Mix.Identity" Version="0.0.2" />
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.16" />
   </ItemGroup>
@@ -45,6 +45,10 @@
   <ItemGroup>
     <Folder Include="Interfaces\" />
     <Folder Include="ViewModels\MixRolePortalPages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\mix.heart\src\Mix.Heart\Mix.Heart.csproj" />
   </ItemGroup>
 
 </Project>
