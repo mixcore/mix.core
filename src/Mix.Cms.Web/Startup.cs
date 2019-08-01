@@ -65,12 +65,8 @@ namespace Mix.Cms.Web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
-
-            //services.TryAddSingleton<IApiDescriptionGroupCollectionProvider, ApiDescriptionGroupCollectionProvider>();
-            //services.TryAddEnumerable(
-            //    ServiceDescriptor.Transient<IApiDescriptionProvider, DefaultApiDescriptionProvider>());
-
+            
+           
             // Config Authenticate 
             // App_Start/Startup.Auth.cs
             ConfigAuthorization(services, Configuration);
@@ -100,8 +96,10 @@ namespace Mix.Cms.Web
                     {
                         Location = ResponseCacheLocation.None,
                         NoStore = true
-                    });
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                    });                
+            }).AddJsonOptions(options => options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver())
+
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddMemoryCache();
 
