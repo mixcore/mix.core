@@ -174,13 +174,16 @@ namespace Mix.Cms.Api.Controllers.OData
             {
                 ODataHelper<TModel>.ParseFilter(queryOptions.Filter.FilterClause.Expression, ref predicate);
             }
-
+            var top = queryOptions.Top?.Value ?? 1;
+            var skip = queryOptions.Skip?.Value ?? 0;
             RequestPaging request = new RequestPaging()
             {
+                PageIndex = 0,
+                PageSize = top + top * (skip/top + 1)
                 //Top = queryOptions.Top?.Value,
                 //Skip = queryOptions.Skip?.Value
             };
-            var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_{SeoHelper.GetSEOString(queryOptions.Filter?.RawValue, '_')}";
+            var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_{SeoHelper.GetSEOString(queryOptions.Filter?.RawValue, '_')}_{request.PageSize}";
             List<TView> data = null;
             if (MixService.GetConfig<bool>("IsCache"))
             {
