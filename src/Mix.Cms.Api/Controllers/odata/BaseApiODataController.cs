@@ -177,10 +177,10 @@ namespace Mix.Cms.Api.Controllers.OData
 
             RequestPaging request = new RequestPaging()
             {
-                Top = queryOptions.Top?.Value,
-                Skip = queryOptions.Skip?.Value
+                //Top = queryOptions.Top?.Value,
+                //Skip = queryOptions.Skip?.Value
             };
-            var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_{SeoHelper.GetSEOString(queryOptions.Filter?.RawValue, '_')}_{queryOptions.Skip?.Value}_{queryOptions.Top?.Value}";
+            var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_{SeoHelper.GetSEOString(queryOptions.Filter?.RawValue, '_')}";
             List<TView> data = null;
             if (MixService.GetConfig<bool>("IsCache"))
             {
