@@ -17,12 +17,10 @@ namespace Mix.Cms.Api.Controllers.OData.Pages
     public class ApiODataPostModelController :
         BaseApiODataController<MixCmsContext, MixArticle>
     {
-        private readonly MixCmsContext _context;
         public ApiODataPostModelController(
             MixCmsContext context, IMemoryCache memoryCache
-            , Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
+            , Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
-            this._context = context;
         }
 
         #region Get
