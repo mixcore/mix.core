@@ -119,10 +119,10 @@ namespace Mix.Cms.Api.Controllers.v1
             }
             if (data==null)
             {
-                UnitOfWorkHelper<TDbContext>.InitTransaction(_context, null, out _context, out _transaction, out bool isRoot);
+                
                 if (predicate != null)
                 {
-                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate, _context, _transaction);
+                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
                     //_memoryCache.Set(cacheKey, data);
                     await MixCacheService.SetAsync(cacheKey, data);
                 }
@@ -131,11 +131,11 @@ namespace Mix.Cms.Api.Controllers.v1
                     data = new RepositoryResponse<TView>()
                     {
                         IsSucceed = true,
-                        Data = DefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model, _context,_transaction)
+                        Data = DefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model)
                     };
 
                 }
-                UnitOfWorkHelper<TDbContext>.HandleTransaction(data.IsSucceed, true, _transaction);
+                
             }
             data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
             return data;
@@ -144,7 +144,7 @@ namespace Mix.Cms.Api.Controllers.v1
         protected async Task<RepositoryResponse<TModel>> DeleteAsync<TView>(Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
            where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-            UnitOfWorkHelper<TDbContext>.InitTransaction(_context, null, out _context, out _transaction, out bool isRoot);
+            
             var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
             if (data.IsSucceed)
             {
@@ -164,8 +164,8 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (data != null)
             {
-                UnitOfWorkHelper<TDbContext>.InitTransaction(_context, null, out _context, out _transaction, out bool isRoot);
-                var result = await data.RemoveModelAsync(isDeleteRelated, _context, _transaction).ConfigureAwait(false);
+                
+                var result = await data.RemoveModelAsync(isDeleteRelated).ConfigureAwait(false);
                 if (result.IsSucceed)
                 {
                     await MixCacheService.RemoveCacheAsync();
@@ -179,21 +179,21 @@ namespace Mix.Cms.Api.Controllers.v1
         protected async Task<RepositoryResponse<List<TModel>>> DeleteListAsync<TView>(Expression<Func<TModel, bool>> predicate, bool isRemoveRelatedModel = false)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-            UnitOfWorkHelper<TDbContext>.InitTransaction(_context, null, out _context, out _transaction, out bool isRoot);
-            var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.RemoveListModelAsync(isRemoveRelatedModel, predicate, _context, _transaction);
+            
+            var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.RemoveListModelAsync(isRemoveRelatedModel, predicate);
             if (data.IsSucceed)
             {
                 await MixCacheService.RemoveCacheAsync();
 
             }
-            UnitOfWorkHelper<TDbContext>.HandleTransaction(data.IsSucceed, true, _transaction);
+            
             return data;
         }
 
 
         protected async Task<RepositoryResponse<FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate, MixStructureType type)
         {
-            UnitOfWorkHelper<TDbContext>.InitTransaction(_context, null, out _context, out _transaction, out bool isRoot);
+            
             var getData = await DefaultModelRepository<TDbContext, TModel>.Instance.GetModelListByAsync(predicate, _context);
             FileViewModel file = null;
             if (getData.IsSucceed)
@@ -236,11 +236,11 @@ namespace Mix.Cms.Api.Controllers.v1
 
             if (data == null)
             {
-                UnitOfWorkHelper<TDbContext>.InitTransaction(_context, null, out _context, out _transaction, out bool isRoot);
+                
                 if (predicate != null)
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(
-                        predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null, _context, _transaction);
+                        predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null);
                     if (data.IsSucceed)
                     {
                         await MixCacheService.SetAsync(cacheKey, data);
@@ -248,13 +248,13 @@ namespace Mix.Cms.Api.Controllers.v1
                 }
                 else
                 {
-                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null, _context, _transaction).ConfigureAwait(false);
+                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
                     if (data.IsSucceed)
                     {
                         await MixCacheService.SetAsync(cacheKey, data);
                     }
                 }
-                UnitOfWorkHelper<TDbContext>.HandleTransaction(data.IsSucceed, true, _transaction);
+                
             }
             data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
             return data;
@@ -265,8 +265,8 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (vm != null)
             {
-                UnitOfWorkHelper<TDbContext>.InitTransaction(_context, null, out _context, out _transaction, out bool isRoot);
-                var result = await vm.SaveModelAsync(isSaveSubModel, _context, _transaction).ConfigureAwait(false);
+                
+                var result = await vm.SaveModelAsync(isSaveSubModel).ConfigureAwait(false);
 
                 await MixCacheService.RemoveCacheAsync();
                 UnitOfWorkHelper<TDbContext>.HandleTransaction(result.IsSucceed, true, _transaction);
@@ -280,7 +280,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (obj != null)
             {
-                UnitOfWorkHelper<TDbContext>.InitTransaction(_context, null, out _context, out _transaction, out bool isRoot);
+                
 
                 List<EntityField> fields = new List<EntityField>();
                 Type type = typeof(TModel);
@@ -300,7 +300,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                 }
 
-                var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.UpdateFieldsAsync(predicate, fields, _context, _transaction);
+                var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.UpdateFieldsAsync(predicate, fields);
                 await MixCacheService.RemoveCacheAsync();
                 UnitOfWorkHelper<TDbContext>.HandleTransaction(result.IsSucceed, true, _transaction);
                 return result;
@@ -311,8 +311,8 @@ namespace Mix.Cms.Api.Controllers.v1
         protected async Task<RepositoryResponse<List<TView>>> SaveListAsync<TView>(List<TView> lstVm, bool isSaveSubModel)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-            UnitOfWorkHelper<TDbContext>.InitTransaction(_context, null, out _context, out _transaction, out bool isRoot);
-            var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.SaveListModelAsync(lstVm, isSaveSubModel, _context, _transaction);
+            
+            var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.SaveListModelAsync(lstVm, isSaveSubModel);
             if (result.IsSucceed)
             {
                 await MixCacheService.RemoveCacheAsync();
@@ -323,7 +323,7 @@ namespace Mix.Cms.Api.Controllers.v1
         protected RepositoryResponse<List<TView>> SaveList<TView>(List<TView> lstVm, bool isSaveSubModel)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-            UnitOfWorkHelper<TDbContext>.InitTransaction(_context, null, out _context, out _transaction, out bool isRoot);
+            
             var result = new RepositoryResponse<List<TView>>() { IsSucceed = true };
             if (lstVm != null)
             {
