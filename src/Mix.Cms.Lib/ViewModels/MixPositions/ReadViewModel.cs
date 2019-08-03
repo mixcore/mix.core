@@ -22,7 +22,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPositions
 
         [JsonProperty("description")]
         public string Description { get; set; }
-
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #endregion Properties

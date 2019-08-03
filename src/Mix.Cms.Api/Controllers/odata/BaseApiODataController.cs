@@ -76,13 +76,13 @@ namespace Mix.Cms.Api.Controllers.OData
         protected async Task<RepositoryResponse<TView>> GetSingleAsync<TView>(string key, Expression<Func<TModel, bool>> predicate = null, TModel model = null)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-            var cacheKey = $"{typeof(TModel).Name}_details_{_lang}_{key}";
+            var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_details_{key}";
             RepositoryResponse<TView> data = null;
             if (MixService.GetConfig<bool>("IsCache"))
             {
                 data = await MixCacheService.GetAsync<RepositoryResponse<TView>>(cacheKey);
             }
-            if (data==null)
+            if (data == null)
             {
 
                 if (predicate != null)
@@ -116,6 +116,21 @@ namespace Mix.Cms.Api.Controllers.OData
             if (data.IsSucceed)
             {
                 var result = await data.Data.RemoveModelAsync(isDeleteRelated).ConfigureAwait(false);
+                if (result.IsSucceed)
+                {
+                    await MixCacheService.RemoveCacheAsync();
+                }
+                return result;
+            }
+            return new RepositoryResponse<TModel>() { IsSucceed = false };
+        }
+
+        protected async Task<RepositoryResponse<TModel>> DeleteAsync<TView>(TView data, bool isDeleteRelated = false)
+            where TView : ViewModelBase<TDbContext, TModel, TView>
+        {
+            if (data != null)
+            {
+                var result = await data.RemoveModelAsync(isDeleteRelated).ConfigureAwait(false);
                 if (result.IsSucceed)
                 {
                     await MixCacheService.RemoveCacheAsync();
@@ -174,21 +189,21 @@ namespace Mix.Cms.Api.Controllers.OData
             {
                 ODataHelper<TModel>.ParseFilter(queryOptions.Filter.FilterClause.Expression, ref predicate);
             }
-            var top = queryOptions.Top?.Value ?? 1;
+            int? top = queryOptions.Top?.Value;
             var skip = queryOptions.Skip?.Value ?? 0;
             RequestPaging request = new RequestPaging()
             {
                 PageIndex = 0,
-                PageSize = top + top * (skip/top + 1)
+                PageSize = top.HasValue ? top + top * (skip / top + 1) : null
                 //Top = queryOptions.Top?.Value,
                 //Skip = queryOptions.Skip?.Value
             };
-            var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_{SeoHelper.GetSEOString(queryOptions.Filter?.RawValue, '_')}_{request.PageSize}";
+            var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_{SeoHelper.GetSEOString(queryOptions.Filter?.RawValue, '_')}_ps-{request.PageSize}";
             List<TView> data = null;
             if (MixService.GetConfig<bool>("IsCache"))
             {
-               var getData = await MixCacheService.GetAsync<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
-                if (getData!=null)
+                var getData = await MixCacheService.GetAsync<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
+                if (getData != null)
                 {
                     data = getData.Data.Items;
                 }
@@ -198,7 +213,7 @@ namespace Mix.Cms.Api.Controllers.OData
             {
                 if (predicate != null)
                 {
-                    var getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate, 
+                    var getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate,
                         request.OrderBy, request.Direction, request.PageSize, request.PageIndex, request.Skip, request.Top
                         ).ConfigureAwait(false);
                     if (getData.IsSucceed)
@@ -232,6 +247,36 @@ namespace Mix.Cms.Api.Controllers.OData
             return new RepositoryResponse<TView>();
         }
 
+        protected async Task<RepositoryResponse<TModel>> SaveAsync<TView>(JObject obj, Expression<Func<TModel, bool>> predicate)
+            where TView : ViewModelBase<TDbContext, TModel, TView>
+        {
+            if (obj != null)
+            {
+                List<EntityField> fields = new List<EntityField>();
+                Type type = typeof(TModel);
+                foreach (var item in obj.Properties())
+                {
+                    var propName = System.Globalization.CultureInfo.InvariantCulture.TextInfo.ToTitleCase(item.Name);
+                    PropertyInfo propertyInfo = type.GetProperty(propName);
+                    if (propertyInfo != null)
+                    {
+                        object val = Convert.ChangeType(item.Value, propertyInfo.PropertyType);
+                        var field = new EntityField()
+                        {
+                            PropertyName = propName,
+                            PropertyValue = val
+                        };
+                        fields.Add(field);
+                    }
+                }
+                
+                var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.UpdateFieldsAsync(predicate, fields);
+                await MixCacheService.RemoveCacheAsync();
+                return result;
+            }
+            return new RepositoryResponse<TModel>();
+        }
+
         protected async Task<RepositoryResponse<List<TView>>> SaveListAsync<TView>(List<TView> lstVm, bool isSaveSubModel)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
@@ -258,7 +303,7 @@ namespace Mix.Cms.Api.Controllers.OData
                         result.Errors.AddRange(tmp.Errors);
                     }
                 }
-                Task.Run(()=> MixCacheService.RemoveCacheAsync());
+                Task.Run(() => MixCacheService.RemoveCacheAsync());
                 return result;
             }
             return result;
@@ -453,7 +498,7 @@ namespace Mix.Cms.Api.Controllers.OData
 
             // Parsing a filter, e.g. /Products?$filter=Name eq 'beer'        
             ParsingFilter(options);
-            
+
         }
         public static Expression<Func<TModel, bool>> FilterObjectSet(SingleValuePropertyAccessNode rule,
             ConstantNode constant, BinaryOperatorKind OperatorKind)
@@ -489,8 +534,8 @@ namespace Mix.Cms.Api.Controllers.OData
             switch (OperatorKind)
             {
                 case BinaryOperatorKind.Or:
-                     eq = Expression.Or(fieldPropertyExpression,
-                                      Expression.Constant(data2));
+                    eq = Expression.Or(fieldPropertyExpression,
+                                     Expression.Constant(data2));
                     break;
                 case BinaryOperatorKind.And:
                     eq = Expression.And(fieldPropertyExpression,
@@ -580,7 +625,7 @@ namespace Mix.Cms.Api.Controllers.OData
             }
             catch (ODataException ex)
             {
-                
+
             }
         }
     }
