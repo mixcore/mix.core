@@ -335,7 +335,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 foreach (var item in ModuleNavs)
                 {
-                    item.CategoryId = parent.Id;
+                    item.PageId = parent.Id;
 
                     if (item.IsActived)
                     {
@@ -354,7 +354,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 foreach (var item in PositionNavs)
                 {
-                    item.CategoryId = parent.Id;
+                    item.PageId = parent.Id;
                     if (item.IsActived)
                     {
                         var saveResult = item.SaveModel(false, _context, _transaction);
@@ -443,7 +443,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 foreach (var item in ModuleNavs)
                 {
-                    item.CategoryId = parent.Id;
+                    item.PageId = parent.Id;
 
                     if (item.IsActived)
                     {
@@ -462,7 +462,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 foreach (var item in PositionNavs)
                 {
-                    item.CategoryId = parent.Id;
+                    item.PageId = parent.Id;
                     if (item.IsActived)
                     {
                         var saveResult = await item.SaveModelAsync(false, _context, _transaction);
@@ -558,11 +558,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                   //.Where(p => p.Specificulture == Specificulture)
                   .Select(p => new MixPagePositions.ReadViewModel()
                   {
-                      CategoryId = Id,
+                      PageId = Id,
                       PositionId = p.Id,
                       Specificulture = Specificulture,
                       Description = p.Description,
-                      IsActived = context.MixPagePosition.Count(m => m.CategoryId == Id && m.PositionId == p.Id && m.Specificulture == Specificulture) > 0
+                      IsActived = context.MixPagePosition.Count(m => m.PageId == Id && m.PositionId == p.Id && m.Specificulture == Specificulture) > 0
                   });
 
             return query.OrderBy(m => m.Priority).ToList();
@@ -589,7 +589,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 .Where(module => module.Specificulture == Specificulture)
                 .Select(module => new MixPageModules.ReadMvcViewModel()
                 {
-                    CategoryId = Id,
+                    PageId = Id,
                     ModuleId = module.Id,
                     Specificulture = Specificulture,
                     Description = module.Title,
@@ -600,7 +600,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             result.ForEach(nav =>
             {
                 var currentNav = context.MixPageModule.FirstOrDefault(
-                        m => m.ModuleId == nav.ModuleId && m.CategoryId == Id && m.Specificulture == Specificulture);
+                        m => m.ModuleId == nav.ModuleId && m.PageId == Id && m.Specificulture == Specificulture);
                 nav.Priority = currentNav?.Priority ?? 0;
                 nav.IsActived = currentNav != null;
             });

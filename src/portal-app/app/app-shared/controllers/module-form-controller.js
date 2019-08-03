@@ -10,7 +10,7 @@ app.controller('ModuleFormController', [
                 resp = await moduleDataService.initModuleForm(name);
                 if (resp && resp.isSucceed) {
                     $scope.data = resp.data;
-                    $scope.data.articleId = $scope.articleId;
+                    $scope.data.postId = $scope.postId;
                     $scope.data.productId = $scope.productId;
                     $scope.data.categoryId = $scope.categoryId;
                     $rootScope.isBusy = false;

@@ -1,0 +1,8 @@
+@{ 
+
+    ViewData["Title"] = Model.Title;
+    ViewData["Description"] = Model.Excerpt;
+    ViewData["Image"] = Model.ImageUrl;
+}
+<div style="background: url('@Model.ImageUrl') no-repeat center center; background-size: cover;width:100%;height:100%">
+</div>

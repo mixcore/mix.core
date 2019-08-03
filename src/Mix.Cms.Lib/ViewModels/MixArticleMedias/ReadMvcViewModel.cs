@@ -23,7 +23,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostMedias
         [JsonProperty("mediaId")]
         public int MediaId { get; set; }
 
-        [JsonProperty("articleId")]
+        [JsonProperty("postId")]
         public int PostId { get; set; }
 
         [JsonProperty("isActived")]

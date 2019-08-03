@@ -23,7 +23,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
         {
         }
 
-        [JsonProperty("articleId")]
+        [JsonProperty("postId")]
         public int PostId { get; set; }
 
         [JsonProperty("moduleId")]
@@ -40,7 +40,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
         [JsonProperty("status")]
         public MixEnums.MixContentStatus Status { get; set; }
         #region Views
-        [JsonProperty("article")]
+        [JsonProperty("post")]
         public MixPosts.ReadMvcViewModel Post { get; set; }
 
         #endregion Views
@@ -68,7 +68,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
         #region Expand
 
 
-        public static RepositoryResponse<List<MixModulePosts.ReadViewModel>> GetModulePostNavAsync(int articleId, string specificulture
+        public static RepositoryResponse<List<MixModulePosts.ReadViewModel>> GetModulePostNavAsync(int postId, string specificulture
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             MixCmsContext context = _context ?? new MixCmsContext();
@@ -79,13 +79,13 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
                     .Select(p => new MixModulePosts.ReadViewModel(
                         new MixModulePost()
                         {
-                            PostId = articleId,
+                            PostId = postId,
                             ModuleId = p.Id,
                             Specificulture = specificulture
                         },
                         _context, _transaction)
                     {
-                        IsActived = p.MixModulePost.Any(cp => cp.PostId == articleId && cp.Specificulture == specificulture),
+                        IsActived = p.MixModulePost.Any(cp => cp.PostId == postId && cp.Specificulture == specificulture),
                         Description = p.Title
                     });
                 return new RepositoryResponse<List<ReadViewModel>>()

@@ -21,7 +21,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeSets
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
 
-        [JsonProperty("articleId")]
+        [JsonProperty("postId")]
         public int PostId { get; set; }
 
         [JsonProperty("isActived")]

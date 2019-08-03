@@ -150,7 +150,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         }
         public static async Task<RepositoryResponse<PaginationModel<ReadViewModel>>> GetModelListByCategoryAsync(
-            int categoryId, string specificulture
+            int pageId, string specificulture
             , string orderByPropertyName, int direction
             , int? pageSize = 1, int? pageIndex = 0, int? skip = null, int? top = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -161,7 +161,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 var query = context.MixPagePost.Include(ac => ac.MixPost)
                     .Where(ac =>
-                    ac.CategoryId == categoryId && ac.Specificulture == specificulture
+                    ac.PageId == pageId && ac.Specificulture == specificulture
                     && ac.Status == (int)MixEnums.MixContentStatus.Published).Select(ac => ac.MixPost);
                 PaginationModel<ReadViewModel> result = await Repository.ParsePagingQueryAsync(
                     query, orderByPropertyName
@@ -204,7 +204,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #region Sync
 
         public static RepositoryResponse<PaginationModel<ReadViewModel>> GetModelListByCategory(
-           int categoryId, string specificulture
+           int pageId, string specificulture
            , string orderByPropertyName, int direction
            , int? pageSize = 1, int? pageIndex = 0
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -215,7 +215,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 var query = context.MixPagePost.Include(ac => ac.MixPost)
                     .Where(ac =>
-                    ac.CategoryId == categoryId && ac.Specificulture == specificulture
+                    ac.PageId == pageId && ac.Specificulture == specificulture
                     && ac.Status == (int)MixContentStatus.Published).Select(ac => ac.MixPost);
                 PaginationModel<ReadViewModel> result = Repository.ParsePagingQuery(
                     query, orderByPropertyName

@@ -25,7 +25,7 @@ namespace Mix.Cms.Api.Controllers.v1
     public class ApiUrlAliasController :
         BaseGenericApiController<MixCmsContext, MixUrlAlias>
     {
-        public ApiUrlAliasController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext) : base(memoryCache, hubContext)
+        public ApiUrlAliasController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
 
         }

@@ -45,12 +45,13 @@ namespace Mix.Cms.Api.Controllers.v1
            UserManager<ApplicationUser> userManager,
            SignInManager<ApplicationUser> signInManager,
            RoleManager<IdentityRole> roleManager,
+           MixCmsContext context,
             Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext,
             IApplicationLifetime appLifetime,
             IHostingEnvironment env,
             IMemoryCache memoryCache
             )
-            : base(memoryCache, hubContext)
+            : base(context, memoryCache, hubContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -234,12 +235,12 @@ namespace Mix.Cms.Api.Controllers.v1
                     root.Add(sitemap.ParseXElement());
                 }
 
-                var articles = Lib.ViewModels.MixPosts.ReadListItemViewModel.Repository.GetModelList();
-                foreach (var article in articles.Data)
+                var posts = Lib.ViewModels.MixPosts.ReadListItemViewModel.Repository.GetModelList();
+                foreach (var post in posts.Data)
                 {
-                    article.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                    "article", new { id= article.Id, seoName = article.SeoName, culture = article.Specificulture }, Request, Url);
-                    var otherLanguages = pages.Data.Where(p => p.Id == article.Id && p.Specificulture != article.Specificulture);
+                    post.DetailsUrl = MixCmsHelper.GetRouterUrl(
+                                    "post", new { id= post.Id, seoName = post.SeoName, culture = post.Specificulture }, Request, Url);
+                    var otherLanguages = pages.Data.Where(p => p.Id == post.Id && p.Specificulture != post.Specificulture);
                     var lstOther = new List<SitemapLanguage>();
                     foreach (var item in otherLanguages)
                     {
@@ -247,14 +248,14 @@ namespace Mix.Cms.Api.Controllers.v1
                         {
                             HrefLang = item.Specificulture,
                             Href = MixCmsHelper.GetRouterUrl(
-                                        "page", new { seoName = article.SeoName, culture = item.Specificulture }, Request, Url)
+                                        "page", new { seoName = post.SeoName, culture = item.Specificulture }, Request, Url)
                         });
                     }
                     var sitemap = new SiteMap()
                     {
                         ChangeFreq = "monthly",
                         LastMod = DateTime.UtcNow,
-                        Loc = article.DetailsUrl,
+                        Loc = post.DetailsUrl,
                         OtherLanguages = lstOther,
                         Priority = 0.3
                     };

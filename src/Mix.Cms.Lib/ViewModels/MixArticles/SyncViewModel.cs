@@ -120,7 +120,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("moduleNavs")]
         public List<MixPostModules.ReadViewModel> ModuleNavs { get; set; }
 
-        [JsonProperty("articleNavs")]
+        [JsonProperty("postNavs")]
         public List<MixPostPosts.ReadViewModel> PostNavs { get; set; }
 
         [JsonProperty("listTag")]
@@ -303,7 +303,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 this.Pages = getPagePost.Data;
                 this.Pages.ForEach(c =>
                 {
-                    c.IsActived = MixPagePosts.ReadViewModel.Repository.CheckIsExists(n => n.CategoryId == c.CategoryId && n.PostId == Id, _context, _transaction);
+                    c.IsActived = MixPagePosts.ReadViewModel.Repository.CheckIsExists(n => n.PageId == c.PageId && n.PostId == Id, _context, _transaction);
                 });
             }
 
@@ -348,7 +348,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 foreach (var item in ModuleNavs)
                 {
                     item.IsActived = true;
-                    item.Module.LoadData(articleId: Id, _context: _context, _transaction: _transaction);
+                    item.Module.LoadData(postId: Id, _context: _context, _transaction: _transaction);
                 }
             }
             var otherModuleNavs = MixModules.ReadMvcViewModel.Repository.GetModelListBy(
@@ -356,7 +356,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 && !ModuleNavs.Any(n => n.ModuleId == m.Id), "CreatedDateTime", 1, null, 0, _context, _transaction);
             foreach (var item in otherModuleNavs.Data.Items)
             {
-                item.LoadData(articleId: Id, _context: _context, _transaction: _transaction);
+                item.LoadData(postId: Id, _context: _context, _transaction: _transaction);
                 ModuleNavs.Add(new MixPostModules.ReadViewModel()
                 {
                     ModuleId = item.Id,

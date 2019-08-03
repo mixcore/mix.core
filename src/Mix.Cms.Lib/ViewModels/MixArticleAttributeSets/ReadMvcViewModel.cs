@@ -20,7 +20,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeSets
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
 
-        [JsonProperty("articleId")]
+        [JsonProperty("postId")]
         public int PostId { get; set; }
 
         [JsonProperty("description")]
@@ -41,7 +41,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeSets
             , _context: _context, _transaction: _transaction
             ).Data;
 
-            // Load all article Data
+            // Load all post Data
             MixAttributeSet.LoadPostData(PostId, Specificulture, _context: _context, _transaction: _transaction);
         }
 

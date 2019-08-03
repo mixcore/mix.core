@@ -37,7 +37,7 @@ namespace Mix.Cms.Api.Controllers.v1
             IEmailSender emailSender,
             ILogger<ApiRoleController> logger,
             IMemoryCache memoryCache,
-            IHubContext<PortalHub> hubContext) : base(memoryCache, hubContext)
+            IHubContext<PortalHub> hubContext) : base(null, memoryCache, hubContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;

@@ -45,27 +45,27 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         controller: "OrderController",
         templateUrl: "/app/app-portal/pages/order/details.html"
     });
-    $routeProvider.when("/portal/article/list", {
-        controller: "ArticleController",
-        templateUrl: "/app/app-portal/pages/article/list.html"
+    $routeProvider.when("/portal/post/list", {
+        controller: "PostController",
+        templateUrl: "/app/app-portal/pages/post/list.html"
     });
 
-    $routeProvider.when("/portal/article/details/:id", {
-        controller: "ArticleController",
-        templateUrl: "/app/app-portal/pages/article/details.html"
+    $routeProvider.when("/portal/post/details/:id", {
+        controller: "PostController",
+        templateUrl: "/app/app-portal/pages/post/details.html"
     });
    
-    $routeProvider.when("/portal/article/gallery-details/:id", {
-        controller: "ArticleController",
-        templateUrl: "/app/app-portal/pages/article/gallery-details.html"
+    $routeProvider.when("/portal/post/gallery-details/:id", {
+        controller: "PostController",
+        templateUrl: "/app/app-portal/pages/post/gallery-details.html"
     });
-    $routeProvider.when("/portal/article/create-gallery", {
-        controller: "ArticleController",
-        templateUrl: "/app/app-portal/pages/article/gallery-details.html"
+    $routeProvider.when("/portal/post/create-gallery", {
+        controller: "PostController",
+        templateUrl: "/app/app-portal/pages/post/gallery-details.html"
     });
-    $routeProvider.when("/portal/article/create", {
-        controller: "ArticleController",
-        templateUrl: "/app/app-portal/pages/article/details.html"
+    $routeProvider.when("/portal/post/create", {
+        controller: "PostController",
+        templateUrl: "/app/app-portal/pages/post/details.html"
     });
 
     $routeProvider.when("/portal/page/list", {
@@ -93,9 +93,9 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         templateUrl: "/app/app-portal/pages/permission/details.html"
     });
 
-    $routeProvider.when("/portal/page/page-article/list/:id", {
-        controller: "PageArticleController",
-        templateUrl: "/app/app-portal/pages/page-article/list.html"
+    $routeProvider.when("/portal/page/page-post/list/:id", {
+        controller: "PagePostController",
+        templateUrl: "/app/app-portal/pages/page-post/list.html"
     });
    
     $routeProvider.when("/portal/page/page-gallery/list/:id", {
@@ -118,9 +118,9 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         templateUrl: "/app/app-portal/pages/module/data.html"
     });
 
-    $routeProvider.when("/portal/module-article/list/:id", {
-        controller: "ModuleArticleController",
-        templateUrl: "/app/app-portal/pages/module-article/list.html"
+    $routeProvider.when("/portal/module-post/list/:id", {
+        controller: "ModulePostController",
+        templateUrl: "/app/app-portal/pages/module-post/list.html"
     });
    
     $routeProvider.when("/portal/module-gallery/list/:id", {

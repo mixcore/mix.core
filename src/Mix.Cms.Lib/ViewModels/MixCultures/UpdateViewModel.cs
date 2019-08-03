@@ -607,8 +607,8 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             var modules = await _context.MixModule.Where(c => c.Specificulture == Specificulture).ToListAsync();
             modules.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var articles = await _context.MixPost.Where(c => c.Specificulture == Specificulture).ToListAsync();
-            articles.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+            var posts = await _context.MixPost.Where(c => c.Specificulture == Specificulture).ToListAsync();
+            posts.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
             var aliases = await _context.MixUrlAlias.Where(c => c.Specificulture == Specificulture).ToListAsync();
             aliases.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);

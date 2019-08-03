@@ -11,7 +11,7 @@ namespace Mix.Cms.Lib.Models.Cms
         }
         [System.ComponentModel.DataAnnotations.Schema.ForeignKey("MixModule")]
         public int ModuleId { get; set; }
-        public int CategoryId { get; set; }
+        public int PageId { get; set; }
         public string Specificulture { get; set; }
         public string Description { get; set; }
         public string Image { get; set; }

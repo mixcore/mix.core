@@ -6,9 +6,9 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$l
         $scope.contentUrl = '';
         $scope.getSingleSuccessCallback = function () {
             if ($scope.activedData.id > 0) {
-                // module => list article or list product
+                // module => list post or list product
                 if($scope.activedData.type==2 || $scope.activedData.type==6){
-                    $scope.contentUrl = '/portal/module-article/list/' + $scope.activedData.id;
+                    $scope.contentUrl = '/portal/module-post/list/' + $scope.activedData.id;
                 }
                 else{
                     $scope.contentUrl = '/portal/module/data/' + $scope.activedData.id;
@@ -166,13 +166,13 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$l
         // $scope.saveSuccessCallback = function () {
         //     $location.url($scope.referrerUrl);
         // }
-        $scope.loadArticles = async function () {
+        $scope.loadPosts = async function () {
             $rootScope.isBusy = true;
             var id = $routeParams.id;
-            $scope.articleRequest.query += '&page_id='+id;
-            var response = await pageArticleService.getList($scope.articleRequest);
+            $scope.postRequest.query += '&page_id='+id;
+            var response = await pagePostService.getList($scope.postRequest);
             if (response.isSucceed) {
-                $scope.pageData.articles = response.data;
+                $scope.pageData.posts = response.data;
                 $rootScope.isBusy = false;
                 $scope.$apply();
             }

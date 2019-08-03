@@ -160,7 +160,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("moduleNavs")]
         public List<MixPostModules.ReadViewModel> ModuleNavs { get; set; }
                 
-        [JsonProperty("articleNavs")]
+        [JsonProperty("postNavs")]
         public List<MixPostPosts.ReadViewModel> PostNavs { get; set; }
 
         [JsonProperty("attributeSets")]
@@ -218,7 +218,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 foreach (var item in ModuleNavs)
                 {
                     item.IsActived = true;
-                    item.Module.LoadData(articleId: Id, _context: _context, _transaction: _transaction);
+                    item.Module.LoadData(postId: Id, _context: _context, _transaction: _transaction);
                 }
             }
 

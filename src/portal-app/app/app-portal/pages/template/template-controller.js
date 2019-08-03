@@ -10,7 +10,7 @@ app.controller('TemplateController', ['$scope', '$rootScope', '$routeParams', '$
             'Forms',
             'Edms',
             'Products',
-            'Articles',
+            'Posts',
             'Widgets',
         ];
         $scope.activedPane = null;

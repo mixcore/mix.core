@@ -32,6 +32,7 @@ namespace Mix.Cms.Web.Controllers
             IHttpContextAccessor accessor
             ) : base(env, memoryCache, accessor)
         {
+
             this._userManager = userManager;
             _apiExplorer = apiExplorer;
         }
@@ -166,8 +167,8 @@ namespace Mix.Cms.Web.Controllers
             return await SearchAsync(keyword);
         }
 
-        [Route("article/{id}/{seoName}")]
-        [Route("{culture}/article/{id}/{seoName}")]
+        [Route("post/{id}/{seoName}")]
+        [Route("{culture}/post/{id}/{seoName}")]
         public async System.Threading.Tasks.Task<IActionResult> Post(int id, string culture, string seoName)
         {
             if (_forbidden)
@@ -572,7 +573,7 @@ namespace Mix.Cms.Web.Controllers
         {
 
             RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel> getPost = null;
-            var cacheKey = $"mvc_{_culture}_article_{id}";
+            var cacheKey = $"mvc_{_culture}_post_{id}";
             if (MixService.GetConfig<bool>("IsCache"))
             {
                 getPost = await MixCacheService.GetAsync<RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel>>(cacheKey);
@@ -589,7 +590,7 @@ namespace Mix.Cms.Web.Controllers
                 if (getPost.IsSucceed)
                 {
                     getPost.Data.DetailsUrl = GenerateDetailsUrl("Post", new { id = getPost.Data.Id, seoName = getPost.Data.SeoName });
-                    //Generate details url for related articles
+                    //Generate details url for related posts
                     if (getPost.IsSucceed)
                     {
                         if (getPost.Data.PostNavs != null && getPost.Data.PostNavs.Count > 0)
@@ -630,7 +631,7 @@ namespace Mix.Cms.Web.Controllers
 
             RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel> getPost = null;
 
-            var cacheKey = $"mvc_{_culture}_article_{seoName}";
+            var cacheKey = $"mvc_{_culture}_post_{seoName}";
 
             if (MixService.GetConfig<bool>("IsCache"))
             {
@@ -659,7 +660,7 @@ namespace Mix.Cms.Web.Controllers
                 if (getPost.IsSucceed)
                 {
                     getPost.Data.DetailsUrl = GenerateDetailsUrl("Post", new { id = getPost.Data.Id, seoName = getPost.Data.SeoName });
-                    //Generate details url for related articles
+                    //Generate details url for related posts
                     if (getPost.Data.PostNavs != null && getPost.Data.PostNavs.Count > 0)
                     {
                         getPost.Data.PostNavs.ForEach(n => n.RelatedPost.DetailsUrl = GenerateDetailsUrl("Post", 
@@ -689,11 +690,11 @@ namespace Mix.Cms.Web.Controllers
             page.DetailsUrl = GenerateDetailsUrl("Alias", new { seoName = page.SeoName });
             if (page.Posts != null)
             {
-                foreach (var articleNav in page.Posts.Items)
+                foreach (var postNav in page.Posts.Items)
                 {
-                    if (articleNav.Post != null)
+                    if (postNav.Post != null)
                     {
-                        articleNav.Post.DetailsUrl = GenerateDetailsUrl("Post", new { id = articleNav.PostId, seoName = articleNav.Post.SeoName });
+                        postNav.Post.DetailsUrl = GenerateDetailsUrl("Post", new { id = postNav.PostId, seoName = postNav.Post.SeoName });
                     }
                 }
             }
@@ -712,11 +713,11 @@ namespace Mix.Cms.Web.Controllers
             if (module.Posts != null)
             {
 
-                foreach (var articleNav in module.Posts.Items)
+                foreach (var postNav in module.Posts.Items)
                 {
-                    if (articleNav.Post != null)
+                    if (postNav.Post != null)
                     {
-                        articleNav.Post.DetailsUrl = GenerateDetailsUrl("Post", new { id = articleNav.PostId, seoName = articleNav.Post.SeoName });
+                        postNav.Post.DetailsUrl = GenerateDetailsUrl("Post", new { id = postNav.PostId, seoName = postNav.Post.SeoName });
                     }
                 }
             }

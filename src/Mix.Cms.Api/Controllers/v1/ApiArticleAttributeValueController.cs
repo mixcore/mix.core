@@ -21,17 +21,17 @@ using Mix.Cms.Lib.Attributes;
 namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
-    [Route("api/v1/{culture}/article-attribute-value")]
+    [Route("api/v1/{culture}/post-attribute-value")]
     public class ApiPostAttributeValueController :
         BaseGenericApiController<MixCmsContext, MixPostAttributeValue>
     {
-        public ApiPostAttributeValueController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext) : base(memoryCache, hubContext)
+        public ApiPostAttributeValueController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
 
         }
         #region Get
 
-        // GET api/article-attribute-value/id
+        // GET api/post-attribute-value/id
         [HttpGet, HttpOptions]
         [Route("delete/{id}")]
         public async Task<RepositoryResponse<MixPostAttributeValue>> DeleteAsync(string id)
@@ -40,7 +40,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 model => model.Id == id && model.Specificulture == _lang, true);
         }
 
-        // GET api/article-attribute-values/id
+        // GET api/post-attribute-values/id
         [HttpGet, HttpOptions]
         [Route("details/{id}/{viewType}")]
         [Route("details/{viewType}")]
@@ -95,7 +95,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         #region Post
 
-        // POST api/article-attribute-value
+        // POST api/post-attribute-value
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]        
         [HttpPost, HttpOptions]
         [RequestFormSizeLimit(valueCountLimit: 214748364)] // 200Mb
@@ -116,7 +116,7 @@ namespace Mix.Cms.Api.Controllers.v1
             return new RepositoryResponse<UpdateViewModel>() { Status = 501 };
         }
 
-        // GET api/article-attribute-value
+        // GET api/post-attribute-value
         [HttpPost, HttpOptions]
         [Route("list")]
         public async Task<ActionResult<JObject>> GetList(

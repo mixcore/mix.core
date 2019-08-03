@@ -14,11 +14,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 {
     public class Helper
     {
-        public static RepositoryResponse<PaginationModel<MixPostAttributeDatas.UpdateViewModel>> LoadPostData(int articleId, string specificulture, int? pageSize = null, int? pageIndex = 0
+        public static RepositoryResponse<PaginationModel<MixPostAttributeDatas.UpdateViewModel>> LoadPostData(int postId, string specificulture, int? pageSize = null, int? pageIndex = 0
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Expression<Func<MixPostAttributeData, bool>> dataExp = null;
-            dataExp = m => m.PostId == articleId && m.Specificulture == specificulture && (m.PostId == articleId);
+            dataExp = m => m.PostId == postId && m.Specificulture == specificulture && (m.PostId == postId);
                 var getDataResult = MixPostAttributeDatas.UpdateViewModel.Repository
                 .GetModelListBy(
                     dataExp
@@ -31,11 +31,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             }
             return getDataResult;
         }
-        public static async System.Threading.Tasks.Task<RepositoryResponse<PaginationModel<MixPostAttributeDatas.UpdateViewModel>>> LoadPostDataAsync(int articleId, string specificulture, int? pageSize = null, int? pageIndex = 0
+        public static async System.Threading.Tasks.Task<RepositoryResponse<PaginationModel<MixPostAttributeDatas.UpdateViewModel>>> LoadPostDataAsync(int postId, string specificulture, int? pageSize = null, int? pageIndex = 0
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Expression<Func<MixPostAttributeData, bool>> dataExp = null;
-            dataExp = m => m.PostId == articleId && m.Specificulture == specificulture && (m.PostId == articleId);
+            dataExp = m => m.PostId == postId && m.Specificulture == specificulture && (m.PostId == postId);
                 var getDataResult = await MixPostAttributeDatas.UpdateViewModel.Repository
                 .GetModelListByAsync(
                     dataExp
