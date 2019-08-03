@@ -37,8 +37,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         [JsonProperty("attributes")]
         public List<MixAttributeFields.UpdateViewModel> Attributes { get; set; }
 
-        [JsonProperty("articleData")]
-        public PaginationModel<MixArticleAttributeDatas.UpdateViewModel> ArticleData { get;set;}
+        [JsonProperty("postData")]
+        public PaginationModel<MixPostAttributeDatas.UpdateViewModel> PostData { get;set;}
         #endregion
         #endregion Properties
         #region Contructors
@@ -72,23 +72,23 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         #endregion
 
         #region Expand
-        public void LoadArticleData(int articleId, string specificulture, int? pageSize = null, int? pageIndex = 0
+        public void LoadPostData(int postId, string specificulture, int? pageSize = null, int? pageIndex = 0
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getData = MixArticleAttributeDatas.UpdateViewModel.Repository
+            var getData = MixPostAttributeDatas.UpdateViewModel.Repository
             .GetModelListBy(
-                m => m.ArticleId == articleId && m.Specificulture == specificulture && m.AttributeSetId== Id
+                m => m.PostId == postId && m.Specificulture == specificulture && m.AttributeSetId== Id
                 , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
                 , pageSize, pageIndex
                 , _context: _context, _transaction: _transaction);
             if (!getData.IsSucceed || getData.Data == null || getData.Data.Items.Count==0)
             {
-                ArticleData = new PaginationModel<MixArticleAttributeDatas.UpdateViewModel>() { TotalItems = 1 };
-                //ArticleData.Items.Add(new MixArticleAttributeDatas.UpdateViewModel(Id, Attributes));
+                PostData = new PaginationModel<MixPostAttributeDatas.UpdateViewModel>() { TotalItems = 1 };
+                //PostData.Items.Add(new MixPostAttributeDatas.UpdateViewModel(Id, Attributes));
             }
             else
             {
-                ArticleData = getData.Data;
+                PostData = getData.Data;
             }
         }
         #endregion

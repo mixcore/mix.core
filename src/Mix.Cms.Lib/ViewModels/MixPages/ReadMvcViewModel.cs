@@ -148,8 +148,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("view")]
         public MixTemplates.ReadListItemViewModel View { get; set; }
 
-        [JsonProperty("articles")]
-        public PaginationModel<MixPageArticles.ReadViewModel> Articles { get; set; } = new PaginationModel<MixPageArticles.ReadViewModel>();
+        [JsonProperty("posts")]
+        public PaginationModel<MixPagePosts.ReadViewModel> Posts { get; set; } = new PaginationModel<MixPagePosts.ReadViewModel>();
 
         [JsonProperty("modules")]
         public List<MixPageModules.ReadMvcViewModel> Modules { get; set; } = new List<MixPageModules.ReadMvcViewModel>(); // Get All Module
@@ -190,12 +190,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 //{
                 //    case MixPageType.Home:
                 //    case MixPageType.Blank:
-                //    case MixPageType.Article:
+                //    case MixPageType.Post:
                 //    case MixPageType.Modules:
                 //        break;
 
-                //    case MixPageType.ListArticle:
-                //        GetSubArticles(_context, _transaction);
+                //    case MixPageType.ListPost:
+                //        GetSubPosts(_context, _transaction);
                 //        break;
 
                 //    case MixPageType.ListProduct:
@@ -222,32 +222,32 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 pageSize = pageSize > 0 ? pageSize : PageSize;
                 pageIndex = pageIndex ?? 0;
                 Expression<Func<MixPageModule, bool>> dataExp = null;
-                Expression<Func<MixPagePost, bool>> articleExp = null;
+                Expression<Func<MixPagePost, bool>> postExp = null;
                 foreach (var item in Modules)
                 {
                     item.Module.LoadData(pageSize: pageSize, pageIndex: pageIndex, _context: context, _transaction: transaction);
                 }
                 switch (Type)
                 {
-                    case MixPageType.ListArticle:
-                        articleExp = n => n.CategoryId == Id && n.Specificulture == Specificulture;
+                    case MixPageType.ListPost:
+                        postExp = n => n.PageId == Id && n.Specificulture == Specificulture;
                         break;
                     default:
-                        dataExp = m => m.CategoryId == Id && m.Specificulture == Specificulture;
-                        articleExp = n => n.CategoryId == Id && n.Specificulture == Specificulture;
+                        dataExp = m => m.PageId == Id && m.Specificulture == Specificulture;
+                        postExp = n => n.PageId == Id && n.Specificulture == Specificulture;
                         break;
                 }
 
-                if (articleExp != null)
+                if (postExp != null)
                 {
-                    var getArticles = MixPageArticles.ReadViewModel.Repository
-                    .GetModelListBy(articleExp
+                    var getPosts = MixPagePosts.ReadViewModel.Repository
+                    .GetModelListBy(postExp
                     , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
                     , pageSize, pageIndex
                     , _context: context, _transaction: transaction);
-                    if (getArticles.IsSucceed)
+                    if (getPosts.IsSucceed)
                     {
-                        Articles = getArticles.Data;
+                        Posts = getPosts.Data;
                     }
                 }
             }
@@ -275,32 +275,32 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 pageSize = pageSize > 0 ? pageSize : PageSize;
                 pageIndex = pageIndex ?? 0;
-                Expression<Func<MixPost, bool>> articleExp = null;
+                Expression<Func<MixPost, bool>> postExp = null;
                 JObject obj = new JObject(new JProperty("text", tagName));
 
-                articleExp = n => n.Tags.Contains(obj.ToString(Newtonsoft.Json.Formatting.None)) && n.Specificulture == Specificulture;
+                postExp = n => n.Tags.Contains(obj.ToString(Newtonsoft.Json.Formatting.None)) && n.Specificulture == Specificulture;
 
-                if (articleExp != null)
+                if (postExp != null)
                 {
-                    var getArticles = MixArticles.ReadListItemViewModel.Repository
-                    .GetModelListBy(articleExp
+                    var getPosts = MixPosts.ReadListItemViewModel.Repository
+                    .GetModelListBy(postExp
                     , MixService.GetConfig<string>(orderBy), 0
                     , pageSize, pageIndex
                     , _context: context, _transaction: transaction);
-                    if (getArticles.IsSucceed)
+                    if (getPosts.IsSucceed)
                     {
-                        Articles.Items = new List<MixPageArticles.ReadViewModel>();
-                        Articles.PageIndex = getArticles.Data.PageIndex;
-                        Articles.PageSize = getArticles.Data.PageSize;
-                        Articles.TotalItems = getArticles.Data.TotalItems;
-                        Articles.TotalPage = getArticles.Data.TotalPage;
-                        foreach (var article in getArticles.Data.Items)
+                        Posts.Items = new List<MixPagePosts.ReadViewModel>();
+                        Posts.PageIndex = getPosts.Data.PageIndex;
+                        Posts.PageSize = getPosts.Data.PageSize;
+                        Posts.TotalItems = getPosts.Data.TotalItems;
+                        Posts.TotalPage = getPosts.Data.TotalPage;
+                        foreach (var post in getPosts.Data.Items)
                         {
-                            Articles.Items.Add(new MixPageArticles.ReadViewModel()
+                            Posts.Items.Add(new MixPagePosts.ReadViewModel()
                             {
-                                CategoryId = Id,
-                                ArticleId = article.Id,
-                                Article = article
+                                PageId = Id,
+                                PostId = post.Id,
+                                Post = post
                             });
                         }
                     }
@@ -330,31 +330,31 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 pageSize = pageSize > 0 ? pageSize : PageSize;
                 pageIndex = pageIndex ?? 0;
-                Expression<Func<MixPost, bool>> articleExp = null;
+                Expression<Func<MixPost, bool>> postExp = null;
 
-                articleExp = n => n.Title.Contains(keyword) && n.Specificulture == Specificulture;
+                postExp = n => n.Title.Contains(keyword) && n.Specificulture == Specificulture;
 
-                if (articleExp != null)
+                if (postExp != null)
                 {
-                    var getArticles = MixArticles.ReadListItemViewModel.Repository
-                    .GetModelListBy(articleExp
+                    var getPosts = MixPosts.ReadListItemViewModel.Repository
+                    .GetModelListBy(postExp
                     , MixService.GetConfig<string>(orderBy), 0
                     , pageSize, pageIndex
                     , _context: context, _transaction: transaction);
-                    if (getArticles.IsSucceed)
+                    if (getPosts.IsSucceed)
                     {
-                        Articles.Items = new List<MixPageArticles.ReadViewModel>();
-                        Articles.PageIndex = getArticles.Data.PageIndex;
-                        Articles.PageSize = getArticles.Data.PageSize;
-                        Articles.TotalItems = getArticles.Data.TotalItems;
-                        Articles.TotalPage = getArticles.Data.TotalPage;
-                        foreach (var article in getArticles.Data.Items)
+                        Posts.Items = new List<MixPagePosts.ReadViewModel>();
+                        Posts.PageIndex = getPosts.Data.PageIndex;
+                        Posts.PageSize = getPosts.Data.PageSize;
+                        Posts.TotalItems = getPosts.Data.TotalItems;
+                        Posts.TotalPage = getPosts.Data.TotalPage;
+                        foreach (var post in getPosts.Data.Items)
                         {
-                            Articles.Items.Add(new MixPageArticles.ReadViewModel()
+                            Posts.Items.Add(new MixPagePosts.ReadViewModel()
                             {
-                                CategoryId = Id,
-                                ArticleId = article.Id,
-                                Article = article
+                                PageId = Id,
+                                PostId = post.Id,
+                                Post = post
                             });
                         }
                     }
@@ -378,7 +378,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         private void GetSubModules(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getNavs = MixPageModules.ReadMvcViewModel.Repository.GetModelListBy(
-                m => m.CategoryId == Id && m.Specificulture == Specificulture
+                m => m.PageId == Id && m.Specificulture == Specificulture
                 , _context, _transaction);
             if (getNavs.IsSucceed)
             {
@@ -395,17 +395,17 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             }
         }
 
-        private void GetSubArticles(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        private void GetSubPosts(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getArticles = MixPageArticles.ReadViewModel.Repository.GetModelListBy(
-                n => n.CategoryId == Id && n.Specificulture == Specificulture,
+            var getPosts = MixPagePosts.ReadViewModel.Repository.GetModelListBy(
+                n => n.PageId == Id && n.Specificulture == Specificulture,
                 MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
                 , 4, 0
                , _context: _context, _transaction: _transaction
                );
-            if (getArticles.IsSucceed)
+            if (getPosts.IsSucceed)
             {
-                Articles = getArticles.Data;
+                Posts = getPosts.Data;
             }
         }
 

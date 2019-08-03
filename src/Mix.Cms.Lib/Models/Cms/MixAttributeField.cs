@@ -7,7 +7,7 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixAttributeField()
         {
-            MixArticleAttributeValue = new HashSet<MixArticleAttributeValue>();
+            MixPostAttributeValue = new HashSet<MixPostAttributeValue>();
             MixModuleAttributeValue = new HashSet<MixModuleAttributeValue>();
             MixPageAttributeValue = new HashSet<MixPageAttributeValue>();
         }
@@ -29,7 +29,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Status { get; set; }
 
         public virtual MixAttributeSet AttributeSet { get; set; }
-        public virtual ICollection<MixArticleAttributeValue> MixArticleAttributeValue { get; set; }
+        public virtual ICollection<MixPostAttributeValue> MixPostAttributeValue { get; set; }
         public virtual ICollection<MixModuleAttributeValue> MixModuleAttributeValue { get; set; }
         public virtual ICollection<MixPageAttributeValue> MixPageAttributeValue { get; set; }
     }

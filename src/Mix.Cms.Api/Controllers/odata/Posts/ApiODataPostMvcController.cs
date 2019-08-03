@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib;
 using System.Linq.Expressions;
-using Mix.Cms.Lib.ViewModels.MixArticles;
+using Mix.Cms.Lib.ViewModels.MixPosts;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNet.OData;
 using System.Collections.Generic;
@@ -42,7 +42,7 @@ namespace Mix.Cms.Api.Controllers.OData.Posts
             var portalResult = await base.GetSingleAsync<ReadMvcViewModel>($"mvc_{id}", predicate);
             if (portalResult.IsSucceed)
             {
-                portalResult.Data.DetailsUrl = MixCmsHelper.GetRouterUrl("Article", new { id = portalResult.Data.Id, SeoName = portalResult.Data.SeoName }, Request, Url);
+                portalResult.Data.DetailsUrl = MixCmsHelper.GetRouterUrl("Post", new { id = portalResult.Data.Id, SeoName = portalResult.Data.SeoName }, Request, Url);
             }
             return Ok(portalResult.Data);
         }

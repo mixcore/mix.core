@@ -136,10 +136,10 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             }
 
             
-            // Clone Article from Default culture
+            // Clone Post from Default culture
             if (result.IsSucceed)
             {
-                var cloneResult = await CloneArticlesAsync(parent, _context, _transaction);
+                var cloneResult = await ClonePostsAsync(parent, _context, _transaction);
                 ViewModelHelper.HandleResult(cloneResult, ref result);
             }
             // Clone ModuleData from Default culture
@@ -162,33 +162,33 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 ViewModelHelper.HandleResult(cloneResult, ref result);
             }
 
-            // Clone PageArticle from Default culture
+            // Clone PagePost from Default culture
             if (result.IsSucceed)
             {
-                var cloneResult = await ClonePageArticlesAsync(parent, _context, _transaction);
+                var cloneResult = await ClonePagePostsAsync(parent, _context, _transaction);
                 ViewModelHelper.HandleResult(cloneResult, ref result);
             }
-            // Clone ModuleArticle from Default culture
+            // Clone ModulePost from Default culture
             if (result.IsSucceed)
             {
-                var cloneResult = await CloneModuleArticlesAsync(parent, _context, _transaction);
+                var cloneResult = await CloneModulePostsAsync(parent, _context, _transaction);
                 ViewModelHelper.HandleResult(cloneResult, ref result);
             }
-            // Clone ArticleArticle from Default culture
+            // Clone PostPost from Default culture
             if (result.IsSucceed)
             {
-                var cloneResult = await CloneArticleArticlesAsync(parent, _context, _transaction);
+                var cloneResult = await ClonePostPostsAsync(parent, _context, _transaction);
                 ViewModelHelper.HandleResult(cloneResult, ref result);
             }
 
-            // Clone ArticleMedia from Default culture
+            // Clone PostMedia from Default culture
             if (result.IsSucceed)
             {
-                var cloneResult = await CloneArticleMediasAsync(parent, _context, _transaction);
+                var cloneResult = await ClonePostMediasAsync(parent, _context, _transaction);
                 ViewModelHelper.HandleResult(cloneResult, ref result);
             }
             
-            // Clone ArticleMedia from Default culture
+            // Clone PostMedia from Default culture
             if (result.IsSucceed)
             {
                 var cloneResult = await CloneUrlAliasAsync(parent, _context, _transaction);
@@ -276,7 +276,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             return result;
         }
 
-        public async Task<RepositoryResponse<bool>> CloneArticleMediasAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        public async Task<RepositoryResponse<bool>> ClonePostMediasAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             try
@@ -302,12 +302,12 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             return result;
         }
 
-        public async Task<RepositoryResponse<bool>> CloneArticleArticlesAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        public async Task<RepositoryResponse<bool>> ClonePostPostsAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             try
             {
-                var getPages = await DefaultModelRepository<MixCmsContext, MixRelatedArticle>.Instance.GetModelListByAsync(
+                var getPages = await DefaultModelRepository<MixCmsContext, MixRelatedPost>.Instance.GetModelListByAsync(
                     c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
                 if (getPages.IsSucceed)
                 {
@@ -329,7 +329,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             return result;
         }
 
-        public async Task<RepositoryResponse<bool>> CloneModuleArticlesAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        public async Task<RepositoryResponse<bool>> CloneModulePostsAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             try
@@ -355,7 +355,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             return result;
         }
 
-        public async Task<RepositoryResponse<bool>> ClonePageArticlesAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        public async Task<RepositoryResponse<bool>> ClonePagePostsAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             try
@@ -433,7 +433,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             return result;
         }
 
-        public async Task<RepositoryResponse<bool>> CloneArticlesAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        public async Task<RepositoryResponse<bool>> ClonePostsAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             try
@@ -583,20 +583,20 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             var PagePositions = await _context.MixPagePosition.Where(l => l.Specificulture == Specificulture).ToListAsync();
             PagePositions.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var PageArticles = await _context.MixPageArticle.Where(l => l.Specificulture == Specificulture).ToListAsync();
-            PageArticles.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+            var PagePosts = await _context.MixPagePost.Where(l => l.Specificulture == Specificulture).ToListAsync();
+            PagePosts.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var ModuleArticles = await _context.MixModuleArticle.Where(l => l.Specificulture == Specificulture).ToListAsync();
-            ModuleArticles.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+            var ModulePosts = await _context.MixModulePost.Where(l => l.Specificulture == Specificulture).ToListAsync();
+            ModulePosts.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var ArticleMedias = await _context.MixArticleMedia.Where(l => l.Specificulture == Specificulture).ToListAsync();
-            ArticleMedias.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+            var PostMedias = await _context.MixPostMedia.Where(l => l.Specificulture == Specificulture).ToListAsync();
+            PostMedias.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
             var ModuleDatas = await _context.MixModuleData.Where(l => l.Specificulture == Specificulture).ToListAsync();
             ModuleDatas.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var ArticleArticles = await _context.MixRelatedArticle.Where(l => l.Specificulture == Specificulture).ToListAsync();
-            ArticleArticles.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+            var PostPosts = await _context.MixRelatedPost.Where(l => l.Specificulture == Specificulture).ToListAsync();
+            PostPosts.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
             var medias = await _context.MixMedia.Where(c => c.Specificulture == Specificulture).ToListAsync();
             medias.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
@@ -607,8 +607,8 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             var modules = await _context.MixModule.Where(c => c.Specificulture == Specificulture).ToListAsync();
             modules.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var articles = await _context.MixArticle.Where(c => c.Specificulture == Specificulture).ToListAsync();
-            articles.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+            var posts = await _context.MixPost.Where(c => c.Specificulture == Specificulture).ToListAsync();
+            posts.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
             var aliases = await _context.MixUrlAlias.Where(c => c.Specificulture == Specificulture).ToListAsync();
             aliases.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);

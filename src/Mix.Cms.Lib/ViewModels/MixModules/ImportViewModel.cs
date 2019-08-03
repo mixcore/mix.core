@@ -86,13 +86,13 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("data")]
         public PaginationModel<MixModuleDatas.ReadViewModel> Data { get; set; } = new PaginationModel<MixModuleDatas.ReadViewModel>();
 
-        //Parent Article Id
-        [JsonProperty("articleId")]
-        public string ArticleId { get; set; }
+        //Parent Post Id
+        [JsonProperty("postId")]
+        public string PostId { get; set; }
 
         //Parent Category Id
-        [JsonProperty("categoryId")]
-        public int CategoryId { get; set; }
+        [JsonProperty("pageId")]
+        public int PageId { get; set; }
 
         #endregion Views
 

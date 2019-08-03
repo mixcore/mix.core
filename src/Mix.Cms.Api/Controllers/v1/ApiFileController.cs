@@ -19,7 +19,7 @@ namespace Mix.Cms.Api.Controllers.v1
     [Route("api/v1/file")]
     public class ApiFileController : BaseApiController<MixCmsContext>
     {
-        public ApiFileController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext) : base(memoryCache, hubContext)
+        public ApiFileController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
         }
         #region Post

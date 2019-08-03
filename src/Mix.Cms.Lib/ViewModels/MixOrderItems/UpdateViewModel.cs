@@ -35,7 +35,7 @@ namespace Mix.Cms.Lib.ViewModels.MixOrderItems
 
         #region Views
 
-        public MixArticles.ReadListItemViewModel Product { get; set; }
+        public MixPosts.ReadListItemViewModel Product { get; set; }
 
         #endregion
 
@@ -66,7 +66,7 @@ namespace Mix.Cms.Lib.ViewModels.MixOrderItems
                     Errors.Add("Invalid Order");
                     IsValid = false;
                 }
-                if (!MixArticles.ReadListItemViewModel.Repository.CheckIsExists(p => p.Id == ProductId && p.Specificulture == Specificulture, _context, _transaction))
+                if (!MixPosts.ReadListItemViewModel.Repository.CheckIsExists(p => p.Id == ProductId && p.Specificulture == Specificulture, _context, _transaction))
                 {
                     Errors.Add("Invalid Product");
                     IsValid = false;
@@ -85,7 +85,7 @@ namespace Mix.Cms.Lib.ViewModels.MixOrderItems
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Product = MixArticles.ReadListItemViewModel.Repository.GetSingleModel(p => p.Id == ProductId && p.Specificulture == Specificulture, _context, _transaction).Data;
+            Product = MixPosts.ReadListItemViewModel.Repository.GetSingleModel(p => p.Id == ProductId && p.Specificulture == Specificulture, _context, _transaction).Data;
         }
         #endregion Overrides
     }

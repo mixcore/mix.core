@@ -28,13 +28,13 @@ app.controller('ModuleGalleryController',
                     $scope.$apply();
                 }
             };
-            $scope.remove = function (moduleId, articleId) {
-                $rootScope.showConfirm($scope, 'removeConfirmed', [moduleId, articleId], null, 'Remove', 'Are you sure');
+            $scope.remove = function (moduleId, postId) {
+                $rootScope.showConfirm($scope, 'removeConfirmed', [moduleId, postId], null, 'Remove', 'Are you sure');
             };
 
-            $scope.removeConfirmed = async function (moduleId, articleId) {
+            $scope.removeConfirmed = async function (moduleId, postId) {
                 $rootScope.isBusy = true;
-                var result = await service.delete(moduleId, articleId);
+                var result = await service.delete(moduleId, postId);
                 if (result.isSucceed) {
                     if ($scope.removeCallback) {
                         $rootScope.executeFunctionByName('removeCallback', $scope.removeCallbackArgs, $scope)

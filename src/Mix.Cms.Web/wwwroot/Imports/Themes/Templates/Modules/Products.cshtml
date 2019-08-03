@@ -1,0 +1,29 @@
+@model Mix.Cms.Lib.ViewModels.MixModules.ReadMvcViewModel
+<div class="projects-5 pb-0 products">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 ml-auto mr-auto text-center">
+                <h2 class="title text-primary">@Model.Title</h2>
+                <div class="description">@Html.Raw(Model.Description)</div>
+                <div class="section-space"></div>
+            </div>
+        </div>
+        @foreach(var item in Model.Data.Items){
+            <div class="row">
+                <div class="col-md-5 ml-auto">
+                    <div class="card card-background card-background-product card-raised" style="background-image: url('@item.Property("image")')">
+                        <div class="card-body">
+                            <h1 class="card-title text-primary">@item.Property("title")</h1>
+                            <p class="card-description">
+                                @item.Property("excerpt")
+                            </p>                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5 mr-auto">
+                    @Html.Raw(item.Property("body"))
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -72,7 +72,7 @@
     "DefaultBlankTemplateFolder": "Themes/Default_Blank",
     "DefaultTemplateFolder": "Themes/Default",
     "DefaultTemplateLayout": "_Layout",
-    "DefaultArticleAttr": "[]",
+    "DefaultPostAttr": "[]",
     "OrderBy": "Priority",
     "OrderDirection": "0",
     "DefaultStatus": "2",

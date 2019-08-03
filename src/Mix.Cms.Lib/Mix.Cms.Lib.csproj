@@ -22,8 +22,8 @@
     <Compile Remove="Migrations\20181219124545_upd_module_edm_form.Designer.cs" />
     <Compile Remove="Migrations\20190106051357_update_themes_module.cs" />
     <Compile Remove="Migrations\20190106051357_update_themes_module.Designer.cs" />
-    <Compile Remove="Migrations\20190113142418_add-article-publisheddat.cs" />
-    <Compile Remove="Migrations\20190113142418_add-article-publisheddat.Designer.cs" />
+    <Compile Remove="Migrations\20190113142418_add-post-publisheddat.cs" />
+    <Compile Remove="Migrations\20190113142418_add-post-publisheddat.Designer.cs" />
     <Compile Remove="Migrations\20190514022718_add-attr.cs" />
     <Compile Remove="Migrations\20190523082752_add-attr.cs" />
     <Compile Remove="Migrations\20190523082752_add-attr.Designer.cs" />
