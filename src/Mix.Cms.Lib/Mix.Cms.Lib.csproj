@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -38,7 +38,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Mix.Heart" Version="0.0.4.4" />
+    <PackageReference Include="Mix.Heart" Version="0.0.4.5" />
     <PackageReference Include="Mix.Identity" Version="0.0.2" />
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.16" />
   </ItemGroup>

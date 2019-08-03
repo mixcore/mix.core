@@ -184,7 +184,6 @@ namespace Mix.Cms.Lib.Helpers
                 case BinaryOperatorKind.Has:
                     break;
             };
-
             return Expression.Lambda<Func<TModel, bool>>(eq, par);
         }
         public static Expression<Func<T, bool>> CombineExpression<T>(Expression<Func<T, bool>> expr1,Expression<Func<T, bool>> expr2, BinaryOperatorKind kind, string name = "model")

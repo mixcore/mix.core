@@ -194,6 +194,7 @@ namespace Mix.Cms.Api.Controllers.v1
             }
             return new RepositoryResponse<FileViewModel>();
         }
+
         protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync<TView>(string key, RequestPaging request, Expression<Func<TModel, bool>> predicate = null, TModel model = null)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
@@ -210,15 +211,12 @@ namespace Mix.Cms.Api.Controllers.v1
                 if (predicate != null)
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-                    //_memoryCache.Set(cacheKey, data);
                     await MixCacheService.SetAsync(cacheKey, data);
                 }
                 else
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-                    //_memoryCache.Set(cacheKey, data);
                     await MixCacheService.SetAsync(cacheKey, data);
-
                 }
                 AlertAsync("Add Cache", 200, cacheKey);
             }
