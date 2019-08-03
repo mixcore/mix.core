@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 {
-    public class ReadMvcArticleViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSet, ReadMvcArticleViewModel>
+    public class ReadMvcPostViewModel
+      : ViewModelBase<MixCmsContext, MixAttributeSet, ReadMvcPostViewModel>
     {
         #region Properties
         #region Models
@@ -29,16 +29,16 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         #endregion Models
         #region Views
         [JsonProperty("articleData")]
-        public PaginationModel<MixArticleAttributeDatas.ReadMvcViewModel> ArticleData { get; set; }
+        public PaginationModel<MixPostAttributeDatas.ReadMvcViewModel> PostData { get; set; }
         #endregion
         #endregion Properties
         #region Contructors
 
-        public ReadMvcArticleViewModel() : base()
+        public ReadMvcPostViewModel() : base()
         {
         }
 
-        public ReadMvcArticleViewModel(MixAttributeSet model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ReadMvcPostViewModel(MixAttributeSet model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -46,25 +46,25 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         #region Overrides
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            ArticleData = MixArticleAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(
-                m => m.ArticleId == Id && m.Specificulture == Specificulture, "Priority", 0, null, null
+            PostData = MixPostAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(
+                m => m.PostId == Id && m.Specificulture == Specificulture, "Priority", 0, null, null
                     , _context, _transaction).Data;
         }
 
         #endregion
 
         #region Expand
-        public void LoadArticleData(int articleId, string specificulture, int? pageSize = null, int? pageIndex = 0
+        public void LoadPostData(int articleId, string specificulture, int? pageSize = null, int? pageIndex = 0
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getData = MixArticleAttributeDatas.ReadMvcViewModel.Repository
+            var getData = MixPostAttributeDatas.ReadMvcViewModel.Repository
             .GetModelListBy(
-                m => m.ArticleId == articleId && m.Specificulture == specificulture && m.AttributeSetId == Id
+                m => m.PostId == articleId && m.Specificulture == specificulture && m.AttributeSetId == Id
                 , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
                 , pageSize, pageIndex
                 , _context: _context, _transaction: _transaction);
 
-            ArticleData = getData.Data;
+            PostData = getData.Data;
         }
 
         #endregion

@@ -136,7 +136,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         #region Template
         [JsonProperty("templates")]
-        public List<MixTemplates.UpdateViewModel> Templates { get; set; }// Article Templates
+        public List<MixTemplates.UpdateViewModel> Templates { get; set; }// Post Templates
 
         [JsonIgnore]
         public string TemplateFolderType
@@ -180,7 +180,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         #region Form
         [JsonProperty("forms")]
-        public List<MixTemplates.UpdateViewModel> Forms { get; set; }// Article Forms
+        public List<MixTemplates.UpdateViewModel> Forms { get; set; }// Post Forms
 
         [JsonIgnore]
         public string FormFolderType
@@ -212,7 +212,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         #region Edm
         [JsonProperty("edms")]
-        public List<MixTemplates.UpdateViewModel> Edms { get; set; }// Article Edms
+        public List<MixTemplates.UpdateViewModel> Edms { get; set; }// Post Edms
 
         [JsonIgnore]
         public string EdmFolderType
@@ -243,9 +243,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         #endregion Edm
 
-        //Parent Article Id
+        //Parent Post Id
         [JsonProperty("articleId")]
-        public string ArticleId { get; set; }
+        public string PostId { get; set; }
 
         //Parent Category Id
         [JsonProperty("categoryId")]
@@ -422,10 +422,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                        , _context, _transaction);
                     break;
 
-                case MixModuleType.SubArticle:
+                case MixModuleType.SubPost:
                     getDataResult = MixModuleDatas.ReadViewModel.Repository
                        .GetModelListBy(m => m.ModuleId == Id && m.Specificulture == Specificulture
-                       && (m.ArticleId == articleId)
+                       && (m.PostId == articleId)
                        , "Priority", 0, pageSize, pageIndex
                        , _context, _transaction);
                     break;

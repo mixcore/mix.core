@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static Mix.Cms.Lib.MixEnums;
 
-namespace Mix.Cms.Lib.ViewModels.MixArticles
+namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
     public class ReadListItemViewModel
         : ViewModelBase<MixCmsContext, MixPost, ReadListItemViewModel>

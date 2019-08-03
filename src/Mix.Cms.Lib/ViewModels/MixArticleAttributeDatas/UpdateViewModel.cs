@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
+namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
 {
     public class UpdateViewModel
        : ViewModelBase<MixCmsContext, MixPostAttributeData, UpdateViewModel>
@@ -20,7 +20,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
         [JsonProperty("articleId")]
-        public int ArticleId { get; set; }
+        public int PostId { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
         [JsonProperty("status")]
@@ -29,7 +29,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
 
         #region Views
         [JsonProperty("data")]
-        public List<MixArticleAttributeValues.UpdateViewModel> Data{ get; set; }
+        public List<MixPostAttributeValues.UpdateViewModel> Data{ get; set; }
         #endregion
 
         #endregion
@@ -45,10 +45,10 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
         {
             AttributeSetId = attributeSetId;
             Specificulture = Specificulture;
-            Data = new List<MixArticleAttributeValues.UpdateViewModel>();
+            Data = new List<MixPostAttributeValues.UpdateViewModel>();
             foreach (var item in attributes)
             {
-                Data.Add(new MixArticleAttributeValues.UpdateViewModel()
+                Data.Add(new MixPostAttributeValues.UpdateViewModel()
                 {
                     Specificulture = Specificulture,
                     AttributeName = item.Name,
@@ -62,10 +62,10 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
         {
             AttributeSetId = attributeSetId;
             var attributes = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == attributeSetId).Data;
-            Data = new List<MixArticleAttributeValues.UpdateViewModel>();
+            Data = new List<MixPostAttributeValues.UpdateViewModel>();
             foreach (var item in attributes)
             {
-                Data.Add(new MixArticleAttributeValues.UpdateViewModel()
+                Data.Add(new MixPostAttributeValues.UpdateViewModel()
                 {
                     Specificulture = Specificulture,
                     AttributeName = item.Name,
@@ -80,17 +80,17 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
         {
             if (!string.IsNullOrEmpty(Id))
             {
-                Data = MixArticleAttributeValues.UpdateViewModel.Repository.GetModelListBy(
+                Data = MixPostAttributeValues.UpdateViewModel.Repository.GetModelListBy(
                     v => v.DataId == Id && v.Specificulture == Specificulture, _context, _transaction).Data;
 
             }
             else
             {
                 var attributes = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId).Data;
-                Data = new List<MixArticleAttributeValues.UpdateViewModel>();
+                Data = new List<MixPostAttributeValues.UpdateViewModel>();
                 foreach (var item in attributes)
                 {
-                    Data.Add(new MixArticleAttributeValues.UpdateViewModel()
+                    Data.Add(new MixPostAttributeValues.UpdateViewModel()
                     {
                         Specificulture = Specificulture,
                         Priority = item.Priority,
@@ -121,7 +121,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
             {
                 item.Specificulture = parent.Specificulture;
                 item.DataId = parent.Id;
-                item.ArticleId = parent.ArticleId;
+                item.PostId = parent.PostId;
                 var saveResult = await item.SaveModelAsync(false, _context, _transaction);
                 ViewModelHelper.HandleResult(saveResult, ref result);
             }

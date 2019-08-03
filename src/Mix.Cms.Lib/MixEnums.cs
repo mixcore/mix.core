@@ -50,7 +50,7 @@ namespace Mix.Cms.Lib
             Modules,
             Forms,
             Edms,
-            Articles,
+            Posts,
             Products,
             Widgets,
             Masters,
@@ -99,8 +99,8 @@ namespace Mix.Cms.Lib
         public enum MixPageType
         {
             Blank = 0,
-            Article = 1,
-            ListArticle = 2,
+            Post = 1,
+            ListPost = 2,
             Home = 3,
             StaticUrl = 4,
             Modules = 5,
@@ -113,9 +113,9 @@ namespace Mix.Cms.Lib
         {
             Content = 0,
             Data = 1,
-            ListArticle = 2,
+            ListPost = 2,
             SubPage = 3,
-            SubArticle = 4,
+            SubPost = 4,
             SubProduct = 5,
             ListProduct = 6,
             Gallery = 7
@@ -124,7 +124,7 @@ namespace Mix.Cms.Lib
         public enum MixAttributeSetType
         {
             SubPage = 1,
-            SubArticle = 2,
+            SubPost = 2,
             SubProduct = 3,
         }
 
@@ -206,7 +206,7 @@ namespace Mix.Cms.Lib
         public enum UrlAliasType
         {
             Page,
-            Article,
+            Post,
             Product,
             Module,
             ModuleData
@@ -215,7 +215,7 @@ namespace Mix.Cms.Lib
         public enum SearchType
         {
             All,
-            Article,
+            Post,
             Module,
             Page
         }

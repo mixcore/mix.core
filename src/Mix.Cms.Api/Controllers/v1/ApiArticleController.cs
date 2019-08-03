@@ -16,7 +16,7 @@ using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
 using static Mix.Cms.Lib.MixEnums;
 using System.Linq.Expressions;
-using Mix.Cms.Lib.ViewModels.MixArticles;
+using Mix.Cms.Lib.ViewModels.MixPosts;
 using System.Web;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.ViewModels;
@@ -25,10 +25,10 @@ namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
     [Route("api/v1/{culture}/article")]
-    public class ApiArticleController :
+    public class ApiPostController :
         BaseGenericApiController<MixCmsContext, MixPost>
     {
-        public ApiArticleController(IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
+        public ApiPostController(IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
         {
         }
 
@@ -61,7 +61,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         var portalResult = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_{id}", predicate);
                         if (portalResult.IsSucceed)
                         {
-                            portalResult.Data.DetailsUrl = MixCmsHelper.GetRouterUrl("Article", new { id = portalResult.Data.Id, SeoName = portalResult.Data.SeoName }, Request, Url);
+                            portalResult.Data.DetailsUrl = MixCmsHelper.GetRouterUrl("Post", new { id = portalResult.Data.Id, SeoName = portalResult.Data.SeoName }, Request, Url);
                         }
 
                         return Ok(JObject.FromObject(portalResult));
@@ -84,7 +84,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         var beResult = await ReadMvcViewModel.Repository.GetSingleModelAsync(model => model.Id == id && model.Specificulture == _lang).ConfigureAwait(false);
                         if (beResult.IsSucceed)
                         {
-                            beResult.Data.DetailsUrl = MixCmsHelper.GetRouterUrl("Article", new { id = beResult.Data.Id, beResult.Data.SeoName }, Request, Url);
+                            beResult.Data.DetailsUrl = MixCmsHelper.GetRouterUrl("Post", new { id = beResult.Data.Id, beResult.Data.SeoName }, Request, Url);
                         }
                         return Ok(JObject.FromObject(beResult));
                     }
@@ -192,10 +192,10 @@ namespace Mix.Cms.Api.Controllers.v1
             Expression<Func<MixPost, bool>> predicate = model =>
                         model.Specificulture == _lang
                         && (!request.Status.HasValue || model.Status == request.Status.Value)
-                        && (!isPage || model.MixPageArticle.Any(nav => nav.CategoryId == pageId && nav.ArticleId == model.Id && nav.Specificulture == _lang))
-                        && (!isNotPage || !model.MixPageArticle.Any(nav => nav.CategoryId == notPageId && nav.ArticleId == model.Id && nav.Specificulture == _lang))
-                        && (!isModule || model.MixModuleArticle.Any(nav => nav.ModuleId == moduleId && nav.ArticleId == model.Id))
-                        && (!isNotModule || !model.MixModuleArticle.Any(nav => nav.ModuleId == notModuleId && nav.ArticleId == model.Id))
+                        && (!isPage || model.MixPagePost.Any(nav => nav.CategoryId == pageId && nav.PostId == model.Id && nav.Specificulture == _lang))
+                        && (!isNotPage || !model.MixPagePost.Any(nav => nav.CategoryId == notPageId && nav.PostId == model.Id && nav.Specificulture == _lang))
+                        && (!isModule || model.MixModulePost.Any(nav => nav.ModuleId == moduleId && nav.PostId == model.Id))
+                        && (!isNotModule || !model.MixModulePost.Any(nav => nav.ModuleId == notModuleId && nav.PostId == model.Id))
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (model.Title.Contains(request.Keyword)
                             || model.Excerpt.Contains(request.Keyword)))
@@ -206,7 +206,7 @@ namespace Mix.Cms.Api.Controllers.v1
                             || (model.CreatedDateTime <= request.ToDate.Value)
                         );
 
-            var nextSync = PublishArticles();
+            var nextSync = PublishPosts();
             string key = $"{nextSync}_{request.Key}_{request.Query}_{request.PageSize}_{request.PageIndex}";
 
             switch (request.Key)
@@ -218,7 +218,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         mvcResult.Data.Items.ForEach(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                "Article", new { id = a.Id, seoName = a.SeoName }, Request, Url);
+                                "Post", new { id = a.Id, seoName = a.SeoName }, Request, Url);
                         });
                     }
 
@@ -230,7 +230,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         portalResult.Data.Items.ForEach(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                "Article", new { id = a.Id, seoName = a.SeoName }, Request, Url);
+                                "Post", new { id = a.Id, seoName = a.SeoName }, Request, Url);
                         });
                     }
 
@@ -243,7 +243,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         listItemResult.Data.Items.ForEach((Action<ReadListItemViewModel>)(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                "Article", new { id = a.Id, seoName = a.SeoName }, Request, Url);
+                                "Post", new { id = a.Id, seoName = a.SeoName }, Request, Url);
                         }));
                     }
 
@@ -285,17 +285,17 @@ namespace Mix.Cms.Api.Controllers.v1
         }
         #endregion Post
 
-        DateTime? PublishArticles()
+        DateTime? PublishPosts()
         {
             var nextSync = MixService.GetConfig<DateTime?>(MixConstants.ConfigurationKeyword.NextSyncContent);
             if (nextSync.HasValue && nextSync.Value <= DateTime.UtcNow)
             {
-                var publishedArticles = ReadListItemViewModel.Repository.GetModelListBy(
+                var publishedPosts = ReadListItemViewModel.Repository.GetModelListBy(
                     a => a.Status == (int)MixContentStatus.Schedule
                         && (!a.PublishedDateTime.HasValue || a.PublishedDateTime.Value <= DateTime.UtcNow)
                         );
-                publishedArticles.Data.ForEach(a => a.Status = MixContentStatus.Published);
-                base.SaveList(publishedArticles.Data, false);
+                publishedPosts.Data.ForEach(a => a.Status = MixContentStatus.Published);
+                base.SaveList(publishedPosts.Data, false);
                 var next = ReadListItemViewModel.Repository.Min(a => a.Type == (int)MixContentStatus.Schedule,
                             a => a.PublishedDateTime);
                 nextSync = next.Data;

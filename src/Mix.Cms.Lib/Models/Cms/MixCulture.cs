@@ -7,7 +7,7 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixCulture()
         {
-            MixArticle = new HashSet<MixPost>();
+            MixPost = new HashSet<MixPost>();
             MixConfiguration = new HashSet<MixConfiguration>();
             MixLanguage = new HashSet<MixLanguage>();
             MixModule = new HashSet<MixModule>();
@@ -27,7 +27,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public DateTime CreatedDateTime { get; set; }
         public string CreatedBy { get; set; }
 
-        public virtual ICollection<MixPost> MixArticle { get; set; }
+        public virtual ICollection<MixPost> MixPost { get; set; }
         public virtual ICollection<MixConfiguration> MixConfiguration { get; set; }
         public virtual ICollection<MixLanguage> MixLanguage { get; set; }
         public virtual ICollection<MixModule> MixModule { get; set; }

@@ -234,7 +234,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     root.Add(sitemap.ParseXElement());
                 }
 
-                var articles = Lib.ViewModels.MixArticles.ReadListItemViewModel.Repository.GetModelList();
+                var articles = Lib.ViewModels.MixPosts.ReadListItemViewModel.Repository.GetModelList();
                 foreach (var article in articles.Data)
                 {
                     article.DetailsUrl = MixCmsHelper.GetRouterUrl(
@@ -300,22 +300,22 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             switch (type)
             {
-                case "Article":
-                    var getArticle = await Lib.ViewModels.MixArticles.ReadListItemViewModel.Repository.GetSingleModelAsync(
+                case "Post":
+                    var getPost = await Lib.ViewModels.MixPosts.ReadListItemViewModel.Repository.GetSingleModelAsync(
                         a => a.Id == id && a.Specificulture == culture);
-                    if (getArticle.IsSucceed)
+                    if (getPost.IsSucceed)
                     {
                         return new RepositoryResponse<string>()
                         {
-                            IsSucceed = getArticle.IsSucceed,
-                            Data = MixCmsHelper.GetRouterUrl("Article", new { id = getArticle.Data.Id, getArticle.Data.SeoName }, Request, Url)
+                            IsSucceed = getPost.IsSucceed,
+                            Data = MixCmsHelper.GetRouterUrl("Post", new { id = getPost.Data.Id, getPost.Data.SeoName }, Request, Url)
                         };
                     }
                     else
                     {
                         return new RepositoryResponse<string>()
                         {
-                            IsSucceed = getArticle.IsSucceed,
+                            IsSucceed = getPost.IsSucceed,
                             Data = $"/{culture}"
                         };
                     }

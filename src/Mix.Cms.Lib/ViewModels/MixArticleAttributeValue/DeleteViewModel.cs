@@ -4,10 +4,10 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 
-namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
+namespace Mix.Cms.Lib.ViewModels.MixPostAttributeValues
 {
     public class DeleteViewModel
-      : ViewModelBase<MixCmsContext, MixArticleAttributeValue, DeleteViewModel>
+      : ViewModelBase<MixCmsContext, MixPostAttributeValue, DeleteViewModel>
     {
         #region Properties
 
@@ -23,7 +23,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
         [JsonProperty("attributeName")]
         public string AttributeName { get; set; }
         [JsonProperty("articleId")]
-        public int ArticleId { get; set; }
+        public int PostId { get; set; }
         [JsonProperty("doubleValue")]
         public double? DoubleValue { get; set; }
         [JsonProperty("integerValue")]
@@ -56,7 +56,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
         {
         }
 
-        public DeleteViewModel(MixArticleAttributeValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public DeleteViewModel(MixPostAttributeValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 

@@ -6,10 +6,10 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
+namespace Mix.Cms.Lib.ViewModels.MixPostAttributeValues
 {
     public class ReadMvcViewModel
-      : ViewModelBase<MixCmsContext, MixArticleAttributeValue, ReadMvcViewModel>
+      : ViewModelBase<MixCmsContext, MixPostAttributeValue, ReadMvcViewModel>
     {
         #region Properties
 
@@ -25,7 +25,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
         [JsonProperty("attributeName")]
         public string AttributeName { get; set; }
         [JsonProperty("articleId")]
-        public int ArticleId { get; set; }
+        public int PostId { get; set; }
         [JsonProperty("doubleValue")]
         public double? DoubleValue { get; set; }
         [JsonProperty("integerValue")]
@@ -68,7 +68,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
         {
         }
 
-        public ReadMvcViewModel(MixArticleAttributeValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ReadMvcViewModel(MixPostAttributeValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 

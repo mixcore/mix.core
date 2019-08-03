@@ -5,7 +5,7 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 
-namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
+namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
 {
     public class ReadViewModel
        : ViewModelBase<MixCmsContext, MixPostAttributeData, ReadViewModel>
@@ -17,7 +17,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
         [JsonProperty("attributeSetId")]
         public int SetAttributeId { get; set; }
         [JsonProperty("articleId")]
-        public int ArticleId { get; set; }
+        public int PostId { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
         [JsonProperty("status")]

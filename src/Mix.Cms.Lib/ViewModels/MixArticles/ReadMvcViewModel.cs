@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Mix.Cms.Lib.ViewModels.MixArticles
+namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
     public class ReadMvcViewModel
         : ViewModelBase<MixCmsContext, MixPost, ReadMvcViewModel>
@@ -155,16 +155,16 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         public List<ExtraProperty> Properties { get; set; }
 
         [JsonProperty("mediaNavs")]
-        public List<MixArticleMedias.ReadViewModel> MediaNavs { get; set; }
+        public List<MixPostMedias.ReadViewModel> MediaNavs { get; set; }
 
         [JsonProperty("moduleNavs")]
-        public List<MixArticleModules.ReadViewModel> ModuleNavs { get; set; }
+        public List<MixPostModules.ReadViewModel> ModuleNavs { get; set; }
                 
         [JsonProperty("articleNavs")]
-        public List<MixArticleArticles.ReadViewModel> ArticleNavs { get; set; }
+        public List<MixPostPosts.ReadViewModel> PostNavs { get; set; }
 
         [JsonProperty("attributeSets")]
-        public List<MixAttributeSets.ReadMvcArticleViewModel> AttributeSets { get; set; } = new List<MixAttributeSets.ReadMvcArticleViewModel>();
+        public List<MixAttributeSets.ReadMvcPostViewModel> AttributeSets { get; set; } = new List<MixAttributeSets.ReadMvcPostViewModel>();
         
         [JsonProperty("listTag")]
         public JArray ListTag { get => JArray.Parse(Tags ?? "[]"); }
@@ -202,19 +202,19 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 }
             }
 
-            var getArticleMedia = MixArticleMedias.ReadViewModel.Repository.GetModelListBy(n => n.ArticleId == Id && n.Specificulture == Specificulture, _context, _transaction);
-            if (getArticleMedia.IsSucceed)
+            var getPostMedia = MixPostMedias.ReadViewModel.Repository.GetModelListBy(n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction);
+            if (getPostMedia.IsSucceed)
             {
-                MediaNavs = getArticleMedia.Data.OrderBy(p => p.Priority).ToList();
+                MediaNavs = getPostMedia.Data.OrderBy(p => p.Priority).ToList();
                 MediaNavs.ForEach(n => n.IsActived = true);
             }
 
             // Modules
-            var getArticleModule = MixArticleModules.ReadViewModel.Repository.GetModelListBy(
-                n => n.ArticleId == Id && n.Specificulture == Specificulture, _context, _transaction);
-            if (getArticleModule.IsSucceed)
+            var getPostModule = MixPostModules.ReadViewModel.Repository.GetModelListBy(
+                n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction);
+            if (getPostModule.IsSucceed)
             {
-                ModuleNavs = getArticleModule.Data.OrderBy(p => p.Priority).ToList();
+                ModuleNavs = getPostModule.Data.OrderBy(p => p.Priority).ToList();
                 foreach (var item in ModuleNavs)
                 {
                     item.IsActived = true;
@@ -222,11 +222,11 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
                 }
             }
 
-            // Related Articles
-            ArticleNavs = MixArticleArticles.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
+            // Related Posts
+            PostNavs = MixPostPosts.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
             
             // Get Attribute Sets
-            var navs = MixArticleAttributeSets.ReadMvcViewModel.Repository.GetModelListBy(n => n.ArticleId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
+            var navs = MixPostAttributeSets.ReadMvcViewModel.Repository.GetModelListBy(n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
             foreach (var item in navs)
             {
                 AttributeSets.Add(item.MixAttributeSet);
@@ -249,7 +249,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             return ModuleNavs.FirstOrDefault(m => m.Module.Name == name)?.Module;
         }
 
-        public MixAttributeSets.ReadMvcArticleViewModel GetAttributeSet(string name)
+        public MixAttributeSets.ReadMvcPostViewModel GetAttributeSet(string name)
         {
             return AttributeSets.FirstOrDefault(m => m.Name == name);
         }

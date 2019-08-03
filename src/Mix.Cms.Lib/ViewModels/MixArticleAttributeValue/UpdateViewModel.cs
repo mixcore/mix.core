@@ -7,10 +7,10 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
+namespace Mix.Cms.Lib.ViewModels.MixPostAttributeValues
 {
     public class UpdateViewModel
-      : ViewModelBase<MixCmsContext, MixArticleAttributeValue, UpdateViewModel>
+      : ViewModelBase<MixCmsContext, MixPostAttributeValue, UpdateViewModel>
     {
         #region Properties
 
@@ -26,7 +26,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
         [JsonProperty("attributeName")]
         public string AttributeName { get; set; }
         [JsonProperty("articleId")]
-        public int ArticleId { get; set; }
+        public int PostId { get; set; }
         [JsonProperty("doubleValue")]
         public double? DoubleValue { get; set; }
         [JsonProperty("integerValue")]
@@ -63,7 +63,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
         {
         }
 
-        public UpdateViewModel(MixArticleAttributeValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public UpdateViewModel(MixPostAttributeValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -104,7 +104,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeValues
                 
             }
         }
-        public override MixArticleAttributeValue ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixPostAttributeValue ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))
             {

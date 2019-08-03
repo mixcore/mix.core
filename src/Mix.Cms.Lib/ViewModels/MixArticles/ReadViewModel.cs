@@ -14,7 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
-namespace Mix.Cms.Lib.ViewModels.MixArticles
+namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
     public class ReadViewModel
       : ViewModelBase<MixCmsContext, MixPost, ReadViewModel>
@@ -159,10 +159,10 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             var transaction = _transaction ?? context.Database.BeginTransaction();
             try
             {
-                var query = context.MixPageArticle.Include(ac => ac.MixArticle)
+                var query = context.MixPagePost.Include(ac => ac.MixPost)
                     .Where(ac =>
                     ac.CategoryId == categoryId && ac.Specificulture == specificulture
-                    && ac.Status == (int)MixEnums.MixContentStatus.Published).Select(ac => ac.MixArticle);
+                    && ac.Status == (int)MixEnums.MixContentStatus.Published).Select(ac => ac.MixPost);
                 PaginationModel<ReadViewModel> result = await Repository.ParsePagingQueryAsync(
                     query, orderByPropertyName
                     , direction
@@ -213,10 +213,10 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             var transaction = _transaction ?? context.Database.BeginTransaction();
             try
             {
-                var query = context.MixPageArticle.Include(ac => ac.MixArticle)
+                var query = context.MixPagePost.Include(ac => ac.MixPost)
                     .Where(ac =>
                     ac.CategoryId == categoryId && ac.Specificulture == specificulture
-                    && ac.Status == (int)MixContentStatus.Published).Select(ac => ac.MixArticle);
+                    && ac.Status == (int)MixContentStatus.Published).Select(ac => ac.MixPost);
                 PaginationModel<ReadViewModel> result = Repository.ParsePagingQuery(
                     query, orderByPropertyName
                     , direction,
@@ -264,10 +264,10 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             var transaction = _transaction ?? context.Database.BeginTransaction();
             try
             {
-                var query = context.MixModuleArticle.Include(ac => ac.MixArticle)
+                var query = context.MixModulePost.Include(ac => ac.MixPost)
                     .Where(ac =>
                     ac.ModuleId == ModuleId && ac.Specificulture == specificulture
-                    && (ac.Status == (int)MixContentStatus.Published || ac.Status == (int)MixContentStatus.Preview)).Select(ac => ac.MixArticle);
+                    && (ac.Status == (int)MixContentStatus.Published || ac.Status == (int)MixContentStatus.Preview)).Select(ac => ac.MixPost);
                 PaginationModel<ReadViewModel> result = Repository.ParsePagingQuery(
                     query, orderByPropertyName
                     , direction,

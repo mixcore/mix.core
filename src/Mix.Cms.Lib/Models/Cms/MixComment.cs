@@ -7,7 +7,7 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public Guid Id { get; set; }
         public string Specificulture { get; set; }
-        public int? ArticleId { get; set; }
+        public int? PostId { get; set; }
         public int? OrderId { get; set; }
         public string Content { get; set; }
         public string CreatedBy { get; set; }
@@ -23,7 +23,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string UpdatedBy { get; set; }
         public DateTime? UpdatedDateTime { get; set; }
 
-        public virtual MixPost MixArticle { get; set; }
+        public virtual MixPost MixPost { get; set; }
         public virtual MixOrder MixOrder { get; set; }
     }
 }
