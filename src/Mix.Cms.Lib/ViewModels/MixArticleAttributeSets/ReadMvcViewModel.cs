@@ -3,7 +3,7 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 
-namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeSets
+namespace Mix.Cms.Lib.ViewModels.MixPostAttributeSets
 {
     public class ReadMvcViewModel
        : ViewModelBase<MixCmsContext, MixPostAttributeSet, ReadMvcViewModel>
@@ -21,14 +21,14 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeSets
         public int AttributeSetId { get; set; }
 
         [JsonProperty("articleId")]
-        public int ArticleId { get; set; }
+        public int PostId { get; set; }
 
         [JsonProperty("description")]
         public string Description { get; set; }
 
         #region Views
         [JsonProperty("attributeSet")]
-        public MixAttributeSets.ReadMvcArticleViewModel MixAttributeSet { get; set; }
+        public MixAttributeSets.ReadMvcPostViewModel MixAttributeSet { get; set; }
 
         #endregion Views
 
@@ -36,13 +36,13 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeSets
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            MixAttributeSet = MixAttributeSets.ReadMvcArticleViewModel.Repository.GetSingleModel(
+            MixAttributeSet = MixAttributeSets.ReadMvcPostViewModel.Repository.GetSingleModel(
                 p => p.Id == AttributeSetId
             , _context: _context, _transaction: _transaction
             ).Data;
 
             // Load all article Data
-            MixAttributeSet.LoadArticleData(ArticleId, Specificulture, _context: _context, _transaction: _transaction);
+            MixAttributeSet.LoadPostData(PostId, Specificulture, _context: _context, _transaction: _transaction);
         }
 
         #endregion overrides

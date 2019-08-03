@@ -1,4 +1,4 @@
-<div class="modal modal-default fade show" id="modal-nav-articles-{{$ctrl.srcId}}" ng-init="$ctrl.loadArticles()">
+<div class="modal modal-default fade show" id="modal-nav-articles-{{$ctrl.srcId}}" ng-init="$ctrl.loadPosts()">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,7 +7,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <filter-list request="$ctrl.request" callback="$ctrl.loadArticles(pageIndex)"></filter-list>
+                        <filter-list request="$ctrl.request" callback="$ctrl.loadPosts(pageIndex)"></filter-list>
                     </div>
 
                 </div>
@@ -24,7 +24,7 @@
             <div class="modal-footer">
                 <div class="row">
                     <div class="col-md-12">
-                        <paging class="small" page="$ctrl.data.page" page-size="$ctrl.data.pageSize" total="$ctrl.data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="$ctrl.loadArticles(page-1)" scroll-top="true">
+                        <paging class="small" page="$ctrl.data.page" page-size="$ctrl.data.pageSize" total="$ctrl.data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="$ctrl.loadPosts(page-1)" scroll-top="true">
                         </paging>
                     </div>
                 </div>

@@ -43,8 +43,8 @@ namespace Mix.Cms.Lib
                         break;
 
                     case MixPageType.Home:
-                    case MixPageType.ListArticle:
-                    case MixPageType.Article:
+                    case MixPageType.ListPost:
+                    case MixPageType.Post:
                     case MixPageType.Modules:
                     default:
                         cate.DetailsUrl = Url.RouteUrl("Alias", new { culture, seoName = cate.SeoName });
@@ -85,8 +85,8 @@ namespace Mix.Cms.Lib
                         break;
 
                     case MixPageType.Home:
-                    case MixPageType.ListArticle:
-                    case MixPageType.Article:
+                    case MixPageType.ListPost:
+                    case MixPageType.Post:
                     case MixPageType.Modules:
                     default:
                         cate.DetailsUrl = Url.RouteUrl("Alias", new { culture, seoName = cate.SeoName });
@@ -223,9 +223,9 @@ namespace Mix.Cms.Lib
             // If load successful => load details
             if (module.IsSucceed)
             {
-                if (url != null && module.Data.Articles != null)
+                if (url != null && module.Data.Posts != null)
                 {
-                    module.Data.Articles.Items.ForEach(a => { a.Article.DetailsUrl = url.RouteUrl("Article", new { id = a.ArticleId, seoName = a.Article.SeoName }); });
+                    module.Data.Posts.Items.ForEach(a => { a.Post.DetailsUrl = url.RouteUrl("Post", new { id = a.PostId, seoName = a.Post.SeoName }); });
                 }
                 await MixCacheService.SetAsync(cacheKey, module);
             }

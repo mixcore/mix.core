@@ -90,7 +90,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             var result = UpdateViewModel.Repository.GetSingleModel(predicate, _context, _transaction);
             if (result.IsSucceed)
             {
-                result.Data.ArticleId = articleId;
+                result.Data.PostId = articleId;
                 result.Data.CategoryId = categoryId;
             }
             return result;

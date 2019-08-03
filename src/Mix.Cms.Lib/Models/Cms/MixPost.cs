@@ -7,16 +7,16 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixPost()
         {
-            MixArticleAttributeData = new HashSet<MixPostAttributeData>();
-            MixArticleAttributeSet = new HashSet<MixPostAttributeSet>();
-            MixArticleMedia = new HashSet<MixPostMedia>();
-            MixArticleModule = new HashSet<MixPostModule>();
+            MixPostAttributeData = new HashSet<MixPostAttributeData>();
+            MixPostAttributeSet = new HashSet<MixPostAttributeSet>();
+            MixPostMedia = new HashSet<MixPostMedia>();
+            MixPostModule = new HashSet<MixPostModule>();
             MixComment = new HashSet<MixComment>();
-            MixModuleArticle = new HashSet<MixModulePost>();
+            MixModulePost = new HashSet<MixModulePost>();
             MixModuleData = new HashSet<MixModuleData>();
-            MixPageArticle = new HashSet<MixPagePost>();
-            MixRelatedArticleMixArticle = new HashSet<MixRelatedArticle>();
-            MixRelatedArticleS = new HashSet<MixRelatedArticle>();
+            MixPagePost = new HashSet<MixPagePost>();
+            MixRelatedPostMixPost = new HashSet<MixRelatedPost>();
+            MixRelatedPostS = new HashSet<MixRelatedPost>();
         }
 
         public int Id { get; set; }
@@ -47,16 +47,16 @@ namespace Mix.Cms.Lib.Models.Cms
         public string ExtraFields { get; set; }
 
         public virtual MixCulture SpecificultureNavigation { get; set; }
-        public virtual ICollection<MixPostAttributeData> MixArticleAttributeData { get; set; }
-        public virtual ICollection<MixPostAttributeSet> MixArticleAttributeSet { get; set; }
-        public virtual ICollection<MixPostMedia> MixArticleMedia { get; set; }
-        public virtual ICollection<MixPostModule> MixArticleModule { get; set; }
+        public virtual ICollection<MixPostAttributeData> MixPostAttributeData { get; set; }
+        public virtual ICollection<MixPostAttributeSet> MixPostAttributeSet { get; set; }
+        public virtual ICollection<MixPostMedia> MixPostMedia { get; set; }
+        public virtual ICollection<MixPostModule> MixPostModule { get; set; }
         public virtual ICollection<MixComment> MixComment { get; set; }
-        public virtual ICollection<MixModulePost> MixModuleArticle { get; set; }
+        public virtual ICollection<MixModulePost> MixModulePost { get; set; }
         public virtual ICollection<MixModuleData> MixModuleData { get; set; }
-        public virtual ICollection<MixPagePost> MixPageArticle { get; set; }
-        public virtual ICollection<MixRelatedArticle> MixRelatedArticleMixArticle { get; set; }
-        public virtual ICollection<MixRelatedArticle> MixRelatedArticleS { get; set; }
+        public virtual ICollection<MixPagePost> MixPagePost { get; set; }
+        public virtual ICollection<MixRelatedPost> MixRelatedPostMixPost { get; set; }
+        public virtual ICollection<MixRelatedPost> MixRelatedPostS { get; set; }
         public virtual ICollection<MixOrderItem> MixOrderItem { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 <!-- Main content -->
-<!-- <jumbotrons tag-name="'Article'" tag-type="'1'"></jumbotrons> -->
+<!-- <jumbotrons tag-name="'Post'" tag-type="'1'"></jumbotrons> -->
 <section class="" ng-init="getSingle()">
     <form ng-class="{'submitted': submitted}" ng-submit="save(activedData)">
         <div class="row">
@@ -68,7 +68,7 @@
                         </pane-v>
                     </tabs-v>
                 </div>
-                <template-editor ng-if="isAdmin" folder-type="'Articles'" template="activedData.view" templates="activedData.templates">
+                <template-editor ng-if="isAdmin" folder-type="'Posts'" template="activedData.view" templates="activedData.templates">
                 </template-editor>
                 <!-- <div class="card mb-3">
                     <div class="card-header">
@@ -163,7 +163,7 @@
                     </div>
                 </div>
 
-                <template-editor folder-type="'Articles'" template="activedData.view" templates="activedData.templates">
+                <template-editor folder-type="'Posts'" template="activedData.view" templates="activedData.templates">
                 </template-editor> -->
                 <!-- 
                 <tabs-v>
@@ -181,7 +181,7 @@
                     </pane-v>
                     <pane-v header="Layout">
                         <div class="tab-pane">
-                            <template-editor folder-type="'Articles'" template="activedData.view"
+                            <template-editor folder-type="'Posts'" template="activedData.view"
                                 templates="activedData.templates"></template-editor>
                         </div>
                     </pane-v>
@@ -243,9 +243,9 @@
 
                     </div>
                 </div>
-                <custom-image header="'Image'" type="'Articles'" folder="activedData.seoName" header="activedData.title" description="activedData.excerpt" src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
+                <custom-image header="'Image'" type="'Posts'" folder="activedData.seoName" header="activedData.title" description="activedData.excerpt" src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
 
-                <custom-image header="'Thumnail'" type="'Articles'" folder="activedData.seoName" title="activedData.title" description="activedData.excerpt" src-url="activedData.thumbnailUrl" src="activedData.thumbnail" auto="'true'"></custom-image>
+                <custom-image header="'Thumnail'" type="'Posts'" folder="activedData.seoName" title="activedData.title" description="activedData.excerpt" src-url="activedData.thumbnailUrl" src="activedData.thumbnail" auto="'true'"></custom-image>
             </section>
         </div>
     </form>

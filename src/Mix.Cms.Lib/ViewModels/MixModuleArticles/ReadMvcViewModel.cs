@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static Mix.Cms.Lib.MixEnums;
 
-namespace Mix.Cms.Lib.ViewModels.MixModuleArticles
+namespace Mix.Cms.Lib.ViewModels.MixModulePosts
 {
     public class ReadMvcViewModel
        : ViewModelBase<MixCmsContext, MixModulePost, ReadMvcViewModel>
@@ -24,7 +24,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleArticles
         }
 
         [JsonProperty("articleId")]
-        public int ArticleId { get; set; }
+        public int PostId { get; set; }
 
         [JsonProperty("moduleId")]
         public int ModuleId { get; set; }
@@ -41,7 +41,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleArticles
         public MixEnums.MixContentStatus Status { get; set; }
         #region Views
         [JsonProperty("article")]
-        public MixArticles.ReadMvcViewModel Article { get; set; }
+        public MixPosts.ReadMvcViewModel Post { get; set; }
 
         #endregion Views
 
@@ -49,12 +49,12 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleArticles
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getArticle = MixArticles.ReadMvcViewModel.Repository.GetSingleModel(p => p.Id == ArticleId && p.Specificulture == Specificulture
+            var getPost = MixPosts.ReadMvcViewModel.Repository.GetSingleModel(p => p.Id == PostId && p.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction
             );
-            if (getArticle.IsSucceed)
+            if (getPost.IsSucceed)
             {
-                Article = getArticle.Data;
+                Post = getPost.Data;
             }
         }
 
@@ -68,30 +68,30 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleArticles
         #region Expand
 
 
-        public static RepositoryResponse<List<MixModuleArticles.ReadViewModel>> GetModuleArticleNavAsync(int articleId, string specificulture
+        public static RepositoryResponse<List<MixModulePosts.ReadViewModel>> GetModulePostNavAsync(int articleId, string specificulture
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             MixCmsContext context = _context ?? new MixCmsContext();
             var transaction = _transaction ?? context.Database.BeginTransaction();
             try
             {
-                var navCategoryArticleViewModels = context.MixModule.Include(cp => cp.MixModuleArticle).Where(a => a.Specificulture == specificulture && a.Type == (int)MixEnums.MixModuleType.ListArticle)
-                    .Select(p => new MixModuleArticles.ReadViewModel(
+                var navCategoryPostViewModels = context.MixModule.Include(cp => cp.MixModulePost).Where(a => a.Specificulture == specificulture && a.Type == (int)MixEnums.MixModuleType.ListPost)
+                    .Select(p => new MixModulePosts.ReadViewModel(
                         new MixModulePost()
                         {
-                            ArticleId = articleId,
+                            PostId = articleId,
                             ModuleId = p.Id,
                             Specificulture = specificulture
                         },
                         _context, _transaction)
                     {
-                        IsActived = p.MixModuleArticle.Any(cp => cp.ArticleId == articleId && cp.Specificulture == specificulture),
+                        IsActived = p.MixModulePost.Any(cp => cp.PostId == articleId && cp.Specificulture == specificulture),
                         Description = p.Title
                     });
                 return new RepositoryResponse<List<ReadViewModel>>()
                 {
                     IsSucceed = true,
-                    Data = navCategoryArticleViewModels.ToList()
+                    Data = navCategoryPostViewModels.ToList()
                 };
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
@@ -100,7 +100,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleArticles
                 {
                     transaction.Rollback();
                 }
-                return new RepositoryResponse<List<MixModuleArticles.ReadViewModel>>()
+                return new RepositoryResponse<List<MixModulePosts.ReadViewModel>>()
                 {
                     IsSucceed = true,
                     Data = null,

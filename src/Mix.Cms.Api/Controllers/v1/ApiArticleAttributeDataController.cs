@@ -12,7 +12,7 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using System.Linq.Expressions;
-using Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas;
+using Mix.Cms.Lib.ViewModels.MixPostAttributeDatas;
 using Microsoft.AspNetCore.SignalR;
 using Mix.Cms.Hub;
 using Microsoft.Extensions.Caching.Memory;
@@ -23,10 +23,10 @@ namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
     [Route("api/v1/{culture}/article-attribute-data")]
-    public class ApiArticleAttributeDataController :
+    public class ApiPostAttributeDataController :
         BaseGenericApiController<MixCmsContext, MixPostAttributeData>
     {
-        public ApiArticleAttributeDataController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext) : base(memoryCache, hubContext)
+        public ApiPostAttributeDataController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext) : base(memoryCache, hubContext)
         {
 
         }
@@ -126,7 +126,7 @@ namespace Mix.Cms.Api.Controllers.v1
             ParseRequestPagingDate(request);
             Expression<Func<MixPostAttributeData, bool>> predicate = model =>
                 string.IsNullOrWhiteSpace(request.Keyword)
-                    || (model.MixArticleAttributeValue.Any(v => v.StringValue.Contains(request.Keyword))
+                    || (model.MixPostAttributeValue.Any(v => v.StringValue.Contains(request.Keyword))
                     );
             string key = $"api_{_lang}_{request.Key}_{request.PageSize}_{request.PageIndex}";
             switch (request.Key)

@@ -24,7 +24,7 @@ namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
     [Route("api/v1/{culture}/page-page")]
-    [ApiExplorerSettings(IgnoreApi = false, GroupName = nameof(ApiPageArticleController))]
+    [ApiExplorerSettings(IgnoreApi = false, GroupName = nameof(ApiPagePostController))]
     public class ApiPagePageController :
         BaseGenericApiController<MixCmsContext, MixPagePage>
     {
@@ -59,7 +59,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         var portalResult = await base.GetSingleAsync<ReadViewModel>($"{viewType}_{parentId}_{id}", predicate);
                         if (portalResult.IsSucceed)
                         {
-                            portalResult.Data.Page.DetailsUrl = MixCmsHelper.GetRouterUrl("Article", new { portalResult.Data.Page.SeoName }, Request, Url);
+                            portalResult.Data.Page.DetailsUrl = MixCmsHelper.GetRouterUrl("Post", new { portalResult.Data.Page.SeoName }, Request, Url);
                         }
 
                         return Ok(JObject.FromObject(portalResult));

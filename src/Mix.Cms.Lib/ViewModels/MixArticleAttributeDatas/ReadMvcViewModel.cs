@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
+namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
 {
     public class ReadMvcViewModel
        : ViewModelBase<MixCmsContext, MixPostAttributeData, ReadMvcViewModel>
@@ -21,12 +21,12 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
         [JsonProperty("articleId")]
-        public int ArticleId { get; set; }
+        public int PostId { get; set; }
         #endregion
 
         #region Views
         [JsonProperty("data")]
-        public List<MixArticleAttributeValues.ReadMvcViewModel> Data{ get; set; }
+        public List<MixPostAttributeValues.ReadMvcViewModel> Data{ get; set; }
         #endregion
 
         #endregion
@@ -43,7 +43,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Data = MixArticleAttributeValues.ReadMvcViewModel.Repository.GetModelListBy(
+            Data = MixPostAttributeValues.ReadMvcViewModel.Repository.GetModelListBy(
                     v => v.DataId == Id && v.Specificulture == Specificulture, _context, _transaction).Data;
         }
 

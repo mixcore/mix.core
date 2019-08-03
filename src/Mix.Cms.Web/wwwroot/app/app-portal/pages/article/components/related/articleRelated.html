@@ -23,20 +23,20 @@
                             <span class="oi oi-move"></span>
                         </td>
                         <td>
-                            <input type="text" name="ArticleNavs[{{$index}}].Priority" value="{{item.priority}}" class="item-priority form-control form-control-sm d-inline" style="width:40px;">
+                            <input type="text" name="PostNavs[{{$index}}].Priority" value="{{item.priority}}" class="item-priority form-control form-control-sm d-inline" style="width:40px;">
                         </td>
                         <td>
-                            {{item.relatedArticle.title}}
+                            {{item.relatedPost.title}}
                         </td>
                         <td>
-                            <a href="#" ng-if="item.relatedArticle.image!=''" data-toggle="modal" data-target=".image-preview-modal-lg" data-imgsrc="{{item.relatedArticle.image}}">
-                                <img imageonload class="" ng-src="{{item.relatedArticle.image}}" alt="{{item.relatedArticle.title}}" style="max-height: 50px;">
+                            <a href="#" ng-if="item.relatedPost.image!=''" data-toggle="modal" data-target=".image-preview-modal-lg" data-imgsrc="{{item.relatedPost.image}}">
+                                <img imageonload class="" ng-src="{{item.relatedPost.image}}" alt="{{item.relatedPost.title}}" style="max-height: 50px;">
                             </a>
                         </td>
                         <td style="position:relative">
                             <span class="switch switch-sm" style="position: absolute;top: 10px;">
-                                <input type="checkbox" class="switch" data-val="{{item.isActived}}" id="ArticleNavs_{{item.relatedArticleId}}" name="ArticleNavs[{{$index}}].IsActived" ng-model="item.isActived" value="{{item.isActived}}">
-                                <label class="switch" for="ArticleNavs_{{item.relatedArticleId}}">
+                                <input type="checkbox" class="switch" data-val="{{item.isActived}}" id="PostNavs_{{item.relatedPostId}}" name="PostNavs[{{$index}}].IsActived" ng-model="item.isActived" value="{{item.isActived}}">
+                                <label class="switch" for="PostNavs_{{item.relatedPostId}}">
                                 </label>
                             </span>
                         </td>
@@ -44,6 +44,6 @@
                 </tbody>
             </table>
         </div>
-    </div><!--activeArticles-->
+    </div><!--activePosts-->
 
 </div>

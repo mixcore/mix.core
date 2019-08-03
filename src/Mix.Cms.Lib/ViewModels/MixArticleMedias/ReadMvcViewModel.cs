@@ -6,7 +6,7 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 
-namespace Mix.Cms.Lib.ViewModels.MixArticleMedias
+namespace Mix.Cms.Lib.ViewModels.MixPostMedias
 {
     public class ReadViewModel
        : ViewModelBase<MixCmsContext, MixPostMedia, ReadViewModel>
@@ -24,7 +24,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleMedias
         public int MediaId { get; set; }
 
         [JsonProperty("articleId")]
-        public int ArticleId { get; set; }
+        public int PostId { get; set; }
 
         [JsonProperty("isActived")]
         public bool IsActived { get; set; }

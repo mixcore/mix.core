@@ -1,5 +1,5 @@
 <!-- Main content -->
-<!-- <jumbotrons tag-name="'Article'" tag-type="'1'"></jumbotrons> -->
+<!-- <jumbotrons tag-name="'Post'" tag-type="'1'"></jumbotrons> -->
 <section class="" ng-init="getSingle()">
     <form ng-class="{'submitted': submitted}" ng-submit="save(activedData)">
         <actions preview-url="activedData.detailsUrl" back-url="referrerUrl"></actions>
@@ -39,7 +39,7 @@
                         </pane-v>
                         <pane-v header="Layout">
                             <div class="tab-pane">
-                                <template-editor folder-type="'Articles'" template="activedData.view" templates="activedData.templates"></template-editor>
+                                <template-editor folder-type="'Posts'" template="activedData.view" templates="activedData.templates"></template-editor>
                             </div>
                         </pane-v>
                         <pane-v header="Related">
@@ -87,8 +87,8 @@
 
                     </div>
                 </div>
-                <custom-image header="'Image'" type="'Articles'" folder="activedData.seoName" src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
-                <custom-image header="'Thumnail'" type="'Articles'" folder="activedData.seoName" src-url="activedData.thumbnailUrl" src="activedData.thumbnail" auto="'true'"></custom-image>
+                <custom-image header="'Image'" type="'Posts'" folder="activedData.seoName" src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
+                <custom-image header="'Thumnail'" type="'Posts'" folder="activedData.seoName" src-url="activedData.thumbnailUrl" src="activedData.thumbnail" auto="'true'"></custom-image>
             </section>
         </div>
     </form>

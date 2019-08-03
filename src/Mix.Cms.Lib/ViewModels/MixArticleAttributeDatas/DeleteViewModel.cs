@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
-namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
+namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
 {
     public class DeleteViewModel
        : ViewModelBase<MixCmsContext, MixPostAttributeData, DeleteViewModel>
@@ -19,7 +19,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
         [JsonProperty("attributeSetId")]
         public int SetAttributeId { get; set; }
         [JsonProperty("articleId")]
-        public int ArticleId { get; set; }
+        public int PostId { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
         [JsonProperty("status")]
@@ -38,7 +38,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
 
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(DeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var result = await MixArticleAttributeValues.DeleteViewModel.ModelRepository.RemoveListModelAsync(v => v.DataId == Id && v.Specificulture == Specificulture,
+            var result = await MixPostAttributeValues.DeleteViewModel.ModelRepository.RemoveListModelAsync(v => v.DataId == Id && v.Specificulture == Specificulture,
                 _context, _transaction);
             return new RepositoryResponse<bool>()
             {
@@ -49,7 +49,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
         }
         public override RepositoryResponse<bool> RemoveRelatedModels(DeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var result = MixArticleAttributeValues.DeleteViewModel.ModelRepository.RemoveListModel(v => v.DataId == Id && v.Specificulture == Specificulture,
+            var result = MixPostAttributeValues.DeleteViewModel.ModelRepository.RemoveListModel(v => v.DataId == Id && v.Specificulture == Specificulture,
                 _context, _transaction);
             return new RepositoryResponse<bool>()
             {

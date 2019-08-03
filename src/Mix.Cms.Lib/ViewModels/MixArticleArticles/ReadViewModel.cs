@@ -5,10 +5,10 @@ using Newtonsoft.Json;
 using System;
 using static Mix.Cms.Lib.MixEnums;
 
-namespace Mix.Cms.Lib.ViewModels.MixArticleArticles
+namespace Mix.Cms.Lib.ViewModels.MixPostPosts
 {
     public class ReadViewModel
-        : ViewModelBase<MixCmsContext, MixRelatedArticle, ReadViewModel>
+        : ViewModelBase<MixCmsContext, MixRelatedPost, ReadViewModel>
     {
         #region Properties
 
@@ -39,8 +39,8 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleArticles
         [JsonProperty("isActived")]
         public bool IsActived { get; set; }
 
-        [JsonProperty("relatedArticle")]
-        public MixArticles.ReadListItemViewModel RelatedArticle { get; set; }
+        [JsonProperty("relatedPost")]
+        public MixPosts.ReadListItemViewModel RelatedPost { get; set; }
 
         #endregion Views
 
@@ -52,7 +52,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleArticles
         {
         }
 
-        public ReadViewModel(MixRelatedArticle model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ReadViewModel(MixRelatedPost model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -62,16 +62,16 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleArticles
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getArticle = MixArticles.ReadListItemViewModel.Repository.GetSingleModel(
+            var getPost = MixPosts.ReadListItemViewModel.Repository.GetSingleModel(
                 m => m.Id == DestinationId && m.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction);
-            if (getArticle.IsSucceed)
+            if (getPost.IsSucceed)
             {
-                this.RelatedArticle = getArticle.Data;
+                this.RelatedPost = getPost.Data;
             }
         }
 
-        public override MixRelatedArticle ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixRelatedPost ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (CreatedDateTime == default(DateTime))
             {

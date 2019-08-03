@@ -1,4 +1,4 @@
-<section ng-init="loadArticles()">
+<section ng-init="loadPosts()">
     <div class="row">
         <div class="col-md-8">
             <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
@@ -15,7 +15,7 @@
         <div class="col-md-4">
         </div>
     </div>
-    <filter-list request="articleRequest" callback="loadArticles()"></filter-list>
+    <filter-list request="articleRequest" callback="loadPosts()"></filter-list>
 
     <table class="table table-sm table-hover" cellspacing="0" ng-if="pageData.articles.totalItems > 0">
         <thead class="thead-light">
@@ -80,7 +80,7 @@
                             <span class="fas fa-eye text-info"></span>
                         </a>
 
-                        <button type="button" class="btn btn-dark del-popover" ng-click="removeArticle(item.article.id)">
+                        <button type="button" class="btn btn-dark del-popover" ng-click="removePost(item.article.id)">
                             <span class="fas fa-times text-danger"></span>
                         </button>
                         <div class="popover-body d-none">

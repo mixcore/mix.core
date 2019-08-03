@@ -251,7 +251,7 @@ namespace Mix.Cms.Api.Controllers.v1
             Expression<Func<MixModuleData, bool>> predicate = model =>
                 model.Specificulture == _lang
                 && model.ModuleId == moduleId
-                && (articleId == 0 || model.ArticleId == articleId)
+                && (articleId == 0 || model.PostId == articleId)
                 && (categoryId == 0 || model.PageId == categoryId)
                 && (!request.FromDate.HasValue
                     || (model.CreatedDateTime >= request.FromDate.Value.ToUniversalTime())
@@ -293,7 +293,7 @@ namespace Mix.Cms.Api.Controllers.v1
             Expression<Func<MixModuleData, bool>> predicate = model =>
                 model.Specificulture == _lang
                 && model.ModuleId == moduleId
-                && (articleId==0 || model.ArticleId == articleId)
+                && (articleId==0 || model.PostId == articleId)
                 && (pageId == 0 || model.PageId == pageId)
                 && (!request.FromDate.HasValue
                     || (model.CreatedDateTime >= request.FromDate.Value.ToUniversalTime())
