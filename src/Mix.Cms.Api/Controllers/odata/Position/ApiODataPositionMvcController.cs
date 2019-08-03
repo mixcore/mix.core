@@ -25,8 +25,9 @@ namespace Mix.Cms.Api.Controllers.OData.Positions
     public class ApiODataPositionMvcController :
         BaseApiODataController<MixCmsContext, MixPosition>
     {
-        public ApiODataPositionMvcController(IMemoryCache memoryCache
-            , Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
+        public ApiODataPositionMvcController(
+            MixCmsContext context, IMemoryCache memoryCache
+            , Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
         }
 
@@ -51,8 +52,7 @@ namespace Mix.Cms.Api.Controllers.OData.Positions
                 };
             }
 
-            var portalResult = await base.GetSingleAsync<UpdateViewModel>(id.ToString(), predicate, model)
-            ;
+            var portalResult = await base.GetSingleAsync<UpdateViewModel>(id.ToString(), predicate, model);
 
             if (portalResult.IsSucceed)
             {

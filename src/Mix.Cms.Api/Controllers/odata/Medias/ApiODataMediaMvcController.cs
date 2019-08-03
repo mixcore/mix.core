@@ -22,8 +22,9 @@ namespace Mix.Cms.Api.Controllers.OData.Medias
     public class ApiODataMediaMvcController :
         BaseApiODataController<MixCmsContext, MixMedia>
     {
-        public ApiODataMediaMvcController(IMemoryCache memoryCache
-            , Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
+        public ApiODataMediaMvcController(
+            MixCmsContext context, IMemoryCache memoryCache
+            , Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
         }
 

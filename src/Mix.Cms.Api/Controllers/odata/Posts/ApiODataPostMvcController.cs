@@ -23,8 +23,8 @@ namespace Mix.Cms.Api.Controllers.OData.Posts
     public class ApiODataPostMvcController :
         BaseApiODataController<MixCmsContext, MixArticle>
     {
-        public ApiODataPostMvcController(IMemoryCache memoryCache
-            , Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
+        public ApiODataPostMvcController(MixCmsContext context, IMemoryCache memoryCache
+            , Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
         }
 

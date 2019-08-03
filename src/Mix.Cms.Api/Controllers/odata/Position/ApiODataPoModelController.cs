@@ -21,7 +21,7 @@ namespace Mix.Cms.Api.Controllers.OData.Positions
         private readonly MixCmsContext _context;
         public ApiODataPositionModelController(
             MixCmsContext context, IMemoryCache memoryCache
-            , Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
+            , Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
             _context = context;
 

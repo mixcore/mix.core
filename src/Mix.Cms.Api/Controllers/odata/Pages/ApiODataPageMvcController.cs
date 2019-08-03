@@ -22,8 +22,9 @@ namespace Mix.Cms.Api.Controllers.OData.Pages
     public class ApiODataPageMvcController :
         BaseApiODataController<MixCmsContext, MixPage>
     {
-        public ApiODataPageMvcController(IMemoryCache memoryCache
-            , Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
+        public ApiODataPageMvcController(
+            MixCmsContext context, IMemoryCache memoryCache
+            , Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
         }
 
