@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixArticleAttributeValue
+    public partial class MixPostAttributeValue
     {
         public string Id { get; set; }
         public string Specificulture { get; set; }
         public int AttributeFieldId { get; set; }
         public string DataId { get; set; }
         public string AttributeName { get; set; }
-        public int ArticleId { get; set; }
+        public int PostId { get; set; }
         public double? DoubleValue { get; set; }
         public int? IntegerValue { get; set; }
         public string StringValue { get; set; }

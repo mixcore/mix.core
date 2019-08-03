@@ -32,7 +32,7 @@ namespace Mix.Cms.Api.Controllers.OData.Pages
         [Route("{id}")]
         public ActionResult<MixPost> Details(string culture, int id)
         {
-            return _context.MixArticle.SingleOrDefault(p => p.Specificulture == culture && p.Id == id);
+            return _context.MixPost.SingleOrDefault(p => p.Specificulture == culture && p.Id == id);
         }
         
         // GET api/pages/id
@@ -42,7 +42,7 @@ namespace Mix.Cms.Api.Controllers.OData.Pages
         [Route("")]
         public ActionResult<List<MixPost>> List(string culture)
         {
-            return _context.MixArticle.Where(p => p.Specificulture == culture).ToList();
+            return _context.MixPost.Where(p => p.Specificulture == culture).ToList();
         }
 
 

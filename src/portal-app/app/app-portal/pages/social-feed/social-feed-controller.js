@@ -1,13 +1,13 @@
 ﻿'use strict';
 app.controller('SocialFeedController',
-    ['$rootScope', '$scope', '$http', 'ArticleService',
-        function ($rootScope, $scope, $http, articleService) {
+    ['$rootScope', '$scope', '$http', 'PostService',
+        function ($rootScope, $scope, $http, postService) {
             $scope.types = [
                 'Facebook',
                 'Instagram'
             ];
             $scope.isInit = false;
-            $scope.defaultArticle = null;
+            $scope.defaultPost = null;
             $scope.defaultProperty = {
                 name: null,
                 dataType: 7,
@@ -49,8 +49,8 @@ app.controller('SocialFeedController',
                     $scope.loadPages();
 
                 }
-                articleService.getSingle(['portal']).then((resp) => {
-                    $scope.defaultArticle = resp.data;
+                postService.getSingle(['portal']).then((resp) => {
+                    $scope.defaultPost = resp.data;
                 });
             };
 
@@ -144,25 +144,25 @@ app.controller('SocialFeedController',
                 $(e).attr(attrName, attVal);
             };
             $scope.parsePost = function (post) {
-                var article = angular.copy($scope.defaultArticle);
+                var post = angular.copy($scope.defaultPost);
                 var prop = angular.copy($scope.defaultProperty);
-                article.title = "Facebook Id";
-                article.name = "facebook_id";
-                article.value = post.id;
-                article.properties.push(prop);
+                post.title = "Facebook Id";
+                post.name = "facebook_id";
+                post.value = post.id;
+                post.properties.push(prop);
 
-                article.title = post.name || post.id;
-                article.excerpt = post.message;
-                article.content = post.description;
-                article.source = 'Facebook';
-                article.image = post.full_picture;
-                article.detailsUrl = post.permalink_url
+                post.title = post.name || post.id;
+                post.excerpt = post.message;
+                post.content = post.description;
+                post.source = 'Facebook';
+                post.image = post.full_picture;
+                post.detailsUrl = post.permalink_url
                 var attachments = post.attachments.data[0];
 
                 if (attachments.media) {
                     var media = $scope.parseMedia(attachments.media, attachments.type);
                     if (media) {
-                        article.mediaNavs.push({
+                        post.mediaNavs.push({
                             media: media,
                             specificulture: $rootScope.settings.lang,
                             image: media.fullPath
@@ -173,14 +173,14 @@ app.controller('SocialFeedController',
                 if (attachments.subattachments) {
                     var medias = $scope.parseMedias(attachments.subattachments.data);
                     angular.forEach(medias, function (e, i) {
-                        article.mediaNavs.push({
+                        post.mediaNavs.push({
                             media: e,
                             specificulture: $rootScope.settings.lang,
                             image: e.fullPath
                         })
                     })
                 }
-                return article;
+                return post;
             }
             $scope.parseMedias = function (data) {
                 var result = [];
@@ -242,7 +242,7 @@ app.controller('SocialFeedController',
             }
             $scope.syncPosts = async function () {
                 $rootScope.isBusy = true;
-                var resp = await articleService.saveList($scope.socialSettings.posts);
+                var resp = await postService.saveList($scope.socialSettings.posts);
                 if (resp && resp.isSucceed) {
                     $rootScope.showMessage('success', 'success');
                     $rootScope.isBusy = false;

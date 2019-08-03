@@ -142,8 +142,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("childs")]
         public List<ReadViewModel> Childs { get; set; }
 
-        [JsonProperty("totalArticle")]
-        public int TotalArticle { get; set; }
+        [JsonProperty("totalPost")]
+        public int TotalPost { get; set; }
 
         [JsonProperty("totalProduct")]
         public int TotalProduct { get; set; }
@@ -182,12 +182,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 Childs = getChilds.Data;
             }
-            var countArticle = MixPageArticles.ReadViewModel.Repository.Count(c => c.CategoryId == Id && c.Specificulture == Specificulture
+            var countPost = MixPagePosts.ReadViewModel.Repository.Count(c => c.PageId == Id && c.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction);
 
-            if (countArticle.IsSucceed)
+            if (countPost.IsSucceed)
             {
-                TotalArticle = countArticle.Data;
+                TotalPost = countPost.Data;
             }
 
         }

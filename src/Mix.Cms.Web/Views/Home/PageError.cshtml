@@ -4,7 +4,7 @@
 }
 @section Seo{
     <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @Model.Title</title>
-    <meta property="og:type" content="article" />
+    <meta property="og:type" content="post" />
     <meta property="og:url" content="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}")" />
     <meta property="og:title" content="@Model.Title" />
     <meta property="og:description"

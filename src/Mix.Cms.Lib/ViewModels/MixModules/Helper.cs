@@ -84,14 +84,14 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         }
 
         public static RepositoryResponse<UpdateViewModel> GetBy(
-            Expression<Func<MixModule, bool>> predicate, string articleId = null, string productId = null, int categoryId = 0
+            Expression<Func<MixModule, bool>> predicate, string postId = null, string productId = null, int pageId = 0
              , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = UpdateViewModel.Repository.GetSingleModel(predicate, _context, _transaction);
             if (result.IsSucceed)
             {
-                result.Data.ArticleId = articleId;
-                result.Data.CategoryId = categoryId;
+                result.Data.PostId = postId;
+                result.Data.PageId = pageId;
             }
             return result;
         }

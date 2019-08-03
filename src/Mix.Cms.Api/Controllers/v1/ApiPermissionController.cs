@@ -27,7 +27,7 @@ namespace Mix.Cms.Api.Controllers.v1
     public class ApiPermissionController :
         BaseGenericApiController<MixCmsContext, MixPortalPage>
     {
-        public ApiPermissionController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext) : base(memoryCache, hubContext)
+        public ApiPermissionController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
 
         }

@@ -8,10 +8,10 @@
         <div class="col-md-12">
             <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
                 <div class="btn-group mr-2">
-                    <a href="/portal/article/create-gallery?module_id={{moduleId}}" class="btn btn-link">
+                    <a href="/portal/post/create-gallery?module_id={{moduleId}}" class="btn btn-link">
                         <i class="fas fa-plus"></i>
                     </a>
-                    <a data-toggle="modal" data-target="#modal-nav-articles-{{moduleId}}" class="btn btn-link">
+                    <a data-toggle="modal" data-target="#modal-nav-posts-{{moduleId}}" class="btn btn-link">
                         <i class="fas fa-search"></i>
                     </a>
                     <a href="/portal/module/details/{{moduleId}}" class="btn btn-link">
@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-        <modal-nav-articles save="saveOthers()" src-field="'moduleId'" src-id="moduleId" selected="others" query="'not_module_id='"></modal-nav-articles>
+        <modal-nav-posts save="saveOthers()" src-field="'moduleId'" src-id="moduleId" selected="others" query="'not_module_id='"></modal-nav-posts>
     </div>
 </div>
 <div class="card-body">
@@ -65,34 +65,34 @@
                 </td>
                 <td>
                     <small>
-                        <span ng-bind-html="item.article.title"></span>
+                        <span ng-bind-html="item.post.title"></span>
                     </small>
                 </td>
                 <td>
-                    <div ng-if="item.article.image!=''">
-                        <preview-image img-height="50" img-src="item.article.imageUrl"></preview-image>
+                    <div ng-if="item.post.image!=''">
+                        <preview-image img-height="50" img-src="item.post.imageUrl"></preview-image>
                     </div>
 
                 </td>
                 <td>
                     <small>
-                        {{item.article.createdDateTime | utcToLocal}}
+                        {{item.post.createdDateTime | utcToLocal}}
                     </small>
                 </td>
                 <td>
-                    {{item.article.createdBy}}
+                    {{item.post.createdBy}}
                 </td>
 
                 <td>
                     <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                        <a href="/portal/article/gallery-details/{{item.article.id}}" class="btn btn-link">
+                        <a href="/portal/post/gallery-details/{{item.post.id}}" class="btn btn-link">
                             <span class="fas fa-pencil-alt text-primary"></span>
                         </a>
-                        <a href="{{item.article.detailsUrl}}" target="_blank" class="btn btn-link">
+                        <a href="{{item.post.detailsUrl}}" target="_blank" class="btn btn-link">
                             <span class="fas fa-eye text-info"></span>
                         </a>
 
-                        <a ng-click="remove(item.moduleId,item.articleId);" class="btn btn-link">
+                        <a ng-click="remove(item.moduleId,item.postId);" class="btn btn-link">
                             <span class="fas fa-times text-danger"></span>
                         </a>
                     </div>

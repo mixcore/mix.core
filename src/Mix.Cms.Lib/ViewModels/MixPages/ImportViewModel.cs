@@ -194,7 +194,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                         }
                         else // Save Module Success
                         {
-                            item.CategoryId = parent.Id;
+                            item.PageId = parent.Id;
                             item.ModuleId = saveModule.Data.Id;
                             item.Specificulture = parent.Specificulture;
                             item.Description = saveModule.Data.Title;
@@ -262,7 +262,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public List<MixPageModules.ImportViewModel> GetModuleNavs(MixCmsContext context, IDbContextTransaction transaction)
         {
             return MixPageModules.ImportViewModel.Repository.GetModelListBy(
-                module => module.Specificulture == Specificulture && module.CategoryId == Id,
+                module => module.Specificulture == Specificulture && module.PageId == Id,
                 context, transaction).Data;
         }
 

@@ -2,9 +2,9 @@
 app.controller('PageGalleryController',
     [
         '$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$location',
-        'PageGalleryService', 'ArticleService', 'CommonService',
+        'PageGalleryService', 'PostService', 'CommonService',
         function ($scope, $rootScope, ngAppSettings, $routeParams, $location,
-            service, articleService, commonService) {
+            service, postService, commonService) {
             BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
             $scope.cates = ['Site', 'System'];
             $scope.others=[];
@@ -28,13 +28,13 @@ app.controller('PageGalleryController',
                     $scope.$apply();
                 }
             };
-            $scope.remove = function (pageId, articleId) {
-                $rootScope.showConfirm($scope, 'removeConfirmed', [pageId, articleId], null, 'Remove', 'Are you sure');
+            $scope.remove = function (pageId, postId) {
+                $rootScope.showConfirm($scope, 'removeConfirmed', [pageId, postId], null, 'Remove', 'Are you sure');
             };
 
-            $scope.removeConfirmed = async function (pageId, articleId) {
+            $scope.removeConfirmed = async function (pageId, postId) {
                 $rootScope.isBusy = true;
-                var result = await service.delete(pageId, articleId);
+                var result = await service.delete(pageId, postId);
                 if (result.isSucceed) {
                     if ($scope.removeCallback) {
                         $rootScope.executeFunctionByName('removeCallback', $scope.removeCallbackArgs, $scope)

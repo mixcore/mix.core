@@ -20,8 +20,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePositions
         [JsonProperty("PositionId")]
         public int PositionId { get; set; }
 
-        [JsonProperty("categoryId")]
-        public int CategoryId { get; set; }
+        [JsonProperty("pageId")]
+        public int PageId { get; set; }
 
         [JsonProperty("isActived")]
         public bool IsActived { get; set; }

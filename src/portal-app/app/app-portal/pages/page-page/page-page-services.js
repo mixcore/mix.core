@@ -4,8 +4,8 @@ app.factory('PagePageService', ['$rootScope', 'CommonService', 'BaseService',
 
         var serviceFactory = Object.create(baseService);
         serviceFactory.init('page-page');
-        var _delete = async function(pageId, articleId){
-            var url = this.prefixUrl + '/delete/' + pageId+'/'+articleId;
+        var _delete = async function(pageId, postId){
+            var url = this.prefixUrl + '/delete/' + pageId+'/'+postId;
             var req = {
                 method: 'GET',
                 url: url

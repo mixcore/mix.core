@@ -49,7 +49,7 @@ namespace Mix.Cms.Api.Controllers.v1
             IHostingEnvironment env,
             IMemoryCache memoryCache
             )
-            : base(memoryCache, hubContext)
+            : base(null, memoryCache, hubContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;

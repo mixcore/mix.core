@@ -14,12 +14,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 {
     public class Helper
     {
-        public static RepositoryResponse<PaginationModel<MixArticleAttributeDatas.UpdateViewModel>> LoadArticleData(int articleId, string specificulture, int? pageSize = null, int? pageIndex = 0
+        public static RepositoryResponse<PaginationModel<MixPostAttributeDatas.UpdateViewModel>> LoadPostData(int postId, string specificulture, int? pageSize = null, int? pageIndex = 0
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Expression<Func<MixPostAttributeData, bool>> dataExp = null;
-            dataExp = m => m.ArticleId == articleId && m.Specificulture == specificulture && (m.ArticleId == articleId);
-                var getDataResult = MixArticleAttributeDatas.UpdateViewModel.Repository
+            dataExp = m => m.PostId == postId && m.Specificulture == specificulture && (m.PostId == postId);
+                var getDataResult = MixPostAttributeDatas.UpdateViewModel.Repository
                 .GetModelListBy(
                     dataExp
                     , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
@@ -27,16 +27,16 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
                     , _context: _context, _transaction: _transaction);
             if (getDataResult.Data.TotalItems==0)
             {
-                getDataResult.Data.Items.Add(new MixArticleAttributeDatas.UpdateViewModel());
+                getDataResult.Data.Items.Add(new MixPostAttributeDatas.UpdateViewModel());
             }
             return getDataResult;
         }
-        public static async System.Threading.Tasks.Task<RepositoryResponse<PaginationModel<MixArticleAttributeDatas.UpdateViewModel>>> LoadArticleDataAsync(int articleId, string specificulture, int? pageSize = null, int? pageIndex = 0
+        public static async System.Threading.Tasks.Task<RepositoryResponse<PaginationModel<MixPostAttributeDatas.UpdateViewModel>>> LoadPostDataAsync(int postId, string specificulture, int? pageSize = null, int? pageIndex = 0
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Expression<Func<MixPostAttributeData, bool>> dataExp = null;
-            dataExp = m => m.ArticleId == articleId && m.Specificulture == specificulture && (m.ArticleId == articleId);
-                var getDataResult = await MixArticleAttributeDatas.UpdateViewModel.Repository
+            dataExp = m => m.PostId == postId && m.Specificulture == specificulture && (m.PostId == postId);
+                var getDataResult = await MixPostAttributeDatas.UpdateViewModel.Repository
                 .GetModelListByAsync(
                     dataExp
                     , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
@@ -44,7 +44,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
                     , _context: _context, _transaction: _transaction);
             if (getDataResult.Data.TotalItems == 0)
             {
-                getDataResult.Data.Items.Add(new MixArticleAttributeDatas.UpdateViewModel());
+                getDataResult.Data.Items.Add(new MixPostAttributeDatas.UpdateViewModel());
             }
             return getDataResult;
         }

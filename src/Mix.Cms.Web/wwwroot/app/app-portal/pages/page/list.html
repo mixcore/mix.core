@@ -63,11 +63,11 @@
                                 <span class="fas fa-pencil-alt text-warning"></span>
                             </a>
                             <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-link"><span class="far fa-eye text-info"></span></a>
-                            <a ng-if="item.type==2" ng-click="goToPath('/portal/page/page-article/list/' + item.id)" class="btn btn-link">
+                            <a ng-if="item.type==2" ng-click="goToPath('/portal/page/page-post/list/' + item.id)" class="btn btn-link">
                                 <span class="fas fa-list text-info"></span>
                             </a>
                             <!-- 
-                                                <a ng-if="item.type==2" href="#" data-toggle="modal" data-target="#modal-articles" class="btn btn-link">
+                                                <a ng-if="item.type==2" href="#" data-toggle="modal" data-target="#modal-posts" class="btn btn-link">
                                                     <span class="fas fa-list text-info"></span>
                                                 </a>-->
                             <a class="btn btn-link" ng-click="remove(item.id)">
@@ -133,7 +133,7 @@
                                             <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
                                                 <a href="" ng-click="goToPath('/portal/page/details/' + c.id)" class="btn btn-link"><span class="fa fa-pen text-warning small"></span></a>
                                                 <a href="{{c.detailsUrl}}" target="_blank" class="btn btn-link"><span class="far fa-eye text-info small"></span></a>
-                                                <a ng-if="c.page.type==2" ng-click="goToPath('/portal/page/page-article/list/' + c.page.id)" class="btn btn-link">
+                                                <a ng-if="c.page.type==2" ng-click="goToPath('/portal/page/page-post/list/' + c.page.id)" class="btn btn-link">
                                                     <span class="fas fa-list text-info"></span>
                                                 </a>
                                                 <a ng-click="remove(item.id);" class="btn btn-link">

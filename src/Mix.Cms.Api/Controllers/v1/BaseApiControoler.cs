@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Hub;
 using Mix.Cms.Lib;
@@ -22,7 +23,8 @@ namespace Mix.Cms.Api.Controllers.v1
         where TDbContext: DbContext
     {
         protected readonly IHubContext<PortalHub> _hubContext;
-
+        protected static TDbContext _context;
+        protected static IDbContextTransaction _transaction;
         protected readonly IMemoryCache _memoryCache;
 
         /// <summary>
@@ -41,8 +43,9 @@ namespace Mix.Cms.Api.Controllers.v1
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseApiController"/> class.
         /// </summary>
-        public BaseApiController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext)
+        public BaseApiController(TDbContext context, IMemoryCache memoryCache, IHubContext<PortalHub> hubContext)
         {
+            _context = context;
             _hubContext = hubContext; 
             _memoryCache = memoryCache;
         }
