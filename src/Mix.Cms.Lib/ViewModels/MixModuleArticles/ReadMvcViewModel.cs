@@ -12,9 +12,9 @@ using static Mix.Cms.Lib.MixEnums;
 namespace Mix.Cms.Lib.ViewModels.MixModuleArticles
 {
     public class ReadMvcViewModel
-       : ViewModelBase<MixCmsContext, MixModuleArticle, ReadMvcViewModel>
+       : ViewModelBase<MixCmsContext, MixModulePost, ReadMvcViewModel>
     {
-        public ReadMvcViewModel(MixModuleArticle model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public ReadMvcViewModel(MixModulePost model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
@@ -77,7 +77,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleArticles
             {
                 var navCategoryArticleViewModels = context.MixModule.Include(cp => cp.MixModuleArticle).Where(a => a.Specificulture == specificulture && a.Type == (int)MixEnums.MixModuleType.ListArticle)
                     .Select(p => new MixModuleArticles.ReadViewModel(
-                        new MixModuleArticle()
+                        new MixModulePost()
                         {
                             ArticleId = articleId,
                             ModuleId = p.Id,

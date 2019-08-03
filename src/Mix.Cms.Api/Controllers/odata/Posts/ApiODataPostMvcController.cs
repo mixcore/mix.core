@@ -21,7 +21,7 @@ namespace Mix.Cms.Api.Controllers.OData.Posts
     [Produces("application/json")]
     [Route("api/odata/{culture}/post/mvc")]
     public class ApiODataPostMvcController :
-        BaseApiODataController<MixCmsContext, MixArticle>
+        BaseApiODataController<MixCmsContext, MixPost>
     {
         public ApiODataPostMvcController(MixCmsContext context, IMemoryCache memoryCache
             , Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
@@ -38,7 +38,7 @@ namespace Mix.Cms.Api.Controllers.OData.Posts
         public async Task<ActionResult<ReadMvcViewModel>> Details(string culture, int id)
         {
             string msg = string.Empty;
-            Expression<Func<MixArticle, bool>> predicate = model => model.Id == id && model.Specificulture == culture;
+            Expression<Func<MixPost, bool>> predicate = model => model.Id == id && model.Specificulture == culture;
             var portalResult = await base.GetSingleAsync<ReadMvcViewModel>($"mvc_{id}", predicate);
             if (portalResult.IsSucceed)
             {
@@ -52,7 +52,7 @@ namespace Mix.Cms.Api.Controllers.OData.Posts
         [EnableQuery(MaxExpansionDepth = 4)]
         [HttpGet, HttpOptions]
         [Route("")]
-        public async Task<ActionResult<List<ReadMvcViewModel>>> List(string culture, ODataQueryOptions<MixArticle> queryOptions)
+        public async Task<ActionResult<List<ReadMvcViewModel>>> List(string culture, ODataQueryOptions<MixPost> queryOptions)
         {
             string msg = string.Empty;
             var portalResult = await base.GetListAsync<ReadMvcViewModel>(queryOptions);

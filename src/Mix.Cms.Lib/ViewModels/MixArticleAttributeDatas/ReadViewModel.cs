@@ -8,7 +8,7 @@ using System;
 namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
 {
     public class ReadViewModel
-       : ViewModelBase<MixCmsContext, MixArticleAttributeData, ReadViewModel>
+       : ViewModelBase<MixCmsContext, MixPostAttributeData, ReadViewModel>
     {
         #region Properties
         #region Models
@@ -24,7 +24,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
         public int Status { get; set; }
         #endregion
         #endregion
-        public ReadViewModel(MixArticleAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public ReadViewModel(MixPostAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }

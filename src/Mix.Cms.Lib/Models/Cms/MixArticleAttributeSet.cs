@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixArticleAttributeSet
+    public partial class MixPostAttributeSet
     {
         public int ArticleId { get; set; }
         public string Specificulture { get; set; }
@@ -14,6 +14,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Status { get; set; }
 
         public virtual MixAttributeSet AttributeSet { get; set; }
-        public virtual MixArticle MixArticle { get; set; }
+        public virtual MixPost MixArticle { get; set; }
     }
 }

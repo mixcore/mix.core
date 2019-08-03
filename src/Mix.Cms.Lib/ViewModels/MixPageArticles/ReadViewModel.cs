@@ -12,9 +12,9 @@ using static Mix.Cms.Lib.MixEnums;
 namespace Mix.Cms.Lib.ViewModels.MixPageArticles
 {
     public class ReadViewModel
-       : ViewModelBase<MixCmsContext, MixPageArticle, ReadViewModel>
+       : ViewModelBase<MixCmsContext, MixPagePost, ReadViewModel>
     {
-        public ReadViewModel(MixPageArticle model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public ReadViewModel(MixPagePost model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
@@ -80,7 +80,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPageArticles
                     && (a.Type == (int)MixEnums.MixPageType.ListArticle|| a.Type == (int)MixEnums.MixPageType.ListProduct)
                     )
                     .Select(p => new MixPageArticles.ReadViewModel(
-                        new MixPageArticle()
+                        new MixPagePost()
                         {
                             ArticleId = articleId,
                             CategoryId = p.Id,

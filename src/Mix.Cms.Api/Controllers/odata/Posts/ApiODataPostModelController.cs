@@ -15,7 +15,7 @@ namespace Mix.Cms.Api.Controllers.OData.Pages
     [Produces("application/json")]
     [Route("api/odata/{culture}/post/model")]
     public class ApiODataPostModelController :
-        BaseApiODataController<MixCmsContext, MixArticle>
+        BaseApiODataController<MixCmsContext, MixPost>
     {
         public ApiODataPostModelController(
             MixCmsContext context, IMemoryCache memoryCache
@@ -30,7 +30,7 @@ namespace Mix.Cms.Api.Controllers.OData.Pages
         [EnableQuery]
         [HttpGet, HttpOptions]
         [Route("{id}")]
-        public ActionResult<MixArticle> Details(string culture, int id)
+        public ActionResult<MixPost> Details(string culture, int id)
         {
             return _context.MixArticle.SingleOrDefault(p => p.Specificulture == culture && p.Id == id);
         }
@@ -40,7 +40,7 @@ namespace Mix.Cms.Api.Controllers.OData.Pages
         [EnableQuery]
         [HttpGet, HttpOptions]
         [Route("")]
-        public ActionResult<List<MixArticle>> List(string culture)
+        public ActionResult<List<MixPost>> List(string culture)
         {
             return _context.MixArticle.Where(p => p.Specificulture == culture).ToList();
         }

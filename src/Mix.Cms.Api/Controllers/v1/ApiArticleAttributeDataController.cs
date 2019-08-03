@@ -24,7 +24,7 @@ namespace Mix.Cms.Api.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/{culture}/article-attribute-data")]
     public class ApiArticleAttributeDataController :
-        BaseGenericApiController<MixCmsContext, MixArticleAttributeData>
+        BaseGenericApiController<MixCmsContext, MixPostAttributeData>
     {
         public ApiArticleAttributeDataController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext) : base(memoryCache, hubContext)
         {
@@ -35,7 +35,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // GET api/article-attribute-data/id
         [HttpGet, HttpOptions]
         [Route("delete/{id}")]
-        public async Task<RepositoryResponse<MixArticleAttributeData>> DeleteAsync(string id)
+        public async Task<RepositoryResponse<MixPostAttributeData>> DeleteAsync(string id)
         {
             return await base.DeleteAsync<DeleteViewModel>(
                 model => model.Id == id && model.Specificulture == _lang, true);
@@ -53,13 +53,13 @@ namespace Mix.Cms.Api.Controllers.v1
                 case "portal":
                     if (!string.IsNullOrEmpty(id))
                     {
-                        Expression<Func<MixArticleAttributeData, bool>> predicate = model => model.Id == id;
+                        Expression<Func<MixPostAttributeData, bool>> predicate = model => model.Id == id;
                         var portalResult = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_{id}", predicate);
                         return Ok(JObject.FromObject(portalResult));
                     }
                     else
                     {
-                        var model = new MixArticleAttributeData()
+                        var model = new MixPostAttributeData()
                         {
                             Status = MixService.GetConfig<int>("DefaultStatus")
                             ,
@@ -72,13 +72,13 @@ namespace Mix.Cms.Api.Controllers.v1
                 default:
                     if (!string.IsNullOrEmpty(id))
                     {
-                        Expression<Func<MixArticleAttributeData, bool>> predicate = model => model.Id == id;
+                        Expression<Func<MixPostAttributeData, bool>> predicate = model => model.Id == id;
                         var result = await base.GetSingleAsync<ReadViewModel>($"{viewType}_{id}", predicate);
                         return Ok(JObject.FromObject(result));
                     }
                     else
                     {
-                        var model = new MixArticleAttributeData()
+                        var model = new MixPostAttributeData()
                         {
                             Status = MixService.GetConfig<int>("DefaultStatus")
                             ,
@@ -124,7 +124,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
 
             ParseRequestPagingDate(request);
-            Expression<Func<MixArticleAttributeData, bool>> predicate = model =>
+            Expression<Func<MixPostAttributeData, bool>> predicate = model =>
                 string.IsNullOrWhiteSpace(request.Keyword)
                     || (model.MixArticleAttributeValue.Any(v => v.StringValue.Contains(request.Keyword))
                     );

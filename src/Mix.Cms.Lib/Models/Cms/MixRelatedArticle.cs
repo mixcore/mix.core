@@ -14,7 +14,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Description { get; set; }
         public string Image { get; set; }
 
-        public virtual MixArticle MixArticle { get; set; }
-        public virtual MixArticle S { get; set; }
+        public virtual MixPost MixArticle { get; set; }
+        public virtual MixPost S { get; set; }
     }
 }

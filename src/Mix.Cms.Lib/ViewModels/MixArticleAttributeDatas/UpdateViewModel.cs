@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
 {
     public class UpdateViewModel
-       : ViewModelBase<MixCmsContext, MixArticleAttributeData, UpdateViewModel>
+       : ViewModelBase<MixCmsContext, MixPostAttributeData, UpdateViewModel>
     {
         #region Properties
         #region Models
@@ -33,7 +33,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
         #endregion
 
         #endregion
-        public UpdateViewModel(MixArticleAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public UpdateViewModel(MixPostAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
@@ -103,7 +103,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
             }
             
         }
-        public override MixArticleAttributeData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixPostAttributeData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))
             {
@@ -113,7 +113,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
             return base.ParseModel(_context, _transaction);
         }
         #region Async
-        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixArticleAttributeData parent, MixCmsContext _context, IDbContextTransaction _transaction)
+        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixPostAttributeData parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             //Save Data Fields

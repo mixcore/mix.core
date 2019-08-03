@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
 {
     public class DeleteViewModel
-       : ViewModelBase<MixCmsContext, MixArticleAttributeData, DeleteViewModel>
+       : ViewModelBase<MixCmsContext, MixPostAttributeData, DeleteViewModel>
     {
         #region Properties
         #region Models
@@ -26,7 +26,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
         public int Status { get; set; }
         #endregion
         #endregion
-        public DeleteViewModel(MixArticleAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public DeleteViewModel(MixPostAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }

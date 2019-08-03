@@ -19,7 +19,7 @@ using static Mix.Cms.Lib.MixEnums;
 namespace Mix.Cms.Lib.ViewModels.MixArticles
 {
     public class UpdateViewModel
-         : ViewModelBase<MixCmsContext, MixArticle, UpdateViewModel>
+         : ViewModelBase<MixCmsContext, MixPost, UpdateViewModel>
     {
 
         #region Properties
@@ -235,7 +235,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         {
         }
 
-        public UpdateViewModel(MixArticle model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public UpdateViewModel(MixPost model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -281,7 +281,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             LoadRelatedArticle(_context, _transaction);
         }
         
-        public override MixArticle ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixPost ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)
             {
@@ -349,7 +349,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         #region Async Methods
         #region Save Sub Models Async
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(
-            MixArticle parent
+            MixPost parent
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -698,7 +698,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             return result;
         }
 
-        public override Task<RepositoryResponse<List<UpdateViewModel>>> CloneAsync(MixArticle model, List<SupportedCulture> cloneCultures, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override Task<RepositoryResponse<List<UpdateViewModel>>> CloneAsync(MixPost model, List<SupportedCulture> cloneCultures, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             return base.CloneAsync(model, cloneCultures, _context, _transaction);
         }
@@ -708,7 +708,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
 
         #region Save Sub Models
         public override RepositoryResponse<bool> SaveSubModels(
-            MixArticle parent
+            MixPost parent
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
