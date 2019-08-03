@@ -182,6 +182,8 @@ namespace Mix.Cms.Web.Controllers
         [Authorize]
         [Route("portal")]
         [Route("admin")]
+        [Route("portal/page/{type}")]
+        [Route("portal/post/{type}")]
         [Route("portal/{pageName}")]
         [Route("portal/{pageName}/{type}")]
         [Route("portal/{pageName}/{type}/{param}")]
