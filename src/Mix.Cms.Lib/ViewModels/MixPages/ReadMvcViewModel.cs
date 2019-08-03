@@ -222,7 +222,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 pageSize = pageSize > 0 ? pageSize : PageSize;
                 pageIndex = pageIndex ?? 0;
                 Expression<Func<MixPageModule, bool>> dataExp = null;
-                Expression<Func<MixPageArticle, bool>> articleExp = null;
+                Expression<Func<MixPagePost, bool>> articleExp = null;
                 foreach (var item in Modules)
                 {
                     item.Module.LoadData(pageSize: pageSize, pageIndex: pageIndex, _context: context, _transaction: transaction);
@@ -275,7 +275,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 pageSize = pageSize > 0 ? pageSize : PageSize;
                 pageIndex = pageIndex ?? 0;
-                Expression<Func<MixArticle, bool>> articleExp = null;
+                Expression<Func<MixPost, bool>> articleExp = null;
                 JObject obj = new JObject(new JProperty("text", tagName));
 
                 articleExp = n => n.Tags.Contains(obj.ToString(Newtonsoft.Json.Formatting.None)) && n.Specificulture == Specificulture;
@@ -330,7 +330,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 pageSize = pageSize > 0 ? pageSize : PageSize;
                 pageIndex = pageIndex ?? 0;
-                Expression<Func<MixArticle, bool>> articleExp = null;
+                Expression<Func<MixPost, bool>> articleExp = null;
 
                 articleExp = n => n.Title.Contains(keyword) && n.Specificulture == Specificulture;
 

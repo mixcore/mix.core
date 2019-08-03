@@ -224,8 +224,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 pageSize = pageSize > 0 ? PageSize : PageSize;
                 pageIndex = pageIndex ?? 0;
                 Expression<Func<MixModuleData, bool>> dataExp = null;
-                Expression<Func<MixModuleArticle, bool>> articleExp = null;
-                Expression<Func<MixModuleProduct, bool>> productExp = null;
+                Expression<Func<MixModulePost, bool>> articleExp = null;
                 switch (Type)
                 {
                     case MixModuleType.Content:
@@ -245,9 +244,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                         break;
                     case MixModuleType.ListArticle:
                         articleExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
-                        break;
-                    case MixModuleType.ListProduct:
-                        productExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
                         break;
                     default:
                         dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture;

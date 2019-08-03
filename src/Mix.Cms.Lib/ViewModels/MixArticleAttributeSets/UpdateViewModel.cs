@@ -8,9 +8,9 @@ using Newtonsoft.Json;
 namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeSets
 {
     public class UpdateViewModel
-       : ViewModelBase<MixCmsContext, MixArticleAttributeSet, UpdateViewModel>
+       : ViewModelBase<MixCmsContext, MixPostAttributeSet, UpdateViewModel>
     {
-        public UpdateViewModel(MixArticleAttributeSet model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public UpdateViewModel(MixPostAttributeSet model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
@@ -56,7 +56,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeSets
 
         #region Async
 
-        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixArticleAttributeSet parent, MixCmsContext _context, IDbContextTransaction _transaction)
+        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixPostAttributeSet parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
 

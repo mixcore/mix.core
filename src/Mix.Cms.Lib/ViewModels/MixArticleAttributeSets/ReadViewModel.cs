@@ -7,9 +7,9 @@ using Newtonsoft.Json;
 namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeSets
 {
     public class ReadViewModel
-       : ViewModelBase<MixCmsContext, MixArticleAttributeSet, ReadViewModel>
+       : ViewModelBase<MixCmsContext, MixPostAttributeSet, ReadViewModel>
     {
-        public ReadViewModel(MixArticleAttributeSet model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public ReadViewModel(MixPostAttributeSet model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }

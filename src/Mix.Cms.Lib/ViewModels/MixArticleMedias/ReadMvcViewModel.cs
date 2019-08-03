@@ -9,9 +9,9 @@ using Newtonsoft.Json;
 namespace Mix.Cms.Lib.ViewModels.MixArticleMedias
 {
     public class ReadViewModel
-       : ViewModelBase<MixCmsContext, MixArticleMedia, ReadViewModel>
+       : ViewModelBase<MixCmsContext, MixPostMedia, ReadViewModel>
     {
-        public ReadViewModel(MixArticleMedia model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public ReadViewModel(MixPostMedia model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
@@ -53,7 +53,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleMedias
                 Media = getMedia.Data;
             }
         }
-        public override RepositoryResponse<bool> SaveSubModels(MixArticleMedia parent, MixCmsContext _context, IDbContextTransaction _transaction)
+        public override RepositoryResponse<bool> SaveSubModels(MixPostMedia parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             var saveMedia = Media.SaveModel(false, _context, _transaction);
@@ -67,7 +67,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleMedias
         }
         #region Async
 
-        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixArticleMedia parent, MixCmsContext _context, IDbContextTransaction _transaction)
+        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixPostMedia parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             var saveMedia = await Media.SaveModelAsync(false, _context, _transaction);

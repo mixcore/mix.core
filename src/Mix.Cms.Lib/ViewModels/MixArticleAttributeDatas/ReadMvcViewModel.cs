@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
 {
     public class ReadMvcViewModel
-       : ViewModelBase<MixCmsContext, MixArticleAttributeData, ReadMvcViewModel>
+       : ViewModelBase<MixCmsContext, MixPostAttributeData, ReadMvcViewModel>
     {
         #region Properties
         #region Models
@@ -30,7 +30,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticleAttributeDatas
         #endregion
 
         #endregion
-        public ReadMvcViewModel(MixArticleAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public ReadMvcViewModel(MixPostAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }

@@ -6,7 +6,6 @@ namespace Mix.Cms.Lib.Models.Cms
     public partial class MixComment
     {
         public Guid Id { get; set; }
-        public int? ProductId { get; set; }
         public string Specificulture { get; set; }
         public int? ArticleId { get; set; }
         public int? OrderId { get; set; }
@@ -24,8 +23,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string UpdatedBy { get; set; }
         public DateTime? UpdatedDateTime { get; set; }
 
-        public virtual MixArticle MixArticle { get; set; }
+        public virtual MixPost MixArticle { get; set; }
         public virtual MixOrder MixOrder { get; set; }
-        public virtual MixProduct MixProduct { get; set; }
     }
 }

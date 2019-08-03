@@ -19,7 +19,7 @@ using static Mix.Cms.Lib.MixEnums;
 namespace Mix.Cms.Lib.ViewModels.MixArticles
 {
     public class RemoveViewModel
-         : ViewModelBase<MixCmsContext, MixArticle, RemoveViewModel>
+         : ViewModelBase<MixCmsContext, MixPost, RemoveViewModel>
     {
 
         #region Properties
@@ -111,7 +111,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         {
         }
 
-        public RemoveViewModel(MixArticle model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public RemoveViewModel(MixPost model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 

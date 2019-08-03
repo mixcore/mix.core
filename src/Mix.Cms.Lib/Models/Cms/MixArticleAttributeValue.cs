@@ -25,6 +25,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public int DataType { get; set; }
 
         public virtual MixAttributeField AttributeField { get; set; }
-        public virtual MixArticleAttributeData Data { get; set; }
+        public virtual MixPostAttributeData Data { get; set; }
     }
 }

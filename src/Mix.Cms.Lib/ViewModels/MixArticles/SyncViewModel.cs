@@ -19,7 +19,7 @@ using static Mix.Cms.Lib.MixEnums;
 namespace Mix.Cms.Lib.ViewModels.MixArticles
 {
     public class SyncViewModel
-         : ViewModelBase<MixCmsContext, MixArticle, SyncViewModel>
+         : ViewModelBase<MixCmsContext, MixPost, SyncViewModel>
     {
 
         #region Properties
@@ -232,7 +232,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         {
         }
 
-        public SyncViewModel(MixArticle model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public SyncViewModel(MixPost model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -385,7 +385,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
             }
         }
 
-        public override MixArticle ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixPost ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)
             {
@@ -453,7 +453,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         #region Async Methods
 
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(
-            MixArticle parent
+            MixPost parent
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -648,7 +648,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         #region Sync Methods
 
         public override RepositoryResponse<bool> SaveSubModels(
-            MixArticle parent
+            MixPost parent
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };

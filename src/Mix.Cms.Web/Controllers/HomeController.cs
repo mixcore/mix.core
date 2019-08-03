@@ -579,7 +579,7 @@ namespace Mix.Cms.Web.Controllers
             }
             if (getArticle == null)
             {
-                Expression<Func<MixArticle, bool>> predicate;
+                Expression<Func<MixPost, bool>> predicate;
                 predicate = p =>
                 p.Id == id
                 && p.Status == (int)MixContentStatus.Published
@@ -640,7 +640,7 @@ namespace Mix.Cms.Web.Controllers
 
             if (getArticle == null)
             {
-                Expression<Func<MixArticle, bool>> predicate;
+                Expression<Func<MixPost, bool>> predicate;
                 if (string.IsNullOrEmpty(seoName))
                 {
                     predicate = p =>
@@ -662,7 +662,8 @@ namespace Mix.Cms.Web.Controllers
                     //Generate details url for related articles
                     if (getArticle.Data.ArticleNavs != null && getArticle.Data.ArticleNavs.Count > 0)
                     {
-                        getArticle.Data.ArticleNavs.ForEach(n => n.RelatedArticle.DetailsUrl = GenerateDetailsUrl("Article", new { id = n.RelatedArticle.Id, seoName = n.RelatedArticle.SeoName }));
+                        getArticle.Data.ArticleNavs.ForEach(n => n.RelatedArticle.DetailsUrl = GenerateDetailsUrl("Article", 
+                                new { id = n.RelatedArticle.Id, seoName = n.RelatedArticle.SeoName }));
                     }
                     MixCacheService.SetAsync(cacheKey, getArticle);
                 }

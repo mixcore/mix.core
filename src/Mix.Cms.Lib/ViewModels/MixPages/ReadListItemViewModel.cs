@@ -190,13 +190,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 TotalArticle = countArticle.Data;
             }
 
-            var countProduct = MixPageProducts.ReadViewModel.Repository.Count(c => c.CategoryId == Id && c.Specificulture == Specificulture
-               , _context: _context, _transaction: _transaction);
-
-            if (countProduct.IsSucceed)
-            {
-                TotalProduct = countProduct.Data;
-            }
         }
 
         #endregion Overrides

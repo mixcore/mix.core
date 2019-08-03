@@ -30,7 +30,6 @@ namespace Mix.Cms.Lib.ViewModels
             {
                 TotalPage = context.MixPage.Count();
                 TotalArticle = context.MixArticle.Count();
-                TotalProduct = context.MixProduct.Count();
             }
         }
     }

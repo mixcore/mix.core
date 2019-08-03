@@ -26,7 +26,7 @@ namespace Mix.Cms.Api.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/{culture}/article")]
     public class ApiArticleController :
-        BaseGenericApiController<MixCmsContext, MixArticle>
+        BaseGenericApiController<MixCmsContext, MixPost>
     {
         public ApiArticleController(IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
         {
@@ -38,7 +38,7 @@ namespace Mix.Cms.Api.Controllers.v1
         
         [HttpGet, HttpOptions]
         [Route("delete/{id}")]
-        public async Task<RepositoryResponse<MixArticle>> DeleteAsync(int id)
+        public async Task<RepositoryResponse<MixPost>> DeleteAsync(int id)
         {
             return await base.DeleteAsync<RemoveViewModel>(
                 model => model.Id == id && model.Specificulture == _lang, true);
@@ -57,7 +57,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 case "portal":
                     if (id.HasValue)
                     {
-                        Expression<Func<MixArticle, bool>> predicate = model => model.Id == id && model.Specificulture == _lang;
+                        Expression<Func<MixPost, bool>> predicate = model => model.Id == id && model.Specificulture == _lang;
                         var portalResult = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_{id}", predicate);
                         if (portalResult.IsSucceed)
                         {
@@ -68,7 +68,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                     else
                     {
-                        var model = new MixArticle()
+                        var model = new MixPost()
                         {
                             Specificulture = _lang,
                             Status = MixService.GetConfig<int>("DefaultStatus"),
@@ -90,7 +90,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                     else
                     {
-                        var model = new MixArticle();
+                        var model = new MixPost();
                         RepositoryResponse<ReadMvcViewModel> result = new RepositoryResponse<ReadMvcViewModel>()
                         {
                             IsSucceed = true,
@@ -155,11 +155,11 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST api/article
         [HttpPost, HttpOptions]
         [Route("save/{id}")]
-        public async Task<RepositoryResponse<MixArticle>> SaveFields(int id, [FromBody]List<EntityField> fields)
+        public async Task<RepositoryResponse<MixPost>> SaveFields(int id, [FromBody]List<EntityField> fields)
         {
             if (fields != null)
             {
-                var result = new RepositoryResponse<MixArticle>() { IsSucceed = true };
+                var result = new RepositoryResponse<MixPost>() { IsSucceed = true };
                 foreach (var property in fields)
                 {
                     if (result.IsSucceed)
@@ -174,7 +174,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 }
                 return result;
             }
-            return new RepositoryResponse<MixArticle>();
+            return new RepositoryResponse<MixPost>();
         }
 
         // GET api/article
@@ -189,7 +189,7 @@ namespace Mix.Cms.Api.Controllers.v1
             bool isModule = int.TryParse(query.Get("module_id"), out int moduleId);
             bool isNotModule = int.TryParse(query.Get("not_module_id"), out int notModuleId);
             ParseRequestPagingDate(request);
-            Expression<Func<MixArticle, bool>> predicate = model =>
+            Expression<Func<MixPost, bool>> predicate = model =>
                         model.Specificulture == _lang
                         && (!request.Status.HasValue || model.Status == request.Status.Value)
                         && (!isPage || model.MixPageArticle.Any(nav => nav.CategoryId == pageId && nav.ArticleId == model.Id && nav.Specificulture == _lang))
@@ -269,7 +269,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("apply-list")]
         public async Task<ActionResult<JObject>> ListActionAsync([FromBody]ListAction<int> data)
         {
-            Expression<Func<MixArticle, bool>> predicate = model =>
+            Expression<Func<MixPost, bool>> predicate = model =>
                        model.Specificulture == _lang
                        && data.Data.Contains(model.Id);
             var result = new RepositoryResponse<bool>();

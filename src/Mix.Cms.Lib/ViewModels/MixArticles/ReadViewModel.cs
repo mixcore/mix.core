@@ -17,7 +17,7 @@ using static Mix.Cms.Lib.MixEnums;
 namespace Mix.Cms.Lib.ViewModels.MixArticles
 {
     public class ReadViewModel
-      : ViewModelBase<MixCmsContext, MixArticle, ReadViewModel>
+      : ViewModelBase<MixCmsContext, MixPost, ReadViewModel>
     {
         #region Properties
 
@@ -135,7 +135,7 @@ namespace Mix.Cms.Lib.ViewModels.MixArticles
         {
         }
 
-        public ReadViewModel(MixArticle model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ReadViewModel(MixPost model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
