@@ -410,7 +410,14 @@ namespace Mix.Cms.Api.Controllers.v1
             if (model != null)
             {
                 settings.Content = model.ToString();
-                FileRepository.Instance.SaveFile(settings);                            
+                if (FileRepository.Instance.SaveFile(settings))
+                {
+                    MixService.Reload();
+                    if (!MixService.GetConfig<bool>("IsCache"))
+                    {
+                        MixCacheService.RemoveCacheAsync();
+                    }
+                }
                 MixService.SetConfig("LastUpdateConfiguration", DateTime.UtcNow);
             
             }
