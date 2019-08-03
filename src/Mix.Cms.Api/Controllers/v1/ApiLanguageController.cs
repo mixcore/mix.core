@@ -25,7 +25,7 @@ namespace Mix.Cms.Api.Controllers.v1
     public class ApiLanguageController :
          BaseGenericApiController<MixCmsContext, MixLanguage>
     {
-        public ApiLanguageController(IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
+        public ApiLanguageController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
         }
 

@@ -25,7 +25,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeValues
         public int DataType { get; set; }
         [JsonProperty("attributeName")]
         public string AttributeName { get; set; }
-        [JsonProperty("articleId")]
+        [JsonProperty("postId")]
         public int PostId { get; set; }
         [JsonProperty("doubleValue")]
         public double? DoubleValue { get; set; }

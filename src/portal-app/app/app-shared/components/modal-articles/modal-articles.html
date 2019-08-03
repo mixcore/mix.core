@@ -1,8 +1,8 @@
-<div class="modal modal-default fade show" id="modal-articles" ng-init="getList()">
+<div class="modal modal-default fade show" id="modal-posts" ng-init="getList()">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">List of articles</h5>
+                <h5 class="modal-title" id="exampleModalLabel">List of posts</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -40,7 +40,7 @@
                     </thead>
 
                     <tbody class="sortable">
-                        <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="article" sort-model-id="{{item.id}}">
+                        <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="post" sort-model-id="{{item.id}}">
                             <td style="cursor:move;" class="drag-header">
                                 <span class="fas fa-sort"></span>
                             </td>
@@ -62,7 +62,7 @@
 
                             <td>
                                 <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                                    <a href="/portal/article/details/{{item.id}}" class="btn btn-dark">
+                                    <a href="/portal/post/details/{{item.id}}" class="btn btn-dark">
                                         <span class="fas fa-pencil-alt text-primary"></span>
                                     </a>
                                     <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-dark">

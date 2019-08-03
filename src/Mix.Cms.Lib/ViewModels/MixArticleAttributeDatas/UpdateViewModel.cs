@@ -19,7 +19,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
         public string Id { get; set; }
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
-        [JsonProperty("articleId")]
+        [JsonProperty("postId")]
         public int PostId { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }

@@ -39,7 +39,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         [JsonProperty("removeAttributes")]
         public List<MixAttributeFields.UpdateViewModel> RemoveAttributes { get; set; } = new List<MixAttributeFields.UpdateViewModel>();
 
-        [JsonProperty("articleData")]
+        [JsonProperty("postData")]
         public PaginationModel<MixPostAttributeDatas.UpdateViewModel> PostData { get;set;}
         #endregion
         #endregion Properties
@@ -131,12 +131,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         #endregion
 
         #region Expand
-        public void LoadPostData(int articleId, string specificulture, int? pageSize = null, int? pageIndex = 0
+        public void LoadPostData(int postId, string specificulture, int? pageSize = null, int? pageIndex = 0
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getData = MixPostAttributeDatas.UpdateViewModel.Repository
             .GetModelListBy(
-                m => m.PostId == articleId && m.Specificulture == specificulture
+                m => m.PostId == postId && m.Specificulture == specificulture
                 , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
                 , pageSize, pageIndex
                 , _context: _context, _transaction: _transaction);

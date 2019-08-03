@@ -182,7 +182,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 Childs = getChilds.Data;
             }
-            var countPost = MixPagePosts.ReadViewModel.Repository.Count(c => c.CategoryId == Id && c.Specificulture == Specificulture
+            var countPost = MixPagePosts.ReadViewModel.Repository.Count(c => c.PageId == Id && c.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction);
 
             if (countPost.IsSucceed)

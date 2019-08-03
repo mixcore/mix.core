@@ -21,7 +21,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostModules
         [JsonProperty("moduleId")]
         public int ModuleId { get; set; }
 
-        [JsonProperty("articleId")]
+        [JsonProperty("postId")]
         public int PostId { get; set; }
 
         [JsonProperty("isActived")]

@@ -24,17 +24,17 @@ using Mix.Cms.Lib.ViewModels;
 namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
-    [Route("api/v1/{culture}/article")]
+    [Route("api/v1/{culture}/post")]
     public class ApiPostController :
         BaseGenericApiController<MixCmsContext, MixPost>
     {
-        public ApiPostController(IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
+        public ApiPostController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
         }
 
         #region Get
 
-        // GET api/article/id
+        // GET api/post/id
         
         [HttpGet, HttpOptions]
         [Route("delete/{id}")]
@@ -44,7 +44,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 model => model.Id == id && model.Specificulture == _lang, true);
         }
 
-        // GET api/articles/id
+        // GET api/posts/id
         [AllowAnonymous]
         [HttpGet, HttpOptions]
         [Route("details/{id}/{viewType}")]
@@ -110,7 +110,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         #region Post
 
-        // POST api/article
+        // POST api/post
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("save")]
@@ -152,7 +152,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 return new RepositoryResponse<List<SyncViewModel>>();
             }
         }
-        // POST api/article
+        // POST api/post
         [HttpPost, HttpOptions]
         [Route("save/{id}")]
         public async Task<RepositoryResponse<MixPost>> SaveFields(int id, [FromBody]List<EntityField> fields)
@@ -177,7 +177,7 @@ namespace Mix.Cms.Api.Controllers.v1
             return new RepositoryResponse<MixPost>();
         }
 
-        // GET api/article
+        // GET api/post
         [HttpPost, HttpOptions]
         [Route("list")]
         public async Task<ActionResult<JObject>> GetList(
@@ -192,8 +192,8 @@ namespace Mix.Cms.Api.Controllers.v1
             Expression<Func<MixPost, bool>> predicate = model =>
                         model.Specificulture == _lang
                         && (!request.Status.HasValue || model.Status == request.Status.Value)
-                        && (!isPage || model.MixPagePost.Any(nav => nav.CategoryId == pageId && nav.PostId == model.Id && nav.Specificulture == _lang))
-                        && (!isNotPage || !model.MixPagePost.Any(nav => nav.CategoryId == notPageId && nav.PostId == model.Id && nav.Specificulture == _lang))
+                        && (!isPage || model.MixPagePost.Any(nav => nav.PageId == pageId && nav.PostId == model.Id && nav.Specificulture == _lang))
+                        && (!isNotPage || !model.MixPagePost.Any(nav => nav.PageId == notPageId && nav.PostId == model.Id && nav.Specificulture == _lang))
                         && (!isModule || model.MixModulePost.Any(nav => nav.ModuleId == moduleId && nav.PostId == model.Id))
                         && (!isNotModule || !model.MixModulePost.Any(nav => nav.ModuleId == notModuleId && nav.PostId == model.Id))
                         && (string.IsNullOrWhiteSpace(request.Keyword)

@@ -18,7 +18,7 @@
                     }
                     if (resp && resp.isSucceed) {
                         ctrl.data = resp.data;
-                        ctrl.data.articleId = ctrl.articleId;
+                        ctrl.data.postId = ctrl.postId;
                         ctrl.data.productId = ctrl.productId;
                         ctrl.data.categoryId = ctrl.categoryId;
                         $rootScope.isBusy = false;
@@ -105,7 +105,7 @@
         moduleId: '=',
         categoryId: '=',
         productId: '=',
-        articleId: '=',
+        postId: '=',
         d: '=',
         title: '=',
         name: '=',

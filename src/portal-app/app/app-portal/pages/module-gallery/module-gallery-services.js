@@ -3,9 +3,9 @@ app.factory('ModuleGalleryService', ['$rootScope', 'CommonService', 'BaseService
     function ($rootScope, commonService, baseService) {
 
         var serviceFactory = Object.create(baseService);
-        serviceFactory.init('module-article');
-        var _delete = async function(moduleId, articleId){
-            var url = this.prefixUrl + '/delete/' + moduleId+'/'+articleId;
+        serviceFactory.init('module-post');
+        var _delete = async function(moduleId, postId){
+            var url = this.prefixUrl + '/delete/' + moduleId+'/'+postId;
             var req = {
                 method: 'GET',
                 url: url

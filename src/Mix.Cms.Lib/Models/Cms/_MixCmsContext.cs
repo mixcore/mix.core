@@ -88,7 +88,7 @@ namespace Mix.Cms.Lib.Models.Cms
             {
                 entity.HasKey(e => new { e.Id, e.Specificulture });
 
-                entity.ToTable("mix_article");
+                entity.ToTable("mix_post");
 
                 entity.HasIndex(e => e.Specificulture);
 
@@ -138,7 +138,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
             modelBuilder.Entity<MixPostAttributeData>(entity =>
             {
-                entity.ToTable("mix_article_attribute_data");
+                entity.ToTable("mix_post_attribute_data");
 
                 entity.HasIndex(e => new { e.PostId, e.Specificulture });
 
@@ -156,14 +156,14 @@ namespace Mix.Cms.Lib.Models.Cms
                     .WithMany(p => p.MixPostAttributeData)
                     .HasForeignKey(d => new { d.PostId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_mix_article_attribute_data_mix_article");
+                    .HasConstraintName("FK_mix_post_attribute_data_mix_post");
             });
 
             modelBuilder.Entity<MixPostAttributeSet>(entity =>
             {
                 entity.HasKey(e => new { e.PostId, e.Specificulture, e.AttributeSetId });
 
-                entity.ToTable("mix_article_attribute_set");
+                entity.ToTable("mix_post_attribute_set");
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
@@ -175,18 +175,18 @@ namespace Mix.Cms.Lib.Models.Cms
                     .WithMany(p => p.MixPostAttributeSet)
                     .HasForeignKey(d => d.AttributeSetId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_mix_article_attribute_set_mix_attribute_set");
+                    .HasConstraintName("FK_mix_post_attribute_set_mix_attribute_set");
 
                 entity.HasOne(d => d.MixPost)
                     .WithMany(p => p.MixPostAttributeSet)
                     .HasForeignKey(d => new { d.PostId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_mix_article_attribute_set_mix_article");
+                    .HasConstraintName("FK_mix_post_attribute_set_mix_post");
             });
 
             modelBuilder.Entity<MixPostAttributeValue>(entity =>
             {
-                entity.ToTable("mix_article_attribute_value");
+                entity.ToTable("mix_post_attribute_value");
 
                 entity.HasIndex(e => e.DataId);
 
@@ -220,20 +220,20 @@ namespace Mix.Cms.Lib.Models.Cms
                     .WithMany(p => p.MixPostAttributeValue)
                     .HasForeignKey(d => d.AttributeFieldId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_mix_article_attribute_value_mix_attribute_field");
+                    .HasConstraintName("FK_mix_post_attribute_value_mix_attribute_field");
 
                 entity.HasOne(d => d.Data)
                     .WithMany(p => p.MixPostAttributeValue)
                     .HasForeignKey(d => d.DataId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_mix_article_attribute_value_mix_article_attribute_data");
+                    .HasConstraintName("FK_mix_post_attribute_value_mix_post_attribute_data");
             });
 
             modelBuilder.Entity<MixPostMedia>(entity =>
             {
                 entity.HasKey(e => new { e.MediaId, e.PostId, e.Specificulture });
 
-                entity.ToTable("mix_article_media");
+                entity.ToTable("mix_post_media");
 
                 entity.HasIndex(e => new { e.PostId, e.Specificulture });
 
@@ -249,20 +249,20 @@ namespace Mix.Cms.Lib.Models.Cms
                     .WithMany(p => p.MixPostMedia)
                     .HasForeignKey(d => new { d.PostId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_mix_article_media_mix_article");
+                    .HasConstraintName("FK_mix_post_media_mix_post");
 
                 entity.HasOne(d => d.MixMedia)
                     .WithMany(p => p.MixPostMedia)
                     .HasForeignKey(d => new { d.MediaId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_mix_article_media_mix_media");
+                    .HasConstraintName("FK_mix_post_media_mix_media");
             });
 
             modelBuilder.Entity<MixPostModule>(entity =>
             {
                 entity.HasKey(e => new { e.ModuleId, e.PostId, e.Specificulture });
 
-                entity.ToTable("mix_article_module");
+                entity.ToTable("mix_post_module");
 
                 entity.HasIndex(e => new { e.PostId, e.Specificulture });
 
@@ -402,7 +402,7 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.HasOne(d => d.MixPost)
                     .WithMany(p => p.MixComment)
                     .HasForeignKey(d => new { d.PostId, d.Specificulture })
-                    .HasConstraintName("FK_mix_comment_mix_article");
+                    .HasConstraintName("FK_mix_comment_mix_post");
 
                 entity.HasOne(d => d.MixOrder)
                     .WithMany(p => p.MixComment)
@@ -674,7 +674,7 @@ namespace Mix.Cms.Lib.Models.Cms
             {
                 entity.HasKey(e => new { e.PostId, e.ModuleId, e.Specificulture });
 
-                entity.ToTable("mix_module_article");
+                entity.ToTable("mix_module_post");
 
                 entity.HasIndex(e => new { e.PostId, e.Specificulture });
 
@@ -841,7 +841,7 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.HasOne(d => d.MixPost)
                     .WithMany(p => p.MixModuleData)
                     .HasForeignKey(d => new { d.PostId, d.Specificulture })
-                    .HasConstraintName("FK_mix_module_data_mix_article");
+                    .HasConstraintName("FK_mix_module_data_mix_post");
 
                 entity.HasOne(d => d.MixModule)
                     .WithMany(p => p.MixModuleData)
@@ -976,14 +976,14 @@ namespace Mix.Cms.Lib.Models.Cms
 
             modelBuilder.Entity<MixPagePost>(entity =>
             {
-                entity.HasKey(e => new { e.PostId, e.CategoryId, e.Specificulture });
+                entity.HasKey(e => new { e.PostId, e.PageId, e.Specificulture });
 
-                entity.ToTable("mix_page_article");
+                entity.ToTable("mix_page_post");
 
                 entity.HasIndex(e => new { e.PostId, e.Specificulture });
 
-                entity.HasIndex(e => new { e.CategoryId, e.Specificulture })
-                    .HasName("IX_mix_page_article_PageId_Specificulture");
+                entity.HasIndex(e => new { e.PageId, e.Specificulture })
+                    .HasName("IX_mix_page_post_PageId_Specificulture");
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
@@ -999,7 +999,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasOne(d => d.MixPage)
                     .WithMany(p => p.MixPagePost)
-                    .HasForeignKey(d => new { d.CategoryId, d.Specificulture })
+                    .HasForeignKey(d => new { d.PageId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Mix_Page_Post_Mix_Page");
             });
@@ -1101,11 +1101,11 @@ namespace Mix.Cms.Lib.Models.Cms
 
             modelBuilder.Entity<MixPageModule>(entity =>
             {
-                entity.HasKey(e => new { e.ModuleId, e.CategoryId, e.Specificulture });
+                entity.HasKey(e => new { e.ModuleId, e.PageId, e.Specificulture });
 
                 entity.ToTable("mix_page_module");
 
-                entity.HasIndex(e => new { e.CategoryId, e.Specificulture })
+                entity.HasIndex(e => new { e.PageId, e.Specificulture })
                     .HasName("IX_mix_page_module_PageId_Specificulture");
 
                 entity.HasIndex(e => new { e.ModuleId, e.Specificulture });
@@ -1118,7 +1118,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasOne(d => d.MixPage)
                     .WithMany(p => p.MixPageModule)
-                    .HasForeignKey(d => new { d.CategoryId, d.Specificulture })
+                    .HasForeignKey(d => new { d.PageId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Mix_Page_Module_Mix_Page");
 
@@ -1159,11 +1159,11 @@ namespace Mix.Cms.Lib.Models.Cms
 
             modelBuilder.Entity<MixPagePosition>(entity =>
             {
-                entity.HasKey(e => new { e.PositionId, e.CategoryId, e.Specificulture });
+                entity.HasKey(e => new { e.PositionId, e.PageId, e.Specificulture });
 
                 entity.ToTable("mix_page_position");
 
-                entity.HasIndex(e => new { e.CategoryId, e.Specificulture })
+                entity.HasIndex(e => new { e.PageId, e.Specificulture })
                     .HasName("IX_mix_page_position_PageId_Specificulture");
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
@@ -1177,7 +1177,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasOne(d => d.MixPage)
                     .WithMany(p => p.MixPagePosition)
-                    .HasForeignKey(d => new { d.CategoryId, d.Specificulture })
+                    .HasForeignKey(d => new { d.PageId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Mix_Page_Position_Mix_Page");
             });
@@ -1298,7 +1298,7 @@ namespace Mix.Cms.Lib.Models.Cms
             {
                 entity.HasKey(e => new { e.SourceId, e.DestinationId, e.Specificulture });
 
-                entity.ToTable("mix_related_article");
+                entity.ToTable("mix_related_post");
 
                 entity.HasIndex(e => new { e.DestinationId, e.Specificulture });
 
@@ -1316,13 +1316,13 @@ namespace Mix.Cms.Lib.Models.Cms
                     .WithMany(p => p.MixRelatedPostMixPost)
                     .HasForeignKey(d => new { d.DestinationId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_mix_related_article_mix_article1");
+                    .HasConstraintName("FK_mix_related_post_mix_post1");
 
                 entity.HasOne(d => d.S)
                     .WithMany(p => p.MixRelatedPostS)
                     .HasForeignKey(d => new { d.SourceId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_mix_related_article_mix_article");
+                    .HasConstraintName("FK_mix_related_post_mix_post");
             });
 
             modelBuilder.Entity<MixTemplate>(entity =>

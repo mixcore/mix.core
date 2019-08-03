@@ -12,19 +12,19 @@
                     subMenus: []
                 },
                 {
-                    title: 'portal_articles',
-                    shortTitle: ('portal_articles'),
+                    title: 'portal_posts',
+                    shortTitle: ('portal_posts'),
                     icon: 'mi mi-ReadingList',
                     href: '#',
                     subMenus: [
                         {
                             title: ('portal_create'),
-                            href: '/portal/article/create',
+                            href: '/portal/post/create',
                             icon: 'mi mi-Add'
                         },
                         {
                             title: 'portal_list',
-                            href: '/portal/article/list',
+                            href: '/portal/post/list',
                             icon: 'mi mi-List'
                         }
                     ]

@@ -1,0 +1,28 @@
+<div class="card mb-3" ng-if="$ctrl.post!=null">
+    <h6 class="card-header">
+        Main Content
+    </h6>
+    <div class="card-body">
+
+        <div class="form-group">
+            <label>Title</label>
+            <input type="text" class="form-control" ng-model="$ctrl.post.title" ng-blur="$ctrl.generateSEO()" placeholder="Your post title here..." required>
+        </div>
+        <div class="form-group">
+            <label>Excerpt</label>
+            <textarea class="form-control" ng-model="$ctrl.post.excerpt">{{$ctrl.post.excerpt}}</textarea>
+<!-- 
+            <trumbowyg ng-model="$ctrl.post.excerpt" removeformat-pasted="'true'"
+                        placeholder="Start typing some text..."
+                        options="{}">
+                      </trumbowyg> -->
+        </div>
+        <div class="form-group">
+            <label>Body content</label>
+            <trumbowyg ng-model="$ctrl.post.content" removeformat-pasted="'true'"
+                placeholder="Start typing some text..." options="{}">
+            </trumbowyg>
+
+        </div>
+    </div>
+</div>

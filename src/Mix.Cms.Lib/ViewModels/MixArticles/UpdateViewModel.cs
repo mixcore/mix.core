@@ -120,7 +120,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("moduleNavs")]
         public List<MixPostModules.ReadViewModel> ModuleNavs { get; set; }
 
-        [JsonProperty("articleNavs")]
+        [JsonProperty("postNavs")]
         public List<MixPostPosts.ReadViewModel> PostNavs { get; set; }
 
         [JsonProperty("attributeSetNavs")]
@@ -378,7 +378,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
                 if (result.IsSucceed)
                 {
-                    // Save related articles
+                    // Save related posts
                     result = await SaveRelatedPostAsync(parent.Id, _context, _transaction);
                 }
                 if (result.IsSucceed)
@@ -583,7 +583,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     ViewModelHelper.HandleResult(saveResult, ref result);
                     if (result.IsSucceed)
                     {
-                        // Save article Data
+                        // Save post Data
                         foreach (var item in nav.MixAttributeSet.PostData.Items)
                         {
                             item.PostId = parentId;
@@ -737,7 +737,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
                 if (result.IsSucceed)
                 {
-                    // Save related articles
+                    // Save related posts
                     result = SaveRelatedPost(parent.Id, _context, _transaction);
                 }
                 if (result.IsSucceed)
@@ -996,7 +996,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         private void LoadRelatedPost(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             PostNavs = GetRelated(_context, _transaction);
-            // Load other article ( != Id) and not actived (not in acticleNavs)
+            // Load other post ( != Id) and not actived (not in acticleNavs)
             var otherPosts = MixPosts.ReadListItemViewModel.Repository.GetModelListBy(
                 m => m.Id != Id && m.Specificulture == Specificulture
                     && !PostNavs.Any(n => n.DestinationId == m.Id)
@@ -1023,7 +1023,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 foreach (var item in ModuleNavs)
                 {
                     item.IsActived = true;
-                    item.Module.LoadData(articleId: Id, _context: _context, _transaction: _transaction);
+                    item.Module.LoadData(postId: Id, _context: _context, _transaction: _transaction);
                 }
             }
             var otherModuleNavs = MixModules.ReadMvcViewModel.Repository.GetModelListBy(
@@ -1031,7 +1031,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 && !ModuleNavs.Any(n => n.ModuleId == m.Id), "CreatedDateTime", 1, null, 0, _context, _transaction);
             foreach (var item in otherModuleNavs.Data.Items)
             {
-                item.LoadData(articleId: Id, _context: _context, _transaction: _transaction);
+                item.LoadData(postId: Id, _context: _context, _transaction: _transaction);
                 ModuleNavs.Add(new MixPostModules.ReadViewModel()
                 {
                     ModuleId = item.Id,
@@ -1054,7 +1054,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 {
                     item.IsActived = true;
                     item.MixAttributeSet.LoadPostData(
-                        articleId: Id, specificulture: Specificulture
+                        postId: Id, specificulture: Specificulture
                         , _context: _context, _transaction: _transaction);
                 }
             }
@@ -1065,7 +1065,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             foreach (var item in otherAttributeSetNavs.Data.Items)
             {
                 item.LoadPostData(
-                        articleId: Id, specificulture: Specificulture
+                        postId: Id, specificulture: Specificulture
                         , _context: _context, _transaction: _transaction);
                 AttributeSetNavs.Add(new MixPostAttributeSets.UpdateViewModel()
                 {
@@ -1124,7 +1124,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 this.Pages = getPagePost.Data;
                 this.Pages.ForEach(c =>
                 {
-                    c.IsActived = MixPagePosts.ReadViewModel.Repository.CheckIsExists(n => n.CategoryId == c.CategoryId && n.PostId == Id, _context, _transaction);
+                    c.IsActived = MixPagePosts.ReadViewModel.Repository.CheckIsExists(n => n.PageId == c.PageId && n.PostId == Id, _context, _transaction);
                 });
             }
         }

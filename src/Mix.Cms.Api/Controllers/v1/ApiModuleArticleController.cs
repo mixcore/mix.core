@@ -23,12 +23,12 @@ using Microsoft.Extensions.Caching.Memory;
 namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
-    [Route("api/v1/{culture}/module-article")]
+    [Route("api/v1/{culture}/module-post")]
     [ApiExplorerSettings(IgnoreApi = false, GroupName = nameof(ApiModulePostController))]
     public class ApiModulePostController :
         BaseGenericApiController<MixCmsContext, MixModulePost>
     {
-        public ApiModulePostController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext) : base(memoryCache, hubContext)
+        public ApiModulePostController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
 
         }
@@ -36,27 +36,27 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // GET api/module/id
         [HttpGet, HttpOptions]
-        [Route("delete/{moduleId}/{articleId}")]
-        public async Task<RepositoryResponse<MixModulePost>> DeleteAsync(int moduleId, int articleId)
+        [Route("delete/{moduleId}/{postId}")]
+        public async Task<RepositoryResponse<MixModulePost>> DeleteAsync(int moduleId, int postId)
         {
             return await base.DeleteAsync<ReadViewModel>(
-                model => model.PostId == articleId && model.ModuleId == moduleId && model.Specificulture == _lang, true);
+                model => model.PostId == postId && model.ModuleId == moduleId && model.Specificulture == _lang, true);
         }
 
         // GET api/modules/id
         [HttpGet, HttpOptions]
-        [Route("detail/{moduleId}/{articleId}/{viewType}")]
-        public async Task<ActionResult<JObject>> Details(string viewType, int? moduleId, int? articleId)
+        [Route("detail/{moduleId}/{postId}/{viewType}")]
+        public async Task<ActionResult<JObject>> Details(string viewType, int? moduleId, int? postId)
         {
             string msg = string.Empty;
             switch (viewType)
             {
 
                 default:
-                    if (moduleId.HasValue && articleId.HasValue)
+                    if (moduleId.HasValue && postId.HasValue)
                     {
-                        Expression<Func<MixModulePost, bool>> predicate = model => model.ModuleId == moduleId && model.PostId == articleId && model.Specificulture == _lang;
-                        var portalResult = await base.GetSingleAsync<ReadViewModel>($"{viewType}_{moduleId}_{articleId}", predicate);
+                        Expression<Func<MixModulePost, bool>> predicate = model => model.ModuleId == moduleId && model.PostId == postId && model.Specificulture == _lang;
+                        var portalResult = await base.GetSingleAsync<ReadViewModel>($"{viewType}_{moduleId}_{postId}", predicate);
                         if (portalResult.IsSucceed)
                         {
                             portalResult.Data.Post.DetailsUrl = MixCmsHelper.GetRouterUrl("Post", new { portalResult.Data.Post.SeoName }, Request, Url);
@@ -100,8 +100,8 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // POST api/module
         [HttpPost, HttpOptions]
-        [Route("save/{id}/{articleId}")]
-        public async Task<RepositoryResponse<MixModulePost>> SaveFields(int moduleId, int articleId, [FromBody]List<EntityField> fields)
+        [Route("save/{id}/{postId}")]
+        public async Task<RepositoryResponse<MixModulePost>> SaveFields(int moduleId, int postId, [FromBody]List<EntityField> fields)
         {
             if (fields != null)
             {
@@ -110,7 +110,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 {
                     if (result.IsSucceed)
                     {
-                        result = await ReadViewModel.Repository.UpdateFieldsAsync(c => c.ModuleId == moduleId && c.PostId == articleId && c.Specificulture == _lang, fields).ConfigureAwait(false);
+                        result = await ReadViewModel.Repository.UpdateFieldsAsync(c => c.ModuleId == moduleId && c.PostId == postId && c.Specificulture == _lang, fields).ConfigureAwait(false);
                     }
                     else
                     {
@@ -131,12 +131,12 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             var query = HttpUtility.ParseQueryString(request.Query ?? "");
             bool isModule = int.TryParse(query.Get("module_id"), out int moduleId);
-            bool isPost = int.TryParse(query.Get("article_id"), out int articleId);
+            bool isPost = int.TryParse(query.Get("post_id"), out int postId);
             ParseRequestPagingDate(request);
             Expression<Func<MixModulePost, bool>> predicate = model =>
                         model.Specificulture == _lang
                         && (!isModule || model.ModuleId == moduleId)
-                        && (!isPost || model.PostId == articleId)
+                        && (!isPost || model.PostId == postId)
                         && (!request.Status.HasValue || model.Status == request.Status.Value)
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (model.Description.Contains(request.Keyword)
@@ -149,7 +149,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
                     var listItemResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);
                     listItemResult.Data.Items.ForEach(n => n.Post.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                "article",  new { id = n.Post.Id, seoName = n.Post.SeoName }, Request, Url));
+                                "post",  new { id = n.Post.Id, seoName = n.Post.SeoName }, Request, Url));
                     return JObject.FromObject(listItemResult);
             }
         }

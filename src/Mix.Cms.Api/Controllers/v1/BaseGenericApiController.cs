@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Hub;
 using Mix.Cms.Lib;
@@ -21,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
@@ -31,6 +33,8 @@ namespace Mix.Cms.Api.Controllers.v1
         where TDbContext : DbContext
         where TModel : class
     {
+        protected static TDbContext _context;
+        protected static IDbContextTransaction _transaction;
         protected readonly IHubContext<PortalHub> _hubContext;
 
         protected IMemoryCache _memoryCache;
@@ -66,8 +70,9 @@ namespace Mix.Cms.Api.Controllers.v1
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseApiController"/> class.
         /// </summary>
-        public BaseGenericApiController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext)
+        public BaseGenericApiController(TDbContext context, IMemoryCache memoryCache, IHubContext<PortalHub> hubContext)
         {
+            _context = context;
             _hubContext = hubContext;
             _memoryCache = memoryCache;
         }
@@ -82,7 +87,6 @@ namespace Mix.Cms.Api.Controllers.v1
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             GetLanguage();
-            AlertAsync("Executing request", 200);
             if (MixService.GetIpConfig<bool>("IsRetrictIp"))
             {
                 var allowedIps = MixService.GetIpConfig<JArray>("AllowedIps") ?? new JArray();
@@ -115,10 +119,10 @@ namespace Mix.Cms.Api.Controllers.v1
             }
             if (data==null)
             {
-
+                UnitOfWorkHelper<TDbContext>.InitTransaction(_context, null, out _context, out _transaction, out bool isRoot);
                 if (predicate != null)
                 {
-                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
+                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate, _context, _transaction);
                     //_memoryCache.Set(cacheKey, data);
                     await MixCacheService.SetAsync(cacheKey, data);
                 }
@@ -127,19 +131,20 @@ namespace Mix.Cms.Api.Controllers.v1
                     data = new RepositoryResponse<TView>()
                     {
                         IsSucceed = true,
-                        Data = DefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model)
+                        Data = DefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model, _context,_transaction)
                     };
 
                 }
-                AlertAsync("Add Cache", 200, cacheKey);
+                UnitOfWorkHelper<TDbContext>.HandleTransaction(data.IsSucceed, true, _transaction);
             }
             data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
             return data;
         }
 
         protected async Task<RepositoryResponse<TModel>> DeleteAsync<TView>(Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
-            where TView : ViewModelBase<TDbContext, TModel, TView>
+           where TView : ViewModelBase<TDbContext, TModel, TView>
         {
+            UnitOfWorkHelper<TDbContext>.InitTransaction(_context, null, out _context, out _transaction, out bool isRoot);
             var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
             if (data.IsSucceed)
             {
@@ -148,27 +153,49 @@ namespace Mix.Cms.Api.Controllers.v1
                 {
                     await MixCacheService.RemoveCacheAsync();
                 }
+                UnitOfWorkHelper<TDbContext>.HandleTransaction(result.IsSucceed, true, _transaction);
                 return result;
             }
             return new RepositoryResponse<TModel>() { IsSucceed = false };
         }
 
-        protected async Task<RepositoryResponse<List<TModel>>> DeleteListAsync<TView>(Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
+        protected async Task<RepositoryResponse<TModel>> DeleteAsync<TView>(TView data, bool isDeleteRelated = false)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-            var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.RemoveListModelAsync(isDeleteRelated, predicate);
+            if (data != null)
+            {
+                UnitOfWorkHelper<TDbContext>.InitTransaction(_context, null, out _context, out _transaction, out bool isRoot);
+                var result = await data.RemoveModelAsync(isDeleteRelated, _context, _transaction).ConfigureAwait(false);
+                if (result.IsSucceed)
+                {
+                    await MixCacheService.RemoveCacheAsync();
+                }
+                UnitOfWorkHelper<TDbContext>.HandleTransaction(result.IsSucceed, true, _transaction);
+                return result;
+            }
+            return new RepositoryResponse<TModel>() { IsSucceed = false };
+        }
+
+        protected async Task<RepositoryResponse<List<TModel>>> DeleteListAsync<TView>(Expression<Func<TModel, bool>> predicate, bool isRemoveRelatedModel = false)
+            where TView : ViewModelBase<TDbContext, TModel, TView>
+        {
+            UnitOfWorkHelper<TDbContext>.InitTransaction(_context, null, out _context, out _transaction, out bool isRoot);
+            var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.RemoveListModelAsync(isRemoveRelatedModel, predicate, _context, _transaction);
             if (data.IsSucceed)
             {
                 await MixCacheService.RemoveCacheAsync();
 
             }
+            UnitOfWorkHelper<TDbContext>.HandleTransaction(data.IsSucceed, true, _transaction);
             return data;
         }
 
 
         protected async Task<RepositoryResponse<FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate, MixStructureType type)
         {
-            var getData = await DefaultModelRepository<TDbContext, TModel>.Instance.GetModelListByAsync(predicate);
+            UnitOfWorkHelper<TDbContext>.InitTransaction(_context, null, out _context, out _transaction, out bool isRoot);
+            var getData = await DefaultModelRepository<TDbContext, TModel>.Instance.GetModelListByAsync(predicate, _context);
+            FileViewModel file = null;
             if (getData.IsSucceed)
             {
                 string exportPath = $"Exports/Structures/{typeof(TModel).Name}/{_lang}";
@@ -177,7 +204,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     new JProperty("type", type.ToString()),
                     new JProperty("data", JArray.FromObject(getData.Data))
                     );
-                var file = new FileViewModel()
+                file = new FileViewModel()
                 {
                     Filename = filename,
                     Extension = ".json",
@@ -186,39 +213,48 @@ namespace Mix.Cms.Api.Controllers.v1
                 };
                 // Copy current templates file
                 FileRepository.Instance.SaveWebFile(file);
-                return new RepositoryResponse<FileViewModel>()
-                {
-                    IsSucceed = true,
-                    Data = file,
-                };
-            }
-            return new RepositoryResponse<FileViewModel>();
-        }
 
+            }
+            UnitOfWorkHelper<TDbContext>.HandleTransaction(getData.IsSucceed, true, _transaction);
+            return new RepositoryResponse<FileViewModel>()
+            {
+                IsSucceed = true,
+                Data = file,
+            };
+
+        }
         protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync<TView>(string key, RequestPaging request, Expression<Func<TModel, bool>> predicate = null, TModel model = null)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-            
+
             var cacheKey = $"api_{_lang}_{typeof(TModel).Name.ToLower()}_list_{key}_{request.Status}_{request.Keyword}_{request.OrderBy}_{request.Direction}_{request.PageSize}_{request.PageIndex}_{request.Query}";
             RepositoryResponse<PaginationModel<TView>> data = null;
             if (MixService.GetConfig<bool>("IsCache"))
             {
                 data = await MixCacheService.GetAsync<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
             }
-            
+
             if (data == null)
             {
+                UnitOfWorkHelper<TDbContext>.InitTransaction(_context, null, out _context, out _transaction, out bool isRoot);
                 if (predicate != null)
                 {
-                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-                    await MixCacheService.SetAsync(cacheKey, data);
+                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(
+                        predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null, _context, _transaction);
+                    if (data.IsSucceed)
+                    {
+                        await MixCacheService.SetAsync(cacheKey, data);
+                    }
                 }
                 else
                 {
-                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
-                    await MixCacheService.SetAsync(cacheKey, data);
+                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null, _context, _transaction).ConfigureAwait(false);
+                    if (data.IsSucceed)
+                    {
+                        await MixCacheService.SetAsync(cacheKey, data);
+                    }
                 }
-                AlertAsync("Add Cache", 200, cacheKey);
+                UnitOfWorkHelper<TDbContext>.HandleTransaction(data.IsSucceed, true, _transaction);
             }
             data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
             return data;
@@ -229,32 +265,72 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (vm != null)
             {
-                var result = await vm.SaveModelAsync(isSaveSubModel).ConfigureAwait(false);
+                UnitOfWorkHelper<TDbContext>.InitTransaction(_context, null, out _context, out _transaction, out bool isRoot);
+                var result = await vm.SaveModelAsync(isSaveSubModel, _context, _transaction).ConfigureAwait(false);
+
                 await MixCacheService.RemoveCacheAsync();
+                UnitOfWorkHelper<TDbContext>.HandleTransaction(result.IsSucceed, true, _transaction);
                 return result;
             }
             return new RepositoryResponse<TView>();
         }
 
+        protected async Task<RepositoryResponse<TModel>> SaveAsync<TView>(JObject obj, Expression<Func<TModel, bool>> predicate)
+            where TView : ViewModelBase<TDbContext, TModel, TView>
+        {
+            if (obj != null)
+            {
+                UnitOfWorkHelper<TDbContext>.InitTransaction(_context, null, out _context, out _transaction, out bool isRoot);
+
+                List<EntityField> fields = new List<EntityField>();
+                Type type = typeof(TModel);
+                foreach (var item in obj.Properties())
+                {
+                    var propName = System.Globalization.CultureInfo.InvariantCulture.TextInfo.ToTitleCase(item.Name);
+                    PropertyInfo propertyInfo = type.GetProperty(propName);
+                    if (propertyInfo != null)
+                    {
+                        object val = Convert.ChangeType(item.Value, propertyInfo.PropertyType);
+                        var field = new EntityField()
+                        {
+                            PropertyName = propName,
+                            PropertyValue = val
+                        };
+                        fields.Add(field);
+                    }
+                }
+
+                var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.UpdateFieldsAsync(predicate, fields, _context, _transaction);
+                await MixCacheService.RemoveCacheAsync();
+                UnitOfWorkHelper<TDbContext>.HandleTransaction(result.IsSucceed, true, _transaction);
+                return result;
+            }
+            return new RepositoryResponse<TModel>();
+        }
+
         protected async Task<RepositoryResponse<List<TView>>> SaveListAsync<TView>(List<TView> lstVm, bool isSaveSubModel)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-            var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.SaveListModelAsync(lstVm, isSaveSubModel);
+            UnitOfWorkHelper<TDbContext>.InitTransaction(_context, null, out _context, out _transaction, out bool isRoot);
+            var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.SaveListModelAsync(lstVm, isSaveSubModel, _context, _transaction);
             if (result.IsSucceed)
             {
                 await MixCacheService.RemoveCacheAsync();
             }
+            UnitOfWorkHelper<TDbContext>.HandleTransaction(result.IsSucceed, true, _transaction);
             return result;
         }
         protected RepositoryResponse<List<TView>> SaveList<TView>(List<TView> lstVm, bool isSaveSubModel)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
+            UnitOfWorkHelper<TDbContext>.InitTransaction(_context, null, out _context, out _transaction, out bool isRoot);
             var result = new RepositoryResponse<List<TView>>() { IsSucceed = true };
             if (lstVm != null)
             {
                 foreach (var vm in lstVm)
                 {
-                    var tmp = vm.SaveModel(isSaveSubModel);
+                    var tmp = vm.SaveModel(isSaveSubModel,
+                        _context, _transaction);
                     result.IsSucceed = result.IsSucceed && tmp.IsSucceed;
                     if (!tmp.IsSucceed)
                     {
@@ -262,9 +338,10 @@ namespace Mix.Cms.Api.Controllers.v1
                         result.Errors.AddRange(tmp.Errors);
                     }
                 }
-                Task.Run(()=> MixCacheService.RemoveCacheAsync());
+                Task.Run(() => MixCacheService.RemoveCacheAsync());
                 return result;
             }
+            UnitOfWorkHelper<TDbContext>.HandleTransaction(result.IsSucceed, true, _transaction);
             return result;
         }
 

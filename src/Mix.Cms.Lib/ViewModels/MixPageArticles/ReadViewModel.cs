@@ -23,11 +23,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         {
         }
 
-        [JsonProperty("articleId")]
+        [JsonProperty("postId")]
         public int PostId { get; set; }
 
         [JsonProperty("pageId")]
-        public int CategoryId { get; set; }
+        public int PageId { get; set; }
 
         [JsonProperty("isActived")]
         public bool IsActived { get; set; }
@@ -42,7 +42,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         public MixContentStatus Status { get; set; }
         #region Views
 
-        [JsonProperty("article")]
+        [JsonProperty("post")]
         public MixPosts.ReadListItemViewModel Post { get; set; }
 
         #endregion Views
@@ -69,7 +69,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         #region Expand
 
 
-        public static RepositoryResponse<List<MixPagePosts.ReadViewModel>> GetPagePostNavAsync(int articleId, string specificulture
+        public static RepositoryResponse<List<MixPagePosts.ReadViewModel>> GetPagePostNavAsync(int postId, string specificulture
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             MixCmsContext context = _context ?? new MixCmsContext();
@@ -82,13 +82,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
                     .Select(p => new MixPagePosts.ReadViewModel(
                         new MixPagePost()
                         {
-                            PostId = articleId,
-                            CategoryId = p.Id,
+                            PostId = postId,
+                            PageId = p.Id,
                             Specificulture = specificulture
                         },
                         _context, _transaction)
                     {
-                        IsActived = p.MixPagePost.Any(cp => cp.PostId == articleId && cp.Specificulture == specificulture),
+                        IsActived = p.MixPagePost.Any(cp => cp.PostId == postId && cp.Specificulture == specificulture),
                         Description = p.Title
                     });
                 return new RepositoryResponse<List<ReadViewModel>>()

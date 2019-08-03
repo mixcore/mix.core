@@ -22,17 +22,17 @@ using System.Linq;
 namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
-    [Route("api/v1/{culture}/article-attribute-data")]
+    [Route("api/v1/{culture}/post-attribute-data")]
     public class ApiPostAttributeDataController :
         BaseGenericApiController<MixCmsContext, MixPostAttributeData>
     {
-        public ApiPostAttributeDataController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext) : base(memoryCache, hubContext)
+        public ApiPostAttributeDataController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
 
         }
         #region Get
 
-        // GET api/article-attribute-data/id
+        // GET api/post-attribute-data/id
         [HttpGet, HttpOptions]
         [Route("delete/{id}")]
         public async Task<RepositoryResponse<MixPostAttributeData>> DeleteAsync(string id)
@@ -41,7 +41,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 model => model.Id == id && model.Specificulture == _lang, true);
         }
 
-        // GET api/article-attribute-datas/id
+        // GET api/post-attribute-datas/id
         [HttpGet, HttpOptions]
         [Route("details/{id}/{viewType}")]
         [Route("details/{viewType}")]
@@ -96,7 +96,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         #region Post
 
-        // POST api/article-attribute-data
+        // POST api/post-attribute-data
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]        
         [HttpPost, HttpOptions]
         [Route("save")]
@@ -116,7 +116,7 @@ namespace Mix.Cms.Api.Controllers.v1
             return new RepositoryResponse<UpdateViewModel>() { Status = 501 };
         }
 
-        // GET api/article-attribute-data
+        // GET api/post-attribute-data
         [HttpPost, HttpOptions]
         [Route("list")]
         public async Task<ActionResult<JObject>> GetList(

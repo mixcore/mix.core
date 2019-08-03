@@ -19,7 +19,7 @@ namespace Mix.Cms.Lib
         {
             return $"/{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, culture)}";
         }
-        public static List<ViewModels.MixPages.ReadListItemViewModel> GetCategory(IUrlHelper Url, string culture, MixEnums.CatePosition position, string activePath = "")
+        public static List<ViewModels.MixPages.ReadListItemViewModel> GetPage(IUrlHelper Url, string culture, MixEnums.CatePosition position, string activePath = "")
         {
             var getTopCates = ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelListBy
             (c => c.Specificulture == culture && c.MixPagePosition.Any(
