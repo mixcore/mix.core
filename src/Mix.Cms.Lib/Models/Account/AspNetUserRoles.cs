@@ -9,8 +9,8 @@ namespace Mix.Cms.Lib.Models.Account
         public string RoleId { get; set; }
         public string ApplicationUserId { get; set; }
 
-        public AspNetUsers ApplicationUser { get; set; }
-        public AspNetRoles Role { get; set; }
-        public AspNetUsers User { get; set; }
+        public virtual AspNetUsers ApplicationUser { get; set; }
+        public virtual AspNetRoles Role { get; set; }
+        public virtual AspNetUsers User { get; set; }
     }
 }
