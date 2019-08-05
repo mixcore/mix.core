@@ -36,7 +36,7 @@ namespace Mix.Cms.Lib.ViewModels.MixOrderItems
 
         #region Views
 
-        public MixProducts.ReadListItemViewModel Product { get; set; }
+        public MixPosts.ReadListItemViewModel Product { get; set; }
 
         #endregion
 
@@ -67,7 +67,7 @@ namespace Mix.Cms.Lib.ViewModels.MixOrderItems
                     Errors.Add("Invalid Order");
                     IsValid = false;
                 }
-                if (!MixProducts.ReadListItemViewModel.Repository.CheckIsExists(p => p.Id == ProductId && p.Specificulture == Specificulture, _context, _transaction))
+                if (!MixPosts.ReadListItemViewModel.Repository.CheckIsExists(p => p.Id == ProductId && p.Specificulture == Specificulture, _context, _transaction))
                 {
                     Errors.Add("Invalid Product");
                     IsValid = false;
@@ -77,16 +77,16 @@ namespace Mix.Cms.Lib.ViewModels.MixOrderItems
 
         public override MixOrderItem ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var product = MixProducts.ReadListItemViewModel.Repository.GetSingleModel(p => p.Id == ProductId && p.Specificulture == Specificulture).Data;
-            Price = product?.Price ?? 0;
-            Quantity = 1;
-            PriceUnit = product?.PriceUnit;
+            //var product = MixPosts.ReadListItemViewModel.Repository.GetSingleModel(p => p.Id == ProductId && p.Specificulture == Specificulture).Data;
+            //Price = product?.Price ?? 0;
+            //Quantity = 1;
+            //PriceUnit = product?.PriceUnit;
             return base.ParseModel(_context, _transaction);
         }
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Product = MixProducts.ReadListItemViewModel.Repository.GetSingleModel(p => p.Id == ProductId && p.Specificulture == Specificulture, _context, _transaction).Data;
+            Product = MixPosts.ReadListItemViewModel.Repository.GetSingleModel(p => p.Id == ProductId && p.Specificulture == Specificulture, _context, _transaction).Data;
         }
         #endregion Overrides
     }

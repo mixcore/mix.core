@@ -1,4 +1,4 @@
-﻿@model  Mix.Cms.Lib.ViewModels.MixArticles.ReadMvcViewModel
+﻿@model  Mix.Cms.Lib.ViewModels.MixPosts.ReadMvcViewModel
 @{ 
     string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, ViewBag.culture);
     Layout = $"Templates/{master}/Masters/_Layout";
@@ -45,7 +45,7 @@
 }
 @section Seo{
     <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @Model.SeoTitle</title>
-    <meta property="og:type" content="article" />
+    <meta property="og:type" content="post" />
     <!--points to the regular HTML version of the AMP HTML document or to itself if no such HTML version exists-->
     <link rel="canonical" href="@url">
     <meta property="og:url" content="@url" />

@@ -26,7 +26,7 @@ namespace Mix.Cms.Api.Controllers.v1
     public class ApiAttributeFieldController :
         BaseGenericApiController<MixCmsContext, MixAttributeField>
     {
-        public ApiAttributeFieldController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext) : base(memoryCache, hubContext)
+        public ApiAttributeFieldController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
 
         }

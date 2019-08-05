@@ -1,0 +1,25 @@
+@model Mix.Cms.Lib.ViewModels.MixModules.ReadMvcViewModel
+<div class="features-3 pb-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mr-auto ml-auto">
+                <h2 class="title text-primary">@Model.Title</h2>
+                <h4 class="description">@Html.Raw(Model.Description)</h4>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var item in Model.Data.Items.Take(3))
+            {
+            <div class="col-md-4">
+                <div class="info info-hover">
+                    <div class="icon icon-@item.Property("color") icon-circle">
+                        <i class="@item.Property("icon")"></i>
+                    </div>
+                    <h4 class="info-title">@item.Property("title")</h4>
+                    <p class="description">@item.Property("description")</p>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</div>

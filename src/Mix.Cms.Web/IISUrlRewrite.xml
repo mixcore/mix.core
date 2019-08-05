@@ -7,24 +7,10 @@
     </rule>
 
     <rule name="Not rewrite" stopProcessing="true">
-      <match url="^plugins|init|security|data|swagger|portal|api|portal|error|Content|lib|css|js|app-shared|app-client|app-portal|app-init|images(\/(.*)){2,8}$" />
+      <match url="^post|page|search|tag|plugins|init|security|data|swagger|portal|api|error|Content|lib|css|js|app-shared|app-client|app-portal|app-init|images(\/(.*)){2,8}$" />
       <action type="None" appendQueryString="false"/>
     </rule>
-
-    <rule name="Not rewrite portal" stopProcessing="true">
-      <match url="^search|portal(\/(.*)){1,8}$" />
-      <action type="None" appendQueryString="false"/>
-    </rule>
-
-    <rule name="Not rewrite article details" stopProcessing="true">
-      <match url="^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))/article|tag|page|search(\/(.*)){1,8}$" />
-      <action type="None" appendQueryString="false"/>
-    </rule>
-
-    <rule name="Not rewrite content" stopProcessing="true">
-      <match url="^Content/(.*)$" />
-      <action type="None" appendQueryString="false"/>
-    </rule>
+  
     <rule name="Rewrite to alias splash" stopProcessing="true">
       <match url="^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))$" />
       <action type="Redirect" url="/{R:1}/" appendQueryString="true"/>

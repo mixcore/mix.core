@@ -60,8 +60,8 @@ namespace Mix.Cms.Web
                     name: "file",
                     template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/portal/file");
                 routes.MapRoute(
-                    name: "article",
-                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/article/{id}/{seoName}");
+                    name: "post",
+                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/post/{id}/{seoName}");
                 routes.MapRoute(
                     name: "product",
                     template: @"{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + @"}/product/{seoName}");

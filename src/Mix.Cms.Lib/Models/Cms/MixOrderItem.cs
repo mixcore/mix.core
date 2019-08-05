@@ -7,7 +7,7 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public int Id { get; set; }
         public int OrderId { get; set; }
-        public int ProductId { get; set; }
+        public int PostId { get; set; }
         public int Quantity { get; set; }
         public double Price { get; set; }
         public string PriceUnit { get; set; }
@@ -16,6 +16,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Status { get; set; }
 
         public virtual MixOrder MixOrder { get; set; }
-        public virtual MixProduct MixProduct { get; set; }
+        public virtual MixPost MixPost { get; set; }
     }
 }

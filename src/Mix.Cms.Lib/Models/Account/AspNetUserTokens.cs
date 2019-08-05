@@ -10,6 +10,6 @@ namespace Mix.Cms.Lib.Models.Account
         public string Name { get; set; }
         public string Value { get; set; }
 
-        public AspNetUsers User { get; set; }
+        public virtual AspNetUsers User { get; set; }
     }
 }

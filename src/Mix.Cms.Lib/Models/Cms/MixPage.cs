@@ -8,14 +8,13 @@ namespace Mix.Cms.Lib.Models.Cms
         public MixPage()
         {
             MixModuleData = new HashSet<MixModuleData>();
-            MixPageArticle = new HashSet<MixPageArticle>();
+            MixPagePost = new HashSet<MixPagePost>();
             MixPageAttributeData = new HashSet<MixPageAttributeData>();
             MixPageAttributeSet = new HashSet<MixPageAttributeSet>();
             MixPageModule = new HashSet<MixPageModule>();
             MixPagePageMixPage = new HashSet<MixPagePage>();
             MixPagePageMixPageNavigation = new HashSet<MixPagePage>();
             MixPagePosition = new HashSet<MixPagePosition>();
-            MixPageProduct = new HashSet<MixPageProduct>();
         }
 
         public int Id { get; set; }
@@ -48,13 +47,12 @@ namespace Mix.Cms.Lib.Models.Cms
 
         public virtual MixCulture SpecificultureNavigation { get; set; }
         public virtual ICollection<MixModuleData> MixModuleData { get; set; }
-        public virtual ICollection<MixPageArticle> MixPageArticle { get; set; }
+        public virtual ICollection<MixPagePost> MixPagePost { get; set; }
         public virtual ICollection<MixPageAttributeData> MixPageAttributeData { get; set; }
         public virtual ICollection<MixPageAttributeSet> MixPageAttributeSet { get; set; }
         public virtual ICollection<MixPageModule> MixPageModule { get; set; }
         public virtual ICollection<MixPagePage> MixPagePageMixPage { get; set; }
         public virtual ICollection<MixPagePage> MixPagePageMixPageNavigation { get; set; }
         public virtual ICollection<MixPagePosition> MixPagePosition { get; set; }
-        public virtual ICollection<MixPageProduct> MixPageProduct { get; set; }
     }
 }

@@ -1,24 +1,24 @@
 ﻿'use strict';
 app.controller('PageController', ['$scope', '$rootScope', 'ngAppSettings', '$location', '$routeParams',
-            'PageService','PageArticleService','PagePageService', 'UrlAliasService',
+            'PageService','PagePostService','PagePageService', 'UrlAliasService',
     function ($scope, $rootScope, ngAppSettings, $location, $routeParams, 
-            service, pageArticleService, pagePageService, urlAliasService) {
+            service, pagePostService, pagePageService, urlAliasService) {
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);        
         $scope.request.query = 'level=0';       
         $scope.pageData={
-            articles:[],
+            posts:[],
             products:[],
             data:[],
         };
-        $scope.articleRequest = angular.copy(ngAppSettings.request);
+        $scope.postRequest = angular.copy(ngAppSettings.request);
         $scope.canDrag = $scope.request.orderBy !== 'Priority' || $scope.request.direction !== '0';
-        $scope.loadArticles = async function () {
+        $scope.loadPosts = async function () {
             $rootScope.isBusy = true;
             var id = $routeParams.id;
-            $scope.articleRequest.query += '&page_id='+id;
-            var response = await pageArticleService.getList($scope.articleRequest);
+            $scope.postRequest.query += '&page_id='+id;
+            var response = await pagePostService.getList($scope.postRequest);
             if (response.isSucceed) {
-                $scope.pageData.articles = response.data;
+                $scope.pageData.posts = response.data;
                 $rootScope.isBusy = false;
                 $scope.$apply();
             }

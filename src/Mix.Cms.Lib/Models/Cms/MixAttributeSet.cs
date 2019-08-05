@@ -7,7 +7,7 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixAttributeSet()
         {
-            MixArticleAttributeSet = new HashSet<MixArticleAttributeSet>();
+            MixPostAttributeSet = new HashSet<MixPostAttributeSet>();
             MixAttributeField = new HashSet<MixAttributeField>();
             MixModuleAttributeData = new HashSet<MixModuleAttributeData>();
             MixModuleAttributeSet = new HashSet<MixModuleAttributeSet>();
@@ -23,7 +23,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Priority { get; set; }
         public int Status { get; set; }
 
-        public virtual ICollection<MixArticleAttributeSet> MixArticleAttributeSet { get; set; }
+        public virtual ICollection<MixPostAttributeSet> MixPostAttributeSet { get; set; }
         public virtual ICollection<MixAttributeField> MixAttributeField { get; set; }
         public virtual ICollection<MixModuleAttributeData> MixModuleAttributeData { get; set; }
         public virtual ICollection<MixModuleAttributeSet> MixModuleAttributeSet { get; set; }

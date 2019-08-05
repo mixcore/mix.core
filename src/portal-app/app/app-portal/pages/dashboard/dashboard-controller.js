@@ -5,7 +5,7 @@ app.controller('DashboardController', ['$scope', '$rootScope', 'ngAppSettings', 
     $('.side-nav .page-dashboard').addClass('active');
     $scope.data = {
         totalPage: 0,
-        totalArticle: 0,
+        totalPost: 0,
         totalProduct: 0,
         totalUser: 0
     }

@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Cms.Lib.Models.Account;
 
@@ -15,15 +14,12 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.3-rtm-32065")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Account.AspNetRoleClaims", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("ClaimType");
 
@@ -46,10 +42,10 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                     b.Property<string>("ConcurrencyStamp");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(256);
+                        .HasMaxLength(250);
 
                     b.Property<string>("NormalizedName")
-                        .HasMaxLength(256);
+                        .HasMaxLength(250);
 
                     b.HasKey("Id");
 
@@ -64,8 +60,7 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
             modelBuilder.Entity("Mix.Cms.Lib.Models.Account.AspNetUserClaims", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("ApplicationUserId");
 
@@ -124,6 +119,21 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                     b.ToTable("AspNetUserRoles");
                 });
 
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Account.AspNetUserTokens", b =>
+                {
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("LoginProvider");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens");
+                });
+
             modelBuilder.Entity("Mix.Cms.Lib.Models.Account.AspNetUsers", b =>
                 {
                     b.Property<string>("Id");
@@ -142,7 +152,7 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                         .HasColumnName("DOB");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(256);
+                        .HasMaxLength(250);
 
                     b.Property<bool>("EmailConfirmed");
 
@@ -167,10 +177,10 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                     b.Property<string>("NickName");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256);
+                        .HasMaxLength(250);
 
                     b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256);
+                        .HasMaxLength(250);
 
                     b.Property<string>("PasswordHash");
 
@@ -185,7 +195,7 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                     b.Property<bool>("TwoFactorEnabled");
 
                     b.Property<string>("UserName")
-                        .HasMaxLength(256);
+                        .HasMaxLength(250);
 
                     b.HasKey("Id");
 
@@ -198,21 +208,6 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                         .HasFilter("([NormalizedUserName] IS NOT NULL)");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Account.AspNetUserTokens", b =>
-                {
-                    b.Property<string>("UserId");
-
-                    b.Property<string>("LoginProvider");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Value");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Account.Clients", b =>

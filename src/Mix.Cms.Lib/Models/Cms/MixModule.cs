@@ -7,14 +7,12 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixModule()
         {
-            MixArticleModule = new HashSet<MixArticleModule>();
-            MixModuleArticle = new HashSet<MixModuleArticle>();
+            MixPostModule = new HashSet<MixPostModule>();
+            MixModulePost = new HashSet<MixModulePost>();
             MixModuleAttributeData = new HashSet<MixModuleAttributeData>();
             MixModuleAttributeSet = new HashSet<MixModuleAttributeSet>();
             MixModuleData = new HashSet<MixModuleData>();
-            MixModuleProduct = new HashSet<MixModuleProduct>();
             MixPageModule = new HashSet<MixPageModule>();
-            MixProductModule = new HashSet<MixProductModule>();
         }
 
         public int Id { get; set; }
@@ -37,13 +35,11 @@ namespace Mix.Cms.Lib.Models.Cms
         public DateTime? LastModified { get; set; }
 
         public virtual MixCulture SpecificultureNavigation { get; set; }
-        public virtual ICollection<MixArticleModule> MixArticleModule { get; set; }
-        public virtual ICollection<MixModuleArticle> MixModuleArticle { get; set; }
+        public virtual ICollection<MixPostModule> MixPostModule { get; set; }
+        public virtual ICollection<MixModulePost> MixModulePost { get; set; }
         public virtual ICollection<MixModuleAttributeData> MixModuleAttributeData { get; set; }
         public virtual ICollection<MixModuleAttributeSet> MixModuleAttributeSet { get; set; }
         public virtual ICollection<MixModuleData> MixModuleData { get; set; }
-        public virtual ICollection<MixModuleProduct> MixModuleProduct { get; set; }
         public virtual ICollection<MixPageModule> MixPageModule { get; set; }
-        public virtual ICollection<MixProductModule> MixProductModule { get; set; }
     }
 }
