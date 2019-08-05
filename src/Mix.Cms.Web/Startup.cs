@@ -83,6 +83,7 @@ namespace Mix.Cms.Web
             // add signalr
             services.AddSignalR();
             services.AddOData();
+            services.AddODataQueryFilter();
             // Config server caching
             services.AddMvc(options =>
             {

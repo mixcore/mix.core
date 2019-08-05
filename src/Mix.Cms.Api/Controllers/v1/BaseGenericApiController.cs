@@ -363,7 +363,6 @@ namespace Mix.Cms.Api.Controllers.v1
                 new JProperty("key", request.Key),
                 new JProperty("encrypted", encrypted),
                 new JProperty("plainText", decrypt));
-
             return data;
         }
 
