@@ -1,6 +1,6 @@
-﻿modules.component('modalArticles', {
-    templateUrl: '/app/app-shared/components/modal-articles/modal-articles.html',
-    controller: 'ModalArticleController',
+﻿modules.component('modalPosts', {
+    templateUrl: '/app/app-shared/components/modal-posts/modal-posts.html',
+    controller: 'ModalPostController',
     bindings: {
         data: '=',
         childName: '=',

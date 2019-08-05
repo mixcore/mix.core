@@ -25,7 +25,7 @@ namespace Mix.Cms.Api.Controllers.v1
     public class ApiAttributeDataController :
         BaseApiController<MixCmsContext>
     {
-        public ApiAttributeDataController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext) : base(memoryCache, hubContext)
+        public ApiAttributeDataController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
         }
 
@@ -60,41 +60,41 @@ namespace Mix.Cms.Api.Controllers.v1
                 case "portal":
                     if (!string.IsNullOrEmpty(id))
                     {
-                        var result = new Lib.ViewModels.MixArticleAttributeDatas.UpdateViewModel(setId);
+                        var result = new Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel(setId);
                         return Ok(JObject.FromObject(result));
                     }
                     else
                     {
-                        var model = new MixArticleAttributeData()
+                        var model = new MixPostAttributeData()
                         {
                             Status = MixService.GetConfig<int>("DefaultStatus"),
                             AttributeSetId = setId,
                             Specificulture = _lang,
-                            Priority = Lib.ViewModels.MixArticleAttributeDatas.UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
+                            Priority = Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 
-                        RepositoryResponse<Lib.ViewModels.MixArticleAttributeDatas.UpdateViewModel> result = 
-                            await base.GetSingleAsync<Lib.ViewModels.MixArticleAttributeDatas.UpdateViewModel, MixArticleAttributeData>($"{viewType}_default", null, model);
+                        RepositoryResponse<Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel> result = 
+                            await base.GetSingleAsync<Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel, MixPostAttributeData>($"{viewType}_default", null, model);
                         return Ok(JObject.FromObject(result));
                     }
                 default:
                     if (!string.IsNullOrEmpty(id))
                     {
-                        Expression<Func<MixArticleAttributeData, bool>> predicate = model => model.Id == id;
-                        var result = await base.GetSingleAsync<Lib.ViewModels.MixArticleAttributeDatas.ReadViewModel, MixArticleAttributeData>(
+                        Expression<Func<MixPostAttributeData, bool>> predicate = model => model.Id == id;
+                        var result = await base.GetSingleAsync<Lib.ViewModels.MixPostAttributeDatas.ReadViewModel, MixPostAttributeData>(
                             $"{viewType}_{id}", predicate);
                         return Ok(JObject.FromObject(result));
                     }
                     else
                     {
-                        var model = new MixArticleAttributeData()
+                        var model = new MixPostAttributeData()
                         {
                             Status = MixService.GetConfig<int>("DefaultStatus")
                            ,
-                            Priority = Lib.ViewModels.MixArticleAttributeDatas.UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
+                            Priority = Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 
-                        RepositoryResponse<Lib.ViewModels.MixArticleAttributeDatas.ReadViewModel> result = await base.GetSingleAsync<Lib.ViewModels.MixArticleAttributeDatas.ReadViewModel, MixArticleAttributeData>(
+                        RepositoryResponse<Lib.ViewModels.MixPostAttributeDatas.ReadViewModel> result = await base.GetSingleAsync<Lib.ViewModels.MixPostAttributeDatas.ReadViewModel, MixPostAttributeData>(
                             $"{viewType}_default", null, model);
                         return Ok(JObject.FromObject(result));
                     }

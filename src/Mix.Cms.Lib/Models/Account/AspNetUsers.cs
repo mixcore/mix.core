@@ -45,12 +45,12 @@ namespace Mix.Cms.Lib.Models.Account
         public bool TwoFactorEnabled { get; set; }
         public string UserName { get; set; }
 
-        public ICollection<AspNetUserClaims> AspNetUserClaimsApplicationUser { get; set; }
-        public ICollection<AspNetUserClaims> AspNetUserClaimsUser { get; set; }
-        public ICollection<AspNetUserLogins> AspNetUserLoginsApplicationUser { get; set; }
-        public ICollection<AspNetUserLogins> AspNetUserLoginsUser { get; set; }
-        public ICollection<AspNetUserRoles> AspNetUserRolesApplicationUser { get; set; }
-        public ICollection<AspNetUserRoles> AspNetUserRolesUser { get; set; }
-        public ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
+        public virtual ICollection<AspNetUserClaims> AspNetUserClaimsApplicationUser { get; set; }
+        public virtual ICollection<AspNetUserClaims> AspNetUserClaimsUser { get; set; }
+        public virtual ICollection<AspNetUserLogins> AspNetUserLoginsApplicationUser { get; set; }
+        public virtual ICollection<AspNetUserLogins> AspNetUserLoginsUser { get; set; }
+        public virtual ICollection<AspNetUserRoles> AspNetUserRolesApplicationUser { get; set; }
+        public virtual ICollection<AspNetUserRoles> AspNetUserRolesUser { get; set; }
+        public virtual ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
     }
 }

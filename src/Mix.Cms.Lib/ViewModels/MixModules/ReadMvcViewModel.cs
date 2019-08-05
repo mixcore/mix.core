@@ -123,8 +123,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("data")]
         public PaginationModel<ViewModels.MixModuleDatas.ReadViewModel> Data { get; set; } = new PaginationModel<ViewModels.MixModuleDatas.ReadViewModel>();
 
-        [JsonProperty("articles")]
-        public PaginationModel<MixModuleArticles.ReadViewModel> Articles { get; set; } = new PaginationModel<MixModuleArticles.ReadViewModel>();
+        [JsonProperty("posts")]
+        public PaginationModel<MixModulePosts.ReadViewModel> Posts { get; set; } = new PaginationModel<MixModulePosts.ReadViewModel>();
 
         public string TemplatePath
         {
@@ -168,8 +168,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         #endregion Views
 
-        public int? ArticleId { get; set; }
-        public int? CategoryId { get; set; }
+        public int? PostId { get; set; }
+        public int? PageId { get; set; }
 
         #endregion Properties
 
@@ -193,7 +193,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
             this.FormView = MixTemplates.ReadListItemViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
             this.EdmView = MixTemplates.ReadListItemViewModel.GetTemplateByPath(EdmTemplate, Specificulture, _context, _transaction).Data;
-            // call load data from controller for padding parameter (articleId, productId, ...)
+            // call load data from controller for padding parameter (postId, productId, ...)
         }
 
         #endregion Overrides
@@ -201,20 +201,20 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #region Expand
 
         public static RepositoryResponse<ReadMvcViewModel> GetBy(
-            Expression<Func<MixModule, bool>> predicate, int? articleId = null, int? productid = null, int categoryId = 0
+            Expression<Func<MixModule, bool>> predicate, int? postId = null, int? productid = null, int pageId = 0
              , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = Repository.GetSingleModel(predicate, _context, _transaction);
             if (result.IsSucceed)
             {
-                result.Data.ArticleId = articleId;
-                result.Data.CategoryId = categoryId;
+                result.Data.PostId = postId;
+                result.Data.PageId = pageId;
                 result.Data.LoadData();
             }
             return result;
         }
 
-        public void LoadData(int? articleId = null, int? productId = null, int? categoryId = null
+        public void LoadData(int? postId = null, int? productId = null, int? pageId = null
             , int? pageSize = null, int? pageIndex = 0
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -224,34 +224,30 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 pageSize = pageSize > 0 ? PageSize : PageSize;
                 pageIndex = pageIndex ?? 0;
                 Expression<Func<MixModuleData, bool>> dataExp = null;
-                Expression<Func<MixModuleArticle, bool>> articleExp = null;
-                Expression<Func<MixModuleProduct, bool>> productExp = null;
+                Expression<Func<MixModulePost, bool>> postExp = null;
                 switch (Type)
                 {
                     case MixModuleType.Content:
                     case MixModuleType.Data:
                         dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture;
-                        //articleExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
+                        //postExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
                         //productExp = m => m.ModuleId == Id && m.Specificulture == Specificulture;
                         break;
 
                     case MixModuleType.SubPage:
-                        dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture && (m.PageId == categoryId);
-                        articleExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
+                        dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture && (m.PageId == pageId);
+                        postExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
                         break;
 
-                    case MixModuleType.SubArticle:
-                        dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture && (m.ArticleId == articleId);
+                    case MixModuleType.SubPost:
+                        dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture && (m.PostId == postId);
                         break;
-                    case MixModuleType.ListArticle:
-                        articleExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
-                        break;
-                    case MixModuleType.ListProduct:
-                        productExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
+                    case MixModuleType.ListPost:
+                        postExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
                         break;
                     default:
                         dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture;
-                        articleExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
+                        postExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
                         break;
                 }
 
@@ -270,16 +266,16 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                         Data = getDataResult.Data;
                     }
                 }
-                if (articleExp != null)
+                if (postExp != null)
                 {
-                    var getArticles = MixModuleArticles.ReadViewModel.Repository
-                    .GetModelListBy(articleExp
+                    var getPosts = MixModulePosts.ReadViewModel.Repository
+                    .GetModelListBy(postExp
                     , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
                     , pageSize, pageIndex
                     , _context: context, _transaction: transaction);
-                    if (getArticles.IsSucceed)
+                    if (getPosts.IsSucceed)
                     {
-                        Articles = getArticles.Data;
+                        Posts = getPosts.Data;
                     }
                 }
             }

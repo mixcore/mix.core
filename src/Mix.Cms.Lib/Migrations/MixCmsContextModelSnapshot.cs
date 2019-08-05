@@ -19,257 +19,6 @@ namespace Mix.Cms.Lib.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixArticle", b =>
-                {
-                    b.Property<int>("Id");
-
-                    b.Property<string>("Specificulture")
-                        .HasMaxLength(10);
-
-                    b.Property<string>("Content");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(250);
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Excerpt");
-
-                    b.Property<string>("ExtraFields")
-                        .HasMaxLength(4000);
-
-                    b.Property<string>("ExtraProperties");
-
-                    b.Property<string>("Icon");
-
-                    b.Property<string>("Image")
-                        .HasMaxLength(250);
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(250);
-
-                    b.Property<int>("Priority");
-
-                    b.Property<DateTime?>("PublishedDateTime")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("SeoDescription")
-                        .HasMaxLength(4000);
-
-                    b.Property<string>("SeoKeywords")
-                        .HasMaxLength(4000);
-
-                    b.Property<string>("SeoName")
-                        .HasMaxLength(500)
-                        .IsUnicode(false);
-
-                    b.Property<string>("SeoTitle")
-                        .HasMaxLength(4000);
-
-                    b.Property<string>("Source")
-                        .HasMaxLength(250);
-
-                    b.Property<int>("Status");
-
-                    b.Property<string>("Tags")
-                        .HasMaxLength(500);
-
-                    b.Property<string>("Template")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Thumbnail")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Title")
-                        .HasMaxLength(4000);
-
-                    b.Property<int>("Type");
-
-                    b.Property<int?>("Views");
-
-                    b.HasKey("Id", "Specificulture");
-
-                    b.HasIndex("Specificulture");
-
-                    b.ToTable("mix_article");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixArticleAttributeData", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(50);
-
-                    b.Property<int>("ArticleId");
-
-                    b.Property<int>("AttributeSetId");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("Priority");
-
-                    b.Property<string>("Specificulture")
-                        .IsRequired()
-                        .HasMaxLength(10);
-
-                    b.Property<int>("Status");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ArticleId", "Specificulture");
-
-                    b.ToTable("mix_article_attribute_data");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixArticleAttributeSet", b =>
-                {
-                    b.Property<int>("ArticleId");
-
-                    b.Property<string>("Specificulture")
-                        .HasMaxLength(10);
-
-                    b.Property<int>("AttributeSetId");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Image")
-                        .HasMaxLength(250);
-
-                    b.Property<int>("Priority");
-
-                    b.Property<int>("Status");
-
-                    b.HasKey("ArticleId", "Specificulture", "AttributeSetId");
-
-                    b.HasIndex("AttributeSetId");
-
-                    b.ToTable("mix_article_attribute_set");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixArticleAttributeValue", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(50);
-
-                    b.Property<int>("ArticleId");
-
-                    b.Property<int>("AttributeFieldId");
-
-                    b.Property<string>("AttributeName")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<bool?>("BooleanValue");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("DataId")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<int>("DataType");
-
-                    b.Property<DateTime?>("DateTimeValue")
-                        .HasColumnType("datetime");
-
-                    b.Property<double?>("DoubleValue");
-
-                    b.Property<string>("EncryptKey")
-                        .HasMaxLength(50);
-
-                    b.Property<int>("EncryptType");
-
-                    b.Property<string>("EncryptValue")
-                        .HasMaxLength(4000);
-
-                    b.Property<int?>("IntegerValue");
-
-                    b.Property<int>("Priority");
-
-                    b.Property<string>("Specificulture")
-                        .IsRequired()
-                        .HasMaxLength(10);
-
-                    b.Property<int>("Status");
-
-                    b.Property<string>("StringValue")
-                        .HasMaxLength(4000);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AttributeFieldId");
-
-                    b.HasIndex("DataId");
-
-                    b.ToTable("mix_article_attribute_value");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixArticleMedia", b =>
-                {
-                    b.Property<int>("MediaId");
-
-                    b.Property<int>("ArticleId");
-
-                    b.Property<string>("Specificulture")
-                        .HasMaxLength(10);
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Image")
-                        .HasMaxLength(250);
-
-                    b.Property<int>("Position");
-
-                    b.Property<int>("Priority");
-
-                    b.Property<int>("Status");
-
-                    b.HasKey("MediaId", "ArticleId", "Specificulture");
-
-                    b.HasIndex("ArticleId", "Specificulture");
-
-                    b.HasIndex("MediaId", "Specificulture");
-
-                    b.ToTable("mix_article_media");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixArticleModule", b =>
-                {
-                    b.Property<int>("ModuleId");
-
-                    b.Property<int>("ArticleId");
-
-                    b.Property<string>("Specificulture")
-                        .HasMaxLength(10);
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Image")
-                        .HasMaxLength(250);
-
-                    b.Property<int>("Position");
-
-                    b.Property<int>("Priority");
-
-                    b.Property<int>("Status");
-
-                    b.HasKey("ModuleId", "ArticleId", "Specificulture");
-
-                    b.HasIndex("ArticleId", "Specificulture");
-
-                    b.HasIndex("ModuleId", "Specificulture");
-
-                    b.ToTable("mix_article_module");
-                });
-
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeField", b =>
                 {
                     b.Property<int>("Id");
@@ -415,8 +164,6 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     b.Property<Guid>("Id");
 
-                    b.Property<int?>("ArticleId");
-
                     b.Property<string>("Content");
 
                     b.Property<string>("CreatedBy")
@@ -439,9 +186,9 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int?>("OrderId");
 
-                    b.Property<int>("Priority");
+                    b.Property<int?>("PostId");
 
-                    b.Property<int?>("ProductId");
+                    b.Property<int>("Priority");
 
                     b.Property<double?>("Rating");
 
@@ -458,11 +205,9 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ArticleId", "Specificulture");
-
                     b.HasIndex("OrderId", "Specificulture");
 
-                    b.HasIndex("ProductId", "Specificulture");
+                    b.HasIndex("PostId", "Specificulture");
 
                     b.ToTable("mix_comment");
                 });
@@ -830,34 +575,6 @@ namespace Mix.Cms.Lib.Migrations
                     b.ToTable("mix_module");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleArticle", b =>
-                {
-                    b.Property<int>("ArticleId");
-
-                    b.Property<int>("ModuleId");
-
-                    b.Property<string>("Specificulture")
-                        .HasMaxLength(10);
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Image")
-                        .HasMaxLength(250);
-
-                    b.Property<int>("Priority");
-
-                    b.Property<int>("Status");
-
-                    b.HasKey("ArticleId", "ModuleId", "Specificulture");
-
-                    b.HasIndex("ArticleId", "Specificulture");
-
-                    b.HasIndex("ModuleId", "Specificulture");
-
-                    b.ToTable("mix_module_article");
-                });
-
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleAttributeData", b =>
                 {
                     b.Property<string>("Id")
@@ -914,7 +631,7 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasIndex("ModuleId", "Specificulture");
 
                     b.HasIndex("ModuleId", "AttributeSetId", "Specificulture")
-                        .HasName("IX_mix_module_attribute_set_ModuleId_ArticleId_Specificulture");
+                        .HasName("IX_mix_module_attribute_set_ModuleId_PostId_Specificulture");
 
                     b.ToTable("mix_module_attribute_set");
                 });
@@ -997,8 +714,6 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Specificulture")
                         .HasMaxLength(10);
 
-                    b.Property<int?>("ArticleId");
-
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
@@ -1007,6 +722,8 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(4000);
 
                     b.Property<int?>("PageId");
+
+                    b.Property<int?>("PostId");
 
                     b.Property<int>("Priority");
 
@@ -1019,20 +736,20 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasKey("Id", "ModuleId", "Specificulture");
 
-                    b.HasIndex("ArticleId", "Specificulture");
-
                     b.HasIndex("ModuleId", "Specificulture");
 
                     b.HasIndex("PageId", "Specificulture");
+
+                    b.HasIndex("PostId", "Specificulture");
 
                     b.HasIndex("ModuleId", "PageId", "Specificulture");
 
                     b.ToTable("mix_module_data");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleProduct", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModulePost", b =>
                 {
-                    b.Property<int>("ProductId");
+                    b.Property<int>("PostId");
 
                     b.Property<int>("ModuleId");
 
@@ -1049,13 +766,13 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Status");
 
-                    b.HasKey("ProductId", "ModuleId", "Specificulture");
+                    b.HasKey("PostId", "ModuleId", "Specificulture");
 
                     b.HasIndex("ModuleId", "Specificulture");
 
-                    b.HasIndex("ProductId", "Specificulture");
+                    b.HasIndex("PostId", "Specificulture");
 
-                    b.ToTable("mix_module_product");
+                    b.ToTable("mix_module_post");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixOrder", b =>
@@ -1091,7 +808,7 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixOrderItem", b =>
                 {
-                    b.Property<int>("ProductId");
+                    b.Property<int>("PostId");
 
                     b.Property<int>("OrderId");
 
@@ -1112,7 +829,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Status");
 
-                    b.HasKey("ProductId", "OrderId", "Specificulture");
+                    b.HasKey("PostId", "OrderId", "Specificulture");
 
                     b.HasIndex("Specificulture");
 
@@ -1122,7 +839,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasIndex("OrderId", "Specificulture");
 
-                    b.HasIndex("ProductId", "Specificulture");
+                    b.HasIndex("PostId", "Specificulture");
 
                     b.ToTable("mix_order_item");
                 });
@@ -1208,35 +925,6 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasIndex("Specificulture");
 
                     b.ToTable("mix_page");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageArticle", b =>
-                {
-                    b.Property<int>("ArticleId");
-
-                    b.Property<int>("CategoryId");
-
-                    b.Property<string>("Specificulture")
-                        .HasMaxLength(10);
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Image")
-                        .HasMaxLength(250);
-
-                    b.Property<int>("Priority");
-
-                    b.Property<int>("Status");
-
-                    b.HasKey("ArticleId", "CategoryId", "Specificulture");
-
-                    b.HasIndex("ArticleId", "Specificulture");
-
-                    b.HasIndex("CategoryId", "Specificulture")
-                        .HasName("IX_mix_page_article_PageId_Specificulture");
-
-                    b.ToTable("mix_page_article");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageAttributeData", b =>
@@ -1356,7 +1044,7 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     b.Property<int>("ModuleId");
 
-                    b.Property<int>("CategoryId");
+                    b.Property<int>("PageId");
 
                     b.Property<string>("Specificulture")
                         .HasMaxLength(10);
@@ -1373,12 +1061,12 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Status");
 
-                    b.HasKey("ModuleId", "CategoryId", "Specificulture");
-
-                    b.HasIndex("CategoryId", "Specificulture")
-                        .HasName("IX_mix_page_module_PageId_Specificulture");
+                    b.HasKey("ModuleId", "PageId", "Specificulture");
 
                     b.HasIndex("ModuleId", "Specificulture");
+
+                    b.HasIndex("PageId", "Specificulture")
+                        .HasName("IX_mix_page_module_PageId_Specificulture");
 
                     b.ToTable("mix_page_module");
                 });
@@ -1415,7 +1103,7 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     b.Property<int>("PositionId");
 
-                    b.Property<int>("CategoryId");
+                    b.Property<int>("PageId");
 
                     b.Property<string>("Specificulture")
                         .HasMaxLength(10);
@@ -1427,19 +1115,19 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Status");
 
-                    b.HasKey("PositionId", "CategoryId", "Specificulture");
+                    b.HasKey("PositionId", "PageId", "Specificulture");
 
-                    b.HasIndex("CategoryId", "Specificulture")
+                    b.HasIndex("PageId", "Specificulture")
                         .HasName("IX_mix_page_position_PageId_Specificulture");
 
                     b.ToTable("mix_page_position");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageProduct", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPagePost", b =>
                 {
-                    b.Property<int>("ProductId");
+                    b.Property<int>("PostId");
 
-                    b.Property<int>("CategoryId");
+                    b.Property<int>("PageId");
 
                     b.Property<string>("Specificulture")
                         .HasMaxLength(10);
@@ -1454,14 +1142,14 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Status");
 
-                    b.HasKey("ProductId", "CategoryId", "Specificulture");
+                    b.HasKey("PostId", "PageId", "Specificulture");
 
-                    b.HasIndex("CategoryId", "Specificulture")
-                        .HasName("IX_mix_page_product_PageId_Specificulture");
+                    b.HasIndex("PageId", "Specificulture")
+                        .HasName("IX_mix_page_post_PageId_Specificulture");
 
-                    b.HasIndex("ProductId", "Specificulture");
+                    b.HasIndex("PostId", "Specificulture");
 
-                    b.ToTable("mix_page_product");
+                    b.ToTable("mix_page_post");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixParameter", b =>
@@ -1603,15 +1291,12 @@ namespace Mix.Cms.Lib.Migrations
                     b.ToTable("mix_position");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixProduct", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPost", b =>
                 {
                     b.Property<int>("Id");
 
                     b.Property<string>("Specificulture")
                         .HasMaxLength(10);
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50);
 
                     b.Property<string>("Content");
 
@@ -1621,11 +1306,10 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<double?>("DealPrice");
-
-                    b.Property<double>("Discount");
-
                     b.Property<string>("Excerpt");
+
+                    b.Property<string>("ExtraFields")
+                        .HasMaxLength(4000);
 
                     b.Property<string>("ExtraProperties");
 
@@ -1634,27 +1318,16 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Image")
                         .HasMaxLength(250);
 
-                    b.Property<double>("ImportPrice");
-
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
-
-                    b.Property<string>("Material")
-                        .HasMaxLength(250);
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(250);
 
-                    b.Property<double>("NormalPrice");
-
-                    b.Property<int>("PackageCount");
-
-                    b.Property<double>("Price");
-
                     b.Property<int>("Priority");
 
-                    b.Property<string>("PrivacyId")
-                        .HasMaxLength(10);
+                    b.Property<DateTime?>("PublishedDateTime")
+                        .HasColumnType("datetime");
 
                     b.Property<string>("SeoDescription")
                         .HasMaxLength(4000);
@@ -1668,10 +1341,6 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("SeoTitle")
                         .HasMaxLength(4000);
-
-                    b.Property<string>("SetAttributeData");
-
-                    b.Property<int?>("SetAttributeId");
 
                     b.Property<string>("Source")
                         .HasMaxLength(250);
@@ -1690,174 +1359,218 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Title")
                         .HasMaxLength(4000);
 
-                    b.Property<int>("TotalSaled");
-
                     b.Property<int>("Type");
-
-                    b.Property<string>("Unit")
-                        .HasMaxLength(50);
 
                     b.Property<int?>("Views");
 
                     b.HasKey("Id", "Specificulture");
 
-                    b.HasIndex("SetAttributeId");
-
                     b.HasIndex("Specificulture");
 
-                    b.ToTable("mix_product");
+                    b.ToTable("mix_post");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixProductMedia", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostAttributeData", b =>
                 {
-                    b.Property<int>("MediaId");
-
-                    b.Property<int>("ProductId");
-
-                    b.Property<string>("Specificulture")
-                        .HasMaxLength(10);
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Image")
-                        .HasMaxLength(250);
-
-                    b.Property<int>("Position");
-
-                    b.Property<int>("Priority");
-
-                    b.Property<int>("Status");
-
-                    b.HasKey("MediaId", "ProductId", "Specificulture");
-
-                    b.HasIndex("MediaId", "Specificulture");
-
-                    b.HasIndex("ProductId", "Specificulture");
-
-                    b.ToTable("mix_product_media");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixProductModule", b =>
-                {
-                    b.Property<int>("ModuleId");
-
-                    b.Property<int>("ProductId");
-
-                    b.Property<string>("Specificulture")
-                        .HasMaxLength(10);
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Image")
-                        .HasMaxLength(250);
-
-                    b.Property<int>("Position");
-
-                    b.Property<int>("Priority");
-
-                    b.Property<int>("Status");
-
-                    b.HasKey("ModuleId", "ProductId", "Specificulture");
-
-                    b.HasIndex("ModuleId", "Specificulture");
-
-                    b.HasIndex("ProductId", "Specificulture");
-
-                    b.ToTable("mix_product_module");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedArticle", b =>
-                {
-                    b.Property<int>("SourceId");
-
-                    b.Property<int>("DestinationId");
-
-                    b.Property<string>("Specificulture")
-                        .HasMaxLength(10);
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(450);
-
-                    b.Property<string>("Image")
-                        .HasMaxLength(450);
-
-                    b.Property<int>("Priority");
-
-                    b.Property<int>("Status");
-
-                    b.HasKey("SourceId", "DestinationId", "Specificulture");
-
-                    b.HasIndex("DestinationId", "Specificulture");
-
-                    b.HasIndex("SourceId", "Specificulture");
-
-                    b.ToTable("mix_related_article");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedProduct", b =>
-                {
-                    b.Property<int>("SourceId");
-
-                    b.Property<int>("DestinationId");
-
-                    b.Property<string>("Specificulture")
-                        .HasMaxLength(10);
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(450);
-
-                    b.Property<string>("Image")
-                        .HasMaxLength(450);
-
-                    b.Property<int>("Priority");
-
-                    b.Property<int>("Status");
-
-                    b.HasKey("SourceId", "DestinationId", "Specificulture");
-
-                    b.HasIndex("DestinationId", "Specificulture");
-
-                    b.HasIndex("SourceId", "Specificulture");
-
-                    b.ToTable("mix_related_product");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixSetAttribute", b =>
-                {
-                    b.Property<int>("Id");
-
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("Id")
                         .HasMaxLength(50);
 
+                    b.Property<int>("AttributeSetId");
+
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(350);
-
-                    b.Property<string>("Fields")
-                        .IsRequired();
+                    b.Property<int>("PostId");
 
                     b.Property<int>("Priority");
 
+                    b.Property<string>("Specificulture")
+                        .IsRequired()
+                        .HasMaxLength(10);
+
                     b.Property<int>("Status");
-
-                    b.Property<string>("Title")
-                        .HasMaxLength(50);
-
-                    b.Property<int>("Type");
 
                     b.HasKey("Id");
 
-                    b.ToTable("mix_set_attribute");
+                    b.HasIndex("PostId", "Specificulture");
+
+                    b.ToTable("mix_post_attribute_data");
+                });
+
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostAttributeSet", b =>
+                {
+                    b.Property<int>("PostId");
+
+                    b.Property<string>("Specificulture")
+                        .HasMaxLength(10);
+
+                    b.Property<int>("AttributeSetId");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("Image")
+                        .HasMaxLength(250);
+
+                    b.Property<int>("Priority");
+
+                    b.Property<int>("Status");
+
+                    b.HasKey("PostId", "Specificulture", "AttributeSetId");
+
+                    b.HasIndex("AttributeSetId");
+
+                    b.ToTable("mix_post_attribute_set");
+                });
+
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostAttributeValue", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("AttributeFieldId");
+
+                    b.Property<string>("AttributeName")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<bool?>("BooleanValue");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("DataId")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<int>("DataType");
+
+                    b.Property<DateTime?>("DateTimeValue")
+                        .HasColumnType("datetime");
+
+                    b.Property<double?>("DoubleValue");
+
+                    b.Property<string>("EncryptKey")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("EncryptType");
+
+                    b.Property<string>("EncryptValue")
+                        .HasMaxLength(4000);
+
+                    b.Property<int?>("IntegerValue");
+
+                    b.Property<int>("PostId");
+
+                    b.Property<int>("Priority");
+
+                    b.Property<string>("Specificulture")
+                        .IsRequired()
+                        .HasMaxLength(10);
+
+                    b.Property<int>("Status");
+
+                    b.Property<string>("StringValue")
+                        .HasMaxLength(4000);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AttributeFieldId");
+
+                    b.HasIndex("DataId");
+
+                    b.ToTable("mix_post_attribute_value");
+                });
+
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostMedia", b =>
+                {
+                    b.Property<int>("MediaId");
+
+                    b.Property<int>("PostId");
+
+                    b.Property<string>("Specificulture")
+                        .HasMaxLength(10);
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("Image")
+                        .HasMaxLength(250);
+
+                    b.Property<int>("Position");
+
+                    b.Property<int>("Priority");
+
+                    b.Property<int>("Status");
+
+                    b.HasKey("MediaId", "PostId", "Specificulture");
+
+                    b.HasIndex("MediaId", "Specificulture");
+
+                    b.HasIndex("PostId", "Specificulture");
+
+                    b.ToTable("mix_post_media");
+                });
+
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostModule", b =>
+                {
+                    b.Property<int>("ModuleId");
+
+                    b.Property<int>("PostId");
+
+                    b.Property<string>("Specificulture")
+                        .HasMaxLength(10);
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("Image")
+                        .HasMaxLength(250);
+
+                    b.Property<int>("Position");
+
+                    b.Property<int>("Priority");
+
+                    b.Property<int>("Status");
+
+                    b.HasKey("ModuleId", "PostId", "Specificulture");
+
+                    b.HasIndex("ModuleId", "Specificulture");
+
+                    b.HasIndex("PostId", "Specificulture");
+
+                    b.ToTable("mix_post_module");
+                });
+
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedPost", b =>
+                {
+                    b.Property<int>("SourceId");
+
+                    b.Property<int>("DestinationId");
+
+                    b.Property<string>("Specificulture")
+                        .HasMaxLength(10);
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(450);
+
+                    b.Property<string>("Image")
+                        .HasMaxLength(450);
+
+                    b.Property<int>("Priority");
+
+                    b.Property<int>("Status");
+
+                    b.HasKey("SourceId", "DestinationId", "Specificulture");
+
+                    b.HasIndex("DestinationId", "Specificulture");
+
+                    b.HasIndex("SourceId", "Specificulture");
+
+                    b.ToTable("mix_related_post");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixTemplate", b =>
@@ -1986,76 +1699,6 @@ namespace Mix.Cms.Lib.Migrations
                     b.ToTable("mix_url_alias");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixArticle", b =>
-                {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixCulture", "SpecificultureNavigation")
-                        .WithMany("MixArticle")
-                        .HasForeignKey("Specificulture")
-                        .HasConstraintName("FK_Mix_Article_Mix_Culture")
-                        .HasPrincipalKey("Specificulture");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixArticleAttributeData", b =>
-                {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixArticle", "MixArticle")
-                        .WithMany("MixArticleAttributeData")
-                        .HasForeignKey("ArticleId", "Specificulture")
-                        .HasConstraintName("FK_mix_article_attribute_data_mix_article");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixArticleAttributeSet", b =>
-                {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
-                        .WithMany("MixArticleAttributeSet")
-                        .HasForeignKey("AttributeSetId")
-                        .HasConstraintName("FK_mix_article_attribute_set_mix_attribute_set");
-
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixArticle", "MixArticle")
-                        .WithMany("MixArticleAttributeSet")
-                        .HasForeignKey("ArticleId", "Specificulture")
-                        .HasConstraintName("FK_mix_article_attribute_set_mix_article");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixArticleAttributeValue", b =>
-                {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeField", "AttributeField")
-                        .WithMany("MixArticleAttributeValue")
-                        .HasForeignKey("AttributeFieldId")
-                        .HasConstraintName("FK_mix_article_attribute_value_mix_attribute_field");
-
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixArticleAttributeData", "Data")
-                        .WithMany("MixArticleAttributeValue")
-                        .HasForeignKey("DataId")
-                        .HasConstraintName("FK_mix_article_attribute_value_mix_article_attribute_data");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixArticleMedia", b =>
-                {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixArticle", "MixArticle")
-                        .WithMany("MixArticleMedia")
-                        .HasForeignKey("ArticleId", "Specificulture")
-                        .HasConstraintName("FK_mix_article_media_mix_article");
-
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixMedia", "MixMedia")
-                        .WithMany("MixArticleMedia")
-                        .HasForeignKey("MediaId", "Specificulture")
-                        .HasConstraintName("FK_mix_article_media_mix_media");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixArticleModule", b =>
-                {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixArticle", "MixArticle")
-                        .WithMany("MixArticleModule")
-                        .HasForeignKey("ArticleId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Article_Module_Mix_Article");
-
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixModule", "MixModule")
-                        .WithMany("MixArticleModule")
-                        .HasForeignKey("ModuleId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Article_Module_Mix_Module1")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeField", b =>
                 {
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
@@ -2066,20 +1709,15 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixComment", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixArticle", "MixArticle")
-                        .WithMany("MixComment")
-                        .HasForeignKey("ArticleId", "Specificulture")
-                        .HasConstraintName("FK_mix_comment_mix_article");
-
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixOrder", "MixOrder")
                         .WithMany("MixComment")
                         .HasForeignKey("OrderId", "Specificulture")
                         .HasConstraintName("FK_mix_comment_mix_order");
 
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixProduct", "MixProduct")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
                         .WithMany("MixComment")
-                        .HasForeignKey("ProductId", "Specificulture")
-                        .HasConstraintName("FK_mix_comment_mix_product");
+                        .HasForeignKey("PostId", "Specificulture")
+                        .HasConstraintName("FK_mix_comment_mix_post");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixConfiguration", b =>
@@ -2120,19 +1758,6 @@ namespace Mix.Cms.Lib.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleArticle", b =>
-                {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixArticle", "MixArticle")
-                        .WithMany("MixModuleArticle")
-                        .HasForeignKey("ArticleId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Module_Article_Mix_Article");
-
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixModule", "MixModule")
-                        .WithMany("MixModuleArticle")
-                        .HasForeignKey("ModuleId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Module_Article_Mix_Module");
-                });
-
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleAttributeData", b =>
                 {
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
@@ -2158,10 +1783,10 @@ namespace Mix.Cms.Lib.Migrations
                         .HasForeignKey("ModuleId", "Specificulture")
                         .HasConstraintName("FK_mix_module_attribute_set_mix_module1");
 
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixArticleModule", "MixArticleModule")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPostModule", "MixPostModule")
                         .WithMany("MixModuleAttributeSet")
                         .HasForeignKey("ModuleId", "AttributeSetId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Module_Attribute_set_Mix_Article_Module");
+                        .HasConstraintName("FK_Mix_Module_Attribute_set_Mix_Post_Module");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleAttributeValue", b =>
@@ -2179,11 +1804,6 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleData", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixArticle", "MixArticle")
-                        .WithMany("MixModuleData")
-                        .HasForeignKey("ArticleId", "Specificulture")
-                        .HasConstraintName("FK_mix_module_data_mix_article");
-
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixModule", "MixModule")
                         .WithMany("MixModuleData")
                         .HasForeignKey("ModuleId", "Specificulture")
@@ -2195,23 +1815,28 @@ namespace Mix.Cms.Lib.Migrations
                         .HasForeignKey("PageId", "Specificulture")
                         .HasConstraintName("FK_mix_module_data_mix_page");
 
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
+                        .WithMany("MixModuleData")
+                        .HasForeignKey("PostId", "Specificulture")
+                        .HasConstraintName("FK_mix_module_data_mix_post");
+
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPageModule", "MixPageModule")
                         .WithMany("MixModuleData")
                         .HasForeignKey("ModuleId", "PageId", "Specificulture")
                         .HasConstraintName("FK_Mix_Module_Data_Mix_Page_Module");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleProduct", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModulePost", b =>
                 {
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixModule", "MixModule")
-                        .WithMany("MixModuleProduct")
+                        .WithMany("MixModulePost")
                         .HasForeignKey("ModuleId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Module_Product_Mix_Module");
+                        .HasConstraintName("FK_Mix_Module_Post_Mix_Module");
 
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixProduct", "MixProduct")
-                        .WithMany("MixModuleProduct")
-                        .HasForeignKey("ProductId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Module_Product_Mix_Product");
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
+                        .WithMany("MixModulePost")
+                        .HasForeignKey("PostId", "Specificulture")
+                        .HasConstraintName("FK_Mix_Module_Post_Mix_Post");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixOrder", b =>
@@ -2229,9 +1854,9 @@ namespace Mix.Cms.Lib.Migrations
                         .HasForeignKey("OrderId", "Specificulture")
                         .HasConstraintName("FK_Order_Item_Order");
 
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixProduct", "MixProduct")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
                         .WithMany("MixOrderItem")
-                        .HasForeignKey("ProductId", "Specificulture")
+                        .HasForeignKey("PostId", "Specificulture")
                         .HasConstraintName("FK_Order_Item_Product");
                 });
 
@@ -2242,19 +1867,6 @@ namespace Mix.Cms.Lib.Migrations
                         .HasForeignKey("Specificulture")
                         .HasConstraintName("FK_Mix_Page_Mix_Culture")
                         .HasPrincipalKey("Specificulture");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageArticle", b =>
-                {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixArticle", "MixArticle")
-                        .WithMany("MixPageArticle")
-                        .HasForeignKey("ArticleId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Page_Article_Mix_Article");
-
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPage", "MixPage")
-                        .WithMany("MixPageArticle")
-                        .HasForeignKey("CategoryId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Page_Article_Mix_Page");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageAttributeData", b =>
@@ -2293,16 +1905,16 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageModule", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPage", "MixPage")
-                        .WithMany("MixPageModule")
-                        .HasForeignKey("CategoryId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Page_Module_Mix_Page");
-
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixModule", "MixModule")
                         .WithMany("MixPageModule")
                         .HasForeignKey("ModuleId", "Specificulture")
                         .HasConstraintName("FK_Mix_Menu_Module_Mix_Module1")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPage", "MixPage")
+                        .WithMany("MixPageModule")
+                        .HasForeignKey("PageId", "Specificulture")
+                        .HasConstraintName("FK_Mix_Page_Module_Mix_Page");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPagePage", b =>
@@ -2328,21 +1940,21 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPage", "MixPage")
                         .WithMany("MixPagePosition")
-                        .HasForeignKey("CategoryId", "Specificulture")
+                        .HasForeignKey("PageId", "Specificulture")
                         .HasConstraintName("FK_Mix_Page_Position_Mix_Page");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageProduct", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPagePost", b =>
                 {
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPage", "MixPage")
-                        .WithMany("MixPageProduct")
-                        .HasForeignKey("CategoryId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Page_Product_Mix_Page");
+                        .WithMany("MixPagePost")
+                        .HasForeignKey("PageId", "Specificulture")
+                        .HasConstraintName("FK_Mix_Page_Post_Mix_Page");
 
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixProduct", "MixProduct")
-                        .WithMany("MixPageProduct")
-                        .HasForeignKey("ProductId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Page_Product_Mix_Product");
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
+                        .WithMany("MixPagePost")
+                        .HasForeignKey("PostId", "Specificulture")
+                        .HasConstraintName("FK_Mix_Page_Post_Mix_Post");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPortalPageNavigation", b =>
@@ -2381,71 +1993,87 @@ namespace Mix.Cms.Lib.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixProduct", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPost", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixSetAttribute", "SetAttribute")
-                        .WithMany("MixProduct")
-                        .HasForeignKey("SetAttributeId")
-                        .HasConstraintName("FK_mix_product_mix_set_attribute");
-
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixCulture", "SpecificultureNavigation")
-                        .WithMany("MixProduct")
+                        .WithMany("MixPost")
                         .HasForeignKey("Specificulture")
-                        .HasConstraintName("FK_Mix_Product_Mix_Culture")
+                        .HasConstraintName("FK_Mix_Post_Mix_Culture")
                         .HasPrincipalKey("Specificulture");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixProductMedia", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostAttributeData", b =>
+                {
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
+                        .WithMany("MixPostAttributeData")
+                        .HasForeignKey("PostId", "Specificulture")
+                        .HasConstraintName("FK_mix_post_attribute_data_mix_post");
+                });
+
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostAttributeSet", b =>
+                {
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
+                        .WithMany("MixPostAttributeSet")
+                        .HasForeignKey("AttributeSetId")
+                        .HasConstraintName("FK_mix_post_attribute_set_mix_attribute_set");
+
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
+                        .WithMany("MixPostAttributeSet")
+                        .HasForeignKey("PostId", "Specificulture")
+                        .HasConstraintName("FK_mix_post_attribute_set_mix_post");
+                });
+
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostAttributeValue", b =>
+                {
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeField", "AttributeField")
+                        .WithMany("MixPostAttributeValue")
+                        .HasForeignKey("AttributeFieldId")
+                        .HasConstraintName("FK_mix_post_attribute_value_mix_attribute_field");
+
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPostAttributeData", "Data")
+                        .WithMany("MixPostAttributeValue")
+                        .HasForeignKey("DataId")
+                        .HasConstraintName("FK_mix_post_attribute_value_mix_post_attribute_data");
+                });
+
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostMedia", b =>
                 {
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixMedia", "MixMedia")
-                        .WithMany("MixProductMedia")
+                        .WithMany("MixPostMedia")
                         .HasForeignKey("MediaId", "Specificulture")
-                        .HasConstraintName("FK_mix_product_media_mix_media");
+                        .HasConstraintName("FK_mix_post_media_mix_media");
 
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixProduct", "MixProduct")
-                        .WithMany("MixProductMedia")
-                        .HasForeignKey("ProductId", "Specificulture")
-                        .HasConstraintName("FK_mix_product_media_mix_product");
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
+                        .WithMany("MixPostMedia")
+                        .HasForeignKey("PostId", "Specificulture")
+                        .HasConstraintName("FK_mix_post_media_mix_post");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixProductModule", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostModule", b =>
                 {
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixModule", "MixModule")
-                        .WithMany("MixProductModule")
+                        .WithMany("MixPostModule")
                         .HasForeignKey("ModuleId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Product_Module_Mix_Module1")
+                        .HasConstraintName("FK_Mix_Post_Module_Mix_Module1")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixProduct", "MixProduct")
-                        .WithMany("MixProductModule")
-                        .HasForeignKey("ProductId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Product_Module_Mix_Product");
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
+                        .WithMany("MixPostModule")
+                        .HasForeignKey("PostId", "Specificulture")
+                        .HasConstraintName("FK_Mix_Post_Module_Mix_Post");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedArticle", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedPost", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixArticle", "MixArticle")
-                        .WithMany("MixRelatedArticleMixArticle")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
+                        .WithMany("MixRelatedPostMixPost")
                         .HasForeignKey("DestinationId", "Specificulture")
-                        .HasConstraintName("FK_mix_related_article_mix_article1");
+                        .HasConstraintName("FK_mix_related_post_mix_post1");
 
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixArticle", "S")
-                        .WithMany("MixRelatedArticleS")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "S")
+                        .WithMany("MixRelatedPostS")
                         .HasForeignKey("SourceId", "Specificulture")
-                        .HasConstraintName("FK_mix_related_article_mix_article");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedProduct", b =>
-                {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixProduct", "MixProduct")
-                        .WithMany("MixRelatedProductMixProduct")
-                        .HasForeignKey("DestinationId", "Specificulture")
-                        .HasConstraintName("FK_mix_related_product_mix_product1");
-
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixProduct", "S")
-                        .WithMany("MixRelatedProductS")
-                        .HasForeignKey("SourceId", "Specificulture")
-                        .HasConstraintName("FK_mix_related_product_mix_product");
+                        .HasConstraintName("FK_mix_related_post_mix_post");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixTemplate", b =>

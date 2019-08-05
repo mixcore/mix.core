@@ -45,10 +45,10 @@ namespace Mix.Cms.Lib.Services
                 {
                     context = new MixCmsContext();
                     accountContext = new MixCmsAccountContext();
-                    messengerContext = new MixChatServiceContext();
+                    //messengerContext = new MixChatServiceContext();
                     await context.Database.MigrateAsync();
                     await accountContext.Database.MigrateAsync();
-                    await messengerContext.Database.MigrateAsync();
+                    //await messengerContext.Database.MigrateAsync();
                     transaction = context.Database.BeginTransaction();
 
                     var countCulture = context.MixCulture.Count();

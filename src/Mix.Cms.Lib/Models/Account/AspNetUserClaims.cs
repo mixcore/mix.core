@@ -11,7 +11,7 @@ namespace Mix.Cms.Lib.Models.Account
         public string ClaimValue { get; set; }
         public string UserId { get; set; }
 
-        public AspNetUsers ApplicationUser { get; set; }
-        public AspNetUsers User { get; set; }
+        public virtual AspNetUsers ApplicationUser { get; set; }
+        public virtual AspNetUsers User { get; set; }
     }
 }

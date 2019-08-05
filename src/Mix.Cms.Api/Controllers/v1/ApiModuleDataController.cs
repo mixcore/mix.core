@@ -25,7 +25,7 @@ namespace Mix.Cms.Api.Controllers.v1
     public class ApiModuleDataController :
         BaseGenericApiController<MixCmsContext, MixModuleData>
     {
-        public ApiModuleDataController(IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
+        public ApiModuleDataController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
         }
 
@@ -244,15 +244,15 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             var query = HttpUtility.ParseQueryString(request.Query ?? "");
             int.TryParse(query.Get("module_id"), out int moduleId);
-            int.TryParse(query.Get("article_id"), out int articleId);
-            int.TryParse(query.Get("category_id"), out int categoryId);
+            int.TryParse(query.Get("post_id"), out int postId);
+            int.TryParse(query.Get("category_id"), out int pageId);
             string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
 
             Expression<Func<MixModuleData, bool>> predicate = model =>
                 model.Specificulture == _lang
                 && model.ModuleId == moduleId
-                && (articleId == 0 || model.ArticleId == articleId)
-                && (categoryId == 0 || model.PageId == categoryId)
+                && (postId == 0 || model.PostId == postId)
+                && (pageId == 0 || model.PageId == pageId)
                 && (!request.FromDate.HasValue
                     || (model.CreatedDateTime >= request.FromDate.Value.ToUniversalTime())
                 )
@@ -286,14 +286,14 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             var query = HttpUtility.ParseQueryString(request.Query ?? "");
             int.TryParse(query.Get("module_id"), out int moduleId);
-            int.TryParse(query.Get("article_id"), out int articleId);
+            int.TryParse(query.Get("post_id"), out int postId);
             int.TryParse(query.Get("product_id"), out int productId);
             int.TryParse(query.Get("category_id"), out int pageId);
             string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
             Expression<Func<MixModuleData, bool>> predicate = model =>
                 model.Specificulture == _lang
                 && model.ModuleId == moduleId
-                && (articleId==0 || model.ArticleId == articleId)
+                && (postId==0 || model.PostId == postId)
                 && (pageId == 0 || model.PageId == pageId)
                 && (!request.FromDate.HasValue
                     || (model.CreatedDateTime >= request.FromDate.Value.ToUniversalTime())

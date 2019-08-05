@@ -39,7 +39,7 @@ namespace Mix.Cms.Lib.Models.Account
             {
                 if (MixService.GetConfig<int>(MixConstants.CONST_SETTING_DATABASE_PROVIDER) == (int)MixEnums.DatabaseProvider.MySQL)
                 {
-                    optionsBuilder.UseMySQL(cnn);
+                    optionsBuilder.UseMySql(cnn);
                 }
                 else
                 {

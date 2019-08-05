@@ -12,8 +12,8 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("totalPage")]
         public int TotalPage { get; set; }
 
-        [JsonProperty("totalArticle")]
-        public int TotalArticle { get; set; }
+        [JsonProperty("totalPost")]
+        public int TotalPost { get; set; }
 
         [JsonProperty("totalProduct")]
         public int TotalProduct { get; set; }
@@ -29,8 +29,7 @@ namespace Mix.Cms.Lib.ViewModels
             using (MixCmsContext context = new MixCmsContext())
             {
                 TotalPage = context.MixPage.Count();
-                TotalArticle = context.MixArticle.Count();
-                TotalProduct = context.MixProduct.Count();
+                TotalPost = context.MixPost.Count();
             }
         }
     }

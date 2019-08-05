@@ -5,8 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ViewModels\MixRolePortalPages\**" />
     <Compile Remove="ViewModels\Shared\**" />
+    <EmbeddedResource Remove="ViewModels\MixRolePortalPages\**" />
     <EmbeddedResource Remove="ViewModels\Shared\**" />
+    <None Remove="ViewModels\MixRolePortalPages\**" />
     <None Remove="ViewModels\Shared\**" />
   </ItemGroup>
 
@@ -19,8 +22,8 @@
     <Compile Remove="Migrations\20181219124545_upd_module_edm_form.Designer.cs" />
     <Compile Remove="Migrations\20190106051357_update_themes_module.cs" />
     <Compile Remove="Migrations\20190106051357_update_themes_module.Designer.cs" />
-    <Compile Remove="Migrations\20190113142418_add-article-publisheddat.cs" />
-    <Compile Remove="Migrations\20190113142418_add-article-publisheddat.Designer.cs" />
+    <Compile Remove="Migrations\20190113142418_add-post-publisheddat.cs" />
+    <Compile Remove="Migrations\20190113142418_add-post-publisheddat.Designer.cs" />
     <Compile Remove="Migrations\20190514022718_add-attr.cs" />
     <Compile Remove="Migrations\20190523082752_add-attr.cs" />
     <Compile Remove="Migrations\20190523082752_add-attr.Designer.cs" />
@@ -40,12 +43,11 @@
     </PackageReference>
     <PackageReference Include="Mix.Heart" Version="0.0.4.5" />
     <PackageReference Include="Mix.Identity" Version="0.0.2" />
-    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.16" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Interfaces\" />
-    <Folder Include="ViewModels\MixRolePortalPages\" />
   </ItemGroup>
 
 </Project>

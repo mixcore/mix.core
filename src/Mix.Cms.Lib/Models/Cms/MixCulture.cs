@@ -7,12 +7,11 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixCulture()
         {
-            MixArticle = new HashSet<MixArticle>();
+            MixPost = new HashSet<MixPost>();
             MixConfiguration = new HashSet<MixConfiguration>();
             MixLanguage = new HashSet<MixLanguage>();
             MixModule = new HashSet<MixModule>();
             MixPage = new HashSet<MixPage>();
-            MixProduct = new HashSet<MixProduct>();
             MixUrlAlias = new HashSet<MixUrlAlias>();
         }
 
@@ -28,12 +27,11 @@ namespace Mix.Cms.Lib.Models.Cms
         public DateTime CreatedDateTime { get; set; }
         public string CreatedBy { get; set; }
 
-        public virtual ICollection<MixArticle> MixArticle { get; set; }
+        public virtual ICollection<MixPost> MixPost { get; set; }
         public virtual ICollection<MixConfiguration> MixConfiguration { get; set; }
         public virtual ICollection<MixLanguage> MixLanguage { get; set; }
         public virtual ICollection<MixModule> MixModule { get; set; }
         public virtual ICollection<MixPage> MixPage { get; set; }
-        public virtual ICollection<MixProduct> MixProduct { get; set; }
         public virtual ICollection<MixUrlAlias> MixUrlAlias { get; set; }
     }
 }

@@ -30,12 +30,12 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         [JsonIgnore]
         public string Value { get; set; }
 
-        [JsonProperty("articleId")]
-        public int? ArticleId { get; set; }
+        [JsonProperty("postId")]
+        public int? PostId { get; set; }
         [JsonProperty("productId")]
         public int? ProductId { get; set; }
-        [JsonProperty("categoryId")]
-        public int? CategoryId { get; set; }
+        [JsonProperty("pageId")]
+        public int? PageId { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
         [JsonProperty("updatedDateTime")]

@@ -7,8 +7,7 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixMedia()
         {
-            MixArticleMedia = new HashSet<MixArticleMedia>();
-            MixProductMedia = new HashSet<MixProductMedia>();
+            MixPostMedia = new HashSet<MixPostMedia>();
         }
 
         public int Id { get; set; }
@@ -30,7 +29,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Source { get; set; }
         public string TargetUrl { get; set; }
 
-        public virtual ICollection<MixArticleMedia> MixArticleMedia { get; set; }
-        public virtual ICollection<MixProductMedia> MixProductMedia { get; set; }
+        public virtual ICollection<MixPostMedia> MixPostMedia { get; set; }
     }
 }
