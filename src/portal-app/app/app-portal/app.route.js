@@ -342,18 +342,5 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         controller: "SocialFeedController",
         templateUrl: "/app/app-portal/pages/social-feed/social-feed.html"
     });
-
-    $routeProvider.when("/portal/menu/list", {
-        controller: "PositionController",
-        templateUrl: "/app/app-portal/pages/menu/list.html"
-    });
-    $routeProvider.when("/portal/menu/details/:id", {
-        controller: "PositionController",
-        templateUrl: "/app/app-portal/pages/menu/details.html"
-    });
-    $routeProvider.when("/portal/menu/create", {
-        controller: "PositionController",
-        templateUrl: "/app/app-portal/pages/menu/details.html"
-    });
     $routeProvider.otherwise({ redirectTo: "/portal" });
 });
