@@ -153,7 +153,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 {
                     await MixCacheService.RemoveCacheAsync();
                 }
-                UnitOfWorkHelper<TDbContext>.HandleTransaction(result.IsSucceed, true, _transaction);
+                
                 return result;
             }
             return new RepositoryResponse<TModel>() { IsSucceed = false };
@@ -170,7 +170,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 {
                     await MixCacheService.RemoveCacheAsync();
                 }
-                UnitOfWorkHelper<TDbContext>.HandleTransaction(result.IsSucceed, true, _transaction);
+                
                 return result;
             }
             return new RepositoryResponse<TModel>() { IsSucceed = false };
@@ -269,7 +269,6 @@ namespace Mix.Cms.Api.Controllers.v1
                 var result = await vm.SaveModelAsync(isSaveSubModel).ConfigureAwait(false);
 
                 await MixCacheService.RemoveCacheAsync();
-                UnitOfWorkHelper<TDbContext>.HandleTransaction(result.IsSucceed, true, _transaction);
                 return result;
             }
             return new RepositoryResponse<TView>();
@@ -302,7 +301,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
                 var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.UpdateFieldsAsync(predicate, fields);
                 await MixCacheService.RemoveCacheAsync();
-                UnitOfWorkHelper<TDbContext>.HandleTransaction(result.IsSucceed, true, _transaction);
+                
                 return result;
             }
             return new RepositoryResponse<TModel>();
@@ -317,7 +316,7 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 await MixCacheService.RemoveCacheAsync();
             }
-            UnitOfWorkHelper<TDbContext>.HandleTransaction(result.IsSucceed, true, _transaction);
+            
             return result;
         }
         protected RepositoryResponse<List<TView>> SaveList<TView>(List<TView> lstVm, bool isSaveSubModel)
@@ -341,7 +340,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 Task.Run(() => MixCacheService.RemoveCacheAsync());
                 return result;
             }
-            UnitOfWorkHelper<TDbContext>.HandleTransaction(result.IsSucceed, true, _transaction);
+            
             return result;
         }
 

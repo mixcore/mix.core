@@ -1,6 +1,6 @@
 ﻿
-app.component('attributeSetMain', {
-    templateUrl: '/app/app-portal/pages/attribute-set/components/main/view.html',
+app.component('menuMain', {
+    templateUrl: '/app/app-portal/pages/menu/components/main/view.html',
     controller: ['$rootScope', function ($rootScope) {
         var ctrl = this;
         ctrl.settings = $rootScope.globalSettings;
