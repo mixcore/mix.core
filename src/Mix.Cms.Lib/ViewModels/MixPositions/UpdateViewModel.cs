@@ -45,6 +45,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPositions
         #endregion Contructors
 
         #region Overrides
+        
         public override MixPosition ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id==0)

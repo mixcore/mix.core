@@ -7,14 +7,15 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixPost()
         {
+            MixComment = new HashSet<MixComment>();
+            MixModuleData = new HashSet<MixModuleData>();
+            MixModulePost = new HashSet<MixModulePost>();
+            MixOrderItem = new HashSet<MixOrderItem>();
+            MixPagePost = new HashSet<MixPagePost>();
             MixPostAttributeData = new HashSet<MixPostAttributeData>();
             MixPostAttributeSet = new HashSet<MixPostAttributeSet>();
             MixPostMedia = new HashSet<MixPostMedia>();
             MixPostModule = new HashSet<MixPostModule>();
-            MixComment = new HashSet<MixComment>();
-            MixModulePost = new HashSet<MixModulePost>();
-            MixModuleData = new HashSet<MixModuleData>();
-            MixPagePost = new HashSet<MixPagePost>();
             MixRelatedPostMixPost = new HashSet<MixRelatedPost>();
             MixRelatedPostS = new HashSet<MixRelatedPost>();
         }
@@ -47,16 +48,16 @@ namespace Mix.Cms.Lib.Models.Cms
         public string ExtraFields { get; set; }
 
         public virtual MixCulture SpecificultureNavigation { get; set; }
+        public virtual ICollection<MixComment> MixComment { get; set; }
+        public virtual ICollection<MixModuleData> MixModuleData { get; set; }
+        public virtual ICollection<MixModulePost> MixModulePost { get; set; }
+        public virtual ICollection<MixOrderItem> MixOrderItem { get; set; }
+        public virtual ICollection<MixPagePost> MixPagePost { get; set; }
         public virtual ICollection<MixPostAttributeData> MixPostAttributeData { get; set; }
         public virtual ICollection<MixPostAttributeSet> MixPostAttributeSet { get; set; }
         public virtual ICollection<MixPostMedia> MixPostMedia { get; set; }
         public virtual ICollection<MixPostModule> MixPostModule { get; set; }
-        public virtual ICollection<MixComment> MixComment { get; set; }
-        public virtual ICollection<MixModulePost> MixModulePost { get; set; }
-        public virtual ICollection<MixModuleData> MixModuleData { get; set; }
-        public virtual ICollection<MixPagePost> MixPagePost { get; set; }
         public virtual ICollection<MixRelatedPost> MixRelatedPostMixPost { get; set; }
         public virtual ICollection<MixRelatedPost> MixRelatedPostS { get; set; }
-        public virtual ICollection<MixOrderItem> MixOrderItem { get; set; }
     }
 }

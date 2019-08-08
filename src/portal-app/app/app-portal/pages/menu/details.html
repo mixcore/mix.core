@@ -16,15 +16,39 @@
                     </div>
                 </div>
             </div>
-            <modal-nav-pages save="saveOthers()" src-field="'positionId'" src-id="activedData.id" selected="others" query="'not_module_id='"></modal-nav-pages>
-            <section class="col-sm-12">
+            <modal-nav-pages save="saveOthers()" src-field="'positionId'" src-id="activedData.id" selected="others"
+                query="'not_module_id='"></modal-nav-pages>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" class="form-control form-control-sm" ng-model="activedData.description"/>
+                </div>
+            </div>
+            <section class="col-md-12">
                 <div class="row">
-                    <div class="col-lg-12">
-                        {{activedData}}
-                    </div>
-                    <div class="col-lg-12">
-                        <!-- <attribute-list title="'Attributes'" attributes="activedData.attributes" remove-attributes="activedData.removeAttributes">
-                        </attribute-list> -->
+                    <div class="col-md-1"></div>
+                    <div class="col-md-8">Description</div>
+                    <div class="col-md-3"></div>
+                </div>
+                <div ng-repeat="item in activedData.pages track by $index" dnd-draggable="item" dnd-type="'item'"
+                    dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedCol = item"
+                    dnd-dragstart="$ctrl.dragStart($index)" ng-class="{'selected': $ctrl.selectedCol === item}"
+                    class="mb-3">
+                    <div class="row">
+                        <div class="col-md-1">
+                            <span class="fas fa-sort"></span>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">                                
+                                <input ng-model="item.description" placeholder="Description"
+                                    class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <a class="btn" ng-click="removePage(page, $index)">
+                                <span class="fas fa-times text-danger"></span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </section>

@@ -17,9 +17,9 @@ namespace Mix.Cms.Lib.Models.Cms
         public DateTime? UpdatedDateTime { get; set; }
         public string Value { get; set; }
 
-        public virtual MixPost MixPost { get; set; }
         public virtual MixModule MixModule { get; set; }
         public virtual MixPage MixPage { get; set; }
         public virtual MixPageModule MixPageModule { get; set; }
+        public virtual MixPost MixPost { get; set; }
     }
 }
