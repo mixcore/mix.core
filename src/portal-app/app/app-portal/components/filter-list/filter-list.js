@@ -8,7 +8,10 @@ modules.component('filterList', {
             toDate: null
         };
         ctrl.init = function(){
-            ctrl.orders = ngAppSettings.orders;
+            if(!ctrl.orders)
+            {
+                ctrl.orders = ngAppSettings.orders;
+            }
             ctrl.directions = ngAppSettings.directions;
             ctrl.pageSizes = ngAppSettings.pageSizes;
             ctrl.statuses = [];
@@ -39,6 +42,7 @@ modules.component('filterList', {
     }],
     bindings: {
         request: '=',
+        orders: '=?',
         createUrl: '=',
         callback: '&'
     }

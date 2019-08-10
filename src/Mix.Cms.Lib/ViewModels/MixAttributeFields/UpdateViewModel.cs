@@ -17,6 +17,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         public int Id { get; set; }
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
+        [JsonProperty("referenceId")]
+        public int? ReferenceId { get; set; }
         [JsonProperty("regex")]
         public string Regex { get; set; }
         [JsonProperty("title")]

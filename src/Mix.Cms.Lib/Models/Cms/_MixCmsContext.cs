@@ -7,7 +7,9 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public virtual DbSet<MixAttributeField> MixAttributeField { get; set; }
         public virtual DbSet<MixAttributeSet> MixAttributeSet { get; set; }
+        public virtual DbSet<MixAttributeSetData> MixAttributeSetData { get; set; }
         public virtual DbSet<MixAttributeSetReference> MixAttributeSetReference { get; set; }
+        public virtual DbSet<MixAttributeSetValue> MixAttributeSetValue { get; set; }
         public virtual DbSet<MixCache> MixCache { get; set; }
         public virtual DbSet<MixCmsUser> MixCmsUser { get; set; }
         public virtual DbSet<MixComment> MixComment { get; set; }
@@ -51,6 +53,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual DbSet<MixTheme> MixTheme { get; set; }
         public virtual DbSet<MixUrlAlias> MixUrlAlias { get; set; }
 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationDbContext" /> class.
         /// </summary>
@@ -91,6 +94,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => e.AttributeSetId);
 
+                entity.HasIndex(e => e.ReferenceId);
+
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
@@ -113,7 +118,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasOne(d => d.Referrence)
                     .WithMany(p => p.MixAttributeFieldReferrence)
-                    .HasForeignKey(d => d.ReferrenceId)
+                    .HasForeignKey(d => d.ReferenceId)
                     .HasConstraintName("FK_mix_attribute_field_mix_attribute_set1");
             });
 
@@ -136,11 +141,39 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasMaxLength(250);
             });
 
+            modelBuilder.Entity<MixAttributeSetData>(entity =>
+            {
+                entity.ToTable("mix_attribute_set_data");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.ParentId).HasMaxLength(50);
+
+                entity.Property(e => e.Specificulture)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.HasOne(d => d.AttributeSet)
+                    .WithMany(p => p.MixAttributeSetData)
+                    .HasForeignKey(d => d.AttributeSetId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_mix_attribute_set_data_mix_attribute_set");
+
+                entity.HasOne(d => d.Parent)
+                    .WithMany(p => p.InverseParent)
+                    .HasForeignKey(d => d.ParentId)
+                    .HasConstraintName("FK_mix_attribute_set_data_mix_attribute_set_data");
+            });
+
             modelBuilder.Entity<MixAttributeSetReference>(entity =>
             {
-                entity.HasKey(e => new { e.SourceId, e.DestinationId });
-
                 entity.ToTable("mix_attribute_set_reference");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
@@ -148,17 +181,50 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Image).HasMaxLength(450);
 
-                entity.HasOne(d => d.Destination)
-                    .WithMany(p => p.MixAttributeSetReferenceDestination)
-                    .HasForeignKey(d => d.DestinationId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_mix_attribute_set_reference_mix_attribute_set1");
-
-                entity.HasOne(d => d.Source)
-                    .WithMany(p => p.MixAttributeSetReferenceSource)
-                    .HasForeignKey(d => d.SourceId)
+                entity.HasOne(d => d.AttributeSet)
+                    .WithMany(p => p.MixAttributeSetReference)
+                    .HasForeignKey(d => d.AttributeSetId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_mix_attribute_set_reference_mix_attribute_set");
+            });
+
+            modelBuilder.Entity<MixAttributeSetValue>(entity =>
+            {
+                entity.ToTable("mix_attribute_set_value");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.AttributeName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.DataId)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.DateTimeValue).HasColumnType("datetime");
+
+                entity.Property(e => e.EncryptKey).HasMaxLength(50);
+
+                entity.Property(e => e.EncryptValue).HasMaxLength(4000);
+
+                entity.Property(e => e.Regex).HasMaxLength(250);
+
+                entity.Property(e => e.Specificulture)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.StringValue).HasMaxLength(4000);
+
+                entity.HasOne(d => d.Data)
+                    .WithMany(p => p.MixAttributeSetValue)
+                    .HasForeignKey(d => d.DataId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_mix_attribute_set_value_mix_attribute_set_data");
             });
 
             modelBuilder.Entity<MixCache>(entity =>
