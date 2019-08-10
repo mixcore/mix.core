@@ -1,7 +1,7 @@
 <!-- <jumbotrons tag-name="'Post'" tag-type="'0'"></jumbotrons> -->
 <section class="card manual">
     <div class="card-header">
-        <filter-list request="request" callback="getList(pageIndex)"
+        <filter-list request="request"  orders="orders" callback="getList(pageIndex)"
             create-url="'/portal/attribute-set/create'"></filter-list>
         <select class="btn custom-select custom-select-sm col-3" ng-model="selectedList.action">
             <option ng-repeat="item in actions" ng-value="item">{{item}}</option>
@@ -33,7 +33,7 @@
             </thead>
 
             <tbody class="sortable" ng-init="getList()">
-                <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="attribute-set"
+                <tr ng-repeat="item in data track by $index" class="sortable-item" sort-model="attribute-set"
                     sort-model-id="{{item.id}}">
                     <td style="cursor:move;" class="drag-header">
                         <span class="fas fa-sort"></span>
@@ -69,7 +69,7 @@
         </table>
     </div>
     <div class="card-footer">
-        <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems"
+        <paging class="small" page="request.pageIndex + 1" page-size="request.pageSize" total="request.totalItems"
             ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)"
             scroll-top="true">
         </paging>

@@ -11,7 +11,7 @@ modules.component('attributeList', {
                     ctrl.defaultAttr = getDefaultAttr.data;
                     ctrl.defaultAttr.options = [];
                 }
-            }
+            };
             ctrl.addAttr = function () {
                 if (ctrl.attributes) {
                     var t = angular.copy(ctrl.defaultAttr);
@@ -95,12 +95,12 @@ modules.component('attributeList', {
     
             ctrl.generateName = function (col) {
                 col.name = $rootScope.generateKeyword(col.title, '_');
-            }
+            };
             ctrl.removeAttr = function (index) {
                 if (ctrl.attributes) {
                     ctrl.attributes.splice(index, 1);
                 }
-            }
+            };
             ctrl.updateOrders = function(index){
                 if(index> ctrl.dragStartIndex){
                     ctrl.attributes.splice(ctrl.dragStartIndex, 1);
@@ -111,11 +111,20 @@ modules.component('attributeList', {
                 angular.forEach(ctrl.attributes, function(e,i){
                     e.priority = i;
                 });
-            } 
-           
+            };           
             ctrl.dragStart = function(index){
                 ctrl.dragStartIndex = index;
-            }            
+            };
+            ctrl.showReferences = function(col){
+                ctrl.colRef = col;
+                $('#modal-navs').modal('show');
+            };
+            ctrl.referenceCallback = function(selected){
+                if (selected && selected.length) {
+                    ctrl.colRef.referenceId = selected[0].id;
+                }                
+                $('#modal-navs').modal('hide');
+            };
         }],
     bindings: {
         title: '=',

@@ -244,6 +244,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     if (data.IsSucceed)
                     {
                         await MixCacheService.SetAsync(cacheKey, data);
+                        AlertAsync("Add Cache", 200, cacheKey);
                     }
                 }
                 else
@@ -252,6 +253,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     if (data.IsSucceed)
                     {
                         await MixCacheService.SetAsync(cacheKey, data);
+                        AlertAsync("Add Cache", 200, cacheKey);
                     }
                 }
                 
@@ -362,15 +364,21 @@ namespace Mix.Cms.Api.Controllers.v1
                 new JProperty("key", request.Key),
                 new JProperty("encrypted", encrypted),
                 new JProperty("plainText", decrypt));
-
             return data;
         }
 
         protected void AlertAsync(string action, int status, string message = null)
         {
+            var address = Request.Headers["X-Forwarded-For"];
+            if (String.IsNullOrEmpty(address))
+            {
+                address = Request.Host.Value;
+            }
             var logMsg = new JObject()
                 {
                     new JProperty("created_at", DateTime.UtcNow),
+                    new JProperty("id", Request.HttpContext.Connection.Id.ToString()),
+                    new JProperty("address", address),
                     new JProperty("ip_address", Request.HttpContext.Connection.RemoteIpAddress.ToString()),
                     new JProperty("user", User.Identity?.Name?? User.Claims.SingleOrDefault(c=>c.Type == "Username")?.Value),
                     new JProperty("request_url", Request.Path.Value),

@@ -9,8 +9,8 @@ namespace Mix.Cms.Lib.Models.Cms
         {
             MixAttributeFieldAttributeSet = new HashSet<MixAttributeField>();
             MixAttributeFieldReferrence = new HashSet<MixAttributeField>();
-            MixAttributeSetReferenceDestination = new HashSet<MixAttributeSetReference>();
-            MixAttributeSetReferenceSource = new HashSet<MixAttributeSetReference>();
+            MixAttributeSetData = new HashSet<MixAttributeSetData>();
+            MixAttributeSetReference = new HashSet<MixAttributeSetReference>();
             MixModuleAttributeData = new HashSet<MixModuleAttributeData>();
             MixModuleAttributeSet = new HashSet<MixModuleAttributeSet>();
             MixPageAttributeSet = new HashSet<MixPageAttributeSet>();
@@ -28,8 +28,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
         public virtual ICollection<MixAttributeField> MixAttributeFieldAttributeSet { get; set; }
         public virtual ICollection<MixAttributeField> MixAttributeFieldReferrence { get; set; }
-        public virtual ICollection<MixAttributeSetReference> MixAttributeSetReferenceDestination { get; set; }
-        public virtual ICollection<MixAttributeSetReference> MixAttributeSetReferenceSource { get; set; }
+        public virtual ICollection<MixAttributeSetData> MixAttributeSetData { get; set; }
+        public virtual ICollection<MixAttributeSetReference> MixAttributeSetReference { get; set; }
         public virtual ICollection<MixModuleAttributeData> MixModuleAttributeData { get; set; }
         public virtual ICollection<MixModuleAttributeSet> MixModuleAttributeSet { get; set; }
         public virtual ICollection<MixPageAttributeSet> MixPageAttributeSet { get; set; }

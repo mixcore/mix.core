@@ -198,6 +198,12 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         controller: "AttributeSetController",
         templateUrl: "/app/app-portal/pages/attribute-set/details.html"
     });
+
+    $routeProvider.when("/portal/page/attribute-set-data/list/:id", {
+        controller: "AttributeSetDataController",
+        templateUrl: "/app/app-portal/pages/attribute-set-data/list.html"
+    });
+   
     /* end attribute set*/
 
     $routeProvider.when("/portal/configuration/list", {
@@ -341,19 +347,6 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
     $routeProvider.when("/portal/social-feed", {
         controller: "SocialFeedController",
         templateUrl: "/app/app-portal/pages/social-feed/social-feed.html"
-    });
-
-    $routeProvider.when("/portal/menu/list", {
-        controller: "PositionController",
-        templateUrl: "/app/app-portal/pages/menu/list.html"
-    });
-    $routeProvider.when("/portal/menu/details/:id", {
-        controller: "PositionController",
-        templateUrl: "/app/app-portal/pages/menu/details.html"
-    });
-    $routeProvider.when("/portal/menu/create", {
-        controller: "PositionController",
-        templateUrl: "/app/app-portal/pages/menu/details.html"
     });
     $routeProvider.otherwise({ redirectTo: "/portal" });
 });

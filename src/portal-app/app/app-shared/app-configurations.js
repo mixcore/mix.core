@@ -1345,8 +1345,8 @@ app.constant('ngAppSettings', {
         'fas fa-zhihu'
     ]
 });
-app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'GlobalSettingsService', 'CommonService', 'AuthService', 'TranslatorService',
-    function ($http, $rootScope, ngAppSettings, $location, globalSettingsService, commonService, authService, translatorService,
+app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'BaseODataService', 'CommonService', 'AuthService', 'TranslatorService',
+    function ($http, $rootScope, ngAppSettings, $location, baseODataService, commonService, authService, translatorService,
     ) {
         $rootScope.currentContext = $rootScope;
         $rootScope.isBusy = false;
@@ -1388,6 +1388,7 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'GlobalSettingsSer
 
         $rootScope.generateKeyword = function (src, character) {
             if (src) {
+                src = $rootScope.parseUnsignString(src);
                 return src.replace(/[^a-zA-Z0-9]+/g, character)
                     .replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2')
                     .replace(/([a-z])([A-Z])/g, '$1-$2')
@@ -1401,7 +1402,23 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'GlobalSettingsSer
         $rootScope.generatePhone = function (src) {
             return src.replace(/^([0-9]{3})([0-9]{3})([0-9]{4})$/, '($1) $2-$3');
         }
-
+        $rootScope.parseUnsignString = function(str) {
+            str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+            str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+            str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+            str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+            str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+            str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+            str = str.replace(/đ/g, "d");
+            str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+            str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+            str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+            str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+            str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+            str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+            str = str.replace(/Đ/g, "D");
+            return str;
+        }
         $rootScope.logOut = function () {
             authService.logOut();            
         };
@@ -1693,7 +1710,14 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'GlobalSettingsSer
                     });
                 }
             });
-        }
+        };
+
+        $rootScope.getODataService = function(modelName, isGlobal)
+        {
+            var serviceFactory = angular.copy(baseODataService);
+            serviceFactory.init(modelName, isGlobal);
+            return serviceFactory;            
+        };
 
     }]);
 if ($.trumbowyg) {
