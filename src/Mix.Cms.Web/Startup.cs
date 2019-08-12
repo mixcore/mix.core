@@ -14,6 +14,7 @@ using Mix.Identity.Services;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Hub;
 using Microsoft.AspNet.OData.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Mix.Cms.Web
 {
