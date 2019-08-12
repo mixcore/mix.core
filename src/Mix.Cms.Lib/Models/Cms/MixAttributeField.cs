@@ -7,9 +7,9 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixAttributeField()
         {
-            MixPostAttributeValue = new HashSet<MixPostAttributeValue>();
             MixModuleAttributeValue = new HashSet<MixModuleAttributeValue>();
             MixPageAttributeValue = new HashSet<MixPageAttributeValue>();
+            MixPostAttributeValue = new HashSet<MixPostAttributeValue>();
         }
 
         public int Id { get; set; }
@@ -27,10 +27,12 @@ namespace Mix.Cms.Lib.Models.Cms
         public DateTime CreatedDateTime { get; set; }
         public int Priority { get; set; }
         public int Status { get; set; }
+        public int? ReferenceId { get; set; }
 
         public virtual MixAttributeSet AttributeSet { get; set; }
-        public virtual ICollection<MixPostAttributeValue> MixPostAttributeValue { get; set; }
+        public virtual MixAttributeSet Referrence { get; set; }
         public virtual ICollection<MixModuleAttributeValue> MixModuleAttributeValue { get; set; }
         public virtual ICollection<MixPageAttributeValue> MixPageAttributeValue { get; set; }
+        public virtual ICollection<MixPostAttributeValue> MixPostAttributeValue { get; set; }
     }
 }

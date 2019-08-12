@@ -37,7 +37,11 @@ paths.appPortal = {
         paths.webapp + "app-portal/demo.js",
         paths.webapp + "app-portal/services/**/*.js",
         paths.webapp + "app-portal/pages/**/*.js",
-        paths.webapp + "app-portal/components/**/*.js"
+        paths.webapp + "app-portal/components/**/*.js",
+
+        paths.webapp + "app-portal-odata/app.route.js",
+        paths.webapp + "app-portal-odata/pages/**/*.js",
+        paths.webapp + "app-portal-odata/components/**/*.js"
     ],
     dest: paths.webroot + "js/app-portal.min.js"
 };
@@ -168,6 +172,7 @@ paths.views = {
     src: [
         "./app/app-shared/**/*.html",
         "./app/app-portal/**/*.html",
+        "./app/app-portal-odata/**/*.html",
         "./app/app-client/**/*.html",
         "./app/app-init/**/*.html",
         "./app/app-security/**/*.html",

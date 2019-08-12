@@ -23,7 +23,7 @@ using Mix.Cms.Lib.ViewModels;
 namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
-    [Route("api/v1/{culture}/position/portal")]
+    [Route("api/v1/{culture}/position")]
     public class ApiPositionController :
          BaseGenericApiController<MixCmsContext, MixPosition>
     {

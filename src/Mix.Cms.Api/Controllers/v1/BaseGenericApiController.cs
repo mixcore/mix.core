@@ -153,7 +153,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 {
                     await MixCacheService.RemoveCacheAsync();
                 }
-                UnitOfWorkHelper<TDbContext>.HandleTransaction(result.IsSucceed, true, _transaction);
+                
                 return result;
             }
             return new RepositoryResponse<TModel>() { IsSucceed = false };
@@ -170,7 +170,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 {
                     await MixCacheService.RemoveCacheAsync();
                 }
-                UnitOfWorkHelper<TDbContext>.HandleTransaction(result.IsSucceed, true, _transaction);
+                
                 return result;
             }
             return new RepositoryResponse<TModel>() { IsSucceed = false };
@@ -244,6 +244,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     if (data.IsSucceed)
                     {
                         await MixCacheService.SetAsync(cacheKey, data);
+                        AlertAsync("Add Cache", 200, cacheKey);
                     }
                 }
                 else
@@ -252,6 +253,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     if (data.IsSucceed)
                     {
                         await MixCacheService.SetAsync(cacheKey, data);
+                        AlertAsync("Add Cache", 200, cacheKey);
                     }
                 }
                 
@@ -269,7 +271,6 @@ namespace Mix.Cms.Api.Controllers.v1
                 var result = await vm.SaveModelAsync(isSaveSubModel).ConfigureAwait(false);
 
                 await MixCacheService.RemoveCacheAsync();
-                UnitOfWorkHelper<TDbContext>.HandleTransaction(result.IsSucceed, true, _transaction);
                 return result;
             }
             return new RepositoryResponse<TView>();
@@ -302,7 +303,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
                 var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.UpdateFieldsAsync(predicate, fields);
                 await MixCacheService.RemoveCacheAsync();
-                UnitOfWorkHelper<TDbContext>.HandleTransaction(result.IsSucceed, true, _transaction);
+                
                 return result;
             }
             return new RepositoryResponse<TModel>();
@@ -317,7 +318,7 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 await MixCacheService.RemoveCacheAsync();
             }
-            UnitOfWorkHelper<TDbContext>.HandleTransaction(result.IsSucceed, true, _transaction);
+            
             return result;
         }
         protected RepositoryResponse<List<TView>> SaveList<TView>(List<TView> lstVm, bool isSaveSubModel)
@@ -341,7 +342,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 Task.Run(() => MixCacheService.RemoveCacheAsync());
                 return result;
             }
-            UnitOfWorkHelper<TDbContext>.HandleTransaction(result.IsSucceed, true, _transaction);
+            
             return result;
         }
 
@@ -363,15 +364,21 @@ namespace Mix.Cms.Api.Controllers.v1
                 new JProperty("key", request.Key),
                 new JProperty("encrypted", encrypted),
                 new JProperty("plainText", decrypt));
-
             return data;
         }
 
         protected void AlertAsync(string action, int status, string message = null)
         {
+            var address = Request.Headers["X-Forwarded-For"];
+            if (String.IsNullOrEmpty(address))
+            {
+                address = Request.Host.Value;
+            }
             var logMsg = new JObject()
                 {
                     new JProperty("created_at", DateTime.UtcNow),
+                    new JProperty("id", Request.HttpContext.Connection.Id.ToString()),
+                    new JProperty("address", address),
                     new JProperty("ip_address", Request.HttpContext.Connection.RemoteIpAddress.ToString()),
                     new JProperty("user", User.Identity?.Name?? User.Claims.SingleOrDefault(c=>c.Type == "Username")?.Value),
                     new JProperty("request_url", Request.Path.Value),

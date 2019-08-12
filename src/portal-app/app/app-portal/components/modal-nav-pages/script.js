@@ -34,7 +34,7 @@
                         var item = {
                             priority: e.priority,
                             description: e.title,
-                            categoryId: e.id,                            
+                            pageId: e.id,                            
                             image: e.thumbnailUrl,
                             specificulture: e.specificulture,
                             status: 2,
