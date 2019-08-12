@@ -33,7 +33,13 @@ namespace Mix.Cms.Web
         {
             services.AddDbContext<MixCmsContext>();
             services.AddDbContext<MixDbContext>();
-
+            if (MixService.GetConfig<bool>("IsInit"))
+            {
+                using (var ctx = new MixCmsContext())
+                {
+                    ctx.Database.MigrateAsync();
+                }
+            }
             // Enforce Request using https schema
             if (_env.IsDevelopment())
             {
