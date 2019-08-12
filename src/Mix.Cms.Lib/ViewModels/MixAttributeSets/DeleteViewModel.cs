@@ -15,7 +15,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 
         [JsonProperty("id")]
         public int Id { get; set; }
-
+        [JsonProperty("referrenceId")]
+        public int? ReferrenceId { get; set; }
         #endregion Models
         #endregion Properties
 

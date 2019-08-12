@@ -23,7 +23,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string UpdatedBy { get; set; }
         public DateTime? UpdatedDateTime { get; set; }
 
-        public virtual MixPost MixPost { get; set; }
         public virtual MixOrder MixOrder { get; set; }
+        public virtual MixPost MixPost { get; set; }
     }
 }

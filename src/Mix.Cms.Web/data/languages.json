@@ -233,6 +233,17 @@
       "status": 2
     },
     {
+      "keyword": "portal_menus",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Menus",
+      "defaultValue": "Menus",
+      "cultures": null,
+      "priority": 0,
+      "status": 2
+    },
+    {
       "keyword": "language",
       "category": "Portal",
       "dataType": 7,

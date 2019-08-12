@@ -7,11 +7,14 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixAttributeSet()
         {
-            MixPostAttributeSet = new HashSet<MixPostAttributeSet>();
-            MixAttributeField = new HashSet<MixAttributeField>();
+            MixAttributeFieldAttributeSet = new HashSet<MixAttributeField>();
+            MixAttributeFieldReferrence = new HashSet<MixAttributeField>();
+            MixAttributeSetData = new HashSet<MixAttributeSetData>();
+            MixAttributeSetReference = new HashSet<MixAttributeSetReference>();
             MixModuleAttributeData = new HashSet<MixModuleAttributeData>();
             MixModuleAttributeSet = new HashSet<MixModuleAttributeSet>();
             MixPageAttributeSet = new HashSet<MixPageAttributeSet>();
+            MixPostAttributeSet = new HashSet<MixPostAttributeSet>();
         }
 
         public int Id { get; set; }
@@ -23,10 +26,13 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Priority { get; set; }
         public int Status { get; set; }
 
-        public virtual ICollection<MixPostAttributeSet> MixPostAttributeSet { get; set; }
-        public virtual ICollection<MixAttributeField> MixAttributeField { get; set; }
+        public virtual ICollection<MixAttributeField> MixAttributeFieldAttributeSet { get; set; }
+        public virtual ICollection<MixAttributeField> MixAttributeFieldReferrence { get; set; }
+        public virtual ICollection<MixAttributeSetData> MixAttributeSetData { get; set; }
+        public virtual ICollection<MixAttributeSetReference> MixAttributeSetReference { get; set; }
         public virtual ICollection<MixModuleAttributeData> MixModuleAttributeData { get; set; }
         public virtual ICollection<MixModuleAttributeSet> MixModuleAttributeSet { get; set; }
         public virtual ICollection<MixPageAttributeSet> MixPageAttributeSet { get; set; }
+        public virtual ICollection<MixPostAttributeSet> MixPostAttributeSet { get; set; }
     }
 }
