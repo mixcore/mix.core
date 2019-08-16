@@ -2,38 +2,44 @@ modules.component('attributeSetForm', {
     templateUrl: '/app/app-portal/components/attribute-set-form/view.html',
     bindings: {
         setId: '=',
-        data: '=',
-        attributes: '=',
-        defaultData: '=?',
+        attrDataId: '=',
+        attrData: '=?',
+        defaultId: '=',
         saveData: '&?'
     },
-    controller: ['$rootScope', '$scope', 'AttributeDataService',
+    controller: ['$rootScope', '$scope', 'AttributeSetDataService',
         function ($rootScope, $scope, service) {
             var ctrl = this;
             ctrl.attributes = [];
             ctrl.selectedProp = null;
             ctrl.settings = $rootScope.globalSettings;
             ctrl.$onInit = async function () {
-                if (!ctrl.defaultData) {
-                    var getData = await service.getSingle(['post', ctrl.setId, 'portal']);
-                    if (getData.isSucceed) {
-                        ctrl.defaultData = getData.data;
-                        if (!ctrl.data) {
-                            ctrl.data = angular.copy(ctrl.defaultData);
-                        }
+                ctrl.loadData();
+            };
+            ctrl.loadData = async function () {
+                $rootScope.isBusy = true;
+                if(ctrl.attrDataId){
+                    ctrl.data = await service.getSingle('portal', [ctrl.attrDataId, ctrl.setId]);
+                    if (ctrl.data) {
                         $rootScope.isBusy = false;
                         $scope.$apply();
                     } else {
-                        if (getData) {
-                            $rootScope.showErrors(getData.errors);
+                        if (ctrl.data) {
+                            $rootScope.showErrors('Failed');
                         }
                         $rootScope.isBusy = false;
                         $scope.$apply();
                     }
-
-                }else{
-                    if (!ctrl.data) {
-                        ctrl.data = angular.copy(ctrl.defaultData);
+                }
+                else{
+                    ctrl.data = await service.getSingle('portal', [ctrl.defaultId, ctrl.setId]);
+                    if (ctrl.data) {
+                        $rootScope.isBusy = false;
+                        $scope.$apply();
+                    } else {
+                        $rootScope.showErrors('Failed');
+                        $rootScope.isBusy = false;
+                        $scope.$apply();
                     }
                 }
             };
@@ -42,11 +48,19 @@ modules.component('attributeSetForm', {
                 if (ctrl.saveData) {
                     var result = await ctrl.saveData({ data: ctrl.data });
                     if(result.isSucceed){
-                        ctrl.data = angular.copy(ctrl.defaultData);
+                        ctrl.data = await service.getSingle('portal', [ctrl.defaultId, ctrl.setId]);
+                        if (ctrl.data) {
+                            $rootScope.isBusy = false;
+                            $scope.$apply();
+                        } else {
+                            $rootScope.showErrors('Failed');
+                            $rootScope.isBusy = false;
+                            $scope.$apply();
+                        }
                     }
                 }
                 else {
-                    angular.forEach(ctrl.data.data, function(e){                    
+                    angular.forEach(ctrl.data.values, function(e){                    
                         //Encrypt field before send
                         if(e.field.isEncrypt){
                             var encryptData = $rootScope.encrypt(e.stringValue);

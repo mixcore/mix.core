@@ -1,36 +1,3 @@
-<!-- Main content -->
-<section ng-init="getSingle()">
-<h6 class="card-header">
-    <span ng-bind="$ctrl.header"></span>    
-</h6>
-<form ng-class="{'submitted': submitted}">
-<table class="table table-sm" id="Table">
-    <thead class="thead-light">
-        <tr>
-            <th scope="col" width="5%">
-                <span class="oi oi-move"></span>
-            </th>            
-            <th scope="col">Value</th>
-        </tr>
-    </thead>
-    <tbody class="sortable">
-        <tr ng-repeat="value in activedData.values | orderBy:'priority' track by $index">
-            <td style="cursor:move;">
-                <span class="oi oi-move"></span>
-            </td>            
-            <td class="prop-value-container">                
-                <attribute-value-editor attribute-value="value" is-show-title="'true'"></attribute-value-editor>                
-            </td>
-        </tr>
-    </tbody>
-    <tfoot>
-        <tr>
-            <td>
-                <button ng-click="$ctrl.submit()" class="btn btn-primary">Save</button>
-            </td>
-        </tr>
-    </tfoot>
-</table>
-</form>
-</section>
-<!-- /.content -->
+<div ng-init="init()">    
+    <attribute-set-form set-id="attributeSetId" default-id="'default'" attr-data-id="dataId" save-data="save(data)"></attribute-set-form>
+</div>
