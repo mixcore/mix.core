@@ -4,6 +4,7 @@ function BaseODataCtrl($scope, $rootScope, $routeParams, ngAppSettings, service)
     $scope.request = angular.copy(ngAppSettings.request);
     $scope.contentStatuses = angular.copy(ngAppSettings.contentStatuses);
     $scope.activedData = null;
+    $scope.defaultId = 0;
     $scope.data = null;
     $scope.isInit = false;
     $scope.isValid = true;
@@ -30,9 +31,10 @@ function BaseODataCtrl($scope, $rootScope, $routeParams, ngAppSettings, service)
     else {
         $scope.referrerUrl = '/portal';// document.referrer.substr(document.referrer.indexOf('/portal'));
     }
+    
     $scope.getSingle = async function () {
         $rootScope.isBusy = true;
-        var id = $routeParams.id || 0;
+        var id = $routeParams.id || $scope.defaultId;
         var resp = await service.getSingle('portal', [id]);
         if (resp) {
             $scope.activedData = resp;
