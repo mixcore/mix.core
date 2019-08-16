@@ -199,9 +199,19 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         templateUrl: "/app/app-portal/pages/attribute-set/details.html"
     });
 
-    $routeProvider.when("/portal/attribute-set-data/list/:id", {
+    $routeProvider.when("/portal/attribute-set-data/list", {
         controller: "AttributeSetDataController",
         templateUrl: "/app/app-portal/pages/attribute-set-data/list.html"
+    });
+    
+    $routeProvider.when("/portal/attribute-set-data/create", {
+        controller: "AttributeSetDataController",
+        templateUrl: "/app/app-portal/pages/attribute-set-data/details.html"
+    });
+    
+    $routeProvider.when("/portal/attribute-set-data/details/:id", {
+        controller: "AttributeSetDataController",
+        templateUrl: "/app/app-portal/pages/attribute-set-data/details.html"
     });
    
     /* end attribute set*/

@@ -111,6 +111,9 @@ app.factory('BaseODataService', ['$rootScope', '$routeParams', 'CommonService',
                 var skip = parseInt(req.pageIndex) * parseInt(req.pageSize);
                 var top = parseInt(req.pageSize);
                 var result = '?$skip=' + skip + '&$top=' + top + '&$orderby=' + req.orderBy;
+                if (req.filter){
+                    result += "&$filter="+req.filter;
+                }
                 if (req.selects){
                     result += "&$select="+req.selects;
                 }

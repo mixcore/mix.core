@@ -1,5 +1,5 @@
 <div ng-if="!$ctrl.attributeValue.field.isSelect" class="form-group">
-    <label class="control-label" ng-if="$ctrl.isShowTitle" ng-bind="$ctrl.attributeValue.field.title"></label>    
+    <label class="control-label" ng-if="$ctrl.isShowTitle=='true'" ng-bind="$ctrl.attributeValue.field.title"></label>    
     <div ng-switch="$ctrl.attributeValue.field.dataType">
         <div ng-switch-when="0">
             <!--custom-->

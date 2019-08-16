@@ -3,6 +3,7 @@ modules.component('attributeValueEditor', {
     templateUrl: '/app/app-portal/components/attribute-value-editor/view.html',
     bindings: {
         attributeValue: '=?',
+        isShowTitle: '=?',
     },
     controller: ['$rootScope', '$scope', 'ngAppSettings', function ($rootScope, $scope, ngAppSettings) {
         var ctrl = this;

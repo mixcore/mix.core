@@ -2,28 +2,71 @@
 app.controller('AttributeSetDataController',
     [
         '$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$location',
-        'PagePostService', 'PostService', 'CommonService',
+        'AttributeSetDataService', 'CommonService',
         function ($scope, $rootScope, ngAppSettings, $routeParams, $location,
-            service, postService, commonService) {
+            service, commonService) {
             BaseODataCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
+            $scope.defaultId = 'default';
             $scope.cates = ['Site', 'System'];
             $scope.others=[];
             $scope.settings = $rootScope.globalSettings;
-            $scope.attributeSetId = $routeParams.id;
+            
             $scope.canDrag = $scope.request.orderBy !== 'Priority' || $scope.request.direction !== '0';
             $scope.getList = async function () {
                 $rootScope.isBusy = true;
-                var id = $routeParams.id;
-                $scope.request.query = '&attribute_set_id=' + id;
-                var response = await service.getList($scope.request);
+                $scope.attributeSetId = $routeParams.attributeSetId;
+                var type = $routeParams.type;
+                var parentId = $routeParams.parentId;
+                var attrSetId = $routeParams.attributeSetId;
+                $scope.request.filter  = '';
+                if(attrSetId){
+                    $scope.request.filter += 'attributeSetId eq ' + attrSetId;
+                }
+                if(type){
+                    if($scope.request.filter){
+                        $scope.request.filter += ' and ';
+                    }
+                    $scope.request.filter += 'parentType eq ' + type;
+                }
+                if(parentId){
+                    if($scope.request.filter){
+                        $scope.request.filter += ' and ';
+                    }
+                    $scope.request.filter += 'parentId eq ' + parentId;
+                }
+                
+                var response = await service.getList('read', $scope.request);
                 $scope.canDrag = $scope.request.orderBy !== 'Priority' || $scope.request.direction !== '0';
-                if (response.isSucceed) {
-                    $scope.data = response.data;
+                if (response) {
+                    $scope.data = response;
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 }
                 else {
-                    $rootScope.showErrors(response.errors);
+                    $rootScope.showErrors('Failed');
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                }
+            };
+            $scope.getSingle = async function () {
+                $rootScope.isBusy = true;
+                var id = $routeParams.id || $scope.defaultId;
+                var attributeSetId = $routeParams.attributeSetId;
+                var resp = await service.getSingle('portal', [id, attributeSetId]);
+                if (resp) {
+                    $scope.activedData = resp;
+                    if ($scope.getSingleSuccessCallback) {
+                        $scope.getSingleSuccessCallback();
+                    }
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                } else {
+                    if (resp) {
+                        $rootScope.showErrors('Failed');
+                    }
+                    if ($scope.getSingleFailCallback) {
+                        $scope.getSingleFailCallback();
+                    }
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 }
