@@ -12,6 +12,10 @@ app.controller('AttributeSetDataController',
             $scope.settings = $rootScope.globalSettings;
             
             $scope.canDrag = $scope.request.orderBy !== 'Priority' || $scope.request.direction !== '0';
+            $scope.init= async function(){
+                $scope.attributeSetId = $routeParams.attributeSetId;
+                $scope.dataId = $routeParams.dataId;
+            };
             $scope.getList = async function () {
                 $rootScope.isBusy = true;
                 $scope.attributeSetId = $routeParams.attributeSetId;
@@ -51,7 +55,7 @@ app.controller('AttributeSetDataController',
             $scope.getSingle = async function () {
                 $rootScope.isBusy = true;
                 var id = $routeParams.id || $scope.defaultId;
-                var attributeSetId = $routeParams.attributeSetId;
+                $scope.attributeSetId = $routeParams.attributeSetId;
                 var resp = await service.getSingle('portal', [id, attributeSetId]);
                 if (resp) {
                     $scope.activedData = resp;

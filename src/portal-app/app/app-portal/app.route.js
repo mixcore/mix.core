@@ -209,7 +209,7 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         templateUrl: "/app/app-portal/pages/attribute-set-data/details.html"
     });
     
-    $routeProvider.when("/portal/attribute-set-data/details/:id", {
+    $routeProvider.when("/portal/attribute-set-data/details", {
         controller: "AttributeSetDataController",
         templateUrl: "/app/app-portal/pages/attribute-set-data/details.html"
     });
