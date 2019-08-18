@@ -125,14 +125,14 @@
                 // ids: $rootScope.settings.data.Google_Analytic_Ids,
                 metrics: 'ga:sessions',
                 dimensions: 'ga:country',
-                'start-date': '30daysAgo',
+                'start-date': '360daysAgo',
                 'end-date': 'yesterday',
                 'max-results': 6,
                 sort: '-ga:sessions'
               },
               chart: {
                 container: 'chart-2-container',
-                type: 'PIE',
+                type: 'GEO',
                 options: {
                   width: '95%',
                   pieHole: 4 / 9
