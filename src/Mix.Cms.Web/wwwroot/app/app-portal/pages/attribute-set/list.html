@@ -54,7 +54,10 @@
                         <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
                             <a href="/portal/attribute-set/details/{{item.id}}" class="btn btn-link">
                                 <span class="fas fa-pencil-alt text-primary"></span>
-                            </a>                            
+                            </a>          
+                            <a href="/portal/attribute-set-data/list?attributeSetId={{item.id}}" class="btn btn-link">
+                                <span class="fas fa-list text-info"></span>
+                            </a>                  
                             <a ng-click="remove(item.id);" class="btn btn-link">
                                 <span class="fas fa-times text-danger"></span>
                             </a>

@@ -2,17 +2,17 @@
     <span ng-bind="$ctrl.header"></span>
 </h6>
 <table class="table table-sm">
-    <thead class="thead-light">
+    <!-- <thead class="thead-light">
         <tr>
             <th scope="col" width="5%">
                 <span class="oi oi-move"></span>
             </th>
-            <th scope="col" ng-repeat="col in $ctrl.columns | orderBy:'priority' track by $index" ng-bind="col.title"
-                ng-if="$index < 3"></th>
+            <th scope="col" ng-repeat="col in $ctrl.data.fields | orderBy:'priority' track by $index" ng-bind="col.title"
+                ng-if="$index < 3" ng-bind="col.title"></th>
                 <th>Actions</th>
             
         </tr>
-    </thead>
+    </thead> -->
     <tbody class="sortable">
         <tr class="sortable-item module-column" 
             ng-repeat="item in $ctrl.data track by $index" 
@@ -20,8 +20,8 @@
             <td style="cursor:move;">
                 <span class="oi oi-move"></span>
             </td>
-            <td ng-repeat="col in $ctrl.columns | orderBy:'priority' track by $index">
-                <attribute-value-preview ng-if="$index < 3" data="$ctrl.filterData(item, col.name)"></attribute-value-preview>
+            <td ng-if="$index < 3" ng-repeat="val in item.values | orderBy:'priority' track by $index">
+                <attribute-value-preview  data="val"></attribute-value-preview>
             </td>
             <td>
                 <a ng-click="$ctrl.update(item)" class="btn btn-link">

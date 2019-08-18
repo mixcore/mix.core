@@ -5,7 +5,7 @@
             <filter-list request="request" callback="getList(pageIndex)"></filter-list>
         </div>
         <div class="col-md-12">
-            <a href="/portal/post/create?page_id={{pageId}}" class="btn btn-link">
+            <a href="/portal/attribute-set-data/create?attributeSetId={{attributeSetId}}" class="btn btn-link">
                 <i class="fas fa-plus"></i>
             </a>
         </div>
@@ -13,7 +13,7 @@
 </div>
 <div class="card-body">
     <table id="list-page" class="table table-sm table-hover sortable" cellspacing="0" ng-init="getList()">
-        <thead class="thead-light">
+        <!-- <thead class="thead-light">
             <tr>
                 <th scope="col" style="width: 3%;">
                     <span class="fas fa-sort"></span>
@@ -36,7 +36,7 @@
 
                 <th scope="col" style="width: 5%;">Actions</th>
             </tr>
-        </thead>
+        </thead> -->
 
         <tbody class="sortable" dnd-list="data" dnd-disable-if="canDrag">
             <tr ng-if="canDrag">
@@ -49,36 +49,21 @@
                 <td>
                     <input type="text" value="{{item.priority}}" class="item-priority form-control form-control-sm d-inline" style="width:40px;">
                 </td>
-                <td>
+                <td ng-repeat="val in item.values">
                     <small>
-                        <span ng-bind-html="item.post.title"></span>
+                        <span ng-bind-html="val.stringValue"></span>
                     </small>
                 </td>
-                <td>
-                    <div ng-if="item.post.image!=''">
-                        <preview-image img-height="50" img-src="item.post.imageUrl"></preview-image>
-                    </div>
-
-                </td>
-                <td>
-                    <small>
-                        {{item.post.createdDateTime | utcToLocal}}
-                    </small>
-                </td>
-                <td>
-                    {{item.post.createdBy}}
-                </td>
-
                 <td>
                     <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                        <a ng-click="goToPath('/portal/post/details/' + item.post.id)" class="btn btn-link">
+                        <a ng-click="goToPath('/portal/attribute-set-data/details?dataId='+ item.id +'&attributeSetId=' + attributeSetId)" class="btn btn-link">
                             <span class="fas fa-pencil-alt text-primary"></span>
                         </a>
                         <a ng-click="preview(item.post)" target="_blank" class="btn btn-link">
                             <span class="fas fa-eye text-info"></span>
                         </a>
 
-                        <a ng-click="remove(item.pageId,item.postId);" class="btn btn-link">
+                        <a ng-click="remove(item.id);" class="btn btn-link">
                             <span class="fas fa-times text-danger"></span>
                         </a>
                     </div>
