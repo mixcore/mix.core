@@ -122,8 +122,18 @@ namespace Mix.Cms.Lib.Helpers
                 fieldPropertyType = fieldInfo.FieldType;
                 fieldPropertyExpression = Expression.Field(par, fieldInfo);
             }
+            object data2 = null;
+            if (fieldPropertyType.IsGenericType && fieldPropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                System.ComponentModel.TypeConverter conv = System.ComponentModel.TypeDescriptor.GetConverter(fieldPropertyType);
+                data2 = conv.ConvertFrom(constant.LiteralText);
+                //data2 = Convert.ChangeType(constant.LiteralText, Nullable.GetUnderlyingType());
+            }
+            else
+            {
+                data2 = Convert.ChangeType(constant.LiteralText, fieldPropertyType);
+            }
 
-            object data2 = Convert.ChangeType(constant.LiteralText, fieldPropertyType);
             if (fieldPropertyType == typeof(string))
             {
                 data2 = data2.ToString().Replace("'", "");
@@ -133,19 +143,19 @@ namespace Mix.Cms.Lib.Helpers
             {
                 case BinaryOperatorKind.Or:
                     eq = Expression.Or(fieldPropertyExpression,
-                                     Expression.Constant(data2));
+                                     Expression.Constant(data2, fieldPropertyType));
                     break;
                 case BinaryOperatorKind.And:
                     eq = Expression.And(fieldPropertyExpression,
-                                      Expression.Constant(data2));
+                                      Expression.Constant(data2, fieldPropertyType));
                     break;
                 case BinaryOperatorKind.Equal:
                     eq = Expression.Equal(fieldPropertyExpression,
-                                      Expression.Constant(data2));
+                                      Expression.Constant(data2, fieldPropertyType));
                     break;
                 case BinaryOperatorKind.NotEqual:
                     eq = Expression.NotEqual(fieldPropertyExpression,
-                                      Expression.Constant(data2));
+                                      Expression.Constant(data2, fieldPropertyType));
                     break;
                 case BinaryOperatorKind.GreaterThan:
                     eq = Expression.GreaterThan(fieldPropertyExpression,
@@ -153,35 +163,35 @@ namespace Mix.Cms.Lib.Helpers
                     break;
                 case BinaryOperatorKind.GreaterThanOrEqual:
                     eq = Expression.GreaterThanOrEqual(fieldPropertyExpression,
-                                      Expression.Constant(data2));
+                                      Expression.Constant(data2, fieldPropertyType));
                     break;
                 case BinaryOperatorKind.LessThan:
                     eq = Expression.LessThan(fieldPropertyExpression,
-                                      Expression.Constant(data2));
+                                      Expression.Constant(data2, fieldPropertyType));
                     break;
                 case BinaryOperatorKind.LessThanOrEqual:
                     eq = Expression.LessThanOrEqual(fieldPropertyExpression,
-                                      Expression.Constant(data2));
+                                      Expression.Constant(data2, fieldPropertyType));
                     break;
                 case BinaryOperatorKind.Add:
                     eq = Expression.Add(fieldPropertyExpression,
-                                      Expression.Constant(data2));
+                                      Expression.Constant(data2, fieldPropertyType));
                     break;
                 case BinaryOperatorKind.Subtract:
                     eq = Expression.Subtract(fieldPropertyExpression,
-                                      Expression.Constant(data2));
+                                      Expression.Constant(data2, fieldPropertyType));
                     break;
                 case BinaryOperatorKind.Multiply:
                     eq = Expression.Multiply(fieldPropertyExpression,
-                                      Expression.Constant(data2));
+                                      Expression.Constant(data2, fieldPropertyType));
                     break;
                 case BinaryOperatorKind.Divide:
                     eq = Expression.Divide(fieldPropertyExpression,
-                                      Expression.Constant(data2));
+                                      Expression.Constant(data2, fieldPropertyType));
                     break;
                 case BinaryOperatorKind.Modulo:
                     eq = Expression.Modulo(fieldPropertyExpression,
-                                      Expression.Constant(data2));
+                                      Expression.Constant(data2, fieldPropertyType));
                     break;
                 case BinaryOperatorKind.Has:
                     break;
@@ -233,6 +243,7 @@ namespace Mix.Cms.Lib.Helpers
             }
             return null;
         }
+       
         private class ReplaceExpressionVisitor: ExpressionVisitor
         {
             private readonly Expression _oldValue;

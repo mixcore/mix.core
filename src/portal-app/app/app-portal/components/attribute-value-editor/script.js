@@ -3,30 +3,53 @@ modules.component('attributeValueEditor', {
     templateUrl: '/app/app-portal/components/attribute-value-editor/view.html',
     bindings: {
         attributeValue: '=?',
+        parentType: '=?',
+        parentId: '=?',
+        isShowTitle: '=?',
     },
-    controller: ['$rootScope', '$scope', 'ngAppSettings', function ($rootScope, $scope, ngAppSettings) {
+    controller: ['$rootScope', '$scope', 'ngAppSettings', 'AttributeSetDataService', 
+        function ($rootScope, $scope, ngAppSettings, dataService) {
         var ctrl = this;
         ctrl.icons = ngAppSettings.icons;
+        ctrl.refData = [];
+        ctrl.refRequest = angular.copy(ngAppSettings.request);
+        ctrl.refRequest.pageSize = 100;
         ctrl.dataTypes = $rootScope.globalSettings.dataTypes;
         ctrl.previousId = null;
         ctrl.$doCheck = function () {
-            if (ctrl.attributeValueEditor && ctrl.previousId !== ctrl.attributeValue.id) {
+            if (ctrl.attributeValue && ctrl.previousId !== ctrl.attributeValue.id) {
                 ctrl.previousId = ctrl.attributeValue.id;
                 ctrl.initData();
             }
         }.bind(ctrl);
         ctrl.$onInit = function () {
-            
         };
-        ctrl.initData = function(){
+        ctrl.initData = async function(){
             setTimeout(() => {
-                switch (ctrl.attributeValue.dataType) {
+                switch (ctrl.attributeValue.field.dataType) {
                     case 1:
                     case 2:
                     case 3:
                         if (ctrl.attributeValue.datetimeValue) {
                             ctrl.attributeValue.dateObj = new Date(ctrl.attributeValue.datetimeValue);
                             $scope.$apply();
+                        }
+                        break;
+                    case 23: // reference
+                        if(ctrl.attributeValue.field.referenceId){
+                            dataService.getList('read', ctrl.refRequest, ctrl.attributeValue.field.referenceId, ctrl.parentType, ctrl.parentId).then(resp=>{
+                                if (resp) {
+                                    ctrl.refData = resp;
+                                    $rootScope.isBusy = false;
+                                    $scope.$apply();
+                                } else {
+                                    if (resp) {
+                                        $rootScope.showErrors('Failed');
+                                    }
+                                    $rootScope.isBusy = false;
+                                    $scope.$apply();
+                                }
+                            });
                         }
                         break;
                     default:
@@ -45,7 +68,7 @@ modules.component('attributeValueEditor', {
                 }
             }, 200);
         };
-        ctrl.updateStringValue = function (dataType) {
+        ctrl.updateStringValue = async function (dataType) {
             switch (dataType) {
                 case 1:
                 case 2:
@@ -69,6 +92,26 @@ modules.component('attributeValueEditor', {
                 default:
                     break;
             }
-        }
+        };
+        ctrl.updateRefData = function(data){
+
+        };
+        ctrl.removeRefData = async function(data){
+            $rootScope.showConfirm(ctrl, 'removeRefDataConfirmed', [data.id], null, 'Remove', 'Are you sure');
+        };
+        ctrl.removeRefDataConfirmed = async function(dataId){
+            $rootScope.isBusy = true;
+            var result = await dataService.delete(dataId);
+            if (result.isSucceed) {
+                $rootScope.removeObjectByKey(ctrl.refData, 'id', dataId);
+                $rootScope.isBusy = false;
+                $scope.$apply();
+            }
+            else {
+                $rootScope.showMessage('failed');
+                $rootScope.isBusy = false;
+                $scope.$apply();
+            }
+        };
     }]
 });
