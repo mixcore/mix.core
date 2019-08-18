@@ -121,6 +121,14 @@
                 placeholder="{{$ctrl.attributeValue.field.title}}">            
         </div>
         <div ng-switch-when="23">  <!-- Referrence -->
+            <a ng-if="$ctrl.parentId" href="/portal/attribute-set-data/details?dataId=default&attributeSetId={{$ctrl.attributeValue.field.referenceId}}&parentType={{$ctrl.parentType}}&parentId={{$ctrl.parentId}}" 
+                class="btn btn-sm btn-primary px-4 mt-3 ng-scope">
+                <i class="fas fa-plus"></i> Add
+            </a>
+            <attribute-set-values on-update="$ctrl.updateRefData(data)" on-delete="$ctrl.removeRefData(data)" 
+                header="$ctrl.attributeValue.field.title" 
+                data="$ctrl.refData">
+            </attribute-set-values>
         </div>
     </div>
 </div>

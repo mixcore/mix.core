@@ -33,7 +33,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #region Views
 
         [JsonProperty("values")]
-        public List<MixAttributeSetValues.ReadViewModel> Values { get; set; }
+        public List<MixAttributeSetValues.UpdateViewModel> Values { get; set; }
 
         #endregion
         #endregion Properties
@@ -54,7 +54,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Values = MixAttributeSetValues.ReadViewModel
+            Values = MixAttributeSetValues.UpdateViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
 
         }

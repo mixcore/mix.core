@@ -62,7 +62,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         }
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            
+            Field = MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId).Data;
         }
         #endregion
     }
