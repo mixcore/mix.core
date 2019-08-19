@@ -134,12 +134,12 @@ function BaseODataCtrl($scope, $rootScope, $routeParams, ngAppSettings, service)
     $scope.save = async function (data) {
         $rootScope.isBusy = true;
         if($scope.validate){
-            $scope.isValid = await $rootScope.executeFunctionByName('validate', $scope.validateArgs, $scope)
+            $scope.isValid = await $rootScope.executeFunctionByName('validate', $scope.validateArgs, $scope);
         }
         if($scope.isValid){
             var resp = await service.save('portal', data);
             if (resp) {
-                $scope.activedData = resp;
+                $scope.activedData = resp.data;
                 $rootScope.showMessage('success', 'success');
 
                 if ($scope.saveSuccessCallback) {
