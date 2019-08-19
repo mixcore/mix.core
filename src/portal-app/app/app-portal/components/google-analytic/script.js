@@ -26,6 +26,16 @@
             var viewSelector1 = new gapi.analytics.ViewSelector({
               container: 'view-selector-1-container'
             });
+
+
+            /**
+             * Create a ViewSelector for the second view to be rendered inside of an
+             * element with the id "view-selector-2-container".
+             */
+            var viewSelector2 = new gapi.analytics.ViewSelector({
+              container: 'view-selector-2-container'
+            });
+
             /**
              * Create a new ActiveUsers instance to be rendered inside of an
              * element with the id "active-users-container" and poll for changes every
@@ -65,7 +75,7 @@
 
             // Render both view selectors to the page.
             // viewSelector1.execute();
-            //viewSelector2.execute();
+            // viewSelector2.execute();
 
 
             /**
@@ -85,14 +95,14 @@
                 type: 'LINE',
                 options: {
                   width: '95%',
-                  legendTextStyle: { color: '#FFF' },
-                  titleTextStyle: { color: '#FFF' },
+                  legendTextStyle: { color: '#333' },
+                  titleTextStyle: { color: '#333' },
                   backgroundColor: { fill: 'transparent' },
                   hAxis: {
-                    textStyle: { color: '#FFF' }
+                    textStyle: { color: '#333' }
                   },
                   vAxis: {
-                    textStyle: { color: '#FFF' }
+                    textStyle: { color: '#333' }
                   },
                   series: {
                     0: { color: $rootScope.globalSettings.portalThemeSettings.primaryColor },
@@ -106,11 +116,6 @@
               }
             });
 
-
-            dataChart1.set({ query: { ids: $rootScope.settings.data.Google_Analytic_Ids } }).execute();
-            activeUsers.set({ ids: $rootScope.settings.data.Google_Analytic_Ids }).execute();
-
-
             /**
              * Create the second DataChart for top countries over the past 30 days.
              * It will be rendered inside an element with the id "chart-2-container".
@@ -120,36 +125,52 @@
                 // ids: $rootScope.settings.data.Google_Analytic_Ids,
                 metrics: 'ga:sessions',
                 dimensions: 'ga:country',
-                'start-date': '30daysAgo',
+                'start-date': '360daysAgo',
                 'end-date': 'yesterday',
                 'max-results': 6,
                 sort: '-ga:sessions'
               },
               chart: {
                 container: 'chart-2-container',
-                type: 'PIE',
+                type: 'GEO',
                 options: {
-                  width: '100%',
+                  width: '95%',
                   pieHole: 4 / 9
                 }
               }
             });
 
-            /**
-             * Update the first dataChart when the first view selecter is changed.
-             */
-            viewSelector1.on('change', function (ids) {
-              dataChart1.set({ query: { ids: ids } }).execute();
-              // Start tracking active users for this view.
-              activeUsers.set({ ids: ids }).execute();
-            });
+            dataChart1.set({ query: { ids: $rootScope.settings.data.Google_Analytic_Ids } }).execute();
+            dataChart2.set({ query: { ids: $rootScope.settings.data.Google_Analytic_Ids } }).execute();
+            activeUsers.set({ ids: $rootScope.settings.data.Google_Analytic_Ids }).execute();
 
-            /**
-             * Update the second dataChart when the second view selecter is changed.
-             */
-            viewSelector2.on('change', function (ids) {
-              dataChart2.set({ query: { ids: ids } }).execute();
-            });
+
+
+            // /**
+            //  * Update the first dataChart when the first view selecter is changed.
+            //  */
+            // viewSelector1.on('change', function (ids) {
+            //   dataChart1.set({ query: { ids: ids } }).execute();
+            //   // Start tracking active users for this view.
+            //   activeUsers.set({ ids: ids }).execute();
+            // });
+
+
+            // /**
+            //  * Update the first dataChart when the first view selecter is changed.
+            //  */
+            // viewSelector2.on('change', function (ids) {
+            //   dataChart2.set({ query: { ids: ids } }).execute();
+            //   // Start tracking active users for this view.
+            //   activeUsers.set({ ids: ids }).execute();
+            // });
+
+            // /**
+            //  * Update the second dataChart when the second view selecter is changed.
+            //  */
+            // viewSelector2.on('change', function (ids) {
+            //   dataChart2.set({ query: { ids: ids } }).execute();
+            // });
           }
         });
       }
