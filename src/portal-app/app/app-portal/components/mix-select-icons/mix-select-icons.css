@@ -5,3 +5,8 @@
     max-height: 250px;
     overflow: scroll;
 }
+.mix-sel-icons .list-icon{
+    max-height: 150px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
