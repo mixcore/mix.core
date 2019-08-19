@@ -7,7 +7,7 @@ modules.component('mixSelectIcons', {
             return $rootScope.translate(keyword);
         };
         ctrl.select = function(ico){
-            ctrl.data = ico;
+            ctrl.data = ico.class;
         }
     }],
     bindings: {
