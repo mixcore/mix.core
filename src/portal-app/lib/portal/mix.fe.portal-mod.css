@@ -10945,6 +10945,7 @@ ul[dnd-list] li {
   display: block;
   padding: 10px 15px;
   margin-bottom: -1px;
+  position: relative;
 }
 /*# sourceMappingURL=mix.fe.portal-mod.css.map */
 

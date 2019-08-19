@@ -47,6 +47,13 @@ app.controller('AppSettingsController',
             else {
                 $rootScope.isBusy = false;
             }
+
+            // load portal menus
+            commonService.loadJArrayData('portal-menus.json').then(resp=>{
+                $scope.menus = resp.data;
+                $rootScope.isBusy = false;
+                $scope.$apply();
+            });
         };
 
         $scope.saveAppSettings = async function (appSettings) {
