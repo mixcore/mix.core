@@ -2,28 +2,70 @@
 app.controller('AttributeSetDataController',
     [
         '$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$location',
-        'PagePostService', 'PostService', 'CommonService',
+        'AttributeSetDataService', 'CommonService',
         function ($scope, $rootScope, ngAppSettings, $routeParams, $location,
-            service, postService, commonService) {
+            service, commonService) {
             BaseODataCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
+            $scope.defaultId = 'default';
+            $scope.parentId = null;
+            $scope.parentType = null;
             $scope.cates = ['Site', 'System'];
             $scope.others=[];
             $scope.settings = $rootScope.globalSettings;
-            $scope.attributeSetId = $routeParams.id;
+            
             $scope.canDrag = $scope.request.orderBy !== 'Priority' || $scope.request.direction !== '0';
+            $scope.init= async function(){
+                $scope.attributeSetId = $routeParams.attributeSetId;
+                $scope.dataId = $routeParams.dataId;
+                if($routeParams.parentId){
+                    $scope.parentId = $routeParams.parentId;
+                }
+                if($routeParams.parentType){
+                    $scope.parentType = $routeParams.parentType;
+                }
+            };
+            $scope.saveSuccessCallback = function () {
+                if($scope.parentId){
+                    $location.url('/portal/attribute-set-data/details?dataId='+ $scope.parentId);
+                }
+                else{
+                    $location.url('/portal/attribute-set-data/list?attributeSetId='+ $scope.activedData.attributeSetId);                    
+                }
+            };
             $scope.getList = async function () {
                 $rootScope.isBusy = true;
-                var id = $routeParams.id;
-                $scope.request.query = '&attribute_set_id=' + id;
-                var response = await service.getList($scope.request);
+                $scope.attributeSetId = $routeParams.attributeSetId;
+                var attrSetId = $routeParams.attributeSetId;
+                var type = $routeParams.type;
+                var parentId = $routeParams.parentId;
+                var response = await service.getList('read', $scope.request, attrSetId, type, parentId);
                 $scope.canDrag = $scope.request.orderBy !== 'Priority' || $scope.request.direction !== '0';
-                if (response.isSucceed) {
-                    $scope.data = response.data;
+                if (response) {
+                    $scope.data = response;
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 }
                 else {
-                    $rootScope.showErrors(response.errors);
+                    $rootScope.showErrors('Failed');
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                }
+            };
+            $scope.getSingle = async function () {
+                $rootScope.isBusy = true;
+                var id = $routeParams.id || $scope.defaultId;
+                $scope.attributeSetId = $routeParams.attributeSetId;
+                var resp = await service.getSingle('portal', [id, $scope.attributeSetId]);
+                if (resp) {
+                    $scope.activedData = resp;
+                    $scope.activedData.parentType = $scope.parentType;
+                    $scope.activedData.parentId = $scope.parentId;
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                } else {
+                    if (resp) {
+                        $rootScope.showErrors('Failed');
+                    }
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 }
@@ -32,13 +74,13 @@ app.controller('AttributeSetDataController',
                 item.editUrl = '/portal/post/details/' + item.id;
                 $rootScope.preview('post', item, item.title, 'modal-lg');
             };
-            $scope.remove = function (attributeSetId, postId) {
-                $rootScope.showConfirm($scope, 'removeConfirmed', [attributeSetId, postId], null, 'Remove', 'Are you sure');
+            $scope.remove = function (dataId) {
+                $rootScope.showConfirm($scope, 'removeConfirmed', [dataId], null, 'Remove', 'Are you sure');
             };
 
-            $scope.removeConfirmed = async function (attributeSetId, postId) {
+            $scope.removeConfirmed = async function (dataId) {
                 $rootScope.isBusy = true;
-                var result = await service.delete(attributeSetId, postId);
+                var result = await service.delete(dataId);
                 if (result.isSucceed) {
                     if ($scope.removeCallback) {
                         $rootScope.executeFunctionByName('removeCallback', $scope.removeCallbackArgs, $scope)
@@ -64,4 +106,5 @@ app.controller('AttributeSetDataController',
                     $scope.$apply();
                 }
             };
+
         }]);

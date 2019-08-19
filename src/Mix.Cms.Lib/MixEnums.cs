@@ -126,6 +126,13 @@ namespace Mix.Cms.Lib
             SubPage = 1,
             SubPost = 2,
             SubProduct = 3,
+        } 
+        public enum MixAttributeSetDataType
+        {
+            SubSet = 1,
+            SubPost = 2,
+            SubPage = 3,
+            SubModule= 4
         }
 
         public enum MixDataType

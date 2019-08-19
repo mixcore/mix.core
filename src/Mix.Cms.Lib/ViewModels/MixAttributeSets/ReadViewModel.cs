@@ -3,6 +3,7 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 {
@@ -30,6 +31,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         public int Status { get; set; }
 
         #endregion Models
+        #region Views
+        public List<MixAttributeFields.ReadViewModel> Fields { get; set; }
+        #endregion
         #endregion Properties
 
         #region Contructors
@@ -43,5 +47,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         }
 
         #endregion Contructors
+
+        #region Overrides
+        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            Fields = MixAttributeFields.ReadViewModel.Repository.GetModelListBy(f => f.AttributeSetId == Id, _context, _transaction).Data;
+        }
+        #endregion
     }
 }
