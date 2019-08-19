@@ -46,25 +46,7 @@
                             icon: 'mi mi-List'
                         }
                     ]
-                },
-                {
-                    title: 'portal_menus',
-                    shortTitle: 'portal_menus',
-                    icon: 'mi mi-Page',
-                    href: '#',
-                    subMenus: [
-                        {
-                            title: ('portal_create'),
-                            href: '/portal/menu/create',
-                            icon: 'mi mi-Add'
-                        },
-                        {
-                            title: 'portal_list',
-                            href: '/portal/menu/list',
-                            icon: 'mi mi-List'
-                        }
-                    ]
-                },
+                },                
                 {
                     title: 'portal_modules',
                     shortTitle: 'portal_modules',
