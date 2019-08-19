@@ -1,0 +1,17 @@
+<div class="card mb-3 ga-container" ng-init="$ctrl.init()">
+    <div class="card-header">
+        <h6>
+            Mixcore CMS Releases
+        </h6>
+    </div>
+    <div class="card-body">
+        <div>
+            <ul class="list-group list-group-flush" ng-repeat="item in $ctrl.items">
+                <li class="list-group-item">{{item.published_at | date:'medium'}} - {{item.tag_name}} {{item.prerelease? '(Prerelease)' : ''}} [ <a href="{{item.html_url}}" target="_blank">Read</a> | <a href="{{item.zipball_url}}" target="_blank">Zip</a> ]</li>
+            </ul>
+            <!-- <pre>
+{{item | json}}
+</pre> -->
+        </div>
+    </div>
+</div>
