@@ -43,7 +43,7 @@ app.factory('BaseODataService', ['$rootScope', '$routeParams', 'CommonService',
         };
         var _getList = async function (viewType, objData) {
                                
-            var data = _parseODataQuery(objData);
+            var data = serviceFactory.parseODataQuery(objData);
             var url = this.prefixUrl + '/' + viewType;
             if(data){
                 url = url.concat(data);
@@ -55,8 +55,8 @@ app.factory('BaseODataService', ['$rootScope', '$routeParams', 'CommonService',
             return await commonService.getApiResult(req);
         };
 
-        var _delete = async function (viewType, id) {
-            var url = this.prefixUrl + '/' + viewType + '/' + id;
+        var _delete = async function (id) {
+            var url = this.prefixUrl + '/portal' + '/' + id;
             var req = {
                 method: 'DELETE',
                 url: url
@@ -111,6 +111,9 @@ app.factory('BaseODataService', ['$rootScope', '$routeParams', 'CommonService',
                 var skip = parseInt(req.pageIndex) * parseInt(req.pageSize);
                 var top = parseInt(req.pageSize);
                 var result = '?$skip=' + skip + '&$top=' + top + '&$orderby=' + req.orderBy;
+                if (req.filter){
+                    result += "&$filter="+req.filter;
+                }
                 if (req.selects){
                     result += "&$select="+req.selects;
                 }
@@ -132,6 +135,7 @@ app.factory('BaseODataService', ['$rootScope', '$routeParams', 'CommonService',
         serviceFactory.saveList = _saveList;
         serviceFactory.delete = _delete;
         serviceFactory.ajaxSubmitForm = _ajaxSubmitForm;
+        serviceFactory.parseODataQuery = _parseODataQuery;
         return serviceFactory;
 
     }]);
