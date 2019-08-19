@@ -1,0 +1,89 @@
+{
+    "data": [
+        {
+            "type": "container",
+            "menuType": "root",
+            "allowedTypes": [
+                "root"
+            ],
+            "data": [
+                {
+                    "type": "item",
+                    "menuType": "root",
+                    "title": "portal_dashboard",
+                    "keyword": "portal_dashboard",
+                    "shortTitle": "portal_short_dashboard",
+                    "icon": "mi mi-Tiles",
+                    "uri": "/portal",
+                    "subMenus": {
+                        "type": "container",
+                        "allowedTypes": [
+                            "portal_dashboard"
+                        ],
+                        "data": []
+                    }
+                },
+                {
+                    "type": "item",
+                    "menuType": "root",
+                    "title": "portal_posts",
+                    "shortTitle": "portal_posts",
+                    "icon": "mi mi-ReadingList",
+                    "uri": "#",
+                    "subMenus": {
+                        "type": "container",
+                        "allowedTypes": [
+                            "portal_posts"
+                        ],
+                        "data": [
+                            {
+                                "type": "item",
+                                "menuType": "portal_posts",
+                                "title": "portal_create",
+                                "uri": "/portal/post/create",
+                                "icon": "mi mi-Add"
+                            },
+                            {
+                                "type": "item",
+                                "menuType": "portal_posts",
+                                "title": "portal_list",
+                                "uri": "/portal/post/list",
+                                "icon": "mi mi-List"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "item",
+                    "menuType": "root",
+                    "title": "portal_pages",
+                    "shortTitle": "portal_pages",
+                    "icon": "mi mi-Page",
+                    "uri": "#",
+                    "subMenus": {
+                        "type": "container",
+                        "allowedTypes": [
+                            "portal_pages"
+                        ],
+                        "data": [
+                            {
+                                "type": "item",
+                                "menuType": "portal_pages",
+                                "title": "portal_create",
+                                "uri": "/portal/page/create",
+                                "icon": "mi mi-Add"
+                            },
+                            {
+                                "type": "item",
+                                "menuType": "portal_pages",
+                                "title": "portal_list",
+                                "uri": "/portal/page/list",
+                                "icon": "mi mi-List"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

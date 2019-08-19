@@ -53,7 +53,7 @@ modules.component('attributeValueEditor', {
                         }
                         break;
                     default:
-                        if (ctrl.attributeValue.field.isEncrypt && ctrl.attributeValue.stringValue) {
+                        if (ctrl.attributeValue.field.isEncrypt && ctrl.attributeValue.encryptValue) {
                             var encryptedData = {
                                 key: ctrl.attributeValue.encryptKey,
                                 data: ctrl.attributeValue.encryptValue
