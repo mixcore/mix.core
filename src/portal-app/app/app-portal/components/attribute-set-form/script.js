@@ -50,7 +50,15 @@ modules.component('attributeSetForm', {
                 // }
             };
             ctrl.submit = async function () {
-               
+                angular.forEach(ctrl.attrData.values, function(e){                    
+                    //Encrypt field before send
+                    if(e.field.isEncrypt){
+                        var encryptData = $rootScope.encrypt(e.stringValue);
+                        e.encryptKey = encryptData.key;
+                        e.encryptValue = encryptData.data;
+                        e.stringValue = null;
+                    }
+                });
                 if (ctrl.saveData) {
                     var result = await ctrl.saveData({ data: ctrl.attrData });
                     if(result){
@@ -66,15 +74,7 @@ modules.component('attributeSetForm', {
                     }
                 }
                 else {
-                    angular.forEach(ctrl.attrData.values, function(e){                    
-                        //Encrypt field before send
-                        if(e.field.isEncrypt){
-                            var encryptData = $rootScope.encrypt(e.stringValue);
-                            e.encryptKey = encryptData.key;
-                            e.encryptValue = encryptData.data;
-                            e.stringValue = null;
-                        }
-                    });
+                   
                     var saveResult = await service.save(ctrl.attrData);
                     if (saveResult.isSucceed) {
 
