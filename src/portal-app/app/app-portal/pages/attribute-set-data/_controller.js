@@ -24,6 +24,14 @@ app.controller('AttributeSetDataController',
                     $scope.parentType = $routeParams.parentType;
                 }
             };
+            $scope.saveSuccessCallback = function () {
+                if($scope.parentId){
+                    $location.url('/portal/attribute-set-data/details?dataId='+ $scope.parentId);
+                }
+                else{
+                    $location.url('/portal/attribute-set-data/list?attributeSetId='+ $scope.activedData.attributeSetId);                    
+                }
+            };
             $scope.getList = async function () {
                 $rootScope.isBusy = true;
                 $scope.attributeSetId = $routeParams.attributeSetId;
