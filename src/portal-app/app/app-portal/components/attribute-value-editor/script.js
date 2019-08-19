@@ -7,8 +7,8 @@ modules.component('attributeValueEditor', {
         parentId: '=?',
         isShowTitle: '=?',
     },
-    controller: ['$rootScope', '$scope', 'ngAppSettings', 'AttributeSetDataService', 
-        function ($rootScope, $scope, ngAppSettings, dataService) {
+    controller: ['$rootScope', '$scope', 'ngAppSettings', '$location', 'AttributeSetDataService', 
+        function ($rootScope, $scope, ngAppSettings,$location, dataService) {
         var ctrl = this;
         ctrl.icons = ngAppSettings.icons;
         ctrl.refData = [];
@@ -93,8 +93,8 @@ modules.component('attributeValueEditor', {
                     break;
             }
         };
-        ctrl.updateRefData = function(data){
-
+        ctrl.updateRefData = function(item){
+            $location.url('/portal/attribute-set-data/details?dataId='+ item.id +'&attributeSetId=' + item.attributeSetId+'&parentType=' + item.parentType+'&parentId=' + item.parentId);
         };
         ctrl.removeRefData = async function(data){
             $rootScope.showConfirm(ctrl, 'removeRefDataConfirmed', [data.id], null, 'Remove', 'Are you sure');
