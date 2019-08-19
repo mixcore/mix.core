@@ -1,0 +1,17 @@
+<div class="row mix-sel-icons">
+    <div class="col-4">
+        <i class="{{$ctrl.data}}"></i>
+    </div>
+    <div class="col-8">
+        <input type="text" class="form-control" ng-model="$ctrl.data" />
+    </div>
+    <div class="col-12">
+        <input type="text" placeholder="filter" class="form-control" ng-model="$ctrl.searchText" />
+    </div>
+    <div class="col-12 list-icon">
+        <a class="dropdown-item btn" ng-repeat="ico in $ctrl.options| filter:$ctrl.searchText"
+            ng-click="$ctrl.select(ico)">
+            <i class="{{ico.class}}"></i> {{ico.title}}</a>
+    </div>
+
+</div>
