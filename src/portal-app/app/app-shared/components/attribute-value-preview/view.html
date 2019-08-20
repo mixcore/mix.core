@@ -1,4 +1,4 @@
-<div ng-switch="$ctrl.data.dataType">
+<div ng-switch="$ctrl.data.field.dataType">
     <div ng-switch-default>
         <p ng-bind="$ctrl.data.stringValue">
         </p>
@@ -26,11 +26,15 @@
         <p ng-bind="$ctrl.data.doubleValue | currency:''">
         </p>
     </div>
+    <div ng-switch-when="8">
+        <p ng-bind-html="$ctrl.data.stringValue"></p>
+    </div>
     <div ng-switch-when="18">
         <input class="form-control" type="checkbox" ng-model="$ctrl.data.booleanValue">
     </div>
-    <div ng-switch-when="8">
-        <p ng-bind-html="$ctrl.data.stringValue"></p>
+    <div ng-switch-when="19">
+        <i class="{{$ctrl.data.stringValue}}">
+        </i>
     </div>
     <div ng-switch-when="21">            
         <div ng-bind-html="$ctrl.data.stringValue | markdown"></div>
