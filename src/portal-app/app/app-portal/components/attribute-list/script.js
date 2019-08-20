@@ -121,13 +121,14 @@ modules.component('attributeList', {
             };
             ctrl.referenceCallback = function(selected){
                 if (selected && selected.length) {
+                    ctrl.colRef.reference = selected;
                     ctrl.colRef.referenceId = selected[0].id;
                 }                
                 $('#modal-navs').modal('hide');
             };
         }],
     bindings: {
-        title: '=',
+        header: '=',
         attributes: '=',
         removeAttributes: '='
     }
