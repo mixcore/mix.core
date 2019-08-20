@@ -208,7 +208,7 @@ namespace Mix.Cms.Lib
             VideoYoutube = 20,
             TuiEditor = 21,
             Number = 22,
-            Refferrence = 23,
+            Reference = 23,
         }
 
         public enum UrlAliasType
