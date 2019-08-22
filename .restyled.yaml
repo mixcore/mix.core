@@ -1,5 +1,5 @@
 enabled: true
-auto: false
+auto: true
 pull_requests: true
 comments: true
 request_review: author
