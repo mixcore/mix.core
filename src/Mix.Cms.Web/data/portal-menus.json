@@ -29,6 +29,41 @@
                     "type": "item",
                     "menuType": "root",
                     "path": "#",
+                   
+                    "title": "portal_posts",
+                    "shortTitle": "portal_posts",
+                    "icon": "mi mi-ReadingList",
+                    "subMenus": {
+                        "type": "container",
+                        "allowedTypes": [
+                            "portal_posts"
+                        ],
+                        "data": [
+                            {
+                                "type": "item",
+                                "menuType": "portal_posts",
+                                "title": "portal_create",
+                                "path": "/portal/post/create",
+                                "controller": "PostController",
+                                "templatePath": "/app/app-portal/pages/post/details.html",
+                                "icon": "mi mi-Add"
+                            },
+                            {
+                                "type": "item",
+                                "menuType": "portal_posts",
+                                "title": "portal_list",
+                                "path": "/portal/post/list",
+                                "controller": "PostController",
+                                "templatePath": "/app/app-portal/pages/post/list.html",
+                                "icon": "mi mi-List"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "item",
+                    "menuType": "root",
+                    "path": "#",
                     "controller": "",
                     "templatePath": "",
                     "title": "portal_settings",
