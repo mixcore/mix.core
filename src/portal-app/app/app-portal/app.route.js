@@ -7,6 +7,8 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
     });
    
 
+    
+      
     $routeProvider.when("/portal/customer/details/:id", {
         controller: "CustomerController",
         templateUrl: "/app/app-portal/pages/customer/details.html"
