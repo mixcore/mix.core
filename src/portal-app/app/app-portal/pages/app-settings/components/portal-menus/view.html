@@ -1,76 +1,13 @@
-<div ng-init="$ctrl.init()">
-    <script type="text/ng-template" id="list.html">
-            <ul  class="portal-menus" 
-                dnd-list="model.data"
-                dnd-allowed-types="model.allowedTypes">
-                <li ng-repeat="item in model.data" dnd-draggable="item" 
-                    dnd-type="item.menuType" dnd-disable-if="item.type == 'unknown'"
-                    dnd-moved="model.data.splice($index, 1)" class="background-{{item.type}}"
-                    dnd-draggable="item"
-                    dnd-effect-allowed="move"
-                    dnd-selected="$ctrl.models.selected = item"
-                    ng-class="{selected: $ctrl.models.selected === item}"
-                    ng-include="item.type + '.html'"
-                        >
-                </li>
-    
-                <li class="dndPlaceholder">
-                    Drop any <strong>{{model.allowedTypes.join(' or ')}}</strong> here
-                </li>
-    
-            </ul>
-        </script>
-    <!-- This template is responsible for rendering a container element. It uses
-             the above list template to render each container column -->
-    <script type="text/ng-template" id="container.html">
-                <div class="container-element box box-blue">
-                    <div class="column" ng-include="'list.html'"></div>
-                    <div class="clearfix"></div>
-                </div>
-            </script>
+<div class="row" ng-init="$ctrl.init()">
+    <div class="col-md-6">
+        <div ng-repeat="model in $ctrl.data"
+            ng-include="'/app/app-portal/pages/app-settings/components/portal-menus/list.html'"></div>
+        <div view-source="nested"></div>
+    </div>
+    <div class="col-md-6">
 
-    <!-- Template for a normal list item -->
-    <script type="text/ng-template" id="item.html">
-            <dnd-nodrag draggable="true">
-                    <div class="row">
-                        <div class="col-md-1">
-                            <div dnd-handle class="handle">:::</div>
-                        </div>
-                        <div class="col-md-11"  data-toggle="collapse" data-target="#details-{{item.title}}">
-                            <a class="btn-link"
-                                ng-bind="$ctrl.translate(item.title)">
-                            </a>
-                        </div>
-                        
-                    </div>
-                </dnd-nodrag>
-                <div ng-if="item.subMenus && item.subMenus.data.length" 
-                    ng-show="$ctrl.models.selected === item || item.subMenus.allowedTypes.indexOf($ctrl.models.selected.menuType) !== -1" 
-                    style="margin-top: 10px;" 
-                    ng-init="model = item.subMenus" ng-include="'container.html'"></div>
-                    <div class="row">
-                            <div class="col-md-1"></div>
-                            <div class="col-md-11" ng-show="$ctrl.models.selected === item">
-                                <div class="form-group">
-                                    <label class="control-label">Title</label>
-                                    <input type="text" ng-model="item.title" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label">Translate Keyword</label>
-                                    <input type="text" ng-model="item.keyword" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label">Uri</label>
-                                    <input type="text" ng-model="item.uri" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label">Icon</label>
-                                    <mix-select-icons prefix="'fab'" options="$ctrl.icons" data="item.icon"></mix-select-icons>     
-                                </div>
-                            </div>
-                    </div>
-            </script>
+        <h2>Generated Model</h2>
+        <pre>{{$ctrl.data | json}}</pre>
 
-
-    <div ng-repeat="model in $ctrl.data" ng-include="'list.html'"></div>
+    </div>
 </div>
