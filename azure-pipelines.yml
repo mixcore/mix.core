@@ -38,8 +38,10 @@ steps:
 - task: UseNode@1
   displayName: 'Install Node.js'
 
+- bash: cd d:\a\1\s\src\portal-app\
+
 - script: |
-    d:\a\1\s\src\portal-app\npm install
+    npm install
   displayName: 'npm install and build'
 
 - task: Gulp@1
@@ -47,3 +49,4 @@ steps:
     gulpFile: 'd:\a\1\s\src\portal-app\gulpfile.js'
     targets: 
     enableCodeCoverage: false
+
