@@ -5,7 +5,8 @@
         var ctrl = this;
         ctrl.items = [];
         ctrl.init = function () {
-            var root = ngAppSettings.routes[0];
+            var routes = $.parseJSON($('#portal-menus').val());
+            var root = routes.data[0];
             ctrl.items = root.data;
         };
     }],
