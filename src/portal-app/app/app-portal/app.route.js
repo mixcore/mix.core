@@ -5,8 +5,10 @@ app.config(function ($routeProvider, $locationProvider, $sceProvider) {
         controller: "DashboardController",
         templateUrl: "/app/app-portal/pages/dashboard/dashboard.html"
     });
+   
 
-
+    
+      
     $routeProvider.when("/portal/customer/details/:id", {
         controller: "CustomerController",
         templateUrl: "/app/app-portal/pages/customer/details.html"
