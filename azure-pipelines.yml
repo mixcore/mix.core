@@ -38,7 +38,7 @@ steps:
 - task: UseNode@1
   displayName: 'Install Node.js'
 
-- bash: cd d:\a\1\s\src\portal-app\
+- bash: cd "d:\a\1\s\src\portal-app\"
 
 - script: |
     npm install
