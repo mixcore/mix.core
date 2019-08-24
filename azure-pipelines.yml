@@ -16,8 +16,8 @@ variables:
 
 steps:
 - task: NuGetToolInstaller@1
-- bash: git clone --depth=50 --branch=master https://github.com/mixcore/mix.heart.git d:/a/1/s/mix.heart
-- bash: git clone --depth=50 --branch=master https://github.com/mixcore/mix.identity.git d:/a/1/s/mix.identity
+- bash: git clone --depth=50 --branch=master https://github.com/mixcore/mix.heart.git d:/a/1/mix.heart
+- bash: git clone --depth=50 --branch=master https://github.com/mixcore/mix.identity.git d:/a/1/mix.identity
 
 - task: NuGetCommand@2
   inputs:
