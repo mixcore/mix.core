@@ -1,12 +1,7 @@
 <section class="" ng-init="loadAppSettings()">
     <form ng-if="appSettings" ng-class="{'submitted': submitted}" ng-submit="saveAppSettings(appSettings)" autocomplete="new-password">
         <tabs-h>
-            <actions preview-url="appSettings.fullPath" back-url="'/portal/configuration/list'"></actions>
-            <pane-h title="Portal Menus" class="card">
-                <div class="card-body">
-                    <portal-menus data="menus" allowed-types="allowedTypes"></portal-menus>
-                </div>
-            </pane-h>
+            <actions preview-url="appSettings.fullPath" back-url="'/portal/configuration/list'"></actions>            
             <pane-h title="General" class="card">
                 <div class="card-body">
                     <app-settings-general app-settings="appSettings"></app-settings-general>

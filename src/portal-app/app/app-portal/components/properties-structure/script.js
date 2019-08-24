@@ -101,7 +101,7 @@ modules.component('propertiesStructure', {
             }
         }],
     bindings: {
-        title: '=',
+        header: '=',
         columns: '='
     }
 });
