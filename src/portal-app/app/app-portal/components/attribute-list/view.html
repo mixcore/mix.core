@@ -44,9 +44,9 @@
                     <input ng-model="col.defaultValue" placeholder="Default Value" class="form-control form-control-sm">
                 </div>
                 <div ng-if="col.dataType == 23">
-                    <a ng-click="$ctrl.showReferences(col)" class="btn-link">References</a>                    
+                    <a ng-click="$ctrl.showReferences(col)" class="btn-link text-primary">References</a>    <br/>                
                     <a ng-if="col.referenceId" href="/portal/attribute-set/details/{{col.referenceId}}" class="btn btn-link">
-                        <span class="fas fa-pencil-alt text-primary"></span>
+                        <span class="fas fa-pencil-alt text-primary"></span> {{col.reference.title}}
                     </a>       
                 </div>
                 
