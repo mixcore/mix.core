@@ -18,7 +18,7 @@
         var image_placeholder = '/assets/img/image_placeholder.jpg';
         ctrl.isImage = false;
         ctrl.mediaNavs = [];
-        ctrl.init = function () {
+        ctrl.$onInit = function () {
             ctrl.srcUrl = ctrl.srcUrl || image_placeholder;
             ctrl.isImage = ctrl.srcUrl.toLowerCase().match(/([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png|svg)/g);
             ctrl.maxHeight = ctrl.maxHeight || '200px';
@@ -35,6 +35,7 @@
         ctrl.$doCheck = function () {
             if (ctrl.src !== ctrl.srcUrl && ctrl.srcUrl != image_placeholder) {
                 ctrl.src = ctrl.srcUrl;
+                ctrl.isImage = ctrl.srcUrl.toLowerCase().match(/([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png|svg)/g);
             }
         }.bind(ctrl);
 
@@ -73,6 +74,7 @@
                         if (resp && resp.isSucceed) {
                             ctrl.src = resp.data.fullPath;
                             ctrl.srcUrl = resp.data.fullPath;
+                            ctrl.isImage = ctrl.srcUrl.toLowerCase().match(/([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png|svg)/g);
                             $rootScope.isBusy = false;
                             $scope.$apply();
                         }
@@ -104,6 +106,7 @@
                     ctrl.postedFile.extension = file.name.substring(file.name.lastIndexOf('.'));
                     ctrl.postedFile.fileStream = reader.result;
                     ctrl.srcUrl = reader.result;
+                    ctrl.isImage = ctrl.srcUrl.toLowerCase().match(/([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png|svg)/g);
                     ctrl.src = reader.result;
                     $rootScope.isBusy = false;
                     $scope.$apply();
