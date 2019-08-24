@@ -1,22 +1,12 @@
+---
 enabled: true
-auto: false
+auto: true
 pull_requests: true
 comments: true
 request_review: author
 labels: ["code-style"]
 
 restylers:
-  # - astyle:
-  #     include:
-  #       - "**/*.java"
-  #     arguments:
-  #       - --style=java
-  #       - --indent=force-tab=4
-  #       - --lineend=linux
-  #       - --indent-after-parens
-  #       - --break-closing-braces
-  #       - --break-one-line-headers
-  #       - --add-braces
   - prettier
   - formatter
   - astyle
