@@ -1,0 +1,12 @@
+---
+enabled: true
+auto: true
+pull_requests: true
+comments: true
+request_review: author
+labels: ["code-style"]
+
+restylers:
+  - prettier
+  - formatter
+  - astyle
