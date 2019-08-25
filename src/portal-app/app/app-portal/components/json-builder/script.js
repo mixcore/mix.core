@@ -145,16 +145,30 @@ modules.component('jsonBuilder', {
             };
             ctrl.addField = function (item) {
                 var i = 0;
-                var tmp = 'f';
                 var field = ctrl.templates[0];
-                field.name = tmp + i;
-                while ($rootScope.findObjectByKey(item.columns[0].items, 'name', field.name)) {
-                    i++;
-                }
+                field.name = 'f' + (item.columns[0].items.length + 1);
                 item.columns[0].items.push(field);
+                item.showMenu = false;
             };
             ctrl.addObj = function (item) {
-                item.columns[0].items.push(ctrl.templates[1]);
+                var i = 0;
+                var obj = ctrl.templates[1];
+                obj.name = 'o' + (item.columns[0].items.length + 1);
+                item.columns[0].items.push(obj);
+                item.showMenu = false;
             };
+            ctrl.clone = function (item, list) {
+                var obj = angular.copy(item);
+                obj.name = item.name + '_copy';
+                list.items.push(obj);
+                item.showMenu = false;
+            };
+            
+            ctrl.remove = function (index, list) {
+                if(confirm('Remove this')){
+                    list.items.splice(index,1);
+                }
+            };
+            
         }]
 });
