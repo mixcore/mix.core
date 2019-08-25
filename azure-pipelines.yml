@@ -56,10 +56,11 @@ steps:
     serverUrl: '115.79.139.90:2121'
     username: 'tinku'
     password: $(ftp_pass)
-    rootDirectory: '/dev'
+    rootDirectory: 'd:\a\1\s\src\Mix.Cms.Web\bin\release\netcoreapp2.2\publish'
     filePatterns: '**'
-    remoteDirectory: '/upload/$(Build.BuildId)/'
+    remoteDirectory: '/dev'
     clean: false
     cleanContents: false
     preservePaths: false
     trustSSL: false
+
