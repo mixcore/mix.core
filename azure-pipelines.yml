@@ -50,3 +50,16 @@ steps:
     configuration: '$(buildConfiguration)'
 
 
+- task: FtpUpload@2
+  inputs:
+    credentialsOption: 'inputs'
+    serverUrl: '115.79.139.90:2121'
+    username: 'tinku'
+    password: $(ftp_pass)
+    rootDirectory: '/dev'
+    filePatterns: '**'
+    remoteDirectory: '/upload/$(Build.BuildId)/'
+    clean: false
+    cleanContents: false
+    preservePaths: false
+    trustSSL: false
