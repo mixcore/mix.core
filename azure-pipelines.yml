@@ -53,7 +53,7 @@ steps:
 - task: FtpUpload@2
   inputs:
     credentialsOption: 'inputs'
-    serverUrl: '115.79.139.90:2121'
+    serverUrl: 'ftp://115.79.139.90:2121/'
     username: 'tinku'
     password: $(ftp_pass)
     rootDirectory: 'd:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\'
