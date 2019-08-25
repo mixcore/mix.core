@@ -43,3 +43,4 @@ steps:
     targets: 
     workingDirectory: 'd:\a\1\s\src\portal-app'
     enableCodeCoverage: false
+
