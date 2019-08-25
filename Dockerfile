@@ -2,3 +2,6 @@
 #For more information, please see https://aka.ms/containercompat
 
 FROM mcr.microsoft.com/dotnet/core/runtime:2.2
+COPY src/Mix.Cms.Web/bin/release/netcoreapp2.2/publish/ app/
+
+ENTRYPOINT ["dotnet", "app/Mix.Cms.Web.dll"]
