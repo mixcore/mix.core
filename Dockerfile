@@ -1,12 +1,13 @@
 #Depending on the operating system of the host machines(s) that will build or run the containers, the image specified in the FROM statement may need to be changed.
 #For more information, please see https://aka.ms/containercompat
 
-FROM node:10 AS node-env
+FROM node:10.16.3 AS node-env
 WORKDIR /app
 COPY src/. ./
 WORKDIR /app/portal-app
-RUN npm install -g gulp
-RUN npm install gulp
+RUN apt-get update && apt-get -y dist-upgrade
+RUN npm install gulp-cli -g
+RUN npm install gulp -D
 RUN gulp build
 
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
