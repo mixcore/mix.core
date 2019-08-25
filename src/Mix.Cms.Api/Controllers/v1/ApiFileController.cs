@@ -90,7 +90,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (model != null)
             {
-                var result = FileRepository.Instance.SaveWebFile(model);
+                var result = FileRepository.Instance.SaveFile(model);
                 return new RepositoryResponse<FileViewModel>()
                 {
                     IsSucceed = result,

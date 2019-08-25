@@ -1,12 +1,101 @@
-<div class="nestedDemo row" ng-init="$ctrl.init()">
+<div class="mix-tree-view row" ng-init="$ctrl.init()">
+        <form ng-if="$ctrl.file" ng-class="{'submitted': submitted}" ng-submit="$ctrl.saveFile()">
+            <actions back-url="$ctrl.listUrl"></actions>
+            <!-- Main area with dropzones and source code -->
+            <div class="col-md-12">
+                <div class="row">
+                    <div ng-repeat="(zone, items) in $ctrl.dropzones" class="col-sm-12">
+                        <div class="dropzone box box-yellow">
+                            <!-- The dropzone also uses the list template -->
+                            <h3>Dropzone {{zone}}</h3>
+                            <!-- <div ng-include="'list.html'"></div> -->
+                            <ul dnd-list="items" dnd-allowed-types="list.allowedTypes">
+                                <li ng-repeat="item in items" dnd-disable-if="item.type == 'unknown'" dnd-type="item.type" dnd-dragend="$ctrl.update()" dnd-draggable="item" dnd-effect-allowed="move" dnd-moved="items.splice($index, 1)" dnd-selected="$ctrl.selected = item" ng-class="{selected: $ctrl.selected === item}">
+                                    <div class="sw-toc-item" is-active-menu>
+                                            <div class="inner">
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    <a class="btn btn-primary text-white">
+                                                        {{item.name}}
+                                                    </a>
+                                                    <a ng-click="$ctrl.addField(list)" class="btn btn-primary text-white">
+                                                        <span class="mi mi-Add"></span>
+                                                    </a>
+                                                    <a href="#" class="btn btn-primary" ng-click="item.show = !item.show">
+                                                        <span class="mi-ChevronRightSmall mi text-white"></span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            
+                                            <div ng-include="item.type + '.html'" ng-show="item.show" id="{{item.type}}-{{item.name}}"></div>                                
+                                        </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h2>Generated Model</h2>
+                        <pre>{{$ctrl.dropzones.root | json}}</pre>
+                    </div>
+                    <div class="col-sm-4">
+                        <h2>Selected Model</h2>
+                        <pre>{{$ctrl.selected | json}}</pre>
+                    </div>
+                    <div class="col-sm-4">
+                        <h2>Mapping Model</h2>
+                        <pre>{{$ctrl.model | json}}</pre>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Sidebar -->
+            <div class="col-md-2">
+    
+                <div class="toolbox box box-grey box-padding">
+                    <h3>New Elements</h3>
+                    <ul>
+                        <!-- The toolbox only allows to copy objects, not move it. After a new
+                             element was created, dnd-copied is invoked and we generate the next id -->
+                        <li ng-repeat="item in $ctrl.templates" dnd-draggable="item" dnd-effect-allowed="copyMove" dnd-dragend="$ctrl.newItem(item)">
+                            <button type="button" class="btn btn-default btn-lg">{{item.type}}</button>
+                        </li>
+                    </ul>
+                </div>
+    
+                <div ng-if="$ctrl.selected" class="box box-grey box-padding">
+                    <h3>Selected</h3>
+                    <strong>Type: </strong> {{$ctrl.selected.type}}<br>
+                    <input type="text" ng-model="$ctrl.selected.id" class="form-control" style="margin-top: 5px">
+                </div>
+    
+                <div class="trashcan box box-grey box-padding">
+                    <!-- If you use [] as referenced list, the dropped elements will be lost -->
+                    <h3>Trashcan</h3>
+                    <ul dnd-list="$ctrl.draft">
+                        <li><i class="mi mi-Bank"></i></li>
+                        <li ng-repeat="item in $ctrl.draft">
+                            {{item.type}} - {{item.name}}
+                        </li>
+                    </ul>
+                </div>
+    
+            </div>
+    
+        </form>
+    </div>
+    
     <!-- Markup for lists inside the dropzone. It's inside a seperate template
-         because it will be used recursively. The dnd-list directive enables
-         to drop elements into the referenced array. The dnd-draggable directive
-         makes an element draggable and will transfer the object that was
-         assigned to it. If an element was dragged away, you have to remove
-         it from the original list yourself using the dnd-moved attribute -->
+             because it will be used recursively. The dnd-list directive enables
+             to drop elements into the referenced array. The dnd-draggable directive
+             makes an element draggable and will transfer the object that was
+             assigned to it. If an element was dragged away, you have to remove
+             it from the original list yourself using the dnd-moved attribute -->
     <script type="text/ng-template" id="list.html">
-            <ul dnd-list="list.items" 
+        <div class="perfect-scroll">
+            <ul class="sw-links" data-children=".sw-toc-item"
+                dnd-list="list.items" 
                 dnd-allowed-types="list.allowedTypes">
                 <li ng-repeat="item in list.items"
                     dnd-dragend="$ctrl.update()"
@@ -17,42 +106,54 @@
                     dnd-moved="list.items.splice($index, 1)"
                     dnd-selected="$ctrl.selected = item"                
                     ng-class="{selected: $ctrl.selected === item}"
-                    ng-include="item.type + '.html'">
+                    >
+                    
+                    <div class="sw-toc-item" is-active-menu>
+                        <div class="inner">
+                            <div class="btn-group btn-group-sm" role="group">
+                                    <a class="btn btn-primary text-white">
+                                            {{item.name}}
+                                        </a>
+                                <a ng-click="$ctrl.addField(list)" class="btn btn-primary text-white">
+                                    <span class="mi mi-Add"></span>
+                                </a>
+                                
+                                <a href="#" class="btn btn-primary" 
+                                    ng-click="item.show = !item.show">
+                                        <span class="mi-ChevronRightSmall mi text-white"></span>
+                                    </a>
+                            </div>
+                        </div>
+                        
+                        <div ng-include="item.type + '.html'" ng-show="item.show"></div>                                
+                    </div>
                 </li>
             </ul>
-        </script>
-
+        </div>
+        <div class="sidebar-background"></div>
+    </script>
+    
     <!-- This template is responsible for rendering a container element. It uses
-             the above list template to render each container column -->
+                 the above list template to render each container column -->
     <script type="text/ng-template" id="object.html">
-        <div class="container-element box box-blue">
-            <h3>Object</h3>
-            <div class="row">
-                <a class="btn-link btn-success"
-                    ng-click="$ctrl.addField(item)">
-                <i class="mi mi-Add"></i> Add Field
-            </a></div>
-                <a class="btn-link btn-success"
-                    ng-click="$ctrl.addObj(item)">
-                <i class="mi mi-Add"></i> Add Obj
-            </a></div>
+        <div class="container object box box-blue">
             <div class="column" ng-repeat="list in item.columns" ng-include="'list.html'"></div>
             <div class="clearfix"></div>
         </div>
     </script>
-
+    
     <script type="text/ng-template" id="array.html">
-        <div class="container-element box box-blue">
+        <div class="container array box box-blue">
             <h3>Array</h3>
             <div class="column" ng-repeat="list in item.columns" ng-include="'list.html'"></div>
             <div class="clearfix"></div>
         </div>
     </script>
-
+    
     <!-- Template for a normal list item -->
     <script type="text/ng-template" id="item.html">
-        <div class="item">
-            <h5>{{item.name}} - {{item.value}}</h5>
+        <div class="container item">
+            <span>{{item.name}} - {{item.value}}</span>
             <div ng-show="$ctrl.selected == item">
                 <input type="text" ng-model="item.name"/>
                 <select class="col-5 form-control form-control-sm" ng-model="item.dataType">
@@ -63,69 +164,3 @@
             </div>
         </div>
     </script>
-
-    <!-- Main area with dropzones and source code -->
-    <div class="col-md-10">
-        <div class="row">
-            <div ng-repeat="(zone, items) in $ctrl.dropzones" class="col-md-6">
-                <div class="dropzone box box-yellow">
-                    <!-- The dropzone also uses the list template -->
-                    <h3>Dropzone {{zone}}</h3>
-                    <!-- <div ng-include="'list.html'"></div> -->
-                    <ul dnd-list="items" dnd-allowed-types="list.allowedTypes">
-                        <li ng-repeat="item in items" dnd-disable-if="item.type == 'unknown'" dnd-type="item.type" dnd-dragend="$ctrl.update()" dnd-draggable="item" dnd-effect-allowed="move" dnd-moved="items.splice($index, 1)" dnd-selected="$ctrl.selected = item" ng-class="{selected: $ctrl.selected === item}" ng-include="item.type + '.html'">
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-4">
-                <h2>Generated Model</h2>
-                <pre>{{$ctrl.dropzones.root | json}}</pre>
-            </div>
-            <div class="col-sm-4">
-                <h2>Selected Model</h2>
-                <pre>{{$ctrl.selected | json}}</pre>
-            </div>
-            <div class="col-sm-4">
-                <h2>Mapping Model</h2>
-                <pre>{{$ctrl.model | json}}</pre>
-            </div>
-        </div>
-    </div>
-
-    <!-- Sidebar -->
-    <div class="col-md-2">
-
-        <div class="toolbox box box-grey box-padding">
-            <h3>New Elements</h3>
-            <ul>
-                <!-- The toolbox only allows to copy objects, not move it. After a new
-                         element was created, dnd-copied is invoked and we generate the next id -->
-                <li ng-repeat="item in $ctrl.templates" dnd-draggable="item" dnd-effect-allowed="copyMove" dnd-dragend="$ctrl.newItem(item)">
-                    <button type="button" class="btn btn-default btn-lg">{{item.type}}</button>
-                </li>
-            </ul>
-        </div>
-
-        <div ng-if="$ctrl.selected" class="box box-grey box-padding">
-            <h3>Selected</h3>
-            <strong>Type: </strong> {{$ctrl.selected.type}}<br>
-            <input type="text" ng-model="$ctrl.selected.id" class="form-control" style="margin-top: 5px">
-        </div>
-
-        <div class="trashcan box box-grey box-padding">
-            <!-- If you use [] as referenced list, the dropped elements will be lost -->
-            <h3>Trashcan</h3>
-            <ul dnd-list="$ctrl.draft">
-                <li><i class="mi mi-Bank"></i></li>
-                <li ng-repeat="item in $ctrl.draft">
-                    {{item.type}} - {{item.name}}
-                </li>
-            </ul>
-        </div>
-
-    </div>
-</div>
