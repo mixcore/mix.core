@@ -30,3 +30,6 @@ ENTRYPOINT ["dotnet", "Mix.Cms.Web.dll"]
 # docker tag mixcoreimage mixcore/mix.core:v1.0.0-alpha.1
 # docker push mixcore/mix.core:v1.0.0-alpha.1
 # docker run -it --rm -p 5000:80 --name aspnetcore_sample mixcoreimage
+# Server=db;Database=master;User=sa;Password=P@ssw0rd;
+# docker-compose build
+# docker-compose up
