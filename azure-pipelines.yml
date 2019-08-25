@@ -37,6 +37,11 @@ steps:
 
 - task: UseNode@1
 
+- task: CmdLine@2
+  inputs:
+    script: 'npm install'
+    workingDirectory: 'd:\a\1\s\src\portal-app\'
+
 - task: Gulp@1
   inputs:
     gulpFile: 'd:\a\1\s\src\portal-app\gulpfile.js'
