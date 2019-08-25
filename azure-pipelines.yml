@@ -45,5 +45,5 @@ steps:
 - task: Gulp@1
   inputs:
     gulpFile: 'd:\a\1\s\src\portal-app\gulpfile.js'
-    targets: 
+    targets: 'build'
     enableCodeCoverage: false
