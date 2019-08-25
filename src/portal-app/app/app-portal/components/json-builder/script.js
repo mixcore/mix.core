@@ -3,10 +3,12 @@ modules.component('jsonBuilder', {
     templateUrl: '/app/app-portal/components/json-builder/view.html',
     bindings: {
         'data': '=?', // json obj (ex: { field1: 'some val' })
+        'folder': '=?', // filepath (ex: 'data/jsonfile.json')
+        'filename': '=?', // filepath (ex: 'data/jsonfile.json')
         'allowedTypes': '=?' // string array ( ex: [ 'type1', 'type2' ] )
     },
-    controller: ['$rootScope', '$scope', '$location', 'CommonService', 'ngAppSettings',
-        function ($rootScope, $scope, $location, commonService, ngAppSettings) {
+    controller: ['$rootScope', '$scope', '$location', 'FileServices', 'ngAppSettings',
+        function ($rootScope, $scope, $location, fileService, ngAppSettings) {
             var ctrl = this;
             ctrl.translate = $rootScope.translate;
             ctrl.settings = $rootScope.globalSettings;
@@ -21,19 +23,33 @@ modules.component('jsonBuilder', {
                 'root': []
             };
             ctrl.selected = null;
-            ctrl.init = function () {
-
-                ctrl.data = {
-                    o: {
-                        a: 'av',
-                        b: 'bv'
-                    },
-                    c: 'cv',
-                    d: 'dv'
-                };
+            ctrl.init = async function () {
                 var arr = [];
-                ctrl.parseObjToList(ctrl.data, arr);
-                ctrl.dropzones.root = arr;
+                if (!ctrl.data && ctrl.filename) {
+                    await ctrl.loadFile();
+                    ctrl.parseObjToList(ctrl.data, arr);
+                    ctrl.dropzones.root = arr;
+                } else {
+                    ctrl.parseObjToList(ctrl.data, arr);
+                    ctrl.dropzones.root = arr;
+                }
+
+            };
+            ctrl.loadFile = async function () {
+                $rootScope.isBusy = true;
+                $scope.listUrl = '/portal/file/list?folder=' + ctrl.folder;
+                $rootScope.isBusy = true;
+                var response = await fileService.getFile(ctrl.folder, ctrl.filename);
+                if (response.isSucceed) {
+                    ctrl.data = $.parseJSON(response.data.content);
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                }
+                else {
+                    $rootScope.showErrors(response.errors);
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                }
             };
             ctrl.update = function () {
                 ctrl.model = {};
@@ -48,64 +64,49 @@ modules.component('jsonBuilder', {
                     switch (objType) {
                         case 'object':
                             if (Array.isArray(item[key])) {
-                                obj = {
-                                    name: key,
-                                    type: "array",
-                                    columns: [
-                                        {
-                                            allowedTypes: ['object'],
-                                            items: []
-                                        }
-                                    ]
-                                };
-                                angular.forEach(item[key], element => {
-                                    Object.keys(element).forEach(function (key, index) {
-                                        ctrl.parseObjToList(element, obj.columns[0].items);
-                                    });
-                                });
-                            } else {
-                                obj = {
-                                    name: key,
-                                    type: "object",
-                                    columns: [
-                                        {
-                                            allowedTypes: ['object', 'item'],
-                                            items: []
-                                        }
-                                    ]
-                                };
+                                obj = angular.copy(ctrl.templates[2]);
+                                obj.name = key;
                                 ctrl.parseObjToList(item[key], obj.columns[0].items);
+                                items.push(obj);
+                            } else {
+                                obj = angular.copy(ctrl.templates[1]);
+                                obj.name = key;
+                                ctrl.parseObjToList(item[key], obj.columns[0].items);
+                                items.push(obj);
                             }
                             break;
                         default:
-                            obj = {
-                                name: key,
-                                type: "item",
-                                dataType: 7,
-                                value: item[key]
-                            };
+                            obj = angular.copy(ctrl.templates[0]);
+                            obj.name = key;
+                            obj.value = item[key];
+                            items.push(obj);
                             break;
                     }
-                    items.push(obj);
+
                 });
             };
-            ctrl.parseObj = function (items, obj) {
+            ctrl.parseObj = function (items, obj, name) {
                 angular.forEach(items, item => {
                     switch (item.type) {
                         case 'array':
-                            var arr = [];
-                            var o = {};
+                            obj[item.name] = [];
                             angular.forEach(item.columns[0].items, sub => {
-                                // array only allow obj => sub -> obj
+                                var o = {};
                                 ctrl.parseObj(sub.columns[0].items, o);
-                                arr.push(o);
+                                obj[item.name].push(o);
                             });
-                            obj[item.name] = arr;
                             break;
                         case 'object':
                             var o = {};
-                            ctrl.parseObj(item.columns[0].items, o);
-                            obj[item.name] = o;
+                            angular.forEach(item.columns[0].items, sub => {                                
+                                ctrl.parseObj(sub.columns[0].items, o, item.name);
+                                if (name) {
+                                    obj[name] = o;
+                                } else {
+                                    obj[item.name] = o;
+                                }
+                            });
+
                             break;
                         case 'item':
                             obj[item.name] = item.value;
@@ -122,6 +123,19 @@ modules.component('jsonBuilder', {
             };
             ctrl.deleteProperty = function (item, name) {
                 delete item[name];
+            };
+            ctrl.addField = function (item) {
+                var i = 0;
+                var tmp = 'f';
+                var field = ctrl.templates[0];
+                field.name = tmp + i;
+                while ($rootScope.findObjectByKey(item.columns[0].items, 'name', field.name)) {
+                    i++;
+                }
+                item.columns[0].items.push(field);
+            };
+            ctrl.addObj = function (item) {
+                item.columns[0].items.push(ctrl.templates[1]);
             };
         }]
 });

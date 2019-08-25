@@ -1,0 +1,23 @@
+{
+    "data":[
+        {
+            "title": "Dashboard",
+            "path": "/portal",
+            "subMenus": []
+        },
+        {
+            "title": "Posts",
+            "path": "#",
+            "subMenus": [
+                {
+                    "title": "Create Post",
+                    "path": "/portal/post/create"
+                },
+                {
+                    "title": "List Post",
+                    "path": "/portal/post/list"
+                }
+            ]
+        }
+    ]
+}

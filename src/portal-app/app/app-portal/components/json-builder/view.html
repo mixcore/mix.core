@@ -27,6 +27,15 @@
     <script type="text/ng-template" id="object.html">
         <div class="container-element box box-blue">
             <h3>Object</h3>
+            <div class="row">
+                <a class="btn-link btn-success"
+                    ng-click="$ctrl.addField(item)">
+                <i class="mi mi-Add"></i> Add Field
+            </a></div>
+                <a class="btn-link btn-success"
+                    ng-click="$ctrl.addObj(item)">
+                <i class="mi mi-Add"></i> Add Obj
+            </a></div>
             <div class="column" ng-repeat="list in item.columns" ng-include="'list.html'"></div>
             <div class="clearfix"></div>
         </div>
