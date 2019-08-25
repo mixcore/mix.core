@@ -1,0 +1,13 @@
+version: "3"
+services:
+    web:
+        build: .
+        ports:
+            - "5000:80"
+        depends_on:
+            - db
+    db:
+        image: "mcr.microsoft.com/mssql/server"
+        environment:
+            SA_PASSWORD: "P@ssw0rd"
+            ACCEPT_EULA: "Y"
