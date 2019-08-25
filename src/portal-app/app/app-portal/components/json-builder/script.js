@@ -10,6 +10,7 @@ modules.component('jsonBuilder', {
     controller: ['$rootScope', '$scope', '$location', 'FileServices', 'ngAppSettings',
         function ($rootScope, $scope, $location, fileService, ngAppSettings) {
             var ctrl = this;
+            ctrl.file = null;
             ctrl.translate = $rootScope.translate;
             ctrl.settings = $rootScope.globalSettings;
             ctrl.templates = [
@@ -41,12 +42,31 @@ modules.component('jsonBuilder', {
                 $rootScope.isBusy = true;
                 var response = await fileService.getFile(ctrl.folder, ctrl.filename);
                 if (response.isSucceed) {
+                    ctrl.file = response.data;
                     ctrl.data = $.parseJSON(response.data.content);
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 }
                 else {
                     $rootScope.showErrors(response.errors);
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                }
+            };
+            ctrl.saveFile = async function () {            
+                $rootScope.isBusy = true;
+                ctrl.model = {};
+                ctrl.parseObj(ctrl.dropzones.root, ctrl.model);
+                ctrl.file.content = JSON.stringify(ctrl.model);
+                var resp = await fileService.saveFile(ctrl.file);
+                if (resp && resp.isSucceed) {
+                    $scope.activedFile = resp.data;
+                    $rootScope.showMessage('Thành công', 'success');
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                }
+                else {
+                    if (resp) { $rootScope.showErrors(resp.errors); }
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 }
@@ -106,7 +126,6 @@ modules.component('jsonBuilder', {
                                     obj[item.name] = o;
                                 }
                             });
-
                             break;
                         case 'item':
                             obj[item.name] = item.value;
