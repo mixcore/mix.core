@@ -35,3 +35,11 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+- task: UseNode@1
+
+- task: Gulp@1
+  inputs:
+    gulpFile: 'gulpfile.js'
+    targets: 
+    workingDirectory: 'd:\a\1\s\src\portal-app'
+    enableCodeCoverage: false
