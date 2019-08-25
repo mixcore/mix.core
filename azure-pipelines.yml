@@ -39,8 +39,6 @@ steps:
 
 - task: Gulp@1
   inputs:
-    gulpFile: 'gulpfile.js'
+    gulpFile: 'd:\a\1\s\src\portal-app\gulpfile.js'
     targets: 
-    workingDirectory: 'd:\a\1\s\src\portal-app'
     enableCodeCoverage: false
-
