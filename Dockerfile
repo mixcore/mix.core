@@ -10,12 +10,12 @@ RUN dotnet restore Mix.Cms.Web/Mix.Cms.Web.csproj
 RUN dotnet publish Mix.Cms.Web/Mix.Cms.Web.csproj -c Release
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/core/aspnet-build:2.2
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2 AS runtime
 WORKDIR /app
 COPY --from=build-env /app/Mix.Cms.Web/bin/Release/netcoreapp2.2/publish .
-ENTRYPOINT ["dotnet", "app/Mix.Cms.Web.dll"]
+ENTRYPOINT ["dotnet", "Mix.Cms.Web.dll"]
 
 # Build -> Tag -> Push process
-# docker build -t myimage -f Dockerfile .
-# docker tag myimage mixcore/mix.core:v1.0.0-alpha.1
+# docker build -t mixcoreimage -f Dockerfile .
+# docker tag mixcoreimage mixcore/mix.core:v1.0.0-alpha.1
 # docker push mixcore/mix.core:v1.0.0-alpha.1
