@@ -6,6 +6,7 @@ WORKDIR /app
 COPY src/. ./
 WORKDIR /app/portal-app
 RUN apt-get update && apt-get -y dist-upgrade
+RUN npm install rimraf
 RUN npm install gulp-cli -g
 RUN npm install gulp -D
 RUN gulp build
