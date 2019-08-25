@@ -1,5 +1,7 @@
 # Mixcore CMS 
 
+[![Donate](https://img.shields.io/badge/$-donate-ff69b4.svg)](https://www.paypal.me/liyascthomas) [![Buy us a coffee](https://img.shields.io/badge/$-BuyMeACoffee-orange.svg)](https://www.buymeacoffee.com/liyasthomas)
+
 > Fully Open Source UI Tools to create web apps.
 > Headless CMS and Dashboards built on top of .Net Core, Angular.JS and Bootstrap.
 
