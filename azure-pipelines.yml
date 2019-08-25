@@ -35,18 +35,3 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: UseNode@1
-  displayName: 'Install Node.js'
-
-- bash: cd "d:\a\1\s\src\portal-app\"
-
-- script: |
-    npm install
-  displayName: 'npm install and build'
-
-- task: Gulp@1
-  inputs:
-    gulpFile: 'd:\a\1\s\src\portal-app\gulpfile.js'
-    targets: 
-    enableCodeCoverage: false
-
