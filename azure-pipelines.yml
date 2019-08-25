@@ -19,6 +19,20 @@ steps:
 - bash: git clone --depth=50 --branch=master https://github.com/mixcore/mix.heart.git d:/a/1/mix.heart
 - bash: git clone --depth=50 --branch=master https://github.com/mixcore/mix.identity.git d:/a/1/mix.identity
 
+- task: UseNode@1
+
+- task: CmdLine@2
+  inputs:
+    script: 'npm install'
+    workingDirectory: 'd:\a\1\s\src\portal-app\'
+
+- task: Gulp@1
+  inputs:
+    gulpFile: 'd:\a\1\s\src\portal-app\gulpfile.js'
+    targets: 'build'
+    enableCodeCoverage: false
+
+
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
@@ -34,4 +48,5 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
 
