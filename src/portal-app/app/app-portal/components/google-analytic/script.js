@@ -125,7 +125,7 @@
                 // ids: $rootScope.settings.data.Google_Analytic_Ids,
                 metrics: 'ga:sessions',
                 dimensions: 'ga:country',
-                'start-date': '360daysAgo',
+                'start-date': '90daysAgo',
                 'end-date': 'yesterday',
                 'max-results': 6,
                 sort: '-ga:sessions'
