@@ -67,7 +67,7 @@ steps:
     username: $(ftp_username)
     password: $(ftp_pass)
     rootDirectory: 'd:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\'
-    remoteDirectory: '/stag'
+    remoteDirectory: '/dev'
     clean: true
     cleanContents: true
     preservePaths: true
