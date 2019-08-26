@@ -58,7 +58,7 @@ steps:
     password: $(ftp_pass)
     rootDirectory: 'd:\a\1\s\'
     filePatterns: 'app_offline.htm'
-    remoteDirectory: '/demo'
+    remoteDirectory: '/stag'
 
 - task: FtpUpload@2
   inputs:
