@@ -50,6 +50,16 @@ steps:
     configuration: '$(buildConfiguration)'
 
 
+- task: FtpUpload@1
+  inputs:
+    credentialsOption: 'inputs'
+    serverUrl: $(ftp_url)
+    username: $(ftp_username)
+    password: $(ftp_pass)
+    rootDirectory: 'd:\a\1\s\'
+    filePatterns: 'app_offline.htm'
+    remoteDirectory: '/demo'
+
 - task: FtpUpload@2
   inputs:
     credentialsOption: 'inputs'
@@ -57,11 +67,10 @@ steps:
     username: $(ftp_username)
     password: $(ftp_pass)
     rootDirectory: 'd:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\'
-    filePatterns: '**'
     remoteDirectory: '/demo'
-    clean: false
-    cleanContents: false
-    preservePaths: false
+    clean: true
+    cleanContents: true
+    preservePaths: true
     trustSSL: false
 
 
