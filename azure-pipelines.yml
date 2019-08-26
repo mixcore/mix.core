@@ -1,0 +1,76 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: NuGetToolInstaller@1
+- bash: git clone --depth=50 --branch=master https://github.com/mixcore/mix.heart.git d:/a/1/mix.heart
+- bash: git clone --depth=50 --branch=master https://github.com/mixcore/mix.identity.git d:/a/1/mix.identity
+
+- task: UseNode@1
+
+- task: CmdLine@2
+  inputs:
+    script: 'npm install'
+    workingDirectory: 'd:\a\1\s\src\portal-app\'
+
+- task: Gulp@1
+  inputs:
+    gulpFile: 'd:\a\1\s\src\portal-app\gulpfile.js'
+    targets: 'build'
+    enableCodeCoverage: false
+
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+
+- task: FtpUpload@1
+  inputs:
+    credentialsOption: 'inputs'
+    serverUrl: $(ftp_url)
+    username: $(ftp_username)
+    password: $(ftp_pass)
+    rootDirectory: 'd:\a\1\s\'
+    filePatterns: 'app_offline.htm'
+    remoteDirectory: '/demo'
+
+- task: FtpUpload@2
+  inputs:
+    credentialsOption: 'inputs'
+    serverUrl: $(ftp_url)
+    username: $(ftp_username)
+    password: $(ftp_pass)
+    rootDirectory: 'd:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\'
+    remoteDirectory: '/stag'
+    clean: true
+    cleanContents: true
+    preservePaths: true
+    trustSSL: false
+
+

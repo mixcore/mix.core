@@ -1,0 +1,27 @@
+version: "3"
+services:
+    web:
+        build: .
+        ports:
+            - "5000:80"
+        depends_on:
+            - db
+    db:
+        image: "mcr.microsoft.com/mssql/server"
+        environment:
+            SA_PASSWORD: "P@ssw0rd"
+            ACCEPT_EULA: "Y"
+
+#     db:
+#         image: mysql:5.7
+#         volumes:
+#           - db_data:/var/lib/mysql
+#         restart: always
+#         environment:
+#           MYSQL_ROOT_PASSWORD: P@ssw0rd
+#           MYSQL_DATABASE: mixcore
+#           MYSQL_USER: mixcore
+#           MYSQL_PASSWORD: P@ssw0rd
+
+# volumes:
+#     db_data: {}
