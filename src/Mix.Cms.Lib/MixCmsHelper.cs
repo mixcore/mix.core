@@ -17,9 +17,9 @@ namespace Mix.Cms.Lib
 {
     public class MixCmsHelper
     {
-        public static FileViewModel LoadDataFile(string name)
+        public static FileViewModel LoadDataFile(string folder, string name)
         {
-            return FileRepository.Instance.GetFile(name, "data", true, "[]");
+            return FileRepository.Instance.GetFile(name, folder, true, "[]");
         }
         public static string GetAssetFolder(string culture)
         {

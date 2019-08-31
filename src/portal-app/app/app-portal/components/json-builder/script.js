@@ -24,6 +24,7 @@ modules.component('jsonBuilder', {
                 'root': []
             };
             ctrl.selected = null;
+            ctrl.selectedModel = {}
             ctrl.init = async function () {
                 var arr = [];
                 if (!ctrl.data && ctrl.filename) {
@@ -53,10 +54,11 @@ modules.component('jsonBuilder', {
                     $scope.$apply();
                 }
             };
-            ctrl.saveFile = async function () {            
+            ctrl.saveFile = async function () {
                 $rootScope.isBusy = true;
                 ctrl.model = {};
-                ctrl.parseObj(ctrl.dropzones.root, ctrl.model);
+                ctrl.update();
+                // ctrl.parseObj(ctrl.dropzones.root, ctrl.model);
                 ctrl.file.content = JSON.stringify(ctrl.model);
                 var resp = await fileService.saveFile(ctrl.file);
                 if (resp && resp.isSucceed) {
@@ -73,7 +75,16 @@ modules.component('jsonBuilder', {
             };
             ctrl.update = function () {
                 ctrl.model = {};
-                ctrl.parseObj(ctrl.dropzones.root, ctrl.model);
+                var obj = {
+                    type: 'object',
+                    name: 'data',
+                    columns:[
+                        {
+                            items: ctrl.dropzones.root
+                        }
+                    ]                    
+                };
+                ctrl.parseObj(obj, ctrl.model);
             };
             ctrl.parseObjToList = function (item, items) {
                 // key: the name of the object key
@@ -105,70 +116,78 @@ modules.component('jsonBuilder', {
 
                 });
             };
-            ctrl.parseObj = function (items, obj, name) {
-                angular.forEach(items, item => {
-                    switch (item.type) {
-                        case 'array':
-                            obj[item.name] = [];
-                            angular.forEach(item.columns[0].items, sub => {
-                                var o = {};
-                                ctrl.parseObj(sub.columns[0].items, o);
-                                obj[item.name].push(o);
-                            });
-                            break;
-                        case 'object':
+            ctrl.parseObj = function (item, obj, name) {
+                switch (item.type) {
+                    case 'array':
+                        obj[item.name] = [];
+                        angular.forEach(item.columns[0].items, sub => {
                             var o = {};
-                            angular.forEach(item.columns[0].items, sub => {                                
-                                ctrl.parseObj(sub.columns[0].items, o, item.name);
-                                if (name) {
-                                    obj[name] = o;
-                                } else {
-                                    obj[item.name] = o;
-                                }
-                            });
-                            break;
-                        case 'item':
-                            obj[item.name] = item.value;
-                            break;
-                    }
-                });
+                            ctrl.parseObj(sub, o);
+                            obj[item.name].push(o);
+                        });
+                        break;
+                    case 'object':
+                        angular.forEach(item.columns[0].items, sub => {
+                            if(sub.type == 'object'){
+                                var o = {};
+                                ctrl.parseObj(sub, o);
+                                obj[item.name] = (o);
+                            }
+                            else{
+                                ctrl.parseObj(sub, obj, item.name);
+                            }
+                        });
+                        break;
+                    case 'item':
+                        obj[item.name] = item.value;
+                        break;
+                }
             };
-            ctrl.newItem = function (item) {
-                item.name = $rootScope.generateUUID();
-                ctrl.update();
-            }
-            ctrl.addProperty = function (item, name, val) {
-                item[name] = val;
-            };
-            ctrl.deleteProperty = function (item, name) {
-                delete item[name];
+            ctrl.select = function (item) {
+                if (ctrl.selected == item) {
+                    ctrl.selected = null;
+                }
+                else {
+                    ctrl.selected = item;
+                    ctrl.selectedModel = {};
+                    ctrl.parseObj(item, ctrl.selectedModel);
+                }
             };
             ctrl.addField = function (item) {
-                var i = 0;
-                var field = ctrl.templates[0];
+                var field = angular.copy(ctrl.templates[0]);
                 field.name = 'f' + (item.columns[0].items.length + 1);
                 item.columns[0].items.push(field);
                 item.showMenu = false;
             };
             ctrl.addObj = function (item) {
-                var i = 0;
-                var obj = ctrl.templates[1];
+                var obj = angular.copy(ctrl.templates[1]);
                 obj.name = 'o' + (item.columns[0].items.length + 1);
                 item.columns[0].items.push(obj);
                 item.showMenu = false;
+                ctrl.update();
+            };
+            ctrl.addArray = function (item) {
+                var obj = angular.copy(ctrl.templates[2]);
+                obj.name = 'a' + (item.columns[0].items.length + 1);
+                item.columns[0].items.push(obj);
+                item.showMenu = false;
+                ctrl.update();
             };
             ctrl.clone = function (item, list) {
                 var obj = angular.copy(item);
                 obj.name = item.name + '_copy';
-                list.items.push(obj);
                 item.showMenu = false;
+                obj.showMenu = false;
+                list.items.push(obj);
+                ctrl.update();
             };
-            
+
             ctrl.remove = function (index, list) {
-                if(confirm('Remove this')){
-                    list.items.splice(index,1);
+                if (confirm('Remove this')) {
+                    list.items.splice(index, 1);
+                    ctrl.update();
                 }
             };
-            
+
         }]
 });

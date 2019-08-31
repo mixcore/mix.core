@@ -3,7 +3,7 @@
     ViewData["Description"] = "Your powerful dashboard is here";
     Layout = "_LayoutPortal_Angular";
 
-    var menus = MixCmsHelper.LoadDataFile("portal-menus.json");
+    var menus = MixCmsHelper.LoadDataFile("data/consts","portal-menus.json");
 }
 <div class="w-100">
     <input type="hidden" id="portal-menus" value="@menus.Content"/>
