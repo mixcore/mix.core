@@ -6,8 +6,7 @@
         ctrl.items = [];
         ctrl.init = function () {
             var routes = $.parseJSON($('#portal-menus').val());
-            var root = routes.data[0];
-            ctrl.items = root.data;
+            ctrl.items = routes.data;
         };
     }],
     bindings: {

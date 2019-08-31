@@ -1,34 +1,16 @@
 app.config(function ($routeProvider, $locationProvider, $sceProvider, ngAppSettings) {
     $locationProvider.html5Mode(true);
-    var routes = $.parseJSON($('#portal-menus').val());
-    ngAppSettings.routes = routes.data;
-    angular.forEach(ngAppSettings.routes, function(item, key) {
-        if(item.type=='item'){
-            $routeProvider.when(item.path, {
-                controller: item.controller,
-                templateUrl: item.templatePath
-            });
-            angular.forEach(item.subMenus.data, function(sub, key) {
-                $routeProvider.when(sub.path, {
-                    controller: sub.controller,
-                    templateUrl: sub.templatePath
+    var data = $.parseJSON($('#portal-menus').val());
+    ngAppSettings.routes = data.routes;
+    angular.forEach(ngAppSettings.routes, function(cate, key) {
+        if(cate.items.length){            
+            angular.forEach(cate.items, function(item, key) {
+                $routeProvider.when(item.path, {
+                    controller: item.controller,
+                    templateUrl: item.templatePath
                 });
             });
-        }
-        else{
-            angular.forEach(item.data, function(sub, key) {
-                $routeProvider.when(sub.path, {
-                    controller: sub.controller,
-                    templateUrl: sub.templatePath
-                });
-                angular.forEach(sub.subMenus.data, function(sub1, key) {
-                    $routeProvider.when(sub1.path, {
-                        controller: sub1.controller,
-                        templateUrl: sub1.templatePath
-                    });
-                });
-            });
-        }
+        }        
     });
     $routeProvider.otherwise({ redirectTo: "/portal" });
 });

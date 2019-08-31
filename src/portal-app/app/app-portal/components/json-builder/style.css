@@ -1,5 +1,10 @@
 .mix-tree-view .container{
   margin:10px;
+  height: auto;
+  min-height: 250px;
+}
+.mix-tree-view .dropdown-menu{
+  z-index: 99999;
 }
 .mix-tree-view .container.array{
   /* background-color:green; */
