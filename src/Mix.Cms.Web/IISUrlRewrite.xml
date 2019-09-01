@@ -7,7 +7,7 @@
     </rule>
 
     <rule name="Not rewrite" stopProcessing="true">
-      <match url="^post|page|search|tag|plugins|init|security|data|swagger|portal|api|error|Content|lib|css|js|app-shared|app-client|app-portal|app-init|images(\/(.*)){2,8}$" />
+      <match url="^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/(post|page|search|tag|plugins|init|security|data|swagger|portal|api|error|Content|lib|css|js|app-shared|app-client|app-portal|app-init|images)(\/(.*)){2,8}$" />
       <action type="None" appendQueryString="false"/>
     </rule>
   
