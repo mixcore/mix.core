@@ -118,7 +118,7 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 
                 default:
-                    var portalResult = await base.GetListAsync<UpdateViewModel>(key, request, predicate);
+                    var portalResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);
                     
                     return Ok(JObject.FromObject(portalResult));
                 
