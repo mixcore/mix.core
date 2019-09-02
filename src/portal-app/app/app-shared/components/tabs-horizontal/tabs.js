@@ -2,7 +2,9 @@
     return {
         restrict: 'E',
         transclude: true,
-        scope: {},
+        scope: {
+            selectCallback: '&'
+        },
         controller: function ($scope, $element) {
             var panes = $scope.panes = [];
 
@@ -11,6 +13,7 @@
                     pane.selected = false;
                 });
                 pane.selected = true;
+                this.selectCallback({pane: pane});
             };
 
             this.addPane = function (pane) {
