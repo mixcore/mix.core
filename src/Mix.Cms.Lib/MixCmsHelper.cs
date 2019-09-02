@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
@@ -15,6 +17,10 @@ namespace Mix.Cms.Lib
 {
     public class MixCmsHelper
     {
+        public static FileViewModel LoadDataFile(string folder, string name)
+        {
+            return FileRepository.Instance.GetFile(name, folder, true, "[]");
+        }
         public static string GetAssetFolder(string culture)
         {
             return $"/{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, culture)}";

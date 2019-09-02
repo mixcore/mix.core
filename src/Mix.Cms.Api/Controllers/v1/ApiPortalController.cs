@@ -109,7 +109,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [AllowAnonymous]
         [HttpGet, HttpOptions]
         [Route("jarray-data/{name}")]
-        public RepositoryResponse<JArray> SupportedCultures(string name)
+        public RepositoryResponse<JArray> loadData(string name)
         {
             var cultures = FileRepository.Instance.GetFile(name, "data", true, "[]");
             var obj = JObject.Parse(cultures.Content);
@@ -119,6 +119,7 @@ namespace Mix.Cms.Api.Controllers.v1
             };
         }
 
+        
         // GET api/category/id
         [HttpGet, HttpOptions]
         [Route("{culture}/translator")]
