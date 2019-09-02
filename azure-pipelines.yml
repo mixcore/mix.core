@@ -76,7 +76,7 @@ steps:
     password: $(ftp_pass)
     rootDirectory: 'd:\a\1\s\'
     filePatterns: 'app_offline.htm'
-    remoteDirectory: '/demo/mixcore_demo'
+    remoteDirectory: '/dev'
 
 # - task: DeleteFiles@1
 #   inputs:
@@ -90,7 +90,7 @@ steps:
     username: $(ftp_username)
     password: $(ftp_pass)
     rootDirectory: 'd:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\'
-    remoteDirectory: '/demo/mixcore_demo'
+    remoteDirectory: '/dev'
     # filePatterns: |
     #   */**/*.json
     #   */**/*.js
