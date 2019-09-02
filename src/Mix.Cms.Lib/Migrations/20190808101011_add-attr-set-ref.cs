@@ -35,7 +35,7 @@ namespace Mix.Cms.Lib.Migrations
                 oldDefaultValueSql: "(N'')");
 
             migrationBuilder.AddColumn<int>(
-                name: "ReferrenceId",
+                name: "ReferenceId",
                 table: "mix_attribute_field",
                 nullable: true);
 
@@ -69,9 +69,9 @@ namespace Mix.Cms.Lib.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_field_ReferrenceId",
+                name: "IX_mix_attribute_field_ReferenceId",
                 table: "mix_attribute_field",
-                column: "ReferrenceId");
+                column: "ReferenceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_mix_attribute_set_reference_DestinationId",
@@ -81,7 +81,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_mix_attribute_field_mix_attribute_set1",
                 table: "mix_attribute_field",
-                column: "ReferrenceId",
+                column: "ReferenceId",
                 principalTable: "mix_attribute_set",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
@@ -97,11 +97,11 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_attribute_set_reference");
 
             migrationBuilder.DropIndex(
-                name: "IX_mix_attribute_field_ReferrenceId",
+                name: "IX_mix_attribute_field_ReferenceId",
                 table: "mix_attribute_field");
 
             migrationBuilder.DropColumn(
-                name: "ReferrenceId",
+                name: "ReferenceId",
                 table: "mix_attribute_field");
 
             migrationBuilder.AlterColumn<string>(
