@@ -5,7 +5,9 @@ modules.component('jsonBuilder', {
         'data': '=?', // json obj (ex: { field1: 'some val' })
         'folder': '=?', // filepath (ex: 'data/jsonfile.json')
         'filename': '=?', // filepath (ex: 'data/jsonfile.json')
-        'allowedTypes': '=?' // string array ( ex: [ 'type1', 'type2' ] )
+        'allowedTypes': '=?', // string array ( ex: [ 'type1', 'type2' ] )
+        'save': '&',
+        'onUpdate': '&'
     },
     controller: ['$rootScope', '$scope', '$location', 'FileServices', 'ngAppSettings',
         function ($rootScope, $scope, $location, fileService, ngAppSettings) {
@@ -39,7 +41,7 @@ modules.component('jsonBuilder', {
             };
             ctrl.loadFile = async function () {
                 $rootScope.isBusy = true;
-                $scope.listUrl = '/portal/file/list?folder=' + ctrl.folder;
+                $scope.listUrl = '/portal/json-data/list?folder=' + ctrl.folder;
                 $rootScope.isBusy = true;
                 var response = await fileService.getFile(ctrl.folder, ctrl.filename);
                 if (response.isSucceed) {
@@ -58,33 +60,40 @@ modules.component('jsonBuilder', {
                 $rootScope.isBusy = true;
                 ctrl.model = {};
                 ctrl.update();
-                // ctrl.parseObj(ctrl.dropzones.root, ctrl.model);
-                ctrl.file.content = JSON.stringify(ctrl.model);
-                var resp = await fileService.saveFile(ctrl.file);
-                if (resp && resp.isSucceed) {
-                    $scope.activedFile = resp.data;
-                    $rootScope.showMessage('Thành công', 'success');
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
+                if (ctrl.save) {
+                    ctrl.save({ data: ctrl.model });
                 }
                 else {
-                    if (resp) { $rootScope.showErrors(resp.errors); }
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
+                    // ctrl.parseObj(ctrl.dropzones.root, ctrl.model);
+                    ctrl.file.content = JSON.stringify(ctrl.model);
+                    var resp = await fileService.saveFile(ctrl.file);
+                    if (resp && resp.isSucceed) {
+                        $scope.activedFile = resp.data;
+                        $rootScope.showMessage('Thành công', 'success');
+                        $rootScope.isBusy = false;
+                        $scope.$apply();
+                    }
+                    else {
+                        if (resp) { $rootScope.showErrors(resp.errors); }
+                        $rootScope.isBusy = false;
+                        $scope.$apply();
+                    }
                 }
+
             };
             ctrl.update = function () {
                 ctrl.model = {};
                 var obj = {
                     type: 'object',
                     name: 'data',
-                    columns:[
+                    columns: [
                         {
                             items: ctrl.dropzones.root
                         }
-                    ]                    
+                    ]
                 };
                 ctrl.parseObj(obj, ctrl.model);
+                ctrl.onUpdate({data: ctrl.model});
             };
             ctrl.parseObjToList = function (item, items) {
                 // key: the name of the object key
@@ -128,12 +137,12 @@ modules.component('jsonBuilder', {
                         break;
                     case 'object':
                         angular.forEach(item.columns[0].items, sub => {
-                            if(sub.type == 'object'){
+                            if (sub.type == 'object') {
                                 var o = {};
                                 ctrl.parseObj(sub, o);
                                 obj[item.name] = (o);
                             }
-                            else{
+                            else {
                                 ctrl.parseObj(sub, obj, item.name);
                             }
                         });

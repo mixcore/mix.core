@@ -1,84 +1,55 @@
-<div class="mix-tree-view row" ng-init="$ctrl.init()">
-    <form ng-if="$ctrl.file" ng-class="{'submitted': submitted}" ng-submit="$ctrl.saveFile()">
-        <actions back-url="$ctrl.listUrl"></actions>
-        <!-- Main area with dropzones and source code -->
-        <div class="col-md-12">
-            <div class="row">
-                <div ng-repeat="(zone, items) in $ctrl.dropzones" class="col-sm-8">
-                    <div class="dropzone box box-yellow">
-                        <!-- The dropzone also uses the list template -->
-                        <h3>Dropzone {{zone}}</h3>
-                        <!-- <div ng-include="'list.html'"></div> -->
-                        <ul dnd-list="items" dnd-allowed-types="list.allowedTypes">
-                            <li ng-repeat="item in items" dnd-disable-if="item.type == 'unknown'" dnd-type="item.type"
-                                dnd-dragend="$ctrl.update()" dnd-draggable="item" dnd-effect-allowed="move"
-                                dnd-moved="items.splice($index, 1)" dnd-selected="$ctrl.selected = item"
-                                ng-click="$ctrl.select(item)"
-                                ng-class="{selected: $ctrl.selected === item}">
-                                <div class="sw-toc-item" is-active-menu>
-                                    <div class="inner">
-                                        <div class="btn-group btn-group-sm" role="group">
-                                            <div class="btn-group" role="group" aria-label="Basic example">
-                                                <input type="text" ng-model="item.name"/>
-                                                <a class="btn btn-primary text-white dropdown-toggle"
-                                                    ng-click="item.showMenu = !item.showMenu">
-                                                    Actions
-                                                </a>
-                                                <div class="dropdown"></div>
-                                                <div class="dropdown-menu" ng-class="{'show': item.showMenu}"
-                                                    aria-labelledby="dropdownMenuLink">
-                                                    <a class="dropdown-item" ng-click="$ctrl.addField(item)">Add
-                                                        field</a>
-                                                    <a class="dropdown-item" ng-click="$ctrl.addObj(item)">Add
-                                                        Object</a>
-                                                    <a class="dropdown-item" ng-click="$ctrl.addArray(item)">Add
-                                                        Array</a>
-                                                    <a class="dropdown-item"
-                                                        ng-click="$ctrl.clone(item, list)">Clone</a>
-                                                    <a class="dropdown-item"
-                                                        ng-click="$ctrl.remove($index, list)">Remove</a>
-                                                </div>
-                                            </div>
-                                            <a class="btn btn-primary" ng-click="item.show = !item.show">
-                                                <span class="mi-ChevronRightSmall mi text-white"></span>
-                                            </a>
+<div class="mix-tree-view" ng-init="$ctrl.init()">
+    <div class="row">
+        <div ng-repeat="(zone, items) in $ctrl.dropzones" class="col-md-6">
+            <div class="dropzone box box-yellow">                
+                <ul dnd-list="items" dnd-allowed-types="list.allowedTypes">
+                    <li ng-repeat="item in items" dnd-disable-if="item.type == 'unknown'" dnd-type="item.type"
+                        dnd-dragend="$ctrl.update()" dnd-draggable="item" dnd-effect-allowed="move"
+                        dnd-moved="items.splice($index, 1)" dnd-selected="$ctrl.selected = item"
+                        ng-click="$ctrl.select(item)" ng-class="{selected: $ctrl.selected === item}">
+                        <div class="sw-toc-item" is-active-menu>
+                            <div class="inner">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <input type="text" ng-model="item.name" />
+                                        <a class="btn btn-primary text-white dropdown-toggle"
+                                            ng-click="item.showMenu = !item.showMenu">
+                                            Actions
+                                        </a>
+                                        <div class="dropdown"></div>
+                                        <div class="dropdown-menu" ng-class="{'show': item.showMenu}"
+                                            aria-labelledby="dropdownMenuLink">
+                                            <a class="dropdown-item" ng-click="$ctrl.addField(item)">Add
+                                                field</a>
+                                            <a class="dropdown-item" ng-click="$ctrl.addObj(item)">Add
+                                                Object</a>
+                                            <a class="dropdown-item" ng-click="$ctrl.addArray(item)">Add
+                                                Array</a>
+                                            <a class="dropdown-item" ng-click="$ctrl.clone(item, list)">Clone</a>
+                                            <a class="dropdown-item"
+                                                ng-click="$ctrl.remove($index, list)">Remove</a>
                                         </div>
-
                                     </div>
+                                    <a class="btn btn-primary" ng-click="item.show = !item.show">
+                                        <span class="mi-ChevronRightSmall mi text-white"></span>
+                                    </a>
                                 </div>
 
-                                <div ng-include="item.type + '.html'" ng-show="item.show || item.showMenu"
-                                    id="{{item.type}}-{{item.name}}"></div>
-                            </li>
-                        </ul>
-                    </div>
+                            </div>
+                        </div>
 
-
-                </div>
-                <div class="col-sm-4">
-                    <h2>Selected Model</h2>
-                    <pre>{{$ctrl.selectedModel | json}}</pre>
-                    <h2>Mapping Model</h2>
-                    <pre>{{$ctrl.model | json}}</pre>
-                </div>
+                        <div ng-include="item.type + '.html'" ng-show="item.show || item.showMenu"
+                            id="{{item.type}}-{{item.name}}"></div>
+                    </li>
+                </ul>
             </div>
         </div>
+        <div class="col-md-6">
+            <h2>Selected Model</h2>
+            <pre>{{$ctrl.selectedModel | json}}</pre>
 
-        <div class="row">
-            <div class="col-sm-4">
-                <h2>Generated Model</h2>
-                <pre>{{$ctrl.dropzones.root | json}}</pre>
-            </div>
-            <div class="col-sm-4">
-                <h2>Selected Model</h2>
-                <pre>{{$ctrl.selected | json}}</pre>
-            </div>
-            <div class="col-sm-4">
-                <h2>Mapping Model</h2>
-                <pre>{{$ctrl.model | json}}</pre>
-            </div>
         </div>
-    </form>
+    </div>
 </div>
 
 <!-- Markup for lists inside the dropzone. It's inside a seperate template

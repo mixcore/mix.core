@@ -3,10 +3,8 @@
     controller: ['$rootScope', '$scope', '$element',
         function ($rootScope, $scope, $element) {
             var ctrl = this;
-            ctrl.previousId = null;
-            ctrl.editor = null;
-            ctrl.minHeight =  320;
-            ctrl.isVisible = false;
+            ctrl.previousId = null;            
+            ctrl.minHeight =  320;            
             ctrl.id = Math.floor(Math.random() * 100) + 1;
             ctrl.$onChanges = (changes) => {
                 if (changes.content) {
@@ -100,6 +98,7 @@
         }
     ],
     bindings: {
+        editor: '=?',
         content: '=',
         defaultContent: '=?',        
         contentId: '=',
