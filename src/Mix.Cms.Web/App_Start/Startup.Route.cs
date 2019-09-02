@@ -61,11 +61,7 @@ namespace Mix.Cms.Web
                     template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/portal/file");
                 routes.MapRoute(
                     name: "post",
-                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/post/{id}/{seoName}");
-                routes.MapRoute(
-                    name: "product",
-                    template: @"{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + @"}/product/{seoName}");
-
+                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/post/{id}/{seoName}");                
                 
                 // uncomment the following line to Work-around for #1175 in beta1
                 routes.EnableDependencyInjection();
