@@ -15,12 +15,12 @@ modules.directive('tabsV', function () {
                 });
                 pane.selected = true;
                 this.selectCallback({pane: pane});
-            }
+            };
 
             this.addPane = function (pane) {
                 if (panes.length === 0) $scope.select(pane);
                 panes.push(pane);
-            }
+            };
         },
         templateUrl: '/app/app-shared/components/tabs-verticle/tabs.html',
         replace: true

@@ -32,7 +32,7 @@ namespace Mix.Cms.Api.Controllers.v1
             // Request: Key => folder, Keyword => filename
             if (!string.IsNullOrEmpty(folder))
             {
-                var file = FileRepository.Instance.GetWebFile(filename, folder);
+                var file = FileRepository.Instance.GetFile(filename, folder);
 
                 return new RepositoryResponse<FileViewModel>()
                 {
@@ -90,7 +90,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (model != null)
             {
-                var result = FileRepository.Instance.SaveWebFile(model);
+                var result = FileRepository.Instance.SaveFile(model);
                 return new RepositoryResponse<FileViewModel>()
                 {
                     IsSucceed = result,

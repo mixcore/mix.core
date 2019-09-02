@@ -367,6 +367,8 @@ gulp.task("min:css", ['min:appCss', "min:appInitCss", 'min:portalCss', 'min:shar
 gulp.task("build", ['clean:js',
     'min:js', 'min:css', "min:views"]);//["clean", "min:views", "min"]);
 
+gulp.task("buildp", ['min:portalApp', 'min:appCss','min:portalCss', "min:views"]);
+
 gulp.task('watch:html', function () {
     gulp.watch('./app/**/**/*.html', ['min:views']);
     gulp.watch('./app/**/**/*.js', ['min:portalApp','min:portalAppRequired']);

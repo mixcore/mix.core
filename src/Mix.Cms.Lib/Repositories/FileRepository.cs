@@ -365,15 +365,10 @@ namespace Mix.Cms.Lib.Repositories
 
         public List<string> GetTopDirectories(string folder)
         {
-            string fullPath = CommonHelper.GetFullPath(new string[]
-            {
-                MixConstants.Folder.WebRootPath,
-                folder
-            });
             List<string> result = new List<string>();
-            if (Directory.Exists(fullPath))
+            if (Directory.Exists(folder))
             {
-                foreach (string dirPath in Directory.GetDirectories(fullPath, "*",
+                foreach (string dirPath in Directory.GetDirectories(folder, "*",
                     SearchOption.TopDirectoryOnly))
                 {
                     DirectoryInfo path = new DirectoryInfo(dirPath);
@@ -384,23 +379,11 @@ namespace Mix.Cms.Lib.Repositories
         }
 
         public List<FileViewModel> GetTopFiles(string folder)
-        {
-            string fullPath = CommonHelper.GetFullPath(new string[]
-             {
-                MixConstants.Folder.WebRootPath,
-                //MixConstants.Folder.FileFolder,
-                folder
-             });
-
-            string webPath = CommonHelper.GetFullPath(new string[]
-             {
-                //MixConstants.Folder.FileFolder,
-                folder
-             });
+        {   
             List<FileViewModel> result = new List<FileViewModel>();
-            if (Directory.Exists(fullPath))
+            if (Directory.Exists(folder))
             {
-                DirectoryInfo path = new DirectoryInfo(fullPath);
+                DirectoryInfo path = new DirectoryInfo(folder);
                 string folderName = path.Name;
 
                 var Files = path.GetFiles();
@@ -409,7 +392,7 @@ namespace Mix.Cms.Lib.Repositories
                     result.Add(new FileViewModel()
                     {
                         FolderName = folderName,
-                        FileFolder = webPath,
+                        FileFolder = folder,
 
                         Filename = file.Name.Substring(0, file.Name.LastIndexOf('.') >= 0 ? file.Name.LastIndexOf('.') : 0),
                         Extension = file.Extension,
