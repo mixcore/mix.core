@@ -39,6 +39,8 @@ docker-compose build
 docker-compose up
 ```
 
+> Docker SQL Server DB information: Server=db;Database=master;User=sa;Password=P@ssw0rd;
+
 ## GITs clone
 ```sh
 mkdir mixcore

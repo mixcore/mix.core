@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using static Mix.Cms.Lib.MixEnums;
 
@@ -113,10 +114,18 @@ namespace Mix.Cms.Lib
             return cates;
         }
 
-        public static string GetRouterUrl(string routerName, object routeValues, HttpRequest request, IUrlHelper Url)
+        public static string GetRouterUrl(object routeValues, HttpRequest request, IUrlHelper Url)
         {
+            Type objType = routeValues.GetType();
+            string url = "";
+            foreach (PropertyInfo prop in objType.GetProperties())
+            {
+                string name = prop.Name;
+                var value = prop.GetValue(routeValues, null).ToString();
+                url += $"/{value}";
+            }
             return string.Format("{0}://{1}{2}", request.Scheme, request.Host,
-                        Url.RouteUrl(routerName, routeValues)
+                        url
                         );
         }
 
