@@ -58,7 +58,8 @@ namespace Mix.Cms.Api.Controllers.v1
                         var portalResult = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_{id}", predicate);
                         if (portalResult.IsSucceed)
                         {
-                            portalResult.Data.DetailsUrl = MixCmsHelper.GetRouterUrl("Order", new { portalResult.Data.Id }, Request, Url);
+                            portalResult.Data.DetailsUrl = MixCmsHelper.GetRouterUrl(
+                                new { culture = _lang, action = "order", portalResult.Data.Id }, Request, Url);
                         }
 
                         return Ok(JObject.FromObject(portalResult));
@@ -80,7 +81,8 @@ namespace Mix.Cms.Api.Controllers.v1
                         var beResult = await ReadViewModel.Repository.GetSingleModelAsync(model => model.Id == id && model.Specificulture == _lang).ConfigureAwait(false);
                         if (beResult.IsSucceed)
                         {
-                            beResult.Data.DetailsUrl = MixCmsHelper.GetRouterUrl("Order", new { beResult.Data.Id }, Request, Url);
+                            beResult.Data.DetailsUrl = MixCmsHelper.GetRouterUrl(
+                                new { culture = _lang, action = "order", seoName = beResult.Data.Id }, Request, Url);
                         }
                         return Ok(JObject.FromObject(beResult));
                     }
@@ -176,7 +178,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         mvcResult.Data.Items.ForEach(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                "order", new { seoName = a.Id }, Request, Url);
+                                new { culture = _lang, action = "order", seoName = a.Id }, Request, Url);
                         });
                     }
 
@@ -188,7 +190,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         portalResult.Data.Items.ForEach(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                "order", new { seoName = a.Id }, Request, Url);
+                                new { culture = _lang, action = "order", seoName = a.Id }, Request, Url);
                         });
                     }
 
@@ -201,7 +203,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         listItemResult.Data.Items.ForEach((Action<ReadListItemViewModel>)(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                "order", new { seoName = a.Id }, Request, Url);
+                                new { culture = _lang, action = "order", seoName = a.Id }, Request, Url);
                         }));
                     }
 
