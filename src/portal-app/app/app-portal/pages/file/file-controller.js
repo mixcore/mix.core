@@ -33,11 +33,11 @@ app.controller('FileController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
                 $scope.request.key += ($scope.request.key !== '') ? '/' : '';
                 $scope.request.key += folder;
             }
-            $location.url('/portal/file/list?folder=' + encodeURIComponent($scope.request.key));
+            $location.url('/portal/file/list?folder=wwwroot/' + encodeURIComponent($scope.request.key));
         };
         $scope.loadFile = async function () {
             $rootScope.isBusy = true;
-            $scope.listUrl = '/portal/file/list?folder=' + $routeParams.folder;
+            $scope.listUrl = '/portal/file/list?folder=wwwroot/' + $routeParams.folder;
             $rootScope.isBusy = true;
             var response = await fileServices.getFile($routeParams.folder, $routeParams.filename);
             if (response.isSucceed) {
@@ -53,7 +53,7 @@ app.controller('FileController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
         };
         $scope.loadFiles = async function (folder) {
             if (folder) {
-                $scope.request.key += ($scope.request.key !== '') ? '/' : '';
+                $scope.request.key += ($scope.request.key !== '') ? 'wwwroot/' : 'wwwroot';
                 $scope.request.key += folder;
             } else {
                 $scope.request.key = $routeParams.folder ? $routeParams.folder : '';

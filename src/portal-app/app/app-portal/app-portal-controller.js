@@ -16,6 +16,7 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
         $scope.init = function () {
             if (!$rootScope.isBusy) {
                 $rootScope.isBusy = true;
+                
                 commonService.loadJArrayData('micon.json').then(resp=>{
                     ngAppSettings.icons = resp.data;
                 });

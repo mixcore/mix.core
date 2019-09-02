@@ -10,11 +10,13 @@
                 {
                     "type": "item",
                     "menuType": "root",
+                    "path": "/portal",
+                    "controller": "DashboardController",
+                    "templatePath": "/app/app-portal/pages/dashboard/dashboard.html",
                     "title": "portal_dashboard",
                     "keyword": "portal_dashboard",
                     "shortTitle": "portal_short_dashboard",
                     "icon": "mi mi-Tiles",
-                    "uri": "/portal",
                     "subMenus": {
                         "type": "container",
                         "allowedTypes": [
@@ -26,10 +28,11 @@
                 {
                     "type": "item",
                     "menuType": "root",
+                    "path": "#",
+                   
                     "title": "portal_posts",
                     "shortTitle": "portal_posts",
                     "icon": "mi mi-ReadingList",
-                    "uri": "#",
                     "subMenus": {
                         "type": "container",
                         "allowedTypes": [
@@ -40,14 +43,18 @@
                                 "type": "item",
                                 "menuType": "portal_posts",
                                 "title": "portal_create",
-                                "uri": "/portal/post/create",
+                                "path": "/portal/post/create",
+                                "controller": "PostController",
+                                "templatePath": "/app/app-portal/pages/post/details.html",
                                 "icon": "mi mi-Add"
                             },
                             {
                                 "type": "item",
                                 "menuType": "portal_posts",
                                 "title": "portal_list",
-                                "uri": "/portal/post/list",
+                                "path": "/portal/post/list",
+                                "controller": "PostController",
+                                "templatePath": "/app/app-portal/pages/post/list.html",
                                 "icon": "mi mi-List"
                             }
                         ]
@@ -56,10 +63,12 @@
                 {
                     "type": "item",
                     "menuType": "root",
-                    "title": "portal_pages",
-                    "shortTitle": "portal_pages",
+                    "path": "#",
+                    "controller": "",
+                    "templatePath": "",
+                    "title": "portal_settings",
+                    "shortTitle": "portal_settings",
                     "icon": "mi mi-Page",
-                    "uri": "#",
                     "subMenus": {
                         "type": "container",
                         "allowedTypes": [
@@ -69,16 +78,11 @@
                             {
                                 "type": "item",
                                 "menuType": "portal_pages",
-                                "title": "portal_create",
-                                "uri": "/portal/page/create",
-                                "icon": "mi mi-Add"
-                            },
-                            {
-                                "type": "item",
-                                "menuType": "portal_pages",
-                                "title": "portal_list",
-                                "uri": "/portal/page/list",
-                                "icon": "mi mi-List"
+                                "path": "/portal/app-settings/details",
+                                "controller": "AppSettingsController",
+                                "templatePath": "/app/app-portal/pages/app-settings/details.html",
+                                "title": "portal_app_settings",
+                                "icon": "mi mi-ViewAll"
                             }
                         ]
                     }

@@ -25,22 +25,25 @@ namespace Mix.Cms.Web.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IApiDescriptionGroupCollectionProvider _apiExplorer;
+        IApplicationLifetime _lifetime;
         public HomeController(IHostingEnvironment env,
             IMemoryCache memoryCache,
              UserManager<ApplicationUser> userManager,
              IApiDescriptionGroupCollectionProvider apiExplorer,
-            IHttpContextAccessor accessor
+            IHttpContextAccessor accessor,
+            IApplicationLifetime lifetime
             ) : base(env, memoryCache, accessor)
         {
 
             this._userManager = userManager;
             _apiExplorer = apiExplorer;
+            _lifetime = lifetime;
         }
 
         #region Routes
         [Route("")]
         public async System.Threading.Tasks.Task<IActionResult> Index()
-        {
+        {            
             if (_forbidden)
             {
                 return Redirect($"/error/403");
