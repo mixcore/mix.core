@@ -18,14 +18,14 @@
         </div>
         <tabs-v select-callback="$ctrl.selectPane(pane)">
             <pane-v header="Razor Template">
-                <monaco-editor content-id="$ctrl.template.id" is-visible="$ctrl.activedPane.title == 'Razor Template'" content="$ctrl.template.content">
+                <monaco-editor content-id="$ctrl.template.id" is-visible="$ctrl.activedPane.header == 'Razor Template'" content="$ctrl.template.content">
                 </monaco-editor>
             </pane-v>
             <pane-v header="Scripts">
-                <monaco-editor content-id="$ctrl.template.id" is-visible="$ctrl.activedPane.title == 'Scripts'" content="$ctrl.template.scripts" default-content="'<script>\n\n</script>'"></monaco-editor>
+                <monaco-editor content-id="$ctrl.template.id" is-visible="$ctrl.activedPane.header == 'Scripts'" content="$ctrl.template.scripts" default-content="'<script>\n\n</script>'"></monaco-editor>
             </pane-v>
             <pane-v header="Styles">
-                <monaco-editor content-id="$ctrl.template.id" is-visible="$ctrl.activedPane.title == 'Styles'" content="$ctrl.template.styles" default-content="'<style>\n\n</style>'">
+                <monaco-editor content-id="$ctrl.template.id" is-visible="$ctrl.activedPane.header == 'Styles'" content="$ctrl.template.styles" default-content="'<style>\n\n</style>'">
                 </monaco-editor>
             </pane-v>
 

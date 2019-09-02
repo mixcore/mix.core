@@ -412,7 +412,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 data.Data.Items.ForEach(a =>
                 {
                     a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                        "Profile", new { a.Id }, Request, Url);
+                        new { action = "profile", a.Id }, Request, Url);
                 }
                 );
             }

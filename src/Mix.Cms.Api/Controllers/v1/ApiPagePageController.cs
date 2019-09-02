@@ -59,7 +59,8 @@ namespace Mix.Cms.Api.Controllers.v1
                         var portalResult = await base.GetSingleAsync<ReadViewModel>($"{viewType}_{parentId}_{id}", predicate);
                         if (portalResult.IsSucceed)
                         {
-                            portalResult.Data.Page.DetailsUrl = MixCmsHelper.GetRouterUrl("Post", new { portalResult.Data.Page.SeoName }, Request, Url);
+                            portalResult.Data.Page.DetailsUrl = MixCmsHelper.GetRouterUrl(
+                                new { culture = _lang, action = "post", portalResult.Data.Page.SeoName }, Request, Url);
                         }
 
                         return Ok(JObject.FromObject(portalResult));
