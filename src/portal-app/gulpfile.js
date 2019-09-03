@@ -109,10 +109,10 @@ paths.framework = {
         paths.scriptLib + "angularjs/angular-route.min.js",
         paths.scriptLib + "angularjs/angular-animate.min.js",
         paths.scriptLib + "angularjs/angular-sanitize.min.js",
-        paths.scriptLib + "jquery/jquery.min.js",
-        paths.scriptLib + "jquery/jquery-ui.min.js",
-        paths.scriptLib + "bootstrap/js/popper.min.js",
-        paths.scriptLib + "bootstrap/js/bootstrap.min.js",
+        // paths.scriptLib + "jquery/jquery.min.js",
+        // paths.scriptLib + "jquery/jquery-ui.min.js",
+        // paths.scriptLib + "bootstrap/js/popper.min.js",
+        // paths.scriptLib + "bootstrap/js/bootstrap.min.js",
     ],
     dest: paths.webroot + "js/framework.min.js"
 };

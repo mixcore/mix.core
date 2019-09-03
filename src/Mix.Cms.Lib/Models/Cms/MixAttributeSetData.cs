@@ -7,23 +7,19 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixAttributeSetData()
         {
-            InverseParent = new HashSet<MixAttributeSetData>();
-            MixAttributeSetValue = new HashSet<MixAttributeSetValue>();
+            MixRelatedAttributeDataMixAttributeSetData = new HashSet<MixRelatedAttributeData>();
+            MixRelatedAttributeDataS = new HashSet<MixRelatedAttributeData>();
         }
 
         public string Id { get; set; }
         public int AttributeSetId { get; set; }
         public string Specificulture { get; set; }
-        public string ParentId { get; set; }
-        public int? ParentType { get; set; }
-        public int ModuleId { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public int Priority { get; set; }
         public int Status { get; set; }
 
         public virtual MixAttributeSet AttributeSet { get; set; }
-        public virtual MixAttributeSetData Parent { get; set; }
-        public virtual ICollection<MixAttributeSetData> InverseParent { get; set; }
-        public virtual ICollection<MixAttributeSetValue> MixAttributeSetValue { get; set; }
+        public virtual ICollection<MixRelatedAttributeData> MixRelatedAttributeDataMixAttributeSetData { get; set; }
+        public virtual ICollection<MixRelatedAttributeData> MixRelatedAttributeDataS { get; set; }
     }
 }
