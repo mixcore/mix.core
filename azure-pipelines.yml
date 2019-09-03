@@ -1,23 +1,23 @@
-# # ASP.NET
-# # Build and test ASP.NET projects.
-# # Add steps that publish symbols, save build artifacts, deploy, and more:
-# # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
-# trigger:
-# - master
+trigger:
+- master
 
-# pool:
-#   vmImage: 'windows-latest'
+pool:
+  vmImage: 'windows-latest'
 
-# variables:
-#   solution: '**/*.sln'
-#   buildPlatform: 'Any CPU'
-#   buildConfiguration: 'Release'
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
 
-# steps:
-# - task: NuGetToolInstaller@1
-# - bash: git clone --depth=50 --branch=master https://github.com/mixcore/mix.heart.git d:/a/1/mix.heart
-# - bash: git clone --depth=50 --branch=master https://github.com/mixcore/mix.identity.git d:/a/1/mix.identity
+steps:
+- task: NuGetToolInstaller@1
+- bash: git clone --depth=50 --branch=master https://github.com/mixcore/mix.heart.git d:/a/1/mix.heart
+- bash: git clone --depth=50 --branch=master https://github.com/mixcore/mix.identity.git d:/a/1/mix.identity
 
 # - task: UseNode@1
 
@@ -32,45 +32,82 @@
 #     targets: 'build'
 #     enableCodeCoverage: false
 
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
 
-# - task: NuGetCommand@2
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      dir /a d:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      (Get-Content d:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\appsettings.json) -replace "\`$SER_IP\`$", $env:DEMO_SER_IP | Set-Content d:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\appsettings.json
+      (Get-Content d:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\appsettings.json) -replace "\`$DBNAME\`$", $env:DEMO_DBNAME | Set-Content d:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\appsettings.json
+      (Get-Content d:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\appsettings.json) -replace "\`$DBUID\`$", $env:DEMO_DBUID | Set-Content d:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\appsettings.json
+      (Get-Content d:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\appsettings.json) -replace "\`$DBPWD\`$", $env:DEMO_DBPWD | Set-Content d:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\appsettings.json
+      (Get-Content d:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\appsettings.json)
+
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+
+- task: FtpUpload@1
+  inputs:
+    credentialsOption: 'inputs'
+    serverUrl: $(ftp_url)
+    username: $(ftp_username)
+    password: $(ftp_pass)
+    rootDirectory: 'd:\a\1\s\'
+    filePatterns: 'app_offline.htm'
+    remoteDirectory: '/demo/mixcore_demo'
+
+# - task: DeleteFiles@1
 #   inputs:
-#     restoreSolution: '$(solution)'
+#     SourceFolder: 'd:\a\1\s\'
+#     Contents: 'app_offline.htm'
 
-# - task: VSBuild@1
-#   inputs:
-#     solution: '$(solution)'
-#     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-#     platform: '$(buildPlatform)'
-#     configuration: '$(buildConfiguration)'
+- task: FtpUpload@1
+  inputs:
+    credentialsOption: 'inputs'
+    serverUrl: $(ftp_url)
+    username: $(ftp_username)
+    password: $(ftp_pass)
+    rootDirectory: 'd:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\'
+    remoteDirectory: '/demo/mixcore_demo'
+    # filePatterns: |
+    #   */**/*.json
+    #   */**/*.js
+    #   */**/*.html
+    #   */**/*.htm
+    #   */**/*.cshtml
+    #   */**/*.css
+    #   */**/*.dll
+    clean: false
+    cleanContents: true
+    preservePaths: true
+    # clean: false
+    # cleanContents: false
+    # preservePaths: false
+    # trustSSL: false
 
-# - task: VSTest@2
-#   inputs:
-#     platform: '$(buildPlatform)'
-#     configuration: '$(buildConfiguration)'
-
-
-# - task: FtpUpload@1
-#   inputs:
-#     credentialsOption: 'inputs'
-#     serverUrl: $(ftp_url)
-#     username: $(ftp_username)
-#     password: $(ftp_pass)
-#     rootDirectory: 'd:\a\1\s\'
-#     filePatterns: 'app_offline.htm'
-#     remoteDirectory: '/stag'
-
-# - task: FtpUpload@2
-#   inputs:
-#     credentialsOption: 'inputs'
-#     serverUrl: $(ftp_url)
-#     username: $(ftp_username)
-#     password: $(ftp_pass)
-#     rootDirectory: 'd:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\'
-#     remoteDirectory: '/stag'
-#     clean: true
-#     cleanContents: true
-#     preservePaths: true
-#     trustSSL: false
-
+      # */**/*.js
+      # */**/*.html
+      # */**/*.htm
+      # */**/*.cshtml
+      # */**/*.css
+      # */**/*.dll
 
