@@ -28,6 +28,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #region Views        
         public List<MixAttributeSetValues.UpdateViewModel> Values { get; set; }
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
+
+        public List<MixRelatedAttributeDatas.ReadViewModel> DataNavs { get; set; }
+
         #endregion
         #endregion Properties
         #region Contructors
@@ -44,7 +47,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #region Overrides
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            
+            // Related Datas
+            DataNavs = MixRelatedAttributeDatas.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
+
             Values = MixAttributeSetValues.UpdateViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a=>a.Priority).ToList();
             Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
