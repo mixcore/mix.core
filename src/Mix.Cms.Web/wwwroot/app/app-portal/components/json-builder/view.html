@@ -1,7 +1,7 @@
 <div class="mix-tree-view" ng-init="$ctrl.init()">
     <div class="row">
         <div ng-repeat="(zone, items) in $ctrl.dropzones" class="col-md-6">
-            <div class="dropzone box box-yellow">
+            <div class="dropzone box box-yellow">                
                 <ul dnd-list="items" dnd-allowed-types="list.allowedTypes">
                     <li ng-repeat="item in items" dnd-disable-if="item.type == 'unknown'" dnd-type="item.type" dnd-dragend="$ctrl.update()" dnd-draggable="item" dnd-effect-allowed="move" dnd-moved="items.splice($index, 1)" dnd-selected="$ctrl.selected = item" ng-click="$ctrl.select(item)" ng-class="{selected: $ctrl.selected === item}">
                         <div class="sw-toc-item" is-active-menu>
@@ -38,8 +38,8 @@
             </div>
         </div>
         <div class="col-md-6">
-            <h2>Viewer</h2>
-            <monaco-editor content-id="monaco-json-viewer" is-visible="editorVisible" content="$ctrl.selectedModel | json" ext="json"></monaco-editor>
+            <h2>Selected Model</h2>
+            <monaco-editor content-id="$ctrl.timestamp" content="$ctrl.selectedModel | json" ext="'.json'"></monaco-editor>
             <pre>{{$ctrl.selectedModel | json}}</pre>
 
         </div>
@@ -73,7 +73,7 @@
                     <div class="inner">
                         <div class="btn-group btn-group-sm" role="group">
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                <input type="text" style="background-color:#999" ng-model="item.name"/>
+                                <input type="text" ng-model="item.name"/>
                                 <a class="btn btn-primary text-white dropdown-toggle" 
                                     ng-click="item.showMenu = !item.showMenu">
                                     Actions
