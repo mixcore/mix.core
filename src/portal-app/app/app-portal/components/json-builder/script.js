@@ -93,7 +93,7 @@ modules.component('jsonBuilder', {
                     ]
                 };
                 ctrl.parseObj(obj, ctrl.model);
-                ctrl.onUpdate({data: ctrl.model});
+                ctrl.onUpdate({ data: ctrl.model });
             };
             ctrl.parseObjToList = function (item, items) {
                 // key: the name of the object key
