@@ -38,15 +38,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             var removeFields = MixAttributeSetValues.DeleteViewModel.Repository.RemoveListModel(false, f => f.DataId == Id && f.Specificulture == Specificulture, _context, _transaction);
             ViewModelHelper.HandleResult(removeFields, ref result);
 
-            // remove subdata values
+            // remove related values
             if (result.IsSucceed)
             {
-                var subData = _context.MixRelatedAttributeData.Where(d => (d.SourceId == Id || d.DestinationId == Id) && d.Specificulture == Specificulture);
+                var subData = _context.MixRelatedAttributeData.Where(d => (d.Id == Id || d.ParentId == Id) && d.Specificulture == Specificulture);
                 foreach (var item in subData)
                 {
-                    var removeChildFields = MixAttributeSetValues.DeleteViewModel.Repository.RemoveListModel(false, f => (f.DataId == item.SourceId || f.DataId == item.DestinationId) && f.Specificulture == Specificulture, _context, _transaction);
+                    var removeChildFields = MixAttributeSetValues.DeleteViewModel.Repository.RemoveListModel(false, f => (f.DataId == item.Id || f.DataId == item.ParentId) && f.Specificulture == Specificulture, _context, _transaction);
                     ViewModelHelper.HandleResult(removeChildFields, ref result);
-                    var removeChilds = MixAttributeSetDatas.DeleteViewModel.Repository.RemoveListModel(false, f => (f.Id == item.SourceId || f.Id == item.DestinationId) && f.Specificulture == Specificulture, _context, _transaction);
+                    var removeChilds = MixAttributeSetDatas.DeleteViewModel.Repository.RemoveListModel(false, f => (f.Id == item.Id || f.Id == item.ParentId) && f.Specificulture == Specificulture, _context, _transaction);
                     ViewModelHelper.HandleResult(removeChilds, ref result);
                 }
             }
@@ -62,12 +62,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             // remove subdata values
             if (result.IsSucceed)
             {
-                var subData = _context.MixRelatedAttributeData.Where(d => (d.SourceId == Id || d.DestinationId == Id) && d.Specificulture == Specificulture);
+                var subData = _context.MixRelatedAttributeData.Where(d => (d.Id == Id || d.ParentId == Id) && d.Specificulture == Specificulture);
                 foreach (var item in subData)
                 {
-                    var removeChildFields = await MixAttributeSetValues.DeleteViewModel.Repository.RemoveListModelAsync(false, f => (f.DataId == item.SourceId || f.DataId == item.DestinationId) && f.Specificulture == Specificulture, _context, _transaction);
+                    var removeChildFields = await MixAttributeSetValues.DeleteViewModel.Repository.RemoveListModelAsync(false, f => (f.DataId == item.Id || f.DataId == item.ParentId) && f.Specificulture == Specificulture, _context, _transaction);
                     ViewModelHelper.HandleResult(removeChildFields, ref result);
-                    var removeChilds = await MixAttributeSetDatas.DeleteViewModel.Repository.RemoveListModelAsync(false, f => (f.Id == item.SourceId || f.Id == item.DestinationId) && f.Specificulture == Specificulture, _context, _transaction);
+                    var removeChilds = await MixAttributeSetDatas.DeleteViewModel.Repository.RemoveListModelAsync(false, f => (f.Id == item.Id || f.Id == item.ParentId) && f.Specificulture == Specificulture, _context, _transaction);
                     ViewModelHelper.HandleResult(removeChilds, ref result);
                 }
             }                

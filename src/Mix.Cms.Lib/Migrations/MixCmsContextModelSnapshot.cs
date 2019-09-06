@@ -1651,14 +1651,14 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedAttributeData", b =>
                 {
-                    b.Property<string>("SourceId")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("DestinationId")
+                    b.Property<string>("Id")
                         .HasMaxLength(50);
 
                     b.Property<string>("Specificulture")
                         .HasMaxLength(10);
+
+                    b.Property<string>("ParentId")
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -1669,17 +1669,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Image")
                         .HasMaxLength(450);
 
-                    b.Property<int?>("ParentType");
+                    b.Property<int>("ParentType");
 
                     b.Property<int>("Priority");
 
                     b.Property<int>("Status");
 
-                    b.HasKey("SourceId", "DestinationId", "Specificulture");
-
-                    b.HasIndex("DestinationId", "Specificulture");
-
-                    b.HasIndex("SourceId", "Specificulture");
+                    b.HasKey("Id", "Specificulture", "ParentId")
+                        .HasName("PK_mix_related_attribute_data_1");
 
                     b.ToTable("mix_related_attribute_data");
                 });
@@ -2229,14 +2226,9 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedAttributeData", b =>
                 {
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSetData", "MixAttributeSetData")
-                        .WithMany("MixRelatedAttributeDataMixAttributeSetData")
-                        .HasForeignKey("DestinationId", "Specificulture")
-                        .HasConstraintName("FK_mix_related_attribute_data_mix_attribute_set_data1");
-
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSetData", "S")
-                        .WithMany("MixRelatedAttributeDataS")
-                        .HasForeignKey("SourceId", "Specificulture")
-                        .HasConstraintName("FK_mix_related_attribute_data_mix_attribute_set_data");
+                        .WithMany("MixRelatedAttributeData")
+                        .HasForeignKey("Id", "Specificulture")
+                        .HasConstraintName("FK_mix_related_attribute_data_mix_attribute_set_data2");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedPost", b =>

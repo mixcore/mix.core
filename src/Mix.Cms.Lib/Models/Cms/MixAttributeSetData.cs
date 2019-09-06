@@ -7,8 +7,7 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixAttributeSetData()
         {
-            MixRelatedAttributeDataMixAttributeSetData = new HashSet<MixRelatedAttributeData>();
-            MixRelatedAttributeDataS = new HashSet<MixRelatedAttributeData>();
+            MixRelatedAttributeData = new HashSet<MixRelatedAttributeData>();
         }
 
         public string Id { get; set; }
@@ -19,7 +18,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Status { get; set; }
 
         public virtual MixAttributeSet AttributeSet { get; set; }
-        public virtual ICollection<MixRelatedAttributeData> MixRelatedAttributeDataMixAttributeSetData { get; set; }
-        public virtual ICollection<MixRelatedAttributeData> MixRelatedAttributeDataS { get; set; }
+        public virtual ICollection<MixRelatedAttributeData> MixRelatedAttributeData { get; set; }
     }
 }

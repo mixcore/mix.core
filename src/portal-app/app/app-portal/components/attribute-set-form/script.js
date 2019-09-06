@@ -4,8 +4,8 @@ modules.component('attributeSetForm', {
         setId: '=',
         attrDataId: '=?',
         attrData: '=?',
-        parentType: '=?', // attribute set = 1 | post = 2 | page = 3 | module = 4
-        parentId: '=?',
+        // parentType: '=?', // attribute set = 1 | post = 2 | page = 3 | module = 4
+        // parentId: '=?',
         defaultId: '=',
         saveData: '&?'
     },
@@ -23,8 +23,8 @@ modules.component('attributeSetForm', {
                 if(ctrl.attrDataId){
                     ctrl.attrData = await service.getSingle('portal', [ctrl.attrDataId, ctrl.setId]);
                     if (ctrl.attrData) {
-                        ctrl.attrData.parentType = ctrl.parentType;
-                        ctrl.attrData.parentId = ctrl.parentId;
+                        // ctrl.attrData.parentType = ctrl.parentType;
+                        // ctrl.attrData.parentId = ctrl.parentId;
                         $rootScope.isBusy = false;
                         $scope.$apply();
                     } else {

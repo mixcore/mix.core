@@ -18,8 +18,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #region Models
         public string Id { get; set; }
         public int AttributeSetId { get; set; }
-        public string ParentId { get; set; }
-        public int? ParentType { get; set; }
         public int ModuleId { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public int Status { get; set; }
@@ -29,7 +27,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public List<MixAttributeSetValues.UpdateViewModel> Values { get; set; }
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
 
-        public List<MixRelatedAttributeDatas.ReadViewModel> DataNavs { get; set; }
+        public List<MixRelatedAttributeDatas.UpdateViewModel> DataNavs { get; set; }
 
         #endregion
         #endregion Properties
@@ -48,7 +46,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             // Related Datas
-            DataNavs = MixRelatedAttributeDatas.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
+            DataNavs = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(
+                n => n.ParentId == Id && n.ParentType == (int)MixEnums.MixAttributeSetDataType.SubSet && n.Specificulture == Specificulture, 
+                _context, _transaction).Data;
 
             Values = MixAttributeSetValues.UpdateViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a=>a.Priority).ToList();
