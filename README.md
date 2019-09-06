@@ -95,7 +95,7 @@ gulp serve
 
 ## License
 
-Mixcore CMS is licensed under the **[GNU General Public License v3.0](https://github.com/mixcore/mix.core/blob/master/LICENSE)**
+Mixcore CMS is licensed under the **[MIT](https://github.com/mixcore/mix.core/blob/master/LICENSE)**
 
 
 |Permissions  |Limitations  |Conditions  |
