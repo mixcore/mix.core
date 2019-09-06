@@ -7,11 +7,17 @@ modules.component('attributeValueEditor', {
         parentId: '=?',
         isShowTitle: '=?',
     },
-    controller: ['$rootScope', '$scope', 'ngAppSettings', '$location', 'AttributeSetDataService', 
-        function ($rootScope, $scope, ngAppSettings,$location, dataService) {
+    controller: ['$rootScope', '$scope', 'ngAppSettings', '$location', 'RelatedAttributeSetDataService', 'AttributeSetDataService', 
+        function ($rootScope, $scope, ngAppSettings,$location, navService,dataService) {
         var ctrl = this;
         ctrl.icons = ngAppSettings.icons;
         ctrl.refData = [];
+        ctrl.refDataModel = {
+            id: null,
+            data: {
+                id:'default',
+            }
+        };
         ctrl.refRequest = angular.copy(ngAppSettings.request);
         ctrl.refRequest.pageSize = 100;
         ctrl.dataTypes = $rootScope.globalSettings.dataTypes;
@@ -37,19 +43,10 @@ modules.component('attributeValueEditor', {
                         break;
                     case 23: // reference
                         if(ctrl.attributeValue.field.referenceId){
-                            dataService.getList('read', ctrl.refRequest, ctrl.attributeValue.field.referenceId, ctrl.parentType, ctrl.parentId).then(resp=>{
-                                if (resp) {
-                                    ctrl.refData = resp;
-                                    $rootScope.isBusy = false;
-                                    $scope.$apply();
-                                } else {
-                                    if (resp) {
-                                        $rootScope.showErrors('Failed');
-                                    }
-                                    $rootScope.isBusy = false;
-                                    $scope.$apply();
-                                }
+                            navService.getSingle('portal', [ctrl.attributeValue.id, '1', 'default']).then(resp=>{
+                                ctrl.refDataModel = resp;
                             });
+                            ctrl.loadRefData();
                         }
                         break;
                     default:
@@ -93,17 +90,63 @@ modules.component('attributeValueEditor', {
                     break;
             }
         };
-        ctrl.updateRefData = function(item){
-            $location.url('/portal/attribute-set-data/details?dataId='+ item.id +'&attributeSetId=' + item.attributeSetId+'&parentType=' + item.parentType+'&parentId=' + item.parentId);
+        ctrl.loadRefData = function(){
+            navService.getList('portal', ctrl.refRequest, 
+                ctrl.attributeValue.field.referenceId, ctrl.parentType, ctrl.parentId)
+                .then(resp=>{
+                if (resp) 
+                {
+                    ctrl.refData = resp;
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                } else {
+                    if (resp) {
+                        $rootScope.showErrors('Failed');
+                    }
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                }
+            });
+        }
+        ctrl.updateRefData = function(nav){
+            $ctrl.refDataModel = nav;
+            // $location.url('/portal/attribute-set-data/details?dataId='+ item.id +'&attributeSetId=' + item.attributeSetId+'&parentType=' + item.parentType+'&parentId=' + item.parentId);
         };
-        ctrl.removeRefData = async function(data){
-            $rootScope.showConfirm(ctrl, 'removeRefDataConfirmed', [data.id], null, 'Remove', 'Are you sure');
-        };
-        ctrl.removeRefDataConfirmed = async function(dataId){
+        ctrl.saveRefData = function(data){            
             $rootScope.isBusy = true;
-            var result = await dataService.delete(dataId);
+            ctrl.refDataModel.data = data;
+            dataService.save('portal', data).then(resp=>{
+                if(resp.isSucceed){
+                    ctrl.refDataModel.id = resp.data.id;
+                    ctrl.refDataModel.data = resp.data;
+                    navService.save('portal', ctrl.refDataModel).then(resp=>{
+                        if(resp.isSucceed){
+                            $rootScope.isBusy = false;
+                            $scope.$apply();
+                        }else{
+                            $rootScope.showMessage('failed');    
+                            $rootScope.isBusy = false;
+                            $scope.$apply();
+                        }
+                    })
+                    
+                }
+                else{
+                    $rootScope.showMessage('failed');    
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                }
+                console.log(resp);
+            })
+        }
+        ctrl.removeRefData = async function(nav){
+            $rootScope.showConfirm(ctrl, 'removeRefDataConfirmed', [nav], null, 'Remove', 'Are you sure');
+        };
+        ctrl.removeRefDataConfirmed = async function(nav){
+            $rootScope.isBusy = true;
+            var result = await navService.delete([nav.parentId, nav.parentType, nav.id]);
             if (result.isSucceed) {
-                $rootScope.removeObjectByKey(ctrl.refData, 'id', dataId);
+                $rootScope.removeObjectByKey(ctrl.refData, 'id', nav.id);
                 $rootScope.isBusy = false;
                 $scope.$apply();
             }

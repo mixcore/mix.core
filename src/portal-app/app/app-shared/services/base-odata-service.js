@@ -55,8 +55,13 @@ app.factory('BaseODataService', ['$rootScope', '$routeParams', 'CommonService',
             return await commonService.getApiResult(req);
         };
 
-        var _delete = async function (id) {
-            var url = this.prefixUrl + '/portal' + '/' + id;
+        var _delete = async function (params = []) {
+            var url = this.prefixUrl + '/portal';
+            for (let i = 0; i < params.length; i++) {
+                if (params[i] != null) {
+                    url += '/' + params[i];
+                }
+            }
             var req = {
                 method: 'DELETE',
                 url: url

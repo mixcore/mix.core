@@ -39,6 +39,7 @@
         </div>
         <div class="col-md-6">
             <h2>Selected Model</h2>
+            <monaco-editor content-id="$ctrl.timestamp" content="$ctrl.selectedModel | json" ext="'.json'"></monaco-editor>
             <pre>{{$ctrl.selectedModel | json}}</pre>
 
         </div>

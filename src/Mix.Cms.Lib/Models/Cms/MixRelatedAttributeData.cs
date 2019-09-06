@@ -5,10 +5,10 @@ namespace Mix.Cms.Lib.Models.Cms
 {
     public partial class MixRelatedAttributeData
     {
-        public string SourceId { get; set; }
+        public string Id { get; set; }
         public string Specificulture { get; set; }
-        public string DestinationId { get; set; }
-        public int? ParentType { get; set; }
+        public string ParentId { get; set; }
+        public int ParentType { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public int Priority { get; set; }
         public int Status { get; set; }
@@ -16,6 +16,5 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Image { get; set; }
 
         public virtual MixAttributeSetData MixAttributeSetData { get; set; }
-        public virtual MixAttributeSetData S { get; set; }
     }
 }

@@ -15,6 +15,7 @@ modules.component('jsonBuilder', {
             ctrl.file = null;
             ctrl.translate = $rootScope.translate;
             ctrl.settings = $rootScope.globalSettings;
+            ctrl.timestamp = Math.random();
             ctrl.templates = [
                 { type: 'item', name: 'i1', dataType: 7, value: '' },
                 { type: 'object', name: 'o1', columns: [{ allowedTypes: ['array', 'object', 'item'], items: [] }] },
@@ -26,7 +27,8 @@ modules.component('jsonBuilder', {
                 'root': []
             };
             ctrl.selected = null;
-            ctrl.selectedModel = {}
+            ctrl.selectedModel = {};
+            ctrl.strModel = null;
             ctrl.init = async function () {
                 var arr = [];
                 if (!ctrl.data && ctrl.filename) {
@@ -161,6 +163,7 @@ modules.component('jsonBuilder', {
                     ctrl.selectedModel = {};
                     ctrl.parseObj(item, ctrl.selectedModel);
                 }
+                ctrl.timestamp = Math.random();
             };
             ctrl.addField = function (item) {
                 var field = angular.copy(ctrl.templates[0]);

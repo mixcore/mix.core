@@ -92,11 +92,14 @@
             <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="number" ng-model="$ctrl.attributeValue.doubleValue" placeholder="{{$ctrl.attributeValue.field.title}}">            
         </div>
         <div ng-switch-when="23">  <!-- Referrence -->
-            <a ng-if="$ctrl.parentId" href="/portal/attribute-set-data/details?dataId=default&attributeSetId={{$ctrl.attributeValue.field.referenceId}}&parentType={{$ctrl.parentType}}&parentId={{$ctrl.parentId}}" class="btn btn-sm btn-primary px-4 mt-3 ng-scope">
+            <!-- <a ng-if="$ctrl.parentId" href="/portal/attribute-set-data/details?dataId=default&attributeSetId={{$ctrl.attributeValue.field.referenceId}}&parentType={{$ctrl.parentType}}&parentId={{$ctrl.parentId}}" 
+                class="btn btn-sm btn-primary px-4 mt-3 ng-scope">
                 <i class="fas fa-plus"></i> Add
-            </a>
-            <attribute-set-values on-update="$ctrl.updateRefData(data)" on-delete="$ctrl.removeRefData(data)" header="$ctrl.attributeValue.field.title" data="$ctrl.refData">
-            </attribute-set-values>
+            </a> -->
+            <attribute-set-form set-id="$ctrl.attributeValue.field.referenceId" default-id="'default'" attr-data-id="$ctrl.refDataModel.data.id" save-data="$ctrl.saveRefData(data)"></attribute-set-form>
+                <!-- <pre>{{$ctrl.attributeValue | json}}</pre> -->
+            <attribute-set-nav-values on-update="$ctrl.updateRefData(data)" on-delete="$ctrl.removeRefData(data)" header="$ctrl.attributeValue.field.title" data="$ctrl.refData">
+            </attribute-set-nav-values>
         </div>
     </div>
 </div>

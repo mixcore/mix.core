@@ -1385,15 +1385,16 @@ namespace Mix.Cms.Lib.Models.Cms
 
             modelBuilder.Entity<MixRelatedAttributeData>(entity =>
             {
-                entity.HasKey(e => new { e.SourceId, e.DestinationId, e.Specificulture });
+                entity.HasKey(e => new { e.Id, e.Specificulture, e.ParentId })
+                    .HasName("PK_mix_related_attribute_data_1");
 
                 entity.ToTable("mix_related_attribute_data");
 
-                entity.Property(e => e.SourceId).HasMaxLength(50);
-
-                entity.Property(e => e.DestinationId).HasMaxLength(50);
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
+
+                entity.Property(e => e.ParentId).HasMaxLength(50);
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
@@ -1402,16 +1403,10 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Image).HasMaxLength(450);
 
                 entity.HasOne(d => d.MixAttributeSetData)
-                    .WithMany(p => p.MixRelatedAttributeDataMixAttributeSetData)
-                    .HasForeignKey(d => new { d.DestinationId, d.Specificulture })
+                    .WithMany(p => p.MixRelatedAttributeData)
+                    .HasForeignKey(d => new { d.Id, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_mix_related_attribute_data_mix_attribute_set_data1");
-
-                entity.HasOne(d => d.S)
-                    .WithMany(p => p.MixRelatedAttributeDataS)
-                    .HasForeignKey(d => new { d.SourceId, d.Specificulture })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_mix_related_attribute_data_mix_attribute_set_data");
+                    .HasConstraintName("FK_mix_related_attribute_data_mix_attribute_set_data2");
             });
 
             modelBuilder.Entity<MixRelatedPost>(entity =>
