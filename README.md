@@ -100,11 +100,11 @@ Mixcore CMS is licensed under the **[GNU General Public License v3.0](https://gi
 
 |Permissions  |Limitations  |Conditions  |
 |---------|---------|---------|
-| Commercial use     |Liability         |License and copyright notice         |
-|Modification     |Warranty         |State changes         |
-|Distribution     |         |Disclose source         |
-|Patent use     |         |Same license         |
-|Private use     |         |         |
+|✔ Commercial use     |✖ Liability         |ℹ License and copyright notice         |
+|✔ Modification     |✖ Warranty         |         |
+|✔ Distribution     |         |         |
+|✔ Private use     |         |         |
+|     |         |         |
 
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmixcore%2Fmix.core.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmixcore%2Fmix.core?ref=badge_large)
