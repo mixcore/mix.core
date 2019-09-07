@@ -12,11 +12,10 @@ modules.component('attributeValueEditor', {
         var ctrl = this;
         ctrl.icons = ngAppSettings.icons;
         ctrl.refData = [];
+        ctrl.defaultDataModel = null;
         ctrl.refDataModel = {
             id: null,
-            data: {
-                id:'default',
-            }
+            data: null
         };
         ctrl.refRequest = angular.copy(ngAppSettings.request);
         ctrl.refRequest.pageSize = 100;
@@ -43,8 +42,9 @@ modules.component('attributeValueEditor', {
                         break;
                     case 23: // reference
                         if(ctrl.attributeValue.field.referenceId){
-                            navService.getSingle('portal', [ctrl.attributeValue.id, '1', 'default']).then(resp=>{
-                                ctrl.refDataModel = resp;
+                            navService.getSingle('portal', [ctrl.parentId, ctrl.parentType, 'default']).then(resp=>{
+                                ctrl.defaultDataModel = resp;
+                                ctrl.refDataModel = angular.copy(ctrl.defaultDataModel);
                             });
                             ctrl.loadRefData();
                         }
@@ -121,6 +121,12 @@ modules.component('attributeValueEditor', {
                     ctrl.refDataModel.data = resp.data;
                     navService.save('portal', ctrl.refDataModel).then(resp=>{
                         if(resp.isSucceed){
+                            var tmp = $rootScope.findObjectByKey(ctrl.refData, ['parentId', 'parentType', 'id'], 
+                                [resp.data.parentId, resp.data.parentType, resp.id]);
+                            if(!tmp){
+                                ctrl.refData.push(resp.data);
+                            }
+                            ctrl.refDataModel = angular.copy(ctrl.defaultDataModel);
                             $rootScope.isBusy = false;
                             $scope.$apply();
                         }else{

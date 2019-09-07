@@ -126,7 +126,7 @@
                 <i class="fas fa-plus"></i> Add
             </a> -->
             <attribute-set-form set-id="$ctrl.attributeValue.field.referenceId" default-id="'default'" 
-                attr-data-id="$ctrl.refDataModel.data.id" save-data="$ctrl.saveRefData(data)"></attribute-set-form>
+                attr-data="$ctrl.refDataModel.data" save-data="$ctrl.saveRefData(data)"></attribute-set-form>
                 <!-- <pre>{{$ctrl.attributeValue | json}}</pre> -->
             <attribute-set-nav-values on-update="$ctrl.updateRefData(data)" on-delete="$ctrl.removeRefData(data)" 
                 header="$ctrl.attributeValue.field.title" 
