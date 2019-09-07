@@ -14,23 +14,13 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         #region Models
 
-        [JsonProperty("sourceId")]
-        public string SourceId { get; set; }
-
-        [JsonProperty("destinationId")]
-        public string DestinationId { get; set; }
-
-        [JsonProperty("createdDateTime")]
+        public string Id { get; set; }
+        public string ParentId { get; set; }
+        public int ParentType { get; set; }
         public DateTime CreatedDateTime { get; set; }
-
-        [JsonProperty("image")]
-        public string Image { get; set; }
-
-        [JsonProperty("description")]
+        public int Status { get; set; }
         public string Description { get; set; }
-
-        [JsonProperty("status")]
-        public MixContentStatus Status { get; set; }
+        public string Image { get; set; }
 
         #endregion Models
 
@@ -63,7 +53,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getPost = MixAttributeSetDatas.ReadViewModel.Repository.GetSingleModel(
-                m => m.Id == DestinationId && m.Specificulture == Specificulture
+                m => m.Id == Id && m.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction);
             if (getPost.IsSucceed)
             {
