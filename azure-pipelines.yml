@@ -1,23 +1,26 @@
-# # ASP.NET
-# # Build and test ASP.NET projects.
-# # Add steps that publish symbols, save build artifacts, deploy, and more:
-# # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
-# trigger:
-# - master
+trigger:
+- master
+- ci-cd
+- releases/*
+- developer
 
-# pool:
-#   vmImage: 'windows-latest'
+pool:
+  vmImage: 'windows-latest'
 
-# variables:
-#   solution: '**/*.sln'
-#   buildPlatform: 'Any CPU'
-#   buildConfiguration: 'Release'
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
 
-# steps:
-# - task: NuGetToolInstaller@1
-# - bash: git clone --depth=50 --branch=master https://github.com/mixcore/mix.heart.git d:/a/1/mix.heart
-# - bash: git clone --depth=50 --branch=master https://github.com/mixcore/mix.identity.git d:/a/1/mix.identity
+steps:
+- task: NuGetToolInstaller@1
+- bash: git clone --depth=50 --branch=master https://github.com/mixcore/mix.heart.git d:/a/1/mix.heart
+- bash: git clone --depth=50 --branch=master https://github.com/mixcore/mix.identity.git d:/a/1/mix.identity
 
 # # - task: UseNode@1
 
@@ -64,6 +67,15 @@
 #     platform: '$(buildPlatform)'
 #     configuration: '$(buildConfiguration)'
 
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      (Get-Content d:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\appsettings.json) -replace "\`$SER_IP\`$", $env:DEMO_SER_IP | Set-Content d:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\appsettings.json
+      (Get-Content d:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\appsettings.json) -replace "\`$DBNAME\`$", $env:DEMO_DBNAME | Set-Content d:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\appsettings.json
+      (Get-Content d:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\appsettings.json) -replace "\`$DBUID\`$", $env:DEMO_DBUID | Set-Content d:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\appsettings.json
+      (Get-Content d:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\appsettings.json) -replace "\`$DBPWD\`$", $env:DEMO_DBPWD | Set-Content d:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\appsettings.json
+      (Get-Content d:\a\1\s\src\Mix.Cms.Web\obj\Release\netcoreapp2.2\PubTmp\Out\appsettings.json)
 
 # - task: FtpUpload@1
 #   inputs:
@@ -110,4 +122,11 @@
 #       # */**/*.cshtml
 #       # */**/*.css
 #       # */**/*.dll
+
+      # */**/*.js
+      # */**/*.html
+      # */**/*.htm
+      # */**/*.cshtml
+      # */**/*.css
+      # */**/*.dll
 
