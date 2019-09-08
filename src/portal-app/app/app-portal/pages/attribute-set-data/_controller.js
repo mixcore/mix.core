@@ -17,12 +17,7 @@ app.controller('AttributeSetDataController',
             $scope.init= async function(){
                 $scope.attributeSetId = $routeParams.attributeSetId;
                 $scope.dataId = $routeParams.dataId;
-                if($routeParams.parentId){
-                    $scope.parentId = $routeParams.parentId;
-                }
-                if($routeParams.parentType){
-                    $scope.parentType = $routeParams.parentType;
-                }
+                
             };
             $scope.saveSuccessCallback = function () {
                 if($scope.parentId){
@@ -80,7 +75,7 @@ app.controller('AttributeSetDataController',
 
             $scope.removeConfirmed = async function (dataId) {
                 $rootScope.isBusy = true;
-                var result = await service.delete(dataId);
+                var result = await service.delete([dataId]);
                 if (result.isSucceed) {
                     if ($scope.removeCallback) {
                         $rootScope.executeFunctionByName('removeCallback', $scope.removeCallbackArgs, $scope)

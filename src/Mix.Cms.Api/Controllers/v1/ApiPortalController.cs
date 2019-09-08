@@ -418,7 +418,6 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                 }
                 MixService.SetConfig("LastUpdateConfiguration", DateTime.UtcNow);
-                _appLifetime.StopApplication();
             }
             return new RepositoryResponse<JObject>() { IsSucceed = model != null, Data = model };
         }
