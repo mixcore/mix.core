@@ -39,7 +39,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         [JsonProperty("attributes")]
         public List<MixAttributeFields.UpdateViewModel> Attributes { get; set; }
         [JsonProperty("removeAttributes")]
-        public List<MixAttributeFields.UpdateViewModel> RemoveAttributes { get; set; } = new List<MixAttributeFields.UpdateViewModel>();
+        public List<MixAttributeFields.DeleteViewModel> RemoveAttributes { get; set; } = new List<MixAttributeFields.DeleteViewModel>();
 
         [JsonProperty("postData")]
         public PaginationModel<MixPostAttributeDatas.UpdateViewModel> PostData { get;set;}

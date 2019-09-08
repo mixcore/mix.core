@@ -4,6 +4,7 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 {
@@ -34,21 +35,27 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         #region Overrides
         public override RepositoryResponse<bool> RemoveRelatedModels(DeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var removeFields = MixAttributeFields.DeleteViewModel.Repository.RemoveListModel(false, f => f.AttributeSetId == Id, _context, _transaction);
-            return new RepositoryResponse<bool>()
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            var removeData = MixAttributeSetDatas.DeleteViewModel.Repository.RemoveListModel(false, f => f.AttributeSetId == Id, _context, _transaction);
+            ViewModelHelper.HandleResult(removeData, ref result);
+            if (result.IsSucceed)
             {
-                IsSucceed = removeFields.IsSucceed,
-                Data = removeFields.IsSucceed
-            };
+                var removeFields = MixAttributeFields.DeleteViewModel.Repository.RemoveListModel(false, f => f.AttributeSetId == Id, _context, _transaction);
+                ViewModelHelper.HandleResult(removeFields, ref result);
+            }
+            return result;
         }
         public override async System.Threading.Tasks.Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(DeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var removeFields = await MixAttributeFields.DeleteViewModel.Repository.RemoveListModelAsync(false, f => f.AttributeSetId == Id, _context, _transaction);
-            return new RepositoryResponse<bool>()
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            var removeData = await MixAttributeSetDatas.DeleteViewModel.Repository.RemoveListModelAsync(false, f => f.AttributeSetId == Id, _context, _transaction);
+            ViewModelHelper.HandleResult(removeData, ref result);
+            if (result.IsSucceed)
             {
-                IsSucceed = removeFields.IsSucceed,
-                Data = removeFields.IsSucceed
-            };
+                var removeFields = await MixAttributeFields.DeleteViewModel.Repository.RemoveListModelAsync(false, f => f.AttributeSetId == Id, _context, _transaction);
+                ViewModelHelper.HandleResult(removeFields, ref result);
+            }
+            return result;
         }
         #endregion
 

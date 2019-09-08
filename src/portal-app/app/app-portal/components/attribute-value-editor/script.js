@@ -109,7 +109,7 @@ modules.component('attributeValueEditor', {
             });
         }
         ctrl.updateRefData = function(nav){
-            $ctrl.refDataModel = nav;
+            ctrl.refDataModel = nav;
             // $location.url('/portal/attribute-set-data/details?dataId='+ item.id +'&attributeSetId=' + item.attributeSetId+'&parentType=' + item.parentType+'&parentId=' + item.parentId);
         };
         ctrl.saveRefData = function(data){            
@@ -122,7 +122,7 @@ modules.component('attributeValueEditor', {
                     navService.save('portal', ctrl.refDataModel).then(resp=>{
                         if(resp.isSucceed){
                             var tmp = $rootScope.findObjectByKey(ctrl.refData, ['parentId', 'parentType', 'id'], 
-                                [resp.data.parentId, resp.data.parentType, resp.id]);
+                                [resp.data.parentId, resp.data.parentType, resp.data.id]);
                             if(!tmp){
                                 ctrl.refData.push(resp.data);
                             }
