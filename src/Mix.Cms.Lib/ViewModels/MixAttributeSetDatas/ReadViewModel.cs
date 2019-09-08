@@ -14,19 +14,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #region Properties
         #region Models
 
-        [JsonProperty("id")]
         public string Id { get; set; }
-        [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
-        [JsonProperty("parentId")]
-        public string ParentId { get; set; }
-        [JsonProperty("parentType")]
-        public int? ParentType { get; set; }
-        [JsonProperty("moduleId")]
         public int ModuleId { get; set; }
-        [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-        [JsonProperty("status")]
         public int Status { get; set; }
 
         #endregion Models
