@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
@@ -58,6 +56,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
             }
+            Priority = Field.Priority;
+            DataType = Field.DataType;
+
             return base.ParseModel(_context, _transaction);
         }
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)

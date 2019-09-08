@@ -2,21 +2,18 @@
 // The Mix I/O Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
-using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib;
-using System.Linq.Expressions;
-using Mix.Cms.Lib.ViewModels.MixAttributeSets;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.AspNet.OData;
-using System.Collections.Generic;
-using Microsoft.AspNet.OData.Query;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.ViewModels.MixAttributeSets;
 using Newtonsoft.Json.Linq;
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSets
 {
@@ -46,7 +43,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSets
             // Get Details if has id or else get default
             if (id > 0)
             {
-                predicate = m => m.Id == id;                
+                predicate = m => m.Id == id;
             }
             else
             {
@@ -86,7 +83,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSets
                 return BadRequest(portalResult);
             }
         }
-        
+
         // Save api/odata/{culture}/attribute-set/portal/{id}
         [HttpPost, HttpOptions]
         [Route("{id}")]

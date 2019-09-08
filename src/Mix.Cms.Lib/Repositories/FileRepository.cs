@@ -13,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
 
 namespace Mix.Cms.Lib.Repositories
@@ -379,7 +378,7 @@ namespace Mix.Cms.Lib.Repositories
         }
 
         public List<FileViewModel> GetTopFiles(string folder)
-        {   
+        {
             List<FileViewModel> result = new List<FileViewModel>();
             if (Directory.Exists(folder))
             {

@@ -5,18 +5,17 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels.MixLanguages;
+using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
-using Mix.Domain.Core.ViewModels;
-using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Services;
-using static Mix.Cms.Lib.MixEnums;
 using System.Linq.Expressions;
-using System.Web;
-using Mix.Cms.Lib.ViewModels.MixLanguages;
-using Microsoft.Extensions.Caching.Memory;
+using System.Threading.Tasks;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -38,7 +37,8 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             var result = await base.DeleteAsync<UpdateViewModel>(
                 model => model.Keyword == keyword && model.Specificulture == _lang, true);
-            if(result.IsSucceed){
+            if (result.IsSucceed)
+            {
                 MixService.SetConfig("LastUpdateConfiguration", DateTime.UtcNow);
             }
             return result;
@@ -110,7 +110,8 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 model.CreatedBy = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
                 var result = await base.SaveAsync<UpdateViewModel>(model, true);
-                if(result.IsSucceed){
+                if (result.IsSucceed)
+                {
                     MixService.SetConfig("LastUpdateConfiguration", DateTime.UtcNow);
                 }
                 return result;
@@ -142,11 +143,11 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 case "mvc":
                     var mvcResult = await base.GetListAsync<ReadMvcViewModel>(key, request, predicate);
-                 
+
                     return Ok(JObject.FromObject(mvcResult));
                 case "portal":
                     var portalResult = await base.GetListAsync<UpdateViewModel>(key, request, predicate);
-                   
+
                     return Ok(JObject.FromObject(portalResult));
                 default:
 

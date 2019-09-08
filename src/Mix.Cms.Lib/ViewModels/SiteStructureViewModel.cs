@@ -50,14 +50,14 @@ namespace Mix.Cms.Lib.ViewModels
                         {
                             if (result.IsSucceed)
                             {
-                                if (!context.MixModule.Any(m=>m.Name == module.Name && m.Specificulture == destCulture))
+                                if (!context.MixModule.Any(m => m.Name == module.Name && m.Specificulture == destCulture))
                                 {
                                     module.Id = context.MixModule.Max(m => m.Id) + 1;
                                     module.CreatedDateTime = DateTime.UtcNow;
                                     var saveResult = await module.SaveModelAsync(true, context, transaction);
                                     ViewModelHelper.HandleResult(saveResult, ref result);
                                 }
-                                
+
                             }
                         }
                     }

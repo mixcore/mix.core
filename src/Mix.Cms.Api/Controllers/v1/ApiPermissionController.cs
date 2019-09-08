@@ -5,20 +5,18 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Mix.Domain.Core.ViewModels;
+using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using System.Linq.Expressions;
-using System.Web;
 using Mix.Cms.Lib.ViewModels.MixPortalPages;
-using Microsoft.AspNetCore.SignalR;
-using Mix.Cms.Hub;
-using Microsoft.Extensions.Caching.Memory;
+using Mix.Domain.Core.ViewModels;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using System.Web;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -135,7 +133,7 @@ namespace Mix.Cms.Api.Controllers.v1
             string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
             switch (request.Key)
             {
-                
+
                 default:
                     var portalResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);
                     return Ok(JObject.FromObject(portalResult));
@@ -148,7 +146,7 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfos([FromBody]List<ReadViewModel> models)
         {
             if (models != null)
-            {                
+            {
                 return await base.SaveListAsync(models, false);// ReadViewModel.UpdateInfosAsync(models);
             }
             else

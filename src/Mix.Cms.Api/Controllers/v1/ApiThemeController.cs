@@ -4,26 +4,23 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib;
+using Mix.Cms.Lib.Attributes;
+using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Repositories;
+using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels;
+using Mix.Cms.Lib.ViewModels.MixThemes;
+using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Mix.Domain.Core.ViewModels;
-using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Services;
-using System.Linq.Expressions;
-using Mix.Cms.Lib.ViewModels.MixThemes;
-using Microsoft.AspNetCore.SignalR;
-using Mix.Cms.Hub;
-using Microsoft.Extensions.Caching.Memory;
 using System.Collections.Generic;
-using Mix.Cms.Lib;
-using Mix.Cms.Lib.Repositories;
-using Mix.Cms.Lib.Attributes;
-using Microsoft.AspNetCore.Http;
-using Mix.Domain.Data.Repository;
-using Mix.Cms.Lib.ViewModels;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -53,7 +50,7 @@ namespace Mix.Cms.Api.Controllers.v1
             }
             return getTemplate;
         }
-        
+
         // GET api/theme/id
         [HttpGet, HttpOptions]
         [Route("export/{id}")]
@@ -67,7 +64,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 Data = siteStructures
             };
         }
-        
+
         // GET api/theme/id
         [HttpPost, HttpOptions]
         [Route("export/{id}")]
@@ -75,7 +72,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             var getTheme = await ReadViewModel.Repository.GetSingleModelAsync(
                  theme => theme.Id == id).ConfigureAwait(false);
-            
+
             //path to temporary folder
             string tempPath = $"wwwroot/Exports/Themes/{getTheme.Data.Name}/temp";
             string outputPath = $"Exports/Themes/{getTheme.Data.Name}";
@@ -94,7 +91,7 @@ namespace Mix.Cms.Api.Controllers.v1
             // Copy current templates file
             FileRepository.Instance.CopyDirectory($"{getTheme.Data.TemplateFolder}", $"{tempPath}/Templates");
             // Copy current assets files
-            FileRepository.Instance.CopyDirectory($"wwwroot/{getTheme.Data.AssetFolder}", $"{tempPath}/Assets");            
+            FileRepository.Instance.CopyDirectory($"wwwroot/{getTheme.Data.AssetFolder}", $"{tempPath}/Assets");
             // Copy current uploads files
             FileRepository.Instance.CopyDirectory($"wwwroot/{getTheme.Data.UploadsFolder}", $"{tempPath}/Uploads");
             // Save Site Structures
@@ -103,7 +100,7 @@ namespace Mix.Cms.Api.Controllers.v1
             // Zip to [theme_name].zip ( wwwroot for web path)
             string filePath = FileRepository.Instance.ZipFolder($"{tempPath}", outputPath, $"{getTheme.Data.Name}-{Guid.NewGuid()}");
 
-            
+
 
             // Delete temp folder
             FileRepository.Instance.DeleteWebFolder($"{outputPath}/Assets");
@@ -191,7 +188,7 @@ namespace Mix.Cms.Api.Controllers.v1
         #region Post
 
         // POST api/theme
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]        
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [RequestFormSizeLimit(100000000)] // 200Mb
         [Route("save")]
@@ -199,12 +196,12 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             var json = JObject.Parse(model);
             var data = json.ToObject<UpdateViewModel>();
-            if (assets!=null)
+            if (assets != null)
             {
                 data.Asset = new Lib.ViewModels.FileViewModel(assets, data.AssetFolder);
                 FileRepository.Instance.SaveWebFile(assets, data.AssetFolder);
             }
-            if (theme!=null)
+            if (theme != null)
             {
                 string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
                 data.TemplateAsset = new Lib.ViewModels.FileViewModel(theme, importFolder);

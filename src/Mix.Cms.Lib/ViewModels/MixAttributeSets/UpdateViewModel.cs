@@ -42,7 +42,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         public List<MixAttributeFields.DeleteViewModel> RemoveAttributes { get; set; } = new List<MixAttributeFields.DeleteViewModel>();
 
         [JsonProperty("postData")]
-        public PaginationModel<MixPostAttributeDatas.UpdateViewModel> PostData { get;set;}
+        public PaginationModel<MixPostAttributeDatas.UpdateViewModel> PostData { get; set; }
         #endregion
         #endregion Properties
         #region Contructors
@@ -60,7 +60,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Attributes = MixAttributeFields.UpdateViewModel
-                .Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data.OrderBy(a=>a.Priority).ToList();
+                .Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
         }
         public override MixAttributeSet ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -109,7 +109,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             return result;
         }
 
-        public override  RepositoryResponse<bool> SaveSubModels(MixAttributeSet parent, MixCmsContext _context, IDbContextTransaction _transaction)
+        public override RepositoryResponse<bool> SaveSubModels(MixAttributeSet parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (result.IsSucceed)
@@ -119,7 +119,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
                     if (result.IsSucceed)
                     {
                         item.AttributeSetId = parent.Id;
-                        var saveResult =  item.SaveModel(false, _context, _transaction);
+                        var saveResult = item.SaveModel(false, _context, _transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                     else
@@ -144,7 +144,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
                 , _context: _context, _transaction: _transaction);
             if (!getData.IsSucceed || getData.Data == null || PostData.TotalItems == 0)
             {
-                PostData = new PaginationModel<MixPostAttributeDatas.UpdateViewModel>() { TotalItems = 1};
+                PostData = new PaginationModel<MixPostAttributeDatas.UpdateViewModel>() { TotalItems = 1 };
                 PostData.Items.Add(new MixPostAttributeDatas.UpdateViewModel(Id, Attributes));
             }
         }

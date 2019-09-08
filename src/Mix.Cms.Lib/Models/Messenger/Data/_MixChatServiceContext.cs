@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
 
@@ -31,7 +30,7 @@ namespace Mix.Cms.Messenger.Models.Data
                 //define the database to use
                 //string cnn = "Data Source=mix-messenger.db";
                 //optionsBuilder.UseSqlite(cnn);
-                 ;
+                ;
                 // IConfiguration configuration = new ConfigurationBuilder()
                 //.SetBasePath(System.IO.Directory.GetCurrentDirectory())
                 //.AddJsonFile(Common.Utility.Const.CONST_FILE_APPSETTING)

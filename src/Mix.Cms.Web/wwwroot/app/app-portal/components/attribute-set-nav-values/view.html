@@ -2,13 +2,14 @@
 <div class="card">
     <div class="card-header">
         <span ng-bind="$ctrl.header"></span>
-    </div>
-    <div class="card-body">
-        <div class="row" ng-if="$ctrl.data[0]">
+         <div class="row" ng-if="$ctrl.data[0]">
             <div class="col-md-1"></div>
             <div ng-repeat="col in $ctrl.data[0].data.fields | orderBy:'priority' track by $index" ng-if="$index < 3" ng-bind="col.title" class="col-md-3"></div>
-                <div class="col-md-2"></div>
+                <div class="col-md-2">Actions</div>
         </div>
+    </div>
+    <div class="card-body">
+       
         <div dnd-list="$ctrl.data" dnd-inserted="$ctrl.updateOrders(index)">
             <div ng-repeat="item in $ctrl.data | orderBy: 'priority' track by $index" dnd-draggable="item" dnd-type="'item'" dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedItem = item" dnd-dragstart="$ctrl.dragStart($index)" ng-class="{'selected': $ctrl.selectedItem === item}" class="mb-3 row">
                 <div class="col-md-1 form-inline">

@@ -5,18 +5,16 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels.MixCultures;
+using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
-using Mix.Domain.Core.ViewModels;
-using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Services;
 using System.Linq.Expressions;
-using Mix.Cms.Lib.ViewModels.MixCultures;
-using Microsoft.AspNetCore.SignalR;
-using Mix.Cms.Hub;
-using Microsoft.Extensions.Caching.Memory;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -59,7 +57,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     if (id.HasValue)
                     {
                         Expression<Func<MixCulture, bool>> predicate = model => model.Id == id;
-                        var portalResult = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_{id}", predicate);                        
+                        var portalResult = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_{id}", predicate);
                         return Ok(JObject.FromObject(portalResult));
                     }
                     else
@@ -112,7 +110,8 @@ namespace Mix.Cms.Api.Controllers.v1
                 model.CreatedBy = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
                 // Only savesubmodels when create new => clone data from default culture
                 var result = await base.SaveAsync<UpdateViewModel>(model, model.Id == 0);
-                if(result.IsSucceed){
+                if (result.IsSucceed)
+                {
                     MixService.SetConfig("LastUpdateConfiguration", DateTime.UtcNow);
                 }
                 return result;

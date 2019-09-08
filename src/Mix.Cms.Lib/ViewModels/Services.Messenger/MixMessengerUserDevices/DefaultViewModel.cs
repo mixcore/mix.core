@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Domain.Data.ViewModels;
 using Mix.Cms.Messenger.Models.Data;
+using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 
