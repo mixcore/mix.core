@@ -1,9 +1,18 @@
-<div class="form-group">
-        <label class="form-label">Database Name</label>
-        <input ng-model="$ctrl.initCmsModel.localDbName" class="form-control" placeholder="DB name (e.g. MixDb)">
+<form>
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label class="form-label">Database Name</label>
+            </div>
+        </div>
+        <div class="col-8">
+            <input ng-model="$ctrl.initCmsModel.localDbName" class="form-control" placeholder="DB name (e.g. MixDb)">
+        </div>
     </div>
-<div class="form-group">
-    <label class="form-label">Connection String</label>
-    <textarea type="text" ng-model="$ctrl.initCmsModel.localDbConnectionString" style="height: 124px"
-        class="form-control" placeholder="DB Server (e.g. domain or IP)"></textarea>
-</div>
+
+    <div class="form-group">
+        <label class="form-label">Connection String</label>
+        <textarea type="text" ng-model="$ctrl.initCmsModel.localDbConnectionString" style="height: 124px"
+            class="form-control" placeholder="DB Server (e.g. domain or IP)"></textarea>
+    </div>
+</form>
