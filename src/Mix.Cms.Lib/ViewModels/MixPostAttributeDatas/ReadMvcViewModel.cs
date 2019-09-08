@@ -1,13 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.ViewModels.MixAttributeSets;
-using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
 {
@@ -26,7 +23,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
 
         #region Views
         [JsonProperty("data")]
-        public List<MixPostAttributeValues.ReadMvcViewModel> Data{ get; set; }
+        public List<MixPostAttributeValues.ReadMvcViewModel> Data { get; set; }
         #endregion
 
         #endregion
@@ -38,7 +35,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
         public ReadMvcViewModel() : base()
         {
         }
-        
+
         #region overrides
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)

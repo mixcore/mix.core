@@ -24,7 +24,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         [JsonProperty("keyword")]
         public string Keyword { get; set; }
 
-    
+
 
         [JsonProperty("dataType")]
         public MixDataType DataType { get; set; }

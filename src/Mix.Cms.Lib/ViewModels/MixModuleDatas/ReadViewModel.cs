@@ -158,7 +158,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
 
         public string Property(string name)
         {
-            
+
             return JItem[name]?.Value<JObject>().Value<string>("value");
         }
 

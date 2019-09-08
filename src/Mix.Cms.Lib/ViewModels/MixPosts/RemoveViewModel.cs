@@ -1,20 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels.MixSystem;
-using Mix.Common.Helper;
-using Mix.Domain.Core.Models;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
@@ -184,22 +177,22 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             // Remove Attributes Value
             if (result.IsSucceed)
             {
-                var values = await _context.MixPostAttributeValue.Where(n => n.PostId == Id 
+                var values = await _context.MixPostAttributeValue.Where(n => n.PostId == Id
                     && n.Specificulture == Specificulture).ToListAsync();
                 foreach (var item in values)
                 {
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
                 }
 
-                var data = await _context.MixPostAttributeData.Where(n => n.PostId == Id 
+                var data = await _context.MixPostAttributeData.Where(n => n.PostId == Id
                     && n.Specificulture == Specificulture).ToListAsync();
                 foreach (var item in data)
                 {
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
                 }
 
-                var sets= await _context.MixPostAttributeSet.Where(n => n.PostId == Id 
-                    && n.Specificulture == Specificulture).ToListAsync();
+                var sets = await _context.MixPostAttributeSet.Where(n => n.PostId == Id
+                     && n.Specificulture == Specificulture).ToListAsync();
                 foreach (var item in sets)
                 {
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
@@ -214,7 +207,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         #region Sync Methods
 
-       
+
         public override RepositoryResponse<bool> RemoveRelatedModels(RemoveViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>()
@@ -282,6 +275,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #endregion  Methods
 
         #endregion Overrides
-       
+
     }
 }

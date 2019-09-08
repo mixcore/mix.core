@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Domain.Data.ViewModels;
 using Mix.Cms.Messenger.Models.Data;
+using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -49,7 +49,7 @@ namespace Mix.Cms.Messenger.ViewModels.MixMessengerUsers
         #region Async
         public override async Task<bool> ExpandViewAsync(MixChatServiceContext _context = null, IDbContextTransaction _transaction = null)
         {
-            this.Connections = ( await MixMessengerUserDevices.DefaultViewModel.Repository.GetModelListByAsync(m => m.UserId == this.Id)).Data;
+            this.Connections = (await MixMessengerUserDevices.DefaultViewModel.Repository.GetModelListByAsync(m => m.UserId == this.Id)).Data;
             return Connections != null;
         }
         #endregion

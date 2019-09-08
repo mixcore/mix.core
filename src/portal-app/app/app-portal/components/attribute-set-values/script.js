@@ -15,7 +15,7 @@ modules.component('attributeSetValues', {
             ctrl.settings = $rootScope.globalSettings;
             ctrl.$onInit = function(){
                 if(ctrl.data.length && !ctrl.columns){
-                    ctrl.columns = ctrl.data[0].data;
+                    ctrl.columns = ctrl.data[0].fields;
                 }
             };
 

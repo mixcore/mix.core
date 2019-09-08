@@ -17,13 +17,13 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
                 switch (DatabaseProvider)
                 {
                     case MixEnums.DatabaseProvider.MSSQL:
-                    {
-                        string dbServer = !string.IsNullOrEmpty(DatabasePort) ? $"{DatabaseServer},{DatabasePort}": DatabaseServer;
-                        return IsUseLocal
-                            ? LocalDbConnectionString
-                            : $"Server={dbServer};Database={DatabaseName}" +
-                            $";UID={DatabaseUser};Pwd={DatabasePassword};MultipleActiveResultSets=true;";
-                    }
+                        {
+                            string dbServer = !string.IsNullOrEmpty(DatabasePort) ? $"{DatabaseServer},{DatabasePort}" : DatabaseServer;
+                            return IsUseLocal
+                                ? LocalDbConnectionString
+                                : $"Server={dbServer};Database={DatabaseName}" +
+                                $";UID={DatabaseUser};Pwd={DatabasePassword};MultipleActiveResultSets=true;";
+                        }
                     case MixEnums.DatabaseProvider.MySQL:
                         return $"Server={DatabaseServer};port={DatabasePort};Database={DatabaseName}" +
                       $";User={DatabaseUser};Password={DatabasePassword};";
@@ -37,7 +37,7 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
 
         [JsonProperty("databaseServer")]
         public string DatabaseServer { get; set; }
-        
+
         [JsonProperty("databasePort")]
         public string DatabasePort { get; set; }
 

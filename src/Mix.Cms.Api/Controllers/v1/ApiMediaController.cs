@@ -4,20 +4,20 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.ViewModels.MixMedias;
+using Mix.Common.Helper;
+using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Threading.Tasks;
-using Mix.Domain.Core.ViewModels;
-using Mix.Cms.Lib.Models.Cms;
-using System.Linq.Expressions;
-using Mix.Common.Helper;
-using Microsoft.AspNetCore.Http;
-using Mix.Cms.Lib.ViewModels.MixMedias;
-using Microsoft.Extensions.Caching.Memory;
-using static Mix.Cms.Lib.MixEnums;
-using System.Web;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using System.Web;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -52,7 +52,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 default:
                     if (id.HasValue)
                     {
-                        var beResult = await UpdateViewModel.Repository.GetSingleModelAsync(model => model.Id == id && model.Specificulture == _lang).ConfigureAwait(false);                       
+                        var beResult = await UpdateViewModel.Repository.GetSingleModelAsync(model => model.Id == id && model.Specificulture == _lang).ConfigureAwait(false);
                         return Ok(JObject.FromObject(beResult));
                     }
                     else
@@ -116,12 +116,12 @@ namespace Mix.Cms.Api.Controllers.v1
             string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
             switch (request.Key)
             {
-                
+
                 default:
                     var portalResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);
-                    
+
                     return Ok(JObject.FromObject(portalResult));
-                
+
             }
         }
 
@@ -131,7 +131,7 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<RepositoryResponse<List<UpdateViewModel>>> UpdateInfos([FromBody]List<UpdateViewModel> models)
         {
             if (models != null)
-            {                
+            {
                 return await base.SaveListAsync(models, false);
             }
             else

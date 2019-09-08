@@ -92,7 +92,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #region Views
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }
-        
+
         [JsonProperty("view")]
         public MixTemplates.ReadListItemViewModel View { get; set; }
 
@@ -159,13 +159,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         [JsonProperty("moduleNavs")]
         public List<MixPostModules.ReadViewModel> ModuleNavs { get; set; }
-                
+
         [JsonProperty("postNavs")]
         public List<MixPostPosts.ReadViewModel> PostNavs { get; set; }
 
         [JsonProperty("attributeSets")]
         public List<MixAttributeSets.ReadMvcPostViewModel> AttributeSets { get; set; } = new List<MixAttributeSets.ReadMvcPostViewModel>();
-        
+
         [JsonProperty("listTag")]
         public JArray ListTag { get => JArray.Parse(Tags ?? "[]"); }
         #endregion Views
@@ -224,7 +224,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
             // Related Posts
             PostNavs = MixPostPosts.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
-            
+
             // Get Attribute Sets
             var navs = MixPostAttributeSets.ReadMvcViewModel.Repository.GetModelListBy(n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
             foreach (var item in navs)

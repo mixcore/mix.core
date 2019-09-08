@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.ViewModels.MixAttributeSets;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 
@@ -36,6 +35,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeSets
         [JsonProperty("status")]
         public MixEnums.MixContentStatus Status { get; set; }
 
-       
+
     }
 }

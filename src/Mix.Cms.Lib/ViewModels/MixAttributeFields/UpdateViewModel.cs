@@ -76,7 +76,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
             {
                 JOptions = JArray.Parse(Options);
             }
-            
+
         }
         #endregion
     }
