@@ -37,7 +37,7 @@
                                     <div class="btn-group btn-group-sm">
                                         <button type="button" class="btn btn-primary"
                                             ng-click="$ctrl.clone(item, list)">
-                                            <span class="fa fa-copy text-white"></span>
+                                            <span class="fa fa-clone text-white"></span>
                                         </button>
                                         <button type="button" class="btn btn-primary"
                                             ng-click="$ctrl.remove($index, list)">
@@ -121,7 +121,7 @@
                             <div class="btn-group btn-group-sm">
                                 <button type="button" class="btn btn-primary"
                                     ng-click="$ctrl.clone(item, list)">
-                                    <span class="fa fa-copy text-white"></span>
+                                    <span class="fa fa-clone text-white"></span>
                                 </button>
                                 <button type="button" class="btn btn-primary"
                                     ng-click="$ctrl.remove($index, list)">
@@ -164,16 +164,38 @@
 
 <!-- Template for a normal list item -->
 <script type="text/ng-template" id="item.html">
-    <div class="container item">        
+    <div class="item-fields">        
         <div ng-show="$ctrl.selected == item">
-            <div class="input-group">
-                <input class="form-control" type="text" ng-model="item.name"/>
-                <select class="col-5 form-control" ng-model="item.dataType">
-                    <option ng-repeat="type in $ctrl.settings.dataTypes track by $index" ng-value="$index">{{type}}
-                    </option>
-                </select>
-                <mix-value-editor type="item.dataType" string-value="item.value"></mix-value-editor>
-            </div>
+            <hr>
+                <form>
+                    <div class="form-row pb-2">
+                        <div class="col">
+                            <div class="input-group input-group-sm ">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">Name</span>
+                                    </div>
+                                <input class="form-control" type="text" ng-model="item.name"/>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group input-group-sm ">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">Content Type</span>
+                                </div>
+                                <select class="custom-select" ng-model="item.dataType">
+                                    <option ng-repeat="type in $ctrl.settings.dataTypes track by $index" ng-value="$index">{{type}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <label>Value</label>
+                            <mix-value-editor type="item.dataType" string-value="item.value"></mix-value-editor>
+                        </div>
+                    </div>
+                </form>
         </div>
     </div>
 </script>
