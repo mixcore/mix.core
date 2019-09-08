@@ -88,6 +88,15 @@ app.factory('BaseODataService', ['$rootScope', '$routeParams', 'CommonService',
             };
             return await commonService.getApiResult(req);
         };
+        var _saveProperties = async function (viewType, objData) {
+            var url = this.prefixUrl + '/' + viewType + '/save-properties';
+            var req = {
+                method: 'POST',
+                url: url,
+                data: JSON.stringify(objData)
+            };
+            return await commonService.getApiResult(req);
+        };
 
         var _saveList = async function (viewType, objData) {
             var url = this.prefixUrl + '/' + viewType + '/save-list';
@@ -137,6 +146,7 @@ app.factory('BaseODataService', ['$rootScope', '$routeParams', 'CommonService',
         serviceFactory.getList = _getList;
         serviceFactory.save = _save;
         serviceFactory.saveFields = _saveFields;
+        serviceFactory.saveProperties = _saveProperties;
         serviceFactory.saveList = _saveList;
         serviceFactory.delete = _delete;
         serviceFactory.ajaxSubmitForm = _ajaxSubmitForm;

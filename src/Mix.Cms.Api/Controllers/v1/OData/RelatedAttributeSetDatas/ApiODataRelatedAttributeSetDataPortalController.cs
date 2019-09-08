@@ -111,6 +111,28 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
             }
         }
 
+        // Save api/odata/{culture}/related-attribute-set-data/portal/save-properties
+        // TODO: Opt Transaction
+        [HttpPost, HttpOptions]
+        [Route("save-properties")]
+        public async Task<ActionResult<UpdateViewModel>> SaveProperties([FromBody]JArray data)
+        {
+            foreach (JObject item in data)
+            {
+                JObject keys = item.Value<JObject>("keys");
+                JObject properties = item.Value<JObject>("properties");
+                string id = keys.Value<string>("id");
+                string parentId = keys.Value<string>("parentId");
+                int parentType = keys.Value<int>("parentType");
+                var portalResult = await base.SaveAsync<UpdateViewModel>(properties, p => p.Id == id && p.ParentId == parentId && p.ParentType == parentType && p.Specificulture == _lang);
+                if (!portalResult.IsSucceed)
+                {
+                    return BadRequest(portalResult);
+                }
+            }
+            return Ok();
+        }
+
         [HttpDelete, HttpOptions]
         [Route("{parentId}/{parentType}/{id}")]
         public async Task<ActionResult<DeleteViewModel>> Delete(string culture, string parentId, int parentType, string id)

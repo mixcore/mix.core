@@ -30,7 +30,7 @@ app.factory('RelatedAttributeSetDataService', ['$rootScope', 'CommonService', 'B
             };
             return await commonService.getApiResult(req);
         };
-
+        
         serviceFactory.getList = _getList;
         return serviceFactory;
 

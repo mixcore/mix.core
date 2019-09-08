@@ -59,8 +59,8 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService',
             };
             return await commonService.getApiResult(req);
         };
-        var _applyList = async function (objData) {
-            var url = this.prefixUrl + '/apply-list';
+        var _saveProperties = async function (objData) {
+            var url = this.prefixUrl + '/save-properties';
             var req = {
                 method: 'POST',
                 url: url,
@@ -104,7 +104,7 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService',
         serviceFactory.getSingle = _getSingle;
         serviceFactory.getList = _getList;
         serviceFactory.save = _save;
-        serviceFactory.applyList = _applyList;
+        serviceFactory.saveProperties = _saveProperties;
         serviceFactory.saveList = _saveList;
         serviceFactory.delete = _delete;
         serviceFactory.updateInfos = _updateInfos;
