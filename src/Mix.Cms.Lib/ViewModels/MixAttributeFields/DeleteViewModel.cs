@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
 {
@@ -53,5 +55,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         }
 
         #endregion Contructors
+
+        #region overrides
+        public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(DeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            var removeFieldValues = await MixAttributeSetValues.DeleteViewModel.Repository.RemoveListModelAsync(false, f => f.AttributeFieldId == Id);
+            ViewModelHelper.HandleResult(removeFieldValues, ref result);
+            return result;
+        }
+        #endregion
     }
 }

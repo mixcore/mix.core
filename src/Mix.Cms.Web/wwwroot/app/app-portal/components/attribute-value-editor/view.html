@@ -1,6 +1,7 @@
 <div ng-if="!$ctrl.attributeValue.field.isSelect" class="form-group">
     <label class="control-label" ng-if="$ctrl.isShowTitle=='true'" ng-bind="$ctrl.attributeValue.field.title"></label>    
     <div ng-switch="$ctrl.attributeValue.field.dataType">
+        
         <div ng-switch-when="0">
             <!--custom-->
             <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="text" ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
@@ -52,7 +53,7 @@
         </div>
         <div ng-switch-when="12">
             <!--Url-->
-            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="url" ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="text" ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
         </div>
         <div ng-switch-when="13">
             <!--ImageUrl-->
@@ -96,7 +97,10 @@
                 class="btn btn-sm btn-primary px-4 mt-3 ng-scope">
                 <i class="fas fa-plus"></i> Add
             </a> -->
-            <attribute-set-form set-id="$ctrl.attributeValue.field.referenceId" default-id="'default'" attr-data="$ctrl.refDataModel.data" save-data="$ctrl.saveRefData(data)"></attribute-set-form>
+            <h6 class="text-warning" ng-if="!$ctrl.attributeValue.id">
+                Please Save Root Item First
+            </h6>
+            <attribute-set-form ng-if="$ctrl.attributeValue.id" set-id="$ctrl.attributeValue.field.referenceId" default-id="'default'" attr-data="$ctrl.refDataModel.data" save-data="$ctrl.saveRefData(data)"></attribute-set-form>
                 <!-- <pre>{{$ctrl.attributeValue | json}}</pre> -->
             <attribute-set-nav-values on-update="$ctrl.updateRefData(data)" on-delete="$ctrl.removeRefData(data)" header="$ctrl.attributeValue.field.title" data="$ctrl.refData">
             </attribute-set-nav-values>
