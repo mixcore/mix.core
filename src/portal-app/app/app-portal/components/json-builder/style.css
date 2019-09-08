@@ -1,7 +1,9 @@
 .mix-tree-view .container{
-  margin:10px;
-  height: auto;
-  min-height: 250px;
+  /* margin:10px; */
+  /* min-height: 250px; */
+  /* height: auto;
+  margin-right: 0; */
+  padding-right: 0;
 }
 .mix-tree-view .dropdown-menu{
   z-index: 99999;
@@ -12,6 +14,12 @@
 .mix-tree-view .container.object{
   /* background-color:lightgray; */
 }
-.mix-tree-view .container.item{
+.mix-tree-view .item{
   /* background-color:transparent; */
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.mix-tree-view .item .btn-group{
+  /* padding-left:24px; */
 }
