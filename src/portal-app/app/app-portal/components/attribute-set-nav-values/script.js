@@ -7,8 +7,8 @@ modules.component('attributeSetNavValues', {
         onUpdate:'&?',
         onDelete:'&?',
     },
-    controller: ['$rootScope', '$scope',
-        function ($rootScope, $scope) {
+    controller: ['$rootScope', '$scope', 'RelatedAttributeSetDataService',
+        function ($rootScope, $scope, navService) {
             var ctrl = this;
             ctrl.selectedProp = null;
             
@@ -33,6 +33,7 @@ modules.component('attributeSetNavValues', {
 
             ctrl.dragStart = function(index){
                 ctrl.dragStartIndex = index;
+                ctrl.minPriority = ctrl.data[0].priority;
             };
             ctrl.updateOrders = function(index){
                 if(index> ctrl.dragStartIndex){
@@ -41,9 +42,27 @@ modules.component('attributeSetNavValues', {
                 else{
                     ctrl.data.splice(ctrl.dragStartIndex+1, 1);
                 }
+                var arrNavs = [];
                 angular.forEach(ctrl.data, function(e,i){
-                    e.priority = i;
+                    e.priority = ctrl.minPriority + i;
+                    var keys = {
+                        parentId: e.parentId,
+                        parentType: e.parentType,
+                        id: e.id
+                    };
+                    var properties = {
+                        priority: e.priority
+                    }
+                    arrNavs.push({
+                        keys: keys,
+                        properties: properties
+                    });
                 });
+                navService.saveProperties('portal', arrNavs).then(resp=>{
+                    console.log(resp);
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                })
             };
         }]
 });
