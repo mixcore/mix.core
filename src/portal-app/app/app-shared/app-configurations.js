@@ -377,14 +377,45 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'BaseODataService'
             return result;
         };
         $rootScope.findObjectByKey = function (array, key, value) {
-            for (var i = 0; i < array.length; i++) {
-                if (array[i][key] == value) {
-                    return array[i];
+            if(Array.isArray(key)){
+                for (var i = 0; i < array.length; i++) {
+                    var isMatch = true;
+                    angular.forEach(key, function(e,j){
+                        isMatch = array[i][key[j]] == value[j];
+                    });
+                    if(isMatch){
+                        return array[i];
+                    }
                 }
-            }
+            }else{
+                for (var i = 0; i < array.length; i++) {
+                    if (array[i][key] == value) {
+                        return array[i];
+                    }
+                }
+            }            
             return null;
         }
         $rootScope.removeObjectByKey = function (array, key, value) {
+            if(Array.isArray(key)){
+                for (var i = 0; i < array.length; i++) {
+                    var isMatch = true;
+                    angular.forEach(key, function(e,j){
+                        isMatch = array[i][key[j]] == value[j];
+                    });
+                    if(isMatch){
+                        array.splice(i,1);
+                        break;
+                    }
+                }
+            }else{
+                for (var i = 0; i < array.length; i++) {
+                    if (array[i][key] == value) {
+                        array.splice(i,1);
+                        break;
+                    }
+                }
+            }
             for (var i = 0; i < array.length; i++) {
                 if (array[i][key] == value) {
                     array.splice(i,1);
