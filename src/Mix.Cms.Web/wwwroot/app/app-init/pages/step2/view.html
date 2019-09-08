@@ -4,15 +4,19 @@
 <div ng-init="loadProgress(25)"></div>
 <form ng-class="{'submitted': submitted}" ng-submit="register()">
     <div class="">
-        <h1 class="display-4">Now, you can create the most powerful account!
+        <h1 class="display-4">Now, creating the most powerful account!
         </h1>
         <p class="lead">
             Please keep this account credential safe and only share this account to the most trusted!
         </p>
         <hr>
         <div class="form-group">
-            <label class="form-label">Username</label>
-            <input ng-model="user.userName" class="form-control" required placeholder="Handsome...">
+            <div class="row">
+                <div class="col">Administrator Username</div>
+                <div class="col"><input ng-model="user.userName" class="form-control" required placeholder="Handsome..."></div>
+            </div>
+
+
         </div>
         <div class="row">
             <div class="col">
@@ -49,8 +53,8 @@
                 You must agree before submitting.
             </div>
         </div>
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary">Create <i class="fa fa-angle-right" style="font-size: 19px;"></i></button>
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary">Continue <i class="fa fa-angle-right"></i></button>
             <!-- <button type="button" class="btn btn-link" ng-click="advanceSetup()">Advance Setup</button> -->
         </div>
         <!-- <div class="form-footer">
