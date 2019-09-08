@@ -1,52 +1,67 @@
 <div class="mix-tree-view" ng-init="$ctrl.init()">
     <div class="row">
         <div ng-repeat="(zone, items) in $ctrl.dropzones" class="col-md-6">
-            <div class="dropzone box box-yellow">                
-                <ul dnd-list="items" dnd-allowed-types="list.allowedTypes">
-                    <li ng-repeat="item in items" dnd-disable-if="item.type == 'unknown'" dnd-type="item.type"
+            <div class="dropzone box box-yellow">
+                <div dnd-list="items" dnd-allowed-types="list.allowedTypes">
+                    <div ng-repeat="item in items" dnd-disable-if="item.type == 'unknown'" dnd-type="item.type"
                         dnd-dragend="$ctrl.update()" dnd-draggable="item" dnd-effect-allowed="move"
                         dnd-moved="items.splice($index, 1)" dnd-selected="$ctrl.selected = item"
-                        ng-click="$ctrl.select(item)" ng-class="{selected: $ctrl.selected === item}">
-                        <div class="sw-toc-item" is-active-menu>
+                        ng-click="$ctrl.select(item)" ng-class="{selected: $ctrl.selected === item}" class="item">
+                        <div is-active-menu>
                             <div class="inner">
-                                <div class="btn-group btn-group-sm" role="group">
-                                    <div class="btn-group" role="group" aria-label="Basic example">
-                                        <input type="text" ng-model="item.name" />
-                                        <a class="btn btn-primary text-white dropdown-toggle"
-                                            ng-click="item.showMenu = !item.showMenu">
-                                            Actions
-                                        </a>
-                                        <div class="dropdown"></div>
-                                        <div class="dropdown-menu" ng-class="{'show': item.showMenu}"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <a class="dropdown-item" ng-click="$ctrl.addField(item)">Add
-                                                field</a>
-                                            <a class="dropdown-item" ng-click="$ctrl.addObj(item)">Add
-                                                Object</a>
-                                            <a class="dropdown-item" ng-click="$ctrl.addArray(item)">Add
-                                                Array</a>
-                                            <a class="dropdown-item" ng-click="$ctrl.clone(item, list)">Clone</a>
-                                            <a class="dropdown-item"
-                                                ng-click="$ctrl.remove($index, list)">Remove</a>
+                                <div class="btn-toolbar justify-content-between pb-1" role="toolbar"
+                                    aria-label="Toolbar with button groups">
+                                    
+                                    <div class="input-group input-group-sm ">
+                                        <div class="input-group-prepend" style="cursor: move;">
+                                            <span class="input-group-text" style="border-radius: 0;"><span class="fa fa-grip-vertical text-second"></span></span>
                                         </div>
+                                        <input class="form-control" type="text" ng-model="item.name" />
                                     </div>
-                                    <a class="btn btn-primary" ng-click="item.show = !item.show">
-                                        <span class="mi-ChevronRightSmall mi text-white"></span>
-                                    </a>
-                                </div>
 
+                                    <div class="btn-group btn-group-sm mr-2">
+                                        <button type="button" class="btn btn-light" ng-click="$ctrl.addField(item)"
+                                            title="Add field">
+                                            <span class="fa fa-cube text-secondary"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-light" ng-click="$ctrl.addObj(item)"
+                                            title="Add Object">
+                                            <span class="fa fa-cubes text-secondary"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-light" ng-click="$ctrl.addArray(item)"
+                                            title="Add Array">
+                                            <span class="fa fa-layer-group text-secondary"></span>
+                                        </button>
+                                        <!-- </div>
+                                    <div class="btn-group btn-group-sm mr-2"> -->
+                                        <button type="button" class="btn btn-light" ng-click="$ctrl.clone(item, list)"
+                                            title="Clone this">
+                                            <span class="fa fa-clone text-secondary"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-light"
+                                            ng-click="$ctrl.remove($index, list)" title="Delete this">
+                                            <span class="fa fa-times text-secondary"></span>
+                                        </button>
+                                        <button type="button"
+                                            class="btn btn-light dropdown-toggle dropdown-toggle-split"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                            ng-click="item.show = !item.show">
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <div ng-include="item.type + '.html'" ng-show="item.show || item.showMenu"
                             id="{{item.type}}-{{item.name}}"></div>
-                    </li>
-                </ul>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-md-6">
-            <h2>Selected Model</h2>
-            <pre>{{$ctrl.selectedModel | json}}</pre>
+            <monaco-editor content-id="$ctrl.timestamp" content="$ctrl.selectedModel | json" ext="'.json'">
+            </monaco-editor>
 
         </div>
     </div>
@@ -58,12 +73,11 @@
                  makes an element draggable and will transfer the object that was
                  assigned to it. If an element was dragged away, you have to remove
                  it from the original list yourself using the dnd-moved attribute -->
+
 <script type="text/ng-template" id="list.html">
     <div class="perfect-scroll">
-        <ul class="sw-links" data-children=".sw-toc-item"
-            dnd-list="list.items" 
-            dnd-allowed-types="list.allowedTypes">
-            <li ng-repeat="item in list.items"
+        <div class="list" dnd-list="list.items" dnd-allowed-types="list.allowedTypes">
+            <div class="items" ng-repeat="item in list.items"
                 dnd-dragend="$ctrl.update()"
                 dnd-disable-if="item.type == 'unknown'"
                 dnd-type="item.type"
@@ -75,35 +89,52 @@
                 ng-click="$ctrl.select(item)"
                 >
                 
-                <div class="sw-toc-item" >
+                <div class="item">
                     <div class="inner">
-                        <div class="btn-group btn-group-sm" role="group">
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                <input type="text" ng-model="item.name"/>
-                                <a class="btn btn-primary text-white dropdown-toggle" 
-                                    ng-click="item.showMenu = !item.showMenu">
-                                    Actions
-                                </a>
-                                <div class="dropdown"></div>
-                                    <div class="dropdown-menu" ng-class="{'show': item.showMenu}" aria-labelledby="dropdownMenuLink">
-                                        <a class="dropdown-item" ng-click="$ctrl.addField(item)">Add field</a>
-                                        <a class="dropdown-item" ng-click="$ctrl.addObj(item)">Add Object</a>
-                                        <a class="dropdown-item" ng-click="$ctrl.addArray(item)">Add Array</a>
-                                        <a class="dropdown-item" ng-click="$ctrl.clone(item, list)">Clone</a>
-                                        <a class="dropdown-item" ng-click="$ctrl.remove($index, list)">Remove</a>
-                                    </div>
-                                </div>
-                                <a class="btn btn-primary" ng-click="item.show = !item.show">
-                                    <span class="mi-ChevronRightSmall mi text-white"></span>
-                                </a>
-                            </div>
+                        
+                        <div class="btn-toolbar justify-content-between pb-1" role="toolbar"
+                            aria-label="Toolbar with button groups">
                             
+                            <div class="input-group input-group-sm ">
+                                <div class="input-group-prepend" style="cursor: move;">
+                                    <span class="input-group-text" style="border-radius: 0;"><span class="fa fa-grip-vertical text-second"></span></span>
+                                </div>
+                                <input class="form-control" type="text" ng-model="item.name" />
+                            </div>
+
+                            <div class="btn-group btn-group-sm mr-2">
+                                <button type="button" class="btn btn-light" ng-click="$ctrl.addField(item)" title="Add field">
+                                    <span class="fa fa-cube text-secondary"></span>
+                                </button>
+                                <button type="button" class="btn btn-light" ng-click="$ctrl.addObj(item)" title="Add Object">
+                                    <span class="fa fa-cubes text-secondary"></span>
+                                </button>
+                                <button type="button" class="btn btn-light" ng-click="$ctrl.addArray(item)" title="Add Array">
+                                    <span class="fa fa-layer-group text-secondary"></span>
+                                </button>
+                            <!-- </div>
+                            <div class="btn-group btn-group-sm mr-2"> -->
+                                <button type="button" class="btn btn-light"
+                                    ng-click="$ctrl.clone(item, list)" title="Clone this">
+                                    <span class="fa fa-clone text-secondary"></span>
+                                </button>
+                                <button type="button" class="btn btn-light"
+                                    ng-click="$ctrl.remove($index, list)" title="Delete this">
+                                    <span class="fa fa-times text-secondary"></span>
+                                </button>
+                                <button type="button"
+                                    class="btn btn-light dropdown-toggle dropdown-toggle-split"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                    ng-click="item.show = !item.show">
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div ng-include="item.type + '.html'" ng-show="item.show || item.showMenu"></div>                                
                 </div>
-            </li>
-        </ul>
+            </div>
+        </div>
     </div>
     <div class="sidebar-background"></div>
 </script>
@@ -119,7 +150,8 @@
 
 <script type="text/ng-template" id="array.html">
             <div class="container array box box-blue">
-                <h3>Array</h3>
+                <!-- <h6>Array</h6>
+                <hr> -->
                 <div class="column" ng-repeat="list in item.columns" ng-include="'list.html'"></div>
                 <div class="clearfix"></div>
             </div>
@@ -127,14 +159,36 @@
 
 <!-- Template for a normal list item -->
 <script type="text/ng-template" id="item.html">
-    <div class="container item">        
+    <div class="item-fields">        
         <div ng-show="$ctrl.selected == item">
-            <input type="text" ng-model="item.name"/>
-            <select class="col-5 form-control form-control-sm" ng-model="item.dataType">
-                    <option ng-repeat="type in $ctrl.settings.dataTypes track by $index" ng-value="$index">{{type}}
-                    </option>
-                </select>
-            <mix-value-editor type="item.dataType" string-value="item.value"></mix-value-editor>
+                <form>
+                    <div class="form-row pb-2">
+                        <div class="col">
+                            <div class="input-group input-group-sm ">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">Name</span>
+                                    </div>
+                                <input class="form-control" type="text" ng-model="item.name"/>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group input-group-sm ">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">Content Type</span>
+                                </div>
+                                <select class="custom-select" ng-model="item.dataType">
+                                    <option ng-repeat="type in $ctrl.settings.dataTypes track by $index" ng-value="$index">{{type}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <mix-value-editor type="item.dataType" string-value="item.value"></mix-value-editor>
+                        </div>
+                    </div>
+                </form>
         </div>
     </div>
 </script>

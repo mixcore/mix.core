@@ -8,7 +8,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public MixAttributeSet()
         {
             MixAttributeFieldAttributeSet = new HashSet<MixAttributeField>();
-            MixAttributeFieldReferrence = new HashSet<MixAttributeField>();
+            MixAttributeFieldReference = new HashSet<MixAttributeField>();
             MixAttributeSetData = new HashSet<MixAttributeSetData>();
             MixAttributeSetReference = new HashSet<MixAttributeSetReference>();
             MixModuleAttributeData = new HashSet<MixModuleAttributeData>();
@@ -27,7 +27,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Status { get; set; }
 
         public virtual ICollection<MixAttributeField> MixAttributeFieldAttributeSet { get; set; }
-        public virtual ICollection<MixAttributeField> MixAttributeFieldReferrence { get; set; }
+        public virtual ICollection<MixAttributeField> MixAttributeFieldReference { get; set; }
         public virtual ICollection<MixAttributeSetData> MixAttributeSetData { get; set; }
         public virtual ICollection<MixAttributeSetReference> MixAttributeSetReference { get; set; }
         public virtual ICollection<MixModuleAttributeData> MixModuleAttributeData { get; set; }

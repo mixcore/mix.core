@@ -22,7 +22,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
 {
     [Produces("application/json")]
     [Route("api/v1/odata/{culture}/attribute-set-data/portal")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
     public class ApiODataAttributeSetDataPortalController :
         BaseApiODataController<MixCmsContext, MixAttributeSetData>
     {
