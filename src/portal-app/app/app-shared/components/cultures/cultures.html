@@ -3,28 +3,26 @@
     <h6 class="card-header">Languages
         <button class="btn btn-link text-primary btn-sm float-right py-0" type="button" data-toggle="collapse"
             data-target="#language-tab" aria-controls="seo-tab-content" aria-expanded="false"
-            aria-label="Toggle navigation"><span class="fas fa-plus text-primary"></span> Add lang</button>
+            aria-label="Toggle navigation">Localize</button>
 
     </h6>
 
     <div id="language-tab" class="card-body collapse">
-        <div ng-repeat="culture in $ctrl.data">
+        <div ng-repeat="culture in $ctrl.data" class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" ng-model="culture.isSupported" id="culture_{{$index}}">
+            <label class="custom-control-label" for="culture_{{$index}}"><span class="flag-icon {{culture.icon}}"></span> <span ng-bind="culture.description"></span></label>
+        </div>
+        <!-- <div ng-repeat="culture in $ctrl.data">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" ng-model="culture.isSupported" id="culture_{{$index}}" class="switch">
+                <input class="form-check-input" type="checkbox" ng-model="culture.isSupported" id="culture_{{$index}}"
+                    class="switch">
                 <label class="form-check-label" for="culture_{{$index}}"
                     style="overflow: hidden;text-overflow: ellipsis;">
                     <span class="flag-icon {{culture.icon}}"></span>
                     <span ng-bind="culture.description"></span>
                 </label>
             </div>
-            <!-- <span class="switch switch-sm">
-                <input type="checkbox" ng-model="culture.isSupported" id="culture_{{$index}}" class="switch">
-                <label class="switch" for="culture_{{$index}}" style="overflow: hidden;text-overflow: ellipsis;">
-                    <span class="flag-icon {{culture.icon}}"></span>
-                    <span ng-bind="culture.description"></span>
-                </label>
-            </span> -->
-        </div>
+        </div> -->
     </div>
 </div>
 <!-- 
