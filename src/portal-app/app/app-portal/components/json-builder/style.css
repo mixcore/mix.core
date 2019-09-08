@@ -4,7 +4,7 @@
   /* height: auto;
   margin-right: 0; */
   padding-right: 0;
-  padding-left:17px;
+  padding-left:25px;
 }
 .mix-tree-view .dropdown-menu{
   z-index: 99999;
@@ -17,7 +17,7 @@
 }
 .mix-tree-view .item{
   /* background-color:transparent; */
-  padding-top: 2px;
+  /* padding-top: 2px; */
   padding-bottom: 2px;
   border-left: 1px #eee solid;
 }
@@ -27,5 +27,5 @@
 }
 
 .mix-tree-view .item-fields{
-  padding-left: 35px;
+  padding: 12px 8px 0 26px; 
 }
