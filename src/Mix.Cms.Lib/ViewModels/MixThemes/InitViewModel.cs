@@ -103,7 +103,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"{MixConstants.Folder.TemplatesFolder}/{Name}";                
+                return $"{MixConstants.Folder.TemplatesFolder}/{Name}";
             }
         }
 
@@ -186,7 +186,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 // Get SiteStructure
                 var strSchema = FileRepository.Instance.GetFile("schema.json", $"{outputFolder}/Data");
                 var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteStructureViewModel>();
-                FileRepository.Instance.DeleteFolder(outputFolder);                
+                FileRepository.Instance.DeleteFolder(outputFolder);
 
                 //Import Site Structures
                 result = await siteStructures.ImportAsync(Specificulture);

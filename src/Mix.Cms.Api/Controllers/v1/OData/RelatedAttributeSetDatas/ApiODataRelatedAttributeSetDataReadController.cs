@@ -2,19 +2,18 @@
 // The Mix I/O Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
-using Mix.Cms.Lib.Models.Cms;
-using System.Linq.Expressions;
-using Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.AspNet.OData;
-using System.Collections.Generic;
-using Microsoft.AspNet.OData.Query;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
 {
@@ -44,7 +43,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
             // Get Details if has id or else get default
             if (id != "default")
             {
-                predicate = m => m.Id == id && m.ParentId == desId && m.Specificulture == _lang; 
+                predicate = m => m.Id == id && m.ParentId == desId && m.Specificulture == _lang;
             }
             else
             {
@@ -85,7 +84,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
                 return BadRequest(portalResult);
             }
         }
-        
+
         // Save api/odata/{culture}/attribute-set-data/portal/{id}
         [HttpPost, HttpOptions]
         [Route("{id}/{desId}")]

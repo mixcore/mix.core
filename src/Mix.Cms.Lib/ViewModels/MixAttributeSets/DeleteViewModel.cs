@@ -3,8 +3,6 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
-using System;
-using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 {

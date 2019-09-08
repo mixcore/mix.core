@@ -3,15 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.AspNetCore.Mvc;
-using Mix.Domain.Core.ViewModels;
-using Mix.Cms.Lib.ViewModels;
-using Mix.Cms.Lib.Repositories;
-using Mix.Cms.Lib;
-using Mix.Common.Helper;
-using Microsoft.AspNetCore.SignalR;
-using Mix.Cms.Hub;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Repositories;
+using Mix.Cms.Lib.ViewModels;
+using Mix.Common.Helper;
+using Mix.Domain.Core.ViewModels;
 
 namespace Mix.Cms.Api.Controllers.v1
 {

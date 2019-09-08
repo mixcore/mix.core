@@ -31,7 +31,7 @@ namespace Mix.Cms.Lib.Models.Account
         public MixCmsAccountContext()
         {
         }
-        
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);

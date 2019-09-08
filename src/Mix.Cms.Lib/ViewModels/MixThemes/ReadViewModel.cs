@@ -6,7 +6,6 @@ using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
-using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixThemes
 {

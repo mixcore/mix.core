@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -9,7 +8,7 @@ namespace Mix.Cms.Lib.Helpers
     {
         static UnicodeEncoding ByteConverter = new UnicodeEncoding();
         static RSACryptoServiceProvider RSA = new RSACryptoServiceProvider();
-        
+
         public static string GetEncryptedText(string text)
         {
             byte[] arrPlaintext = ByteConverter.GetBytes(text);

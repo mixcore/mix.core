@@ -5,18 +5,16 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Mix.Domain.Core.ViewModels;
+using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using static Mix.Cms.Lib.MixEnums;
-using System.Linq.Expressions;
-using System.Web;
 using Mix.Cms.Lib.ViewModels.MixConfigurations;
-using Microsoft.Extensions.Caching.Memory;
+using Mix.Domain.Core.ViewModels;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -142,11 +140,11 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 case "mvc":
                     var mvcResult = await base.GetListAsync<ReadMvcViewModel>(key, request, predicate);
-                 
+
                     return Ok(JObject.FromObject(mvcResult));
                 case "portal":
                     var portalResult = await base.GetListAsync<UpdateViewModel>(key, request, predicate);
-                   
+
                     return Ok(JObject.FromObject(portalResult));
                 default:
 

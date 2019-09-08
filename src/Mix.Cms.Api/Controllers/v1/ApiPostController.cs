@@ -5,21 +5,21 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib;
+using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels;
+using Mix.Cms.Lib.ViewModels.MixPosts;
+using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Mix.Domain.Core.ViewModels;
-using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib;
-using Mix.Cms.Lib.Services;
-using static Mix.Cms.Lib.MixEnums;
 using System.Linq.Expressions;
-using Mix.Cms.Lib.ViewModels.MixPosts;
+using System.Threading.Tasks;
 using System.Web;
-using Microsoft.Extensions.Caching.Memory;
-using Mix.Cms.Lib.ViewModels;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -35,7 +35,7 @@ namespace Mix.Cms.Api.Controllers.v1
         #region Get
 
         // GET api/post/id
-        
+
         [HttpGet, HttpOptions]
         [Route("delete/{id}")]
         public async Task<RepositoryResponse<MixPost>> DeleteAsync(int id)

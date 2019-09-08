@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -47,7 +45,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPositions
         #region Overrides
         public override MixPosition ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (Id==0)
+            if (Id == 0)
             {
                 Id = Repository.Max(p => p.Id).Data + 1;
             }

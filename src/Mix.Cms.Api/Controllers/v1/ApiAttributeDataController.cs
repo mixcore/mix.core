@@ -2,21 +2,15 @@
 // The Mix I/O Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Threading.Tasks;
-using Mix.Domain.Core.ViewModels;
+using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Domain.Core.ViewModels;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Linq.Expressions;
-using Mix.Cms.Lib.ViewModels;
-using Microsoft.AspNetCore.SignalR;
-using Mix.Cms.Hub;
-using Microsoft.Extensions.Caching.Memory;
-using Mix.Cms.Lib.Attributes;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -50,7 +44,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     break;
             }
             return BadRequest();
-            
+
         }
 
         async Task<ActionResult<JObject>> GetPostDataAsync(int setId, string viewType, string id)
@@ -73,7 +67,7 @@ namespace Mix.Cms.Api.Controllers.v1
                             Priority = Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 
-                        RepositoryResponse<Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel> result = 
+                        RepositoryResponse<Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel> result =
                             await base.GetSingleAsync<Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel, MixPostAttributeData>($"{viewType}_default", null, model);
                         return Ok(JObject.FromObject(result));
                     }
@@ -102,6 +96,6 @@ namespace Mix.Cms.Api.Controllers.v1
         }
         #endregion Get
 
-        
+
     }
 }

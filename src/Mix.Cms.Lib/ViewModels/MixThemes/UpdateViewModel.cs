@@ -2,20 +2,20 @@
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels.MixSystem;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
-using Mix.Cms.Lib.ViewModels.MixSystem;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
-using System.IO;
-using Newtonsoft.Json.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixThemes
 {
@@ -31,14 +31,14 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         [JsonProperty("name")]
         public string Name { get; set; }
-        
+
         [Required]
         [JsonProperty("title")]
         public string Title { get; set; }
 
         [JsonProperty("image")]
         public string Image { get; set; }
-        
+
         [JsonProperty("thumbnail")]
         public string Thumbnail { get; set; }
 
@@ -197,10 +197,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             return result;
         }
 
-       
+
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var result = await MixTemplates.InitViewModel.Repository.RemoveListModelAsync(false,  t => t.ThemeId == Id);
+            var result = await MixTemplates.InitViewModel.Repository.RemoveListModelAsync(false, t => t.ThemeId == Id);
             if (result.IsSucceed)
             {
                 FileRepository.Instance.DeleteWebFolder(AssetFolder);
@@ -366,21 +366,21 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             string defaultFolder = $"{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultBlankTemplateFolder) }";
-                
-                //CommonHelper.GetFullPath(new string[] {
-                //    MixConstants.Folder.TemplatesFolder,
-                //    MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateFolder) });
+
+            //CommonHelper.GetFullPath(new string[] {
+            //    MixConstants.Folder.TemplatesFolder,
+            //    MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateFolder) });
             bool copyResult = FileRepository.Instance.CopyDirectory(defaultFolder, TemplateFolder);
 
             var files = FileRepository.Instance.GetFilesWithContent(TemplateFolder);
-            var id = _context.MixTemplate.Count()+1;
+            var id = _context.MixTemplate.Count() + 1;
             //TODO: Create default asset
             foreach (var file in files)
-            {                
+            {
                 MixTemplates.InitViewModel template = new MixTemplates.InitViewModel(
                     new MixTemplate()
                     {
-                        Id= id,
+                        Id = id,
                         FileFolder = file.FileFolder,
                         FileName = file.Filename,
                         Content = file.Content,

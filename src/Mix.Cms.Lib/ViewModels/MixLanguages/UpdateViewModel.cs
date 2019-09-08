@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixSystem;
 using Mix.Domain.Core.Models;
@@ -79,7 +78,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
 
         #region Overrides
 
-        
+
         public override MixLanguage ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Value = Property.Value ?? Value;
@@ -149,7 +148,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         }
 
         #endregion
-        
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Cultures = LoadCultures(Specificulture, _context, _transaction);

@@ -1,20 +1,20 @@
-﻿using System.Text.Encodings.Web;
-using System.Text.Unicode;
+﻿using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.WebEncoders;
+using Mix.Cms.Hub;
+using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Identity.Services;
-using Mix.Cms.Lib.Models.Account;
-using Mix.Cms.Hub;
-using Microsoft.AspNet.OData.Extensions;
-using Microsoft.EntityFrameworkCore;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 namespace Mix.Cms.Web
 {
@@ -72,15 +72,15 @@ namespace Mix.Cms.Web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            
-           
+
+
             // Config Authenticate 
             // App_Start/Startup.Auth.cs
             ConfigAuthorization(services, Configuration);
 
-            
+
             //When View Page Source That changes only the HTML encoder, leaving the JavaScript and URL encoders with their (ASCII) defaults.
-            services.Configure<WebEncoderOptions>(options => options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All));            
+            services.Configure<WebEncoderOptions>(options => options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All));
 
             // add application services.
             services.AddTransient<IEmailSender, AuthEmailMessageSender>();
@@ -104,7 +104,7 @@ namespace Mix.Cms.Web
                     {
                         Location = ResponseCacheLocation.None,
                         NoStore = true
-                    });                
+                    });
             }).AddJsonOptions(options => options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver())
 
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
