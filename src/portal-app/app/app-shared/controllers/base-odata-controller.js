@@ -138,7 +138,7 @@ function BaseODataCtrl($scope, $rootScope, $routeParams, ngAppSettings, service)
         }
         if($scope.isValid){
             var resp = await service.save('portal', data);
-            if (resp) {
+            if (resp.isSucceed) {
                 $scope.activedData = resp.data;
                 $rootScope.showMessage('success', 'success');
 
@@ -152,7 +152,7 @@ function BaseODataCtrl($scope, $rootScope, $routeParams, ngAppSettings, service)
                     $rootScope.executeFunctionByName('saveFailCallback', $scope.saveSuccessCallbackArgs, $scope)
                 }
                 if (resp) {
-                    $rootScope.showErrors('Failed');
+                    $rootScope.showErrors(resp.errors);
                 }
                 $rootScope.isBusy = false;
                 $scope.$apply();

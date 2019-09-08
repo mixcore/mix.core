@@ -59,8 +59,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         #region Overrides
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Attributes = MixAttributeFields.UpdateViewModel
-                .Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
+            if (Id>0)
+            {
+                Attributes = MixAttributeFields.UpdateViewModel
+                .Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList();
+            }
+            else
+            {
+                Attributes = new List<MixAttributeFields.UpdateViewModel>();
+            }
         }
         public override MixAttributeSet ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
