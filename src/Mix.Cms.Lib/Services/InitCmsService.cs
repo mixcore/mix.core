@@ -1,18 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Domain.Core.ViewModels;
-using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.ViewModels;
 using Mix.Cms.Lib.Models.Account;
+using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Repositories;
+using Mix.Cms.Lib.ViewModels;
+using Mix.Cms.Messenger.Models.Data;
+using Mix.Common.Helper;
+using Mix.Domain.Core.ViewModels;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
-using Mix.Cms.Lib.Repositories;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using Mix.Cms.Messenger.Models.Data;
-using Mix.Common.Helper;
 
 namespace Mix.Cms.Lib.Services
 {
@@ -56,8 +56,8 @@ namespace Mix.Cms.Lib.Services
                     var isInit = MixService.GetConfig<bool>("IsInit");
 
                     if (!isInit)
-                    {                        
-                        
+                    {
+
                         /**
                          * Init Selected Language as default 
                          */
@@ -75,19 +75,19 @@ namespace Mix.Cms.Lib.Services
                         {
                             result.Errors.Add("Cannot init Pages");
                         }
-                        
+
                         /**
                          * Init System Positions
                          */
                         if (isSucceed)
                         {
-                            isSucceed =  await InitPositionsAsync(context, transaction);                            
+                            isSucceed = await InitPositionsAsync(context, transaction);
                         }
                         else
                         {
                             result.Errors.Add("Cannot init Positions");
                         }
-                        
+
                         /**
                          * Init System Configurations
                          */
@@ -160,7 +160,7 @@ namespace Mix.Cms.Lib.Services
             return result;
 
         }
-        
+
 
         /// <summary>
         /// Step 3
@@ -183,7 +183,7 @@ namespace Mix.Cms.Lib.Services
 
         }
 
-        
+
         /// <summary>
         /// Step 4 
         ///     - Init default theme
@@ -196,7 +196,7 @@ namespace Mix.Cms.Lib.Services
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            var result = new RepositoryResponse<bool>(){ IsSucceed = true };
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
             var getThemes = ViewModels.MixThemes.InitViewModel.Repository.GetModelList(_context: context, _transaction: transaction);
             if (!context.MixTheme.Any())
             {
@@ -290,6 +290,6 @@ namespace Mix.Cms.Lib.Services
             return result.IsSucceed;
         }
 
-        
+
     }
 }

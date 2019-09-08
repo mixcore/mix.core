@@ -91,7 +91,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
                 }
             }
         }
-[JsonProperty("filePath")]
+        [JsonProperty("filePath")]
         public string FilePath
         {
             get

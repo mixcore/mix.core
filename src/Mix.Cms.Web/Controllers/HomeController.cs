@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Linq.Expressions;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
@@ -17,6 +11,11 @@ using Mix.Cms.Lib.Services;
 using Mix.Cms.Web.Models;
 using Mix.Domain.Core.ViewModels;
 using Mix.Identity.Models;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Linq.Expressions;
 using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Web.Controllers
@@ -43,7 +42,7 @@ namespace Mix.Cms.Web.Controllers
         #region Routes
         [Route("")]
         public async System.Threading.Tasks.Task<IActionResult> Index()
-        {            
+        {
             if (_forbidden)
             {
                 return Redirect($"/error/403");
@@ -481,7 +480,7 @@ namespace Mix.Cms.Web.Controllers
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
             var cacheKey = $"mvc_{_culture}_tag_{tagName}_{pageSize}_{pageIndex}_{orderBy}_{orderDirection}";
             RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
-            
+
 
             if (MixService.GetConfig<bool>("IsCache"))
             {
@@ -596,7 +595,7 @@ namespace Mix.Cms.Web.Controllers
                 getPost = await Lib.ViewModels.MixPosts.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
                 if (getPost.IsSucceed)
                 {
-                    getPost.Data.DetailsUrl = GenerateDetailsUrl(                        
+                    getPost.Data.DetailsUrl = GenerateDetailsUrl(
                         new { culture = _culture, action = "post", id = getPost.Data.Id, seoName = getPost.Data.SeoName }
                         );
                     //Generate details url for related posts
@@ -730,7 +729,7 @@ namespace Mix.Cms.Web.Controllers
                     if (postNav.Post != null)
                     {
                         postNav.Post.DetailsUrl = GenerateDetailsUrl(
-                            new {culture = _culture, action = "post", id = postNav.PostId, seoName = postNav.Post.SeoName }
+                            new { culture = _culture, action = "post", id = postNav.PostId, seoName = postNav.Post.SeoName }
                             );
                     }
                 }

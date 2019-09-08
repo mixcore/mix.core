@@ -14,13 +14,12 @@ modules.component('attributeSetNavValues', {
             
             ctrl.settings = $rootScope.globalSettings;
             ctrl.$onInit = function(){
-                if(ctrl.data.length && !ctrl.columns){
-                    ctrl.columns = ctrl.data[0].data;
-                }
+                
             };
 
             ctrl.update = function(data){
                 ctrl.onUpdate({data: data});
+                $("html, body").animate({ "scrollTop": "0px" }, 500);
             };
             
             ctrl.delete = function(data){

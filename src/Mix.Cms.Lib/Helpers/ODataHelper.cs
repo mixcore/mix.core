@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNet.OData.Query;
-using Microsoft.OData;
+﻿using Microsoft.OData;
 using Microsoft.OData.UriParser;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +9,7 @@ using System.Reflection;
 namespace Mix.Cms.Lib.Helpers
 {
     public class ODataHelper<TModel>
-    {   
+    {
         private static Expression GetPropertyExpression(Type type, string name)
         {
             var param = Expression.Parameter(type, "model");
@@ -82,7 +80,7 @@ namespace Mix.Cms.Lib.Helpers
                     {
                         var exp = FilterObjectSet(property, constant, bon.OperatorKind);
                         var parameter = Expression.Parameter(typeof(TModel), "model");
-                        if (kind >=0 && result !=null)
+                        if (kind >= 0 && result != null)
                         {
                             var binaryKind = (BinaryOperatorKind)kind;
                             result = CombineExpression(result, exp, binaryKind);
@@ -92,8 +90,8 @@ namespace Mix.Cms.Lib.Helpers
                             result = exp;
                         }
                     }
-                }                
-            }            
+                }
+            }
         }
         public static Expression<Func<TModel, bool>> FilterObjectSet(SingleValuePropertyAccessNode rule, ConstantNode constant, BinaryOperatorKind kind, string name = "model")
         {
@@ -139,7 +137,7 @@ namespace Mix.Cms.Lib.Helpers
                 data2 = data2.ToString().Replace("'", "");
             }
             BinaryExpression eq = null;
-                switch (kind)
+            switch (kind)
             {
                 case BinaryOperatorKind.Or:
                     eq = Expression.Or(fieldPropertyExpression,
@@ -198,7 +196,7 @@ namespace Mix.Cms.Lib.Helpers
             };
             return Expression.Lambda<Func<TModel, bool>>(eq, par);
         }
-        public static Expression<Func<T, bool>> CombineExpression<T>(Expression<Func<T, bool>> expr1,Expression<Func<T, bool>> expr2, BinaryOperatorKind kind, string name = "model")
+        public static Expression<Func<T, bool>> CombineExpression<T>(Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2, BinaryOperatorKind kind, string name = "model")
         {
             var parameter = Expression.Parameter(typeof(T), name);
 
@@ -243,8 +241,8 @@ namespace Mix.Cms.Lib.Helpers
             }
             return null;
         }
-       
-        private class ReplaceExpressionVisitor: ExpressionVisitor
+
+        private class ReplaceExpressionVisitor : ExpressionVisitor
         {
             private readonly Expression _oldValue;
             private readonly Expression _newValue;

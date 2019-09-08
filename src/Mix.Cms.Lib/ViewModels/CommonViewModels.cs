@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -11,9 +10,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 using static Mix.Cms.Lib.MixEnums;
 
@@ -200,7 +197,7 @@ namespace Mix.Cms.Lib.ViewModels
 
         [JsonProperty("title")]
         public string Title { get; set; }
-        
+
         [JsonProperty("defaultValue")]
         public string DefaultValue { get; set; }
 
@@ -389,7 +386,7 @@ namespace Mix.Cms.Lib.ViewModels
             XNamespace ns = @"http://www.sitemaps.org/schemas/sitemap/0.9";
             XNamespace xsi = @"http://www.w3.org/1999/xhtml";
 
-            var e = new XElement(ns+ "url");
+            var e = new XElement(ns + "url");
             e.Add(new XElement(ns + "lastmod", LastMod.HasValue ? LastMod.Value : DateTime.UtcNow));
             e.Add(new XElement(ns + "changefreq", ChangeFreq));
             e.Add(new XElement(ns + "priority", Priority));

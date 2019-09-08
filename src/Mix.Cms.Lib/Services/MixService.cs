@@ -1,16 +1,16 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Repositories;
+using Mix.Cms.Lib.ViewModels;
+using Mix.Common.Helper;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Threading;
-using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
-using Mix.Cms.Lib.ViewModels;
-using Mix.Common.Helper;
-using Newtonsoft.Json.Linq;
 
 namespace Mix.Cms.Lib.Services
 {
@@ -178,7 +178,7 @@ namespace Mix.Cms.Lib.Services
         public static T GetConfig<T>(string name)
         {
             var result = Instance.GlobalSettings[name];
-            if (result==null)
+            if (result == null)
             {
                 result = DefaultInstance.GlobalSettings[name];
             }
@@ -363,7 +363,8 @@ namespace Mix.Cms.Lib.Services
                     smtpClient.UseDefaultCredentials = true;
                     smtpClient.Send(mailMessage);
                 }
-                catch {
+                catch
+                {
                     // ToDo: cannot send mail
                 }
             }

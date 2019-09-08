@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixSystem;
@@ -458,7 +457,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             try
-            {               
+            {
                 if (result.IsSucceed)
                 {
                     foreach (var item in UrlAliases)
@@ -478,9 +477,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 }
                 if (result.IsSucceed)
                 {
-                    var startMediaId = MixMedias.UpdateViewModel.Repository.Max(c => c.Id,_context, _transaction).Data;
+                    var startMediaId = MixMedias.UpdateViewModel.Repository.Max(c => c.Id, _context, _transaction).Data;
                     foreach (var navMedia in MediaNavs)
-                    {                        
+                    {
                         if (navMedia.Media != null)
                         {
                             startMediaId += 1;
@@ -654,7 +653,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             try
             {
-                
+
                 if (result.IsSucceed)
                 {
                     var startMediaId = MixMedias.UpdateViewModel.Repository.Max(c => c.Id).Data;
@@ -666,7 +665,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                             navMedia.Media.Specificulture = Specificulture;
                             navMedia.Media.Cultures = Cultures;
                             navMedia.Media.Id = startMediaId;
-                            var saveMedia =  navMedia.Media.SaveModel(false, _context, _transaction);
+                            var saveMedia = navMedia.Media.SaveModel(false, _context, _transaction);
                             if (saveMedia.IsSucceed)
                             {
                                 navMedia.PostId = parent.Id;
@@ -719,7 +718,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     }
                 }
 
-                
+
                 if (result.IsSucceed)
                 {
                     // Save Parent Category

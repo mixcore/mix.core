@@ -1,18 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
-using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
@@ -79,7 +73,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
             if (string.IsNullOrEmpty(Id))
             {
                 Id = Guid.NewGuid().ToString();
-                CreatedDateTime = DateTime.UtcNow;                
+                CreatedDateTime = DateTime.UtcNow;
             }
             else
             {
