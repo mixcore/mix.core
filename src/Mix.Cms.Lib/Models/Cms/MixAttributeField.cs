@@ -30,7 +30,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public int? ReferenceId { get; set; }
 
         public virtual MixAttributeSet AttributeSet { get; set; }
-        public virtual MixAttributeSet Referrence { get; set; }
+        public virtual MixAttributeSet Reference { get; set; }
         public virtual ICollection<MixModuleAttributeValue> MixModuleAttributeValue { get; set; }
         public virtual ICollection<MixPageAttributeValue> MixPageAttributeValue { get; set; }
         public virtual ICollection<MixPostAttributeValue> MixPostAttributeValue { get; set; }

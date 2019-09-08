@@ -274,8 +274,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         {
             if (obj != null)
             {
-                
-
                 List<EntityField> fields = new List<EntityField>();
                 Type type = typeof(TModel);
                 foreach (var item in obj.Properties())
@@ -293,10 +291,8 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                         fields.Add(field);
                     }
                 }
-                
                 var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.UpdateFieldsAsync(predicate, fields);
                 await MixCacheService.RemoveCacheAsync();
-                
                 return result;
             }
             return new RepositoryResponse<TModel>();
