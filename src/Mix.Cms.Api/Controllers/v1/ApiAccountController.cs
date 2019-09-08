@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +12,11 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Api.Controllers.v1
@@ -357,7 +357,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     var user = await _userManager.FindByNameAsync(model.Username);
                     if (user != null)
                     {
-                        var tmp  = await _userManager.ChangePasswordAsync(user, model.ChangePassword.CurrentPassword, model.ChangePassword.NewPassword);
+                        var tmp = await _userManager.ChangePasswordAsync(user, model.ChangePassword.CurrentPassword, model.ChangePassword.NewPassword);
                         result.IsSucceed = tmp.Succeeded;
                         if (!result.IsSucceed)
                         {
@@ -507,6 +507,6 @@ namespace Mix.Cms.Api.Controllers.v1
             return result;
         }
 
-        
+
     }
 }

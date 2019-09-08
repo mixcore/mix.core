@@ -19,8 +19,8 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
-    public class BaseApiController<TDbContext>: Controller
-        where TDbContext: DbContext
+    public class BaseApiController<TDbContext> : Controller
+        where TDbContext : DbContext
     {
         protected readonly IHubContext<PortalHub> _hubContext;
         protected static TDbContext _context;
@@ -36,7 +36,7 @@ namespace Mix.Cms.Api.Controllers.v1
         /// The domain
         /// </summary>
         protected string _domain;
-        
+
         /// <summary>
         /// The repo
         /// </summary>
@@ -46,7 +46,7 @@ namespace Mix.Cms.Api.Controllers.v1
         public BaseApiController(TDbContext context, IMemoryCache memoryCache, IHubContext<PortalHub> hubContext)
         {
             _context = context;
-            _hubContext = hubContext; 
+            _hubContext = hubContext;
             _memoryCache = memoryCache;
         }
 
@@ -79,7 +79,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
         protected async Task<RepositoryResponse<TView>> GetSingleAsync<TView, TModel>(string key, Expression<Func<TModel, bool>> predicate = null, TModel model = null)
             where TView : ViewModelBase<TDbContext, TModel, TView>
-            where TModel: class
+            where TModel : class
         {
             var cacheKey = $"{typeof(TModel).Name}_details_{_lang}_{key}";
             RepositoryResponse<TView> data = null;
@@ -116,7 +116,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 {
                     new JProperty("created_at", DateTime.UtcNow),
                     new JProperty("ip_address", Request.HttpContext.Connection.RemoteIpAddress.ToString()),
-                    new JProperty("user", User.Identity?.Name),                   
+                    new JProperty("user", User.Identity?.Name),
                     new JProperty("request_url", Request.Path.Value),
                     new JProperty("action", action),
                     new JProperty("status", status),

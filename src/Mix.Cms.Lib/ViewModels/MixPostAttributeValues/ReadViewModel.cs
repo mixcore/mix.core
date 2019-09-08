@@ -47,7 +47,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeValues
 
         #endregion Models
 
-       
+
         #endregion Properties
 
         #region Contructors

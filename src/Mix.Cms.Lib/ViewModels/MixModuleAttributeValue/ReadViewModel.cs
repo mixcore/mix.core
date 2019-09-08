@@ -1,13 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixModuleAttributeValues
 {
@@ -43,7 +38,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleAttributeValues
 
         #endregion Models
 
-       
+
         #endregion Properties
 
         #region Contructors

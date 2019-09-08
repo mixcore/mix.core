@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,18 +45,18 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         {
             // Related Datas
             DataNavs = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(
-                n => n.ParentId == Id && n.ParentType == (int)MixEnums.MixAttributeSetDataType.SubSet && n.Specificulture == Specificulture, 
+                n => n.ParentId == Id && n.ParentType == (int)MixEnums.MixAttributeSetDataType.SubSet && n.Specificulture == Specificulture,
                 _context, _transaction).Data;
 
             Values = MixAttributeSetValues.UpdateViewModel
-                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a=>a.Priority).ToList();
+                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
             Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
-            if (Values.Count == 0)
+            foreach (var field in Fields)
             {
-                
-                foreach (var field in Fields)
+                var val = Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
+                if (val == null)
                 {
-                    var val = new MixAttributeSetValues.UpdateViewModel(
+                    val = new MixAttributeSetValues.UpdateViewModel(
                         new MixAttributeSetValue() { AttributeFieldId = field.Id }
                         , _context, _transaction);
                     val.Field = field;
@@ -66,22 +64,17 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     val.Priority = field.Priority;
                     Values.Add(val);
                 }
+                val.Field = field;
+               
             }
-            else
-            {
-                foreach (var val in Values)
-                {
-                    val.Field = Fields.FirstOrDefault(f => f.Id == val.AttributeFieldId);
-                    val.Priority = val.Field.Priority;
-                }
-            }
-            
+
+
         }
         public override MixAttributeSetData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))
             {
-                Id = Guid.NewGuid().ToString();                
+                Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
             }
             return base.ParseModel(_context, _transaction);
@@ -96,7 +89,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     if (result.IsSucceed)
                     {
-                        item.DataId = parent.Id;                        
+                        item.DataId = parent.Id;
                         item.Specificulture = parent.Specificulture;
                         var saveResult = await item.SaveModelAsync(false, _context, _transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
@@ -107,11 +100,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     }
                 }
             }
-            
+
             return result;
         }
 
-        public override  RepositoryResponse<bool> SaveSubModels(MixAttributeSetData parent, MixCmsContext _context, IDbContextTransaction _transaction)
+        public override RepositoryResponse<bool> SaveSubModels(MixAttributeSetData parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (result.IsSucceed)
@@ -122,7 +115,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     {
                         item.DataId = parent.Id;
                         item.Specificulture = parent.Specificulture;
-                        var saveResult =  item.SaveModel(false, _context, _transaction);
+                        var saveResult = item.SaveModel(false, _context, _transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                     else
@@ -134,6 +127,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             return result;
         }
         #endregion
-        
+
     }
 }

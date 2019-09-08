@@ -1,13 +1,10 @@
 ﻿using Mix.Domain.Core.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mix.Cms.Lib.ViewModels
 {
     public class ViewModelHelper
     {
-        public static void HandleResult<T>(RepositoryResponse<T> result, ref RepositoryResponse<bool> output)            
+        public static void HandleResult<T>(RepositoryResponse<T> result, ref RepositoryResponse<bool> output)
         {
             if (!result.IsSucceed)
             {

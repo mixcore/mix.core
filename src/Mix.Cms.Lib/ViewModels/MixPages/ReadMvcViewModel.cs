@@ -158,7 +158,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             get
             {
-                return $"/{MixConstants.Folder.TemplatesFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture)}/{Template}";                
+                return $"/{MixConstants.Folder.TemplatesFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture)}/{Template}";
             }
         }
 
@@ -267,7 +267,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public void LoadDataByTag(string tagName
             , string orderBy, int orderDirection
-            , int? pageSize = null, int? pageIndex = null            
+            , int? pageSize = null, int? pageIndex = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
@@ -305,7 +305,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                         }
                     }
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -320,10 +320,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 }
             }
         }
-         public void LoadDataByKeyword(string keyword
-            , string orderBy, int orderDirection
-            , int? pageSize = null, int? pageIndex = null            
-            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public void LoadDataByKeyword(string keyword
+           , string orderBy, int orderDirection
+           , int? pageSize = null, int? pageIndex = null
+           , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
@@ -359,7 +359,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                         }
                     }
                 }
-                
+
             }
             catch (Exception ex)
             {

@@ -4,7 +4,6 @@
 
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Mix.Cms.Lib.Services;
 using Mix.Identity.Entities;
 using Mix.Identity.Models;

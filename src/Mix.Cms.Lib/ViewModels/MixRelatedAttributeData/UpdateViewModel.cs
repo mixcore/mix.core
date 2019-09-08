@@ -1,10 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
-using Newtonsoft.Json;
+using System;
 
 namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 {
@@ -57,7 +54,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         #region Async
 
-        
+
         #endregion Async
 
         #endregion overrides

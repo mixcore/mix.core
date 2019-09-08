@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mix.Cms.Lib
+﻿namespace Mix.Cms.Lib
 {
     public class MixEnums
     {
@@ -120,19 +116,19 @@ namespace Mix.Cms.Lib
             ListProduct = 6,
             Gallery = 7
         }
-        
+
         public enum MixAttributeSetType
         {
             SubPage = 1,
             SubPost = 2,
             SubProduct = 3,
-        } 
+        }
         public enum MixAttributeSetDataType
         {
             SubSet = 1,
             SubPost = 2,
             SubPage = 3,
-            SubModule= 4
+            SubModule = 4
         }
 
         public enum MixDataType

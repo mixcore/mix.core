@@ -1,9 +1,9 @@
-﻿using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixPostAttributeSets
 {
@@ -66,7 +66,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeSets
             return result;
         }
 
-       
+
         #endregion Async
 
         #endregion overrides

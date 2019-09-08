@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 {
@@ -40,7 +39,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         public List<MixAttributeFields.UpdateViewModel> Attributes { get; set; }
 
         [JsonProperty("postData")]
-        public PaginationModel<MixPostAttributeDatas.UpdateViewModel> PostData { get;set;}
+        public PaginationModel<MixPostAttributeDatas.UpdateViewModel> PostData { get; set; }
         #endregion
         #endregion Properties
         #region Contructors
@@ -58,7 +57,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Attributes = MixAttributeFields.UpdateViewModel
-                .Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data.OrderBy(a=>a.Priority).ToList();
+                .Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
         }
         public override MixAttributeSet ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -70,7 +69,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             return base.ParseModel(_context, _transaction);
         }
 
-       
+
         #endregion
 
         #region Expand
@@ -79,11 +78,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         {
             var getData = MixPostAttributeDatas.UpdateViewModel.Repository
             .GetModelListBy(
-                m => m.PostId == postId && m.Specificulture == specificulture && m.AttributeSetId== Id
+                m => m.PostId == postId && m.Specificulture == specificulture && m.AttributeSetId == Id
                 , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
                 , pageSize, pageIndex
                 , _context: _context, _transaction: _transaction);
-            if (!getData.IsSucceed || getData.Data == null || getData.Data.Items.Count==0)
+            if (!getData.IsSucceed || getData.Data == null || getData.Data.Items.Count == 0)
             {
                 PostData = new PaginationModel<MixPostAttributeDatas.UpdateViewModel>() { TotalItems = 1 };
                 //PostData.Items.Add(new MixPostAttributeDatas.UpdateViewModel(Id, Attributes));

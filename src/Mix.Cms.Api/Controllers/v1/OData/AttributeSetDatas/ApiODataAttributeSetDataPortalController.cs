@@ -2,21 +2,19 @@
 // The Mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
-using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib;
-using System.Linq.Expressions;
-using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNet.OData;
-using System.Collections.Generic;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Newtonsoft.Json.Linq;
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
 {
@@ -47,9 +45,9 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             // Get Details if has id or else get default
             if (id != "default")
             {
-                predicate = m => m.Id == id && m.Specificulture == _lang;                
+                predicate = m => m.Id == id && m.Specificulture == _lang;
             }
-            else if(attributeSetId.HasValue)
+            else if (attributeSetId.HasValue)
             {
                 model = new MixAttributeSetData()
                 {
@@ -59,7 +57,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                 };
             }
 
-            if(predicate!=null || model != null)
+            if (predicate != null || model != null)
             {
                 var portalResult = await base.GetSingleAsync<UpdateViewModel>(id.ToString(), predicate, model);
                 return Ok(portalResult.Data);
@@ -95,7 +93,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                 return BadRequest(portalResult);
             }
         }
-        
+
         // Save api/odata/{culture}/attribute-set-data/portal/{id}
         [HttpPost, HttpOptions]
         [Route("{id}")]

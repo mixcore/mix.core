@@ -1,8 +1,8 @@
-﻿using System;
-using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Net.Http.Headers;
+using System;
+using System.Text.RegularExpressions;
 
 namespace RewriteRules
 {

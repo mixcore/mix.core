@@ -46,7 +46,7 @@ namespace Mix.Cms.Web
                 .AddUserManager<UserManager<ApplicationUser>>()
 
                 ;
-            
+
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("AddEditUser", policy =>
@@ -92,7 +92,7 @@ namespace Mix.Cms.Web
                                 Console.WriteLine("OnTokenValidated: " + context.SecurityToken);
                                 return Task.CompletedTask;
                             },
-                            
+
                         };
                     });
             //services.AddAuthentication("Bearer");

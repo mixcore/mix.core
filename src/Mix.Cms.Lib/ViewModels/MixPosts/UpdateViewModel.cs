@@ -266,7 +266,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             LoadTemplates(_context, _transaction);
 
             // Load Parent Pages
-            LoadParentPage(_context,_transaction);
+            LoadParentPage(_context, _transaction);
 
             // Load Parent Modules
             LoadParentModules(_context, _transaction);
@@ -280,7 +280,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             // Related Posts
             LoadRelatedPost(_context, _transaction);
         }
-        
+
         public override MixPost ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)
@@ -604,18 +604,18 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 }
                 else
                 {
-                    var saveResult = await nav.RemoveModelAsync(false, _context, _transaction);                    
+                    var saveResult = await nav.RemoveModelAsync(false, _context, _transaction);
                     ViewModelHelper.HandleResult(saveResult, ref result);
 
                     // Remove Post Attribute Data
                     if (result.IsSucceed)
                     {
-                        var data = await _context.MixPostAttributeData.Where(n => n.PostId == Id && n.AttributeSetId== nav.AttributeSetId
+                        var data = await _context.MixPostAttributeData.Where(n => n.PostId == Id && n.AttributeSetId == nav.AttributeSetId
                             && n.Specificulture == Specificulture).ToListAsync();
                         foreach (var item in data)
                         {
                             var values = await _context.MixPostAttributeValue.Where(n =>
-                                n.DataId==item.Id && n.PostId == Id
+                                n.DataId == item.Id && n.PostId == Id
                                 && n.Specificulture == Specificulture).ToListAsync();
                             foreach (var val in values)
                             {
@@ -1060,7 +1060,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
             var otherAttributeSetNavs = MixAttributeSets.ContentUpdateViewModel.Repository.GetModelListBy(
                 m => !AttributeSetNavs.Any(n => n.AttributeSetId == m.Id)
-                    //&& (m.Type == (int)MixEnums.MixAttributeSetType.SubPost)
+                //&& (m.Type == (int)MixEnums.MixAttributeSetType.SubPost)
                 , "CreatedDateTime", 1, null, 0, _context, _transaction);
             foreach (var item in otherAttributeSetNavs.Data.Items)
             {

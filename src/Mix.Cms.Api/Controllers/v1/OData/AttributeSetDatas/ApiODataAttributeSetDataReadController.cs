@@ -2,25 +2,24 @@
 // The Mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
-using Mix.Cms.Lib.Models.Cms;
-using System.Linq.Expressions;
-using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.AspNet.OData;
-using System.Collections.Generic;
-using Microsoft.AspNet.OData.Query;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
 {
     [Produces("application/json")]
     [Route("api/v1/odata/{culture}/attribute-set-data/read")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
+    [AllowAnonymous]
     public class ApiODataAttributeSetDataReadController :
         BaseApiODataController<MixCmsContext, MixAttributeSetData>
     {
@@ -36,24 +35,14 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         [EnableQuery]
         [HttpGet, HttpOptions]
         [Route("{id}")]
+        [Route("{id}/{attributeSetId}")]
         public async Task<ActionResult<ReadViewModel>> Details(string culture, string id)
         {
             string msg = string.Empty;
             Expression<Func<MixAttributeSetData, bool>> predicate = null;
             MixAttributeSetData model = null;
             // Get Details if has id or else get default
-            if (id != "default")
-            {
-                predicate = m => m.Id == id && m.Specificulture == _lang; 
-            }
-            else
-            {
-                model = new MixAttributeSetData()
-                {
-                    Specificulture = _lang,
-                    Priority = ReadViewModel.Repository.Max(p => p.Priority).Data + 1
-                };
-            }
+            predicate = m => m.Id == id && m.Specificulture == _lang;
 
             var portalResult = await base.GetSingleAsync<ReadViewModel>(id.ToString(), predicate, model);
 
@@ -85,7 +74,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                 return BadRequest(portalResult);
             }
         }
-        
+
         // Save api/odata/{culture}/attribute-set-data/portal/{id}
         [HttpPost, HttpOptions]
         [Route("{id}")]

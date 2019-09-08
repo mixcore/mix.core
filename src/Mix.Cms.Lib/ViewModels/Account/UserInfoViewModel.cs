@@ -1,15 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
+using Mix.Identity.Models.AccountViewModels;
 using Newtonsoft.Json;
-using Mix.Cms.Lib.ViewModels.Account;
 using System;
 using System.Collections.Generic;
-using Mix.Identity.Models.AccountViewModels;
 
 namespace Mix.Cms.Lib.ViewModels.Account
 {
@@ -122,7 +120,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
                     IsValid = false;
                 }
 
-            }            
+            }
             return base.ParseModel(_context, _transaction);
         }
 

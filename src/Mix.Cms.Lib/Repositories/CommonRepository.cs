@@ -4,8 +4,8 @@
 
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Domain.Core.Models;
 using Mix.Cms.Lib.ViewModels.MixSystem;
+using Mix.Domain.Core.Models;
 using System;
 using System.Collections.Generic;
 
@@ -20,8 +20,10 @@ namespace Mix.Cms.Lib.Repositories
         {
         }
 
-        public static CommonRepository Instance {
-            get {
+        public static CommonRepository Instance
+        {
+            get
+            {
                 if (instance == null)
                 {
                     lock (syncRoot)

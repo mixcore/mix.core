@@ -2,7 +2,6 @@
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -112,7 +111,7 @@ namespace Mix.Cms.Lib.Helpers
                     Data = plaintext
                 };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MixCmsHelper.LogException(ex);
                 result.IsSucceed = false;

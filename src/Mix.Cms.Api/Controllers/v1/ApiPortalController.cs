@@ -4,30 +4,26 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib;
+using Mix.Cms.Lib.Helpers;
+using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
+using Mix.Domain.Core.ViewModels;
+using Mix.Identity.Models;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Mix.Identity.Models;
-using Mix.Domain.Core.ViewModels;
-using Mix.Cms.Lib;
-using static Mix.Cms.Lib.MixEnums;
-using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.ViewModels.Account;
-using Mix.Cms.Lib.ViewModels.MixInit;
 using System.Xml.Linq;
-using System.Text;
-using System.Xml;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Caching.Memory;
-using Mix.Cms.Lib.Helpers;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -59,7 +55,7 @@ namespace Mix.Cms.Api.Controllers.v1
             _appLifetime = appLifetime;
             _env = env;
         }
-        
+
         #region Get
 
         // GET api/category/id
@@ -102,7 +98,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             return getAllSettings();
         }
-        
+
         [AllowAnonymous]
         [HttpGet, HttpOptions]
         [Route("jarray-data/{name}")]
@@ -110,13 +106,14 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             var cultures = FileRepository.Instance.GetFile(name, "data", true, "[]");
             var obj = JObject.Parse(cultures.Content);
-            return new RepositoryResponse<JArray>() {
+            return new RepositoryResponse<JArray>()
+            {
                 IsSucceed = true,
                 Data = obj["data"] as JArray
             };
         }
 
-        
+
         // GET api/category/id
         [HttpGet, HttpOptions]
         [Route("{culture}/translator")]
@@ -185,13 +182,15 @@ namespace Mix.Cms.Api.Controllers.v1
         public RepositoryResponse<JObject> checkConfig(DateTime lastSync)
         {
             var lastUpdate = MixService.GetConfig<DateTime>("LastUpdateConfiguration");
-            if(lastSync.ToUniversalTime() < lastUpdate){
+            if (lastSync.ToUniversalTime() < lastUpdate)
+            {
                 return getAllSettings();
             }
-            else{
+            else
+            {
                 return new RepositoryResponse<JObject>()
                 {
-                    IsSucceed = true,                
+                    IsSucceed = true,
                 };
             }
         }
@@ -209,19 +208,20 @@ namespace Mix.Cms.Api.Controllers.v1
                 List<int> handledPageId = new List<int>();
                 foreach (var page in pages.Data)
                 {
-                        page.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                        new { culture = page.Specificulture, seoName = page.SeoName}, Request, Url);
+                    page.DetailsUrl = MixCmsHelper.GetRouterUrl(
+                                    new { culture = page.Specificulture, seoName = page.SeoName }, Request, Url);
                     var otherLanguages = pages.Data.Where(p => p.Id == page.Id && p.Specificulture != page.Specificulture);
                     var lstOther = new List<SitemapLanguage>();
                     foreach (var item in otherLanguages)
                     {
-                        lstOther.Add(new SitemapLanguage() {
+                        lstOther.Add(new SitemapLanguage()
+                        {
                             HrefLang = item.Specificulture,
-                            Href= MixCmsHelper.GetRouterUrl(
+                            Href = MixCmsHelper.GetRouterUrl(
                                        new { culture = item.Specificulture, seoName = page.SeoName }, Request, Url)
-                        } );
+                        });
                     }
-                    
+
                     var sitemap = new SiteMap()
                     {
                         ChangeFreq = "monthly",
@@ -327,9 +327,9 @@ namespace Mix.Cms.Api.Controllers.v1
                         return new RepositoryResponse<string>()
                         {
                             IsSucceed = getPage.IsSucceed,
-                            Data = MixCmsHelper.GetRouterUrl(new { culture = _lang, action = "post", seoName =getPage.Data.SeoName }, Request, Url)
+                            Data = MixCmsHelper.GetRouterUrl(new { culture = _lang, action = "post", seoName = getPage.Data.SeoName }, Request, Url)
                         };
-                    
+
                     }
                     else
                     {
@@ -385,8 +385,9 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             string data = model.GetValue("data").Value<string>();
             var encrypted = new JObject(new JProperty("encrypted", data));
-            return new RepositoryResponse<CryptoViewModel<string>>() {
-                
+            return new RepositoryResponse<CryptoViewModel<string>>()
+            {
+
                 Data = AesEncryptionHelper.EncryptStringToBytes_Aes(encrypted)
             };
         }
@@ -421,7 +422,7 @@ namespace Mix.Cms.Api.Controllers.v1
             }
             return new RepositoryResponse<JObject>() { IsSucceed = model != null, Data = model };
         }
-        
+
         // POST api/category
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
@@ -440,7 +441,7 @@ namespace Mix.Cms.Api.Controllers.v1
             var result = MixService.SaveSettings();
             return new RepositoryResponse<string>() { IsSucceed = result };
         }
-        
+
         // POST api/category
         [HttpGet, HttpOptions]
         [Route("app-settings/save-default")]
@@ -505,11 +506,12 @@ namespace Mix.Cms.Api.Controllers.v1
 
         }
 
-       
+
         #endregion Post
 
         #region Helpers
-        private RepositoryResponse<JObject> getAllSettings(){
+        private RepositoryResponse<JObject> getAllSettings()
+        {
             var cultures = CommonRepository.Instance.LoadCultures();
             var culture = cultures.FirstOrDefault(c => c.Specificulture == _lang);
 
@@ -545,7 +547,7 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 new JProperty("lang",_lang),
                 new JProperty("langIcon",configurations.LangIcon),
-                
+
                 new JProperty("data", MixService.GetLocalSettings(_lang))
             };
             JObject result = new JObject()

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Mix.Cms.Lib
 {
@@ -46,13 +44,13 @@ namespace Mix.Cms.Lib
             public const string Domain = "Domain";
             public const string PortalThemeSettings = "PortalThemeSettings";
             public const string ThemeId = "ThemeId";
-            public const string ThemeName= "ThemeName";
-            public const string ThemeFolder= "ThemeFolder";
+            public const string ThemeName = "ThemeName";
+            public const string ThemeFolder = "ThemeFolder";
             public const string ApiEncryptKey = "ApiEncryptKey";
             public const string ApiEncryptIV = "ApiEncryptIV";
             public const string IsEncryptApi = "IsEncryptApi";
             public const string TemplateExtension = "TemplateExtension";
-            public const string DefaultTheme= "DefaultTheme";
+            public const string DefaultTheme = "DefaultTheme";
             public const string DefaultTemplate = "DefaultTemplate";
             public const string DefaultTemplateContent = "DefaultTemplateContent";
             public const string DefaultContentStatus = "DefaultContentStatus";

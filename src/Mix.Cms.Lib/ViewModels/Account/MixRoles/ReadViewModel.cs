@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
 
 
 namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
@@ -87,7 +86,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
 
                 foreach (var child in item.ChildPages)
                 {
-                    child.Page.NavPermission =  MixPortalPageRoles.ReadViewModel.Repository.GetSingleModel(n => n.PageId == child.Page.Id && n.RoleId == Id).Data;
+                    child.Page.NavPermission = MixPortalPageRoles.ReadViewModel.Repository.GetSingleModel(n => n.PageId == child.Page.Id && n.RoleId == Id).Data;
                 }
             }
         }
@@ -104,7 +103,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
                 var query = context.MixPortalPage
                 .Include(cp => cp.MixPortalPageRole)
                 .Select(Category =>
-                new  MixPortalPageRoles.ReadViewModel(
+                new MixPortalPageRoles.ReadViewModel(
                       new MixPortalPageRole()
                       {
                           RoleId = Id,
@@ -112,7 +111,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
                       }, context, transaction));
 
                 var result = query.ToList();
-                
+
                 result.ForEach(nav =>
                 {
                     nav.IsActived = context.MixPortalPageRole.Any(
