@@ -55,7 +55,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getCategory = MixPortalPages.ReadRolePermissionViewModel.Repository.GetSingleModel(p => p.Id == Id
-               
+
             );
             if (getCategory.IsSucceed)
             {

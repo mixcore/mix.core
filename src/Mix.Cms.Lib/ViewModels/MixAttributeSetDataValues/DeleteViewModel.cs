@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
-using Newtonsoft.Json;
 using System;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues

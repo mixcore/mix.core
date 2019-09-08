@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
@@ -8,7 +7,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
@@ -172,18 +170,21 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 foreach (var item in ModuleNavs)
                 {
                     if (!MixModules.ImportViewModel.Repository.CheckIsExists(m => m.Name == item.Module.Name && m.Specificulture == parent.Specificulture,
-                            _context,_transaction))
+                            _context, _transaction))
                     {
                         //  Force to create new module
                         item.Module.Id = 0;
                         item.Module.Specificulture = parent.Specificulture;
-                        if(!string.IsNullOrEmpty(item.Image)){
+                        if (!string.IsNullOrEmpty(item.Image))
+                        {
                             item.Image = item.Image.Replace("content/templates/default", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", parent.Specificulture)}");
                         }
-                        if(!string.IsNullOrEmpty(item.Module.Image)){
+                        if (!string.IsNullOrEmpty(item.Module.Image))
+                        {
                             item.Module.Image = item.Module.Image.Replace("content/templates/default", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", parent.Specificulture)}");
                         }
-                        if(!string.IsNullOrEmpty(item.Module.Thumbnail)){
+                        if (!string.IsNullOrEmpty(item.Module.Thumbnail))
+                        {
                             item.Module.Thumbnail = item.Module.Thumbnail.Replace("content/templates/default", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", parent.Specificulture)}");
                         }
                         var saveModule = await item.Module.SaveModelAsync(true, _context, _transaction);
@@ -268,7 +269,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public List<MixPagePages.ReadViewModel> GetParentNavs(MixCmsContext context, IDbContextTransaction transaction)
         {
-            return MixPagePages.ReadViewModel.Repository.GetModelListBy(p => p.Specificulture == Specificulture && p.Id == Id).Data;            
+            return MixPagePages.ReadViewModel.Repository.GetModelListBy(p => p.Specificulture == Specificulture && p.Id == Id).Data;
         }
 
         public List<MixPagePages.ReadViewModel> GetChildNavs(MixCmsContext context, IDbContextTransaction transaction)

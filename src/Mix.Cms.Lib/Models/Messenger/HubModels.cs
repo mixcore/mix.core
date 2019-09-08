@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Mix.Cms.Messenger.Models
 {
@@ -23,7 +20,7 @@ namespace Mix.Cms.Messenger.Models
     {
         //From Connection
         [JsonProperty("connection")]
-        public MessengerConnection Connection{ get; set; }
+        public MessengerConnection Connection { get; set; }
         [JsonProperty("content")]
         public string Content { get; set; }
         [JsonProperty("createdDate")]

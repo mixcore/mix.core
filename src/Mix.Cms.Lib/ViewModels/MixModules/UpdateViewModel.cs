@@ -1,10 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels.MixSystem;
 using Mix.Common.Helper;
-using Mix.Domain.Core.Models;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -13,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
@@ -38,7 +34,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("image")]
         public string Image { get; set; }
-        
+
         [JsonProperty("thumbnail")]
         public string Thumbnail { get; set; }
 
@@ -297,7 +293,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 Newtonsoft.Json.JsonConvert.SerializeObject(Columns.OrderBy(c => c.Priority).Where(
                     c => !string.IsNullOrEmpty(c.Name)))) : new JArray();
             Fields = arrField.ToString(Newtonsoft.Json.Formatting.None);
-            if (!string.IsNullOrEmpty(Image) && Image[0] == '/') { Image = Image.Substring(1); }            
+            if (!string.IsNullOrEmpty(Image) && Image[0] == '/') { Image = Image.Substring(1); }
             return base.ParseModel(_context, _transaction);
         }
 
@@ -351,7 +347,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                     this.EdmView?.FileFolder
                     , this.EdmView?.FileName
                });
-            if (SetAttributeId.HasValue) {
+            if (SetAttributeId.HasValue)
+            {
                 AttributeSet = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(s => s.Id == SetAttributeId.Value).Data;
             }
             else
@@ -388,7 +385,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 Exception = saveView.Exception,
                 Errors = saveView.Errors
             };
-            
+
         }
 
         #endregion Async
@@ -398,8 +395,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #endregion Overrides
 
         #region Expand
-        
-        public void LoadData(int? postId = null, int? productId= null, int? pageId = null
+
+        public void LoadData(int? postId = null, int? productId = null, int? pageId = null
             , int? pageSize = null, int? pageIndex = 0
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

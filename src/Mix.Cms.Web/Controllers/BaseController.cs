@@ -1,16 +1,15 @@
-﻿using System.Globalization;
-using System.Linq;
-using AutoMapper.Configuration;
+﻿using AutoMapper.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
 using Newtonsoft.Json.Linq;
+using System.Globalization;
+using System.Linq;
 
 namespace Mix.Cms.Web.Controllers
 {
@@ -64,8 +63,8 @@ namespace Mix.Cms.Web.Controllers
 
         protected string _culture
         {
-            get => RouteData?.Values["culture"]?.ToString().ToLower() ==null
-                    || RouteData?.Values["culture"]?.ToString().ToLower() == "init" 
+            get => RouteData?.Values["culture"]?.ToString().ToLower() == null
+                    || RouteData?.Values["culture"]?.ToString().ToLower() == "init"
                 ? MixService.GetConfig<string>("DefaultCulture")
                 : RouteData?.Values["culture"].ToString();
         }

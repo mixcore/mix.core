@@ -2,13 +2,11 @@
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixPages
@@ -177,10 +175,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getChilds = MixPagePages.ReadViewModel.Repository.GetModelListBy(
-                p => p.ParentId == Id && p.Specificulture == Specificulture,  _context, _transaction);
+                p => p.ParentId == Id && p.Specificulture == Specificulture, _context, _transaction);
             if (getChilds.IsSucceed)
             {
-                Childs = getChilds.Data.OrderBy(p=>p.Priority).ToList();
+                Childs = getChilds.Data.OrderBy(p => p.Priority).ToList();
             }
             var countPost = MixPagePosts.ReadViewModel.Repository.Count(c => c.PageId == Id && c.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction);
@@ -194,6 +192,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         #endregion Overrides
 
-        
+
     }
 }

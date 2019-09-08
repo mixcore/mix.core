@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 {
@@ -33,7 +31,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
         #endregion Models
         #region Views
-        public MixAttributeFields.UpdateViewModel Field { get; set; }
         #endregion
         #endregion Properties
 
@@ -49,10 +46,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
         #endregion Contructors
         #region Override
-        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            Field = MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId).Data;
-        }
+
         #endregion
     }
 }

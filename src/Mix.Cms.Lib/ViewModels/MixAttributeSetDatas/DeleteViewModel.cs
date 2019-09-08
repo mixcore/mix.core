@@ -3,7 +3,6 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
-using System;
 using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
@@ -70,7 +69,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     var removeChilds = await MixAttributeSetDatas.DeleteViewModel.Repository.RemoveListModelAsync(false, f => (f.Id == item.Id || f.Id == item.ParentId) && f.Specificulture == Specificulture, _context, _transaction);
                     ViewModelHelper.HandleResult(removeChilds, ref result);
                 }
-            }                
+            }
             return result;
         }
         #endregion

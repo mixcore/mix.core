@@ -100,7 +100,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
 
         #endregion
         #region Expands
-        
+
         public static async System.Threading.Tasks.Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfosAsync(List<ReadViewModel> cates)
         {
             MixCmsContext context = new MixCmsContext();

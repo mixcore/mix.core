@@ -59,12 +59,13 @@ public class ImageResizer
             thumbnailBitmap.Dispose();
             image.Dispose();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             string err = ex.Message;
         }
-        finally {
-            
+        finally
+        {
+
         }
     }
     public static bool ResizeImage(int imageSize, string base64, string outputPath)
