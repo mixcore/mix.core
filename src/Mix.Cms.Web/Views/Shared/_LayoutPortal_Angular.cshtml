@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="~/css/app-vendor.min.css" />
     <link rel="stylesheet" href="~/css/shared.min.css" />
     <link rel="stylesheet" href="~/css/portal.min.css" />
+
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,600,700&display=swap&subset=latin-ext,vietnamese" rel="stylesheet">
       
     <!-- <link rel="stylesheet" href="~/css/portal/mixcore.css" /> -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
@@ -33,6 +35,9 @@
             --primary-color-brightness : {{globalSettings.portalThemeSettings.primaryColorBrightness}}%;
             --bg-color: {{globalSettings.portalThemeSettings.bgColor}};
             --text-color: {{globalSettings.portalThemeSettings.textColor}}; 
+        }
+        body{
+            /*font-family: 'Segoe UI', 'Quicksand', sans-serif;*/
         }
         .modal{
             background-color: hsla(var(--primary-color-hue,211),100%,35%,0.1);

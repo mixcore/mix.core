@@ -27,7 +27,7 @@
                         <span class="oi oi-sort-ascending"></span>
                     </th>
                     <!--<th scope="col" style="width: 4%;">
-                            <span class="fas fa-sort-numeric-down"></span>
+                            <span class="fa fa-grip-vertical text-black-50-numeric-down"></span>
                         </th>-->
                     <th scope="col" style="width: 5%;">
                         Priority
@@ -49,7 +49,7 @@
             <tbody class="sortable" ng-init="getList()">
                 <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="media" sort-model-id="{{item.id}}">
                     <td style="cursor:move;" class="drag-header">
-                        <span class="fas fa-sort"></span>
+                        <span class="fa fa-grip-vertical text-black-50"></span>
                     </td>
                     <td>
                         {{item.priority}}

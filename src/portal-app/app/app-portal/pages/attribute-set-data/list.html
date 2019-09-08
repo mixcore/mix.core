@@ -16,10 +16,10 @@
         <!-- <thead class="thead-light">
             <tr>
                 <th scope="col" style="width: 3%;">
-                    <span class="fas fa-sort"></span>
+                    <span class="fa fa-grip-vertical text-black-50"></span>
                 </th>
                 <th scope="col" style="width: 4%;">
-                    <span class="fas fa-sort-numeric-down"></span>
+                    <span class="fa fa-grip-vertical text-black-50-numeric-down"></span>
                 </th>
                 <th scope="col" style="width: 25%;">
                     Title
@@ -45,7 +45,7 @@
             <tr ng-repeat="item in data" dnd-draggable="item" dnd-effect-allowed="move" dnd-selected="selected = item"
                 dnd-moved="updateInfos($index)" ng-class="{'selected': selected === item}">
                 <td style="cursor:move;" class="drag-header">
-                    <span class="fas fa-sort"></span>
+                    <span class="fa fa-grip-vertical text-black-50"></span>
                 </td>
                 <td>
                     <input type="text" value="{{item.priority}}" class="item-priority form-control form-control-sm d-inline"
