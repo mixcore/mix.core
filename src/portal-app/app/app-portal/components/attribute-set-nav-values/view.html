@@ -15,7 +15,7 @@
                 dnd-dragstart="$ctrl.dragStart($index)"
                 ng-class="{'selected': $ctrl.selectedItem === item}" class="mb-3 row">
                 <div class="col-md-1">
-                    <span class="fas fa-sort"></span>{{item.priority}}
+                    <span class="fa fa-grip-vertical text-black-50"></span>{{item.priority}}
                 </div>
                 <div ng-if="$index < 3" ng-repeat="val in item.data.values | orderBy: 'priority' track by $index"
                     class="col-md-3">
