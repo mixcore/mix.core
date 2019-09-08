@@ -222,6 +222,7 @@ FakesAssemblies/
 *.opt
 
 azure-pipelines.yml
+appsettings.json
 
 # Visual Studio LightSwitch build output
 **/*.HTMLClient/GeneratedArtifacts
