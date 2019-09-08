@@ -55,8 +55,13 @@ app.factory('BaseODataService', ['$rootScope', '$routeParams', 'CommonService',
             return await commonService.getApiResult(req);
         };
 
-        var _delete = async function (id) {
-            var url = this.prefixUrl + '/portal' + '/' + id;
+        var _delete = async function (params = []) {
+            var url = this.prefixUrl + '/portal';
+            for (let i = 0; i < params.length; i++) {
+                if (params[i] != null) {
+                    url += '/' + params[i];
+                }
+            }
             var req = {
                 method: 'DELETE',
                 url: url
@@ -76,6 +81,15 @@ app.factory('BaseODataService', ['$rootScope', '$routeParams', 'CommonService',
        
         var _saveFields = async function (viewType, id, objData) {
             var url = this.prefixUrl + '/' + viewType + '/' + id;
+            var req = {
+                method: 'POST',
+                url: url,
+                data: JSON.stringify(objData)
+            };
+            return await commonService.getApiResult(req);
+        };
+        var _saveProperties = async function (viewType, objData) {
+            var url = this.prefixUrl + '/' + viewType + '/save-properties';
             var req = {
                 method: 'POST',
                 url: url,
@@ -132,6 +146,7 @@ app.factory('BaseODataService', ['$rootScope', '$routeParams', 'CommonService',
         serviceFactory.getList = _getList;
         serviceFactory.save = _save;
         serviceFactory.saveFields = _saveFields;
+        serviceFactory.saveProperties = _saveProperties;
         serviceFactory.saveList = _saveList;
         serviceFactory.delete = _delete;
         serviceFactory.ajaxSubmitForm = _ajaxSubmitForm;

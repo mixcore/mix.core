@@ -23,7 +23,5 @@ namespace Mix.Cms.Lib.Models.Cms
         public string EncryptValue { get; set; }
         public string EncryptKey { get; set; }
         public int EncryptType { get; set; }
-
-        public virtual MixAttributeSetData Data { get; set; }
     }
 }

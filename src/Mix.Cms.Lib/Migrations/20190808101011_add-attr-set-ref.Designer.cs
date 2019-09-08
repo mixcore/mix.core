@@ -51,7 +51,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("Priority");
 
-                    b.Property<int?>("ReferrenceId");
+                    b.Property<int?>("ReferenceId");
 
                     b.Property<string>("Regex")
                         .HasMaxLength(250);
@@ -65,7 +65,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasIndex("AttributeSetId");
 
-                    b.HasIndex("ReferrenceId");
+                    b.HasIndex("ReferenceId");
 
                     b.ToTable("mix_attribute_field");
                 });
@@ -1731,7 +1731,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "Referrence")
                         .WithMany("MixAttributeFieldReferrence")
-                        .HasForeignKey("ReferrenceId")
+                        .HasForeignKey("ReferenceId")
                         .HasConstraintName("FK_mix_attribute_field_mix_attribute_set1");
                 });
 
