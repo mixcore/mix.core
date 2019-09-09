@@ -35,13 +35,12 @@
                             <label class="control-label">Default Value</label>
                             <input ng-model="col.defaultValue" placeholder="Default Value" class="form-control form-control-sm">
                         </div>
-                        <div ng-if="col.dataType == 23">
-                            <a ng-click="$ctrl.showReferences(col)" class="btn-link text-primary"><span class="fas fa-plus"></span> References</a> <br>
+                        <div ng-if="col.dataType == 23">References
+                            [ <a ng-click="$ctrl.showReferences(col)" class="btn-link text-primary">Select</a> ] <br>
                             <a ng-if="col.referenceId" href="/portal/attribute-set/details/{{col.referenceId}}" class="btn btn-link">
                                 <span class="fas fa-pencil-alt text-primary"></span> {{col.reference.title}}
                             </a>
                         </div>
-
                     </div>
                     <div class="col-md-1">
                         <a href="" class="btn btn-lnk text-primary" ng-click="col.showAdvanced = !col.showAdvanced">
@@ -115,9 +114,10 @@
                     </div>
 
                 </div>
-            </div>
 
             <hr>
+            </div>
+
         </div>
     </div>
 </div>
