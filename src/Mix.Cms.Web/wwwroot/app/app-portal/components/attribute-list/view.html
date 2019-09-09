@@ -1,116 +1,123 @@
-<div class="card-header">
-    <h6>
-        <span ng-bind="$ctrl.title"></span>
-        <a ng-click="$ctrl.addAttr()" class="btn btn-primary btn-sm float-right text-white"><span class="fas fa-plus text-primary"></span> Add New</a>
-        <!-- <a ng-click="$ctrl.generateForm()" class="btn btn-primary btn-sm float-right text-white mr-2">Generate Form</a> -->
-    </h6>
-    <p class="text-muted">Add a title and description to see how this product might
-        appear in a search engine listing.</p>
-</div>
-<div dnd-list="$ctrl.attributes" dnd-inserted="$ctrl.updateOrders(index)">
-    <div ng-repeat="col in $ctrl.attributes track by $index" dnd-draggable="col" dnd-type="'col'" dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedCol = col" dnd-dragstart="$ctrl.dragStart($index)" ng-class="{'selected': $ctrl.selectedCol === col}" class="mb-3">
-        <div class="row">
-            <div class="col-md-1">
-                <span class="fa fa-grip-vertical text-black-50"></span>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Title</label>
-                    <input ng-model="col.title" placeholder="Title" ng-change="$ctrl.generateName(col)" class="form-control form-control-sm">
-                    <small class="form-text text-muted">Name: <span ng-bind="col.name"></span></small>
+<div class="card">
+    <div class="card-header">
+        <h6>Atrribute
+
+            <span ng-bind="$ctrl.title"></span>
+            <a ng-click="$ctrl.addAttr()" class="btn btn-primary btn-sm float-right text-white"><span class="fas fa-plus text-white"></span> Create Attribute</a>
+        </h6>
+    </div>
+    <div class="card-body">
+        <div dnd-list="$ctrl.attributes" dnd-inserted="$ctrl.updateOrders(index)">
+            <div ng-repeat="col in $ctrl.attributes track by $index" dnd-draggable="col" dnd-type="'col'" dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedCol = col" dnd-dragstart="$ctrl.dragStart($index)" ng-class="{'selected': $ctrl.selectedCol === col}" class="mb-3">
+                <div class="row">
+                    <div class="col-md-1">
+                        <span class="fa fa-grip-vertical text-black-50"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Attribute title:</label>
+                            <input ng-model="col.title" placeholder="Title" ng-change="$ctrl.generateName(col)" class="form-control form-control-sm">
+                            <small class="form-text text-muted">Name: <span ng-bind="col.name"></span></small>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label">Type</label>
+                            <select class="form-control form-control-sm" ng-model="col.dataType" ng-change="$ctrl.changeDataType(col.dataType);">
+                                <option ng-repeat="item in $ctrl.settings.dataTypes track by $index" ng-value="$index">
+                                    {{item}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group" ng-if="col.dataType != 23">
+                            <label class="control-label">Default Value</label>
+                            <input ng-model="col.defaultValue" placeholder="Default Value" class="form-control form-control-sm">
+                        </div>
+                        <div ng-if="col.dataType == 23">
+                            <a ng-click="$ctrl.showReferences(col)" class="btn-link text-primary"><span class="fas fa-plus"></span> References</a> <br>
+                            <a ng-if="col.referenceId" href="/portal/attribute-set/details/{{col.referenceId}}" class="btn btn-link">
+                                <span class="fas fa-pencil-alt text-primary"></span> {{col.reference.title}}
+                            </a>
+                        </div>
+
+                    </div>
+                    <div class="col-md-1">
+                        <a href="" class="btn btn-lnk text-primary" ng-click="col.showAdvanced = !col.showAdvanced">
+                            <span class="far fa-check-square"></span> Advanced
+                        </a>
+                    </div>
+                    <div class="col-md-1">
+                        <a class="btn" ng-click="$ctrl.removeAttribute(col, $index)">
+                            <span class="fas fa-times text-danger"></span>
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Type</label>
-                    <select class="form-control form-control-sm" ng-model="col.dataType" ng-change="$ctrl.changeDataType(col.dataType);">
-                        <option ng-repeat="item in $ctrl.settings.dataTypes track by $index" ng-value="$index">{{item}}
-                        </option>
-                    </select>
+                <div class="row" ng-show="col.showAdvanced">
+                    <div class="col-md-1"></div>
+                    <div class="form-group col-md-2">
+                        <span class="switch switch-sm">
+                            <input type="checkbox" ng-model="col.isEncrypt">
+                            <label class="switch mb-0">
+                                <span>Encrypt</span>
+                            </label>
+                        </span>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <span class="switch switch-sm">
+                            <input type="checkbox" ng-model="col.isUnique">
+                            <label class="switch mb-0">
+                                <span>Unique</span>
+                            </label>
+                        </span>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <span class="switch switch-sm">
+                            <input type="checkbox" ng-model="col.isRequired">
+                            <label class="switch mb-0">
+                                <span>Required</span>
+                            </label>
+                        </span>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <span class="switch switch-sm">
+                            <input type="checkbox" ng-model="col.isSelect">
+                            <label class="switch mb-0">
+                                <span>Select</span>
+                            </label>
+                        </span>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group" ng-if="col.dataType != 23">
-                    <label class="control-label">Default Value</label>
-                    <input ng-model="col.defaultValue" placeholder="Default Value" class="form-control form-control-sm">
-                </div>
-                <div ng-if="col.dataType == 23">
-                    <a ng-click="$ctrl.showReferences(col)" class="btn-link text-primary">References</a>    <br>                
-                    <a ng-if="col.referenceId" href="/portal/attribute-set/details/{{col.referenceId}}" class="btn btn-link">
-                        <span class="fas fa-pencil-alt text-primary"></span> {{col.reference.title}}
-                    </a>       
-                </div>
-                
-            </div>
-            <div class="col-md-2">
-                <a href="" class="btn-lnk" ng-click="col.showAdvanced = !col.showAdvanced">
-                    Advanced
-                </a>
-            </div>
-            <div class="col-md-1">
-                <a class="btn" ng-click="$ctrl.removeAttribute(col, $index)">
-                    <span class="fas fa-times text-danger"></span>
-                </a>
-            </div>
-        </div>
-        <div class="row" ng-show="col.showAdvanced">
-            <div class="col-md-1"></div>
-            <div class="form-group col-md-2">
-                <span class="switch switch-sm">
-                    <input type="checkbox" ng-model="col.isEncrypt">
-                    <label class="switch mb-0">
-                        <span>Encrypt</span>
-                    </label>
-                </span>
-            </div>
-            <div class="form-group col-md-2">
-                <span class="switch switch-sm">
-                    <input type="checkbox" ng-model="col.isUnique">
-                    <label class="switch mb-0">
-                        <span>Unique</span>
-                    </label>
-                </span>
-            </div>
-            <div class="form-group col-md-2">
-                <span class="switch switch-sm">
-                    <input type="checkbox" ng-model="col.isRequired">
-                    <label class="switch mb-0">
-                        <span>Required</span>
-                    </label>
-                </span>
-            </div>
-            <div class="form-group col-md-2">
-                <span class="switch switch-sm">
-                    <input type="checkbox" ng-model="col.isSelect">
-                    <label class="switch mb-0">
-                        <span>Select</span>
-                    </label>
-                </span>
-            </div>
-        </div>
-        <div ng-show="col.isSelect">
-            <div class="row">
-                <label class="col-sm-3 col-form-label">Title</label>
-                <div class="col-sm-7">
-                    <input type="text" class="form-control form-control-sm" id="option_{{$index}}" ng-enter="$ctrl.addOption(col,$index)" placeholder="fill then enter to add options">
-                </div>
-            </div>
-            <div class="row" ng-repeat="opt in col.options track by $index">
-                <div class="col-md-10 row">
-                    <input type="text" class="col-7 form-control form-control-sm" ng-model="col.options[$index].value">
-                    <select class="col-5 form-control form-control-sm" ng-model="col.options[$index].dataType">
-                        <option ng-repeat="item in $ctrl.settings.dataTypes track by $index" ng-value="$index">{{item}}
-                        </option>
-                    </select>
+                <div ng-show="col.isSelect">
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <label class="col-sm-2 col-form-label">List items</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control form-control-sm" id="option_{{$index}}" ng-enter="$ctrl.addOption(col,$index)" placeholder="fill then enter to add options">
+                        </div>
+                    </div>
+                    <div class="row" ng-repeat="opt in col.options track by $index">
+                        <div class="col-md-10 row">
+                            <input type="text" class="col-7 form-control form-control-sm" ng-model="col.options[$index].value">
+                            <select class="col-5 form-control form-control-sm" ng-model="col.options[$index].dataType">
+                                <option ng-repeat="item in $ctrl.settings.dataTypes track by $index" ng-value="$index">
+                                    {{item}}
+                                </option>
+                            </select>
+
+                        </div>
+                        <div class="col-md-2">
+                            <a class="btn" ng-click="col.options.splice($index,1)">
+                                <span class="fas fa-times text-danger"></span>
+                            </a>
+                        </div>
+                    </div>
 
                 </div>
-                <div class="col-md-2">
-                    <a class="btn" ng-click="col.options.splice($index,1)">
-                        <span class="fas fa-times text-danger"></span>
-                    </a>
-                </div>
             </div>
 
+            <hr>
         </div>
     </div>
 </div>
