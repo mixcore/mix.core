@@ -114,6 +114,74 @@
                     </div>
 
                 </div>
+                <div ng-if="col.dataType == 23">
+                    <a ng-click="$ctrl.showReferences(col)" class="btn-link text-primary">References</a>    <br>                
+                    <a ng-if="col.referenceId" href="/portal/attribute-set/details/{{col.referenceId}}" class="btn btn-link">
+                        <span class="fas fa-pencil-alt text-primary"></span> {{col.reference.title}}
+                    </a>       
+                </div>
+                
+            </div>
+            <div class="col-md-2">
+                <a href="" class="btn-lnk" ng-click="col.showAdvanced = !col.showAdvanced">
+                    Advanced
+                </a>
+            </div>
+            <div class="col-md-1">
+                <a class="btn" ng-click="$ctrl.removeAttribute(col, $index)">
+                    <span class="fas fa-times text-danger"></span>
+                </a>
+            </div>
+        </div>
+        <div class="row" ng-show="col.showAdvanced">
+            <div class="col-md-1"></div>
+            <div class="form-group col-md-2">
+                <span class="switch switch-sm">
+                    <input type="checkbox" ng-model="col.isEncrypt">
+                    <label class="switch mb-0">
+                        <span>Encrypt</span>
+                    </label>
+                </span>
+            </div>
+            <div class="form-group col-md-2">
+                <span class="switch switch-sm">
+                    <input type="checkbox" ng-model="col.isUnique">
+                    <label class="switch mb-0">
+                        <span>Unique</span>
+                    </label>
+                </span>
+            </div>
+            <div class="form-group col-md-2">
+                <span class="switch switch-sm">
+                    <input type="checkbox" ng-model="col.isRequire">
+                    <label class="switch mb-0">
+                        <span>Required</span>
+                    </label>
+                </span>
+            </div>
+            <div class="form-group col-md-2">
+                <span class="switch switch-sm">
+                    <input type="checkbox" ng-model="col.isSelect">
+                    <label class="switch mb-0">
+                        <span>Select</span>
+                    </label>
+                </span>
+            </div>
+        </div>
+        <div ng-show="col.isSelect">
+            <div class="row">
+                <label class="col-sm-3 col-form-label">Title</label>
+                <div class="col-sm-7">
+                    <input type="text" class="form-control form-control-sm" id="option_{{$index}}" ng-enter="$ctrl.addOption(col,$index)" placeholder="fill then enter to add options">
+                </div>
+            </div>
+            <div class="row" ng-repeat="opt in col.options track by $index">
+                <div class="col-md-10 row">
+                    <input type="text" class="col-7 form-control form-control-sm" ng-model="col.options[$index].value">
+                    <select class="col-5 form-control form-control-sm" ng-model="col.options[$index].dataType">
+                        <option ng-repeat="item in $ctrl.settings.dataTypes track by $index" ng-value="$index">{{item}}
+                        </option>
+                    </select>
 
             <hr>
             </div>
@@ -122,4 +190,4 @@
     </div>
 </div>
 
-<modal-navs model-name="'attribute-set'" is-global="'true'" view-type="'read'" selects="'id,title,createdDateTime'" is-single="'true'" save="$ctrl.referenceCallback(selected)"></modal-navs>
+<modal-navs model-name="'attribute-set'" is-global="'true'" view-type="'read'" selects="'id,title,createdDateTime'" is-single="'true'" save="$ctrl.referenceCallback(selected)"></modal-navs></div>

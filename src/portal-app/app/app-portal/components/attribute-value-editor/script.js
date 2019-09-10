@@ -72,8 +72,8 @@ modules.component('attributeValueEditor', {
                 case 2:
                 case 3:
                     if (ctrl.attributeValue.dateObj) {
-                        ctrl.attributeValue.datetimeValue = ctrl.attributeValue.dateObj.toISOString();
-                        ctrl.attributeValue.stringValue = ctrl.attributeValue.datetimeValue;
+                        ctrl.attributeValue.dateTimeValue = ctrl.attributeValue.dateObj.toISOString();
+                        ctrl.attributeValue.stringValue = ctrl.attributeValue.dateTimeValue;
                     }
                     break;
                 case 6:
