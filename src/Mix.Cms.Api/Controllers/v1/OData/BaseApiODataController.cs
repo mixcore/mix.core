@@ -23,7 +23,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
-
+using Mix.Cms.Lib.Extensions;
 namespace Mix.Cms.Api.Controllers.v1.OData
 {
     public class BaseApiODataController<TDbContext, TModel> : ODataController
@@ -276,7 +276,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                 Type type = typeof(TModel);
                 foreach (var item in obj.Properties())
                 {
-                    var propName = System.Globalization.CultureInfo.InvariantCulture.TextInfo.ToTitleCase(item.Name);
+                    var propName = item.Name.ToTitleCase();
                     PropertyInfo propertyInfo = type.GetProperty(propName);
                     if (propertyInfo != null)
                     {
