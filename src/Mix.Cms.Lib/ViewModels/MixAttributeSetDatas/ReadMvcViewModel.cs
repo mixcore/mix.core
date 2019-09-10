@@ -45,12 +45,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             ObjValue = new JObject();
             var values = MixAttributeSetValues.ReadMvcViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-            foreach (var item in values)
+            foreach (var item in values.OrderBy(v=>v.Priority))
             {
                 ObjValue.Add(ParseValue(item));
-
             }
-
         }
 
         #endregion
@@ -72,7 +70,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     return (new JProperty(item.AttributeName, item.BooleanValue));
                 case MixEnums.MixDataType.Number:
                     return (new JProperty(item.AttributeName, item.IntegerValue));
-                    break;
                 case MixEnums.MixDataType.Reference:
                     JArray arr = new JArray();
                     foreach (var nav in item.DataNavs)
