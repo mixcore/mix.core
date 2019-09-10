@@ -4,7 +4,7 @@ modules.component('attributeValuePreview', {
     controller: ['$rootScope', function ($rootScope) {
         var ctrl = this;
         ctrl.$onInit = function(){
-            if(ctrl.data.field.isEncrypt){
+            if(ctrl.data.field && ctrl.data.field.isEncrypt){
                 var encryptedData = {
                     key: ctrl.data.encryptKey,
                     data: ctrl.data.encryptValue
