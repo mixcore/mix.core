@@ -22,8 +22,8 @@ modules.component('mixValueEditor', {
                     case 1:
                     case 2:
                     case 3:
-                        if (ctrl.datetimeValue) {
-                            ctrl.dateObj = new Date(ctrl.datetimeValue);
+                        if (ctrl.dateTimeValue) {
+                            ctrl.dateObj = new Date(ctrl.dateTimeValue);
                             $scope.$apply();
                         }
                         break;
@@ -66,8 +66,8 @@ modules.component('mixValueEditor', {
                 case 2:
                 case 3:
                     if (ctrl.dateObj) {
-                        ctrl.datetimeValue = ctrl.dateObj.toISOString();
-                        ctrl.stringValue = ctrl.datetimeValue;
+                        ctrl.dateTimeValue = ctrl.dateObj.toISOString();
+                        ctrl.stringValue = ctrl.dateTimeValue;
                     }
                     break;
                 case 6:

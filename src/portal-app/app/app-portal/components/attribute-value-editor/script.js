@@ -35,8 +35,8 @@ modules.component('attributeValueEditor', {
                     case 1:
                     case 2:
                     case 3:
-                        if (ctrl.attributeValue.datetimeValue) {
-                            ctrl.attributeValue.dateObj = new Date(ctrl.attributeValue.datetimeValue);
+                        if (ctrl.attributeValue.dateTimeValue) {
+                            ctrl.attributeValue.dateObj = new Date(ctrl.attributeValue.dateTimeValue);
                             $scope.$apply();
                         }
                         break;

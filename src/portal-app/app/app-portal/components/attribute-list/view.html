@@ -122,25 +122,8 @@
                         </div>
                     </div>
 
-                </div>
-                <div ng-if="col.dataType == 23">
-                    <a ng-click="$ctrl.showReferences(col)" class="btn-link text-primary">References</a>    <br/>                
-                    <a ng-if="col.referenceId" href="/portal/attribute-set/details/{{col.referenceId}}" class="btn btn-link">
-                        <span class="fas fa-pencil-alt text-primary"></span> {{col.reference.title}}
-                    </a>       
-                </div>
-                
-            </div>
-            <div class="col-md-2">
-                <a href="" class="btn-lnk" ng-click="col.showAdvanced = !col.showAdvanced">
-                    Advanced
-                </a>
-            </div>
-            <div class="col-md-1">
-                <a class="btn" ng-click="$ctrl.removeAttribute(col, $index)">
-                    <span class="fas fa-times text-danger"></span>
-                </a>
-            </div>
+                </div>                
+            </div>            
         </div>
         <div class="row" ng-show="col.showAdvanced">
             <div class="col-md-1"></div>
