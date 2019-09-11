@@ -146,7 +146,7 @@ function BaseODataCtrl($scope, $rootScope, $routeParams, ngAppSettings, service)
                     $rootScope.executeFunctionByName('saveSuccessCallback', $scope.saveSuccessCallbackArgs, $scope);
                 }
                 $rootScope.isBusy = false;
-                $scope.$apply();
+                $scope.$apply();                
             } else {
                 if($scope.saveFailCallback){
                     $rootScope.executeFunctionByName('saveFailCallback', $scope.saveSuccessCallbackArgs, $scope)
@@ -157,6 +157,7 @@ function BaseODataCtrl($scope, $rootScope, $routeParams, ngAppSettings, service)
                 $rootScope.isBusy = false;
                 $scope.$apply();
             }
+            return resp;
         }
         else{
             $rootScope.showErrors(['invalid model']);

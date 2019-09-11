@@ -53,7 +53,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                 {
                     AttributeSetId = attributeSetId.Value,
                     Specificulture = _lang,
-                    Priority = UpdateViewModel.Repository.Max(p => p.Priority).Data + 1
+                    //Priority = UpdateViewModel.Repository.Max(p => p.Priority).Data + 1
                 };
             }
 
