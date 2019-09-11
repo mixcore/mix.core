@@ -17,7 +17,7 @@
             <thead class="thead-light">
                 <tr>
                     <th scope="col" style="width: 3%;">
-                        <span class="fas fa-sort"></span>
+                        <span class="fa fa-grip-vertical text-black-50"></span>
                     </th>
                     <th scope="col" style="width: 4%;">
                         <input type="checkbox" ng-model="selectedList.isSelectAll" ng-change="selectAll(selectedList.isSelectAll)">
@@ -42,7 +42,7 @@
             <tbody class="sortable" ng-init="getList()">
                 <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="post" sort-model-id="{{item.id}}">
                     <td style="cursor:move;" class="drag-header">
-                        <span class="fas fa-sort"></span>
+                        <span class="fa fa-grip-vertical text-black-50"></span>
                     </td>
                     <td>
                         <input type="checkbox" ng-model="item.isSelected" ng-change="select(item.id, item.isSelected)">

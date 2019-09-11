@@ -8,7 +8,6 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
@@ -116,7 +115,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 var cloneResult = await CloneLanguagesAsync(parent, _context, _transaction);
                 ViewModelHelper.HandleResult(cloneResult, ref result);
             }
-            
+
             if (result.IsSucceed)
             {
                 var cloneResult = await CloneMediasAsync(parent, _context, _transaction);
@@ -135,7 +134,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 ViewModelHelper.HandleResult(cloneResult, ref result);
             }
 
-            
+
             // Clone Post from Default culture
             if (result.IsSucceed)
             {
@@ -157,7 +156,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
 
             // Clone PagePosition from Default culture
             if (result.IsSucceed)
-            {                
+            {
                 var cloneResult = await ClonePagePositionsAsync(parent, _context, _transaction);
                 ViewModelHelper.HandleResult(cloneResult, ref result);
             }
@@ -187,7 +186,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 var cloneResult = await ClonePostMediasAsync(parent, _context, _transaction);
                 ViewModelHelper.HandleResult(cloneResult, ref result);
             }
-            
+
             // Clone PostMedia from Default culture
             if (result.IsSucceed)
             {
@@ -503,7 +502,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                     await context.SaveChangesAsync();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result.IsSucceed = false;
                 result.Exception = ex;
@@ -530,7 +529,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                     await context.SaveChangesAsync();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result.IsSucceed = false;
                 result.Exception = ex;
@@ -558,7 +557,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                     await context.SaveChangesAsync();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result.IsSucceed = false;
                 result.Exception = ex;
@@ -600,7 +599,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
 
             var medias = await _context.MixMedia.Where(c => c.Specificulture == Specificulture).ToListAsync();
             medias.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
-            
+
             var cates = await _context.MixPage.Where(c => c.Specificulture == Specificulture).ToListAsync();
             cates.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 

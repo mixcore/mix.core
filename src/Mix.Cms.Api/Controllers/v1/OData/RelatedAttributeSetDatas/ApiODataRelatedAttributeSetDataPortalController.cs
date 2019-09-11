@@ -1,21 +1,18 @@
 ﻿// Licensed to the Mix I/O Foundation under one or more agreements.
 // See the LICENSE file in the project root for more information.
 
+using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
-using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib;
-using System.Linq.Expressions;
-using Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.AspNet.OData;
-using System.Collections.Generic;
-using Microsoft.AspNet.OData.Query;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas;
 using Newtonsoft.Json.Linq;
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
 {
@@ -45,7 +42,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
             // Get Details if has id or else get default
             if (id != "default")
             {
-                predicate = m => m.Id == id && m.ParentId == parentId && m.ParentType == parentType && m.Specificulture == _lang; 
+                predicate = m => m.Id == id && m.ParentId == parentId && m.ParentType == parentType && m.Specificulture == _lang;
             }
             else
             {
@@ -58,7 +55,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
                 };
             }
 
-            if(predicate!=null || model != null)
+            if (predicate != null || model != null)
             {
                 var portalResult = await base.GetSingleAsync<UpdateViewModel>(id.ToString(), predicate, model);
                 return Ok(portalResult.Data);
@@ -94,7 +91,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
                 return BadRequest(portalResult);
             }
         }
-        
+
         // Save api/odata/{culture}/attribute-set-data/portal/{id}
         [HttpPost, HttpOptions]
         [Route("{parentId}/{parentType}/{id}")]
@@ -137,7 +134,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
         [Route("{parentId}/{parentType}/{id}")]
         public async Task<ActionResult<DeleteViewModel>> Delete(string culture, string parentId, int parentType, string id)
         {
-            Expression<Func<MixRelatedAttributeData, bool>> predicate = model => model.Id == id && model.ParentId == parentId && model.ParentType== parentType && model.Specificulture == _lang;
+            Expression<Func<MixRelatedAttributeData, bool>> predicate = model => model.Id == id && model.ParentId == parentId && model.ParentType == parentType && model.Specificulture == _lang;
 
             // Get Details if has id or else get default
 

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.ViewModels.MixAttributeSets;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -29,7 +28,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
 
         #region Views
         [JsonProperty("data")]
-        public List<MixPostAttributeValues.UpdateViewModel> Data{ get; set; }
+        public List<MixPostAttributeValues.UpdateViewModel> Data { get; set; }
         #endregion
 
         #endregion
@@ -94,14 +93,14 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
                     {
                         Specificulture = Specificulture,
                         Priority = item.Priority,
-                        AttributeName = item.Name,                        
+                        AttributeName = item.Name,
                         DataType = item.DataType,
                         AttributeFieldId = item.Id,
                         Field = item
                     });
                 }
             }
-            
+
         }
         public override MixPostAttributeData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

@@ -6,10 +6,10 @@
         <div class="col-sm-12 p-2">
             <div class="row header">
                 <div class="col-1">
-                    <span class="fas fa-sort"></span>
+                    <span class="fa fa-grip-vertical text-black-50"></span>
                 </div>
                 <div scope="col" class="col-sm-1">
-                    <span class="fas fa-sort-numeric-down"></span>
+                    <span class="fa fa-grip-vertical text-black-50-numeric-down"></span>
                 </div>
                 <div scope="col" class="col-sm-{{$ctrl.colWidth}}" ng-repeat="col in $ctrl.columns track by $index">
                     <span ng-bind="col.title">
@@ -30,7 +30,7 @@
             ng-class="{'selected': $ctrl.selected === nav}">
             <div class="row">
                 <div class="col-1 drag-header" style="cursor:move;">
-                    <span class="fas fa-sort"></span>
+                    <span class="fa fa-grip-vertical text-black-50"></span>
                 </div>
                 <div class="col-sm-1">
                     <input style="width:40px" type="number" readonly="readonly" ng-model="nav.priority" 
@@ -62,7 +62,7 @@
                     dnd-effect-allowed="move" dnd-selected="$ctrl.selected = snav">
                     <div class="row">
                         <div class="col-1 drag-header" style="cursor:move;">
-                            <span class="fas fa-sort"></span>
+                            <span class="fa fa-grip-vertical text-black-50"></span>
                         </div>
                         <div class="col-sm-1">
                             <input type="number" readonly="readonly" ng-model="snav.priority" class="item-priority form-control form-control-sm d-inline">

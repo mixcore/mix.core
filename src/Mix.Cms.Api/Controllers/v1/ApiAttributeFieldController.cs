@@ -5,19 +5,17 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Threading.Tasks;
-using Mix.Domain.Core.ViewModels;
-using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Services;
-using System.Linq.Expressions;
-using Mix.Cms.Lib.ViewModels.MixAttributeFields;
-using Microsoft.AspNetCore.SignalR;
-using Mix.Cms.Hub;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Attributes;
+using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels.MixAttributeFields;
+using Mix.Domain.Core.ViewModels;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -106,7 +104,7 @@ namespace Mix.Cms.Api.Controllers.v1
         #region Post
 
         // POST api/attribute-field
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]        
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [RequestFormSizeLimit(valueCountLimit: 214748364)] // 200Mb
         [Route("save")]

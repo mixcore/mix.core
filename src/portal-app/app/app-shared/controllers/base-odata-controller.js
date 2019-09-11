@@ -119,7 +119,7 @@ function BaseODataCtrl($scope, $rootScope, $routeParams, ngAppSettings, service)
     $scope.removeConfirmed = async function (id) {
         $rootScope.isBusy = true;
         var result = await service.delete([id]);
-        if (result) {
+        if (result.isSucceed) {
             if ($scope.removeCallback) {
                 $rootScope.executeFunctionByName('removeCallback', $scope.removeCallbackArgs, $scope)
             }

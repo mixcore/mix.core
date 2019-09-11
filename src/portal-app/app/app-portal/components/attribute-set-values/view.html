@@ -1,36 +1,39 @@
-<h6 class="card-header">
-    <span ng-bind="$ctrl.header"></span>
-</h6>
-<table class="table table-sm">
-    <!-- <thead class="thead-light">
-        <tr>
-            <th scope="col" width="5%">
-                <span class="oi oi-move"></span>
-            </th>
-            <th scope="col" ng-repeat="col in $ctrl.data.fields | orderBy:'priority' track by $index" ng-bind="col.title"
-                ng-if="$index < 3" ng-bind="col.title"></th>
-                <th>Actions</th>
-            
-        </tr>
-    </thead> -->
-    <tbody class="sortable">
-        <tr class="sortable-item module-column" 
-            ng-repeat="item in $ctrl.data track by $index" 
-            ng-class="{'selected': $ctrl.selectedProp === item}">            
-            <td style="cursor:move;">
-                <span class="oi oi-move"></span>
-            </td>
-            <td ng-if="$index < 3" ng-repeat="val in item.values | orderBy:'priority' track by $index">
-                <attribute-value-preview  data="val"></attribute-value-preview>
-            </td>
-            <td>
-                <a ng-click="$ctrl.update(item)" class="btn btn-link">
-                    <span class="fas fa-pencil-alt text-warning"></span>
-                </a>
-                <a ng-click="$ctrl.delete(item)" class="btn btn-link">
-                    <span class="fas fa-times text-danger"></span>
-                </a>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="card">
+    <div class="card-header">
+        <span ng-bind="$ctrl.header"></span>
+        <div class="row" ng-if="$ctrl.data[0]">
+            <div class="col-md-1"></div>
+            <div ng-repeat="col in $ctrl.data[0].fields | orderBy:'priority' track by $index" ng-if="$index < 3"
+                ng-bind="col.title" class="col-md-3"></div>
+            <div class="col-md-2">Actions</div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div dnd-list="$ctrl.data" dnd-inserted="$ctrl.updateOrders(index)">
+            <div ng-repeat="item in $ctrl.data | orderBy: 'priority' track by $index" dnd-draggable="item"
+                dnd-type="'item'" dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedItem = item"
+                dnd-dragstart="$ctrl.dragStart($index)" ng-class="{'selected': $ctrl.selectedItem === item}"
+                class="mb-3 row">
+                <div class="col-md-1 form-inline">
+                    <div class="form-group mb-2">
+                        <span class="fa fa-grip-vertical mr-2"></span>
+                        <input class="ml-1 form-control form-control-sm" ng-model="item.priority" style="width:30px" />
+                    </div>
+                </div>
+                <div ng-if="$index < 3" ng-repeat="val in item.values | orderBy: 'priority' track by $index"
+                    class="col-md-3">
+                    <attribute-value-preview data="val"></attribute-value-preview>
+                </div>
+                <div class="col-md-2">
+                    <a ng-click="$ctrl.update(item)" class="btn btn-link">
+                        <span class="fas fa-pencil-alt text-warning"></span>
+                    </a>
+                    <a ng-click="$ctrl.delete(item)" class="btn btn-link">
+                        <span class="fas fa-times text-danger"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

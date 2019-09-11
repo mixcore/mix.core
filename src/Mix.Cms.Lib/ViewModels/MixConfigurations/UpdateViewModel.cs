@@ -1,17 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixSystem;
 using Mix.Domain.Core.Models;
-using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixConfigurations
@@ -42,7 +39,7 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
         public string Value { get; set; }
 
         [JsonProperty("createdBy")]
-        public string CreatedBy{ get; set; }
+        public string CreatedBy { get; set; }
 
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }

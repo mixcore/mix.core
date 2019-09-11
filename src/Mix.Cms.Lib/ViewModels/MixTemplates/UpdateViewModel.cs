@@ -155,7 +155,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             if (Id == 0)
             {
-                Id = Repository.Max(m => m.Id, _context,  _transaction).Data + 1;
+                Id = Repository.Max(m => m.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
             FileFolder = CommonHelper.GetFullPath(new string[]

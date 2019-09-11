@@ -5,20 +5,20 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib;
+using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels.MixOrders;
+using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Mix.Domain.Core.ViewModels;
-using Mix.Cms.Lib.Models.Cms;
-using static Mix.Cms.Lib.MixEnums;
-using System.Linq.Expressions;
-using System.Web;
-using Mix.Cms.Lib.ViewModels.MixOrders;
-using Microsoft.Extensions.Caching.Memory;
-using Mix.Cms.Lib;
-using Mix.Cms.Lib.Services;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using System.Web;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -216,7 +216,7 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<RepositoryResponse<List<ReadListItemViewModel>>> UpdateInfos([FromBody]List<ReadListItemViewModel> models)
         {
             if (models != null)
-            {                
+            {
                 return await base.SaveListAsync(models, false);
             }
             else

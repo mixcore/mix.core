@@ -1,23 +1,26 @@
-<!-- <jumbotrons tag-name="'Post'" tag-type="'0'"></jumbotrons> -->
-<section class="card manual">
-    <div class="card-header">
-        <filter-list request="request"  orders="orders" callback="getList(pageIndex)"
+<div class="row">
+    <div class="col">
+        <filter-list request="request" orders="orders" callback="getList(pageIndex)"
             create-url="'/portal/attribute-set/create'"></filter-list>
-        <select class="btn custom-select custom-select-sm col-3" ng-model="selectedList.action">
+        <select class="btn custom-select custom-select-sm col-3 my-3" ng-model="selectedList.action">
             <option ng-repeat="item in actions" ng-value="item">{{item}}</option>
         </select>
         <a class="btn btn-link text-white" ng-if="selectedList.data.length > 0 && selectedList.action"
-            ng-click="applyList()">Apply</a>            
+            ng-click="applyList()">Apply</a>
     </div>
-    <div class="card-body">
+</div>
+<div class="row">
+    <div class="col">
+
         <table class="table table-sm table-hover" cellspacing="0">
             <thead class="thead-light">
                 <tr>
                     <th scope="col" style="width: 3%;">
-                        <span class="fas fa-sort"></span>
+                        <span class="fa fa-grip-vertical text-black-50"></span>
                     </th>
                     <th scope="col" style="width: 4%;">
-                        <input type="checkbox" ng-model="selectedList.isSelectAll" ng-change="selectAll(selectedList.isSelectAll)" />
+                        <input type="checkbox" ng-model="selectedList.isSelectAll"
+                            ng-change="selectAll(selectedList.isSelectAll)" />
                     </th>
                     <th scope="col" style="width: 25%;">
                         Title
@@ -36,7 +39,7 @@
                 <tr ng-repeat="item in data track by $index" class="sortable-item" sort-model="attribute-set"
                     sort-model-id="{{item.id}}">
                     <td style="cursor:move;" class="drag-header">
-                        <span class="fas fa-sort"></span>
+                        <span class="fa fa-grip-vertical text-black-50"></span>
                     </td>
                     <td>
                         <input type="checkbox" ng-model="item.isSelected"
@@ -58,10 +61,10 @@
                         <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
                             <a href="/portal/attribute-set/details/{{item.id}}" class="btn btn-link">
                                 <span class="fas fa-pencil-alt text-primary"></span>
-                            </a>          
+                            </a>
                             <a href="/portal/attribute-set-data/list?attributeSetId={{item.id}}" class="btn btn-link">
                                 <span class="fas fa-list text-info"></span>
-                            </a>                  
+                            </a>
                             <a ng-click="remove(item.id);" class="btn btn-link">
                                 <span class="fas fa-times text-danger"></span>
                             </a>
@@ -71,10 +74,14 @@
             </tbody>
         </table>
     </div>
-    <div class="card-footer">
+</div>
+<hr>
+<div class="row">
+    <div class="col">
+
         <paging class="small" page="request.pageIndex + 1" page-size="request.pageSize" total="request.totalItems"
             ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)"
             scroll-top="true">
         </paging>
     </div>
-</section>
+</div>

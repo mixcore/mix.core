@@ -5,20 +5,18 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib;
+using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels.MixPagePages;
+using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Mix.Domain.Core.ViewModels;
-using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib;
-using Mix.Cms.Lib.Services;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using System.Web;
-using Mix.Cms.Lib.ViewModels.MixPagePages;
-using Microsoft.AspNetCore.SignalR;
-using Mix.Cms.Hub;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -131,12 +129,12 @@ namespace Mix.Cms.Api.Controllers.v1
             [FromBody] RequestPaging request)
         {
             var query = HttpUtility.ParseQueryString(request.Query ?? "");
-            bool isParent = int.TryParse(query.Get("parent_id"), out int parentId);            
+            bool isParent = int.TryParse(query.Get("parent_id"), out int parentId);
             bool isPage = int.TryParse(query.Get("page_id"), out int id);
             ParseRequestPagingDate(request);
             Expression<Func<MixPagePage, bool>> predicate = model =>
                         model.Specificulture == _lang
-                        && (!isParent || model.ParentId == parentId)                        
+                        && (!isParent || model.ParentId == parentId)
                         && (!isPage || model.ParentId == id)
                         && (!request.Status.HasValue || model.Status == request.Status.Value)
                         && (string.IsNullOrWhiteSpace(request.Keyword)
@@ -158,7 +156,7 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfos([FromBody]List<ReadViewModel> models)
         {
             if (models != null)
-            {                
+            {
                 return await base.SaveListAsync(models, false);
             }
             else
