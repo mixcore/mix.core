@@ -143,7 +143,6 @@ modules.component('attributeValueEditor', {
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 }
-                console.log(resp);
             })
         }
         ctrl.removeRefData = async function(nav){
