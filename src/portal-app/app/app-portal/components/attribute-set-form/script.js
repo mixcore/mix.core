@@ -64,15 +64,8 @@ modules.component('attributeSetForm', {
                 });
                 if (ctrl.saveData) {
                     var result = await ctrl.saveData({ data: ctrl.attrData });
-                    console.log(result);
-                    ctrl.attrData = await service.getSingle('portal', [ctrl.defaultId, ctrl.setId]);
-                    if (ctrl.attrData) {
-                        $rootScope.isBusy = false;
-                        $scope.$apply();
-                    } else {
-                        $rootScope.showErrors('Failed');
-                        $rootScope.isBusy = false;
-                        $scope.$apply();
+                    if (result) {
+                        ctrl.attrData = await service.getSingle('portal', [ctrl.defaultId, ctrl.setId]);                        
                     }
                 }
                 else {

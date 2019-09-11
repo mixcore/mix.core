@@ -50,6 +50,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         }
 
         #endregion Contructors
+
         #region Overrides
         public override MixAttributeSetValue ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -79,9 +80,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                 if (Field.IsUnique)
                 {
                     var exist = _context.MixAttributeSetValue.Any(d => d.Specificulture == Specificulture
-                        && d.StringValue == StringValue && d.Id != Id);
-                    IsValid = false;
-                    Errors.Add($"{Field.Title} is existed");
+                        && d.StringValue == StringValue && d.Id != Id && d.DataId != DataId);
+                    if (exist)
+                    {
+                        IsValid = false;
+                        Errors.Add($"{Field.Title} = {StringValue} is existed");
+                    }                    
                 }
                 if (Field.IsRequire)
                 {
