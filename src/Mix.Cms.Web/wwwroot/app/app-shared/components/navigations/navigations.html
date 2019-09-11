@@ -1,7 +1,7 @@
 <ul dnd-list="$ctrl.data">
     <li ng-repeat="nav in $ctrl.data" class="col-sm-12 p-2" dnd-draggable="nav" dnd-type="'nav'" dnd-effect-allowed="move" dnd-selected="$ctrl.selected = nav" dnd-moved="$ctrl.updateOrders($index)" ng-class="{'selected': $ctrl.selected === nav}">
         <div class="row">
-            <div class="col-1 drag-header" style="cursor:move;"><span class="fas fa-sort"></span></div>
+            <div class="col-1 drag-header" style="cursor:move;"><span class="fa fa-grip-vertical text-black-50"></span></div>
             <!--<div class="col-1">
                 <input type="text" ng-model="nav.priority" ng-change="$ctrl.updatePriorities()" 
                        class="item-priority d-none form-control form-control-sm d"/>
