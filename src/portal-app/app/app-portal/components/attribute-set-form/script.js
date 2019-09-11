@@ -64,8 +64,13 @@ modules.component('attributeSetForm', {
                 });
                 if (ctrl.saveData) {
                     var result = await ctrl.saveData({ data: ctrl.attrData });
-                    if (result) {
-                        ctrl.attrData = await service.getSingle('portal', [ctrl.defaultId, ctrl.setId]);                        
+                    if (result && result.isSucceed) {
+                        ctrl.attrData = result.data;
+                        $scope.$apply();
+                    }
+                    else{
+                        ctrl.attrData = await service.getSingle('portal', [ctrl.defaultId, ctrl.setId]);
+                        $scope.$apply();
                     }
                 }
                 else {
