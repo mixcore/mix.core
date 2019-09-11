@@ -11,27 +11,29 @@
 
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
+                            <label>Theme title</label><br />
                             <input type="text" ng-model="activedData.title" ng-change="generateSEO()"
                                 class="form-control" placeholder="Enter your theme name here...">
                         </div>
 
                         <div class="form-group">
+                            <label>Preview URL</label><br />
                             <input type="text" ng-model="activedData.previewUrl" class="form-control"
                                 placeholder="Preview Url">
                         </div>
 
                         <div class="form-group">
                             <label>Asset</label>
-                            <api-file form-name="'assets'" class="form-control" posted-file="asset"></api-file>
+                            <api-file form-name="'assets'" class="custom-file" posted-file="asset"></api-file>
                         </div>
                         <div class="form-group">
                             <label>Import Theme</label><br />
                             {{theme.name}}
-                            <api-file form-name="'theme'" class="form-control" posted-file="theme"></api-file>
+                            <api-file form-name="'theme'" class="custom-file" posted-file="theme"></api-file>
                         </div>
 
                         <div class="form-group">
-                            <div class="custom-control custom-checkbox">
+                            <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" ng-model="activedData.isActived"
                                     id="isActived">
                                 <label class="custom-control-label" for="isActived">Activate this theme to be default
