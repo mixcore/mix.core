@@ -4,14 +4,11 @@
 
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
-using Microsoft.IdentityModel.Tokens;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
 using RewriteRules;
 using System.IO;
-using System.Text;
 
 namespace Mix.Cms.Web
 {
@@ -38,9 +35,9 @@ namespace Mix.Cms.Web
 
                     app.UseRewriter(options);
                 }
-            //    app.Run(context => context.Response.WriteAsync(
-            //$"Rewritten or Redirected Url: " +
-            //$"{context.Request.Path + context.Request.QueryString}"));
+                //    app.Run(context => context.Response.WriteAsync(
+                //$"Rewritten or Redirected Url: " +
+                //$"{context.Request.Path + context.Request.QueryString}"));
             }
             app.UseMvc(routes =>
             {
@@ -61,11 +58,11 @@ namespace Mix.Cms.Web
                     template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/portal/file");
                 routes.MapRoute(
                     name: "post",
-                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/post/{id}/{seoName}");                
-                
+                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/post/{id}/{seoName}");
+
                 // uncomment the following line to Work-around for #1175 in beta1
                 routes.EnableDependencyInjection();
-                
+
                 // and this line to enable OData query option, for example $filter
                 routes.Select().Expand().Filter().OrderBy().MaxTop(100).Count();
                 //routes.MapODataServiceRoute("ODataRoute", "odata", builder.GetEdmModel());

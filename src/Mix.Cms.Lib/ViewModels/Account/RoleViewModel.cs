@@ -1,11 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Models.Account;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Mix.Cms.Lib.Models.Account;
 
 namespace Mix.Cms.Lib.ViewModels.Account
 {
@@ -58,7 +58,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
         }
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(RoleViewModel view, MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var result = await UserRoleViewModel.Repository.RemoveListModelAsync(false,  ur => ur.RoleId == Id, _context, _transaction);
+            var result = await UserRoleViewModel.Repository.RemoveListModelAsync(false, ur => ur.RoleId == Id, _context, _transaction);
             return new RepositoryResponse<bool>()
             {
                 IsSucceed = result.IsSucceed,

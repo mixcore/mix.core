@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
-using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -90,8 +88,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[] { 
-                    MixConstants.Folder.TemplatesFolder, 
+                return CommonHelper.GetFullPath(new string[] {
+                    MixConstants.Folder.TemplatesFolder,
                     ThemeName });
             }
         }

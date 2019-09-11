@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Hub
 {
-    public class PortalHub: BaseSignalRHub
+    public class PortalHub : BaseSignalRHub
     {
         public async Task SendMessage(string user, string message)
         {

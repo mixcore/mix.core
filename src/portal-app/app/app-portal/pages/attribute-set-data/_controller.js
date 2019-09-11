@@ -69,8 +69,11 @@ app.controller('AttributeSetDataController',
                 item.editUrl = '/portal/post/details/' + item.id;
                 $rootScope.preview('post', item, item.title, 'modal-lg');
             };
-            $scope.remove = function (dataId) {
-                $rootScope.showConfirm($scope, 'removeConfirmed', [dataId], null, 'Remove', 'Are you sure');
+            $scope.edit= function(data){
+                $scope.goToPath('/portal/attribute-set-data/details?dataId='+ data.id +'&attributeSetId=' + $scope.attributeSetId)
+            }
+            $scope.remove = function (data) {
+                $rootScope.showConfirm($scope, 'removeConfirmed', [data.id], null, 'Remove', 'Are you sure');
             };
 
             $scope.removeConfirmed = async function (dataId) {

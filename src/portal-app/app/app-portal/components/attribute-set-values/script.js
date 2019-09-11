@@ -13,12 +13,7 @@ modules.component('attributeSetValues', {
             ctrl.selectedProp = null;
             
             ctrl.settings = $rootScope.globalSettings;
-            ctrl.$onInit = function(){
-                if(ctrl.data.length && !ctrl.columns){
-                    ctrl.columns = ctrl.data[0].data;
-                }
-            };
-
+           
             ctrl.update = function(data){
                 ctrl.onUpdate({data: data});
             };

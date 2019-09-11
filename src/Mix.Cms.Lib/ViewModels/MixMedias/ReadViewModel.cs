@@ -1,18 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixSystem;
-using Mix.Common.Helper;
 using Mix.Domain.Core.Models;
-using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixMedias
 {
@@ -91,7 +87,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
                 }
             }
         }
-[JsonProperty("filePath")]
+        [JsonProperty("filePath")]
         public string FilePath
         {
             get
@@ -129,7 +125,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
 
         #region Overrides
 
-       
+
         #endregion Overrides
         #region Expand
         List<SupportedCulture> LoadCultures(string initCulture = null, MixCmsContext _context = null, IDbContextTransaction _transaction = null)

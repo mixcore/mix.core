@@ -2,7 +2,6 @@
 using Mix.Cms.Lib.Models.Account;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
-using Mix.Cms.Lib.ViewModels.Account;
 
 namespace Mix.Cms.Lib.ViewModels.Account
 {

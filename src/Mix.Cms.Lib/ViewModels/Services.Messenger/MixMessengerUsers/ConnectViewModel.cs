@@ -1,9 +1,6 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.ViewModels;
-using Mix.Cms.Messenger.Models;
+﻿using Mix.Cms.Messenger.Models;
 using Mix.Cms.Messenger.Models.Data;
+using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
@@ -30,7 +27,7 @@ namespace Mix.Cms.Messenger.ViewModels.MixMessengerUsers
         #endregion
 
         #region Contructor
-        
+
         public ConnectViewModel(MessengerConnection connection)
         {
             Id = connection.Id;
@@ -51,7 +48,7 @@ namespace Mix.Cms.Messenger.ViewModels.MixMessengerUsers
         #region Async
         public async Task<RepositoryResponse<bool>> Join()
         {
-            using(MixChatServiceContext _context = new MixChatServiceContext())
+            using (MixChatServiceContext _context = new MixChatServiceContext())
             {
                 var result = new RepositoryResponse<bool>() { IsSucceed = true };
                 try
@@ -65,7 +62,7 @@ namespace Mix.Cms.Messenger.ViewModels.MixMessengerUsers
                         Name = Name,
                         Status = (int)MixChatEnums.OnlineStatus.Connected
                     };
-                    if (_context.MixMessengerUser.Any(u=>u.Id == user.Id))
+                    if (_context.MixMessengerUser.Any(u => u.Id == user.Id))
                     {
                         _context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     }
@@ -89,7 +86,7 @@ namespace Mix.Cms.Messenger.ViewModels.MixMessengerUsers
                             Device.StartDate = DateTime.UtcNow;
                             _context.Entry(Device).State = Microsoft.EntityFrameworkCore.EntityState.Added;
                         }
-                        
+
                     }
                     result.IsSucceed = (await _context.SaveChangesAsync()) > 0;
                 }
@@ -100,7 +97,7 @@ namespace Mix.Cms.Messenger.ViewModels.MixMessengerUsers
                 }
                 return result;
             }
-            
+
         }
         #endregion
 

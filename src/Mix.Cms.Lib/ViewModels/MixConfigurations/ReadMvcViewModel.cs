@@ -30,7 +30,7 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
         [JsonProperty("dataType")]
         public MixDataType DataType { get; set; }
         [JsonProperty("status")]
-        public MixContentStatus Status{ get; set; }
+        public MixContentStatus Status { get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
         [JsonProperty("createdDateTime")]
@@ -87,7 +87,7 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
                 {
                     var lang = new ReadMvcViewModel(item, context, transaction);
                     lang.CreatedDateTime = DateTime.UtcNow;
-                    lang.Specificulture = destCulture;                    
+                    lang.Specificulture = destCulture;
                     var saveResult = await lang.SaveModelAsync(false, context, transaction);
                     result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
                     if (!result.IsSucceed)
@@ -115,7 +115,7 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
                 {
                     context?.Dispose();
                 }
-                
+
             }
             return result;
         }

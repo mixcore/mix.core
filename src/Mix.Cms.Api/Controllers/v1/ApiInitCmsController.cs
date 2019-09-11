@@ -2,30 +2,27 @@
 // The Mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Api.Helpers;
+using Mix.Cms.Lib;
+using Mix.Cms.Lib.Attributes;
+using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Mix.Identity.Models;
-using Mix.Domain.Core.ViewModels;
-using Mix.Cms.Lib;
-using static Mix.Cms.Lib.MixEnums;
 using Mix.Cms.Lib.ViewModels.Account;
 using Mix.Cms.Lib.ViewModels.MixInit;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Caching.Memory;
-using System.Collections.Generic;
-using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Attributes;
-using Microsoft.AspNetCore.Http;
-using Mix.Cms.Lib.Models.Account;
-using Mix.Cms.Api.Helpers;
 using Mix.Common.Helper;
+using Mix.Domain.Core.ViewModels;
+using Mix.Identity.Models;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -62,10 +59,10 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             _appLifetime.StopApplication();
         }
-        
+
         #region Post
 
-        
+
         /// <summary>
         /// Step 1 when status = 0
         ///     - Init Cms Database
@@ -81,7 +78,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (model != null)
             {
-                var result = new RepositoryResponse<bool>() { IsSucceed = true};
+                var result = new RepositoryResponse<bool>() { IsSucceed = true };
                 if (MixService.GetConfig<int>("InitStatus") == 0)
                 {
                     result = await InitStep1Async(model).ConfigureAwait(false);
@@ -219,8 +216,8 @@ namespace Mix.Cms.Api.Controllers.v1
             }
             return new RepositoryResponse<bool>();
         }
-        
-        
+
+
         /// <summary>
         /// Step 5 when status = 4 (Finished)
         ///     - Init default theme
@@ -234,7 +231,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             var json = JObject.Parse(model);
             var data = json.ToObject<Lib.ViewModels.MixThemes.InitViewModel>();
-            
+
             if (theme != null)
             {
                 string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
@@ -245,18 +242,20 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 if (data.IsCreateDefault)
                 {
-                    data.TemplateAsset = new Lib.ViewModels.FileViewModel() {
-                        Filename="default",
-                        Extension=".zip",
-                        FileFolder= "Imports/Themes"
+                    data.TemplateAsset = new Lib.ViewModels.FileViewModel()
+                    {
+                        Filename = "default",
+                        Extension = ".zip",
+                        FileFolder = "Imports/Themes"
                     };
                 }
                 else
                 {
-                    data.TemplateAsset = new Lib.ViewModels.FileViewModel() {
-                        Filename="default_blank",
-                        Extension=".zip",
-                        FileFolder= "Imports/Themes"
+                    data.TemplateAsset = new Lib.ViewModels.FileViewModel()
+                    {
+                        Filename = "default_blank",
+                        Extension = ".zip",
+                        FileFolder = "Imports/Themes"
                     };
                 }
             }

@@ -1,14 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
-using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 {
@@ -19,13 +14,13 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         {
             Expression<Func<MixPostAttributeData, bool>> dataExp = null;
             dataExp = m => m.PostId == postId && m.Specificulture == specificulture && (m.PostId == postId);
-                var getDataResult = MixPostAttributeDatas.UpdateViewModel.Repository
-                .GetModelListBy(
-                    dataExp
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
-                    , pageSize, pageIndex
-                    , _context: _context, _transaction: _transaction);
-            if (getDataResult.Data.TotalItems==0)
+            var getDataResult = MixPostAttributeDatas.UpdateViewModel.Repository
+            .GetModelListBy(
+                dataExp
+                , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+                , pageSize, pageIndex
+                , _context: _context, _transaction: _transaction);
+            if (getDataResult.Data.TotalItems == 0)
             {
                 getDataResult.Data.Items.Add(new MixPostAttributeDatas.UpdateViewModel());
             }
@@ -36,12 +31,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         {
             Expression<Func<MixPostAttributeData, bool>> dataExp = null;
             dataExp = m => m.PostId == postId && m.Specificulture == specificulture && (m.PostId == postId);
-                var getDataResult = await MixPostAttributeDatas.UpdateViewModel.Repository
-                .GetModelListByAsync(
-                    dataExp
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
-                    , pageSize, pageIndex, null, null
-                    , _context: _context, _transaction: _transaction);
+            var getDataResult = await MixPostAttributeDatas.UpdateViewModel.Repository
+            .GetModelListByAsync(
+                dataExp
+                , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+                , pageSize, pageIndex, null, null
+                , _context: _context, _transaction: _transaction);
             if (getDataResult.Data.TotalItems == 0)
             {
                 getDataResult.Data.Items.Add(new MixPostAttributeDatas.UpdateViewModel());
