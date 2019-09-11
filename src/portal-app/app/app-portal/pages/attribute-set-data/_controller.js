@@ -20,12 +20,12 @@ app.controller('AttributeSetDataController',
                 
             };
             $scope.saveSuccessCallback = function () {
-                if($scope.parentId){
-                    $location.url('/portal/attribute-set-data/details?dataId='+ $scope.parentId);
-                }
-                else{
-                    $location.url('/portal/attribute-set-data/list?attributeSetId='+ $scope.activedData.attributeSetId);                    
-                }
+                // if($scope.parentId){
+                //     $location.url('/portal/attribute-set-data/details?dataId='+ $scope.parentId);
+                // }
+                // else{
+                //     $location.url('/portal/attribute-set-data/list?attributeSetId='+ $scope.activedData.attributeSetId);                    
+                // }
             };
             $scope.getList = async function () {
                 $rootScope.isBusy = true;
