@@ -1,3 +1,11 @@
+<div class="row">
+    <a href="$ctrl.backUrl" class="btn btn-sm col-md-3 btn-secondary form-control"><i
+                            class="fa fa-chevron-left"></i>
+                        <span>Back</span></a>
+    <a ng-click="$ctrl.saveFile()" class="btn btn-sm col-md-3 btn-primary form-control"><i
+                            class="fa fa-save"></i>
+                        <span>Save</span></a>
+</div>
 <div class="mix-tree-view" ng-init="$ctrl.init()">
     <div class="row">
         <div ng-repeat="(zone, items) in $ctrl.dropzones" class="col-md-6">
