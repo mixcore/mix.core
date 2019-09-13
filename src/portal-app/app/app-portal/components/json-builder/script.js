@@ -6,6 +6,7 @@ modules.component('jsonBuilder', {
         'folder': '=?', // filepath (ex: 'data/jsonfile.json')
         'filename': '=?', // filepath (ex: 'data/jsonfile.json')
         'allowedTypes': '=?', // string array ( ex: [ 'type1', 'type2' ] )
+        'backUrl': '=?', // string array ( ex: [ 'type1', 'type2' ] )
         'save': '&',
         'onUpdate': '&'
     },
@@ -44,7 +45,7 @@ modules.component('jsonBuilder', {
             ctrl.loadFile = async function () {
                 $rootScope.isBusy = true;
                 $scope.listUrl = '/portal/json-data/list?folder=' + ctrl.folder;
-                $rootScope.isBusy = true;
+                
                 var response = await fileService.getFile(ctrl.folder, ctrl.filename);
                 if (response.isSucceed) {
                     ctrl.file = response.data;
@@ -81,6 +82,7 @@ modules.component('jsonBuilder', {
                         $scope.$apply();
                     }
                 }
+                ctrl.select(ctrl.selected);
 
             };
             ctrl.update = function () {
@@ -156,7 +158,7 @@ modules.component('jsonBuilder', {
             };
             ctrl.select = function (item) {
                 if (ctrl.selected == item) {
-                    ctrl.selected = null;
+                    ctrl.parseObj(item, ctrl.selectedModel);
                 }
                 else {
                     ctrl.selected = item;
