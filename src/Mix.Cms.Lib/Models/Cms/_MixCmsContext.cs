@@ -154,6 +154,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
+                entity.Property(e => e.AttributeSetName).HasMaxLength(250);
+
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.AttributeSet)
@@ -194,7 +196,7 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasMaxLength(50)
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.AttributeName)
+                entity.Property(e => e.AttributeFieldName)
                     .IsRequired()
                     .HasMaxLength(50);
 
