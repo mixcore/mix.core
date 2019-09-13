@@ -29,6 +29,8 @@
     <Compile Remove="Migrations\20190523082752_add-attr.Designer.cs" />
     <Compile Remove="Migrations\20190523083122_update-maytisa.cs" />
     <Compile Remove="Migrations\20190523083122_update-maytisa.Designer.cs" />
+    <Compile Remove="Migrations\20190912014738_add_attr_name_to_data.cs" />
+    <Compile Remove="Migrations\20190912014738_add_attr_name_to_data.Designer.cs" />
     <Compile Remove="Services\CmsConfiguration.cs" />
     <Compile Remove="Services\CmsCultureConfiguration.cs" />
   </ItemGroup>

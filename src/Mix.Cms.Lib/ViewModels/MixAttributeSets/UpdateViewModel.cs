@@ -79,6 +79,19 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             return base.ParseModel(_context, _transaction);
         }
 
+        public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            base.Validate(_context, _transaction);
+            if (IsValid)
+            {
+                if (_context.MixAttributeSet.Any(s=>s.Name== Name))
+                {
+                    IsValid = false;
+                    Errors.Add($"{Name} is Existed");
+                }
+            }
+        }
+
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSet parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };

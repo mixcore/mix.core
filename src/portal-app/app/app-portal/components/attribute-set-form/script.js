@@ -1,7 +1,8 @@
 modules.component('attributeSetForm', {
     templateUrl: '/app/app-portal/components/attribute-set-form/view.html',
     bindings: {
-        setId: '=',
+        attrSetId: '=',
+        attrSetName: '=',
         attrDataId: '=?',
         attrData: '=?',
         // parentType: '=?', // attribute set = 1 | post = 2 | page = 3 | module = 4
@@ -26,7 +27,7 @@ modules.component('attributeSetForm', {
                 */
 
                 if(ctrl.attrDataId){
-                    ctrl.attrData = await service.getSingle('portal', [ctrl.attrDataId, ctrl.setId]);
+                    ctrl.attrData = await service.getSingle('portal', [ctrl.attrDataId, ctrl.attrSetId, ctrl.attrSetName]);
                     if (ctrl.attrData) {
                         $rootScope.isBusy = false;
                         $scope.$apply();
@@ -40,7 +41,7 @@ modules.component('attributeSetForm', {
                 }
                 else{
                     if(!ctrl.attrData){
-                        ctrl.attrData = await service.getSingle('portal', [ctrl.defaultId, ctrl.setId]);
+                        ctrl.attrData = await service.getSingle('portal', [ctrl.defaultId, ctrl.attrSetId, ctrl.attrSetName]);
                         if (ctrl.attrData) {
                             $rootScope.isBusy = false;
                             $scope.$apply();
@@ -50,6 +51,18 @@ modules.component('attributeSetForm', {
                             $scope.$apply();
                         }
                     }
+                }
+            };
+            ctrl.reload = async function () {
+                $rootScope.isBusy = true;
+               ctrl.attrData = await service.getSingle('portal', [ctrl.defaultId, ctrl.attrSetId, ctrl.attrSetName]);
+                if (ctrl.attrData) {
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                } else {
+                    $rootScope.showErrors('Failed');
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
                 }
             };
             ctrl.submit = async function () {
@@ -69,7 +82,7 @@ modules.component('attributeSetForm', {
                         $scope.$apply();
                     }
                     else{
-                        ctrl.attrData = await service.getSingle('portal', [ctrl.defaultId, ctrl.setId]);
+                        ctrl.attrData = await service.getSingle('portal', [ctrl.defaultId, ctrl.attrSetId, ctrl.attrSetName]);
                         $scope.$apply();
                     }
                 }
@@ -91,9 +104,9 @@ modules.component('attributeSetForm', {
            
             ctrl.filterData = function (attributeName) {
                 if(ctrl.attrData){
-                    var attr =  $rootScope.findObjectByKey(ctrl.attrData.data, 'attributeName', attributeName);
+                    var attr =  $rootScope.findObjectByKey(ctrl.attrData.data, 'attributeFieldName', attributeName);
                     if (!attr){
-                        attr = angular.copy($rootScope.findObjectByKey(ctrl.defaultData.data, 'attributeName', attributeName));
+                        attr = angular.copy($rootScope.findObjectByKey(ctrl.defaultData.data, 'attributeFieldName', attributeName));
                         ctrl.attrData.data.push(attr);
                     }
                     return attr;
