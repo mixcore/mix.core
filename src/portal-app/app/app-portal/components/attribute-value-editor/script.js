@@ -111,6 +111,8 @@ modules.component('attributeValueEditor', {
         }
         ctrl.updateRefData = function(nav){
             ctrl.refDataModel = nav;
+            var e = $(".pane-form-" + ctrl.attributeValue.field.referenceId)[0];
+            angular.element(e).triggerHandler('click');
             // $location.url('/portal/attribute-set-data/details?dataId='+ item.id +'&attributeSetId=' + item.attributeSetId+'&parentType=' + item.parentType+'&parentId=' + item.parentId);
         };
         ctrl.saveRefData = function(data){            
@@ -126,6 +128,8 @@ modules.component('attributeValueEditor', {
                                 [resp.data.parentId, resp.data.parentType, resp.data.id]);
                             if(!tmp){
                                 ctrl.refData.push(resp.data);
+                                var e = $(".pane-data-" + ctrl.attributeValue.field.referenceId)[0];
+                                angular.element(e).triggerHandler('click');
                             }
                             ctrl.refDataModel = angular.copy(ctrl.defaultDataModel);
                             $rootScope.isBusy = false;

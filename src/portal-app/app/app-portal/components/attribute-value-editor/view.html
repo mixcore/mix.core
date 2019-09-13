@@ -129,13 +129,20 @@
              <h6 class="text-warning" ng-if="!$ctrl.attributeValue.id">
                 Please Save Root Item First
             </h6>
-            <attribute-set-form ng-if="$ctrl.attributeValue.id" set-id="$ctrl.attributeValue.field.referenceId" default-id="'default'" 
-                attr-data="$ctrl.refDataModel.data" save-data="$ctrl.saveRefData(data)"></attribute-set-form>
+            <tabs-v select-callback="selectPane(pane)" class="mb-3"
+                ng-if="$ctrl.attributeValue.id">
+                <pane-v id="pane-data-{{$ctrl.attributeValue.field.referenceId}}" header="Data" class="card">
+                    <attribute-set-nav-values on-update="$ctrl.updateRefData(data)" on-delete="$ctrl.removeRefData(data)" 
+                        data="$ctrl.refData">
+                    </attribute-set-nav-values>
+                </pane-v>
+                <pane-v id="pane-form-{{$ctrl.attributeValue.field.referenceId}}" header="Form" class="card">
+                    <attribute-set-form ng-if="$ctrl.attributeValue.id" attr-set-id="$ctrl.attributeValue.field.referenceId" default-id="'default'" 
+                        attr-data="$ctrl.refDataModel.data" save-data="$ctrl.saveRefData(data)"></attribute-set-form>
+                </pane-v>
+            </tabs-v>
                 <!-- <pre>{{$ctrl.attributeValue | json}}</pre> -->
-            <attribute-set-nav-values on-update="$ctrl.updateRefData(data)" on-delete="$ctrl.removeRefData(data)" 
-                header="$ctrl.attributeValue.field.title" 
-                data="$ctrl.refData">
-            </attribute-set-nav-values>
+            
         </div>
     </div>
 </div>
