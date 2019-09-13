@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <h6>Atrribute
+        <h6>Atrribute Set Schema
 
             <span ng-bind="$ctrl.title"></span>
             <a ng-click="$ctrl.addAttr()" class="btn btn-primary btn-sm float-right text-white"><span class="fas fa-plus text-white"></span> Create Attribute</a>
@@ -42,50 +42,50 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-md-1">
-                        <a href="" class="btn btn-lnk text-primary" ng-click="col.showAdvanced = !col.showAdvanced">
-                            <span class="far fa-check-square"></span> Advanced
-                        </a>
-                    </div>
-                    <div class="col-md-1">
-                        <a class="btn" ng-click="$ctrl.removeAttribute(col, $index)">
-                            <span class="fas fa-times text-danger"></span>
-                        </a>
+                    <div class="col-md-2">
+                        <div class="btn-group btn-group-sm float-right">
+                            <a href="" class="btn btn-secondary" ng-click="col.showAdvanced = !col.showAdvanced">
+                                <span class="far fa-check-square"></span>
+                            </a>
+                            <a href="" class="btn btn-danger" ng-click="$ctrl.removeAttribute(col, $index)">
+                                <span class="fas fa-times"></span>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div class="row" ng-show="col.showAdvanced">
                     <div class="col-md-1"></div>
                     <div class="form-group col-md-2">
-                        <span class="switch switch-sm">
-                            <input type="checkbox" ng-model="col.isEncrypt">
-                            <label class="switch mb-0">
-                                <span>Encrypt</span>
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" ng-model="col.isEncrypt" id="{{'isEncrypt_' + $index}}">
+                            <label class="custom-control-label" for="{{'isEncrypt_' + $index}}">
+                                Encrypt
                             </label>
-                        </span>
+                        </div>
                     </div>
                     <div class="form-group col-md-2">
-                        <span class="switch switch-sm">
-                            <input type="checkbox" ng-model="col.isUnique">
-                            <label class="switch mb-0">
-                                <span>Unique</span>
+                        <div class="scustom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" ng-model="col.isUnique" id="{{'unique_' + $index}}">
+                            <label class="custom-control-label" for="{{'unique_' + $index}}">
+                                Unique
                             </label>
-                        </span>
+                        </div>
                     </div>
                     <div class="form-group col-md-2">
-                        <span class="switch switch-sm">
-                            <input type="checkbox" ng-model="col.isRequired">
-                            <label class="switch mb-0">
-                                <span>Required</span>
+                        <div class="scustom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" ng-model="col.isRequired" id="{{'required_' + $index}}">
+                            <label class="custom-control-label" for="{{'required_' + $index}}">
+                                Required
                             </label>
-                        </span>
+                        </div>
                     </div>
                     <div class="form-group col-md-2">
-                        <span class="switch switch-sm">
-                            <input type="checkbox" ng-model="col.isSelect">
-                            <label class="switch mb-0">
-                                <span>Select</span>
+                        <div class="scustom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" ng-model="col.isSelect" id="{{'select_' + $index}}">
+                            <label class="custom-control-label" for="{{'select_' + $index}}">
+                                Select
                             </label>
-                        </span>
+                        </div>
                     </div>
                 </div>
                 <div ng-show="col.isSelect">
@@ -113,39 +113,41 @@
                         </div>
                     </div>
 
-                </div>                
-            </div>            
+                </div>
+
+                <hr>
+            </div>
         </div>
         <div class="row" ng-show="col.showAdvanced">
             <div class="col-md-1"></div>
             <div class="form-group col-md-2">
-                <span class="switch switch-sm">
+                <span class="scustom-control custom-switch">
                     <input type="checkbox" ng-model="col.isEncrypt">
-                    <label class="switch mb-0">
+                    <label class="custom-control-label">
                         <span>Encrypt</span>
                     </label>
                 </span>
             </div>
             <div class="form-group col-md-2">
-                <span class="switch switch-sm">
+                <span class="scustom-control custom-switch">
                     <input type="checkbox" ng-model="col.isUnique">
-                    <label class="switch mb-0">
+                    <label class="custom-control-label">
                         <span>Unique</span>
                     </label>
                 </span>
             </div>
             <div class="form-group col-md-2">
-                <span class="switch switch-sm">
+                <span class="scustom-control custom-switch">
                     <input type="checkbox" ng-model="col.isRequire">
-                    <label class="switch mb-0">
+                    <label class="custom-control-label">
                         <span>Required</span>
                     </label>
                 </span>
             </div>
             <div class="form-group col-md-2">
-                <span class="switch switch-sm">
+                <span class="scustom-control custom-switch">
                     <input type="checkbox" ng-model="col.isSelect">
-                    <label class="switch mb-0">
+                    <label class="custom-control-label">
                         <span>Select</span>
                     </label>
                 </span>
@@ -166,11 +168,11 @@
                         </option>
                     </select>
 
-            <hr>
-            </div>
+                    <hr>
+                </div>
 
+            </div>
         </div>
     </div>
-</div>
 
-<modal-navs model-name="'attribute-set'" is-global="'true'" view-type="'read'" selects="'id,title,createdDateTime'" is-single="'true'" save="$ctrl.referenceCallback(selected)"></modal-navs></div>
+    <modal-navs model-name="'attribute-set'" is-global="'true'" view-type="'read'" selects="'id,title,createdDateTime'" is-single="'true'" save="$ctrl.referenceCallback(selected)"></modal-navs></div>
