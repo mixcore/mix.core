@@ -60,10 +60,10 @@
                         <label class="control-label">Attribute Sets</label>
                         <navs data="activedData.attributeSetNavs" prefix="'attribute_set'" details-url="'/portal/attribute-set/details/'" key="'attributeSetId'"></navs>
                     </div>
-                    <tabs-v class="mb-3">
+                    <tabs-v class="mb-3" ng-if="activedData.id">
                         <pane-v header="{{set.description}}" class="card" ng-repeat="set in activedData.attributeSetNavs track by $index" ng-if="set.isActived">
                             <div class="card-body">
-                                <post-attribute-set ng-if="isAdmin" set="set"></post-attribute-set>
+                                <post-attribute-set parent-id="activedData.id" parent-type="2" ng-if="isAdmin" set="set"></post-attribute-set>
                             </div>
                         </pane-v>
                     </tabs-v>

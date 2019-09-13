@@ -119,10 +119,12 @@
 
         public enum MixAttributeSetType
         {
+            System = 0,
             SubPage = 1,
             SubPost = 2,
-            SubProduct = 3,
+            SubModule = 3
         }
+
         public enum MixAttributeSetDataType
         {
             SubSet = 1,

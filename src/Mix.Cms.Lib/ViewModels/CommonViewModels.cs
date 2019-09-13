@@ -50,6 +50,8 @@ namespace Mix.Cms.Lib.ViewModels
 
         [JsonProperty("moduleTypes")]
         public List<string> ModuleTypes { get; set; }
+        [JsonProperty("attributeSetTypes")]
+        public List<string> AttributeSetTypes { get; set; }
 
         [JsonProperty("dataTypes")]
         public List<string> DataTypes { get; set; }

@@ -581,26 +581,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     // Save Navigation Post - Attribute Set
                     var saveResult = await nav.SaveModelAsync(true, _context, _transaction);
                     ViewModelHelper.HandleResult(saveResult, ref result);
-                    if (result.IsSucceed)
-                    {
-                        // Save post Data
-                        foreach (var item in nav.MixAttributeSet.PostData.Items)
-                        {
-                            item.PostId = parentId;
-                            item.AttributeSetId = nav.AttributeSetId;
-                            item.Specificulture = Specificulture;
-                            if (result.IsSucceed)
-                            {
-                                var saveData = await item.SaveModelAsync(true, _context, _transaction);
-                                ViewModelHelper.HandleResult(saveData, ref result);
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-
-                    }
+                    
                 }
                 else
                 {
@@ -1059,8 +1040,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 }
             }
             var otherAttributeSetNavs = MixAttributeSets.ContentUpdateViewModel.Repository.GetModelListBy(
-                m => !AttributeSetNavs.Any(n => n.AttributeSetId == m.Id)
-                //&& (m.Type == (int)MixEnums.MixAttributeSetType.SubPost)
+                m => m.Type == (int) MixEnums.MixAttributeSetType.SubPost && !AttributeSetNavs.Any(n => n.AttributeSetId == m.Id)
                 , "CreatedDateTime", 1, null, 0, _context, _transaction);
             foreach (var item in otherAttributeSetNavs.Data.Items)
             {
