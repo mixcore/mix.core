@@ -5,8 +5,8 @@ modules.component('attributeSetForm', {
         attrSetName: '=',
         attrDataId: '=?',
         attrData: '=?',
-        // parentType: '=?', // attribute set = 1 | post = 2 | page = 3 | module = 4
-        // parentId: '=?',
+        parentType: '=?', // attribute set = 1 | post = 2 | page = 3 | module = 4
+        parentId: '=?',
         defaultId: '=',
         saveData: '&?'
     },
@@ -14,9 +14,11 @@ modules.component('attributeSetForm', {
         function ($rootScope, $scope, service) {
             var ctrl = this;
             ctrl.attributes = [];
+            ctrl.defaultData = null;
             ctrl.selectedProp = null;
             ctrl.settings = $rootScope.globalSettings;
             ctrl.$onInit = async function () {
+                ctrl.defaultData = await service.getSingle('portal', [ctrl.defaultId, ctrl.attrSetId, ctrl.attrSetName]);
                 ctrl.loadData();
             };
             ctrl.loadData = async function () {
@@ -41,29 +43,14 @@ modules.component('attributeSetForm', {
                 }
                 else{
                     if(!ctrl.attrData){
-                        ctrl.attrData = await service.getSingle('portal', [ctrl.defaultId, ctrl.attrSetId, ctrl.attrSetName]);
-                        if (ctrl.attrData) {
-                            $rootScope.isBusy = false;
-                            $scope.$apply();
-                        } else {
-                            $rootScope.showErrors('Failed');
-                            $rootScope.isBusy = false;
-                            $scope.$apply();
-                        }
+                        ctrl.attrData = angular.copy(ctrl.defaultData);
                     }
+                    $rootScope.isBusy = false;
                 }
             };
             ctrl.reload = async function () {
                 $rootScope.isBusy = true;
-               ctrl.attrData = await service.getSingle('portal', [ctrl.defaultId, ctrl.attrSetId, ctrl.attrSetName]);
-                if (ctrl.attrData) {
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
-                } else {
-                    $rootScope.showErrors('Failed');
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
-                }
+                ctrl.attrData = angular.copy(ctrl.defaultData);
             };
             ctrl.submit = async function () {
                 angular.forEach(ctrl.attrData.values, function(e){                    
