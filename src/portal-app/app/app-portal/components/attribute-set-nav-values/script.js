@@ -18,8 +18,7 @@ modules.component('attributeSetNavValues', {
             };
 
             ctrl.update = function(data){
-                ctrl.onUpdate({data: data});
-                $("html, body").animate({ "scrollTop": "0px" }, 500);
+                ctrl.onUpdate({data: data});                
             };
             
             ctrl.delete = function(data){

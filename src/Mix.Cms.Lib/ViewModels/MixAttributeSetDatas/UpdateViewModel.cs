@@ -16,6 +16,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #region Models
         public string Id { get; set; }
         public int AttributeSetId { get; set; }
+        public string AttributeSetName { get; set; }
         public int ModuleId { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public int Status { get; set; }
@@ -60,7 +61,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         new MixAttributeSetValue() { AttributeFieldId = field.Id }
                         , _context, _transaction);
                     val.Field = field;
-                    val.AttributeName = field.Name;
+                    val.AttributeFieldName = field.Name;
                     val.Priority = field.Priority;
                     Values.Add(val);
                 }
