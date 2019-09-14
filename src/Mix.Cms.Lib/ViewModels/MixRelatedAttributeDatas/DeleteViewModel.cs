@@ -18,10 +18,10 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         public string Id { get; set; }
         public string ParentId { get; set; }
         public int ParentType { get; set; }
+        public int AttributeSetId { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public int Status { get; set; }
         public string Description { get; set; }
-        public string Image { get; set; }
 
         #endregion Models
 
