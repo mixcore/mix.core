@@ -15,6 +15,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public string Id { get; set; }
         public int AttributeSetId { get; set; }
+        public string AttributeSetName { get; set; }
         public int ModuleId { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public int Status { get; set; }

@@ -19,6 +19,12 @@ app.factory('RelatedAttributeSetDataService', ['$rootScope', 'CommonService', 'B
                 }
                 objData.filter += "parentId eq '" + parentId+ "'";
             }        
+            if(attributeSetId){
+                if(objData.filter){
+                    objData.filter += ' and ';
+                }
+                objData.filter += "attributeSetId eq " + attributeSetId;
+            }        
             var data = serviceFactory.parseODataQuery(objData);           
             var url = this.prefixUrl + '/' + viewType;
             if(data){

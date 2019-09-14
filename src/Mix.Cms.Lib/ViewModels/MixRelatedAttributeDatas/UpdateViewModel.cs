@@ -5,35 +5,44 @@ using System;
 
 namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 {
-    public class ReadMvcViewModel
-       : ViewModelBase<MixCmsContext, MixRelatedAttributeData, ReadMvcViewModel>
+    public class UpdateViewModel
+       : ViewModelBase<MixCmsContext, MixRelatedAttributeData, UpdateViewModel>
     {
-        public ReadMvcViewModel(MixRelatedAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public UpdateViewModel(MixRelatedAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
 
-        public ReadMvcViewModel() : base()
+        public UpdateViewModel() : base()
         {
         }
         public string Id { get; set; }
         public string ParentId { get; set; }
         public int ParentType { get; set; }
+        public int AttributeSetId { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public int Status { get; set; }
         public string Description { get; set; }
-        public string Image { get; set; }
         #region Views
 
-        public MixAttributeSetDatas.ReadMvcViewModel Data { get; set; }
+        public MixAttributeSetDatas.UpdateViewModel Data { get; set; }
 
         #endregion Views
 
         #region overrides
 
+        public override MixRelatedAttributeData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            if (CreatedDateTime == default(DateTime))
+            {
+                CreatedDateTime = DateTime.UtcNow;
+            }
+            return base.ParseModel(_context, _transaction);
+        }
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getData = MixAttributeSetDatas.ReadMvcViewModel.Repository.GetSingleModel(p => p.Id == Id && p.Specificulture == Specificulture
+            var getData = MixAttributeSetDatas.UpdateViewModel.Repository.GetSingleModel(p => p.Id == Id && p.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction
             );
             if (getData.IsSucceed)

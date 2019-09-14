@@ -15,6 +15,7 @@ namespace Mix.Cms.Lib.Models.Cms
             MixModuleAttributeSet = new HashSet<MixModuleAttributeSet>();
             MixPageAttributeSet = new HashSet<MixPageAttributeSet>();
             MixPostAttributeSet = new HashSet<MixPostAttributeSet>();
+            MixRelatedAttributeSet = new HashSet<MixRelatedAttributeSet>();
         }
 
         public int Id { get; set; }
@@ -34,5 +35,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual ICollection<MixModuleAttributeSet> MixModuleAttributeSet { get; set; }
         public virtual ICollection<MixPageAttributeSet> MixPageAttributeSet { get; set; }
         public virtual ICollection<MixPostAttributeSet> MixPostAttributeSet { get; set; }
+        public virtual ICollection<MixRelatedAttributeSet> MixRelatedAttributeSet { get; set; }
     }
 }

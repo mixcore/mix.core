@@ -4,7 +4,7 @@ modules.directive('paneV', function () {
         require: '^tabs-v',
         restrict: 'E',
         transclude: true,
-        scope: { header: '@' },
+        scope: { header: '@', id: '@' },
         link: function (scope, element, attrs, tabsController) {
             tabsController.addPane(scope);
         },

@@ -6,17 +6,17 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
+namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
 {
     public class DeleteViewModel
-        : ViewModelBase<MixCmsContext, MixRelatedAttributeData, DeleteViewModel>
+        : ViewModelBase<MixCmsContext, MixRelatedAttributeSet, DeleteViewModel>
     {
         #region Properties
 
         #region Models
 
-        public string Id { get; set; }
-        public string ParentId { get; set; }
+        public int Id { get; set; }
+        public int ParentId { get; set; }
         public int ParentType { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public int Status { get; set; }
@@ -37,7 +37,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         {
         }
 
-        public DeleteViewModel(MixRelatedAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public DeleteViewModel(MixRelatedAttributeSet model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -45,7 +45,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         #region Overrides
 
-        public override MixRelatedAttributeData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixRelatedAttributeSet ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (CreatedDateTime == default(DateTime))
             {
