@@ -1,0 +1,34 @@
+<div class="form-group">
+    <label class="control-label">Attribute Sets</label>
+    <div dnd-list="$ctrl.data" dnd-inserted="$ctrl.updateOrders(index)">
+        <div ng-repeat="item in $ctrl.data | orderBy: 'priority' track by $index" dnd-draggable="item"
+            dnd-type="'item'" dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedItem = item"
+            dnd-dragstart="$ctrl.dragStart($index)" ng-class="{'selected': $ctrl.selectedItem === item}"
+            class="mb-3 row">
+            <div class="col-md-1 form-inline">
+                <div class="form-group mb-2">
+                    <span class="fa fa-grip-vertical mr-2"></span>
+                </div>
+            </div>
+            <div class="col-md-1 form-inline">
+                <input type="checkbox" ng-model="item.isActived" ng-change="$ctrl.save(item)">
+            </div>
+            <div class="col-md-8">
+                <span ng-bind="item.data.title"></span>
+            </div>
+            <div class="col-md-2">
+                <a ng-click="$ctrl.goToPath('/portal/attribute-set/details/' + item.id)" class="btn btn-link">
+                    <span class="fas fa-pencil-alt text-warning"></span>
+                </a>                
+            </div>
+        </div>
+    </div>    
+</div>
+<tabs-v class="mb-3" ng-if="$ctrl.parentId">
+    <pane-v header="{{nav.data.title}}" id="pane-container-{{nav.data.id}}" class="card"
+        ng-repeat="nav in $ctrl.data | orderBy: 'priority' track by $index" ng-if="nav.isActived">
+        <div class="card-body">
+            <attribute-set-nav-data nav="nav" parent-id="$ctrl.parentId" parent-type="$ctrl.parentType"></attribute-set-nav-data>
+        </div>
+    </pane-v>
+</tabs-v>

@@ -119,16 +119,19 @@
 
         public enum MixAttributeSetType
         {
-            SubPage = 1,
-            SubPost = 2,
-            SubProduct = 3,
+            System = 0,
+            Page = 1,
+            Post = 2,
+            Module = 3,
+            Service = 4
         }
+
         public enum MixAttributeSetDataType
         {
-            SubSet = 1,
-            SubPost = 2,
-            SubPage = 3,
-            SubModule = 4
+            Set = 1,
+            Post = 2,
+            Page = 3,
+            Module = 4
         }
 
         public enum MixDataType
