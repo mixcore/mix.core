@@ -138,6 +138,7 @@
                 </pane-v>
                 <pane-v id="pane-form-{{$ctrl.attributeValue.field.referenceId}}" header="Form" class="card">
                     <attribute-set-form ng-if="$ctrl.attributeValue.id" attr-set-id="$ctrl.attributeValue.field.referenceId" default-id="'default'" 
+                        parent-id="$ctrl.parentId" parent-type="$ctrl.parentType"
                         attr-data="$ctrl.refDataModel.data" save-data="$ctrl.saveRefData(data)"></attribute-set-form>
                 </pane-v>
             </tabs-v>
@@ -146,12 +147,10 @@
         </div>
     </div>
 </div>
+<!-- TODO: Only allow stringValue -->>
 <div ng-if="$ctrl.attributeValue.field.isSelect" class="form-group">
-                                    
     <label class="control-label" ng-if="$ctrl.isShowTitle" ng-bind="$ctrl.attributeValue.field.title"></label>                                    
-    <mix-select-icons ng-if="$ctrl.attributeValue.field.dataType==19" options="$ctrl.attributeValue.field.options" data="$ctrl.attributeValue.booleanValue"></mix-select-icons>
-    
-    <select ng-if="$ctrl.attributeValue.field.dataType!=19" class="btn custom-select form-control" ng-model="$ctrl.attributeValue.booleanValue">
+    <select ng-if="$ctrl.attributeValue.field.dataType!=19" class="btn custom-select form-control" ng-model="$ctrl.attributeValue.stringValue">
         <option ng-repeat="item in $ctrl.attributeValue.field.options track by $index" ng-value="item.value">{{item.value}}</option>
     </select>
     <br/>                    

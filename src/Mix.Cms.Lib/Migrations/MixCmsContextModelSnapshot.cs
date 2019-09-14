@@ -1663,6 +1663,37 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("ParentId")
                         .HasMaxLength(50);
 
+                    b.Property<int>("ParentType");
+
+                    b.Property<int>("AttributeSetId");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(450);
+
+                    b.Property<int>("Priority");
+
+                    b.Property<int>("Status");
+
+                    b.HasKey("Id", "Specificulture", "ParentId", "ParentType")
+                        .HasName("PK_mix_related_attribute_data_1");
+
+                    b.ToTable("mix_related_attribute_data");
+                });
+
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedAttributeSet", b =>
+                {
+                    b.Property<int>("Id");
+
+                    b.Property<string>("Specificulture")
+                        .HasMaxLength(10);
+
+                    b.Property<int>("ParentId");
+
+                    b.Property<int>("ParentType");
+
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
@@ -1672,16 +1703,13 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Image")
                         .HasMaxLength(450);
 
-                    b.Property<int>("ParentType");
-
                     b.Property<int>("Priority");
 
                     b.Property<int>("Status");
 
-                    b.HasKey("Id", "Specificulture", "ParentId")
-                        .HasName("PK_mix_related_attribute_data_1");
+                    b.HasKey("Id", "Specificulture", "ParentId", "ParentType");
 
-                    b.ToTable("mix_related_attribute_data");
+                    b.ToTable("mix_related_attribute_set");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedPost", b =>
@@ -2232,6 +2260,14 @@ namespace Mix.Cms.Lib.Migrations
                         .WithMany("MixRelatedAttributeData")
                         .HasForeignKey("Id", "Specificulture")
                         .HasConstraintName("FK_mix_related_attribute_data_mix_attribute_set_data2");
+                });
+
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedAttributeSet", b =>
+                {
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "IdNavigation")
+                        .WithMany("MixRelatedAttributeSet")
+                        .HasForeignKey("Id")
+                        .HasConstraintName("FK_mix_related_attribute_set_mix_attribute_set");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedPost", b =>

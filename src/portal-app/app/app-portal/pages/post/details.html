@@ -9,8 +9,6 @@
                         <post-main post="activedData" generate-seo="generateSEO()"></post-main>
                     </div>
                 </div>
-
-
                 <hr>
                 <tabs-v select-callback="selectPane(pane)" class="mb-3">
                     <pane-v header="General" class="card">
@@ -19,58 +17,34 @@
                         </div>
                     </pane-v>
                     <pane-v header="Search Engine" class="card">
-
-
                         <div class="card-body">
                             <p class="text-muted">Add a title and description to see how this product might appear in a
                                 search engine listing.</p>
-
                             <post-seo post="activedData"></post-seo>
                         </div>
-
                     </pane-v>
                     <pane-v header="Parents" class="card">
-
                         <div class="card-body">
                             <post-parents post="activedData"></post-parents>
                         </div>
                     </pane-v>
                     <pane-v header="Module" class="card">
-
                         <div class="card-body">
                             <post-modules post="activedData"></post-modules>
                         </div>
                     </pane-v>
                     <pane-v header="Medias">
                         <post-medias post="activedData" medias="activedData.mediaNavs"></post-medias>
-                        <!--<navigation data="activedData.mediaNavs" prefix="media"></navigation>-->
-                        <!--<navs data="activedData.mediaNavs" prefix="'media'" model="'nav-post-media'"></navs>-->
-
                     </pane-v>
                     <pane-v header="Related Posts">
-
                         <related-navs request="request" source-id="activedData.id" culture="activedData.specificulture"
                             prefix="'post'" navs="activedData.postNavs" data="data"
                             load-data="getListRelated(pageIndex)"></related-navs>
-
                     </pane-v>
-
                 </tabs-v>
-                <div class="tab-pane fade active show" id="pills-general" role="tabpanel" aria-labelledby="pills-general-tab">
-                
-                    <div class="form-group">
-                        <label class="control-label">Attribute Sets</label>
-                        <navs data="activedData.attributeSetNavs" prefix="'attribute_set'"
-                            details-url="'/portal/attribute-set/details/'" key="'attributeSetId'"></navs>
-                    </div>
-                    <tabs-v class="mb-3">
-                        <pane-v header="{{set.description}}" class="card"
-                            ng-repeat="set in activedData.attributeSetNavs track by $index" ng-if="set.isActived">
-                            <div class="card-body">
-                                <post-attribute-set ng-if="isAdmin" set="set"></post-attribute-set>
-                            </div>
-                        </pane-v>
-                    </tabs-v>
+                <div class="tab-pane fade active show" id="pills-general" role="tabpanel" 
+                    aria-labelledby="pills-general-tab">
+                    <attribute-set-navs ng-if="activedData.id" parent-id="activedData.id" parent-type="2"></attribute-set-navs>
                 </div>
                 <template-editor ng-if="isAdmin" folder-type="'Posts'" template="activedData.view" templates="activedData.templates">
                 </template-editor>
