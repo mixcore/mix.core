@@ -2,18 +2,18 @@
     <form ng-if="appSettings" ng-class="{'submitted': submitted}" ng-submit="saveAppSettings(appSettings)" autocomplete="new-password">
         <tabs-h>
             <actions preview-url="appSettings.fullPath" back-url="'/portal/configuration/list'"></actions>            
-            <pane-h title="General" class="card">
+            <pane-h header="General" class="card">
                 <div class="card-body">
                     <app-settings-general app-settings="appSettings"></app-settings-general>
                 </div>
             </pane-h>
-            <pane-h title="Default" class="card">
+            <pane-h header="Default" class="card">
                 <div class="card-body">
                     <app-settings-default app-settings="appSettings" statuses="statuses" cultures="globalSettings.cultures">
                     </app-settings-default>
                 </div>
             </pane-h>
-            <pane-h title="Import" class="card">
+            <pane-h header="Import" class="card">
                 <div class="card-body">
                     <h6>Import
                         <a href="/portal/import" class="btn btn-link text-primary btn-sm float-right"><span class="fas fa-file-import text-primary"></span> Import</a>
@@ -23,7 +23,7 @@
                         appear in a search engine listing.</p>
                 </div>
             </pane-h>
-            <pane-h title="Permissions" class="card">
+            <pane-h header="Permissions" class="card">
                 <div class="card-body">
                     <h6>Permissions
                         <a href="/portal/permission/create" class="btn btn-link text-primary btn-sm float-right"><span class="fas fa-plus text-primary"></span> Add
@@ -33,7 +33,7 @@
                     </h6>
                 </div>
             </pane-h>
-            <pane-h title="Attribute sets" class="card">
+            <pane-h header="Attribute sets" class="card">
                 <div class="card-body">
                     <h6>Attribute sets
                         <a href="/portal/attribute-set/create" class="btn btn-link text-primary btn-sm float-right"><span class="fas fa-plus text-primary"></span> Add
@@ -43,17 +43,17 @@
                     </h6>
                 </div>
             </pane-h>
-            <pane-h title="Authentication" class="card">
+            <pane-h header="Authentication" class="card">
                 <div class="card-body">
                     <app-settings-auth app-settings="appSettings"></app-settings-auth>
                 </div>
             </pane-h>
-            <pane-h title="Email" class="card">
+            <pane-h header="Email" class="card">
                 <div class="card-body">
                     <app-settings-smtp app-settings="appSettings"></app-settings-smtp>
                 </div>
             </pane-h>
-            <pane-h title="Languages" class="card">
+            <pane-h header="Languages" class="card">
                 <div class="card-body">
                     <h6>Languages
                         <a href="/portal/language/create" class="btn btn-link text-primary btn-sm float-right"><span class="fas fa-plus text-primary"></span> Add
@@ -63,7 +63,7 @@
                     </h6>
                 </div>
             </pane-h>
-            <pane-h title="Localization" class="card">
+            <pane-h header="Localization" class="card">
                 <div class="card-body">
                         <h6>Localization
                             <a href="/portal/localize/create" class="btn btn-link text-primary btn-sm float-right"><span class="fas fa-plus text-primary"></span> Add

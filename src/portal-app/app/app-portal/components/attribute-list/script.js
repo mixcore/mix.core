@@ -15,6 +15,7 @@ modules.component('attributeList', {
             ctrl.addAttr = function () {
                 if (ctrl.attributes) {
                     var t = angular.copy(ctrl.defaultAttr);
+                    t.priority = ctrl.attributes.length +1;
                     ctrl.attributes.push(t);
                 }
             };

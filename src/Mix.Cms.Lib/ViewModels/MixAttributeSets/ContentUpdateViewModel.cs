@@ -39,7 +39,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         public List<MixAttributeFields.UpdateViewModel> Attributes { get; set; }
 
         [JsonProperty("postData")]
-        public PaginationModel<MixPostAttributeDatas.UpdateViewModel> PostData { get; set; }
+        public PaginationModel<MixRelatedAttributeDatas.UpdateViewModel> PostData { get; set; }
         #endregion
         #endregion Properties
         #region Contructors
@@ -76,15 +76,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         public void LoadPostData(int postId, string specificulture, int? pageSize = null, int? pageIndex = 0
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getData = MixPostAttributeDatas.UpdateViewModel.Repository
+            var getData = MixRelatedAttributeDatas.UpdateViewModel.Repository
             .GetModelListBy(
-                m => m.PostId == postId && m.Specificulture == specificulture && m.AttributeSetId == Id
+                m => m.ParentId == postId.ToString() && m.ParentType == (int)MixEnums.MixAttributeSetDataType.Post && m.Specificulture == specificulture 
                 , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
                 , pageSize, pageIndex
                 , _context: _context, _transaction: _transaction);
             if (!getData.IsSucceed || getData.Data == null || getData.Data.Items.Count == 0)
             {
-                PostData = new PaginationModel<MixPostAttributeDatas.UpdateViewModel>() { TotalItems = 1 };
+                PostData = new PaginationModel<MixRelatedAttributeDatas.UpdateViewModel>() { TotalItems = 1 };
                 //PostData.Items.Add(new MixPostAttributeDatas.UpdateViewModel(Id, Attributes));
             }
             else

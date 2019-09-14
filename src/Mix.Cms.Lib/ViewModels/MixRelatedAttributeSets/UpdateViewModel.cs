@@ -3,12 +3,29 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using System;
 
-namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
+namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
 {
     public class UpdateViewModel
-       : ViewModelBase<MixCmsContext, MixRelatedAttributeData, UpdateViewModel>
+       : ViewModelBase<MixCmsContext, MixRelatedAttributeSet, UpdateViewModel>
     {
-        public UpdateViewModel(MixRelatedAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        #region Properties
+        #region Models
+        public int Id { get; set; }
+        public int ParentId { get; set; }
+        public int ParentType { get; set; }
+        public DateTime CreatedDateTime { get; set; }
+        public int Status { get; set; }
+        public string Description { get; set; }
+        public string Image { get; set; }
+
+        #endregion
+        #region Views
+
+        public MixAttributeSets.UpdateViewModel Data { get; set; }
+
+        #endregion Views
+        #endregion
+        public UpdateViewModel(MixRelatedAttributeSet model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
@@ -16,22 +33,11 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         public UpdateViewModel() : base()
         {
         }
-        public string Id { get; set; }
-        public string ParentId { get; set; }
-        public int ParentType { get; set; }
-        public DateTime CreatedDateTime { get; set; }
-        public int Status { get; set; }
-        public string Description { get; set; }
-        public string Image { get; set; }
-        #region Views
-
-        public MixAttributeSetDatas.UpdateViewModel Data { get; set; }
-
-        #endregion Views
+        
 
         #region overrides
 
-        public override MixRelatedAttributeData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixRelatedAttributeSet ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (CreatedDateTime == default(DateTime))
             {
@@ -42,7 +48,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getData = MixAttributeSetDatas.UpdateViewModel.Repository.GetSingleModel(p => p.Id == Id && p.Specificulture == Specificulture
+            var getData = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(p => p.Id == Id
                 , _context: _context, _transaction: _transaction
             );
             if (getData.IsSucceed)
