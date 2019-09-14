@@ -33,6 +33,8 @@
     <Compile Remove="Migrations\20190912014738_add_attr_name_to_data.Designer.cs" />
     <Compile Remove="Migrations\20190913152757_upd_related_attr_set.cs" />
     <Compile Remove="Migrations\20190913152757_upd_related_attr_set.Designer.cs" />
+    <Compile Remove="Migrations\20190914091248_upd_attr_set_data.cs" />
+    <Compile Remove="Migrations\20190914091248_upd_attr_set_data.Designer.cs" />
     <Compile Remove="Services\CmsConfiguration.cs" />
     <Compile Remove="Services\CmsCultureConfiguration.cs" />
   </ItemGroup>
