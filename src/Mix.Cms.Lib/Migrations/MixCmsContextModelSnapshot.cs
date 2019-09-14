@@ -1665,13 +1665,12 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("ParentType");
 
+                    b.Property<int>("AttributeSetId");
+
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(450);
-
-                    b.Property<string>("Image")
                         .HasMaxLength(450);
 
                     b.Property<int>("Priority");

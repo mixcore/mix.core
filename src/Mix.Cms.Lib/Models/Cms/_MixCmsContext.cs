@@ -1415,8 +1415,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Description).HasMaxLength(450);
 
-                entity.Property(e => e.Image).HasMaxLength(450);
-
                 entity.HasOne(d => d.MixAttributeSetData)
                     .WithMany(p => p.MixRelatedAttributeData)
                     .HasForeignKey(d => new { d.Id, d.Specificulture })

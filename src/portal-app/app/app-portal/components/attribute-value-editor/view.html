@@ -147,12 +147,10 @@
         </div>
     </div>
 </div>
+<!-- TODO: Only allow stringValue -->>
 <div ng-if="$ctrl.attributeValue.field.isSelect" class="form-group">
-                                    
     <label class="control-label" ng-if="$ctrl.isShowTitle" ng-bind="$ctrl.attributeValue.field.title"></label>                                    
-    <mix-select-icons ng-if="$ctrl.attributeValue.field.dataType==19" options="$ctrl.attributeValue.field.options" data="$ctrl.attributeValue.booleanValue"></mix-select-icons>
-    
-    <select ng-if="$ctrl.attributeValue.field.dataType!=19" class="btn custom-select form-control" ng-model="$ctrl.attributeValue.booleanValue">
+    <select ng-if="$ctrl.attributeValue.field.dataType!=19" class="btn custom-select form-control" ng-model="$ctrl.attributeValue.stringValue">
         <option ng-repeat="item in $ctrl.attributeValue.field.options track by $index" ng-value="item.value">{{item.value}}</option>
     </select>
     <br/>                    

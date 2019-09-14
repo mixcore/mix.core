@@ -123,9 +123,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("postNavs")]
         public List<MixPostPosts.ReadViewModel> PostNavs { get; set; }
 
-        [JsonProperty("attributeSetNavs")]
-        public List<MixPostAttributeSets.UpdateViewModel> AttributeSetNavs { get; set; }
-
         [JsonProperty("listTag")]
         public JArray ListTag { get; set; } = new JArray();
 
@@ -259,9 +256,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             // Load Properties
             LoadExtraProperties();
 
-            // Load Attribute Sets
-            LoadAttributeSets(_context, _transaction);
-
             //Get Templates
             LoadTemplates(_context, _transaction);
 
@@ -391,12 +385,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 {
                     // Save Parent Modules
                     result = await SaveParentModulesAsync(parent.Id, _context, _transaction);
-                }
-
-                if (result.IsSucceed)
-                {
-                    // Save Attribute Set Values
-                    result = await SaveAttributeSetDataAsync(parent.Id, _context, _transaction);
                 }
 
                 return result;
@@ -563,51 +551,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (!result.IsSucceed)
                 {
                     break;
-                }
-            }
-            return result;
-        }
-
-        private async Task<RepositoryResponse<bool>> SaveAttributeSetDataAsync(int parentId, MixCmsContext _context, IDbContextTransaction _transaction)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            foreach (var nav in AttributeSetNavs)
-            {
-                nav.PostId = parentId;
-                nav.Specificulture = Specificulture;
-
-                if (nav.IsActived)
-                {
-                    // Save Navigation Post - Attribute Set
-                    var saveResult = await nav.SaveModelAsync(true, _context, _transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-                    
-                }
-                else
-                {
-                    var saveResult = await nav.RemoveModelAsync(false, _context, _transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-
-                    // Remove Post Attribute Data
-                    if (result.IsSucceed)
-                    {
-                        var data = await _context.MixPostAttributeData.Where(n => n.PostId == Id && n.AttributeSetId == nav.AttributeSetId
-                            && n.Specificulture == Specificulture).ToListAsync();
-                        foreach (var item in data)
-                        {
-                            var values = await _context.MixPostAttributeValue.Where(n =>
-                                n.DataId == item.Id && n.PostId == Id
-                                && n.Specificulture == Specificulture).ToListAsync();
-                            foreach (var val in values)
-                            {
-                                _context.Entry(val).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-                            }
-                            _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-                        }
-                        await _context.SaveChangesAsync();
-
-                        ViewModelHelper.HandleResult(saveResult, ref result);
-                    }
                 }
             }
             return result;
@@ -1020,39 +963,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     PostId = Id,
                     Description = item.Title,
                     Module = item
-                });
-            }
-        }
-
-        private void LoadAttributeSets(MixCmsContext _context, IDbContextTransaction _transaction)
-        {
-            var getPostAttributeSet = MixPostAttributeSets.UpdateViewModel.Repository.GetModelListBy(
-                n => n.PostId == Id, _context, _transaction);
-            if (getPostAttributeSet.IsSucceed)
-            {
-                AttributeSetNavs = getPostAttributeSet.Data.OrderBy(p => p.Priority).ToList();
-                foreach (var item in AttributeSetNavs)
-                {
-                    item.IsActived = true;
-                    item.MixAttributeSet.LoadPostData(
-                        postId: Id, specificulture: Specificulture
-                        , _context: _context, _transaction: _transaction);
-                }
-            }
-            var otherAttributeSetNavs = MixAttributeSets.ContentUpdateViewModel.Repository.GetModelListBy(
-                m => m.Type == (int) MixEnums.MixAttributeSetType.SubPost && !AttributeSetNavs.Any(n => n.AttributeSetId == m.Id)
-                , "CreatedDateTime", 1, null, 0, _context, _transaction);
-            foreach (var item in otherAttributeSetNavs.Data.Items)
-            {
-                item.LoadPostData(
-                        postId: Id, specificulture: Specificulture
-                        , _context: _context, _transaction: _transaction);
-                AttributeSetNavs.Add(new MixPostAttributeSets.UpdateViewModel()
-                {
-                    AttributeSetId = item.Id,
-                    PostId = Id,
-                    Description = item.Title,
-                    MixAttributeSet = item
                 });
             }
         }

@@ -34,13 +34,13 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSets
         [EnableQuery]
         [HttpGet, HttpOptions]
         [Route("{parentId}/{parentType}/{id}")]
-        public async Task<ActionResult<UpdateViewModel>> Details(string culture, int parentId, int parentType, int? id)
+        public async Task<ActionResult<UpdateViewModel>> Details(string culture, int parentId, int parentType, int id)
         {
             string msg = string.Empty;
             Expression<Func<MixRelatedAttributeSet, bool>> predicate = null;
             MixRelatedAttributeSet model = null;
             // Get Details if has id or else get default
-            if (id.HasValue)
+            if (id > 0)
             {
                 predicate = m => m.Id == id && m.ParentId == parentId && m.ParentType == parentType && m.Specificulture == _lang;
             }

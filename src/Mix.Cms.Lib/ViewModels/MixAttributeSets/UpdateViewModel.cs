@@ -19,7 +19,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 
         public int Id { get; set; }
         public int? ReferenceId { get; set; }
-        public MixEnums.MixAttributeSetType Type { get; set; }
+        public int Type { get; set; }
         public string Title { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

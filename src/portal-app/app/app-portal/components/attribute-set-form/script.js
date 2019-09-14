@@ -22,7 +22,7 @@ modules.component('attributeSetForm', {
                 ctrl.loadData();
             };
             ctrl.loadData = async function () {
-                $rootScope.isBusy = true;
+                
                 /*
                     If input is data id => load ctrl.attrData from service and handle it independently
                     Else modify input ctrl.attrData
@@ -31,13 +31,11 @@ modules.component('attributeSetForm', {
                 if(ctrl.attrDataId){
                     ctrl.attrData = await service.getSingle('portal', [ctrl.attrDataId, ctrl.attrSetId, ctrl.attrSetName]);
                     if (ctrl.attrData) {
-                        $rootScope.isBusy = false;
                         $scope.$apply();
                     } else {
                         if (ctrl.attrData) {
                             $rootScope.showErrors('Failed');
                         }
-                        $rootScope.isBusy = false;
                         $scope.$apply();
                     }
                 }
@@ -45,11 +43,9 @@ modules.component('attributeSetForm', {
                     if(!ctrl.attrData){
                         ctrl.attrData = angular.copy(ctrl.defaultData);
                     }
-                    $rootScope.isBusy = false;
                 }
             };
             ctrl.reload = async function () {
-                $rootScope.isBusy = true;
                 ctrl.attrData = angular.copy(ctrl.defaultData);
             };
             ctrl.submit = async function () {
@@ -82,7 +78,6 @@ modules.component('attributeSetForm', {
                         if (saveResult) {
                             $rootScope.showErrors(saveResult.errors);
                         }
-                        $rootScope.isBusy = false;
                         $scope.$apply();
                     }
 
