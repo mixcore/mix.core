@@ -36,7 +36,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         [HttpGet, HttpOptions]
         [Route("{id}")]
         [Route("{id}/{attributeSetId}")]
-        public async Task<ActionResult<ReadViewModel>> Details(string culture, string id)
+        public async Task<ActionResult<ReadViewModel>> Details(string culture, string id, int attributeSetId)
         {
             string msg = string.Empty;
             Expression<Func<MixAttributeSetData, bool>> predicate = null;

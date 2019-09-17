@@ -17,21 +17,13 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         #region Properties
         #region Models
 
-        [JsonProperty("id")]
         public int Id { get; set; }
-        [JsonProperty("ReferenceId")]
         public int? ReferenceId { get; set; }
-        [JsonProperty("type")]
-        public int? Type { get; set; }
-        [JsonProperty("title")]
+        public int Type { get; set; }
         public string Title { get; set; }
-        [JsonProperty("name")]
         public string Name { get; set; }
-        [JsonProperty("description")]
         public string Description { get; set; }
-        [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-        [JsonProperty("status")]
         public int Status { get; set; }
 
         #endregion Models
@@ -77,6 +69,19 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
                 CreatedDateTime = DateTime.UtcNow;
             }
             return base.ParseModel(_context, _transaction);
+        }
+
+        public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            base.Validate(_context, _transaction);
+            if (IsValid)
+            {
+                if (_context.MixAttributeSet.Any(s=>s.Name== Name && s.Id != Id))
+                {
+                    IsValid = false;
+                    Errors.Add($"{Name} is Existed");
+                }
+            }
         }
 
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSet parent, MixCmsContext _context, IDbContextTransaction _transaction)

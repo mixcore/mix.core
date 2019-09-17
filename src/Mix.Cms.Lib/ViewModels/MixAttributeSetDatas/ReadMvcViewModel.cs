@@ -15,6 +15,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public string Id { get; set; }
         public int AttributeSetId { get; set; }
+        public string AttributeSetName { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public MixEnums.MixContentStatus Status { get; set; }
 
@@ -45,12 +46,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             ObjValue = new JObject();
             var values = MixAttributeSetValues.ReadMvcViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-            foreach (var item in values)
+            foreach (var item in values.OrderBy(v=>v.Priority))
             {
                 ObjValue.Add(ParseValue(item));
-
             }
-
         }
 
         #endregion
@@ -61,25 +60,24 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             switch (item.DataType)
             {
                 case MixEnums.MixDataType.DateTime:
-                    return new JProperty(item.AttributeName, item.DateTimeValue);
+                    return new JProperty(item.AttributeFieldName, item.DateTimeValue);
                 case MixEnums.MixDataType.Date:
-                    return (new JProperty(item.AttributeName, item.DateTimeValue));
+                    return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
                 case MixEnums.MixDataType.Time:
-                    return (new JProperty(item.AttributeName, item.DateTimeValue));
+                    return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
                 case MixEnums.MixDataType.Currency:
-                    return (new JProperty(item.AttributeName, item.DoubleValue));
+                    return (new JProperty(item.AttributeFieldName, item.DoubleValue));
                 case MixEnums.MixDataType.Boolean:
-                    return (new JProperty(item.AttributeName, item.BooleanValue));
+                    return (new JProperty(item.AttributeFieldName, item.BooleanValue));
                 case MixEnums.MixDataType.Number:
-                    return (new JProperty(item.AttributeName, item.IntegerValue));
-                    break;
+                    return (new JProperty(item.AttributeFieldName, item.IntegerValue));
                 case MixEnums.MixDataType.Reference:
                     JArray arr = new JArray();
                     foreach (var nav in item.DataNavs)
                     {
                         arr.Add(nav.Data.ObjValue);
                     }
-                    return (new JProperty(item.AttributeName, arr));
+                    return (new JProperty(item.AttributeFieldName, arr));
                 case MixEnums.MixDataType.Custom:
                 case MixEnums.MixDataType.Duration:
                 case MixEnums.MixDataType.PhoneNumber:
@@ -98,7 +96,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 case MixEnums.MixDataType.VideoYoutube:
                 case MixEnums.MixDataType.TuiEditor:
                 default:
-                    return (new JProperty(item.AttributeName, item.StringValue));
+                    return (new JProperty(item.AttributeFieldName, item.StringValue));
             }
         }
         #endregion

@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using System;
+using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 {
@@ -16,7 +18,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         public string Regex { get; set; }
         public int DataType { get; set; }
         public int Status { get; set; }
-        public string AttributeName { get; set; }
+        public string AttributeFieldName { get; set; }
         public bool? BooleanValue { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public string DataId { get; set; }
@@ -48,6 +50,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         }
 
         #endregion Contructors
+
         #region Overrides
         public override MixAttributeSetValue ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -65,6 +68,36 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         {
             Field = MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId).Data;
         }
+        #endregion
+
+        #region Expands
+
+        public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            base.Validate(_context, _transaction);
+            if (IsValid)
+            {
+                if (Field.IsUnique)
+                {
+                    var exist = _context.MixAttributeSetValue.Any(d => d.Specificulture == Specificulture
+                        && d.StringValue == StringValue && d.Id != Id && d.DataId != DataId);
+                    if (exist)
+                    {
+                        IsValid = false;
+                        Errors.Add($"{Field.Title} = {StringValue} is existed");
+                    }                    
+                }
+                if (Field.IsRequire)
+                {
+                    if (string.IsNullOrEmpty(StringValue))
+                    {
+                        IsValid = false;
+                        Errors.Add($"{Field.Title} is required");
+                    }
+                }
+            }
+        }
+
         #endregion
     }
 }

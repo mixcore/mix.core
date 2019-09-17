@@ -1,26 +1,23 @@
 <!-- <section class="content container-fluid"> -->
-<div class="card-header">
-    <div class="row">
-        <div class="col-md-12">
-            <filter-list request="request" callback="getList(pageIndex)"></filter-list>
-        </div>
-        <div class="col-md-12">
-            <a href="/portal/attribute-set-data/create?attributeSetId={{attributeSetId}}&dataId=default" class="btn btn-link">
-                <i class="fas fa-plus"></i>
-            </a>
-        </div>
+<div class="row mb-3">
+    <div class="col-md-12 my-2">
+        <filter-list request="request" callback="getList(pageIndex)"></filter-list>
+    </div>
+    <div class="col-md-12">
+        <a href="/portal/attribute-set-data/create?attributeSetId={{attributeSetId}}&attributeSetName={{attributeSetName}}&dataId=default"
+            class="btn btn-sm btn-primary float-right">
+            <i class="fas fa-plus"></i> Create data
+        </a>
     </div>
 </div>
-<div class="card-body"  ng-init="getList()">    
-     <attribute-set-values on-update="edit(data)" on-delete="remove(data)" 
-        header="''" 
-        data="data">
+<div ng-init="getList()">
+    <attribute-set-values on-update="edit(data)" on-delete="remove(data)" header="''" data="data">
     </attribute-set-values>
 </div>
-<div class="card-footer">
-    <paging class="small" page="request.pageIndex + 1" page-size="request.pageSize" total="request.totalItems" ul-class="pagination justify-content-end m-0"
-        a-class="page-link" paging-action="getList(page-1)" scroll-top="true"></paging>
-</div>
+<hr>
+<paging class="small" page="request.pageIndex + 1" page-size="request.pageSize" total="request.totalItems"
+ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)"
+scroll-top="true"></paging>
 
 
 
