@@ -1,0 +1,14 @@
+<tabs-v select-callback="$ctrl.selectPane(pane)" class="mb-3">
+    <pane-v id="pane-data-{{$ctrl.nav.data.id}}" header="Data" class="card">
+        <attribute-set-nav-values on-update="$ctrl.updateData(data)" on-delete="$ctrl.removeData(data)" 
+            data="$ctrl.data">
+        </attribute-set-nav-values>
+    </pane-v>
+    <pane-v id="pane-form-{{$ctrl.nav.data.id}}" header="Form" class="card">
+        <attribute-set-form ng-if="$ctrl.selected" attr-set-id="$ctrl.nav.data.id" default-id="'default'" 
+            parent-id="$ctrl.parentId" parent-type="$ctrl.parentType"
+            attr-data="$ctrl.selected.data" save-data="$ctrl.saveData(data)">
+        </attribute-set-form>
+    </pane-v>
+</tabs-v>
+

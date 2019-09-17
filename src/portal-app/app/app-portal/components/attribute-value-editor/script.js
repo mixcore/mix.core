@@ -35,8 +35,8 @@ modules.component('attributeValueEditor', {
                     case 1:
                     case 2:
                     case 3:
-                        if (ctrl.attributeValue.datetimeValue) {
-                            ctrl.attributeValue.dateObj = new Date(ctrl.attributeValue.datetimeValue);
+                        if (ctrl.attributeValue.dateTimeValue) {
+                            ctrl.attributeValue.dateObj = new Date(ctrl.attributeValue.dateTimeValue);
                             $scope.$apply();
                         }
                         break;
@@ -72,8 +72,8 @@ modules.component('attributeValueEditor', {
                 case 2:
                 case 3:
                     if (ctrl.attributeValue.dateObj) {
-                        ctrl.attributeValue.datetimeValue = ctrl.attributeValue.dateObj.toISOString();
-                        ctrl.attributeValue.stringValue = ctrl.attributeValue.datetimeValue;
+                        ctrl.attributeValue.dateTimeValue = ctrl.attributeValue.dateObj.toISOString();
+                        ctrl.attributeValue.stringValue = ctrl.attributeValue.dateTimeValue;
                     }
                     break;
                 case 6:
@@ -111,6 +111,8 @@ modules.component('attributeValueEditor', {
         }
         ctrl.updateRefData = function(nav){
             ctrl.refDataModel = nav;
+            var e = $(".pane-form-" + ctrl.attributeValue.field.referenceId)[0];
+            angular.element(e).triggerHandler('click');
             // $location.url('/portal/attribute-set-data/details?dataId='+ item.id +'&attributeSetId=' + item.attributeSetId+'&parentType=' + item.parentType+'&parentId=' + item.parentId);
         };
         ctrl.saveRefData = function(data){            
@@ -126,6 +128,8 @@ modules.component('attributeValueEditor', {
                                 [resp.data.parentId, resp.data.parentType, resp.data.id]);
                             if(!tmp){
                                 ctrl.refData.push(resp.data);
+                                var e = $(".pane-data-" + ctrl.attributeValue.field.referenceId)[0];
+                                angular.element(e).triggerHandler('click');
                             }
                             ctrl.refDataModel = angular.copy(ctrl.defaultDataModel);
                             $rootScope.isBusy = false;
@@ -143,7 +147,6 @@ modules.component('attributeValueEditor', {
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 }
-                console.log(resp);
             })
         }
         ctrl.removeRefData = async function(nav){

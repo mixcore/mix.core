@@ -16,24 +16,26 @@ app.controller('AttributeSetDataController',
             $scope.canDrag = $scope.request.orderBy !== 'Priority' || $scope.request.direction !== '0';
             $scope.init= async function(){
                 $scope.attributeSetId = $routeParams.attributeSetId;
+                $scope.attributeSetName = $routeParams.attributeSetName;
                 $scope.dataId = $routeParams.dataId;
                 
             };
             $scope.saveSuccessCallback = function () {
-                if($scope.parentId){
-                    $location.url('/portal/attribute-set-data/details?dataId='+ $scope.parentId);
-                }
-                else{
-                    $location.url('/portal/attribute-set-data/list?attributeSetId='+ $scope.activedData.attributeSetId);                    
-                }
+                // if($scope.parentId){
+                //     $location.url('/portal/attribute-set-data/details?dataId='+ $scope.parentId);
+                // }
+                // else{
+                //     $location.url('/portal/attribute-set-data/list?attributeSetId='+ $scope.activedData.attributeSetId);                    
+                // }
             };
             $scope.getList = async function () {
                 $rootScope.isBusy = true;
                 $scope.attributeSetId = $routeParams.attributeSetId;
+                $scope.attributeSetName = $routeParams.attributeSetName;
                 var attrSetId = $routeParams.attributeSetId;
                 var type = $routeParams.type;
                 var parentId = $routeParams.parentId;
-                var response = await service.getList('read', $scope.request, attrSetId, type, parentId);
+                var response = await service.getList('read', $scope.request, $scope.attributeSetId, $scope.attributeSetName, type, parentId);
                 $scope.canDrag = $scope.request.orderBy !== 'Priority' || $scope.request.direction !== '0';
                 if (response) {
                     $scope.data = response;
@@ -50,7 +52,8 @@ app.controller('AttributeSetDataController',
                 $rootScope.isBusy = true;
                 var id = $routeParams.id || $scope.defaultId;
                 $scope.attributeSetId = $routeParams.attributeSetId;
-                var resp = await service.getSingle('portal', [id, $scope.attributeSetId]);
+                $scope.attributeSetName = $routeParams.attributeSetName;
+                var resp = await service.getSingle('portal', [id, $scope.attributeSetId, $scope.attributeSetName]);
                 if (resp) {
                     $scope.activedData = resp;
                     $scope.activedData.parentType = $scope.parentType;

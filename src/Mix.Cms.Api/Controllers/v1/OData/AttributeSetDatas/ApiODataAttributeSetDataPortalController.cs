@@ -37,7 +37,8 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         [HttpGet, HttpOptions]
         [Route("{id}")]
         [Route("{id}/{attributeSetId}")]
-        public async Task<ActionResult<UpdateViewModel>> Details(string culture, string id, int? attributeSetId)
+        [Route("{id}/{attributeSetId}/{attributeSetName}")]
+        public async Task<ActionResult<UpdateViewModel>> Details(string culture, string id, int? attributeSetId, string attributeSetName)
         {
             string msg = string.Empty;
             Expression<Func<MixAttributeSetData, bool>> predicate = null;
@@ -47,14 +48,20 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             {
                 predicate = m => m.Id == id && m.Specificulture == _lang;
             }
-            else if (attributeSetId.HasValue)
+            else
             {
                 model = new MixAttributeSetData()
                 {
-                    AttributeSetId = attributeSetId.Value,
                     Specificulture = _lang,
-                    Priority = UpdateViewModel.Repository.Max(p => p.Priority).Data + 1
                 };
+                if (attributeSetId.HasValue)
+                {
+                    model.AttributeSetId = attributeSetId.Value;  
+                }
+                if (!string.IsNullOrEmpty(attributeSetName))
+                {
+                    model.AttributeSetName = attributeSetName;
+                }
             }
 
             if (predicate != null || model != null)

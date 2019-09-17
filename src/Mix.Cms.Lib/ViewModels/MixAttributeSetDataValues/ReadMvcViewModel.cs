@@ -17,7 +17,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         public string Regex { get; set; }
         public MixEnums.MixDataType DataType { get; set; }
         public int Status { get; set; }
-        public string AttributeName { get; set; }
+        public string AttributeFieldName { get; set; }
         public bool? BooleanValue { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public string DataId { get; set; }
@@ -55,7 +55,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
             if (DataType == MixEnums.MixDataType.Reference)
             {
                 DataNavs = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(d =>
-                    d.ParentId == DataId && d.ParentType == (int)MixEnums.MixAttributeSetDataType.SubSet && d.Specificulture == Specificulture,
+                    d.ParentId == DataId && d.ParentType == (int)MixEnums.MixAttributeSetDataType.Set && d.Specificulture == Specificulture,
                 _context, _transaction).Data;
             }
         }

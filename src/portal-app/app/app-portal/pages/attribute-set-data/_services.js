@@ -4,10 +4,16 @@ app.factory('AttributeSetDataService', ['$rootScope', 'CommonService', 'BaseODat
         var serviceFactory = angular.copy(baseService);
         serviceFactory.init('attribute-set-data');
 
-        var _getList = async function (viewType, objData,attributeSetId,parentType, parentId) {
+        var _getList = async function (viewType, objData, attributeSetId, attributeSetName, parentType, parentId) {
             objData.filter  = '';
             if(attributeSetId){
                 objData.filter += 'attributeSetId eq ' + attributeSetId;
+            }
+            if(attributeSetName){
+                if(objData.filter){
+                    objData.filter += ' and ';
+                }
+                objData.filter += "attributeSetName eq '" + attributeSetName + "'";;
             }
             if(parentType){
                 if(objData.filter){
@@ -19,7 +25,7 @@ app.factory('AttributeSetDataService', ['$rootScope', 'CommonService', 'BaseODat
                 if(objData.filter){
                     objData.filter += ' and ';
                 }
-                objData.filter += "parentId eq '" + parentId+ "'";
+                objData.filter += "parentId eq '" + parentId + "'";
             }        
             var data = serviceFactory.parseODataQuery(objData);           
             var url = this.prefixUrl + '/' + viewType;
