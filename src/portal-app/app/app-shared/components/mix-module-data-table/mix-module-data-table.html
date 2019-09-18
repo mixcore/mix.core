@@ -8,7 +8,7 @@
         <div class="col-sm-12">
             <div class="row header">
                 <div class="col-1">
-                    <span class="fa fa-grip-vertical text-black-50"></span>
+                    <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                 </div>
                 <div scope="col" class="col-sm-2" ng-repeat="col in $ctrl.columns track by $index">
                     <span ng-bind="col.title">
@@ -30,7 +30,7 @@
             dnd-selected="$ctrl.selected = nav" ng-class="{'selected': $ctrl.selected === nav}">
             <div class="row">
                 <div class="col-1 drag-header" style="cursor:move;">
-                    <span class="fa fa-grip-vertical text-black-50"></span>
+                    <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                 </div>
                 <div class="col-sm-2" ng-repeat="col in $ctrl.columns track by $index" style="overflow:hidden">
                     <module-data-preview data="nav.jItem[col.name]" width="50"></module-data-preview>

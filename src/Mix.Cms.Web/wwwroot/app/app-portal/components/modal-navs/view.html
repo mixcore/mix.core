@@ -32,7 +32,7 @@
                             <tbody>
                                 <tr ng-repeat="item in $ctrl.data track by $index">
                                     <td style="cursor:move;" class="drag-header">
-                                        <span class="fa fa-grip-vertical text-black-50"></span>
+                                        <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                                     </td>
                                     <td>
                                         <input type="checkbox" ng-model="item.isActived" ng-change="$ctrl.selectChange(item)">

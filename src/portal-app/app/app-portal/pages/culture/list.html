@@ -19,7 +19,7 @@
         <thead class="thead-light">
             <tr>
                 <th scope="col" width="5%">
-                    <span class="fa fa-grip-vertical text-black-50"></span>
+                    <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                 </th>
                 <th scope="col" width="5%">
                     <span class="fa fa-grip-vertical text-black-50-numeric-down"></span>
@@ -45,7 +45,7 @@
         <tbody class="sortable" ng-init="getList()">
             <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="culture" sort-model-id="{{item.id}}">
                 <td style="cursor:move;" class="drag-header">
-                    <span class="fa fa-grip-vertical text-black-50"></span>
+                    <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                 </td>
                 <td>
                     <input type="text" value="{{item.priority}}" class="item-priority form-control form-control-sm d-inline" style="width:40px;">
