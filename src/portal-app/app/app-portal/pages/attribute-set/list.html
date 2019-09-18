@@ -16,7 +16,7 @@
             <thead class="thead-light">
                 <tr>
                     <th scope="col" style="width: 3%;">
-                        <span class="fa fa-grip-vertical text-black-50"></span>
+                        <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                     </th>
                     <th scope="col" style="width: 4%;">
                         <input type="checkbox" ng-model="selectedList.isSelectAll"
@@ -31,7 +31,7 @@
                     <th scope="col" width="10%">
                         Created Date
                     </th>
-                    <th scope="col" style="width: 5%;">Actions</th>
+                    <th scope="col" style="width: 5%;"></th>
                 </tr>
             </thead>
 
@@ -39,7 +39,7 @@
                 <tr ng-repeat="item in data track by $index" class="sortable-item" sort-model="attribute-set"
                     sort-model-id="{{item.id}}">
                     <td style="cursor:move;" class="drag-header">
-                        <span class="fa fa-grip-vertical text-black-50"></span>
+                        <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                     </td>
                     <td>
                         <input type="checkbox" ng-model="item.isSelected"
