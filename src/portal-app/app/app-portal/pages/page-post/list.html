@@ -20,7 +20,7 @@
         <thead class="thead-light">
             <tr>
                 <th scope="col" style="width: 3%;">
-                    <span class="fa fa-grip-vertical text-black-50"></span>
+                    <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                 </th>
                 <th scope="col" style="width: 4%;">
                     <span class="fa fa-grip-vertical text-black-50-numeric-down"></span>
@@ -35,21 +35,21 @@
                     Created Date
                 </th>
                 <th scope="col" style="width: 10%;">
-                    Created By
+                    Author
                 </th>
 
-                <th scope="col" style="width: 5%;">Actions</th>
+                <th scope="col" style="width: 5%;"></th>
             </tr>
         </thead>
 
         <tbody class="sortable" dnd-list="data.items" dnd-disable-if="canDrag">
             <tr ng-if="canDrag">
-                <td colspan="7"><span class="text-warning" ng-bind="translate('warning_can_not_drag_drop',true, '(**Drag Drop only allow when order by priority asc)')"></span></td>
+                <td colspan="7"><small class="text-warning" ng-bind="translate('warning_can_not_drag_drop',true, '(Drag & Drop feature only active when priority is asc)')"></small></td>
             </tr>
             <tr ng-repeat="item in data.items" dnd-draggable="item" dnd-effect-allowed="move" dnd-selected="selected = item"
                 dnd-moved="updateInfos($index)" ng-class="{'selected': selected === item}">
                 <td style="cursor:move;" class="drag-header">
-                    <span class="fa fa-grip-vertical text-black-50"></span>
+                    <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                 </td>
                 <td>
                     <input type="text" value="{{item.priority}}" class="item-priority form-control form-control-sm d-inline"

@@ -8,7 +8,7 @@
                 <option value="-1">All</option>
                 <option ng-repeat="type in settings.moduleTypes track by $index" ng-value="$index">{{type}}</option>
             </select>
-    
+
             <select class="form-control btn custom-select custom-select-sm col-3" ng-model="selectedList.action">
                 <option ng-repeat="item in actions" ng-value="item">{{item}}</option>
             </select>
@@ -29,42 +29,40 @@
                         <input type="checkbox" ng-model="isSelectAll" ng-change="selectAll(isSelectAll)">
                     </th>
                     <th scope="col" width="5%">
-                        Priority
+                        <i class="fas fa-sort-numeric-down"></i>
                     </th>
-                    <th scope="col" width="35%">
+                    <th scope="col" width="30%">
                         Title
                     </th>
-                    <th scope="col" width="10%">
-                    </th><th scope="col" width="35%">
+                    <th scope="col" width="30%">
                         Name
                     </th>
-                    <th scope="col" width="10%">
+                    <th scope="col" width="15%">
                         Created Date
                     </th>
 
-                    <th scope="col" width="5%">
+                    <th scope="col" width="10%">
                         Image
                     </th>
-                    <th scope="col" style="width: 5%;">Actions</th>
+                    <th scope="col" width="10%"></th>
                 </tr>
             </thead>
 
             <tbody class="sortable" ng-init="getList()">
                 <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="module" sort-model-id="{{item.id}}">
                     <td style="cursor:move;" class="drag-header">
-                        <span class="fa fa-grip-vertical text-black-50"></span>
+                        <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                     </td>
                     <td>
                         <input type="checkbox" ng-model="item.isSelected" ng-change="select(item.id, item.isSelected)">
                     </td>
                     <td>
-                        {{item.priority}}
+                        <small>{{item.priority}}</small>
                     </td>
                     <td>
                         {{item.title}}
                     </td>
                     <td>
-                    </td><td>
                         {{item.name}}
                     </td>
                     <td>

@@ -44,7 +44,7 @@
                         Created Date
                     </th>
 
-                    <th scope="col" style="width: 5%;">Actions</th>
+                    <th scope="col" style="width: 5%;"></th>
                 </tr>
             </thead>
 
@@ -52,7 +52,7 @@
                 <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="media"
                     sort-model-id="{{item.id}}">
                     <td style="cursor:move;" class="drag-header">
-                        <span class="fa fa-grip-vertical text-black-50"></span>
+                        <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                     </td>
                     <td>
                         {{item.priority}}

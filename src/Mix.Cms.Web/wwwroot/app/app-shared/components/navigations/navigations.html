@@ -1,17 +1,20 @@
 <ul dnd-list="$ctrl.data">
-    <li ng-repeat="nav in $ctrl.data" class="col-sm-12 p-2" dnd-draggable="nav" dnd-type="'nav'" dnd-effect-allowed="move" dnd-selected="$ctrl.selected = nav" dnd-moved="$ctrl.updateOrders($index)" ng-class="{'selected': $ctrl.selected === nav}">
+    <li ng-repeat="nav in $ctrl.data" class="container py-1 rounded-0" dnd-draggable="nav" dnd-type="'nav'" dnd-effect-allowed="move" dnd-selected="$ctrl.selected = nav" dnd-moved="$ctrl.updateOrders($index)" ng-class="{'selected': $ctrl.selected === nav}">
         <div class="row">
-            <div class="col-1 drag-header" style="cursor:move;"><span class="fa fa-grip-vertical text-black-50"></span></div>
+            <div class="col-1 drag-header" style="cursor:move;"><i class="fa fa-grip-vertical text-black-50 align-middle"></i>
+            </div>
             <!--<div class="col-1">
                 <input type="text" ng-model="nav.priority" ng-change="$ctrl.updatePriorities()" 
                        class="item-priority d-none form-control form-control-sm d"/>
             </div>-->
             <div class="col-7">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" ng-change="$ctrl.callback({nav: nav})" ng-model="nav.isActived" id="{{$ctrl.prefix}}_{{$index}}" class="custom-control-input">
+                    <label class="custom-control-label align-middle" for="{{$ctrl.prefix}}_{{$index}}" ng-bind="$ctrl.limString(nav.description, 15)">
+                </label></div>
                 <span class="switch switch-sm">
-                    <input type="checkbox" ng-change="$ctrl.callback({nav: nav})" ng-model="nav.isActived" id="{{$ctrl.prefix}}_{{$index}}" class="switch">
-                    <label class="switch m-0" for="{{$ctrl.prefix}}_{{$index}}" ng-bind="$ctrl.limString(nav.description, 15)">
 
-                    </label>
+                    
                 </span>
             </div>
             <div class="col-2 text-right">
@@ -19,7 +22,7 @@
             </div>
 
             <div class="col-2 text-right">
-                <a class="text-primary btn" ng-if="$ctrl.detailsUrl" ng-click="$ctrl.goToDetails(nav)"><i class="mi mi-Pencil"></i>
+                <a class="text-primary btn btn-sm" ng-if="$ctrl.detailsUrl" ng-click="$ctrl.goToDetails(nav)"><i class="fas fa-edit"></i>
                     Edit</a>
             </div>
 
