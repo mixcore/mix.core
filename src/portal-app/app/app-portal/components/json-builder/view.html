@@ -1,6 +1,6 @@
 <div class="mix-tree-view" ng-init="$ctrl.init()">
     <div class="row">
-        <div ng-repeat="(zone, items) in $ctrl.dropzones" class="col-md-6">
+        <div ng-repeat="(zone, items) in $ctrl.dropzones" class="col-md-8">
             <div class="dropzone box box-yellow">
                 <div dnd-list="items" dnd-allowed-types="list.allowedTypes">
                     <div ng-repeat="item in items" dnd-disable-if="item.type == 'unknown'" dnd-type="item.type"
@@ -60,18 +60,18 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="position-sticky" style="top: 3.90rem; z-index: 12;">
                 <div class="card mb-3">
                     <div class="card-body">
                         <div class="form-row">
                             <div class="col">
-                                <a href="$ctrl.backUrl" class="btn btn-sm btn-secondary form-control"><i
+                                <a href="$ctrl.backUrl" class="btn btn-sm btn-secondary form-control text-white"><i
                                         class="fa fa-chevron-left"></i>
                                     <span>Back</span></a>
                             </div>
                             <div class="col">
-                                <a ng-click="$ctrl.saveFile()" class="btn btn-sm btn-primary form-control"><i
+                                <a ng-click="$ctrl.saveFile()" class="btn btn-sm btn-primary form-control text-white"><i
                                         class="fa fa-save"></i>
                                     <span>Save</span></a>
                             </div>
