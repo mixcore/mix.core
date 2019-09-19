@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="card-body">
-
+        <h6 class="text-warning text-center" ng-if="!$ctrl.data || !$ctrl.data.length">No Record found!</h6>
         <div dnd-list="$ctrl.data" dnd-inserted="$ctrl.updateOrders(index)">
             <div ng-repeat="item in $ctrl.data | orderBy: 'priority' track by $index" dnd-draggable="item"
                 dnd-type="'item'" dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedItem = item"

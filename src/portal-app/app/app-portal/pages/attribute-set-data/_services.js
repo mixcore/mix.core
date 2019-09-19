@@ -11,7 +11,7 @@ app.factory('AttributeSetDataService', ['$rootScope', 'CommonService', 'BaseODat
             }
             if(attributeSetName){
                 if(objData.filter){
-                    objData.filter += ' and ';
+                    objData.filter += ' or ';
                 }
                 objData.filter += "attributeSetName eq '" + attributeSetName + "'";;
             }
