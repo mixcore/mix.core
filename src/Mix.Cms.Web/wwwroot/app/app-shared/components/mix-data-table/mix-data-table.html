@@ -25,7 +25,7 @@
         <div class="col-sm-12 dndPlaceholder"></div>
         <div ng-repeat="nav in $ctrl.data.items" class="col-sm-12 dnd-item" dnd-draggable="nav" dnd-moved="$ctrl.updateOrders($index,$ctrl.data.items)" dnd-effect-allowed="move" dnd-selected="$ctrl.selected = nav" ng-class="{'selected': $ctrl.selected === nav}">
             <div class="row">
-                <div class="col-1 drag-header" style="cursor:move;">
+                <div class="col-1 drag-header" style="cursor:grab;">
                     <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                 </div>
                 <div class="col-sm-1">
@@ -53,7 +53,7 @@
                 <div class="col-sm-12 dndPlaceholder"></div>
                 <div ng-repeat="snav in nav.childNavs" class="col-sm-12 dnd-item" dnd-draggable="snav" dnd-moved="$ctrl.updateChildOrders($index,nav.childNavs)" dnd-effect-allowed="move" dnd-selected="$ctrl.selected = snav">
                     <div class="row">
-                        <div class="col-1 drag-header" style="cursor:move;">
+                        <div class="col-1 drag-header" style="cursor:grab;">
                             <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                         </div>
                         <div class="col-sm-1">

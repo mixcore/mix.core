@@ -17,7 +17,7 @@
         <tr class="sortable-item module-column" 
             ng-repeat="item in $ctrl.data track by $index" 
             ng-class="{'selected': $ctrl.selectedProp === item}">            
-            <td style="cursor:move;">
+            <td style="cursor:grab;">
                 <span class="oi oi-move"></span>
             </td>
             <td ng-repeat="col in $ctrl.columns | orderBy:'priority' track by $index">

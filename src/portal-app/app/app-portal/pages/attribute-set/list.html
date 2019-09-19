@@ -16,7 +16,6 @@
             <thead class="thead-light">
                 <tr>
                     <th scope="col" style="width: 3%;">
-                        <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                     </th>
                     <th scope="col" style="width: 4%;">
                         <input type="checkbox" ng-model="selectedList.isSelectAll"
@@ -25,7 +24,7 @@
                     <th scope="col" style="width: 25%;">
                         Title
                     </th>
-                    <th scope="col" width="10%">
+                    <th scope="col" width="20%">
                         Name
                     </th>
                     <th scope="col" width="10%">
@@ -49,7 +48,7 @@
                         {{item.title}}
                     </td>
                     <td>
-                        {{item.name}}
+                        <small>{{item.name}}</small>
                     </td>
 
                     <td>

@@ -50,7 +50,7 @@
 
             <tbody class="sortable" ng-init="getList()">
                 <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="module" sort-model-id="{{item.id}}">
-                    <td style="cursor:move;" class="drag-header">
+                    <td style="cursor:grab;" class="drag-header">
                         <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                     </td>
                     <td>

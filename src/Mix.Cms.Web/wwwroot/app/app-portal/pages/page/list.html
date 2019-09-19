@@ -30,7 +30,7 @@
 
             <tbody ng-repeat="item in data.items" dnd-draggable="item" dnd-effect-allowed="move" dnd-selected="selected = item" dnd-moved="updateInfos($index)" ng-class="{'selected': selected === item}">
                 <tr class="" sort-model="category" sort-model-id="{{item.id}}">
-                    <td style="cursor:move;" class="drag-header">
+                    <td style="cursor:grab;" class="drag-header">
                         <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                     </td>
 
@@ -83,7 +83,7 @@
                                 <thead style="font-size:small; font-weight:normal">
                                     <tr>
 
-                                        <td style="cursor:move;" class="drag-header">
+                                        <td style="cursor:grab;" class="drag-header">
                                             <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                                         </td>
                                         <th scope="col" width="20%">
@@ -106,7 +106,7 @@
                                 <tbody>
                                     <tr ng-repeat="c in item.childs">
 
-                                        <td style="cursor:move;" class="drag-header">
+                                        <td style="cursor:grab;" class="drag-header">
 
 
                                             <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">

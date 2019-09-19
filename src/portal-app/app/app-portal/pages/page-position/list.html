@@ -48,7 +48,7 @@
             </tr>
             <tr ng-repeat="item in data.items" dnd-draggable="item" dnd-effect-allowed="move" dnd-selected="selected = item"
                 dnd-moved="updateInfos($index)" ng-class="{'selected': selected === item}">
-                <td style="cursor:move;" class="drag-header">
+                <td style="cursor:grab;" class="drag-header">
                     <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                 </td>
                 <td>
