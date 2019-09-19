@@ -1,19 +1,13 @@
-<div class="row">
-    <a href="$ctrl.backUrl" class="btn btn-sm col-md-3 btn-secondary form-control"><i class="fa fa-chevron-left"></i>
-                        <span>Back</span></a>
-    <a ng-click="$ctrl.saveFile()" class="btn btn-sm col-md-3 btn-primary form-control"><i class="fa fa-save"></i>
-                        <span>Save</span></a>
-</div>
 <div class="mix-tree-view" ng-init="$ctrl.init()">
     <div class="row">
-        <div ng-repeat="(zone, items) in $ctrl.dropzones" class="col-md-6">
+        <div ng-repeat="(zone, items) in $ctrl.dropzones" class="col-md-8">
             <div class="dropzone box box-yellow">
                 <div dnd-list="items" dnd-allowed-types="list.allowedTypes">
                     <div ng-repeat="item in items" dnd-disable-if="item.type == 'unknown'" dnd-type="item.type" dnd-dragend="$ctrl.update()" dnd-draggable="item" dnd-effect-allowed="move" dnd-moved="items.splice($index, 1)" dnd-selected="$ctrl.selected = item" ng-click="$ctrl.select(item)" ng-class="{selected: $ctrl.selected === item}" class="item">
                         <div is-active-menu>
                             <div class="inner">
                                 <div class="btn-toolbar justify-content-between pb-1" role="toolbar" aria-label="Toolbar with button groups">
-                                    
+
                                     <div class="input-group input-group-sm">
                                         <div class="input-group-prepend" style="cursor: move;">
                                             <span class="input-group-text" style="border-radius: 0;"><span class="fa fa-grip-vertical text-black-50 text-second"></span></span>
@@ -52,10 +46,25 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
+            <div class="position-sticky" style="top: 3.90rem; z-index: 12;">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col">
+                                <a href="$ctrl.backUrl" class="btn btn-sm btn-secondary form-control text-white"><i class="fa fa-chevron-left"></i>
+                                    <span>Back</span></a>
+                            </div>
+                            <div class="col">
+                                <a ng-click="$ctrl.saveFile()" class="btn btn-sm btn-primary form-control text-white"><i class="fa fa-save"></i>
+                                    <span>Save</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <monaco-editor content-id="$ctrl.timestamp" content="$ctrl.selectedModel | json" ext="'.json'">
             </monaco-editor>
-
         </div>
     </div>
 </div>
