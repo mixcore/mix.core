@@ -23,6 +23,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         public DateTime CreatedDateTime { get; set; }
         public int Status { get; set; }
         public string Description { get; set; }
+
         #region Views
 
         public MixAttributeSetDatas.UpdateViewModel Data { get; set; }
