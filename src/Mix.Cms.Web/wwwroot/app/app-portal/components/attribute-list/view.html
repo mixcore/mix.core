@@ -7,8 +7,8 @@
         </h6>
     </div>
     <div class="card-body">
-        <div dnd-list="$ctrl.attributes" dnd-inserted="$ctrl.updateOrders(index)">
-            <div ng-repeat="col in $ctrl.attributes track by $index" dnd-draggable="col" dnd-type="'col'" dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedCol = col" dnd-dragstart="$ctrl.dragStart($index)" ng-class="{'selected': $ctrl.selectedCol === col}" class="mb-3">
+        <div dnd-list="$ctrl.fields" dnd-inserted="$ctrl.updateOrders(index)">
+            <div ng-repeat="col in $ctrl.fields track by $index" dnd-draggable="col" dnd-type="'col'" dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedCol = col" dnd-dragstart="$ctrl.dragStart($index)" ng-class="{'selected': $ctrl.selectedCol === col}" class="mb-3">
                 <div class="row">
                     <div class="col-md-1">
                         <span class="fa fa-grip-vertical text-black-50"></span>

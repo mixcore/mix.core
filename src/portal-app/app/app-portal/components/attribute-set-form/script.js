@@ -27,22 +27,27 @@ modules.component('attributeSetForm', {
                     If input is data id => load ctrl.attrData from service and handle it independently
                     Else modify input ctrl.attrData
                 */
-
+                $rootScope.isBusy = true;
                 if(ctrl.attrDataId){
                     ctrl.attrData = await service.getSingle('portal', [ctrl.attrDataId, ctrl.attrSetId, ctrl.attrSetName]);
                     if (ctrl.attrData) {
+                        $rootScope.isBusy = false;
                         $scope.$apply();
                     } else {
                         if (ctrl.attrData) {
                             $rootScope.showErrors('Failed');
-                        }
+                        }                        
+                        $rootScope.isBusy = false;
                         $scope.$apply();
                     }
+                   
                 }
                 else{
                     if(!ctrl.attrData){
                         ctrl.attrData = angular.copy(ctrl.defaultData);
                     }
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
                 }
             };
             ctrl.reload = async function () {
