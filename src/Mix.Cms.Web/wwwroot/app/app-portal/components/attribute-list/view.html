@@ -11,7 +11,7 @@
             <div ng-repeat="col in $ctrl.fields track by $index" dnd-draggable="col" dnd-type="'col'" dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedCol = col" dnd-dragstart="$ctrl.dragStart($index)" ng-class="{'selected': $ctrl.selectedCol === col}" class="mb-3">
                 <div class="row">
                     <div class="col-md-1">
-                        <span class="fa fa-grip-vertical text-black-50"></span>
+                        <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">

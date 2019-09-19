@@ -35,7 +35,7 @@
         <tbody class="sortable" dnd-list="$ctrl.columns">
             <tr class="sortable-item module-column" ng-repeat="col in $ctrl.columns track by $index" dnd-draggable="col" dnd-effect-allowed="move" dnd-selected="selectedCol = col" dnd-moved="$ctrl.columns.splice($index, 1)" ng-class="{'selected': $ctrl.selectedCol === col}">
                 <td style="cursor:move;" class="drag-header">
-                    <span class="fa fa-grip-vertical text-black-50"></span>
+                    <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                 </td>
                 <td>
                     <input ng-model="col.title" placeholder="Title" ng-change="$ctrl.generateName(col)" class="form-control form-control-sm">

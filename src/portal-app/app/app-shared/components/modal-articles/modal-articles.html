@@ -19,7 +19,7 @@
                     <thead class="thead-light">
                         <tr>
                             <th scope="col" style="width: 3%;">
-                                <span class="fa fa-grip-vertical text-black-50"></span>
+                                <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                             </th>
                             <th scope="col" style="width: 4%;">
                                 <span class="fa fa-grip-vertical text-black-50-numeric-down"></span>
@@ -32,17 +32,17 @@
                             </th>
 
                             <th scope="col" style="width: 10%;">
-                                Created By
+                                Author
                             </th>
 
-                            <th scope="col" style="width: 5%;">Actions</th>
+                            <th scope="col" style="width: 5%;"></th>
                         </tr>
                     </thead>
 
                     <tbody class="sortable">
                         <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="post" sort-model-id="{{item.id}}">
                             <td style="cursor:move;" class="drag-header">
-                                <span class="fa fa-grip-vertical text-black-50"></span>
+                                <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                             </td>
                             <td>
                                 <input type="text" value="{{item.priority}}" class="item-priority form-control form-control-sm d-inline" style="width:40px;">
