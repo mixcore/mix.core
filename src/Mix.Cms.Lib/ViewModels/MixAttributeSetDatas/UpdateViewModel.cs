@@ -2,7 +2,6 @@
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,26 +14,17 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
     {
         #region Properties
         #region Models
-        [JsonProperty("id")]
         public string Id { get; set; }
-        [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
-        [JsonProperty("attributeSetName")]
         public string AttributeSetName { get; set; }
-        [JsonProperty("moduleId")]
-        public int ModuleId { get; set; }
-        [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-        [JsonProperty("status")]
         public int Status { get; set; }
 
         #endregion Models
         #region Views        
-        [JsonProperty("values")]
         public List<MixAttributeSetValues.UpdateViewModel> Values { get; set; }
-        [JsonProperty("fields")]
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
-        [JsonProperty("dataNavs")]
+
         public List<MixRelatedAttributeDatas.UpdateViewModel> DataNavs { get; set; }
 
         #endregion

@@ -8,10 +8,10 @@
                     <div class="col-lg-12">
                         <post-main post="activedData" generate-seo="generateSEO()"></post-main>
                         
-                        <attribute-set-form-default ng-if="activedData.attributes" attr-set-id="activedData.attributes.id" attr-set-name="activedData.attributes.name" default-id="'default'" 
+                        <attribute-set-form ng-if="activedData.attributes" attr-set-id="activedData.attributes.id" attr-set-name="activedData.attributes.name" default-id="'default'" 
                                     attrData="activedData.attributeData"
                                     attr-data-id="dataId" save-data="save(data)">
-                                </attribute-set-form-default>
+                                </attribute-set-form>
                     </div>
                 </div>
                 <hr>
