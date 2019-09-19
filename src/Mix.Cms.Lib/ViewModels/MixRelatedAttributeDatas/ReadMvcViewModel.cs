@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
-using Newtonsoft.Json;
 using System;
 
 namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
@@ -17,22 +16,13 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         public ReadMvcViewModel() : base()
         {
         }
-        #region Model
-        [JsonProperty("id")]
         public string Id { get; set; }
-        [JsonProperty("parentId")]
         public string ParentId { get; set; }
-        [JsonProperty("parentType")]
         public int ParentType { get; set; }
-        [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
-        [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-        [JsonProperty("status")]
         public int Status { get; set; }
-        [JsonProperty("description")]
         public string Description { get; set; }
-        #endregion
         #region Views
 
         public MixAttributeSetDatas.ReadMvcViewModel Data { get; set; }
