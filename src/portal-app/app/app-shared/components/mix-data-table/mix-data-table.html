@@ -1,12 +1,12 @@
 <div ng-if="!$ctrl.canDrag">
-    <span class="text-warning" ng-bind="$ctrl.translate('warning_can_not_drag_drop',true, '(**Drag Drop only allow when order by priority asc)')"></span>
+    <small class="text-info" ng-bind="$ctrl.translate('warning_can_not_drag_drop',true, '(Drag & Drop feature only active when priority is asc)')"></small>
 </div>
 <div class="data-table" ng-if="$ctrl.data.items" ng-init="$ctrl.init()">
     <div class="nav">
         <div class="col-sm-12 p-2">
             <div class="row header">
                 <div class="col-1">
-                    <span class="fa fa-grip-vertical text-black-50"></span>
+                    <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                 </div>
                 <div scope="col" class="col-sm-1">
                     <span class="fa fa-grip-vertical text-black-50-numeric-down"></span>
@@ -30,7 +30,7 @@
             ng-class="{'selected': $ctrl.selected === nav}">
             <div class="row">
                 <div class="col-1 drag-header" style="cursor:move;">
-                    <span class="fa fa-grip-vertical text-black-50"></span>
+                    <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                 </div>
                 <div class="col-sm-1">
                     <input style="width:40px" type="number" readonly="readonly" ng-model="nav.priority" 
@@ -62,7 +62,7 @@
                     dnd-effect-allowed="move" dnd-selected="$ctrl.selected = snav">
                     <div class="row">
                         <div class="col-1 drag-header" style="cursor:move;">
-                            <span class="fa fa-grip-vertical text-black-50"></span>
+                            <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                         </div>
                         <div class="col-sm-1">
                             <input type="number" readonly="readonly" ng-model="snav.priority" class="item-priority form-control form-control-sm d-inline">
