@@ -11,17 +11,22 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
     {
         #region Properties
 
-        #region Models
-
+        #region Model
+        [JsonProperty("id")]
         public string Id { get; set; }
+        [JsonProperty("parentId")]
         public string ParentId { get; set; }
+        [JsonProperty("parentType")]
         public int ParentType { get; set; }
+        [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
+        [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("status")]
         public int Status { get; set; }
+        [JsonProperty("description")]
         public string Description { get; set; }
-
-        #endregion Models
+        #endregion
 
         #region Views
 
