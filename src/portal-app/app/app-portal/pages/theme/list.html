@@ -12,7 +12,7 @@
             <thead class="thead-light">
                 <tr>
                     <th scope="col" width="5%">
-                        <span class="fa fa-grip-vertical text-black-50"></span>
+                        <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                     </th>
                     <th scope="col">
                         Title
@@ -21,13 +21,12 @@
                         Image
                     </th>
                     <th scope="col" width="15%">
-                        Created By
-                    </th>
-                    <th scope="col" width="15%">
                         Created Date
                     </th>
+                    <th scope="col" width="15%">
+                        Author
+                    </th>
                     <th scope="col" width="10%" class="text-right">
-                        Actions
                     </th>
                 </tr>
             </thead>
@@ -36,21 +35,21 @@
                 <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="theme"
                     sort-model-id="{{item.id}}">
                     <td style="cursor:move;" class="drag-header">
-                        <span class="fa fa-grip-vertical text-black-50"></span>
+                            <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                     </td>
-                    <td>
+                    <td class=" align-middle">
                         {{item.title}}
                     </td>
                     <td>
                         <img height="30" imageonload ng-src="{{item.imageUrl}}">
                     </td>
                     <td>
-                        {{item.createdBy}}
-                    </td>
-                    <td>
-                        <small>
+                        <small class=" align-middle">
                             {{item.createdDateTime | utcToLocal:'dd.MM.yyyy hh:mm:ss a'}}
                         </small>
+                    </td>
+                    <td>
+                        <small class=" align-middle">{{item.createdBy}}</small>
                     </td>
                     <td>
                         <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
