@@ -1,15 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Domain.Core.Models;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
-    public class ReadMvcViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSetData, ReadMvcViewModel>
+    public class MobileViewModel
+      : ViewModelBase<MixCmsContext, MixAttributeSetData, MobileViewModel>
     {
         #region Properties
         #region Models
@@ -23,22 +25,21 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public DateTime CreatedDateTime { get; set; }
         [JsonProperty("status")]
         public int Status { get; set; }
-
         #endregion Models
         #region Views
 
-        //public List<MixAttributeSetValues.ReadMvcViewModel> Values { get; set; }
+        //public List<MixAttributeSetValues.MobileViewModel> Values { get; set; }
         public JObject Data { get; set; }
         #endregion
         #endregion Properties
 
         #region Contructors
 
-        public ReadMvcViewModel() : base()
+        public MobileViewModel() : base()
         {
         }
 
-        public ReadMvcViewModel(MixAttributeSetData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public MobileViewModel(MixAttributeSetData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -48,11 +49,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Data = new JObject();            
-            var values = MixAttributeSetValues.ReadMvcViewModel
-                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
+            Data = new JObject();
             Data.Add(new JProperty("id", Id));
-            foreach (var item in values.OrderBy(v=>v.Priority)){
+            var values = MixAttributeSetValues.MobileViewModel
+                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
+            foreach (var item in values.OrderBy(v=>v.Priority))
+            {
                 Data.Add(ParseValue(item));
             }
         }
@@ -60,7 +62,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #endregion
 
         #region Expands
-        JProperty ParseValue(MixAttributeSetValues.ReadMvcViewModel item)
+        JProperty ParseValue(MixAttributeSetValues.MobileViewModel item)
         {
             switch (item.DataType)
             {
@@ -80,7 +82,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     JArray arr = new JArray();
                     foreach (var nav in item.DataNavs)
                     {
-                        nav.Data.Data.Add(new JProperty("id", nav.Data.Id));
                         arr.Add(nav.Data.Data);
                     }
                     return (new JProperty(item.AttributeFieldName, arr));

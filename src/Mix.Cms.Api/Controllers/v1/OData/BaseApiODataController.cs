@@ -252,6 +252,65 @@ namespace Mix.Cms.Api.Controllers.v1.OData
             return data;
         }
 
+        protected async Task<List<TView>> GetListAsync<TView>(Expression<Func<TModel, bool>> predicate, string key, ODataQueryOptions<TModel> queryOptions)
+           where TView : ViewModelBase<TDbContext, TModel, TView>
+        {            
+            if (queryOptions.Filter != null)
+            {
+                ODataHelper<TModel>.ParseFilter(queryOptions.Filter.FilterClause.Expression, ref predicate);
+            }
+            int? top = queryOptions.Top?.Value;
+            var skip = queryOptions.Skip?.Value ?? 0;
+            RequestPaging request = new RequestPaging()
+            {
+                PageIndex = 0,
+                PageSize = top.HasValue ? top + top * (skip / top + 1) : null,
+                OrderBy = queryOptions.OrderBy?.RawValue
+                //Top = queryOptions.Top?.Value,
+                //Skip = queryOptions.Skip?.Value
+            };
+            var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_{key}_{SeoHelper.GetSEOString(queryOptions.Filter?.RawValue, '_')}_ps-{request.PageSize}";
+            List<TView> data = null;
+            if (MixService.GetConfig<bool>("IsCache"))
+            {
+                var getData = await MixCacheService.GetAsync<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
+                if (getData != null)
+                {
+                    data = getData.Data.Items;
+                }
+            }
+
+            if (data == null)
+            {
+
+                if (predicate != null)
+                {
+                    var getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate,
+                        request.OrderBy, request.Direction, request.PageSize, request.PageIndex, request.Skip, request.Top).ConfigureAwait(false);
+                    if (getData.IsSucceed)
+                    {
+                        await MixCacheService.SetAsync(cacheKey, getData);
+                        data = getData.Data.Items;
+                    }
+
+                }
+                else
+                {
+                    var getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(
+                        request.OrderBy, request.Direction, request.PageSize, request.PageIndex
+                        , null, null).ConfigureAwait(false);
+                    if (getData.IsSucceed)
+                    {
+                        await MixCacheService.SetAsync(cacheKey, getData);
+                        data = getData.Data.Items;
+                    }
+
+                }
+            }
+
+            return data;
+        }
+
         protected async Task<RepositoryResponse<TView>> SaveAsync<TView>(TView vm, bool isSaveSubModel)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
