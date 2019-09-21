@@ -4,7 +4,7 @@ app.component('permissionMain', {
     controller: ['$rootScope', '$scope', 'ngAppSettings', '$routeParams',function ($rootScope, $scope, ngAppSettings, $routeParams) {
         var ctrl = this;
         ctrl.settings = $rootScope.globalSettings;
-        ctrl.miIcons = ngAppSettings.miIcons;
+        ctrl.icons = ngAppSettings.icons;
         ctrl.setPageType = function (type) {
             ctrl.page.type = $index;
         };
