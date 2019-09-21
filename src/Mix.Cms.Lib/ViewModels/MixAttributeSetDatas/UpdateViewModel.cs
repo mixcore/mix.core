@@ -29,6 +29,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #endregion
         #endregion Properties
+
         #region Contructors
 
         public UpdateViewModel() : base()
@@ -40,6 +41,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         }
 
         #endregion Contructors
+
         #region Overrides
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
