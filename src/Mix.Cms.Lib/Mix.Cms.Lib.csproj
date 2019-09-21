@@ -56,8 +56,4 @@
     <Folder Include="Interfaces\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\mix.heart\src\Mix.Heart\Mix.Heart.csproj" />
-  </ItemGroup>
-
 </Project>
