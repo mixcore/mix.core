@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
     public class UpdateViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSetData, UpdateViewModel>
+      : ODataViewModelBase<MixCmsContext, MixAttributeSetData, UpdateViewModel>
     {
         #region Properties
         #region Models

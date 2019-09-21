@@ -22,7 +22,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
     [Route("api/v1/odata/{culture}/attribute-set-data/mobile")]
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
     public class ApiODataAttributeSetDataMobileController :
-        BaseApiODataController<MixCmsContext, MixAttributeSetData>
+        ODataBaseApiController<MixCmsContext, MixAttributeSetData>
     {
         public ApiODataAttributeSetDataMobileController(
             IMemoryCache memoryCache
@@ -67,7 +67,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             if (predicate != null || model != null)
             {
                 var portalResult = await base.GetSingleAsync<MobileViewModel>(id.ToString(), predicate, model);
-                return Ok(portalResult.Data);
+                return Ok(portalResult.Data.Data);
             }
             else
             {
@@ -143,7 +143,34 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         [HttpGet, HttpOptions]
         public async Task<ActionResult<List<MobileViewModel>>> List(string culture, ODataQueryOptions<MixAttributeSetData> queryOptions)
         {
-            var result = await base.GetListAsync<MobileViewModel>(queryOptions);
+            var data = await base.GetListAsync<MobileViewModel>(queryOptions);
+            var result = new JArray();
+            if (data != null)
+            {
+                foreach (var item in data)
+                {
+                    result.Add(item.Data);
+                }
+            }
+            return Ok(result);
+        }
+
+        // GET api/AttributeSetDatas/id
+        [EnableQuery(MaxExpansionDepth = 4)]
+        [HttpGet, HttpOptions]
+        [Route("name/{name}")]
+        public async Task<ActionResult<List<MobileViewModel>>> ListByName(string culture, string name, ODataQueryOptions<MixAttributeSetData> queryOptions)
+        {
+            Expression<Func<MixAttributeSetData, bool>> predicate = m => m.AttributeSetName == name;
+            var data = await base.GetListAsync<MobileViewModel>(queryOptions);
+            var result = new JArray();
+            if (data != null)
+            {
+                foreach (var item in data)
+                {
+                    result.Add(item.Data);
+                }
+            }
             return Ok(result);
         }
 
