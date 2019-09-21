@@ -22,10 +22,10 @@
         <table class="table table-sm table-hover" cellspacing="0">
             <thead class="thead-light">
                 <tr>
-                    <th scope="col" width="3%">
+                    <th scope="col" width="5px">
                         <span class="oi oi-sort-ascending"></span>
                     </th>
-                    <th scope="col" style="width: 4%;">
+                    <th scope="col" width="5px">
                         <input type="checkbox" ng-model="isSelectAll" ng-change="selectAll(isSelectAll)">
                     </th>
                     <th scope="col" width="5%">
@@ -50,7 +50,7 @@
 
             <tbody class="sortable" ng-init="getList()">
                 <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="module" sort-model-id="{{item.id}}">
-                    <td style="cursor:move;" class="drag-header">
+                    <td style="cursor:grab;" class="drag-header">
                         <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                     </td>
                     <td>
@@ -60,10 +60,10 @@
                         <small>{{item.priority}}</small>
                     </td>
                     <td>
-                        {{item.title}}
+                        <small>{{item.title}}</small>
                     </td>
                     <td>
-                        {{item.name}}
+                        <small>{{item.name}}</small>
                     </td>
                     <td>
                         <small>
