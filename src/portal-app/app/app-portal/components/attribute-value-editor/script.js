@@ -43,8 +43,9 @@ modules.component('attributeValueEditor', {
                     case 23: // reference
                         if(ctrl.attributeValue.field.referenceId){
                             ctrl.attributeValue.integerValue = ctrl.attributeValue.field.referenceId;
-                            navService.getSingle('portal', [ctrl.parentId, ctrl.parentType, 'default']).then(resp=>{
+                            navService.getSingle('portal', [ctrl.parentId, ctrl.parentType, 'default', ctrl.attributeValue.field.referenceId]).then(resp=>{
                                 ctrl.defaultDataModel = resp;
+                                ctrl.defaultDataModel.attributeSetId = ctrl.attributeValue.field.referenceId;
                                 ctrl.refDataModel = angular.copy(ctrl.defaultDataModel);
                             });
                             ctrl.loadRefData();
