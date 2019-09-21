@@ -25,40 +25,43 @@
                                         <input ng-if="!$ctrl.isSingle" type="checkbox" ng-model="$ctrl.isActived"
                                             ng-change="$ctrl.selectAll($ctrl.isActived)" />
                                     </th>
-                                    <th scope="col" ng-repeat="col in $ctrl.cols" ng-bind="col">                                        
+                                    <th scope="col" ng-repeat="col in $ctrl.cols" ng-bind="col">
                                     </th>
+                                    <th></th>
                                 </tr>
                             </thead>
 
                             <tbody>
                                 <tr ng-repeat="item in $ctrl.data track by $index">
-                                    <td style="cursor:move;" class="drag-header">
-                                        <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
+                                    <td style="cursor:grab;" class="drag-header">
+                                        <small class="fa fa-grip-vertical text-black-50 align-middle" style="cursor: grab"></small>
                                     </td>
                                     <td>
-                                        <input type="checkbox" ng-model="item.isActived" ng-change="$ctrl.selectChange(item)" />
+                                        <input type="checkbox" ng-model="item.isActived"
+                                            ng-change="$ctrl.selectChange(item)" />
                                     </td>
-                                    <td ng-repeat="col in $ctrl.cols">                                        
-                                        {{item[col]}}
+                                    <td ng-repeat="col in $ctrl.cols">
+                                        <small>{{item[col]}}</small>
                                     </td>
                                     <td>
                                         <preview-image img-height="25" img-src="item.image"></preview-image>
-                                    </td>                                    
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
                         <hr>
 
-                        <paging class="small" page="$ctrl.request.pageIndex + 1" page-size="$ctrl.request.pageSize" total="$ctrl.request.totalItems"
-                            ul-class="pagination justify-content-end m-0" a-class="page-link"
-                            paging-action="$ctrl.getList($ctrl.request.pageIndex)" scroll-top="true">
+                        <paging class="small" page="$ctrl.request.pageIndex + 1" page-size="$ctrl.request.pageSize"
+                            total="$ctrl.request.totalItems" ul-class="pagination justify-content-end m-0"
+                            a-class="page-link" paging-action="$ctrl.getList($ctrl.request.pageIndex)"
+                            scroll-top="true">
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">                
+            <div class="modal-footer">
                 <div class="row">
                     <div class="col-md-12">
-                        <a class="btn btn-success" ng-click="$ctrl.saveSelected()">Save</a>
+                        <a href="#" class="btn btn-primary px-4" ng-click="$ctrl.saveSelected()"><i class="fas fa-save"></i> Save</a>
                     </div>
                 </div>
             </div>

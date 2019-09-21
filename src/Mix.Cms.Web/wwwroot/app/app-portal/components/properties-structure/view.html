@@ -34,7 +34,7 @@
         </thead>
         <tbody class="sortable" dnd-list="$ctrl.columns">
             <tr class="sortable-item module-column" ng-repeat="col in $ctrl.columns track by $index" dnd-draggable="col" dnd-effect-allowed="move" dnd-selected="selectedCol = col" dnd-moved="$ctrl.columns.splice($index, 1)" ng-class="{'selected': $ctrl.selectedCol === col}">
-                <td style="cursor:move;" class="drag-header">
+                <td style="cursor:grab;" class="drag-header">
                     <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                 </td>
                 <td>

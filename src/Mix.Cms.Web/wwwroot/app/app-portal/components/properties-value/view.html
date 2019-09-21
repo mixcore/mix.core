@@ -15,7 +15,7 @@
     </thead>
     <tbody class="sortable" dnd-list="$ctrl.properties">
         <tr class="sortable-item module-column" ng-repeat="prop in $ctrl.properties" dnd-draggable="col" dnd-effect-allowed="move" dnd-selected="$ctrl.selectedProp = col" dnd-moved="$ctrl.properties.splice($index, 1)" ng-class="{'selected': $ctrl.selectedProp === col}">
-            <td style="cursor:move;">
+            <td style="cursor:grab;">
                 <span class="oi oi-move"></span>
             </td>
             <td>
