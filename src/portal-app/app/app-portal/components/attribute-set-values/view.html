@@ -1,14 +1,14 @@
-<div class="card">
-    <div class="card-header">
+<div class="card border-left-0 border-bottom-0 border-right-0">
+    <div class="card-header py-1">
         <span ng-bind="$ctrl.header"></span>
         <div class="row" ng-if="$ctrl.data[0]">
             <div class="col-md-1"></div>
-            <div ng-repeat="col in $ctrl.data[0].fields | orderBy:'priority' track by $index" ng-if="$index < 3"
-                ng-bind="col.title" class="col-md-3"></div>
-            <div class="col-md-2">Actions</div>
+            <small ng-repeat="col in $ctrl.data[0].fields | orderBy:'priority' track by $index" ng-if="$index < 3"
+                ng-bind="col.title" class="col-md-3"></small>
+            <div class="col-md-2"></div>
         </div>
     </div>
-    <div class="card-body">
+    <div class="card-body py-1">
         <h6 class="text-warning text-center mt-10" ng-if="!$ctrl.data || !$ctrl.data.length">
             No Data Found!
         </h6>
@@ -16,11 +16,11 @@
             <div ng-repeat="item in $ctrl.data | orderBy: 'priority' track by $index" dnd-draggable="item"
                 dnd-type="'item'" dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedItem = item"
                 dnd-dragstart="$ctrl.dragStart($index)" ng-class="{'selected': $ctrl.selectedItem === item}"
-                class="mb-3 row">
+                class="row border-bottom">
                 <div class="col-md-1 form-inline">
-                    <div class="form-group mb-2">
-                        <span class="fa fa-grip-vertical mr-2"></span>
-                        <input class="ml-1 form-control form-control-sm" ng-model="item.priority" style="width:30px" />
+                    <div class="form-group">
+                        <small class="fa fa-grip-vertical text-black-50 mr-2"></small>
+                        <input class="ml-1 form-control form-control-sm border-0" ng-model="item.priority" />
                     </div>
                 </div>
                 <div ng-if="$index < 3" ng-repeat="val in item.values | orderBy: 'priority' track by $index"
@@ -28,12 +28,14 @@
                     <attribute-value-preview data="val"></attribute-value-preview>
                 </div>
                 <div class="col-md-2">
-                    <a ng-click="$ctrl.update(item)" class="btn btn-link">
-                        <span class="fas fa-pencil-alt text-warning"></span>
-                    </a>
-                    <a ng-click="$ctrl.delete(item)" class="btn btn-link">
-                        <span class="fas fa-times text-danger"></span>
-                    </a>
+                    <div class="btn-group btn-group-sm float-right">
+                        <a href="#" ng-click="$ctrl.update(item)" class="btn btn-link">
+                            <span class="fa fa-pen text-primary"></span>
+                        </a>
+                        <a href="#" ng-click="$ctrl.delete(item)" class="btn btn-link">
+                            <span class="fas fa-times text-danger"></span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

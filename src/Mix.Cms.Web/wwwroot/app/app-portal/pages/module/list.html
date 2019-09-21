@@ -76,16 +76,16 @@
                     <td>
                         <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
                             <a href="/portal/module/details/{{item.id}}" class="btn btn-link">
-                                <span class="fa fa-pen text-warning"></span>
+                                <span class="fa fa-pen text-primary"></span>
                             </a>
                             <!--<a href="{{item.detailsUrl}}" target="_blank" class="btn btn-link">
                                             <span class="far fa-eye text-primary"></span>
                                         </a>-->
                             <a ng-if="item.type==2" href="/portal/module-post/list/{{item.id}}" class="btn btn-link">
-                                <span class="fas fa-list text-info"></span>
+                                <span class="fas fa-bars text-primary"></span>
                             </a>
                             <a ng-if="item.type==1" href="/portal/module/data/{{item.id}}" class="btn btn-link">
-                                <span class="fas fa-list text-info"></span>
+                                <span class="fas fa-bars text-primary"></span>
                             </a>
                             <a ng-click="remove(item.id);" class="btn btn-link">
                                 <span class="fas fa-times text-danger"></span>
