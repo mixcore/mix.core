@@ -131,6 +131,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         [JsonProperty("thumbnailFileStream")]
         public FileStreamViewModel ThumbnailFileStream { get; set; }
+        [JsonProperty("attributes")]
+        public MixAttributeSets.UpdateViewModel Attributes { get; set; }
+        [JsonProperty("attributesData")]
+        public MixRelatedAttributeDatas.UpdateViewModel AttributeData { get; set; }
 
         #region Template
 
@@ -252,6 +256,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 ListTag = JArray.Parse(this.Tags);
             }
+
+            // Load Attributes
+            LoadAttributes(_context, _transaction);
 
             // Load Properties
             LoadExtraProperties();
@@ -1029,8 +1036,53 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                {
                     this.View?.FileFolder
                     , this.View?.FileName
-               });
+               });           
+        }
 
+        private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == "post", _context, _transaction);
+            if (getAttrs.IsSucceed)
+            {
+                Attributes = getAttrs.Data;
+                AttributeData = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetSingleModel(
+                    a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId == Attributes.Id
+                        , _context, _transaction).Data;
+                if (AttributeData == null)
+                {
+                    AttributeData = new MixRelatedAttributeDatas.UpdateViewModel(
+                        new MixRelatedAttributeData()
+                        {
+                            Specificulture = Specificulture,
+                            ParentType = (int)MixEnums.MixAttributeSetDataType.Post,
+                            ParentId = Id.ToString()
+                        }
+                        );
+                    AttributeData.Data = new MixAttributeSetDatas.UpdateViewModel(
+                    new MixAttributeSetData()
+                    {
+                        Specificulture = Specificulture,
+                        AttributeSetId = Attributes.Id
+                    }
+                    );
+                }
+                foreach (var field in Attributes.Fields.OrderBy(f => f.Priority))
+                {
+                    var val = AttributeData.Data.Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
+                    if (val == null)
+                    {
+                        val = new MixAttributeSetValues.UpdateViewModel(
+                            new MixAttributeSetValue() { AttributeFieldId = field.Id }
+                            , _context, _transaction);
+                        val.Field = field;
+                        val.AttributeFieldName = field.Name;
+                        val.Priority = field.Priority;
+                        AttributeData.Data.Values.Add(val);
+                    }
+                    val.Priority = field.Priority;
+                    val.Field = field;
+                }
+            }
         }
 
         private void LoadExtraProperties()
