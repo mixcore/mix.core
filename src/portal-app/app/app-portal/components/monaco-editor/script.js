@@ -54,7 +54,8 @@
                             // theme: "vs-dark",
                             formatOnType: true,
                             formatOnPaste: true,
-                            wordWrap: 'on',
+                            // wordWrap: 'on',
+                            automaticLayout: true, // the important part
                         };
                         switch (ctrl.ext) {
                             case '.json':
