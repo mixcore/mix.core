@@ -1411,6 +1411,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.ParentId).HasMaxLength(50);
 
+                entity.Property(e => e.AttributeSetName).HasMaxLength(250);
+
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.Description).HasMaxLength(450);

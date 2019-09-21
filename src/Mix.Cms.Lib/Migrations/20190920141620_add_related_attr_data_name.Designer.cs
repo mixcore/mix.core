@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Migrations
 {
     [DbContext(typeof(MixCmsContext))]
-    partial class MixCmsContextModelSnapshot : ModelSnapshot
+    [Migration("20190920141620_add_related_attr_data_name")]
+    partial class add_related_attr_data_name
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

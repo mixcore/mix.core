@@ -26,7 +26,7 @@ using static Mix.Cms.Lib.MixEnums;
 using Mix.Cms.Lib.Extensions;
 namespace Mix.Cms.Api.Controllers.v1.OData
 {
-    public class BaseApiODataController<TDbContext, TModel> : ODataController
+    public class ODataBaseApiController<TDbContext, TModel> : ODataController
         where TDbContext : DbContext
         where TModel : class
     {
@@ -65,7 +65,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseApiController"/> class.
         /// </summary>
-        public BaseApiODataController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext)
+        public ODataBaseApiController(IMemoryCache memoryCache, IHubContext<PortalHub> hubContext)
         {
             _hubContext = hubContext;
             _memoryCache = memoryCache;
@@ -73,7 +73,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         }
 
         protected async Task<RepositoryResponse<TView>> GetSingleAsync<TView>(string key, Expression<Func<TModel, bool>> predicate = null, TModel model = null)
-            where TView : ViewModelBase<TDbContext, TModel, TView>
+            where TView : ODataViewModelBase<TDbContext, TModel, TView>
         {
             var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_details_{key}";
             RepositoryResponse<TView> data = null;
@@ -86,7 +86,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
 
                 if (predicate != null)
                 {
-                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
+                    data = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
                     if (data.IsSucceed)
                     {
                         //_memoryCache.Set(cacheKey, data);
@@ -99,7 +99,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                     data = new RepositoryResponse<TView>()
                     {
                         IsSucceed = true,
-                        Data = DefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model)
+                        Data = ODataDefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model)
                     };
 
                 }
@@ -110,11 +110,11 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         }
 
         protected async Task<RepositoryResponse<TModel>> DeleteAsync<TView>(Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
-            where TView : ViewModelBase<TDbContext, TModel, TView>
+            where TView : ODataViewModelBase<TDbContext, TModel, TView>
         {
 
             var result = new RepositoryResponse<TModel>();
-            var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
+            var data = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
             if (data.IsSucceed)
             {
                 result = await data.Data.RemoveModelAsync(isDeleteRelated).ConfigureAwait(false);
@@ -129,7 +129,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         }
 
         protected async Task<RepositoryResponse<TModel>> DeleteAsync<TView>(TView data, bool isDeleteRelated = false)
-            where TView : ViewModelBase<TDbContext, TModel, TView>
+            where TView : ODataViewModelBase<TDbContext, TModel, TView>
         {
             if (data != null)
             {
@@ -146,10 +146,10 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         }
 
         protected async Task<RepositoryResponse<List<TModel>>> DeleteListAsync<TView>(bool isRemoveRelatedModel, Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
-            where TView : ViewModelBase<TDbContext, TModel, TView>
+            where TView : ODataViewModelBase<TDbContext, TModel, TView>
         {
 
-            var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.RemoveListModelAsync(isRemoveRelatedModel, predicate);
+            var data = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.RemoveListModelAsync(isRemoveRelatedModel, predicate);
             if (data.IsSucceed)
             {
                 await MixCacheService.RemoveCacheAsync();
@@ -193,7 +193,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
 
         }
         protected async Task<List<TView>> GetListAsync<TView>(ODataQueryOptions<TModel> queryOptions)
-            where TView : ViewModelBase<TDbContext, TModel, TView>
+            where TView : ODataViewModelBase<TDbContext, TModel, TView>
         {
             Expression<Func<TModel, bool>> predicate = null;
             if (queryOptions.Filter != null)
@@ -226,7 +226,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
 
                 if (predicate != null)
                 {
-                    var getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate,
+                    var getData = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate,
                         request.OrderBy, request.Direction, request.PageSize, request.PageIndex, request.Skip, request.Top).ConfigureAwait(false);
                     if (getData.IsSucceed)
                     {
@@ -237,7 +237,66 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                 }
                 else
                 {
-                    var getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(
+                    var getData = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(
+                        request.OrderBy, request.Direction, request.PageSize, request.PageIndex
+                        , null, null).ConfigureAwait(false);
+                    if (getData.IsSucceed)
+                    {
+                        await MixCacheService.SetAsync(cacheKey, getData);
+                        data = getData.Data.Items;
+                    }
+
+                }
+            }
+
+            return data;
+        }
+        protected async Task<List<TView>> GetListAsync<TView>(Expression<Func<TModel, bool>> predicate, ODataQueryOptions<TModel> queryOptions)
+            where TView : ODataViewModelBase<TDbContext, TModel, TView>
+        {
+            Expression<Func<TModel, bool>> pre = null;
+            if (queryOptions.Filter != null)
+            {
+                ODataHelper<TModel>.ParseFilter(queryOptions.Filter.FilterClause.Expression, ref pre);
+                predicate = ODataHelper<TModel>.CombineExpression(predicate, pre, Microsoft.OData.UriParser.BinaryOperatorKind.And);
+            }
+            
+            int? top = queryOptions.Top?.Value;
+            var skip = queryOptions.Skip?.Value ?? 0;
+            RequestPaging request = new RequestPaging()
+            {
+                PageIndex = 0,
+                PageSize = top.HasValue ? top + top * (skip / top + 1) : null,
+                OrderBy = queryOptions.OrderBy?.RawValue
+            };
+            var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_{SeoHelper.GetSEOString(queryOptions.Filter?.RawValue, '_')}_ps-{request.PageSize}";
+            List<TView> data = null;
+            if (MixService.GetConfig<bool>("IsCache"))
+            {
+                var getData = await MixCacheService.GetAsync<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
+                if (getData != null)
+                {
+                    data = getData.Data.Items;
+                }
+            }
+
+            if (data == null)
+            {
+
+                if (predicate != null)
+                {
+                    var getData = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate,
+                        request.OrderBy, request.Direction, request.PageSize, request.PageIndex, request.Skip, request.Top).ConfigureAwait(false);
+                    if (getData.IsSucceed)
+                    {
+                        await MixCacheService.SetAsync(cacheKey, getData);
+                        data = getData.Data.Items;
+                    }
+
+                }
+                else
+                {
+                    var getData = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(
                         request.OrderBy, request.Direction, request.PageSize, request.PageIndex
                         , null, null).ConfigureAwait(false);
                     if (getData.IsSucceed)
@@ -253,7 +312,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         }
 
         protected async Task<List<TView>> GetListAsync<TView>(Expression<Func<TModel, bool>> predicate, string key, ODataQueryOptions<TModel> queryOptions)
-           where TView : ViewModelBase<TDbContext, TModel, TView>
+           where TView : ODataViewModelBase<TDbContext, TModel, TView>
         {            
             if (queryOptions.Filter != null)
             {
@@ -285,7 +344,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
 
                 if (predicate != null)
                 {
-                    var getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate,
+                    var getData = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate,
                         request.OrderBy, request.Direction, request.PageSize, request.PageIndex, request.Skip, request.Top).ConfigureAwait(false);
                     if (getData.IsSucceed)
                     {
@@ -296,7 +355,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                 }
                 else
                 {
-                    var getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(
+                    var getData = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(
                         request.OrderBy, request.Direction, request.PageSize, request.PageIndex
                         , null, null).ConfigureAwait(false);
                     if (getData.IsSucceed)
@@ -312,7 +371,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         }
 
         protected async Task<RepositoryResponse<TView>> SaveAsync<TView>(TView vm, bool isSaveSubModel)
-            where TView : ViewModelBase<TDbContext, TModel, TView>
+            where TView : ODataViewModelBase<TDbContext, TModel, TView>
         {
             if (vm != null)
             {
@@ -327,7 +386,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         }
 
         protected async Task<RepositoryResponse<TModel>> SaveAsync<TView>(JObject obj, Expression<Func<TModel, bool>> predicate)
-            where TView : ViewModelBase<TDbContext, TModel, TView>
+            where TView : ODataViewModelBase<TDbContext, TModel, TView>
         {
             if (obj != null)
             {
@@ -348,7 +407,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                         fields.Add(field);
                     }
                 }
-                var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.UpdateFieldsAsync(predicate, fields);
+                var result = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.UpdateFieldsAsync(predicate, fields);
                 await MixCacheService.RemoveCacheAsync();
                 return result;
             }
@@ -356,10 +415,10 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         }
 
         protected async Task<RepositoryResponse<List<TView>>> SaveListAsync<TView>(List<TView> lstVm, bool isSaveSubModel)
-            where TView : ViewModelBase<TDbContext, TModel, TView>
+            where TView : ODataViewModelBase<TDbContext, TModel, TView>
         {
 
-            var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.SaveListModelAsync(lstVm, isSaveSubModel);
+            var result = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.SaveListModelAsync(lstVm, isSaveSubModel);
             if (result.IsSucceed)
             {
                 await MixCacheService.RemoveCacheAsync();
@@ -368,7 +427,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
             return result;
         }
         protected RepositoryResponse<List<TView>> SaveList<TView>(List<TView> lstVm, bool isSaveSubModel)
-            where TView : ViewModelBase<TDbContext, TModel, TView>
+            where TView : ODataViewModelBase<TDbContext, TModel, TView>
         {
 
             var result = new RepositoryResponse<List<TView>>() { IsSucceed = true };
