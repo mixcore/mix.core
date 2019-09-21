@@ -7,6 +7,7 @@ using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Newtonsoft.Json.Linq;
@@ -48,6 +49,15 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
 
             return Ok(portalResult.Data);
         }
+
+        // GET api/AttributeSetDatas/id
+        [EnableQuery(MaxExpansionDepth = 4)]
+        [HttpGet, HttpOptions]
+        public async Task<ActionResult<List<ReadMvcViewModel>>> List(string culture, ODataQueryOptions<MixAttributeSetData> queryOptions)
+        {
+            var result = await base.GetListAsync<ReadMvcViewModel>(queryOptions);
+            return Ok(result);
+        }       
 
         // GET api/attribute-set-datas/portal/count
         [AllowAnonymous]
@@ -112,14 +122,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             }
         }
 
-        // GET api/AttributeSetDatas/id
-        [EnableQuery(MaxExpansionDepth = 4)]
-        [HttpGet, HttpOptions]
-        public async Task<ActionResult<List<ReadMvcViewModel>>> List(string culture, ODataQueryOptions<MixAttributeSetData> queryOptions)
-        {
-            var result = await base.GetListAsync<ReadMvcViewModel>(queryOptions);
-            return Ok(result);
-        }
 
         #endregion Get
 
