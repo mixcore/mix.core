@@ -31,6 +31,8 @@ modules.component('attributeSetForm', {
                 if(ctrl.attrDataId){
                     ctrl.attrData = await service.getSingle('portal', [ctrl.attrDataId, ctrl.attrSetId, ctrl.attrSetName]);
                     if (ctrl.attrData) {
+                        ctrl.defaultData.attributeSetId = ctrl.attrData.attributeSetId;
+                        ctrl.defaultData.attributeSetName = ctrl.attrData.attributeSetName;
                         $rootScope.isBusy = false;
                         $scope.$apply();
                     } else {
