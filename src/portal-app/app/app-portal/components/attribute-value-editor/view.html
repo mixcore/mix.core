@@ -1,157 +1,161 @@
-<div ng-if="!$ctrl.attributeValue.field.isSelect" class="form-group">
-    <label class="control-label" ng-if="$ctrl.isShowTitle=='true'" ng-bind="$ctrl.attributeValue.field.title"></label>    
-    <div ng-switch="$ctrl.attributeValue.field.dataType">
-        
+<div ng-if="!$ctrl.attributeValue.field.isSelect" class="form-group row">
+    <div class="col-2">
+        <h6 class="control-label" ng-if="$ctrl.isShowTitle=='true'" ng-bind="$ctrl.attributeValue.field.title"></h6>
+    </div>
+    <div ng-switch="$ctrl.attributeValue.field.dataType" class="col-10 pb-4">
         <div ng-switch-when="0">
             <!--custom-->
-            <input 
-                class="form-control form-control-sm {{$ctrl.inputClass}}" 
-                type="text" ng-model="$ctrl.attributeValue.stringValue" 
-                placeholder="{{$ctrl.attributeValue.field.title}}">
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="text"
+                ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
         </div>
         <div ng-switch-when="1">
             <!--datetime-->
-            <input class="form-control form-control-sm {{$ctrl.inputClass}}" 
-                ng-change="$ctrl.updateStringValue($ctrl.attributeValue.field.dataType)"
-                type="datetime-local" ng-model="$ctrl.attributeValue.dateObj" placeholder="{{$ctrl.attributeValue.field.title}}">
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}"
+                ng-change="$ctrl.updateStringValue($ctrl.attributeValue.field.dataType)" type="datetime-local"
+                ng-model="$ctrl.attributeValue.dateObj" placeholder="{{$ctrl.attributeValue.field.title}}">
         </div>
         <div ng-switch-when="2">
             <!--date-->
-            <input class="form-control form-control-sm {{$ctrl.inputClass}}" 
-                ng-change="$ctrl.updateStringValue($ctrl.attributeValue.field.dataType)"
-                type="date" ng-model="$ctrl.attributeValue.dateObj" placeholder="{{$ctrl.attributeValue.field.title}}">
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}"
+                ng-change="$ctrl.updateStringValue($ctrl.attributeValue.field.dataType)" type="date"
+                ng-model="$ctrl.attributeValue.dateObj" placeholder="{{$ctrl.attributeValue.field.title}}">
         </div>
         <div ng-switch-when="3">
             <!--time-->
             <input class="form-control form-control-sm {{$ctrl.inputClass}}"
-                ng-change="$ctrl.updateStringValue($ctrl.attributeValue.field.dataType)" 
-                type="time" ng-model="$ctrl.attributeValue.dateObj" placeholder="{{$ctrl.attributeValue.field.title}}">
+                ng-change="$ctrl.updateStringValue($ctrl.attributeValue.field.dataType)" type="time"
+                ng-model="$ctrl.attributeValue.dateObj" placeholder="{{$ctrl.attributeValue.field.title}}">
         </div>
         <div ng-switch-when="4">
             <!--duration-->
-            <input class="form-control form-control-sm {{$ctrl.inputClass}}" 
-                type="text" ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="text"
+                ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
         </div>
         <div ng-switch-when="5">
             <!--phonenumber-->
-            <input class="form-control form-control-sm {{$ctrl.inputClass}}" 
-                type="tel" ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="tel"
+                ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
         </div>
         <div ng-switch-when="6">
             <!--Currency-->
-            <input class="form-control form-control-sm {{$ctrl.inputClass}}" 
-                ng-change="$ctrl.updateStringValue($ctrl.attributeValue.field.dataType)" 
-                type="number" ng-model="$ctrl.attributeValue.doubleValue" placeholder="{{$ctrl.attributeValue.field.title}}">
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}"
+                ng-change="$ctrl.updateStringValue($ctrl.attributeValue.field.dataType)" type="number"
+                ng-model="$ctrl.attributeValue.doubleValue" placeholder="{{$ctrl.attributeValue.field.title}}">
             <label class="control-label" ng-bind="$ctrl.attributeValue.doubleValue | currency:''"></label>
         </div>
         <div ng-switch-when="7">
             <!--Text-->
-            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="text" 
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="text"
                 ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
         </div>
         <div ng-switch-when="8">
             <!--Html-->
-            <trumbowyg class="trumbowyg-dark" options="{}" 
-                ng-model="$ctrl.attributeValue.stringValue"></trumbowyg>
+            <trumbowyg class="trumbowyg-dark" options="{}" ng-model="$ctrl.attributeValue.stringValue"></trumbowyg>
         </div>
         <div ng-switch-when="9">
             <!--TextArea-->
-            <textarea class="form-control form-control-sm {{$ctrl.inputClass}}" rows="5" 
-                ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}"></textarea>
+            <textarea class="form-control form-control-sm {{$ctrl.inputClass}}" rows="5"
+                ng-model="$ctrl.attributeValue.stringValue"
+                placeholder="{{$ctrl.attributeValue.field.title}}"></textarea>
         </div>
         <div ng-switch-when="10">
             <!--Email-->
-            <input class="form-control form-control-sm {{$ctrl.inputClass}}" 
-                type="email" ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="email"
+                ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
         </div>
         <div ng-switch-when="11">
             <!--Password-->
-            <input class="form-control form-control-sm {{$ctrl.inputClass}}" 
-                type="password" ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="password"
+                ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
         </div>
         <div ng-switch-when="12">
             <!--Url-->
-            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="text" 
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="text"
                 ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
         </div>
         <div ng-switch-when="13">
             <!--ImageUrl-->
-            <input placeholder="{{$ctrl.attributeValue.field.title}}" class="form-control form-control-sm {{$ctrl.inputClass}}" type="url" ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
+            <input placeholder="{{$ctrl.attributeValue.field.title}}"
+                class="form-control form-control-sm {{$ctrl.inputClass}}" type="url"
+                ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
         </div>
         <div ng-switch-when="14">
             <!--CreditCard-->
-            <input class="form-control form-control-sm {{$ctrl.inputClass}}" 
-                type="text" ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="text"
+                ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
         </div>
         <div ng-switch-when="15">
             <!--PostalCode-->
-            <input class="form-control form-control-sm {{$ctrl.inputClass}}" 
-                type="text" ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="text"
+                ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
         </div>
         <div ng-switch-when="16">
             <!--upload-->
             <custom-image header="'Image'" type="'Posts'" folder="'Attributes'"
-                    src-url="$ctrl.attributeValue.stringValue" src="$ctrl.attributeValue.stringValue" auto="'true'"></custom-image>
+                src-url="$ctrl.attributeValue.stringValue" src="$ctrl.attributeValue.stringValue" auto="'true'">
+            </custom-image>
         </div>
         <div ng-switch-when="17">
             <!--Color-->
-            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="color" 
-                value="{{$ctrl.attributeValue.stringValue}}"
-                ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="color"
+                value="{{$ctrl.attributeValue.stringValue}}" ng-model="$ctrl.attributeValue.stringValue"
+                placeholder="{{$ctrl.attributeValue.field.title}}">
         </div>
         <div ng-switch-when="18">
             <!--Boolean-->
-            
             <input class="{{$ctrl.inputClass}}" type="checkbox" placeholder="{{$ctrl.attributeValue.field.title}}"
-                ng-change="$ctrl.updateStringValue($ctrl.attributeValue.field.dataType)"    
-                ng-model="$ctrl.attributeValue.booleanValue" ng-checked="$ctrl.attributeValue.booleanValue=='true'" >
+                ng-change="$ctrl.updateStringValue($ctrl.attributeValue.field.dataType)"
+                ng-model="$ctrl.attributeValue.booleanValue" ng-checked="$ctrl.attributeValue.booleanValue=='true'">
         </div>
         <div ng-switch-when="19">
-            <mix-select-icons prefix="'fab'" options="$ctrl.icons" data="$ctrl.attributeValue.stringValue"></mix-select-icons>            
+            <mix-select-icons prefix="'fab'" options="$ctrl.icons" data="$ctrl.attributeValue.stringValue">
+            </mix-select-icons>
         </div>
-        <div ng-switch-when="20">            
+        <div ng-switch-when="20">
             <youtube-editor code="$ctrl.attributeValue.stringValue"></youtube-editor>
         </div>
-        <div ng-switch-when="21">  
+        <div ng-switch-when="21">
             <tui-editor content="$ctrl.attributeValue.stringValue"></tui-editor>
         </div>
-        <div ng-switch-when="22">  <!-- Number -->
-            <input 
-                class="form-control form-control-sm {{$ctrl.inputClass}}" 
-                type="number" ng-model="$ctrl.attributeValue.doubleValue" 
-                placeholder="{{$ctrl.attributeValue.field.title}}">            
+        <div ng-switch-when="22">
+            <!-- Number -->
+            <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="number"
+                ng-model="$ctrl.attributeValue.doubleValue" placeholder="{{$ctrl.attributeValue.field.title}}">
         </div>
-        <div ng-switch-when="23">  <!-- Referrence -->
+        <div ng-switch-when="23">
+            <!-- Referrence -->
             <!-- <a ng-if="$ctrl.parentId" href="/portal/attribute-set-data/details?dataId=default&attributeSetId={{$ctrl.attributeValue.field.referenceId}}&parentType={{$ctrl.parentType}}&parentId={{$ctrl.parentId}}" 
                 class="btn btn-sm btn-primary px-4 mt-3 ng-scope">
                 <i class="fas fa-plus"></i> Add
             </a> -->
-             <h6 class="text-warning" ng-if="!$ctrl.attributeValue.id">
+            <h6 class="text-warning" ng-if="!$ctrl.attributeValue.id">
                 Please Save Root Item First
             </h6>
-            <tabs-v select-callback="selectPane(pane)" class="mb-3"
-                ng-if="$ctrl.attributeValue.id">
+            <tabs-v select-callback="selectPane(pane)" class="mb-3" ng-if="$ctrl.attributeValue.id">
                 <pane-v id="pane-data-{{$ctrl.attributeValue.field.referenceId}}" header="Data" class="card">
-                    <attribute-set-nav-values on-update="$ctrl.updateRefData(data)" on-delete="$ctrl.removeRefData(data)" 
-                        data="$ctrl.refData">
+                    <attribute-set-nav-values on-update="$ctrl.updateRefData(data)"
+                        on-delete="$ctrl.removeRefData(data)" data="$ctrl.refData">
                     </attribute-set-nav-values>
                 </pane-v>
                 <pane-v id="pane-form-{{$ctrl.attributeValue.field.referenceId}}" header="Form" class="card">
-                    <attribute-set-form ng-if="$ctrl.attributeValue.id" attr-set-id="$ctrl.attributeValue.field.referenceId" default-id="'default'" 
-                        parent-id="$ctrl.parentId" parent-type="$ctrl.parentType"
-                        attr-data="$ctrl.refDataModel.data" save-data="$ctrl.saveRefData(data)"></attribute-set-form>
+                    <attribute-set-form ng-if="$ctrl.attributeValue.id"
+                        attr-set-id="$ctrl.attributeValue.field.referenceId" default-id="'default'"
+                        parent-id="$ctrl.parentId" parent-type="$ctrl.parentType" attr-data="$ctrl.refDataModel.data"
+                        save-data="$ctrl.saveRefData(data)"></attribute-set-form>
                 </pane-v>
             </tabs-v>
-                <!-- <pre>{{$ctrl.attributeValue | json}}</pre> -->
-            
+            <!-- <pre>{{$ctrl.attributeValue | json}}</pre> -->
+
         </div>
     </div>
 </div>
 <!-- TODO: Only allow stringValue -->
 <div ng-if="$ctrl.attributeValue.field.isSelect" class="form-group">
-    <label class="control-label" ng-if="$ctrl.isShowTitle" ng-bind="$ctrl.attributeValue.field.title"></label>                                    
-    <select ng-if="$ctrl.attributeValue.field.dataType!=19" class="btn custom-select form-control" ng-model="$ctrl.attributeValue.stringValue">
-        <option ng-repeat="item in $ctrl.attributeValue.field.options track by $index" ng-value="item.value">{{item.value}}</option>
+    <label class="control-label" ng-if="$ctrl.isShowTitle" ng-bind="$ctrl.attributeValue.field.title"></label>
+    <select ng-if="$ctrl.attributeValue.field.dataType!=19" class="btn custom-select form-control"
+        ng-model="$ctrl.attributeValue.stringValue">
+        <option ng-repeat="item in $ctrl.attributeValue.field.options track by $index" ng-value="item.value">
+            {{item.value}}</option>
     </select>
-    <br/>                    
+    <br />
 </div>

@@ -3,16 +3,16 @@
         <filter-list request="request" callback="getList(pageIndex)"></filter-list>
     </div>
 </div>
-<div class="row">
-    <div class="col-6">
-        <div class="input-group input-group-sm mb-2 mr-sm-2">
+<div class="row justify-content-end">
+    <div class="col-4">
+        <div class="input-group input-group-sm mb-3 mr-sm-2">
             <div class="input-group-prepend">
-                <div class="input-group-text"><i class="mi mi-Permissions"></i></div>
+                <div class="input-group-text"><i class="fas fa-user-tag"></i></div>
             </div>
             <input type="text" class="form-control" ng-model="role.name" ng-enter="createRole()"
                 placeholder="Enter new role name...">
             <div class="input-group-append">
-                <a class="btn btn-outline-secondary" ng-click="createRole()">Create</a>
+                <a href="#" class="btn btn-primary px-2" ng-click="createRole()"><i class="fas fa-plus"></i> Create</a>
             </div>
         </div>
         <!-- 
@@ -46,16 +46,16 @@
                     sort-model-id="{{item.id}}">
 
                     <td>
-                        <span ng-bind="item.name"></span>
+                        <small ng-bind="item.name"></small>
                     </td>
                     <td>
-                        <span ng-bind="item.normalizedName"></span>
+                        <small ng-bind="item.normalizedName"></small>
                     </td>
                     <td>
-                        <small><span ng-bind="item.id"></span></small>
+                        <small ng-bind="item.id"></small>
                     </td>
                     <td>
-                        <small><span ng-bind="item.concurrencyStamp"></span></small>
+                        <small ng-bind="item.concurrencyStamp"></small>
                     </td>
                     <td>
                         <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">

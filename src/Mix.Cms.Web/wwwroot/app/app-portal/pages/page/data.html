@@ -45,7 +45,7 @@
 
         <tbody class="sortable">
             <tr ng-repeat="item in pageData.posts.items track by $index" class="sortable-item" sort-model="post" sort-model-id="{{item.post.id}}">
-                <td style="cursor:move;" class="drag-header">
+                <td style="cursor:grab;" class="drag-header">
                     <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
                 </td>
                 <td>
