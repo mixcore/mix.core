@@ -34,7 +34,8 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
         [EnableQuery]
         [HttpGet, HttpOptions]
         [Route("{parentId}/{parentType}/{id}")]
-        public async Task<ActionResult<UpdateViewModel>> Details(string culture, string parentId, int parentType, string id)
+        [Route("{parentId}/{parentType}/{id}/{attributeSetId}")]
+        public async Task<ActionResult<UpdateViewModel>> Details(string culture, string parentId, int parentType, string id, int? attributeSetId)
         {
             string msg = string.Empty;
             Expression<Func<MixRelatedAttributeData, bool>> predicate = null;
@@ -50,9 +51,13 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
                 {
                     Specificulture = _lang,
                     ParentType = parentType,
-                    ParentId = parentId,
+                    ParentId = parentId,                    
                     Priority = UpdateViewModel.Repository.Max(p => p.Priority).Data + 1
                 };
+                if (attributeSetId.HasValue)
+                {
+                    model.AttributeSetId = attributeSetId.Value;
+                }
             }
 
             if (predicate != null || model != null)
