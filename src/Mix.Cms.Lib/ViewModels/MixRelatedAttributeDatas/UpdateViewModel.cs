@@ -2,6 +2,7 @@
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using System;
+using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 {
@@ -20,6 +21,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         public string ParentId { get; set; }
         public int ParentType { get; set; }
         public int AttributeSetId { get; set; }
+        public string AttributeSetName { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public int Status { get; set; }
         public string Description { get; set; }
@@ -50,6 +52,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
             {
                 Data = getData.Data;
             }
+            AttributeSetName = _context.MixAttributeSet.FirstOrDefault(m => m.Id == AttributeSetId)?.Name;   
         }
 
 
