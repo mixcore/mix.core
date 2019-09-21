@@ -38,7 +38,7 @@ namespace Mix.Cms.Web
             {
                 using (var ctx = new MixCmsContext())
                 {
-                    ctx.Database.MigrateAsync();
+                    ctx.Database.Migrate();
                 }
             }
             // Enforce Request using https schema

@@ -11,7 +11,7 @@ using System.Linq;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
     public class MobileViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSetData, MobileViewModel>
+      : ODataViewModelBase<MixCmsContext, MixAttributeSetData, MobileViewModel>
     {
         #region Properties
         #region Models
@@ -79,12 +79,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 case MixEnums.MixDataType.Number:
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue));
                 case MixEnums.MixDataType.Reference:
-                    JArray arr = new JArray();
-                    foreach (var nav in item.DataNavs)
-                    {
-                        arr.Add(nav.Data.Data);
-                    }
-                    return (new JProperty(item.AttributeFieldName, arr));
+                    string url = $"/api/v1/odata/en-us/related-attribute-set-data/mobile/parent/set/{Id}/{item.Field.ReferenceId}";
+                    //foreach (var nav in item.DataNavs)
+                    //{
+                    //    arr.Add(nav.Data.Data);
+                    //}
+                    return (new JProperty(item.AttributeFieldName, url));
                 case MixEnums.MixDataType.Custom:
                 case MixEnums.MixDataType.Duration:
                 case MixEnums.MixDataType.PhoneNumber:

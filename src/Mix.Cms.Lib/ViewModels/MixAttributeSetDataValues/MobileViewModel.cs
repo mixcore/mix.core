@@ -31,8 +31,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
 
         #endregion Models
-        #region Views
 
+        #region Views
+        public MixAttributeFields.ReadViewModel Field { get; set; }
         public List<MixRelatedAttributeDatas.MobileViewModel> DataNavs { get; set; }
 
         #endregion
@@ -58,6 +59,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                     d.ParentId == DataId && d.ParentType == (int)MixEnums.MixAttributeSetDataType.Set && d.Specificulture == Specificulture,
                 _context, _transaction).Data;
             }
+            Field = MixAttributeFields.ReadViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId, _context, _transaction).Data;
         }
         #endregion
     }
