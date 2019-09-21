@@ -3,15 +3,15 @@
         Attribute
     </h6>
     <div class="card-body">
-
-        <div class="form-group">
-            <label>Title</label>
-            <input type="text" class="form-control" ng-model="$ctrl.model.title"
-                ng-blur="$ctrl.gennerateName()">
-        </div>
-        <div class="form-group">
-            <label>Name</label>
-            <input type="text" class="form-control" ng-model="$ctrl.model.name">
+        <div class="row form-group">
+            <div class="col">
+                <label>Title</label>
+                <input type="text" class="form-control" ng-model="$ctrl.model.title" ng-blur="$ctrl.gennerateName()">
+            </div>
+            <div class="col">
+                <label>Name</label>
+                <input type="text" class="form-control" ng-model="$ctrl.model.name">
+            </div>
         </div>
         <div class="form-group">
             <label class="control-label">Type</label>
@@ -24,8 +24,10 @@
                     <span ng-switch-when="System" class="" title="{{type}}"><i class="fas fa-cog"></i> System</span>
                     <span ng-switch-when="Page" class="" title="{{type}}"><i class="far fa-file"></i> Page</span>
                     <span ng-switch-when="Post" class="" title="{{type}}"><i class="far fa-newspaper"></i> Post</span>
-                    <span ng-switch-when="Module" class="" title="{{type}}"><i class="fas fa-puzzle-piece"></i> Module</span>
-                    <span ng-switch-when="Service" class="" title="{{type}}"><i class="fas fa-layer-group"></i> Service</span>
+                    <span ng-switch-when="Module" class="" title="{{type}}"><i class="fas fa-puzzle-piece"></i>
+                        Module</span>
+                    <span ng-switch-when="Service" class="" title="{{type}}"><i class="fas fa-layer-group"></i>
+                        Service</span>
                 </label>
             </div>
         </div>

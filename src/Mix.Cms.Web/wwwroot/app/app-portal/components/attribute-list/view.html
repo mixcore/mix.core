@@ -2,7 +2,7 @@
     <div class="card-header">
         <h6>Fields
             <span ng-bind="$ctrl.title"></span>
-            <a ng-click="$ctrl.addAttr()" class="btn btn-primary btn-sm float-right text-white"><span class="fas fa-plus text-white"></span> Add field</a>
+            <a ng-click="$ctrl.addAttr()" class="btn btn-primary btn-sm float-right text-white"><span class="fas fa-plus text-white"></span> Create field</a>
         </h6>
     </div>
     <div class="card-body">
@@ -16,7 +16,6 @@
                         <div class="">
                             <small class="control-label">Field: <span ng-bind="col.name"></span></small>
                             <input ng-model="col.title" placeholder="Title" ng-change="$ctrl.generateName(col)" class="form-control form-control-sm">
-
                         </div>
                     </div>
                     <div class="col-md-2">

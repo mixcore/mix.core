@@ -1,9 +1,11 @@
 <div class="row">
     <div class="col">
         <filter-list request="request" orders="orders" callback="getList(pageIndex)" create-url="'/portal/attribute-set/create'"></filter-list>
+
         <select class="btn custom-select custom-select-sm col-3 my-3" ng-model="selectedList.action">
             <option ng-repeat="item in actions" ng-value="item">{{item}}</option>
         </select>
+        
         <a class="btn btn-link text-white" ng-if="selectedList.data.length > 0 && selectedList.action" ng-click="applyList()">Apply</a>
     </div>
 </div>
@@ -72,7 +74,6 @@
 <hr>
 <div class="row">
     <div class="col">
-
         <paging class="small" page="request.pageIndex + 1" page-size="request.pageSize" total="request.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
         </paging>
     </div>

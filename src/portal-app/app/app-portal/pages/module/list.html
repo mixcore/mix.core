@@ -24,10 +24,10 @@
         <table class="table table-sm table-hover" cellspacing="0">
             <thead class="thead-light">
                 <tr>
-                    <th scope="col" width="3%">
+                    <th scope="col" width="5px">
                         <span class="oi oi-sort-ascending"></span>
                     </th>
-                    <th scope="col" style="width: 4%;">
+                    <th scope="col" width="5px">
                         <input type="checkbox" ng-model="isSelectAll" ng-change="selectAll(isSelectAll)" />
                     </th>
                     <th scope="col" width="5%">
@@ -64,10 +64,10 @@
                         <small>{{item.priority}}</small>
                     </td>
                     <td>
-                        {{item.title}}
+                        <small>{{item.title}}</small>
                     </td>
                     <td>
-                        {{item.name}}
+                        <small>{{item.name}}</small>
                     </td>
                     <td>
                         <small>
