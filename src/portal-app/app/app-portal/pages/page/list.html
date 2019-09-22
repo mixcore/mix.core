@@ -7,8 +7,7 @@
     <div class="col-12">
         <small ng-if="canDrag"><span class="text-info"
                 ng-bind="translate('warning_can_not_drag_drop',true, '(Drag Drop only allow when order by priority asc)')"></span></small>
-        <table id="list-page" class="table table-sm table-hover" dnd-list="data.items" dnd-disable-if="canDrag"
-            cellspacing="0" ng-init="getList()">
+        <table id="list-page" class="table table-sm table-hover" dnd-list="data.items" dnd-disable-if="canDrag" cellspacing="0" ng-init="getList()">
             <thead class="thead-light">
                 <tr>
                     <th scope="col" width="15px">
@@ -30,12 +29,10 @@
                 </tr>
             </thead>
 
-            <tbody ng-repeat="item in data.items" dnd-draggable="item" dnd-effect-allowed="move"
-                dnd-selected="selected = item" dnd-moved="updateInfos($index)"
-                ng-class="{'selected': selected === item}">
+            <tbody ng-repeat="item in data.items" dnd-draggable="item" dnd-effect-allowed="move" dnd-selected="selected = item" dnd-moved="updateInfos($index)" ng-class="{'selected': selected === item}" class="border-top">
                 <tr class="" sort-model="category" sort-model-id="{{item.id}}">
                     <td style="cursor:grab;" class="drag-header">
-                        <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
+                        <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
                     </td>
 
                     <td>
@@ -43,25 +40,24 @@
                             {{item.title}}
                         </small>
                     </td>
-                    <td>
+                    <td class="text-secondary">
                         <small>
                             {{shortString(item.excerpt,50)}}
                         </small>
                     </td>
-                    <td>
+                    <td class="text-secondary">
                         <small>
                             {{item.createdDateTime | utcToLocal:'dd.MM.yy hh:mm a'}}
                         </small>
                     </td>
-                    <td>
+                    <td class="text-secondary">
                         <small>{{item.createdBy}}</small>
                     </td>
                     <td>
                         <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
 
-                            <a ng-if="item.childs.length>0" class="btn btn-link" data-toggle="collapse" role="button"
-                                ng-click="showChilds(item.id)">
-                                <span class="fa fa-list text-secondary"></span>
+                            <a ng-if="item.childs.length>0" class="btn btn-link text-primary" data-toggle="collapse" role="button" ng-click="showChilds(item.id)">
+                                <i class="fas fa-project-diagram"></i>
                             </a>
 
                             <a href="" ng-click="goToPath('/portal/page/details/' + item.id)" class="btn btn-link">
@@ -69,8 +65,7 @@
                             </a>
                             <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-link"><span
                                     class="fas fa-link"></span></a>
-                            <a ng-if="item.type==2" ng-click="goToPath('/portal/page/page-post/list/' + item.id)"
-                                class="btn btn-link">
+                            <a ng-if="item.type==2" ng-click="goToPath('/portal/page/page-post/list/' + item.id)" class="btn btn-link">
                                 <span class="fas fa-bars text-secondary"></span>
                             </a>
                             <!-- 
@@ -83,54 +78,47 @@
                         </div>
                     </td>
                 </tr>
-                <tr>
+                <tr id="childs-{{item.id}}" class="collapse">
                     <td colspan="7" style="padding:0">
-                        <div class="collapse" id="childs-{{item.id}}">
-                            <table class="table table-sm table-hover mb-0" cellspacing="0"
-                                style="background-color: #f5f5f5;" ng-if="item.childs.length>0">
+                        <div class="pl-4">
+                            <table class="table table-sm table-hover mb-0 border" cellspacing="0" style="background-color: #f5f5f5;" ng-if="item.childs.length>0">
                                 <thead style="font-size:small; font-weight:normal">
                                     <tr>
-
-                                        <td style="cursor:grab;" class="drag-header">
-                                            <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
+                                        <td scope="col" style="cursor:grab;" class="drag-header" width="15px">
+                                            <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
                                         </td>
-                                        <th scope="col" width="20%">
+                                        <td scope="col" width="20%">
                                             Title
-                                        </th>
-                                        <th scope="col">
-                                            Description
-                                        </th>
-                                        <th scope="col" width="15%">
+                                        </td>
+                                        <td scope="col">
+                                            Excerpt	
+                                        </td>
+                                        <td scope="col" width="15%">
                                             Created Date
-                                        </th>
-                                        <th scope="col" width="10%">
+                                        </td>
+                                        <td scope="col" width="15%">
                                             Author
-                                        </th>
+                                        </td>
 
-                                        <th scope="col" width="5%" class="text-right"></th>
+                                        <td scope="col" width="5%" class="text-right"></td>
                                     </tr>
                                 </thead>
 
                                 <tbody>
                                     <tr ng-repeat="c in item.childs">
-
                                         <td style="cursor:grab;" class="drag-header">
-
-
-                                            <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                                                <button ng-click="goUp(item.childs, $index)" type="button"
-                                                    class="btn btn-link"><span
+                                            <div class="btn-group-vertical" role="group" aria-label="Basic example">
+                                                <button ng-click="goUp(item.childs, $index)" type="button" title="Move up" class="btn btn-link text-secondary btn-xs py-0 border-bottom"><span
                                                         class="fa fa-sort-up small"></span></button>
-                                                <button ng-click="goDown(item.childs, $index)" type="button"
-                                                    class="btn btn-link"><span
+                                                <button ng-click="goDown(item.childs, $index)" type="button" title="Move down" class="btn btn-xs text-secondary py-0 btn-link"><span
                                                         class="fa fa-sort-down small"></span></button>
                                             </div>
                                         </td>
                                         <td>
-                                            <span ng-bind="c.page.title"></span>
+                                            <small ng-bind="c.page.title"></small>
                                         </td>
                                         <td>
-                                            <span class="small" ng-bind="shortString(c.page.excerpt,50)"></span>
+                                            <small ng-bind="shortString(c.page.excerpt,50)"></small>
                                         </td>
                                         <td>
                                             <small>
@@ -138,23 +126,19 @@
                                             </small>
                                         </td>
                                         <td>
-                                            {{c.page.createdBy}}
+                                            <small>{{c.page.createdBy}}</small>
                                         </td>
 
                                         <td>
-                                            <div class="btn-group btn-group-sm btn-group-sm float-right" role="group"
-                                                aria-label="Actions">
-                                                <a href="" ng-click="goToPath('/portal/page/details/' + c.id)"
-                                                    class="btn btn-link"><span class="fa fa-pen small"></span></a>
-                                                <a href="{{c.detailsUrl}}" target="_blank" class="btn btn-link"><span
+                                            <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
+                                                <a href="" ng-click="goToPath('/portal/page/details/' + c.id)" class="btn btn-link"><span class="fa fa-pen small"></span></a>
+                                                <a href="{{c.detailsUrl}}" target="_blank" class="btn btn-link text-primary"><span
                                                         class="fas fa-link small"></span></a>
-                                                <a ng-if="c.page.type==2"
-                                                    ng-click="goToPath('/portal/page/page-post/list/' + c.page.id)"
-                                                    class="btn btn-link">
-                                                    <span class="fas fa-bars text-secondary"></span>
+                                                <a ng-if="c.page.type==2" ng-click="goToPath('/portal/page/page-post/list/' + c.page.id)" class="btn btn-link text-primary">
+                                                    <span class="fas fa-bars"></span>
                                                 </a>
-                                                <a ng-click="remove(item.id);" class="btn btn-link">
-                                                    <span class="fas fa-times text-danger"></span>
+                                                <a ng-click="remove(item.id);" class="btn btn-link text-danger">
+                                                    <span class="fas fa-times"></span>
                                                 </a>
                                             </div>
                                         </td>
@@ -171,6 +155,5 @@
 </div>
 <hr>
 
-<paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems"
-    ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
+<paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
 </paging>
