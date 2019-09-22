@@ -14,9 +14,6 @@
             
                 <main-side-bar ng-if="isAdmin"></main-side-bar>
                 <main-side-bar-dynamic ng-if="roles" roles="roles" actived-role="roles[0]"></main-side-bar-dynamic>
-            
-            
-            
                 <!-- <main class="py-md-4 px-md-2 sw-content" role="main"> -->
                 <main class="py-md-3 px-md-2 sw-content w-100" role="main" style="">
                     <section class="container-fluid">
@@ -33,15 +30,16 @@
                         <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
                     </section>
 
-                    <footer class="footer d-block" style="margin-top:100px;">
+                    <footer class="footer d-block fixed-bottom pt-2 pr-3 text-black-50" style="z-index:-1;">
                         <div class="container-fluid">
                             <nav>
-                                <p class="copyright text-center">
+                                <p class="copyright text-right">
+                                     <small>
                                     <span style="display:inline-block;transform: rotate(180deg);">&copy;</span>
                                     <script>
                                         document.write(new Date().getFullYear());
                                     </script>
-                                    <strong><a href="https://www.mixcore.org">mixcore</a></strong>, made by human on earth.</strong>
+                                   <strong><a href="https://www.mixcore.org">mixcore</a></strong>, made by human on earth.</small>
                                 </p>
                             </nav>
                         </div>

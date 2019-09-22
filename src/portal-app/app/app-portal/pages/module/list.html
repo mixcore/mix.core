@@ -30,7 +30,7 @@
                     <th scope="col" width="5px">
                         <input type="checkbox" ng-model="isSelectAll" ng-change="selectAll(isSelectAll)" />
                     </th>
-                    <th scope="col" width="5%">
+                    <th scope="col" width="5px">
                         <i class="fas fa-sort-numeric-down"></i>
                     </th>
                     <th scope="col" width="30%">
@@ -66,10 +66,10 @@
                     <td>
                         <small>{{item.title}}</small>
                     </td>
-                    <td>
+                    <td class="text-black-50">
                         <small>{{item.name}}</small>
                     </td>
-                    <td>
+                    <td class="text-black-50">
                         <small>
                             {{item.lastModified | utcToLocal:'d.M.yyyy h:mm a'}}
                         </small>
