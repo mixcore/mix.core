@@ -1,18 +1,20 @@
 <div class="tab-pane">
     <div class="form-group">
-        <label ng-bind="$ctrl.translate('SeoName')"></label>
-        <input type="text" class="form-control form-control-lg" ng-model="$ctrl.page.seoName">
+        <label ng-bind="$ctrl.translate('SeoTitle')"></label>
+        <input type="text" class="form-control" ng-model="$ctrl.page.seoTitle" maxlength="60">
     </div>
     <div class="form-group">
-        <label ng-bind="$ctrl.translate('SeoTitle')"></label>
-        <input type="text" class="form-control form-control-lg" ng-model="$ctrl.page.seoTitle">
+        <label ng-bind="$ctrl.translate('SeoName')"></label>
+        <input type="text" class="form-control" ng-model="$ctrl.page.seoName">
     </div>
     <div class="form-group">
         <label ng-bind="$ctrl.translate('SeoDescription')"></label>
-        <input type="text" class="form-control form-control-lg" ng-model="$ctrl.page.seoDescription">
+        <!-- <input type="text" class="form-control" ng-model="$ctrl.page.seoDescription"> -->
+        <textarea class="form-control" ng-model="$ctrl.page.seoDescription" rows="2" maxlength="160"></textarea>
     </div>
     <div class="form-group">
         <label ng-bind="$ctrl.translate('SeoKeywords')"></label>
-        <input type="text" class="form-control form-control-lg" ng-model="$ctrl.page.seoKeywords">
+        <!-- <input type="text" class="form-control" ng-model="$ctrl.page.seoKeywords"> -->
+        <textarea class="form-control" ng-model="$ctrl.page.seoKeywords" rows="2"></textarea>
     </div>
 </div>

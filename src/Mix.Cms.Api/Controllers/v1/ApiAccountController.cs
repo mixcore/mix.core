@@ -64,7 +64,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [HttpPost, HttpOptions]
         [AllowAnonymous]
         //[ValidateAntiForgeryToken]
-        public async Task<RepositoryResponse<AccessTokenViewModel>> Login([FromBody] LoginViewModel model)
+        public async Task<ActionResult<RepositoryResponse<AccessTokenViewModel>>> Login([FromBody] LoginViewModel model)
         {
             RepositoryResponse<AccessTokenViewModel> loginResult = new RepositoryResponse<AccessTokenViewModel>();
             if (ModelState.IsValid)
@@ -91,22 +91,22 @@ namespace Mix.Cms.Api.Controllers.v1
                         loginResult.Status = 1;
                         loginResult.Data = token;
                         _logger.LogInformation("User logged in.");
-                        return loginResult;
+                        return Ok(loginResult);
                     }
                     else
                     {
-                        return loginResult;
+                        return Ok(loginResult);
                     }
                 }
                 else
                 {
                     loginResult.Errors.Add("login failed");
-                    return loginResult;
+                    return BadRequest(loginResult);
                 }
             }
             else
             {
-                return loginResult;
+                return BadRequest(loginResult);
             }
         }
 

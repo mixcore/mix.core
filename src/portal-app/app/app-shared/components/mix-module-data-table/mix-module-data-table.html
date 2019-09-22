@@ -8,7 +8,7 @@
         <div class="col-sm-12">
             <div class="row header">
                 <div class="col-1">
-                    <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
+                    <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
                 </div>
                 <div scope="col" class="col-sm-2" ng-repeat="col in $ctrl.columns track by $index">
                     <span ng-bind="col.title">
@@ -29,8 +29,8 @@
             dnd-moved="$ctrl.updateOrders($index,$ctrl.data.items)" dnd-effect-allowed="move"
             dnd-selected="$ctrl.selected = nav" ng-class="{'selected': $ctrl.selected === nav}">
             <div class="row">
-                <div class="col-1 drag-header" style="cursor:move;">
-                    <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
+                <div class="col-1 drag-header" style="cursor:grab;">
+                    <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
                 </div>
                 <div class="col-sm-2" ng-repeat="col in $ctrl.columns track by $index" style="overflow:hidden">
                     <module-data-preview data="nav.jItem[col.name]" width="50"></module-data-preview>
@@ -49,7 +49,7 @@
                             <span class="fa fa-list text-info"></span>
                         </a>
                         <a ng-if="$ctrl.editUrl" ng-click="$ctrl.goTo(nav.id)" class="btn btn-sm btn-light">
-                            <span class="fas fa-pencil-alt text-default"></span>
+                            <span class="fas fa-pen text-default"></span>
                         </a>
                         <a ng-click="$ctrl.delete(nav.id);" class="btn btn-light del-popover" data-toggle="popover"
                             data-html="true">

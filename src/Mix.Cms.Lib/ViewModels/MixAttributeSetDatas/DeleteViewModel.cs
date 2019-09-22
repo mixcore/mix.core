@@ -8,7 +8,7 @@ using System.Linq;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
     public class DeleteViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSetData, DeleteViewModel>
+      : ODataViewModelBase<MixCmsContext, MixAttributeSetData, DeleteViewModel>
     {
         #region Properties
         #region Models

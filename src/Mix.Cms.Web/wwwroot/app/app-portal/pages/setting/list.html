@@ -7,7 +7,7 @@
         <thead class="thead-light">
             <tr>
                 <th scope="col" style="width: 3%;">
-                    <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
+                    <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
                 </th>
                 <th scope="col" style="width: 4%;">
                     <span class="fa fa-grip-vertical text-black-50-numeric-down"></span>
@@ -34,8 +34,8 @@
 
         <tbody class="sortable" ng-init="loadProducts()">
             <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="product" sort-model-id="{{item.id}}">
-                <td style="cursor:move;" class="drag-header">
-                    <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
+                <td style="cursor:grab;" class="drag-header">
+                    <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
                 </td>
                 <td>
                     <input type="text" value="{{item.priority}}" class="item-priority form-control form-control-sm d-inline" style="width:40px;">
@@ -66,7 +66,7 @@
                 <td>
                     <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
                         <a href="/admin/product/details/{{item.id}}" class="btn btn-link">
-                            <span class="fas fa-pencil-alt text-primary"></span>
+                            <span class="fas fa-pen text-primary"></span>
                         </a>
                         <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-link">
                             <span class="fas fa-eye text-info"></span>

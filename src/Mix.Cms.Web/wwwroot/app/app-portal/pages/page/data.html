@@ -7,7 +7,7 @@
                         <i class="fas fa-plus"></i>
                     </a>
                     <a href="/portal/Page/details/{{activedData.id}}" class="btn btn-secondary">
-                        <i class="fas fa-pencil-alt"></i>
+                        <i class="fas fa-pen"></i>
                     </a>
                 </div>
             </div>
@@ -21,7 +21,7 @@
         <thead class="thead-light">
             <tr>
                 <th scope="col" style="width: 3%;">
-                    <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
+                    <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
                 </th>
                 <th scope="col" style="width: 4%;">
                     <span class="fa fa-grip-vertical text-black-50-numeric-down"></span>
@@ -45,8 +45,8 @@
 
         <tbody class="sortable">
             <tr ng-repeat="item in pageData.posts.items track by $index" class="sortable-item" sort-model="post" sort-model-id="{{item.post.id}}">
-                <td style="cursor:move;" class="drag-header">
-                    <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
+                <td style="cursor:grab;" class="drag-header">
+                    <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
                 </td>
                 <td>
                     <input type="text" value="{{item.post.priority}}" class="item-priority form-control form-control-sm d-inline" style="width:40px;">
@@ -74,7 +74,7 @@
                 <td>
                     <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
                         <a href="/portal/post/details/{{item.post.id}}" class="btn btn-dark">
-                            <span class="fas fa-pencil-alt text-primary"></span>
+                            <span class="fas fa-pen text-primary"></span>
                         </a>
                         <a href="{{item.post.detailsUrl}}" target="_blank" class="btn btn-dark">
                             <span class="fas fa-eye text-info"></span>

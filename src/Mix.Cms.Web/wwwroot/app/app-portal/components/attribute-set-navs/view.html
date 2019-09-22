@@ -1,5 +1,4 @@
 <div class="form-group">
-    <label class="control-label">Attribute Sets</label>
     <div dnd-list="$ctrl.data" dnd-inserted="$ctrl.updateOrders(index)">
         <div ng-repeat="item in $ctrl.data | orderBy: 'priority' track by $index" dnd-draggable="item" dnd-type="'item'" dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedItem = item" dnd-dragstart="$ctrl.dragStart($index)" ng-class="{'selected': $ctrl.selectedItem === item}" class="mb-3 row">
             <div class="col-md-1 form-inline">
@@ -15,7 +14,7 @@
             </div>
             <div class="col-md-2">
                 <a ng-click="$ctrl.goToPath('/portal/attribute-set/details/' + item.id)" class="btn btn-link">
-                    <span class="fas fa-pencil-alt text-warning"></span>
+                    <span class="fas fa-pen text-warning"></span>
                 </a>                
             </div>
         </div>

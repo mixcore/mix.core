@@ -72,6 +72,7 @@ function BaseODataCtrl($scope, $rootScope, $routeParams, ngAppSettings, service)
     };
     
     $scope.getList = async function (pageIndex) {
+        $rootScope.isBusy = true;
         if (pageIndex !== undefined) {
             $scope.request.pageIndex = pageIndex;
         }

@@ -11,8 +11,7 @@ app.controller('AttributeSetDataController',
             $scope.parentType = null;
             $scope.cates = ['Site', 'System'];
             $scope.others=[];
-            $scope.settings = $rootScope.globalSettings;
-            
+            $scope.settings = $rootScope.globalSettings;            
             $scope.canDrag = $scope.request.orderBy !== 'Priority' || $scope.request.direction !== '0';
             $scope.init= async function(){
                 $scope.attributeSetId = $routeParams.attributeSetId;
@@ -32,7 +31,6 @@ app.controller('AttributeSetDataController',
                 $rootScope.isBusy = true;
                 $scope.attributeSetId = $routeParams.attributeSetId;
                 $scope.attributeSetName = $routeParams.attributeSetName;
-                var attrSetId = $routeParams.attributeSetId;
                 var type = $routeParams.type;
                 var parentId = $routeParams.parentId;
                 var response = await service.getList('read', $scope.request, $scope.attributeSetId, $scope.attributeSetName, type, parentId);
@@ -74,7 +72,7 @@ app.controller('AttributeSetDataController',
             };
             $scope.edit= function(data){
                 $scope.goToPath('/portal/attribute-set-data/details?dataId='+ data.id +'&attributeSetId=' + $scope.attributeSetId)
-            }
+            };  
             $scope.remove = function (data) {
                 $rootScope.showConfirm($scope, 'removeConfirmed', [data.id], null, 'Remove', 'Are you sure');
             };

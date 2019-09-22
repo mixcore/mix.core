@@ -14,7 +14,7 @@
     </thead>
     <tbody class="sortable">
         <tr class="sortable-item module-column" ng-repeat="item in $ctrl.data track by $index" ng-class="{'selected': $ctrl.selectedProp === item}">            
-            <td style="cursor:move;">
+            <td style="cursor:grab;">
                 <span class="oi oi-move"></span>
             </td>
             <td ng-repeat="col in $ctrl.columns | orderBy:'priority' track by $index">
@@ -22,7 +22,7 @@
             </td>
             <td>
                 <a ng-click="$ctrl.update(item)" class="btn btn-link">
-                    <span class="fas fa-pencil-alt text-warning"></span>
+                    <span class="fas fa-pen text-warning"></span>
                 </a>
                 <a ng-click="$ctrl.delete(item)" class="btn btn-link">
                     <span class="fas fa-times text-danger"></span>
