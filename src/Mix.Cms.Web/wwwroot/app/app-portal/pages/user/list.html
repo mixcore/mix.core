@@ -36,21 +36,22 @@
                                                 <small><span ng-bind="item.id"></span></small>
                                             </td> -->
                     <td>
-                        <span ng-bind="item.username"></span>
+                        <small ng-bind="item.username"></small>
                     </td>
                     <td>
-                        <ul class="m-0">
-                            <li ng-repeat="ur in item.userRoles">
-                                <span ng-bind="ur.role.name"></span>
-                            </li>
-                        </ul>
-
+                        <small>
+                            <ul class="m-0 p-0">
+                                <li ng-repeat="ur in item.userRoles">
+                                    <span ng-bind="ur.role.name"></span>
+                                </li>
+                            </ul>
+                        </small>
                     </td>
                     <td>
                         <preview-image img-height="25" img-src="item.avatarUrl"></preview-image>
                     </td>
                     <td>
-                        <small>
+                        <small class="text-black-50">
                             {{item.createdDateTime | utcToLocal:'d.M.yyyy h:mm a'}}
                         </small>
                     </td>

@@ -21,7 +21,7 @@
         <thead class="thead-light">
             <tr>
                 <th scope="col" style="width: 3%;">
-                    <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
+                    <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
                 </th>
                 <th scope="col" style="width: 4%;">
                     <span class="fa fa-grip-vertical text-black-50-numeric-down"></span>
@@ -47,7 +47,7 @@
             <tr ng-repeat="item in pageData.posts.items track by $index" class="sortable-item" sort-model="post"
                 sort-model-id="{{item.post.id}}">
                 <td style="cursor:grab;" class="drag-header">
-                    <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
+                    <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
                 </td>
                 <td>
                     <input type="text" value="{{item.post.priority}}" class="item-priority form-control form-control-sm d-inline"
