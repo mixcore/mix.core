@@ -38,7 +38,7 @@
                 dnd-effect-allowed="move" dnd-selected="selectedCol = col" dnd-moved="$ctrl.columns.splice($index, 1)"
                 ng-class="{'selected': $ctrl.selectedCol === col}">
                 <td style="cursor:grab;" class="drag-header">
-                    <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
+                    <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
                 </td>
                 <td>
                     <input ng-model="col.title" placeholder="Title" ng-change="$ctrl.generateName(col)"
