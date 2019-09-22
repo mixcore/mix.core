@@ -1,0 +1,21 @@
+.monaco-editor-full {
+    position: fixed !important;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 2222;
+}
+
+.cta-full {
+    position: absolute;
+    z-index: 1;
+    right: 5px;
+    top: 5px;
+}
+
+.monaco-editor-full .cta-full {
+    z-index: 2223;
+    position: fixed;
+    top: 5px;
+    right: 5px;
+}
