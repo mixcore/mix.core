@@ -1,8 +1,9 @@
 <div class="row">
     <div class="col-12">
-        <span class="switch switch-sm">
-            <input type="checkbox" ng-model="$ctrl.page.navPermission.isActived" id="{{$ctrl.prefix}}_{{$ctrl.page.id}}" class="switch">
-            <label class="switch" for="{{$ctrl.prefix}}_{{$ctrl.page.id}}">
+        <span class="custom-control custom-switch">
+            <input type="checkbox" ng-model="$ctrl.page.navPermission.isActived" id="{{$ctrl.prefix}}_{{$ctrl.page.id}}"
+                class="custom-control-input">
+            <label class="custom-control-label" for="{{$ctrl.prefix}}_{{$ctrl.page.id}}">
                 {{$ctrl.page.textDefault}}
             </label>
         </span>

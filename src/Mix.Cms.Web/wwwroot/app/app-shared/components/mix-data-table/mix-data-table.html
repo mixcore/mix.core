@@ -6,7 +6,7 @@
         <div class="col-sm-12 p-2">
             <div class="row header">
                 <div class="col-1">
-                    <!-- <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small> -->
+                    <!-- <small class="fa fa-grip-vertical text-black-50 align-middle"></small> -->
                 </div>
                 <div scope="col" class="col-sm-1">
                     <i class="fas fa-sort-numeric-down"></i>
@@ -26,7 +26,7 @@
         <div ng-repeat="nav in $ctrl.data.items" class="col-sm-12 dnd-item p-0 rounded-0 border-left-0 border-right-0" dnd-draggable="nav" dnd-moved="$ctrl.updateOrders($index,$ctrl.data.items)" dnd-effect-allowed="move" dnd-selected="$ctrl.selected = nav" ng-class="{'selected': $ctrl.selected === nav}">
             <div class="row">
                 <div class="col-1 drag-header" style="cursor:grab;">
-                    <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
+                    <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
                 </div>
                 <div class="col-sm-1">
                     <input style="width:40px" type="number" readonly="readonly" ng-model="nav.priority" class="item-priority form-control form-control-sm d-inline">
@@ -54,7 +54,7 @@
                 <div ng-repeat="snav in nav.childNavs" class="col-sm-12 dnd-item" dnd-draggable="snav" dnd-moved="$ctrl.updateChildOrders($index,nav.childNavs)" dnd-effect-allowed="move" dnd-selected="$ctrl.selected = snav">
                     <div class="row">
                         <div class="col-1 drag-header" style="cursor:grab;">
-                            <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
+                            <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
                         </div>
                         <div class="col-sm-1">
                             <input type="number" readonly="readonly" ng-model="snav.priority" class="item-priority form-control form-control-sm d-inline">
