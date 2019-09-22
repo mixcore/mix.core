@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
@@ -12,18 +13,22 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
     {
         #region Properties
         #region Models
-
+        [JsonProperty("id")]
         public string Id { get; set; }
+        [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
+        [JsonProperty("attributeSetName")]
         public string AttributeSetName { get; set; }
+        [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-        public MixEnums.MixContentStatus Status { get; set; }
+        [JsonProperty("status")]
+        public int Status { get; set; }
 
         #endregion Models
         #region Views
 
         //public List<MixAttributeSetValues.ReadMvcViewModel> Values { get; set; }
-        public JObject ObjValue { get; set; }
+        public JObject Data { get; set; }
         #endregion
         #endregion Properties
 
@@ -43,12 +48,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            ObjValue = new JObject();
+            Data = new JObject();            
             var values = MixAttributeSetValues.ReadMvcViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-            foreach (var item in values.OrderBy(v=>v.Priority))
-            {
-                ObjValue.Add(ParseValue(item));
+            Data.Add(new JProperty("id", Id));
+            foreach (var item in values.OrderBy(v=>v.Priority)){
+                Data.Add(ParseValue(item));
             }
         }
 
@@ -75,7 +80,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     JArray arr = new JArray();
                     foreach (var nav in item.DataNavs)
                     {
-                        arr.Add(nav.Data.ObjValue);
+                        nav.Data.Data.Add(new JProperty("id", nav.Data.Id));
+                        arr.Add(nav.Data.Data);
                     }
                     return (new JProperty(item.AttributeFieldName, arr));
                 case MixEnums.MixDataType.Custom:

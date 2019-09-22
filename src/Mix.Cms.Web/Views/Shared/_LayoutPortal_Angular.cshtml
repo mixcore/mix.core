@@ -8,17 +8,17 @@
     <title>@ViewData["Title"] - Angular mixcore</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=1920">
-    <meta data-react-helmet="true" name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-    <link rel="icon" type="image/png" sizes="16x16" href="@(MixService.GetConfig<string>("Favicon", ViewBag.culture) ?? "/mixcore-logo-green-16x16.png")">        
-    
-    
+    <meta name="viewport" content="width=1920, initial-scale=1.0">
+    <!-- <meta data-react-helmet="true" name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"> -->
+    <link rel="icon" type="image/png" sizes="16x16" href="@(MixService.GetConfig<string>("Favicon", ViewBag.culture) ?? "/mixcore-logo-green-16x16.png")">
+
+
     <link rel="stylesheet" href="~/css/app-vendor.min.css" />
     <link rel="stylesheet" href="~/css/shared.min.css" />
     <link rel="stylesheet" href="~/css/portal.min.css" />
 
-    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,600,700&display=swap&subset=latin-ext,vietnamese" rel="stylesheet">
-      
+    <!-- <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,600,700&display=swap&subset=latin-ext,vietnamese" rel="stylesheet"> -->
+
     <!-- <link rel="stylesheet" href="~/css/portal/mixcore.css" /> -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 
@@ -28,16 +28,22 @@
 <body ng-app="MixPortal" ng-init="init()" ng-controller="AppPortalController" class="d-block overflow-auto">
     <!-- <link rel="stylesheet" href="~/css/portal-light-theme-params.css" /> -->
     <style>
-        :root 
+        :root
         {
             --primary-color-hue : {{globalSettings.portalThemeSettings.primaryColorHue}};
             --primary-color-saturation : {{globalSettings.portalThemeSettings.primaryColorSaturation}}%;
             --primary-color-brightness : {{globalSettings.portalThemeSettings.primaryColorBrightness}}%;
             --bg-color: {{globalSettings.portalThemeSettings.bgColor}};
-            --text-color: {{globalSettings.portalThemeSettings.textColor}}; 
+            --text-color: {{globalSettings.portalThemeSettings.textColor}};
         }
         body{
-            /*font-family: 'Segoe UI', 'Quicksand', sans-serif;*/
+            /*font-family: 'Quicksand', sans-serif;*/
+        }
+        .btn-group-xs > .btn, .btn-xs {
+            padding: .25rem .4rem;
+            font-size: .875rem;
+            line-height: .5;
+            border-radius: .2rem;
         }
         .modal{
             background-color: hsla(var(--primary-color-hue,211),20%,10%,0.5);
@@ -53,7 +59,7 @@
     <script src="~/js/app-portal-required.min.js"></script>
     <script src="~/js/app-portal.min.js"></script>
     <script src="~/js/app-shared.min.js"></script>
-    
+
     <script>var require = { paths: { 'vs': '/js/monaco-editor/min/vs' } };</script>
     <script src="/js/monaco-editor/min/vs/loader.js"></script>
     <script src="/js/monaco-editor/min/vs/editor/editor.main.nls.js"></script>

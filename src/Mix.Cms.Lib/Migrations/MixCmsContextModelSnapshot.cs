@@ -1667,6 +1667,9 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("AttributeSetId");
 
+                    b.Property<string>("AttributeSetName")
+                        .HasMaxLength(250);
+
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 

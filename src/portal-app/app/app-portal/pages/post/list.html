@@ -17,23 +17,23 @@
         <table class="table table-sm table-hover" cellspacing="0">
             <thead class="thead-light">
                 <tr>
-                    <th scope="col" style="width: 3%;">
-                        <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
+                    <th scope="col" width="5px">
+                        <!-- <small class="fa fa-grip-vertical text-black-50 align-middle"></small> -->
                     </th>
-                    <th scope="col" style="width: 4%;">
+                    <th scope="col" width="5px">
                         <input type="checkbox" ng-model="selectedList.isSelectAll"
                             ng-change="selectAll(selectedList.isSelectAll)" />
                     </th>
-                    <th scope="col" style="width: 25%;">
+                    <th scope="col">
                         Title
                     </th>
-                    <th scope="col" width="10%">
+                    <th scope="col" width="15%">
                         Image
                     </th>
-                    <th scope="col" width="10%">
+                    <th scope="col" width="15%">
                         Created Date
                     </th>
-                    <th scope="col" style="width: 10%;">
+                    <th scope="col" width="15%">
                         Author
                     </th>
 
@@ -44,38 +44,38 @@
             <tbody class="sortable" ng-init="getList()">
                 <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="post"
                     sort-model-id="{{item.id}}">
-                    <td style="cursor:move;" class="drag-header">
-                        <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
+                    <td style="cursor:grab;" class="drag-header">
+                        <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
                     </td>
                     <td>
                         <input type="checkbox" ng-model="item.isSelected"
                             ng-change="select(item.id, item.isSelected)" />
                     </td>
                     <td>
-                        {{item.title}}
+                        <small>{{item.title}}</small>
                     </td>
                     <td>
                         <preview-image img-height="25" img-src="item.imageUrl"></preview-image>
                     </td>
-                    <td>
+                    <td class="text-black-50">
                         <small>
                             {{item.createdDateTime | utcToLocal}}
                         </small>
                     </td>
-                    <td>
-                        {{item.createdBy}}
+                    <td class="text-black-50">
+                        <small>{{item.createdBy}}</small>
                     </td>
 
                     <td>
                         <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                            <a href="/portal/post/details/{{item.id}}" class="btn btn-link">
-                                <span class="fas fa-pencil-alt text-warning"></span>
+                            <a href="/portal/post/details/{{item.id}}" class="btn btn-link text-primary">
+                                <span class="fas fa-pen"></span>
                             </a>
-                            <a ng-click="preview(item)" target="_blank" class="btn btn-link">
-                                <span class="fas fa-eye text-info"></span>
+                            <a ng-click="preview(item)" target="_blank" class="btn btn-link text-primary">
+                                <span class="fas fa-eye"></span>
                             </a>
-                            <a ng-click="remove(item.id);" class="btn btn-link">
-                                <span class="fas fa-times text-danger"></span>
+                            <a ng-click="remove(item.id);" class="btn btn-link text-danger">
+                                <i class="fas fa-times"></i>
                             </a>
                         </div>
                     </td>

@@ -3,7 +3,8 @@
         dnd-effect-allowed="move" dnd-selected="$ctrl.selected = nav" dnd-moved="$ctrl.updateOrders($index)"
         ng-class="{'selected': $ctrl.selected === nav}">
         <div class="row">
-            <div class="col-1 drag-header" style="cursor:move;"><i class="fa fa-grip-vertical text-black-50 align-middle"></i>
+            <div class="col-1 drag-header" style="cursor:grab;">
+                <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
             </div>
             <!--<div class="col-1">
                 <input type="text" ng-model="nav.priority" ng-change="$ctrl.updatePriorities()" 
@@ -27,8 +28,7 @@
 
             <div class="col-2 text-right">
                 <a class="text-primary btn btn-sm" ng-if="$ctrl.detailsUrl" ng-click="$ctrl.goToDetails(nav)"><i
-                        class="fas fa-edit"></i>
-                    Edit</a>
+                        class="fa fa-pen"></i></a>
             </div>
 
         </div>

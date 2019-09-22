@@ -9,7 +9,9 @@
         </div>
     </div>
     <div class="card-body">
-
+        <h6 class="text-warning text-center mt-10" ng-if="!$ctrl.data || !$ctrl.data.length">
+            No Data Found!
+        </h6>
         <div dnd-list="$ctrl.data" dnd-inserted="$ctrl.updateOrders(index)">
             <div ng-repeat="item in $ctrl.data | orderBy: 'priority' track by $index" dnd-draggable="item"
                 dnd-type="'item'" dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedItem = item"
@@ -27,7 +29,7 @@
                 </div>
                 <div class="col-md-2">
                     <a ng-click="$ctrl.update(item)" class="btn btn-link">
-                        <span class="fas fa-pencil-alt text-warning"></span>
+                        <span class="fas fa-pen text-warning"></span>
                     </a>
                     <a ng-click="$ctrl.delete(item)" class="btn btn-link">
                         <span class="fas fa-times text-danger"></span>

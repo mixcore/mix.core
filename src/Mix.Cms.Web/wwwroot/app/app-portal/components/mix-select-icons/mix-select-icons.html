@@ -1,16 +1,23 @@
 <div class="row mix-sel-icons">
-    <div class="col-4">
-        <i class="{{$ctrl.data}}"></i>
-    </div>
-    <div class="col-8">
-        <input type="text" class="form-control" ng-model="$ctrl.data">
-    </div>
     <div class="col-12">
-        <input type="text" placeholder="filter" class="form-control" ng-model="$ctrl.searchText">
+        <div class="input-group input-group-lg mb-2">
+            <div class="input-group-prepend">
+                <span class="input-group-text px-5"><i class="{{$ctrl.data}}"></i></span>
+            </div>
+            <input type="text" class="form-control" ng-model="$ctrl.data">
+        </div>
+    </div>
+    <div class="col-12 mb-2">
+        <div class="input-group mb-2">
+            <input type="text" placeholder="search keywords..." class="form-control" ng-model="$ctrl.searchText">
+            <div class="input-group-append">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+            </div>
+        </div>
     </div>
     <div class="col-12 list-icon">
         <a class="dropdown-item btn" ng-repeat="ico in $ctrl.options| filter:$ctrl.searchText" ng-click="$ctrl.select(ico)">
-            <i class="{{ico.class}}"></i> {{ico.title}}</a>
+            <i class="{{ico.class}}"></i>
+            {{ico.title}}</a>
     </div>
-
 </div>
