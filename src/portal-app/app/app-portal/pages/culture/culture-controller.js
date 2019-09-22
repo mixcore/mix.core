@@ -3,7 +3,7 @@ app.controller('CultureController', ['$scope', '$rootScope', 'ngAppSettings', '$
     function ($scope, $rootScope, ngAppSettings, $routeParams, service, commonService) {
         $scope.cultures = [
 
-            { specificulture: 'en-us', fullName: 'United States - English (Default)', icon: 'flag-icon-us' },
+            { specificulture: 'en-us', fullName: 'United States - English', icon: 'flag-icon-us' },
             { specificulture: 'fr-dz', fullName: 'Algeria - Français', icon: 'flag-icon-dz' },
             { specificulture: 'es-ar', fullName: 'Argentina - Español', icon: 'flag-icon-ar' },
             { specificulture: 'en-au', fullName: 'Australia - English', icon: 'flag-icon-au' },

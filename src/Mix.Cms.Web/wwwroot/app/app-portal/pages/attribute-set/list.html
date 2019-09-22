@@ -36,7 +36,7 @@
             <tbody class="sortable" ng-init="getList()">
                 <tr ng-repeat="item in data track by $index" class="sortable-item" sort-model="attribute-set" sort-model-id="{{item.id}}">
                     <td style="cursor:move;" class="drag-header">
-                        <small><span class="fa fa-grip-vertical text-black-50 align-middle"></span></small>
+                        <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
                     </td>
                     <td>
                         <input type="checkbox" ng-model="item.isSelected" ng-change="select(item.id, item.isSelected)">
