@@ -1,5 +1,15 @@
 ﻿modules.component('monacoEditor', {
-    templateUrl: '/app/app-portal/components/monaco-editor/view.html',
+    templateUrl: '/app/app-portal/components/monaco-editor/view.html',    
+    bindings: {
+        editor: '=?',
+        content: '=',
+        defaultContent: '=?',        
+        contentId: '=',
+        isVisible: '=',
+        isReadonly: '=?',
+        lineCount: '=?',
+        ext: '='
+    },
     controller: ['$rootScope', '$scope', '$element',
         function ($rootScope, $scope, $element) {
             var ctrl = this;
@@ -30,7 +40,7 @@
                 }
             }.bind(this);
             ctrl.initEditor = function () {
-                
+                ctrl.lineCount = parseInt(ctrl.lineCount) || 100;
                 setTimeout(() => {
                     ctrl.previousId = ctrl.contentId;
                     ctrl.updateEditors();
@@ -40,7 +50,10 @@
             };
             ctrl.updateContent = function (content) {
                 ctrl.editor.setValue(content);
-                var h = ctrl.editor.getModel().getLineCount() * 18;
+                // lineCount = ctrl.editor.getModel().getLineCount();
+                
+                // var h = ctrl.editor.getModel().getLineCount() * 18;
+                var h = ctrl.lineCount * 18;
                 $($element).height(h);
                 ctrl.editor.layout();    
             };
@@ -49,7 +62,8 @@
                     //var container = $(this);
                     if (e) {
                         var model = {
-                            value: ctrl.content || ctrl.defaultContent,                            
+                            value: ctrl.content || ctrl.defaultContent,        
+                            readOnly: ctrl.isReadonly || false,                    
                             contextmenu: false,
                             // theme: "vs-dark",
                             formatOnType: true,
@@ -87,8 +101,9 @@
                             btn.click();
                         });
                         setTimeout(() => {
-                            var h = ctrl.editor.getModel().getLineCount() * 18;
-                            h = h < ctrl.minHeight ? ctrl.minHeight : h;
+                            // var h = ctrl.editor.getModel().getLineCount() * 18;
+                            // h = h < ctrl.minHeight ? ctrl.minHeight : h;
+                            var h = ctrl.lineCount * 18;
                             $(e).height(h);
                             ctrl.editor.layout();    
                         }, 200);
@@ -96,14 +111,11 @@
                     }
                 });
             };
+            ctrl.fullscreen = function(){
+                $('.monaco-editor').toggleClass('monaco-editor-full');
+                ctrl.editor.dispose();
+                ctrl.updateEditors();
+            };
         }
-    ],
-    bindings: {
-        editor: '=?',
-        content: '=',
-        defaultContent: '=?',        
-        contentId: '=',
-        isVisible: '=',
-        ext: '='
-    }
+    ]
 });
