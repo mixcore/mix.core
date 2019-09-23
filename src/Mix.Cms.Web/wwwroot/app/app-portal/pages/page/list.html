@@ -10,7 +10,8 @@
             <thead class="thead-light">
                 <tr>
                     <th scope="col" width="15px">
-                        <span class="oi oi-sort-ascending"></span>
+                    </th>
+                    <th scope="col" width="15px">
                     </th>
                     <th scope="col" width="20%">
                         Title
@@ -32,6 +33,12 @@
                 <tr class="" sort-model="category" sort-model-id="{{item.id}}">
                     <td style="cursor:grab;" class="drag-header">
                         <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
+                    </td>
+                    <td class="align-middle">
+                        <div class="btn-group-vertical" role="group" aria-label="Basic example">
+                            <button ng-click="goUp(item.childs, $index)" type="button" title="Move up" class="btn btn-outline-light btn-xs py-0 border-bottom"><span class="fa fa-sort-up small"></span></button>
+                            <button ng-click="goDown(item.childs, $index)" type="button" title="Move down" class="btn btn-outline-light btn-xs py-0"><span class="fa fa-sort-down small"></span></button>
+                        </div>
                     </td>
 
                     <td>
@@ -89,7 +96,7 @@
                                             Title
                                         </td>
                                         <td scope="col">
-                                            Excerpt	
+                                            Excerpt
                                         </td>
                                         <td scope="col" width="15%">
                                             Created Date
@@ -104,7 +111,7 @@
 
                                 <tbody>
                                     <tr ng-repeat="c in item.childs">
-                                        <td style="cursor:grab;" class="drag-header">
+                                        <td>
                                             <div class="btn-group-vertical" role="group" aria-label="Basic example">
                                                 <button ng-click="goUp(item.childs, $index)" type="button" title="Move up" class="btn btn-link text-secondary btn-xs py-0 border-bottom"><span class="fa fa-sort-up small"></span></button>
                                                 <button ng-click="goDown(item.childs, $index)" type="button" title="Move down" class="btn btn-xs text-secondary py-0 btn-link"><span class="fa fa-sort-down small"></span></button>

@@ -7,11 +7,13 @@
     <div class="col-12">
         <small ng-if="canDrag"><span class="text-info"
                 ng-bind="translate('warning_can_not_drag_drop',true, '(Drag Drop only allow when order by priority asc)')"></span></small>
-        <table id="list-page" class="table table-sm table-hover" dnd-list="data.items" dnd-disable-if="canDrag" cellspacing="0" ng-init="getList()">
+        <table id="list-page" class="table table-sm table-hover" dnd-list="data.items" dnd-disable-if="canDrag"
+            cellspacing="0" ng-init="getList()">
             <thead class="thead-light">
                 <tr>
                     <th scope="col" width="15px">
-                        <span class="oi oi-sort-ascending"></span>
+                    </th>
+                    <th scope="col" width="15px">
                     </th>
                     <th scope="col" width="20%">
                         Title
@@ -29,10 +31,22 @@
                 </tr>
             </thead>
 
-            <tbody ng-repeat="item in data.items" dnd-draggable="item" dnd-effect-allowed="move" dnd-selected="selected = item" dnd-moved="updateInfos($index)" ng-class="{'selected': selected === item}" class="border-top">
+            <tbody ng-repeat="item in data.items" dnd-draggable="item" dnd-effect-allowed="move"
+                dnd-selected="selected = item" dnd-moved="updateInfos($index)"
+                ng-class="{'selected': selected === item}" class="border-top">
                 <tr class="" sort-model="category" sort-model-id="{{item.id}}">
                     <td style="cursor:grab;" class="drag-header">
                         <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
+                    </td>
+                    <td class=" align-middle">
+                        <div class="btn-group-vertical" role="group" aria-label="Basic example">
+                            <button ng-click="goUp(item.childs, $index)" type="button" title="Move up"
+                                class="btn btn-outline-light btn-xs py-0 border-bottom"><span
+                                    class="fa fa-sort-up small"></span></button>
+                            <button ng-click="goDown(item.childs, $index)" type="button" title="Move down"
+                                class="btn  btn-outline-light btn-xs py-0"><span
+                                    class="fa fa-sort-down small"></span></button>
+                        </div>
                     </td>
 
                     <td>
@@ -56,7 +70,8 @@
                     <td>
                         <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
 
-                            <a ng-if="item.childs.length>0" class="btn btn-link text-primary" data-toggle="collapse" role="button" ng-click="showChilds(item.id)">
+                            <a ng-if="item.childs.length>0" class="btn btn-link text-primary" data-toggle="collapse"
+                                role="button" ng-click="showChilds(item.id)">
                                 <i class="fas fa-project-diagram"></i>
                             </a>
 
@@ -65,7 +80,8 @@
                             </a>
                             <a href="{{item.detailsUrl}}" target="_blank" class="btn btn-link"><span
                                     class="fas fa-link"></span></a>
-                            <a ng-if="item.type==2" ng-click="goToPath('/portal/page/page-post/list/' + item.id)" class="btn btn-link">
+                            <a ng-if="item.type==2" ng-click="goToPath('/portal/page/page-post/list/' + item.id)"
+                                class="btn btn-link">
                                 <span class="fas fa-bars text-secondary"></span>
                             </a>
                             <!-- 
@@ -81,7 +97,8 @@
                 <tr id="childs-{{item.id}}" class="collapse">
                     <td colspan="7" style="padding:0">
                         <div class="pl-4">
-                            <table class="table table-sm table-hover mb-0 border" cellspacing="0" style="background-color: #f5f5f5;" ng-if="item.childs.length>0">
+                            <table class="table table-sm table-hover mb-0 border" cellspacing="0"
+                                style="background-color: #f5f5f5;" ng-if="item.childs.length>0">
                                 <thead style="font-size:small; font-weight:normal">
                                     <tr>
                                         <td scope="col" style="cursor:grab;" class="drag-header" width="15px">
@@ -91,7 +108,7 @@
                                             Title
                                         </td>
                                         <td scope="col">
-                                            Excerpt	
+                                            Excerpt
                                         </td>
                                         <td scope="col" width="15%">
                                             Created Date
@@ -106,11 +123,15 @@
 
                                 <tbody>
                                     <tr ng-repeat="c in item.childs">
-                                        <td style="cursor:grab;" class="drag-header">
+                                        <td>
                                             <div class="btn-group-vertical" role="group" aria-label="Basic example">
-                                                <button ng-click="goUp(item.childs, $index)" type="button" title="Move up" class="btn btn-link text-secondary btn-xs py-0 border-bottom"><span
+                                                <button ng-click="goUp(item.childs, $index)" type="button"
+                                                    title="Move up"
+                                                    class="btn btn-link text-secondary btn-xs py-0 border-bottom"><span
                                                         class="fa fa-sort-up small"></span></button>
-                                                <button ng-click="goDown(item.childs, $index)" type="button" title="Move down" class="btn btn-xs text-secondary py-0 btn-link"><span
+                                                <button ng-click="goDown(item.childs, $index)" type="button"
+                                                    title="Move down"
+                                                    class="btn btn-xs text-secondary py-0 btn-link"><span
                                                         class="fa fa-sort-down small"></span></button>
                                             </div>
                                         </td>
@@ -130,11 +151,16 @@
                                         </td>
 
                                         <td>
-                                            <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                                                <a href="" ng-click="goToPath('/portal/page/details/' + c.id)" class="btn btn-link"><span class="fa fa-pen small"></span></a>
-                                                <a href="{{c.detailsUrl}}" target="_blank" class="btn btn-link text-primary"><span
+                                            <div class="btn-group btn-group-sm btn-group-sm float-right" role="group"
+                                                aria-label="Actions">
+                                                <a href="" ng-click="goToPath('/portal/page/details/' + c.id)"
+                                                    class="btn btn-link"><span class="fa fa-pen small"></span></a>
+                                                <a href="{{c.detailsUrl}}" target="_blank"
+                                                    class="btn btn-link text-primary"><span
                                                         class="fas fa-link small"></span></a>
-                                                <a ng-if="c.page.type==2" ng-click="goToPath('/portal/page/page-post/list/' + c.page.id)" class="btn btn-link text-primary">
+                                                <a ng-if="c.page.type==2"
+                                                    ng-click="goToPath('/portal/page/page-post/list/' + c.page.id)"
+                                                    class="btn btn-link text-primary">
                                                     <span class="fas fa-bars"></span>
                                                 </a>
                                                 <a ng-click="remove(item.id);" class="btn btn-link text-danger">
@@ -155,5 +181,6 @@
 </div>
 <hr>
 
-<paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
+<paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems"
+    ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
 </paging>
