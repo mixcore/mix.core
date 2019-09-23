@@ -7,11 +7,11 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <post-main post="activedData" generate-seo="generateSEO()"></post-main>
-                        
-                        <attribute-set-form ng-if="activedData.attributes" attr-set-id="activedData.attributes.id" attr-set-name="activedData.attributes.name" default-id="'default'" 
-                                    attrData="activedData.attributeData"
-                                    attr-data-id="dataId" save-data="save(data)">
-                                </attribute-set-form>
+
+                        <attribute-set-form ng-if="activedData.attributes" attr-set-id="activedData.attributes.id"
+                            attr-set-name="activedData.attributes.name" default-id="'default'"
+                            attrData="activedData.attributeData" attr-data-id="dataId" save-data="save(data)">
+                        </attribute-set-form>
                     </div>
                 </div>
                 <hr>
@@ -24,7 +24,7 @@
                     <pane-v header="Search Engine" class="card">
                         <div class="card-body">
                             <p class="text-muted">Add a title and description to see how this product might appear in a
-                                search engine listing.</p>                                
+                                search engine listing.</p>
                             <post-seo post="activedData"></post-seo>
                         </div>
                     </pane-v>
@@ -47,24 +47,25 @@
                             load-data="getListRelated(pageIndex)"></related-navs>
                     </pane-v>
                 </tabs-v>
-                <div class="tab-pane fade active show" id="pills-general" role="tabpanel" 
+                <div class="tab-pane fade active show" id="pills-general" role="tabpanel"
                     aria-labelledby="pills-general-tab">
-                    <div class="card">
+                    <div class="card mb-3">
                         <div class="card-header">
                             <h6>Attribute Sets</h6>
                         </div>
                         <div class="card-body">
-                            <h6 class="text-danger" ng-if="!activedData.id">
-                                Please Save Post To Continues With Attributtes
-                            </h6>
-                            <attribute-set-navs ng-if="activedData.id" parent-id="activedData.id" parent-type="2"></attribute-set-navs>
+                            <div class="alert alert-warning" role="alert" ng-if="!activedData.id">
+                                Please save post to continues with attributtes section!
+                            </div>
+                            <attribute-set-navs ng-if="activedData.id" parent-id="activedData.id" parent-type="2">
+                            </attribute-set-navs>
                         </div>
                     </div>
                 </div>
                 <template-editor ng-if="isAdmin" is-readonly="'true'" folder-type="'Posts'" line-count="'20'"
                     template="activedData.view" templates="activedData.templates">
                 </template-editor>
-                
+
                 <!-- <div class="card mb-3">
                     <div class="card-header">
                         <h6>General
@@ -195,11 +196,11 @@
 
                 <actions preview-url="activedData.detailsUrl" back-url="referrerUrl"></actions>
                 <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
-                
+
                 <collape-container title="'URL slugs'" actived-data="activedData" add-callback="addAlias()">
                     <pane-collape>
                         <url-alias ng-repeat="alias in activedData.urlAliases" index="$index" url-alias="alias"
-                        remove-callback="removeAliasCallback(index)"></url-alias>
+                            remove-callback="removeAliasCallback(index)"></url-alias>
                     </pane-collape>
                 </collape-container>
 
@@ -244,13 +245,13 @@
 
                     </div>
                 </div>
-                <custom-image header="'Image'" type="'Posts'" folder="activedData.seoName"
-                header="activedData.title" description="activedData.excerpt"    
-                src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
+                <custom-image header="'Image'" type="'Posts'" folder="activedData.seoName" header="activedData.title"
+                    description="activedData.excerpt" src-url="activedData.imageUrl" src="activedData.image"
+                    auto="'true'"></custom-image>
 
-                <custom-image header="'Thumnail'" type="'Posts'" folder="activedData.seoName"
-                title="activedData.title" description="activedData.excerpt"
-                src-url="activedData.thumbnailUrl" src="activedData.thumbnail" auto="'true'"></custom-image>
+                <custom-image header="'Thumnail'" type="'Posts'" folder="activedData.seoName" title="activedData.title"
+                    description="activedData.excerpt" src-url="activedData.thumbnailUrl" src="activedData.thumbnail"
+                    auto="'true'"></custom-image>
             </section>
         </div>
     </form>

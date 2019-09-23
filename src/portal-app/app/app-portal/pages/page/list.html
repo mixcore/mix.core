@@ -35,17 +35,16 @@
                 dnd-selected="selected = item" dnd-moved="updateInfos($index)"
                 ng-class="{'selected': selected === item}" class="border-top">
                 <tr class="" sort-model="category" sort-model-id="{{item.id}}">
-                    <td style="cursor:grab;" class="drag-header">
-                        <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
+                    <td style="cursor:grab;" class="drag-header align-middle">
+                        <small class="fa fa-grip-vertical text-black-50"></small>
                     </td>
-                    <td class=" align-middle">
+                    <td class="align-middle">
                         <div class="btn-group-vertical" role="group" aria-label="Basic example">
                             <button ng-click="goUp(item.childs, $index)" type="button" title="Move up"
-                                class="btn btn-outline-light btn-xs py-0 border-bottom"><span
+                                class="btn  btn-xs py-0 border-bottom"><span
                                     class="fa fa-sort-up small"></span></button>
                             <button ng-click="goDown(item.childs, $index)" type="button" title="Move down"
-                                class="btn  btn-outline-light btn-xs py-0"><span
-                                    class="fa fa-sort-down small"></span></button>
+                                class="btn  btn-xs py-0"><span class="fa fa-sort-down small"></span></button>
                         </div>
                     </td>
 
@@ -84,7 +83,7 @@
                                 class="btn btn-link">
                                 <span class="fas fa-bars text-secondary"></span>
                             </a>
-                            <!-- 
+                            <!--
                                                 <a ng-if="item.type==2" href="#" data-toggle="modal" data-target="#modal-posts" class="btn btn-link">
                                                     <span class="fas fa-bars text-secondary"></span>
                                                 </a>-->
@@ -98,31 +97,39 @@
                     <td colspan="7" style="padding:0">
                         <div class="pl-4">
                             <table class="table table-sm table-hover mb-0 border" cellspacing="0"
-                                style="background-color: #f5f5f5;" ng-if="item.childs.length>0">
-                                <thead style="font-size:small; font-weight:normal">
+                                ng-if="item.childs.length>0">
+                                <thead class="thead-light">
                                     <tr>
-                                        <td scope="col" style="cursor:grab;" class="drag-header" width="15px">
-                                            <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
-                                        </td>
-                                        <td scope="col" width="20%">
-                                            Title
-                                        </td>
-                                        <td scope="col">
-                                            Excerpt
-                                        </td>
-                                        <td scope="col" width="15%">
-                                            Created Date
-                                        </td>
-                                        <td scope="col" width="15%">
-                                            Author
-                                        </td>
+                                        <th scope="col" style="cursor:grab;" class="drag-header align-middle"
+                                            width="15px">
+                                            <!-- <small class="fa fa-grip-vertical text-black-50"></small> -->
+                                        </th>
+                                        <th width="15px">
 
-                                        <td scope="col" width="5%" class="text-right"></td>
+                                        </th>
+                                        <th scope="col" width="20%">
+                                            Title
+                                        </th>
+                                        <th scope="col">
+                                            Excerpt
+                                        </th>
+                                        <th scope="col" width="15%">
+                                            Created Date
+                                        </th>
+                                        <th scope="col" width="15%">
+                                            Author
+                                        </th>
+
+                                        <th scope="col" width="5%" class="text-right"></th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
                                     <tr ng-repeat="c in item.childs">
+                                        <td scope="col" style="cursor:grab;" class="drag-header align-middle"
+                                            width="15px">
+                                            <small class="fa fa-grip-vertical text-black-50"></small>
+                                        </td>
                                         <td>
                                             <div class="btn-group-vertical" role="group" aria-label="Basic example">
                                                 <button ng-click="goUp(item.childs, $index)" type="button"
