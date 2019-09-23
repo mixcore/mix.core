@@ -20,6 +20,9 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
                 commonService.loadJArrayData('micon.json').then(resp=>{
                     ngAppSettings.icons = resp.data;
                 });
+                commonService.loadJsonData('enums.json').then(resp=>{
+                    ngAppSettings.enums = resp.data;
+                });
                 commonService.fillAllSettings($scope.lang).then(function (response) {
                     if ($rootScope.globalSettings) {
                         $scope.portalThemeSettings = $rootScope.globalSettings.portalThemeSettings;
