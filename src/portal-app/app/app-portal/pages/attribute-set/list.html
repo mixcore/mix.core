@@ -7,7 +7,7 @@
             <option ng-repeat="item in actions" ng-value="item">{{item}}</option>
         </select>
         
-        <a class="btn btn-link text-white" ng-if="selectedList.data.length > 0 && selectedList.action"
+        <a class="btn btn-sm btn-primary" ng-if="selectedList.data.length > 0 && selectedList.action"
             ng-click="applyList()">Apply</a>
     </div>
 </div>
