@@ -35,6 +35,8 @@
     bindings: {
         template: '=',
         templates: '=',
-        folderType: '='
+        folderType: '=',
+        isReadonly: '=?',
+        lineCount: '=?'
     }
 });

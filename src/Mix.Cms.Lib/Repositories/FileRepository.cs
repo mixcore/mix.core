@@ -227,9 +227,9 @@ namespace Mix.Cms.Lib.Repositories
         public FileViewModel GetFile(string fullname, string FileFolder, bool isCreate = false, string defaultContent = "")
         {
             var arr = fullname.Split('.');
-            if (arr.Length == 2)
+            if (arr.Length >= 2)
             {
-                return GetFile(arr[0], $".{arr[1]}", FileFolder, isCreate, defaultContent);
+                return GetFile(fullname.Substring(0,fullname.LastIndexOf('.')), $".{arr[arr.Length-1]}", FileFolder, isCreate, defaultContent);
             }
             else
             {
