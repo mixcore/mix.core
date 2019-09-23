@@ -125,7 +125,7 @@ namespace Mix.Cms.Lib.ViewModels
             {
                 _fullPath = CommonHelper.GetFullPath(new string[] {
                     FileFolder,
-                    FolderName,
+                    //FolderName,
                     $"{Filename}{Extension}"
                 });
 
