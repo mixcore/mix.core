@@ -114,6 +114,20 @@ namespace Mix.Cms.Api.Controllers.v1
             };
         }
 
+        [AllowAnonymous]
+        [HttpGet, HttpOptions]
+        [Route("json-data/{name}")]
+        public RepositoryResponse<JObject> loadJsonData(string name)
+        {
+            var cultures = FileRepository.Instance.GetFile(name, "data", true, "{}");
+            var obj = JObject.Parse(cultures.Content);
+            return new RepositoryResponse<JObject>()
+            {
+                IsSucceed = true,
+                Data = obj["data"] as JObject
+            };
+        }
+
 
         // GET api/category/id
         [HttpGet, HttpOptions]

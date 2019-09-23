@@ -13,6 +13,13 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
             };
             return await _getAnonymousApiResult(req);
         };
+        var _loadJsonData = async function (name) {
+            var req = {
+                method: 'GET',
+                url: '/portal/json-data/' + name
+            };
+            return await _getAnonymousApiResult(req);
+        };
         var _showAlertMsg = function (title, message) {
             $rootScope.message = {
                 title: title,
@@ -302,6 +309,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
         adminCommonFactory.settings = _settings;
         adminCommonFactory.genrateSitemap = _genrateSitemap;
         adminCommonFactory.loadJArrayData = _loadJArrayData;
+        adminCommonFactory.loadJsonData = _loadJsonData;
         return adminCommonFactory;
 
     }]);
