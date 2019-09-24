@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace Mix.Cms.Api.Controllers.v1.OData.Configurations
 {
     [Produces("application/json")]
-    [Route("api/v1/odata/configuration/read-mvc")]
+    [Route("api/v1/odata/{culture}/configuration/read")]
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
     public class ApiODataConfigurationReadController :
         BaseApiODataController<MixCmsContext, MixConfiguration>
@@ -35,7 +35,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.Configurations
         [EnableQuery]
         [HttpGet, HttpOptions]
         [Route("{keyword}")]
-        public async Task<ActionResult<ReadMvcViewModel>> Details(string culture, string keyword)
+        public async Task<ActionResult<ReadViewModel>> Details(string culture, string keyword)
         {
             string msg = string.Empty;
             Expression<Func<MixConfiguration, bool>> predicate = null;
@@ -49,11 +49,11 @@ namespace Mix.Cms.Api.Controllers.v1.OData.Configurations
             {
                 model = new MixConfiguration()
                 {
-                    Priority = ReadMvcViewModel.Repository.Max(p => p.Priority).Data + 1
+                    Priority = ReadViewModel.Repository.Max(p => p.Priority).Data + 1
                 };
             }
 
-            var readResult = await base.GetSingleAsync<ReadMvcViewModel>(keyword, predicate, model);
+            var readResult = await base.GetSingleAsync<ReadViewModel>(keyword, predicate, model);
 
             return Ok(readResult.Data);
         }
@@ -61,19 +61,29 @@ namespace Mix.Cms.Api.Controllers.v1.OData.Configurations
         [EnableQuery(MaxExpansionDepth = 4)]
         [HttpGet, HttpOptions]
         [Route("type/{type}")]
-        public async Task<ActionResult<List<ReadMvcViewModel>>> ListByType(string culture, string type, ODataQueryOptions<MixConfiguration> queryOptions)
+        public async Task<ActionResult<JObject>> ListByType(string culture, string type, ODataQueryOptions<MixConfiguration> queryOptions)
         {
             Expression<Func<MixConfiguration, bool>> predicate = m => m.Category == type && m.Specificulture== culture;
-            var result = await base.GetListAsync<ReadMvcViewModel>(predicate, $"type_{type}", queryOptions);
+            var data = await base.GetListAsync<ReadViewModel>(predicate, $"type_{type}", queryOptions);
+            JObject result = new JObject();
+            foreach (var item in data)
+            {
+                result.Add(new JProperty(item.Keyword, item.Value));
+            }
             return Ok(result);
         }
 
         // GET api/Configurations/keyword
         [EnableQuery(MaxExpansionDepth = 4)]
         [HttpGet, HttpOptions]
-        public async Task<ActionResult<List<ReadMvcViewModel>>> List(string culture, ODataQueryOptions<MixConfiguration> queryOptions)
+        public async Task<ActionResult<JObject>> List(string culture, ODataQueryOptions<MixConfiguration> queryOptions)
         {
-            var result = await base.GetListAsync<ReadMvcViewModel>(queryOptions);
+            var data = await base.GetListAsync<ReadViewModel>(queryOptions);
+            JObject result = new JObject();
+            foreach (var item in data)
+            {
+                result.Add(new JProperty(item.Keyword, item.Value));
+            }
             return Ok(result);
         }
         // GET api/attribute-sets/read/count
@@ -83,15 +93,15 @@ namespace Mix.Cms.Api.Controllers.v1.OData.Configurations
         [HttpGet, HttpOptions]
         public async System.Threading.Tasks.Task<ActionResult<int>> CountAsync()
         {
-            return (await ReadMvcViewModel.Repository.CountAsync()).Data;
+            return (await ReadViewModel.Repository.CountAsync()).Data;
         }
 
         // Save api/odata/{culture}/attribute-set/read
         [HttpPost, HttpOptions]
         [Route("")]
-        public async Task<ActionResult<ReadMvcViewModel>> Save(string culture, [FromBody]ReadMvcViewModel data)
+        public async Task<ActionResult<ReadViewModel>> Save(string culture, [FromBody]ReadViewModel data)
         {
-            var readResult = await base.SaveAsync<ReadMvcViewModel>(data, true);
+            var readResult = await base.SaveAsync<ReadViewModel>(data, true);
             if (readResult.IsSucceed)
             {
                 return Ok(readResult);
@@ -105,9 +115,9 @@ namespace Mix.Cms.Api.Controllers.v1.OData.Configurations
         // Save api/odata/{culture}/attribute-set/read/{keyword}
         [HttpPost, HttpOptions]
         [Route("{keyword}")]
-        public async Task<ActionResult<ReadMvcViewModel>> Save(string culture, string keyword, [FromBody]JObject data)
+        public async Task<ActionResult<ReadViewModel>> Save(string culture, string keyword, [FromBody]JObject data)
         {
-            var readResult = await base.SaveAsync<ReadMvcViewModel>(data, p => p.Keyword == keyword);
+            var readResult = await base.SaveAsync<ReadViewModel>(data, p => p.Keyword == keyword);
             if (readResult.IsSucceed)
             {
                 return Ok(readResult);
