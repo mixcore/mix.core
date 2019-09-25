@@ -1,14 +1,13 @@
 <div ng-if="$ctrl.template" ng-init="$ctrl.init()" class="card mb-3">
-    <div class="card-header">
 
-        <h6>Quick {{$ctrl.folderType}} Layout Editor
-
-            <a href="/portal/template/details/{{$ctrl.template.themeId}}/{{$ctrl.template.folderType}}/{{$ctrl.template.id}}" class="btn btn-link text-primary btn-sm float-right py-0">
-                <span class="fas fa-pen text-primary"></span> Edit {{$ctrl.folderType}} Layout
-            </a>
-        </h6>
-    </div>
-    <div id="quick-{{$ctrl.folderType}}-layout-editor" class="card-body">
+    <h6 class="card-header">{{$ctrl.folderType}} Template Viewer
+        <a class="btn-link text-primary btn-sm float-right py-0" data-toggle="collapse" href="#quick-{{$ctrl.folderType}}-layout-editor" role="button" aria-expanded="false" aria-controls="quick-{{$ctrl.folderType}}-layout-editor">
+            <span class="far fa-minus-square text-primary"></span> Show/Hide</a>
+        <a href="/portal/template/details/{{$ctrl.template.themeId}}/{{$ctrl.template.folderType}}/{{$ctrl.template.id}}" class="btn btn-link text-primary btn-sm float-right py-0">
+            <span class="fas fa-pen text-primary"></span> Edit {{$ctrl.folderType}} Layout
+        </a>
+    </h6>
+    <div id="quick-{{$ctrl.folderType}}-layout-editor" class="card-body collapse">
         <div class="form-group">
             <div class="input-group mb-3">
                 <select class="btn btn-outline-secondary custom-select col-sm-4" ng-options="item as item.fileName for item in $ctrl.templates track by item.id" ng-model="$ctrl.template" ng-change="$ctrl.selectTemplate($ctrl.template)"></select>

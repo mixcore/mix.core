@@ -52,10 +52,15 @@
                     <div class="card mb-3">
                         <h6 class="card-header">
                             Attribute Sets
+                            <a class="btn-link text-primary btn-sm float-right py-0" data-toggle="collapse"
+                                href="#AttributeSetsBody" role="button" aria-expanded="false"
+                                aria-controls="AttributeSetsBody collapse">
+                                <span class="far fa-minus-square text-primary"></span> Show/Hide</a>
                         </h6>
-                        <div class="card-body">
+                        <div id="AttributeSetsBody" class="card-body collapse">
                             <div class="alert alert-warning" role="alert" ng-if="!activedData.id">
-                                Please save post to continues with attributtes section!
+                                <i class="fas fa-exclamation-triangle text-warning"></i> Please save post to continues
+                                with attributtes section!
                             </div>
                             <attribute-set-navs ng-if="activedData.id" parent-id="activedData.id" parent-type="2">
                             </attribute-set-navs>
