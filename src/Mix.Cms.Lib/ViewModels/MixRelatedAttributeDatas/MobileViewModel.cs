@@ -9,15 +9,17 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
     public class MobileViewModel
        : ViewModelBase<MixCmsContext, MixRelatedAttributeData, MobileViewModel>
     {
-        #region Models
+        #region Model
         [JsonProperty("id")]
         public string Id { get; set; }
         [JsonProperty("parentId")]
         public string ParentId { get; set; }
         [JsonProperty("parentType")]
-        public int ParentType { get; set; }
+        public MixEnums.MixAttributeSetDataType ParentType { get; set; }
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
+        [JsonProperty("attributeSetName")]
+        public string AttributeSetName { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
         [JsonProperty("status")]
@@ -25,7 +27,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         [JsonProperty("description")]
         public string Description { get; set; }
 
-        #endregion Models
+        #endregion
         #region Views
         [JsonProperty("data")]
         public MixAttributeSetDatas.MobileViewModel Data { get; set; }

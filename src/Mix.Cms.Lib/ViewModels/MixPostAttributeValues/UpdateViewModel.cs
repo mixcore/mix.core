@@ -20,7 +20,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeValues
         [JsonProperty("attributeFieldId")]
         public int AttributeFieldId { get; set; }
         [JsonProperty("dataType")]
-        public int DataType { get; set; }
+        public MixEnums.MixDataType DataType { get; set; }
         [JsonProperty("attributeName")]
         public string AttributeName { get; set; }
         [JsonProperty("postId")]
