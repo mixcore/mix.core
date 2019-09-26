@@ -6,7 +6,7 @@
         <select class="btn custom-select custom-select-sm col-3 my-3" ng-model="selectedList.action">
             <option ng-repeat="item in actions" ng-value="item">{{item}}</option>
         </select>
-        
+
         <a class="btn btn-sm btn-primary" ng-if="selectedList.data.length > 0 && selectedList.action"
             ng-click="applyList()">Apply</a>
     </div>
@@ -28,6 +28,9 @@
                     </th>
                     <th scope="col" width="20%">
                         Name
+                    </th>
+                    <th scope="col" width="10%">
+                        Type
                     </th>
                     <th scope="col" width="10%">
                         Created Date
@@ -52,7 +55,9 @@
                     <td>
                         <small>{{item.name}}</small>
                     </td>
-
+                    <td>
+                        <small>{{item.model.type}}</small>
+                    </td>
                     <td>
                         <small>
                             {{item.createdDateTime | utcToLocal}}
@@ -65,7 +70,7 @@
                             </a>
                             <a href="/portal/attribute-set-data/list?attributeSetId={{item.id}}&attributeSetName={{item.name}}"
                                 class="btn btn-link">
-                                <span class="fas fa-bars text-primary"></span>
+                                <span class="fas fa-database text-primary"></span>
                             </a>
                             <a ng-click="remove(item.id);" class="btn btn-link">
                                 <span class="fas fa-times text-danger"></span>
