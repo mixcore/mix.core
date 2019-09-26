@@ -12,7 +12,7 @@
                             attr-set-name="activedData.attributes.name" default-id="'default'"
                             attrData="activedData.attributeData" attr-data-id="dataId" save-data="save(data)">
                         </attribute-set-form> -->
-                        <div ng-repeat="value in activedData.attributesData.data.values | orderBy:'priority' track by $index">
+                        <div ng-repeat="value in activedData.attributeData.data.values | orderBy:'priority' track by $index">
                             <attribute-value-editor attribute-value="value" is-show-title="'true'"
                                 parent-type="'1'" parent-id="activedData.attributeData.id"></attribute-value-editor>
                         </div>
@@ -57,7 +57,7 @@
                         <h6 class="card-header">
                             Attribute Sets
                             <a class="btn-link text-primary btn-sm float-right py-0" data-toggle="collapse"
-                                href="#AttributeSetsBody" role="button" aria-expanded="false"
+                                data-target="#AttributeSetsBody" role="button" aria-expanded="false"
                                 aria-controls="AttributeSetsBody collapse">
                                 <span class="far fa-minus-square text-primary"></span> Show/Hide</a>
                         </h6>
