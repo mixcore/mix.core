@@ -160,7 +160,7 @@
             //
             // Summary:
             //     Represents a currency value.
-            Currency = 6,
+            Double = 6,
             //
             // Summary:
             //     Represents text that is displayed.
