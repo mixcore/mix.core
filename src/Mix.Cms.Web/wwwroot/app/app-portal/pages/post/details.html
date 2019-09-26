@@ -39,18 +39,21 @@
                     <pane-v header="Medias">
                         <post-medias post="activedData" medias="activedData.mediaNavs"></post-medias>
                     </pane-v>
-                    <pane-v header="Related Posts">
+                    <pane-v header="Related Posts" class="card">
                         <related-navs request="request" source-id="activedData.id" culture="activedData.specificulture" prefix="'post'" navs="activedData.postNavs" data="data" load-data="getListRelated(pageIndex)"></related-navs>
                     </pane-v>
                 </tabs-v>
                 <div class="tab-pane fade active show" id="pills-general" role="tabpanel" aria-labelledby="pills-general-tab">
                     <div class="card mb-3">
-                        <div class="card-header">
-                            <h6>Attribute Sets</h6>
-                        </div>
-                        <div class="card-body">
+                        <h6 class="card-header">
+                            Attribute Sets
+                            <a class="btn-link text-primary btn-sm float-right py-0" data-toggle="collapse" href="#AttributeSetsBody" role="button" aria-expanded="false" aria-controls="AttributeSetsBody collapse">
+                                <span class="far fa-minus-square text-primary"></span> Show/Hide</a>
+                        </h6>
+                        <div id="AttributeSetsBody" class="card-body collapse">
                             <div class="alert alert-warning" role="alert" ng-if="!activedData.id">
-                                Please save post to continues with attributtes section!
+                                <i class="fas fa-exclamation-triangle text-warning"></i> Please save post to continues
+                                with attributtes section!
                             </div>
                             <attribute-set-navs ng-if="activedData.id" parent-id="activedData.id" parent-type="2">
                             </attribute-set-navs>
