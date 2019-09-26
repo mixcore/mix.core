@@ -1,6 +1,9 @@
 <div class="card border-left-0 border-bottom-0 border-right-0">
     <div class="card-header py-1">
         <span ng-bind="$ctrl.header"></span>
+        <div class="" role="alert" ng-if="!$ctrl.data || !$ctrl.data.length">
+            <i class="fas fa-exclamation-triangle text-danger"></i> No data has been created for this attribute yet!
+        </div>
         <div class="row" ng-if="$ctrl.data[0]">
             <div class="col-md-1"></div>
             <small ng-repeat="col in $ctrl.data[0].fields | orderBy:'priority' track by $index" ng-if="$index < 3"
@@ -9,9 +12,6 @@
         </div>
     </div>
     <div class="card-body py-1">
-        <div class="alert alert-warning" role="alert" ng-if="!$ctrl.data || !$ctrl.data.length">
-            No Data Found!
-        </div>
         <div dnd-list="$ctrl.data" dnd-inserted="$ctrl.updateOrders(index)">
             <div ng-repeat="item in $ctrl.data | orderBy: 'priority' track by $index" dnd-draggable="item"
                 dnd-type="'item'" dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedItem = item"
