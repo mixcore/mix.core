@@ -24,7 +24,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         [JsonProperty("title")]
         public string Title { get; set; }
         [JsonProperty("dataType")]
-        public int DataType { get; set; }
+        public MixEnums.MixDataType DataType { get; set; }
         [JsonProperty("defaultValue")]
         public string DefaultValue { get; set; }
         [JsonIgnore]

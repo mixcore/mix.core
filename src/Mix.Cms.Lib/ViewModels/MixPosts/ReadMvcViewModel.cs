@@ -151,8 +151,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 });
             }
         }
-        [JsonProperty("properties")]
-        public List<ExtraProperty> Properties { get; set; }
+        //[JsonProperty("properties")]
+        //public List<ExtraProperty> Properties { get; set; }
 
         [JsonProperty("mediaNavs")]
         public List<MixPostMedias.ReadViewModel> MediaNavs { get; set; }
@@ -168,6 +168,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         [JsonProperty("listTag")]
         public JArray ListTag { get => JArray.Parse(Tags ?? "[]"); }
+
+        [JsonProperty("attributes")]
+        public IDictionary<string, string> Attributes { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -191,16 +194,18 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             //Load Template + Style +  Scripts for views
             this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
 
-            Properties = new List<ExtraProperty>();
+            //Properties = new List<ExtraProperty>();
 
-            if (!string.IsNullOrEmpty(ExtraProperties))
-            {
-                JArray arr = JArray.Parse(ExtraProperties);
-                foreach (JToken item in arr)
-                {
-                    Properties.Add(item.ToObject<ExtraProperty>());
-                }
-            }
+            //if (!string.IsNullOrEmpty(ExtraProperties))
+            //{
+            //    JArray arr = JArray.Parse(ExtraProperties);
+            //    foreach (JToken item in arr)
+            //    {
+            //        Properties.Add(item.ToObject<ExtraProperty>());
+            //    }
+            //}
+
+            LoadAttributes(_context, _transaction);
 
             var getPostMedia = MixPostMedias.ReadViewModel.Repository.GetModelListBy(n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction);
             if (getPostMedia.IsSucceed)
@@ -236,12 +241,26 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #endregion Overrides
 
         #region Expands
-        //Get Property by name
-        public string Property(string name)
+        private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            var prop = Properties.FirstOrDefault(p => p.Name.ToLower() == name.ToLower());
-            return prop?.Value;
-
+            var AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
+                a => a.ParentId == Id.ToString() && a.ParentType == (int)MixEnums.MixAttributeSetDataType.Post  && a.AttributeSetName == "post"
+                    && a.Specificulture == Specificulture
+                    , _context, _transaction).Data;
+            Attributes = new Dictionary<string, string>();
+            if (AttributeData!=null)
+            {
+                foreach (var item in AttributeData.Data.Data.Properties())
+                {
+                    Attributes.Add(item.Name, item.Value.ToString());
+                }                
+            }
+            
+        }
+        //Get Property by name
+        public object Property(string name)
+        {
+            return Attributes[name.ToLower()];
         }
 
         public MixModules.ReadMvcViewModel GetModule(string name)
