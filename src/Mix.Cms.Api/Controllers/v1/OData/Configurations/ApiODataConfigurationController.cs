@@ -4,6 +4,7 @@
 
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -18,8 +19,7 @@ using System.Threading.Tasks;
 namespace Mix.Cms.Api.Controllers.v1.OData.Configurations
 {
     [Produces("application/json")]
-    [Route("api/v1/odata/configuration/read-mvc")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
+    [Route("api/v1/odata/{culture}/configuration/mobile")]
     public class ApiODataConfigurationReadController :
         BaseApiODataController<MixCmsContext, MixConfiguration>
     {
@@ -32,94 +32,91 @@ namespace Mix.Cms.Api.Controllers.v1.OData.Configurations
         #region Get
 
         // GET api/Configurations/keyword
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [EnableQuery]
         [HttpGet, HttpOptions]
         [Route("{keyword}")]
-        public async Task<ActionResult<ReadMvcViewModel>> Details(string culture, string keyword)
+        public async Task<ActionResult<MobileViewModel>> Details(string culture, string keyword)
         {
             string msg = string.Empty;
             Expression<Func<MixConfiguration, bool>> predicate = null;
-            MixConfiguration model = null;
-            // Get Details if has keyword or else get default
-            if (keyword!="default")
-            {
-                predicate = m => m.Keyword == keyword;
-            }
-            else
-            {
-                model = new MixConfiguration()
-                {
-                    Priority = ReadMvcViewModel.Repository.Max(p => p.Priority).Data + 1
-                };
-            }
-
-            var readResult = await base.GetSingleAsync<ReadMvcViewModel>(keyword, predicate, model);
-
-            return Ok(readResult.Data);
+            predicate = m => m.Keyword == keyword;
+            var readResult = await base.GetSingleAsync<MobileViewModel>(keyword, predicate, null);
+            return Ok(readResult.Data?.Value);
         }
         // GET api/Configurations/keyword
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [EnableQuery(MaxExpansionDepth = 4)]
         [HttpGet, HttpOptions]
         [Route("type/{type}")]
-        public async Task<ActionResult<List<ReadMvcViewModel>>> ListByType(string culture, string type, ODataQueryOptions<MixConfiguration> queryOptions)
+        public async Task<ActionResult<JObject>> ListByType(string culture, string type, ODataQueryOptions<MixConfiguration> queryOptions)
         {
             Expression<Func<MixConfiguration, bool>> predicate = m => m.Category == type && m.Specificulture== culture;
-            var result = await base.GetListAsync<ReadMvcViewModel>(predicate, $"type_{type}", queryOptions);
+            var data = await base.GetListAsync<MobileViewModel>(predicate, $"type_{type}", queryOptions);
+            JObject result = new JObject();
+            foreach (var item in data)
+            {
+                result.Add(new JProperty(item.Keyword, item.Value));
+            }
             return Ok(result);
         }
 
         // GET api/Configurations/keyword
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [EnableQuery(MaxExpansionDepth = 4)]
         [HttpGet, HttpOptions]
-        public async Task<ActionResult<List<ReadMvcViewModel>>> List(string culture, ODataQueryOptions<MixConfiguration> queryOptions)
+        public async Task<ActionResult<JObject>> List(string culture, ODataQueryOptions<MixConfiguration> queryOptions)
         {
-            var result = await base.GetListAsync<ReadMvcViewModel>(queryOptions);
+            var data = await base.GetListAsync<MobileViewModel>(queryOptions);
+            JObject result = new JObject();
+            foreach (var item in data)
+            {
+                result.Add(new JProperty(item.Keyword, item.Value));
+            }
             return Ok(result);
         }
         // GET api/attribute-sets/read/count
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [EnableQuery]
         [Route("count")]
         [HttpGet, HttpOptions]
         public async System.Threading.Tasks.Task<ActionResult<int>> CountAsync()
         {
-            return (await ReadMvcViewModel.Repository.CountAsync()).Data;
+            return (await MobileViewModel.Repository.CountAsync()).Data;
         }
 
-        // Save api/odata/{culture}/attribute-set/read
-        [HttpPost, HttpOptions]
-        [Route("")]
-        public async Task<ActionResult<ReadMvcViewModel>> Save(string culture, [FromBody]ReadMvcViewModel data)
-        {
-            var readResult = await base.SaveAsync<ReadMvcViewModel>(data, true);
-            if (readResult.IsSucceed)
-            {
-                return Ok(readResult);
-            }
-            else
-            {
-                return BadRequest(readResult);
-            }
-        }
 
         // Save api/odata/{culture}/attribute-set/read/{keyword}
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
-        [Route("{keyword}")]
-        public async Task<ActionResult<ReadMvcViewModel>> Save(string culture, string keyword, [FromBody]JObject data)
+        [Route("{keyword}")]        
+        public async Task<ActionResult<MobileViewModel>> Save(string culture, string keyword, [FromBody]JObject data)
         {
-            var readResult = await base.SaveAsync<ReadMvcViewModel>(data, p => p.Keyword == keyword);
-            if (readResult.IsSucceed)
+            Expression<Func<MixConfiguration, bool>> predicate = model => model.Keyword == keyword && model.Specificulture == culture;
+            var getData = await base.GetSingleAsync<MobileViewModel>(keyword, predicate, null);
+
+            if (getData.IsSucceed)
             {
-                return Ok(readResult);
+                getData.Data.Value = data["value"].Value<string>();
+                var saveResult = await getData.Data.SaveModelAsync(true);
+                if (saveResult.IsSucceed)
+                {
+                    return Ok(saveResult);
+                }
+                else
+                {
+                    return BadRequest(saveResult);
+                }
             }
             else
             {
-                return BadRequest(readResult);
+                return BadRequest(getData);
             }
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpDelete, HttpOptions]
-        [Route("{keyword}")]
+        [Route("{keyword}")]        
         public async Task<ActionResult<DeleteViewModel>> Delete(string culture, string keyword)
         {
             Expression<Func<MixConfiguration, bool>> predicate = model => model.Keyword == keyword;

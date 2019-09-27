@@ -1,7 +1,7 @@
 <div ng-if="$ctrl.template" ng-init="$ctrl.init()" class="card mb-3">
 
     <h6 class="card-header">{{$ctrl.folderType}} Template Viewer
-        <a class="btn-link text-primary btn-sm float-right py-0" data-toggle="collapse" href="#quick-{{$ctrl.folderType}}-layout-editor" role="button" aria-expanded="false" aria-controls="quick-{{$ctrl.folderType}}-layout-editor">
+        <a class="btn-link text-primary btn-sm float-right py-0" data-toggle="collapse" data-target="#quick-{{$ctrl.folderType}}-layout-editor" role="button" aria-expanded="false" aria-controls="quick-{{$ctrl.folderType}}-layout-editor">
             <span class="far fa-minus-square text-primary"></span> Show/Hide</a>
         <a href="/portal/template/details/{{$ctrl.template.themeId}}/{{$ctrl.template.folderType}}/{{$ctrl.template.id}}" class="btn btn-link text-primary btn-sm float-right py-0">
             <span class="fas fa-pen text-primary"></span> Edit {{$ctrl.folderType}} Layout
