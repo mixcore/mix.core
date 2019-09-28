@@ -26,10 +26,8 @@
                             <post-general is-admin="isAdmin" post="activedData"></post-general>
                         </div>
                     </pane-v>
-                    <pane-v header="Search Engine" class="">
+                    <pane-v header="SEO" class="">
                         <div class="card card-body">
-                            <p class="text-muted">Add a title and description to see how this product might appear in a
-                                search engine listing.</p>
                             <post-seo post="activedData"></post-seo>
                         </div>
                     </pane-v>
@@ -48,7 +46,7 @@
                             <post-medias post="activedData" medias="activedData.mediaNavs"></post-medias>
                         </div>
                     </pane-v>
-                    <pane-v header="Related Posts">
+                    <pane-v header="Related">
                         <related-navs request="request" source-id="activedData.id" culture="activedData.specificulture"
                             prefix="'post'" navs="activedData.postNavs" data="data"
                             load-data="getListRelated(pageIndex)"></related-navs>
@@ -237,9 +235,9 @@
                                     readonly="readonly">
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-0">
                             <label class="control-label">Author</label>
-                            <div class="input-group mb-3">
+                            <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1"><i
                                             class="mi mi-Contact"></i></span>
