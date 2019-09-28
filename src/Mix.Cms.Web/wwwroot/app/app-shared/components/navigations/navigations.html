@@ -1,7 +1,7 @@
-<ul dnd-list="$ctrl.data">
-    <li ng-repeat="nav in $ctrl.data" class="container py-1 rounded-0" dnd-draggable="nav" dnd-type="'nav'" dnd-effect-allowed="move" dnd-selected="$ctrl.selected = nav" dnd-moved="$ctrl.updateOrders($index)" ng-class="{'selected': $ctrl.selected === nav}">
+<ul dnd-list="$ctrl.data" class="m-0">
+    <li ng-repeat="nav in $ctrl.data" class="container border-left-0 border-right-0 py-1 rounded-0" dnd-draggable="nav" dnd-type="'nav'" dnd-effect-allowed="move" dnd-selected="$ctrl.selected = nav" dnd-moved="$ctrl.updateOrders($index)" ng-class="{'selected': $ctrl.selected === nav}">
         <div class="row">
-            <div class="col-1 drag-header" style="cursor:grab;">
+            <div class="drag-header" style="cursor:grab; width: 15px;">
                 <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
             </div>
             <!--<div class="col-1">
@@ -11,7 +11,7 @@
             <div class="col-7">
                 <div class="custom-control custom-switch">
                     <input type="checkbox" ng-change="$ctrl.callback({nav: nav})" ng-model="nav.isActived" id="{{$ctrl.prefix}}_{{$index}}" class="custom-control-input">
-                    <label class="custom-control-label align-middle" for="{{$ctrl.prefix}}_{{$index}}" ng-bind="$ctrl.limString(nav.description, 15)">
+                    <label class="custom-control-label align-middle" for="{{$ctrl.prefix}}_{{$index}}" ng-bind="$ctrl.limString(nav.description, 30)">
                 </label></div>
                 <span class="switch switch-sm">
 
