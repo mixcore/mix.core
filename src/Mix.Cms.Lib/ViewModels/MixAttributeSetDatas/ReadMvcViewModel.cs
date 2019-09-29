@@ -70,7 +70,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
                 case MixEnums.MixDataType.Time:
                     return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
-                case MixEnums.MixDataType.Currency:
+                case MixEnums.MixDataType.Double:
                     return (new JProperty(item.AttributeFieldName, item.DoubleValue));
                 case MixEnums.MixDataType.Boolean:
                     return (new JProperty(item.AttributeFieldName, item.BooleanValue));
