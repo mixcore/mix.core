@@ -67,7 +67,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             if (predicate != null || model != null)
             {
                 var portalResult = await base.GetSingleAsync<MobileViewModel>(id.ToString(), predicate, model);
-                return Ok(portalResult.Data);
+                return Ok(portalResult.Data.Data);
             }
             else
             {
