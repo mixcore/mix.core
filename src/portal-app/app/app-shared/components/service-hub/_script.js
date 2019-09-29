@@ -3,7 +3,7 @@
     bindings: {
         hubName: '=',
         message: '=',
-    }
+    },
     controller: ['$scope', function ($scope) {
         BaseHub.call(this, $scope);
         $scope.user = {
