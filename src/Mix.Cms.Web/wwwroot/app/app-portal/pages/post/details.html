@@ -7,7 +7,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <post-main post="activedData" generate-seo="generateSEO()"></post-main>
-<!-- 
+                        <!-- 
                         <attribute-set-form ng-if="activedData.attributes" attr-set-id="activedData.attributes.id"
                             attr-set-name="activedData.attributes.name" default-id="'default'"
                             attrData="activedData.attributeData" attr-data-id="dataId" save-data="save(data)">
@@ -24,30 +24,31 @@
                             <post-general is-admin="isAdmin" post="activedData"></post-general>
                         </div>
                     </pane-v>
-                    <pane-v header="Search Engine" class="card">
-                        <div class="card-body">
-                            <p class="text-muted">Add a title and description to see how this product might appear in a
-                                search engine listing.</p>
+                    <pane-v header="SEO" class="">
+                        <div class="card card-body">
                             <post-seo post="activedData"></post-seo>
                         </div>
                     </pane-v>
-                    <pane-v header="Parents" class="card">
-                        <div class="card-body">
+                    <pane-v header="Parents" class="">
+                        <div class="card card-body">
                             <post-parents post="activedData"></post-parents>
                         </div>
                     </pane-v>
-                    <pane-v header="Module" class="card">
-                        <div class="card-body">
+                    <pane-v header="Module" class="">
+                        <div class="card card-body">
                             <post-modules post="activedData"></post-modules>
                         </div>
                     </pane-v>
                     <pane-v header="Medias">
-                        <post-medias post="activedData" medias="activedData.mediaNavs"></post-medias>
+                        <div class="card card-body">
+                            <post-medias post="activedData" medias="activedData.mediaNavs"></post-medias>
+                        </div>
                     </pane-v>
-                    <pane-v header="Related Posts" class="card">
+                    <pane-v header="Related">
                         <related-navs request="request" source-id="activedData.id" culture="activedData.specificulture" prefix="'post'" navs="activedData.postNavs" data="data" load-data="getListRelated(pageIndex)"></related-navs>
                     </pane-v>
                 </tabs-v>
+                <hr>
                 <div class="tab-pane fade active show" id="pills-general" role="tabpanel" aria-labelledby="pills-general-tab">
                     <div class="card mb-3">
                         <h6 class="card-header">
@@ -197,13 +198,6 @@
             <section class="col-sm-4" style="padding-left:0">
 
                 <actions preview-url="activedData.detailsUrl" back-url="referrerUrl"></actions>
-                <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
-
-                <collape-container title="'URL slugs'" actived-data="activedData" add-callback="addAlias()">
-                    <pane-collape>
-                        <url-alias ng-repeat="alias in activedData.urlAliases" index="$index" url-alias="alias" remove-callback="removeAliasCallback(index)"></url-alias>
-                    </pane-collape>
-                </collape-container>
 
                 <div class="card mb-3">
                     <h6 class="card-header">
@@ -222,16 +216,16 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label">Created Date Time</label>
-                            <div class="input-group input-group-sm mb-3">
+                            <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1"><i class="mi mi-Calendar"></i></span>
                                 </div>
                                 <input ng-model="activedData.createdDateTime" type="text" class="form-control" readonly="readonly">
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-0">
                             <label class="control-label">Author</label>
-                            <div class="input-group input-group-sm mb-3">
+                            <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1"><i class="mi mi-Contact"></i></span>
                                 </div>
@@ -241,9 +235,24 @@
 
                     </div>
                 </div>
-                <custom-image header="'Image'" type="'Posts'" folder="activedData.seoName" header="activedData.title" description="activedData.excerpt" src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
+                <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
 
-                <custom-image header="'Thumnail'" type="'Posts'" folder="activedData.seoName" title="activedData.title" description="activedData.excerpt" src-url="activedData.thumbnailUrl" src="activedData.thumbnail" auto="'true'"></custom-image>
+                <collape-container title="'URL slugs'" actived-data="activedData" add-callback="addAlias()">
+                    <pane-collape>
+                        <url-alias ng-repeat="alias in activedData.urlAliases" index="$index" url-alias="alias" remove-callback="removeAliasCallback(index)"></url-alias>
+                    </pane-collape>
+                </collape-container>
+
+                <tabs-v select-callback="selectPane(pane)" class="mb-3">
+                    <pane-v header="Feature">
+                        <custom-image header="'Feature image'" type="'Posts'" folder="activedData.seoName" header="activedData.title" description="activedData.excerpt" src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
+                    </pane-v>
+                    <pane-v header="Thumbnail Image">
+                        <custom-image header="'Thumnail image Upload'" type="'Posts'" folder="activedData.seoName" title="activedData.title" description="activedData.excerpt" src-url="activedData.thumbnailUrl" src="activedData.thumbnail" auto="'true'"></custom-image>
+                    </pane-v>
+                </tabs-v>
+
+
             </section>
         </div>
     </form>
