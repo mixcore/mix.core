@@ -1,15 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
-using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
 {
-    public class DeleteViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeField, DeleteViewModel>
+    public class HubViewModel
+      : ViewModelBase<MixCmsContext, MixAttributeField, HubViewModel>
     {
         #region Properties
         #region Models
@@ -22,10 +20,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         public string AttributeSetName { get; set; }
         [JsonProperty("referenceId")]
         public int? ReferenceId { get; set; }
+        [JsonProperty("regex")]
+        public string Regex { get; set; }
         [JsonProperty("title")]
         public string Title { get; set; }
         [JsonProperty("dataType")]
-        public int DataType { get; set; }
+        public MixEnums.MixDataType DataType { get; set; }
         [JsonProperty("defaultValue")]
         public string DefaultValue { get; set; }
         [JsonProperty("name")]
@@ -48,24 +48,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
 
         #region Contructors
 
-        public DeleteViewModel() : base()
+        public HubViewModel() : base()
         {
         }
 
-        public DeleteViewModel(MixAttributeField model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public HubViewModel(MixAttributeField model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
         #endregion Contructors
-
-        #region overrides
-        public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(DeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            var removeFieldValues = await MixAttributeSetValues.DeleteViewModel.Repository.RemoveListModelAsync(false, f => f.AttributeFieldId == Id);
-            ViewModelHelper.HandleResult(removeFieldValues, ref result);
-            return result;
-        }
-        #endregion
     }
 }

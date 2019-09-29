@@ -12,8 +12,8 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
-    public class MobileViewModel
-      : ODataViewModelBase<MixCmsContext, MixAttributeSetData, MobileViewModel>
+    public class HubViewModel
+      : ODataViewModelBase<MixCmsContext, MixAttributeSetData, HubViewModel>
     {
         #region Properties
         #region Models
@@ -30,9 +30,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #endregion Models
         #region Views
         [JsonIgnore]
-        public List<MixAttributeSetValues.MobileViewModel> Values { get; set; }
+        public List<MixAttributeSetValues.HubViewModel> Values { get; set; }
         [JsonIgnore]
-        public List<MixAttributeFields.MobileViewModel> Fields { get; set; }
+        public List<MixAttributeFields.HubViewModel> Fields { get; set; }
 
         [JsonProperty("data")]
         public JObject Data { get; set; }
@@ -41,11 +41,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #region Contructors
 
-        public MobileViewModel() : base()
+        public HubViewModel() : base()
         {
         }
 
-        public MobileViewModel(MixAttributeSetData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public HubViewModel(MixAttributeSetData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -58,7 +58,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             Data = new JObject();
             Data.Add(new JProperty("id", Id));
             Data.Add(new JProperty("details", $"/api/v1/odata/{Specificulture}/attribute-set-data/mobile/{Id}"));
-            Values = MixAttributeSetValues.MobileViewModel
+            Values = MixAttributeSetValues.HubViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
             foreach (var item in Values.OrderBy(v=>v.Priority))
             {
@@ -73,15 +73,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 CreatedDateTime = DateTime.UtcNow;
                 Priority = Repository.Count(m => m.AttributeSetName == AttributeSetName && m.Specificulture == Specificulture,_context,_transaction).Data + 1;
             }
-            Values = Values ?? MixAttributeSetValues.MobileViewModel
+            Values = Values ?? MixAttributeSetValues.HubViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-            Fields = MixAttributeFields.MobileViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
+            Fields = MixAttributeFields.HubViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
             foreach (var field in Fields.OrderBy(f => f.Priority))
             {
                 var val = Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
                 if (val == null)
                 {
-                    val = new MixAttributeSetValues.MobileViewModel(
+                    val = new MixAttributeSetValues.HubViewModel(
                         new MixAttributeSetValue() {
                             AttributeFieldId = field.Id,
                             AttributeFieldName = field.Name,                            
@@ -142,7 +142,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #endregion
 
         #region Expands
-        JProperty ParseValue(MixAttributeSetValues.MobileViewModel item)
+        JProperty ParseValue(MixAttributeSetValues.HubViewModel item)
         {
             switch (item.DataType)
             {
@@ -186,7 +186,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     return (new JProperty(item.AttributeFieldName, item.StringValue));
             }
         }
-        void ParseModelValue(JToken property, MixAttributeSetValues.MobileViewModel item)
+        void ParseModelValue(JToken property, MixAttributeSetValues.HubViewModel item)
         {
             switch (item.DataType)
             {
