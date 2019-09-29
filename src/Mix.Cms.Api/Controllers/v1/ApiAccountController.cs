@@ -166,7 +166,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("Register")]
         [HttpPost, HttpOptions]
         [AllowAnonymous]
-        public async Task<RepositoryResponse<AccessTokenViewModel>> Register([FromBody] MixRegisterViewModel model)
+        public async Task<ActionResult<RepositoryResponse<AccessTokenViewModel>>> Register([FromBody] MixRegisterViewModel model)
         {
             RepositoryResponse<AccessTokenViewModel> result = new RepositoryResponse<AccessTokenViewModel>();
             if (ModelState.IsValid)
@@ -180,16 +180,15 @@ namespace Mix.Cms.Api.Controllers.v1
                     Avatar = model.Avatar ?? MixService.GetConfig<string>("DefaultAvatar"),
                     JoinDate = DateTime.UtcNow
                 };
+
                 var createResult = await _userManager.CreateAsync(user, password: model.Password).ConfigureAwait(false);
                 if (createResult.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-
                     user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
                     model.Id = user.Id;
                     model.CreatedDateTime = DateTime.UtcNow;
                     // Save to cms db context
-
                     await model.SaveModelAsync();
                     var token = await _helper.GenerateAccessTokenAsync(user, true);
                     if (token != null)
@@ -201,7 +200,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                     else
                     {
-                        return result;
+                        return Ok(result);
                     }
                 }
                 else
@@ -210,11 +209,11 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         result.Errors.Add(error.Description);
                     }
-                    return result;
+                    return BadRequest(result);
                 }
             }
 
-            return result;
+            return BadRequest(result);
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
