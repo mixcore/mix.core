@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Core.Models;
 using Mix.Domain.Core.ViewModels;
@@ -30,8 +29,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public int Status { get; set; }
         #endregion Models
         #region Views
-
-        //public List<MixAttributeSetValues.MobileViewModel> Values { get; set; }
+        [JsonIgnore]
+        public List<MixAttributeSetValues.MobileViewModel> Values { get; set; }
+        [JsonProperty("data")]
         public JObject Data { get; set; }
         #endregion
         #endregion Properties
@@ -54,61 +54,59 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         {
             Data = new JObject();
             Data.Add(new JProperty("id", Id));
-            var values = MixAttributeSetValues.MobileViewModel
+            Data.Add(new JProperty("details", $"/api/v1/odata/{Specificulture}/attribute-set-data/mobile/{Id}"));
+            Values = MixAttributeSetValues.MobileViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-            foreach (var item in values.OrderBy(v=>v.Priority))
+            foreach (var item in Values.OrderBy(v=>v.Priority))
             {
                 Data.Add(ParseValue(item));
             }
         }
+        public override MixAttributeSetData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            Model = base.ParseModel(_context, _transaction);
+            Values = Values ?? MixAttributeSetValues.MobileViewModel
+                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
+            foreach (var val in Values.OrderBy(v=>v.Priority))
+            {
+                if (Data[val.AttributeFieldName] != null)
+                {
+                    ParseModelValue(Data[val.AttributeFieldName], val);
+                }
+                else
+                {
+                    Data.Add(ParseValue(val));
+                }
+            }
+            return Model;
+        }
 
-        //public override Task<RepositoryResponse<MobileViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        //{
-        //    string dbName = $"data/attribute-sets/{AttributeSetName}.sqlite";
-        //    var cnn = new SqliteConnection($"Data Source={dbName};Version=3;");
-        //    // open the connection:
-        //    //using (var connection = new SqliteConnection("Data Source=hello.db"))
-        //    //{
-        //    //    var command = connection.CreateCommand();
-        //    //    command.CommandText =
-        //    //        "UPDATE message SET text = $text1 WHERE id = 1;" +
-        //    //        "UPDATE message SET text = $text2 WHERE id = 2";
-        //    //    command.Parameters.AddWithValue("$text1", "Hello");
-        //    //    command.Parameters.AddWithValue("$text2", "World");
+        #region Async
+        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSetData parent, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            if (result.IsSucceed)
+            {
+                foreach (var item in Values)
+                {
+                    if (result.IsSucceed)
+                    {
+                        item.Priority = item.Field.Priority;
+                        item.DataId = parent.Id;
+                        item.Specificulture = parent.Specificulture;
+                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+                        ViewModelHelper.HandleResult(saveResult, ref result);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
 
-        //    //    connection.Open();
-        //    //    command.ExecuteNonQuery();
-        //    //}
-
-        //    //if (value != null)
-        //    //{
-        //    //    var jobj = JObject.FromObject(value);
-        //    //    var cacheFile = new FileViewModel()
-        //    //    {
-        //    //        Filename = key.ToLower(),
-        //    //        Extension = ".json",
-        //    //        FileFolder = "Cache",
-        //    //        Content = jobj.ToString(Newtonsoft.Json.Formatting.None)
-        //    //    };
-
-        //    //    var result = FileRepository.Instance.SaveFile(cacheFile);
-        //    //    return new RepositoryResponse<bool>()
-        //    //    {
-        //    //        IsSucceed = result,
-        //    //    };
-        //    //}
-        //    //else
-        //    //{
-        //    //    return new RepositoryResponse<bool>();
-        //    //}
-        //    var result = new RepositoryResponse<MobileViewModel>()
-        //    {
-        //        IsSucceed = true,
-        //        Data = this
-        //    };
-        //    return Task.FromResult(result);
-        //}
-
+            return result;
+        }
+        #endregion
         #endregion
 
         #region Expands
@@ -155,6 +153,60 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 default:
                     return (new JProperty(item.AttributeFieldName, item.StringValue));
             }
+        }
+        void ParseModelValue(JToken property, MixAttributeSetValues.MobileViewModel item)
+        {
+            switch (item.DataType)
+            {
+                case MixEnums.MixDataType.DateTime:
+                    item.DateTimeValue = property.Value<DateTime>();
+                    break;
+                case MixEnums.MixDataType.Date:
+                    item.DateTimeValue = property.Value<DateTime>();
+                    break;                    
+                case MixEnums.MixDataType.Time:
+                    item.DateTimeValue = property.Value<DateTime>();
+                    break;
+                case MixEnums.MixDataType.Double:
+                    item.DoubleValue = property.Value<double>();
+                    break;
+                case MixEnums.MixDataType.Boolean:
+                    item.BooleanValue = property.Value<bool>();
+                    break;
+                case MixEnums.MixDataType.Number:
+                    item.IntegerValue = property.Value<int>();
+                    break;
+                case MixEnums.MixDataType.Reference:
+                    //string url = $"/api/v1/odata/en-us/related-attribute-set-data/mobile/parent/set/{Id}/{item.Field.ReferenceId}";
+
+                    //foreach (var nav in item.DataNavs)
+                    //{
+                    //    arr.Add(nav.Data.Data);
+                    //}
+                    //return (new JProperty(item.AttributeFieldName, url));
+                    break;
+                case MixEnums.MixDataType.Custom:
+                case MixEnums.MixDataType.Duration:
+                case MixEnums.MixDataType.PhoneNumber:
+                case MixEnums.MixDataType.Text:
+                case MixEnums.MixDataType.Html:
+                case MixEnums.MixDataType.MultilineText:
+                case MixEnums.MixDataType.EmailAddress:
+                case MixEnums.MixDataType.Password:
+                case MixEnums.MixDataType.Url:
+                case MixEnums.MixDataType.ImageUrl:
+                case MixEnums.MixDataType.CreditCard:
+                case MixEnums.MixDataType.PostalCode:
+                case MixEnums.MixDataType.Upload:
+                case MixEnums.MixDataType.Color:
+                case MixEnums.MixDataType.Icon:
+                case MixEnums.MixDataType.VideoYoutube:
+                case MixEnums.MixDataType.TuiEditor:
+                default:
+                    item.StringValue = property.Value<string>();
+                    break;
+            }
+            item.StringValue = property.Value<string>();
         }
         #endregion
     }
