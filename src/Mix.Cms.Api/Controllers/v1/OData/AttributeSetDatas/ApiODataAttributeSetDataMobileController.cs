@@ -66,8 +66,8 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
 
             if (predicate != null || model != null)
             {
-                var portalResult = await base.GetSingleAsync<MobileViewModel>(id.ToString(), predicate, model);
-                return Ok(portalResult.Data.Data);
+                var portalResult = await base.GetSingleAsync<MobileViewModel>(id, predicate, model);
+                return Ok(portalResult.Data);
             }
             else
             {
@@ -106,14 +106,23 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         [Route("{id}")]
         public async Task<ActionResult<MobileViewModel>> Save(string culture, string id, [FromBody]JObject data)
         {
-            var portalResult = await base.SaveAsync<MobileViewModel>(data, p => p.Id == id && p.Specificulture == _lang);
-            if (portalResult.IsSucceed)
+            var getData = await base.GetSingleAsync<MobileViewModel>(id, p => p.Id == id && p.Specificulture == _lang);
+            getData.Data.Data = data;
+            if (getData.IsSucceed)
             {
-                return Ok(portalResult);
+                var portalResult = await base.SaveAsync<MobileViewModel>(getData.Data, true);
+                if (portalResult.IsSucceed)
+                {
+                    return Ok(portalResult);
+                }
+                else
+                {
+                    return BadRequest(portalResult);
+                }
             }
             else
             {
-                return BadRequest(portalResult);
+                return NotFound(data);
             }
         }
 

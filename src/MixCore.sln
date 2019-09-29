@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Performance1.psess = Performance1.psess
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Heart", "..\..\mix.heart\src\Mix.Heart\Mix.Heart.csproj", "{1C423080-E5D0-420D-88F2-076C6574AEFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{46A6FAC4-B138-4AB8-AAB2-597EE1774371}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46A6FAC4-B138-4AB8-AAB2-597EE1774371}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46A6FAC4-B138-4AB8-AAB2-597EE1774371}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C423080-E5D0-420D-88F2-076C6574AEFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C423080-E5D0-420D-88F2-076C6574AEFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C423080-E5D0-420D-88F2-076C6574AEFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C423080-E5D0-420D-88F2-076C6574AEFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +50,7 @@ Global
 		{0E27FDA9-70B1-41AD-8465-3E56EA78F0DF} = {C45D03E7-0453-4199-A5DE-E61B5FF29AF4}
 		{BC4D7CE6-F507-482E-A939-B9F8D6533929} = {C45D03E7-0453-4199-A5DE-E61B5FF29AF4}
 		{46A6FAC4-B138-4AB8-AAB2-597EE1774371} = {C45D03E7-0453-4199-A5DE-E61B5FF29AF4}
+		{1C423080-E5D0-420D-88F2-076C6574AEFC} = {C28E20DA-23BA-4B69-8F00-725057F9082E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B133AF3-4413-4B56-9BEC-8C4509008F85}
