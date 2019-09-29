@@ -1,41 +1,76 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Mix.Cms.Lib.Models.Cms;
+using Mix.Domain.Core.ViewModels;
 using Mix.UI.Core.SignalR;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Hub
 {
     public class ServiceHub : BaseSignalRHub
     {
-        public async Task SendMessage(string user, string message)
-        {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
-        }
-
-        public Task SendMessageToCaller(string message)
-        {
-            return Clients.Caller.SendAsync("ReceiveMessage", message);
-        }
-
+        private const string receiveMethod = "ReceiveMessage";
+        private const string hubMemberName = "hub_member";
+        private const string hubMemberFieldName = "hub_name";
         // TODO Handle Join/Leave group
         public Task JoinGroup(string groupName, string username)
         {
             string msg = $"new user {username}";
             AddUserToGroup(groupName, username);
-            return Clients.Group(groupName).SendAsync("ReceiveMessage", msg );
+            return Clients.Group(groupName).SendAsync(receiveMethod, msg );
         }
 
-        private void AddUserToGroup(string groupName, string username)
+        private Task AddUserToGroup(string groupName, string username)
         {
+            var groupMembers = GetGroupMembers(groupName);
+            return Task.WhenAll(new Task[]
+            {
+                SendMessageToCaller(groupMembers)
+            });
+        }
+
+        private object GetGroupMembers(string groupName)
+        {
+            Expression<Func<MixAttributeSetValue, bool>> predicate= m => 
+                m.AttributeSetName == hubMemberName && m.AttributeFieldName == hubMemberFieldName;
             throw new NotImplementedException();
         }
-
-        public Task SendMessageToGroups(string message)
+        #region Send Methods
+        public async Task SendMessage(string user, dynamic message)
         {
-            List<string> groups = new List<string>() { "SignalR Users" };
-            return Clients.Groups(groups).SendAsync("ReceiveMessage", message);
+            RepositoryResponse<dynamic> msg = new RepositoryResponse<dynamic>()
+            {
+                IsSucceed = true,
+                Data = message
+            };
+            await Clients.All.SendAsync(receiveMethod, user, msg);
         }
+
+        public Task SendMessageToCaller(dynamic message)
+        {
+            RepositoryResponse<dynamic> msg = new RepositoryResponse<dynamic>()
+            {
+                IsSucceed = true,
+                Data = message
+            };
+            return Clients.Caller.SendAsync(receiveMethod, msg);
+        }
+
+
+        public Task SendMessageToGroup(dynamic message, string groupName)
+        {
+            RepositoryResponse<dynamic> msg = new RepositoryResponse<dynamic>()
+            {
+                IsSucceed = true,
+                Data = message
+            };
+            return Clients.Group(groupName).SendAsync(receiveMethod, msg);
+        }
+
+        #endregion
+
 
         public override async Task OnConnectedAsync()
         {

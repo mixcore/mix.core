@@ -1,15 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 {
-    public class UpdateViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSetValue, UpdateViewModel>
+    public class HubViewModel
+      : ViewModelBase<MixCmsContext, MixAttributeSetValue, HubViewModel>
     {
         #region Properties
         #region Models
@@ -47,28 +47,41 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         public string EncryptKey { get; set; }
         [JsonProperty("encryptType")]
         public int EncryptType { get; set; }
+
+
         #endregion Models
 
-        #region Views       
+        #region Views
         [JsonProperty("field")]
-        public MixAttributeFields.UpdateViewModel Field { get; set; }
-        #endregion
+        public MixAttributeFields.ReadViewModel Field { get; set; }
+        [JsonProperty("dataNavs")]
+        public List<MixRelatedAttributeDatas.HubViewModel> DataNavs { get; set; }
 
+        #endregion
         #endregion Properties
 
         #region Contructors
 
-        public UpdateViewModel() : base()
+        public HubViewModel() : base()
         {
         }
 
-        public UpdateViewModel(MixAttributeSetValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public HubViewModel(MixAttributeSetValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
         #endregion Contructors
-
-        #region Overrides
+        #region Override
+        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            if (DataType == MixEnums.MixDataType.Reference)
+            {
+                DataNavs = MixRelatedAttributeDatas.HubViewModel.Repository.GetModelListBy(d =>
+                    d.ParentId == DataId && d.ParentType == (int)MixEnums.MixAttributeSetDataType.Set && d.Specificulture == Specificulture,
+                _context, _transaction).Data;
+            }
+            Field = MixAttributeFields.ReadViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId, _context, _transaction).Data;
+        }
         public override MixAttributeSetValue ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))
@@ -81,14 +94,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
             return base.ParseModel(_context, _transaction);
         }
-        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            Field = MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId).Data;
-        }
-        #endregion
-
-        #region Expands
-
         public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             base.Validate(_context, _transaction);
@@ -102,7 +107,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                     {
                         IsValid = false;
                         Errors.Add($"{Field.Title} = {StringValue} is existed");
-                    }                    
+                    }
                 }
                 if (Field.IsRequire)
                 {
@@ -114,7 +119,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                 }
             }
         }
-
         #endregion
     }
 }

@@ -14,6 +14,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
         public int Id { get; set; }
         public int AttributeSetId { get; set; }
+        public string AttributeSetName { get; set; }
         public string Regex { get; set; }
         public string Title { get; set; }
         public int DataType { get; set; }

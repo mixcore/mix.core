@@ -137,6 +137,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
                 {
                     if (result.IsSucceed)
                     {
+                        item.AttributeSetName = parent.Name;
                         item.AttributeSetId = parent.Id;
                         var saveResult = item.SaveModel(false, _context, _transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
