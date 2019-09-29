@@ -80,20 +80,21 @@ namespace Mix.Cms.Web
                                  ValidAudiences = MixService.GetAuthConfig<string>("Audiences").Split(','),
                                  IssuerSigningKey = JwtSecurityKey.Create(MixService.GetAuthConfig<string>("SecretKey"))
                              };
-                        options.Events = new JwtBearerEvents
-                        {
-                            OnAuthenticationFailed = context =>
-                            {
-                                Console.WriteLine("OnAuthenticationFailed: " + context.Exception.Message);
-                                return Task.CompletedTask;
-                            },
-                            OnTokenValidated = context =>
-                            {
-                                Console.WriteLine("OnTokenValidated: " + context.SecurityToken);
-                                return Task.CompletedTask;
-                            },
+                        // TODO Handle Custom Auth
+                        //options.Events = new JwtBearerEvents
+                        //{
+                        //    OnAuthenticationFailed = context =>
+                        //    {
+                        //        Console.WriteLine("OnAuthenticationFailed: " + context.Exception.Message);
+                        //        return Task.CompletedTask;
+                        //    },
+                        //    OnTokenValidated = context =>
+                        //    {
+                        //        Console.WriteLine("OnTokenValidated: " + context.SecurityToken);
+                        //        return Task.CompletedTask;
+                        //    },
 
-                        };
+                        //};
                     });
             //services.AddAuthentication("Bearer");
         }
