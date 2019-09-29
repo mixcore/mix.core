@@ -1,12 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Core.Models;
+using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
@@ -58,6 +61,53 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 Data.Add(ParseValue(item));
             }
         }
+
+        //public override Task<RepositoryResponse<MobileViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        //{
+        //    string dbName = $"data/attribute-sets/{AttributeSetName}.sqlite";
+        //    var cnn = new SqliteConnection($"Data Source={dbName};Version=3;");
+        //    // open the connection:
+        //    //using (var connection = new SqliteConnection("Data Source=hello.db"))
+        //    //{
+        //    //    var command = connection.CreateCommand();
+        //    //    command.CommandText =
+        //    //        "UPDATE message SET text = $text1 WHERE id = 1;" +
+        //    //        "UPDATE message SET text = $text2 WHERE id = 2";
+        //    //    command.Parameters.AddWithValue("$text1", "Hello");
+        //    //    command.Parameters.AddWithValue("$text2", "World");
+
+        //    //    connection.Open();
+        //    //    command.ExecuteNonQuery();
+        //    //}
+
+        //    //if (value != null)
+        //    //{
+        //    //    var jobj = JObject.FromObject(value);
+        //    //    var cacheFile = new FileViewModel()
+        //    //    {
+        //    //        Filename = key.ToLower(),
+        //    //        Extension = ".json",
+        //    //        FileFolder = "Cache",
+        //    //        Content = jobj.ToString(Newtonsoft.Json.Formatting.None)
+        //    //    };
+
+        //    //    var result = FileRepository.Instance.SaveFile(cacheFile);
+        //    //    return new RepositoryResponse<bool>()
+        //    //    {
+        //    //        IsSucceed = result,
+        //    //    };
+        //    //}
+        //    //else
+        //    //{
+        //    //    return new RepositoryResponse<bool>();
+        //    //}
+        //    var result = new RepositoryResponse<MobileViewModel>()
+        //    {
+        //        IsSucceed = true,
+        //        Data = this
+        //    };
+        //    return Task.FromResult(result);
+        //}
 
         #endregion
 
