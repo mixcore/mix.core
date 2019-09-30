@@ -11,7 +11,7 @@ namespace Mix.Cms.Hub
 {
     public class ServiceHub : BaseSignalRHub
     {
-        private const string receiveMethod = "ReceiveMessage";
+        private const string receiveMethod = "receive_message";
         private const string hubMemberName = "hub_member";
         private const string hubMemberFieldName = "hub_name";
         // TODO Handle Join/Leave group
@@ -24,9 +24,10 @@ namespace Mix.Cms.Hub
 
         private Task AddUserToGroup(string groupName, string username)
         {
-            var groupMembers = GetGroupMembers(groupName);
+            var groupMembers = GetGroupMembers(groupName);            
             return Task.WhenAll(new Task[]
             {
+                Groups.AddToGroupAsync(Context.ConnectionId, groupName),
                 SendMessageToCaller(groupMembers)
             });
         }
