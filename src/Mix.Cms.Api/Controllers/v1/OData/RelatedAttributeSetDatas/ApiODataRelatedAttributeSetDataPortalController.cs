@@ -35,7 +35,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
         [HttpGet, HttpOptions]
         [Route("{parentId}/{parentType}/{id}")]
         [Route("{parentId}/{parentType}/{id}/{attributeSetId}")]
-        public async Task<ActionResult<UpdateViewModel>> Details(string culture, string parentId, int parentType, string id, int? attributeSetId)
+        public async Task<ActionResult<ODataUpdateViewModel>> Details(string culture, string parentId, int parentType, string id, int? attributeSetId)
         {
             string msg = string.Empty;
             Expression<Func<MixRelatedAttributeData, bool>> predicate = null;
@@ -52,7 +52,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
                     Specificulture = _lang,
                     ParentType = parentType,
                     ParentId = parentId,                    
-                    Priority = UpdateViewModel.Repository.Max(p => p.Priority).Data + 1
+                    Priority = ODataUpdateViewModel.Repository.Max(p => p.Priority).Data + 1
                 };
                 if (attributeSetId.HasValue)
                 {
@@ -62,7 +62,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
 
             if (predicate != null || model != null)
             {
-                var portalResult = await base.GetSingleAsync<UpdateViewModel>(id.ToString(), predicate, model);
+                var portalResult = await base.GetSingleAsync<ODataUpdateViewModel>(id.ToString(), predicate, model);
                 return Ok(portalResult.Data);
             }
             else
@@ -78,15 +78,15 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
         [HttpGet, HttpOptions]
         public async System.Threading.Tasks.Task<ActionResult<int>> CountAsync()
         {
-            return (await UpdateViewModel.Repository.CountAsync()).Data;
+            return (await ODataUpdateViewModel.Repository.CountAsync()).Data;
         }
 
         // Save api/odata/{culture}/attribute-set-data/portal
         [HttpPost, HttpOptions]
         [Route("")]
-        public async Task<ActionResult<UpdateViewModel>> Save(string culture, [FromBody]UpdateViewModel data)
+        public async Task<ActionResult<ODataUpdateViewModel>> Save(string culture, [FromBody]ODataUpdateViewModel data)
         {
-            var portalResult = await base.SaveAsync<UpdateViewModel>(data, true);
+            var portalResult = await base.SaveAsync<ODataUpdateViewModel>(data, true);
             if (portalResult.IsSucceed)
             {
                 return Ok(portalResult);
@@ -100,9 +100,9 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
         // Save api/odata/{culture}/attribute-set-data/portal/{id}
         [HttpPost, HttpOptions]
         [Route("{parentId}/{parentType}/{id}")]
-        public async Task<ActionResult<UpdateViewModel>> Save(string culture, string parentId, int parentType, string id, [FromBody]JObject data)
+        public async Task<ActionResult<ODataUpdateViewModel>> Save(string culture, string parentId, int parentType, string id, [FromBody]JObject data)
         {
-            var portalResult = await base.SaveAsync<UpdateViewModel>(data, p => p.Id == id && p.ParentId == parentId && p.ParentType == parentType && p.Specificulture == _lang);
+            var portalResult = await base.SaveAsync<ODataUpdateViewModel>(data, p => p.Id == id && p.ParentId == parentId && p.ParentType == parentType && p.Specificulture == _lang);
             if (portalResult.IsSucceed)
             {
                 return Ok(portalResult);
@@ -117,7 +117,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
         // TODO: Opt Transaction
         [HttpPost, HttpOptions]
         [Route("save-properties")]
-        public async Task<ActionResult<UpdateViewModel>> SaveProperties([FromBody]JArray data)
+        public async Task<ActionResult<ODataUpdateViewModel>> SaveProperties([FromBody]JArray data)
         {
             foreach (JObject item in data)
             {
@@ -126,7 +126,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
                 string id = keys.Value<string>("id");
                 string parentId = keys.Value<string>("parentId");
                 int parentType = keys.Value<int>("parentType");
-                var portalResult = await base.SaveAsync<UpdateViewModel>(properties, p => p.Id == id && p.ParentId == parentId && p.ParentType == parentType && p.Specificulture == _lang);
+                var portalResult = await base.SaveAsync<ODataUpdateViewModel>(properties, p => p.Id == id && p.ParentId == parentId && p.ParentType == parentType && p.Specificulture == _lang);
                 if (!portalResult.IsSucceed)
                 {
                     return BadRequest(portalResult);
@@ -159,9 +159,9 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
         // GET api/RelatedAttributeSetDatas/id
         [EnableQuery(MaxExpansionDepth = 4)]
         [HttpGet, HttpOptions]
-        public async Task<ActionResult<List<UpdateViewModel>>> List(string culture, ODataQueryOptions<MixRelatedAttributeData> queryOptions)
+        public async Task<ActionResult<List<ODataUpdateViewModel>>> List(string culture, ODataQueryOptions<MixRelatedAttributeData> queryOptions)
         {
-            var result = await base.GetListAsync<UpdateViewModel>(queryOptions);
+            var result = await base.GetListAsync<ODataUpdateViewModel>(queryOptions);
             return Ok(result);
         }
 
