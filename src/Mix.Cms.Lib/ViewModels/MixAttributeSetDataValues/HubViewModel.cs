@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 {
@@ -116,6 +117,18 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                         IsValid = false;
                         Errors.Add($"{Field.Title} is required");
                     }
+                }
+                if (!string.IsNullOrEmpty(Field.Regex))
+                {
+                    Match match = System.Text.RegularExpressions.Regex.Match(StringValue, Regex,
+            RegexOptions.IgnoreCase);
+                    IsValid = IsValid && match.Success;
+                    if (match.Success)
+                    {
+                        // Finally, we get the Group value and display it.
+                        Errors.Add($"{Field.Title} is invalid");
+                    }
+
                 }
             }
         }
