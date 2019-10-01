@@ -40,6 +40,11 @@
     <None Remove="Views\Shared\Templates\**" />
     <None Remove="wwwroot\content\**" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Remove="App_Start\Validattors\CookieValidator.cs" />
+    <Compile Remove="App_Start\Validattors\JwtValidator.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="4.5.3.1" />
@@ -54,6 +59,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="App_Start\Validattors\" />
     <Folder Include="logs\" />
     <Folder Include="wwwroot\lib\portal\Trumbowyg\" />
    
