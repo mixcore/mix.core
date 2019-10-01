@@ -1,49 +1,53 @@
 ﻿modules.component('serviceHub', {
     templateUrl: '/app/app-shared/components/service-hub/view.html',
     bindings: {
-        hubName: '=',
-        message: '=',
+        hubName: '='
     },
-    controller: ['$scope', function ($scope) {
-        BaseHub.call(this, $scope);
-        $scope.user = {
+    controller: ['$rootScope', '$scope', function ($rootScope, $scope) {
+        var ctrl = this;
+        BaseHub.call(this, ctrl);  
+        
+        ctrl.user = {
             loggedIn: false,
-            info: {}
+            connection: {}
         };
-        $scope.isHide = true;
-        $scope.hideContact = true;
-        $scope.members = [];
-        $scope.messages = [];
-        $scope.message = { connection: {}, content: '' };
-        $scope.request = {
+        ctrl.isHide = true;
+        ctrl.hideContact = true;
+        ctrl.members = [];
+        ctrl.messages = [];
+        ctrl.message = { connection: {}, content: '' };
+        ctrl.request = {
             uid: '',
-            objectType: null,
             action: '',
+            objectType: null,
             data: {},
             room: '',
             isMyself: false
         };
-        $scope.loadMsgButton = function () {
+        ctrl.loadMsgButton = function () {
             
         }
-        $scope.init = function () {
-            $scope.startConnection('ServiceHub', $scope.checkLoginStatus);            
+        ctrl.init = function () {
+            ctrl.user.connection.name = Math.random() * 100;
+            ctrl.user.connection.id = 'abc';
+            ctrl.user.connection.avatar = '';
+            ctrl.startConnection('ServiceHub', ctrl.join);            
         };
-        $scope.logout = function () {
+        ctrl.logout = function () {
             FB.logout(function(response) {
                 // user is now logged out
-                $scope.user.loggedIn = false;
+                ctrl.user.loggedIn = false;
             });
         };
-        $scope.login = function () {
+        ctrl.login = function () {
             FB.login(function (response) {
                 if (response.authResponse) {
                     FB.api('/me', function (response) {
 
-                        $scope.user.info.name = response.name;
-                        $scope.user.info.id = response.id;
-                        $scope.user.info.avatar = '//graph.facebook.com/' + response.id + '/picture?width=32&height=32';
-                        $scope.join();
+                        ctrl.user.info.name = response.name;
+                        ctrl.user.info.id = response.id;
+                        ctrl.user.info.avatar = '//graph.facebook.com/' + response.id + '/picture?width=32&height=32';
+                        ctrl.join();
                         $scope.$apply();
                     });
                 } else {
@@ -51,51 +55,51 @@
                 }
             });
         };
-        $scope.join = function () {
-            $scope.request.uid = $scope.user.info.id;
-            $scope.request.data = $scope.user.info;
-            $scope.message.connection = $scope.user.info;
-            $scope.connection.invoke('join', $scope.request);
+        ctrl.join = function () {
+            ctrl.request.action = "join_group";
+            ctrl.request.uid = ctrl.user.connection.id;
+            ctrl.request.data = ctrl.user.connection;
+            ctrl.message.connection = ctrl.user.connection;
+            ctrl.connection.invoke('handleRequest', ctrl.request);
 
         };
-        $scope.toggle = function(){
-            $scope.isHide = !$scope.isHide;
+        ctrl.toggle = function(){
+            ctrl.isHide = !ctrl.isHide;
         }
-        $scope.toggleContact = function(){
-            $scope.hideContact = !$scope.hideContact;
+        ctrl.toggleContact = function(){
+            ctrl.hideContact = !ctrl.hideContact;
         }
-        $scope.sendMessage = function () {
-            if ($scope.user.loggedIn) {
-                $scope.request.data = $scope.message;
-                $scope.connection.invoke('sendMessage', $scope.request);
-                $scope.message.content = '';         
+        ctrl.sendMessage = function () {
+            if (ctrl.user.loggedIn) {
+                ctrl.request.data = ctrl.message;
+                ctrl.connection.invoke('sendMessage', ctrl.request);
+                ctrl.message.content = '';         
             }
         };
-        $scope.receiveMessage = function (msg) {
-            //$scope.responses.splice(0, 0, msg);
+        ctrl.receiveMessage = function (msg) {
             switch (msg.responseKey) {
                 case 'NewMember':
-                    $scope.newMember(msg.data);
+                    ctrl.newMember(msg.data);
                     $('.widget-conversation').scrollTop = $('.widget-conversation')[0].scrollHeight;
                     break;
 
                 case 'NewMessage':
-                    $scope.newMessage(msg.data);
+                    ctrl.newMessage(msg.data);
                     break;
                 case 'ConnectSuccess':
-                    $scope.user.loggedIn = true;
-                    $scope.initList(msg.data);
+                    ctrl.user.loggedIn = true;
+                    ctrl.initList(msg.data);
                     $scope.$apply();
                     break;
 
                 case 'MemberOffline':
-                    $scope.removeMember(msg.data);
+                    ctrl.removeMember(msg.data);
                     break;
 
             }
 
         };
-        $scope.checkLoginStatus = function () {
+        ctrl.checkLoginStatus = function () {
             FB.getLoginStatus(function (response) {
                 if (response.status === 'connected') {
                     // The user is logged in and has authenticated your
@@ -104,10 +108,10 @@
                     // request, and the time the access token 
                     // and signed request each expire.
                     FB.api('/me', function (response) {
-                        $scope.user.info.name = response.name;
-                        $scope.user.info.id = response.id;
-                        $scope.user.info.avatar = '//graph.facebook.com/' + response.id + '/picture?width=32&height=32';
-                        $scope.join();
+                        ctrl.user.info.name = response.name;
+                        ctrl.user.info.id = response.id;
+                        ctrl.user.info.avatar = '//graph.facebook.com/' + response.id + '/picture?width=32&height=32';
+                        ctrl.join();
                         $scope.$apply();
                     });
                 } else if (response.status === 'authorization_expired') {
@@ -129,40 +133,39 @@
                 }
             });
         };
-        $scope.newMember = function (member) {
-
-            var index = $scope.members.findIndex(x => x.id === member.id);
-            if (index < 0) {
-                $scope.members.splice(0, 0, member);
+        ctrl.newMember = function (member) {
+            var m = $rootScope.findObjectByKey(ctrl.members, 'id', member.id);
+            if(!m){
+                ctrl.members.push(member);
             }
             $scope.$apply();
-        }
+        };
         
-        $scope.initList = function (data) {
+        ctrl.initList = function (data) {
             data.forEach(member => {
-                var index = $scope.members.findIndex(x => x.id === member.id);
+                var index = ctrl.members.findIndex(x => x.id === member.id);
                 if (index < 0) {
-                    $scope.members.splice(0, 0, member);
+                    ctrl.members.splice(0, 0, member);
                 }    
             });
             
             $scope.$apply();
         }
 
-        $scope.removeMember = function (memberId) {
+        ctrl.removeMember = function (memberId) {
 
-            var index = $scope.members.findIndex(x => x.id === memberId);
+            var index = ctrl.members.findIndex(x => x.id === memberId);
             if (index >= 0) {
-                $scope.members.splice(index, 1);
+                ctrl.members.splice(index, 1);
             }
             $scope.$apply();
         }
 
-        $scope.newMessage = function (msg) {
-            $scope.messages.push(msg);
+        ctrl.newMessage = function (msg) {
+            ctrl.messages.push(msg);
             $scope.$apply();
-            var objDiv = document.getElementsByClassName("widget-conversation")[0];
-            objDiv.scrollTop = objDiv.scrollHeight + 20;
+            // var objDiv = document.getElementsByClassName("widget-conversation")[0];
+            // objDiv.scrollTop = objDiv.scrollHeight + 20;
         }
         
         

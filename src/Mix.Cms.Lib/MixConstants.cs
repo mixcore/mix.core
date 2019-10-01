@@ -66,6 +66,12 @@ namespace Mix.Cms.Lib
             public const string UploadFolder = @"Content/Uploads";
             public const string WebRootPath = @"wwwroot";
         }
-
+        public class HubAction
+        {
+            public const string JoinGroup = "join_group";
+            public const string NewMessage = "new_message";
+            public const string NewNotification = "new_notification";
+            public const string NewMember = "new_member";
+        }
     }
 }
