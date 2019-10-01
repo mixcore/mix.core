@@ -414,7 +414,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             AttributeData.ParentId = id.ToString();
-            AttributeData.ParentType = MixEnums.MixAttributeSetDataType.Post;
+            AttributeData.ParentType = (int)MixEnums.MixAttributeSetDataType.Post;
             var saveData = await AttributeData.Data.SaveModelAsync(true, context, transaction);
             ViewModelHelper.HandleResult(saveData, ref result);
             if (result.IsSucceed)
@@ -726,7 +726,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             AttributeData.ParentId = id.ToString();
-            AttributeData.ParentType = MixEnums.MixAttributeSetDataType.Post;
+            AttributeData.ParentType = (int)MixEnums.MixAttributeSetDataType.Post;
             var saveData = AttributeData.SaveModel(true, context, transaction);
             ViewModelHelper.HandleResult(saveData, ref result);
             return result;

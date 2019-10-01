@@ -25,6 +25,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         public int Status { get; set; }
         [JsonProperty("attributeFieldName")]
         public string AttributeFieldName { get; set; }
+        [JsonProperty("attributeSetName")]
+        public string AttributeSetName { get; set; }
         [JsonProperty("booleanValue")]
         public bool? BooleanValue { get; set; }
         [JsonProperty("createdDateTime")]

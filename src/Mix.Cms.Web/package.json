@@ -1,19 +1,19 @@
 {
-  "devDependencies": {
-    "browser-sync": "^2.26.7",
-    "gulp": "^3.9.1",
-    "gulp-babel": "",
-    "gulp-concat": "",
-    "gulp-cssmin": "",
-    "gulp-htmlmin": "",
-    "gulp-uglify": "",
-    "gulp-uglify-es": "",
-    "pump": "",
-    "rimraf": "",
-    "uglify-es": ""
-  },
-  "dependencies": {
-    "bundle": "^2.1.0",
-    "gulp-uglify-es": "^1.0.4"
-  }
+    "devDependencies": {
+        "browser-sync": "^2.26.7",
+        "gulp": "^3.9.1",
+        "gulp-babel": "",
+        "gulp-concat": "",
+        "gulp-cssmin": "",
+        "gulp-htmlmin": "",
+        "gulp-uglify": "",
+        "gulp-uglify-es": "",
+        "pump": "",
+        "rimraf": "",
+        "uglify-es": ""
+    },
+    "dependencies": {
+        "bundle": "^2.1.0",
+        "gulp-uglify-es": "^1.0.4"
+    }
 }
