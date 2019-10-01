@@ -180,15 +180,15 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         public async Task<ActionResult<List<MobileViewModel>>> List(string culture, ODataQueryOptions<MixAttributeSetData> queryOptions)
         {
             var data = await base.GetListAsync<MobileViewModel>(queryOptions);
-            var result = new JArray();
-            if (data != null)
-            {
-                foreach (var item in data)
-                {
-                    result.Add(item.Data);
-                }
-            }
-            return Ok(result);
+            //var result = new JArray();
+            //if (data != null)
+            //{
+            //    foreach (var item in data)
+            //    {
+            //        result.Add(item.Data);
+            //    }
+            //}
+            return Ok(data);
         }
 
         // GET api/AttributeSetDatas/id
@@ -199,15 +199,15 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         {
             Expression<Func<MixAttributeSetData, bool>> predicate = m => m.AttributeSetName == name && m.Specificulture == culture;
             var data = await base.GetListAsync<MobileViewModel>(predicate, queryOptions);
-            var result = new JArray();
-            if (data != null)
-            {
-                foreach (var item in data)
-                {
-                    result.Add(item.Data);
-                }
-            }
-            return Ok(result);
+            //var result = new JArray();
+            //if (data != null)
+            //{
+            //    foreach (var item in data)
+            //    {
+            //        result.Add(item.Data);
+            //    }
+            //}
+            return Ok(data);
         }
 
         #endregion Get

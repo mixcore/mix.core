@@ -5,6 +5,7 @@
         public enum MessageReponseKey
         {
             NewMessage,
+            NewGroupMessage,
             NewInvite,
             NewRequest,
             RemovedTeam,
@@ -22,8 +23,8 @@
             GetTeamNotifications,
             NotMembered,
             CancelRequest,
-            RejectInvite
-
+            RejectInvite,
+            Error
         }
         public enum ApiResponseKey
         {

@@ -19,5 +19,8 @@ namespace Mix.Cms.Messenger.Models
         public string Room { get; set; }
         [JsonProperty("isMyself")]
         public bool IsMySelf { get; set; }
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
     }
+
 }

@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
@@ -142,6 +143,20 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #endregion
 
         #region Expands
+        public static List<HubViewModel> FilterByValue(Expression<Func<MixAttributeSetValue, bool>> predicate)
+        {
+            using(var context = new MixCmsContext())
+            {
+                List<HubViewModel> result = new List<HubViewModel>();
+                var values = context.MixAttributeSetValue.Where(predicate);
+                var data = context.MixAttributeSetData.Where(m => values.Any(v => v.DataId == m.Id && v.Specificulture == m.Specificulture));
+                foreach (var item in data)
+                {
+                    result.Add(new HubViewModel(item));
+                }
+                return result;
+            }
+        }
         JProperty ParseValue(MixAttributeSetValues.HubViewModel item)
         {
             switch (item.DataType)
