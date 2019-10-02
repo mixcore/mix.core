@@ -12,8 +12,8 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
-    public class MobileViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSetData, MobileViewModel>
+    public class ODataMobileFullViewModel
+      : ODataViewModelBase<MixCmsContext, MixAttributeSetData, ODataMobileFullViewModel>
     {
         #region Properties
         #region Models
@@ -41,11 +41,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #region Contructors
 
-        public MobileViewModel() : base()
+        public ODataMobileFullViewModel() : base()
         {
         }
 
-        public MobileViewModel(MixAttributeSetData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ODataMobileFullViewModel(MixAttributeSetData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -159,12 +159,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 case MixEnums.MixDataType.Number:
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue));
                 case MixEnums.MixDataType.Reference:
-                    string url = $"/api/v1/odata/en-us/related-attribute-set-data/mobile/parent/set/{Id}/{item.Field.ReferenceId}";
-                    //foreach (var nav in item.DataNavs)
-                    //{
-                    //    arr.Add(nav.Data.Data);
-                    //}
-                    return (new JProperty(item.AttributeFieldName, url));
+                    JArray arr = new JArray();
+                    foreach (var nav in item.DataNavs)
+                    {
+                        arr.Add(nav.Data.Data);
+                    }
+                    return (new JProperty(item.AttributeFieldName, arr));
                 case MixEnums.MixDataType.Custom:
                 case MixEnums.MixDataType.Duration:
                 case MixEnums.MixDataType.PhoneNumber:

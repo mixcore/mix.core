@@ -15,23 +15,31 @@ namespace Mix.Cms.Hub
 {
     public class ServiceHub : BaseSignalRHub
     {
-        private const string receiveMethod = "receive_message";
-        private const string hubMemberName = "hub_member";
-        private const string hubMemberFieldName = "hub_name";        
-        private const string defaultDevice = "website";
-        private const string unknowErrorMsg = "Unknow";
+       
         // TODO Handle Join/Leave group
         public Task HandleRequest(HubRequest<JObject> request)
         {
             switch (request.Action)
             {
-                case "join_group":
+                case MixConstants.ServiceHub.SaveData:
+                    return SaveData(request);
+                case MixConstants.ServiceHub.JoinGroup:
                     return JoinGroup(request);
                 default:
-                    return SendToCaller(unknowErrorMsg, MessageReponseKey.Error);
+                    return SendToCaller(MixConstants.ServiceHub.UnknowErrorMsg, MessageReponseKey.Error);
             }
 
             
+        }
+
+        private Task SaveData(HubRequest<JObject> request)
+        {
+            var data = new Lib.ViewModels.MixAttributeSetDatas.HubViewModel()
+            {
+                AttributeSetName = request.AttributeSetName,
+                Data = request.Data
+            };
+            throw new NotImplementedException();
         }
 
         private Task JoinGroup(HubRequest<JObject> request)
@@ -40,7 +48,7 @@ namespace Mix.Cms.Hub
             var connection = request.Data.ToObject<MessengerConnection>();
             // Set connection Id
             connection.ConnectionId = Context.ConnectionId;
-            connection.DeviceId = connection.DeviceId ?? defaultDevice;
+            connection.DeviceId = connection.DeviceId ?? MixConstants.ServiceHub.DefaultDevice;
             // Mapping connecting user to db  models
             var user = new Messenger.ViewModels.MixMessengerUsers.ConnectViewModel(connection);
 
@@ -79,7 +87,7 @@ namespace Mix.Cms.Hub
         private object GetGroupMembers(HubRequest<JObject> request)
         {
             Expression<Func<MixAttributeSetValue, bool>> predicate= m => m.Specificulture == request.Specificulture 
-                && m.AttributeSetName == hubMemberName && m.AttributeFieldName == request.Room;
+                && m.AttributeSetName == MixConstants.ServiceHub.HubMemberName && m.AttributeFieldName == request.Room;
             var data = Lib.ViewModels.MixAttributeSetDatas.HubViewModel.FilterByValue(predicate);
             return data;
         }
@@ -106,16 +114,16 @@ namespace Mix.Cms.Hub
                 if (isMySelf)
                 {
 
-                    return Clients.Client(connectionId).SendAsync(receiveMethod, JObject.FromObject(result));
+                    return Clients.Client(connectionId).SendAsync(MixConstants.ServiceHub.ReceiveMethod, JObject.FromObject(result));
                 }
                 else
                 {
-                    return Clients.OthersInGroup(connectionId).SendAsync(receiveMethod, JObject.FromObject(result));
+                    return Clients.OthersInGroup(connectionId).SendAsync(MixConstants.ServiceHub.ReceiveMethod, JObject.FromObject(result));
                 }
             }
             else
             {
-                return SendToCaller(unknowErrorMsg, MessageReponseKey.Error);
+                return SendToCaller(MixConstants.ServiceHub.UnknowErrorMsg, MessageReponseKey.Error);
             }
         }
 
@@ -127,7 +135,7 @@ namespace Mix.Cms.Hub
                 Data = message,
                 ResponseKey = GetResponseKey(action)
             };
-            return Clients.Caller.SendAsync(receiveMethod, JObject.FromObject(result));
+            return Clients.Caller.SendAsync(MixConstants.ServiceHub.ReceiveMethod, JObject.FromObject(result));
         }
 
         private Task SendToGroup<T>(T message, MessageReponseKey action, string groupName, bool isMySelf = false)
@@ -144,16 +152,16 @@ namespace Mix.Cms.Hub
 
                 if (isMySelf)
                 {
-                    return Clients.Group(groupName).SendAsync(receiveMethod, JObject.FromObject(result));
+                    return Clients.Group(groupName).SendAsync(MixConstants.ServiceHub.ReceiveMethod, JObject.FromObject(result));
                 }
                 else
                 {
-                    return Clients.OthersInGroup(groupName).SendAsync(receiveMethod, JObject.FromObject(result));
+                    return Clients.OthersInGroup(groupName).SendAsync(MixConstants.ServiceHub.ReceiveMethod, JObject.FromObject(result));
                 }
             }
             else
             {
-                return SendToCaller(unknowErrorMsg, MessageReponseKey.Error);
+                return SendToCaller(MixConstants.ServiceHub.UnknowErrorMsg, MessageReponseKey.Error);
             }
         }
 
@@ -168,11 +176,11 @@ namespace Mix.Cms.Hub
 
             if (isMySelf)
             {
-                return Clients.All.SendAsync(receiveMethod, result);
+                return Clients.All.SendAsync(MixConstants.ServiceHub.ReceiveMethod, result);
             }
             else
             {
-                return Clients.Others.SendAsync(receiveMethod, result);
+                return Clients.Others.SendAsync(MixConstants.ServiceHub.ReceiveMethod, result);
             }
         }
 
