@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Web.Controllers
@@ -293,7 +294,7 @@ namespace Mix.Cms.Web.Controllers
         #endregion
         #region Helper
 
-        async System.Threading.Tasks.Task<IActionResult> AliasAsync(string seoName)
+        async Task<IActionResult> AliasAsync(string seoName)
         {
             // Home Page
             int? pageSize = MixService.GetConfig<int?>("TagPageSize");
@@ -319,7 +320,7 @@ namespace Mix.Cms.Web.Controllers
                 getAlias = await Lib.ViewModels.MixUrlAliases.UpdateViewModel.Repository.GetSingleModelAsync(predicate);
                 if (getAlias.IsSucceed)
                 {
-                    MixCacheService.SetAsync(cacheKey, getAlias);
+                    _ = Task.FromResult(MixCacheService.SetAsync(cacheKey, getAlias));
                 }
 
             }
@@ -385,7 +386,7 @@ namespace Mix.Cms.Web.Controllers
                         getPage.Data.LoadData(pageIndex: pageIndex, pageSize: pageSize);
                     }
                     GeneratePageDetailsUrls(getPage.Data);
-                    MixCacheService.SetAsync(cacheKey, getPage);
+                    _ = MixCacheService.SetAsync(cacheKey, getPage);
                 }
             }
 
@@ -439,7 +440,7 @@ namespace Mix.Cms.Web.Controllers
                         new { culture = _culture, seoName = getPage.Data.SeoName }
                         );
                     GeneratePageDetailsUrls(getPage.Data);
-                    MixCacheService.SetAsync(cacheKey, getPage);
+                    _ = MixCacheService.SetAsync(cacheKey, getPage);
                 }
             }
 
@@ -499,7 +500,7 @@ namespace Mix.Cms.Web.Controllers
                 {
                     getPage.Data.LoadDataByTag(tagName, orderBy, orderDirection, pageIndex: pageIndex, pageSize: pageSize);
                     GeneratePageDetailsUrls(getPage.Data);
-                    MixCacheService.SetAsync(cacheKey, getPage);
+                    _ = MixCacheService.SetAsync(cacheKey, getPage);
                 }
             }
 
@@ -554,7 +555,7 @@ namespace Mix.Cms.Web.Controllers
                     GeneratePageDetailsUrls(getPage.Data);
                     getPage.Data.LoadDataByKeyword(keyword, orderBy, orderDirection, pageIndex: pageIndex, pageSize: pageSize);
 
-                    MixCacheService.SetAsync(cacheKey, getPage);
+                    _ = MixCacheService.SetAsync(cacheKey, getPage);
                 }
             }
 
@@ -606,7 +607,7 @@ namespace Mix.Cms.Web.Controllers
                             getPost.Data.PostNavs.ForEach(n => n.RelatedPost.DetailsUrl = GenerateDetailsUrl(
                                 new { culture = _culture, action = "post", id = n.RelatedPost.Id, seoName = n.RelatedPost.SeoName }));
                         }
-                        MixCacheService.SetAsync(cacheKey, getPost);
+                        _ = MixCacheService.SetAsync(cacheKey, getPost);
                     }
                 }
 
@@ -676,7 +677,7 @@ namespace Mix.Cms.Web.Controllers
                         getPost.Data.PostNavs.ForEach(n => n.RelatedPost.DetailsUrl = GenerateDetailsUrl(
                                 new { culture = _culture, action = "post", id = n.RelatedPost.Id, seoName = n.RelatedPost.SeoName }));
                     }
-                    MixCacheService.SetAsync(cacheKey, getPost);
+                    _ = MixCacheService.SetAsync(cacheKey, getPost);
                 }
             }
 

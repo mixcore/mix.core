@@ -468,7 +468,8 @@ namespace Mix.Cms.Api.Controllers.v1.OData
             }
             catch (ODataException ex)
             {
-
+                // TODO Handle exception
+                Console.Write(ex.Message);
             }
         }
 

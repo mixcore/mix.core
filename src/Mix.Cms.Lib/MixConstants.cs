@@ -66,12 +66,20 @@ namespace Mix.Cms.Lib
             public const string UploadFolder = @"Content/Uploads";
             public const string WebRootPath = @"wwwroot";
         }
-        public class HubAction
+        public class ServiceHub
         {
+            public const string ReceiveMethod = "receive_message";
+            public const string HubMemberName = "hub_member";
+            public const string HubMemberFieldName = "hub_name";
+            public const string DefaultDevice = "website";
+            public const string UnknowErrorMsg = "Unknow";
+
+            public const string SaveData = "save_data";
             public const string JoinGroup = "join_group";
             public const string NewMessage = "new_message";
             public const string NewNotification = "new_notification";
             public const string NewMember = "new_member";
+
         }
     }
 }

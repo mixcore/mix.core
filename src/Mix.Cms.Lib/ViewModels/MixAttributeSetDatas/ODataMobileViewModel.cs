@@ -12,8 +12,8 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
-    public class MobileViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSetData, MobileViewModel>
+    public class ODataMobileViewModel
+      : ODataViewModelBase<MixCmsContext, MixAttributeSetData, ODataMobileViewModel>
     {
         #region Properties
         #region Models
@@ -41,11 +41,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #region Contructors
 
-        public MobileViewModel() : base()
+        public ODataMobileViewModel() : base()
         {
         }
 
-        public MobileViewModel(MixAttributeSetData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ODataMobileViewModel(MixAttributeSetData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 

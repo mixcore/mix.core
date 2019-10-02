@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
-    public class UpdateViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSetData, UpdateViewModel>
+    public class ODataUpdateViewModel
+      : ODataViewModelBase<MixCmsContext, MixAttributeSetData, ODataUpdateViewModel>
     {
         #region Properties
         #region Models
@@ -40,11 +40,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #region Contructors
 
-        public UpdateViewModel() : base()
+        public ODataUpdateViewModel() : base()
         {
         }
 
-        public UpdateViewModel(MixAttributeSetData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ODataUpdateViewModel(MixAttributeSetData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
