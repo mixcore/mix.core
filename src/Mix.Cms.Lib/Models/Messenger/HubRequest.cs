@@ -7,8 +7,8 @@ namespace Mix.Cms.Messenger.Models
     {
         [JsonProperty("uid")]
         public string Uid { get; set; }
-        [JsonProperty("objectType")]
-        public string ObjectType { get; set; }
+        [JsonProperty("attributeSetName")]
+        public string AttributeSetName { get; set; }
         [JsonProperty("action")]
         public string Action { get; set; }
         [JsonProperty("data")]
@@ -19,5 +19,8 @@ namespace Mix.Cms.Messenger.Models
         public string Room { get; set; }
         [JsonProperty("isMyself")]
         public bool IsMySelf { get; set; }
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
     }
+
 }

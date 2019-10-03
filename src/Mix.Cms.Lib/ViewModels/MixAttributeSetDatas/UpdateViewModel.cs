@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
     public class UpdateViewModel
-      : ODataViewModelBase<MixCmsContext, MixAttributeSetData, UpdateViewModel>
+      : ViewModelBase<MixCmsContext, MixAttributeSetData, UpdateViewModel>
     {
         #region Properties
         #region Models
@@ -70,10 +70,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         new MixAttributeSetValue() { AttributeFieldId = field.Id }
                         , _context, _transaction);
                     val.Field = field;
-                    val.AttributeFieldName = field.Name;
+                    val.AttributeFieldName = field.Name;                    
                     val.Priority = field.Priority;
                     Values.Add(val);
                 }
+                val.AttributeSetName = AttributeSetName;
                 val.Priority = field.Priority;
                 val.Field = field;
             }
