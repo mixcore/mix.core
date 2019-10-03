@@ -25,6 +25,9 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("AttributeSetId");
 
+                    b.Property<string>("AttributeSetName")
+                        .HasMaxLength(250);
+
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
@@ -164,6 +167,9 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("AttributeFieldName")
                         .IsRequired()
                         .HasMaxLength(50);
+
+                    b.Property<string>("AttributeSetName")
+                        .HasMaxLength(250);
 
                     b.Property<bool?>("BooleanValue");
 

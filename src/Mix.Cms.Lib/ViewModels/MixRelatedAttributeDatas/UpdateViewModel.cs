@@ -31,7 +31,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         [JsonProperty("parentId")]
         public string ParentId { get; set; }
         [JsonProperty("parentType")]
-        public MixEnums.MixAttributeSetDataType ParentType { get; set; }
+        public int ParentType { get; set; }
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
         [JsonProperty("attributeSetName")]

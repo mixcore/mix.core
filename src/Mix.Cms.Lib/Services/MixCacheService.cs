@@ -46,15 +46,15 @@ namespace Mix.Cms.Lib.Services
             }
         }
 
-        public static async Task<T> GetAsync<T>(string key)
+        public static Task<T> GetAsync<T>(string key)
         {
             var data = FileRepository.Instance.GetFile(key, ".json", "Cache", false, "{}");
             if (data != null && !string.IsNullOrEmpty(data.Content))
             {
                 var jobj = JObject.Parse(data.Content);
-                return jobj.ToObject<T>();
+                return Task.FromResult(jobj.ToObject<T>());
             }
-            return default(T);
+            return Task.FromResult(default(T));
 
             //var result = await Instance.Repository.GetSingleModelAsync(c => c.Id == key);
             //if (result.IsSucceed)
@@ -65,7 +65,7 @@ namespace Mix.Cms.Lib.Services
             //return default(T);
         }
 
-        public static async Task<RepositoryResponse<bool>> SetAsync<T>(string key, T value)
+        public static Task<RepositoryResponse<bool>> SetAsync<T>(string key, T value)
         {
 
             if (value != null)
@@ -80,14 +80,14 @@ namespace Mix.Cms.Lib.Services
                 };
 
                 var result = FileRepository.Instance.SaveFile(cacheFile);
-                return new RepositoryResponse<bool>()
+                return Task.FromResult(new RepositoryResponse<bool>()
                 {
                     IsSucceed = result,
-                };
+                });
             }
             else
             {
-                return new RepositoryResponse<bool>();
+                return Task.FromResult(new RepositoryResponse<bool>());
             }
             //var getData = await Instance.Repository.GetSingleModelAsync(c => c.Id == key);
             //MixCache data = null;
@@ -122,9 +122,9 @@ namespace Mix.Cms.Lib.Services
             //}
         }
 
-        public static async Task RemoveCacheAsync()
+        public static Task RemoveCacheAsync()
         {
-            FileRepository.Instance.EmptyFolder("Cache");
+            return Task.FromResult(FileRepository.Instance.EmptyFolder("Cache"));
             //await Instance.Repository.RemoveListModelAsync(c => !string.IsNullOrEmpty(c.Id));
         }
     }

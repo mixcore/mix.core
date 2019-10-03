@@ -4,6 +4,7 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 {
@@ -24,6 +25,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         public int Status { get; set; }
         [JsonProperty("attributeFieldName")]
         public string AttributeFieldName { get; set; }
+        [JsonProperty("attributeSetName")]
+        public string AttributeSetName { get; set; }
         [JsonProperty("booleanValue")]
         public bool? BooleanValue { get; set; }
         [JsonProperty("createdDateTime")]
@@ -52,7 +55,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         [JsonProperty("field")]
         public MixAttributeFields.ReadViewModel Field { get; set; }
         [JsonProperty("dataNavs")]
-        public List<MixRelatedAttributeDatas.MobileViewModel> DataNavs { get; set; }
+        public List<MixRelatedAttributeDatas.ODataMobileFullViewModel> DataNavs { get; set; }
 
         #endregion
         #endregion Properties
@@ -73,11 +76,48 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         {
             if (DataType == MixEnums.MixDataType.Reference)
             {
-                DataNavs = MixRelatedAttributeDatas.MobileViewModel.Repository.GetModelListBy(d =>
+                DataNavs = MixRelatedAttributeDatas.ODataMobileFullViewModel.Repository.GetModelListBy(d =>
                     d.ParentId == DataId && d.ParentType == (int)MixEnums.MixAttributeSetDataType.Set && d.Specificulture == Specificulture,
                 _context, _transaction).Data;
             }
             Field = MixAttributeFields.ReadViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId, _context, _transaction).Data;
+        }
+        public override MixAttributeSetValue ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            if (string.IsNullOrEmpty(Id))
+            {
+                Id = Guid.NewGuid().ToString();
+                CreatedDateTime = DateTime.UtcNow;
+            }
+            Priority = Field.Priority;
+            DataType = Field.DataType;
+
+            return base.ParseModel(_context, _transaction);
+        }
+        public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            base.Validate(_context, _transaction);
+            if (IsValid)
+            {
+                if (Field.IsUnique)
+                {
+                    var exist = _context.MixAttributeSetValue.Any(d => d.Specificulture == Specificulture
+                        && d.StringValue == StringValue && d.Id != Id && d.DataId != DataId);
+                    if (exist)
+                    {
+                        IsValid = false;
+                        Errors.Add($"{Field.Title} = {StringValue} is existed");
+                    }
+                }
+                if (Field.IsRequire)
+                {
+                    if (string.IsNullOrEmpty(StringValue))
+                    {
+                        IsValid = false;
+                        Errors.Add($"{Field.Title} is required");
+                    }
+                }
+            }
         }
         #endregion
     }

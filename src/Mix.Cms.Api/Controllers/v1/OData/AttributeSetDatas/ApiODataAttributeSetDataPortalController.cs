@@ -38,7 +38,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         [Route("{id}")]
         [Route("{id}/{attributeSetId}")]
         [Route("{id}/{attributeSetId}/{attributeSetName}")]
-        public async Task<ActionResult<UpdateViewModel>> Details(string culture, string id, int? attributeSetId, string attributeSetName)
+        public async Task<ActionResult<ODataUpdateViewModel>> Details(string culture, string id, int? attributeSetId, string attributeSetName)
         {
             string msg = string.Empty;
             Expression<Func<MixAttributeSetData, bool>> predicate = null;
@@ -66,7 +66,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
 
             if (predicate != null || model != null)
             {
-                var portalResult = await base.GetSingleAsync<UpdateViewModel>(id.ToString(), predicate, model);
+                var portalResult = await base.GetSingleAsync<ODataUpdateViewModel>(id.ToString(), predicate, model);
                 return Ok(portalResult.Data);
             }
             else
@@ -82,15 +82,15 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         [HttpGet, HttpOptions]
         public async System.Threading.Tasks.Task<ActionResult<int>> CountAsync()
         {
-            return (await UpdateViewModel.Repository.CountAsync()).Data;
+            return (await ODataUpdateViewModel.Repository.CountAsync()).Data;
         }
 
         // Save api/odata/{culture}/attribute-set-data/portal
         [HttpPost, HttpOptions]
         [Route("")]
-        public async Task<ActionResult<UpdateViewModel>> Save(string culture, [FromBody]UpdateViewModel data)
+        public async Task<ActionResult<ODataUpdateViewModel>> Save(string culture, [FromBody]ODataUpdateViewModel data)
         {
-            var portalResult = await base.SaveAsync<UpdateViewModel>(data, true);
+            var portalResult = await base.SaveAsync<ODataUpdateViewModel>(data, true);
             if (portalResult.IsSucceed)
             {
                 return Ok(portalResult);
@@ -104,9 +104,9 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         // Save api/odata/{culture}/attribute-set-data/portal/{id}
         [HttpPost, HttpOptions]
         [Route("{id}")]
-        public async Task<ActionResult<UpdateViewModel>> Save(string culture, string id, [FromBody]JObject data)
+        public async Task<ActionResult<ODataUpdateViewModel>> Save(string culture, string id, [FromBody]JObject data)
         {
-            var portalResult = await base.SaveAsync<UpdateViewModel>(data, p => p.Id == id && p.Specificulture == _lang);
+            var portalResult = await base.SaveAsync<ODataUpdateViewModel>(data, p => p.Id == id && p.Specificulture == _lang);
             if (portalResult.IsSucceed)
             {
                 return Ok(portalResult);
@@ -119,15 +119,15 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
 
         [HttpDelete, HttpOptions]
         [Route("{id}")]
-        public async Task<ActionResult<DeleteViewModel>> Delete(string culture, string id)
+        public async Task<ActionResult<ODataDeleteViewModel>> Delete(string culture, string id)
         {
             Expression<Func<MixAttributeSetData, bool>> predicate = model => model.Id == id && model.Specificulture == _lang;
 
             // Get Details if has id or else get default
 
-            var portalResult = await base.GetSingleAsync<DeleteViewModel>(id.ToString(), predicate);
+            var portalResult = await base.GetSingleAsync<ODataDeleteViewModel>(id.ToString(), predicate);
 
-            var result = await base.DeleteAsync<DeleteViewModel>(portalResult.Data, true);
+            var result = await base.DeleteAsync<ODataDeleteViewModel>(portalResult.Data, true);
             if (result.IsSucceed)
             {
                 return Ok(result);
@@ -141,9 +141,9 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         // GET api/AttributeSetDatas/id
         [EnableQuery(MaxExpansionDepth = 4)]
         [HttpGet, HttpOptions]
-        public async Task<ActionResult<List<UpdateViewModel>>> List(string culture, ODataQueryOptions<MixAttributeSetData> queryOptions)
+        public async Task<ActionResult<List<ODataUpdateViewModel>>> List(string culture, ODataQueryOptions<MixAttributeSetData> queryOptions)
         {
-            var result = await base.GetListAsync<UpdateViewModel>(queryOptions);
+            var result = await base.GetListAsync<ODataUpdateViewModel>(queryOptions);
             return Ok(result);
         }
 
