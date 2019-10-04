@@ -132,7 +132,7 @@
                 Please Save Root Item First
             </h6>
             <tabs-v select-callback="selectPane(pane)" class="mb-3" ng-if="$ctrl.attributeValue.id">
-                <pane-v id="pane-data-{{$ctrl.attributeValue.field.referenceId}}" header="Data" class="card">
+                <pane-v id="pane-data-{{$ctrl.attributeValue.field.referenceId}}" header="Data" class="card">                    
                     <attribute-set-nav-values on-update="$ctrl.updateRefData(data)"
                         on-delete="$ctrl.removeRefData(data)" data="$ctrl.refData">
                     </attribute-set-nav-values>
