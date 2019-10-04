@@ -6,8 +6,8 @@ using System;
 
 namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 {
-    public class MobileViewModel
-       : ViewModelBase<MixCmsContext, MixRelatedAttributeData, MobileViewModel>
+    public class ODataMobileViewModel
+       : ODataViewModelBase<MixCmsContext, MixRelatedAttributeData, ODataMobileViewModel>
     {
         #region Model
         [JsonProperty("id")]
@@ -32,14 +32,14 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         [JsonProperty("parentName")]
         public string ParentName { get; set; }
         [JsonProperty("data")]
-        public MixAttributeSetDatas.MobileViewModel Data { get; set; }
+        public MixAttributeSetDatas.ODataMobileViewModel Data { get; set; }
         #endregion Views
-        public MobileViewModel(MixRelatedAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public ODataMobileViewModel(MixRelatedAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
 
-        public MobileViewModel() : base()
+        public ODataMobileViewModel() : base()
         {
         }
         
@@ -48,7 +48,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getData = MixAttributeSetDatas.MobileViewModel.Repository.GetSingleModel(p => p.Id == Id && p.Specificulture == Specificulture
+            var getData = MixAttributeSetDatas.ODataMobileViewModel.Repository.GetSingleModel(p => p.Id == Id && p.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction
             );
             if (getData.IsSucceed)

@@ -29,6 +29,8 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         #endregion
         #region Views
+        [JsonProperty("parentName")]
+        public string ParentName { get; set; }
         [JsonProperty("data")]
         public MixAttributeSetDatas.ODataMobileFullViewModel Data { get; set; }
         #endregion Views

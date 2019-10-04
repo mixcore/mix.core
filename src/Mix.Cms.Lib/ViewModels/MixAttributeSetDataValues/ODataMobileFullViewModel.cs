@@ -8,8 +8,8 @@ using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 {
-    public class MobileViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSetValue, MobileViewModel>
+    public class ODataMobileFullViewModel
+      : ODataViewModelBase<MixCmsContext, MixAttributeSetValue, ODataMobileFullViewModel>
     {
         #region Properties
         #region Models
@@ -55,18 +55,18 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         [JsonProperty("field")]
         public MixAttributeFields.ReadViewModel Field { get; set; }
         [JsonProperty("dataNavs")]
-        public List<MixRelatedAttributeDatas.MobileViewModel> DataNavs { get; set; }
+        public List<MixRelatedAttributeDatas.ODataMobileFullViewModel> DataNavs { get; set; }
 
         #endregion
         #endregion Properties
 
         #region Contructors
 
-        public MobileViewModel() : base()
+        public ODataMobileFullViewModel() : base()
         {
         }
 
-        public MobileViewModel(MixAttributeSetValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ODataMobileFullViewModel(MixAttributeSetValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -76,7 +76,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         {
             if (DataType == MixEnums.MixDataType.Reference)
             {
-                DataNavs = MixRelatedAttributeDatas.MobileViewModel.Repository.GetModelListBy(d =>
+                DataNavs = MixRelatedAttributeDatas.ODataMobileFullViewModel.Repository.GetModelListBy(d =>
                     d.ParentId == DataId && d.ParentType == (int)MixEnums.MixAttributeSetDataType.Set && d.Specificulture == Specificulture,
                 _context, _transaction).Data;
             }

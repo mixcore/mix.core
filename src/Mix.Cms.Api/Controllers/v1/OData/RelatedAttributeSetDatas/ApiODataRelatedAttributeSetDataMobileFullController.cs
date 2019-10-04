@@ -71,21 +71,22 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
         [EnableQuery(MaxExpansionDepth = 4)]
         [HttpGet, HttpOptions]
         [Route("parent/{parentType}/{parentId}")]
-        [Route("parent/{parentType}/{parentId}/{attributeSetId}")]
-        public async Task<ActionResult<List<Lib.ViewModels.MixAttributeSetDatas.ODataMobileFullViewModel>>> ListDataByParent(string culture, MixEnums.MixAttributeSetDataType parentType, string parentId, int? attributeSetId, ODataQueryOptions<MixRelatedAttributeData> queryOptions)
+        [Route("parent/{parentType}/{parentId}/{attributeSetName}")]
+        public async Task<ActionResult<List<Lib.ViewModels.MixAttributeSetDatas.ODataMobileFullViewModel>>> ListDataByParent(string culture, MixEnums.MixAttributeSetDataType parentType,
+                string parentId, string attributeSetName, ODataQueryOptions<MixRelatedAttributeData> queryOptions)
         {
             var data = new List<Lib.ViewModels.MixAttributeSetDatas.ODataMobileFullViewModel>();
             var arr = new JArray();
             Expression<Func<MixRelatedAttributeData, bool>> predicate = null;
-            if (attributeSetId.HasValue)
+            if (!string.IsNullOrEmpty(attributeSetName))
             {
-                predicate = m => m.ParentType == (int)parentType && m.ParentId == parentId && m.AttributeSetId == attributeSetId;
+                predicate = m => m.ParentType == (int)parentType && m.ParentId == parentId && m.AttributeSetName == attributeSetName;
             }
             else
             {
                 predicate = m => m.ParentType == (int)parentType && m.ParentId == parentId;
             }
-            var result = await base.GetListAsync<ODataMobileFullViewModel>(predicate, $"parent_{parentType}_{parentId}_{attributeSetId}", queryOptions);
+            var result = await base.GetListAsync<ODataMobileFullViewModel>(predicate, $"parent_{parentType}_{parentId}_{attributeSetName}", queryOptions);
             if (result != null)
             {
                 foreach (var item in result)

@@ -9,7 +9,10 @@
         </div>
     </div>
     <div class="card-body">
-        <div class="alert alert-warning" role="alert" ng-if="!$ctrl.data || !$ctrl.data.length">
+        <div class="alert alert-warning" role="alert" ng-if="!$ctrl.data">
+            Please wait ...
+        </div>
+        <div class="alert alert-warning" role="alert" ng-if="$ctrl.data && !$ctrl.data.length">
             No Data Found!
         </div>
         <div dnd-list="$ctrl.data" dnd-inserted="$ctrl.updateOrders(index)">
