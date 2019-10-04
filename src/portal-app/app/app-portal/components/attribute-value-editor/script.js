@@ -11,7 +11,7 @@ modules.component('attributeValueEditor', {
         function ($rootScope, $scope, ngAppSettings,$location, navService,dataService) {
         var ctrl = this;
         ctrl.icons = ngAppSettings.icons;
-        ctrl.refData = [];
+        ctrl.refData = null;
         ctrl.defaultDataModel = null;
         ctrl.refDataModel = {
             id: null,

@@ -55,7 +55,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         [JsonProperty("field")]
         public MixAttributeFields.ReadViewModel Field { get; set; }
         [JsonProperty("dataNavs")]
-        public List<MixRelatedAttributeDatas.ODataMobileFullViewModel> DataNavs { get; set; }
+        public List<MixRelatedAttributeDatas.MobileViewModel> DataNavs { get; set; }
 
         #endregion
         #endregion Properties
@@ -76,7 +76,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         {
             if (DataType == MixEnums.MixDataType.Reference)
             {
-                DataNavs = MixRelatedAttributeDatas.ODataMobileFullViewModel.Repository.GetModelListBy(d =>
+                DataNavs = MixRelatedAttributeDatas.MobileViewModel.Repository.GetModelListBy(d =>
                     d.ParentId == DataId && d.ParentType == (int)MixEnums.MixAttributeSetDataType.Set && d.Specificulture == Specificulture,
                 _context, _transaction).Data;
             }

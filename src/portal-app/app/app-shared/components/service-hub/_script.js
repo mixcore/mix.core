@@ -70,11 +70,11 @@
             ctrl.hideContact = !ctrl.hideContact;
         }
         ctrl.sendMessage = function () {
-            if (ctrl.user.loggedIn) {
+            // if (ctrl.user.loggedIn) {
                 ctrl.request.data = ctrl.message;
                 ctrl.connection.invoke('sendMessage', ctrl.request);
                 ctrl.message.content = '';         
-            }
+            // }
         };
         ctrl.receiveMessage = function (msg) {
             switch (msg.responseKey) {
