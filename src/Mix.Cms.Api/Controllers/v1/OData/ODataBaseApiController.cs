@@ -75,15 +75,15 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         protected async Task<RepositoryResponse<TView>> GetSingleAsync<TView>(string key, Expression<Func<TModel, bool>> predicate = null, TModel model = null)
             where TView : ODataViewModelBase<TDbContext, TModel, TView>
         {
-            var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_details_{key}";
+            var cacheKey = $"odata/{_lang}/details/";
             RepositoryResponse<TView> data = null;
             if (MixService.GetConfig<bool>("IsCache"))
             {
-                data = await MixCacheService.GetAsync<RepositoryResponse<TView>>(cacheKey);
+                data = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetCachedSingleAsync($"{_lang}_{key}", predicate);
+                
             }
-            if (data == null)
+            else
             {
-
                 if (predicate != null)
                 {
                     data = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
@@ -103,8 +103,36 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                     };
 
                 }
-
             }
+
+            //if (MixService.GetConfig<bool>("IsCache"))
+            //{
+            //    data = await MixCacheService.GetAsync<RepositoryResponse<TView>>(cacheKey);
+            //}
+            //if (data == null)
+            //{
+
+            //    if (predicate != null)
+            //    {
+            //        data = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
+            //        if (data.IsSucceed)
+            //        {
+            //            //_memoryCache.Set(cacheKey, data);
+            //            await MixCacheService.SetAsync(cacheKey, data);
+            //            AlertAsync("Add Cache", 200, cacheKey);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        data = new RepositoryResponse<TView>()
+            //        {
+            //            IsSucceed = true,
+            //            Data = ODataDefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model)
+            //        };
+
+            //    }
+
+            //}
             data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
             return data;
         }

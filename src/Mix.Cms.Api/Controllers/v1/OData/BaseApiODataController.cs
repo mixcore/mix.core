@@ -76,35 +76,35 @@ namespace Mix.Cms.Api.Controllers.v1.OData
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
             var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_details_{key}";
-            RepositoryResponse<TView> data = null;
-            if (MixService.GetConfig<bool>("IsCache"))
-            {
-                data = await MixCacheService.GetAsync<RepositoryResponse<TView>>(cacheKey);
-            }
-            if (data == null)
-            {
+            RepositoryResponse<TView> data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleAsync(cacheKey, predicate);
+            //if (MixService.GetConfig<bool>("IsCache"))
+            //{
+            //    data = await MixCacheService.GetAsync<RepositoryResponse<TView>>(cacheKey);
+            //}
+            //if (data == null)
+            //{
 
-                if (predicate != null)
-                {
-                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
-                    if (data.IsSucceed)
-                    {
-                        //_memoryCache.Set(cacheKey, data);
-                        await MixCacheService.SetAsync(cacheKey, data);
-                        AlertAsync("Add Cache", 200, cacheKey);
-                    }
-                }
-                else
-                {
-                    data = new RepositoryResponse<TView>()
-                    {
-                        IsSucceed = true,
-                        Data = DefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model)
-                    };
+            //    if (predicate != null)
+            //    {
+            //        data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
+            //        if (data.IsSucceed)
+            //        {
+            //            //_memoryCache.Set(cacheKey, data);
+            //            await MixCacheService.SetAsync(cacheKey, data);
+            //            AlertAsync("Add Cache", 200, cacheKey);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        data = new RepositoryResponse<TView>()
+            //        {
+            //            IsSucceed = true,
+            //            Data = DefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model)
+            //        };
 
-                }
+            //    }
 
-            }
+            //}
             data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
             return data;
         }
