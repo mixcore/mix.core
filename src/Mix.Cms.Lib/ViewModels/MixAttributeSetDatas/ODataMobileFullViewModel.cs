@@ -65,6 +65,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
             foreach (var item in Values.OrderBy(v=>v.Priority))
             {
+                item.AttributeFieldName = item.Field.Name;
                 Data.Add(ParseValue(item));
             }
         }
