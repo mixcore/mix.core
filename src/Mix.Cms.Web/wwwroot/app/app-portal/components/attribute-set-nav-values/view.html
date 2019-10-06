@@ -1,4 +1,7 @@
-<div class="card">
+<div class="alert alert-warning" role="alert" ng-if="$ctrl.data && !$ctrl.data.length">
+    <i class="fas fa-exclamation-triangle"></i> There is no data has been created for this attribute yet!
+</div>
+<div class="card" ng-if="!($ctrl.data && !$ctrl.data.length)">
     <div class="card-header py-1">
         <span ng-bind="$ctrl.header"></span>
         <div class="row" ng-if="$ctrl.data[0]">
@@ -7,12 +10,9 @@
             <div class="col text-right"></div>
         </div>
     </div>
-    <div class="card-body">
+    <div class="card-body py-0">
         <div class="alert alert-warning" role="alert" ng-if="!$ctrl.data">
             Please wait ...
-        </div>
-        <div class="alert alert-warning" role="alert" ng-if="$ctrl.data && !$ctrl.data.length">
-            No Data Found!
         </div>
         <div dnd-list="$ctrl.data" dnd-inserted="$ctrl.updateOrders(index)">
             <div ng-repeat="item in $ctrl.data | orderBy: 'priority' track by $index" dnd-draggable="item" dnd-type="'item'" dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedItem = item" dnd-dragstart="$ctrl.dragStart($index)" ng-class="{'selected': $ctrl.selectedItem === item}" class="row border-top">
@@ -26,12 +26,14 @@
                     <attribute-value-preview data="val"></attribute-value-preview>
                 </div>
                 <div class="col text-right">
-                    <a ng-click="$ctrl.update(item)" class="btn btn-link text-primary">
-                        <span class="fas fa-pen"></span>
-                    </a>
-                    <a ng-click="$ctrl.delete(item)" class="btn btn-link text-danger">
-                        <span class="fas fa-trash-alt"></span>
-                    </a>
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                            <a ng-click="$ctrl.update(item)" class="btn btn-link text-primary">
+                                <span class="fas fa-pen"></span>
+                            </a>
+                            <a ng-click="$ctrl.delete(item)" class="btn btn-link text-danger">
+                                <span class="fas fa-trash-alt"></span>
+                            </a>
+                    </div>
                 </div>
             </div>
         </div>
