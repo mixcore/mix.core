@@ -196,15 +196,15 @@
                 class="btn btn-sm btn-primary px-4 mt-3 ng-scope">
                 <i class="fas fa-plus"></i> Add
             </a> -->
-            <h6 class="text-warning" ng-if="!$ctrl.attributeValue.id">
-                Please Save Root Item First
-            </h6>
+            <div class="alert alert-warning" role="alert" ng-if="!$ctrl.attributeValue.id">
+                <i class="fas fa-exclamation-triangle"></i> Please save the current item to initialization a parent ID before input it child's data!
+            </div>
             <tabs-v select-callback="selectPane(pane)" class="mb-3" ng-if="$ctrl.attributeValue.id">
-                <pane-v id="pane-data-{{$ctrl.attributeValue.field.referenceId}}" header="Data" class="card">
+                <pane-v id="pane-data-{{$ctrl.attributeValue.field.referenceId}}" header="Data" class="">
                     <attribute-set-nav-values on-update="$ctrl.updateRefData(data)" on-delete="$ctrl.removeRefData(data)" data="$ctrl.refData">
                     </attribute-set-nav-values>
                 </pane-v>
-                <pane-v id="pane-form-{{$ctrl.attributeValue.field.referenceId}}" header="Form" class="card">
+                <pane-v id="pane-form-{{$ctrl.attributeValue.field.referenceId}}" header="Form" class="">
                     <attribute-set-form ng-if="$ctrl.attributeValue.id" attr-set-id="$ctrl.attributeValue.field.referenceId" default-id="'default'" parent-id="$ctrl.parentId" parent-type="$ctrl.parentType" attr-data="$ctrl.refDataModel.data" save-data="$ctrl.saveRefData(data)"></attribute-set-form>
                 </pane-v>
             </tabs-v>
