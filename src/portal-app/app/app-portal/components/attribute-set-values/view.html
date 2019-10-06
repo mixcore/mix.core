@@ -20,13 +20,11 @@
                 dnd-dragstart="$ctrl.dragStart($index)" ng-class="{'selected': $ctrl.selectedItem === item}"
                 class="row border-bottom">
                 <div class="col-md-1 form-inline">
-                    <div class="form-group">
-                        <small class="fa fa-grip-vertical text-black-50 mr-2"></small>
-                        <input class="ml-1 form-control form-control-sm border-0" ng-model="item.priority" />
-                    </div>
+                    <small class="fa fa-grip-vertical text-black-50 mr-2" style="cursor:grab;"></small>
+                    <input class="ml-1 form-control form-control-sm border-0 col-2 p-0" ng-model="item.priority" />
                 </div>
                 <div ng-if="$index < 3" ng-repeat="val in item.values | orderBy: 'priority' track by $index"
-                    class="col-md-2">
+                    class="col-md-3 py-2">
                     <attribute-value-preview data="val"></attribute-value-preview>
                 </div>                
                 <div class="col-md-2" ng-bind="item.createdBy">
@@ -37,11 +35,11 @@
                 </div>
                 <div class="col-md-1">
                     <div class="btn-group btn-group-sm float-right">
-                        <a ng-click="$ctrl.update(item)" class="btn btn-link">
-                            <span class="fa fa-pen text-primary"></span>
+                        <a ng-click="$ctrl.update(item)" class="btn btn-link text-primary">
+                            <span class="fa fa-pen"></span>
                         </a>
-                        <a ng-click="$ctrl.delete(item)" class="btn btn-link">
-                            <span class="fas fa-times text-danger"></span>
+                        <a ng-click="$ctrl.delete(item)" class="btn btn-link text-danger">
+                            <span class="fas fa-trash-alt"></span>
                         </a>
                     </div>
                 </div>
