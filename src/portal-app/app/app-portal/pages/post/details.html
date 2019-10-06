@@ -12,15 +12,16 @@
                             attr-set-name="activedData.attributes.name" default-id="'default'"
                             attrData="activedData.attributeData" attr-data-id="dataId" save-data="save(data)">
                         </attribute-set-form> -->
-                        <div
+                    </div>
+                </div>
+                <tabs-v select-callback="selectPane(pane)" class="mb-3">
+                    <pane-v header="Attributes" class="card">
+                        <div class="card-body"
                             ng-repeat="value in activedData.attributeData.data.values | orderBy:'priority' track by $index">
                             <attribute-value-editor attribute-value="value" is-show-title="'true'" parent-type="'1'"
                                 parent-id="activedData.attributeData.id"></attribute-value-editor>
                         </div>
-                    </div>
-                </div>
-                <hr>
-                <tabs-v select-callback="selectPane(pane)" class="mb-3">
+                    </pane-v>
                     <pane-v header="General" class="card">
                         <div class="card-body">
                             <post-general is-admin="isAdmin" post="activedData"></post-general>
@@ -57,7 +58,7 @@
                     aria-labelledby="pills-general-tab">
                     <div class="card mb-3">
                         <h6 class="card-header">
-                            Attribute Sets
+                            Add-in Attributes
                             <a class="btn-link text-primary btn-sm float-right py-0" data-toggle="collapse"
                                 data-target="#AttributeSetsBody" role="button" aria-expanded="false"
                                 aria-controls="AttributeSetsBody collapse">
