@@ -13,6 +13,7 @@ using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
 {
     [Produces("application/json")]
     [Route("api/v1/odata/{culture}/attribute-set-data/mobile-full")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ApiODataAttributeSetDataMobileFullController :
         ODataBaseApiController<MixCmsContext, MixAttributeSetData>
     {
@@ -75,7 +76,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                 {
                     return NotFound();
                 }
-                
             }
             else
             {
@@ -93,9 +93,9 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             return (await ODataMobileFullViewModel.Repository.CountAsync()).Data;
         }
 
-        // Save api/odata/{culture}/attribute-set-data/portal
         [HttpPost, HttpOptions]
         [Route("")]
+
         public async Task<ActionResult<ODataMobileFullViewModel>> Save(string culture, [FromBody]JObject data)
         {
             string id = data["id"]?.Value<string>();
@@ -104,16 +104,25 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                 var getData = await base.GetSingleAsync<ODataMobileFullViewModel>(id, p => p.Id == id && p.Specificulture == _lang);
                 if (getData.IsSucceed)
                 {
-                    getData.Data.Data = data;
-                    var portalResult = await base.SaveAsync<ODataMobileFullViewModel>(getData.Data, true);
-                    if (portalResult.IsSucceed)
+                    if (string.IsNullOrEmpty(getData.Data.CreatedBy) || getData.Data.CreatedBy == User.Identity.Name)
                     {
-                        return Ok(portalResult);
+                        getData.Data.Data = data;
+                        getData.Data.CreatedBy = User?.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
+                        var portalResult = await base.SaveAsync<ODataMobileFullViewModel>(getData.Data, true);
+                        if (portalResult.IsSucceed)
+                        {
+                            return Ok(portalResult);
+                        }
+                        else
+                        {
+                            return BadRequest();
+                        }
                     }
                     else
                     {
-                        return BadRequest();
+                        return Unauthorized();
                     }
+
                 }
                 else
                 {
@@ -124,8 +133,9 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             {
                 return NotFound();
             }
-            
+
         }
+
 
         // Save api/odata/{culture}/attribute-set-data/portal
         [HttpPost, HttpOptions]
@@ -133,11 +143,13 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         public async Task<ActionResult<ODataMobileFullViewModel>> SaveByName(string culture, string name, [FromBody]JObject obj)
         {
             var getAttrSet = await Mix.Cms.Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModelAsync(m => m.Name == name);
+            string _username = User?.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
             if (getAttrSet.IsSucceed)
             {
                 ODataMobileFullViewModel data = new ODataMobileFullViewModel()
                 {
                     Id = obj["id"]?.Value<string>(),
+                    CreatedBy = _username,
                     AttributeSetId = getAttrSet.Data.Id,
                     AttributeSetName = getAttrSet.Data.Name,
                     Specificulture = culture,
@@ -164,7 +176,8 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         [Route("{id}")]
         public async Task<ActionResult<ODataMobileFullViewModel>> Save(string culture, string id, [FromBody]JObject data)
         {
-            var getData = await base.GetSingleAsync<ODataMobileFullViewModel>(id, p => p.Id == id && p.Specificulture == _lang);            
+            var getData = await base.GetSingleAsync<ODataMobileFullViewModel>(id, p => p.Id == id && p.Specificulture == _lang);
+
             if (getData.IsSucceed)
             {
                 getData.Data.Data = data;
@@ -229,6 +242,26 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         public async Task<ActionResult<List<ODataMobileFullViewModel>>> ListByName(string culture, string name, ODataQueryOptions<MixAttributeSetData> queryOptions)
         {
             Expression<Func<MixAttributeSetData, bool>> predicate = m => m.AttributeSetName == name && m.Specificulture == culture;
+            var data = await base.GetListAsync<ODataMobileFullViewModel>(predicate, queryOptions);
+            var result = new JArray();
+            if (data != null)
+            {
+                foreach (var item in data)
+                {
+                    result.Add(item.Data);
+                }
+            }
+            return Ok(result);
+        }
+
+        // GET api/AttributeSetDatas/id
+        [EnableQuery(MaxExpansionDepth = 4)]
+        [HttpGet, HttpOptions]
+        [Route("my-data/{name}")]
+        public async Task<ActionResult<List<ODataMobileFullViewModel>>> ListMyDataByName(string culture, string name, ODataQueryOptions<MixAttributeSetData> queryOptions)
+        {
+            string _username = User?.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
+            Expression<Func<MixAttributeSetData, bool>> predicate = m => m.AttributeSetName == name && m.Specificulture == culture && m.CreatedBy == _username;
             var data = await base.GetListAsync<ODataMobileFullViewModel>(predicate, queryOptions);
             var result = new JArray();
             if (data != null)

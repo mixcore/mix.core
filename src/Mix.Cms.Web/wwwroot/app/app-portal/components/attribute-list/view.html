@@ -31,7 +31,9 @@
                     <div class="col-md-3">
                         <div class="" ng-if="col.dataType != 23">
                             <small class="control-label">Value</small>
-                            <input ng-model="col.defaultValue" placeholder="Default Value" class="form-control form-control-sm">
+                            <mix-value-editor string-value="col.defaultValue" type="col.dataType"></mix-value-editor>
+                            <!-- <input ng-model="col.defaultValue" placeholder="Default Value"
+                                class="form-control form-control-sm"> -->
                         </div>
                         <div ng-if="col.dataType == 23">
                             <small>
