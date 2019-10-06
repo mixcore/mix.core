@@ -13,6 +13,7 @@ using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
 {
     [Produces("application/json")]
     [Route("api/v1/odata/{culture}/attribute-set-data/mobile")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ApiODataAttributeSetDataMobileController :
         ODataBaseApiController<MixCmsContext, MixAttributeSetData>
     {
@@ -95,7 +96,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         [HttpPost, HttpOptions]
         [Route("")]
 
-        public async Task<ActionResult<ODataMobileFullViewModel>> Save(string culture, [FromBody]JObject data)
+        public async Task<ActionResult<ODataMobileViewModel>> Save(string culture, [FromBody]JObject data)
         {
             string id = data["id"]?.Value<string>();
             if (!string.IsNullOrEmpty(id))
@@ -103,16 +104,25 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                 var getData = await base.GetSingleAsync<ODataMobileViewModel>(id, p => p.Id == id && p.Specificulture == _lang);
                 if (getData.IsSucceed)
                 {
-                    getData.Data.Data = data;
-                    var portalResult = await base.SaveAsync<ODataMobileViewModel>(getData.Data, true);
-                    if (portalResult.IsSucceed)
+                    if (string.IsNullOrEmpty(getData.Data.CreatedBy) || getData.Data.CreatedBy == User.Identity.Name)
                     {
-                        return Ok(portalResult);
+                        getData.Data.Data = data;
+                        getData.Data.CreatedBy = User?.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
+                        var portalResult = await base.SaveAsync<ODataMobileViewModel>(getData.Data, true);
+                        if (portalResult.IsSucceed)
+                        {
+                            return Ok(portalResult);
+                        }
+                        else
+                        {
+                            return BadRequest();
+                        }
                     }
                     else
                     {
-                        return BadRequest();
+                        return Unauthorized();
                     }
+                    
                 }
                 else
                 {
@@ -133,11 +143,13 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         public async Task<ActionResult<ODataMobileViewModel>> SaveByName(string culture, string name, [FromBody]JObject obj)
         {
             var getAttrSet = await Mix.Cms.Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModelAsync(m => m.Name == name);
+            string _username = User?.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
             if (getAttrSet.IsSucceed)
             {
                 ODataMobileViewModel data = new ODataMobileViewModel()
                 {
                     Id = obj["id"]?.Value<string>(),
+                    CreatedBy = _username,
                     AttributeSetId = getAttrSet.Data.Id,
                     AttributeSetName = getAttrSet.Data.Name,
                     Specificulture = culture,
@@ -230,6 +242,45 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         public async Task<ActionResult<List<ODataMobileViewModel>>> ListByName(string culture, string name, ODataQueryOptions<MixAttributeSetData> queryOptions)
         {
             Expression<Func<MixAttributeSetData, bool>> predicate = m => m.AttributeSetName == name && m.Specificulture == culture;
+            var data = await base.GetListAsync<ODataMobileViewModel>(predicate, queryOptions);
+            var result = new JArray();
+            if (data != null)
+            {
+                foreach (var item in data)
+                {
+                    result.Add(item.Data);
+                }
+            }
+            return Ok(result);
+        }
+
+        // GET api/AttributeSetDatas/id
+        [EnableQuery(MaxExpansionDepth = 4)]
+        [HttpGet, HttpOptions]
+        [Route("filter/{name}")]
+        public async Task<ActionResult<List<ODataMobileViewModel>>> FilterByValue(string culture, string name, ODataQueryOptions<MixAttributeSetData> queryOptions)
+        {
+            var queryDictionary = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(Request.QueryString.Value);
+            var data = await ODataMobileViewModel.FilterByValueAsync(culture, name, queryDictionary);
+            var result = new JArray();
+            if (data != null)
+            {
+                foreach (var item in data.Data)
+                {
+                    result.Add(item.Data);
+                }
+            }
+            return Ok(result);
+        }
+
+        // GET api/AttributeSetDatas/id
+        [EnableQuery(MaxExpansionDepth = 4)]
+        [HttpGet, HttpOptions]
+        [Route("my-data/{name}")]
+        public async Task<ActionResult<List<ODataMobileViewModel>>> ListMyDataByName(string culture, string name, ODataQueryOptions<MixAttributeSetData> queryOptions)
+        {
+            string _username = User?.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
+            Expression<Func<MixAttributeSetData, bool>> predicate = m => m.AttributeSetName == name && m.Specificulture == culture && m.CreatedBy == _username;
             var data = await base.GetListAsync<ODataMobileViewModel>(predicate, queryOptions);
             var result = new JArray();
             if (data != null)

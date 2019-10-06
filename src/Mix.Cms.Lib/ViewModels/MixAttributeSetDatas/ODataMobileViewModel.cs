@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Common.Helper;
 using Mix.Domain.Core.Models;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -8,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
@@ -25,6 +29,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public string AttributeSetName { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         [JsonProperty("status")]
         public int Status { get; set; }
         #endregion Models
@@ -365,6 +371,48 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     break;
             }
             item.StringValue = property.Value<string>();
+        }
+
+        public static async Task<RepositoryResponse<List<ODataMobileViewModel>>> FilterByValueAsync(string culture, string attributeSetName
+            , Dictionary<string, Microsoft.Extensions.Primitives.StringValues> queryDictionary
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                Expression<Func<MixAttributeSetValue, bool>> valPredicate = m=>m.Specificulture == culture;
+                List<ODataMobileViewModel> result = new List<ODataMobileViewModel>();
+                foreach (var q in queryDictionary)
+                {
+                    Expression<Func<MixAttributeSetValue, bool>> pre = m =>
+                    m.Specificulture == culture && m.AttributeSetName == attributeSetName
+                    && m.AttributeFieldName == q.Key && m.StringValue.Contains(q.Value);
+                    valPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(valPredicate, pre, Microsoft.OData.UriParser.BinaryOperatorKind.And);
+                }
+                var query = context.MixAttributeSetValue.Where(valPredicate);
+                var data = context.MixAttributeSetData.Where(m => query.Any(q => q.DataId == m.Id) && m.Specificulture == culture);
+                foreach (var item in data)
+                {
+                    result.Add(new ODataMobileViewModel(item, context,transaction));
+                }
+                return new RepositoryResponse<List<ODataMobileViewModel>>()
+                {
+                    IsSucceed = true,
+                    Data = result
+                };
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<List<ODataMobileViewModel>>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    context.Dispose();
+                }
+            }
         }
         #endregion
     }

@@ -72,71 +72,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
             GetLanguage();
         }
 
-        protected async Task<RepositoryResponse<TView>> GetSingleAsync<TView>(string key, Expression<Func<TModel, bool>> predicate = null, TModel model = null)
-            where TView : ODataViewModelBase<TDbContext, TModel, TView>
-        {
-            var cacheKey = $"odata/{_lang}/details/";
-            RepositoryResponse<TView> data = null;
-            if (MixService.GetConfig<bool>("IsCache"))
-            {
-                data = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetCachedSingleAsync($"{_lang}_{key}", predicate);
-                
-            }
-            else
-            {
-                if (predicate != null)
-                {
-                    data = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
-                    if (data.IsSucceed)
-                    {
-                        //_memoryCache.Set(cacheKey, data);
-                        await MixCacheService.SetAsync(cacheKey, data);
-                        AlertAsync("Add Cache", 200, cacheKey);
-                    }
-                }
-                else
-                {
-                    data = new RepositoryResponse<TView>()
-                    {
-                        IsSucceed = true,
-                        Data = ODataDefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model)
-                    };
-
-                }
-            }
-
-            //if (MixService.GetConfig<bool>("IsCache"))
-            //{
-            //    data = await MixCacheService.GetAsync<RepositoryResponse<TView>>(cacheKey);
-            //}
-            //if (data == null)
-            //{
-
-            //    if (predicate != null)
-            //    {
-            //        data = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
-            //        if (data.IsSucceed)
-            //        {
-            //            //_memoryCache.Set(cacheKey, data);
-            //            await MixCacheService.SetAsync(cacheKey, data);
-            //            AlertAsync("Add Cache", 200, cacheKey);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        data = new RepositoryResponse<TView>()
-            //        {
-            //            IsSucceed = true,
-            //            Data = ODataDefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model)
-            //        };
-
-            //    }
-
-            //}
-            data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
-            return data;
-        }
-
         protected async Task<RepositoryResponse<TModel>> DeleteAsync<TView>(Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
             where TView : ODataViewModelBase<TDbContext, TModel, TView>
         {
@@ -477,7 +412,97 @@ namespace Mix.Cms.Api.Controllers.v1.OData
 
             return result;
         }
+        #region Cached
+        protected async Task<RepositoryResponse<TView>> SaveCachedAsync<TView>(string key, TView vm, bool isSaveSubModel)
+           where TView : ODataViewModelBase<TDbContext, TModel, TView>
+        {
+            if (vm != null)
+            {
 
+                var result = await vm.SaveCachedModelAsync(key,isSaveSubModel).ConfigureAwait(false);
+
+                await MixCacheService.RemoveCacheAsync();
+
+                return result;
+            }
+            return new RepositoryResponse<TView>();
+        }
+
+        protected async Task<RepositoryResponse<TModel>> SaveCachedFieldsAsync<TView>(string key, JObject obj, Expression<Func<TModel, bool>> predicate)
+            where TView : ODataViewModelBase<TDbContext, TModel, TView>
+        {
+            if (obj != null)
+            {
+                List<EntityField> fields = new List<EntityField>();
+                Type type = typeof(TModel);
+                foreach (var item in obj.Properties())
+                {
+                    var propName = item.Name.ToTitleCase();
+                    PropertyInfo propertyInfo = type.GetProperty(propName);
+                    if (propertyInfo != null)
+                    {
+                        object val = Convert.ChangeType(item.Value, propertyInfo.PropertyType);
+                        var field = new EntityField()
+                        {
+                            PropertyName = propName,
+                            PropertyValue = val
+                        };
+                        fields.Add(field);
+                    }
+                }
+                var result = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.UpdateCachedFieldsAsync(key, predicate, fields);
+                return result;
+            }
+            return new RepositoryResponse<TModel>();
+        }
+        protected async Task<RepositoryResponse<TView>> GetSingleAsync<TView>(string key, Expression<Func<TModel, bool>> predicate = null, TModel model = null)
+          where TView : ODataViewModelBase<TDbContext, TModel, TView>
+        {
+            var cacheKey = $"odata/{_lang}/details/";
+            RepositoryResponse<TView> data = null;
+            if (MixService.GetConfig<bool>("IsCache"))
+            {
+                if (predicate != null)
+                {
+                    data = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetCachedSingleAsync($"{_lang}_{key}", predicate);
+                }
+                else
+                {
+                    data = new RepositoryResponse<TView>()
+                    {
+                        IsSucceed = true,
+                        Data = ODataDefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model)
+                    };
+                }
+            }
+            else
+            {
+                if (predicate != null)
+                {
+                    data = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
+                    if (data.IsSucceed)
+                    {
+                        await MixCacheService.SetAsync(cacheKey, data);
+                        AlertAsync("Add Cache", 200, cacheKey);
+                    }
+                }
+                else
+                {
+                    data = new RepositoryResponse<TView>()
+                    {
+                        IsSucceed = true,
+                        Data = ODataDefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model)
+                    };
+
+                }
+            }
+
+            data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+            return data;
+        }
+
+        #endregion
+        #region Helpers
         public JObject SaveEncrypt([FromBody] RequestEncrypted request)
         {
             //var key = Convert.FromBase64String(request.Key); //Encoding.UTF8.GetBytes(request.Key);
@@ -564,5 +589,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         {
             return base.Content(content);
         }
+        #endregion
+
     }
 }
