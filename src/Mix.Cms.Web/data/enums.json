@@ -3,8 +3,8 @@
         "configuration_types":[
             "System","Site","Mobile"
         ],
-        "":[
-            
+        "language_types": [
+            "System","Site","Mobile"
         ]
     }
 }

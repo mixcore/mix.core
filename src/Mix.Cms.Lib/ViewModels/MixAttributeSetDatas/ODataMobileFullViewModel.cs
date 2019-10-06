@@ -25,6 +25,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public string AttributeSetName { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         [JsonProperty("status")]
         public int Status { get; set; }
         #endregion Models
@@ -65,6 +67,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
             foreach (var item in Values.OrderBy(v=>v.Priority))
             {
+                item.AttributeFieldName = item.Field.Name;
                 Data.Add(ParseValue(item));
             }
         }

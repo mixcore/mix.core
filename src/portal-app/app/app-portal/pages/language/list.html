@@ -30,7 +30,9 @@
                                 <span ng-bind="item.keyword"></span>
                             </td>                
                             <td>
-                                <span ng-bind="item.value"></span>
+                                <small>
+                                    <module-data-preview data="item.property" width="50"></module-data-preview>
+                                </small>
                             </td>
                             <td>
                                 <span ng-bind="item.defaultValue"></span>
@@ -41,7 +43,7 @@
                             
                             <td>
                                 <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                                    <a href="/portal/language/details/{{item.keyword}}" class="btn btn-link">
+                                    <a href="/portal/localize/details/{{item.keyword}}" class="btn btn-link">
                                         <span class="fa fa-pen text-primary"></span>
                                     </a>
                                     <a ng-click="remove(item.keyword);" class="btn btn-link">

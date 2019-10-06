@@ -13,6 +13,7 @@ using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -91,6 +92,11 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         public async Task<ActionResult<ODataUpdateViewModel>> Save(string culture, [FromBody]ODataUpdateViewModel data)
         {
             var portalResult = await base.SaveAsync<ODataUpdateViewModel>(data, true);
+            string _username = User?.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
+            if (string.IsNullOrEmpty(data.CreatedBy))
+            {
+                data.CreatedBy = _username;
+            }
             if (portalResult.IsSucceed)
             {
                 return Ok(portalResult);
@@ -106,7 +112,8 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         [Route("{id}")]
         public async Task<ActionResult<ODataUpdateViewModel>> Save(string culture, string id, [FromBody]JObject data)
         {
-            var portalResult = await base.SaveAsync<ODataUpdateViewModel>(data, p => p.Id == id && p.Specificulture == _lang);
+            
+            var portalResult = await base.SaveAsync<ODataUpdateViewModel>(data, p => p.Id == id && p.Specificulture == _lang);            
             if (portalResult.IsSucceed)
             {
                 return Ok(portalResult);
