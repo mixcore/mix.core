@@ -11,8 +11,11 @@
         </div>
     </div>
     <div class="card-body" ng-if="!$ctrl.data">
-        <div class="alert alert-warning" role="alert">
+        <!-- <div class="alert alert-warning" role="alert">
             <i class="fas fa-exclamation-triangle"></i> Loading data! Please hold on...
+        </div> -->
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
         </div>
     </div>
     <div class="card-body py-0" ng-if="$ctrl.data">
