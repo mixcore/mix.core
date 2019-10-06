@@ -11,10 +11,12 @@
             <div class="col text-right"></div>
         </div>
     </div>
-    <div class="card-body py-0">
-        <div class="alert alert-warning" role="alert" ng-if="!$ctrl.data">
-            Please wait ...
+    <div class="card-body" ng-if="!$ctrl.data">
+        <div class="alert alert-warning" role="alert">
+            <i class="fas fa-exclamation-triangle"></i> Loading data! Please hold on...
         </div>
+    </div>
+    <div class="card-body py-0" ng-if="$ctrl.data">
         <div dnd-list="$ctrl.data" dnd-inserted="$ctrl.updateOrders(index)">
             <div ng-repeat="item in $ctrl.data | orderBy: 'priority' track by $index" dnd-draggable="item"
                 dnd-type="'item'" dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedItem = item"
@@ -32,12 +34,12 @@
                 </div>
                 <div class="col text-right">
                     <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                            <a ng-click="$ctrl.update(item)" class="btn btn-link text-primary">
-                                <span class="fas fa-pen"></span>
-                            </a>
-                            <a ng-click="$ctrl.delete(item)" class="btn btn-link text-danger">
-                                <span class="fas fa-trash-alt"></span>
-                            </a>
+                        <a ng-click="$ctrl.update(item)" class="btn btn-link text-primary">
+                            <span class="fas fa-pen"></span>
+                        </a>
+                        <a ng-click="$ctrl.delete(item)" class="btn btn-link text-danger">
+                            <span class="fas fa-trash-alt"></span>
+                        </a>
                     </div>
                 </div>
             </div>
