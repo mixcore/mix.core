@@ -48,7 +48,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
 
         #endregion Models
+
         #region Views
+        [JsonProperty("field")]
+        public MixAttributeFields.ReadViewModel Field { get; set; }
         #endregion
         #endregion Properties
 

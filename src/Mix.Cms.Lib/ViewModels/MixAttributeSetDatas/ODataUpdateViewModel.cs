@@ -23,9 +23,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public string AttributeSetName { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         [JsonProperty("status")]
         public int Status { get; set; }
-
         #endregion Models
         #region Views        
         [JsonProperty("values")]
@@ -52,7 +53,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #region Overrides
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
+        {            
             // Related Datas
             DataNavs = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(
                 n => n.ParentId == Id && n.ParentType == (int)MixEnums.MixAttributeSetDataType.Set && n.Specificulture == Specificulture,

@@ -3,27 +3,15 @@ app.controller('LanguageController',
     ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$location', 'LanguageService', 'CommonService',
         function ($scope, $rootScope, ngAppSettings, $routeParams, $location, service, commonService) {
             BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
+            $scope.cates = ngAppSettings.enums.language_types;
+            $scope.settings = $rootScope.globalSettings;
             $scope.languageFile = {
                 file: null,
                 fullPath: '',
                 folder: 'Language',
                 title: '',
                 description: ''
-            };
-            $scope.cates = [
-                {
-                    title: 'Common',
-                    prefix: ''
-                },
-                {
-                    title: 'Portal',
-                    prefix: 'portal_'
-                },
-                {
-                    title: 'Frontend',
-                    prefix: 'fe_'
-                }
-            ];
+            };                
             $scope.cate = $scope.cates[0];
             $scope.dataTypes = $rootScope.globalSettings.dataTypes;
             

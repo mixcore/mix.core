@@ -76,7 +76,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
             var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_details_{key}";
-            RepositoryResponse<TView> data = null;
+            RepositoryResponse<TView> data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleAsync(cacheKey, predicate);
             if (MixService.GetConfig<bool>("IsCache"))
             {
                 data = await MixCacheService.GetAsync<RepositoryResponse<TView>>(cacheKey);

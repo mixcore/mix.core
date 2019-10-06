@@ -53,7 +53,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
         #region Views
         [JsonProperty("field")]
-        public MixAttributeFields.ReadViewModel Field { get; set; }
+        public MixAttributeFields.ODataMobileViewModel Field { get; set; }
         [JsonProperty("dataNavs")]
         public List<MixRelatedAttributeDatas.ODataMobileViewModel> DataNavs { get; set; }
 
@@ -80,7 +80,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                     d.ParentId == DataId && d.ParentType == (int)MixEnums.MixAttributeSetDataType.Set && d.Specificulture == Specificulture,
                 _context, _transaction).Data;
             }
-            Field = MixAttributeFields.ReadViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId, _context, _transaction).Data;
+            Field = MixAttributeFields.ODataMobileViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId, _context, _transaction).Data;
         }
         public override MixAttributeSetValue ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

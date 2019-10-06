@@ -8,7 +8,7 @@ using System.Linq;
 namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 {
     public class ODataUpdateViewModel
-       : ViewModelBase<MixCmsContext, MixRelatedAttributeData, ODataUpdateViewModel>
+       : ODataViewModelBase<MixCmsContext, MixRelatedAttributeData, ODataUpdateViewModel>
     {
         public ODataUpdateViewModel(MixRelatedAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
