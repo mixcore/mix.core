@@ -14,7 +14,7 @@
 <div class="row">
     <div class="col">
 
-        <table class="table table-sm table-hover" cellspacing="0">
+        <table class="table table-sm table-hover" cellspacing="0" ng-init="getList()">
             <thead class="thead-light">
                 <tr>
                     <th scope="col" style="width: 3%;">
@@ -32,14 +32,14 @@
                     <th scope="col" width="10%">
                         Type
                     </th>
-                    <th scope="col" width="10%">
+                    <th scope="col" width="15%">
                         Created Date
                     </th>
                     <th scope="col" style="width: 5%;"></th>
                 </tr>
             </thead>
 
-            <tbody class="sortable" ng-init="getList()">
+            <tbody class="sortable">
                 <tr ng-repeat="item in data track by $index" class="sortable-item" sort-model="attribute-set"
                     sort-model-id="{{item.id}}">
                     <td style="cursor:move;" class="drag-header">
@@ -65,6 +65,10 @@
                     </td>
                     <td>
                         <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
+                            <!-- <a class="btn btn-link" data-toggle="collapse" href="#attribute-childs" role="button"
+                                aria-expanded="false" aria-controls="attribute-childs">
+                                <i class="fas fa-folder"></i>
+                            </a> -->
                             <a href="/portal/attribute-set/details/{{item.id}}" class="btn btn-link">
                                 <span class="fas fa-pen text-primary"></span>
                             </a>
@@ -73,11 +77,83 @@
                                 <span class="fas fa-database text-primary"></span>
                             </a>
                             <a ng-click="remove(item.id);" class="btn btn-link">
-                                <span class="fas fa-times text-danger"></span>
+                                <span class="fas fa-trash-alt text-danger"></span>
                             </a>
                         </div>
                     </td>
                 </tr>
+                <!-- <tr class="collapse" id="attribute-childs">
+                    <td colspan="2">
+                    </td>
+                    <td colspan="5">
+                        <table class="w-100">
+                            <tr>
+                                <td>
+                                    <small>
+                                        Childrends
+                                    </small>
+                                </td>
+                                <td>
+                                    <small>childrens</small>
+                                </td>
+                                <td>
+                                    <small>Childrend type...</small>
+                                </td>
+                                <td>
+                                    <small>
+                                        
+                                    </small>
+                                </td>
+                                <td>
+                                    <small>
+                                        <div class="btn-group btn-group-sm btn-group-sm float-right" role="group"
+                                            aria-label="Actions">
+                                            <a href="/portal/attribute-set/details/{{item.id}}" class="btn btn-link">
+                                                <span class="fas fa-pen text-primary"></span>
+                                            </a>
+                                            <a href="/portal/attribute-set-data/list?attributeSetId={{item.id}}&attributeSetName={{item.name}}"
+                                                class="btn btn-link">
+                                                <span class="fas fa-database text-primary"></span>
+                                            </a>
+                                        </div>
+                                    </small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <small>
+                                        Childrends
+                                    </small>
+                                </td>
+                                <td>
+                                    <small>childrens</small>
+                                </td>
+                                <td>
+                                    <small>Childrend type...</small>
+                                </td>
+                                <td>
+                                    <small>
+                                        
+                                    </small>
+                                </td>
+                                <td>
+                                    <small>
+                                        <div class="btn-group btn-group-sm btn-group-sm float-right" role="group"
+                                            aria-label="Actions">
+                                            <a href="/portal/attribute-set/details/{{item.id}}" class="btn btn-link">
+                                                <span class="fas fa-pen text-primary"></span>
+                                            </a>
+                                            <a href="/portal/attribute-set-data/list?attributeSetId={{item.id}}&attributeSetName={{item.name}}"
+                                                class="btn btn-link">
+                                                <span class="fas fa-database text-primary"></span>
+                                            </a>
+                                        </div>
+                                    </small>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr> -->
             </tbody>
         </table>
     </div>
