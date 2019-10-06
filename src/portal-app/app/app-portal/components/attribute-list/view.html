@@ -2,8 +2,8 @@
     <div class="card-header">
         <h6>Fields
             <span ng-bind="$ctrl.title"></span>
-            <a ng-click="$ctrl.addAttr()" class="btn btn-primary btn-sm float-right text-white"><span
-                    class="fas fa-plus text-white"></span> Create field</a>
+            <a ng-click="$ctrl.addAttr()" class="btn btn-link btn-sm float-right text-primary"><span
+                    class="fas fa-plus"></span> Create field</a>
         </h6>
     </div>
     <div class="card-body">
@@ -58,7 +58,7 @@
                                 <span class="far fa-check-square"></span>
                             </a>
                             <a href="" class="btn btn-danger" ng-click="$ctrl.removeAttribute(col, $index)">
-                                <span class="fas fa-times"></span>
+                                <span class="fas fa-trash-alt"></span>
                             </a>
                         </div>
                     </div>
@@ -120,7 +120,7 @@
                         </div>
                         <div class="col-md-2">
                             <a class="btn" ng-click="col.options.splice($index,1)">
-                                <span class="fas fa-times text-danger"></span>
+                                <span class="fas fa-trash-alt text-danger"></span>
                             </a>
                         </div>
                     </div>
