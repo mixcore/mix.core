@@ -15,33 +15,33 @@
                     </div>
                 </div>
                 <tabs-v select-callback="selectPane(pane)" class="mb-3">
-                    <pane-v header="Attributes" class="card">
+                    <pane-v header="Attributes">
                         <div class="card-body" ng-repeat="value in activedData.attributeData.data.values | orderBy:'priority' track by $index">
                             <attribute-value-editor attribute-value="value" is-show-title="'true'" parent-type="'1'" parent-id="activedData.attributeData.id"></attribute-value-editor>
                         </div>
                     </pane-v>
-                    <pane-v header="General" class="card">
+                    <pane-v header="General">
                         <div class="card-body">
                             <post-general is-admin="isAdmin" post="activedData"></post-general>
                         </div>
                     </pane-v>
                     <pane-v header="SEO" class="">
-                        <div class="card card-body">
+                        <div class="card-body">
                             <post-seo post="activedData"></post-seo>
                         </div>
                     </pane-v>
                     <pane-v header="Parents" class="">
-                        <div class="card card-body">
+                        <div class="card-body">
                             <post-parents post="activedData"></post-parents>
                         </div>
                     </pane-v>
                     <pane-v header="Module" class="">
-                        <div class="card card-body">
+                        <div class="card-body">
                             <post-modules post="activedData"></post-modules>
                         </div>
                     </pane-v>
                     <pane-v header="Medias">
-                        <div class="card card-body">
+                        <div class="card-body">
                             <post-medias post="activedData" medias="activedData.mediaNavs"></post-medias>
                         </div>
                     </pane-v>
