@@ -18,7 +18,7 @@
             <div ng-repeat="item in $ctrl.data | orderBy: 'priority' track by $index" dnd-draggable="item"
                 dnd-type="'item'" dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedItem = item"
                 dnd-dragstart="$ctrl.dragStart($index)" ng-class="{'selected': $ctrl.selectedItem === item}"
-                class="row border-bottom">
+                class="row border-bottom attr-set-value-item">
                 <div class="col-md-1 form-inline">
                     <small class="fa fa-grip-vertical text-black-50 mr-2" style="cursor:grab;"></small>
                     <input class="ml-1 form-control form-control-sm border-0 col-2 p-0" ng-model="item.priority" />
