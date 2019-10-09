@@ -17,7 +17,10 @@ namespace Mix.Cms.Lib.Helpers
             Expression fieldPropertyExpression = Expression.Property(param, propertyInfo);
             return fieldPropertyExpression;
         }
-
+        public static object GetPropValue(object src, string propName)
+        {
+            return src.GetType().GetProperty(propName).GetValue(src, null);
+        }
         private static Type GetPropertyType(Type type, string name)
         {
             Type fieldPropertyType;
