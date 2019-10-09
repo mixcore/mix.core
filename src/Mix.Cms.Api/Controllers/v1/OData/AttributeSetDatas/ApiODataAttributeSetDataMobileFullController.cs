@@ -67,7 +67,8 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
 
             if (predicate != null || model != null)
             {
-                var portalResult = await base.GetSingleAsync<ODataMobileFullViewModel>(id, predicate, model);
+                string key = $"{_lang}_{id}";
+                var portalResult = await base.GetCachedSingleAsync<ODataMobileFullViewModel>(key, predicate, model);
                 if (portalResult.IsSucceed)
                 {
                     return Ok(portalResult.Data.Data);
@@ -101,7 +102,8 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             string id = data["id"]?.Value<string>();
             if (!string.IsNullOrEmpty(id))
             {
-                var getData = await base.GetSingleAsync<ODataMobileFullViewModel>(id, p => p.Id == id && p.Specificulture == _lang);
+                string key = $"{_lang}_{id}";
+                var getData = await base.GetCachedSingleAsync<ODataMobileFullViewModel>(key, p => p.Id == id && p.Specificulture == _lang);
                 if (getData.IsSucceed)
                 {
                     if (string.IsNullOrEmpty(getData.Data.CreatedBy) || getData.Data.CreatedBy == User.Identity.Name)
@@ -176,7 +178,8 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         [Route("{id}")]
         public async Task<ActionResult<ODataMobileFullViewModel>> Save(string culture, string id, [FromBody]JObject data)
         {
-            var getData = await base.GetSingleAsync<ODataMobileFullViewModel>(id, p => p.Id == id && p.Specificulture == _lang);
+            string key = $"{_lang}_{id}";
+            var getData = await base.GetCachedSingleAsync<ODataMobileFullViewModel>(key, p => p.Id == id && p.Specificulture == _lang);
 
             if (getData.IsSucceed)
             {
@@ -204,8 +207,8 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             Expression<Func<MixAttributeSetData, bool>> predicate = model => model.Id == id && model.Specificulture == _lang;
 
             // Get Details if has id or else get default
-
-            var portalResult = await base.GetSingleAsync<ODataDeleteViewModel>(id.ToString(), predicate);
+            string key = $"{_lang}_{id}";
+            var portalResult = await base.GetCachedSingleAsync<ODataDeleteViewModel>(key, predicate);
 
             var result = await base.DeleteAsync<ODataDeleteViewModel>(portalResult.Data, true);
             if (result.IsSucceed)
@@ -247,6 +250,24 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             if (data != null)
             {
                 foreach (var item in data)
+                {
+                    result.Add(item.Data);
+                }
+            }
+            return Ok(result);
+        }
+        // GET api/AttributeSetDatas/id
+        [EnableQuery(MaxExpansionDepth = 4)]
+        [HttpGet, HttpOptions]
+        [Route("filter/{name}")]
+        public async Task<ActionResult<List<ODataMobileFullViewModel>>> FilterByValue(string culture, string name, ODataQueryOptions<MixAttributeSetData> queryOptions)
+        {
+            var queryDictionary = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(Request.QueryString.Value);
+            var data = await Lib.ViewModels.MixAttributeSetDatas.Helper.FilterByValueAsync<ODataMobileFullViewModel>(culture, name, queryDictionary);
+            var result = new JArray();
+            if (data != null)
+            {
+                foreach (var item in data.Data)
                 {
                     result.Add(item.Data);
                 }
