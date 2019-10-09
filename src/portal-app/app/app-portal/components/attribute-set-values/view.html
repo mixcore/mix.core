@@ -24,7 +24,7 @@
                     <input class="ml-1 form-control form-control-sm border-0 col-2 p-0" ng-model="item.priority" />
                 </div>
                 <div ng-if="$index < 3" ng-repeat="val in item.values | orderBy: 'priority' track by $index"
-                    class="col-md-3 py-2">
+                    class="col-md-2 py-2">
                     <attribute-value-preview data="val"></attribute-value-preview>
                 </div>                
                 <div class="col-md-2" ng-bind="item.createdBy">
