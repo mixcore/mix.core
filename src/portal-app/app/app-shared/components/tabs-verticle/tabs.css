@@ -1,0 +1,7 @@
+.nav-item:first-child .nav-link {
+    border-left: 0;
+}
+
+.nav-item:last-child .nav-link {
+    border-right: 0;
+}
