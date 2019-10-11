@@ -1,8 +1,12 @@
 <div class="form-group">
-        <input ng-model="$ctrl.status" type="radio" class="custom-control-input">
+    <input ng-model="$ctrl.status" type="radio" class="custom-control-input">
     <div class="btn-group btn-group-sm btn-group-toggle d-flex w-100">
+<<<<<<< feature/update-cached
         <label ng-repeat="stt in $ctrl.contentStatuses" ng-switch="stt" ng-class="{active: $index === $ctrl.status}" ng-if="stt !== 'Preview'" class="btn btn-outline-primary btn-block mt-0" ng-click="$ctrl.status = $index">
 
+=======
+        <label ng-repeat="stt in $ctrl.contentStatuses" ng-switch="stt" ng-class="{active: $index === $ctrl.status}" ng-if="stt !== 'Preview'" ng-click="$ctrl.status = $index" class="btn btn-outline-primary btn-block mt-0">
+>>>>>>> update portal styles
             <i ng-switch-when="Deleted" class="fa fa-trash-alt" title="{{stt}}"></i>
             <i ng-switch-when="Preview" class="mi mi-Preview mi-lg mi-fw" title="{{stt}}"></i>
             <i ng-switch-when="Published" class="fa fa-globe-americas" title="{{stt}}"></i>
