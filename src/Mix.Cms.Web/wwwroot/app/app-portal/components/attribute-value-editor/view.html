@@ -1,5 +1,5 @@
 <div ng-if="!$ctrl.attributeValue.field.isSelect" class="form-group row">
-    <div class="col-2">
+    <div class="col-3">
         <h6 class="control-label m-0" ng-if="$ctrl.isShowTitle=='true'" ng-bind="$ctrl.attributeValue.field.title"></h6>
         <div ng-switch="$ctrl.attributeValue.field.dataType">
             <small class="text-muted" ng-switch-when="0">
@@ -97,7 +97,7 @@
             </small>
         </div>
     </div>
-    <div ng-switch="$ctrl.attributeValue.field.dataType" class="col-10 pb-4">
+    <div ng-switch="$ctrl.attributeValue.field.dataType" class="col-9 pb-4">
         <div class="text-muted" ng-switch-when="0">
             <!--custom-->
             <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="text" ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
@@ -163,7 +163,7 @@
             <!--PostalCode-->
             <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="text" ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
         </div>
-        <div class="text-muted" ng-switch-when="16">
+        <div class="text-muted col-8 card p-0" ng-switch-when="16">
             <!--upload-->
             <custom-image header="'Image'" type="'Posts'" folder="'Attributes'" src-url="$ctrl.attributeValue.stringValue" src="$ctrl.attributeValue.stringValue" auto="'true'">
             </custom-image>
@@ -216,10 +216,10 @@
 </div>
 <!-- TODO: Only allow stringValue -->
 <div ng-if="$ctrl.attributeValue.field.isSelect" class="form-group row">
-    <div class="col-2">
+    <div class="col-3">
         <h6 class="control-label" ng-if="$ctrl.isShowTitle" ng-bind="$ctrl.attributeValue.field.title"></h6>
     </div>
-    <div class="col-10">
+    <div class="col-9">
         <select ng-if="$ctrl.attributeValue.field.dataType!=19" class="btn custom-select form-control" ng-model="$ctrl.attributeValue.stringValue">
             <option ng-repeat="item in $ctrl.attributeValue.field.options track by $index" ng-value="item.value">
                 {{item.value}}
