@@ -262,7 +262,7 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'BaseODataService'
             var from = 'bottom';
             var align = 'right';
             $.notify({
-                icon: "now-ui-icons ui-1_bell-53",
+                icon: "fas fa-bell",
                 message: $rootScope.translate(content)
 
             }, {
