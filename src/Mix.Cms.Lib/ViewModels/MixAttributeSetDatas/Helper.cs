@@ -43,8 +43,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     foreach (var item in query)
                     {
                         tasks.Add(Task.Run(async () => {
-                            var resp = await ODataDefaultRepository<MixCmsContext, MixAttributeSetData, TView>.Instance.GetCachedSingleAsync(
-                            $"{culture}_{item}", m => m.Id == item && m.Specificulture == culture);
+                            var resp = await ODataDefaultRepository<MixCmsContext, MixAttributeSetData, TView>.Instance.GetSingleModelAsync(
+                                m => m.Id == item && m.Specificulture == culture);
                             return resp;
                         }));
 
