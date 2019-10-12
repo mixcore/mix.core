@@ -1,10 +1,5 @@
-<<<<<<< feature/update-cached
-<div ng-if="!$ctrl.attributeValue.field.isSelect" ng-init="$ctrl.initData()" class="form-group row">
-    <div class="col-2">
-=======
 <div ng-if="!$ctrl.attributeValue.field.isSelect" class="form-group row">
     <div class="col-3">
->>>>>>> update portal styles
         <h6 class="control-label m-0" ng-if="$ctrl.isShowTitle=='true'" ng-bind="$ctrl.attributeValue.field.title"></h6>
         <div ng-switch="$ctrl.attributeValue.field.dataType">
             <small class="text-muted" ng-switch-when="0">
@@ -205,13 +200,8 @@
                 <i class="fas fa-exclamation-triangle"></i> Please save the current item to initialization a parent ID
                 before input it child's data!
             </div>
-<<<<<<< feature/update-cached
-            <tabs-v select-callback="selectPane(pane)" class="mb-3" ng-if="$ctrl.attributeValue.id && $ctrl.parentId">
-                <pane-v id="pane-data-{{$ctrl.attributeValue.field.referenceId}}" header="Data" class="">
-=======
             <tabs-v select-callback="selectPane(pane)" class="mb-3" ng-if="$ctrl.attributeValue.id">
                 <pane-v id="pane-data-{{$ctrl.attributeValue.field.referenceId}}" header="Data" class="card-body">
->>>>>>> upd style
                     <attribute-set-nav-values on-update="$ctrl.updateRefData(data)" on-delete="$ctrl.removeRefData(data)" data="$ctrl.refData">
                     </attribute-set-nav-values>
                 </pane-v>
