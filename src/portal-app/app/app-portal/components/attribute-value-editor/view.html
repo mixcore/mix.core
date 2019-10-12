@@ -1,5 +1,5 @@
-<div ng-if="!$ctrl.attributeValue.field.isSelect" ng-init="$ctrl.initData()" class="form-group row">
-    <div class="col-2">
+<div ng-if="!$ctrl.attributeValue.field.isSelect" class="form-group row">
+    <div class="col-3">
         <h6 class="control-label m-0" ng-if="$ctrl.isShowTitle=='true'" ng-bind="$ctrl.attributeValue.field.title"></h6>
         <div ng-switch="$ctrl.attributeValue.field.dataType">
             <small class="text-muted" ng-switch-when="0">
@@ -97,7 +97,7 @@
             </small>
         </div>
     </div>
-    <div ng-switch="$ctrl.attributeValue.field.dataType" class="col-10 pb-4">
+    <div ng-switch="$ctrl.attributeValue.field.dataType" class="col-9 pb-4">
         <div class="text-muted" ng-switch-when="0">
             <!--custom-->
             <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="text"
@@ -184,7 +184,7 @@
             <input class="form-control form-control-sm {{$ctrl.inputClass}}" type="text"
                 ng-model="$ctrl.attributeValue.stringValue" placeholder="{{$ctrl.attributeValue.field.title}}">
         </div>
-        <div class="text-muted" ng-switch-when="16">
+        <div class="text-muted col-8 card p-0" ng-switch-when="16">
             <!--upload-->
             <custom-image header="'Image'" type="'Posts'" folder="'Attributes'"
                 src-url="$ctrl.attributeValue.stringValue" src="$ctrl.attributeValue.stringValue" auto="'true'">
@@ -223,16 +223,17 @@
                 class="btn btn-sm btn-primary px-4 mt-3 ng-scope">
                 <i class="fas fa-plus"></i> Add
             </a> -->
-            <div class="alert alert-warning" role="alert"  ng-if="!$ctrl.attributeValue.id">
-                <i class="fas fa-exclamation-triangle"></i> Please save the current item to initialization a parent ID before input it child's data!
+            <div class="alert alert-warning" role="alert" ng-if="!$ctrl.attributeValue.id">
+                <i class="fas fa-exclamation-triangle"></i> Please save the current item to initialization a parent ID
+                before input it child's data!
             </div>
-            <tabs-v  select-callback="selectPane(pane)" class="mb-3" ng-if="$ctrl.attributeValue.id && $ctrl.parentId">
-                <pane-v id="pane-data-{{$ctrl.attributeValue.field.referenceId}}" header="Data" class="">
+            <tabs-v select-callback="selectPane(pane)" class="mb-3" ng-if="$ctrl.attributeValue.id">
+                <pane-v id="pane-data-{{$ctrl.attributeValue.field.referenceId}}" header="Data" class="card-body">
                     <attribute-set-nav-values on-update="$ctrl.updateRefData(data)"
                         on-delete="$ctrl.removeRefData(data)" data="$ctrl.refData">
                     </attribute-set-nav-values>
                 </pane-v>
-                <pane-v id="pane-form-{{$ctrl.attributeValue.field.referenceId}}" header="Form" class="">
+                <pane-v id="pane-form-{{$ctrl.attributeValue.field.referenceId}}" header="Form" class="card-body">
                     <attribute-set-form ng-if="$ctrl.attributeValue.id"
                         attr-set-id="$ctrl.attributeValue.field.referenceId" default-id="'default'"
                         parent-id="$ctrl.parentId" parent-type="$ctrl.parentType" attr-data="$ctrl.refDataModel.data"
@@ -245,12 +246,17 @@
     </div>
 </div>
 <!-- TODO: Only allow stringValue -->
-<div ng-if="$ctrl.attributeValue.field.isSelect" class="form-group">
-    <label class="control-label" ng-if="$ctrl.isShowTitle" ng-bind="$ctrl.attributeValue.field.title"></label>
-    <select ng-if="$ctrl.attributeValue.field.dataType!=19" class="btn custom-select form-control"
-        ng-model="$ctrl.attributeValue.stringValue">
-        <option ng-repeat="item in $ctrl.attributeValue.field.options track by $index" ng-value="item.value">
-            {{item.value}}</option>
-    </select>
+<div ng-if="$ctrl.attributeValue.field.isSelect" class="form-group row">
+    <div class="col-3">
+        <h6 class="control-label" ng-if="$ctrl.isShowTitle" ng-bind="$ctrl.attributeValue.field.title"></h6>
+    </div>
+    <div class="col-9">
+        <select ng-if="$ctrl.attributeValue.field.dataType!=19" class="btn custom-select form-control"
+            ng-model="$ctrl.attributeValue.stringValue">
+            <option ng-repeat="item in $ctrl.attributeValue.field.options track by $index" ng-value="item.value">
+                {{item.value}}
+            </option>
+        </select>
+    </div>
     <br />
 </div>
