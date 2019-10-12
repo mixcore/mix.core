@@ -9,6 +9,9 @@
         <a class="btn btn-sm btn-primary" ng-if="selectedList.data.length > 0 && selectedList.action" ng-click="applyList()">Apply</a>
     </div>
 </div>
+
+
+
 <div class="row">
     <div class="col">
 
@@ -45,16 +48,16 @@
                         <input type="checkbox" ng-model="item.isSelected" ng-change="select(item.id, item.isSelected)">
                     </td>
                     <td>
-                        {{item.title}}
+                        <small>{{item.title}}</small>
                     </td>
                     <td>
-                        <small>{{item.name}}</small>
+                        <small class="text-black-50">{{item.name}}</small>
                     </td>
                     <td>
-                        <small>{{item.model.type}}</small>
+                        <small class="text-black-50">{{item.model.type}}</small>
                     </td>
                     <td>
-                        <small>
+                        <small class="text-black-50">
                             {{item.createdDateTime | utcToLocal}}
                         </small>
                     </td>
