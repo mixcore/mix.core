@@ -2,7 +2,7 @@
     <small class="form-text text-muted">slug items
 
         <a ng-click="$ctrl.remove()" class="btn btn-link text-primary btn-sm float-right py-0"><span class="far fa-trash-alt text-primary"></span> Remove</a>
-        <a class="btn btn-link text-primary btn-sm float-right py-0" href="{{$ctrl.url}}" target="_blank"><span class="far fa-eye text-primary"></span> View</a>
+        <a class="btn btn-link text-primary btn-sm float-right py-0" href="{{$ctrl.url}}" target="_blank"><span class="fas fa-eye text-primary"></span> View</a>
     </small>
     <input type="text" ng-change="$ctrl.updateUrl()" class="form-control form-control-sm mb-1" ng-model="$ctrl.urlAlias.alias" placeholder="/slug-value">
     <!-- <input type="text" class="form-control form-control-sm" ng-model="$ctrl.urlAlias.description" placeholder="description..."> -->
@@ -10,7 +10,7 @@
 <!-- 
 <div class="row">
     <div class="col-sm-12">
-        <div class="card mb-3">
+        <div class="card mb-4">
             <div class="card-body" ng-if="$ctrl.urlAlias">
                 <a ng-click="$ctrl.remove()" class="btn d-inline text-danger float-right">X</a>
                 <div class="form-group">
