@@ -67,8 +67,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
 
             if (predicate != null || model != null)
             {
-                string key = $"{_lang}_{id}";
-                var portalResult = await base.GetCachedSingleAsync<ODataMobileFullViewModel>(key, predicate, model);
+                var portalResult = await base.GetSingleAsync<ODataMobileFullViewModel>(predicate, model);
                 if (portalResult.IsSucceed)
                 {
                     return Ok(portalResult.Data.Data);
@@ -102,8 +101,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             string id = data["id"]?.Value<string>();
             if (!string.IsNullOrEmpty(id))
             {
-                string key = $"{_lang}_{id}";
-                var getData = await base.GetCachedSingleAsync<ODataMobileFullViewModel>(key, p => p.Id == id && p.Specificulture == _lang);
+                var getData = await base.GetSingleAsync<ODataMobileFullViewModel>(p => p.Id == id && p.Specificulture == _lang);
                 if (getData.IsSucceed)
                 {
                     if (string.IsNullOrEmpty(getData.Data.CreatedBy) || getData.Data.CreatedBy == User.Identity.Name)
@@ -178,8 +176,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         [Route("{id}")]
         public async Task<ActionResult<ODataMobileFullViewModel>> Save(string culture, string id, [FromBody]JObject data)
         {
-            string key = $"{_lang}_{id}";
-            var getData = await base.GetCachedSingleAsync<ODataMobileFullViewModel>(key, p => p.Id == id && p.Specificulture == _lang);
+            var getData = await base.GetSingleAsync<ODataMobileFullViewModel>(p => p.Id == id && p.Specificulture == _lang);
 
             if (getData.IsSucceed)
             {
@@ -207,8 +204,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             Expression<Func<MixAttributeSetData, bool>> predicate = model => model.Id == id && model.Specificulture == _lang;
 
             // Get Details if has id or else get default
-            string key = $"{_lang}_{id}";
-            var portalResult = await base.GetCachedSingleAsync<ODataDeleteViewModel>(key, predicate);
+            var portalResult = await base.GetSingleAsync<ODataDeleteViewModel>(predicate);
 
             var result = await base.DeleteAsync<ODataDeleteViewModel>(portalResult.Data, true);
             if (result.IsSucceed)

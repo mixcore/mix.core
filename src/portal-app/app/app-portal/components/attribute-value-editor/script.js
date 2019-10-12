@@ -44,7 +44,7 @@ modules.component('attributeValueEditor', {
                         }
                         break;
                     case 23: // reference
-                        if(ctrl.attributeValue.field.referenceId){
+                        if(ctrl.attributeValue.field.referenceId && ctrl.parentId){
                             ctrl.attributeValue.integerValue = ctrl.attributeValue.field.referenceId;
                             navService.getSingle('portal', [ctrl.parentId, ctrl.parentType, 'default', ctrl.attributeValue.field.referenceId]).then(resp=>{
                                 ctrl.defaultDataModel = resp;
@@ -139,6 +139,7 @@ modules.component('attributeValueEditor', {
                     if (resp) {
                         $rootScope.showErrors('Failed');
                     }
+                    ctrl.refData = [];
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 }

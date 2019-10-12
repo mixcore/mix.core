@@ -199,7 +199,7 @@
             <div class="alert alert-warning" role="alert" ng-if="!$ctrl.attributeValue.id">
                 <i class="fas fa-exclamation-triangle"></i> Please save the current item to initialization a parent ID before input it child's data!
             </div>
-            <tabs-v select-callback="selectPane(pane)" class="mb-3" ng-if="$ctrl.attributeValue.id">
+            <tabs-v select-callback="selectPane(pane)" class="mb-3" ng-if="$ctrl.attributeValue.id && $ctrl.parentId">
                 <pane-v id="pane-data-{{$ctrl.attributeValue.field.referenceId}}" header="Data" class="">
                     <attribute-set-nav-values on-update="$ctrl.updateRefData(data)" on-delete="$ctrl.removeRefData(data)" data="$ctrl.refData">
                     </attribute-set-nav-values>
