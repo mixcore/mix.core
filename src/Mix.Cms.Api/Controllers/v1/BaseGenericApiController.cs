@@ -148,10 +148,6 @@ namespace Mix.Cms.Api.Controllers.v1
             if (data.IsSucceed)
             {
                 var result = await data.Data.RemoveModelAsync(isDeleteRelated).ConfigureAwait(false);
-                if (result.IsSucceed)
-                {
-                    await MixCacheService.RemoveCacheAsync();
-                }
 
                 return result;
             }
@@ -165,10 +161,6 @@ namespace Mix.Cms.Api.Controllers.v1
             {
 
                 var result = await data.RemoveModelAsync(isDeleteRelated).ConfigureAwait(false);
-                if (result.IsSucceed)
-                {
-                    await MixCacheService.RemoveCacheAsync();
-                }
 
                 return result;
             }
@@ -180,11 +172,6 @@ namespace Mix.Cms.Api.Controllers.v1
         {
 
             var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.RemoveListModelAsync(isRemoveRelatedModel, predicate);
-            if (data.IsSucceed)
-            {
-                await MixCacheService.RemoveCacheAsync();
-
-            }
 
             return data;
         }
@@ -269,7 +256,6 @@ namespace Mix.Cms.Api.Controllers.v1
 
                 var result = await vm.SaveModelAsync(isSaveSubModel).ConfigureAwait(false);
 
-                await MixCacheService.RemoveCacheAsync();
                 return result;
             }
             return new RepositoryResponse<TView>();
@@ -301,7 +287,6 @@ namespace Mix.Cms.Api.Controllers.v1
                 }
 
                 var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.UpdateFieldsAsync(predicate, fields);
-                await MixCacheService.RemoveCacheAsync();
 
                 return result;
             }
@@ -313,11 +298,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
 
             var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.SaveListModelAsync(lstVm, isSaveSubModel);
-            if (result.IsSucceed)
-            {
-                await MixCacheService.RemoveCacheAsync();
-            }
-
+            
             return result;
         }
         protected RepositoryResponse<List<TView>> SaveList<TView>(List<TView> lstVm, bool isSaveSubModel)
@@ -338,7 +319,6 @@ namespace Mix.Cms.Api.Controllers.v1
                         result.Errors.AddRange(tmp.Errors);
                     }
                 }
-                Task.Run(() => MixCacheService.RemoveCacheAsync());
                 return result;
             }
 

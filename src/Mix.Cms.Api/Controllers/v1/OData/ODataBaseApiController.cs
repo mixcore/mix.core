@@ -72,43 +72,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
             GetLanguage();
         }
 
-        protected async Task<RepositoryResponse<TView>> GetSingleAsync<TView>(string key, Expression<Func<TModel, bool>> predicate = null, TModel model = null)
-            where TView : ODataViewModelBase<TDbContext, TModel, TView>
-        {
-            var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_details_{key}";
-            RepositoryResponse<TView> data = null;
-            if (MixService.GetConfig<bool>("IsCache"))
-            {
-                data = await MixCacheService.GetAsync<RepositoryResponse<TView>>(cacheKey);
-            }
-            if (data == null)
-            {
-
-                if (predicate != null)
-                {
-                    data = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
-                    if (data.IsSucceed)
-                    {
-                        //_memoryCache.Set(cacheKey, data);
-                        await MixCacheService.SetAsync(cacheKey, data);
-                        AlertAsync("Add Cache", 200, cacheKey);
-                    }
-                }
-                else
-                {
-                    data = new RepositoryResponse<TView>()
-                    {
-                        IsSucceed = true,
-                        Data = ODataDefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model)
-                    };
-
-                }
-
-            }
-            data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
-            return data;
-        }
-
         protected async Task<RepositoryResponse<TModel>> DeleteAsync<TView>(Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
             where TView : ODataViewModelBase<TDbContext, TModel, TView>
         {
@@ -118,11 +81,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
             if (data.IsSucceed)
             {
                 result = await data.Data.RemoveModelAsync(isDeleteRelated).ConfigureAwait(false);
-                if (result.IsSucceed)
-                {
-                    await MixCacheService.RemoveCacheAsync();
-                }
-
             }
 
             return result;
@@ -135,11 +93,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
             {
 
                 var result = await data.RemoveModelAsync(isDeleteRelated).ConfigureAwait(false);
-                if (result.IsSucceed)
-                {
-                    await MixCacheService.RemoveCacheAsync();
-                }
-
                 return result;
             }
             return new RepositoryResponse<TModel>() { IsSucceed = false };
@@ -150,12 +103,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         {
 
             var data = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.RemoveListModelAsync(isRemoveRelatedModel, predicate);
-            if (data.IsSucceed)
-            {
-                await MixCacheService.RemoveCacheAsync();
-
-            }
-
+            
             return data;
         }
 
@@ -210,16 +158,16 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                 //Top = queryOptions.Top?.Value,
                 //Skip = queryOptions.Skip?.Value
             };
-            var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_{SeoHelper.GetSEOString(queryOptions.Filter?.RawValue, '_')}_ps-{request.PageSize}";
             List<TView> data = null;
-            if (MixService.GetConfig<bool>("IsCache"))
-            {
-                var getData = await MixCacheService.GetAsync<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
-                if (getData != null)
-                {
-                    data = getData.Data.Items;
-                }
-            }
+            //var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_{SeoHelper.GetSEOString(queryOptions.Filter?.RawValue, '_')}_ps-{request.PageSize}";
+            //if (MixService.GetConfig<bool>("IsCache"))
+            //{
+            //    var getData = await MixCacheService.GetAsync<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
+            //    if (getData != null)
+            //    {
+            //        data = getData.Data.Items;
+            //    }
+            //}
 
             if (data == null)
             {
@@ -228,11 +176,11 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                 {
                     var getData = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate,
                         request.OrderBy, request.Direction, request.PageSize, request.PageIndex, request.Skip, request.Top).ConfigureAwait(false);
-                    if (getData.IsSucceed)
-                    {
-                        await MixCacheService.SetAsync(cacheKey, getData);
-                        data = getData.Data.Items;
-                    }
+                    //if (getData.IsSucceed)
+                    //{
+                    //    await MixCacheService.SetAsync(cacheKey, getData);
+                    //    data = getData.Data.Items;
+                    //}
 
                 }
                 else
@@ -240,11 +188,11 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                     var getData = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(
                         request.OrderBy, request.Direction, request.PageSize, request.PageIndex
                         , null, null).ConfigureAwait(false);
-                    if (getData.IsSucceed)
-                    {
-                        await MixCacheService.SetAsync(cacheKey, getData);
-                        data = getData.Data.Items;
-                    }
+                    //if (getData.IsSucceed)
+                    //{
+                    //    await MixCacheService.SetAsync(cacheKey, getData);
+                    //    data = getData.Data.Items;
+                    //}
 
                 }
             }
@@ -271,14 +219,14 @@ namespace Mix.Cms.Api.Controllers.v1.OData
             };
             var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_{SeoHelper.GetSEOString(queryOptions.Filter?.RawValue, '_')}_ps-{request.PageSize}";
             List<TView> data = null;
-            if (MixService.GetConfig<bool>("IsCache"))
-            {
-                var getData = await MixCacheService.GetAsync<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
-                if (getData != null)
-                {
-                    data = getData.Data.Items;
-                }
-            }
+            //if (MixService.GetConfig<bool>("IsCache"))
+            //{
+            //    var getData = await MixCacheService.GetAsync<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
+            //    if (getData != null)
+            //    {
+            //        data = getData.Data.Items;
+            //    }
+            //}
 
             if (data == null)
             {
@@ -289,7 +237,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                         request.OrderBy, request.Direction, request.PageSize, request.PageIndex, request.Skip, request.Top).ConfigureAwait(false);
                     if (getData.IsSucceed)
                     {
-                        await MixCacheService.SetAsync(cacheKey, getData);
+                        //await MixCacheService.SetAsync(cacheKey, getData);
                         data = getData.Data.Items;
                     }
 
@@ -301,7 +249,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                         , null, null).ConfigureAwait(false);
                     if (getData.IsSucceed)
                     {
-                        await MixCacheService.SetAsync(cacheKey, getData);
+                        //await MixCacheService.SetAsync(cacheKey, getData);
                         data = getData.Data.Items;
                     }
 
@@ -330,14 +278,14 @@ namespace Mix.Cms.Api.Controllers.v1.OData
             };
             var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_{key}_{SeoHelper.GetSEOString(queryOptions.Filter?.RawValue, '_')}_ps-{request.PageSize}";
             List<TView> data = null;
-            if (MixService.GetConfig<bool>("IsCache"))
-            {
-                var getData = await MixCacheService.GetAsync<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
-                if (getData != null)
-                {
-                    data = getData.Data.Items;
-                }
-            }
+            //if (MixService.GetConfig<bool>("IsCache"))
+            //{
+            //    var getData = await MixCacheService.GetAsync<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
+            //    if (getData != null)
+            //    {
+            //        data = getData.Data.Items;
+            //    }
+            //}
 
             if (data == null)
             {
@@ -346,11 +294,11 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                 {
                     var getData = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate,
                         request.OrderBy, request.Direction, request.PageSize, request.PageIndex, request.Skip, request.Top).ConfigureAwait(false);
-                    if (getData.IsSucceed)
-                    {
-                        await MixCacheService.SetAsync(cacheKey, getData);
-                        data = getData.Data.Items;
-                    }
+                    //if (getData.IsSucceed)
+                    //{
+                    //    await MixCacheService.SetAsync(cacheKey, getData);
+                    //    data = getData.Data.Items;
+                    //}
 
                 }
                 else
@@ -358,11 +306,11 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                     var getData = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(
                         request.OrderBy, request.Direction, request.PageSize, request.PageIndex
                         , null, null).ConfigureAwait(false);
-                    if (getData.IsSucceed)
-                    {
-                        await MixCacheService.SetAsync(cacheKey, getData);
-                        data = getData.Data.Items;
-                    }
+                    //if (getData.IsSucceed)
+                    //{
+                    //    await MixCacheService.SetAsync(cacheKey, getData);
+                    //    data = getData.Data.Items;
+                    //}
 
                 }
             }
@@ -377,8 +325,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
             {
 
                 var result = await vm.SaveModelAsync(isSaveSubModel).ConfigureAwait(false);
-
-                await MixCacheService.RemoveCacheAsync();
 
                 return result;
             }
@@ -408,7 +354,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                     }
                 }
                 var result = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.UpdateFieldsAsync(predicate, fields);
-                await MixCacheService.RemoveCacheAsync();
                 return result;
             }
             return new RepositoryResponse<TModel>();
@@ -419,11 +364,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         {
 
             var result = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.SaveListModelAsync(lstVm, isSaveSubModel);
-            if (result.IsSucceed)
-            {
-                await MixCacheService.RemoveCacheAsync();
-            }
-
             return result;
         }
         protected RepositoryResponse<List<TView>> SaveList<TView>(List<TView> lstVm, bool isSaveSubModel)
@@ -443,13 +383,36 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                         result.Errors.AddRange(tmp.Errors);
                     }
                 }
-                Task.Run(() => MixCacheService.RemoveCacheAsync());
                 return result;
             }
 
             return result;
         }
+        #region Cached
+        
+        protected async Task<RepositoryResponse<TView>> GetSingleAsync<TView>(Expression<Func<TModel, bool>> predicate = null, TModel model = null)
+          where TView : ODataViewModelBase<TDbContext, TModel, TView>
+        {
+            RepositoryResponse<TView> data = null;
+            if (predicate != null)
+            {
+                data = await ODataDefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
+            }
+            else
+            {
+                data = new RepositoryResponse<TView>()
+                {
+                    IsSucceed = true,
+                    Data = ODataDefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model)
+                };
+            }
 
+            data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+            return data;
+        }
+
+        #endregion
+        #region Helpers
         public JObject SaveEncrypt([FromBody] RequestEncrypted request)
         {
             //var key = Convert.FromBase64String(request.Key); //Encoding.UTF8.GetBytes(request.Key);
@@ -536,5 +499,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         {
             return base.Content(content);
         }
+        #endregion
+
     }
 }

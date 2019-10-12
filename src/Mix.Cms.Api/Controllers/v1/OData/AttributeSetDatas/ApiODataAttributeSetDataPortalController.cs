@@ -13,6 +13,7 @@ using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -21,7 +22,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
     [Produces("application/json")]
     [Route("api/v1/odata/{culture}/attribute-set-data/portal")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
-    public class ApiODataAttributeSetDataPortalController :
+    public class ApiODataAttributeSetDataPortalController:
         ODataBaseApiController<MixCmsContext, MixAttributeSetData>
     {
         public ApiODataAttributeSetDataPortalController(
@@ -66,7 +67,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
 
             if (predicate != null || model != null)
             {
-                var portalResult = await base.GetSingleAsync<ODataUpdateViewModel>(id.ToString(), predicate, model);
+                var portalResult = await base.GetSingleAsync<ODataUpdateViewModel>(predicate, model);
                 return Ok(portalResult.Data);
             }
             else
@@ -91,6 +92,11 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         public async Task<ActionResult<ODataUpdateViewModel>> Save(string culture, [FromBody]ODataUpdateViewModel data)
         {
             var portalResult = await base.SaveAsync<ODataUpdateViewModel>(data, true);
+            string _username = User?.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
+            if (string.IsNullOrEmpty(data.CreatedBy))
+            {
+                data.CreatedBy = _username;
+            }
             if (portalResult.IsSucceed)
             {
                 return Ok(portalResult);
@@ -106,7 +112,8 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         [Route("{id}")]
         public async Task<ActionResult<ODataUpdateViewModel>> Save(string culture, string id, [FromBody]JObject data)
         {
-            var portalResult = await base.SaveAsync<ODataUpdateViewModel>(data, p => p.Id == id && p.Specificulture == _lang);
+            
+            var portalResult = await base.SaveAsync<ODataUpdateViewModel>(data, p => p.Id == id && p.Specificulture == _lang);            
             if (portalResult.IsSucceed)
             {
                 return Ok(portalResult);
@@ -124,8 +131,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             Expression<Func<MixAttributeSetData, bool>> predicate = model => model.Id == id && model.Specificulture == _lang;
 
             // Get Details if has id or else get default
-
-            var portalResult = await base.GetSingleAsync<ODataDeleteViewModel>(id.ToString(), predicate);
+            var portalResult = await base.GetSingleAsync<ODataDeleteViewModel>(predicate);
 
             var result = await base.DeleteAsync<ODataDeleteViewModel>(portalResult.Data, true);
             if (result.IsSucceed)

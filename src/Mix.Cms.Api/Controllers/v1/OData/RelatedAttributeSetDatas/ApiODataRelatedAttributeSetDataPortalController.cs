@@ -11,6 +11,7 @@ using Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
     [Route("api/v1/odata/{culture}/related-attribute-set-data/portal")]
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
     public class ApiODataRelatedAttributeSetDataPortalController :
-        BaseApiODataController<MixCmsContext, MixRelatedAttributeData>
+        ODataBaseApiController<MixCmsContext, MixRelatedAttributeData>
     {
         public ApiODataRelatedAttributeSetDataPortalController(
             IMemoryCache memoryCache
@@ -62,7 +63,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
 
             if (predicate != null || model != null)
             {
-                var portalResult = await base.GetSingleAsync<ODataUpdateViewModel>(id.ToString(), predicate, model);
+                var portalResult = await base.GetSingleAsync<ODataUpdateViewModel>(predicate, model);
                 return Ok(portalResult.Data);
             }
             else
@@ -86,6 +87,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
         [Route("")]
         public async Task<ActionResult<ODataUpdateViewModel>> Save(string culture, [FromBody]ODataUpdateViewModel data)
         {
+            
             var portalResult = await base.SaveAsync<ODataUpdateViewModel>(data, true);
             if (portalResult.IsSucceed)
             {
@@ -142,10 +144,9 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
             Expression<Func<MixRelatedAttributeData, bool>> predicate = model => model.Id == id && model.ParentId == parentId && model.ParentType == parentType && model.Specificulture == _lang;
 
             // Get Details if has id or else get default
+            var portalResult = await base.GetSingleAsync<ODataDeleteViewModel>(predicate);
 
-            var portalResult = await base.GetSingleAsync<DeleteViewModel>(id.ToString(), predicate);
-
-            var result = await base.DeleteAsync<DeleteViewModel>(portalResult.Data, true);
+            var result = await base.DeleteAsync<ODataDeleteViewModel>(portalResult.Data, true);
             if (result.IsSucceed)
             {
                 return Ok(result);

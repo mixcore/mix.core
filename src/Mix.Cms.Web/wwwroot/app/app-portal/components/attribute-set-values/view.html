@@ -6,7 +6,9 @@
         </div>
         <div class="row" ng-if="$ctrl.data[0]">
             <div class="col-md-1"></div>
-            <small ng-repeat="col in $ctrl.data[0].fields | orderBy:'priority' track by $index" ng-if="$index < 3" ng-bind="col.title" class="col-md-3"></small>
+            <small ng-repeat="col in $ctrl.data[0].fields | orderBy:'priority' track by $index" ng-if="$index < 3" ng-bind="col.title" class="col-md-2"></small>
+            <div class="col-md-2">Created By</div>
+            <div class="col-md-2">Created Date</div>
             <div class="col-md-2"></div>
         </div>
     </div>
@@ -17,10 +19,16 @@
                     <small class="fa fa-grip-vertical text-black-50 mr-2" style="cursor:grab;"></small>
                     <input class="ml-1 form-control form-control-sm border-0 col-2 p-0" ng-model="item.priority">
                 </div>
-                <div ng-if="$index < 3" ng-repeat="val in item.values | orderBy: 'priority' track by $index" class="col-md-3 py-2">
+                <div ng-if="$index < 3" ng-repeat="val in item.values | orderBy: 'priority' track by $index" class="col-md-2 py-2">
                     <attribute-value-preview data="val"></attribute-value-preview>
+                </div>                
+                <div class="col-md-2" ng-bind="item.createdBy">
+                    
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2" ng-bind="item.createdDateTime | utcToLocal">
+                    
+                </div>
+                <div class="col-md-1">
                     <div class="btn-group btn-group-sm float-right">
                         <a ng-click="$ctrl.update(item)" class="btn btn-link text-primary">
                             <span class="fa fa-pen"></span>

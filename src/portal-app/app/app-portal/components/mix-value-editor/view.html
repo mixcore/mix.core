@@ -1,4 +1,4 @@
-<div ng-if="!$ctrl.isSelect" class="form-group">
+<div ng-if="!$ctrl.isSelect" class="form-group" ng-init="$ctrl.initData()">
     <label class="control-label" ng-if="$ctrl.isShowTitle=='true'" ng-bind="$ctrl.title"></label>    
     <div ng-switch="$ctrl.type">
         <div ng-switch-when="0">
@@ -105,7 +105,7 @@
             
             <input class="{{$ctrl.inputClass}}" type="checkbox" placeholder="{{$ctrl.title}}"
                 ng-change="$ctrl.updateStringValue($ctrl.type)"
-                ng-model="$ctrl.stringValue" ng-checked="$ctrl.booleanValue=='true'" >
+                ng-model="$ctrl.booleanValue" ng-checked="$ctrl.booleanValue" >
         </div>
         <div ng-switch-when="19">
             <mix-select-icons prefix="'fab'" options="$ctrl.icons" data="$ctrl.stringValue"></mix-select-icons>            

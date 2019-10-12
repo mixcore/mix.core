@@ -30,18 +30,21 @@ modules.component('attributeValueEditor', {
         ctrl.$onInit = function () {
         };
         ctrl.initData = async function(){
-            setTimeout(() => {
+            setTimeout(() => {                
+                if(!ctrl.attributeValue.id){
+                    ctrl.initDefaultValue();
+                }
                 switch (ctrl.attributeValue.field.dataType) {
                     case 1:
                     case 2:
-                    case 3:
+                    case 3:                        
                         if (ctrl.attributeValue.dateTimeValue) {
                             ctrl.attributeValue.dateObj = new Date(ctrl.attributeValue.dateTimeValue);
                             $scope.$apply();
                         }
                         break;
                     case 23: // reference
-                        if(ctrl.attributeValue.field.referenceId){
+                        if(ctrl.attributeValue.field.referenceId && ctrl.parentId){
                             ctrl.attributeValue.integerValue = ctrl.attributeValue.field.referenceId;
                             navService.getSingle('portal', [ctrl.parentId, ctrl.parentType, 'default', ctrl.attributeValue.field.referenceId]).then(resp=>{
                                 ctrl.defaultDataModel = resp;
@@ -52,6 +55,7 @@ modules.component('attributeValueEditor', {
                         }
                         break;
                     default:
+                        
                         if (ctrl.attributeValue.field.isEncrypt && ctrl.attributeValue.encryptValue) {
                             var encryptedData = {
                                 key: ctrl.attributeValue.encryptKey,
@@ -66,6 +70,36 @@ modules.component('attributeValueEditor', {
                         break;
                 }
             }, 200);
+        };
+        ctrl.initDefaultValue = async function () {
+            switch (ctrl.attributeValue.field.dataType) {
+                case 1:
+                case 2:
+                case 3:
+                    if (ctrl.attributeValue.field.defaultValue) {
+                        ctrl.attributeValue.dateObj = new Date(ctrl.attributeValue.field.defaultValue);
+                        ctrl.attributeValue.stringValue = ctrl.attributeValue.field.defaultValue;
+                    }
+                    break;
+                case 6:
+                    if (ctrl.attributeValue.field.defaultValue) {
+                        ctrl.attributeValue.doubleValue = parseFloat(ctrl.attributeValue.field.defaultValue);
+                        ctrl.attributeValue.stringValue = ctrl.attributeValue.field.defaultValue;
+                    }
+                    break;
+                case 18:
+                    if (ctrl.attributeValue.field.defaultValue) {
+                        ctrl.attributeValue.booleanValue = ctrl.attributeValue.field.defaultValue =='true';
+                        ctrl.attributeValue.stringValue = ctrl.attributeValue.field.defaultValue;
+                    }
+                    break;
+
+                default:
+                    if (ctrl.attributeValue.field.defaultValue) {
+                        ctrl.attributeValue.stringValue = ctrl.attributeValue.field.defaultValue;
+                    }
+                    break;
+            }
         };
         ctrl.updateStringValue = async function (dataType) {
             switch (dataType) {
@@ -83,7 +117,7 @@ modules.component('attributeValueEditor', {
                     }
                     break;
                 case 18:
-                    if (ctrl.attributeValue.booleanValue) {
+                    if (ctrl.attributeValue.booleanValue != null) {
                         ctrl.attributeValue.stringValue = ctrl.attributeValue.booleanValue.toString();
                     }
                     break;
@@ -105,6 +139,7 @@ modules.component('attributeValueEditor', {
                     if (resp) {
                         $rootScope.showErrors('Failed');
                     }
+                    ctrl.refData = [];
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 }

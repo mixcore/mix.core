@@ -15,6 +15,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public int AttributeSetId { get; set; }
         public string AttributeSetName { get; set; }
         public DateTime CreatedDateTime { get; set; }
+        public string CreatedBy { get; set; }
         public int Priority { get; set; }
         public int Status { get; set; }
 

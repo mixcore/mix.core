@@ -30,7 +30,7 @@
         <p ng-bind-html="$ctrl.data.stringValue" class="mb-0"></p>
     </div>
     <div ng-switch-when="18">
-        <input class="form-control" type="checkbox" ng-model="$ctrl.data.booleanValue">
+        <input type="checkbox" readonly="readonly" ng-model="$ctrl.data.booleanValue" class="switch">
     </div>
     <div ng-switch-when="19">
         <i class="{{$ctrl.data.stringValue}}">

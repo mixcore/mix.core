@@ -58,7 +58,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
 
             if (predicate != null || model != null)
             {
-                var portalResult = await base.GetSingleAsync<ODataMobileFullViewModel>(id.ToString(), predicate, model);
+                var portalResult = await base.GetSingleAsync<ODataMobileFullViewModel>(predicate, model);
                 return Ok(portalResult.Data);
             }
             else
@@ -169,8 +169,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
             Expression<Func<MixRelatedAttributeData, bool>> predicate = model => model.Id == id && model.ParentId == parentId && model.ParentType == parentType && model.Specificulture == _lang;
 
             // Get Details if has id or else get default
-
-            var portalResult = await base.GetSingleAsync<ODataDeleteViewModel>(id.ToString(), predicate);
+            var portalResult = await base.GetSingleAsync<ODataDeleteViewModel>(predicate);
 
             var result = await base.DeleteAsync<ODataDeleteViewModel>(portalResult.Data, true);
             if (result.IsSucceed)
