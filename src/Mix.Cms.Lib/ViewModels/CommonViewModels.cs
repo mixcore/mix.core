@@ -108,7 +108,7 @@ namespace Mix.Cms.Lib.ViewModels
     public class DataValueViewModel
     {
         [JsonProperty("dataType")]
-        public MixDataType DataType { get; set; }
+        public MixDataType DataType { get; set; } = MixDataType.Text;
         [JsonProperty("value")]
         public string Value { get; set; }
         [JsonProperty("name")]

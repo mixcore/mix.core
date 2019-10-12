@@ -25,6 +25,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public string AttributeSetName { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         [JsonProperty("status")]
         public int Status { get; set; }
         #endregion Models

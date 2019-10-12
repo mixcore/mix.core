@@ -53,7 +53,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
         #region Views
         [JsonProperty("field")]
-        public MixAttributeFields.ReadViewModel Field { get; set; }
+        public MixAttributeFields.ODataMobileFullViewModel Field { get; set; }
         [JsonProperty("dataNavs")]
         public List<MixRelatedAttributeDatas.ODataMobileFullViewModel> DataNavs { get; set; }
 
@@ -73,14 +73,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         #endregion Contructors
         #region Override
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
+        {            
+            Field = MixAttributeFields.ODataMobileFullViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId, _context, _transaction).Data;
             if (DataType == MixEnums.MixDataType.Reference)
             {
                 DataNavs = MixRelatedAttributeDatas.ODataMobileFullViewModel.Repository.GetModelListBy(d =>
-                    d.ParentId == DataId && d.ParentType == (int)MixEnums.MixAttributeSetDataType.Set && d.Specificulture == Specificulture,
+                    d.AttributeSetId == Field.ReferenceId && d.ParentId == DataId && d.ParentType == (int)MixEnums.MixAttributeSetDataType.Set && d.Specificulture == Specificulture,
                 _context, _transaction).Data;
             }
-            Field = MixAttributeFields.ReadViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId, _context, _transaction).Data;
         }
         public override MixAttributeSetValue ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
