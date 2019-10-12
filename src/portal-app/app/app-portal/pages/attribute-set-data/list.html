@@ -12,10 +12,12 @@
         </a>
     </div>
 </div>
+
 <div ng-init="getList()">
     <attribute-set-values on-update="edit(data)" on-delete="remove(data)" header="''" data="data">
     </attribute-set-values>
 </div>
+
 <paging class="small" page="request.pageIndex + 1" page-size="request.pageSize" total="request.totalItems"
     ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
 </paging>
