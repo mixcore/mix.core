@@ -124,7 +124,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             // if have id => update data, else add new
                             if (!string.IsNullOrEmpty(id))
                             {
-                                var getData = Repository.GetCachedSingle($"{Specificulture}_{id}", m => m.Id == id && m.Specificulture == Specificulture);
+                                var getData = Repository.GetSingleModel(m => m.Id == id && m.Specificulture == Specificulture, _context, _transaction);
                                 if (getData.IsSucceed)
                                 {
                                     getData.Data.Data = objData;
@@ -165,6 +165,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             if (result.IsSucceed)
             {
                 RepositoryResponse<bool> saveValues = await SaveValues(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(saveValues, ref result);
             }
             // Save Ref Data
             if (result.IsSucceed)
@@ -373,7 +374,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             item.StringValue = property.Value<string>();
         }
 
-        public static async Task<RepositoryResponse<List<ODataMobileViewModel>>> FilterByValueAsync(string culture, string attributeSetName
+        public static Task<RepositoryResponse<List<ODataMobileViewModel>>> FilterByValueAsync(string culture, string attributeSetName
             , Dictionary<string, Microsoft.Extensions.Primitives.StringValues> queryDictionary
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -395,15 +396,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     result.Add(new ODataMobileViewModel(item, context,transaction));
                 }
-                return new RepositoryResponse<List<ODataMobileViewModel>>()
+                return Task.FromResult(new RepositoryResponse<List<ODataMobileViewModel>>()
                 {
                     IsSucceed = true,
                     Data = result
-                };
+                });
             }
             catch (Exception ex)
             {
-                return UnitOfWorkHelper<MixCmsContext>.HandleException<List<ODataMobileViewModel>>(ex, isRoot, transaction);
+                return Task.FromResult(UnitOfWorkHelper<MixCmsContext>.HandleException<List<ODataMobileViewModel>>(ex, isRoot, transaction));
             }
             finally
             {
