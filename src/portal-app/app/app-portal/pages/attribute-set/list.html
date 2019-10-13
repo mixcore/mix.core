@@ -72,15 +72,18 @@
                                 aria-expanded="false" aria-controls="attribute-childs">
                                 <i class="fas fa-folder"></i>
                             </a> -->
-                            <a href="/portal/attribute-set/details/{{item.id}}" class="btn btn-link">
-                                <span class="fas fa-pen text-primary"></span>
+                            <a href="/portal/attribute-set/details/{{item.id}}" title="Edit Attribute" class="btn btn-link text-primary">
+                                <span class="fas fa-pen"></span>
                             </a>
-                            <a href="/portal/attribute-set-data/list?attributeSetId={{item.id}}&attributeSetName={{item.name}}"
-                                class="btn btn-link">
-                                <span class="fas fa-database text-primary"></span>
+                            <a href="/portal/attribute-set-data/create?attributeSetId={{item.id}}&attributeSetName={{item.name}}&dataId=default" title="Add Data" class="btn btn-link text-primary">
+                                <span class="fas fa-plus"></span>
                             </a>
-                            <a ng-click="remove(item.id);" class="btn btn-link">
-                                <span class="fas fa-trash-alt text-danger"></span>
+                            <a href="/portal/attribute-set-data/list?attributeSetId={{item.id}}&attributeSetName={{item.name}}" title="List Data"
+                                class="btn btn-link text-primary">
+                                <span class="fas fa-database"></span>
+                            </a>
+                            <a ng-click="remove(item.id);" class="btn btn-link text-danger">
+                                <span class="fas fa-trash-alt"></span>
                             </a>
                         </div>
                     </td>
