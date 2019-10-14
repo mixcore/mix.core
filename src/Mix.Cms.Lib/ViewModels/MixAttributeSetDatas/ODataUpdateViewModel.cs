@@ -33,8 +33,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public List<MixAttributeSetValues.UpdateViewModel> Values { get; set; }
         [JsonProperty("fields")]
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
-        [JsonProperty("dataNavs")]
-        public List<MixRelatedAttributeDatas.UpdateViewModel> DataNavs { get; set; }
+        //[JsonProperty("dataNavs")]
+        //public List<MixRelatedAttributeDatas.UpdateViewModel> DataNavs { get; set; }
 
         #endregion
         #endregion Properties
@@ -55,9 +55,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {            
             // Related Datas
-            DataNavs = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(
-                n => n.ParentId == Id && n.ParentType == (int)MixEnums.MixAttributeSetDataType.Set && n.Specificulture == Specificulture,
-                _context, _transaction).Data;
+            //DataNavs = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(
+            //    n => n.ParentId == Id && n.ParentType == (int)MixEnums.MixAttributeSetDataType.Set && n.Specificulture == Specificulture,
+            //    _context, _transaction).Data;
 
             Values = MixAttributeSetValues.UpdateViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
