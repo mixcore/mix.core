@@ -10632,6 +10632,11 @@ a.text-dark:hover, a.text-dark:focus {
   margin-left: 10px;
 }
 
+.position-sticky-under-navbar {
+  top: 3.90rem;
+  z-index: 12;
+}
+
 .sw-toc {
   -webkit-box-ordinal-group: 3;
       -ms-flex-order: 2;
@@ -10878,7 +10883,7 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 .sw-sidebar .sw-toc-item li .sw-toc-sub-link:hover .mi {
-  color: hsla(var(--primary-color-hue,211), var(--primary-color-saturation,100%), 100%, 1) !important;
+  color: hsla(var(--primary-color-hue,211), var(--primary-color-saturation,100%),var(--primary-color-brightness,50%), 1);
 }
 
 .sw-sidebar .sw-toc-item li .sw-toc-sub-link:hover .inner .btn-group {
@@ -11018,9 +11023,10 @@ a.text-dark:hover, a.text-dark:focus {
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 }
 
-.table th {
+.table thead th {
   font-weight: normal;
   font-size: small;
+  border-bottom: 1px !important;
 }
 
 .table tbody tr {
@@ -11055,6 +11061,32 @@ ul[dnd-list] li {
   margin-bottom: -1px;
 }
 /*# sourceMappingURL=mix.fe.portal-mod.css.map */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

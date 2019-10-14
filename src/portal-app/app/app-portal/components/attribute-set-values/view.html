@@ -12,9 +12,9 @@
             </div>
             <small ng-repeat="col in $ctrl.data[0].fields | orderBy:'priority' track by $index" ng-if="$index < 3"
                 ng-bind="col.title" class="col-md-2"></small>
-            <div class="col-md-2">Created By</div>
-            <div class="col-md-2">Created Date</div>
-            <div class="col-md-2"></div>
+            <small class="col-md-2">Author</small>
+            <small class="col-md-2">Created Date</small>
+            <small class="col-md-2"></small>
         </div>
         <div class="row">
             <div class="col-md-6">
@@ -36,18 +36,22 @@
                 class="row border-bottom attr-set-value-item">
                 <div class="col-md-1 form-inline">
                     <small class="fa fa-grip-vertical text-black-50 mr-2" style="cursor:grab;"></small>
-                    <input type="checkbox" ng-model="item.isSelected"
-                            ng-change="$ctrl.select(item.id, item.isSelected)" />
+                    <small>
+                        <input class="ml-1 border-0 p-0 text-center text-black-50" style="width: 25px;"
+                            ng-model="item.priority" />
+                    </small>
                 </div>
                 <div ng-if="$index < 3" ng-repeat="val in item.values | orderBy: 'priority' track by $index"
                     class="col-md-2 py-2">
                     <attribute-value-preview data="val"></attribute-value-preview>
-                </div>                
-                <div class="col-md-2" ng-bind="item.createdBy">
-                    
                 </div>
-                <div class="col-md-2" ng-bind="item.createdDateTime | utcToLocal">
-                    
+                <div class="col-md-2">
+                    <small class="text-black-50 align-middle" ng-bind="item.createdBy">
+                    </small>
+                </div>
+                <div class="col-md-2">
+                    <small class="text-black-50 align-middle" ng-bind="item.createdDateTime | utcToLocal">
+                    </small>
                 </div>
                 <div class="col-md-1">
                     <div class="btn-group btn-group-sm float-right">
