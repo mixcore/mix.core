@@ -30,13 +30,9 @@
             <div ng-repeat="item in $ctrl.data | orderBy: 'priority' track by $index" dnd-draggable="item" dnd-type="'item'" dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedItem = item" dnd-dragstart="$ctrl.dragStart($index)" ng-class="{'selected': $ctrl.selectedItem === item}" class="row border-bottom attr-set-value-item">
                 <div class="col-md-1 form-inline">
                     <small class="fa fa-grip-vertical text-black-50 mr-2" style="cursor:grab;"></small>
-<<<<<<< HEAD
-                    <input type="checkbox" ng-model="item.isSelected" ng-change="$ctrl.select(item.id, item.isSelected)">
-=======
                     <small>
                         <input class="ml-1 border-0 p-0 text-center text-black-50" style="width: 25px;" ng-model="item.priority">
                     </small>
->>>>>>> develop
                 </div>
                 <div ng-if="$index < 3" ng-repeat="val in item.values | orderBy: 'priority' track by $index" class="col-md-2 py-2">
                     <attribute-value-preview data="val"></attribute-value-preview>
