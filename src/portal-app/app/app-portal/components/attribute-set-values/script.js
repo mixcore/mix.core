@@ -3,17 +3,46 @@ modules.component('attributeSetValues', {
     bindings: {
         header: '=',
         data: '=',
+        selectedList: '=',
         columns: '=?',
+        onApplyList:'&?',
         onUpdate:'&?',
         onDelete:'&?',
     },
-    controller: ['$rootScope', '$scope',
-        function ($rootScope, $scope) {
+    controller: ['$rootScope', '$scope', 'AttributeSetDataService',
+        function ($rootScope, $scope, dataService) {
             var ctrl = this;
+            ctrl.selectedList = {
+                action: 'Delete',
+                data: []
+            };
+            ctrl.actions = ['Delete', 'Export'];
+
             ctrl.selectedProp = null;
             
             ctrl.settings = $rootScope.globalSettings;
-           
+            ctrl.select = function (id, isSelected) {
+                if (isSelected) {
+                    ctrl.selectedList.data.push(id);
+                }
+                else {
+                    $rootScope.removeObject( ctrl.selectedList.data, id);
+                }
+            }
+            ctrl.selectAll = function (isSelected) {
+                ctrl.selectedList.data = [];
+                angular.forEach(ctrl.data, function (e) {
+                    e.isSelected = isSelected;
+                    if (isSelected) {
+                        ctrl.selectedList.data.push(e.id);
+                    }
+                });
+
+            }
+            ctrl.apply = async function () {
+                ctrl.onApplyList()
+            };
+
             ctrl.update = function(data){
                 ctrl.onUpdate({data: data});
             };

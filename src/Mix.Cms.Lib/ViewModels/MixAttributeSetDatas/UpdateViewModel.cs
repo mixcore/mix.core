@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -139,6 +140,47 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
             }
             return result;
+        }
+
+        public override Task GenerateCache(MixAttributeSetData model, UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                base.GenerateCache(model, view, _context, _transaction);
+                var tasks = new List<Task>();
+
+                // Remove parent caches
+                
+                // 1. Remove Parent Attribute Data
+                var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
+                .Any(d => d.Specificulture == Specificulture && d.Id == Id && d.ParentType == (int)MixEnums.MixAttributeSetDataType.Set));
+                foreach (var item in attrDatas)
+                {
+                    tasks.Add(Task.Run(() =>
+                    {
+                        var updModel = new UpdateViewModel(item, context, transaction);
+                        updModel.GenerateCache(item, updModel,context, transaction);
+                    }));
+                }
+
+                // TODO Remove Post / Page / Module Data
+
+                return Task.WhenAll(tasks);
+            }            
+            catch (Exception ex)
+            {
+                UnitOfWorkHelper<MixCmsContext>.HandleException<UpdateViewModel>(ex, isRoot, transaction);
+                return Task.FromException(ex);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    context.Dispose();
+                }
+            }
         }
         #endregion
 

@@ -231,7 +231,8 @@
         {
             Page,
             Module,
-            Post
+            Post,
+            AttributeSet
         }
         #endregion
 
