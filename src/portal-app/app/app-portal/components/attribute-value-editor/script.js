@@ -164,10 +164,10 @@ modules.component('attributeValueEditor', {
                                 [resp.data.parentId, resp.data.parentType, resp.data.id]);
                             if(!tmp){
                                 ctrl.refData.push(resp.data);
-                                var e = $(".pane-data-" + ctrl.attributeValue.field.referenceId)[0];
-                                angular.element(e).triggerHandler('click');
                             }
                             ctrl.refDataModel = angular.copy(ctrl.defaultDataModel);
+                            var e = $(".pane-data-" + ctrl.attributeValue.field.referenceId)[0];                                
+                            angular.element(e).triggerHandler('click');
                             $rootScope.isBusy = false;
                             $scope.$apply();
                         }else{
