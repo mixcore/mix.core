@@ -5,12 +5,27 @@
             <i class="fas fa-exclamation-triangle text-danger"></i> No data has been created for this attribute yet!
         </div>
         <div class="row" ng-if="$ctrl.data[0]">
-            <div class="col-md-1"></div>
+            <div class="col-md-1">
+                <input type="checkbox" ng-model="$ctrl.selectedList.isSelectAll"
+                            ng-change="$ctrl.selectAll($ctrl.selectedList.isSelectAll)" />
+                    
+            </div>
             <small ng-repeat="col in $ctrl.data[0].fields | orderBy:'priority' track by $index" ng-if="$index < 3"
                 ng-bind="col.title" class="col-md-2"></small>
             <small class="col-md-2">Author</small>
             <small class="col-md-2">Created Date</small>
             <small class="col-md-2"></small>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+            <select class="form-control btn custom-select custom-select-sm col-3" ng-model="$ctrl.selectedList.action">
+                <option ng-repeat="item in $ctrl.actions" ng-value="item">{{item}}</option>
+            </select>
+            </div>
+            <div class="col-md-2">
+            <a class="btn btn-sm btn-primary" ng-if="$ctrl.selectedList.data.length > 0 && $ctrl.selectedList.action"
+            ng-click="$ctrl.apply()">Apply</a>
+            </div>
         </div>
     </div>
     <div class="card-body py-1">
