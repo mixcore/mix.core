@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
+using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -44,6 +45,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             string msg = string.Empty;
             Expression<Func<MixAttributeSetData, bool>> predicate = null;
             MixAttributeSetData model = null;
+
             // Get Details if has id or else get default
             if (id != "default")
             {
@@ -70,7 +72,12 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                 var portalResult = await base.GetSingleAsync<ODataMobileFullViewModel>(predicate, model);
                 if (portalResult.IsSucceed)
                 {
-                    return Ok(portalResult.Data.Data);
+                    RepositoryResponse<JObject> result = new RepositoryResponse<JObject>()
+                    {
+                        IsSucceed = true,
+                        Data = portalResult.Data.Data
+                    };
+                    return Ok(result);
                 }
                 else
                 {
@@ -99,12 +106,13 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         public async Task<ActionResult<ODataMobileFullViewModel>> Save(string culture, [FromBody]JObject data)
         {
             string id = data["id"]?.Value<string>();
+            string _username = User?.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
             if (!string.IsNullOrEmpty(id))
             {
                 var getData = await base.GetSingleAsync<ODataMobileFullViewModel>(p => p.Id == id && p.Specificulture == _lang);
                 if (getData.IsSucceed)
                 {
-                    if (string.IsNullOrEmpty(getData.Data.CreatedBy) || getData.Data.CreatedBy == User.Identity.Name)
+                    if (string.IsNullOrEmpty(getData.Data.CreatedBy) || getData.Data.CreatedBy == _username)
                     {
                         getData.Data.Data = data;
                         getData.Data.CreatedBy = User?.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
@@ -158,7 +166,11 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                 var portalResult = await base.SaveAsync<ODataMobileFullViewModel>(data, true);
                 if (portalResult.IsSucceed)
                 {
-                    return Ok(portalResult);
+                    return Ok(new RepositoryResponse<JObject>
+                    {
+                        IsSucceed = true,
+                        Data = portalResult.Data.Data
+                    });
                 }
                 else
                 {
@@ -231,7 +243,11 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                     result.Add(item.Data);
                 }
             }
-            return Ok(result);
+            return Ok(new RepositoryResponse<JArray>
+            {
+                IsSucceed = true,
+                Data = result
+            });
         }
 
         // GET api/AttributeSetDatas/id
@@ -250,8 +266,13 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                     result.Add(item.Data);
                 }
             }
-            return Ok(result);
+            return Ok(new RepositoryResponse<JArray>
+            {
+                IsSucceed = true,
+                Data = result
+            });
         }
+
         // GET api/AttributeSetDatas/id
         [EnableQuery(MaxExpansionDepth = 4)]
         [HttpGet, HttpOptions]
@@ -268,7 +289,11 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                     result.Add(item.Data);
                 }
             }
-            return Ok(result);
+            return Ok(new RepositoryResponse<JArray>
+            {
+                IsSucceed = true,
+                Data = result
+            });
         }
 
         // GET api/AttributeSetDatas/id
@@ -288,7 +313,11 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                     result.Add(item.Data);
                 }
             }
-            return Ok(result);
+            return Ok(new RepositoryResponse<JArray>
+            {
+                IsSucceed = true,
+                Data = result
+            });
         }
 
         #endregion Get
