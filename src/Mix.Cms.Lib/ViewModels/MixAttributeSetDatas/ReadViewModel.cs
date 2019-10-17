@@ -53,11 +53,24 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             Values = MixAttributeSetValues.ReadViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
             Fields = MixAttributeFields.ReadViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
-            Values.ForEach(val =>
+            foreach (var field in Fields.OrderBy(f => f.Priority))
             {
-                val.Field = Fields.First(f => f.Id == val.AttributeFieldId);
-                val.Priority = val.Field.Priority;
-            });
+                var val = Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
+                if (val == null)
+                {
+                    val = new MixAttributeSetValues.ReadViewModel(
+                        new MixAttributeSetValue() { AttributeFieldId = field.Id }
+                        , _context, _transaction);
+                    val.Field = field;
+                    val.AttributeFieldName = field.Name;
+                    val.StringValue = field.DefaultValue;
+                    val.Priority = field.Priority;
+                    Values.Add(val);
+                }
+                val.AttributeSetName = AttributeSetName;
+                val.Priority = field.Priority;
+                val.Field = field;
+            };
         }
 
         #endregion
