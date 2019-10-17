@@ -136,7 +136,7 @@
             <input class="form-control form-control-sm {{$ctrl.inputClass}}"
                 ng-change="$ctrl.updateStringValue($ctrl.attributeValue.field.dataType)" type="number"
                 ng-model="$ctrl.attributeValue.doubleValue" placeholder="{{$ctrl.attributeValue.field.title}}">
-            <label class="control-label" ng-bind="$ctrl.attributeValue.doubleValue | currency:''"></label>
+            <label class="control-label" ng-bind="$ctrl.attributeValue.doubleValue | currency:'': 6"></label>
         </div>
         <div class="text-muted" ng-switch-when="7">
             <!--Text-->
