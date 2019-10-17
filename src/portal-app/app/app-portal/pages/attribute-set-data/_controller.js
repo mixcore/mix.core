@@ -27,16 +27,20 @@ app.controller('AttributeSetDataController',
                 //     $location.url('/portal/attribute-set-data/list?attributeSetId='+ $scope.activedData.attributeSetId);                    
                 // }
             };
-            $scope.getList = async function () {
+            $scope.getList = async function (page = 0) {
                 $rootScope.isBusy = true;
                 $scope.attributeSetId = $routeParams.attributeSetId;
                 $scope.attributeSetName = $routeParams.attributeSetName;
+                if(page != undefined){
+                    $scope.request.pageIndex = page;
+                }
                 var type = $routeParams.type;
                 var parentId = $routeParams.parentId;
                 var response = await service.getList('read', $scope.request, $scope.attributeSetId, $scope.attributeSetName, type, parentId);
                 $scope.canDrag = $scope.request.orderBy !== 'Priority' || $scope.request.direction !== '0';
                 if (response) {
                     $scope.data = response;
+                    $scope.count([$routeParams.attributeSetName]);
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 }

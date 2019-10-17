@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Extensions;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
     public class ODataMobileViewModel
@@ -87,9 +87,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 Id = Guid.NewGuid().ToString();                
                 CreatedDateTime = DateTime.UtcNow;
-                Priority = Repository.Count(m => m.AttributeSetName == AttributeSetName && m.Specificulture == Specificulture,_context,_transaction).Data + 1;
-                Data.Add(new JProperty("id", Id));
-                Data.Add(new JProperty("createdDateTime", CreatedDateTime));
+                Priority = Repository.Count(m => m.AttributeSetName == AttributeSetName && m.Specificulture == Specificulture,_context,_transaction).Data + 1;                
             }
             Values = Values ?? MixAttributeSetValues.ODataMobileViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
@@ -110,6 +108,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             
                         }
                         , _context, _transaction);
+                    val.StringValue = field.DefaultValue;
                     val.Priority = field.Priority;
                     val.Field = field;
                     Values.Add(val);
@@ -148,7 +147,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     }
                     else
                     {
-                        ParseModelValue(Data[val.AttributeFieldName], val);
+                       ParseModelValue(Data[val.AttributeFieldName], val);
                     }
                     
                 }
@@ -162,6 +161,24 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         }
 
         #region Async
+        public override async Task<RepositoryResponse<ODataMobileViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = await base.SaveModelAsync(isSaveSubModels, _context, _transaction);
+            if (result.IsSucceed)
+            {
+                result.Data.ExpandView();
+            }
+            return result;
+        }
+        public override RepositoryResponse<ODataMobileViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = base.SaveModel(isSaveSubModels, _context, _transaction);
+            if (result.IsSucceed)
+            {
+                result.Data.ExpandView();
+            }
+            return result;
+        }
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSetData parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -359,6 +376,33 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 case MixEnums.MixDataType.Reference:
                     item.StringValue = property.Value<string>();
                     break;
+                case MixEnums.MixDataType.Upload:
+                    string mediaData = property.Value<string>();
+                    if (mediaData.IsBase64())
+                    {
+                        MixMedias.UpdateViewModel media = new MixMedias.UpdateViewModel()
+                        {
+                            Specificulture = Specificulture,
+                            MediaFile = new FileViewModel()
+                            {
+                                FileStream = mediaData,
+                                Extension = ".png",
+                                Filename = Guid.NewGuid().ToString(),
+                                FileFolder = "Attributes"
+                            }
+                        };
+                        var saveMedia = media.SaveModel(true);
+                        if (saveMedia.IsSucceed)
+                        {
+                            item.StringValue = saveMedia.Data.FullPath;
+                        }
+                    }
+                    else
+                    {
+                        item.StringValue = mediaData;
+                    }
+                    break;
+
                 case MixEnums.MixDataType.Custom:
                 case MixEnums.MixDataType.Duration:
                 case MixEnums.MixDataType.PhoneNumber:
@@ -371,7 +415,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 case MixEnums.MixDataType.ImageUrl:
                 case MixEnums.MixDataType.CreditCard:
                 case MixEnums.MixDataType.PostalCode:
-                case MixEnums.MixDataType.Upload:
                 case MixEnums.MixDataType.Color:
                 case MixEnums.MixDataType.Icon:
                 case MixEnums.MixDataType.VideoYoutube:
@@ -380,7 +423,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     item.StringValue = property.Value<string>();
                     break;
             }
-            
         }
 
         public static Task<RepositoryResponse<List<ODataMobileViewModel>>> FilterByValueAsync(string culture, string attributeSetName

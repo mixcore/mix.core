@@ -529,7 +529,7 @@ namespace Mix.Cms.Lib.Repositories
                     }
                     else
                     {
-                        string base64 = file.FileStream.Split(',')[1];
+                        string base64 = file.FileStream.IndexOf(',') >= 0 ?  file.FileStream.Split(',')[1] : file.FileStream;
 
                         if (!string.IsNullOrEmpty(ImageResizer.getContentType(fileName)))
                         {
