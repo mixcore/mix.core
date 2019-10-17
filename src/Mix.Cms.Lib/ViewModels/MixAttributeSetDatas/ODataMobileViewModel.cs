@@ -71,6 +71,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         {
             Data = new JObject();
             Data.Add(new JProperty("id", Id));
+            Data.Add(new JProperty("createdDateTime", CreatedDateTime));
             Data.Add(new JProperty("details", $"/api/v1/odata/{Specificulture}/attribute-set-data/mobile/{Id}"));
             Values = MixAttributeSetValues.ODataMobileViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
@@ -84,9 +85,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         {
             if (string.IsNullOrEmpty(Id))
             {
-                Id = Guid.NewGuid().ToString();
+                Id = Guid.NewGuid().ToString();                
                 CreatedDateTime = DateTime.UtcNow;
                 Priority = Repository.Count(m => m.AttributeSetName == AttributeSetName && m.Specificulture == Specificulture,_context,_transaction).Data + 1;
+                Data.Add(new JProperty("id", Id));
+                Data.Add(new JProperty("createdDateTime", CreatedDateTime));
             }
             Values = Values ?? MixAttributeSetValues.ODataMobileViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
@@ -331,24 +334,30 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 case MixEnums.MixDataType.DateTime:
                     item.DateTimeValue = property.Value<DateTime?>();
+                    item.StringValue = property.Value<string>();
                     break;
                 case MixEnums.MixDataType.Date:
                     item.DateTimeValue = property.Value<DateTime?>();
+                    item.StringValue = property.Value<string>();
                     break;                    
                 case MixEnums.MixDataType.Time:
                     item.DateTimeValue = property.Value<DateTime?>();
+                    item.StringValue = property.Value<string>();
                     break;
                 case MixEnums.MixDataType.Double:
                     item.DoubleValue = property.Value<double?>();
+                    item.StringValue = property.Value<string>();
                     break;
                 case MixEnums.MixDataType.Boolean:
                     item.BooleanValue = property.Value<bool?>();
+                    item.StringValue = property.Value<string>().ToLower();
                     break;
                 case MixEnums.MixDataType.Number:
                     item.IntegerValue = property.Value<int?>();
+                    item.StringValue = property.Value<string>();
                     break;
                 case MixEnums.MixDataType.Reference:
-                   
+                    item.StringValue = property.Value<string>();
                     break;
                 case MixEnums.MixDataType.Custom:
                 case MixEnums.MixDataType.Duration:
@@ -371,7 +380,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     item.StringValue = property.Value<string>();
                     break;
             }
-            item.StringValue = property.Value<string>();
+            
         }
 
         public static Task<RepositoryResponse<List<ODataMobileViewModel>>> FilterByValueAsync(string culture, string attributeSetName
