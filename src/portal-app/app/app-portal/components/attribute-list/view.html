@@ -11,34 +11,32 @@
             <div ng-repeat="col in $ctrl.fields track by $index" dnd-draggable="col" dnd-type="'col'"
                 dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedCol = col"
                 dnd-dragstart="$ctrl.dragStart($index)" ng-class="{'selected': $ctrl.selectedCol === col}" class="">
-                <div class="row">
+
+                <div class="form-row">
+
                     <div class="col-md-1">
                         <small class="fa fa-grip-vertical text-black-50 align-middle" style="cursor: grab"></small>
                     </div>
-                    <div class="col-md-4">
-                        <div class="">
-                            <small class="control-label">Field: <span ng-bind="col.name"></span></small>
-                            <input ng-model="col.title" placeholder="Title" ng-change="$ctrl.generateName(col)"
-                                class="form-control form-control-sm">
-                        </div>
+                    <div class="form-groupx col-md-4">
+                        <small class="control-label">Field: <span class="text-black-50"
+                                ng-bind="col.name"></span></small>
+                        <input ng-model="col.title" placeholder="Title" ng-change="$ctrl.generateName(col)"
+                            class="form-control form-control-sm">
                     </div>
-                    <div class="col-md-2">
-                        <div class="">
-                            <small class="control-label">Type</small>
-                            <select class="form-control form-control-sm" ng-model="col.dataType"
-                                ng-change="$ctrl.changeDataType(col.dataType);">
-                                <option ng-repeat="item in $ctrl.settings.dataTypes track by $index" ng-value="$index">
-                                    {{item}}
-                                </option>
-                            </select>
-                        </div>
+                    <div class="form-groupx col-md-2">
+                        <small class="control-label">Type</small>
+                        <select class="form-control form-control-sm" ng-model="col.dataType"
+                            ng-change="$ctrl.changeDataType(col.dataType);">
+                            <option ng-repeat="item in $ctrl.settings.dataTypes track by $index" ng-value="$index">
+                                {{item}}
+                            </option>
+                        </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="form-groupx col-md-4">
                         <div class="" ng-if="col.dataType != 23">
                             <small class="control-label">Value</small>
-                            <mix-value-editor string-value="col.defaultValue" type="col.dataType"></mix-value-editor>
-                            <!-- <input ng-model="col.defaultValue" placeholder="Default Value"
-                                class="form-control form-control-sm"> -->
+                            <mix-value-editor string-value="col.defaultValue" type="col.dataType">
+                            </mix-value-editor>
                         </div>
                         <div ng-if="col.dataType == 23">
                             <small>
@@ -47,12 +45,12 @@
                             </small> <br />
                             <a ng-if="col.referenceId" href="/portal/attribute-set/details/{{col.referenceId}}"
                                 class="btn btn-link"><small>
-                                <span class="fas fa-pen text-primary"></span> Edit attribute
-                                {{col.reference.title}}</small>
+                                    <span class="fas fa-pen text-primary"></span> Edit attribute
+                                    {{col.reference.title}}</small>
                             </a>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         <div class="btn-group btn-group-sm float-right">
                             <a href="" class="btn btn-secondary" ng-click="col.showAdvanced = !col.showAdvanced">
                                 <span class="far fa-check-square"></span>
@@ -63,7 +61,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-2" ng-show="col.showAdvanced">
+
+                <div class="row form-group">
+                    <div class="col-md-1"></div>
+                    <div class="col">
+                        <input type="text" class="col form-control form-control-sm" ng-model="col.regex"
+                            placeholder="Regular Expression..."></div>
+                </div>
+
+                <div class="row my-2" ng-show="col.showAdvanced">
                     <div class="col-md-1"></div>
                     <div class="col-md form-check-inline px-2">
                         <div class="custom-control custom-switch mx-2">
@@ -95,37 +101,43 @@
                             </label>
                         </div>
                     </div>
-
-                    <div class="col-md-1"></div>
                 </div>
+
                 <div ng-show="col.isSelect">
-                    <div class="row">
+                    <div class="row mb-2">
                         <div class="col-md-1"></div>
-                        <label class="col-sm-2 col-form-label">List items</label>
-                        <div class="col-sm-7">
-                            <input type="text" class="form-control form-control-sm" id="option_{{$index}}"
-                                ng-enter="$ctrl.addOption(col,$index)" placeholder="fill then enter to add options">
+                        <div class="col">
+                            <div class="form-group">
+                                <input type="text" class="form-control form-control-sm" id="option_{{$index}}"
+                                    ng-enter="$ctrl.addOption(col,$index)"
+                                    placeholder="Please type in the value then enter to add to option list...">
+                            </div>
+
+                            <div class="form-row" ng-repeat="opt in col.options track by $index">
+                                <div class="form-groupx col-md pl-4">
+                                    <input type="text" class="form-control form-control-sm"
+                                        ng-model="col.options[$index].value">
+                                </div>
+                                <div class="form-groupx col-md-3">
+
+                                    <select class="form-control form-control-sm"
+                                        ng-model="col.options[$index].dataType">
+                                        <option ng-repeat="item in $ctrl.settings.dataTypes track by $index"
+                                            ng-value="$index">
+                                            {{item}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-groupx col-md-1">
+                                    <a class="btn" ng-click="col.options.splice($index,1)">
+                                        <span class="fas fa-trash-alt text-danger"></span>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="row" ng-repeat="opt in col.options track by $index">
-                        <div class="col-md-10 row">
-                            <input type="text" class="col-7 form-control form-control-sm"
-                                ng-model="col.options[$index].value">
-                            <select class="col-5 form-control form-control-sm" ng-model="col.options[$index].dataType">
-                                <option ng-repeat="item in $ctrl.settings.dataTypes track by $index" ng-value="$index">
-                                    {{item}}
-                                </option>
-                            </select>
-
-                        </div>
-                        <div class="col-md-2">
-                            <a class="btn" ng-click="col.options.splice($index,1)">
-                                <span class="fas fa-trash-alt text-danger"></span>
-                            </a>
-                        </div>
-                    </div>
-
                 </div>
+
                 <hr>
             </div>
         </div>
