@@ -29,7 +29,7 @@ app.factory('BaseODataService', ['$rootScope', '$routeParams', 'CommonService',
             return await commonService.getApiResult(req);
         };
         var _count = async function (viewType, params = []) {
-            var url = this.prefixUrl + '/' + viewType;
+            var url = this.prefixUrl + '/' + viewType + '/count';
             for (let i = 0; i < params.length; i++) {
                 if (params[i] != null) {
                     url += '/' + params[i];
@@ -37,14 +37,19 @@ app.factory('BaseODataService', ['$rootScope', '$routeParams', 'CommonService',
             }
             var req = {
                 method: 'GET',
-                url: url + '/count'
+                url: url 
             };
             return await commonService.getApiResult(req);
         };
-        var _getList = async function (viewType, objData) {
+        var _getList = async function (viewType, objData, params = []) {
                                
             var data = serviceFactory.parseODataQuery(objData);
             var url = this.prefixUrl + '/' + viewType;
+            for (let i = 0; i < params.length; i++) {
+                if (params[i] != null) {
+                    url += '/' + params[i];
+                }
+            }
             if(data){
                 url = url.concat(data);
             }

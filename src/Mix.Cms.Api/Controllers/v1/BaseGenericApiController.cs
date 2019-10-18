@@ -112,10 +112,10 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             var cacheKey = $"api_{_lang}_{typeof(TModel).Name.ToLower()}_details_{key}";
             RepositoryResponse<TView> data = null;
-            if (MixService.GetConfig<bool>("IsCache"))
-            {
-                data = await MixCacheService.GetAsync<RepositoryResponse<TView>>(cacheKey);
-            }
+            //if (MixService.GetConfig<bool>("IsCache"))
+            //{
+            //    data = await MixCacheService.GetAsync<RepositoryResponse<TView>>(cacheKey);
+            //}
             if (data == null)
             {
 
@@ -123,7 +123,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
                     //_memoryCache.Set(cacheKey, data);
-                    await MixCacheService.SetAsync(cacheKey, data);
+                    //await MixCacheService.SetAsync(cacheKey, data);
                 }
                 else
                 {
@@ -215,10 +215,10 @@ namespace Mix.Cms.Api.Controllers.v1
 
             var cacheKey = $"api_{_lang}_{typeof(TModel).Name.ToLower()}_list_{key}_{request.Status}_{request.Keyword}_{request.OrderBy}_{request.Direction}_{request.PageSize}_{request.PageIndex}_{request.Query}";
             RepositoryResponse<PaginationModel<TView>> data = null;
-            if (MixService.GetConfig<bool>("IsCache"))
-            {
-                data = await MixCacheService.GetAsync<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
-            }
+            //if (MixService.GetConfig<bool>("IsCache"))
+            //{
+            //    data = await MixCacheService.GetAsync<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
+            //}
 
             if (data == null)
             {
@@ -227,20 +227,20 @@ namespace Mix.Cms.Api.Controllers.v1
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(
                         predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null);
-                    if (data.IsSucceed)
-                    {
-                        await MixCacheService.SetAsync(cacheKey, data);
-                        AlertAsync("Add Cache", 200, cacheKey);
-                    }
+                    //    if (data.IsSucceed)
+                    //    {
+                    //        await MixCacheService.SetAsync(cacheKey, data);
+                    //        AlertAsync("Add Cache", 200, cacheKey);
+                    //    }
                 }
                 else
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
-                    if (data.IsSucceed)
-                    {
-                        await MixCacheService.SetAsync(cacheKey, data);
-                        AlertAsync("Add Cache", 200, cacheKey);
-                    }
+                    //if (data.IsSucceed)
+                    //{
+                    //    await MixCacheService.SetAsync(cacheKey, data);
+                    //    AlertAsync("Add Cache", 200, cacheKey);
+                    //}
                 }
 
             }
