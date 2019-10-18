@@ -18,7 +18,7 @@ function BaseODataCtrl($scope, $rootScope, $routeParams, ngAppSettings, service)
     $scope.getSingleFailCallback = null;
     $scope.getListSuccessCallback = null;
     $scope.getListFailCallback = null;
-    $scope.saveFailCallback = null;    
+    $scope.saveFailCallback = null;
     $scope.selectedList = {
         action: '',
         data: []
@@ -31,10 +31,11 @@ function BaseODataCtrl($scope, $rootScope, $routeParams, ngAppSettings, service)
     else {
         $scope.referrerUrl = '/portal';// document.referrer.substr(document.referrer.indexOf('/portal'));
     }
-    
-    $scope.getSingle = async function () {
+
+    $scope.getSingle = async function (params = []) {
         $rootScope.isBusy = true;
         var id = $routeParams.id || $scope.defaultId;
+        params.splice(0, 0, id);
         var resp = await service.getSingle('portal', [id]);
         if (resp) {
             $scope.activedData = resp;
@@ -54,10 +55,10 @@ function BaseODataCtrl($scope, $rootScope, $routeParams, ngAppSettings, service)
             $scope.$apply();
         }
     };
-    
-    $scope.count = async function () {
+
+    $scope.count = async function (params = []) {
         $rootScope.isBusy = true;
-        var resp = await service.count('read');
+        var resp = await service.count('read', params);
         if (resp) {
             $scope.request.totalItems = resp;
             $rootScope.isBusy = false;
@@ -70,8 +71,8 @@ function BaseODataCtrl($scope, $rootScope, $routeParams, ngAppSettings, service)
             $scope.$apply();
         }
     };
-    
-    $scope.getList = async function (pageIndex) {
+
+    $scope.getList = async function (pageIndex, params = []) {
         $rootScope.isBusy = true;
         if (pageIndex !== undefined) {
             $scope.request.pageIndex = pageIndex;
@@ -84,10 +85,10 @@ function BaseODataCtrl($scope, $rootScope, $routeParams, ngAppSettings, service)
             var d = new Date($scope.request.toDate);
             $scope.request.toDate = d.toISOString();
         }
-        var resp = await service.getList('read', $scope.request);
-        if (resp) {            
+        var resp = await service.getList('read', $scope.request, params);
+        if (resp) {
             $scope.data = resp;
-            $scope.count();
+            $scope.count(params);
             $.each($scope.data, function (i, data) {
                 $.each($scope.activedDatas, function (i, e) {
                     if (e.dataId === data.id) {
@@ -134,10 +135,10 @@ function BaseODataCtrl($scope, $rootScope, $routeParams, ngAppSettings, service)
 
     $scope.save = async function (data) {
         $rootScope.isBusy = true;
-        if($scope.validate){
+        if ($scope.validate) {
             $scope.isValid = await $rootScope.executeFunctionByName('validate', $scope.validateArgs, $scope);
         }
-        if($scope.isValid){
+        if ($scope.isValid) {
             var resp = await service.save('portal', data);
             if (resp.isSucceed) {
                 $scope.activedData = resp.data;
@@ -147,9 +148,9 @@ function BaseODataCtrl($scope, $rootScope, $routeParams, ngAppSettings, service)
                     $rootScope.executeFunctionByName('saveSuccessCallback', $scope.saveSuccessCallbackArgs, $scope);
                 }
                 $rootScope.isBusy = false;
-                $scope.$apply();                
+                $scope.$apply();
             } else {
-                if($scope.saveFailCallback){
+                if ($scope.saveFailCallback) {
                     $rootScope.executeFunctionByName('saveFailCallback', $scope.saveSuccessCallbackArgs, $scope)
                 }
                 if (resp) {
@@ -160,7 +161,7 @@ function BaseODataCtrl($scope, $rootScope, $routeParams, ngAppSettings, service)
             }
             return resp;
         }
-        else{
+        else {
             $rootScope.showErrors(['invalid model']);
             $rootScope.isBusy = false;
             $scope.$apply();

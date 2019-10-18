@@ -47,7 +47,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         public string EncryptKey { get; set; }
         [JsonProperty("encryptType")]
         public int EncryptType { get; set; }
-
+        
 
         #endregion Models
 

@@ -71,7 +71,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         new MixAttributeSetValue() { AttributeFieldId = field.Id }
                         , _context, _transaction);
                     val.Field = field;
-                    val.AttributeFieldName = field.Name;                    
+                    val.AttributeFieldName = field.Name;
+                    val.StringValue = field.DefaultValue;
                     val.Priority = field.Priority;
                     Values.Add(val);
                 }

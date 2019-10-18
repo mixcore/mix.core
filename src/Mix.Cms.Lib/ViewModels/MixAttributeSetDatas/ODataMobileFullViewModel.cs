@@ -33,7 +33,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #region Views
         [JsonIgnore]
         public List<MixAttributeSetValues.ODataMobileFullViewModel> Values { get; set; }
-        [JsonIgnore]
         public List<MixAttributeFields.ODataMobileFullViewModel> Fields { get; set; }
 
         [JsonProperty("data")]
@@ -65,11 +64,24 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             Data.Add(new JProperty("details", $"/api/v1/odata/{Specificulture}/attribute-set-data/mobile-full/{Id}"));
             Values = MixAttributeSetValues.ODataMobileFullViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-            foreach (var item in Values.OrderBy(v=>v.Priority))
+            foreach (var field in Fields.OrderBy(f => f.Priority))
             {
-                item.AttributeFieldName = item.Field.Name;
-                Data.Add(ParseValue(item));
-            }
+                var val = Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
+                if (val == null)
+                {
+                    val = new MixAttributeSetValues.ODataMobileFullViewModel(
+                        new MixAttributeSetValue() { AttributeFieldId = field.Id }
+                        , _context, _transaction);
+                    val.Field = field;
+                    val.AttributeFieldName = field.Name;
+                    val.StringValue = field.DefaultValue;
+                    val.Priority = field.Priority;
+                    Values.Add(val);
+                }
+                val.AttributeSetName = AttributeSetName;
+                val.Priority = field.Priority;
+                val.Field = field;
+            };
         }
         public override MixAttributeSetData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

@@ -178,7 +178,7 @@ namespace Mix.Cms.Web.Controllers
             {
                 return Redirect($"/error/403");
             }
-            return await PostViewAsync(id, seoName);
+            return await Post(id, seoName);
         }
 
         [HttpGet]
@@ -332,7 +332,7 @@ namespace Mix.Cms.Web.Controllers
                     case UrlAliasType.Page:
                         return await PageAsync(int.Parse(getAlias.Data.SourceId));
                     case UrlAliasType.Post:
-                        return await PostViewAsync(int.Parse(getAlias.Data.SourceId));
+                        return await Post(int.Parse(getAlias.Data.SourceId));
                     case UrlAliasType.Module: // TODO: Create view for module
                     case UrlAliasType.ModuleData: // TODO: Create view for module data
                     default:
@@ -576,7 +576,7 @@ namespace Mix.Cms.Web.Controllers
             }
         }
 
-        async System.Threading.Tasks.Task<IActionResult> PostViewAsync(int id)
+        async System.Threading.Tasks.Task<IActionResult> Post(int id)
         {
 
             RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel> getPost = null;
@@ -632,7 +632,7 @@ namespace Mix.Cms.Web.Controllers
                 return Redirect($"/error/404");
             }
         }
-        async System.Threading.Tasks.Task<IActionResult> PostViewAsync(int id, string seoName)
+        async System.Threading.Tasks.Task<IActionResult> Post(int id, string seoName)
         {
             ViewData["TopPages"] = await GetCategoryAsync(CatePosition.Nav, seoName);
             ViewData["HeaderPages"] = await GetCategoryAsync(CatePosition.Top, seoName);
@@ -641,13 +641,13 @@ namespace Mix.Cms.Web.Controllers
 
             RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel> getPost = null;
 
-            var cacheKey = $"mvc_{_culture}_post_{seoName}";
+            //var cacheKey = $"mvc_{_culture}_post_{seoName}";
 
-            if (MixService.GetConfig<bool>("IsCache"))
-            {
-                getPost = await MixCacheService.GetAsync<RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel>>(cacheKey);
+            //if (MixService.GetConfig<bool>("IsCache"))
+            //{
+            //    getPost = await MixCacheService.GetAsync<RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel>>(cacheKey);
 
-            }
+            //}
 
             if (getPost == null)
             {

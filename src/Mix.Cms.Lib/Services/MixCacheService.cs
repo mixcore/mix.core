@@ -65,62 +65,62 @@ namespace Mix.Cms.Lib.Services
             //return default(T);
         }
 
-        public static Task<RepositoryResponse<bool>> SetAsync<T>(string key, T value)
-        {
+        //public static Task<RepositoryResponse<bool>> SetAsync<T>(string key, T value)
+        //{
 
-            if (value != null)
-            {
-                var jobj = JObject.FromObject(value);
-                var cacheFile = new FileViewModel()
-                {
-                    Filename = key.ToLower(),
-                    Extension = ".json",
-                    FileFolder = "Cache",
-                    Content = jobj.ToString(Newtonsoft.Json.Formatting.None)
-                };
+        //    if (value != null)
+        //    {
+        //        var jobj = JObject.FromObject(value);
+        //        var cacheFile = new FileViewModel()
+        //        {
+        //            Filename = key.ToLower(),
+        //            Extension = ".json",
+        //            FileFolder = "Cache",
+        //            Content = jobj.ToString(Newtonsoft.Json.Formatting.None)
+        //        };
 
-                var result = FileRepository.Instance.SaveFile(cacheFile);
-                return Task.FromResult(new RepositoryResponse<bool>()
-                {
-                    IsSucceed = result,
-                });
-            }
-            else
-            {
-                return Task.FromResult(new RepositoryResponse<bool>());
-            }
-            //var getData = await Instance.Repository.GetSingleModelAsync(c => c.Id == key);
-            //MixCache data = null;
-            //if (value != null)
-            //{
+        //        var result = FileRepository.Instance.SaveFile(cacheFile);
+        //        return Task.FromResult(new RepositoryResponse<bool>()
+        //        {
+        //            IsSucceed = result,
+        //        });
+        //    }
+        //    else
+        //    {
+        //        return Task.FromResult(new RepositoryResponse<bool>());
+        //    }
+        //    //var getData = await Instance.Repository.GetSingleModelAsync(c => c.Id == key);
+        //    //MixCache data = null;
+        //    //if (value != null)
+        //    //{
 
-            //    if (getData.IsSucceed)
-            //    {
-            //        data = getData.Data;
-            //    }
-            //    else
-            //    {
-            //        data = new MixCache();
-            //    }
+        //    //    if (getData.IsSucceed)
+        //    //    {
+        //    //        data = getData.Data;
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        data = new MixCache();
+        //    //    }
 
-            //    var jobj = JObject.FromObject(value);
-            //    data.Id = key;
-            //    data.Status = (int)MixEnums.MixContentStatus.Published;
-            //    data.Value = jobj.ToString(Newtonsoft.Json.Formatting.None);
-            //    data.CreatedDateTime = DateTime.UtcNow;
-            //    var tmp = Instance.Repository.SaveModel(data);
-            //    return new RepositoryResponse<bool>()
-            //    {
-            //        IsSucceed = tmp.IsSucceed,
-            //        Exception = tmp.Exception,
-            //        Errors = tmp.Errors
-            //    };
-            //}
-            //else
-            //{
-            //    return new RepositoryResponse<bool>();
-            //}
-        }
+        //    //    var jobj = JObject.FromObject(value);
+        //    //    data.Id = key;
+        //    //    data.Status = (int)MixEnums.MixContentStatus.Published;
+        //    //    data.Value = jobj.ToString(Newtonsoft.Json.Formatting.None);
+        //    //    data.CreatedDateTime = DateTime.UtcNow;
+        //    //    var tmp = Instance.Repository.SaveModel(data);
+        //    //    return new RepositoryResponse<bool>()
+        //    //    {
+        //    //        IsSucceed = tmp.IsSucceed,
+        //    //        Exception = tmp.Exception,
+        //    //        Errors = tmp.Errors
+        //    //    };
+        //    //}
+        //    //else
+        //    //{
+        //    //    return new RepositoryResponse<bool>();
+        //    //}
+        //}
 
         public static Task RemoveCacheAsync()
         {

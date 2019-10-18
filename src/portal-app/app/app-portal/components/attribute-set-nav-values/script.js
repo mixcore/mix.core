@@ -57,7 +57,6 @@ modules.component('attributeSetNavValues', {
                     });
                 });
                 navService.saveProperties('portal', arrNavs).then(resp=>{
-                    console.log(resp);
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 })
