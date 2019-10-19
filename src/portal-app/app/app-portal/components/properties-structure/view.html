@@ -9,12 +9,7 @@
             class="fas fa-plus text-primary"></span> Add Attr</button>
     <!-- <a ng-click="$ctrl.generateForm()" class="btn btn-primary btn-sm float-right text-white mr-2">Generate Form</a> -->
 </h6>
-<p class="text-muted m-0">Add a title and description to see how this product might
-    appear in a search engine listing.</p>
-    <hr>
-
 <div id="module-attr-table">
-
     <table class="table table-sm" id="Table">
         <thead class="thead-light">
             <tr>
@@ -43,7 +38,8 @@
                 <td>
                     <input ng-model="col.title" placeholder="Title" ng-change="$ctrl.generateName(col)"
                         class="form-control form-control-sm">
-                    <small class="form-text text-muted">Name: <input type="text" class="input-sm" ng-model="col.name"/></small>
+                    <small class="form-text text-muted">Name: <input type="text" class="input-sm"
+                            ng-model="col.name" /></small>
                 </td>
                 <td>
                     <select class="form-control form-control-sm" ng-model="col.dataType">

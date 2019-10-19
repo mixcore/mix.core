@@ -1,14 +1,10 @@
 <div class="card border-left-0 border-bottom-0 border-right-0">
-    <div class="card-header py-1">
+    <div class="card-header py-1" ng-if="$ctrl.data.length">
         <span ng-bind="$ctrl.header"></span>
-        <div class="" role="alert" ng-if="!$ctrl.data || !$ctrl.data.length">
-            <i class="fas fa-exclamation-triangle text-danger"></i> No data has been created for this attribute yet!
-        </div>
         <div class="row" ng-if="$ctrl.data[0]">
             <div class="col-md-1">
                 <input type="checkbox" ng-model="$ctrl.selectedList.isSelectAll"
                     ng-change="$ctrl.selectAll($ctrl.selectedList.isSelectAll)" />
-
             </div>
             <small ng-repeat="col in $ctrl.data[0].fields | orderBy:'priority' track by $index" ng-if="$index < 3"
                 ng-bind="col.title" class="col-md-2"></small>
@@ -16,22 +12,15 @@
             <small class="col-md-2">Created Date</small>
             <small class="col-md-2"></small>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <select class="form-control btn custom-select custom-select-sm col-3"
-                    ng-model="$ctrl.selectedList.action">
-                    <option ng-repeat="item in $ctrl.actions" ng-value="item">{{item}}</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <a class="btn btn-sm btn-primary"
-                    ng-if="$ctrl.selectedList.data.length > 0 && $ctrl.selectedList.action"
-                    ng-click="$ctrl.apply()">Apply</a>
-            </div>
-        </div>
     </div>
     <div class="card-body py-1">
-        <div dnd-list="$ctrl.data" dnd-inserted="$ctrl.updateOrders(index)">
+
+        <div class="py-2" role="alert" ng-if="!$ctrl.data || !$ctrl.data.length">
+            <i class="fas fa-exclamation-triangle text-warning mr-3"></i> No data has been created for this attribute
+            yet!
+        </div>
+
+        <div dnd-list="$ctrl.data" dnd-inserted="$ctrl.updateOrders(index)" ng-if="$ctrl.data.length">
             <div ng-repeat="item in $ctrl.data | orderBy: 'priority' track by $index" dnd-draggable="item"
                 dnd-type="'item'" dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedItem = item"
                 dnd-dragstart="$ctrl.dragStart($index)" ng-class="{'selected': $ctrl.selectedItem === item}"
@@ -66,6 +55,15 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="card-footer form-inline" ng-if="$ctrl.data.length">
+        <div class="form-group">
+            <select class="form-control btn custom-select custom-select-sm mr-2" ng-model="$ctrl.selectedList.action">
+                <option ng-repeat="item in $ctrl.actions" ng-value="item">{{item}}</option>
+            </select>
+            <button type="button" class="btn btn-sm btn-primary" ng-if="$ctrl.selectedList.data.length > 0 && $ctrl.selectedList.action"
+                ng-click="$ctrl.apply()">Apply</button>
         </div>
     </div>
 </div>
