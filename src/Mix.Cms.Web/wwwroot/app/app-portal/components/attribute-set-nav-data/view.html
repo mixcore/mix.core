@@ -1,4 +1,4 @@
-<tabs-v select-callback="$ctrl.selectPane(pane)" class="mb-3">
+<tabs-v select-callback="$ctrl.selectPane(pane)">
     <pane-v id="pane-data-{{$ctrl.nav.data.id}}" header="Data" class="">
         <div class="card-body">
             <attribute-set-nav-values on-update="$ctrl.updateData(data)" on-delete="$ctrl.removeData(data)" data="$ctrl.data" class="card-body">

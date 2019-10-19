@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-12 mb-3">
-        <filter-list request="request" callback="getList(pageIndex)" create-url="'/portal/module/create'"></filter-list>
+        <filter-list request="request" callback="getList(pageIndex)" create-url="'/portal/module/create'" create-text="'Create Module'"></filter-list>
 
         <select class="form-control btn custom-select custom-select-sm col-2 mt-3" ng-model="type" ng-change="getListByType(pageIndex)">
             <option value="-1">All</option>
@@ -16,87 +16,86 @@
 </div>
 <div class="row">
     <div class="col-12">
+        <div class="card mb-3">
+            <div class="card-body">
+                <table class="table table-sm table-hover mb-0" cellspacing="0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col" width="5px">
+                                <span class="oi oi-sort-ascending"></span>
+                            </th>
+                            <th scope="col" width="5px">
+                                <input type="checkbox" ng-model="isSelectAll" ng-change="selectAll(isSelectAll)">
+                            </th>
+                            <th scope="col" width="5px">
+                                <i class="fas fa-sort-numeric-down"></i>
+                            </th>
+                            <th scope="col" width="30%">
+                                Module
+                            </th>
+                            <th scope="col" width="30%">
+                                Name
+                            </th>
+                            <th scope="col" width="15%">
+                                Created Date
+                            </th>
 
-        <div class="card border-0">
+                            <th scope="col" width="10%">
+                                Image
+                            </th>
+                            <th scope="col" width="10%"></th>
+                        </tr>
+                    </thead>
 
-            <table class="table table-sm table-hover mb-0" cellspacing="0">
-                <thead class="thead-light">
-                    <tr>
-                        <th scope="col" width="5px">
-                            <span class="oi oi-sort-ascending"></span>
-                        </th>
-                        <th scope="col" width="5px">
-                            <input type="checkbox" ng-model="isSelectAll" ng-change="selectAll(isSelectAll)">
-                        </th>
-                        <th scope="col" width="5px">
-                            <i class="fas fa-sort-numeric-down"></i>
-                        </th>
-                        <th scope="col" width="30%">
-                            Title
-                        </th>
-                        <th scope="col" width="30%">
-                            Name
-                        </th>
-                        <th scope="col" width="15%">
-                            Created Date
-                        </th>
-
-                        <th scope="col" width="10%">
-                            Image
-                        </th>
-                        <th scope="col" width="10%"></th>
-                    </tr>
-                </thead>
-
-                <tbody class="sortable" ng-init="getList()">
-                    <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="module" sort-model-id="{{item.id}}">
-                        <td style="cursor:grab;" class="drag-header">
-                            <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
-                        </td>
-                        <td>
-                            <input type="checkbox" ng-model="item.isSelected" ng-change="select(item.id, item.isSelected)">
-                        </td>
-                        <td>
-                            <small>{{item.priority}}</small>
-                        </td>
-                        <td>
-                            <small>{{item.title}}</small>
-                        </td>
-                        <td class="text-black-50">
-                            <small>{{item.name}}</small>
-                        </td>
-                        <td class="text-black-50">
-                            <small>
-                                {{item.lastModified | utcToLocal:'d.M.yyyy h:mm a'}}
-                            </small>
-                        </td>
-                        <td>
-                            <preview-image img-height="25" img-src="item.image"></preview-image>
-                        </td>
-                        <td>
-                            <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                                <a href="/portal/module/details/{{item.id}}" class="btn btn-link">
-                                    <span class="fa fa-pen text-primary"></span>
-                                </a>
-                                <!--<a href="{{item.detailsUrl}}" target="_blank" class="btn btn-link">
+                    <tbody class="sortable" ng-init="getList()">
+                        <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="module" sort-model-id="{{item.id}}">
+                            <td style="cursor:grab;" class="drag-header">
+                                <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
+                            </td>
+                            <td>
+                                <input type="checkbox" ng-model="item.isSelected" ng-change="select(item.id, item.isSelected)">
+                            </td>
+                            <td>
+                                <small>{{item.priority}}</small>
+                            </td>
+                            <td>
+                                <small>{{item.title}}</small>
+                            </td>
+                            <td class="text-black-50">
+                                <small>{{item.name}}</small>
+                            </td>
+                            <td class="text-black-50">
+                                <small>
+                                    {{item.lastModified | utcToLocal:'d.M.yyyy h:mm a'}}
+                                </small>
+                            </td>
+                            <td>
+                                <preview-image img-height="25" img-src="item.image"></preview-image>
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
+                                    <a href="/portal/module/details/{{item.id}}" class="btn btn-link">
+                                        <span class="fa fa-pen text-primary"></span>
+                                    </a>
+                                    <!--<a href="{{item.detailsUrl}}" target="_blank" class="btn btn-link">
                                             <span class="fas fa-eye text-primary"></span>
                                         </a>-->
-                                <a ng-if="item.type==2" href="/portal/module-post/list/{{item.id}}" class="btn btn-link">
-                                    <span class="fas fa-bars text-primary"></span>
-                                </a>
-                                <a ng-if="item.type==1" href="/portal/module/data/{{item.id}}" class="btn btn-link">
-                                    <span class="fas fa-bars text-primary"></span>
-                                </a>
-                                <a ng-click="remove(item.id);" class="btn btn-link">
-                                    <span class="fas fa-trash-alt text-danger"></span>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                                    <a ng-if="item.type==2" href="/portal/module-post/list/{{item.id}}" class="btn btn-link">
+                                        <span class="fas fa-bars text-primary"></span>
+                                    </a>
+                                    <a ng-if="item.type==1" href="/portal/module/data/{{item.id}}" class="btn btn-link">
+                                        <span class="fas fa-bars text-primary"></span>
+                                    </a>
+                                    <a ng-click="remove(item.id);" class="btn btn-link">
+                                        <span class="fas fa-trash-alt text-danger"></span>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <hr>
         <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
     </paging></div>
 </div>
