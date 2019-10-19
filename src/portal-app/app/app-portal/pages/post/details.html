@@ -15,26 +15,19 @@
                 </div>
                 <tabs-v select-callback="selectPane(pane)" class="mb-4">
                     <pane-v header="Attributes">
-                        <div class="card-body"
-                            ng-repeat="value in activedData.attributeData.data.values | orderBy:'priority' track by $index">
+                        <div ng-repeat="value in activedData.attributeData.data.values | orderBy:'priority' track by $index">
                             <attribute-value-editor attribute-value="value" is-show-title="'true'" parent-type="'1'"
                                 parent-id="activedData.attributeData.id"></attribute-value-editor>
                         </div>
                     </pane-v>
                     <pane-v header="General">
-                        <div class="card-body">
-                            <post-general is-admin="isAdmin" post="activedData"></post-general>
-                        </div>
+                        <post-general is-admin="isAdmin" post="activedData"></post-general>
                     </pane-v>
                     <pane-v header="SEO" class="">
-                        <div class="card-body">
-                            <post-seo post="activedData"></post-seo>
-                        </div>
+                        <post-seo post="activedData"></post-seo>
                     </pane-v>
                     <pane-v header="Parents" class="">
-                        <div class="card-body">
-                            <post-parents post="activedData"></post-parents>
-                        </div>
+                        <post-parents post="activedData"></post-parents>
                     </pane-v>
                     <!-- <pane-v header="Module" class="">
                         <div class="card-body">
@@ -42,9 +35,7 @@
                         </div>
                     </pane-v> -->
                     <pane-v header="Media">
-                        <div class="card-body">
-                            <post-medias post="activedData" medias="activedData.mediaNavs"></post-medias>
-                        </div>
+                        <post-medias post="activedData" medias="activedData.mediaNavs"></post-medias>
                     </pane-v>
                     <pane-v header="Related">
                         <related-navs request="request" source-id="activedData.id" culture="activedData.specificulture"
@@ -52,7 +43,6 @@
                             load-data="getListRelated(pageIndex)"></related-navs>
                     </pane-v>
                 </tabs-v>
-                <hr>
                 <div class="tab-pane fade active show" id="pills-general" role="tabpanel"
                     aria-labelledby="pills-general-tab">
                     <div class="card mb-4">
@@ -65,7 +55,8 @@
                         </h6>
                         <div id="AttributeSetsBody" class="card-body collapse">
                             <div class="alert alert-warning" role="alert" ng-if="!activedData.id">
-                                <i class="fas fa-exclamation-triangle mr-3 text-warning"></i> Please save post to continues
+                                <i class="fas fa-exclamation-triangle mr-3 text-warning"></i> Please save post to
+                                continues
                                 with attributtes section!
                             </div>
                             <attribute-set-navs ng-if="activedData.id" parent-id="activedData.id" parent-type="2">

@@ -9,23 +9,23 @@
                     </page-main></div>
                 </div>
                 <tabs-v select-callback="selectPane(pane)" class="mb-3">
-                    <pane-v header="General" class="card-body">
+                    <pane-v header="General">
                         <page-general page="activedData"></page-general>
                     </pane-v>
-                    <pane-v header="Search Engine" class="card-body">
+                    <pane-v header="Search Engine">
                         <page-seo page="activedData"></page-seo>
                     </pane-v>
-                    <pane-v header="Plug & Play" class="card-body">
+                    <pane-v header="Plug & Play">
                         <page-plug-play page="activedData"></page-plug-play>
                     </pane-v>
-                    <pane-v header="Module" class="card-body">
+                    <pane-v header="Module">
                         <page-modules page="activedData"></page-modules>
                     </pane-v>
-                    <pane-v header="Page Layout" class="card-body">
+                    <pane-v header="Page Layout">
                         <template-editor folder-type="'Pages'" template="activedData.view" templates="activedData.templates">
                         </template-editor>
                     </pane-v>
-                    <pane-v header="Master Layout" class="card-body">
+                    <pane-v header="Master Layout">
                         <template-editor folder-type="'Masters'" template="activedData.master" templates="activedData.masters">
                         </template-editor>
                     </pane-v>
@@ -50,7 +50,7 @@
                 <actions preview-url="activedData.detailsUrl" back-url="'/portal/page/list'"></actions>
 
                 <div class="card mb-4">
-                    <h6 class="card-header">
+                    <h6 class="card-header position-sticky position-sticky-under-actionbar">
                         Info
                     </h6>
                     <div class="card-body">
@@ -89,7 +89,7 @@
                 <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
                 <!-- <navs data="activedData.positionNavs" prefix="'pos'"></navs> -->
                 <div class="card mb-4">
-                    <h6 class="card-header">URL slugs
+                    <h6 class="card-header position-sticky position-sticky-under-actionbar">URL slugs
                         <button class="btn btn-link text-primary btn-sm float-right py-0" type="button" data-toggle="collapse" data-target="#slug-tab" aria-controls="slug-tab" aria-expanded="false" aria-label="Toggle navigation"><span class="far fa-minus-square text-primary"></span> Show/Hide</button>
                         <button class="btn btn-link text-primary btn-sm float-right py-0" type="button" ng-click="addAlias()"><span class="fas fa-plus text-primary"></span> Add slugs</button>
 
