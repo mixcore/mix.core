@@ -10637,6 +10637,11 @@ a.text-dark:hover, a.text-dark:focus {
   z-index: 12;
 }
 
+.position-sticky-under-acrtionbar {
+  top: 8.90rem;
+  z-index: 12;
+}
+
 .sw-toc {
   -webkit-box-ordinal-group: 3;
       -ms-flex-order: 2;
@@ -11061,32 +11066,6 @@ ul[dnd-list] li {
   margin-bottom: -1px;
 }
 /*# sourceMappingURL=mix.fe.portal-mod.css.map */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
