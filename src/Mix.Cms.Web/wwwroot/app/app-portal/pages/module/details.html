@@ -11,20 +11,20 @@
                     </div>
                 </div>
                 <tabs-v select-callback="selectPane(pane)" class="mb-3">
-                    <pane-v header="Attributes" class="card-body" ng-if="isAdmin">
+                    <pane-v header="Attributes" ng-if="isAdmin">
                         <input type="hidden" asp-for="Id">
                         <input type="hidden" asp-for="Specificulture">
                         <input type="hidden" asp-for="Priority">
                         <properties-structure header="'Module Attributes'" columns="activedData.columns">
                         </properties-structure>
                     </pane-v>
-                    <pane-v header="Modules Layout" class="card-body" ng-if="isAdmin">
+                    <pane-v header="Modules Layout" ng-if="isAdmin">
                         <template-editor folder-type="'Modules'" template="activedData.view" templates="activedData.templates"></template-editor>
                     </pane-v>
-                    <pane-v header="Form Layout" class="card-body" ng-if="isAdmin">
-                        <template-editor folder-type="'Forms'" class="card-body" template="activedData.formView" templates="activedData.forms"></template-editor>
+                    <pane-v header="Form Layout" ng-if="isAdmin">
+                        <template-editor folder-type="'Forms'" template="activedData.formView" templates="activedData.forms"></template-editor>
                     </pane-v>
-                    <pane-v header="eDM Layout" class="card-body" ng-if="isAdmin">
+                    <pane-v header="eDM Layout" ng-if="isAdmin">
                         <template-editor folder-type="'Edms'" template="activedData.edmView" templates="activedData.edms"></template-editor>
                     </pane-v>
                 </tabs-v>
