@@ -1,63 +1,65 @@
 <div class="row mb-3">
     <div class="col">
         <filter-list request="request" callback="getList(pageIndex)" create-url="'/portal/localize/create'"
-            create-text="'Create Text'"></filter-list>
+            create-text="'Create Keyword'"></filter-list>
     </div>
 </div>
 <div class="row mb-3">
     <div class="col">
-        <div class="card border-0">
-            <table class="table table-sm table-hover mb-0" cellspacing="0">
-                <thead class="thead-light">
-                    <tr>
-                        <th scope="col" style="width: 10%;">
-                            Keyword
-                        </th>
-                        <th scope="col" width="10%">
-                            Value
-                        </th>
-                        <th scope="col" width="25%">
-                            Default Value
-                        </th>
-                        <th scope="col" width="5%">
-                            Category
-                        </th>
-                        <th scope="col" width="5%"></th>
-                    </tr>
-                </thead>
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-sm table-hover mb-0" cellspacing="0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col" style="width: 10%;">
+                                Keyword
+                            </th>
+                            <th scope="col" width="10%">
+                                Value
+                            </th>
+                            <th scope="col" width="25%">
+                                Default Value
+                            </th>
+                            <th scope="col" width="5%">
+                                Category
+                            </th>
+                            <th scope="col" width="5%"></th>
+                        </tr>
+                    </thead>
 
-                <tbody class="sortable" ng-init="getList()">
-                    <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="language"
-                        sort-model-id="{{item.id}}">
-                        <td>
-                            <small ng-bind="item.keyword"></small>
-                        </td>
-                        <td>
-                            <small class="text-black-50">
-                                <module-data-preview data="item.property" width="50"></module-data-preview>
-                            </small>
-                        </td>
-                        <td>
-                            <small class="text-black-50" ng-bind="item.defaultValue"></small>
-                        </td>
-                        <td>
-                            <small class="text-black-50" ng-bind="item.category"></small>
-                        </td>
+                    <tbody class="sortable" ng-init="getList()">
+                        <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="language"
+                            sort-model-id="{{item.id}}">
+                            <td>
+                                <small ng-bind="item.keyword"></small>
+                            </td>
+                            <td>
+                                <small class="text-black-50">
+                                    <module-data-preview data="item.property" width="50"></module-data-preview>
+                                </small>
+                            </td>
+                            <td>
+                                <small class="text-black-50" ng-bind="item.defaultValue"></small>
+                            </td>
+                            <td>
+                                <small class="text-black-50" ng-bind="item.category"></small>
+                            </td>
 
-                        <td>
-                            <div class="btn-group btn-group-sm btn-group-sm float-right" role="group"
-                                aria-label="Actions">
-                                <a href="/portal/localize/details/{{item.keyword}}" class="btn btn-link">
-                                    <span class="fa fa-pen text-primary"></span>
-                                </a>
-                                <a ng-click="remove(item.keyword);" class="btn btn-link">
-                                    <span class="fas fa-trash-alt text-danger"></span>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            <td>
+                                <div class="btn-group btn-group-sm btn-group-sm float-right" role="group"
+                                    aria-label="Actions">
+                                    <a href="/portal/localize/details/{{item.keyword}}" class="btn btn-link">
+                                        <span class="fa fa-pen text-primary"></span>
+                                    </a>
+                                    <a ng-click="remove(item.keyword);" class="btn btn-link">
+                                        <span class="fas fa-trash-alt text-danger"></span>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
