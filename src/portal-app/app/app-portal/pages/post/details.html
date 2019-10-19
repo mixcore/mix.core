@@ -1,5 +1,4 @@
 <!-- Main content -->
-<!-- <jumbotrons tag-name="'Post'" tag-type="'1'"></jumbotrons> -->
 <section class="" ng-init="getSingle()">
     <form ng-class="{'submitted': submitted}" ng-submit="save(activedData)">
         <div class="row">
@@ -66,7 +65,7 @@
                         </h6>
                         <div id="AttributeSetsBody" class="card-body collapse">
                             <div class="alert alert-warning" role="alert" ng-if="!activedData.id">
-                                <i class="fas fa-exclamation-triangle text-warning"></i> Please save post to continues
+                                <i class="fas fa-exclamation-triangle mr-3 text-warning"></i> Please save post to continues
                                 with attributtes section!
                             </div>
                             <attribute-set-navs ng-if="activedData.id" parent-id="activedData.id" parent-type="2">
