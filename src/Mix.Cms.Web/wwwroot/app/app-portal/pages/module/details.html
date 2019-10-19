@@ -63,7 +63,7 @@
 
                 <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
                 <div class="card mb-4">
-                    <h6 class="card-header">
+                    <h6 class="card-header position-sticky position-sticky-under-actionbar">
                         Info
                     </h6>
                     <div class="card-body">
@@ -79,12 +79,10 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <span class="switch">
-                                <label>
-                                    <input type="checkbox" ng-model="activedData.isClone" class="switch">
-                                    Clone
-                                </label>
-                            </span>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" ng-model="activedData.isClone" id="isCloneCultures">
+                                <label class="custom-control-label" for="isCloneCultures">Clone to other cultures</label>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label">Created Date Time</label>
@@ -96,7 +94,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group mb-0">
                             <label class="control-label">Author</label>
                             <div class="input-group input-group-sm">
                                 <div class="input-group-prepend">
@@ -105,7 +103,6 @@
                                 <input ng-model="activedData.createdBy" class="form-control" readonly="readonly">
                             </div>
                         </div>
-                        
                     </div>
                 </div>
 

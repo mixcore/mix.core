@@ -20,56 +20,57 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-12">
-        <table class="table table-sm table-hover" cellspacing="0">
-            <thead class="thead-light">
-                <tr>
-                    <th scope="col">
-                        Rolename
-                    </th>
-                    <th scope="col">
-                        Normalized Name
-                    </th>
-                    <th scope="col">
-                        Id
-                    </th>
-                    <th scope="col">
-                        Concurrency Stamp
-                    </th>
+    <div class="col mb-0">
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-sm table-hover mb-0" cellspacing="0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">
+                                Role Name
+                            </th>
+                            <th scope="col">
+                                Normalized Name
+                            </th>
+                            <th scope="col">
+                                Id
+                            </th>
+                            <th scope="col">
+                                Concurrency Stamp
+                            </th>
 
-                    <th scope="col" style="width: 5%;"></th>
-                </tr>
-            </thead>
-            <tbody class="sortable" ng-init="getList()">
-                <tr ng-repeat="item in data track by $index" class="sortable-item" sort-model="role" sort-model-id="{{item.id}}">
-
-                    <td>
-                        <small ng-bind="item.name"></small>
-                    </td>
-                    <td>
-                        <small ng-bind="item.normalizedName"></small>
-                    </td>
-                    <td>
-                        <small ng-bind="item.id" class="text-black-50"></small>
-                    </td>
-                    <td>
-                        <small ng-bind="item.concurrencyStamp" class="text-black-50"></small>
-                    </td>
-                    <td>
-                        <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
-                            <a href="/portal/role/details/{{item.id}}" class="btn btn-link">
-                                <span class="fa fa-pen text-primary"></span>
-                            </a>
-                            <a ng-click="remove(item.name);" class="btn btn-link">
-                                <span class="fas fa-trash-alt text-danger"></span>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <hr>
-
-        <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
-    </paging></div>
-</div>
+                            <th scope="col" style="width: 5%;"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="sortable" ng-init="getList()">
+                        <tr ng-repeat="item in data track by $index" class="sortable-item" sort-model="role" sort-model-id="{{item.id}}">
+                            <td>
+                                <small ng-bind="item.name"></small>
+                            </td>
+                            <td>
+                                <small ng-bind="item.normalizedName"></small>
+                            </td>
+                            <td>
+                                <small ng-bind="item.id" class="text-black-50"></small>
+                            </td>
+                            <td>
+                                <small ng-bind="item.concurrencyStamp" class="text-black-50"></small>
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
+                                    <a href="/portal/role/details/{{item.id}}" class="btn btn-link">
+                                        <span class="fa fa-pen text-primary"></span>
+                                    </a>
+                                    <a ng-click="remove(item.name);" class="btn btn-link">
+                                        <span class="fas fa-trash-alt text-danger"></span>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
+</paging></div>
