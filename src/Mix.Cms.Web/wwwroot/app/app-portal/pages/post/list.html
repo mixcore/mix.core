@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-12 mb-3">
-        <filter-list request="request" callback="getList(pageIndex)" create-url="'/portal/post/create'">
+        <filter-list request="request" callback="getList(pageIndex)" create-url="'/portal/post/create'" create-text="'Create Post'">
         </filter-list>
 
         <select class="btn custom-select custom-select-sm col-3 mt-3" ng-model="selectedList.action">
@@ -11,7 +11,7 @@
 </div>
 <div class="row">
     <div class="col-12">
-        <div class="card border-0">
+        <div class="card border-0 mb-3">
 
             <table class="table table-sm table-hover mb-0" cellspacing="0">
                 <thead class="thead-light">
@@ -83,6 +83,5 @@
     </div>
 
 </div>
-<hr>
 <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
 </paging>

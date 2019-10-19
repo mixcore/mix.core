@@ -44,6 +44,7 @@ modules.component('filterList', {
         request: '=',
         orders: '=?',
         createUrl: '=',
+        createText: '=',
         callback: '&'
     }
 });
