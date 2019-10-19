@@ -15,10 +15,10 @@
     </div>
 </div>
 
-<div ng-init="getList()">
+<div ng-init="getList()" class="mb-3">
     <attribute-set-values on-update="edit(data)" on-delete="remove(data)" on-apply-list="applyList()" selected-list="selectedList" header="''" data="data">
     </attribute-set-values>
 </div>
-<hr>
+
 <paging class="small" page="request.pageIndex + 1" page-size="request.pageSize" total="request.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
 </paging>
