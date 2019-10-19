@@ -1,12 +1,12 @@
 <div class="" ng-init="$ctrl.init()">
-    <div class="card-body m-0 pb-0">
+    <div class="mb-3">
         {{$ctrl.header}}
         <a class="btn btn-link text-primary btn-sm float-right py-0" data-toggle="modal" data-target="#modal-files-search-{{$ctrl.id}}">
             <i class="fa fa-folder-open"></i> Browse
         </a>
         <a class="btn btn-link text-primary btn-sm float-right py-0" ng-click="$ctrl.isShowBrowser = !$ctrl.isShowBrowser"><i class="fa fa-file-upload"></i> Upload</a>
     </div>
-    <div ng-show="$ctrl.isShowBrowser" class="card-body pb-0">
+    <div ng-show="$ctrl.isShowBrowser" class="mb-3">
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text">URL</span>
@@ -21,7 +21,7 @@
             </div>
         </div>
     </div>
-    <div class="card-body" style="background:url(/images/upload-image-thumbnail.png) no-repeat center;  cursor:pointer; min-height: 200px;">
+    <div style="background:url(/images/upload-image-thumbnail.png) no-repeat center;  cursor:pointer; min-height: 200px;">
         <img ng-if="$ctrl.isImage" imageonload ng-src="{{$ctrl.srcUrl}}" ng-if="$ctrl.srcUrl" name="pic" class="custom-file-img d-block ng-scope ml-auto mr-auto w-100" accept="image/*">
         <a ng-if="!$ctrl.isImage && $ctrl.srcUrl" href="{{$ctrl.srcUrl}}" target="_blank">View</a>
         <input type="hidden" value="{{$ctrl.type}}/{{$ctrl.folder}}" class="folder-val">
