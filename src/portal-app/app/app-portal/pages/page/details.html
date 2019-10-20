@@ -9,6 +9,12 @@
                     </div>
                 </div>
                 <tabs-v select-callback="selectPane(pane)" class="mb-3">
+                    <pane-v header="Attributes">
+                        <div ng-repeat="value in activedData.attributeData.data.values | orderBy:'priority' track by $index">
+                            <attribute-value-editor attribute-value="value" is-show-title="'true'" parent-type="'1'"
+                                parent-id="activedData.attributeData.id"></attribute-value-editor>
+                        </div>
+                    </pane-v>
                     <pane-v header="General">
                         <page-general page="activedData"></page-general>
                     </pane-v>
@@ -43,7 +49,7 @@
                                 <i class="fas fa-exclamation-triangle mr-3"></i> Please save post to continues with
                                 attributtes section!
                             </div>
-                            <attribute-set-navs ng-if="activedData.id" parent-id="activedData.id" parent-type="2">
+                            <attribute-set-navs ng-if="activedData.id" parent-id="activedData.id" parent-type="1">
                             </attribute-set-navs>
                         </div>
                     </div>

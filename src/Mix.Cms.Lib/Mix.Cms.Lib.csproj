@@ -14,6 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Helpers\AesEncryptionHelper.cs" />
+    <Compile Remove="Helpers\RSAEncryptionHelper.cs" />
     <Compile Remove="Interfaces\IMixCmsService.cs" />
     <Compile Remove="Migrations\20181103045052_init-all.cs" />
     <Compile Remove="Migrations\20181103045052_init-all.Designer.cs" />
@@ -46,7 +48,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Mix.Heart" Version="0.0.4.9" />
+    <PackageReference Include="Mix.Heart" Version="0.0.5" />
     <PackageReference Include="Mix.Identity" Version="0.0.2" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
   </ItemGroup>
