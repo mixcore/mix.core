@@ -64,6 +64,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             Data.Add(new JProperty("details", $"/api/v1/odata/{Specificulture}/attribute-set-data/mobile-full/{Id}"));
             Values = MixAttributeSetValues.ODataMobileFullViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
+            Fields = MixAttributeFields.ODataMobileFullViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
             foreach (var field in Fields.OrderBy(f => f.Priority))
             {
                 var val = Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
