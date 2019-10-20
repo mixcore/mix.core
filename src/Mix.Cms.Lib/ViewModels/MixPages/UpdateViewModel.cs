@@ -218,6 +218,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("urlAliases")]
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
+        [JsonProperty("attributes")]
+        public MixAttributeSets.UpdateViewModel Attributes { get; set; }
+
+        [JsonProperty("attributeData")]
+        public MixRelatedAttributeDatas.UpdateViewModel AttributeData { get; set; }
 
         #endregion Views
 
@@ -282,7 +287,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     this.View?.FileFolder
                     , this.View?.FileName
                });
-
+            // Load Attributes
+            LoadAttributes(_context, _transaction);
             // Load master views
             this.Masters = this.Masters ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == MixEnums.EnumTemplateFolder.Masters.ToString(), _context, _transaction).Data;
@@ -490,6 +496,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 }
             }
 
+            if (result.IsSucceed)
+            {
+                // Save Attributes
+                result = await SaveAttributeAsync(parent.Id, _context, _transaction);
+            }
             //if (result.IsSucceed)
             //{
             //    foreach (var item in ChildNavs)
@@ -509,12 +520,75 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             //}
             return result;
         }
+        private async Task<RepositoryResponse<bool>> SaveAttributeAsync(int id, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            AttributeData.ParentId = id.ToString();
+            AttributeData.ParentType = (int)MixEnums.MixAttributeSetDataType.Page;
+            var saveData = await AttributeData.Data.SaveModelAsync(true, context, transaction);
+            ViewModelHelper.HandleResult(saveData, ref result);
+            if (result.IsSucceed)
+            {
+                AttributeData.Id = saveData.Data.Id;
+                var saveRelated = await AttributeData.SaveModelAsync(true, context, transaction);
+                ViewModelHelper.HandleResult(saveRelated, ref result);
+            }
+            return result;
+        }
 
         #endregion Async
 
         #endregion Overrides
 
         #region Expands
+        private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == "post", _context, _transaction);
+            if (getAttrs.IsSucceed)
+            {
+                Attributes = getAttrs.Data;
+                AttributeData = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetFirstModel(
+                    a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId == Attributes.Id
+                        , _context, _transaction).Data;
+                if (AttributeData == null)
+                {
+                    AttributeData = new MixRelatedAttributeDatas.UpdateViewModel(
+                        new MixRelatedAttributeData()
+                        {
+                            Specificulture = Specificulture,
+                            ParentType = (int)MixEnums.MixAttributeSetDataType.Page,
+                            ParentId = Id.ToString(),
+                            AttributeSetId = Attributes.Id,
+                            AttributeSetName = Attributes.Name
+                        }
+                        );
+                    AttributeData.Data = new MixAttributeSetDatas.UpdateViewModel(
+                    new MixAttributeSetData()
+                    {
+                        Specificulture = Specificulture,
+                        AttributeSetId = Attributes.Id,
+                        AttributeSetName = Attributes.Name
+                    }
+                    );
+                }
+                foreach (var field in Attributes.Fields.OrderBy(f => f.Priority))
+                {
+                    var val = AttributeData.Data.Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
+                    if (val == null)
+                    {
+                        val = new MixAttributeSetValues.UpdateViewModel(
+                            new MixAttributeSetValue() { AttributeFieldId = field.Id }
+                            , _context, _transaction);
+                        val.Field = field;
+                        val.AttributeFieldName = field.Name;
+                        val.Priority = field.Priority;
+                        AttributeData.Data.Values.Add(val);
+                    }
+                    val.Priority = field.Priority;
+                    val.Field = field;
+                }
+            }
+        }
 
         private void GenerateSEO()
         {

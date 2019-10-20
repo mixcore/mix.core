@@ -383,6 +383,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         MixMedias.UpdateViewModel media = new MixMedias.UpdateViewModel()
                         {
                             Specificulture = Specificulture,
+                            Status = MixEnums.MixContentStatus.Published,
                             MediaFile = new FileViewModel()
                             {
                                 FileStream = mediaData,
