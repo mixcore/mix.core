@@ -7,7 +7,7 @@
       "fields": [
         {
           "attributeSetId": 1,
-          "attributeSetName": "navigations",
+          "attributeSetName": "menu_item",
           "title": "Title",
           "dataType": 7,
           "name": "title",
@@ -20,7 +20,7 @@
         },
         {
           "attributeSetId": 1,
-          "attributeSetName": "navigations",
+          "attributeSetName": "menu_item",
           "title": "Uri",
           "dataType": 7,
           "name": "Uri",
@@ -35,12 +35,12 @@
     },
     {
       "id": 2,
-      "title": "Navigations",
-      "name": "navigations",
+      "title": "Navigation",
+      "name": "navigation",
       "fields": [
         {
           "attributeSetId": 2,
-          "attributeSetName": "navigations",
+          "attributeSetName": "navigation",
           "title": "Title",
           "dataType": 7,
           "name": "title",
@@ -53,12 +53,12 @@
         },
         {
           "attributeSetId": 2,
-          "attributeSetName": "navigations",
+          "attributeSetName": "navigation",
           "title": "Menu Items",
           "dataType": 23,
           "name": "menu_items",
           "options":[],
-          "referenceId": 2,
+          "referenceId": 1,
           "isRequire": false,
           "isEncrypt": false,
           "isSelect": false,
