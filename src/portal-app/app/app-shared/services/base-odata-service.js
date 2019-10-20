@@ -5,12 +5,11 @@ app.factory('BaseODataService', ['$rootScope', '$routeParams', 'CommonService',
 
         var _init = function (modelName, isGlobal) {
             this.modelName = modelName;
-            if(!isGlobal && isGlobal !='true')
-            {
+            if (!isGlobal && isGlobal != 'true') {
                 this.lang = $rootScope.settings.lang;
                 this.prefixUrl = '/odata/' + this.lang + '/' + modelName;
             }
-            else{
+            else {
                 this.prefixUrl = '/odata/' + modelName;
             }
         };
@@ -37,12 +36,12 @@ app.factory('BaseODataService', ['$rootScope', '$routeParams', 'CommonService',
             }
             var req = {
                 method: 'GET',
-                url: url 
+                url: url
             };
             return await commonService.getApiResult(req);
         };
         var _getList = async function (viewType, objData, params = []) {
-                               
+
             var data = serviceFactory.parseODataQuery(objData);
             var url = this.prefixUrl + '/' + viewType;
             for (let i = 0; i < params.length; i++) {
@@ -50,7 +49,7 @@ app.factory('BaseODataService', ['$rootScope', '$routeParams', 'CommonService',
                     url += '/' + params[i];
                 }
             }
-            if(data){
+            if (data) {
                 url = url.concat(data);
             }
             var req = {
@@ -83,7 +82,7 @@ app.factory('BaseODataService', ['$rootScope', '$routeParams', 'CommonService',
             };
             return await commonService.getApiResult(req);
         };
-       
+
         var _saveFields = async function (viewType, id, objData) {
             var url = this.prefixUrl + '/' + viewType + '/' + id;
             var req = {
@@ -123,32 +122,35 @@ app.factory('BaseODataService', ['$rootScope', '$routeParams', 'CommonService',
             return await commonService.getApiResult(req);
         };
 
-       
-        var _ajaxSubmitForm = async function (form, url) {            
+
+        var _ajaxSubmitForm = async function (form, url) {
             var req = {
                 method: 'POST',
                 url: url,
-                headers: {'Content-Type': undefined},
+                headers: { 'Content-Type': undefined },
                 contentType: false, // Not to set any content header
                 processData: false, // Not to process data
                 data: form
             };
-            return await commonService.getApiResult(req);            
+            return await commonService.getApiResult(req);
         };
-        var _parseODataQuery = function(req){
-            if(req){
+        var _parseODataQuery = function (req) {
+            if (req) {
                 var skip = parseInt(req.pageIndex) * parseInt(req.pageSize);
                 var top = parseInt(req.pageSize);
                 var result = '?$skip=' + skip + '&$top=' + top + '&$orderby=' + req.orderBy;
-                if (req.filter){
-                    result += "&$filter="+req.filter;
+                if (req.direction == '1') {
+                    result += " desc";
                 }
-                if (req.selects){
-                    result += "&$select="+req.selects;
+                if (req.filter) {
+                    result += "&$filter=" + req.filter;
+                }
+                if (req.selects) {
+                    result += "&$select=" + req.selects;
                 }
                 return result;
             }
-            else{
+            else {
                 return '';
             }
         };

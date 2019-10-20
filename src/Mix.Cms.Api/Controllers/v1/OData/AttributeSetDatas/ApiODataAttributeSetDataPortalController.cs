@@ -94,12 +94,13 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         [Route("")]
         public async Task<ActionResult<ODataUpdateViewModel>> Save(string culture, [FromBody]ODataUpdateViewModel data)
         {
-            var portalResult = await base.SaveAsync<ODataUpdateViewModel>(data, true);
             string _username = User?.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
             if (string.IsNullOrEmpty(data.CreatedBy))
             {
                 data.CreatedBy = _username;
             }
+            var portalResult = await base.SaveAsync<ODataUpdateViewModel>(data, true);
+            
             if (portalResult.IsSucceed)
             {
                 return Ok(portalResult);
