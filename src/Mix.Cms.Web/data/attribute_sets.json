@@ -1,0 +1,89 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "title": "Menu Item",
+      "name": "menu_item",
+      "fields": [
+        {
+          "attributeSetId": 1,
+          "attributeSetName": "navigations",
+          "title": "Title",
+          "dataType": 7,
+          "name": "title",
+          "options":[],
+          "isRequire": true,
+          "isEncrypt": false,
+          "isSelect": false,
+          "isUnique": false,
+          "status": 2
+        },
+        {
+          "attributeSetId": 1,
+          "attributeSetName": "navigations",
+          "title": "Uri",
+          "dataType": 7,
+          "name": "Uri",
+          "options":[],
+          "isRequire": true,
+          "isEncrypt": false,
+          "isSelect": false,
+          "isUnique": false,
+          "status": 2
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Navigations",
+      "name": "navigations",
+      "fields": [
+        {
+          "attributeSetId": 2,
+          "attributeSetName": "navigations",
+          "title": "Title",
+          "dataType": 7,
+          "name": "title",
+          "options":[],
+          "isRequire": true,
+          "isEncrypt": false,
+          "isSelect": false,
+          "isUnique": false,
+          "status": 2
+        },
+        {
+          "attributeSetId": 2,
+          "attributeSetName": "navigations",
+          "title": "Menu Items",
+          "dataType": 23,
+          "name": "menu_items",
+          "options":[],
+          "referenceId": 2,
+          "isRequire": false,
+          "isEncrypt": false,
+          "isSelect": false,
+          "isUnique": false,
+          "status": 2
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Page",
+      "name": "page",
+      "fields": []
+    },
+    {
+      "id": 4,
+      "title": "Module",
+      "name": "module",
+      "fields": []
+    },
+    {
+      "id": 5,
+      "title": "Post",
+      "name": "post",
+      "fields": []
+    }
+  ]
+}

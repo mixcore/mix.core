@@ -100,6 +100,19 @@ namespace Mix.Cms.Lib.Services
                         {
                             result.Errors.Add("Cannot init Configurations");
                         }
+
+                        /**
+                        * Init System Attribute Sets
+                        */
+                        if (isSucceed)
+                        {
+                            var saveResult = await InitAttributeSetsAsync(siteName, culture.Specificulture, context, transaction);
+                            isSucceed = saveResult.IsSucceed;
+                        }
+                        else
+                        {
+                            result.Errors.Add("Cannot init Attribute Sets");
+                        }
                     }
                     if (isSucceed)
                     {
@@ -154,6 +167,45 @@ namespace Mix.Cms.Lib.Services
                 configurations.Find(c => c.Keyword == "ThemeFolder").Value = Common.Helper.SeoHelper.GetSEOString(cnfSiteName.Value);
             }
             var result = await ViewModels.MixConfigurations.ReadMvcViewModel.ImportConfigurations(configurations, specifiCulture, context, transaction);
+
+            UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+
+            return result;
+
+        }
+
+
+        /// <summary>
+        /// Step 2
+        ///     - Init Configurations
+        /// </summary>
+        /// <param name="siteName"></param>
+        /// <param name="specifiCulture"></param>
+        /// <param name="_context"></param>
+        /// <param name="_transaction"></param>
+        /// <returns></returns>
+        public static async Task<RepositoryResponse<bool>> InitAttributeSetsAsync(string siteName, string specifiCulture, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            /* Init Configs */
+
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            var getData = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_ATTRIBUTE_SETS, "data", true, "{}");
+            var obj = JObject.Parse(getData.Content);
+            var data = obj["data"].ToObject<List<ViewModels.MixAttributeSets.UpdateViewModel>>();
+            foreach (var item in data)
+            {
+                if (result.IsSucceed)
+                {
+                    item.CreatedDateTime = DateTime.UtcNow;
+                    var saveResult = await item.SaveModelAsync(true, context, transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                }
+                else
+                {
+                    break;
+                }
+            }
 
             UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
 
