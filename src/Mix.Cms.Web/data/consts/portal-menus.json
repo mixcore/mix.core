@@ -17,7 +17,7 @@
                     "path": "/portal/attribute-set-data/create?attributeName=navigation&attributeSetId=2&dataId=default"
                 },
                 {
-                    "path": "/portal/attribute-set-data/list?attributeSetId=1&attributeSetName=navigation",
+                    "path": "/portal/attribute-set-data/list?attributeSetId=2&attributeSetName=navigation",
                     "title": "List",
                     "icon": "mi mi-List"
                 }
