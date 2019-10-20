@@ -9,7 +9,7 @@
                     </div>
                 </div>
                 <tabs-v select-callback="selectPane(pane)" class="mb-3">
-                    <pane-v header="Attributes">
+                    <pane-v header="Attributes" ng-if=" && activedData.attributeData.data.values.length">
                         <div ng-repeat="value in activedData.attributeData.data.values | orderBy:'priority' track by $index">
                             <attribute-value-editor attribute-value="value" is-show-title="'true'" parent-type="'1'"
                                 parent-id="activedData.attributeData.id"></attribute-value-editor>
