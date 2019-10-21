@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.controller('NavigationController', ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', 'MediaService', 'CommonService',
+app.controller('MixNavigationController', ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', 'MediaService', 'CommonService',
     function ($scope, $rootScope, ngAppSettings, $routeParams, service, commonService) {
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
 
