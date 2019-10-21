@@ -16,6 +16,7 @@ using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Helpers;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

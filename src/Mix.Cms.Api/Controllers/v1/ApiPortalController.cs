@@ -16,6 +16,7 @@ using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Helpers;
 using Mix.Identity.Models;
 using Newtonsoft.Json.Linq;
 using System;
@@ -377,7 +378,7 @@ namespace Mix.Cms.Api.Controllers.v1
             return new RepositoryResponse<string>()
             {
 
-                Data = RSAEncryptionHelper.GetEncryptedText(data)
+                Data = Lib.Helpers.RSAEncryptionHelper.GetEncryptedText(data)
             };
         }
 
@@ -390,31 +391,35 @@ namespace Mix.Cms.Api.Controllers.v1
             return new RepositoryResponse<string>()
             {
 
-                Data = RSAEncryptionHelper.GetDecryptedText(data)
+                Data = Lib.Helpers.RSAEncryptionHelper.GetDecryptedText(data)
             };
         }
 
         [AllowAnonymous]
         [HttpPost, HttpOptions]
         [Route("encrypt")]
-        public RepositoryResponse<CryptoViewModel<string>> Encrypt([FromBody]JObject model)
+        public RepositoryResponse<string> Encrypt([FromBody]JObject model)
         {
             string data = model.GetValue("data").Value<string>();
             var encrypted = new JObject(new JProperty("encrypted", data));
-            return new RepositoryResponse<CryptoViewModel<string>>()
+            var key = System.Text.Encoding.UTF8.GetBytes("sw-cms-secret-key");
+            return new RepositoryResponse<string>()
             {
-
-                Data = AesEncryptionHelper.EncryptStringToBytes_Aes(encrypted)
+                Data = AesEncryptionHelper.EncryptString(data, Convert.ToBase64String(key))
             };
         }
         [AllowAnonymous]
         [HttpPost, HttpOptions]
         [Route("decrypt")]
-        public RepositoryResponse<CryptoViewModel<string>> Decrypt([FromBody]JObject model)
+        public RepositoryResponse<string> Decrypt([FromBody]JObject model)
         {
             string data = model.GetValue("data")?.Value<string>();
-            string key = model.GetValue("key")?.Value<string>();
-            return AesEncryptionHelper.DecryptStringFromBytes_Aes(data, key);
+            //string key = model.GetValue("key")?.Value<string>();
+            var key = System.Text.Encoding.UTF8.GetBytes("sw-cms-secret-key");
+            return new RepositoryResponse<string>()
+            {
+                Data = AesEncryptionHelper.DecryptString(data, Convert.ToBase64String(key))
+            };
         }
         // POST api/category
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
