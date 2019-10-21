@@ -5,6 +5,7 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 {
@@ -114,7 +115,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                 }
                 if (!string.IsNullOrEmpty(Field.Regex))
                 {
-                    if (System.Text.RegularExpressions.Regex.Match(StringValue, Regex) == null)
+                    System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex(Field.Regex, RegexOptions.IgnoreCase);
+                    Match m = r.Match(StringValue);
+                    if (!m.Success)
                     {
                         IsValid = false;
                         Errors.Add($"{Field.Title} is invalid");
