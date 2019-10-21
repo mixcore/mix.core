@@ -117,6 +117,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                         Errors.Add($"{Field.Title} is required");
                     }
                 }
+                if (!string.IsNullOrEmpty(Field.Regex))
+                {
+                    if (System.Text.RegularExpressions.Regex.Match(StringValue, Regex) == null)
+                    {
+                        IsValid = false;
+                        Errors.Add($"{Field.Title} is invalid");
+                    }
+                }
             }
         }
         #endregion

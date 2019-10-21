@@ -36,8 +36,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 
         #endregion Models
         #region Views        
+        [JsonProperty("fields")]
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
-        
+        [JsonProperty("removeAttributes")]
         public List<MixAttributeFields.DeleteViewModel> RemoveAttributes { get; set; } = new List<MixAttributeFields.DeleteViewModel>();
 
         #endregion

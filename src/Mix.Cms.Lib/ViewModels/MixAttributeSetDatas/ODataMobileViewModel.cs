@@ -14,6 +14,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Mix.Cms.Lib.Extensions;
+using Mix.Cms.Lib.Services;
+
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
     public class ODataMobileViewModel
@@ -57,10 +59,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public ODataMobileViewModel() : base()
         {
+            CacheConnectionString = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
         }
 
         public ODataMobileViewModel(MixAttributeSetData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
+            CacheConnectionString = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
         }
 
         #endregion Contructors
@@ -383,6 +387,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         MixMedias.UpdateViewModel media = new MixMedias.UpdateViewModel()
                         {
                             Specificulture = Specificulture,
+                            Status = MixEnums.MixContentStatus.Published,
                             MediaFile = new FileViewModel()
                             {
                                 FileStream = mediaData,

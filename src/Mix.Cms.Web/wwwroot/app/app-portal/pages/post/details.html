@@ -13,12 +13,20 @@
                         </attribute-set-form> -->
                     </div>
                 </div>
-                <tabs-v select-callback="selectPane(pane)" class="mb-4">
-                    <pane-v header="Attributes">
-                        <div ng-repeat="value in activedData.attributeData.data.values | orderBy:'priority' track by $index">
-                            <attribute-value-editor attribute-value="value" is-show-title="'true'" parent-type="'1'" parent-id="activedData.attributeData.id"></attribute-value-editor>
+                <div class="tab-pane fade active show" ng-show="activedData.attributes.fields.length > 0">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h6>Attribute Data</h6>
                         </div>
-                    </pane-v>
+                        <div class="card-body">
+                            <div ng-repeat="value in activedData.attributeData.data.values | orderBy:'priority' track by $index">
+                                <attribute-value-editor attribute-value="value" is-show-title="'true'" parent-type="'1'" parent-id="activedData.attributeData.id"></attribute-value-editor>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <tabs-v select-callback="selectPane(pane)" class="mb-4">
                     <pane-v header="General">
                         <post-general is-admin="isAdmin" post="activedData"></post-general>
                     </pane-v>
