@@ -14,10 +14,10 @@
                 {
                     "title": "Create New",
                     "icon": "mi mi-Add",
-                    "path": "/portal/attribute-set-data/create?attributeName=navigation&attributeSetId=2&dataId=default"
+                    "path": "/portal/navigation/create?attributeName=navigation&attributeSetId=2&dataId=default"
                 },
                 {
-                    "path": "/portal/attribute-set-data/list?attributeSetId=2&attributeSetName=navigation",
+                    "path": "/portal/navigation/list?attributeSetId=2&attributeSetName=navigation",
                     "title": "List",
                     "icon": "mi mi-List"
                 }
@@ -656,6 +656,26 @@
                     "path": "/portal/attribute-set-data/details",
                     "templatePath": "/app/app-portal/pages/attribute-set-data/details.html",
                     "controller": "AttributeSetDataController"
+                }
+            ]
+        },
+        {
+            "cate": "Navigation",
+            "items": [
+                {
+                    "path": "/portal/navigation/create",
+                    "templatePath": "/app/app-portal/pages/navigation/details.html",
+                    "controller": "NavigationController"
+                },
+                {
+                    "path": "/portal/navigation/list",
+                    "templatePath": "/app/app-portal/pages/navigation/list.html",
+                    "controller": "NavigationController"
+                },
+                {
+                    "path": "/portal/navigation/details",
+                    "templatePath": "/app/app-portal/pages/navigation/details.html",
+                    "controller": "NavigationController"
                 }
             ]
         },
