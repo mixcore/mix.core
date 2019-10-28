@@ -76,7 +76,7 @@ modules.component('attributeSetForm', {
                     }
                     else {
                         ctrl.isBusy = false;
-                        ctrl.attrData = await service.getSingle('portal', [ctrl.defaultId, ctrl.attrSetId, ctrl.attrSetName]);
+                        // ctrl.attrData = await service.getSingle('portal', [ctrl.defaultId, ctrl.attrSetId, ctrl.attrSetName]);
                         $scope.$apply();
                     }
                 }

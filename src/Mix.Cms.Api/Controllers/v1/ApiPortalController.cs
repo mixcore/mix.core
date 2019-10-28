@@ -106,13 +106,25 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("jarray-data/{name}")]
         public RepositoryResponse<JArray> loadData(string name)
         {
-            var cultures = FileRepository.Instance.GetFile(name, "data", true, "[]");
-            var obj = JObject.Parse(cultures.Content);
-            return new RepositoryResponse<JArray>()
+            try
             {
-                IsSucceed = true,
-                Data = obj["data"] as JArray
-            };
+                var cultures = FileRepository.Instance.GetFile(name, "data", true, "[]");
+                var obj = JObject.Parse(cultures.Content);
+                return new RepositoryResponse<JArray>()
+                {
+                    IsSucceed = true,
+                    Data = obj["data"] as JArray
+                };
+            }
+            catch
+            {
+                return new RepositoryResponse<JArray>()
+                {
+                    IsSucceed = true,
+                    Data = null
+                };
+            }
+            
         }
 
         [AllowAnonymous]

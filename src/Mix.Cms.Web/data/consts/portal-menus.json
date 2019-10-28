@@ -368,22 +368,32 @@
                     "controller": "ModuleController"
                 },
                 {
-                    "path": "/portal/page/module-post/list/:id",
+                    "path": "/portal/module/data/:id",
+                    "templatePath": "/app/app-portal/pages/module/data.html",
+                    "controller": "ModuleController"
+                },
+                {
+                    "path": "/portal/module-post/list/:id",
                     "templatePath": "/app/app-portal/pages/module-post/list.html",
                     "controller": "ModulePostController"
                 },
                 {
-                    "path": "/portal/page/module-gallery/list/:id",
+                    "path": "/portal/module-gallery/list/:id",
                     "templatePath": "/app/app-portal/pages/module-gallery/list.html",
                     "controller": "ModuleGalleryController"
                 },
                 {
-                    "path": "/portal/page/module-data/details/:moduleId",
-                    "templatePath": "/app/app-portal/pages/moduleData/details.html",
+                    "path": "/portal/module-data/details/:moduleId",
+                    "templatePath": "/app/app-portal/pages/module-data/details.html",
                     "controller": "SharedModuleDataController"
                 },
                 {
-                    "path": "/portal/page/module-data/list/:moduleId",
+                    "path": "/portal/module-data/details/:moduleId/:id",
+                    "templatePath": "/app/app-portal/pages/module-data/details.html",
+                    "controller": "SharedModuleDataController"
+                },
+                {
+                    "path": "/portal/module-data/list/:moduleId",
                     "templatePath": "/app/app-portal/pages/module-data/list.html",
                     "controller": "SharedModuleDataController"
                 }
