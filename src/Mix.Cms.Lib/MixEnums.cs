@@ -73,6 +73,15 @@
             Schedule = 4
         }
 
+        public enum ResponseStatus
+        {
+            Ok = 200,
+            BadRequest = 400,
+            UnAuthorized = 401,
+            Forbidden = 403,
+            ServerError = 500
+        }
+
         public enum MixOrderStatus
         {
             Deleted = 0,

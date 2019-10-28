@@ -44,6 +44,7 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$l
 
                 $scope.activedData = response.data;
                 $scope.editDataUrl = '/portal/module-data/details/' + $scope.activedData.id;
+                $scope.loadMoreModuleDatas();
                 angular.forEach($scope.activedData.columns, function (e, i) {
                     if (e.isDisplay) {
                         $scope.dataColumns.push({

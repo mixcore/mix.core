@@ -28,7 +28,7 @@ using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
+    
     public class BaseGenericApiController<TDbContext, TModel> : Controller
         where TDbContext : DbContext
         where TModel : class
