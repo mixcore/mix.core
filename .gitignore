@@ -288,3 +288,5 @@ src/Mix\.Cms\.Web/Cache/
 .DS_Store
 
 .vscode/
+
+src/Mix.Cms.Web/appsettings.*.json
