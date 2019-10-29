@@ -86,13 +86,12 @@
             var canvas = document.getElementById("canvas");
             var link = document.createElement("a");
             link.download = ctrl.postedFile.fileName + ctrl.postedFile.extension;
-            canvas.toBlob(function (blob) {
-                $rootScope.isBusy = true;
+            $rootScope.isBusy = true;
+            canvas.toBlob(function (blob) {                
                 link.href = URL.createObjectURL(blob);
-                console.log(blob);
-                console.log(link.href); // this line should be here
                 link.click();
                 $rootScope.isBusy = false;
+                $scope.$apply();
             }, 'image/png');
             
 
@@ -139,8 +138,13 @@
                 ctrl.mediaFile.title = ctrl.title ? ctrl.title : '';
                 ctrl.mediaFile.description = ctrl.description ? ctrl.description : '';
                 ctrl.mediaFile.file = file;
-
                 ctrl.getBase64(file);
+                if (file.size < 100000) {                
+                    var msg = 'Please choose a better photo (larger than 100kb)!';
+                    $rootScope.showConfirm(ctrl, null, [], null, null, msg);
+                } else {
+                    
+                }
             }
         };
 
@@ -172,6 +176,5 @@
                 return null;
             }
         };
-    }],
-
+    }]
 });

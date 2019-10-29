@@ -288,10 +288,12 @@ namespace Mix.Cms.Api.Controllers.v1
             int.TryParse(query.Get("post_id"), out int postId);
             int.TryParse(query.Get("product_id"), out int productId);
             int.TryParse(query.Get("category_id"), out int pageId);
+            
             string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
             Expression<Func<MixModuleData, bool>> predicate = model =>
                 model.Specificulture == _lang
                 && model.ModuleId == moduleId
+                && (string.IsNullOrEmpty(request.Keyword) || model.Value.Contains(request.Keyword))
                 && (postId == 0 || model.PostId == postId)
                 && (pageId == 0 || model.PageId == pageId)
                 && (!request.FromDate.HasValue

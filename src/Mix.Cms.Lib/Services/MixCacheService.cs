@@ -48,7 +48,7 @@ namespace Mix.Cms.Lib.Services
 
         public static Task<T> GetAsync<T>(string key)
         {
-            var data = FileRepository.Instance.GetFile(key, ".json", "Cache", false, "{}");
+            var data = FileRepository.Instance.GetFile(key, ".json", MixConstants.Folder.CacheFolder, false, "{}");
             if (data != null && !string.IsNullOrEmpty(data.Content))
             {
                 var jobj = JObject.Parse(data.Content);
@@ -124,7 +124,7 @@ namespace Mix.Cms.Lib.Services
 
         public static Task RemoveCacheAsync()
         {
-            return Task.FromResult(FileRepository.Instance.EmptyFolder("Cache"));
+            return Task.FromResult(FileRepository.Instance.EmptyFolder(MixConstants.Folder.CacheFolder));
             //await Instance.Repository.RemoveListModelAsync(c => !string.IsNullOrEmpty(c.Id));
         }
     }

@@ -1,7 +1,13 @@
 <div ng-if="!$ctrl.canDrag">
     <em> <span class="text-muted"
             ng-bind="$ctrl.translate('warning_can_not_drag_drop',true, '(Note: Drag Drop only allow when order by asc priority!)')"></span>
-    </em></div>
+    </em>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <em> Total: <span ng-bind="$ctrl.data.totalItems" class="text-muted"></span></em>
+    </div>
+</div>
 
 <div class="data-table" ng-if="$ctrl.data.items" ng-init="$ctrl.init()">
     <div class="nav">
