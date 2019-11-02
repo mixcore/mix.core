@@ -141,6 +141,31 @@ namespace Mix.Cms.Api.Controllers.v1
             return data;
         }
 
+        protected async Task<RepositoryResponse<TView>> GetSingleAsync<TView>(Expression<Func<TModel, bool>> predicate = null, TModel model = null)
+            where TView : ViewModelBase<TDbContext, TModel, TView>
+        {
+            RepositoryResponse<TView> data = null;
+            if (data == null)
+            {
+
+                if (predicate != null)
+                {
+                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
+                }
+                else
+                {
+                    data = new RepositoryResponse<TView>()
+                    {
+                        IsSucceed = true,
+                        Data = DefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model)
+                    };
+                }
+            }
+            data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+            return data;
+        }
+
+
         protected async Task<RepositoryResponse<TModel>> DeleteAsync<TView>(Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
            where TView : ViewModelBase<TDbContext, TModel, TView>
         {

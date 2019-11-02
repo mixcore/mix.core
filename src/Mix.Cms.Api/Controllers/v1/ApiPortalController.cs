@@ -77,7 +77,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
                 ModuleTypes = Enum.GetNames(typeof(MixModuleType)).ToList(),
-                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetType)).ToList(),
+                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetDataType)).ToList(),
                 DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
                 Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
@@ -178,7 +178,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
                 ModuleTypes = Enum.GetNames(typeof(MixModuleType)).ToList(),
-                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetType)).ToList(),
+                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetDataType)).ToList(),
                 DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
                 Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
@@ -561,7 +561,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
                 ModuleTypes = Enum.GetNames(typeof(MixModuleType)).ToList(),
-                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetType)).ToList(),
+                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetDataType)).ToList(),
                 DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
                 Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")

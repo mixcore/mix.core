@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
@@ -146,6 +147,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
 
 
         // Save api/odata/{culture}/attribute-set-data/portal
+        [AllowAnonymous]
         [HttpPost, HttpOptions]
         [Route("name/{name}")]
         public async Task<ActionResult<ODataMobileViewModel>> SaveByName(string culture, string name, [FromBody]JObject obj)
@@ -166,6 +168,10 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                 var portalResult = await base.SaveAsync<ODataMobileViewModel>(data, true);
                 if (portalResult.IsSucceed)
                 {
+                    if (getAttrSet.Data.EdmAutoSend.HasValue && getAttrSet.Data.EdmAutoSend.Value)
+                    {
+                        _ = MixService.SendEdm(_lang, getAttrSet.Data.EdmTemplate, portalResult.Data.Data, getAttrSet.Data.EdmSubject, getAttrSet.Data.EdmFrom);
+                    }
                     return Ok(new RepositoryResponse<JObject> {
                         IsSucceed = true,
                         Data = portalResult.Data.Data
