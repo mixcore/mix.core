@@ -275,7 +275,12 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
                         return t;
                     }
                     else {
-                        return { isSucceed: false, errors: [error.statusText || error.status] };
+                        if (error.data) {
+                            return error.data;
+                        }
+                        else {
+                            return { isSucceed: false, errors: [error.statusText || error.status] };
+                        }
                     }
                 });
         };
