@@ -65,6 +65,7 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
             var d = new Date($scope.request.toDate);
             $scope.request.toDate = d.toISOString();
         }
+        $rootScope.isBusy = true;
         var resp = await service.getList($scope.request);
         if (resp && resp.isSucceed) {
 
