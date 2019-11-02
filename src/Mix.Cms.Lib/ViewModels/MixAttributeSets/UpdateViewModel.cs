@@ -19,16 +19,27 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 
         [JsonProperty("id")]
         public int Id { get; set; }
-        [JsonProperty("referenceId")]
+        [JsonProperty("ReferenceId")]
         public int? ReferenceId { get; set; }
         [JsonProperty("type")]
-        public int Type { get; set; }
+        public int? Type { get; set; }
         [JsonProperty("title")]
         public string Title { get; set; }
         [JsonProperty("name")]
         public string Name { get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
+        [JsonProperty("formTemplate")]
+        public string FormTemplate { get; set; }
+
+        [JsonProperty("edmTemplate")]
+        public string EdmTemplate { get; set; }
+        [JsonProperty("edmSubject")]
+        public string EdmSubject { get; set; }
+        [JsonProperty("edmFrom")]
+        public string EdmFrom { get; set; }
+        [JsonProperty("edmAutoSend")]
+        public bool? EdmAutoSend { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
         [JsonProperty("status")]
@@ -40,6 +51,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
         [JsonProperty("removeAttributes")]
         public List<MixAttributeFields.DeleteViewModel> RemoveAttributes { get; set; } = new List<MixAttributeFields.DeleteViewModel>();
+
+        [JsonProperty("formView")]
+        public MixTemplates.UpdateViewModel FormView { get; set; }
+        [JsonProperty("edmView")]
+        public MixTemplates.UpdateViewModel EdmView { get; set; }
 
         #endregion
         #endregion Properties
@@ -63,6 +79,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             {
                 Fields = MixAttributeFields.UpdateViewModel
                 .Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList();
+                FormView = MixTemplates.UpdateViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
+                EdmView = MixTemplates.UpdateViewModel.GetTemplateByPath(EdmTemplate, Specificulture, _context, _transaction).Data;
             }
             else
             {
@@ -76,6 +94,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
                 Id = Repository.Max(s => s.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
+            FormTemplate = FormView != null ? string.Format(@"{0}/{1}{2}", FormView.FolderType, FormView.FileName, FormView.Extension) : FormTemplate;
+            EdmTemplate = EdmView != null ? string.Format(@"{0}/{1}{2}", EdmView.FolderType, EdmView.FileName, EdmView.Extension) : EdmTemplate;
             return base.ParseModel(_context, _transaction);
         }
 

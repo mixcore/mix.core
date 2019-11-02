@@ -15,6 +15,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels.MixAttributeSetValues;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
@@ -73,17 +74,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Data = new JObject();
-            Data.Add(new JProperty("id", Id));
-            Data.Add(new JProperty("createdDateTime", CreatedDateTime));
-            Data.Add(new JProperty("details", $"/api/v1/odata/{Specificulture}/attribute-set-data/mobile/{Id}"));
             Values = MixAttributeSetValues.ODataMobileViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-            foreach (var item in Values.OrderBy(v=>v.Priority))
-            {
-                item.AttributeFieldName = item.Field.Name;
-                Data.Add(ParseValue(item));
-            }
+            ParseData();
         }
         public override MixAttributeSetData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -170,16 +163,18 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             var result = await base.SaveModelAsync(isSaveSubModels, _context, _transaction);
             if (result.IsSucceed)
             {
-                result.Data.ExpandView();
+                ParseData();
             }
             return result;
         }
+
+        
         public override RepositoryResponse<ODataMobileViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = base.SaveModel(isSaveSubModels, _context, _transaction);
             if (result.IsSucceed)
             {
-                result.Data.ExpandView();
+                ParseData();
             }
             return result;
         }
@@ -478,25 +473,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             try
             {
                 base.GenerateCache(model, view, _context, _transaction);
-                var tasks = new List<Task>();
+                
 
                 // Remove parent caches
+                return RemoveParentData(context, transaction);
 
-                // 1. Remove Parent Attribute Data
-                var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
-                .Any(d => d.Specificulture == Specificulture && d.Id == Id && d.ParentType == (int)MixEnums.MixAttributeSetDataType.Set));
-                foreach (var item in attrDatas)
-                {
-                    tasks.Add(Task.Run(() =>
-                    {
-                        var updModel = new UpdateViewModel(item, context, transaction);
-                        updModel.GenerateCache(item, updModel, context, transaction);
-                    }));
-                }
-
-                // TODO Remove Post / Page / Module Data
-
-                return Task.WhenAll(tasks);
             }
             catch (Exception ex)
             {
@@ -512,6 +493,35 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
             }
         }
+
+        private Task RemoveParentData(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var tasks = new List<Task>();
+            var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
+                .Any(d => d.Specificulture == Specificulture && d.Id == Id));
+            foreach (var item in attrDatas)
+            {
+                tasks.Add(Task.Run(() =>
+                {
+                    var updModel = new UpdateViewModel(item, context, transaction);
+                    updModel.GenerateCache(item, updModel, context, transaction);
+                }));
+            }
+            return Task.WhenAll(tasks);
+        }
+        private void ParseData()
+        {
+            Data = new JObject();
+            Data.Add(new JProperty("id", Id));
+            Data.Add(new JProperty("createdDateTime", CreatedDateTime));
+            Data.Add(new JProperty("details", $"/api/v1/odata/{Specificulture}/attribute-set-data/mobile/{Id}"));
+            foreach (var item in Values.OrderBy(v => v.Priority))
+            {
+                item.AttributeFieldName = item.Field.Name;
+                Data.Add(ParseValue(item));
+            }
+        }
+
         #endregion
     }
 }

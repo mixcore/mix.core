@@ -23,6 +23,11 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Title { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string FormTemplate { get; set; }
+        public string EdmTemplate { get; set; }
+        public string EdmSubject { get; set; }
+        public string EdmFrom { get; set; }
+        public bool? EdmAutoSend { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public int Priority { get; set; }
         public int Status { get; set; }

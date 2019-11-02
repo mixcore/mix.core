@@ -283,25 +283,13 @@ namespace Mix.Cms.Lib
 
         public static async System.Threading.Tasks.Task<ViewModels.MixTemplates.ReadListItemViewModel> GetTemplateByPath(string templatePath)
         {
-            var cacheKey = $"vm_template_{templatePath}_listitem";
-            RepositoryResponse<ViewModels.MixTemplates.ReadListItemViewModel> getData = null;
-            //if (MixService.GetConfig<bool>("IsCache"))
-            //{
-            //    getData = await MixCacheService.GetAsync<RepositoryResponse<ViewModels.MixTemplates.ReadListItemViewModel>>(cacheKey);
-            //}
-            if (getData == null)
+            
+            string[] tmp = templatePath.Split('/');
+            if (tmp[1].IndexOf('.') > 0)
             {
-                string[] tmp = templatePath.Split('/');
-                if (tmp[1].IndexOf('.') > 0)
-                {
-                    tmp[1] = tmp[1].Substring(0, tmp[1].IndexOf('.'));
-                }
-                getData = ViewModels.MixTemplates.ReadListItemViewModel.Repository.GetSingleModel(m => m.FolderType == tmp[0] && m.FileName == tmp[1]);
-                //if (getData.IsSucceed)
-                //{
-                //    await MixCacheService.SetAsync(cacheKey, getData);
-                //}
+                tmp[1] = tmp[1].Substring(0, tmp[1].IndexOf('.'));
             }
+            var getData = await ViewModels.MixTemplates.ReadListItemViewModel.Repository.GetFirstModelAsync(m => m.FolderType == tmp[0] && m.FileName == tmp[1]);
 
             return getData.Data;
 

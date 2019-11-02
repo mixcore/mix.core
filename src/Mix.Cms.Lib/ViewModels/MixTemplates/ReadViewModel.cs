@@ -150,6 +150,14 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         #region Overrides
 
         #region Common
+        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var file = FileRepository.Instance.GetFile(FileName, Extension, FileFolder);
+            if (!string.IsNullOrWhiteSpace(file?.Content))
+            {
+                Content = file.Content;
+            }
+        }
 
         public override MixTemplate ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -248,6 +256,31 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                     MixConstants.ConfigurationKeyword.ThemeId, culture);
 
                 result = Repository.GetSingleModel(t => t.FolderType == temp[0] && t.FileName == temp[1].Split('.')[0] && t.ThemeId == activeThemeId
+                    , _context, _transaction);
+            }
+            return result;
+        }
+        /// <summary>
+        /// Gets the template by path.
+        /// </summary>
+        /// <param name="path">The path.</param> Ex: "Pages/_Home"
+        /// <returns></returns>
+        public static async Task<RepositoryResponse<ReadViewModel>> GetTemplateByPathAsync(string path, string culture
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            RepositoryResponse<ReadViewModel> result = new RepositoryResponse<ReadViewModel>();
+            string[] temp = path.Split('/');
+            if (temp.Length < 2)
+            {
+                result.IsSucceed = false;
+                result.Errors.Add("Template Not Found");
+            }
+            else
+            {
+                int activeThemeId = MixService.GetConfig<int>(
+                    MixConstants.ConfigurationKeyword.ThemeId, culture);
+
+                result = await Repository.GetSingleModelAsync(t => t.FolderType == temp[0] && t.FileName == temp[1].Split('.')[0] && t.ThemeId == activeThemeId
                     , _context, _transaction);
             }
             return result;

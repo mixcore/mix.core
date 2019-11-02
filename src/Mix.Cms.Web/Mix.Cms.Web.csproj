@@ -49,7 +49,6 @@
   <ItemGroup>
     <Content Remove="appsettings-moderntrailer.json" />
     <Content Remove="appsettings-stag.json" />
-    <Content Remove="appsettings.json" />
   </ItemGroup>
 
   <ItemGroup>

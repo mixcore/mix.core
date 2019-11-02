@@ -250,6 +250,7 @@ namespace Mix.Cms.Api.Controllers.v1
             Expression<Func<MixModuleData, bool>> predicate = model =>
                 model.Specificulture == _lang
                 && model.ModuleId == moduleId
+                && (string.IsNullOrEmpty(request.Keyword) || model.Value.Contains(request.Keyword))
                 && (postId == 0 || model.PostId == postId)
                 && (pageId == 0 || model.PageId == pageId)
                 && (!request.FromDate.HasValue
