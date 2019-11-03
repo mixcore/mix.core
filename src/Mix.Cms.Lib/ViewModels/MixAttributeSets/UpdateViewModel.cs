@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -171,6 +172,59 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             }
             return result;
         }
+
+        public override Task GenerateCache(MixAttributeSet model, UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            Task result = null;
+            try
+            {
+                var genFieldsTasks= new List<Task>();
+                var genDataTasks = new List<Task>();
+                var attrDatas = context.MixAttributeSetData.Where(m => m.AttributeSetId == Id);
+                var attrFields = context.MixAttributeField.Where(m => m.AttributeSetId == Id);
+                
+                foreach (var item in attrDatas)
+                {
+                    genDataTasks.Add(Task.Run(() =>
+                    {
+                        MixAttributeSetDatas.UpdateViewModel.Repository.RemoveCache(item, context, transaction);
+                    }));
+                }
+                foreach (var item in attrFields)
+                {
+                    genFieldsTasks.Add(Task.Run(() =>
+                    {
+                        MixAttributeFields.UpdateViewModel.Repository.RemoveCache(item, context, transaction);
+                    }));
+                }
+                
+                result = base.GenerateCache(model, view, _context, _transaction).ContinueWith(resp => {
+                    if (resp.IsCompleted)
+                    {
+                        Task.WhenAll(genFieldsTasks).ContinueWith(fields =>
+                        {
+                            Task.WhenAll(genDataTasks).Wait();
+                        });
+                    }
+                });
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                UnitOfWorkHelper<MixCmsContext>.HandleException<UpdateViewModel>(ex, isRoot, transaction);
+                return Task.FromException(ex);
+            }
+            finally
+            {
+                if (isRoot && (result.IsCompleted || result.IsFaulted || result.IsCanceled))
+                {
+                    //if current Context is Root
+                    context.Dispose();
+                }
+            }
+        }        
         #endregion
 
         #region Expand       
