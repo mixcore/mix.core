@@ -136,6 +136,14 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Description).HasMaxLength(250);
 
+                entity.Property(e => e.EdmFrom).HasMaxLength(250);
+
+                entity.Property(e => e.EdmSubject).HasMaxLength(250);
+
+                entity.Property(e => e.EdmTemplate).HasMaxLength(250);
+
+                entity.Property(e => e.FormTemplate).HasMaxLength(250);
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(250);

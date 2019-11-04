@@ -57,10 +57,20 @@ namespace Mix.Cms.Lib
             public const string DefaultContentStatus = "DefaultContentStatus";
             public const string NextSyncContent = "NextSyncContent";
         }
-
+        public static class TemplateFolder
+        {
+            public const string Masters = "Masters";
+            public const string Layouts = "Layouts";
+            public const string Pages = "Pages";
+            public const string Posts = "Posts";
+            public const string Modules = "Modules";
+            public const string Forms = "Forms";
+            public const string Edms = "Edms";
+        }
         public static class Folder
         {
             public const string FileFolder = @"content";
+            public const string CacheFolder = @"cache";
             public const string TemplateExtension = @".cshtml";
             public const string TemplatesAssetFolder = @"templates";
             public const string TemplatesFolder = @"Views/Shared/Templates";

@@ -77,7 +77,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
                 ModuleTypes = Enum.GetNames(typeof(MixModuleType)).ToList(),
-                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetType)).ToList(),
+                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetDataType)).ToList(),
                 DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
                 Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
@@ -106,13 +106,25 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("jarray-data/{name}")]
         public RepositoryResponse<JArray> loadData(string name)
         {
-            var cultures = FileRepository.Instance.GetFile(name, "data", true, "[]");
-            var obj = JObject.Parse(cultures.Content);
-            return new RepositoryResponse<JArray>()
+            try
             {
-                IsSucceed = true,
-                Data = obj["data"] as JArray
-            };
+                var cultures = FileRepository.Instance.GetFile(name, "data", true, "[]");
+                var obj = JObject.Parse(cultures.Content);
+                return new RepositoryResponse<JArray>()
+                {
+                    IsSucceed = true,
+                    Data = obj["data"] as JArray
+                };
+            }
+            catch
+            {
+                return new RepositoryResponse<JArray>()
+                {
+                    IsSucceed = true,
+                    Data = null
+                };
+            }
+            
         }
 
         [AllowAnonymous]
@@ -166,7 +178,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
                 ModuleTypes = Enum.GetNames(typeof(MixModuleType)).ToList(),
-                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetType)).ToList(),
+                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetDataType)).ToList(),
                 DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
                 Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
@@ -549,7 +561,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
                 ModuleTypes = Enum.GetNames(typeof(MixModuleType)).ToList(),
-                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetType)).ToList(),
+                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetDataType)).ToList(),
                 DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
                 Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")

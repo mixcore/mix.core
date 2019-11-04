@@ -9,6 +9,16 @@
                 <attribute-list header="'Attributes'" fields="activedData.fields"
                     remove-attributes="activedData.removeAttributes">
                 </attribute-list>
+                <tabs-v select-callback="selectPane(pane)" class="mb-3">
+                    <pane-v header="Form Layout" ng-if="isAdmin">
+                        <mix-template-editor folder-type="'Forms'" template="activedData.formView">
+                        </mix-template-editor>
+                    </pane-v>
+                    <pane-v header="eDM Layout" ng-if="isAdmin">
+                        <mix-template-editor folder-type="'Edms'" template="activedData.edmView">
+                        </mix-template-editor>
+                    </pane-v>
+                </tabs-v>
             </div>
             <div class="col-4">
                 <actions preview-url="activedData.detailsUrl" content-url="contentUrl" back-url="referrerUrl"></actions>

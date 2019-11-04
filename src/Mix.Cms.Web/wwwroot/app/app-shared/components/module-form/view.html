@@ -14,13 +14,13 @@
                                 <div ng-if="prop.isSelect" class="form-group">
                                     
                                     <label class="control-label" ng-if="$ctrl.isShowTitle" ng-bind="prop.title"></label>                                    
-                                    <mix-select-icons ng-if="prop.dataType==19" options="prop.options" data="$ctrl.data.jItem[prop.name]['value']"></mix-select-icons>
+                                    <!-- <mix-select-icons ng-if="prop.dataType==19" options="prop.options" data="$ctrl.data.jItem[prop.name]['value']"></mix-select-icons> -->
                                     
                                     <select ng-if="prop.dataType!=19" class="btn custom-select form-control" ng-model="$ctrl.data.jItem[prop.name]['value']">
                                         <option ng-repeat="item in prop.options track by $index" ng-value="item">{{item}}</option>
                                     </select>
-                                    <br><br>
-                                    <input type="text" class="form-control form-control-sm" ng-model="$ctrl.data.jItem[prop.name]['value']" placeholder="Other options">
+                                    <!-- <br/><br/>
+                                    <input type="text" class="form-control form-control-sm" ng-model="$ctrl.data.jItem[prop.name]['value']" placeholder="Other options" /> -->
                                 </div>
                             </div>
                         </div>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -19,16 +20,27 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 
         [JsonProperty("id")]
         public int Id { get; set; }
-        [JsonProperty("referenceId")]
+        [JsonProperty("ReferenceId")]
         public int? ReferenceId { get; set; }
         [JsonProperty("type")]
-        public int Type { get; set; }
+        public int? Type { get; set; }
         [JsonProperty("title")]
         public string Title { get; set; }
         [JsonProperty("name")]
         public string Name { get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
+        [JsonProperty("formTemplate")]
+        public string FormTemplate { get; set; }
+
+        [JsonProperty("edmTemplate")]
+        public string EdmTemplate { get; set; }
+        [JsonProperty("edmSubject")]
+        public string EdmSubject { get; set; }
+        [JsonProperty("edmFrom")]
+        public string EdmFrom { get; set; }
+        [JsonProperty("edmAutoSend")]
+        public bool? EdmAutoSend { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
         [JsonProperty("status")]
@@ -40,6 +52,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
         [JsonProperty("removeAttributes")]
         public List<MixAttributeFields.DeleteViewModel> RemoveAttributes { get; set; } = new List<MixAttributeFields.DeleteViewModel>();
+
+        [JsonProperty("formView")]
+        public MixTemplates.UpdateViewModel FormView { get; set; }
+        [JsonProperty("edmView")]
+        public MixTemplates.UpdateViewModel EdmView { get; set; }
 
         #endregion
         #endregion Properties
@@ -63,6 +80,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             {
                 Fields = MixAttributeFields.UpdateViewModel
                 .Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList();
+                FormView = MixTemplates.UpdateViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
+                EdmView = MixTemplates.UpdateViewModel.GetTemplateByPath(EdmTemplate, Specificulture, _context, _transaction).Data;
             }
             else
             {
@@ -76,6 +95,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
                 Id = Repository.Max(s => s.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
+            FormTemplate = FormView != null ? string.Format(@"{0}/{1}{2}", FormView.FolderType, FormView.FileName, FormView.Extension) : FormTemplate;
+            EdmTemplate = EdmView != null ? string.Format(@"{0}/{1}{2}", EdmView.FolderType, EdmView.FileName, EdmView.Extension) : EdmTemplate;
             return base.ParseModel(_context, _transaction);
         }
 
@@ -151,6 +172,59 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             }
             return result;
         }
+
+        public override Task GenerateCache(MixAttributeSet model, UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            Task result = null;
+            try
+            {
+                var genFieldsTasks= new List<Task>();
+                var genDataTasks = new List<Task>();
+                var attrDatas = context.MixAttributeSetData.Where(m => m.AttributeSetId == Id);
+                var attrFields = context.MixAttributeField.Where(m => m.AttributeSetId == Id);
+                
+                foreach (var item in attrDatas)
+                {
+                    genDataTasks.Add(Task.Run(() =>
+                    {
+                        MixAttributeSetDatas.UpdateViewModel.Repository.RemoveCache(item, context, transaction);
+                    }));
+                }
+                foreach (var item in attrFields)
+                {
+                    genFieldsTasks.Add(Task.Run(() =>
+                    {
+                        MixAttributeFields.UpdateViewModel.Repository.RemoveCache(item, context, transaction);
+                    }));
+                }
+                
+                result = base.GenerateCache(model, view, _context, _transaction).ContinueWith(resp => {
+                    if (resp.IsCompleted)
+                    {
+                        Task.WhenAll(genFieldsTasks).ContinueWith(fields =>
+                        {
+                            Task.WhenAll(genDataTasks).Wait();
+                        });
+                    }
+                });
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                UnitOfWorkHelper<MixCmsContext>.HandleException<UpdateViewModel>(ex, isRoot, transaction);
+                return Task.FromException(ex);
+            }
+            finally
+            {
+                if (isRoot && (result.IsCompleted || result.IsFaulted || result.IsCanceled))
+                {
+                    //if current Context is Root
+                    context.Dispose();
+                }
+            }
+        }        
         #endregion
 
         #region Expand       
