@@ -1040,7 +1040,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 }
             }
             var otherAttributeSetNavs = MixAttributeSets.ContentUpdateViewModel.Repository.GetModelListBy(
-                m => m.Type == (int) MixEnums.MixAttributeSetType.Post && !AttributeSetNavs.Any(n => n.AttributeSetId == m.Id)
+                m => m.Type == (int) MixEnums.MixAttributeSetDataType.Post && !AttributeSetNavs.Any(n => n.AttributeSetId == m.Id)
                 , "CreatedDateTime", 1, null, 0, _context, _transaction);
             foreach (var item in otherAttributeSetNavs.Data.Items)
             {

@@ -35,5 +35,20 @@
             <label>Description</label>
             <textarea class="form-control" ng-model="$ctrl.model.description"></textarea>
         </div>
+        <div class="form-group">
+            <label>Edm Subject</label>
+            <input type="text" class="form-control" ng-model="$ctrl.model.edmSubject" />
+        </div>
+        <div class="form-group">
+            <label>Edm From</label>
+            <input type="email" class="form-control" ng-model="$ctrl.model.edmFrom" />
+        </div>
+        <div class="custom-control custom-switch">
+            <input type="checkbox" ng-model="$ctrl.model.edmAutoSend"
+                id="edmAutoSend" class="custom-control-input">
+            <label class="custom-control-label align-middle" for="edmAutoSend">
+                Auto Send Mail
+            </label>
+        </div>
     </div>
 </div>

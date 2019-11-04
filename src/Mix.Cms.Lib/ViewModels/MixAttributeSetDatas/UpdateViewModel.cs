@@ -145,13 +145,13 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public override Task GenerateCache(MixAttributeSetData model, UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            Task result = null;
             try
             {
-                base.GenerateCache(model, view, _context, _transaction);
                 var tasks = new List<Task>();
-
-                // Remove parent caches
                 
+                // Remove parent caches
+
                 // 1. Remove Parent Attribute Data
                 var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
                 .Any(d => d.Specificulture == Specificulture && d.Id == Id && d.ParentType == (int)MixEnums.MixAttributeSetDataType.Set));
@@ -159,14 +159,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     tasks.Add(Task.Run(() =>
                     {
-                        var updModel = new UpdateViewModel(item, context, transaction);
-                        updModel.GenerateCache(item, updModel,context, transaction);
+                        UpdateViewModel.Repository.RemoveCache(item, context, transaction);
                     }));
                 }
 
                 // TODO Remove Post / Page / Module Data
-
-                return Task.WhenAll(tasks);
+                result = base.GenerateCache(model, view, _context, _transaction).ContinueWith(resp => {
+                    Task.WhenAll(tasks).Wait();
+                });
+                return result;
             }            
             catch (Exception ex)
             {
@@ -175,7 +176,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             finally
             {
-                if (isRoot)
+                if (isRoot && (result.IsCompleted || result.IsFaulted || result.IsCanceled))
                 {
                     //if current Context is Root
                     context.Dispose();

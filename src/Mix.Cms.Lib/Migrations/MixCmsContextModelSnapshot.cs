@@ -81,6 +81,20 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(250);
 
+                    b.Property<bool?>("EdmAutoSend");
+
+                    b.Property<string>("EdmFrom")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("EdmSubject")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("EdmTemplate")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("FormTemplate")
+                        .HasMaxLength(250);
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(250);
