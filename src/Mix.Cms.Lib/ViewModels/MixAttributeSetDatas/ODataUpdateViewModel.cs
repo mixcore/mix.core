@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Repositories;
+using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -88,11 +90,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             if (string.IsNullOrEmpty(Id))
             {
                 Id = Guid.NewGuid().ToString();
-                CreatedDateTime = DateTime.UtcNow;
+                CreatedDateTime = DateTime.UtcNow;               
             }
+
+            HandleEdm(_context, _transaction);
+
             return base.ParseModel(_context, _transaction);
         }
-       
+
+
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSetData parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -140,6 +146,81 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
             }
             return result;
+        }
+        public override Task GenerateCache(MixAttributeSetData model, ODataUpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                RemoveParentData(context, transaction);
+                // Remove parent caches
+                return base.RemoveCache(model, _context, _transaction);
+
+            }
+            catch (Exception ex)
+            {
+                UnitOfWorkHelper<MixCmsContext>.HandleException<UpdateViewModel>(ex, isRoot, transaction);
+                return Task.FromException(ex);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    context.Dispose();
+                }
+            }
+        }
+
+        private void RemoveParentData(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
+                .Any(d => d.Specificulture == Specificulture && d.Id == Id));
+            foreach (var item in attrDatas)
+            {
+                var updModel = new UpdateViewModel(item, context, transaction);
+                updModel.GenerateCache(item, updModel, context, transaction);
+            }
+            foreach (var item in Values)
+            {
+                item.GenerateCache(item.Model, item, context, transaction);
+            }
+        }
+        private void HandleEdm(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var getAttrSet = Mix.Cms.Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModel(m => m.Name == AttributeSetName || m.Id == AttributeSetId, _context, _transaction);
+            if (!string.IsNullOrEmpty(getAttrSet.Data.EdmSubject))
+            {
+                var getEdm = Lib.ViewModels.MixTemplates.UpdateViewModel.GetTemplateByPath(getAttrSet.Data.EdmTemplate, Specificulture);
+                if (getEdm.IsSucceed && !string.IsNullOrEmpty(getEdm.Data.Content))
+                {
+                    string body = getEdm.Data.Content;
+                    foreach (var prop in Fields)
+                    {
+                        var val = GetValue(prop.Name);
+                        body = body.Replace($"[[{prop.Name}]]", val.StringValue);
+                    }
+                    var edmFile = new FileViewModel()
+                    {
+                        Content = body,
+                        Extension = ".html",
+                        FileFolder = "edms",
+                        Filename = $"{getAttrSet.Data.EdmSubject}-{Id}"
+                    };
+                    if (FileRepository.Instance.SaveWebFile(edmFile))
+                    {
+                        var val = GetValue("edm");
+                        if (val != null)
+                        {
+                            val.StringValue = edmFile.WebPath;
+                        }
+                    }
+                }
+            }
+        }
+        public MixAttributeSetValues.UpdateViewModel GetValue(string fieldName)
+        {
+            return Values?.FirstOrDefault(v => v.AttributeFieldName == fieldName);
         }
         #endregion
 

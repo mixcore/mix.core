@@ -10,14 +10,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Repositories;
+using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
+using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
@@ -94,7 +98,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         [Route("")]
         public async Task<ActionResult<ODataUpdateViewModel>> Save(string culture, [FromBody]ODataUpdateViewModel data)
         {
-            string _username = User?.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
+            string _username = User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
             if (string.IsNullOrEmpty(data.CreatedBy))
             {
                 data.CreatedBy = _username;
@@ -156,7 +160,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             var result = await base.GetListAsync<ODataUpdateViewModel>(queryOptions);
             return Ok(result);
         }
-
+        
         #endregion Get
 
         #region Post

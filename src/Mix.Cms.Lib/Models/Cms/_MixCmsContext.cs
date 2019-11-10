@@ -63,6 +63,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public MixCmsContext(DbContextOptions<MixCmsContext> options)
                     : base(options)
         {
+            
         }
         public MixCmsContext()
         {

@@ -659,8 +659,8 @@
                 },
                 {
                     "path": "/portal/attribute-set-data/list",
-                    "templatePath": "/app/app-portal/pages/attribute-set-data/list.html",
-                    "controller": "AttributeSetDataController"
+                    "templatePath": "/app/app-portal/pages/attribute-set-data/list.html?v=1",
+                    "controller": "MixAttributeSetDataController"
                 },
                 {
                     "path": "/portal/attribute-set-data/details",

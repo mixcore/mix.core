@@ -9,8 +9,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
+using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
@@ -46,7 +49,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             string msg = string.Empty;
             Expression<Func<MixAttributeSetData, bool>> predicate = null;
             MixAttributeSetData model = null;
-            
+
             // Get Details if has id or else get default
             if (id != "default")
             {
@@ -60,7 +63,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                 };
                 if (attributeSetId.HasValue)
                 {
-                    model.AttributeSetId = attributeSetId.Value;  
+                    model.AttributeSetId = attributeSetId.Value;
                 }
                 if (!string.IsNullOrEmpty(attributeSetName))
                 {
@@ -131,7 +134,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                     {
                         return Unauthorized();
                     }
-                    
+
                 }
                 else
                 {
@@ -172,7 +175,9 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                     {
                         _ = MixService.SendEdm(_lang, getAttrSet.Data.EdmTemplate, portalResult.Data.Data, getAttrSet.Data.EdmSubject, getAttrSet.Data.EdmFrom);
                     }
-                    return Ok(new RepositoryResponse<JObject> {
+                    
+                    return Ok(new RepositoryResponse<JObject>
+                    {
                         IsSucceed = true,
                         Data = portalResult.Data.Data
                     });
@@ -189,12 +194,13 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         }
 
         // Save api/odata/{culture}/attribute-set-data/portal/{id}
+        [AllowAnonymous]
         [HttpPost, HttpOptions]
         [Route("{id}")]
         public async Task<ActionResult<ODataMobileViewModel>> Save(string culture, string id, [FromBody]JObject data)
         {
             var getData = await base.GetSingleAsync<ODataMobileViewModel>(p => p.Id == id && p.Specificulture == _lang);
-            
+
             if (getData.IsSucceed)
             {
                 getData.Data.Data = data;
@@ -235,6 +241,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         }
 
         // GET api/AttributeSetDatas/id
+        [AllowAnonymous]
         [EnableQuery(MaxExpansionDepth = 4)]
         [HttpGet, HttpOptions]
         public async Task<ActionResult<List<ODataMobileViewModel>>> List(string culture, ODataQueryOptions<MixAttributeSetData> queryOptions)
@@ -248,7 +255,8 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                     result.Add(item.Data);
                 }
             }
-            return Ok(new RepositoryResponse<JArray> {
+            return Ok(new RepositoryResponse<JArray>
+            {
                 IsSucceed = true,
                 Data = result
             });
@@ -256,6 +264,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
 
         // GET api/AttributeSetDatas/id
         [EnableQuery(MaxExpansionDepth = 4)]
+        [AllowAnonymous]
         [HttpGet, HttpOptions]
         [Route("name/{name}")]
         public async Task<ActionResult<List<ODataMobileViewModel>>> ListByName(string culture, string name, ODataQueryOptions<MixAttributeSetData> queryOptions)
@@ -279,6 +288,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
 
         // GET api/AttributeSetDatas/id
         [EnableQuery(MaxExpansionDepth = 4)]
+        [AllowAnonymous]
         [HttpGet, HttpOptions]
         [Route("filter/{name}")]
         public async Task<ActionResult<List<ODataMobileViewModel>>> FilterByValue(string culture, string name, ODataQueryOptions<MixAttributeSetData> queryOptions)
@@ -302,6 +312,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
 
         // GET api/AttributeSetDatas/id
         [EnableQuery(MaxExpansionDepth = 4)]
+        [AllowAnonymous]
         [HttpGet, HttpOptions]
         [Route("my-data/{name}")]
         public async Task<ActionResult<List<ODataMobileViewModel>>> ListMyDataByName(string culture, string name, ODataQueryOptions<MixAttributeSetData> queryOptions)

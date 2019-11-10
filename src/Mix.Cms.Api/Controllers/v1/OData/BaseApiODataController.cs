@@ -189,25 +189,18 @@ namespace Mix.Cms.Api.Controllers.v1.OData
             }
             int? top = queryOptions.Top?.Value;
             var skip = queryOptions.Skip?.Value ?? 0;
+
+            // TODO: OData need to load all data for filter (optimize for bid data)
             RequestPaging request = new RequestPaging()
             {
                 PageIndex = 0,
                 PageSize = top.HasValue ? top + top * (skip / top + 1) : null,
-                OrderBy = queryOptions.OrderBy?.RawValue
-                //Top = queryOptions.Top?.Value,
-                //Skip = queryOptions.Skip?.Value
+                OrderBy = queryOptions.OrderBy?.RawValue,
+                Top = queryOptions.Top?.Value,
+                Skip = queryOptions.Skip?.Value
             };
-            var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_{SeoHelper.GetSEOString(queryOptions.Filter?.RawValue, '_')}_ps-{request.PageSize}";
             List<TView> data = null;
-            //if (MixService.GetConfig<bool>("IsCache"))
-            //{
-            //    var getData = await MixCacheService.GetAsync<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
-            //    if (getData != null)
-            //    {
-            //        data = getData.Data.Items;
-            //    }
-            //}
-
+            
             if (data == null)
             {
 
@@ -217,7 +210,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                         request.OrderBy, request.Direction, request.PageSize, request.PageIndex, request.Skip, request.Top).ConfigureAwait(false);
                     if (getData.IsSucceed)
                     {
-                        //await MixCacheService.SetAsync(cacheKey, getData);
                         data = getData.Data.Items;
                     }
 
@@ -229,7 +221,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                         , null, null).ConfigureAwait(false);
                     if (getData.IsSucceed)
                     {
-                        //await MixCacheService.SetAsync(cacheKey, getData);
                         data = getData.Data.Items;
                     }
 
@@ -252,21 +243,11 @@ namespace Mix.Cms.Api.Controllers.v1.OData
             {
                 PageIndex = 0,
                 PageSize = top.HasValue ? top + top * (skip / top + 1) : null,
-                OrderBy = queryOptions.OrderBy?.RawValue
-                //Top = queryOptions.Top?.Value,
-                //Skip = queryOptions.Skip?.Value
+                OrderBy = queryOptions.OrderBy?.RawValue,
+                Top = queryOptions.Top?.Value,
+                Skip = queryOptions.Skip?.Value
             };
-            var cacheKey = $"odata_{_lang}_{typeof(TView).FullName}_{key}_{SeoHelper.GetSEOString(queryOptions.Filter?.RawValue, '_')}_ps-{request.PageSize}";
             List<TView> data = null;
-            //if (MixService.GetConfig<bool>("IsCache"))
-            //{
-            //    var getData = await MixCacheService.GetAsync<RepositoryResponse<PaginationModel<TView>>>(cacheKey);
-            //    if (getData != null)
-            //    {
-            //        data = getData.Data.Items;
-            //    }
-            //}
-
             if (data == null)
             {
 
@@ -276,7 +257,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                         request.OrderBy, request.Direction, request.PageSize, request.PageIndex, request.Skip, request.Top).ConfigureAwait(false);
                     if (getData.IsSucceed)
                     {
-                        //await MixCacheService.SetAsync(cacheKey, getData);
                         data = getData.Data.Items;
                     }
 
@@ -288,7 +268,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                         , null, null).ConfigureAwait(false);
                     if (getData.IsSucceed)
                     {
-                        //await MixCacheService.SetAsync(cacheKey, getData);
                         data = getData.Data.Items;
                     }
 
