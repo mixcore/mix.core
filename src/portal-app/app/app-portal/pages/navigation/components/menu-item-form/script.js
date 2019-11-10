@@ -56,6 +56,9 @@ modules.component('menuItemForm', {
             ctrl.reload = async function () {
                 ctrl.attrData = angular.copy(ctrl.defaultData);
             };
+            ctrl.loadSelected = function(data){
+                console.log(data);
+            };
             ctrl.submit = async function () {
                 angular.forEach(ctrl.attrData.values, function (e) {
                     //Encrypt field before send
@@ -76,7 +79,7 @@ modules.component('menuItemForm', {
                     }
                     else {
                         ctrl.isBusy = false;
-                        ctrl.attrData = await service.getSingle('portal', [ctrl.defaultId, ctrl.attrSetId, ctrl.attrSetName]);
+                        // ctrl.attrData = await service.getSingle('portal', [ctrl.defaultId, ctrl.attrSetId, ctrl.attrSetName]);
                         $scope.$apply();
                     }
                 }

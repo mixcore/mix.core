@@ -10,17 +10,20 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
+using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Web;
 using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
-    [Route("api/v1/{culture}/attribute-set-data/mobile")]
+    [Route("api/v1/{culture}/attribute-set-data")]
     public class ApiAttributeSetDataController :
         BaseGenericApiController<MixCmsContext, MixAttributeSetData>
     {
@@ -29,6 +32,13 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         #region Get
+        // GET api/attribute-set-data/id
+        [HttpGet, HttpOptions]
+        [Route("sendmail/{id}")]
+        public  Task<RepositoryResponse<JArray>> SendMailAsync(string id)
+        {
+            return SendMailListAsync(model => model.Id == id && model.Specificulture == _lang);
+        }
 
         // GET api/attribute-set-data/id
         [HttpGet, HttpOptions]
@@ -119,31 +129,48 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<ActionResult<JObject>> GetList(
             [FromBody] RequestPaging request)
         {
-
+            var queryDictionary = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(request.Query);
+            var queries = HttpUtility.ParseQueryString(request.Query ?? "");
+            int.TryParse(queries.Get("attributeSetId"), out int attributeSetId);
+            string attributeSetName = queries.Get("attributeSetName");
             ParseRequestPagingDate(request);
-            Expression<Func<MixAttributeSetData, bool>> predicate = model =>
-                string.IsNullOrWhiteSpace(request.Keyword)
-                    || (model.AttributeSetName.Contains(request.Keyword)
-                    )
-                && (!request.FromDate.HasValue
-                    || (model.CreatedDateTime >= request.FromDate.Value)
-                )
-                && (!request.ToDate.HasValue
-                    || (model.CreatedDateTime <= request.ToDate.Value)
-                )
-                    ;
-            string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
+            
             switch (request.Key)
             {
                 case "portal":
-                    var portalResult = await base.GetListAsync<MobileViewModel>(key, request, predicate);
+                    var portalResult = await Helper.FilterByKeywordAsync<MobileViewModel>(_lang, attributeSetName, 
+                        request, request.Keyword, queryDictionary);
                     return Ok(JObject.FromObject(portalResult));
                 default:
 
-                    var listItemResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);
+                    var listItemResult = await Lib.ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ReadViewModel>(_lang, attributeSetName,
+                        request, request.Keyword, queryDictionary);
 
                     return JObject.FromObject(listItemResult);
             }
+        }
+
+        // GET api/attribute-set-data
+        [HttpPost, HttpOptions]
+        [Route("export")]
+        public async Task<ActionResult<JObject>> Export(
+            [FromBody] RequestPaging request)
+        {
+            var queryDictionary = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(request.Query);
+            var queries = HttpUtility.ParseQueryString(request.Query ?? "");
+            int.TryParse(queries.Get("attributeSetId"), out int attributeSetId);
+            string attributeSetName = queries.Get("attributeSetName");
+            ParseRequestPagingDate(request);
+            var data = await Helper.FilterByKeywordAsync<ExportViewModel>(_lang, attributeSetName,
+                        request, request.Keyword, queryDictionary);
+            string exportPath = $"exports/module/{attributeSetName}";
+            var jData = new List<JObject>();
+            foreach (var item in data.Data.Items)
+            {
+                jData.Add(item.Data);
+            }
+            var result = CommonHelper.ExportAttributeToExcel(jData, string.Empty, exportPath, $"{attributeSetName}", null);
+            return Ok(JObject.FromObject(result));
         }
 
         [HttpPost, HttpOptions]
@@ -158,11 +185,45 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 case "Delete":
                     return Ok(JObject.FromObject(await base.DeleteListAsync<MobileViewModel>(predicate, true)));
+                case "SendMail":
+                    return Ok(JObject.FromObject(await SendMailListAsync(predicate)));
                 case "Export":
                     return Ok(JObject.FromObject(await base.ExportListAsync(predicate, MixStructureType.AttributeSet)));
                 default:
                     return JObject.FromObject(new RepositoryResponse<bool>());
             }
+        }
+
+        private async Task<RepositoryResponse<JArray>> SendMailListAsync(Expression<Func<MixAttributeSetData, bool>> predicate)
+        {
+            var data = await MobileViewModel.Repository.GetModelListByAsync(predicate);
+            JArray array = new JArray();
+            RepositoryResponse<JArray> result = new RepositoryResponse<JArray>()
+            {
+                IsSucceed = true
+            };
+            try
+            {
+                foreach (var item in data.Data)
+                {
+                    var getAttrSet = await Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModelAsync(m => m.Name == item.AttributeSetName);
+
+                    if (getAttrSet.IsSucceed)
+                    {
+                        _ = MixService.SendEdm(_lang, getAttrSet.Data.EdmTemplate, item.Data, getAttrSet.Data.EdmSubject, getAttrSet.Data.EdmFrom);
+                    }
+                    array.Add(item.Data);
+                }
+                result.Data = array;
+                return result;
+            }
+            catch(Exception ex)
+            {
+                result.Exception = ex;
+                result.IsSucceed = false;
+                return result;
+            }
+            
         }
         #endregion Post
     }
