@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\v1\Mix\AttributeSetDataValues\**" />
+    <Content Remove="Controllers\v1\Mix\AttributeSetDataValues\**" />
+    <EmbeddedResource Remove="Controllers\v1\Mix\AttributeSetDataValues\**" />
+    <None Remove="Controllers\v1\Mix\AttributeSetDataValues\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

@@ -1,16 +1,16 @@
 ﻿'use strict';
 app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$location', '$routeParams',
-    'ModuleService', 'SharedModuleDataService',
-    function ($scope, $rootScope, ngAppSettings, $location, $routeParams, moduleServices, moduleDataService) {
+    'ModuleService', 'SharedModuleDataService', 'RelatedAttributeSetDataService',
+    function ($scope, $rootScope, ngAppSettings, $location, $routeParams, moduleServices, moduleDataService, relatedAttributeSetDataService) {
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, moduleServices, 'product');
         $scope.contentUrl = '';
         $scope.getSingleSuccessCallback = function () {
             if ($scope.activedData.id > 0) {
                 // module => list post or list product
-                if($scope.activedData.type==2 || $scope.activedData.type==6){
+                if ($scope.activedData.type == 2 || $scope.activedData.type == 6) {
                     $scope.contentUrl = '/portal/module-post/list/' + $scope.activedData.id;
                 }
-                else{
+                else {
                     $scope.contentUrl = '/portal/module/data/' + $scope.activedData.id;
                 }
             }
@@ -29,8 +29,8 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$l
             isDisplay: true,
             width: 3
         };
-        $scope.type='-1';
-        
+        $scope.type = '-1';
+
         $scope.settings = $rootScope.globalSettings;
         $scope.activedData = null;
         $scope.editDataUrl = '';
@@ -118,7 +118,7 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$l
                 $scope.$apply();
             }
         };
-        
+
 
         $scope.removeData = function (id) {
             if ($scope.activedData) {
@@ -170,7 +170,7 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$l
         $scope.loadPosts = async function () {
             $rootScope.isBusy = true;
             var id = $routeParams.id;
-            $scope.postRequest.query += '&page_id='+id;
+            $scope.postRequest.query += '&page_id=' + id;
             var response = await pagePostService.getList($scope.postRequest);
             if (response.isSucceed) {
                 $scope.pageData.posts = response.data;
@@ -188,7 +188,19 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$l
             //console.log('drop ', index, item, external, type);
         }
         $scope.insertColCallback = function (index, item, external, type) {
-            console.log('insert ', index, item, external, type);
         }
-        
+        $scope.addAttr = function () {
+            if ($scope.activedData.attributeData.data.values) {
+                var t = angular.copy($scope.defaultAttr);
+                t.priority = $scope.activedData.attributeData.data.values.length + 1;
+                ctrl.fields.push(t);
+            }
+        };
+        $scope.removeAttribute = function (attr, index) {
+            $rootScope.showConfirm($scope, 'removeAttributeConfirmed', [attr, index], null, 'Remove Field', 'Are you sure');
+        };
+        $scope.removeAttributeConfirmed = function (attr, index) {
+            relatedAttributeSetDataService.delete([])
+            $scope.activedData.attributeData.data.values.splice(index, 1);
+        };
     }]);
