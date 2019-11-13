@@ -309,7 +309,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 MixService.SetConfig<string>("DefaultCulture", model.Culture.Specificulture);
                 MixService.SetConfig("InitStatus", 1);
                 MixService.SaveSettings();
-                MixService.Reload();
+                //MixService.Reload();
             }
             else
             {

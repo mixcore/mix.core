@@ -503,16 +503,22 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public override Task GenerateCache(MixAttributeSetData model, ODataMobileViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            Task result = null;
             try
             {
                 Data["id"] = model.Id;
                 Data["createdDateTime"] = model.CreatedDateTime;
                 Data["details"] = $"/api/v1/odata/{Specificulture}/attribute-set-data/mobile/{Id}";
                 
-
-                RemoveParentData(context, transaction);
+                var tasks = new List<Task>();
+                tasks.AddRange(RemoveParentData(context, transaction));
                 // Remove parent caches
-                return base.RemoveCache(model, _context, _transaction);
+                tasks.Add(base.GenerateCache(model, this, _context, _transaction));
+                // TODO Remove Post / Page / Module Data
+                result = Task.WhenAll(tasks);
+                result.ConfigureAwait(true);
+                result.Wait();
+                return result;
 
             }
             catch (Exception ex)
@@ -522,7 +528,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             finally
             {
-                if (isRoot)
+                if (isRoot && (result.Status == TaskStatus.RanToCompletion || result.Status == TaskStatus.Canceled || result.Status == TaskStatus.Faulted))
                 {
                     //if current Context is Root
                     context.Dispose();
@@ -530,19 +536,29 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
         }
 
-        private void RemoveParentData(MixCmsContext context, IDbContextTransaction transaction)
+        private List<Task> RemoveParentData(MixCmsContext context, IDbContextTransaction transaction)
         {
+            var tasks = new List<Task>();
             var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
                 .Any(d => d.Specificulture == Specificulture && d.Id == Id));
             foreach (var item in attrDatas)
             {
+                tasks.Add(Task.Run(() =>
+                {
                     var updModel = new UpdateViewModel(item, context, transaction);
-                    updModel.GenerateCache(item, updModel, context, transaction);
+                    updModel.GenerateCache(item, updModel);
+                }));
+                
             }
             foreach (var item in Values)
             {
-                    item.RemoveCache(item.Model, context, transaction);
+                tasks.Add(Task.Run(() =>
+                {
+                    item.RemoveCache(item.Model);
+                }));
+
             }
+            return tasks;
         }
         private void ParseData()
         {

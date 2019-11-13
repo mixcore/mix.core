@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib
@@ -217,16 +218,10 @@ namespace Mix.Cms.Lib
             }
         }
 
-        public static async System.Threading.Tasks.Task<ViewModels.MixModules.ReadMvcViewModel> GetModuleAsync(string name, string culture, IUrlHelper url = null)
+        public static System.Threading.Tasks.Task<ViewModels.MixModules.ReadMvcViewModel> GetModuleAsync(string name, string culture, IUrlHelper url = null)
         {
             var cacheKey = $"vm_{culture}_module_{name}_mvc";
             var module = new Domain.Core.ViewModels.RepositoryResponse<ViewModels.MixModules.ReadMvcViewModel>();
-
-            // Load From Cache 
-            //if (MixService.GetConfig<bool>("IsCache"))
-            //{
-            //    module = await MixCacheService.GetAsync<Mix.Domain.Core.ViewModels.RepositoryResponse<ViewModels.MixModules.ReadMvcViewModel>>(cacheKey);
-            //}
 
             // If not cached yet => load from db
             if (module == null || !module.IsSucceed)
@@ -244,7 +239,7 @@ namespace Mix.Cms.Lib
                 //await MixCacheService.SetAsync(cacheKey, module);
             }
 
-            return module.Data;
+            return Task.FromResult(module.Data);
         }
 
 
