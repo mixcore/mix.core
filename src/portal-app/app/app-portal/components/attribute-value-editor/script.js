@@ -34,7 +34,7 @@ modules.component('attributeValueEditor', {
                 if(!ctrl.attributeValue.id){
                     ctrl.initDefaultValue();
                 }
-                switch (ctrl.attributeValue.field.dataType) {
+                switch (ctrl.attributeValue.dataType) {
                     case 1:
                     case 2:
                     case 3:                        
@@ -72,7 +72,7 @@ modules.component('attributeValueEditor', {
             }, 200);
         };
         ctrl.initDefaultValue = async function () {
-            switch (ctrl.attributeValue.field.dataType) {
+            switch (ctrl.attributeValue.dataType) {
                 case 1:
                 case 2:
                 case 3:

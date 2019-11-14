@@ -169,8 +169,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("listTag")]
         public JArray ListTag { get => JArray.Parse(Tags ?? "[]"); }
 
-        [JsonProperty("attributes")]
-        public IDictionary<string, string> Attributes { get; set; }
+        [JsonProperty("attributeData")]
+        public MixRelatedAttributeDatas.ReadMvcViewModel AttributeData { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -241,26 +241,29 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #endregion Overrides
 
         #region Expands
+        
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            var AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
-                a => a.ParentId == Id.ToString() && a.ParentType == (int)MixEnums.MixAttributeSetDataType.Post  && a.AttributeSetName == "post"
-                    && a.Specificulture == Specificulture
-                    , _context, _transaction).Data;
-            Attributes = new Dictionary<string, string>();
-            if (AttributeData!=null)
+            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == "page", _context, _transaction);
+            if (getAttrs.IsSucceed)
             {
-                foreach (var item in AttributeData.Data.Data.Properties())
-                {
-                    Attributes.Add(item.Name, item.Value.ToString());
-                }                
+                AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
+                a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId == getAttrs.Data.Id
+                    , _context, _transaction).Data;
             }
-            
         }
         //Get Property by name
-        public object Property(string name)
+        public T Property<T>(string fieldName)
         {
-            return Attributes[name.ToLower()];
+            if (AttributeData != null)
+            {
+                return AttributeData.Data.Data.GetValue(fieldName).Value<T>();
+            }
+            else
+            {
+                return default(T);
+            }
+
         }
 
         public MixModules.ReadMvcViewModel GetModule(string name)

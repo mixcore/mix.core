@@ -10,26 +10,8 @@
                         </module-main>
                     </div>
                 </div>
-                <div class="tab-pane fade active show" ng-show="activedData.attributes.length > 0">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h6>Attribute Data
-                            </h6>
-                            <add-addictional-field parent-type="'1'" parent-id="activedData.attributeData.id" values="activedData.attributeData.data.values"></add-addictional-field>
-                        </div>
-                        <div class="card-body">
-                            <div class="row" ng-repeat="value in activedData.attributeData.data.values | orderBy:'priority' track by $index">
-                                <div class="col-sm-10">
-                                    <attribute-value-editor attribute-value="value" is-show-title="'true'" parent-type="'1'" parent-id="activedData.attributeData.id"></attribute-value-editor>
-                                </div>
-                                <div class="col-sm-2">
-                                    <a class="btn btn-danger" ng-click="removeAttribute(col, $index)">
-                                        <span class="fas fa-trash-alt"></span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="tab-pane fade active show">
+                    <add-addictional-field class="mb-4" model="activedData"></add-addictional-field>
                 </div>
                 <tabs-v select-callback="selectPane(pane)" class="mb-3">
                     <pane-v header="Attributes" class="card" ng-if="isAdmin">

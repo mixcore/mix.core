@@ -1,13 +1,13 @@
 modules.component('addAddictionalField', {
     templateUrl: '/app/app-portal/components/add-addictional-field/view.html',
-    bindings: {
-        parentId: '=',
-        parentType: '=',
-        values: '='
+    bindings: {                
+        model: '='
     },
-    controller: ['$rootScope', '$scope',
-        function ($rootScope, $scope, ) {
+    controller: ['$rootScope', '$scope', 'BaseService',
+        function ($rootScope, $scope, baseService ) {
             var ctrl = this;
+            var valueService = angular.copy(baseService);
+            valueService.init('attribute-set-value');
             ctrl.value = {};
             ctrl.field = { dataType: 7 };
             ctrl.selectedCol = null;
@@ -17,18 +17,18 @@ modules.component('addAddictionalField', {
             ctrl.addAttr = function () {
                 
                 if (ctrl.field.name) {
-                    var current = $rootScope.findObjectByKey(ctrl.values, 'attributeFieldName', ctrl.field.name);
+                    var current = $rootScope.findObjectByKey(ctrl.model.attributeData.data.values, 'attributeFieldName', ctrl.field.name);
                     if (current) { 
                         $rootScope.showErrors(['Field ' + ctrl.field.name + ' existed!']);
                     }
                     else {
                         var t = angular.copy(ctrl.field);
-                        t.priority = ctrl.values.length + 1;
+                        t.priority = ctrl.model.attributeData.data.values.length + 1;
                         ctrl.value.attributeFieldName = ctrl.field.name;
                         ctrl.value.dataType = ctrl.field.dataType;
-                        ctrl.value.priority = ctrl.values.length + 1;
+                        ctrl.value.priority = t.priority;
                         ctrl.value.field = t;
-                        ctrl.values.push(ctrl.value);
+                        ctrl.model.attributeData.data.values.push(ctrl.value);
 
                         //reset field option
                         ctrl.field.title = '';
@@ -41,25 +41,11 @@ modules.component('addAddictionalField', {
                 }
             };
 
-            ctrl.removeAttribute = function (attr, index) {
-                if (attr) {
-                    $rootScope.showConfirm(ctrl, 'removeAttributeConfirmed', [attr, index], null, 'Remove Field', 'Are you sure');
-                }
-            }
-            ctrl.removeAttributeConfirmed = function (attr, index) {
-                ctrl.fields.splice(index, 1);
-                ctrl.removeAttributes.push(attr);
-            };
-
+            
             ctrl.generateName = function (col) {
                 col.name = $rootScope.generateKeyword(col.title, '_');
             };
 
-            ctrl.removeAttr = function (index) {
-                if (ctrl.fields) {
-                    ctrl.fields.splice(index, 1);
-                }
-            };
             ctrl.updateOrders = function (index) {
                 if (index > ctrl.dragStartIndex) {
                     ctrl.fields.splice(ctrl.dragStartIndex, 1);
@@ -71,8 +57,32 @@ modules.component('addAddictionalField', {
                     e.priority = i;
                 });
             };
+
             ctrl.dragStart = function (index) {
                 ctrl.dragStartIndex = index;
+            };
+
+            ctrl.removeAttribute = function (val, index) {
+                $rootScope.showConfirm(ctrl, 'removeAttributeConfirmed', [val, index], null, 'Remove Field', 'Are you sure');
+            };
+            ctrl.removeAttributeConfirmed = async function (val, index) {
+                if(val.id){
+                    $rootScope.isBusy = true;
+                    var result = await valueService.delete([val.id]);
+                    if(result.isSucceed){
+                        ctrl.model.attributeData.data.values.splice(index, 1);
+                        $rootScope.isBusy = false;
+                        $scope.$apply();
+                    }
+                    else{
+                        $rootScope.showErrors(result.errors);
+                        $rootScope.isBusy = false;
+                        $scope.$apply();
+                    }
+                }
+                else{
+                    ctrl.model.attributeData.data.values.splice(index, 1);
+                }
             };
 
         }]

@@ -189,13 +189,6 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$l
         }
         $scope.insertColCallback = function (index, item, external, type) {
         }
-        $scope.addAttr = function () {
-            if ($scope.activedData.attributeData.data.values) {
-                var t = angular.copy($scope.defaultAttr);
-                t.priority = $scope.activedData.attributeData.data.values.length + 1;
-                ctrl.fields.push(t);
-            }
-        };
         $scope.removeAttribute = function (attr, index) {
             $rootScope.showConfirm($scope, 'removeAttributeConfirmed', [attr, index], null, 'Remove Field', 'Are you sure');
         };

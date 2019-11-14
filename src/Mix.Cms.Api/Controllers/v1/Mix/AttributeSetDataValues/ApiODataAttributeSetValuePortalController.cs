@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetValues;
@@ -17,7 +16,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Mix.Cms.Api.Controllers.v1.Mix.AttributeSetValues
+namespace Mix.Cms.Api.Controllers.v1.AttributeSetValues
 {
     [Produces("application/json")]
     [Route("api/v1/{culture}/attribute-set-value")]

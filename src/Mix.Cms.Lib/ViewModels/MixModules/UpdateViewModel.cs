@@ -413,7 +413,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 AttributeData.Data.AttributeSetId = getAttrs.Data.Id;
                 AttributeData.Data.AttributeSetName = getAttrs.Data.Name;
                 AttributeData.ParentId = id.ToString();
-                AttributeData.ParentType = (int)MixEnums.MixAttributeSetDataType.Page;
+                AttributeData.ParentType = (int)MixEnums.MixAttributeSetDataType.Module;
                 var saveData = await AttributeData.Data.SaveModelAsync(true, context, transaction);
                 ViewModelHelper.HandleResult(saveData, ref result);
                 if (result.IsSucceed)
