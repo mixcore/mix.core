@@ -13,17 +13,8 @@
                         </attribute-set-form> -->
                     </div>
                 </div>
-                <div class="tab-pane fade active show" ng-show="activedData.attributes.fields.length > 0">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h6>Attribute Data</h6>
-                        </div>
-                        <div class="card-body">
-                            <div ng-repeat="value in activedData.attributeData.data.values | orderBy:'priority' track by $index">
-                                <attribute-value-editor attribute-value="value" is-show-title="'true'" parent-type="'1'" parent-id="activedData.attributeData.id"></attribute-value-editor>
-                            </div>
-                        </div>
-                    </div>
+                <div class="tab-pane fade active show">
+                    <add-addictional-field class="mb-4" model="activedData"></add-addictional-field>
                 </div>
 
                 <tabs-v select-callback="selectPane(pane)" class="mb-4">

@@ -102,7 +102,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     if (result.IsSucceed)
                     {
-                        item.Priority = item.Field.Priority;
+                        item.Priority = item.Field?.Priority??item.Priority;
                         item.DataId = parent.Id;
                         item.Specificulture = parent.Specificulture;
                         var saveResult = await item.SaveModelAsync(false, _context, _transaction);
@@ -127,7 +127,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     if (result.IsSucceed)
                     {
-                        item.Priority = item.Field.Priority;
+                        item.Priority = item.Field?.Priority?? item.Priority;
                         item.DataId = parent.Id;
                         item.Specificulture = parent.Specificulture;
                         var saveResult = item.SaveModel(false, _context, _transaction);
