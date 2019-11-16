@@ -10,7 +10,13 @@
             </div>
             <!-- <small class="col-md-2">Author</small> -->
             <small class="col-md-2">Created Date</small>
-            <small class="col-md-2"></small>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <select class="form-control btn custom-select custom-select-sm mr-2" ng-model="$ctrl.filterType">
+                        <option ng-repeat="item in $ctrl.filterTypes" ng-value="item">{{item}}</option>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
     <div class="card-body py-1">
@@ -41,9 +47,9 @@
                 </div>
                 <div class="col-md-1">
                     <div class="btn-group btn-group-sm float-right">
-                            <a ng-click="$ctrl.sendMail(item)" class="btn btn-link text-primary">
-                                    <span class="fa fa-envelope"></span>
-                                </a>
+                        <a ng-click="$ctrl.sendMail(item)" class="btn btn-link text-primary">
+                            <span class="fa fa-envelope"></span>
+                        </a>
                         <a ng-click="$ctrl.update(item)" class="btn btn-link text-primary">
                             <span class="fa fa-pen"></span>
                         </a>

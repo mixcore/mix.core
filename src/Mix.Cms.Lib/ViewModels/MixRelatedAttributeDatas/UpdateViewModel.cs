@@ -4,6 +4,7 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 {
@@ -73,6 +74,19 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
             AttributeSetName = _context.MixAttributeSet.FirstOrDefault(m => m.Id == AttributeSetId)?.Name;   
         }
 
+        public override Task GenerateCache(MixRelatedAttributeData model, UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            return base.GenerateCache(model, view, _context, _transaction).ContinueWith(resp=> {
+                Data.GenerateCache(Data.Model, Data);
+            });
+
+        }
+        public override Task RemoveCache(MixRelatedAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            return base.RemoveCache(model, _context, _transaction).ContinueWith(resp => {
+                Data.RemoveCache(Data.Model);
+            }); ;
+        }
 
         #region Async
 

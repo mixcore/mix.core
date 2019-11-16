@@ -4,6 +4,7 @@ modules.component('attributeSetValues', {
         header: '=',
         data: '=',
         queries: '=?',
+        filterType: '=?',
         selectedList: '=',
         columns: '=?',
         onFilterList: '&?',
@@ -20,6 +21,7 @@ modules.component('attributeSetValues', {
                 data: []
             };
             ctrl.actions = ['Delete', 'SendMail'];
+            ctrl.filterTypes = ['contain', 'equal'];
 
             ctrl.selectedProp = null;
             ctrl.canDrag = false;

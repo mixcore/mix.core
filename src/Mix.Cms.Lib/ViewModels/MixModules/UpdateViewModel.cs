@@ -469,6 +469,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             }
             else
             {
+                Attributes = new List<MixAttributeFields.UpdateViewModel>();
                 foreach (var item in AttributeData.Data.Values)
                 {
                     Attributes.Add(new MixAttributeFields.UpdateViewModel()

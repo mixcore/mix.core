@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <attribute-set-values on-update="edit(data)" on-delete="remove(data)" on-send-mail="sendMail(data)" on-filter-list="getList()" on-apply-list="applyList()" selected-list="selectedList" header="''" data="data.items" queries="queries">
+    <attribute-set-values on-update="edit(data)" on-delete="remove(data)" on-send-mail="sendMail(data)" filter-type="filterType" on-filter-list="getList()" on-apply-list="applyList()" selected-list="selectedList" header="''" data="data.items" queries="queries">
     </attribute-set-values>
 </div>
 <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
