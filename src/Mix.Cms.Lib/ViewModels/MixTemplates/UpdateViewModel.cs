@@ -239,8 +239,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             RepositoryResponse<UpdateViewModel> result = new RepositoryResponse<UpdateViewModel>();
-            string[] temp = path.Split('/');
-            if (temp.Length < 2)
+            string[] temp = path?.Split('/');
+            if (temp == null || temp.Length < 2)
             {
                 result.IsSucceed = false;
                 result.Errors.Add("Template Not Found");

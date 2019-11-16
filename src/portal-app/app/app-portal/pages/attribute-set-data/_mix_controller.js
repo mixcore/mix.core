@@ -6,6 +6,7 @@ app.controller('MixAttributeSetDataController',
             $scope.queries = {};
             $scope.settings = $rootScope.globalSettings;
             $scope.canDrag = $scope.request.orderBy !== 'Priority' || $scope.request.direction !== '0';
+            $scope.filterType = 'contain';
             $scope.init = async function () {
                 $scope.attributeSetId = $routeParams.attributeSetId;
                 $scope.attributeSetName = $routeParams.attributeSetName;
@@ -91,6 +92,9 @@ app.controller('MixAttributeSetDataController',
                 $scope.request.query = '';
                 $scope.request.query = 'attributeSetId=' + $routeParams.attributeSetId;
                 $scope.request.query += '&attributeSetName=' + $routeParams.attributeSetName;
+                if($scope.filterType){
+                    $scope.request.query += '&filterType=' + $scope.filterType;
+                }
                 Object.keys($scope.queries).forEach(e => {
                     if($scope.queries[e]){
                         $scope.request.query += '&' + e + '=' + $scope.queries[e];
@@ -145,6 +149,9 @@ app.controller('MixAttributeSetDataController',
                 $scope.request.query = '';
                 $scope.request.query = 'attributeSetId=' + $routeParams.attributeSetId;
                 $scope.request.query += '&attributeSetName=' + $routeParams.attributeSetName;
+                if($scope.filterType){
+                    $scope.request.query += '&filterType=' + $scope.filterType;
+                }
                 Object.keys($scope.queries).forEach(e => {
                     if($scope.queries[e]){
                         $scope.request.query += '&' + e + '=' + $scope.queries[e];

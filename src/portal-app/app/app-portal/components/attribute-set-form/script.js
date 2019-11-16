@@ -19,7 +19,6 @@ modules.component('attributeSetForm', {
             ctrl.selectedProp = null;
             ctrl.settings = $rootScope.globalSettings;
             ctrl.$onInit = async function () {
-                ctrl.defaultData = await service.getSingle('portal', [ctrl.defaultId, ctrl.attrSetId, ctrl.attrSetName]);
                 ctrl.loadData();
             };
             ctrl.loadData = async function () {
@@ -29,6 +28,7 @@ modules.component('attributeSetForm', {
                     Else modify input ctrl.attrData
                 */
                 $rootScope.isBusy = true;
+                ctrl.defaultData = await service.getSingle('portal', [ctrl.defaultId, ctrl.attrSetId, ctrl.attrSetName]);
                 if (ctrl.attrDataId) {
                     ctrl.attrData = await service.getSingle('portal', [ctrl.attrDataId, ctrl.attrSetId, ctrl.attrSetName]);
                     if (ctrl.attrData) {
