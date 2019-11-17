@@ -15,19 +15,17 @@
             <!-- <div class="modal-body" style="height: calc(100vh - 143px);overflow-y: auto;"> -->
             <div class="modal-body">
                 <div class="tab-pane" ng-if="$ctrl.data.items.length>0">
-                    <ul dnd-list="$ctrl.data.items" class="m-0">
-                        <li ng-repeat="nav in $ctrl.data.items" class="container border-left-0 border-right-0 py-1 rounded-0" dnd-draggable="nav" dnd-type="'nav'" dnd-effect-allowed="move" dnd-selected="$ctrl.selected = nav" ng-class="{'selected': $ctrl.selected === nav}">
+                    <ul class="m-0">
+                        <li ng-repeat="nav in $ctrl.data.items" class="container border-left-0 border-right-0 py-1 rounded-0" ng-class="{'selected': $ctrl.selected === nav.isActive}">
                             <div class="row">
                                 <div class="drag-header" style="cursor:grab; width: 15px;">
                                     <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
                                 </div>
                                 <div class="col-7">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" ng-change="$ctrl.callback({nav: nav})" ng-model="nav.isActived" id="content_{{$index}}" class="custom-control-input">
-                                        <label class="custom-control-label align-middle" for="content__{{$index}}" ng-bind="$ctrl.limString(nav.title, 50)">
-                                        </label>
-                                        <span class="switch switch-sm">
-                                        </span>
+                                        <input type="checkbox" id="content_{{$index}}" class="custom-control-input" ng-model="nav.isActive">
+                                        <label class="custom-control-label" ng-click="$ctrl.select(nav)" for="content__{{$index}}">{{nav.title}}</label>
+
                                     </div>
                                 </div>
                                 <div class="col-2 text-right">
@@ -47,7 +45,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <a class="btn btn-success" ng-click="$ctrl.saveSelected()">Save</a>
+                        <a class="btn btn-success text-white" ng-click="$ctrl.saveSelected()">Save</a>
                     </div>
                 </div>
             </div>

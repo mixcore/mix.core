@@ -186,6 +186,76 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
         }
 
+
+        public static async Task<RepositoryResponse<List<TView>>> FilterByKeywordAsync<TView>(string culture, string attributeSetName
+            , string filterType, string fieldName, string keyword
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            where TView : ViewModelBase<MixCmsContext, MixAttributeSetData, TView>
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                Expression<Func<MixAttributeSetValue, bool>> attrPredicate = m => m.Specificulture == culture && m.AttributeSetName == attributeSetName;
+                Expression<Func<MixAttributeSetValue, bool>> valPredicate = null;
+                RepositoryResponse<List<TView>> result = new RepositoryResponse<List<TView>>()
+                {
+                    IsSucceed = true,
+                    Data = new List<TView>()
+                };
+                if (filterType == "equal")
+                {
+                    Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeFieldName == fieldName && m.StringValue == keyword;
+                    if (valPredicate != null)
+                    {
+                        valPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(valPredicate, pre, Microsoft.OData.UriParser.BinaryOperatorKind.And);
+                    }
+                    else
+                    {
+                        valPredicate = pre;
+                    }
+                }
+                else
+                {
+                    Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeFieldName == fieldName && m.StringValue.Contains(keyword);
+                    if (valPredicate != null)
+                    {
+                        valPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(valPredicate, pre, Microsoft.OData.UriParser.BinaryOperatorKind.And);
+                    }
+                    else
+                    {
+                        valPredicate = pre;
+                    }
+                }
+                if (valPredicate != null)
+                {
+                    attrPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(valPredicate, attrPredicate, Microsoft.OData.UriParser.BinaryOperatorKind.And);
+                }
+
+                var query = context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
+                var dataIds = query.ToList();
+                if (query != null)
+                {
+                    Expression<Func<MixAttributeSetData, bool>> predicate = m => dataIds.Any(id => m.Id == id);
+                    result = await DefaultRepository<MixCmsContext, MixAttributeSetData, TView>.Instance.GetModelListByAsync(
+                        predicate, context, transaction);
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<List<TView>>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    context.Dispose();
+                }
+            }
+        }
+
         public static RepositoryResponse<string> ExportAttributeToExcel(List<JObject> lstData, string sheetName
           , string folderPath, string fileName
           , List<string> headers = null)

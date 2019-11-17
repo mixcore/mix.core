@@ -3,7 +3,8 @@
     bindings: {
         query: '=',
         selected: '=',
-        save: '&'
+        callback: '&?',
+        save: '&?'
     },
     controller: ['$rootScope', '$scope', 'ngAppSettings', 'PostService', 'PageService',
         function ($rootScope, $scope, ngAppSettings, postService, pageService) {
@@ -53,8 +54,25 @@
                             $scope.$apply();
                         }
                         break;
-                }                
+                }
             };
+            ctrl.select = function (nav) {
+                var current = $rootScope.findObjectByKey(ctrl.data.items, 'id', nav.id);
+                if(!nav.isActive && ctrl.callback){
+                    ctrl.callback({nav: nav, type: ctrl.type});
+                }
+                if (ctrl.isMultiple) {
+                    current.isActive = !current.isActive;
+                }
+                else {
+                    if (!nav.isActive) {
+                        angular.forEach(ctrl.data.items, element => {
+                            element.isActive = false;
+                        });
+                    }
+                    current.isActive = !nav.isActive;
+                }
+            }
             ctrl.saveSelected = function () {
                 ctrl.selected = $rootScope.filterArray(ctrl.data, 'isActived', true);
                 setTimeout(() => {
@@ -65,9 +83,9 @@
                 }, 500);
 
             };
-            ctrl.limString = function(str, max){          
-                if(str){  
-                    return (str.length>max)?  str.substring(0, max) + ' ...': str;
+            ctrl.limString = function (str, max) {
+                if (str) {
+                    return (str.length > max) ? str.substring(0, max) + ' ...' : str;
                 }
             };
         }
