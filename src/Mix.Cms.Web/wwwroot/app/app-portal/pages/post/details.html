@@ -234,7 +234,7 @@
                     </pane-collape>
                 </collape-container>
 
-                <tabs-v select-callback="selectPane(pane)" class="mb-4">
+                <tabs-v ng-if="activedData" select-callback="selectPane(pane)" class="mb-4">
                     <pane-v header="Feature Img">
                         <custom-image header="'Feature Upload'" type="'Posts'" folder="activedData.seoName" header="activedData.title" description="activedData.excerpt" src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
                     </pane-v>

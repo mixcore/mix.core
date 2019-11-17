@@ -252,12 +252,19 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     , _context, _transaction).Data;
             }
         }
-        //Get Property by name
         public T Property<T>(string fieldName)
         {
             if (AttributeData != null)
             {
-                return AttributeData.Data.Data.GetValue(fieldName).Value<T>();
+                var field = AttributeData.Data.Data.GetValue(fieldName);
+                if (field != null)
+                {
+                    return field.Value<T>();
+                }
+                else
+                {
+                    return default(T);
+                }
             }
             else
             {

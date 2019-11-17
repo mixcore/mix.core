@@ -302,13 +302,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             this.UrlAliases = GetAliases(_context, _transaction);
         }
 
-        public override Task RemoveCache(MixPage model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            return base.RemoveCache(model, _context, _transaction).ContinueWith(resp =>
-            {
-                AttributeData.RemoveCache(AttributeData.Model);
-            });
-        }
         #region Sync
 
         public override RepositoryResponse<bool> SaveSubModels(MixPage parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)

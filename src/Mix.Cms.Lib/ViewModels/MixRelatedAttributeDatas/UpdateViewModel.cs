@@ -81,13 +81,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
             });
 
         }
-        public override Task RemoveCache(MixRelatedAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            return base.RemoveCache(model, _context, _transaction).ContinueWith(resp => {
-                Data.RemoveCache(Data.Model);
-            }); ;
-        }
-
+        
         #region Async
 
 

@@ -27,10 +27,9 @@
             ctrl.maxHeight = ctrl.maxHeight || '2000px';
             ctrl.id = Math.floor(Math.random() * 100);
             ctrl.cropped = {
-                source: 'https://localhost:5001/assets/img/image_placeholder.jpg'
+                source: '/assets/img/image_placeholder.jpg'
             };
             var frameUrl = '/content/templates/tsets/uploads/2019-10/730149275529721421464195891692074859757568n0037047f8f6f4adab55211aee3538155.png';//$rootScope.settings.data['frame_url'] 
-            frameUrl = frameUrl || 'https://travel.mixcore.org/content/templates/travel-together/uploads/2019-10/7329952728167098616815215831685433204932608nf5ae77416f8b46c99eaf85901a5a4517.png';
             ctrl.frame = ctrl.loadImage(frameUrl);
             if (ctrl.isImage) {
                 var ext = ctrl.srcUrl.substring(ctrl.srcUrl.lastIndexOf('.') + 1);
