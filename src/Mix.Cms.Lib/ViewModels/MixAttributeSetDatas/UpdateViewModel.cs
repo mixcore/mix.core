@@ -142,15 +142,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             return result;
         }
-        public override Task RemoveCache(MixAttributeSetData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            return base.RemoveCache(model, _context, _transaction).ContinueWith(resp=> {
-                foreach (var item in Values)
-                {
-                    item.RemoveCache(item.Model);
-                }
-            });
-        }
+        
         public override Task GenerateCache(MixAttributeSetData model, UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
