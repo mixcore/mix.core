@@ -289,5 +289,11 @@ namespace Mix.Cms.Lib
             return getData.Data;
 
         }
+
+        public static async System.Threading.Tasks.Task<JObject> GetNavigation(string name, string culture)
+        {
+            var navs = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.NavigationViewModel>(culture, "navigation", "equal", "name", name);
+            return navs.Data.FirstOrDefault()?.Data;
+        }
     }
 }

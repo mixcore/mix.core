@@ -56,7 +56,15 @@ modules.component('menuItemForm', {
             ctrl.reload = async function () {
                 ctrl.attrData = angular.copy(ctrl.defaultData);
             };
-            ctrl.loadSelected = function(data){
+            ctrl.loadSelected = function(data, type){
+                if(data){
+                    ctrl.setFieldValue('id', data.id);
+                    ctrl.setFieldValue('specificulture', data.specificulture);
+                    ctrl.setFieldValue('title', data.title);
+                    ctrl.setFieldValue('type', type);
+                    ctrl.setFieldValue('uri', data.detailsUrl);
+                }
+                console.log(ctrl.attrData)
                 console.log(data);
             };
             ctrl.submit = async function () {
@@ -109,6 +117,14 @@ modules.component('menuItemForm', {
                         ctrl.attrData.data.push(attr);
                     }
                     return attr;
+                }
+            };
+            ctrl.setFieldValue = function (attributeName, val) {
+                if (ctrl.attrData) {
+                    var attr = $rootScope.findObjectByKey(ctrl.attrData.values, 'attributeFieldName', attributeName);
+                    if(attr){
+                        attr.stringValue = val;
+                    }
                 }
             };
         }]
