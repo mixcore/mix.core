@@ -93,7 +93,7 @@ angular.module('bw.paging', []).directive('paging', function () {
     function fieldTemplate(el, attrs){
             return '<ul data-ng-hide="Hide" data-ng-class="ulClass"> ' +
                 '<li class="page-item"' +
-                    'title="{{Item.title}}" ' +
+                    'title="{{item.title}}" ' +
                     'data-ng-class="Item.liClass" ' +
                     'data-ng-repeat="Item in List"> ' +
                         '<a ' + 
@@ -178,9 +178,9 @@ angular.module('bw.paging', []).directive('paging', function () {
     function validateScopeValues(scope, pageCount) {
 
         // Block where the page is larger than the pageCount
-        if (scope.page > pageCount) {
-            scope.page = pageCount;
-        }
+        // if (scope.page > pageCount) {
+        //     scope.page = pageCount;
+        // }
 
         // Block where the page is less than 0
         if (scope.page <= 0) {

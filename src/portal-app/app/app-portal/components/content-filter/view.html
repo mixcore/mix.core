@@ -1,0 +1,64 @@
+<div class="modal modal-default fade show" id="modal-content-filter" ng-init="$ctrl.loadData()">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <filter-list request="$ctrl.request" callback="$ctrl.loadData(pageIndex)"></filter-list>
+                    </div>
+
+                </div>
+            </div>
+            <!-- <div class="modal-body" style="height: calc(100vh - 143px);overflow-y: auto;"> -->
+            <div class="modal-body">
+                <div class="tab-pane" ng-if="$ctrl.data.items.length>0">
+                    <ul class="m-0">
+                        <li ng-repeat="nav in $ctrl.data.items"
+                            class="container border-left-0 border-right-0 py-1 rounded-0"                            
+                            ng-class="{'selected': $ctrl.selected === nav.isActive}">
+                            <div class="row">
+                                <div class="drag-header" style="cursor:grab; width: 15px;">
+                                    <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
+                                </div>
+                                <div class="col-7">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" id="content_{{$index}}" class="custom-control-input"
+                                            ng-model="nav.isActive">
+                                        <label class="custom-control-label"
+                                            ng-click="$ctrl.select(nav)"
+                                            for="content__{{$index}}">{{nav.title}}</label>
+
+                                    </div>
+                                </div>
+                                <div class="col-2 text-right">
+                                    <a class="text-primary btn btn-sm" ng-if="nav.detailsUrl"
+                                        ng-click="$ctrl.goToPath(nav.detailsUrl)"><i class="fa fa-pen"></i></a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-md-12">
+                        <paging class="small" page="$ctrl.data.page" page-size="$ctrl.data.pageSize"
+                            total="$ctrl.data.totalItems" ul-class="pagination justify-content-end m-0"
+                            a-class="page-link" paging-action="$ctrl.loadPosts(page-1)" scroll-top="true">
+                        </paging>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <a class="btn btn-success text-white" ng-click="$ctrl.saveSelected()">Save</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

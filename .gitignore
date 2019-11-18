@@ -290,3 +290,4 @@ src/Mix\.Cms\.Web/Cache/
 .vscode/
 
 src/Mix.Cms.Web/appsettings.*.json
+/src/_MixCore.sln

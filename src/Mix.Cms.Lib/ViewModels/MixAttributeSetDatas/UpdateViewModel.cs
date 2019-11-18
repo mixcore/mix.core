@@ -72,7 +72,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         new MixAttributeSetValue() { AttributeFieldId = field.Id }
                         , _context, _transaction);
                     val.Field = field;
-                    val.AttributeFieldName = field.Name;                    
+                    val.AttributeFieldName = field.Name;
+                    val.StringValue = field.DefaultValue;
                     val.Priority = field.Priority;
                     Values.Add(val);
                 }
@@ -102,7 +103,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     if (result.IsSucceed)
                     {
-                        item.Priority = item.Field.Priority;
+                        item.Priority = item.Field?.Priority??item.Priority;
                         item.DataId = parent.Id;
                         item.Specificulture = parent.Specificulture;
                         var saveResult = await item.SaveModelAsync(false, _context, _transaction);
@@ -127,7 +128,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     if (result.IsSucceed)
                     {
-                        item.Priority = item.Field.Priority;
+                        item.Priority = item.Field?.Priority?? item.Priority;
                         item.DataId = parent.Id;
                         item.Specificulture = parent.Specificulture;
                         var saveResult = item.SaveModel(false, _context, _transaction);
@@ -141,7 +142,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             return result;
         }
-
+        
         public override Task GenerateCache(MixAttributeSetData model, UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);

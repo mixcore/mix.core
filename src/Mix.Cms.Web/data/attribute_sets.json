@@ -6,30 +6,170 @@
       "name": "menu_item",
       "fields": [
         {
+          "id": 1,
           "attributeSetId": 1,
           "attributeSetName": "menu_item",
+          "referenceId": null,
+          "regex": null,
           "title": "Title",
           "dataType": 7,
+          "defaultValue": null,
+          "options": [],
           "name": "title",
-          "options":[],
           "isRequire": true,
           "isEncrypt": false,
           "isSelect": false,
           "isUnique": false,
-          "status": 2
+          "status": 2,
+          "createdDateTime": "2019-11-02T04:54:35.07",
+          "isClone": false,
+          "cultures": null,
+          "priority": 0,
+          "specificulture": null
         },
         {
+          "id": 2,
           "attributeSetId": 1,
           "attributeSetName": "menu_item",
+          "referenceId": null,
+          "regex": null,
           "title": "Uri",
           "dataType": 7,
+          "defaultValue": null,
+          "options": [],
           "name": "Uri",
-          "options":[],
           "isRequire": true,
           "isEncrypt": false,
           "isSelect": false,
           "isUnique": false,
-          "status": 2
+          "status": 2,
+          "createdDateTime": "2019-11-02T04:54:35.24",
+          "isClone": false,
+          "cultures": null,
+          "priority": 1,
+          "specificulture": null
+        },
+        {
+          "id": 13,
+          "attributeSetId": 1,
+          "attributeSetName": null,
+          "referenceId": null,
+          "regex": null,
+          "title": "Type",
+          "dataType": 7,
+          "defaultValue": "uri",
+          "options": [
+            {
+              "value": "uri",
+              "dataType": 7
+            },
+            {
+              "value": "page",
+              "dataType": 7
+            },
+            {
+              "value": "post",
+              "dataType": 7
+            }
+          ],
+          "name": "type",
+          "isRequire": false,
+          "isEncrypt": false,
+          "isSelect": true,
+          "isUnique": false,
+          "status": 2,
+          "createdDateTime": "2019-11-09T05:56:45.447",
+          "isClone": false,
+          "cultures": null,
+          "priority": 2,
+          "specificulture": null
+        },
+        {
+          "id": 10,
+          "attributeSetId": 1,
+          "attributeSetName": null,
+          "referenceId": null,
+          "regex": null,
+          "title": "Target",
+          "dataType": 7,
+          "defaultValue": "_top",
+          "options": [
+            {
+              "value": "_blank",
+              "dataType": 7
+            },
+            {
+              "value": "_self",
+              "dataType": 7
+            },
+            {
+              "value": "_parent",
+              "dataType": 7
+            },
+            {
+              "value": "_top",
+              "dataType": 7
+            },
+            {
+              "value": "framename",
+              "dataType": 7
+            }
+          ],
+          "name": "target",
+          "isRequire": false,
+          "isEncrypt": false,
+          "isSelect": true,
+          "isUnique": false,
+          "status": 2,
+          "createdDateTime": "2019-11-09T04:59:07.743",
+          "isClone": false,
+          "cultures": null,
+          "priority": 3,
+          "specificulture": null
+        },
+        {
+          "id": 11,
+          "attributeSetId": 1,
+          "attributeSetName": null,
+          "referenceId": null,
+          "regex": null,
+          "title": "classes",
+          "dataType": 7,
+          "defaultValue": null,
+          "options": [],
+          "name": "classes",
+          "isRequire": false,
+          "isEncrypt": false,
+          "isSelect": false,
+          "isUnique": false,
+          "status": 2,
+          "createdDateTime": "2019-11-09T04:59:07.793",
+          "isClone": false,
+          "cultures": null,
+          "priority": 4,
+          "specificulture": null
+        },
+        {
+          "id": 12,
+          "attributeSetId": 1,
+          "attributeSetName": null,
+          "referenceId": null,
+          "regex": null,
+          "title": "Description",
+          "dataType": 9,
+          "defaultValue": null,
+          "options": [],
+          "name": "description",
+          "isRequire": false,
+          "isEncrypt": false,
+          "isSelect": false,
+          "isUnique": false,
+          "status": 2,
+          "createdDateTime": "2019-11-09T04:59:07.83",
+          "isClone": false,
+          "cultures": null,
+          "priority": 5,
+          "specificulture": null
         }
       ]
     },
@@ -44,7 +184,7 @@
           "title": "Title",
           "dataType": 7,
           "name": "title",
-          "options":[],
+          "options": [],
           "isRequire": true,
           "isEncrypt": false,
           "isSelect": false,
@@ -57,7 +197,7 @@
           "title": "Menu Items",
           "dataType": 23,
           "name": "menu_items",
-          "options":[],
+          "options": [],
           "referenceId": 1,
           "isRequire": false,
           "isEncrypt": false,

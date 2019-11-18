@@ -1105,7 +1105,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     {
                         Specificulture = Specificulture,
                         AttributeSetId = Attributes.Id,
-                        AttributeSetName = Attributes.Name
+                        AttributeSetName = Attributes.Name                        
                     }
                     );
                 }
@@ -1120,6 +1120,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                         val.Field = field;
                         val.AttributeFieldName = field.Name;
                         val.Priority = field.Priority;
+                        val.StringValue = field.DefaultValue;
                         AttributeData.Data.Values.Add(val);
                     }
                     val.Priority = field.Priority;

@@ -10,19 +10,9 @@
                         </module-main>
                     </div>
                 </div>
-                <div class="tab-pane fade active show" ng-show="activedData.attributes.fields.length > 0">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h6>Attribute Data</h6>
-                        </div>
-                        <div class="card-body">
-                            <div ng-repeat="value in activedData.attributeData.data.values | orderBy:'priority' track by $index">
-                                <attribute-value-editor attribute-value="value" is-show-title="'true'" parent-type="'1'" parent-id="activedData.attributeData.id"></attribute-value-editor>
-                            </div>
-                        </div>
-                    </div>
+                <div class="tab-pane fade active show">
+                    <add-addictional-field class="mb-4" model="activedData"></add-addictional-field>
                 </div>
-
                 <tabs-v select-callback="selectPane(pane)" class="mb-3">
                     <pane-v header="Attributes" class="card" ng-if="isAdmin">
                         <div class="card-body">
@@ -139,7 +129,7 @@
                 </div>
 
 
-                <tabs-v select-callback="selectPane(pane)" class="mb-4">
+                <tabs-v ng-if="activedData" select-callback="selectPane(pane)" class="mb-4">
                     <pane-v header="Feature Img">
                         <custom-image header="'Feature upload'" type="'Modules'" folder="activedData.seoName" src-url="activedData.image" title="activedData.title" description="activedData.description" src="activedData.image" auto="'true'"></custom-image>
                     </pane-v>

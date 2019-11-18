@@ -1,9 +1,17 @@
-<div ng-if="!$ctrl.attributeValue.field.isSelect" class="form-group row">
-    <div ng-switch="$ctrl.attributeValue.field.dataType" class="col-9 pb-4">
-        
-        <div class="text-muted" ng-switch-when="23">
+<div class="form-group row">
+    <div class="col-3">
+        <h6 class="control-label m-0" ng-if="$ctrl.isShowTitle=='true'" ng-bind="$ctrl.attributeValue.field.title"></h6>
+        <small class="text-muted">
+            <!--custom-->
+            (menu item)
+        </small>
+    </div>
+    <div class="col-9 pb-4">
+
+        <div class="text-muted">
             <div class="alert alert-warning" role="alert" ng-if="!$ctrl.attributeValue.id">
-                <i class="fas fa-exclamation-triangle mr-3"></i> Please save the current item to initialization a parent ID
+                <i class="fas fa-exclamation-triangle mr-3"></i> Please save the current item to initialization a parent
+                ID
                 before input it child's data!
             </div>
             <tabs-v select-callback="selectPane(pane)" class="mb-3" ng-if="$ctrl.attributeValue.id">

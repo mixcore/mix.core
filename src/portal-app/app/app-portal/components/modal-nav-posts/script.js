@@ -1,5 +1,12 @@
 ﻿modules.component('modalNavPosts', {
     templateUrl: '/app/app-portal/components/modal-nav-posts/modal-nav-posts.html',
+    bindings: {
+        srcField: '=',
+        srcId: '=',
+        query:'=',
+        selected:'=',
+        save: '&'
+    },    
     controller: ['$rootScope', '$scope', 'ngAppSettings', 'PostService',
         function ($rootScope, $scope, ngAppSettings, postService) {
             var ctrl = this;
@@ -58,12 +65,5 @@
             }
         }
 
-    ],
-    bindings: {
-        srcField: '=',
-        srcId: '=',
-        query:'=',
-        selected:'=',
-        save: '&'
-    }
+    ]
 });

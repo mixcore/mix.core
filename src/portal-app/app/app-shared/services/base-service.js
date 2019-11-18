@@ -40,6 +40,19 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService',
 
             return await commonService.getApiResult(req);
         };
+        var _export = async function (objData, params = []) {
+            var url = this.prefixUrl + '/export';
+            for (let i = 0; i < params.length; i++) {
+                url += '/' + params[i];
+            }
+            var req = {
+                method: 'POST',
+                url: url,
+                data: JSON.stringify(objData)
+            };
+
+            return await commonService.getApiResult(req);
+        };
 
         var _delete = async function (id) {
             var url = this.prefixUrl + '/delete/' + id;
@@ -98,14 +111,27 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService',
             };
             return await commonService.getApiResult(req);            
         };
+        
+        var _applyList = async function (objData) {
+            var url = this.prefixUrl + '/apply-list';
+            var req = {
+                method: 'POST',
+                url: url,
+                data: JSON.stringify(objData)
+            };
+            return await commonService.getApiResult(req);
+        };
+
         serviceFactory.lang = '';
         serviceFactory.prefixUrl = '';
         serviceFactory.init = _init;
         serviceFactory.getSingle = _getSingle;
         serviceFactory.getList = _getList;
+        serviceFactory.export = _export;
         serviceFactory.save = _save;
         serviceFactory.saveProperties = _saveProperties;
         serviceFactory.saveList = _saveList;
+        serviceFactory.applyList = _applyList;
         serviceFactory.delete = _delete;
         serviceFactory.updateInfos = _updateInfos;
         serviceFactory.ajaxSubmitForm = _ajaxSubmitForm;

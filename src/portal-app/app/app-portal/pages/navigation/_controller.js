@@ -75,7 +75,7 @@ app.controller('NavigationController',
                 $rootScope.preview('post', item, item.title, 'modal-lg');
             };
             $scope.edit= function(data){
-                $scope.goToPath('/portal/attribute-set-data/details?dataId='+ data.id +'&attributeSetId=' + $scope.attributeSetId)
+                $scope.goToPath('/portal/navigation/details?dataId='+ data.id +'&attributeSetId=' + $scope.attributeSetId)
             };  
             $scope.remove = function (data) {
                 $rootScope.showConfirm($scope, 'removeConfirmed', [data.id], null, 'Remove', 'Are you sure');
