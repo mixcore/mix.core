@@ -77,14 +77,28 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
             }
-            Priority = Field.Priority;
-            DataType = Field.DataType;
+            Priority = Field?.Priority??Priority;
+            DataType = Field?.DataType ?? DataType;
 
             return base.ParseModel(_context, _transaction);
         }
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Field = MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId).Data;            
+
+            if (AttributeFieldId > 0)
+            {
+                Field = MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId).Data;
+            }
+            else // addictional field for page / post / module => id = 0
+            {
+                Field = new MixAttributeFields.UpdateViewModel()
+                {
+                    DataType = DataType,
+                    Title = AttributeFieldName,
+                    Name = AttributeFieldName,
+                    Priority = Priority
+                };
+            }
         }
         #endregion
 
@@ -93,7 +107,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             base.Validate(_context, _transaction);
-            if (IsValid)
+            if (IsValid && Field!=null)
             {
                 if (Field.IsUnique)
                 {

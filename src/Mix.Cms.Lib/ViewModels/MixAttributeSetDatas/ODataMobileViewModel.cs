@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetValues;
+using Mix.Cms.Lib.Repositories;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
@@ -44,7 +45,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonIgnore]
         public List<MixAttributeFields.ODataMobileViewModel> Fields { get; set; }
         //[JsonIgnore]
-        public List<MixAttributeSetDatas.ODataMobileViewModel> RefData { get; set; }= new List<ODataMobileViewModel>();
+        public List<MixAttributeSetDatas.ODataMobileViewModel> RefData { get; set; } = new List<ODataMobileViewModel>();
         [JsonProperty("data")]
         public JObject Data { get; set; }
 
@@ -82,13 +83,17 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         {
             if (string.IsNullOrEmpty(Id))
             {
-                Id = Guid.NewGuid().ToString();                
+                Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
-                Priority = Repository.Count(m => m.AttributeSetName == AttributeSetName && m.Specificulture == Specificulture,_context,_transaction).Data + 1;                
+                Priority = Repository.Count(m => m.AttributeSetName == AttributeSetName && m.Specificulture == Specificulture, _context, _transaction).Data + 1;
+                
+                
             }
             Values = Values ?? MixAttributeSetValues.ODataMobileViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
             Fields = MixAttributeFields.ODataMobileViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
+
+            
             if (string.IsNullOrEmpty(AttributeSetName))
             {
                 AttributeSetName = _context.MixAttributeSet.First(m => m.Id == AttributeSetId)?.Name;
@@ -99,10 +104,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (val == null)
                 {
                     val = new MixAttributeSetValues.ODataMobileViewModel(
-                        new MixAttributeSetValue() {
+                        new MixAttributeSetValue()
+                        {
                             AttributeFieldId = field.Id,
-                            AttributeFieldName = field.Name, 
-                            
+                            AttributeFieldName = field.Name,
+
                         }
                         , _context, _transaction);
                     val.StringValue = field.DefaultValue;
@@ -140,20 +146,45 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                                 });
                             }
                         }
-                        
+
                     }
                     else
                     {
-                       ParseModelValue(Data[val.AttributeFieldName], val);
+                        ParseModelValue(Data[val.AttributeFieldName], val);
                     }
-                    
+
                 }
                 else
                 {
                     Data.Add(ParseValue(val));
                 }
             }
-                
+
+            // Save Edm html
+            var getAttrSet = Mix.Cms.Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModel(m => m.Name == AttributeSetName, _context, _transaction);
+            var getEdm = Lib.ViewModels.MixTemplates.UpdateViewModel.GetTemplateByPath(getAttrSet.Data.EdmTemplate, Specificulture);
+            var edmField = Values.FirstOrDefault(f => f.AttributeFieldName == "edm");
+            if (edmField != null && getEdm.IsSucceed && !string.IsNullOrEmpty(getEdm.Data.Content))
+            {
+                string body = getEdm.Data.Content;
+                foreach (var prop in Data.Properties())
+                {
+                    body = body.Replace($"[[{prop.Name}]]", Data[prop.Name].Value<string>());
+                }
+                var edmFile = new FileViewModel()
+                {
+                    Content = body,
+                    Extension = ".html",
+                    FileFolder = "edms",
+                    Filename = $"{getAttrSet.Data.EdmSubject}-{Id}"
+                };
+                if (FileRepository.Instance.SaveWebFile(edmFile))
+                {
+                    Data["edm"] = edmFile.WebPath;
+                    edmField.StringValue = edmFile.WebPath;
+                }
+            }
+            //End save edm
             return base.ParseModel(_context, _transaction); ;
         }
 
@@ -168,7 +199,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             return result;
         }
 
-        
+
         public override RepositoryResponse<ODataMobileViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = base.SaveModel(isSaveSubModels, _context, _transaction);
@@ -181,6 +212,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSetData parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
+
             if (result.IsSucceed)
             {
                 RepositoryResponse<bool> saveValues = await SaveValues(parent, _context, _transaction);
@@ -192,14 +224,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 RepositoryResponse<bool> saveRefData = await SaveRefDataAsync(parent, _context, _transaction);
                 ViewModelHelper.HandleResult(saveRefData, ref result);
             }
-            
+
             // Save Related Data
             if (result.IsSucceed)
             {
                 RepositoryResponse<bool> saveRelated = await SaveRelatedDataAsync(parent, _context, _transaction);
                 ViewModelHelper.HandleResult(saveRelated, ref result);
             }
-            
+
             return result;
         }
 
@@ -246,12 +278,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         RelatedData.Add(new MixRelatedAttributeDatas.ODataMobileViewModel()
                         {
                             Id = saveRef.Data.Id,
-                            ParentId = Id,                            
+                            ParentId = Id,
                             ParentType = MixEnums.MixAttributeSetDataType.Set,
                             AttributeSetId = saveRef.Data.AttributeSetId,
                             AttributeSetName = saveRef.Data.AttributeSetName,
                             CreatedDateTime = DateTime.UtcNow,
-                            Specificulture = Specificulture                            
+                            Specificulture = Specificulture
                         });
                     }
                     ViewModelHelper.HandleResult(saveRef, ref result);
@@ -260,7 +292,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     break;
                 }
-                
+
             }
             return result;
         }
@@ -290,7 +322,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     item.Specificulture = Specificulture;
                     item.CreatedDateTime = DateTime.UtcNow;
                     var saveResult = await item.SaveModelAsync(true, context, transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);                    
+                    ViewModelHelper.HandleResult(saveResult, ref result);
                 }
                 else
                 {
@@ -355,7 +387,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 case MixEnums.MixDataType.Date:
                     item.DateTimeValue = property.Value<DateTime?>();
                     item.StringValue = property.Value<string>();
-                    break;                    
+                    break;
                 case MixEnums.MixDataType.Time:
                     item.DateTimeValue = property.Value<DateTime?>();
                     item.StringValue = property.Value<string>();
@@ -395,6 +427,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         if (saveMedia.IsSucceed)
                         {
                             item.StringValue = saveMedia.Data.FullPath;
+                            Data[item.AttributeFieldName] = item.StringValue;
                         }
                     }
                     else
@@ -432,7 +465,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                Expression<Func<MixAttributeSetValue, bool>> valPredicate = m=>m.Specificulture == culture;
+                Expression<Func<MixAttributeSetValue, bool>> valPredicate = m => m.Specificulture == culture;
                 List<ODataMobileViewModel> result = new List<ODataMobileViewModel>();
                 foreach (var q in queryDictionary)
                 {
@@ -445,7 +478,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 var data = context.MixAttributeSetData.Where(m => query.Any(q => q.DataId == m.Id) && m.Specificulture == culture);
                 foreach (var item in data)
                 {
-                    result.Add(new ODataMobileViewModel(item, context,transaction));
+                    result.Add(new ODataMobileViewModel(item, context, transaction));
                 }
                 return Task.FromResult(new RepositoryResponse<List<ODataMobileViewModel>>()
                 {
@@ -470,13 +503,22 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public override Task GenerateCache(MixAttributeSetData model, ODataMobileViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            Task result = null;
             try
             {
-                base.GenerateCache(model, view, _context, _transaction);
+                Data["id"] = model.Id;
+                Data["createdDateTime"] = model.CreatedDateTime;
+                Data["details"] = $"/api/v1/odata/{Specificulture}/attribute-set-data/mobile/{Id}";
                 
-
+                var tasks = new List<Task>();
+                tasks.AddRange(RemoveParentData(context, transaction));
                 // Remove parent caches
-                return RemoveParentData(context, transaction);
+                tasks.Add(base.GenerateCache(model, this, _context, _transaction));
+                // TODO Remove Post / Page / Module Data
+                result = Task.WhenAll(tasks);
+                result.ConfigureAwait(true);
+                result.Wait();
+                return result;
 
             }
             catch (Exception ex)
@@ -486,7 +528,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             finally
             {
-                if (isRoot)
+                if (isRoot && (result.Status == TaskStatus.RanToCompletion || result.Status == TaskStatus.Canceled || result.Status == TaskStatus.Faulted))
                 {
                     //if current Context is Root
                     context.Dispose();
@@ -494,7 +536,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
         }
 
-        private Task RemoveParentData(MixCmsContext context, IDbContextTransaction transaction)
+        private List<Task> RemoveParentData(MixCmsContext context, IDbContextTransaction transaction)
         {
             var tasks = new List<Task>();
             var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
@@ -504,10 +546,19 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 tasks.Add(Task.Run(() =>
                 {
                     var updModel = new UpdateViewModel(item, context, transaction);
-                    updModel.GenerateCache(item, updModel, context, transaction);
+                    updModel.GenerateCache(item, updModel);
                 }));
+                
             }
-            return Task.WhenAll(tasks);
+            foreach (var item in Values)
+            {
+                tasks.Add(Task.Run(() =>
+                {
+                    item.RemoveCache(item.Model);
+                }));
+
+            }
+            return tasks;
         }
         private void ParseData()
         {

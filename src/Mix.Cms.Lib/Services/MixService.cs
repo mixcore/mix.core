@@ -342,6 +342,7 @@ namespace Mix.Cms.Lib.Services
             return Task.Run(() => {
                 if (!string.IsNullOrEmpty(data["email"].Value<string>()))
                 {
+                    string to = data["email"].Value<string>();
                     var getEdm = ViewModels.MixTemplates.UpdateViewModel.GetTemplateByPath(template, culture);
                     if (getEdm.IsSucceed && !string.IsNullOrEmpty(getEdm.Data.Content))
                     {
@@ -350,7 +351,7 @@ namespace Mix.Cms.Lib.Services
                         {
                             body = body.Replace($"[[{prop.Name}]]", data[prop.Name].Value<string>());
                         }
-                        MixService.SendMail(subject, body, data["email"].Value<string>(), from);
+                        MixService.SendMail(subject, body, to, from);                        
                     }
                 }
             });

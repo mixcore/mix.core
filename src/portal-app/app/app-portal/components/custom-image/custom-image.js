@@ -1,16 +1,16 @@
 ﻿modules.component('customImage', {
     templateUrl: '/app/app-portal/components/custom-image/custom-image.html',
     bindings: {
-        header: '=',
-        description: '=',
+        header: '=?',
+        description: '=?',
         src: '=',
         srcUrl: '=',
-        postedFile: '=',
-        type: '=',
-        folder: '=',
+        postedFile: '=?',
+        type: '=?',
+        folder: '=?',
         auto: '=',
-        onDelete: '&',
-        onUpdate: '&'
+        onDelete: '&?',
+        onUpdate: '&?'
     },
     controller: ['$rootScope', '$scope', 'ngAppSettings', 'MediaService', function ($rootScope, $scope, ngAppSettings, mediaService) {
         var ctrl = this;

@@ -353,41 +353,30 @@ namespace Mix.Cms.Web.Controllers
             string orderBy = MixService.GetConfig<string>("OrderBy");
             int orderDirection = MixService.GetConfig<int>("OrderDirection");
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
-            var cacheKey = $"mvc_{_culture}_page_{seoName}_{pageSize}_{pageIndex}_{orderBy}_{orderDirection}";
             RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
-
-            if (MixService.GetConfig<bool>("IsCache"))
+            Expression<Func<MixPage, bool>> predicate;
+            if (string.IsNullOrEmpty(seoName))
             {
-                getPage = await MixCacheService.GetAsync<RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>>(cacheKey);
+                predicate = p =>
+                p.Type == (int)MixPageType.Home
+                && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+            }
+            else
+            {
+                predicate = p =>
+                p.SeoName == seoName
+                && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
             }
 
-            // Try to get page if not cached yet
-            if (getPage == null)
+            getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+            if (getPage.IsSucceed)
             {
-                Expression<Func<MixPage, bool>> predicate;
-                if (string.IsNullOrEmpty(seoName))
+                if (getPage.Data != null)
                 {
-                    predicate = p =>
-                    p.Type == (int)MixPageType.Home
-                    && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+                    getPage.Data.LoadData(pageIndex: pageIndex, pageSize: pageSize);
                 }
-                else
-                {
-                    predicate = p =>
-                    p.SeoName == seoName
-                    && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
-                }
-
-                getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
-                if (getPage.IsSucceed)
-                {
-                    if (getPage.Data != null)
-                    {
-                        getPage.Data.LoadData(pageIndex: pageIndex, pageSize: pageSize);
-                    }
-                    GeneratePageDetailsUrls(getPage.Data);
-                    //_ = MixCacheService.SetAsync(cacheKey, getPage);
-                }
+                GeneratePageDetailsUrls(getPage.Data);
+                //_ = MixCacheService.SetAsync(cacheKey, getPage);
             }
 
             if (getPage.IsSucceed)
@@ -417,31 +406,23 @@ namespace Mix.Cms.Web.Controllers
             string orderBy = MixService.GetConfig<string>("OrderBy");
             int orderDirection = MixService.GetConfig<int>("OrderDirection");
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
-            var cacheKey = $"mvc_{_culture}_page_{pageId}_{pageSize}_{pageIndex}_{orderBy}_{orderDirection}";
             RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
 
-            if (MixService.GetConfig<bool>("IsCache"))
-            {
-                getPage = await MixCacheService.GetAsync<RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>>(cacheKey);
-            }
-            if (getPage == null)
-            {
-                Expression<Func<MixPage, bool>> predicate;
+            Expression<Func<MixPage, bool>> predicate;
 
-                predicate = p =>
-                p.Id == pageId
-                && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+            predicate = p =>
+            p.Id == pageId
+            && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
 
-                getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
-                if (getPage.IsSucceed)
-                {
-                    getPage.Data.LoadData(pageIndex: pageIndex, pageSize: pageSize);
-                    getPage.Data.DetailsUrl = GenerateDetailsUrl(
-                        new { culture = _culture, seoName = getPage.Data.SeoName }
-                        );
-                    GeneratePageDetailsUrls(getPage.Data);
-                    //_ = MixCacheService.SetAsync(cacheKey, getPage);
-                }
+            getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+            if (getPage.IsSucceed)
+            {
+                getPage.Data.LoadData(pageIndex: pageIndex, pageSize: pageSize);
+                getPage.Data.DetailsUrl = GenerateDetailsUrl(
+                    new { culture = _culture, seoName = getPage.Data.SeoName }
+                    );
+                GeneratePageDetailsUrls(getPage.Data);
+                //_ = MixCacheService.SetAsync(cacheKey, getPage);
             }
 
             if (getPage.IsSucceed)
@@ -479,29 +460,18 @@ namespace Mix.Cms.Web.Controllers
             string orderBy = MixService.GetConfig<string>("OrderBy");
             int orderDirection = MixService.GetConfig<int>("OrderDirection");
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
-            var cacheKey = $"mvc_{_culture}_tag_{tagName}_{pageSize}_{pageIndex}_{orderBy}_{orderDirection}";
             RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
+            Expression<Func<MixPage, bool>> predicate;
+            predicate = p =>
+            p.SeoName == "tag"
+            && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
 
-
-            if (MixService.GetConfig<bool>("IsCache"))
+            getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+            if (getPage.IsSucceed)
             {
-                getPage = await MixCacheService.GetAsync<RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>>(cacheKey);
-            }
-            if (getPage == null)
-            {
-                Expression<Func<MixPage, bool>> predicate;
-
-                predicate = p =>
-                p.SeoName == "tag"
-                && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
-
-                getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
-                if (getPage.IsSucceed)
-                {
-                    getPage.Data.LoadDataByTag(tagName, orderBy, orderDirection, pageIndex: pageIndex, pageSize: pageSize);
-                    GeneratePageDetailsUrls(getPage.Data);
-                    //_ = MixCacheService.SetAsync(cacheKey, getPage);
-                }
+                getPage.Data.LoadDataByTag(tagName, orderBy, orderDirection, pageIndex: pageIndex, pageSize: pageSize);
+                GeneratePageDetailsUrls(getPage.Data);
+                //_ = MixCacheService.SetAsync(cacheKey, getPage);
             }
 
             if (getPage.IsSucceed)// && getPage.Data.View != null

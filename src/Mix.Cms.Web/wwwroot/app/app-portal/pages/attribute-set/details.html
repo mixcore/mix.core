@@ -2,9 +2,9 @@
     <form ng-class="{'submitted': submitted}" ng-submit="save(activedData)">
         <div class="row">
             <div class="col-8">
-                <attribute-set-main model="activedData">
+                <attribute-set-main model="activedData" class="mb-3">
                 </attribute-set-main>
-                <div class="mb-3"></div>
+                
                 <!-- app-portal/components/attribute-list -->
                 <attribute-list header="'Attributes'" fields="activedData.fields" remove-attributes="activedData.removeAttributes">
                 </attribute-list>
@@ -18,6 +18,8 @@
                         </mix-template-editor>
                     </pane-v>
                 </tabs-v>
+                <attribute-set-edm model="activedData">
+                    </attribute-set-edm>
             </div>
             <div class="col-4">
                 <actions preview-url="activedData.detailsUrl" content-url="contentUrl" back-url="referrerUrl"></actions>
