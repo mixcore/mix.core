@@ -76,6 +76,7 @@
         },
         {
             "title": "Services",
+            "isHiden": true,
             "path": "#",
             "icon": "mi mi-AdjustHologram",
             "subMenus": [
