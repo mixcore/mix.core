@@ -1,21 +1,24 @@
-<div class="card">
-    <h6 class="card-header">
-        Edm
-    </h6>
+<div class="card mb-4">
+    <div class="card-header">
+        <h6>eDM
+        </h6>
+
+    </div>
     <div class="card-body">
+
+        <div class="form-group custom-control custom-switch">
+            <input type="checkbox" ng-model="$ctrl.model.edmAutoSend" id="edmAutoSend" class="custom-control-input">
+            <label class="custom-control-label align-middle" for="edmAutoSend">
+                Auto send an eMail to the user after they submitted the form
+            </label>
+        </div>
         <div class="form-group">
-            <label>Edm Subject</label>
+            <label>Email Subject</label>
             <input type="text" class="form-control" ng-model="$ctrl.model.edmSubject">
         </div>
         <div class="form-group">
-            <label>Edm From</label>
+            <label>Email From</label>
             <input type="email" class="form-control" ng-model="$ctrl.model.edmFrom">
-        </div>
-        <div class="custom-control custom-switch">
-            <input type="checkbox" ng-model="$ctrl.model.edmAutoSend" id="edmAutoSend" class="custom-control-input">
-            <label class="custom-control-label align-middle" for="edmAutoSend">
-                Auto Send Mail
-            </label>
         </div>
     </div>
 </div>
