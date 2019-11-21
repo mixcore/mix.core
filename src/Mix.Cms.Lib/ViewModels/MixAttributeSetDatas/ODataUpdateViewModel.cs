@@ -71,19 +71,19 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     val = new MixAttributeSetValues.UpdateViewModel(
                         new MixAttributeSetValue() { AttributeFieldId = field.Id }
-                        , _context, _transaction);
+                        , _context, _transaction);                    
                     val.Field = field;
+                    val.DataType = field.DataType;
                     val.AttributeFieldName = field.Name;
+                    val.AttributeSetName = field.AttributeSetName;
                     val.StringValue = field.DefaultValue;
                     val.Priority = field.Priority;
                     Values.Add(val);
                 }
-                val.AttributeSetName = AttributeSetName;
+                val.DataId = Id;
                 val.Priority = field.Priority;
                 val.Field = field;
             }
-
-
         }
         public override MixAttributeSetData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -92,7 +92,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;               
             }
-
+            if (AttributeSetId >0 && string.IsNullOrEmpty(AttributeSetName))
+            {
+                var attr = _context.MixAttributeSet.FirstOrDefault(m => m.Id == AttributeSetId);
+                if (attr!=null)
+                {
+                    AttributeSetName = attr.Name;
+                }
+            }
             HandleEdm(_context, _transaction);
 
             return base.ParseModel(_context, _transaction);
@@ -150,11 +157,18 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public override Task GenerateCache(MixAttributeSetData model, ODataUpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            Task result = null;
             try
             {
-                RemoveParentData(context, transaction);
+                var tasks = new List<Task>();
+                tasks.AddRange(RemoveParentData(context, transaction));
                 // Remove parent caches
-                return base.RemoveCache(model, _context, _transaction);
+                tasks.Add(base.GenerateCache(model, this, _context, _transaction));
+                // TODO Remove Post / Page / Module Data
+                result = Task.WhenAll(tasks);
+                result.ConfigureAwait(true);
+                result.Wait();
+                return result;
 
             }
             catch (Exception ex)
@@ -164,7 +178,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             finally
             {
-                if (isRoot)
+                if (isRoot && (result.Status == TaskStatus.RanToCompletion || result.Status == TaskStatus.Canceled || result.Status == TaskStatus.Faulted))
                 {
                     //if current Context is Root
                     context.Dispose();
@@ -172,19 +186,29 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
         }
 
-        private void RemoveParentData(MixCmsContext context, IDbContextTransaction transaction)
+        private List<Task> RemoveParentData(MixCmsContext context, IDbContextTransaction transaction)
         {
+            var tasks = new List<Task>();
             var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
                 .Any(d => d.Specificulture == Specificulture && d.Id == Id));
             foreach (var item in attrDatas)
             {
-                var updModel = new UpdateViewModel(item, context, transaction);
-                updModel.GenerateCache(item, updModel, context, transaction);
+                tasks.Add(Task.Run(() =>
+                {
+                    var updModel = new UpdateViewModel(item, context, transaction);
+                    updModel.GenerateCache(item, updModel);
+                }));
+
             }
             foreach (var item in Values)
             {
-                item.GenerateCache(item.Model, item, context, transaction);
+                tasks.Add(Task.Run(() =>
+                {
+                    item.RemoveCache(item.Model);
+                }));
+
             }
+            return tasks;
         }
         private void HandleEdm(MixCmsContext _context, IDbContextTransaction _transaction)
         {
