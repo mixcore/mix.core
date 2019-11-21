@@ -1,17 +1,32 @@
 <!-- Main content -->
-<section class="" ng-init="getSingle()">
-    <form ng-class="{'submitted': submitted}" ng-submit="save(activedData)">
-        <tabs-v class="mb-3">
-            <pane-v header="Content">
-                <div class="row">
-                    <section class="col-sm-8 pr-3">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <module-main module="activedData">
-                                </module-main>
-                            </div>
+<section ng-init="getSingle()">
+    <form class="row" ng-class="{'submitted': submitted}" ng-submit="save(activedData)">
+        <section class="col-sm-8 pr-3">
+            <tabs-v class="mb-3">
+                <pane-v header="Content">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <module-main module="activedData">
+                            </module-main>
                         </div>
-                        <tabs-v select-callback="selectPane(pane)" class="mb-3">
+                        <div class="col-lg-12">
+                            <addictional-value class="mb-4" model="activedData"></addictional-value>
+                        </div>
+                    </div>
+                </pane-v>
+                <pane-v header="Structure">
+                    <div class="row">
+                        <div class="tab-pane fade active show col-lg-12">
+                            <addictional-field class="mb-4" model="activedData"></addictional-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="tab-pane fade active show col-lg-12">
+                            <module-type class="mb-4" model="activedData"></module-type>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <tabs-v select-callback="selectPane(pane)" class="mb-3 col-lg-12">
                             <pane-v header="Attributes" class="card" ng-if="isAdmin">
                                 <div class="card-body">
                                     <input type="hidden" asp-for="Id">
@@ -31,19 +46,17 @@
                                 <template-editor folder-type="'Edms'" template="activedData.edmView" templates="activedData.edms"></template-editor>
                             </pane-v>
                         </tabs-v>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <addictional-value class="mb-4" model="activedData"></addictional-value>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade active show" id="pills-general" role="tabpanel" aria-labelledby="pills-general-tab">
+                    </div>
+                    <div class="row">
+                        <div class="tab-pane fade active show col-lg-12" id="pills-general" role="tabpanel" aria-labelledby="pills-general-tab">
                             <div class="card mb-4">
                                 <div class="card-header">
                                     <h6>Attribute Sets</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="alert alert-warning mb-0" role="alert" ng-if="!activedData.id">
-                                        <i class="fas fa-exclamation-triangle mr-3"></i> Please save post to continues
+                                        <i class="fas fa-exclamation-triangle mr-3"></i> Please save post to
+                                        continues
                                         with
                                         attributtes section!
                                     </div>
@@ -52,79 +65,69 @@
                                 </div>
                             </div>
                         </div>
-                    </section>
-                    <section class="col-sm-4 pl-3" style="padding-left:0">
-                        <actions preview-url="activedData.detailsUrl" back-url="'/portal/module/list'">
-                        </actions>
+                    </div>
+                </pane-v>
+            </tabs-v>
+        </section>
+        <section class="col-sm-4 pl-3">
+            <actions preview-url="activedData.detailsUrl" back-url="'/portal/module/list'">
+            </actions>
 
-                        <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
-                        <div class="card mb-4">
-                            <h6 class="card-header position-sticky position-sticky-under-actionbar">
-                                Info
-                            </h6>
-                            <div class="card-body">
+            <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
+            <div class="card mb-4">
+                <h6 class="card-header position-sticky position-sticky-under-actionbar">
+                    Info
+                </h6>
+                <div class="card-body">
 
-                                <statuses status="activedData.status"></statuses>
-                                <div class="form-group" ng-if="activedData.status == 4">
-                                    <label class="control-label">Published Date Time</label>
-                                    <div class="input-group input-group-sm">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="basic-addon1"><i class="mi mi-Calendar"></i></span>
-                                        </div>
-                                        <input value="{{activedData.publishedDateTime}}" ng-model="activedData.publishedDateTime" type="datetime-local" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label">Created Date Time</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="basic-addon1"><i class="mi mi-Calendar"></i></span>
-                                        </div>
-                                        <input ng-model="activedData.createdDateTime" type="text" class="form-control" readonly="readonly">
-                                    </div>
-                                </div>
-
-                                <div class="form-group mb-0">
-                                    <label class="control-label">Author</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="basic-addon1"><i class="mi mi-Contact"></i></span>
-                                        </div>
-                                        <input ng-model="activedData.createdBy" class="form-control" readonly="readonly">
-                                    </div>
-                                </div>
-
+                    <statuses status="activedData.status"></statuses>
+                    <div class="form-group" ng-if="activedData.status == 4">
+                        <label class="control-label">Published Date Time</label>
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="mi mi-Calendar"></i></span>
                             </div>
+                            <input value="{{activedData.publishedDateTime}}" ng-model="activedData.publishedDateTime" type="datetime-local" class="form-control">
                         </div>
-
-
-                        <tabs-v ng-if="activedData" select-callback="selectPane(pane)" class="mb-4">
-                            <pane-v header="Feature Img">
-                                <custom-image header="'Feature upload'" type="'Modules'" folder="activedData.seoName" src-url="activedData.image" title="activedData.title" description="activedData.description" src="activedData.image" auto="'true'">
-                                </custom-image>
-                            </pane-v>
-                            <pane-v header="Thumbnail Img">
-                                <custom-image header="'Thumnail upload'" type="'Modules'" folder="activedData.seoName" title="activedData.title" description="activedData.description" src-url="activedData.thumbnail" src="activedData.thumbnail" auto="'true'">
-                                </custom-image>
-                            </pane-v>
-                        </tabs-v>
-
-
-
-                    </section>
-                </div>
-            </pane-v>
-            <pane-v header="Structure">
-                <div class="row">
-                    <section class="col-sm-8 pr-3">
-                        <div class="tab-pane fade active show">
-                            <addictional-field class="mb-4" model="activedData"></addictional-field>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Created Date Time</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="mi mi-Calendar"></i></span>
+                            </div>
+                            <input ng-model="activedData.createdDateTime" type="text" class="form-control" readonly="readonly">
                         </div>
-                    </section>
-                </div>
-            </pane-v>
-        </tabs-v>
+                    </div>
 
+                    <div class="form-group mb-0">
+                        <label class="control-label">Author</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="mi mi-Contact"></i></span>
+                            </div>
+                            <input ng-model="activedData.createdBy" class="form-control" readonly="readonly">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <tabs-v ng-if="activedData" select-callback="selectPane(pane)" class="mb-4">
+                <pane-v header="Feature Img">
+                    <custom-image header="'Feature upload'" type="'Modules'" folder="activedData.seoName" src-url="activedData.image" title="activedData.title" description="activedData.description" src="activedData.image" auto="'true'">
+                    </custom-image>
+                </pane-v>
+                <pane-v header="Thumbnail Img">
+                    <custom-image header="'Thumnail upload'" type="'Modules'" folder="activedData.seoName" title="activedData.title" description="activedData.description" src-url="activedData.thumbnail" src="activedData.thumbnail" auto="'true'">
+                    </custom-image>
+                </pane-v>
+            </tabs-v>
+
+
+
+        </section>
     </form>
 </section>
 <!-- /.content -->

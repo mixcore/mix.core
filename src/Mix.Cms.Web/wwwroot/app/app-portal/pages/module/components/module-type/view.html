@@ -1,0 +1,18 @@
+<div class="card mb-4">    
+    <div class="card-body collapse show">        
+        <div class="form-group">
+            <label class="control-label">Module types</label><br>
+            <div class="custom-control custom-switch custom-control-inline col-3" ng-repeat="type in $ctrl.settings.moduleTypes track by $index" ng-switch="type" ng-class="{active: $index === $ctrl.model.type}" ng-click="$ctrl.model.type=$index;">
+                <input type="radio" ng-model="$ctrl.model.type" class="custom-control-input" value="{{$index}}" id="module_type_{{$index}}" name="module_type_{{$index}}">
+                <label ng-switch-when="Content" class="custom-control-label" for="module_type_{{$index}}" ng-click="$ctrl.model.type=$index;">Content</label>
+                <label ng-switch-when="Data" class="custom-control-label" for="module_type_{{$index}}" ng-click="$ctrl.model.type=$index;">Data</label>
+                <label ng-switch-when="ListPost" class="custom-control-label" for="module_type_{{$index}}" ng-click="$ctrl.model.type=$index;">List Post</label>
+                <label ng-switch-when="SubPage" class="custom-control-label" for="module_type_{{$index}}" ng-click="$ctrl.model.type=$index;">Sub Page</label>
+                <label ng-switch-when="SubPost" class="custom-control-label" for="module_type_{{$index}}" ng-click="$ctrl.model.type=$index;">Sub Post</label>
+                <label ng-switch-when="SubProduct" class="custom-control-label" for="module_type_{{$index}}" ng-click="$ctrl.model.type=$index;">Sub Product</label>
+                <label ng-switch-when="ListProduct" class="custom-control-label" for="module_type_{{$index}}" ng-click="$ctrl.model.type=$index;">List Product</label>
+                <label ng-switch-when="Gallery" class="custom-control-label" for="module_type_{{$index}}" ng-click="$ctrl.model.type=$index;">Gallery</label>
+            </div>
+        </div>
+    </div>
+</div>
