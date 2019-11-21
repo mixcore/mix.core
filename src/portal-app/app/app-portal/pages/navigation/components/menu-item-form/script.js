@@ -64,8 +64,6 @@ modules.component('menuItemForm', {
                     ctrl.setFieldValue('type', type);
                     ctrl.setFieldValue('uri', data.detailsUrl);
                 }
-                console.log(ctrl.attrData)
-                console.log(data);
             };
             ctrl.submit = async function () {
                 angular.forEach(ctrl.attrData.values, function (e) {

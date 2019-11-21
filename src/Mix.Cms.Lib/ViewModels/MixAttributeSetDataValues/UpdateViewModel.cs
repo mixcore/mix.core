@@ -88,6 +88,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
             if (AttributeFieldId > 0)
             {
                 Field = MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId).Data;
+                if (Field != null && DataType == MixEnums.MixDataType.Reference)
+                {
+                    AttributeSetName = _context.MixAttributeSet.FirstOrDefault(m => m.Id == Field.ReferenceId)?.Name;
+                }
             }
             else // addictional field for page / post / module => id = 0
             {
@@ -99,6 +103,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                     Priority = Priority
                 };
             }
+            
         }
         #endregion
 

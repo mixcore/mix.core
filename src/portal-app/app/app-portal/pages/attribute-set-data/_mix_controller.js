@@ -1,7 +1,7 @@
 'use strict';
 app.controller('MixAttributeSetDataController',
-    ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$location', 'MixAttributeSetDataService',
-        function ($scope, $rootScope, ngAppSettings, $routeParams, $location, service) {
+    ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$location', 'MixAttributeSetDataService', 'RelatedAttributeSetDataService',
+        function ($scope, $rootScope, ngAppSettings, $routeParams, $location, service, navService) {
             BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
             $scope.queries = {};
             $scope.settings = $rootScope.globalSettings;
@@ -10,11 +10,36 @@ app.controller('MixAttributeSetDataController',
             $scope.init = async function () {
                 $scope.attributeSetId = $routeParams.attributeSetId;
                 $scope.attributeSetName = $routeParams.attributeSetName;
+                $scope.refParentId = $routeParams.refParentId;
+                $scope.refParentType = $routeParams.refParentType;
                 $scope.dataId = $routeParams.dataId;
                 $scope.request.query = 'attributeSetId=' + $routeParams.attributeSetId;
                 $scope.request.query += '&attributeSetName=' + $routeParams.attributeSetName;
-            };
 
+                if ($scope.refParentId && $scope.refParentType) {
+                    $scope.refDataModel = {
+                        parentId: $scope.refParentId,
+                        parentType: $scope.refParentType
+                    };
+                }
+            };
+            $scope.saveSuccessCallback = function () {
+                if ($scope.refDataModel) {
+                    $scope.refDataModel.id = $scope.activedData.id;
+                    $scope.refDataModel.data = $scope.activedData.data;
+                    $rootScope.isBusy = true;
+                    navService.save('portal', $scope.refDataModel).then(resp => {
+                        if (resp.isSucceed) {
+                            $rootScope.isBusy = false;
+                            $scope.$apply();
+                        } else {
+                            $rootScope.showMessage('failed');
+                            $rootScope.isBusy = false;
+                            $scope.$apply();
+                        }
+                    });
+                }
+            }
             $scope.preview = function (item) {
                 item.editUrl = '/portal/post/details/' + item.id;
                 $rootScope.preview('post', item, item.title, 'modal-lg');
@@ -43,14 +68,14 @@ app.controller('MixAttributeSetDataController',
             };
             $scope.sendMail = function (data) {
                 var email = '';
-                angular.forEach(data.values, function(e){
-                    if(e.attributeFieldName == 'email'){
+                angular.forEach(data.values, function (e) {
+                    if (e.attributeFieldName == 'email') {
                         email = e.stringValue;
                     }
                 })
-                $rootScope.showConfirm($scope, 'sendMailConfirmed', [data], null, 'Send mail', 'Are you sure to send mail to '+ email);
+                $rootScope.showConfirm($scope, 'sendMailConfirmed', [data], null, 'Send mail', 'Are you sure to send mail to ' + email);
             };
-            $scope.sendMailConfirmed = async function(data){
+            $scope.sendMailConfirmed = async function (data) {
                 $rootScope.isBusy = true;
                 $rootScope.isBusy = true;
                 var result = await service.sendMail([data.id]);
@@ -92,11 +117,11 @@ app.controller('MixAttributeSetDataController',
                 $scope.request.query = '';
                 $scope.request.query = 'attributeSetId=' + $routeParams.attributeSetId;
                 $scope.request.query += '&attributeSetName=' + $routeParams.attributeSetName;
-                if($scope.filterType){
+                if ($scope.filterType) {
                     $scope.request.query += '&filterType=' + $scope.filterType;
                 }
                 Object.keys($scope.queries).forEach(e => {
-                    if($scope.queries[e]){
+                    if ($scope.queries[e]) {
                         $scope.request.query += '&' + e + '=' + $scope.queries[e];
                     }
                 });
@@ -149,11 +174,11 @@ app.controller('MixAttributeSetDataController',
                 $scope.request.query = '';
                 $scope.request.query = 'attributeSetId=' + $routeParams.attributeSetId;
                 $scope.request.query += '&attributeSetName=' + $routeParams.attributeSetName;
-                if($scope.filterType){
+                if ($scope.filterType) {
                     $scope.request.query += '&filterType=' + $scope.filterType;
                 }
                 Object.keys($scope.queries).forEach(e => {
-                    if($scope.queries[e]){
+                    if ($scope.queries[e]) {
                         $scope.request.query += '&' + e + '=' + $scope.queries[e];
                     }
                 });

@@ -53,6 +53,15 @@ modules.component('navigationForm', {
                     $scope.$apply();
                 }
             };
+            ctrl.loadSelected = function(data, type){
+                if(data){
+                    ctrl.setFieldValue('id', data.id);
+                    ctrl.setFieldValue('specificulture', data.specificulture);
+                    ctrl.setFieldValue('title', data.title);
+                    ctrl.setFieldValue('type', type);
+                    ctrl.setFieldValue('uri', data.detailsUrl);
+                }
+            };
             ctrl.reload = async function () {
                 ctrl.attrData = angular.copy(ctrl.defaultData);
             };
@@ -106,6 +115,14 @@ modules.component('navigationForm', {
                         ctrl.attrData.data.push(attr);
                     }
                     return attr;
+                }
+            };
+            ctrl.setFieldValue = function (attributeName, val) {
+                if (ctrl.attrData) {
+                    var attr = $rootScope.findObjectByKey(ctrl.attrData.values, 'attributeFieldName', attributeName);
+                    if(attr){
+                        attr.stringValue = val;
+                    }
                 }
             };
         }]
