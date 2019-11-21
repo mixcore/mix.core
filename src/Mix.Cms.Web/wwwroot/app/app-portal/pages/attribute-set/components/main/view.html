@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card mb-4">
     <h6 class="card-header">
         Attribute
     </h6>
@@ -19,6 +19,7 @@
                 <label ng-repeat="type in $ctrl.settings.attributeSetTypes track by $index" ng-switch="type" ng-class="{active: $index === $ctrl.model.type}" class="btn btn-outline-primary btn-block mt-0" ng-click="$ctrl.model.type=$index;">
                     <input ng-model="$ctrl.model.type" type="radio" value="{{$index}}" class="custom-control-input" id="model_type_{{$index}}">
                     <span ng-switch-when="System" class="" title="{{type}}"><i class="fas fa-cog"></i> System</span>
+                    <span ng-switch-when="Set" class="" title="{{type}}"><i class="fas fa-database"></i> Data Set</span>
                     <span ng-switch-when="Page" class="" title="{{type}}"><i class="far fa-file"></i> Page</span>
                     <span ng-switch-when="Post" class="" title="{{type}}"><i class="far fa-newspaper"></i> Post</span>
                     <span ng-switch-when="Module" class="" title="{{type}}"><i class="fas fa-puzzle-piece"></i>
@@ -31,6 +32,6 @@
         <div class="form-group">
             <label>Description</label>
             <textarea class="form-control" ng-model="$ctrl.model.description"></textarea>
-        </div>        
+        </div>
     </div>
 </div>
