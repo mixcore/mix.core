@@ -1,9 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 {
@@ -31,7 +34,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         [JsonProperty("parentId")]
         public string ParentId { get; set; }
         [JsonProperty("parentType")]
-        public int ParentType { get; set; }
+        public MixEnums.MixAttributeSetDataType ParentType { get; set; }
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
         [JsonProperty("attributeSetName")]
@@ -73,7 +76,100 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
             AttributeSetName = _context.MixAttributeSet.FirstOrDefault(m => m.Id == AttributeSetId)?.Name;   
         }
 
+        public override Task GenerateCache(MixRelatedAttributeData model, ODataUpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            Task result = null;
+            try
+            {
+                var tasks = new List<Task>();
+                tasks.AddRange(GenerateRelatedData(context, transaction));
+                // Remove parent caches
+                tasks.Add(base.GenerateCache(model, this, _context, _transaction));
+                // TODO Remove Post / Page / Module Data
+                result = Task.WhenAll(tasks);
+                result.ConfigureAwait(true);
+                result.Wait();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                UnitOfWorkHelper<MixCmsContext>.HandleException<UpdateViewModel>(ex, isRoot, transaction);
+                return Task.FromException(ex);
+            }
+            finally
+            {
+                if (isRoot && (result.Status == TaskStatus.RanToCompletion || result.Status == TaskStatus.Canceled || result.Status == TaskStatus.Faulted))
+                {
+                    //if current Context is Root
+                    context.Dispose();
+                }
+            }
+        }
 
+        private List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var tasks = new List<Task>();
+            switch (ParentType)
+            {
+                case MixEnums.MixAttributeSetDataType.System:                    
+                case MixEnums.MixAttributeSetDataType.Set:
+                case MixEnums.MixAttributeSetDataType.Service:
+                    var attrDatas = context.MixAttributeSetData.Where(m => m.Specificulture == Specificulture && m.Id == ParentId);
+                    foreach (var item in attrDatas)
+                    {
+                        tasks.Add(Task.Run(() =>
+                        {
+                            var updModel = new MixAttributeSetDatas.ReadViewModel(item, context, transaction);
+                            updModel.GenerateCache(item, updModel);
+                        }));
+
+                    }
+                    break;
+                case MixEnums.MixAttributeSetDataType.Post:
+                    int.TryParse(ParentId, out int postId);
+                    var post = context.MixPost.First(m => m.Specificulture == Specificulture && m.Id == postId);
+                    if(post!=null)
+                    {
+                        tasks.Add(Task.Run(() =>
+                        {
+                            var updModel = new MixPosts.ReadViewModel(post, context, transaction);
+                            updModel.GenerateCache(post, updModel);
+                        }));
+
+                    }
+                    break;
+                case MixEnums.MixAttributeSetDataType.Page:
+                    int.TryParse(ParentId, out int pageId);
+                    var page = context.MixPage.First(m => m.Specificulture == Specificulture && m.Id == pageId);
+                    if (page != null)
+                    {
+                        tasks.Add(Task.Run(() =>
+                        {
+                            var updModel = new MixPages.ReadViewModel(page, context, transaction);
+                            updModel.GenerateCache(page, updModel);
+                        }));
+
+                    }
+                    break;
+                case MixEnums.MixAttributeSetDataType.Module:
+                    int.TryParse(ParentId, out int moduleId);
+                    var module = context.MixModule.First(m => m.Specificulture == Specificulture && m.Id == moduleId);
+                    if (module != null)
+                    {
+                        tasks.Add(Task.Run(() =>
+                        {
+                            var updModel = new MixModules.ReadListItemViewModel(module, context, transaction);
+                            updModel.GenerateCache(module, updModel);
+                        }));
+
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return tasks;
+        }
         #region Async
 
 
