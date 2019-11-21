@@ -2,36 +2,61 @@
 app.controller('NavigationController',
     [
         '$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$location',
-        'NavigationService', 'CommonService',
+        'NavigationService', 'RelatedAttributeSetDataService', 'CommonService',
         function ($scope, $rootScope, ngAppSettings, $routeParams, $location,
-            service, commonService) {
+            service, navService, commonService) {
             BaseODataCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
             $scope.defaultId = 'default';
             $scope.parentId = null;
             $scope.parentType = null;
             $scope.cates = ['Site', 'System'];
-            $scope.others=[];
-            $scope.settings = $rootScope.globalSettings;            
+            $scope.others = [];
+            $scope.settings = $rootScope.globalSettings;
             $scope.canDrag = $scope.request.orderBy !== 'Priority' || $scope.request.direction !== '0';
-            $scope.init= async function(){
+            $scope.init = async function () {
                 $scope.attributeSetId = $routeParams.attributeSetId;
                 $scope.attributeSetName = $routeParams.attributeSetName;
                 $scope.dataId = $routeParams.dataId;
-                
+                $scope.refParentId = $routeParams.refParentId;
+                $scope.refParentType = $routeParams.refParentType;
+                if ($scope.refParentId && $scope.refParentType) {
+                    $scope.refDataModel = {
+                        parentId: $scope.refParentId,
+                        parentType: $scope.refParentType
+                    };
+                }
             };
-            $scope.saveSuccessCallback = function () {
-                // if($scope.parentId){
-                //     $location.url('/portal/attribute-set-data/details?dataId='+ $scope.parentId);
-                // }
-                // else{
-                //     $location.url('/portal/attribute-set-data/list?attributeSetId='+ $scope.activedData.attributeSetId);                    
-                // }
+            $scope.saveSuccessCallback = function () {                
+                if ($scope.refDataModel) {
+                    $scope.refDataModel.id = $scope.activedData.id;
+                    $scope.refDataModel.attributeSetId = $scope.activedData.attributeSetId;
+                    $scope.refDataModel.attributeSetName = $scope.activedData.attributeSetName;
+                    $scope.refDataModel.specificulture = $scope.activedData.specificulture;
+                    $scope.refDataModel.data = $scope.activedData;
+                    $rootScope.isBusy = true;
+                    navService.save('portal', $scope.refDataModel).then(resp => {
+                        if (resp.isSucceed) {
+                            $rootScope.isBusy = false;
+                            if($scope.parentId){
+                                $location.url('/portal/navigation/details?dataId='+ $scope.parentId);
+                            }
+                            else{
+                                $location.url('/portal/navigation/list?attributeSetId='+ $scope.activedData.attributeSetId);                    
+                            }
+                            $scope.$apply();
+                        } else {
+                            $rootScope.showMessage('failed');
+                            $rootScope.isBusy = false;
+                            $scope.$apply();
+                        }
+                    });
+                }
             };
             $scope.getList = async function (page = 0) {
                 $rootScope.isBusy = true;
                 $scope.attributeSetId = $routeParams.attributeSetId;
                 $scope.attributeSetName = $routeParams.attributeSetName;
-                if(page != undefined){
+                if (page != undefined) {
                     $scope.request.pageIndex = page;
                 }
                 var type = $routeParams.type;
@@ -74,9 +99,9 @@ app.controller('NavigationController',
                 item.editUrl = '/portal/post/details/' + item.id;
                 $rootScope.preview('post', item, item.title, 'modal-lg');
             };
-            $scope.edit= function(data){
-                $scope.goToPath('/portal/navigation/details?dataId='+ data.id +'&attributeSetId=' + $scope.attributeSetId)
-            };  
+            $scope.edit = function (data) {
+                $scope.goToPath('/portal/attribute-set-data/details?dataId=' + data.id + '&attributeSetId=' + $scope.attributeSetId+ '&attributeSetName=' + $scope.attributeSetId)
+            };
             $scope.remove = function (data) {
                 $rootScope.showConfirm($scope, 'removeConfirmed', [data.id], null, 'Remove', 'Are you sure');
             };
@@ -97,7 +122,7 @@ app.controller('NavigationController',
                 }
             };
 
-            $scope.saveOthers = async function(){                
+            $scope.saveOthers = async function () {
                 var response = await service.saveList($scope.others);
                 if (response.isSucceed) {
                     $scope.getList();

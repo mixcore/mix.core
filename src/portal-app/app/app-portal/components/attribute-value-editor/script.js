@@ -10,6 +10,7 @@ modules.component('attributeValueEditor', {
     controller: ['$rootScope', '$scope', 'ngAppSettings', '$location', 'RelatedAttributeSetDataService', 'AttributeSetDataService', 
         function ($rootScope, $scope, ngAppSettings,$location, navService,dataService) {
         var ctrl = this;
+        ctrl.goToPath = $rootScope.goToPath;
         ctrl.icons = ngAppSettings.icons;
         ctrl.refData = null;
         ctrl.defaultDataModel = null;
@@ -28,6 +29,7 @@ modules.component('attributeValueEditor', {
             }
         }.bind(ctrl);
         ctrl.$onInit = function () {
+            ctrl.initData();
         };
         ctrl.initData = async function(){
             setTimeout(() => {                
@@ -146,9 +148,10 @@ modules.component('attributeValueEditor', {
             });
         }
         ctrl.updateRefData = function(nav){
-            ctrl.refDataModel = nav;
-            var e = $(".pane-form-" + ctrl.attributeValue.field.referenceId)[0];
-            angular.element(e).triggerHandler('click');
+            ctrl.goToPath('/portal/attribute-set-data/details?dataId=' + nav.data.id + '&attributeSetId=' + nav.data.attributeSetId)
+            // ctrl.refDataModel = nav;
+            // var e = $(".pane-form-" + ctrl.attributeValue.field.referenceId)[0];
+            // angular.element(e).triggerHandler('click');
             // $location.url('/portal/attribute-set-data/details?dataId='+ item.id +'&attributeSetId=' + item.attributeSetId+'&parentType=' + item.parentType+'&parentId=' + item.parentId);
         };
         ctrl.saveRefData = function(data){            

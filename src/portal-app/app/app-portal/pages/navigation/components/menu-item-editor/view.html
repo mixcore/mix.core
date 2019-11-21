@@ -14,19 +14,19 @@
                 ID
                 before input it child's data!
             </div>
-            <tabs-v select-callback="selectPane(pane)" class="mb-3" ng-if="$ctrl.attributeValue.id">
-                <pane-v id="pane-data-{{$ctrl.attributeValue.field.referenceId}}" header="Data" class="card-body">
+            <div class="row" ng-if="$ctrl.attributeValue.dataId">
+                <div class="col-md-12">
+                    <a href="/portal/navigation/create?attributeSetName={{$ctrl.attributeValue.attributeSetName}}&attributeSetId={{$ctrl.attributeValue.field.referenceId}}&dataId=default&refParentId={{$ctrl.parentId}}&refParentType={{$ctrl.parentType}}"
+                        class="btn btn-sm btn-primary float-right px-4 mr-2">
+                        <i class="fas fa-plus"></i> Create data
+                    </a>
+                </div>
+                <div class="col-md-12">
                     <attribute-set-nav-values on-update="$ctrl.updateRefData(data)"
                         on-delete="$ctrl.removeRefData(data)" data="$ctrl.refData">
                     </attribute-set-nav-values>
-                </pane-v>
-                <pane-v id="pane-form-{{$ctrl.attributeValue.field.referenceId}}" header="Form" class="card-body">
-                    <menu-item-form ng-if="$ctrl.attributeValue.id" attr-set-id="$ctrl.attributeValue.field.referenceId"
-                        default-id="'default'" parent-id="$ctrl.parentId" parent-type="$ctrl.parentType"
-                        attr-data="$ctrl.refDataModel.data" save-data="$ctrl.saveRefData(data)"></menu-item-form>
-                </pane-v>
-            </tabs-v>
-            <!-- <pre>{{$ctrl.attributeValue | json}}</pre> -->
+                </div>
+            </div>
 
         </div>
     </div>
