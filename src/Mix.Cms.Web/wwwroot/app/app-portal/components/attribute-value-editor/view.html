@@ -1,6 +1,6 @@
 <div ng-if="!$ctrl.attributeValue.field.isSelect" class="form-group row">
     <div class="col-3">
-        <h6 class="control-label m-0" ng-if="$ctrl.isShowTitle=='true'" ng-bind="$ctrl.attributeValue.field.title"></h6>
+        <h6 class="control-label m-0" ng-if="$ctrl.isShowTitle=='true'" ng-bind="$ctrl.attributeValue.field.title || $ctrl.attributeValue.field.name"></h6>
         <div ng-switch="$ctrl.attributeValue.dataType">
             <small class="text-muted" ng-switch-when="0">
                 <!--custom-->
