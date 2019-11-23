@@ -143,42 +143,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         }
         #endregion
         #endregion
-        public override Task GenerateCache(MixAttributeSetData model, NavigationViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            Task result = null;
-            try
-            {
-                Data["id"] = model.Id;
-                Data["createdDateTime"] = model.CreatedDateTime;
-                Data["details"] = $"/api/v1/odata/{Specificulture}/attribute-set-data/mobile/{Id}";
-
-                var tasks = new List<Task>();
-                tasks.AddRange(RemoveParentData(context, transaction));
-                // Remove parent caches
-                tasks.Add(base.GenerateCache(model, this, _context, _transaction));
-                // TODO Remove Post / Page / Module Data
-                result = Task.WhenAll(tasks);
-                result.ConfigureAwait(true);
-                result.Wait();
-                return result;
-
-            }
-            catch (Exception ex)
-            {
-                UnitOfWorkHelper<MixCmsContext>.HandleException<UpdateViewModel>(ex, isRoot, transaction);
-                return Task.FromException(ex);
-            }
-            finally
-            {
-                if (isRoot && (result.Status == TaskStatus.RanToCompletion || result.Status == TaskStatus.Canceled || result.Status == TaskStatus.Faulted))
-                {
-                    //if current Context is Root
-                    context.Dispose();
-                }
-            }
-        }
-        private List<Task> RemoveParentData(MixCmsContext context, IDbContextTransaction transaction)
+        public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
         {
             var tasks = new List<Task>();
             var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
