@@ -142,47 +142,24 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             return result;
         }
-        
-        public override Task GenerateCache(MixAttributeSetData model, UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+
+        public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
         {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            Task result = null;
-            try
-            {
-                var tasks = new List<Task>();
-                
-                // Remove parent caches
+            var tasks = new List<Task>();
 
-                // 1. Remove Parent Attribute Data
-                var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
-                .Any(d => d.Specificulture == Specificulture && d.Id == Id && d.ParentType == (int)MixEnums.MixAttributeSetDataType.Set));
-                foreach (var item in attrDatas)
-                {
-                    tasks.Add(Task.Run(() =>
-                    {
-                        UpdateViewModel.Repository.RemoveCache(item, context, transaction);
-                    }));
-                }
+            // Remove parent caches
 
-                // TODO Remove Post / Page / Module Data
-                result = base.GenerateCache(model, view, _context, _transaction).ContinueWith(resp => {
-                    Task.WhenAll(tasks).Wait();
-                });
-                return result;
-            }            
-            catch (Exception ex)
+            // 1. Remove Parent Attribute Data
+            var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
+            .Any(d => d.Specificulture == Specificulture && d.Id == Id && d.ParentType == (int)MixEnums.MixAttributeSetDataType.Set));
+            foreach (var item in attrDatas)
             {
-                UnitOfWorkHelper<MixCmsContext>.HandleException<UpdateViewModel>(ex, isRoot, transaction);
-                return Task.FromException(ex);
-            }
-            finally
-            {
-                if (isRoot && (result.IsCompleted || result.IsFaulted || result.IsCanceled))
+                tasks.Add(Task.Run(() =>
                 {
-                    //if current Context is Root
-                    context.Dispose();
-                }
+                    UpdateViewModel.Repository.RemoveCache(item, context, transaction);
+                }));
             }
+            return tasks;
         }
         #endregion
 

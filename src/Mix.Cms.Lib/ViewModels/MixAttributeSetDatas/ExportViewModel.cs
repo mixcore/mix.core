@@ -320,38 +320,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
             }
         }
-
-        public override Task GenerateCache(MixAttributeSetData model, ExportViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            try
-            {
-                Data["id"] = model.Id;
-                Data["createdDateTime"] = model.CreatedDateTime;
-                Data["details"] = $"/api/v1/odata/{Specificulture}/attribute-set-data/mobile/{Id}";
-                base.GenerateCache(model, view, _context, _transaction);
-                
-
-                // Remove parent caches
-                return RemoveParentData(context, transaction);
-
-            }
-            catch (Exception ex)
-            {
-                UnitOfWorkHelper<MixCmsContext>.HandleException<ExportViewModel>(ex, isRoot, transaction);
-                return Task.FromException(ex);
-            }
-            finally
-            {
-                if (isRoot)
-                {
-                    //if current Context is Root
-                    context.Dispose();
-                }
-            }
-        }
-
-        private Task RemoveParentData(MixCmsContext context, IDbContextTransaction transaction)
+        public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
         {
             var tasks = new List<Task>();
             var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
@@ -364,7 +333,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     updModel.GenerateCache(item, updModel, context, transaction);
                 }));
             }
-            return Task.WhenAll(tasks);
+            return tasks;
         }
         private void ParseData()
         {

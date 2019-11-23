@@ -59,10 +59,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
         public ReadViewModel() : base()
         {
+            IsCache = false;
         }
 
         public ReadViewModel(MixAttributeSetValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
+            IsCache = false;
         }
 
         #endregion Contructors

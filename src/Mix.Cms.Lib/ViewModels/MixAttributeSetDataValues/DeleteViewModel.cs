@@ -59,10 +59,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
         public DeleteViewModel() : base()
         {
+            IsCache = false;
         }
 
         public DeleteViewModel(MixAttributeSetValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
+            IsCache = false;
         }
 
         #endregion Contructors

@@ -76,38 +76,8 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
             AttributeSetName = _context.MixAttributeSet.FirstOrDefault(m => m.Id == AttributeSetId)?.Name;   
         }
 
-        public override Task GenerateCache(MixRelatedAttributeData model, ODataUpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            Task result = null;
-            try
-            {
-                var tasks = new List<Task>();
-                tasks.AddRange(GenerateRelatedData(context, transaction));
-                // Remove parent caches
-                tasks.Add(base.GenerateCache(model, this, _context, _transaction));
-                // TODO Remove Post / Page / Module Data
-                result = Task.WhenAll(tasks);
-                result.ConfigureAwait(true);
-                result.Wait();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                UnitOfWorkHelper<MixCmsContext>.HandleException<UpdateViewModel>(ex, isRoot, transaction);
-                return Task.FromException(ex);
-            }
-            finally
-            {
-                if (isRoot && (result.Status == TaskStatus.RanToCompletion || result.Status == TaskStatus.Canceled || result.Status == TaskStatus.Faulted))
-                {
-                    //if current Context is Root
-                    context.Dispose();
-                }
-            }
-        }
 
-        private List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
+        public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
         {
             var tasks = new List<Task>();
             switch (ParentType)
