@@ -173,58 +173,28 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             return result;
         }
 
-        public override Task GenerateCache(MixAttributeSet model, UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
         {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            Task result = null;
-            try
-            {
-                var genFieldsTasks= new List<Task>();
-                var genDataTasks = new List<Task>();
-                var attrDatas = context.MixAttributeSetData.Where(m => m.AttributeSetId == Id);
-                var attrFields = context.MixAttributeField.Where(m => m.AttributeSetId == Id);
-                
-                foreach (var item in attrDatas)
-                {
-                    genDataTasks.Add(Task.Run(() =>
-                    {
-                        MixAttributeSetDatas.UpdateViewModel.Repository.RemoveCache(item, context, transaction);
-                    }));
-                }
-                foreach (var item in attrFields)
-                {
-                    genFieldsTasks.Add(Task.Run(() =>
-                    {
-                        MixAttributeFields.UpdateViewModel.Repository.RemoveCache(item, context, transaction);
-                    }));
-                }
-                
-                result = base.GenerateCache(model, view, _context, _transaction).ContinueWith(resp => {
-                    if (resp.IsCompleted)
-                    {
-                        Task.WhenAll(genFieldsTasks).ContinueWith(fields =>
-                        {
-                            Task.WhenAll(genDataTasks).Wait();
-                        });
-                    }
-                });
-                return result;
+            var tasks = new List<Task>();
+            var attrDatas = context.MixAttributeSetData.Where(m => m.AttributeSetId == Id);
+            var attrFields = context.MixAttributeField.Where(m => m.AttributeSetId == Id);
 
-            }
-            catch (Exception ex)
+            foreach (var item in attrDatas)
             {
-                UnitOfWorkHelper<MixCmsContext>.HandleException<UpdateViewModel>(ex, isRoot, transaction);
-                return Task.FromException(ex);
-            }
-            finally
-            {
-                if (isRoot && (result.IsCompleted || result.IsFaulted || result.IsCanceled))
+                tasks.Add(Task.Run(() =>
                 {
-                    //if current Context is Root
-                    context.Dispose();
-                }
+                    MixAttributeSetDatas.UpdateViewModel.Repository.RemoveCache(item, context, transaction);
+                }));
             }
-        }        
+            foreach (var item in attrFields)
+            {
+                tasks.Add(Task.Run(() =>
+                {
+                    MixAttributeFields.UpdateViewModel.Repository.RemoveCache(item, context, transaction);
+                }));
+            }
+            return tasks;
+        }
         #endregion
 
         #region Expand       

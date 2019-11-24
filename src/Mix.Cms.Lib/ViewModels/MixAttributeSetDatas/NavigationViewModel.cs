@@ -63,7 +63,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             Data.Add(new JProperty("details", $"/api/v1/odata/{Specificulture}/attribute-set-data/mobile/{Id}"));
             Values = MixAttributeSetValues.MobileViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-            foreach (var item in Values.OrderBy(v=>v.Priority))
+            foreach (var item in Values.OrderBy(v => v.Priority))
             {
                 Data.Add(ParseValue(item));
             }
@@ -74,7 +74,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
-                Priority = Repository.Count(m => m.AttributeSetName == AttributeSetName && m.Specificulture == Specificulture,_context,_transaction).Data + 1;
+                Priority = Repository.Count(m => m.AttributeSetName == AttributeSetName && m.Specificulture == Specificulture, _context, _transaction).Data + 1;
             }
             Values = Values ?? MixAttributeSetValues.MobileViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
@@ -85,9 +85,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (val == null)
                 {
                     val = new MixAttributeSetValues.MobileViewModel(
-                        new MixAttributeSetValue() {
+                        new MixAttributeSetValue()
+                        {
                             AttributeFieldId = field.Id,
-                            AttributeFieldName = field.Name,                            
+                            AttributeFieldName = field.Name,
                         }
                         , _context, _transaction);
                     val.Priority = field.Priority;
@@ -104,7 +105,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     Data.Add(ParseValue(val));
                 }
             }
-                
+
             return base.ParseModel(_context, _transaction); ;
         }
 
@@ -143,42 +144,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         }
         #endregion
         #endregion
-        public override Task GenerateCache(MixAttributeSetData model, NavigationViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            Task result = null;
-            try
-            {
-                Data["id"] = model.Id;
-                Data["createdDateTime"] = model.CreatedDateTime;
-                Data["details"] = $"/api/v1/odata/{Specificulture}/attribute-set-data/mobile/{Id}";
-
-                var tasks = new List<Task>();
-                tasks.AddRange(RemoveParentData(context, transaction));
-                // Remove parent caches
-                tasks.Add(base.GenerateCache(model, this, _context, _transaction));
-                // TODO Remove Post / Page / Module Data
-                result = Task.WhenAll(tasks);
-                result.ConfigureAwait(true);
-                result.Wait();
-                return result;
-
-            }
-            catch (Exception ex)
-            {
-                UnitOfWorkHelper<MixCmsContext>.HandleException<UpdateViewModel>(ex, isRoot, transaction);
-                return Task.FromException(ex);
-            }
-            finally
-            {
-                if (isRoot && (result.Status == TaskStatus.RanToCompletion || result.Status == TaskStatus.Canceled || result.Status == TaskStatus.Faulted))
-                {
-                    //if current Context is Root
-                    context.Dispose();
-                }
-            }
-        }
-        private List<Task> RemoveParentData(MixCmsContext context, IDbContextTransaction transaction)
+        public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
         {
             var tasks = new List<Task>();
             var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
@@ -257,7 +223,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     break;
                 case MixEnums.MixDataType.Date:
                     item.DateTimeValue = property.Value<DateTime?>();
-                    break;                    
+                    break;
                 case MixEnums.MixDataType.Time:
                     item.DateTimeValue = property.Value<DateTime?>();
                     break;
