@@ -64,10 +64,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
         public ODataWebViewModel() : base()
         {
+            IsCache = false;
         }
 
         public ODataWebViewModel(MixAttributeSetValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
+            IsCache = false;
         }
 
         #endregion Contructors
