@@ -1,6 +1,6 @@
 ﻿'use strict';
 app.controller('StoreController',
-    ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$location', 'StoreService', 'CommonService',
+    ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$location','PostService', 'CommonService',
         function ($scope, $rootScope, ngAppSettings, $routeParams, $location, service, commonService) {
             BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
             $scope.cates = ngAppSettings.enums.configuration_types;
@@ -16,9 +16,6 @@ app.controller('StoreController',
                 });
             }
 
-            $scope.getList = function(){
-                $scope.data.items = [];
-            };
 
             // $scope.items = [];
             // $scope.init = function () {
