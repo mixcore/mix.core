@@ -217,6 +217,18 @@
             ]
         },
         {
+            "title": "Mix Store",
+            "path": "#",
+            "icon": "mi mi-Shop",
+            "subMenus": [
+                {
+                    "title": "List Online",
+                    "icon": "mi mi-Cloud",
+                    "path": "/portal/store/list"
+                }
+            ]
+        },
+        {
             "title": "Settings",
             "path": "#",
             "icon": "mi mi-Settings  mi-spin",
@@ -587,6 +599,16 @@
                     "path": "/portal/attribute-set/details/:id",
                     "templatePath": "/app/app-portal/pages/attribute-set/details.html",
                     "controller": "AttributeSetController"
+                }
+            ]
+        },
+        {
+            "cate": "Mix Store",
+            "items": [
+                {
+                    "path": "/portal/store/list",
+                    "templatePath": "/app/app-portal/pages/store/list.html",
+                    "controller": "StoreController"
                 }
             ]
         },
