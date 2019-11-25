@@ -2,15 +2,13 @@
     <h6 class="card-header">
         Properties
         <span ng-bind="$ctrl.title"></span>
-        <!-- 
-                        <button class="btn btn-link text-primary btn-sm float-right py-0" type="button" data-toggle="collapse"
-                            data-target="#module-attr-table" aria-controls="module-attr-table" aria-expanded="false"
-                            aria-label="Toggle navigation"><span class="far fa-minus-square text-primary"></span> Show/Hide</button> -->
+
+        <button class="btn btn-link text-primary btn-sm float-right py-0" type="button" data-toggle="collapse" data-target="#module-attr-table" aria-controls="module-attr-table" aria-expanded="false" aria-label="Toggle navigation"><span class="far fa-minus-square text-primary"></span> Show/Hide</button>
 
         <button type="button" ng-click="$ctrl.addAttr()" class="btn btn-link text-primary btn-sm float-right py-0"><span class="fas fa-plus text-primary"></span> Add Attr</button>
         <!-- <a ng-click="$ctrl.generateForm()" class="btn btn-primary btn-sm float-right text-white mr-2">Generate Form</a> -->
     </h6>
-    <div id="module-attr-table" class="card-body">
+    <div id="module-attr-table" class="card-body collapse">
         <table class="table table-sm" id="Table">
             <thead class="thead-light">
                 <tr>
