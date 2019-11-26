@@ -1,22 +1,11 @@
 ﻿'use strict';
 app.controller('StoreController',
-    ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$location','PostService', 'CommonService',
-        function ($scope, $rootScope, ngAppSettings, $routeParams, $location, service, commonService) {
+    ['$scope', '$rootScope', 'ngAppSettings', '$routeParams', '$location', 'StoreService',
+        function ($scope, $rootScope, ngAppSettings, $routeParams, $location, service) {
             BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
+            $scope.request.key = 'service.store';
             $scope.cates = ngAppSettings.enums.configuration_types;
             $scope.settings = $rootScope.globalSettings;
-            $scope.saveSuccessCallback = function () {
-                commonService.initAllSettings().then(function () {
-                    $location.url($scope.referrerUrl);
-                });
-            }
-            $scope.removeCallback = function () {
-                commonService.initAllSettings().then(function () {
-                    $location.url($scope.referrerUrl);
-                });
-            }
-
-
             // $scope.items = [];
             // $scope.init = function () {
             //     var req = {

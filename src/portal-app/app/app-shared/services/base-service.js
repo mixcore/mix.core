@@ -3,14 +3,14 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService',
     function ($rootScope, $routeParams, commonService) {
         var serviceFactory = {};
 
-        var _init = function (modelName, isGlobal) {
+        var _init = function (modelName, isGlobal, serviceBase) {
             this.modelName = modelName;
-            if(!isGlobal)
-            {
+            this.serviceBase = serviceBase;
+            if (!isGlobal) {
                 this.lang = $rootScope.settings.lang;
                 this.prefixUrl = '/' + this.lang + '/' + modelName;
             }
-            else{
+            else {
                 this.prefixUrl = '/' + modelName;
             }
         }
@@ -23,6 +23,7 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService',
             }
             var req = {
                 method: 'GET',
+                serviceBase: this.serviceBase,
                 url: url
             };
             return await commonService.getApiResult(req);
@@ -33,6 +34,7 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService',
                 url += '/' + params[i];
             }
             var req = {
+                serviceBase: this.serviceBase,
                 method: 'POST',
                 url: url,
                 data: JSON.stringify(objData)
@@ -46,6 +48,7 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService',
                 url += '/' + params[i];
             }
             var req = {
+                serviceBase: this.serviceBase,
                 method: 'POST',
                 url: url,
                 data: JSON.stringify(objData)
@@ -57,6 +60,7 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService',
         var _delete = async function (id) {
             var url = this.prefixUrl + '/delete/' + id;
             var req = {
+                serviceBase: this.serviceBase,
                 method: 'GET',
                 url: url
             };
@@ -66,6 +70,7 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService',
         var _save = async function (objData) {
             var url = this.prefixUrl + '/save';
             var req = {
+                serviceBase: this.serviceBase,
                 method: 'POST',
                 url: url,
                 data: JSON.stringify(objData)
@@ -75,6 +80,7 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService',
         var _saveProperties = async function (objData) {
             var url = this.prefixUrl + '/save-properties';
             var req = {
+                serviceBase: this.serviceBase,
                 method: 'POST',
                 url: url,
                 data: JSON.stringify(objData)
@@ -84,6 +90,7 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService',
         var _saveList = async function (objData) {
             var url = this.prefixUrl + '/save-list';
             var req = {
+                serviceBase: this.serviceBase,
                 method: 'POST',
                 url: url,
                 data: JSON.stringify(objData)
@@ -94,27 +101,30 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService',
         var _updateInfos = async function (objData) {
             var url = this.prefixUrl + '/update-infos';
             var req = {
+                serviceBase: this.serviceBase,
                 method: 'POST',
                 url: url,
                 data: JSON.stringify(objData)
             };
             return await commonService.getApiResult(req);
         };
-        var _ajaxSubmitForm = async function (form, url) {            
+        var _ajaxSubmitForm = async function (form, url) {
             var req = {
+                serviceBase: this.serviceBase,
                 method: 'POST',
                 url: url,
-                headers: {'Content-Type': undefined},
+                headers: { 'Content-Type': undefined },
                 contentType: false, // Not to set any content header
                 processData: false, // Not to process data
                 data: form
             };
-            return await commonService.getApiResult(req);            
+            return await commonService.getApiResult(req);
         };
-        
+
         var _applyList = async function (objData) {
             var url = this.prefixUrl + '/apply-list';
             var req = {
+                serviceBase: this.serviceBase,
                 method: 'POST',
                 url: url,
                 data: JSON.stringify(objData)

@@ -1,0 +1,294 @@
+[
+  {
+    "CreatedDateTime": "2019-11-25T15:04:59.098322Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. This is usually caused by different threads using the same instance of DbContext, however instance members are not guaranteed to be thread safe. This could also be caused by a nested query being evaluated on the client, if this is the case rewrite the query avoiding nested invocations.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ODataViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction)",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2019-11-25T15:04:59.1370793Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. This is usually caused by different threads using the same instance of DbContext, however instance members are not guaranteed to be thread safe. This could also be caused by a nested query being evaluated on the client, if this is the case rewrite the query avoiding nested invocations.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ODataViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction)",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2019-11-25T15:04:59.6495355Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. This is usually caused by different threads using the same instance of DbContext, however instance members are not guaranteed to be thread safe. This could also be caused by a nested query being evaluated on the client, if this is the case rewrite the query avoiding nested invocations.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)\r\n   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetModelListBy(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction)",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2019-11-25T15:04:59.7158246Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. This is usually caused by different threads using the same instance of DbContext, however instance members are not guaranteed to be thread safe. This could also be caused by a nested query being evaluated on the client, if this is the case rewrite the query avoiding nested invocations.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)\r\n   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetModelListBy(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction)",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2019-11-25T15:04:59.7345844Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. This is usually caused by different threads using the same instance of DbContext, however instance members are not guaranteed to be thread safe. This could also be caused by a nested query being evaluated on the client, if this is the case rewrite the query avoiding nested invocations.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction)",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2019-11-25T15:04:59.795089Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. This is usually caused by different threads using the same instance of DbContext, however instance members are not guaranteed to be thread safe. This could also be caused by a nested query being evaluated on the client, if this is the case rewrite the query avoiding nested invocations.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ODataViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction)",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2019-11-25T15:04:59.8896901Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. This is usually caused by different threads using the same instance of DbContext, however instance members are not guaranteed to be thread safe. This could also be caused by a nested query being evaluated on the client, if this is the case rewrite the query avoiding nested invocations.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)\r\n   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetModelListBy(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction)",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2019-11-25T15:04:59.9051251Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. This is usually caused by different threads using the same instance of DbContext, however instance members are not guaranteed to be thread safe. This could also be caused by a nested query being evaluated on the client, if this is the case rewrite the query avoiding nested invocations.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction)",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2019-11-25T15:04:59.9374271Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. This is usually caused by different threads using the same instance of DbContext, however instance members are not guaranteed to be thread safe. This could also be caused by a nested query being evaluated on the client, if this is the case rewrite the query avoiding nested invocations.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction)",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2019-11-25T15:05:00.0216709Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. This is usually caused by different threads using the same instance of DbContext, however instance members are not guaranteed to be thread safe. This could also be caused by a nested query being evaluated on the client, if this is the case rewrite the query avoiding nested invocations.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction)",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2019-11-25T15:05:00.0940789Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. This is usually caused by different threads using the same instance of DbContext, however instance members are not guaranteed to be thread safe. This could also be caused by a nested query being evaluated on the client, if this is the case rewrite the query avoiding nested invocations.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)\r\n   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)\r\n   at Mix.Domain.Data.Repository.ODataViewRepositoryBase`3.GetModelListBy(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction)",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2019-11-25T15:05:00.1424813Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. This is usually caused by different threads using the same instance of DbContext, however instance members are not guaranteed to be thread safe. This could also be caused by a nested query being evaluated on the client, if this is the case rewrite the query avoiding nested invocations.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)\r\n   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetModelListBy(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction)",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2019-11-25T15:05:00.189324Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. This is usually caused by different threads using the same instance of DbContext, however instance members are not guaranteed to be thread safe. This could also be caused by a nested query being evaluated on the client, if this is the case rewrite the query avoiding nested invocations.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)\r\n   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)\r\n   at Mix.Domain.Data.Repository.ODataViewRepositoryBase`3.GetModelListBy(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction)",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2019-11-25T15:05:00.2254053Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. This is usually caused by different threads using the same instance of DbContext, however instance members are not guaranteed to be thread safe. This could also be caused by a nested query being evaluated on the client, if this is the case rewrite the query avoiding nested invocations.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)\r\n   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass15_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetSingleModel(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction)",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2019-11-25T15:05:00.3213697Z",
+    "Details": {
+      "ClassName": "System.InvalidOperationException",
+      "Message": "A second operation started on this context before a previous operation completed. This is usually caused by different threads using the same instance of DbContext, however instance members are not guaranteed to be thread safe. This could also be caused by a nested query being evaluated on the client, if this is the case rewrite the query avoiding nested invocations.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Microsoft.EntityFrameworkCore.Internal.ConcurrencyDetector.EnterCriticalSection()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)\r\n   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.GetModelListBy(Expression`1 predicate, TDbContext _context, IDbContextTransaction _transaction)",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": null,
+      "HResult": -2146233079,
+      "Source": "Microsoft.EntityFrameworkCore",
+      "WatsonBuckets": null
+    }
+  },
+  {
+    "CreatedDateTime": "2019-11-25T15:05:57.6174172Z",
+    "Details": {
+      "Entries": [],
+      "Message": "An error occurred while updating the entries. See the inner exception for details.",
+      "Data": {},
+      "InnerException": {
+        "ClassName": "System.Data.SqlClient.SqlException",
+        "Message": "The DELETE statement conflicted with the REFERENCE constraint \"FK_mix_related_attribute_data_mix_attribute_set_data2\". The conflict occurred in database \"mixcore_default_theme\", table \"dbo.mix_related_attribute_data\".\r\nThe statement has been terminated.",
+        "Data": {
+          "HelpLink.ProdName": "Microsoft SQL Server",
+          "HelpLink.ProdVer": "13.00.4001",
+          "HelpLink.EvtSrc": "MSSQLServer",
+          "HelpLink.EvtID": "547",
+          "HelpLink.BaseHelpUrl": "http://go.microsoft.com/fwlink",
+          "HelpLink.LinkId": "20476",
+          "SqlError 1": "System.Data.SqlClient.SqlError: The DELETE statement conflicted with the REFERENCE constraint \"FK_mix_related_attribute_data_mix_attribute_set_data2\". The conflict occurred in database \"mixcore_default_theme\", table \"dbo.mix_related_attribute_data\".",
+          "SqlError 2": "System.Data.SqlClient.SqlError: The statement has been terminated."
+        },
+        "InnerException": null,
+        "HelpURL": null,
+        "StackTraceString": "   at System.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__122_0(Task`1 result)\r\n   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()\r\n   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot)\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at Microsoft.EntityFrameworkCore.Storage.Internal.RelationalCommand.ExecuteAsync(IRelationalConnection connection, DbCommandMethod executeMethod, IReadOnlyDictionary`2 parameterValues, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)",
+        "RemoteStackTraceString": null,
+        "RemoteStackIndex": 0,
+        "ExceptionMethod": null,
+        "HResult": -2146232060,
+        "Source": "Core .Net SqlClient Data Provider",
+        "WatsonBuckets": null,
+        "Errors": null,
+        "ClientConnectionId": "9a8b8ee6-42e3-4fa6-b949-39349ab3ea64"
+      },
+      "StackTrace": "   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(DbContext _, ValueTuple`2 parameters, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IReadOnlyList`1 entriesToSave, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)\r\n   at Mix.Domain.Data.Repository.ViewRepositoryBase`3.RemoveModelAsync(TModel model, TDbContext _context, IDbContextTransaction _transaction)",
+      "HelpLink": null,
+      "Source": "Microsoft.EntityFrameworkCore.Relational",
+      "HResult": -2146233088
+    }
+  }
+]
