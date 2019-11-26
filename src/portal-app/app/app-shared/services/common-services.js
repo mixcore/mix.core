@@ -211,6 +211,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
 
         };
         var _getApiResult = async function (req, serviceBase) {
+            console.log(req);
             if (!authService.authentication) {
                 await authService.fillAuthData();
             }
@@ -219,8 +220,8 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
             }
 
             var serviceUrl = appSettings.serviceBase + '/api/' + appSettings.apiVersion;
-            if (serviceBase !== undefined) {
-                serviceUrl = serviceBase + '/api/' + appSettings.apiVersion
+            if (serviceBase || req.serviceBase) {
+                serviceUrl = (serviceBase || req.serviceBase) + '/api/' + appSettings.apiVersion;
             }
 
             req.url = serviceUrl + req.url;
