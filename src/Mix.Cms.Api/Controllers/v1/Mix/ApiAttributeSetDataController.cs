@@ -138,15 +138,31 @@ namespace Mix.Cms.Api.Controllers.v1
             switch (request.Key)
             {
                 case "portal":
-                    var portalResult = await Helper.FilterByKeywordAsync<MobileViewModel>(_lang, attributeSetName, 
+                    if (!string.IsNullOrEmpty(request.Query))
+                    {
+                        var portalResult = await Helper.FilterByKeywordAsync<MobileViewModel>(_lang, attributeSetName,
                         request, request.Keyword, queryDictionary);
-                    return Ok(JObject.FromObject(portalResult));
+                        return Ok(JObject.FromObject(portalResult));
+                    }
+                    else
+                    {
+                        Expression<Func<MixAttributeSetData, bool>> predicate = m => (m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName) && m.Specificulture == _lang;
+                        var portalResult = await base.GetListAsync<UpdateViewModel>(request.Key, request, predicate);
+                        return Ok(JObject.FromObject(portalResult));
+                    }
                 default:
-
-                    var listItemResult = await Lib.ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ReadViewModel>(_lang, attributeSetName,
+                    if (!string.IsNullOrEmpty(request.Query))
+                    {
+                        var portalResult = await Helper.FilterByKeywordAsync<ReadViewModel>(_lang, attributeSetName,
                         request, request.Keyword, queryDictionary);
-
-                    return JObject.FromObject(listItemResult);
+                        return Ok(JObject.FromObject(portalResult));
+                    }
+                    else
+                    {
+                        Expression<Func<MixAttributeSetData, bool>> predicate = m => (m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName) && m.Specificulture == _lang;
+                        var portalResult = await base.GetListAsync<ReadViewModel>(request.Key, request, predicate);
+                        return Ok(JObject.FromObject(portalResult));
+                    }                    
             }
         }
 
