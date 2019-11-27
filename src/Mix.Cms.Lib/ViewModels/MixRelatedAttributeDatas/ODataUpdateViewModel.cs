@@ -34,7 +34,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         [JsonProperty("parentId")]
         public string ParentId { get; set; }
         [JsonProperty("parentType")]
-        public MixEnums.MixAttributeSetDataType ParentType { get; set; }
+        public int ParentType { get; set; } // cannot use mixenum for odata request
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
         [JsonProperty("attributeSetName")]
@@ -80,11 +80,12 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
         {
             var tasks = new List<Task>();
+            // MixEnums.MixAttributeSetDataType
             switch (ParentType)
             {
-                case MixEnums.MixAttributeSetDataType.System:                    
-                case MixEnums.MixAttributeSetDataType.Set:
-                case MixEnums.MixAttributeSetDataType.Service:
+                case 0:
+                case 1:
+                case 5:
                     var attrDatas = context.MixAttributeSetData.Where(m => m.Specificulture == Specificulture && m.Id == ParentId);
                     foreach (var item in attrDatas)
                     {
@@ -96,7 +97,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
                     }
                     break;
-                case MixEnums.MixAttributeSetDataType.Post:
+                case 2:
                     int.TryParse(ParentId, out int postId);
                     var post = context.MixPost.First(m => m.Specificulture == Specificulture && m.Id == postId);
                     if(post!=null)
@@ -109,7 +110,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
                     }
                     break;
-                case MixEnums.MixAttributeSetDataType.Page:
+                case 3:
                     int.TryParse(ParentId, out int pageId);
                     var page = context.MixPage.First(m => m.Specificulture == Specificulture && m.Id == pageId);
                     if (page != null)
@@ -122,7 +123,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
                     }
                     break;
-                case MixEnums.MixAttributeSetDataType.Module:
+                case 4:
                     int.TryParse(ParentId, out int moduleId);
                     var module = context.MixModule.First(m => m.Specificulture == Specificulture && m.Id == moduleId);
                     if (module != null)

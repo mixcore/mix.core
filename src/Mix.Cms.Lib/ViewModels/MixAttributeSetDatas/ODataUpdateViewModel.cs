@@ -117,6 +117,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     {
                         item.Priority = item.Field.Priority;
                         item.DataId = parent.Id;
+                        item.AttributeSetName = parent.AttributeSetName;
                         item.Specificulture = parent.Specificulture;
                         var saveResult = await item.SaveModelAsync(false, _context, _transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
