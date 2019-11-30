@@ -81,9 +81,39 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
             }
             Priority = Field?.Priority??Priority;
             DataType = Field?.DataType ?? DataType;
-
+            if (string.IsNullOrEmpty(StringValue) && !string.IsNullOrEmpty(Field.DefaultValue))
+            {
+                ParseDefaultValue(Field.DefaultValue);
+            }            
             return base.ParseModel(_context, _transaction);
         }
+
+        private void ParseDefaultValue(string defaultValue)
+        {
+            StringValue = defaultValue;
+            switch (DataType)
+            {
+                case MixEnums.MixDataType.DateTime:
+                    break;
+                case MixEnums.MixDataType.Date:
+                    break;
+                case MixEnums.MixDataType.Time:
+                    break;
+                case MixEnums.MixDataType.Double:                    
+                    double.TryParse(defaultValue, out double doubleValue);
+                    DoubleValue = DoubleValue;
+                    break;
+                case MixEnums.MixDataType.Boolean:
+                    bool.TryParse(defaultValue, out bool boolValue);
+                    BooleanValue = boolValue;
+                    break;
+                case MixEnums.MixDataType.Number:
+                    int.TryParse(defaultValue, out int intValue);
+                    IntegerValue = intValue;
+                    break;                
+            }
+        }
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
 
@@ -103,7 +133,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                     Title = AttributeFieldName,
                     Name = AttributeFieldName,
                     Priority = Priority
-                };
+                };                
             }
             
         }
