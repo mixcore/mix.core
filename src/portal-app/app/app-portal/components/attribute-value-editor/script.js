@@ -58,14 +58,14 @@ modules.component('attributeValueEditor', {
                         break;
                     default:
                         
-                        if (ctrl.attributeValue.field.isEncrypt && ctrl.attributeValue.encryptValue) {
+                        if (ctrl.attributeValue.field && ctrl.attributeValue.field.isEncrypt && ctrl.attributeValue.encryptValue) {
                             var encryptedData = {
                                 key: ctrl.attributeValue.encryptKey,
                                 data: ctrl.attributeValue.encryptValue
                             };
                             ctrl.attributeValue.stringValue = $rootScope.decrypt(encryptedData);
                         }
-                        if (!ctrl.attributeValue.stringValue) {
+                        if (ctrl.attributeValue.field && !ctrl.attributeValue.stringValue) {
                             ctrl.attributeValue.stringValue = ctrl.attributeValue.field.defaultValue;
                             $scope.$apply();
                         }

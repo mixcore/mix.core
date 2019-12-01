@@ -81,7 +81,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
             }
             Priority = Field?.Priority??Priority;
             DataType = Field?.DataType ?? DataType;
-            if (string.IsNullOrEmpty(StringValue) && !string.IsNullOrEmpty(Field.DefaultValue))
+            if (string.IsNullOrEmpty(StringValue) && !string.IsNullOrEmpty(Field?.DefaultValue))
             {
                 ParseDefaultValue(Field.DefaultValue);
             }            
