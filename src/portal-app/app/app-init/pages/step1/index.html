@@ -12,7 +12,7 @@
     <div class="intruction-labels">
         <div class="form-group row">
             <div class="col-4">
-                Input your site name
+                Site Title
             </div>
             <div class="col-8">
                 <input type="text" ng-model="initCmsModel.siteName" class="form-control" required>
@@ -20,7 +20,7 @@
         </div>
         <div class="form-group row">
             <div class="col-4">
-                Your 1st Language
+                1st Language
             </div>
             <div class="col-8">
                 <select id="inputState" class="form-control custom-select custom-select-sm"
@@ -65,19 +65,20 @@
 
     <hr>
     <div class="text-right">
-        <button ng-if="!initCmsModel.isUseLocal" ng-click="initCms();" class="btn btn-primary" style="width:250px"
+        <button ng-if="!initCmsModel.isUseLocal" ng-click="initCms();" class="btn btn-primary mt-4" style="min-width:200px"
             ng-disabled="!initCmsModel.databaseServer || !initCmsModel.databaseName || !initCmsModel.databaseUser || !initCmsModel.culture">
             <span
-                ng-if="!initCmsModel.databaseServer || !initCmsModel.databaseName || !initCmsModel.databaseUser || !initCmsModel.culture">Next...</span>
+                ng-if="!initCmsModel.databaseServer || !initCmsModel.databaseName || !initCmsModel.databaseUser || !initCmsModel.culture">Next <i
+                class="fa fa-angle-right"></i></span>
             <span
                 ng-if="initCmsModel.databaseServer && initCmsModel.databaseName && initCmsModel.databaseUser  && initCmsModel.culture">Connect</span>
         </button>
-        <button ng-if="initCmsModel.isUseLocal" ng-click="initCms();" class="btn btn-primary" style="width:250px"
+        <button ng-if="initCmsModel.isUseLocal" ng-click="initCms();" class="btn btn-primary mt-4" style="min-width:200px"
             ng-disabled="!initCmsModel.sqliteDbConnectionString || !initCmsModel.localDbName">
             <span ng-if="!initCmsModel.sqliteDbConnectionString || !initCmsModel.localDbName">Next <i
-                    class="fa fa-angle-right" style="font-size: 19px;"></i></span>
+                    class="fa fa-angle-right"></i></span>
             <span ng-if="initCmsModel.sqliteDbConnectionString && initCmsModel.localDbName ">Next <i
-                    class="fa fa-angle-right" style="font-size: 19px;"></i></span>
+                    class="fa fa-angle-right"></i></span>
         </button>
     </div>
 </form>
