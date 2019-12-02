@@ -509,10 +509,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 tasks.Add(Task.Run(() =>
                 {
-                    var updModel = new UpdateViewModel(item, context, transaction);
-                    updModel.GenerateCache(item, updModel);
+                    var data = new ReadViewModel(item, context, transaction);
+                    data.RemoveCache(item, context, transaction);
                 }));
-                
+
             }
             foreach (var item in Values)
             {
@@ -524,6 +524,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             return tasks;
         }
+
         private void ParseData()
         {
             Data = new JObject();
