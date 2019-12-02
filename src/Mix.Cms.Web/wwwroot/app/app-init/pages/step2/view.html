@@ -6,17 +6,12 @@
     <div class="">
         <h1 class="display-4">Now, creating the most powerful account!
         </h1>
-        <p class="lead">
-            Please keep this account credential safe and only share this account to the most trusted!
-        </p>
         <hr>
         <div class="form-group">
             <div class="row">
                 <div class="col">Administrator Username</div>
                 <div class="col"><input ng-model="user.userName" class="form-control" required placeholder="Handsome..."></div>
             </div>
-
-
         </div>
         <div class="row">
             <div class="col">
@@ -40,11 +35,16 @@
         <div class="form-group">
             <label class="form-label">Email Address
             </label>
-            <input ng-model="user.email" class="form-control" type="email" required placeholder="Email@mixcore.org">
+            <input ng-model="user.email" class="form-control" type="email" required placeholder="your-email-address@domain.com">
         </div>
+
+        <p class="text-info">
+            Please keep this account credential safe and only share this account to the most trusted!
+        </p>
+        <hr>
         <div class="form-group">
             <label class="custom-control custom-checkbox">
-                <input ng-model="user.isAgreed" class="custom-control-input" type="checkbox">
+                <input ng-model="user.isAgreed" class="custom-control-input" type="checkbox" required>
                 <span class="custom-control-label">
                     I agree to the <a href="#" data-toggle="modal" data-target="#termAndCondition">terms and
                         conditions</a>.</span>
