@@ -6,25 +6,25 @@
                     <div class="card mb-4 shadow-sm">
                         <img class="bd-placeholder-img card-img-top" src="{{post.thumbnailUrl}}" />
                         <div class="card-body">
-                            <h6 class="small mb-4">Metronic - Bootstrap 4, Angular 8, React Admin Dashboard Theme...
+                            <h6 class="small mb-4">{{post.title}}
                                 <br />
-                                <small class="text-muted">by <b>keenthemes</b> in <b>Admin Templates</b></small>
+                                <small class="text-muted">by <b><a href="{{post.properties.author_url}}" target="_blank">{{post.properties.author_name}}</a></b> in <b>{{post.properties.category}}</b></small>
                             </h6>
 
                             <div class="d-flex justify-content-left">
-                                <h5 class="text-success">$Free</h5>
+                                <h5 class="text-success">$ {{post.properties.price }}</h5>
                             </div>
                             <div class="d-flex justify-content-between">
                                 <div class="col-5 p-0">
                                     <div class="progress">
                                         <div class="progress-bar progress-bar-striped bg-warning" role="progressbar"
-                                            style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                                            style="width: {{post.properties.avg_rating}}%" aria-valuenow="{{post.properties.avg_rating}}" aria-valuemin="0" aria-valuemax="100">
                                         </div>
                                     </div>
-                                    <small class="text-muted">5.6k sales</small>
+                                    <small class="text-muted">{{post.properties.download_count}} download</small>
                                 </div>
                                 <div class="col-7 justify-content-end text-right p-0">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary mr-1">Preview</button>
+                                    <a target="_blank" href="{{post.properties.external_preview_url}}" class="btn btn-sm btn-outline-secondary mr-1">Preview</a>
                                     <button type="button" class="btn btn-sm btn-outline-primary"><i
                                             class="fas fa-cloud-download-alt"></i></button>
                                 </div>
@@ -33,7 +33,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                <!-- <div class="col-md-4">
                     <div class="card mb-4 shadow-sm">
                         <img class="bd-placeholder-img card-img-top"
                             src="https://themeforest.img.customer.envatousercontent.com/files/274184998/01_preview.jpg?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=300&s=42793292eb08245b65a4b064bbbfa351" />
@@ -128,255 +128,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <img class="bd-placeholder-img card-img-top"
-                            src="https://themeforest.img.customer.envatousercontent.com/files/264133686/01_screenshot.png?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=300&s=3ef4779864c0568b54eb9b9d83845bd2" />
-                        <div class="card-body">
-                            <h6 class="small mb-4">Metronic - Bootstrap 4, Angular 8, React Admin Dashboard Theme...
-                                <br />
-                                <small class="text-muted">by keenthemes in Admin Templates</small>
-                            </h6>
-
-                            <div class="d-flex justify-content-left">
-                                <h5 class="text-success">$Free</h5>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <div class="col-5 p-0">
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-striped bg-warning" role="progressbar"
-                                            style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                                        </div>
-                                    </div>
-                                    <small class="text-muted">5.6k sales</small>
-                                </div>
-                                <div class="col-7 justify-content-end text-right p-0">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary mr-1">Preview</button>
-                                    <button type="button" class="btn btn-sm btn-outline-primary"><i
-                                            class="fas fa-cloud-download-alt"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <img class="bd-placeholder-img card-img-top"
-                            src="https://themeforest.img.customer.envatousercontent.com/files/258973178/01_cover.png?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=300&s=1779e6a0e1c0b4fd761b41320ae0fd4e" />
-                        <div class="card-body">
-                            <h6 class="small mb-4">Metronic - Bootstrap 4, Angular 8, React Admin Dashboard Theme...
-                                <br />
-                                <small class="text-muted">by keenthemes in Admin Templates</small>
-                            </h6>
-
-                            <div class="d-flex justify-content-left">
-                                <h5 class="text-success">$Free</h5>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <div class="col-5 p-0">
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-striped bg-warning" role="progressbar"
-                                            style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                                        </div>
-                                    </div>
-                                    <small class="text-muted">5.6k sales</small>
-                                </div>
-                                <div class="col-7 justify-content-end text-right p-0">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary mr-1">Preview</button>
-                                    <button type="button" class="btn btn-sm btn-outline-primary"><i
-                                            class="fas fa-cloud-download-alt"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <img class="bd-placeholder-img card-img-top"
-                            src="https://themeforest.img.customer.envatousercontent.com/files/273420880/preivew.png?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=300&s=3172da312cdaef834582a05c30edcb6a" />
-                        <div class="card-body">
-                            <h6 class="small mb-4">Metronic - Bootstrap 4, Angular 8, React Admin Dashboard Theme...
-                                <br />
-                                <small class="text-muted">by keenthemes in Admin Templates</small>
-                            </h6>
-
-                            <div class="d-flex justify-content-left">
-                                <h5 class="text-success">$Free</h5>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <div class="col-5 p-0">
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-striped bg-warning" role="progressbar"
-                                            style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                                        </div>
-                                    </div>
-                                    <small class="text-muted">5.6k sales</small>
-                                </div>
-                                <div class="col-7 justify-content-end text-right p-0">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary mr-1">Preview</button>
-                                    <button type="button" class="btn btn-sm btn-outline-primary"><i
-                                            class="fas fa-cloud-download-alt"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <img class="bd-placeholder-img card-img-top"
-                            src="https://themeforest.img.customer.envatousercontent.com/files/274184998/01_preview.jpg?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=300&s=42793292eb08245b65a4b064bbbfa351" />
-                        <div class="card-body">
-                            <h6 class="small mb-4">Metronic - Bootstrap 4, Angular 8, React Admin Dashboard Theme...
-                                <br />
-                                <small class="text-muted">by keenthemes in Admin Templates</small>
-                            </h6>
-
-                            <div class="d-flex justify-content-left">
-                                <h5 class="text-success">$Free</h5>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <div class="col-5 p-0">
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-striped bg-warning" role="progressbar"
-                                            style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                                        </div>
-                                    </div>
-                                    <small class="text-muted">5.6k sales</small>
-                                </div>
-                                <div class="col-7 justify-content-end text-right p-0">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary mr-1">Preview</button>
-                                    <button type="button" class="btn btn-sm btn-outline-primary"><i
-                                            class="fas fa-cloud-download-alt"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <img class="bd-placeholder-img card-img-top"
-                            src="https://themeforest.img.customer.envatousercontent.com/files/268283650/01_preview_brook.jpg?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=300&s=6501da8c473a2855f27349d7d4d5b3de" />
-                        <div class="card-body">
-                            <h6 class="small mb-4">Metronic - Bootstrap 4, Angular 8, React Admin Dashboard Theme...
-                                <br />
-                                <small class="text-muted">by keenthemes in Admin Templates</small>
-                            </h6>
-
-                            <div class="d-flex justify-content-left">
-                                <h5 class="text-success">$Free</h5>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <div class="col-5 p-0">
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-striped bg-warning" role="progressbar"
-                                            style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                                        </div>
-                                    </div>
-                                    <small class="text-muted">5.6k sales</small>
-                                </div>
-                                <div class="col-7 justify-content-end text-right p-0">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary mr-1">Preview</button>
-                                    <button type="button" class="btn btn-sm btn-outline-primary"><i
-                                            class="fas fa-cloud-download-alt"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <img class="bd-placeholder-img card-img-top"
-                            src="https://themeforest.img.customer.envatousercontent.com/files/274523882/preview/00_preview.png?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=300&s=3f5beed9d81da46f2292292636e05d37" />
-                        <div class="card-body">
-                            <h6 class="small mb-4">Metronic - Bootstrap 4, Angular 8, React Admin Dashboard Theme...
-                                <br />
-                                <small class="text-muted">by keenthemes in Admin Templates</small>
-                            </h6>
-
-                            <div class="d-flex justify-content-left">
-                                <h5 class="text-success">$Free</h5>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <div class="col-5 p-0">
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-striped bg-warning" role="progressbar"
-                                            style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                                        </div>
-                                    </div>
-                                    <small class="text-muted">5.6k sales</small>
-                                </div>
-                                <div class="col-7 justify-content-end text-right p-0">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary mr-1">Preview</button>
-                                    <button type="button" class="btn btn-sm btn-outline-primary"><i
-                                            class="fas fa-cloud-download-alt"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <img class="bd-placeholder-img card-img-top"
-                            src="https://themeforest.img.customer.envatousercontent.com/files/264133686/01_screenshot.png?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=300&s=3ef4779864c0568b54eb9b9d83845bd2" />
-                        <div class="card-body">
-                            <h6 class="small mb-4">Metronic - Bootstrap 4, Angular 8, React Admin Dashboard Theme...
-                                <br />
-                                <small class="text-muted">by keenthemes in Admin Templates</small>
-                            </h6>
-
-                            <div class="d-flex justify-content-left">
-                                <h5 class="text-success">$Free</h5>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <div class="col-5 p-0">
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-striped bg-warning" role="progressbar"
-                                            style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                                        </div>
-                                    </div>
-                                    <small class="text-muted">5.6k sales</small>
-                                </div>
-                                <div class="col-7 justify-content-end text-right p-0">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary mr-1">Preview</button>
-                                    <button type="button" class="btn btn-sm btn-outline-primary"><i
-                                            class="fas fa-cloud-download-alt"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <img class="bd-placeholder-img card-img-top"
-                            src="https://themeforest.img.customer.envatousercontent.com/files/258973178/01_cover.png?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=300&s=1779e6a0e1c0b4fd761b41320ae0fd4e" />
-                        <div class="card-body">
-                            <h6 class="small mb-4">Metronic - Bootstrap 4, Angular 8, React Admin Dashboard Theme...
-                                <br />
-                                <small class="text-muted">by keenthemes in Admin Templates</small>
-                            </h6>
-
-                            <div class="d-flex justify-content-left">
-                                <h5 class="text-success">$Free</h5>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <div class="col-5 p-0">
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-striped bg-warning" role="progressbar"
-                                            style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                                        </div>
-                                    </div>
-                                    <small class="text-muted">5.6k sales</small>
-                                </div>
-                                <div class="col-7 justify-content-end text-right p-0">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary mr-1">Preview</button>
-                                    <button type="button" class="btn btn-sm btn-outline-primary"><i
-                                            class="fas fa-cloud-download-alt"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="col-3">
