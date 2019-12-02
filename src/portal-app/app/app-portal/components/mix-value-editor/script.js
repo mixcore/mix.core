@@ -67,22 +67,22 @@ modules.component('mixValueEditor', {
                 case 1:
                 case 2:
                 case 3:
-                    if (ctrl.dateObj) {
+                    if (ctrl.dateObj!=null) {
                         ctrl.stringValue = ctrl.dateObj.toISOString();
+                    }
+                    else{
+                        ctrl.stringValue = null;
                     }
                     break;
                 case 6:
-                    if (ctrl.doubleValue) {
-                        ctrl.stringValue = ctrl.doubleValue.toString();
-                    }
+                    // ctrl.stringValue = ctrl.doubleValue;
                     break;
                 case 18:
-                    if (ctrl.booleanValue) {
-                        ctrl.stringValue = ctrl.booleanValue.toString();
-                    }
+                    // ctrl.stringValue = ctrl.booleanValue;
                     break;
 
                 default:
+                    ctrl.stringValue = ctrl.doubleValue;
                     break;
             }
         };

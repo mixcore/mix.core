@@ -426,15 +426,33 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             return result;
         }
 
+        public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var tasks = new List<Task>();
+            // Remove parent Pages
+            var relatedPages = context.MixPage.Where(m => m.MixPageModule
+                 .Any(d => d.Specificulture == Specificulture && (d.ModuleId == Id)));
+            foreach (var item in relatedPages)
+            {
+                tasks.Add(Task.Run(() =>
+                {
+                    var data = new MixPages.ReadViewModel(item, context, transaction);
+                    data.RemoveCache(item, context, transaction);
+                }));
 
-        #endregion Async
+            }
+
+            return tasks;
+        }
+
+    #endregion Async
 
 
 
-        #endregion Overrides
+    #endregion Overrides
 
-        #region Expand
-        private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
+    #region Expand
+    private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             LoadAttributeData(_context, _transaction);
             LoadAttributeFields(_context, _transaction);

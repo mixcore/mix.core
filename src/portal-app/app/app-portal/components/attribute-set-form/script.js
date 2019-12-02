@@ -59,7 +59,7 @@ modules.component('attributeSetForm', {
             ctrl.submit = async function () {
                 angular.forEach(ctrl.attrData.values, function (e) {
                     //Encrypt field before send
-                    if (e.field.isEncrypt) {
+                    if (e.field && e.field.isEncrypt) {
                         var encryptData = $rootScope.encrypt(e.stringValue);
                         e.encryptKey = encryptData.key;
                         e.encryptValue = encryptData.data;
