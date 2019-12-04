@@ -533,7 +533,7 @@ namespace Mix.Cms.Lib.ViewModels.Services.Store
             Data.Add(new JProperty("details", $"/api/v1/odata/{Specificulture}/attribute-set-data/mobile/{Id}"));
             foreach (var item in Values.OrderBy(v => v.Priority))
             {
-                item.AttributeFieldName = item.Field.Name;
+                item.AttributeFieldName = item.Field?.Name?? item.AttributeFieldName;
                 Data.Add(ParseValue(item));
             }
         }
