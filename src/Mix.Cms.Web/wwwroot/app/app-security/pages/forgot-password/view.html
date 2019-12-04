@@ -1,12 +1,12 @@
-<div class="p-5">
-    <form class="mb-3 frm-login" action="" ng-class="{'submitted': submitted}" ng-submit="submit()">
-        <div class="p-6">
+
+    <form class="card mb-3 frm-login" action="" ng-class="{'submitted': submitted}" ng-submit="submit()">
+        <div class="p-5">
             <div ng-if="!isSucceed">
 
-                <h1 class="h4 text-gray-900 mb-3">Reset your password!</h1>
+                <img src="/css/portal/img/mixcore-logo-green.svg" alt="Mixcore CMS" height="35">
                 <hr>
                 <div class="form-group">
-                    <label class="form-label">Your email address</label>
+                    <label class="form-label">Input your email address to receive the instruction!</label>
 
                     <input class="form-control" placeholder="Email" ng-model="activedData.email" required="" autofocus="" ng-enter="submit()">
 
@@ -32,4 +32,3 @@
         </div>
 
     </form>
-</div>
