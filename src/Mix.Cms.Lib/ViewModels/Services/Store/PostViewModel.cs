@@ -127,8 +127,8 @@ namespace Mix.Cms.Lib.ViewModels.Services.Store
         [JsonIgnore]
         [JsonProperty("attributeData")]
         public AttributeDataViewModel AttributeData { get; set; }
-        [JsonProperty("fields")]
-        public JObject Fields { get { return AttributeData?.Data; } }
+        [JsonProperty("properties")]
+        public JObject Properties { get { return AttributeData?.Data; } }
         #endregion Views
 
         #endregion Properties
@@ -177,8 +177,8 @@ namespace Mix.Cms.Lib.ViewModels.Services.Store
         #region Overrides
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            AttributeData = AttributeDataViewModel.Repository.GetSingleModel(m => m.MixRelatedAttributeData.Any(
-                n => n.ParentId == Id.ToString() && n.ParentType == (int)MixEnums.MixAttributeSetDataType.Post && n.Specificulture == Specificulture))?.Data;
+            AttributeData = AttributeDataViewModel.Repository.GetFirstModel(m => m.MixRelatedAttributeData.Any(
+                n => n.ParentId == Id.ToString() && n.ParentType == (int)MixEnums.MixAttributeSetDataType.Post && n.AttributeSetName == "post" && n.Specificulture == Specificulture))?.Data;
         }
         #endregion
     }
