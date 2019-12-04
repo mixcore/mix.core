@@ -3,17 +3,14 @@
 </div> -->
 <div ng-init="loadProgress(100)"></div>
 <div ng-init="init()">
-
-    <h1 class="display-4">Hooray! Almost there... </h1>
-    <p class="lead">You can start <strong>mixcore</strong> with our beautiful themes.</p>
-
+    <h1 class="lead">You can start <strong>Mixcore CMS</strong> with our default beautiful themes. </h1>
     <hr>
     <div class="">
         <form id="frm-theme">
 
             <div class="options">
 
-                <div class="option active" style="--optionBackground:url(../assets/img/bgs/thumb_theme1.png);">
+                <div class="option active" style="--optionBackground:url(../assets/img/bgs/thumb_theme1.jpg);">
                     <label for="theme-1">
                         <div class="shadow"></div>
                         <div class="label">
@@ -25,15 +22,15 @@
                             </div>
 
                             <div class="info">
-                                <div class="main">Now UI Kit Pro</div>
-                                <div class="sub">MVC App</div>
+                                <div class="main">Mix Agency</div>
+                                <div class="sub">Bootstrap 4 + Shards</div>
 
                             </div>
                         </div>
                     </label>
                 </div>
 
-                <div class="option" style="--optionBackground:url(../assets/img/bgs/thumb_theme2.png);">
+                <div class="option" style="--optionBackground:url(../assets/img/bgs/thumb_theme1.png);">
                     <label for="theme-2">
                         <div class="shadow"></div>
                         <div class="label">
@@ -42,8 +39,8 @@
                                 <label for="theme-2"></label>
                             </div>
                             <div class="info">
-                                <div class="main">[ Theme's Name ]</div>
-                                <div class="sub">Onepage App</div>
+                                <div class="main">Now UI Kit Pro</div>
+                                <div class="sub">Bootstrap 4</div>
 
                             </div>
                         </div>
@@ -61,7 +58,7 @@
                             <div class="info">
                                 <div class="main">Your own theme</div>
                                 <div class="sub">
-                                    <api-file form-name="'theme'" class="form-control" posted-file="theme" style="display: unset;
+                                    <api-file form-name="'theme'" class="form-control form-control-sm" posted-file="theme" style="display: unset;
                                 padding: 0;
                                 background-color: unset;
                                 border: none;
@@ -74,55 +71,12 @@
                 </div>
 
             </div>
-            <!-- <div class="row no-gutters">
-                    <div class="card col-md-6">
-                        <img src="https://s3.amazonaws.com/creativetim_bucket/products/62/original/opt_nukp_thumbnail.jpg?1503343544"
-                            class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Now UI Kit Pro</h5>
-                            <p class="card-text">
-                                Theme proudly
-                                sponsored by Creative Tim.
-                            </p>
-                            <p class="card-text">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" ng-model="data.isCreateDefault"
-                                        id="isCreateDefault">
-                                    <label class="custom-control-label" for="isCreateDefault">Use</label>
-                                </div>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="card col-md-6">
-                        <img src="https://s3.amazonaws.com/creativetim_bucket/products/62/original/opt_nukp_thumbnail.jpg?1503343544"
-                            class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Now UI Kit Pro</h5>
-
-                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                        </div>
-                    </div>
-                </div> -->
-            <!-- <div class="form-group">
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" ng-model="data.isCreateDefault"
-                        id="isCreateDefault">
-                    <label class="custom-control-label" for="isCreateDefault">Using Now UI Kit Pro as your default
-                        time</label>
-                </div>
-            </div> -->
-            <!-- <div class="form-group">
-                <label>Or import your theme:</label><br />
-                <hr class="hr-text" data-content="OR">
-                <api-file form-name="'theme'" class="form-control" posted-file="theme"></api-file>
-            </div>
- -->
-
+            <hr>
             <div class="text-right mt-4">
                 <!-- <div class="text-center form-footer">
                     <button ng-click="submit()" class="btn btn-primary mt-4">Create and Login</button>
                 </div> -->
-                <button class="btn btn-primary" ng-click="submit()">Create and Login to Portal <i class="fa fa-angle-right"></i></button>
+                <button class="btn btn-primary" style="min-width:200px" ng-click="submit()">Create and Login to Portal <i class="fa fa-angle-right"></i></button>
                 <!-- <button type="button" class="btn btn-link" ng-click="advanceSetup()">Advance Setup <i
                         class="fa fa-angle-right" style="font-size: 19px;"></i></button> -->
             </div>
