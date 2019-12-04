@@ -146,7 +146,7 @@
         {
             "title": "Users",
             "path": "#",
-            "icon": "mi mi-Contact",
+            "icon": "mi mi-Emoji",
             "subMenus": [
                 {
                     "title": "Create",
