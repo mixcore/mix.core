@@ -1,7 +1,7 @@
-<form class="mb-3 frm-login" action="" ng-class="{'submitted': submitted}" ng-submit="login()">
+<form class="card mb-3 frm-login" action="" ng-class="{'submitted': submitted}" ng-submit="login()">
     <div class="p-5">
-
-        <img src="/css/portal/img/mixcore-logo-green.svg" alt="Mixcore CMS" height="35">
+        <img src="/css/portal/img/mixcore-logo-green.svg" alt="Mixcore CMS" height="35" class="mb-4">
+        <h1 class="lead">Hi there! Welcome back.</h1>
         <hr>
         <div class="form-group">
             <label class="form-label">Username</label>
@@ -14,7 +14,7 @@
             </label>
 
             <input type="password" class="form-control" placeholder="Password" ng-model="loginData.password" required ng-enter="login()">
-                <a href="/security/forgot-password" class="float-right small">Forgot password?</a>
+            <a href="/security/forgot-password" class="float-right small">Forgot password?</a>
 
         </div>
         <div class="form-group mt-4">
@@ -29,7 +29,7 @@
                 Login
             </button>
             <p class="text-danger ng-binding" ng-bind="error"></p>
-            <button ng-click="goToSiteUrl('/')" type="button" class="btn btn-link">Back to Homepage</button>
+            <button ng-click="goToSiteUrl('/')" type="button" class="btn btn-link">Back to Homepage</button> | <button ng-click="goToSiteUrl('/security/register')" type="button" class="btn btn-link">Register</button>
         </div>
 
 
