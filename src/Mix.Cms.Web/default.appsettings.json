@@ -105,14 +105,11 @@
             "fontSize": "12"
         }
     },
-    "Socials": {
-        "Facebook": {},
-        "Instagram": {}
-    },
     "Logging": {
-        "IncludeScopes": false,
         "LogLevel": {
-            "Default": "Warning"
+            "Default": "Information",
+            "Microsoft": "Warning",
+            "Microsoft.Hosting.Lifetime": "Information"
         }
     },
     "JWTSettings": {

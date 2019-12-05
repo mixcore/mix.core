@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Mix.Cms.Lib;
-using System.IO;
 
 namespace Mix.Cms.Web
 {
@@ -10,22 +15,26 @@ namespace Mix.Cms.Web
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
         {
+            // Mix: Create default appSettings if not exists
+            if (!System.IO.File.Exists(MixConstants.CONST_FILE_APPSETTING))
+            {
+                System.IO.File.Copy(MixConstants.CONST_DEFAULT_FILE_APPSETTING, MixConstants.CONST_FILE_APPSETTING, false);
+            }
+
             var config = new ConfigurationBuilder()
            .SetBasePath(Directory.GetCurrentDirectory())
            .AddJsonFile(MixConstants.CONST_FILE_APPSETTING, optional: true, reloadOnChange: true)
            .Build();
-
-            return WebHost.CreateDefaultBuilder(args)
-                .UseConfiguration(config)
-                .UseSetting("https_port", "443")
-                .UseStartup<Startup>().UseKestrel(options =>
+            return Host.CreateDefaultBuilder(args)          
+                .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    options.Limits.MaxRequestBodySize = 209715200;
+                    webBuilder.UseConfiguration(config);
+                    webBuilder.UseStartup<Startup>();
                 });
         }
     }
