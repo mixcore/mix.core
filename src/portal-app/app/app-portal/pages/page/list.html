@@ -5,8 +5,6 @@
                 <filter-list request="request" callback="getList(pageIndex)" create-url="'/portal/page/create'"
                     create-text="'Create Page'"></filter-list>
 
-                <small ng-if="canDrag" class="text-info"
-                    ng-bind="translate('warning_can_not_drag_drop',true, '(Drag Drop only allow when order by priority asc)')"></small>
                 <hr>
                 <table id="list-page" class="table table-sm table-hover mb-0" dnd-list="data.items"
                     dnd-disable-if="canDrag" cellspacing="0" ng-init="getList()">
@@ -204,9 +202,20 @@
                     </tbody>
                 </table>
             </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-6">
+                        <small ng-if="canDrag" class="text-info"
+                            ng-bind="translate('warning_can_not_drag_drop',true, 'Note: Drag Drop only allow when order by priority asc')"></small>
+                    </div>
+                    <div class="col-6">
+                        <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems"
+                            ul-class="pagination justify-content-end m-0" a-class="page-link"
+                            paging-action="getList(page-1)" scroll-top="true">
+                        </paging>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems"
-    ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
-</paging>

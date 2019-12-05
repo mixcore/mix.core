@@ -8,7 +8,7 @@
             </div>
             <div ng-repeat="col in $ctrl.data[0].fields | orderBy:'priority' track by $index" ng-if="$index < 4"
                 class="col-md-2">
-                <div class="input-group input-group-sm">
+                <div class="input-group input-group-xs">
                     <div class="input-group-prepend">
                         <div class="input-group-text"><i class="fas fa-filter"></i></div>
                     </div>
@@ -19,8 +19,8 @@
             <!-- <small class="col-md-2">Author</small> -->
             <small class="col-md-2">Created Date</small>
             <div class="col-md-1">
-                <div class="form-group">
-                    <select class="form-control btn custom-select custom-select-sm mr-2" ng-model="$ctrl.filterType">
+                <div class="input-group input-group-xs">
+                    <select class="custom-select custom-select-sm mr-2" ng-model="$ctrl.filterType">
                         <option ng-repeat="item in $ctrl.filterTypes" ng-value="item">{{item}}</option>
                     </select>
                 </div>
