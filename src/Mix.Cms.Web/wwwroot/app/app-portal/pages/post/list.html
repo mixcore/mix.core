@@ -5,15 +5,14 @@
                 <filter-list request="request" callback="getList(pageIndex)" create-url="'/portal/post/create'" create-text="'Create Post'">
                 </filter-list>
 
-                <select class="btn custom-select custom-select-sm col-3 mt-3" ng-model="selectedList.action">
+                <select class="custom-select custom-select-sm col-2" ng-model="selectedList.action">
                     <option ng-repeat="item in actions" ng-value="item">{{item}}</option>
                 </select>
-                <a class="btn btn-sm btn-primary" ng-if="selectedList.data.length > 0 && selectedList.action" ng-click="applyList()">Apply</a>
+                <button type="buttin" class="btn btn-sm btn-primary" ng-if="selectedList.data.length > 0 && selectedList.action" ng-click="applyList()">Apply</button>
                 <hr>
                 <table class="table table-sm table-hover mb-0" cellspacing="0">
                     <thead class="thead-light">
                         <tr>
-
                             <th scope="col" width="15px">
                             </th>
                             <th scope="col" width="15px">
@@ -87,8 +86,18 @@
                     </tbody>
                 </table>
             </div>
+            <div class="card-footer">
+                <div class="row">
+
+                    <div class="col-6">
+                    </div>
+                    <div class="col-6">
+
+                        <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
+                        </paging>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
-</paging>
