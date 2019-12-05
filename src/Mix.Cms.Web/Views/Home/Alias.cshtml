@@ -1,0 +1,69 @@
+﻿@{
+    string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, ViewBag.culture);
+    string layout = Model.Layout ?? "Masters/_Layout";
+    Layout = $"Templates/{master}/{layout}";
+    var materTemplate = await MixCmsHelper.GetTemplateByPath(layout);
+}
+<div>
+    <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
+    
+    <input type="hidden" id="view-type" value="Page" />
+    <input type="hidden" id="view-id" value="@Model.Id" />
+    @if (!string.IsNullOrEmpty(Model.TemplatePath))
+    {
+        try
+        {
+            <partial name="@Model.TemplatePath" model="@Model" />
+        }
+        catch (System.InvalidOperationException invalidOperationException)
+        {
+            <p class="danger text-center has-error">Unable load template with Exception detail below:</p>
+            <code>
+                @invalidOperationException
+            </code>
+
+        }
+        catch (Exception ex)
+        {
+            <code>
+                @ex
+            </code>
+            <p class="danger text-center has-error">Unable load template</p>
+        }
+    }
+    else
+    {
+        <section class="container">
+            <h1>@(MixService.Translate<string>("Please choose template", ViewBag.culture))</h1>
+        </section>
+    }
+</div>
+@{
+    string url = ViewData["OgUrl"] != null ? (string)ViewData["OgUrl"] : Model.DetailsUrl;
+    string title = ViewData["OgTitle"] != null ? (string)ViewData["OgTitle"] : Model.SeoTitle;
+    string desc = ViewData["OgDescription"] != null ? (string)ViewData["OgDescription"] : Model.SeoDescription;
+    string image = ViewData["OgImage"] != null ? (string)ViewData["OgImage"] : Model.ThumbnailUrl;
+}
+@section Seo{
+    <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @Model.SeoTitle</title>
+    <meta property="og:type" content="post" />
+    <!--points to the regular HTML version of the AMP HTML document or to itself if no such HTML version exists-->
+    <link rel="canonical" href="@url">
+    <meta property="og:url" content="@url" />
+    <meta property="og:title" content="@title" />
+    <meta property="og:description"
+          content="@desc" />
+    <meta property="og:image" content="@image" />
+
+    <meta name="title" content="@title" />
+    <meta name="description" content="@desc" />
+    <meta name="keywords" content="@desc" />
+}
+@section Styles{
+    @Html.Raw(materTemplate.Styles)
+    @Html.Raw(Model.View?.Styles)
+}
+@section Scripts{
+    @Html.Raw(materTemplate.Scripts)
+    @Html.Raw(Model.View?.Scripts)
+}

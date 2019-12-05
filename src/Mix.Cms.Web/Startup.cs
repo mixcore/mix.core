@@ -25,6 +25,7 @@ namespace Mix.Cms.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews()
+                .AddRazorRuntimeCompilation()
                 .AddNewtonsoftJson(options =>
             options.SerializerSettings.ContractResolver =
               new CamelCasePropertyNamesContractResolver()); ;

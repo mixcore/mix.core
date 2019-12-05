@@ -40,7 +40,7 @@
                     </thead>
 
                     <tbody class="sortable">
-                        <tr ng-repeat="item in data track by $index" class="sortable-item" sort-model="attribute-set" sort-model-id="{{item.id}}">
+                        <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="attribute-set" sort-model-id="{{item.id}}">
                             <td style="cursor:move;" class="drag-header">
                                 <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
                             </td>
@@ -158,7 +158,7 @@
                 </table>
             </div>
         </div>
-        <paging class="small" page="request.pageIndex + 1" page-size="request.pageSize" total="request.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
+        <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
         </paging>
     </div>
 </div>
