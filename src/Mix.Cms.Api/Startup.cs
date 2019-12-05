@@ -34,7 +34,7 @@ namespace Mix.Cms.Api
             }
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+            //app.UseMvc();
         }
     }
 }

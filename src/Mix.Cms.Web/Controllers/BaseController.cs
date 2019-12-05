@@ -1,10 +1,7 @@
 ﻿using AutoMapper.Configuration;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
 using Newtonsoft.Json.Linq;
@@ -34,25 +31,8 @@ namespace Mix.Cms.Web.Controllers
             }
         }
         protected IConfiguration _configuration;
-        protected IHostingEnvironment _env;
-        protected readonly IMemoryCache _memoryCache;
-        protected readonly IHttpContextAccessor _accessor;
-        public BaseController(IHostingEnvironment env, IMemoryCache memoryCache, IHttpContextAccessor accessor)
+        public BaseController()
         {
-            _env = env;
-            _memoryCache = memoryCache;
-            _accessor = accessor;
-            // Set CultureInfo
-            var cultureInfo = new CultureInfo(_culture);
-            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
-            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
-        }
-
-        public BaseController(IHostingEnvironment env, IConfiguration configuration, IHttpContextAccessor accessor)
-        {
-            _configuration = configuration;
-            _accessor = accessor;
-            _env = env;
             // Set CultureInfo
             var cultureInfo = new CultureInfo(_culture);
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
@@ -96,12 +76,17 @@ namespace Mix.Cms.Web.Controllers
                     _forbidden = true;
                 }
             }
+
+            if (_forbidden)
+            {
+                Redirect($"/error/403");
+            }
+            if (MixService.GetConfig<bool>("IsMaintenance"))
+            {
+                Redirect($"/{_culture}/maintenance");
+            }
+
             base.OnActionExecuting(context);
-        }
-
-        protected void GetLanguage()
-        {
-
         }
 
     }

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <DockerTargetOS>Windows</DockerTargetOS>
     <UserSecretsId>8d8e7493-9576-4341-89be-19d4e1c62ac2</UserSecretsId>
   </PropertyGroup>
@@ -26,8 +26,7 @@
       <PrivateAssets Condition="'%(PackageReference.Version)' == ''">all</PrivateAssets>
       <Publish Condition="'%(PackageReference.Version)' == ''">true</Publish>
     </PackageReference>
-    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.2.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>

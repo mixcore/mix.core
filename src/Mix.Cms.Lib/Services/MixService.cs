@@ -89,11 +89,11 @@ namespace Mix.Cms.Lib.Services
         {
             // Load configurations from appSettings.json
             JObject jsonSettings = new JObject();
-            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, ".json", string.Empty, true);
+            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, string.Empty, true);
 
             if (string.IsNullOrEmpty(settings.Content))
             {
-                settings = FileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, ".json", string.Empty, true, "{}");
+                settings = FileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, string.Empty, true, "{}");
             }
 
             string content = string.IsNullOrWhiteSpace(settings.Content) ? "{}" : settings.Content;
@@ -114,7 +114,7 @@ namespace Mix.Cms.Lib.Services
         {
             // Load configurations from appSettings.json
             JObject jsonSettings = new JObject();
-            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, ".json", string.Empty, true);
+            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, string.Empty, true);
 
             string content = string.IsNullOrWhiteSpace(settings.Content) ? "{}" : settings.Content;
             jsonSettings = JObject.Parse(content);
@@ -238,12 +238,12 @@ namespace Mix.Cms.Lib.Services
 
         public static bool SaveSettings()
         {
-            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, ".json", string.Empty, true, "{}");
+            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, string.Empty, true, "{}");
             if (settings != null)
             {
                 if (string.IsNullOrWhiteSpace(settings.Content))
                 {
-                    var defaultSettings = FileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, ".json", string.Empty, true, "{}");
+                    var defaultSettings = FileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, string.Empty, true, "{}");
                     settings = new FileViewModel()
                     {
                         Filename = MixConstants.CONST_FILE_APPSETTING,
@@ -277,7 +277,7 @@ namespace Mix.Cms.Lib.Services
         }
         public static bool SaveSettings(string content)
         {
-            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, ".json", string.Empty, true, "{}");
+            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, string.Empty, true, "{}");
 
             settings.Content = content;
             return FileRepository.Instance.SaveFile(settings);

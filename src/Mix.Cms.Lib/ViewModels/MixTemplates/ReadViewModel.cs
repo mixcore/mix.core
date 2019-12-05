@@ -254,8 +254,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             {
                 int activeThemeId = MixService.GetConfig<int>(
                     MixConstants.ConfigurationKeyword.ThemeId, culture);
-
-                result = Repository.GetSingleModel(t => t.FolderType == temp[0] && t.FileName == temp[1].Split('.')[0] && t.ThemeId == activeThemeId
+                string name = temp[1].Split('.')[0];
+                result = Repository.GetSingleModel(t => t.FolderType == temp[0] && t.FileName == name && t.ThemeId == activeThemeId
                     , _context, _transaction);
             }
             return result;
@@ -279,8 +279,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             {
                 int activeThemeId = MixService.GetConfig<int>(
                     MixConstants.ConfigurationKeyword.ThemeId, culture);
-
-                result = await Repository.GetSingleModelAsync(t => t.FolderType == temp[0] && t.FileName == temp[1].Split('.')[0] && t.ThemeId == activeThemeId
+                string name = temp[1].Split('.')[0];
+                result = await Repository.GetSingleModelAsync(t => t.FolderType == temp[0] && t.FileName == name && t.ThemeId == activeThemeId
                     , _context, _transaction);
             }
             return result;

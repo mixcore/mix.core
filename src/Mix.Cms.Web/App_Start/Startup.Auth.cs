@@ -47,21 +47,12 @@ namespace Mix.Cms.Web
 
                 ;
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("AddEditUser", policy =>
-                {
-                    policy.RequireClaim("Add User");
-                    policy.RequireClaim("Edit User");
-                });
-                options.AddPolicy("DeleteUser", policy => policy.RequireClaim("Delete User"));
-            })
-             ;
+            services.AddAuthorization();
         }
 
         protected void ConfigJWTToken(IServiceCollection services, IConfiguration Configuration)
         {
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication()
                     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                     {
                         options.RequireHttpsMetadata = false;
@@ -96,7 +87,7 @@ namespace Mix.Cms.Web
 
                         //};
                     });
-            //services.AddAuthentication("Bearer");
+            services.AddAuthentication("Bearer");
         }
 
         protected void ConfigCookieAuth(IServiceCollection services, IConfiguration Configuration)
@@ -105,7 +96,8 @@ namespace Mix.Cms.Web
             {
                 options.Cookie.HttpOnly = true;
                 options.Cookie.MaxAge = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>("CookieExpiration"));
-                options.Cookie.Expiration = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>("CookieExpiration"));
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>("CookieExpiration"));
+                //options.Cookie.Expiration = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>("CookieExpiration"));
                 options.LoginPath = "/security/login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
                 options.LogoutPath = "/"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
                 options.AccessDeniedPath = "/security/login"; // If the MixConstants.Default.DefaultCulture is not set here, ASP.NET Core will default to /Account/AccessDenied

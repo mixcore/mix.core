@@ -390,7 +390,7 @@ namespace Mix.Cms.Api.Controllers.v1
             return new RepositoryResponse<string>()
             {
 
-                Data = Lib.Helpers.RSAEncryptionHelper.GetEncryptedText(data)
+                Data = RSAEncryptionHelper.GetEncryptedText(data)
             };
         }
 

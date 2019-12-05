@@ -5,6 +5,7 @@
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Rewrite;
+using Mix.Cms.Hub;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
 using RewriteRules;
@@ -30,45 +31,54 @@ namespace Mix.Cms.Web
                         .AddApacheModRewrite(apacheModRewriteStreamReader)
                         .AddIISUrlRewrite(iisUrlRewriteStreamReader)
                         .Add(MethodRules.RedirectXMLRequests);
-                    //.Add(new RedirectImageRequests(".png", "/png-images"))
-                    //.Add(new RedirectImageRequests(".jpg", "/jpg-images"));
-
                     app.UseRewriter(options);
                 }
-                //    app.Run(context => context.Response.WriteAsync(
-                //$"Rewritten or Redirected Url: " +
-                //$"{context.Request.Path + context.Request.QueryString}"));
+
+                /* Uncomment for debug rewrite route url 
+                 * 
+                app.Run(context => context.Response.WriteAsync(
+                $"Rewritten or Redirected Url: " +
+                $"{context.Request.Path + context.Request.QueryString}"));
+
+                */
             }
-            app.UseMvc(routes =>
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-                routes.MapRoute(
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
                     name: "areaRoute",
-                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{area:exists}/{controller=Portal}/{action=Init}");
-                routes.MapRoute(
+                    pattern: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{area:exists}/{controller=Portal}/{action=Init}");
+                endpoints.MapControllerRoute(
                     name: "alias",
-                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{seoName}");
-                routes.MapRoute(
+                    pattern: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{seoName}");
+                endpoints.MapControllerRoute(
                    name: "page",
-                   template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{seoName}");
-                routes.MapRoute(
+                   pattern: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{seoName}");
+                endpoints.MapControllerRoute(
                     name: "file",
-                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/portal/file");
-                routes.MapRoute(
+                    pattern: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/portal/file");
+                endpoints.MapControllerRoute(
                     name: "post",
-                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/post/{id}/{seoName}");
+                    pattern: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/post/{id}/{seoName}");
+                
+                endpoints.MapHub<PortalHub>("/portalhub");
 
-                // uncomment the following line to Work-around for #1175 in beta1
-                routes.EnableDependencyInjection();
-
-                // and this line to enable OData query option, for example $filter
-                routes.Select().Expand().Filter().OrderBy().MaxTop(100).Count();
-                //routes.MapODataServiceRoute("ODataRoute", "odata", builder.GetEdmModel());
-
+                endpoints.MapHub<ServiceHub>("/servicehub");
 
             });
+            //app.UseMvc(routes =>
+            //{
+            //    // uncomment the following line to Work-around for #1175 in beta1
+            //    routes.EnableDependencyInjection();
+
+            //    // and this line to enable OData query option, for example $filter
+            //    routes.Select().Expand().Filter().OrderBy().MaxTop(100).Count();
+            //    //routes.MapODataServiceRoute("ODataRoute", "odata", builder.GetEdmModel());
+
+            //});
         }
 
     }
