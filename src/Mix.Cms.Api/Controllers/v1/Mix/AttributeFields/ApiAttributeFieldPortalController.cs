@@ -19,7 +19,7 @@ using System.Web;
 namespace Mix.Cms.Api.Controllers.v1.AttributeFields
 {
     [Produces("application/json")]
-    [Route("api/v1/attribute-set-field")]
+    [Route("api/v1/attribute-field")]
     public class ApiAttributeFieldController :
         BaseGenericApiController<MixCmsContext, MixAttributeField>
     {
@@ -27,7 +27,7 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeFields
         {
         }
 
-        // GET api/attribute-set-field/id
+        // GET api/attribute-field/id
         [HttpGet, HttpOptions]
         [Route("delete/{id}")]
         public async Task<RepositoryResponse<MixAttributeField>> DeleteAsync(int id)
@@ -35,7 +35,7 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeFields
             return await base.DeleteAsync<DeleteViewModel>(model => model.Id == id, true);
         }
 
-        // GET api/attribute-set-fields/id
+        // GET api/attribute-fields/id
         [HttpGet, HttpOptions]
         [Route("details/{id}/{viewType}")]
         [Route("details/{viewType}")]
@@ -87,7 +87,7 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeFields
 
         #region Post
 
-        // POST api/attribute-set-field
+        // POST api/attribute-field
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("save")]
@@ -107,7 +107,7 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeFields
             return new RepositoryResponse<UpdateViewModel>() { Status = 501 };
         }
 
-        // GET api/attribute-set-field
+        // GET api/attribute-field
         [HttpPost, HttpOptions]
         [Route("list")]
         public async Task<ActionResult<JObject>> GetList(
@@ -127,15 +127,14 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeFields
                         && (!request.ToDate.HasValue
                             || (model.CreatedDateTime <= request.ToDate.Value)
                         );
-            string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
             switch (request.Key)
             {
                 case "mvc":
-                    var mvcResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);                    
+                    var mvcResult = await base.GetListAsync<ReadViewModel>(request, predicate);                    
                     return Ok(JObject.FromObject(mvcResult));
                 default:
 
-                    var listItemResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);                    
+                    var listItemResult = await base.GetListAsync<ReadViewModel>(request, predicate);                    
                     return JObject.FromObject(listItemResult);
             }
         }

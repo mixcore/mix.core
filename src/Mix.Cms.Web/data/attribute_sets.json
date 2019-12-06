@@ -171,7 +171,8 @@
           "priority": 5,
           "specificulture": null
         }
-      ]
+      ],
+      "status": 2
     },
     {
       "id": 2,
@@ -205,25 +206,29 @@
           "isUnique": false,
           "status": 2
         }
-      ]
+      ],
+      "status": 2
     },
     {
       "id": 3,
       "title": "Page",
       "name": "page",
-      "fields": []
+      "fields": [],
+      "status": 2
     },
     {
       "id": 4,
       "title": "Module",
       "name": "module",
-      "fields": []
+      "fields": [],
+      "status": 2
     },
     {
       "id": 5,
       "title": "Post",
       "name": "post",
-      "fields": []
+      "fields": [],
+      "status": 2
     }
   ]
 }

@@ -21,26 +21,12 @@
             ctrl.selected = [];
             
             ctrl.init = function(){                
-                ctrl.service = $rootScope.getODataService(ctrl.modelName, ctrl.isGlobal);
+                ctrl.service = $rootScope.getService(ctrl.modelName, ctrl.isGlobal);
                 ctrl.prefix = 'modal_navs_' + ctrl.modelName;
                 ctrl.cols = ctrl.selects.split(',');
                 ctrl.getList();
             };
-            ctrl.count = async function () {
-                $rootScope.isBusy = true;
-                var resp = await ctrl.service.count(ctrl.viewType);
-                if (resp) {
-                    ctrl.request.totalItems = resp;
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
-                } else {
-                    if (resp) {
-                        $rootScope.showErrors('Failed');
-                    }
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
-                }
-            };
+            
             ctrl.getList = async function (pageIndex) {
                 if (pageIndex !== undefined) {
                     ctrl.request.pageIndex = pageIndex;

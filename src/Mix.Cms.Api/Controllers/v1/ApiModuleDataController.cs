@@ -260,7 +260,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     || (model.CreatedDateTime <= request.ToDate.Value.ToUniversalTime())
                 );
 
-            var portalResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);
+            var portalResult = await base.GetListAsync<ReadViewModel>(request, predicate);
             foreach (var item in portalResult.Data.Items)
             {
                 item.JItem["created_date"] = new JObject()
@@ -304,7 +304,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     || (model.CreatedDateTime <= request.ToDate.Value.ToUniversalTime())
                 )
                     ;
-            var portalResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);
+            var portalResult = await base.GetListAsync<ReadViewModel>(request, predicate);
 
             return Ok(JObject.FromObject(portalResult));
         }

@@ -127,15 +127,14 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSets
                         && (!request.ToDate.HasValue
                             || (model.CreatedDateTime <= request.ToDate.Value)
                         );
-            string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
             switch (request.Key)
             {
                 case "mvc":
-                    var mvcResult = await base.GetListAsync<ReadMvcViewModel>(key, request, predicate);                    
+                    var mvcResult = await base.GetListAsync<ReadMvcViewModel>(request, predicate);                    
                     return Ok(JObject.FromObject(mvcResult));
                 default:
 
-                    var listItemResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);                    
+                    var listItemResult = await base.GetListAsync<ReadViewModel>(request, predicate);                    
                     return JObject.FromObject(listItemResult);
             }
         }

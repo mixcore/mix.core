@@ -488,6 +488,12 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'BaseODataService'
             serviceFactory.init(modelName, isGlobal);
             return serviceFactory;            
         };
+        $rootScope.getService = function(modelName, isGlobal)
+        {
+            var serviceFactory = angular.copy(baseODataService);
+            serviceFactory.init(modelName, isGlobal);
+            return serviceFactory;            
+        };
 
     }]);
 if ($.trumbowyg) {

@@ -147,7 +147,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     else
                     {
                         Expression<Func<MixAttributeSetData, bool>> predicate = m => (m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName) && m.Specificulture == _lang;
-                        var portalResult = await base.GetListAsync<UpdateViewModel>(request.Key, request, predicate);
+                        var portalResult = await base.GetListAsync<UpdateViewModel>(request, predicate);
                         return Ok(JObject.FromObject(portalResult));
                     }
                 default:
@@ -160,7 +160,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     else
                     {
                         Expression<Func<MixAttributeSetData, bool>> predicate = m => (m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName) && m.Specificulture == _lang;
-                        var portalResult = await base.GetListAsync<ReadViewModel>(request.Key, request, predicate);
+                        var portalResult = await base.GetListAsync<ReadViewModel>(request, predicate);
                         return Ok(JObject.FromObject(portalResult));
                     }                    
             }
