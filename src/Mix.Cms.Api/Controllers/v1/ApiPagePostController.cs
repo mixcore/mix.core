@@ -141,11 +141,10 @@ namespace Mix.Cms.Api.Controllers.v1
                             || (model.Description.Contains(request.Keyword)
                             ))
                         ;
-            string key = $"{request.Key}_{request.Query}_{request.PageSize}_{request.PageIndex}";
             switch (request.Key)
             {
                 default:
-                    var listItemResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);
+                    var listItemResult = await base.GetListAsync<ReadViewModel>(request, predicate);
                     listItemResult.Data.Items.ForEach(n => n.IsActived = true);
                     listItemResult.Data.Items.ForEach(n => n.Post.DetailsUrl = MixCmsHelper.GetRouterUrl(
                                 new { culture = _lang, action = "post", id = n.Post.Id, seoName = n.Post.SeoName }, Request, Url));

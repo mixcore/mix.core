@@ -209,12 +209,11 @@ namespace Mix.Cms.Api.Controllers.v1
                         );
 
             var nextSync = PublishPosts();
-            string key = $"{nextSync}_{request.Key}_{request.Query}_{request.PageSize}_{request.PageIndex}";
 
             switch (request.Key)
             {
                 case "service.store":
-                    var srvResult = await base.GetListAsync<Lib.ViewModels.Services.Store.PostViewModel>(key, request, predicate);
+                    var srvResult = await base.GetListAsync<Lib.ViewModels.Services.Store.PostViewModel>(request, predicate);
                     if (srvResult.IsSucceed)
                     {
                         srvResult.Data.Items.ForEach(a =>
@@ -225,7 +224,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                     return Ok(JObject.FromObject(srvResult));
                 case "mvc":
-                    var mvcResult = await base.GetListAsync<ReadMvcViewModel>(key, request, predicate);
+                    var mvcResult = await base.GetListAsync<ReadMvcViewModel>(request, predicate);
                     if (mvcResult.IsSucceed)
                     {
                         mvcResult.Data.Items.ForEach(a =>
@@ -236,7 +235,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                     return Ok(JObject.FromObject(mvcResult));
                 case "portal":
-                    var portalResult = await base.GetListAsync<UpdateViewModel>(key, request, predicate);
+                    var portalResult = await base.GetListAsync<UpdateViewModel>(request, predicate);
                     if (portalResult.IsSucceed)
                     {
                         portalResult.Data.Items.ForEach(a =>
@@ -248,7 +247,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     return Ok(JObject.FromObject(portalResult));
                 default:
 
-                    var listItemResult = await base.GetListAsync<ReadListItemViewModel>(key, request, predicate);
+                    var listItemResult = await base.GetListAsync<ReadListItemViewModel>(request, predicate);
                     if (listItemResult.IsSucceed)
                     {
                         listItemResult.Data.Items.ForEach((Action<ReadListItemViewModel>)(a =>

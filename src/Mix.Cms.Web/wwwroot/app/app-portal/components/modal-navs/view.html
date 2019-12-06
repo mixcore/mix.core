@@ -31,7 +31,7 @@
                             </thead>
 
                             <tbody>
-                                <tr ng-repeat="item in $ctrl.data track by $index">
+                                <tr ng-repeat="item in $ctrl.data.items track by $index">
                                     <td style="cursor:grab;" class="drag-header">
                                         <small class="fa fa-grip-vertical text-black-50 align-middle" style="cursor: grab"></small>
                                     </td>
@@ -49,8 +49,9 @@
                         </table>
                         <hr>
 
-                        <paging class="small" page="$ctrl.request.pageIndex + 1" page-size="$ctrl.request.pageSize" total="$ctrl.request.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="$ctrl.getList($ctrl.request.pageIndex)" scroll-top="true">
-                    </paging></div>
+                        <paging class="small" page="$ctrl.data.page" page-size="$ctrl.data.pageSize" total="$ctrl.data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="$ctrl.getList(page-1)" scroll-top="true">
+                        </paging>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">

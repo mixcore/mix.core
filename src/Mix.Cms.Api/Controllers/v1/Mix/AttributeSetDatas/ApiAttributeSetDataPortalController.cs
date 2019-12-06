@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels.MixAttributeSetValues;
+using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
@@ -16,26 +16,26 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Mix.Cms.Api.Controllers.v1.AttributeSetValues
+namespace Mix.Cms.Api.Controllers.v1.AttributeSetDatas
 {
     [Produces("application/json")]
-    [Route("api/v1/{culture}/attribute-set-value")]
-    public class ApiAttributeSetValueController :
-        BaseGenericApiController<MixCmsContext, MixAttributeSetValue>
+    [Route("api/v1/{culture}/attribute-set-data/portal")]
+    public class ApiAttributeSetDataPortalController :
+        BaseGenericApiController<MixCmsContext, MixAttributeSetData>
     {
-        public ApiAttributeSetValueController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
+        public ApiAttributeSetDataPortalController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
         }
 
-        // GET api/attribute-set-value/id
+        // GET api/attribute-set-data/id
         [HttpGet, HttpOptions]
         [Route("delete/{id}")]
-        public async Task<RepositoryResponse<MixAttributeSetValue>> DeleteAsync(string id)
+        public async Task<RepositoryResponse<MixAttributeSetData>> DeleteAsync(string id)
         {
             return await base.DeleteAsync<DeleteViewModel>(model => model.Id == id, true);
         }
 
-        // GET api/attribute-set-values/id
+        // GET api/attribute-set-datas/id
         [HttpGet, HttpOptions]
         [Route("details/{id}/{viewType}")]
         [Route("details/{viewType}")]
@@ -47,39 +47,39 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSetValues
                 case "portal":
                     if (!string.IsNullOrEmpty(id))
                     {
-                        Expression<Func<MixAttributeSetValue, bool>> predicate = model => model.Id == id;
-                        var portalResult = await base.GetSingleAsync<MobileViewModel>($"{viewType}_{id}", predicate);
+                        Expression<Func<MixAttributeSetData, bool>> predicate = model => model.Id == id;
+                        var portalResult = await base.GetSingleAsync<UpdateViewModel>(predicate);
                         return Ok(JObject.FromObject(portalResult));
                     }
                     else
                     {
-                        var model = new MixAttributeSetValue()
+                        var model = new MixAttributeSetData()
                         {
                             Status = MixService.GetConfig<int>("DefaultStatus")
                             ,
-                            Priority = MobileViewModel.Repository.Max(a => a.Priority).Data + 1
+                            Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 
-                        RepositoryResponse<MobileViewModel> result = await base.GetSingleAsync<MobileViewModel>($"{viewType}_default", null, model);
+                        RepositoryResponse<UpdateViewModel> result = await base.GetSingleAsync<UpdateViewModel>(null, model);
                         return Ok(JObject.FromObject(result));
                     }
                 default:
                     if (!string.IsNullOrEmpty(id))
                     {
-                        Expression<Func<MixAttributeSetValue, bool>> predicate = model => model.Id == id;
+                        Expression<Func<MixAttributeSetData, bool>> predicate = model => model.Id == id;
                         var result = await base.GetSingleAsync<ReadViewModel>($"{viewType}_{id}", predicate);
                         return Ok(JObject.FromObject(result));
                     }
                     else
                     {
-                        var model = new MixAttributeSetValue()
+                        var model = new MixAttributeSetData()
                         {
                             Status = MixService.GetConfig<int>("DefaultStatus")
                             ,
                             Priority = ReadViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 
-                        RepositoryResponse<ReadViewModel> result = await base.GetSingleAsync<ReadViewModel>($"{viewType}_default", null, model);
+                        RepositoryResponse<ReadViewModel> result = await base.GetSingleAsync<ReadViewModel>(null, model);
                         return Ok(JObject.FromObject(result));
                     }
             }
@@ -89,16 +89,16 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSetValues
 
         #region Post
 
-        // POST api/attribute-set-value
+        // POST api/attribute-set-data
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("save")]
-        public async Task<RepositoryResponse<MobileViewModel>> Save([FromBody]MobileViewModel data)
+        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromBody]UpdateViewModel data)
         {
             if (data != null)
             {
                 data.Specificulture = _lang;
-                var result = await base.SaveAsync<MobileViewModel>(data, true);
+                var result = await base.SaveAsync<UpdateViewModel>(data, true);
                 if (result.IsSucceed)
                 {
                     MixService.LoadFromDatabase();
@@ -106,10 +106,10 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSetValues
                 }
                 return result;
             }
-            return new RepositoryResponse<MobileViewModel>() { Status = 501 };
+            return new RepositoryResponse<UpdateViewModel>() { Status = 501 };
         }
 
-        // GET api/attribute-set-value
+        // GET api/attribute-set-data
         [HttpPost, HttpOptions]
         [Route("list")]
         public async Task<ActionResult<JObject>> GetList(
@@ -118,11 +118,11 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSetValues
             var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
             bool isLevel = int.TryParse(parsed.Get("level"), out int level);
             ParseRequestPagingDate(request);
-            Expression<Func<MixAttributeSetValue, bool>> predicate = model =>
+            Expression<Func<MixAttributeSetData, bool>> predicate = model =>
                         model.Specificulture == _lang
                         && (!request.Status.HasValue || model.Status == request.Status.Value)
                         && (string.IsNullOrWhiteSpace(request.Keyword)
-                            || (model.StringValue.Contains(request.Keyword))
+                            || (model.AttributeSetName.Contains(request.Keyword))
                             )
                         && (!request.FromDate.HasValue
                             || (model.CreatedDateTime >= request.FromDate.Value)
@@ -137,7 +137,7 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSetValues
                     return Ok(JObject.FromObject(mvcResult));
                 default:
 
-                    var listItemResult = await base.GetListAsync<ReadViewModel>(request, predicate);                    
+                    var listItemResult = await base.GetListAsync<UpdateViewModel>(request, predicate);                    
                     return JObject.FromObject(listItemResult);
             }
         }

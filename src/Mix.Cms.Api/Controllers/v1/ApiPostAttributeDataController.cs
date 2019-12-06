@@ -125,15 +125,14 @@ namespace Mix.Cms.Api.Controllers.v1
                 string.IsNullOrWhiteSpace(request.Keyword)
                     || (model.MixPostAttributeValue.Any(v => v.StringValue.Contains(request.Keyword))
                     );
-            string key = $"api_{_lang}_{request.Key}_{request.PageSize}_{request.PageIndex}";
             switch (request.Key)
             {
                 case "portal":
-                    var portalResult = await base.GetListAsync<UpdateViewModel>(key, request, predicate);
+                    var portalResult = await base.GetListAsync<UpdateViewModel>(request, predicate);
                     return Ok(JObject.FromObject(portalResult));
                 default:
 
-                    var listItemResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);
+                    var listItemResult = await base.GetListAsync<ReadViewModel>(request, predicate);
 
                     return JObject.FromObject(listItemResult);
             }

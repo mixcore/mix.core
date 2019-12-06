@@ -9,7 +9,7 @@
                 <attribute-list header="'Attributes'" fields="activedData.fields"
                     remove-attributes="activedData.removeAttributes">
                 </attribute-list>
-                </tabs-v>
+                
                 <attribute-set-edm model="activedData">
                 </attribute-set-edm>
                 <tabs-v select-callback="selectPane(pane)" class="mb-3">
@@ -21,6 +21,7 @@
                         <mix-template-editor folder-type="'Edms'" template="activedData.edmView">
                         </mix-template-editor>
                     </pane-v>
+                </tabs-v>
             </div>
             <div class="col-4">
                 <actions preview-url="activedData.detailsUrl" content-url="contentUrl" back-url="referrerUrl"></actions>
