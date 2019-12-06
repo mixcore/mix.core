@@ -80,6 +80,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 val.AttributeSetName = AttributeSetName;
                 val.Priority = field.Priority;
                 val.Field = field;
+                val.DataType = field.DataType;
             }
 
 
