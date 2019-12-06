@@ -683,7 +683,7 @@
                 {
                     "path": "/portal/attribute-set-data/list",
                     "templatePath": "/app/app-portal/pages/attribute-set-data/list.html?v=1",
-                    "controller": "MixAttributeSetDataController"
+                    "controller": "AttributeSetDataController"
                 },
                 {
                     "path": "/portal/attribute-set-data/details",

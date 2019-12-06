@@ -35,57 +35,59 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSetDatas
             return await base.DeleteAsync<DeleteViewModel>(model => model.Id == id, true);
         }
 
-        // GET api/attribute-set-datas/id
         [HttpGet, HttpOptions]
-        [Route("details/{id}/{viewType}")]
-        [Route("details/{viewType}")]
-        public async Task<ActionResult<JObject>> Details(string viewType, string id)
+        [Route("details/{id}")]
+        [Route("details/{id}/{attributeSetId}")]
+        [Route("details/{id}/{attributeSetId}/{attributeSetName}")]
+        public async Task<ActionResult<UpdateViewModel>> Details(string id, int? attributeSetId, string attributeSetName)
         {
             string msg = string.Empty;
-            switch (viewType)
+            Expression<Func<MixAttributeSetData, bool>> predicate = null;
+            MixAttributeSetData model = null;
+
+            // Get Details if has id or else get default
+            if (id != "default")
             {
-                case "portal":
-                    if (!string.IsNullOrEmpty(id))
-                    {
-                        Expression<Func<MixAttributeSetData, bool>> predicate = model => model.Id == id;
-                        var portalResult = await base.GetSingleAsync<UpdateViewModel>(predicate);
-                        return Ok(JObject.FromObject(portalResult));
-                    }
-                    else
-                    {
-                        var model = new MixAttributeSetData()
-                        {
-                            Status = MixService.GetConfig<int>("DefaultStatus")
-                            ,
-                            Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
-                        };
+                predicate = m => m.Id == id && m.Specificulture == _lang;
+            }
+            else
+            {
+                model = new MixAttributeSetData()
+                {
+                    Specificulture = _lang,
+                };
+                if (attributeSetId.HasValue)
+                {
+                    model.AttributeSetId = attributeSetId.Value;
+                }
+                if (!string.IsNullOrEmpty(attributeSetName))
+                {
+                    model.AttributeSetName = attributeSetName;
+                }
+            }
 
-                        RepositoryResponse<UpdateViewModel> result = await base.GetSingleAsync<UpdateViewModel>(null, model);
-                        return Ok(JObject.FromObject(result));
-                    }
-                default:
-                    if (!string.IsNullOrEmpty(id))
+            if (predicate != null || model != null)
+            {
+                var portalResult = await base.GetSingleAsync<UpdateViewModel>(predicate, model);
+                if (portalResult.IsSucceed)
+                {
+                    var result = new RepositoryResponse<UpdateViewModel>()
                     {
-                        Expression<Func<MixAttributeSetData, bool>> predicate = model => model.Id == id;
-                        var result = await base.GetSingleAsync<ReadViewModel>($"{viewType}_{id}", predicate);
-                        return Ok(JObject.FromObject(result));
-                    }
-                    else
-                    {
-                        var model = new MixAttributeSetData()
-                        {
-                            Status = MixService.GetConfig<int>("DefaultStatus")
-                            ,
-                            Priority = ReadViewModel.Repository.Max(a => a.Priority).Data + 1
-                        };
-
-                        RepositoryResponse<ReadViewModel> result = await base.GetSingleAsync<ReadViewModel>(null, model);
-                        return Ok(JObject.FromObject(result));
-                    }
+                        IsSucceed = true,
+                        Data = portalResult.Data
+                    };
+                    return Ok(result);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            else
+            {
+                return NotFound();
             }
         }
-
-
 
         #region Post
 

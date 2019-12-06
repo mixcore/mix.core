@@ -28,17 +28,19 @@ modules.component('attributeSetForm', {
                     Else modify input ctrl.attrData
                 */
                 $rootScope.isBusy = true;
-                ctrl.defaultData = await service.getSingle('portal', [ctrl.defaultId, ctrl.attrSetId, ctrl.attrSetName]);
+                var getDefault = await service.getSingle([ctrl.defaultId, ctrl.attrSetId, ctrl.attrSetName]);
+                ctrl.defaultData = getDefault.data;
                 if (ctrl.attrDataId) {
-                    ctrl.attrData = await service.getSingle('portal', [ctrl.attrDataId, ctrl.attrSetId, ctrl.attrSetName]);
-                    if (ctrl.attrData) {
+                    var getData = await service.getSingle([ctrl.attrDataId, ctrl.attrSetId, ctrl.attrSetName]);
+                    if (getData.isSucceed) {
+                        ctrl.attrData = getData.data;
                         ctrl.defaultData.attributeSetId = ctrl.attrData.attributeSetId;
                         ctrl.defaultData.attributeSetName = ctrl.attrData.attributeSetName;
                         $rootScope.isBusy = false;
                         $scope.$apply();
                     } else {
-                        if (ctrl.attrData) {
-                            $rootScope.showErrors('Failed');
+                        if (getData) {
+                            $rootScope.showErrors(getData.errors);
                         }
                         $rootScope.isBusy = false;
                         $scope.$apply();

@@ -366,7 +366,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     // Save Alias
                     result = await SaveUrlAliasAsync(parent.Id, _context, _transaction);
                 }
-                if (result.IsSucceed)
+                if (result.IsSucceed && MediaNavs!=null)
                 {
                     // Save Medias
                     result = await SaveMediasAsync(parent.Id, _context, _transaction);
@@ -383,7 +383,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     result = await SaveAttributeAsync(parent.Id, _context, _transaction);
                 }
 
-                if (result.IsSucceed)
+                if (result.IsSucceed && PostNavs != null)
                 {
                     // Save related posts
                     result = await SaveRelatedPostAsync(parent.Id, _context, _transaction);
