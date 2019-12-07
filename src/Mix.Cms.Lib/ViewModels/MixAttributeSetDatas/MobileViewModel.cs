@@ -143,6 +143,16 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         }
         #endregion
         #endregion
+        public override void GenerateCache(MixAttributeSetData model, MobileViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            if (Data["id"] == null)
+            {
+                Data.Add(new JProperty("id", Id));
+                Data.Add(new JProperty("createdDateTime", CreatedDateTime));
+                Data.Add(new JProperty("details", $"/api/v1/odata/{Specificulture}/attribute-set-data/mobile/{Id}"));
+            }
+            base.GenerateCache(model, view, _context, _transaction);
+        }
         public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
         {
             var tasks = new List<Task>();
@@ -171,6 +181,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #region Expands
         JProperty ParseValue(MixAttributeSetValues.MobileViewModel item)
         {
+            
             switch (item.DataType)
             {
                 case MixEnums.MixDataType.DateTime:
