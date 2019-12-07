@@ -77,6 +77,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
                 var navCategoryPostViewModels = context.MixModule.Include(cp => cp.MixModulePost).Where(a => a.Specificulture == specificulture
                     && (a.Type == (int)MixEnums.MixModuleType.ListPost || a.Type == (int)MixEnums.MixModuleType.ListProduct)
                     )
+                    .AsEnumerable()
                     .Select(p => new MixModulePosts.ReadViewModel(
                         new MixModulePost()
                         {
