@@ -94,7 +94,7 @@ modules.component('mixValueEditor', {
         };
         ctrl.removeRefDataConfirmed = async function(dataId){
             $rootScope.isBusy = true;
-            var result = await dataService.delete(dataId);
+            var result = await dataService.delete([dataId]);
             if (result.isSucceed) {
                 $rootScope.removeObjectByKey(ctrl.refData, 'id', dataId);
                 $rootScope.isBusy = false;

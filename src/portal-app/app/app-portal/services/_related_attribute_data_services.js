@@ -1,38 +1,37 @@
 ﻿
 'use strict';
-app.factory('RelatedAttributeSetDataService', ['$rootScope', 'CommonService', 'BaseODataService',
+app.factory('RelatedAttributeSetDataService', ['$rootScope', 'CommonService', 'BaseService',
     function ($rootScope, commonService, baseService) {
         var serviceFactory = angular.copy(baseService);
-        serviceFactory.init('related-attribute-set-data');
+        serviceFactory.init('related-attribute-data/portal');
 
-        var _getList = async function (viewType, objData,attributeSetId,parentType, parentId) {
-            objData.filter  = '';            
+        var _getList = async function (viewType, request,attributeSetId,parentType, parentId) {
+            request.query  = '';        
+            request.key = viewType;    
             if(parentType){
-                if(objData.filter){
-                    objData.filter += ' and ';
+                if(request.query){
+                    request.query += '&';
                 }
-                objData.filter += 'parentType eq ' + parentType;
+                request.query += 'parentType=' + parentType;
             }
             if(parentId){
-                if(objData.filter){
-                    objData.filter += ' and ';
+                if(request.query){
+                    request.query += '&';
                 }
-                objData.filter += "parentId eq '" + parentId+ "'";
+                request.query += "parentId='" + parentId+ "'";
             }        
             if(attributeSetId){
-                if(objData.filter){
-                    objData.filter += ' and ';
+                if(request.query){
+                    request.query += '&';
                 }
-                objData.filter += "attributeSetId eq " + attributeSetId;
+                request.query += "attributeSetId=" + attributeSetId;
             }        
-            var data = serviceFactory.parseODataQuery(objData);           
-            var url = this.prefixUrl + '/' + viewType;
-            if(data){
-                url = url.concat(data);
-            }
+            var url = this.prefixUrl + '/list';
+           
             var req = {
-                method: 'GET',
-                url: url
+                method: 'POST',
+                url: url,
+                data: JSON.stringify(request)
             };
             return await commonService.getApiResult(req);
         };

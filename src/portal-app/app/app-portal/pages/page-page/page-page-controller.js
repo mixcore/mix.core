@@ -34,7 +34,7 @@ app.controller('PagePageController',
 
             $scope.removeConfirmed = async function (pageId, postId) {
                 $rootScope.isBusy = true;
-                var result = await service.delete(pageId, postId);
+                var result = await service.delete([pageId, postId]);
                 if (result.isSucceed) {
                     if ($scope.removeCallback) {
                         $rootScope.executeFunctionByName('removeCallback', $scope.removeCallbackArgs, $scope)

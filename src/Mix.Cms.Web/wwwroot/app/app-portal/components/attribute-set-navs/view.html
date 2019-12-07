@@ -9,12 +9,11 @@
                         <td class="align-middle">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="customSwitch_{{item.id}}" ng-model="item.isActived" ng-change="$ctrl.save(item)">
-                                <label class="custom-control-label" for="customSwitch_{{item.id}}" ng-bind="item.data.title"></label>
+                                <label class="custom-control-label" for="customSwitch_{{item.id}}" ng-bind="item.description"></label>
                             </div>
-                            <!-- <input type="checkbox" ng-model="item.isActived" ng-change="$ctrl.save(item)"> -->
                         </td>
-                        <!-- <td class="align-middle"><span ng-bind="item.data.title"></span></td> -->
-                        <td class="align-middle" width="5%"><a ng-click="$ctrl.goToPath('/portal/attribute-set/details/' + item.id)" class="btn btn-link text-primary">
+                        <td class="align-middle" width="5%">
+                            <a ng-click="$ctrl.goToPath('/portal/attribute-set/details/' + item.id)" class="btn btn-link text-primary">
                                 <span class="fas fa-pen"></span>
                             </a></td>
                     </tr>

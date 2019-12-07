@@ -4,14 +4,6 @@ app.factory('PagePositionService', ['$rootScope', 'CommonService', 'BaseService'
 
         var serviceFactory = Object.create(baseService);
         serviceFactory.init('page-position');
-        var _delete = async function(pageId, positionId){
-            var url = this.prefixUrl + '/delete/' + pageId+'/'+positionId;
-            var req = {
-                method: 'GET',
-                url: url
-            };
-            return await commonService.getApiResult(req);
-        }
         var _updateInfos = async function (pages) {
 
             var req = {
@@ -21,7 +13,6 @@ app.factory('PagePositionService', ['$rootScope', 'CommonService', 'BaseService'
             };
             return await commonService.getApiResult(req);
         };
-        serviceFactory.delete = _delete;
         serviceFactory.updateInfos = _updateInfos;
         return serviceFactory;
 

@@ -4,14 +4,7 @@ app.factory('PageGalleryService', ['$rootScope', 'CommonService', 'BaseService',
 
         var serviceFactory = Object.create(baseService);
         serviceFactory.init('page-post');
-        var _delete = async function(pageId, postId){
-            var url = this.prefixUrl + '/delete/' + pageId+'/'+postId;
-            var req = {
-                method: 'GET',
-                url: url
-            };
-            return await commonService.getApiResult(req);
-        }
+        
         var _updateInfos = async function (pages) {
 
             var req = {
@@ -21,7 +14,6 @@ app.factory('PageGalleryService', ['$rootScope', 'CommonService', 'BaseService',
             };
             return await commonService.getApiResult(req);
         };
-        serviceFactory.delete = _delete;
         serviceFactory.updateInfos = _updateInfos;
         return serviceFactory;
 

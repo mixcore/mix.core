@@ -23,7 +23,7 @@ modules.component('urlAlias', {
 
             ctrl.removeConfirmed = async function (id) {
                 $rootScope.isBusy = true;
-                var result = await service.delete(id);
+                var result = await service.delete([id]);
                 if (result.isSucceed) {
                     if (ctrl.removeCallback) {
                         ctrl.removeCallback({ index: ctrl.index });

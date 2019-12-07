@@ -45,7 +45,7 @@ app.controller('ModuleDataController',
         
             $scope.removeConfirmed = async function (moduleId, dataId) {
                 $rootScope.isBusy = true;
-                var result = await service.delete(moduleId, dataId);
+                var result = await service.delete([moduleId, dataId]);
                 if (result.isSucceed) {
                     if ($scope.removeCallback) {
                         $rootScope.executeFunctionByName('removeCallback', $scope.removeCallbackArgs, $scope)

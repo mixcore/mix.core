@@ -5,7 +5,7 @@ app.controller('NavigationController',
         'NavigationService', 'RelatedAttributeSetDataService', 'CommonService',
         function ($scope, $rootScope, ngAppSettings, $routeParams, $location,
             service, navService, commonService) {
-            BaseODataCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
+            BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
             $scope.defaultId = 'default';
             $scope.parentId = null;
             $scope.parentType = null;

@@ -17,13 +17,17 @@ modules.component('attributeSetNavs', {
             ctrl.settings = $rootScope.globalSettings;
             ctrl.$onInit = function () {
                 navService.getSingle([ctrl.parentId, ctrl.parentType, 0]).then(resp => {
-                    ctrl.defaultData = resp;
-                    ctrl.loadData();
+                    if (resp.isSucceed) {
+                        ctrl.defaultData = resp.data;
+                        ctrl.loadData();
+                    }
+                    else {
+                        $rootScope.showErrors(resp.errors);
+                    }
                 });
             };
             ctrl.goToPath = $rootScope.goToPath;
             ctrl.selectPane = function (pane) {
-                console.log(pane);
             };
             ctrl.loadData = async function () {
                 ctrl.navRequest.query = '';
@@ -51,7 +55,7 @@ modules.component('attributeSetNavs', {
                         $rootScope.showErrors(resp.errors);
                     }
                 }
-                ctrl.setRequest.filter = 'type eq ' + ctrl.parentType;
+                ctrl.setRequest.query = 'parentType=' + ctrl.parentType;
                 ctrl.setRequest.key = "portal";
                 var setResult = await setService.getList(ctrl.setRequest);
                 if (setResult.isSucceed) {
@@ -61,7 +65,9 @@ modules.component('attributeSetNavs', {
                         if (!e) {
                             e = angular.copy(ctrl.defaultData);
                             e.id = element.id;
+                            e.description = element.title;
                             e.data = element;
+                            e.status = 2;
                             e.isActived = false;
                             ctrl.data.push(e);
                         }
@@ -77,7 +83,7 @@ modules.component('attributeSetNavs', {
                 $rootScope.isBusy = true;
                 var result;
                 if (nav.isActived) {
-                    result = await navService.save('portal', nav);
+                    result = await navService.save(nav);
                 }
                 else {
                     result = await navService.delete([nav.parentId, nav.parentType, nav.id]);
@@ -129,8 +135,7 @@ modules.component('attributeSetNavs', {
                         properties: properties
                     });
                 });
-                navService.saveProperties('portal', arrNavs).then(resp => {
-                    console.log(resp);
+                navService.saveProperties(arrNavs).then(resp => {
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 })
