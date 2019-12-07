@@ -256,6 +256,4 @@ src/_MixCore.sln
 
 src/Mix.Cms.Web/logs/
 
-src/Mix.Cms.Web/wwwroot/edms/
-
-src/Mix.Cms.Web/appsettings.json.json
+src/Mix.Cms.Web.old/

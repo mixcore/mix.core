@@ -1,5 +1,5 @@
 <div class="row" ng-init="$ctrl.init()">
-    <div class="col-md-5">
+    <div class="col-md-6">
         <div class="" role="toolbar" aria-label="Toolbar with button groups">
             <div class="input-group input-group-sm mr-2">
 
@@ -25,7 +25,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="" role="toolbar" aria-label="Toolbar with button groups">
             <div class="input-group input-group-sm">
                 <input type="date" data-date-format="dd.MM.yyyy" ng-model="$ctrl.dateRange.fromDate"
@@ -45,8 +45,11 @@
         </div>
     </div>
 </div>
-<div class="row float-right">
-    <div class="col-md-12">
+<div class="row">
+    <div class="col-md-6">
+        
+    </div>
+    <div class="col-md-6 text-right">
         <a ng-if="$ctrl.createUrl" href="{{$ctrl.createUrl}}" class="btn btn-sm btn-primary px-4 mt-3">
             <i class="fas fa-plus"></i> {{$ctrl.createText}}
         </a>
