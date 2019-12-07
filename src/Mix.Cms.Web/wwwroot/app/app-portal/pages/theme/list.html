@@ -11,20 +11,26 @@
                 <table class="table table-sm table-hover" cellspacing="0">
                     <thead class="thead-light">
                         <tr>
-                            <th scope="col" width="5px">
-                                <!-- <small class="fa fa-grip-vertical text-black-50 align-middle"></small> -->
-                            </th>
+                            <!-- <th scope="col" width="5px">
+                                <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
+                            </th> -->
                             <th scope="col">
                                 Title
+                            </th>
+                            <th scope="col">
+                                Name
+                            </th>
+                            <th scope="col">
+                                Version
                             </th>
                             <th scope="col" width="15%">
                                 Image
                             </th>
-                            <th scope="col" width="20%">
-                                Created Date
-                            </th>
                             <th scope="col" width="10%">
                                 Author
+                            </th>
+                            <th scope="col" width="20%">
+                                Created Date
                             </th>
                             <th scope="col" width="15%" class="text-right">
                             </th>
@@ -33,22 +39,28 @@
 
                     <tbody class="sortable" ng-init="getList()">
                         <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="theme" sort-model-id="{{item.id}}">
-                            <td style="cursor:grab;" class="drag-header">
+                            <!-- <td style="cursor:grab;" class="drag-header">
                                 <small class="fa fa-grip-vertical text-black-50 align-middle"></small>
-                            </td>
+                            </td> -->
                             <td class="">
                                 <small>{{item.title}}</small>
+                            </td>
+                            <td class="">
+                                <small>???</small>
+                            </td>
+                            <td class="">
+                                <small>v???</small>
                             </td>
                             <td>
                                 <img height="30" imageonload ng-src="{{item.imageUrl}}">
                             </td>
                             <td>
-                                <small class="text-black-50 align-middle">
-                                    {{item.createdDateTime | utcToLocal:'dd.MM.yyyy hh:mm:ss a'}}
-                                </small>
+                                <small class="text-black-50 align-middle">{{item.createdBy}}</small>
                             </td>
                             <td>
-                                <small class="text-black-50 align-middle">{{item.createdBy}}</small>
+                                <small class="text-black-50 align-middle">
+                                    {{item.createdDateTime | utcToLocal:'dd/MM/yyyy hh:mm a'}}
+                                </small>
                             </td>
                             <td>
                                 <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
@@ -63,11 +75,17 @@
                                     </a>
                                     <a href="/portal/theme/export/{{item.id}}" class="btn btn-sm btn-link d-inline-block text-primary">
                                         <span class="fas fa-arrow-down"></span></a>
+
                                     <a ng-click="syncTemplates(item.id)" class="btn btn-sm btn-link d-inline-block text-primary"><span class="fas fa-sync-alt"></span></a>
+<!-- 
+                                    <a ng-click="shareTemplates(item.id)"
+                                        class="btn btn-sm btn-link d-inline-block text-primary"><span
+                                            class="fas fa-cloud-upload-alt"></span></a> -->
 
                                     <a href="/portal/theme/details/{{item.id}}" class="btn btn-link text-primary">
                                         <span class="fas fa-pen"></span>
                                     </a>
+
                                     <a ng-click="remove(item.id);" class="btn btn-link text-danger">
                                         <span class="fas fa-trash-alt"></span>
                                     </a>
