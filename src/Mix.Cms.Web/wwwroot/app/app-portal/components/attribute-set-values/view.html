@@ -8,7 +8,7 @@
             <div ng-repeat="col in $ctrl.data[0].fields | orderBy:'priority' track by $index" ng-if="$index < 4" class="col-md-2">
                 <div class="input-group input-group-xs">
                     <div class="input-group-prepend">
-                        <div class="input-group-text"><i class="fas fa-filter"></i></div>
+                        <div class="input-group-text"><i class="fas fa-search"></i></div>
                     </div>
                     <input type="text" class="form-control" placeholder="{{col.title}}" ng-model="$ctrl.queries[col.name]" ng-enter="$ctrl.onFilterList()">
                 </div>
