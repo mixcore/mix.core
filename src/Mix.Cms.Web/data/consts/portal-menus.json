@@ -93,23 +93,6 @@
             ]
         },
         {
-            "title": "Themes",
-            "path": "#",
-            "icon": "mi mi-Layout",
-            "subMenus": [
-                {
-                    "title": "Create New",
-                    "icon": "mi mi-Add",
-                    "path": "/portal/theme/create"
-                },
-                {
-                    "path": "/portal/theme/list",
-                    "title": "List",
-                    "icon": "mi mi-List"
-                }
-            ]
-        },
-        {
             "title": "Media",
             "path": "#",
             "icon": "mi mi-Media",
@@ -132,9 +115,27 @@
             ]
         },
         {
+            "title": "Themes",
+            "path": "#",
+            "icon": "mi mi-Layout",
+            "subMenus": [
+                {
+                    "title": "Create New",
+                    "icon": "mi mi-Add",
+                    "path": "/portal/theme/create"
+                },
+                {
+                    "path": "/portal/theme/list",
+                    "title": "List",
+                    "icon": "mi mi-List"
+                }
+            ]
+        },
+        {
             "title": "Files",
             "path": "#",
             "icon": "mi mi-FileExplorer",
+            "isHiden": true,
             "subMenus": [
                 {
                     "title": "Create New",
@@ -174,6 +175,7 @@
             "title": "Localize",
             "path": "#",
             "icon": "mi mi-Characters",
+            "isHiden": true,
             "subMenus": [
                 {
                     "title": "Create New",
@@ -191,6 +193,7 @@
             "title": "Permission",
             "path": "#",
             "icon": "mi mi-LockscreenDesktop",
+            "isHiden": true,
             "subMenus": [
                 {
                     "title": "Create New",
@@ -252,11 +255,6 @@
                     "path": "/portal/configuration/list",
                     "title": "List",
                     "icon": "mi mi-List"
-                },
-                {
-                    "path": "/portal/json-data/list",
-                    "title": "Constants",
-                    "icon": "mi mi-sourcetree"
                 }
             ]
         }
