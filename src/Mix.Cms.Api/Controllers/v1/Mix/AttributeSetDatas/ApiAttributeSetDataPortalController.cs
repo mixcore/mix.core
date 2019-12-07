@@ -8,15 +8,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web;
+using static Mix.Cms.Lib.MixEnums;
 
-namespace Mix.Cms.Api.Controllers.v1.AttributeSetDatas
+namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
     [Route("api/v1/{culture}/attribute-set-data/portal")]
@@ -27,6 +30,15 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSetDatas
         {
         }
 
+        #region Get
+        // GET api/attribute-set-data/id
+        [HttpGet, HttpOptions]
+        [Route("sendmail/{id}")]
+        public Task<RepositoryResponse<JArray>> SendMailAsync(string id)
+        {
+            return SendMailListAsync(model => model.Id == id && model.Specificulture == _lang);
+        }
+
         // GET api/attribute-set-data/id
         [HttpGet, HttpOptions]
         [Route("delete/{id}")]
@@ -35,59 +47,58 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSetDatas
             return await base.DeleteAsync<DeleteViewModel>(model => model.Id == id, true);
         }
 
+        // GET api/attribute-set-datas/id
         [HttpGet, HttpOptions]
-        [Route("details/{id}")]
-        [Route("details/{id}/{attributeSetId}")]
-        [Route("details/{id}/{attributeSetId}/{attributeSetName}")]
-        public async Task<ActionResult<UpdateViewModel>> Details(string id, int? attributeSetId, string attributeSetName)
+        [Route("details/{id}/{viewType}")]
+        [Route("details/{viewType}")]
+        public async Task<ActionResult<JObject>> Details(string viewType, string id)
         {
             string msg = string.Empty;
-            Expression<Func<MixAttributeSetData, bool>> predicate = null;
-            MixAttributeSetData model = null;
-
-            // Get Details if has id or else get default
-            if (id != "default")
+            switch (viewType)
             {
-                predicate = m => m.Id == id && m.Specificulture == _lang;
-            }
-            else
-            {
-                model = new MixAttributeSetData()
-                {
-                    Specificulture = _lang,
-                };
-                if (attributeSetId.HasValue)
-                {
-                    model.AttributeSetId = attributeSetId.Value;
-                }
-                if (!string.IsNullOrEmpty(attributeSetName))
-                {
-                    model.AttributeSetName = attributeSetName;
-                }
-            }
-
-            if (predicate != null || model != null)
-            {
-                var portalResult = await base.GetSingleAsync<UpdateViewModel>(predicate, model);
-                if (portalResult.IsSucceed)
-                {
-                    var result = new RepositoryResponse<UpdateViewModel>()
+                case "portal":
+                    if (!string.IsNullOrEmpty(id))
                     {
-                        IsSucceed = true,
-                        Data = portalResult.Data
-                    };
-                    return Ok(result);
-                }
-                else
-                {
-                    return NotFound();
-                }
-            }
-            else
-            {
-                return NotFound();
+                        Expression<Func<MixAttributeSetData, bool>> predicate = model => model.Id == id;
+                        var portalResult = await base.GetSingleAsync<MobileViewModel>($"{viewType}_{id}", predicate);
+                        return Ok(JObject.FromObject(portalResult));
+                    }
+                    else
+                    {
+                        var model = new MixAttributeSetData()
+                        {
+                            Status = MixService.GetConfig<int>("DefaultStatus")
+                            ,
+                            Priority = MobileViewModel.Repository.Max(a => a.Priority).Data + 1
+                        };
+
+                        RepositoryResponse<MobileViewModel> result = await base.GetSingleAsync<MobileViewModel>($"{viewType}_default", null, model);
+                        return Ok(JObject.FromObject(result));
+                    }
+                default:
+                    if (!string.IsNullOrEmpty(id))
+                    {
+                        Expression<Func<MixAttributeSetData, bool>> predicate = model => model.Id == id;
+                        var result = await base.GetSingleAsync<ReadViewModel>($"{viewType}_{id}", predicate);
+                        return Ok(JObject.FromObject(result));
+                    }
+                    else
+                    {
+                        var model = new MixAttributeSetData()
+                        {
+                            Status = MixService.GetConfig<int>("DefaultStatus")
+                            ,
+                            Priority = ReadViewModel.Repository.Max(a => a.Priority).Data + 1
+                        };
+
+                        RepositoryResponse<ReadViewModel> result = await base.GetSingleAsync<ReadViewModel>($"{viewType}_default", null, model);
+                        return Ok(JObject.FromObject(result));
+                    }
             }
         }
+
+
+        #endregion Get
 
         #region Post
 
@@ -95,12 +106,12 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSetDatas
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("save")]
-        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromBody]UpdateViewModel data)
+        public async Task<RepositoryResponse<MobileViewModel>> Save([FromBody]MobileViewModel data)
         {
             if (data != null)
             {
                 data.Specificulture = _lang;
-                var result = await base.SaveAsync<UpdateViewModel>(data, true);
+                var result = await base.SaveAsync<MobileViewModel>(data, true);
                 if (result.IsSucceed)
                 {
                     MixService.LoadFromDatabase();
@@ -108,7 +119,7 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSetDatas
                 }
                 return result;
             }
-            return new RepositoryResponse<UpdateViewModel>() { Status = 501 };
+            return new RepositoryResponse<MobileViewModel>() { Status = 501 };
         }
 
         // GET api/attribute-set-data
@@ -117,31 +128,117 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSetDatas
         public async Task<ActionResult<JObject>> GetList(
             [FromBody] RequestPaging request)
         {
-            var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
-            bool isLevel = int.TryParse(parsed.Get("level"), out int level);
+            var queryDictionary = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(request.Query);
+            var queries = HttpUtility.ParseQueryString(request.Query ?? "");
+            int.TryParse(queries.Get("attributeSetId"), out int attributeSetId);
+            string attributeSetName = queries.Get("attributeSetName");
             ParseRequestPagingDate(request);
-            Expression<Func<MixAttributeSetData, bool>> predicate = model =>
-                        model.Specificulture == _lang
-                        && (!request.Status.HasValue || model.Status == request.Status.Value)
-                        && (string.IsNullOrWhiteSpace(request.Keyword)
-                            || (model.AttributeSetName.Contains(request.Keyword))
-                            )
-                        && (!request.FromDate.HasValue
-                            || (model.CreatedDateTime >= request.FromDate.Value)
-                        )
-                        && (!request.ToDate.HasValue
-                            || (model.CreatedDateTime <= request.ToDate.Value)
-                        );
+
             switch (request.Key)
             {
-                case "mvc":
-                    var mvcResult = await base.GetListAsync<ReadMvcViewModel>(request, predicate);                    
-                    return Ok(JObject.FromObject(mvcResult));
+                case "portal":
+                    if (!string.IsNullOrEmpty(request.Query))
+                    {
+                        var portalResult = await Helper.FilterByKeywordAsync<MobileViewModel>(_lang, attributeSetName,
+                        request, request.Keyword, queryDictionary);
+                        return Ok(JObject.FromObject(portalResult));
+                    }
+                    else
+                    {
+                        Expression<Func<MixAttributeSetData, bool>> predicate = m => (m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName) && m.Specificulture == _lang;
+                        var portalResult = await base.GetListAsync<UpdateViewModel>(request, predicate);
+                        return Ok(JObject.FromObject(portalResult));
+                    }
                 default:
-
-                    var listItemResult = await base.GetListAsync<UpdateViewModel>(request, predicate);                    
-                    return JObject.FromObject(listItemResult);
+                    if (!string.IsNullOrEmpty(request.Query))
+                    {
+                        var portalResult = await Helper.FilterByKeywordAsync<ReadViewModel>(_lang, attributeSetName,
+                        request, request.Keyword, queryDictionary);
+                        return Ok(JObject.FromObject(portalResult));
+                    }
+                    else
+                    {
+                        Expression<Func<MixAttributeSetData, bool>> predicate = m => (m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName) && m.Specificulture == _lang;
+                        var portalResult = await base.GetListAsync<ReadViewModel>(request, predicate);
+                        return Ok(JObject.FromObject(portalResult));
+                    }
             }
+        }
+
+        // GET api/attribute-set-data
+        [HttpPost, HttpOptions]
+        [Route("export")]
+        public async Task<ActionResult<JObject>> Export(
+            [FromBody] RequestPaging request)
+        {
+            var queryDictionary = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(request.Query);
+            var queries = HttpUtility.ParseQueryString(request.Query ?? "");
+            int.TryParse(queries.Get("attributeSetId"), out int attributeSetId);
+            string attributeSetName = queries.Get("attributeSetName");
+            ParseRequestPagingDate(request);
+            var data = await Lib.ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ExportViewModel>(_lang, attributeSetName,
+                        request, request.Keyword, queryDictionary);
+            string exportPath = $"exports/module/{attributeSetName}";
+            var jData = new List<JObject>();
+            foreach (var item in data.Data.Items)
+            {
+                jData.Add(item.Data);
+            }
+            var result = Lib.ViewModels.MixAttributeSetDatas.Helper.ExportAttributeToExcel(jData, string.Empty, exportPath, $"{attributeSetName}", null);
+            return Ok(JObject.FromObject(result));
+        }
+
+        [HttpPost, HttpOptions]
+        [Route("apply-list")]
+        public async Task<ActionResult<JObject>> ListActionAsync([FromBody]ListAction<string> data)
+        {
+            Expression<Func<MixAttributeSetData, bool>> predicate = model =>
+                       model.Specificulture == _lang
+                       && data.Data.Contains(model.Id);
+            var result = new RepositoryResponse<bool>();
+            switch (data.Action)
+            {
+                case "Delete":
+                    return Ok(JObject.FromObject(await base.DeleteListAsync<MobileViewModel>(predicate, true)));
+                case "SendMail":
+                    return Ok(JObject.FromObject(await SendMailListAsync(predicate)));
+                case "Export":
+                    return Ok(JObject.FromObject(await base.ExportListAsync(predicate, MixStructureType.AttributeSet)));
+                default:
+                    return JObject.FromObject(new RepositoryResponse<bool>());
+            }
+        }
+
+        private async Task<RepositoryResponse<JArray>> SendMailListAsync(Expression<Func<MixAttributeSetData, bool>> predicate)
+        {
+            var data = await MobileViewModel.Repository.GetModelListByAsync(predicate);
+            JArray array = new JArray();
+            RepositoryResponse<JArray> result = new RepositoryResponse<JArray>()
+            {
+                IsSucceed = true
+            };
+            try
+            {
+                foreach (var item in data.Data)
+                {
+                    var getAttrSet = await Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModelAsync(m => m.Name == item.AttributeSetName);
+
+                    if (getAttrSet.IsSucceed)
+                    {
+                        _ = MixService.SendEdm(_lang, getAttrSet.Data.EdmTemplate, item.Data, getAttrSet.Data.EdmSubject, getAttrSet.Data.EdmFrom);
+                    }
+                    array.Add(item.Data);
+                }
+                result.Data = array;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Exception = ex;
+                result.IsSucceed = false;
+                return result;
+            }
+
         }
         #endregion Post
     }

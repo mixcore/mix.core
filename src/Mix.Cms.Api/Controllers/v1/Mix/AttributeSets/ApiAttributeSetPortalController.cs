@@ -114,7 +114,6 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSets
             [FromBody] RequestPaging request)
         {
             var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
-            bool isLevel = int.TryParse(parsed.Get("level"), out int level);
             ParseRequestPagingDate(request);
             Expression<Func<MixAttributeSet, bool>> predicate = model =>
                         (!request.Status.HasValue || model.Status == request.Status.Value)
@@ -138,6 +137,8 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSets
                     return JObject.FromObject(listItemResult);
             }
         }
+
+        
         #endregion Post
     }
 }
