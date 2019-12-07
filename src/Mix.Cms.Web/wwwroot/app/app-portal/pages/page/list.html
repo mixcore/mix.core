@@ -1,19 +1,22 @@
 <div class="row">
     <div class="col-12">
-        <filter-list request="request" callback="getList(pageIndex)" create-url="'/portal/page/create'" create-text="'Create Page'"></filter-list>
-    </div>
-</div>
-<div class="row mb-3">
-    <div class="col">
-        <small ng-if="canDrag"><span class="text-info" ng-bind="translate('warning_can_not_drag_drop',true, '(Drag Drop only allow when order by priority asc)')"></span></small>
-        <div class="card">
+        <div class="card mb-4">
             <div class="card-body">
+                <filter-list request="request" callback="getList(pageIndex)" create-url="'/portal/page/create'" create-text="'Create Page'"></filter-list>
+
+                <hr>
                 <table id="list-page" class="table table-sm table-hover mb-0" dnd-list="data.items" dnd-disable-if="canDrag" cellspacing="0" ng-init="getList()">
                     <thead class="thead-light">
                         <tr>
                             <th scope="col" width="15px">
                             </th>
                             <th scope="col" width="15px">
+                            </th>
+                            <th scope="col" width="15px">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" ng-model="selectedList.isSelectAll" ng-change="selectAll(selectedList.isSelectAll)" id="customCheck_all">
+                                    <label class="custom-control-label" for="customCheck_all"></label>
+                                </div>
                             </th>
                             <th scope="col" width="20%">
                                 Page
@@ -33,7 +36,7 @@
 
                     <tbody ng-repeat="item in data.items" dnd-draggable="item" dnd-effect-allowed="move" dnd-selected="selected = item" dnd-moved="updateInfos($index)" ng-class="{'selected': selected === item}" class="border-top">
                         <tr class="" sort-model="category" sort-model-id="{{item.id}}">
-                            <td style="cursor:grab;" class="drag-header align-middle">
+                            <td style="cursor:grab;" class="drag-header align-middle small">
                                 <small class="fa fa-grip-vertical text-black-50"></small>
                             </td>
                             <td class="align-middle">
@@ -42,8 +45,13 @@
                                     <button ng-click="goDown(item.childs, $index)" type="button" title="Move down" class="btn btn-xs py-0"><span class="fa fa-sort-down small"></span></button>
                                 </div>
                             </td>
-
-                            <td>
+                            <td class="align-middle">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck_{{item.id}}" ng-model="item.isSelected" ng-change="select(item.id, item.isSelected)">
+                                    <label class="custom-control-label" for="customCheck_{{item.id}}"></label>
+                                </div>
+                            </td>
+                            <td class="">
                                 <small>
                                     {{item.title}}
                                 </small>
@@ -79,8 +87,8 @@
                                                 <a ng-if="item.type==2" href="#" data-toggle="modal" data-target="#modal-posts" class="btn btn-link">
                                                     <span class="fas fa-bars text-secondary"></span>
                                                 </a>-->
-                                    <a class="btn btn-link" ng-click="remove(item.id)">
-                                        <span class="fas fa-trash-alt text-danger"></span>
+                                    <a class="btn btn-link text-danger" ng-click="remove(item.id)">
+                                        <span class="fas fa-trash-alt"></span>
                                     </a>
                                 </div>
                             </td>
@@ -161,9 +169,17 @@
                     </tbody>
                 </table>
             </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-6">
+                        <small ng-if="canDrag" class="text-info" ng-bind="translate('warning_can_not_drag_drop',true, 'Note: Drag Drop only allow when order by priority asc')"></small>
+                    </div>
+                    <div class="col-6">
+                        <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
+                        </paging>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
 </div>
-<paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
-</paging>
