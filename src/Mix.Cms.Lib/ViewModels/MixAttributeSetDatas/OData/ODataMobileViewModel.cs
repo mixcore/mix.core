@@ -499,7 +499,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
             }
         }
-
+        public override void GenerateCache(MixAttributeSetData model, ODataMobileViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            ParseData();
+            base.GenerateCache(model, view, _context, _transaction);
+        }
         public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
         {
             var tasks = new List<Task>();
