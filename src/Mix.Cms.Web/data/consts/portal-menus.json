@@ -123,6 +123,11 @@
                     "path": "/portal/media/list",
                     "title": "List",
                     "icon": "mi mi-List"
+                },
+                {
+                    "path": "/portal/media/grid",
+                    "title": "Grid",
+                    "icon": "mi mi-GridView"
                 }
             ]
         },
@@ -513,6 +518,11 @@
                 {
                     "path": "/portal/media/list",
                     "templatePath": "/app/app-portal/pages/media/list.html",
+                    "controller": "MediaController"
+                },
+                {
+                    "path": "/portal/media/grid",
+                    "templatePath": "/app/app-portal/pages/media/list-grid.html",
                     "controller": "MediaController"
                 },
                 {
