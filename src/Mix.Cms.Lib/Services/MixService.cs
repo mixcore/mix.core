@@ -246,7 +246,7 @@ namespace Mix.Cms.Lib.Services
                     var defaultSettings = FileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, string.Empty, true, "{}");
                     settings = new FileViewModel()
                     {
-                        Filename = MixConstants.CONST_FILE_APPSETTING,
+                        Filename = "appsettings",
                         Extension = ".json",
                         Content = defaultSettings.Content
                     };
