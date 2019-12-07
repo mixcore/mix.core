@@ -102,7 +102,7 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
 
     $scope.removeConfirmed = async function (id) {
         $rootScope.isBusy = true;
-        var result = await service.delete(id);
+        var result = await service.delete([id]);
         if (result.isSucceed) {
             if ($scope.removeCallback) {
                 $rootScope.executeFunctionByName('removeCallback', $scope.removeCallbackArgs, $scope)

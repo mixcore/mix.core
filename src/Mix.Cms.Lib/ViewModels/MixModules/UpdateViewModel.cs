@@ -451,7 +451,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
     #endregion Overrides
 
-    #region Expand
+        #region Expand
     private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             LoadAttributeData(_context, _transaction);

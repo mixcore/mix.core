@@ -84,8 +84,8 @@ app.constant('ngAppSettings', {
     ]
     , icons: []
 });
-app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'BaseODataService', 'CommonService', 'AuthService', 'TranslatorService',
-    function ($http, $rootScope, ngAppSettings, $location, baseODataService, commonService, authService, translatorService,
+app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'CommonService', 'AuthService', 'TranslatorService',
+    function ($http, $rootScope, ngAppSettings, $location, commonService, authService, translatorService,
     ) {
         $rootScope.currentContext = $rootScope;
         $rootScope.isBusy = false;
@@ -482,15 +482,9 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'BaseODataService'
             });
         };
 
-        $rootScope.getODataService = function(modelName, isGlobal)
-        {
-            var serviceFactory = angular.copy(baseODataService);
-            serviceFactory.init(modelName, isGlobal);
-            return serviceFactory;            
-        };
         $rootScope.getService = function(modelName, isGlobal)
         {
-            var serviceFactory = angular.copy(baseODataService);
+            var serviceFactory = angular.copy(baseService);
             serviceFactory.init(modelName, isGlobal);
             return serviceFactory;            
         };

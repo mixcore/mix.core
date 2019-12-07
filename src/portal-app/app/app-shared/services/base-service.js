@@ -17,7 +17,7 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService',
         var _getSingle = async function (params = []) {
             var url = (this.prefixUrl || '/' + this.lang + '/' + this.modelName) + '/details';
             for (let i = 0; i < params.length; i++) {
-                if (params[i]) {
+                if (params[i]!=null) {
                     url += '/' + params[i];
                 }
             }
@@ -57,8 +57,11 @@ app.factory('BaseService', ['$rootScope', '$routeParams', 'CommonService',
             return await commonService.getApiResult(req);
         };
 
-        var _delete = async function (id) {
-            var url = this.prefixUrl + '/delete/' + id;
+        var _delete = async function (params) {
+            var url = this.prefixUrl + '/delete';
+            for (let i = 0; i < params.length; i++) {
+                url += '/' + params[i];
+            }
             var req = {
                 serviceBase: this.serviceBase,
                 method: 'GET',

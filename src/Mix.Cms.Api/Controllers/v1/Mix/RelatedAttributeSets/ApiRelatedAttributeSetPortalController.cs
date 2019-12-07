@@ -1,7 +1,6 @@
 ﻿// Licensed to the Mix I/O Foundation under one or more agreements.
 // See the LICENSE file in the project root for more information.
 
-using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
@@ -13,7 +12,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSets
+namespace Mix.Cms.Api.Controllers.v1.RelatedAttributeSets
 {
     [Produces("application/json")]
     [Route("api/v1/{culture}/related-attribute-set/portal")]
@@ -29,8 +28,8 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSets
 
         // GET api/related-attribute-set//id
         [HttpGet, HttpOptions]
-        [Route("{parentId}/{parentType}/{id}")]
-        public async Task<ActionResult<UpdateViewModel>> Details(int parentId, int parentType, int id)
+        [Route("details/{parentId}/{parentType}/{id}")]
+        public async Task<ActionResult> Details(int parentId, int parentType, int id)
         {
             string msg = string.Empty;
             Expression<Func<MixRelatedAttributeSet, bool>> predicate = null;
@@ -54,7 +53,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSets
             if (predicate != null || model != null)
             {
                 var portalResult = await base.GetSingleAsync<UpdateViewModel>(id.ToString(), predicate, model);
-                return Ok(portalResult.Data);
+                return Ok(portalResult);
             }
             else
             {
@@ -62,9 +61,9 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSets
             }
         }
 
-        [HttpDelete, HttpOptions]
-        [Route("{parentId}/{parentType}/{id}")]
-        public async Task<ActionResult<DeleteViewModel>> Delete(int parentId, int parentType, int id)
+        [HttpGet, HttpOptions]
+        [Route("delete/{parentId}/{parentType}/{id}")]
+        public async Task<ActionResult> Delete(int parentId, int parentType, int id)
         {
             Expression<Func<MixRelatedAttributeSet, bool>> predicate = model => model.Id == id && model.ParentId == parentId && model.ParentType == parentType && model.Specificulture == _lang;
 
@@ -90,8 +89,8 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSets
 
         // Save api/odata/{culture}/related-attribute-set/portal
         [HttpPost, HttpOptions]
-        [Route("")]
-        public async Task<ActionResult<UpdateViewModel>> Save(string culture, [FromBody]UpdateViewModel data)
+        [Route("save")]
+        public async Task<ActionResult> Save(string culture, [FromBody]UpdateViewModel data)
         {
             var portalResult = await base.SaveAsync<UpdateViewModel>(data, true);
             if (portalResult.IsSucceed)
@@ -107,7 +106,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSets
         // Save api/odata/{culture}/related-attribute-set/portal/{id}
         [HttpPost, HttpOptions]
         [Route("{parentId}/{parentType}/{id}")]
-        public async Task<ActionResult<UpdateViewModel>> Save(string culture, int parentId, int parentType, int id, [FromBody]JObject data)
+        public async Task<ActionResult> Save(string culture, int parentId, int parentType, int id, [FromBody]JObject data)
         {
             var portalResult = await base.SaveAsync<UpdateViewModel>(data, p => p.Id == id && p.ParentId == parentId && p.ParentType == parentType && p.Specificulture == _lang);
             if (portalResult.IsSucceed)
@@ -124,7 +123,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSets
         // TODO: Opt Transaction
         [HttpPost, HttpOptions]
         [Route("save-properties")]
-        public async Task<ActionResult<UpdateViewModel>> SaveProperties([FromBody]JArray data)
+        public async Task<ActionResult> SaveProperties([FromBody]JArray data)
         {
             foreach (JObject item in data)
             {
@@ -145,13 +144,22 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSets
         // GET api/related-attribute-set
         [HttpPost, HttpOptions]
         [Route("list")]
-        public async Task<ActionResult<JObject>> GetList(
+        public async Task<ActionResult> GetList(
             [FromBody] RequestPaging request)
         {
-            var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
+            var parsed = HttpUtility.ParseQueryString(request.Query ?? "");            
+            int.TryParse(parsed.Get("parentType"), out int parentType);
+            int.TryParse(parsed.Get("parentId"), out int parentId);
             ParseRequestPagingDate(request);
             Expression<Func<MixRelatedAttributeSet, bool>> predicate = model =>
                         (!request.Status.HasValue || model.Status == request.Status.Value)
+                        && (parentId == 0
+                            || (model.ParentId == parentId)
+                            )
+                        && (parentType == 0
+                            || (model.ParentType == parentType)
+                            )
+
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (model.Description.Contains(request.Keyword))
                             )
@@ -163,13 +171,16 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSets
                         );
             switch (request.Key)
             {
+                case "portal":
+                    var portalResult = await base.GetListAsync<UpdateViewModel>(request, predicate);
+                    return Ok(JObject.FromObject(portalResult));
                 case "mvc":
                     var mvcResult = await base.GetListAsync<ReadMvcViewModel>(request, predicate);
                     return Ok(JObject.FromObject(mvcResult));
                 default:
 
                     var listItemResult = await base.GetListAsync<ReadViewModel>(request, predicate);
-                    return JObject.FromObject(listItemResult);
+                    return Ok(JObject.FromObject(listItemResult));
             }
         }
         #endregion

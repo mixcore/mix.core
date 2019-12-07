@@ -11,6 +11,6 @@ app.component('attributeSetMain', {
         };
     }],
     bindings: {
-        model: '=',
+        model: '='
     }
 });

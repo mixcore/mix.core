@@ -4,7 +4,7 @@
     </div>
     <div class="card-body">
         <div class="row" ng-repeat="value in $ctrl.model.attributeData.data.values | orderBy:'priority' track by $index">
-            <div class="col-sm-10">                
+            <div class="col-sm-10">
                 <attribute-value-editor attribute-value="value" is-show-title="'true'" parent-type="$ctrl.model.attributeData.parentType" parent-id="$ctrl.model.id">
                 </attribute-value-editor>
             </div>

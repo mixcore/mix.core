@@ -38,7 +38,7 @@ app.controller('ModulePostController',
 
             $scope.removeConfirmed = async function (moduleId, postId) {
                 $rootScope.isBusy = true;
-                var result = await service.delete(moduleId, postId);
+                var result = await service.delete([moduleId, postId]);
                 if (result.isSucceed) {
                     if ($scope.removeCallback) {
                         $rootScope.executeFunctionByName('removeCallback', $scope.removeCallbackArgs, $scope)

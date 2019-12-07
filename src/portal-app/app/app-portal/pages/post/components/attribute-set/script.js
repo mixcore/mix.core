@@ -44,7 +44,7 @@ app.component('postAttributeSet', {
 
                 // if (data.id) {
                 //     $rootScope.isBusy = true;
-                //     var result = await dataService.delete(data.id);
+                //     var result = await dataService.delete([data.id]);
                 //     if (result.isSucceed) {
                 //         $rootScope.removeObjectByKey(ctrl.set.attributeSet.postData.items, 'id', data.id);
                 //         $rootScope.isBusy = false;

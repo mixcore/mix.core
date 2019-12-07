@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('NavigationService', ['$rootScope', 'CommonService', 'BaseODataService',
+app.factory('NavigationService', ['$rootScope', 'CommonService', 'BaseService',
     function ($rootScope, commonService, baseService) {
         var serviceFactory = angular.copy(baseService);
         serviceFactory.init('attribute-set-data');
