@@ -388,13 +388,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     // Save related posts
                     result = await SaveRelatedPostAsync(parent.Id, _context, _transaction);
                 }
-                if (result.IsSucceed)
+                if (result.IsSucceed && Pages!=null)
                 {
                     // Save Parent Category
                     result = await SaveParentPagesAsync(parent.Id, _context, _transaction);
                 }
 
-                if (result.IsSucceed)
+                if (result.IsSucceed && Modules!=null)
                 {
                     // Save Parent Modules
                     result = await SaveParentModulesAsync(parent.Id, _context, _transaction);
