@@ -194,13 +194,13 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // GET api/category/id
         [HttpGet, HttpOptions]
-        [Route("dashboard")]
-        public RepositoryResponse<DashboardViewModel> Dashboard(int id)
+        [Route("{culture}/dashboard")]
+        public RepositoryResponse<DashboardViewModel> Dashboard(string culture)
         {
             return new RepositoryResponse<DashboardViewModel>()
             {
                 IsSucceed = true,
-                Data = new DashboardViewModel()
+                Data = new DashboardViewModel(culture)
             };
         }
 

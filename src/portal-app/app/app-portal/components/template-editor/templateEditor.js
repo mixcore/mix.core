@@ -1,5 +1,14 @@
 ﻿modules.component('templateEditor', {
     templateUrl: '/app/app-portal/components/template-editor/templateEditor.html',
+    bindings: {
+        template: '=',
+        templates: '=',
+        folderType: '=',
+        isReadonly: '=?',
+        lineCount: '=?',
+        hideJs: '=?',
+        hideCss: '=?',
+    },
     controller: ['$scope', '$rootScope', '$routeParams', 'ngAppSettings', 'GlobalSettingsService', 'TemplateService',
         function ($scope, $rootScope, $routeParams, ngAppSettings, globalSettingsService, service) {
             BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
@@ -31,12 +40,5 @@
                     
                 }
             }
-        }],
-    bindings: {
-        template: '=',
-        templates: '=',
-        folderType: '=',
-        isReadonly: '=?',
-        lineCount: '=?'
-    }
+        }]
 });

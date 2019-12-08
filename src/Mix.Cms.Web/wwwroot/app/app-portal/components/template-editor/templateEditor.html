@@ -20,10 +20,10 @@
                 <monaco-editor content-id="$ctrl.template.id" line-count="$ctrl.lineCount" is-readonly="$ctrl.isReadonly" is-visible="$ctrl.activedPane.header == 'Razor Template'" content="$ctrl.template.content">
                 </monaco-editor>
             </pane-v>
-            <pane-v header="Scripts">
+            <pane-v header="Scripts" ng-if="$ctrl.hideJs != 'true'">
                 <monaco-editor content-id="$ctrl.template.id" line-count="$ctrl.lineCount" is-readonly="$ctrl.isReadonly" is-visible="$ctrl.activedPane.header == 'Scripts'" content="$ctrl.template.scripts" default-content="'<script>\n\n</script>'"></monaco-editor>
             </pane-v>
-            <pane-v header="Styles">
+            <pane-v header="Styles" ng-if="!$ctrl.hideCss != 'true'">
                 <monaco-editor content-id="$ctrl.template.id" line-count="$ctrl.lineCount" is-readonly="$ctrl.isReadonly" is-visible="$ctrl.activedPane.header == 'Styles'" content="$ctrl.template.styles" default-content="'<style>\n\n</style>'">
                 </monaco-editor>
             </pane-v>
