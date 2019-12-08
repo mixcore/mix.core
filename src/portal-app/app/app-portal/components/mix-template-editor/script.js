@@ -4,7 +4,9 @@
         template: '=',
         folderType: '=',
         isReadonly: '=?',
-        lineCount: '=?'
+        lineCount: '=?',
+        hideJs: '=?',
+        hideCss: '=?'
     },
     controller: ['$scope', '$rootScope', '$routeParams', 'ngAppSettings', 'GlobalSettingsService', 'TemplateService',
         function ($scope, $rootScope, $routeParams, ngAppSettings, globalSettingsService, service) {

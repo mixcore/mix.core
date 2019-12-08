@@ -36,7 +36,8 @@
 
         <div dnd-list="$ctrl.data" dnd-inserted="$ctrl.updateOrders(index)" ng-if="$ctrl.data.length">
             <div ng-repeat="item in $ctrl.data track by $index" dnd-draggable="item" dnd-type="'item'"
-                dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedItem = item" dnd-disable-if="$crl.canDrag"
+                dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedItem = item" 
+                dnd-disable-if="$crl.canDrag"
                 dnd-dragstart="$ctrl.dragStart($index)" ng-class="{'selected': $ctrl.selectedItem === item}"
                 class="row border-bottom attr-set-value-item">
                 <div class="col-md-1 form-inline">
@@ -60,9 +61,9 @@
                 </div>
                 <div class="col-md-1">
                     <div class="btn-group btn-group-sm float-right">
-                        <a ng-click="$ctrl.sendMail(item)" class="btn btn-link text-primary">
+                        <!-- <a ng-click="$ctrl.sendMail(item)" class="btn btn-link text-primary">
                             <span class="fa fa-envelope"></span>
-                        </a>
+                        </a> -->
                         <a ng-click="$ctrl.update(item)" class="btn btn-link text-primary">
                             <span class="fa fa-pen"></span>
                         </a>

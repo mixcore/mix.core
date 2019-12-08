@@ -33,6 +33,7 @@
                 }
                 ctrl.toggleSidebar = function () {           
                     $('#sidebar').toggleClass('active');
+                    $('.navbar-brand').toggle();
                 }
                 ctrl.generateSitemap = async function(){
                     $rootScope.isBusy = true;
