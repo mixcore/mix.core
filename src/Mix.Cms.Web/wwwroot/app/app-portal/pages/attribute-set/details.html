@@ -8,19 +8,33 @@
                 <!-- app-portal/components/attribute-list -->
                 <attribute-list header="'Attributes'" fields="activedData.fields" remove-attributes="activedData.removeAttributes">
                 </attribute-list>
-                
-                <attribute-set-edm model="activedData">
-                </attribute-set-edm>
-                <tabs-v select-callback="selectPane(pane)" class="mb-3">
-                    <pane-v header="Form Layout" ng-if="isAdmin">
-                        <mix-template-editor folder-type="'Forms'" template="activedData.formView">
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6>Response Email
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <attribute-set-edm model="activedData">
+                        </attribute-set-edm>
+
+                        <mix-template-editor folder-type="'Edms'" template="activedData.edmView" hide-js="'true'" hide-css="'true'" ng-if="isAdmin">
                         </mix-template-editor>
+                    </div>
+                </div>
+
+                <mix-template-editor folder-type="'Submit Form'" template="activedData.formView" ng-if="isAdmin">
+                </mix-template-editor>
+                <!-- <tabs-v select-callback="selectPane(pane)" class="mb-3">
+                    <pane-v header="Form Layout" ng-if="isAdmin">
                     </pane-v>
                     <pane-v header="eDM Layout" ng-if="isAdmin">
-                        <mix-template-editor folder-type="'Edms'" template="activedData.edmView">
-                        </mix-template-editor>
                     </pane-v>
+<<<<<<< HEAD
                 </tabs-v>
+=======
+                </tabs-v> -->
+>>>>>>> develop
             </div>
             <div class="col-4">
                 <actions preview-url="activedData.detailsUrl" content-url="contentUrl" back-url="referrerUrl"></actions>

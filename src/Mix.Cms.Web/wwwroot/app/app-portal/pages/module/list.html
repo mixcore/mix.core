@@ -18,9 +18,9 @@
                 <table class="table table-sm table-hover mb-0" cellspacing="0">
                     <thead class="thead-light">
                         <tr>
-                            <th scope="col" width="15px">
+                            <th ng-if="!canDrag" scope="col" width="15px">
                             </th>
-                            <th scope="col" width="15px">
+                            <th ng-if="!canDrag" scope="col" width="15px">
                             </th>
                             <th scope="col" width="15px">
                                 <div class="custom-control custom-checkbox">
@@ -50,10 +50,10 @@
 
                     <tbody class="sortable" ng-init="getList()">
                         <tr ng-repeat="item in data.items track by $index" class="sortable-item" sort-model="module" sort-model-id="{{item.id}}">
-                            <td style="cursor:grab;" class="drag-header align-middle small">
+                            <td ng-if="!canDrag" style="cursor:grab;" class="drag-header align-middle small">
                                 <small class="fa fa-grip-vertical text-black-50"></small>
                             </td>
-                            <td class="align-middle">
+                            <td ng-if="!canDrag" class="align-middle">
                                 <div class="btn-group-vertical" role="group" aria-label="Basic example">
                                     <button ng-click="goUp(item.childs, $index)" type="button" title="Move up" class="btn btn-xs py-0 border-bottom"><span class="fa fa-sort-up small"></span></button>
                                     <button ng-click="goDown(item.childs, $index)" type="button" title="Move down" class="btn btn-xs py-0"><span class="fa fa-sort-down small"></span></button>
@@ -102,7 +102,10 @@
                     </tbody>
                 </table>
             </div>
+            <div class="card-footer">
+
+                <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true"></paging>
+            </div>
         </div>
-        <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
-    </paging></div>
+    </div>
 </div>

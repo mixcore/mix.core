@@ -3,6 +3,7 @@ modules.component('attributeSetValues', {
     bindings: {
         header: '=',
         data: '=',
+        canDrag: '=',
         queries: '=?',
         filterType: '=?',
         selectedList: '=',
@@ -23,8 +24,7 @@ modules.component('attributeSetValues', {
             ctrl.actions = ['Delete', 'SendMail'];
             ctrl.filterTypes = ['contain', 'equal'];
 
-            ctrl.selectedProp = null;
-            ctrl.canDrag = false;
+            ctrl.selectedProp = null;            
             ctrl.settings = $rootScope.globalSettings;
             ctrl.select = function (id, isSelected) {
                 if (isSelected) {
