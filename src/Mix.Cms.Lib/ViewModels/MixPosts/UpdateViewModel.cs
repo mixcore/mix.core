@@ -1047,7 +1047,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     ModuleId = item.Id,
                     Image = item.Image,
                     PostId = Id,
-                    Description = Title
+                    Description = item.Title
                 });
             }
 
