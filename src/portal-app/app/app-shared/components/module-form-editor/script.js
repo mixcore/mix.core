@@ -3,7 +3,6 @@ modules.component('moduleFormEditor', {
     templateUrl: '/app/app-shared/components/module-form-editor/view.html',
     controller: ['$rootScope', '$scope', 'ngAppSettings', function ($rootScope, $scope, ngAppSettings) {
         var ctrl = this;
-
         ctrl.icons = ngAppSettings.icons;
         this.dataTypes = ngAppSettings.dataTypes;
         ctrl.initEditor = function () {
