@@ -8,7 +8,8 @@
     </div>
     <div class="card-body">
         <div class="alert alert-warning mb-0" role="alert" ng-if="!$ctrl.fields || !$ctrl.fields.length">
-            <i class="fas fa-exclamation-triangle text-warning mr-3"></i> No field has been created for this attribute yet!
+            <i class="fas fa-exclamation-triangle text-warning mr-3"></i> No field has been created for this attribute
+            yet!
         </div>
         <div dnd-list="$ctrl.fields" dnd-inserted="$ctrl.updateOrders(index)" ng-if="$ctrl.fields.length">
             <div ng-repeat="col in $ctrl.fields track by $index" dnd-draggable="col" dnd-type="'col'"
@@ -16,7 +17,6 @@
                 dnd-dragstart="$ctrl.dragStart($index)" ng-class="{'selected': $ctrl.selectedCol === col}" class="">
 
                 <div class="form-row">
-
                     <div class="col-md-1">
                         <small class="fa fa-grip-vertical text-black-50 align-middle" style="cursor: grab"></small>
                     </div>
@@ -38,7 +38,8 @@
                     <div class="form-groupx col-md-4">
                         <div class="" ng-if="col.dataType != 23">
                             <small class="control-label">Value</small>
-                            <input ng-model="col.defaultValue" placeholder="Default Value" class="form-control form-control-sm">
+                            <input ng-model="col.defaultValue" placeholder="Default Value"
+                                class="form-control form-control-sm">
                             <!-- <mix-value-editor string-value="col.defaultValue" type="col.dataType">
                             </mix-value-editor> -->
                         </div>
