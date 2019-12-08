@@ -57,7 +57,7 @@
                 </div>
                 <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
 
-                <collape-container title="'URL slugs'" actived-data="activedData" add-callback="addAlias()">
+                <collape-container title="'URL alias'" actived-data="activedData" add-callback="addAlias()">
                     <pane-collape>
                         <url-alias ng-repeat="alias in activedData.urlAliases" index="$index" url-alias="alias" remove-callback="removeAliasCallback(index)"></url-alias>
                     </pane-collape>

@@ -104,7 +104,7 @@
                                         <span class="fas fa-bars text-primary"></span>
                                     </a>
                                     <a ng-if="item.type==1" href="/portal/module/data/{{item.id}}" class="btn btn-link">
-                                        <span class="fas fa-bars text-primary"></span>
+                                        <span class="fas fa-database text-primary"></span>
                                     </a>
                                     <a ng-click="remove(item.id);" class="btn btn-link">
                                         <span class="fas fa-trash-alt text-danger"></span>
@@ -116,7 +116,6 @@
                 </table>
             </div>
             <div class="card-footer">
-
                 <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems"
                     ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)"
                     scroll-top="true"></paging>

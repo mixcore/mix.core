@@ -3,7 +3,9 @@
     <form ng-if="activedData" ng-class="{'submitted': submitted}" ng-submit="save(activedData)" class="row">
         <div class=" col-8">
             <div class="card">
-
+                <h6 class="card-header">
+                    Media Info
+                </h6>
                 <section class=" card-body">
                     <div class="form-group">
                         <label class="control-label">Title</label>
@@ -11,24 +13,31 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">Description</label>
-                        <input type="text" class="form-control" ng-model="activedData.description">
+                        <!-- <input type="text" class="form-control" ng-model="activedData.description"> -->
+                        <textarea class="form-control" ng-model="activedData.description">{{activedData.description}}</textarea>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Tags</label>
-                        <input type="text" class="form-control tags" ng-model="activedData.tags">
+                        <!-- <input type="text" class="form-control tags" ng-model="activedData.tags"> -->
+
+                        <tags-input ng-model="$ctrl.media.listTag">
+                            <!--<auto-complete source="$ctrl.loadTags($query)"></auto-complete>-->
+                        </tags-input>
                     </div>
                     <input type="text" class="form-control d-none" ng-model="activedData.fullPath">
-
-
                 </section>
             </div>
         </div>
         <div class="col-4">
-
             <actions preview-url="activedData.fullPath" back-url="'/portal/media/list'"></actions>
 
-            <custom-image header="''" type="'Medias'" folder="activedData.folder" src-url="activedData.fullPath"
-                src="activedData.fullPath" posted-file="activedData.mediaFile"></custom-image>
+            <div class="card">
+                <div class="card-body">
+                    <custom-image header="'Media Upload'" type="'Medias'" folder="activedData.folder"
+                        src-url="activedData.fullPath" src="activedData.fullPath" posted-file="activedData.mediaFile">
+                    </custom-image>
+                </div>
+            </div>
         </div>
     </form>
 </section>
