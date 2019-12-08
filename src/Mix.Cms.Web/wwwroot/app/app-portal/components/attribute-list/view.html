@@ -112,14 +112,16 @@
                                 <div class="form-groupx col-md pl-4">
                                     <input type="text" class="form-control form-control-sm" ng-model="col.options[$index].value">
                                 </div>
-                                <div class="form-groupx col-md-3">
+                                <!-- <div class="form-groupx col-md-3">
 
-                                    <select class="form-control form-control-sm" ng-model="col.options[$index].dataType">
-                                        <option ng-repeat="item in $ctrl.settings.dataTypes track by $index" ng-value="$index">
+                                    <select class="form-control form-control-sm"
+                                        ng-model="col.options[$index].dataType">
+                                        <option ng-repeat="item in $ctrl.settings.dataTypes track by $index"
+                                            ng-value="$index">
                                             {{item}}
                                         </option>
                                     </select>
-                                </div>
+                                </div> -->
                                 <div class="form-groupx col-md-1">
                                     <a class="btn btn-sm" ng-click="col.options.splice($index,1)">
                                         <span class="fas fa-trash-alt text-danger"></span>

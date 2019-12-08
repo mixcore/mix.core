@@ -10,9 +10,9 @@
                     dnd-disable-if="canDrag" cellspacing="0" ng-init="getList()">
                     <thead class="thead-light">
                         <tr>
-                            <th scope="col" width="15px">
+                            <th ng-if="!canDrag" scope="col" width="15px">
                             </th>
-                            <th scope="col" width="15px">
+                            <th ng-if="!canDrag" scope="col" width="15px">
                             </th>
                             <th scope="col" width="15px">
                                 <div class="custom-control custom-checkbox">
@@ -42,10 +42,10 @@
                         dnd-selected="selected = item" dnd-moved="updateInfos($index)"
                         ng-class="{'selected': selected === item}" class="border-top">
                         <tr class="" sort-model="category" sort-model-id="{{item.id}}">
-                            <td style="cursor:grab;" class="drag-header align-middle small">
+                            <td ng-if="!canDrag" style="cursor:grab;" class="drag-header align-middle small">
                                 <small class="fa fa-grip-vertical text-black-50"></small>
                             </td>
-                            <td class="align-middle">
+                            <td ng-if="!canDrag" class="align-middle">
                                 <div class="btn-group-vertical" role="group" aria-label="Basic example">
                                     <button ng-click="goUp(item.childs, $index)" type="button" title="Move up"
                                         class="btn  btn-xs py-0 border-bottom"><span
