@@ -12,51 +12,12 @@
             <!-- <small class="form-text text-muted">This page title will show on..</small> -->
         </div>
         <div class="form-group">
-            <label>Redirect to URL <small>(Optional)</small></label>
-            <input type="text" class="form-control" ng-model="$ctrl.page.staticUrl" placeholder="https://your-external-link...">
-            <!-- <small class="form-text text-muted">This page will auto redirect to an external link instead.</small> -->
-        </div>
-        <div class="form-group">
             <label>Excerpt</label>
             <textarea class="form-control" ng-model="$ctrl.page.excerpt">{{$ctrl.page.excerpt}}</textarea>
         </div>
         <div class="form-group">
             <trumbowyg options="{}" ng-model="$ctrl.page.content"></trumbowyg>
         </div>
-        <div class="form-group">
-            <label class="control-label">Page types</label><br>
-            <div class="custom-control custom-switch custom-control-inline col-3" ng-repeat="type in $ctrl.settings.pageTypes track by $index" ng-switch="type" ng-class="{active: $index === $ctrl.page.type}" ng-click="$ctrl.page.type=$index;">
-                <input type="radio" ng-model="$ctrl.page.type" class="custom-control-input" value="{{$index}}" id="page_type_{{$index}}" name="page_type_{{$index}}">
-                <label ng-switch-when="Blank" class="custom-control-label" for="page_type_{{$index}}" ng-click="$ctrl.page.type=$index;">Blank</label>
-                <label ng-switch-when="Post" class="custom-control-label" for="page_type_{{$index}}" ng-click="$ctrl.page.type=$index;">Post</label>
-                <label ng-switch-when="ListPost" class="custom-control-label" for="page_type_{{$index}}" ng-click="$ctrl.page.type=$index;">List Post</label>
-                <label ng-switch-when="ListProduct" class="custom-control-label" for="page_type_{{$index}}" ng-click="$ctrl.page.type=$index;">List Product</label>
-                <label ng-switch-when="List" class="custom-control-label" for="page_type_{{$index}}" ng-click="$ctrl.page.type=$index;">List</label>
-                <label ng-switch-when="Home" class="custom-control-label" for="page_type_{{$index}}" ng-click="$ctrl.page.type=$index;">Home</label>
-                <label ng-switch-when="StaticUrl" class="custom-control-label" for="page_type_{{$index}}" ng-click="$ctrl.page.type=$index;">Static Url</label>
-                <label ng-switch-when="Modules" class="custom-control-label" for="page_type_{{$index}}" ng-click="$ctrl.page.type=$index;">Modules</label>
-                <label ng-switch-when="Gallery" class="custom-control-label" for="page_type_{{$index}}" ng-click="$ctrl.page.type=$index;">Gallery</label>
-                <label ng-switch-when="System" class="custom-control-label" for="page_type_{{$index}}" ng-click="$ctrl.page.type=$index;">System</label>
-            </div>
-            <!-- <div class="btn-group btn-group-sm btn-group-toggle d-flex w-100" role="group" data-toggle="buttons">
-                <label ng-repeat="type in $ctrl.settings.pageTypes track by $index" ng-switch="type"
-                    ng-class="{active: $index === $ctrl.page.type}" class="btn btn-outline-primary btn-block mt-0"
-                    ng-click="$ctrl.page.type=$index;">
-                    <input ng-model="$ctrl.page.type" type="radio" value="{{$index}}" class="custom-control-input"
-                        id="page_type_{{$index}}">
-                    <i ng-switch-when="Blank" class="mi mi-Preview mi-lg mi-fw" title="{{type}}"></i>
-                    <i ng-switch-when="Post" class="mi mi-ReadingList mi-lg" title="{{type}}"></i>
-                    <i ng-switch-when="ListPost" class="mi mi-AllApps mi-lg" title="{{type}}"></i>
-                    <i ng-switch-when="ListProduct" class="mi mi-Package mi-lg mi-fw" title="{{type}}"></i>
-                    <i ng-switch-when="List" class="mi mi-BulletedList mi-lg mi-fw" title="{{type}}"></i>
-                    <i ng-switch-when="Home" class="mi mi-Home mi-lg mi-flip-horizontal" title="{{type}}"></i>
-                    <i ng-switch-when="StaticUrl" class="mi mi-Go mi-lg mi-flip-horizontal" title="{{type}}"></i>
-                    <i ng-switch-when="Modules" class="mi mi-ResolutionLegacy mi-lg mi-flip-horizontal"
-                        title="{{type}}"></i>
-                    <i ng-switch-when="Gallery" class="mi mi-Media mi-lg mi-flip-horizontal" title="{{type}}"></i>
-                    <i ng-switch-when="System" class="mi mi-Settings mi-lg mi-flip-horizontal" title="{{type}}"></i>
-                </label>
-            </div> -->
-        </div>
+        
     </div>
 </div>
