@@ -6,6 +6,7 @@ app.controller('AttributeSetController', [
         ngAppSettings, $routeParams, attributeFieldService, service) {
         BaseODataCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
         $scope.defaultAttr = null;
+        $scope.actions= ['Delete'];
         $scope.request.selects = 'id,title,name,createdDateTime';
         $scope.orders = [{ title: 'Id', value: 'id' }, { title: 'Name', value: 'name' }, { title: 'Created Date', value: 'createdDateTime' }];
         $scope.request.orderBy = 'createdDateTime';

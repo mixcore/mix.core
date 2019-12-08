@@ -209,7 +209,7 @@ function BaseODataCtrl($scope, $rootScope, $routeParams, ngAppSettings, service)
             }
         } else {
             if (resp) {
-                $rootScope.showErrors('Failed');
+                $rootScope.showErrors(resp.errors);
             }
             $rootScope.isBusy = false;
             $scope.$apply();

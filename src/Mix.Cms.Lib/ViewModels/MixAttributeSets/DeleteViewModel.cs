@@ -56,10 +56,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             }
             if (result.IsSucceed)
             {
-                var removeFields = await MixRelatedAttributeSets.DeleteViewModel.Repository.RemoveListModelAsync(false, 
-                    f => f.Id == Id || (f.ParentId == Id && f.ParentType== (int)MixEnums.MixAttributeSetDataType.Service)
+                var removeRelated = await MixRelatedAttributeSets.DeleteViewModel.Repository.RemoveListModelAsync(false, 
+                    f => f.Id == Id || (f.ParentId == Id && f.ParentType == (int)MixEnums.MixAttributeSetDataType.Service)
                     , _context, _transaction);
-                ViewModelHelper.HandleResult(removeFields, ref result);
+                ViewModelHelper.HandleResult(removeRelated, ref result);
             }
             
             return result;
