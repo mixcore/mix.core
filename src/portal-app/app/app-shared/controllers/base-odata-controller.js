@@ -115,7 +115,7 @@ function BaseODataCtrl($scope, $rootScope, $routeParams, ngAppSettings, service)
     };
 
     $scope.remove = function (id) {
-        $rootScope.showConfirm($scope, 'removeConfirmed', [id], null, 'Remove', 'Are you sure');
+        $rootScope.showConfirm($scope, 'removeConfirmed', [id], null, 'Remove', 'Deleted data will not able to recover, are you sure you want to delete this item?');
     };
 
     $scope.removeConfirmed = async function (id) {

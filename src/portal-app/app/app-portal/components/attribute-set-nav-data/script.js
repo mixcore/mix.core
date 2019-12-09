@@ -83,7 +83,7 @@ modules.component('attributeSetNavData', {
                 })
             }
             ctrl.removeData = async function(nav){
-                $rootScope.showConfirm(ctrl, 'removeDataConfirmed', [nav], null, 'Remove', 'Are you sure');
+                $rootScope.showConfirm(ctrl, 'removeDataConfirmed', [nav], null, 'Remove', 'Deleted data will not able to recover, are you sure you want to delete this item?');
             };
             ctrl.removeDataConfirmed = async function(nav){
                 $rootScope.isBusy = true;

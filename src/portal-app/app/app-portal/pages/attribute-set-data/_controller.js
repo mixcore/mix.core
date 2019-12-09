@@ -130,7 +130,7 @@ app.controller('AttributeSetDataController',
                 $scope.goToPath('/portal/attribute-set-data/details?dataId=' + data.id + '&attributeSetId=' + $scope.attributeSetId)
             };
             $scope.remove = function (data) {
-                $rootScope.showConfirm($scope, 'removeConfirmed', [data.id], null, 'Remove', 'Are you sure');
+                $rootScope.showConfirm($scope, 'removeConfirmed', [data.id], null, 'Remove', 'Deleted data will not able to recover, are you sure you want to delete this item?');
             };
 
             $scope.removeConfirmed = async function (dataId) {
