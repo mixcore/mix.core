@@ -211,7 +211,6 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
 
         };
         var _getApiResult = async function (req, serviceBase) {
-            console.log(req);
             if (!authService.authentication) {
                 await authService.fillAuthData();
             }

@@ -4,9 +4,11 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
@@ -102,6 +104,22 @@ namespace Mix.Cms.Api.Controllers.v1
         #endregion Get
 
         #region Post
+        // POST api/attribute-set-data
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
+        [HttpPost, HttpOptions]
+        [Route("import-data")]
+        public async Task<RepositoryResponse<UpdateViewModel>> ImportData([FromForm]string model, [FromForm]IFormFile file)
+        {
+            if (file != null)
+            {
+                string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{file.Name}";
+                //file.TemplateAsset = new Lib.ViewModels.FileViewModel(file, importFolder);
+                var importFile = FileRepository.Instance.SaveWebFile(file, importFolder);
+
+                return result;
+            }
+            return new RepositoryResponse<MobileViewModel>() { Status = 501 };
+        }
 
         // POST api/attribute-set-data
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]

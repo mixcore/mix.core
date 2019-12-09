@@ -38,7 +38,7 @@ function BaseHub(scope) {
         });
         scope.connection.start()
             .then(function () {
-                console.log('connection started', scope.connection);
+                // console.log('connection started', scope.connection);
                 if(callback){
                     callback();
                 }

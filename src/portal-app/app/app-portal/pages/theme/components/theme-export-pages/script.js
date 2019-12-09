@@ -15,7 +15,6 @@ app.component('themeExportPages', {
             });
             
             
-            console.log(ctrl.selectedExport);
         };    
     }],
     bindings: {
