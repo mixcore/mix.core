@@ -122,7 +122,7 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$l
 
         $scope.removeData = function (id) {
             if ($scope.activedData) {
-                $rootScope.showConfirm($scope, 'removeDataConfirmed', [id], null, 'Remove Data', 'Are you sure');
+                $rootScope.showConfirm($scope, 'removeDataConfirmed', [id], null, 'Remove Data', 'Deleted data will not able to recover, are you sure you want to delete this item?');
             }
         }
 
@@ -190,7 +190,7 @@ app.controller('ModuleController', ['$scope', '$rootScope', 'ngAppSettings', '$l
         $scope.insertColCallback = function (index, item, external, type) {
         }
         $scope.removeAttribute = function (attr, index) {
-            $rootScope.showConfirm($scope, 'removeAttributeConfirmed', [attr, index], null, 'Remove Field', 'Are you sure');
+            $rootScope.showConfirm($scope, 'removeAttributeConfirmed', [attr, index], null, 'Remove Field', 'Deleted data will not able to recover, are you sure you want to delete this item?');
         };
         $scope.removeAttributeConfirmed = function (attr, index) {
             relatedAttributeSetDataService.delete([])

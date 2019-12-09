@@ -94,7 +94,7 @@ app.controller('UserController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
         };
 
         $scope.removeUser = function (id) {
-            $rootScope.showConfirm($scope, 'removeUserConfirmed', [id], null, 'Remove User', 'Are you sure');
+            $rootScope.showConfirm($scope, 'removeUserConfirmed', [id], null, 'Remove User', 'Deleted data will not able to recover, are you sure you want to delete this item?');
         }
 
         $scope.removeUserConfirmed = async function (id) {
