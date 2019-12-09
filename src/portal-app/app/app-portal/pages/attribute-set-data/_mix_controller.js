@@ -7,6 +7,13 @@ app.controller('MixAttributeSetDataController',
             $scope.settings = $rootScope.globalSettings;
             $scope.canDrag = $scope.request.orderBy !== 'Priority' || $scope.request.direction !== '0';
             $scope.filterType = 'contain';
+            $scope.importFile = {
+                file: null,
+                fullPath: '',
+                folder: 'import',
+                title: '',
+                description: ''
+            };
             $scope.init = async function () {
                 $scope.attributeSetId = $routeParams.attributeSetId;
                 $scope.attributeSetName = $routeParams.attributeSetName;
@@ -100,6 +107,21 @@ app.controller('MixAttributeSetDataController',
                     $rootScope.showErrors(response.errors);
                     $rootScope.isBusy = false;
                     $scope.$apply();
+                }
+            };
+            $scope.selectImportFile = function (file, errFiles) {
+                if (file !== undefined && file !== null) {
+                    $scope.importFile.folder = 'imports';
+                    $scope.importFile.title = $scope.attributeSetName;
+                    $scope.importFile.description = $scope.attributeSetName+ '\'s data';
+                    $scope.importFile.file = file;
+    
+                    // if (ctrl.auto=='true') {
+                    //     ctrl.uploadFile(file);
+                    // }
+                    // else {
+                    //     ctrl.getBase64(file);
+                    // }
                 }
             };
             $scope.getList = async function (pageIndex) {

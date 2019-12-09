@@ -90,7 +90,6 @@ modules.component('attributeList', {
                     formHtml.appendChild(el);      
                     
                 });
-                console.log(formHtml);
                 ctrl.activedData.formView.content = formHtml.innerHTML;
             };
     

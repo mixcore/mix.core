@@ -79,7 +79,6 @@
                         ctrl.$apply();
                     },
                     error: function (a, b, c) {
-                        console.log(a + " " + b + " " + c);
                     }
                 });
             }
@@ -100,7 +99,6 @@
                     }
                 },
                 error: function (a, b, c) {
-                    console.log(a + " " + b + " " + c);
                 }
             });
         };
@@ -167,7 +165,6 @@
                     $(data).find('.prop-data-type').trigger('change');
                 },
                 error: function (a, b, c) {
-                    console.log(a + " " + b + " " + c);
                 }
             });
             ctrl.updateHero = function (hero, prop, value) {

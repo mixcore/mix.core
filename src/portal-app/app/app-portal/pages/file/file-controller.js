@@ -28,7 +28,7 @@ app.controller('FileController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
             for (var i = 1; i <= max; i += 1) input.push(i);
             return input;
         };
-        $scope.loadPage = async function(folder){
+        $scope.loadPage = async function (folder) {
             if (folder) {
                 $scope.request.key += ($scope.request.key !== '') ? '/' : '';
                 $scope.request.key += folder;
@@ -41,7 +41,7 @@ app.controller('FileController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
             $rootScope.isBusy = true;
             var response = await fileServices.getFile($routeParams.folder, $routeParams.filename);
             if (response.isSucceed) {
-                $scope.activedFile = response.data;                
+                $scope.activedFile = response.data;
                 $rootScope.isBusy = false;
                 $scope.$apply();
             }
@@ -58,7 +58,9 @@ app.controller('FileController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
             } else {
                 $scope.request.key = $routeParams.folder ? $routeParams.folder : 'wwwroot';
             }
-            
+            if ($routeParams.folder) {
+                $scope.backUrl = '/portal/file/list?folder=' + $routeParams.folder.substring(0, $routeParams.folder.lastIndexOf('/'));
+            }
             $rootScope.isBusy = true;
             var resp = await fileServices.getFiles($scope.request);
             if (resp && resp.isSucceed) {
@@ -80,7 +82,7 @@ app.controller('FileController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
                 $rootScope.isBusy = false;
                 $scope.$apply();
             }
-            
+
         };
 
         $scope.removeFile = async function (id) {
@@ -98,7 +100,7 @@ app.controller('FileController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
             }
         };
 
-        $scope.saveFile = async function (file) {            
+        $scope.saveFile = async function (file) {
             $rootScope.isBusy = true;
             var resp = await fileServices.saveFile(file);
             if (resp && resp.isSucceed) {

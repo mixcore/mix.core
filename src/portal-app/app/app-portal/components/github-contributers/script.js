@@ -20,7 +20,6 @@
               ctrl.items = resp.data;
           }
           else{
-            console.log(resp);
  
           }
         },
