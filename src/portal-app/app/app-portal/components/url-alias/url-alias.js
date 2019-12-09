@@ -13,7 +13,7 @@ modules.component('urlAlias', {
             }
             ctrl.remove = function () {
                 if (ctrl.urlAlias.id > 0) {
-                    $rootScope.showConfirm(ctrl, 'removeConfirmed', [ctrl.urlAlias.id], null, 'Remove', 'Are you sure');
+                    $rootScope.showConfirm(ctrl, 'removeConfirmed', [ctrl.urlAlias.id], null, 'Remove', 'Deleted data will not able to recover, are you sure you want to delete this item?');
                 } else {
                     if (ctrl.removeCallback) {
                         ctrl.removeCallback({ index: ctrl.index });

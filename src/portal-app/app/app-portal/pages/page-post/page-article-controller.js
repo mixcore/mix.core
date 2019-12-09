@@ -33,7 +33,7 @@ app.controller('PagePostController',
                 $rootScope.preview('post', item, item.title, 'modal-lg');
             };
             $scope.remove = function (pageId, postId) {
-                $rootScope.showConfirm($scope, 'removeConfirmed', [pageId, postId], null, 'Remove', 'Are you sure');
+                $rootScope.showConfirm($scope, 'removeConfirmed', [pageId, postId], null, 'Remove', 'Deleted data will not able to recover, are you sure you want to delete this item?');
             };
 
             $scope.removeConfirmed = async function (pageId, postId) {
