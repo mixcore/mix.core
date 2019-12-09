@@ -2,27 +2,39 @@
     <form ng-if="appSettings" ng-class="{'submitted': submitted}" ng-submit="saveAppSettings(appSettings)" autocomplete="new-password">
         <tabs-h>
             <actions preview-url="appSettings.fullPath" back-url="'/portal/configuration/list'"></actions>
-            <pane-h header="General" class="card">
-                <div class="card-body">
+            <pane-h header="General" class="">
+                <div class="">
                     <app-settings-general app-settings="appSettings"></app-settings-general>
                 </div>
             </pane-h>
-            <pane-h header="Default" class="card">
+            <!-- <pane-h header="Default" class="card">
                 <div class="card-body">
-                    <app-settings-default app-settings="appSettings" statuses="statuses" cultures="globalSettings.cultures">
+                    <app-settings-default app-settings="appSettings" statuses="statuses"
+                        cultures="globalSettings.cultures">
                     </app-settings-default>
                 </div>
+            </pane-h> -->
+            <pane-h header="Authentication" class="card">
+                    <div class="card-body">
+                        <app-settings-auth app-settings="appSettings"></app-settings-auth>
+                    </div>
+                </pane-h>
+            <pane-h header="Email" class="card">
+                <div class="card-body">
+                    <app-settings-smtp app-settings="appSettings"></app-settings-smtp>
+                </div>
             </pane-h>
-            <pane-h header="Import" class="card">
+            <!-- <pane-h header="Import" class="card">
                 <div class="card-body">
                     <h6>Import
-                        <a href="/portal/import" class="btn btn-link text-primary btn-sm float-right"><span class="fas fa-file-import text-primary"></span> Import</a>
+                        <a href="/portal/import" class="btn btn-link text-primary btn-sm float-right"><span
+                                class="fas fa-file-import text-primary"></span> Import</a>
 
                     </h6>
                     <p class="text-muted">Add a title and description to see how this product might
                         appear in a search engine listing.</p>
                 </div>
-            </pane-h>
+            </pane-h> -->
             <pane-h header="Permissions" class="card">
                 <div class="card-body">
                     <h6>Permissions
@@ -36,7 +48,7 @@
             <pane-h header="File Management" class="card">
                 <div class="card-body">
                     <h6>Files
-                        <a href="/portal/create/create" class="btn btn-link text-primary btn-sm float-right"><span class="fas fa-plus text-primary"></span> Add
+                        <a href="/portal/file/create" class="btn btn-link text-primary btn-sm float-right"><span class="fas fa-plus text-primary"></span> Add
                             new</a>
                         <a href="/portal/file/list" class="btn btn-link text-primary btn-sm float-right"><span class="far fa-list-alt text-primary"></span> List
                             file</a>
@@ -54,26 +66,19 @@
                     </h6>
                 </div>
             </pane-h>
-            <pane-h header="Attribute sets" class="card">
+            <!-- <pane-h header="Attribute sets" class="card">
                 <div class="card-body">
                     <h6>Attribute sets
-                        <a href="/portal/attribute-set/create" class="btn btn-link text-primary btn-sm float-right"><span class="fas fa-plus text-primary"></span> Add
+                        <a href="/portal/attribute-set/create"
+                            class="btn btn-link text-primary btn-sm float-right"><span
+                                class="fas fa-plus text-primary"></span> Add
                             New</a>
-                        <a href="/portal/attribute-set/list" class="btn btn-link text-primary btn-sm float-right"><span class="far fa-list-alt text-primary"></span> List
+                        <a href="/portal/attribute-set/list" class="btn btn-link text-primary btn-sm float-right"><span
+                                class="far fa-list-alt text-primary"></span> List
                             Attr Sets</a>
                     </h6>
                 </div>
-            </pane-h>
-            <pane-h header="Authentication" class="card">
-                <div class="card-body">
-                    <app-settings-auth app-settings="appSettings"></app-settings-auth>
-                </div>
-            </pane-h>
-            <pane-h header="Email" class="card">
-                <div class="card-body">
-                    <app-settings-smtp app-settings="appSettings"></app-settings-smtp>
-                </div>
-            </pane-h>
+            </pane-h> -->
             <pane-h header="Languages" class="card">
                 <div class="card-body">
                     <h6>Languages

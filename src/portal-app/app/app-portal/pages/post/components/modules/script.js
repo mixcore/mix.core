@@ -10,7 +10,7 @@ app.component('postModules', {
             };
 
             ctrl.removeData = function (id, moduleId) {
-                $rootScope.showConfirm(ctrl, 'removeDataConfirmed', [id, moduleId], null, 'Remove Data', 'Are you sure');
+                $rootScope.showConfirm(ctrl, 'removeDataConfirmed', [id, moduleId], null, 'Remove Data', 'Deleted data will not able to recover, are you sure you want to delete this item?');
             }
             ctrl.removeDataConfirmed = async function (id, moduleId) {
                 $rootScope.isBusy = true;
