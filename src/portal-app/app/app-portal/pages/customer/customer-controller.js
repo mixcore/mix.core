@@ -74,7 +74,7 @@ app.controller('CustomerController', ['$scope', '$rootScope', 'ngAppSettings', '
         };
 
         $scope.removeCustomer = function (id) {
-            $rootScope.showConfirm($scope, 'removeCustomerConfirmed', [id], null, 'Remove Customer', 'Are you sure');
+            $rootScope.showConfirm($scope, 'removeCustomerConfirmed', [id], null, 'Remove Customer', 'Deleted data will not able to recover, are you sure you want to delete this item?');
         }
 
         $scope.removeCustomerConfirmed = async function (id) {
