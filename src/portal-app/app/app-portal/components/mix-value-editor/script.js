@@ -90,7 +90,7 @@ modules.component('mixValueEditor', {
             $location.url('/portal/attribute-set-data/details?dataId='+ item.id +'&attributeSetId=' + item.attributeSetId+'&parentType=' + item.parentType+'&parentId=' + item.parentId);
         };
         ctrl.removeRefData = async function(data){
-            $rootScope.showConfirm(ctrl, 'removeRefDataConfirmed', [data.id], null, 'Remove', 'Are you sure');
+            $rootScope.showConfirm(ctrl, 'removeRefDataConfirmed', [data.id], null, 'Remove', 'Deleted data will not able to recover, are you sure you want to delete this item?');
         };
         ctrl.removeRefDataConfirmed = async function(dataId){
             $rootScope.isBusy = true;

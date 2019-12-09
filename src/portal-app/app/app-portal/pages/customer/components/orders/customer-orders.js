@@ -4,7 +4,7 @@ app.component('customerOrders', {
     controller: ['$rootScope', 'OrderServices', function($rootScope, orderServices){
         var ctrl = this;
         ctrl.removeOrder = function (id) {
-            $rootScope.showConfirm(ctrl, 'removeOrderConfirmed', [id], null, 'Remove Order', 'Are you sure');
+            $rootScope.showConfirm(ctrl, 'removeOrderConfirmed', [id], null, 'Remove Order', 'Deleted data will not able to recover, are you sure you want to delete this item?');
         }
 
         ctrl.removeOrderConfirmed = async function (id) {

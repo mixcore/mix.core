@@ -11,10 +11,7 @@
 
     </div>
 </dnd-nodrag>
-<div ng-if="item.subMenus && item.subMenus.data.length"
-    ng-show="$ctrl.models.selected === item || item.subMenus.allowedTypes.indexOf($ctrl.models.selected.menuType) !== -1"
-    style="margin-top: 10px;" ng-init="model = item.subMenus"
-    ng-include="'/app/app-portal/pages/app-settings/components/portal-menus/container.html'"></div>
+<div ng-if="item.subMenus && item.subMenus.data.length" ng-show="$ctrl.models.selected === item || item.subMenus.allowedTypes.indexOf($ctrl.models.selected.menuType) !== -1" style="margin-top: 10px;" ng-init="model = item.subMenus" ng-include="'/app/app-portal/pages/app-settings/components/portal-menus/container.html'"></div>
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-11" ng-show="$ctrl.models.selected === item">

@@ -55,11 +55,7 @@
             <ul>
                 <!-- The toolbox only allows to copy objects, not move it. After a new
                      element was created, dnd-copied is invoked and we generate the next id -->
-                <li ng-repeat="item in $ctrl.models.templates"
-                    dnd-draggable="item"
-                    dnd-effect-allowed="copy"
-                    dnd-copied="item.id = item.id + 1"
-                    >
+                <li ng-repeat="item in $ctrl.models.templates" dnd-draggable="item" dnd-effect-allowed="copy" dnd-copied="item.id = item.id + 1">
                     <button type="button" class="btn btn-default btn-lg" disabled="disabled">{{item.type}}</button>
                 </li>
             </ul>
@@ -68,7 +64,7 @@
         <div ng-if="$ctrl.models.selected" class="box box-grey box-padding">
             <h3>Selected</h3>
             <strong>Type: </strong> {{$ctrl.models.selected.type}}<br>
-            <input type="text" ng-model="$ctrl.models.selected.id" class="form-control" style="margin-top: 5px" />
+            <input type="text" ng-model="$ctrl.models.selected.id" class="form-control" style="margin-top: 5px">
         </div>
     
     
