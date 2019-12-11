@@ -107,18 +107,20 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST api/attribute-set-data
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
-        [Route("import-data")]
-        public async Task<RepositoryResponse<UpdateViewModel>> ImportData([FromForm]string model, [FromForm]IFormFile file)
+        [Route("import-data/{attributeSetName}")]
+        public async Task<ActionResult<RepositoryResponse<ImportViewModel>>> ImportData(string attributeSetName, [FromForm]IFormFile file)
         {
-            if (file != null)
+            var getAttributeSet = await Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModelAsync(
+                    m => m.Name == attributeSetName);
+            if (getAttributeSet.IsSucceed)
             {
-                string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{file.Name}";
-                //file.TemplateAsset = new Lib.ViewModels.FileViewModel(file, importFolder);
-                var importFile = FileRepository.Instance.SaveWebFile(file, importFolder);
-
-                return result;
+                if (file != null)
+                {
+                    var result = await Helper.ImportData(_lang, getAttributeSet.Data, file);
+                    return Ok(result);
+                }
             }
-            return new RepositoryResponse<MobileViewModel>() { Status = 501 };
+            return new RepositoryResponse<ImportViewModel>() { Status = 501 };
         }
 
         // POST api/attribute-set-data

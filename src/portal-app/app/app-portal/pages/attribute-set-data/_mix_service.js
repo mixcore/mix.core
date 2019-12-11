@@ -16,6 +16,15 @@ app.factory('MixAttributeSetDataService', ['BaseService','CommonService', functi
         };
         return await commonService.getApiResult(req);
     };
+    
+    var _import = async function (attributeSetName, file) {
+        var url = (this.prefixUrl || '/' + this.lang + '/' 
+            + this.modelName) + '/import-data/' + attributeSetName;
+        var frm = new FormData();
+        frm.append('file', file);
+        return serviceFactory.ajaxSubmitForm(frm, url);
+    };
+    serviceFactory.import = _import;
     serviceFactory.sendMail = _sendMail;
     return serviceFactory;
 
