@@ -24,8 +24,8 @@ jobs:
       run: npm install
     - name: Pull Mix Heart & Identity
       run: |
-        git clone --depth=50 --branch=master https://github.com/mixcore/mix.heart.git /home/travis/build/mixcore/mix.heart
-        git clone --depth=50 --branch=master https://github.com/mixcore/mix.identity.git /home/travis/build/mixcore/mix.identity
+        git clone --depth=50 --branch=master https://github.com/mixcore/mix.heart.git /home/runner/work/mix.core/mix.heart
+        git clone --depth=50 --branch=master https://github.com/mixcore/mix.identity.git /home/runner/work/mix.core/mix.identity
         cd src/Mix.Cms.Web
     - name: Build with dotnet
       run: dotnet build --configuration Release
