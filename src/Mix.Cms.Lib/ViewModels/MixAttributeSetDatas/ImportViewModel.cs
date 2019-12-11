@@ -180,7 +180,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             //End save edm
             return base.ParseModel(_context, _transaction); ;
         }
-
         public override void GenerateCache(MixAttributeSetData model, ImportViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             ParseData();
@@ -210,6 +209,152 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             return tasks;
         }
+
+        #region Async
+        public override async Task<RepositoryResponse<ImportViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = await base.SaveModelAsync(isSaveSubModels, _context, _transaction);
+            if (result.IsSucceed)
+            {
+                ParseData();
+            }
+            return result;
+        }
+
+
+        public override RepositoryResponse<ImportViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = base.SaveModel(isSaveSubModels, _context, _transaction);
+            if (result.IsSucceed)
+            {
+                ParseData();
+            }
+            return result;
+        }
+        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSetData parent, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+
+            if (result.IsSucceed)
+            {
+                RepositoryResponse<bool> saveValues = await SaveValues(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(saveValues, ref result);
+            }
+            // Save Ref Data
+            if (result.IsSucceed)
+            {
+                RepositoryResponse<bool> saveRefData = await SaveRefDataAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(saveRefData, ref result);
+            }
+
+            // Save Related Data
+            if (result.IsSucceed)
+            {
+                RepositoryResponse<bool> saveRelated = await SaveRelatedDataAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(saveRelated, ref result);
+            }
+
+            return result;
+        }
+
+        private async Task<RepositoryResponse<bool>> SaveValues(MixAttributeSetData parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var item in Values)
+            {
+                if (result.IsSucceed)
+                {
+                    if (Fields.Any(f => f.Id == item.AttributeFieldId))
+                    {
+                        item.Priority = item.Field.Priority;
+                        item.DataId = parent.Id;
+                        item.Specificulture = parent.Specificulture;
+                        var saveResult = await item.SaveModelAsync(false, context, transaction);
+                        ViewModelHelper.HandleResult(saveResult, ref result);
+                    }
+                    else
+                    {
+                        var delResult = await item.RemoveModelAsync(false, context, transaction);
+                        ViewModelHelper.HandleResult(delResult, ref result);
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return result;
+        }
+
+        private async Task<RepositoryResponse<bool>> SaveRefDataAsync(MixAttributeSetData parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var item in RefData)
+            {
+                if (result.IsSucceed)
+                {
+                    item.Specificulture = Specificulture;
+                    var saveRef = await item.SaveModelAsync(true, context, transaction);
+                    if (saveRef.IsSucceed)
+                    {
+                        RelatedData.Add(new MixRelatedAttributeDatas.ODataMobileViewModel()
+                        {
+                            Id = saveRef.Data.Id,
+                            ParentId = Id,
+                            ParentType = MixEnums.MixAttributeSetDataType.Set,
+                            AttributeSetId = saveRef.Data.AttributeSetId,
+                            AttributeSetName = saveRef.Data.AttributeSetName,
+                            CreatedDateTime = DateTime.UtcNow,
+                            Specificulture = Specificulture
+                        });
+                    }
+                    ViewModelHelper.HandleResult(saveRef, ref result);
+                }
+                else
+                {
+                    break;
+                }
+
+            }
+            return result;
+        }
+
+        private async Task<RepositoryResponse<bool>> SaveRelatedDataAsync(MixAttributeSetData parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+
+            foreach (var item in RelatedData)
+            {
+                if (result.IsSucceed)
+                {
+                    // Current data is child data
+                    if (string.IsNullOrEmpty(item.Id))
+                    {
+                        item.AttributeSetId = parent.AttributeSetId;
+                        item.AttributeSetName = parent.AttributeSetName;
+                        item.Id = parent.Id;
+                    }
+                    // Current data is parent data
+                    else if (string.IsNullOrEmpty(item.ParentId))
+                    {
+                        item.ParentId = parent.Id;
+                    }
+                    item.Priority = MixRelatedAttributeDatas.ODataMobileViewModel.Repository.Count(
+                                    m => m.ParentId == Id && m.Specificulture == Specificulture, context, transaction).Data + 1;
+                    item.Specificulture = Specificulture;
+                    item.CreatedDateTime = DateTime.UtcNow;
+                    var saveResult = await item.SaveModelAsync(true, context, transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return result;
+        }
+        #endregion
         #endregion
 
         #region Expand
