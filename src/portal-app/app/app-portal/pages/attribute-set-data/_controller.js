@@ -7,6 +7,13 @@ app.controller('AttributeSetDataController',
             $scope.settings = $rootScope.globalSettings;
             $scope.canDrag = $scope.request.orderBy !== 'Priority' || $scope.request.direction !== '0';
             $scope.filterType = 'contain';
+            $scope.importFile = {
+                file: null,
+                fullPath: '',
+                folder: 'import',
+                title: '',
+                description: ''
+            };
             $scope.init = async function () {
                 $scope.attributeSetId = $routeParams.attributeSetId;
                 $scope.attributeSetName = $routeParams.attributeSetName;
@@ -21,26 +28,6 @@ app.controller('AttributeSetDataController',
                         parentId: $scope.refParentId,
                         parentType: $scope.refParentType
                     };
-                }
-            };
-            $scope.getSingle = async function () {
-                $rootScope.isBusy = true;
-                var id = $routeParams.id || $scope.defaultId;
-                $scope.attributeSetId = $routeParams.attributeSetId;
-                $scope.attributeSetName = $routeParams.attributeSetName;
-                var resp = await service.getSingle([id, $scope.attributeSetId, $scope.attributeSetName]);
-                if (resp) {
-                    $scope.activedData = resp;
-                    $scope.activedData.parentType = $scope.parentType;
-                    $scope.activedData.parentId = $scope.parentId;
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
-                } else {
-                    if (resp) {
-                        $rootScope.showErrors('Failed');
-                    }
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
                 }
             };
             $scope.saveSuccessCallback = function () {
@@ -68,7 +55,7 @@ app.controller('AttributeSetDataController',
                 $scope.goToPath('/portal/attribute-set-data/details?dataId=' + data.id + '&attributeSetId=' + $scope.attributeSetId)
             };
             $scope.remove = function (data) {
-                $rootScope.showConfirm($scope, 'removeConfirmed', [data.id], null, 'Remove', 'Are you sure');
+                $rootScope.showConfirm($scope, 'removeConfirmed', [data.id], null, 'Remove', 'Deleted data will not able to recover, are you sure you want to delete this item?');
             };
 
             $scope.removeConfirmed = async function (dataId) {
@@ -79,6 +66,21 @@ app.controller('AttributeSetDataController',
                         $rootScope.executeFunctionByName('removeCallback', $scope.removeCallbackArgs, $scope)
                     }
                     $scope.getList();
+                }
+                else {
+                    $rootScope.showMessage('failed');
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                }
+            };
+            $scope.import = async function () {
+                $rootScope.isBusy = true;
+                var form = document.getElementById('frm-import');
+                var result = await service.import($scope.attributeSetName, form['data'].files[0]);
+                if (result.isSucceed) {
+                    $rootScope.showMessage('success', 'success');
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
                 }
                 else {
                     $rootScope.showMessage('failed');
@@ -120,6 +122,21 @@ app.controller('AttributeSetDataController',
                     $rootScope.showErrors(response.errors);
                     $rootScope.isBusy = false;
                     $scope.$apply();
+                }
+            };
+            $scope.selectImportFile = function (file, errFiles) {
+                if (file !== undefined && file !== null) {
+                    $scope.importFile.folder = 'imports';
+                    $scope.importFile.title = $scope.attributeSetName;
+                    $scope.importFile.description = $scope.attributeSetName + '\'s data';
+                    $scope.importFile.file = file;
+
+                    // if (ctrl.auto=='true') {
+                    //     ctrl.uploadFile(file);
+                    // }
+                    // else {
+                    //     ctrl.getBase64(file);
+                    // }
                 }
             };
             $scope.getList = async function (pageIndex) {

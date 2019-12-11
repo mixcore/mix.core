@@ -1,15 +1,10 @@
 <div class="row">
     <div class="col">
-    </div>
-</div>
-
-<div class="row">
-    <div class="col">
         <div class="card mb-3">
             <div class="card-body">
-
                 <filter-list request="request" orders="orders" callback="getList(pageIndex)"
                     create-url="'/portal/attribute-set/create'" create-text="'Create Attribute'"></filter-list>
+                <hr>
                 <table class="table table-sm table-hover mb-0" cellspacing="0" ng-init="getList()">
                     <thead class="thead-light">
                         <tr>

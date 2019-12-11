@@ -45,7 +45,6 @@ modules.component('attributeSetValues', {
 
             };
             ctrl.filter = function () {
-                console.log(ctrl.queries);
             };
             ctrl.sendMail = async function (data) {
                 ctrl.onSendMail({data: data});

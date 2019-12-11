@@ -11022,7 +11022,7 @@ a.text-dark:hover, a.text-dark:focus {
 
 .input-group-xs > .form-control:not(textarea),
 .input-group-xs > .custom-select {
-  height: calc(1.3rem + 2px);
+  height: calc(1.5rem + 2px);
 }
 
 .input-group-xs > .form-control,
@@ -11031,8 +11031,8 @@ a.text-dark:hover, a.text-dark:focus {
 .input-group-xs > .input-group-append > .input-group-text,
 .input-group-xs > .input-group-prepend > .btn,
 .input-group-xs > .input-group-append > .btn {
-  padding: 0.25rem 0.25rem;
-  font-size: 0.2rem;
+  padding: 0.15rem 0.25rem;
+  font-size: 0.8rem;
   line-height: 1.5;
   border-radius: 0.1rem;
 }

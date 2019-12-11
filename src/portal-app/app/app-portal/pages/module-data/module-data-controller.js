@@ -40,7 +40,7 @@ app.controller('ModuleDataController',
             }
         };
             $scope.remove = function (moduleId, dataId) {
-                $rootScope.showConfirm($scope, 'removeConfirmed', [moduleId, dataId], null, 'Remove', 'Are you sure');
+                $rootScope.showConfirm($scope, 'removeConfirmed', [moduleId, dataId], null, 'Remove', 'Deleted data will not able to recover, are you sure you want to delete this item?');
             };
         
             $scope.removeConfirmed = async function (moduleId, dataId) {

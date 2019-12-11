@@ -63,7 +63,7 @@ modules.component('addictionalValue', {
             };
 
             ctrl.removeAttribute = function (val, index) {
-                $rootScope.showConfirm(ctrl, 'removeAttributeConfirmed', [val, index], null, 'Remove Field', 'Are you sure');
+                $rootScope.showConfirm(ctrl, 'removeAttributeConfirmed', [val, index], null, 'Remove Field', 'Deleted data will not able to recover, are you sure you want to delete this item?');
             };
             ctrl.removeAttributeConfirmed = async function (val, index) {
                 if(val.id){

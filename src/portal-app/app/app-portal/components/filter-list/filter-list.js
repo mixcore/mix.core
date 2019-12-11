@@ -16,8 +16,8 @@ modules.component('filterList', {
             ctrl.pageSizes = ngAppSettings.pageSizes;
             ctrl.statuses = [];
             var statuses = ngAppSettings.contentStatuses;
-            if(ctrl.request){
-                statuses = ctrl.request.contentStatuses || ngAppSettings.contentStatuses;
+            if(ctrl.request && ctrl.request.contentStatuses){
+                statuses = ctrl.request.contentStatuses;
             }
             angular.forEach(statuses, function(val,i){
                 ctrl.statuses.push({
