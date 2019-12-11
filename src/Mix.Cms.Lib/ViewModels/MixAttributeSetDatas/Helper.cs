@@ -36,7 +36,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     ViewModelHelper.HandleResult(saveResult, ref result);
                 }
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
-                await context.SaveChangesAsync();
                 return result;
             }
             catch (Exception ex)
@@ -80,7 +79,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         }
                         ImportViewModel data = new ImportViewModel()
                         {
-                            Id = obj["id"]?.Value<string>(),
                             AttributeSetId = attributeSet.Id,
                             AttributeSetName = attributeSet.Name,
                             Specificulture = culture,
