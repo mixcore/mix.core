@@ -5,10 +5,13 @@ app.component('pageAdvanced', {
         model: '='
     },
     controller: ['$rootScope', '$scope',
-        function ($rootScope, $scope, attributeSetService) {
+        function ($rootScope, $scope) {
             var ctrl = this;
-            ctrl.translate = $rootScope.translate;    
-                  
+            
+            ctrl.translate = $rootScope.translate;                
+            ctrl.$onInit = function(){
+                ctrl.isAdmin = $rootScope.isAdmin;
+            }
         }
     ]    
 });

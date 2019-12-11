@@ -4,9 +4,11 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
@@ -102,6 +104,24 @@ namespace Mix.Cms.Api.Controllers.v1
         #endregion Get
 
         #region Post
+        // POST api/attribute-set-data
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
+        [HttpPost, HttpOptions]
+        [Route("import-data/{attributeSetName}")]
+        public async Task<ActionResult<RepositoryResponse<ImportViewModel>>> ImportData(string attributeSetName, [FromForm]IFormFile file)
+        {
+            var getAttributeSet = await Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModelAsync(
+                    m => m.Name == attributeSetName);
+            if (getAttributeSet.IsSucceed)
+            {
+                if (file != null)
+                {
+                    var result = await Helper.ImportData(_lang, getAttributeSet.Data, file);
+                    return Ok(result);
+                }
+            }
+            return new RepositoryResponse<ImportViewModel>() { Status = 501 };
+        }
 
         // POST api/attribute-set-data
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]

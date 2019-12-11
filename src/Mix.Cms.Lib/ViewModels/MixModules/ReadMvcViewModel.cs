@@ -204,7 +204,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #region Expand
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == "page", _context, _transaction);
+            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == "module", _context, _transaction);
             if (getAttrs.IsSucceed)
             {
                 AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(

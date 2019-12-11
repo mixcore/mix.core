@@ -12,6 +12,13 @@
                 <a href="/portal/attribute-set/details/{{attributeSetId}}" class="btn btn-sm btn-primary float-right px-4 mr-2">
                     <i class="fas fa-pen"></i> Edit Attribute
                 </a>
+                <form action="" id="frm-import">
+                    <a ng-if="importFile.file" ng-click="import()" class="btn btn-sm btn-primary text-white float-right px-4 mr-2">
+                        <i class="fas fa-upload"></i> Import
+
+                    </a>
+                    <input id="inp-import-data" type="file" name="data" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ngf-select="selectImportFile($file, $invalidFiles)" data-file="file.file">
+                </form>
                 <a ng-click="export()" class="btn btn-sm btn-primary text-white float-right px-4 mr-2">
                     <i class="fas fa-download"></i> Export
                 </a>
@@ -27,7 +34,7 @@
                     </div>
                 </div>
 
-                <attribute-set-values on-update="edit(data)" on-delete="remove(data)" can-drag="canDrag" on-send-mail="sendMail(data)" filter-type="filterType" on-filter-list="getList()" on-apply-list="applyList()" selected-list="selectedList" header="''" data="data.items" queries="queries">
+                <attribute-set-values on-update="edit(data)" on-delete="remove(data)" can-drag="canDrag" on-send-mail="sendMail(data)" filter-type="filterType" on-filter-list="getList(0)" on-apply-list="applyList()" selected-list="selectedList" header="''" data="data.items" queries="queries">
                 </attribute-set-values>
             </div>
         </div>
