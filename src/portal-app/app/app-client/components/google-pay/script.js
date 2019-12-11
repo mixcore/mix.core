@@ -113,7 +113,7 @@
               };
               ctrl.processPayment = function(paymentData) {
                 // show returned data in developer console for debugging
-                  console.log(paymentData);
+                  // console.log(paymentData);
                 // @todo pass payment token to your gateway to process payment
                 paymentToken = paymentData.paymentMethodData.tokenizationData.token;
               };

@@ -186,7 +186,7 @@ modules.component('menuItemEditor', {
             })
         }
         ctrl.removeRefData = async function(nav){
-            $rootScope.showConfirm(ctrl, 'removeRefDataConfirmed', [nav], null, 'Remove', 'Are you sure');
+            $rootScope.showConfirm(ctrl, 'removeRefDataConfirmed', [nav], null, 'Remove', 'Deleted data will not able to recover, are you sure you want to delete this item?');
         };
         ctrl.removeRefDataConfirmed = async function(nav){
             $rootScope.isBusy = true;

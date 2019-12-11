@@ -4,7 +4,7 @@
     </div>
 </div>
 <div class="tab-pane fade active show" id="pills-general" role="tabpanel" aria-labelledby="pills-general-tab">
-    <div class="card">
+    <div class="card mb-4">
         <h6 class="card-header">
             Add-in Attributes
             <a class="btn-link text-primary btn-sm float-right py-0" data-toggle="collapse" data-target="#AttributeSetsBody" role="button" aria-expanded="false" aria-controls="AttributeSetsBody collapse">
@@ -21,5 +21,5 @@
         </div>
     </div>
 </div>
-<template-editor ng-if="isAdmin" is-readonly="'true'" folder-type="'Posts'" line-count="'20'" template="$ctrl.model.view" templates="$ctrl.model.templates">
+<template-editor is-readonly="'true'" folder-type="'Posts'" line-count="'20'" template="$ctrl.model.view" templates="$ctrl.model.templates">
 </template-editor>

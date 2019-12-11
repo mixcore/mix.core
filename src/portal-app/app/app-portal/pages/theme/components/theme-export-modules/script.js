@@ -10,7 +10,6 @@ app.component('themeExportModules', {
             });
             
             
-            console.log(ctrl.selectedExport);
         };    
     }],
     bindings: {

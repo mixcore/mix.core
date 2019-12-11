@@ -24,23 +24,6 @@
             ]
         },
         {
-            "title": "Pages",
-            "path": "#",
-            "icon": "mi mi-Page",
-            "subMenus": [
-                {
-                    "title": "Create",
-                    "icon": "mi mi-Add",
-                    "path": "/portal/page/create"
-                },
-                {
-                    "path": "/portal/page/list",
-                    "title": "List Page",
-                    "icon": "mi mi-List"
-                }
-            ]
-        },
-        {
             "title": "Posts",
             "path": "#",
             "icon": "mi mi-ReadingList",
@@ -53,6 +36,23 @@
                 {
                     "path": "/portal/post/list",
                     "title": "List Post",
+                    "icon": "mi mi-List"
+                }
+            ]
+        },
+        {
+            "title": "Pages",
+            "path": "#",
+            "icon": "mi mi-Page",
+            "subMenus": [
+                {
+                    "title": "Create",
+                    "icon": "mi mi-Add",
+                    "path": "/portal/page/create"
+                },
+                {
+                    "path": "/portal/page/list",
+                    "title": "List Page",
                     "icon": "mi mi-List"
                 }
             ]
@@ -93,6 +93,23 @@
             ]
         },
         {
+            "title": "Attributes",
+            "path": "#",
+            "icon": "mi mi-ResolutionLegacy",
+            "subMenus": [
+                {
+                    "title": "Create New",
+                    "icon": "mi mi-Add",
+                    "path": "/portal/attribute-set/create"
+                },
+                {
+                    "path": "/portal/attribute-set/list",
+                    "title": "List",
+                    "icon": "mi mi-List"
+                }
+            ]
+        },
+        {
             "title": "Media",
             "path": "#",
             "icon": "mi mi-Media",
@@ -111,23 +128,6 @@
                     "path": "/portal/media/grid",
                     "title": "Grid",
                     "icon": "mi mi-GridView"
-                }
-            ]
-        },
-        {
-            "title": "Themes",
-            "path": "#",
-            "icon": "mi mi-Layout",
-            "subMenus": [
-                {
-                    "title": "Create New",
-                    "icon": "mi mi-Add",
-                    "path": "/portal/theme/create"
-                },
-                {
-                    "path": "/portal/theme/list",
-                    "title": "List",
-                    "icon": "mi mi-List"
                 }
             ]
         },
@@ -208,17 +208,17 @@
             ]
         },
         {
-            "title": "Attributes",
+            "title": "Themes",
             "path": "#",
-            "icon": "mi mi-ResolutionLegacy",
+            "icon": "mi mi-Layout",
             "subMenus": [
                 {
                     "title": "Create New",
                     "icon": "mi mi-Add",
-                    "path": "/portal/attribute-set/create"
+                    "path": "/portal/theme/create"
                 },
                 {
-                    "path": "/portal/attribute-set/list",
+                    "path": "/portal/theme/list",
                     "title": "List",
                     "icon": "mi mi-List"
                 }

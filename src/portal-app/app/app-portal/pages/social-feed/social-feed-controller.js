@@ -123,7 +123,6 @@ app.controller('SocialFeedController',
                         $scope.socialSettings.errors = response;
                         $scope.$apply();
                     }
-                    console.log(response);
                 });
             }
             $scope.loadPages = function () {

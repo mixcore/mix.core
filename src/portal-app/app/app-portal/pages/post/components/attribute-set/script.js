@@ -25,7 +25,7 @@ app.component('postAttributeSet', {
             };
 
             ctrl.removeValue = function (nav) {
-                $rootScope.showConfirm(ctrl, 'removeValueConfirmed', [nav], null, 'Remove', 'Are you sure');
+                $rootScope.showConfirm(ctrl, 'removeValueConfirmed', [nav], null, 'Remove', 'Deleted data will not able to recover, are you sure you want to delete this item?');
             };
 
             ctrl.removeValueConfirmed = async function (nav) {

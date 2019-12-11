@@ -29,7 +29,7 @@ app.controller('ModuleGalleryController',
                 }
             };
             $scope.remove = function (moduleId, postId) {
-                $rootScope.showConfirm($scope, 'removeConfirmed', [moduleId, postId], null, 'Remove', 'Are you sure');
+                $rootScope.showConfirm($scope, 'removeConfirmed', [moduleId, postId], null, 'Remove', 'Deleted data will not able to recover, are you sure you want to delete this item?');
             };
 
             $scope.removeConfirmed = async function (moduleId, postId) {

@@ -87,7 +87,6 @@ modules.component('propertiesStructure', {
                     formHtml.appendChild(el);      
                     
                 });
-                console.log(formHtml);
                 ctrl.activedData.formView.content = formHtml.innerHTML;
             };
     

@@ -11,7 +11,8 @@ app.directive('ngEnter', function () {
             }
         });
     };
-}).directive('file', function () {
+})
+.directive('file', function () {
     return {
         scope: {
             file: '='
@@ -25,7 +26,8 @@ app.directive('ngEnter', function () {
             });
         }
     };
-}).directive('imageonload', function () {
+})
+.directive('imageonload', function () {
     return {
         restrict: 'A',
         link: function (scope, element, attrs) {
