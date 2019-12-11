@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
@@ -20,6 +21,78 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
     public class Helper
     {
+
+        public static async Task<RepositoryResponse<bool>> ImportData(
+            string culture, Lib.ViewModels.MixAttributeSets.ReadViewModel attributeSet, IFormFile file)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(null, null, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                List<ImportViewModel> data = LoadFileData(culture, attributeSet, file);
+                foreach (var item in data)
+                {
+                    var saveResult = await item.SaveModelAsync(true, context, transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                }
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+                await context.SaveChangesAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<bool>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    context.Dispose();
+                }
+            }
+
+        }
+        private static List<ImportViewModel> LoadFileData(
+           string culture, Lib.ViewModels.MixAttributeSets.ReadViewModel attributeSet, IFormFile file)
+        {
+            //create a list to hold all the values
+            List<ImportViewModel> excelData = new List<ImportViewModel>();
+
+            //create a new Excel package in a memorystream
+            using (var stream = file.OpenReadStream())
+            using (ExcelPackage excelPackage = new ExcelPackage(stream))
+            {
+                //loop all worksheets
+                foreach (ExcelWorksheet worksheet in excelPackage.Workbook.Worksheets)
+                {
+                    // First row is supose to be headers (list field name) => start from row 2
+                    int startRow = 2;//worksheet.Dimension.Start.Row
+                    //loop all rows                    
+                    for (int i = startRow; i <= worksheet.Dimension.End.Row; i++)
+                    {
+                        JObject obj = new JObject();
+                        //loop all columns in a row
+                        for (int j = worksheet.Dimension.Start.Column; j <= worksheet.Dimension.End.Column; j++)
+                        {
+                            obj.Add(new JProperty(worksheet.Cells[1, j].Value.ToString(), worksheet.Cells[i, j].Value));
+                        }
+                        ImportViewModel data = new ImportViewModel()
+                        {
+                            Id = obj["id"]?.Value<string>(),
+                            AttributeSetId = attributeSet.Id,
+                            AttributeSetName = attributeSet.Name,
+                            Specificulture = culture,
+                            Data = obj
+                        };
+                        excelData.Add(data);
+                    }
+                }
+                return excelData;
+            }
+        }
+
         public static Task<RepositoryResponse<List<TView>>> FilterByValueAsync<TView>(string culture, string attributeSetName
             , Dictionary<string, Microsoft.Extensions.Primitives.StringValues> queryDictionary
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)

@@ -11,6 +11,13 @@ app.controller('AttributeSetDataController',
             $scope.parentType = null;
             $scope.cates = ['Site', 'System'];
             $scope.others = [];
+            $scope.importFile = {
+                file: null,
+                fullPath: '',
+                folder: 'import',
+                title: '',
+                description: ''
+            };
             $scope.settings = $rootScope.globalSettings;
             $scope.canDrag = $scope.request.orderBy !== 'Priority' || $scope.request.direction !== '0';
             $scope.init = async function () {
@@ -68,6 +75,10 @@ app.controller('AttributeSetDataController',
                     $scope.$apply();
                 }
             };
+            $scope.openImportDialog = function(){
+                $('#inp-import-data').click();
+            };
+            
             $scope.getList = async function (page = 0) {
                 $rootScope.isBusy = true;
                 $scope.attributeSetId = $routeParams.attributeSetId;

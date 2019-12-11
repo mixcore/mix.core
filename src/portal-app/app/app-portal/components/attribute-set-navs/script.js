@@ -23,7 +23,6 @@ modules.component('attributeSetNavs', {
             };
             ctrl.goToPath = $rootScope.goToPath;
             ctrl.selectPane = function(pane){
-                console.log(pane);
             };
             ctrl.loadData = async function(){
                 var resp = await navService.getList('portal', ctrl.navRequest, ctrl.parentType, ctrl.parentId);
@@ -117,7 +116,6 @@ modules.component('attributeSetNavs', {
                     });
                 });
                 navService.saveProperties('portal', arrNavs).then(resp=>{
-                    console.log(resp);
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 })

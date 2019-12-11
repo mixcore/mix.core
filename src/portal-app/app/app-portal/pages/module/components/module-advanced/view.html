@@ -1,6 +1,6 @@
 <div class="row">
     <div class="tab-pane fade active show col-lg-12">
-        <module-type class="mb-4" model="$ctrl.model"></module-type>
+        <module-type class="mb-4" model="$ctrl.model.type|number:0"></module-type>
     </div>
 </div>
 
@@ -41,16 +41,16 @@
     </div>
 </div>
 <tabs-v select-callback="selectPane(pane)" class="col-lg-12">
-    <pane-v header="Modules Layout" ng-if="isAdmin">
+    <pane-v header="Modules Layout">
         <template-editor folder-type="'Modules'" template="$ctrl.model.view" templates="$ctrl.model.templates">
         </template-editor>
     </pane-v>
-    <pane-v header="Form Layout" ng-if="isAdmin">
+    <pane-v header="Form Layout">
         <template-editor folder-type="'Forms'" template="$ctrl.model.formView" templates="$ctrl.model.forms">
         </template-editor>
     </pane-v>
-    <pane-v header="eDM Layout" ng-if="isAdmin">
-        <template-editor folder-type="'Edms'" template="$ctrl.model.edmView" templates="$ctrl.model.edms">
+    <pane-v header="eDM Layout">
+        <template-editor folder-type="'Edms'" hide-css="'true'" hide-js="'true'" template="$ctrl.model.edmView" templates="$ctrl.model.edms">
         </template-editor>
     </pane-v>
 </tabs-v>
