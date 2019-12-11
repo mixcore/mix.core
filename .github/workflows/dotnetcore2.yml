@@ -1,0 +1,32 @@
+name: .NET Core
+
+on:
+  push:
+    branches:
+    - master
+    - develop
+    - release/v1.0.0
+  schedule:
+  - cron: "0 2 * * 1-5"
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 2.2.108
+    - name: Install Dependencies
+      run: npm install
+    - name: Pull Mix Heart & Identity
+      run: |
+        git clone --depth=50 --branch=master https://github.com/mixcore/mix.heart.git /home/travis/build/mixcore/mix.heart
+        git clone --depth=50 --branch=master https://github.com/mixcore/mix.identity.git /home/travis/build/mixcore/mix.identity
+        cd src/Mix.Cms.Web
+    - name: Build with dotnet
+      run: dotnet build --configuration Release
+      
