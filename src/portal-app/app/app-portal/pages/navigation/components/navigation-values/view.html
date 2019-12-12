@@ -6,8 +6,8 @@
                 <input type="checkbox" ng-model="$ctrl.selectedList.isSelectAll"
                     ng-change="$ctrl.selectAll($ctrl.selectedList.isSelectAll)" />
             </div>
-            <div ng-repeat="col in $ctrl.data[0].fields | orderBy:'priority' track by $index" ng-if="$index < 4"
-                class="col-md-2">
+            <div ng-repeat="col in $ctrl.data[0].fields | orderBy:'priority' track by $index" ng-if="$index < 4 && col.dataType != 23"
+                class="col-md-2" ng-if="">                
                 <div class="input-group input-group-xs">
                     <div class="input-group-prepend">
                         <div class="input-group-text"><i class="fas fa-search"></i></div>
@@ -47,7 +47,7 @@
                                 ng-model="item.priority" />
                         </small>
                     </div>
-                    <div ng-if="$index < 4" ng-repeat="val in item.values | orderBy: 'priority' track by $index"
+                    <div ng-if="$index < 4 && val.dataType != 23" ng-repeat="val in item.values | orderBy: 'priority' track by $index"
                         class="col-md-2 py-2">
                         <attribute-value-preview data="val"></attribute-value-preview>
                     </div>
