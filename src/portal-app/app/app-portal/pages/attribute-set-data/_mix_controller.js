@@ -232,4 +232,4 @@ app.controller('MixAttributeSetDataController',
                     $scope.$apply();
                 }
             };
-        }]);
+}]);

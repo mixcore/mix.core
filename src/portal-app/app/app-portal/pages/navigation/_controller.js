@@ -26,7 +26,7 @@ app.controller('NavigationController',
                     };
                 }
             };
-            $scope.saveSuccessCallback = function () {                
+            $scope.saveSuccessCallback = function () {
                 if ($scope.refDataModel) {
                     $scope.refDataModel.id = $scope.activedData.id;
                     $scope.refDataModel.attributeSetId = $scope.activedData.attributeSetId;
@@ -37,11 +37,11 @@ app.controller('NavigationController',
                     navService.save('portal', $scope.refDataModel).then(resp => {
                         if (resp.isSucceed) {
                             $rootScope.isBusy = false;
-                            if($scope.parentId){
-                                $location.url('/portal/navigation/details?dataId='+ $scope.parentId);
+                            if ($scope.refParentId) {
+                                $location.url('/portal/navigation/details?dataId=' + $scope.refParentId);
                             }
-                            else{
-                                $location.url('/portal/navigation/list?attributeSetId='+ $scope.activedData.attributeSetId);                    
+                            else {
+                                $location.url('/portal/navigation/list?attributeSetId=' + $scope.activedData.attributeSetId);
                             }
                             $scope.$apply();
                         } else {
@@ -100,7 +100,7 @@ app.controller('NavigationController',
                 $rootScope.preview('post', item, item.title, 'modal-lg');
             };
             $scope.edit = function (data) {
-                $scope.goToPath('/portal/attribute-set-data/details?dataId=' + data.id + '&attributeSetId=' + $scope.attributeSetId+ '&attributeSetName=' + $scope.attributeSetId)
+                $scope.goToPath('/portal/navigation/details?dataId=' + data.id + '&attributeSetId=' + $scope.attributeSetId + '&attributeSetName=' + $scope.attributeSetName);
             };
             $scope.remove = function (data) {
                 $rootScope.showConfirm($scope, 'removeConfirmed', [data.id], null, 'Remove', 'Deleted data will not able to recover, are you sure you want to delete this item?');
