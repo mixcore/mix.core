@@ -21,9 +21,9 @@
             <hr>
 
             <div ng-init="getList()" class="col-md-12 mb-4">
-                <attribute-set-values on-update="edit(data)" on-delete="remove(data)" on-apply-list="applyList()"
+                <navigation-values on-update="edit(data)" on-delete="remove(data)" on-apply-list="applyList()"
                     selected-list="selectedList" header="''" data="data">
-                </attribute-set-values>
+                </navigation-values>
             </div>
             <div class="col-md-12">
                 <paging class="small" page="request.pageIndex + 1" page-size="request.pageSize"

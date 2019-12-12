@@ -58,7 +58,7 @@
             };
             ctrl.select = function (nav) {
                 var current = $rootScope.findObjectByKey(ctrl.data.items, 'id', nav.id);
-                if(!nav.isActive && ctrl.callback){
+                if(!nav.isActive && ctrl.callback){                    
                     ctrl.callback({nav: nav, type: ctrl.type});
                 }
                 if (ctrl.isMultiple) {
@@ -72,7 +72,7 @@
                     }
                     current.isActive = !nav.isActive;
                 }
-            }
+            };
             ctrl.saveSelected = function () {
                 ctrl.selected = $rootScope.filterArray(ctrl.data, 'isActived', true);
                 setTimeout(() => {
