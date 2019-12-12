@@ -56,13 +56,14 @@ modules.component('menuItemForm', {
             ctrl.reload = async function () {
                 ctrl.attrData = angular.copy(ctrl.defaultData);
             };
-            ctrl.loadSelected = function(data, type){
-                if(data){
-                    ctrl.setFieldValue('id', data.id);
-                    ctrl.setFieldValue('specificulture', data.specificulture);
-                    ctrl.setFieldValue('title', data.title);
+            ctrl.loadSelected = function(nav, type){
+                console.log(nav, type);
+                if(nav){
+                    ctrl.setFieldValue('id', nav.id);
+                    ctrl.setFieldValue('specificulture', nav.specificulture);
+                    ctrl.setFieldValue('title', nav.title);
                     ctrl.setFieldValue('type', type);
-                    ctrl.setFieldValue('uri', data.detailsUrl);
+                    ctrl.setFieldValue('uri', nav.detailsUrl);
                 }
             };
             ctrl.submit = async function () {

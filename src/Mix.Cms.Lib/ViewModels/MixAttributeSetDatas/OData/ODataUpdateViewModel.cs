@@ -169,7 +169,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }));
 
             }
-            
             foreach (var item in Values)
             {
                 tasks.Add(Task.Run(() =>
@@ -178,52 +177,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }));
 
             }
-           
-            var relatedNav = context.MixRelatedAttributeData.Where(m => m.Specificulture == Specificulture && m.Id == Id);
-            foreach (var item in relatedNav)
-            {
-                switch (item.ParentType)
-                {
-                    case (int)MixEnums.MixAttributeSetDataType.Module:
-                        int.TryParse(item.ParentId, out int moduleId);
-                        var relatedModule = context.MixModule.FirstOrDefault(m => m.Id == moduleId);
-                        if (relatedModule!=null)
-                        {
-                            tasks.Add(Task.Run(() =>
-                            {
-                                var data = new MixModules.ReadListItemViewModel(relatedModule, context, transaction);
-                                data.RemoveCache(relatedModule, context, transaction);
-                            }));
-                        }
-                        break;
-                    case (int)MixEnums.MixAttributeSetDataType.Page:
-                        int.TryParse(item.ParentId, out int pageId);
-                        var relatedPage = context.MixPage.FirstOrDefault(m => m.Id == pageId);
-                        if (relatedPage != null)
-                        {
-                            tasks.Add(Task.Run(() =>
-                            {
-                                var data = new MixPages.ReadListItemViewModel(relatedPage, context, transaction);
-                                data.RemoveCache(relatedPage, context, transaction);
-                            }));
-                        }
-                        break;
-                    case (int)MixEnums.MixAttributeSetDataType.Post:
-                        int.TryParse(item.ParentId, out int postId);
-                        var relatedPost = context.MixPost.FirstOrDefault(m => m.Id == postId);
-                        if (relatedPost != null)
-                        {
-                            tasks.Add(Task.Run(() =>
-                            {
-                                var data = new MixPosts.ReadListItemViewModel(relatedPost, context, transaction);
-                                data.RemoveCache(relatedPost, context, transaction);
-                            }));
-                        }
-                        break;
-                }
-            }
             return tasks;
         }
+
         private void HandleEdm(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var getAttrSet = Mix.Cms.Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModel(m => m.Name == AttributeSetName || m.Id == AttributeSetId, _context, _transaction);
