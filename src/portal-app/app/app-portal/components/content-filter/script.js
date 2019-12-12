@@ -14,6 +14,7 @@
             ctrl.type = 'Page';
             ctrl.navs = [];
             ctrl.data = { items: [] }
+            ctrl.goToPath = $rootScope.goToPath;
             ctrl.loadData = async function (pageIndex) {
                 ctrl.request.query = ctrl.query + ctrl.srcId;
                 ctrl.navs = [];
