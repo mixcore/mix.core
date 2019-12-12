@@ -5,12 +5,15 @@
             <actions back-url="$ctrl.backUrl" ng-if="$ctrl.backUrl"></actions>
             <content-filter callback="$ctrl.loadSelected(nav,type)"></content-filter>
             <div class="card mb-4">
+                <div class="card-header text-right" ng-if="$ctrl.attrSetName=='menu_item'">
+                    <a href="/portal/navigation/details?dataId={{$ctrl.parentId}}" class="btn bnt-sm btn-primary px-3">
+                        <i class="fas fa-chevron-left"></i> Back
+                    </a>
+                    <a href="#" data-toggle="modal" data-target="#modal-content-filter" class="btn bnt-sm btn-primary px-3">
+                        <i class="fas fa-search"></i> Search links
+                    </a>
+                </div>
                 <div class="card-body">
-                    <div class="col-md-12" ng-if="$ctrl.attrSetName=='menu_item'">
-                        <a href="#" data-toggle="modal" data-target="#modal-content-filter" class="btn btn-link">
-                            <i class="fas fa-search"></i>
-                        </a>
-                    </div>
                     <div class="row">
                         <div class="col-sm-12">
                             <div ng-repeat="value in $ctrl.attrData.values | orderBy:'priority' track by $index">
@@ -28,7 +31,8 @@
                     <hr>
                     <div class="row">
                         <div class="col-sm-12 text-right">
-                            <button type="button" ng-click="$ctrl.submit()" class="btn btn-primary btn-round pull-right px-5"><i class="fas fa-save"></i> Save menu</button>
+                            <button type="button" ng-click="$ctrl.submit()" class="btn btn-primary btn-round pull-right px-5"><i class="fas fa-save"></i> Save
+                                menu</button>
                         </div>
                     </div>
                 </div>
