@@ -147,6 +147,7 @@ modules.component('menuItemEditor', {
         }
         ctrl.updateRefData = function(nav){
             ctrl.refDataModel = nav;
+            console.log(nav);
             var e = $(".pane-form-" + ctrl.attributeValue.field.referenceId)[0];
             angular.element(e).triggerHandler('click');
             // $location.url('/portal/attribute-set-data/details?dataId='+ item.id +'&attributeSetId=' + item.attributeSetId+'&parentType=' + item.parentType+'&parentId=' + item.parentId);
