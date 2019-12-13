@@ -1,33 +1,36 @@
 <div class="card mb-4">
     <h6 class="card-header">
-        Page types
+        Page types {{$ctrl.model}}
     </h6>
     <div class="card-body collapse show">
         <div class="custom-control custom-switch custom-control-inline col-3"
             ng-repeat="type in $ctrl.settings.pageTypes track by $index" ng-switch="type"
-            ng-class="{active: $index === $ctrl.page.type}" ng-click="$ctrl.page.type=$index;">
-            <input type="radio" ng-model="$ctrl.page.type" class="custom-control-input" value="{{$index}}"
+            ng-class="{active: $index == ($ctrl.model)}" ng-click="$ctrl.model=$index;">
+            <input type="radio" ng-model="$ctrl.model" class="custom-control-input" value="{{$index}}"
                 id="page_type_{{$index}}" name="page_type_{{$index}}">
+
+
+
             <label ng-switch-when="Blank" class="custom-control-label" for="page_type_{{$index}}"
-                ng-click="$ctrl.page.type=$index;">Blank</label>
+                ng-click="$ctrl.model=$index;">Blank</label>
             <label ng-switch-when="Post" class="custom-control-label" for="page_type_{{$index}}"
-                ng-click="$ctrl.page.type=$index;">Post</label>
+                ng-click="$ctrl.model=$index;">Post {{$index}}</label>
             <label ng-switch-when="ListPost" class="custom-control-label" for="page_type_{{$index}}"
-                ng-click="$ctrl.page.type=$index;">List Post</label>
+                ng-click="$ctrl.model=$index;">List Post</label>
             <label ng-switch-when="ListProduct" class="custom-control-label" for="page_type_{{$index}}"
-                ng-click="$ctrl.page.type=$index;">List Product</label>
+                ng-click="$ctrl.model=$index;">List Product</label>
             <label ng-switch-when="List" class="custom-control-label" for="page_type_{{$index}}"
-                ng-click="$ctrl.page.type=$index;">List</label>
+                ng-click="$ctrl.model=$index;">List</label>
             <label ng-switch-when="Home" class="custom-control-label" for="page_type_{{$index}}"
-                ng-click="$ctrl.page.type=$index;">Home</label>
+                ng-click="$ctrl.model=$index;">Home</label>
             <label ng-switch-when="StaticUrl" class="custom-control-label" for="page_type_{{$index}}"
-                ng-click="$ctrl.page.type=$index;">Static Url</label>
+                ng-click="$ctrl.model=$index;">Static Url</label>
             <label ng-switch-when="Modules" class="custom-control-label" for="page_type_{{$index}}"
-                ng-click="$ctrl.page.type=$index;">Modules</label>
+                ng-click="$ctrl.model=$index;">Modules</label>
             <label ng-switch-when="Gallery" class="custom-control-label" for="page_type_{{$index}}"
-                ng-click="$ctrl.page.type=$index;">Gallery</label>
+                ng-click="$ctrl.model=$index;">Gallery</label>
             <label ng-switch-when="System" class="custom-control-label" for="page_type_{{$index}}"
-                ng-click="$ctrl.page.type=$index;">System</label>
+                ng-click="$ctrl.model=$index;">System</label>
         </div>
     </div>
 </div>
@@ -36,14 +39,14 @@
 <!-- <label class="control-label">Page types</label><br>
 <div class="custom-control custom-switch custom-control-inline col-3"
     ng-repeat="type in $ctrl.settings.pageTypes track by $index" ng-switch="type"
-    ng-class="{active: $index === $ctrl.page.type}" ng-click="$ctrl.page.type=$index;">
+    ng-class="{active: $index === $ctrl.model}" ng-click="$ctrl.model=$index;">
 
 </div> -->
 <!-- <div class="btn-group btn-group-sm btn-group-toggle d-flex w-100" role="group" data-toggle="buttons">
     <label ng-repeat="type in $ctrl.settings.pageTypes track by $index" ng-switch="type"
-        ng-class="{active: $index === $ctrl.page.type}" class="btn btn-outline-primary btn-block mt-0"
-        ng-click="$ctrl.page.type=$index;">
-        <input ng-model="$ctrl.page.type" type="radio" value="{{$index}}" class="custom-control-input"
+        ng-class="{active: $index === $ctrl.model}" class="btn btn-outline-primary btn-block mt-0"
+        ng-click="$ctrl.model=$index;">
+        <input ng-model="$ctrl.model" type="radio" value="{{$index}}" class="custom-control-input"
             id="page_type_{{$index}}">
         <i ng-switch-when="Blank" class="mi mi-Preview mi-lg mi-fw" title="{{type}}"></i>
         <i ng-switch-when="Post" class="mi mi-ReadingList mi-lg" title="{{type}}"></i>
