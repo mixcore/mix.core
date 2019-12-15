@@ -318,6 +318,19 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'BaseODataService'
                 options);
             return decrypted.toString(CryptoJS.enc.Utf8);
         }
+        
+        $rootScope.ajaxSubmitForm = async function (form, url) {
+            var req = {
+                serviceBase: this.serviceBase,
+                method: 'POST',
+                url: url,
+                headers: { 'Content-Type': undefined },
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: form
+            };
+            return await commonService.getApiResult(req);
+        };
 
         $rootScope.translate = function (keyword, isWrap, defaultText) {
             if ($rootScope.globalSettings && ($rootScope.translator)) {

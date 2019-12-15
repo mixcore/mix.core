@@ -18,7 +18,42 @@ app.controller('MediaController', ['$scope', '$rootScope', 'ngAppSettings', '$ro
                 fileStream: ''
             }
         };
+        // multipart form   
+        $scope.formFile = null; 
         $scope.relatedMedias = [];
+        $scope.save = async function (data) {
+            $rootScope.isBusy = true;
+            if($scope.validate){
+                $scope.isValid = await $rootScope.executeFunctionByName('validate', $scope.validateArgs, $scope)
+            }
+            if($scope.isValid){
+                var resp = await service.save(data, $scope.formFile);
+                if (resp && resp.isSucceed) {
+                    $scope.activedData = resp.data;
+                    $rootScope.showMessage('success', 'success');
+    
+                    if ($scope.saveSuccessCallback) {
+                        $rootScope.executeFunctionByName('saveSuccessCallback', $scope.saveSuccessCallbackArgs, $scope);
+                    }
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                } else {
+                    if($scope.saveFailCallback){
+                        $rootScope.executeFunctionByName('saveFailCallback', $scope.saveSuccessCallbackArgs, $scope)
+                    }
+                    if (resp) {
+                        $rootScope.showErrors(resp.errors);
+                    }
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                }
+            }
+            else{
+                $rootScope.showErrors(['invalid model']);
+                $rootScope.isBusy = false;
+                $scope.$apply();
+            }
+        };
         $scope.uploadMedia = async function () {
             $rootScope.isBusy = true;
             var resp = await service.uploadMedia($scope.mediaFile);
