@@ -1,12 +1,12 @@
 <div class="card mb-4">
     <h6 class="card-header">
-        Page types {{$ctrl.model}}
+        Page types
     </h6>
-    <div class="card-body collapse show">
+    <div class="card-body collapse show" ng-if="$ctrl.model">
         <div class="custom-control custom-switch custom-control-inline col-3"
             ng-repeat="type in $ctrl.settings.pageTypes track by $index" ng-switch="type"
             ng-class="{active: $index === $ctrl.model}" ng-click="$ctrl.model=$index;">
-            <input type="radio" ng-model="$ctrl.model" class="custom-control-input" value="{{$index}}"
+            <input type="radio" ng-model="$ctrl.model" class="custom-control-input" ng-value="$index"
                 id="page_type_{{$index}}" name="page_type_{{$index}}">
 
 
