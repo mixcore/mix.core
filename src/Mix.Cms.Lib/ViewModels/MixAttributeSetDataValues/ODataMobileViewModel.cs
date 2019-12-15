@@ -65,14 +65,17 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         public ODataMobileViewModel() : base()
         {
             IsCache = false;
+            Repository.IsCache = false;
         }
 
         public ODataMobileViewModel(MixAttributeSetValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
             IsCache = false;
+            Repository.IsCache = false;
         }
 
         #endregion Contructors
+
         #region Override
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

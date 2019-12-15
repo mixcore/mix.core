@@ -74,19 +74,29 @@ app.controller('MixAttributeSetDataController',
                 }
             };
             $scope.import = async function () {
-                $rootScope.isBusy = true;
-                var form = document.getElementById('frm-import');
-                var result = await service.import($scope.attributeSetName, form['data'].files[0]);
-                if (result.isSucceed) {
-                    $rootScope.showMessage('success', 'success');
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
+                if($scope.validateDataFile()){                    
+                    $rootScope.isBusy = true;
+                    var form = document.getElementById('frm-import');
+                    var result = await service.import($scope.attributeSetName, form['data'].files[0]);
+                    if (result.isSucceed) {
+                        $rootScope.showMessage('success', 'success');
+                        $rootScope.isBusy = false;
+                        $scope.getList(0);
+                    }
+                    else {
+                        $rootScope.showMessage('failed');
+                        $rootScope.isBusy = false;
+                        $scope.$apply();
+                    }
                 }
-                else {
-                    $rootScope.showMessage('failed');
-                    $rootScope.isBusy = false;
-                    $scope.$apply();
-                }
+            };
+            $scope.validateDataFile = function (){
+                if (!$scope.importFile.file) {
+                    $rootScope.showMessage('Please choose data file', 'danger');
+                    return false;
+                } else {
+                    return true;
+                }                
             };
             $scope.sendMail = function (data) {
                 var email = '';
