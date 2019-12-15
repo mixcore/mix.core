@@ -500,10 +500,10 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             string importFolder = $"Imports/Structures/{_lang}";
             var result = new RepositoryResponse<bool>();
-            var model = FileRepository.Instance.SaveWebFile(assets, importFolder);
-            if (model != null)
+            var saveFile = FileRepository.Instance.SaveWebFile(assets, assets.FileName, importFolder);
+            if (saveFile.IsSucceed)
             {
-                var fileContent = FileRepository.Instance.GetWebFile($"{model.Filename}{model.Extension}", model.FileFolder);
+                var fileContent = FileRepository.Instance.GetWebFile($"{saveFile.Data.Filename}{saveFile.Data.Extension}", saveFile.Data.FileFolder);
                 var obj = JObject.Parse(fileContent.Content);
                 switch (obj["type"].Value<string>())
                 {

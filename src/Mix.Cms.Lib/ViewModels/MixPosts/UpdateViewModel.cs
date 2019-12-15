@@ -465,8 +465,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             foreach (var item in Pages)
             {
                 item.PostId = id;
-                item.Description = Title;
-                item.Image = ThumbnailUrl;
                 item.Status = MixEnums.MixContentStatus.Published;
                 if (item.IsActived)
                 {
@@ -1061,6 +1059,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 this.Pages = getPagePost.Data;
                 this.Pages.ForEach(c =>
                 {
+                    c.Description = c.Page.Title;
                     c.IsActived = MixPagePosts.ReadViewModel.Repository.CheckIsExists(n => n.PageId == c.PageId && n.PostId == Id, _context, _transaction);
                 });
             }

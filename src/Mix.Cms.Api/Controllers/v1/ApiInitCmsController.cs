@@ -238,7 +238,7 @@ namespace Mix.Cms.Api.Controllers.v1
             if (theme != null)
             {
                 string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
-                FileRepository.Instance.SaveWebFile(theme, importFolder);
+                FileRepository.Instance.SaveWebFile(theme, theme.FileName, importFolder);
                 data.TemplateAsset = new Lib.ViewModels.FileViewModel(theme, importFolder);
             }
             else

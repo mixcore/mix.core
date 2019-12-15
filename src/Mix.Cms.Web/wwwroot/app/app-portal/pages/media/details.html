@@ -1,6 +1,6 @@
 <!-- Main content -->
 <section class="" ng-init="getSingle()">
-    <form ng-if="activedData" ng-class="{'submitted': submitted}" ng-submit="save(activedData)" class="row">
+    <form ng-if="activedData" ng-class="{'submitted': submitted}" ng-submit="save(activedData)" class="row" enctype="multipart/form-data">
         <div class="col-8">
             <div class="card">
                 <h6 class="card-header">
@@ -33,8 +33,10 @@
 
             <div class="card">
                 <div class="card-body">
-                    <custom-image header="'Media Upload'" type="'Medias'" folder="activedData.folder" src-url="activedData.fullPath" src="activedData.fullPath" posted-file="activedData.mediaFile">
-                    </custom-image>
+                    {{formFile}}
+                    {{activedData.mediaFile.file}}
+                    <mix-file-upload header="'Media Upload'" type="'Medias'" folder="activedData.folder" accept="'audio/*,video/*,image/*'" src-url="activedData.fullPath" src="activedData.fullPath" media-file="activedData.mediaFile" form-file="formFile">
+                    </mix-file-upload>
                 </div>
             </div>
         </div>
