@@ -50,8 +50,17 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Values = MixAttributeSetValues.ReadViewModel
-                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
+            var getValues = MixAttributeSetValues.ReadViewModel
+                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
+            if (getValues.IsSucceed)
+            {
+                Values = getValues.Data.OrderBy(a => a.Priority).ToList();
+            }
+            else
+            {
+                Console.WriteLine(getValues.Exception);
+            }
+                
             Fields = MixAttributeFields.ReadViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
             foreach (var field in Fields.OrderBy(f => f.Priority))
             {

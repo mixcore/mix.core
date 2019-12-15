@@ -195,7 +195,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 tasks.Add(Task.Run(() =>
                 {
                     var data = new ReadViewModel(item, context, transaction);
-                    data.RemoveCache(item, context, transaction);
+                    data.GenerateCache(item, data, context, transaction);
                 }));
 
             }

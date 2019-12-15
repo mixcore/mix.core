@@ -32,10 +32,17 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 List<ImportViewModel> data = LoadFileData(culture, attributeSet, file);
                 foreach (var item in data)
                 {
-                    var saveResult = await item.SaveModelAsync(true, context, transaction);
+                    var saveResult = await item.SaveModelAsync(true, context, transaction);                    
                     ViewModelHelper.HandleResult(saveResult, ref result);
                 }
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+                //if (result.IsSucceed)
+                //{
+                //    foreach (var item in data)
+                //    {
+                //        item.GenerateCache(item.Model, item);
+                //    }
+                //}
                 return result;
             }
             catch (Exception ex)
