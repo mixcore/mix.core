@@ -17,6 +17,8 @@ app.controller('NavigationController',
                 $scope.attributeSetId = $routeParams.attributeSetId;
                 $scope.attributeSetName = $routeParams.attributeSetName;
                 $scope.dataId = $routeParams.dataId;
+                $scope.parentId = $routeParams.parentId;
+                $scope.parentType = $routeParams.parentType;
                 $scope.refParentId = $routeParams.refParentId;
                 $scope.refParentType = $routeParams.refParentType;
                 if ($scope.refParentId && $scope.refParentType) {
