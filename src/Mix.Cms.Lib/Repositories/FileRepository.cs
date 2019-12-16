@@ -9,6 +9,7 @@
 using Microsoft.AspNetCore.Http;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
+using Mix.Domain.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -557,16 +558,16 @@ namespace Mix.Cms.Lib.Repositories
             }
         }
 
-        public string SaveFile(IFormFile file, string fullPath)
+        public RepositoryResponse<FileViewModel> SaveFile(IFormFile file, string filename, string folder)
         {
+            var result = new RepositoryResponse<FileViewModel>();
             try
             {
                 if (file.Length > 0)
                 {
-                    CreateDirectoryIfNotExist(fullPath);
+                    CreateDirectoryIfNotExist(folder);
 
-                    string filename = file.FileName;
-                    string filePath = CommonHelper.GetFullPath(new string[] { fullPath, filename });
+                    string filePath = CommonHelper.GetFullPath(new string[] { folder, filename });
                     if (File.Exists(filePath))
                     {
                         DeleteFile(filePath);
@@ -575,17 +576,28 @@ namespace Mix.Cms.Lib.Repositories
                     {
                         file.CopyTo(stream);
                     }
-                    return filename;
+                    result.IsSucceed = true;
+                    result.Data =  new FileViewModel()
+                    {
+                        Filename = filename.Substring(0, file.FileName.LastIndexOf('.')),
+                        Extension = filename.Substring(file.FileName.LastIndexOf('.')),
+                        FileFolder = folder
+                    };
+                    
                 }
                 else
                 {
-                    return string.Empty;
+                    result.IsSucceed = false;
+                    result.Errors.Add("File not found");
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                return string.Empty;
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
             }
+            return result;
         }
 
         public bool SaveFile(FileViewModel file)
@@ -636,21 +648,12 @@ namespace Mix.Cms.Lib.Repositories
             }
         }
 
-        public FileViewModel SaveWebFile(IFormFile file, string folder)
+        public RepositoryResponse<FileViewModel> SaveWebFile(IFormFile file, string filename, string folder)
         {
             try
             {
-                string fullPath = CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.WebRootPath,
-                    folder
-                });
-                string filename = SaveFile(file, fullPath);
-                return new FileViewModel()
-                {
-                    Filename = file.FileName.Substring(0, file.FileName.LastIndexOf('.')),
-                    Extension = file.FileName.Substring(file.FileName.LastIndexOf('.')),
-                    FileFolder = folder
-                };
+                string fullPath = $"{MixConstants.Folder.WebRootPath}/{folder}";
+                return SaveFile(file, filename, fullPath);
             }
             catch
             {

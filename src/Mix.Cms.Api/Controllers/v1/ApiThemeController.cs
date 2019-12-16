@@ -199,13 +199,13 @@ namespace Mix.Cms.Api.Controllers.v1
             if (assets != null)
             {
                 data.Asset = new Lib.ViewModels.FileViewModel(assets, data.AssetFolder);
-                FileRepository.Instance.SaveWebFile(assets, data.AssetFolder);
+                FileRepository.Instance.SaveWebFile(assets, assets.FileName, data.AssetFolder);
             }
             if (theme != null)
             {
                 string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
                 data.TemplateAsset = new Lib.ViewModels.FileViewModel(theme, importFolder);
-                FileRepository.Instance.SaveWebFile(theme, importFolder);
+                FileRepository.Instance.SaveWebFile(theme, theme.FileName, importFolder);
             }
 
 

@@ -42,7 +42,7 @@ namespace Mix.Cms.Web.Controllers
 
         #region Routes
         [Route("")]
-        public async System.Threading.Tasks.Task<IActionResult> Index()
+        public IActionResult Index()
         {
             if (_forbidden)
             {
