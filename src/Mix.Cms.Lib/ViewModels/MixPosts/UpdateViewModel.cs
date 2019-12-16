@@ -465,8 +465,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             foreach (var item in Pages)
             {
                 item.PostId = id;
-                item.Description = Title;
-                item.Image = ThumbnailUrl;
                 item.Status = MixEnums.MixContentStatus.Published;
                 if (item.IsActived)
                 {
@@ -830,28 +828,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             return result;
         }
 
-        private RepositoryResponse<bool> SaveSubModules(int id, MixCmsContext _context, IDbContextTransaction _transaction)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            foreach (var navModule in ModuleNavs)
-            {
-                navModule.PostId = id;
-                navModule.Specificulture = Specificulture;
-                navModule.Status = MixEnums.MixContentStatus.Published;
-                if (navModule.IsActived)
-                {
-                    var saveResult = navModule.SaveModel(false, _context, _transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-                }
-                else
-                {
-                    var saveResult = navModule.RemoveModel(false, _context, _transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-                }
-            }
-            return result;
-        }
-
         private RepositoryResponse<bool> SaveMedias(int id, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -1061,6 +1037,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 this.Pages = getPagePost.Data;
                 this.Pages.ForEach(c =>
                 {
+                    c.Description = c.Page.Title;
                     c.IsActived = MixPagePosts.ReadViewModel.Repository.CheckIsExists(n => n.PageId == c.PageId && n.PostId == Id, _context, _transaction);
                 });
             }
@@ -1099,15 +1076,17 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                             AttributeSetId = Attributes.Id,
                             AttributeSetName = Attributes.Name
                         }
-                        );
-                    AttributeData.Data = new MixAttributeSetDatas.UpdateViewModel(
+                        )
+                    {
+                        Data = new MixAttributeSetDatas.UpdateViewModel(
                     new MixAttributeSetData()
                     {
                         Specificulture = Specificulture,
                         AttributeSetId = Attributes.Id,
-                        AttributeSetName = Attributes.Name                        
+                        AttributeSetName = Attributes.Name
                     }
-                    );
+                    )
+                    };
                 }
                 foreach (var field in Attributes.Fields.OrderBy(f => f.Priority))
                 {
@@ -1116,11 +1095,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     {
                         val = new MixAttributeSetValues.UpdateViewModel(
                             new MixAttributeSetValue() { AttributeFieldId = field.Id }
-                            , _context, _transaction);
-                        val.Field = field;
-                        val.AttributeFieldName = field.Name;
-                        val.Priority = field.Priority;
-                        val.StringValue = field.DefaultValue;
+                            , _context, _transaction)
+                        {
+                            Field = field,
+                            AttributeFieldName = field.Name,
+                            Priority = field.Priority,
+                            StringValue = field.DefaultValue
+                        };
                         AttributeData.Data.Values.Add(val);
                     }
                     val.Priority = field.Priority;

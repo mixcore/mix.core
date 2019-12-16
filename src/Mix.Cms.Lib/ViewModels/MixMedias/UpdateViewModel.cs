@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
@@ -110,6 +111,8 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
 
         [JsonProperty("mediaFile")]
         public FileViewModel MediaFile { get; set; }
+        [JsonProperty("file")]
+        public IFormFile File { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -131,13 +134,13 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
 
         public override MixMedia ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (CreatedDateTime == default(DateTime))
+            if (CreatedDateTime == default)
             {
                 Id = Id > 0 ? Id : UpdateViewModel.Repository.Max(c => c.Id).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
                 IsClone = true;
                 Cultures = Cultures ?? LoadCultures(Specificulture, _context, _transaction);
-                Cultures.ForEach(c => c.IsSupported = true);
+                Cultures.ForEach(c => c.IsSupported = true);                
             }
             if (string.IsNullOrEmpty(TargetUrl))
             {
@@ -148,26 +151,42 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
 
         public override void Validate(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            
             if (MediaFile?.FileStream != null)
             {
+                FileFolder = $"wwwroot/{MixService.GetTemplateUploadFolder(Specificulture)}/{DateTime.UtcNow.ToString("yyyy-MM")}";
                 MediaFile.Filename = SeoHelper.GetSEOString(MediaFile.Filename).ToLower() + Guid.NewGuid().ToString("N");
-                MediaFile.FileFolder = CommonHelper.GetFullPath(new[] {
-                    //MixService.GetConfig<string>("UploadFolder"),
-                    MixService.GetTemplateUploadFolder(Specificulture),
-                    DateTime.UtcNow.ToString("yyyy-MM")
-                }); ;
+                MediaFile.FileFolder = FileFolder;
                 var isSaved = FileRepository.Instance.SaveWebFile(MediaFile);
                 if (isSaved)
                 {
                     Extension = MediaFile.Extension.ToLower();
                     FileName = MediaFile.Filename;
                     FileFolder = MediaFile.FileFolder;
+                    if (string.IsNullOrEmpty(Title))
+                    {
+                        Title = FileName;
+                    }
                 }
                 else
                 {
                     IsValid = false;
                 }
 
+            }
+            else
+            {
+                if (File!=null)
+                {
+                    FileFolder = $"{MixService.GetTemplateUploadFolder(Specificulture)}/{DateTime.UtcNow.ToString("yyyy-MM")}";
+                    FileName = SeoHelper.GetSEOString(File.FileName.Substring(0, File.FileName.LastIndexOf('.'))) + DateTime.UtcNow.Ticks;
+                    Extension = File.FileName.Substring(File.FileName.LastIndexOf('.'));
+                    IsValid = FileRepository.Instance.SaveWebFile(File, $"{FileName}{Extension}", FileFolder).IsSucceed;
+                    if (string.IsNullOrEmpty(Title))
+                    {
+                        Title = FileName;
+                    }
+                }
             }
             FileType = FileType ?? "image";
             base.Validate(_context, _transaction);

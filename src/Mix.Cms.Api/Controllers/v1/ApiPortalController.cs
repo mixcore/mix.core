@@ -98,7 +98,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("all-settings")]
         public RepositoryResponse<JObject> AllSettingsAsync()
         {
-            return getAllSettings();
+            return GetAllSettings();
         }
 
         [AllowAnonymous]
@@ -213,7 +213,7 @@ namespace Mix.Cms.Api.Controllers.v1
             var lastUpdate = MixService.GetConfig<DateTime>("LastUpdateConfiguration");
             if (lastSync.ToUniversalTime() < lastUpdate)
             {
-                return getAllSettings();
+                return GetAllSettings();
             }
             else
             {
@@ -500,10 +500,10 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             string importFolder = $"Imports/Structures/{_lang}";
             var result = new RepositoryResponse<bool>();
-            var model = FileRepository.Instance.SaveWebFile(assets, importFolder);
-            if (model != null)
+            var saveFile = FileRepository.Instance.SaveWebFile(assets, assets.FileName, importFolder);
+            if (saveFile.IsSucceed)
             {
-                var fileContent = FileRepository.Instance.GetWebFile($"{model.Filename}{model.Extension}", model.FileFolder);
+                var fileContent = FileRepository.Instance.GetWebFile($"{saveFile.Data.Filename}{saveFile.Data.Extension}", saveFile.Data.FileFolder);
                 var obj = JObject.Parse(fileContent.Content);
                 switch (obj["type"].Value<string>())
                 {
@@ -543,7 +543,7 @@ namespace Mix.Cms.Api.Controllers.v1
         #endregion Post
 
         #region Helpers
-        private RepositoryResponse<JObject> getAllSettings()
+        private RepositoryResponse<JObject> GetAllSettings()
         {
             var cultures = CommonRepository.Instance.LoadCultures();
             var culture = cultures.FirstOrDefault(c => c.Specificulture == _lang);

@@ -263,12 +263,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 }
                 else
                 {
-                    return default(T);
+                    return default;
                 }
             }
             else
             {
-                return default(T);
+                return default;
             }
 
         }
