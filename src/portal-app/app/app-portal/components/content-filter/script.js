@@ -29,7 +29,7 @@
                     var d = new Date(ctrl.request.toDate);
                     ctrl.request.toDate = d.toISOString();
                 }
-
+                
                 switch (ctrl.type) {
                     case 'Page':
                         var response = await pageService.getList(ctrl.request);
@@ -48,6 +48,8 @@
                         var response = await postService.getList(ctrl.request);
                         if (response.isSucceed) {
                             ctrl.data = response.data;
+                            $rootScope.isBusy = false;
+                            $scope.$apply();
                         }
                         else {
                             $rootScope.showErrors(response.errors);
