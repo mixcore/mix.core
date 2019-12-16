@@ -134,7 +134,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
 
         public override MixMedia ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (CreatedDateTime == default(DateTime))
+            if (CreatedDateTime == default)
             {
                 Id = Id > 0 ? Id : UpdateViewModel.Repository.Max(c => c.Id).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;

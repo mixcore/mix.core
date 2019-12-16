@@ -98,7 +98,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("all-settings")]
         public RepositoryResponse<JObject> AllSettingsAsync()
         {
-            return getAllSettings();
+            return GetAllSettings();
         }
 
         [AllowAnonymous]
@@ -213,7 +213,7 @@ namespace Mix.Cms.Api.Controllers.v1
             var lastUpdate = MixService.GetConfig<DateTime>("LastUpdateConfiguration");
             if (lastSync.ToUniversalTime() < lastUpdate)
             {
-                return getAllSettings();
+                return GetAllSettings();
             }
             else
             {
@@ -543,7 +543,7 @@ namespace Mix.Cms.Api.Controllers.v1
         #endregion Post
 
         #region Helpers
-        private RepositoryResponse<JObject> getAllSettings()
+        private RepositoryResponse<JObject> GetAllSettings()
         {
             var cultures = CommonRepository.Instance.LoadCultures();
             var culture = cultures.FirstOrDefault(c => c.Specificulture == _lang);

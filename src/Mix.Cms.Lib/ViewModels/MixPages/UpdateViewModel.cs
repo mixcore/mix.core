@@ -561,15 +561,17 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                             AttributeSetId = Attributes.Id,
                             AttributeSetName = Attributes.Name
                         }
-                        );
-                    AttributeData.Data = new MixAttributeSetDatas.UpdateViewModel(
+                        )
+                    {
+                        Data = new MixAttributeSetDatas.UpdateViewModel(
                     new MixAttributeSetData()
                     {
                         Specificulture = Specificulture,
                         AttributeSetId = Attributes.Id,
                         AttributeSetName = Attributes.Name
                     }
-                    );
+                    )
+                    };
                 }
                 foreach (var field in Attributes.Fields.OrderBy(f => f.Priority))
                 {
@@ -578,10 +580,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     {
                         val = new MixAttributeSetValues.UpdateViewModel(
                             new MixAttributeSetValue() { AttributeFieldId = field.Id }
-                            , _context, _transaction);
-                        val.Field = field;
-                        val.AttributeFieldName = field.Name;
-                        val.Priority = field.Priority;
+                            , _context, _transaction)
+                        {
+                            Field = field,
+                            AttributeFieldName = field.Name,
+                            Priority = field.Priority
+                        };
                         AttributeData.Data.Values.Add(val);
                     }
                     val.Priority = field.Priority;

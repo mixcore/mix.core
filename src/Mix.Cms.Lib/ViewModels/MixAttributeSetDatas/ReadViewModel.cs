@@ -69,11 +69,13 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     val = new MixAttributeSetValues.ReadViewModel(
                         new MixAttributeSetValue() { AttributeFieldId = field.Id }
-                        , _context, _transaction);
-                    val.Field = field;
-                    val.AttributeFieldName = field.Name;
-                    val.StringValue = field.DefaultValue;
-                    val.Priority = field.Priority;
+                        , _context, _transaction)
+                    {
+                        Field = field,
+                        AttributeFieldName = field.Name,
+                        StringValue = field.DefaultValue,
+                        Priority = field.Priority
+                    };
                     Values.Add(val);
                 }
                 val.AttributeSetName = AttributeSetName;
