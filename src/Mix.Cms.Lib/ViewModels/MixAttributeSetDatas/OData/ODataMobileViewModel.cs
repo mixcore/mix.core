@@ -110,10 +110,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             AttributeFieldName = field.Name,
 
                         }
-                        , _context, _transaction);
-                    val.StringValue = field.DefaultValue;
-                    val.Priority = field.Priority;
-                    val.Field = field;
+                        , _context, _transaction)
+                    {
+                        StringValue = field.DefaultValue,
+                        Priority = field.Priority,
+                        Field = field
+                    };
                     Values.Add(val);
                 }
                 val.Priority = field.Priority;
@@ -531,10 +533,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         private void ParseData()
         {
-            Data = new JObject();
-            Data.Add(new JProperty("id", Id));
-            Data.Add(new JProperty("createdDateTime", CreatedDateTime));
-            Data.Add(new JProperty("details", $"/api/v1/odata/{Specificulture}/attribute-set-data/mobile/{Id}"));
+            Data = new JObject
+            {
+                new JProperty("id", Id),
+                new JProperty("createdDateTime", CreatedDateTime),
+                new JProperty("details", $"/api/v1/odata/{Specificulture}/attribute-set-data/mobile/{Id}")
+            };
             foreach (var item in Values.OrderBy(v => v.Priority))
             {
                 item.AttributeFieldName = item.Field.Name;

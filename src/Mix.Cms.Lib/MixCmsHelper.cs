@@ -114,7 +114,7 @@ namespace Mix.Cms.Lib
             return cates;
         }
 
-        public static string GetRouterUrl(object routeValues, HttpRequest request, IUrlHelper Url)
+        public static string GetRouterUrl(object routeValues, HttpRequest request)
         {
             Type objType = routeValues.GetType();
             string url = "";
@@ -156,8 +156,7 @@ namespace Mix.Cms.Lib
                 return false;
             }
             number = number.Replace(",", "");
-
-            return double.TryParse(number, out double t);
+            return double.TryParse(number, out _);
         }
 
         public static double ReversePrice(string formatedPrice)

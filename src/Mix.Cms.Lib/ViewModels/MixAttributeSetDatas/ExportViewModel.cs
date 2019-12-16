@@ -97,15 +97,18 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (val == null)
                 {
                     val = new MixAttributeSetValues.ODataMobileViewModel(
-                        new MixAttributeSetValue() {
+                        new MixAttributeSetValue()
+                        {
                             AttributeFieldId = field.Id,
-                            AttributeFieldName = field.Name, 
-                            
+                            AttributeFieldName = field.Name,
+
                         }
-                        , _context, _transaction);
-                    val.StringValue = field.DefaultValue;
-                    val.Priority = field.Priority;
-                    val.Field = field;
+                        , _context, _transaction)
+                    {
+                        StringValue = field.DefaultValue,
+                        Priority = field.Priority,
+                        Field = field
+                    };
                     Values.Add(val);
                 }
                 val.Priority = field.Priority;
