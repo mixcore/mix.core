@@ -114,7 +114,7 @@ namespace Mix.Cms.Lib
             return cates;
         }
 
-        public static string GetRouterUrl(object routeValues, HttpRequest request)
+        public static string GetRouterUrl(object routeValues, HttpRequest request, IUrlHelper Url)
         {
             Type objType = routeValues.GetType();
             string url = "";
