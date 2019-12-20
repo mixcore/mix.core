@@ -181,7 +181,12 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
                     FileFolder = $"{MixService.GetTemplateUploadFolder(Specificulture)}/{DateTime.UtcNow.ToString("yyyy-MM")}";
                     FileName = SeoHelper.GetSEOString(File.FileName.Substring(0, File.FileName.LastIndexOf('.'))) + DateTime.UtcNow.Ticks;
                     Extension = File.FileName.Substring(File.FileName.LastIndexOf('.'));
-                    IsValid = FileRepository.Instance.SaveWebFile(File, $"{FileName}{Extension}", FileFolder).IsSucceed;
+                    var saveFile = FileRepository.Instance.SaveWebFile(File, $"{FileName}{Extension}", FileFolder);
+                    if (saveFile.IsSucceed)
+                    {
+                        IsValid = false;
+                        Errors.AddRange(saveFile.Errors);
+                    }
                     if (string.IsNullOrEmpty(Title))
                     {
                         Title = FileName;

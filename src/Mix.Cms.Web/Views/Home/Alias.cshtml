@@ -3,6 +3,7 @@
     string layout = Model.Layout ?? "Masters/_Layout";
     Layout = $"Templates/{master}/{layout}";
     var materTemplate = await MixCmsHelper.GetTemplateByPath(layout);
+    var navs = await MixCmsHelper.GetNavigation("top", ViewBag.culture);
 }
 <div>
     <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
@@ -13,6 +14,10 @@
     {
         try
         {
+            foreach (var item in navs)
+            {
+                @item.ToString()
+            }
             <partial name="@Model.TemplatePath" model="@Model" />
         }
         catch (System.InvalidOperationException invalidOperationException)
