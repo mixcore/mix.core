@@ -74,44 +74,22 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         }
         public override MixAttributeSetData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (string.IsNullOrEmpty(Id))
+            Id = Guid.NewGuid().ToString();
+            CreatedDateTime = DateTime.UtcNow;
+            Values = new List<MixAttributeSetValues.ODataMobileViewModel>();            
+            foreach (var field in Fields)
             {
-                Id = Guid.NewGuid().ToString();
-                CreatedDateTime = DateTime.UtcNow;
-                Priority = Repository.Count(m => m.AttributeSetName == AttributeSetName && m.Specificulture == Specificulture, _context, _transaction).Data + 1;
-
-
-            }
-            Values = Values ?? MixAttributeSetValues.ODataMobileViewModel
-                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-            Fields = MixAttributeFields.ODataMobileViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
-
-
-            if (string.IsNullOrEmpty(AttributeSetName))
-            {
-                AttributeSetName = _context.MixAttributeSet.First(m => m.Id == AttributeSetId)?.Name;
-            }
-            foreach (var field in Fields.OrderBy(f => f.Priority))
-            {
-                var val = Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
-                if (val == null)
+                var val = new MixAttributeSetValues.ODataMobileViewModel()
                 {
-                    val = new MixAttributeSetValues.ODataMobileViewModel(
-                        new MixAttributeSetValue()
-                        {
-                            AttributeFieldId = field.Id,
-                            AttributeFieldName = field.Name,
-
-                        }
-                        , _context, _transaction)
-                    {
-                        StringValue = field.DefaultValue,
-                        Priority = field.Priority,
-                        Field = field
-                    };
-                    Values.Add(val);
-                }
+                    AttributeFieldId = field.Id,
+                    AttributeFieldName = field.Name,
+                    StringValue = field.DefaultValue,
+                    Priority = field.Priority,
+                    Field = field
+                };
+                
                 val.Priority = field.Priority;
+                val.DataType = field.DataType;
                 val.AttributeSetName = AttributeSetName;
                 if (Data[val.AttributeFieldName] != null)
                 {
@@ -149,37 +127,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     }
 
                 }
-                else
-                {
-                    Data.Add(ParseValue(val));
-                }
+                Values.Add(val);
             }
 
-            // Save Edm html
-            var getAttrSet = Mix.Cms.Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModel(m => m.Name == AttributeSetName, _context, _transaction);
-            var getEdm = Lib.ViewModels.MixTemplates.UpdateViewModel.GetTemplateByPath(getAttrSet.Data.EdmTemplate, Specificulture);
-            var edmField = Values.FirstOrDefault(f => f.AttributeFieldName == "edm");
-            if (edmField != null && getEdm.IsSucceed && !string.IsNullOrEmpty(getEdm.Data.Content))
-            {
-                string body = getEdm.Data.Content;
-                foreach (var prop in Data.Properties())
-                {
-                    body = body.Replace($"[[{prop.Name}]]", Data[prop.Name].Value<string>());
-                }
-                var edmFile = new FileViewModel()
-                {
-                    Content = body,
-                    Extension = ".html",
-                    FileFolder = "edms",
-                    Filename = $"{getAttrSet.Data.EdmSubject}-{Id}"
-                };
-                if (FileRepository.Instance.SaveWebFile(edmFile))
-                {
-                    Data["edm"] = edmFile.WebPath;
-                    edmField.StringValue = edmFile.WebPath;
-                }
-            }
-            //End save edm
             return base.ParseModel(_context, _transaction); ;
         }
         public override void GenerateCache(MixAttributeSetData model, ImportViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
