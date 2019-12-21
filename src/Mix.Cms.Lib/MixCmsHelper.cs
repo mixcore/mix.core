@@ -280,7 +280,7 @@ namespace Mix.Cms.Lib
 
         }
 
-        public static async System.Threading.Tasks.Task<JObject> GetNavigation(string name, string culture)
+        public static async System.Threading.Tasks.Task<ViewModels.MixAttributeSetDatas.Navigation> GetNavigation(string name, string culture)
         {
             var navs = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.NavigationViewModel>(culture, "navigation", "equal", "name", name);
             return navs.Data.FirstOrDefault()?.Data;
