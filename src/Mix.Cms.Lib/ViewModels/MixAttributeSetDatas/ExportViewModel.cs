@@ -72,9 +72,13 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Values = MixAttributeSetValues.ODataMobileViewModel
-                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-            ParseData();
+            var getValues = MixAttributeSetValues.ODataMobileViewModel
+                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
+            if (getValues.IsSucceed)
+            {
+                Values = getValues.Data.OrderBy(a => a.Priority).ToList();
+                ParseData();
+            }
         }
         public override MixAttributeSetData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

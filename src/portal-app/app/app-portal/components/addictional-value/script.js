@@ -14,38 +14,7 @@ modules.component('addictionalValue', {
             ctrl.settings = $rootScope.globalSettings;
             ctrl.$onInit = async function () {
             };
-            ctrl.addAttr = function () {
-                
-                if (ctrl.field.name) {
-                    var current = $rootScope.findObjectByKey(ctrl.model.attributeData.data.values, 'attributeFieldName', ctrl.field.name);
-                    if (current) { 
-                        $rootScope.showErrors(['Field ' + ctrl.field.name + ' existed!']);
-                    }
-                    else {
-                        var t = angular.copy(ctrl.field);
-                        t.priority = ctrl.model.attributeData.data.values.length + 1;
-                        ctrl.value.attributeFieldName = ctrl.field.name;
-                        ctrl.value.dataType = ctrl.field.dataType;
-                        ctrl.value.priority = t.priority;
-                        ctrl.value.field = t;
-                        ctrl.model.attributeData.data.values.push(ctrl.value);
-
-                        //reset field option
-                        ctrl.field.title = '';
-                        ctrl.field.name = '';
-                        ctrl.field.dataType = 0;
-                    }
-                }
-                else {
-                    $rootScope.showErrors(['Please Add Field Name']);
-                }
-            };
-
             
-            ctrl.generateName = function (col) {
-                col.name = $rootScope.generateKeyword(col.title, '_');
-            };
-
             ctrl.updateOrders = function (index) {
                 if (index > ctrl.dragStartIndex) {
                     ctrl.fields.splice(ctrl.dragStartIndex, 1);

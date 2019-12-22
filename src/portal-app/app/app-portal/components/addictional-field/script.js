@@ -23,17 +23,19 @@ modules.component('addictionalField', {
                     }
                     else {
                         var t = angular.copy(ctrl.field);
+                        var value = {};
                         t.priority = ctrl.model.attributeData.data.values.length + 1;
-                        ctrl.value.attributeFieldName = ctrl.field.name;
-                        ctrl.value.dataType = ctrl.field.dataType;
-                        ctrl.value.priority = t.priority;
-                        ctrl.value.field = t;
-                        ctrl.model.attributeData.data.values.push(ctrl.value);
+                        
+                        value.attributeFieldName = ctrl.field.name;
+                        value.dataType = ctrl.field.dataType;
+                        value.priority = t.priority;
+                        value.field = t;
+                        ctrl.model.attributeData.data.values.push(value);
 
                         //reset field option
                         ctrl.field.title = '';
                         ctrl.field.name = '';
-                        ctrl.field.dataType = 0;
+                        ctrl.field.dataType = 7;
                     }
                 }
                 else {

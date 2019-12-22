@@ -99,15 +99,30 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (result.IsSucceed)
             {
+                var addictionalSet = _context.MixAttributeSet.FirstOrDefault(m => m.Name == "addictional_field");
                 foreach (var item in Values)
                 {
                     if (result.IsSucceed)
                     {
-                        item.Priority = item.Field?.Priority??item.Priority;
-                        item.DataId = parent.Id;
-                        item.Specificulture = parent.Specificulture;
-                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
+
+                        if (addictionalSet != null && item.Field != null && item.Field.Id == 0)
+                        {
+                            // Add field to addictional_field set
+                            item.Field.AttributeSetId = addictionalSet.Id;
+                            item.Field.AttributeSetName = addictionalSet.Name;
+                            var saveField = await item.Field.SaveModelAsync(false, _context, _transaction);
+                            ViewModelHelper.HandleResult(saveField, ref result);
+                        }
+                        if (result.IsSucceed)
+                        {
+                            item.AttributeFieldId = item.Field.Id;
+                            item.AttributeFieldName = item.Field.Name;
+                            item.Priority = item.Field?.Priority ?? item.Priority;
+                            item.DataId = parent.Id;
+                            item.Specificulture = parent.Specificulture;
+                            var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+                            ViewModelHelper.HandleResult(saveResult, ref result);
+                        }
                     }
                     else
                     {

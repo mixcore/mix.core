@@ -38,7 +38,16 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public List<MixAttributeFields.ReadViewModel> Fields { get; set; }
 
         [JsonProperty("data")]
-        public Navigation Data { get; set; }
+        public JObject Data { get; set; }
+
+        [JsonProperty("nav")]
+        public Navigation Nav { get {
+                if (AttributeSetName == "navigation" && Data!=null)
+                {
+                    return Data.ToObject<Navigation>();
+                }
+                return null;
+            } }
         #endregion
         #endregion Properties
 
@@ -58,18 +67,16 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var obj = new JObject
+            Data = new JObject
             {
-                new JProperty("id", Id),
+                new JProperty("id", Id)
             };
             Values = MixAttributeSetValues.NavigationViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
             foreach (var item in Values.OrderBy(v => v.Priority))
             {
-                obj.Add(ParseValue(item));
+                Data.Add(ParseValue(item));
             }
-
-            Data = obj.ToObject<Navigation>();
         }
         
         #region Async
@@ -252,6 +259,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public string Title { get; set; }
         [JsonProperty("uri")]
         public string Uri { get; set; }
+        [JsonProperty("icon")]
+        public string Icon { get; set; }
         [JsonProperty("type")]
         public string Type { get; set; }
         [JsonProperty("target")]
@@ -260,6 +269,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public string Classes { get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
+        [JsonProperty("isActive")]
+        public bool IsActive { get; set; }
         [JsonProperty("menu_items")]
         public List<MenuItem> MenuItems { get; set; }
     }
