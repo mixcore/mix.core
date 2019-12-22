@@ -490,12 +490,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 Attributes = new List<MixAttributeFields.UpdateViewModel>();
                 foreach (var item in AttributeData.Data.Values)
                 {
-                    Attributes.Add(new MixAttributeFields.UpdateViewModel()
-                    {
-                        Name = item.AttributeFieldName,
-                        DataType = item.DataType,
-                        Priority = item.Priority
-                    });
+                    Attributes.Add(item.Field);
                 }
             }
         }

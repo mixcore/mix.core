@@ -2,7 +2,7 @@
     <h6 class="card-header">
         Module types
     </h6>
-    <div class="card-body collapse show" ng-if="$ctrl.model != undefined">
+    <div class="card-body collapse show">
         <div class="custom-control custom-switch custom-control-inline col-3"
             ng-repeat="type in $ctrl.settings.moduleTypes track by $index" ng-switch="type"
             ng-class="{active: $index == ($ctrl.model)}" ng-click="$ctrl.model=$index;">
