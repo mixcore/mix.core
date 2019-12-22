@@ -356,8 +356,9 @@ namespace Mix.Cms.Api.Controllers.v1
                         return new RepositoryResponse<string>()
                         {
                             IsSucceed = getPage.IsSucceed,
-                            Data = MixCmsHelper.GetRouterUrl(new { culture = _lang, action = "post", seoName = getPage.Data.SeoName }, Request, Url)
-                        };
+                            Data = MixCmsHelper.GetRouterUrl(
+                                new { culture = _lang, seoName = getPage.Data.SeoName }, Request, Url)
+                    };
 
                     }
                     else
