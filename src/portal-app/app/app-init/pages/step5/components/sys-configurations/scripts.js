@@ -5,8 +5,8 @@ app.component('initSysConfigurations', {
         var ctrl = this; 
         ctrl.data = [];
         ctrl.$onInit = function(){
-            ctrl.data = $rootScope.filterArray(ctrl.configurations, 'category', 'System');
-        } 
+            ctrl.data = $rootScope.filterArray(ctrl.configurations, ['category'], ['System']);
+        };
     }],
     bindings: {
         configurations: '=',

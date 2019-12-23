@@ -19,8 +19,9 @@
                 <post-medias post="$ctrl.model" medias="$ctrl.model.mediaNavs"></post-medias>
             </pane-v>
             <pane-v header="Related">
-                <related-navs request="request" source-id="$ctrl.model.id" culture="$ctrl.model.specificulture"
-                    prefix="'post'" navs="$ctrl.model.postNavs" data="data" load-data="getListRelated(pageIndex)">
+                <related-navs request="$ctrl.request" source-id="$ctrl.model.id" culture="$ctrl.model.specificulture"
+                    prefix="'post'" navs="$ctrl.model.postNavs" data="$ctrl.relatedData"
+                    load-data="$ctrl.getListRelated(pageIndex)">
                 </related-navs>
             </pane-v>
         </tabs-v>
