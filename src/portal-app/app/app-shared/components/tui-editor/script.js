@@ -34,7 +34,6 @@
             }; 
             ctrl.updateContent = function () {
                 ctrl.content = ctrl.editor.getMarkdown();
-                console.log(ctrl.content);
             };
             
         }

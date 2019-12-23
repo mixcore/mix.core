@@ -262,7 +262,7 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'BaseODataService'
             var from = 'bottom';
             var align = 'right';
             $.notify({
-                icon: "now-ui-icons ui-1_bell-53",
+                icon: "fas fa-bell",
                 message: $rootScope.translate(content)
 
             }, {
@@ -318,6 +318,19 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'BaseODataService'
                 options);
             return decrypted.toString(CryptoJS.enc.Utf8);
         }
+        
+        $rootScope.ajaxSubmitForm = async function (form, url) {
+            var req = {
+                serviceBase: this.serviceBase,
+                method: 'POST',
+                url: url,
+                headers: { 'Content-Type': undefined },
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: form
+            };
+            return await commonService.getApiResult(req);
+        };
 
         $rootScope.translate = function (keyword, isWrap, defaultText) {
             if ($rootScope.globalSettings && ($rootScope.translator)) {
@@ -367,10 +380,17 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'BaseODataService'
                 return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
             });
         };
-        $rootScope.filterArray = function (array, key, value) {
+        $rootScope.filterArray = function (array, keys, values) {
             var result = [];
             for (var i = 0; i < array.length; i++) {
-                if (array[i][key] === value) {
+                var matched = true;
+                for (var j = 0; i < keys.length; i++) {
+                    if (array[i][keys[j]] !== values[j]) {
+                        matched = false;
+                        break;
+                    }
+                }
+                if(matched){
                     result.push(array[i]);
                 }
             }

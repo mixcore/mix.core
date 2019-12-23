@@ -9,6 +9,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Specificulture { get; set; }
         public int AttributeFieldId { get; set; }
         public string AttributeFieldName { get; set; }
+        public string AttributeSetName { get; set; }
         public string Regex { get; set; }
         public int DataType { get; set; }
         public int Priority { get; set; }

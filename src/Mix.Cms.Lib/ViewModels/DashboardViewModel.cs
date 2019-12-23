@@ -21,12 +21,13 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("totalUser")]
         public int TotalUser { get; set; }
 
-        public DashboardViewModel()
+        public DashboardViewModel(string culture)
         {
             using (MixCmsContext context = new MixCmsContext())
             {
-                TotalPage = context.MixPage.Count();
-                TotalPost = context.MixPost.Count();
+                TotalPage = context.MixPage.Count(p => p.Specificulture == culture);
+                TotalPost = context.MixPost.Count(p => p.Specificulture == culture);
+                TotalUser = context.MixCmsUser.Count();
             }
         }
     }

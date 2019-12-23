@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -7,6 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
@@ -93,10 +95,20 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
             {
                 if (!JItem.TryGetValue(item.Name, out JToken tmp))
                 {
+                    string val = string.Empty;
+                    switch (item.DataType)
+                    {
+                        case MixEnums.MixDataType.Upload:
+                            val = Path.Combine(MixService.GetConfig<string>("Domain"), JItem[item.Name]?.Value<JObject>().Value<string>("value"));
+                            break;
+                        default:
+                            val = JItem[item.Name]?.Value<JObject>().Value<string>("value");
+                            break;
+                    }
                     JItem[item.Name] = new JObject()
                     {
                         new JProperty("dataType", item.DataType),
-                        new JProperty("value", JItem[item.Name]?.Value<JObject>().Value<string>("value"))
+                        new JProperty("value", val)
                     };
                 }
             }

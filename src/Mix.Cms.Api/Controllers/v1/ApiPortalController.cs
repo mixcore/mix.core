@@ -16,6 +16,7 @@ using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Helpers;
 using Mix.Identity.Models;
 using Newtonsoft.Json.Linq;
 using System;
@@ -76,7 +77,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
                 ModuleTypes = Enum.GetNames(typeof(MixModuleType)).ToList(),
-                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetType)).ToList(),
+                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetDataType)).ToList(),
                 DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
                 Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
@@ -97,7 +98,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("all-settings")]
         public RepositoryResponse<JObject> AllSettingsAsync()
         {
-            return getAllSettings();
+            return GetAllSettings();
         }
 
         [AllowAnonymous]
@@ -105,12 +106,38 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("jarray-data/{name}")]
         public RepositoryResponse<JArray> loadData(string name)
         {
-            var cultures = FileRepository.Instance.GetFile(name, "data", true, "[]");
+            try
+            {
+                var cultures = FileRepository.Instance.GetFile(name, "data", true, "[]");
+                var obj = JObject.Parse(cultures.Content);
+                return new RepositoryResponse<JArray>()
+                {
+                    IsSucceed = true,
+                    Data = obj["data"] as JArray
+                };
+            }
+            catch
+            {
+                return new RepositoryResponse<JArray>()
+                {
+                    IsSucceed = true,
+                    Data = null
+                };
+            }
+            
+        }
+
+        [AllowAnonymous]
+        [HttpGet, HttpOptions]
+        [Route("json-data/{name}")]
+        public RepositoryResponse<JObject> loadJsonData(string name)
+        {
+            var cultures = FileRepository.Instance.GetFile(name, "data", true, "{}");
             var obj = JObject.Parse(cultures.Content);
-            return new RepositoryResponse<JArray>()
+            return new RepositoryResponse<JObject>()
             {
                 IsSucceed = true,
-                Data = obj["data"] as JArray
+                Data = obj["data"] as JObject
             };
         }
 
@@ -151,7 +178,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
                 ModuleTypes = Enum.GetNames(typeof(MixModuleType)).ToList(),
-                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetType)).ToList(),
+                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetDataType)).ToList(),
                 DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
                 Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
@@ -167,13 +194,13 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // GET api/category/id
         [HttpGet, HttpOptions]
-        [Route("dashboard")]
-        public RepositoryResponse<DashboardViewModel> Dashboard(int id)
+        [Route("{culture}/dashboard")]
+        public RepositoryResponse<DashboardViewModel> Dashboard(string culture)
         {
             return new RepositoryResponse<DashboardViewModel>()
             {
                 IsSucceed = true,
-                Data = new DashboardViewModel()
+                Data = new DashboardViewModel(culture)
             };
         }
 
@@ -186,7 +213,7 @@ namespace Mix.Cms.Api.Controllers.v1
             var lastUpdate = MixService.GetConfig<DateTime>("LastUpdateConfiguration");
             if (lastSync.ToUniversalTime() < lastUpdate)
             {
-                return getAllSettings();
+                return GetAllSettings();
             }
             else
             {
@@ -329,8 +356,9 @@ namespace Mix.Cms.Api.Controllers.v1
                         return new RepositoryResponse<string>()
                         {
                             IsSucceed = getPage.IsSucceed,
-                            Data = MixCmsHelper.GetRouterUrl(new { culture = _lang, action = "post", seoName = getPage.Data.SeoName }, Request, Url)
-                        };
+                            Data = MixCmsHelper.GetRouterUrl(
+                                new { culture = _lang, seoName = getPage.Data.SeoName }, Request, Url)
+                    };
 
                     }
                     else
@@ -363,7 +391,7 @@ namespace Mix.Cms.Api.Controllers.v1
             return new RepositoryResponse<string>()
             {
 
-                Data = RSAEncryptionHelper.GetEncryptedText(data)
+                Data = Lib.Helpers.RSAEncryptionHelper.GetEncryptedText(data)
             };
         }
 
@@ -376,31 +404,35 @@ namespace Mix.Cms.Api.Controllers.v1
             return new RepositoryResponse<string>()
             {
 
-                Data = RSAEncryptionHelper.GetDecryptedText(data)
+                Data = Lib.Helpers.RSAEncryptionHelper.GetDecryptedText(data)
             };
         }
 
         [AllowAnonymous]
         [HttpPost, HttpOptions]
         [Route("encrypt")]
-        public RepositoryResponse<CryptoViewModel<string>> Encrypt([FromBody]JObject model)
+        public RepositoryResponse<string> Encrypt([FromBody]JObject model)
         {
             string data = model.GetValue("data").Value<string>();
             var encrypted = new JObject(new JProperty("encrypted", data));
-            return new RepositoryResponse<CryptoViewModel<string>>()
+            var key = System.Text.Encoding.UTF8.GetBytes("sw-cms-secret-key");
+            return new RepositoryResponse<string>()
             {
-
-                Data = AesEncryptionHelper.EncryptStringToBytes_Aes(encrypted)
+                Data = AesEncryptionHelper.EncryptString(data, Convert.ToBase64String(key))
             };
         }
         [AllowAnonymous]
         [HttpPost, HttpOptions]
         [Route("decrypt")]
-        public RepositoryResponse<CryptoViewModel<string>> Decrypt([FromBody]JObject model)
+        public RepositoryResponse<string> Decrypt([FromBody]JObject model)
         {
             string data = model.GetValue("data")?.Value<string>();
-            string key = model.GetValue("key")?.Value<string>();
-            return AesEncryptionHelper.DecryptStringFromBytes_Aes(data, key);
+            //string key = model.GetValue("key")?.Value<string>();
+            var key = System.Text.Encoding.UTF8.GetBytes("sw-cms-secret-key");
+            return new RepositoryResponse<string>()
+            {
+                Data = AesEncryptionHelper.DecryptString(data, Convert.ToBase64String(key))
+            };
         }
         // POST api/category
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
@@ -469,10 +501,10 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             string importFolder = $"Imports/Structures/{_lang}";
             var result = new RepositoryResponse<bool>();
-            var model = FileRepository.Instance.SaveWebFile(assets, importFolder);
-            if (model != null)
+            var saveFile = FileRepository.Instance.SaveWebFile(assets, assets.FileName, importFolder);
+            if (saveFile.IsSucceed)
             {
-                var fileContent = FileRepository.Instance.GetWebFile($"{model.Filename}{model.Extension}", model.FileFolder);
+                var fileContent = FileRepository.Instance.GetWebFile($"{saveFile.Data.Filename}{saveFile.Data.Extension}", saveFile.Data.FileFolder);
                 var obj = JObject.Parse(fileContent.Content);
                 switch (obj["type"].Value<string>())
                 {
@@ -512,7 +544,7 @@ namespace Mix.Cms.Api.Controllers.v1
         #endregion Post
 
         #region Helpers
-        private RepositoryResponse<JObject> getAllSettings()
+        private RepositoryResponse<JObject> GetAllSettings()
         {
             var cultures = CommonRepository.Instance.LoadCultures();
             var culture = cultures.FirstOrDefault(c => c.Specificulture == _lang);
@@ -530,7 +562,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
                 ModuleTypes = Enum.GetNames(typeof(MixModuleType)).ToList(),
-                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetType)).ToList(),
+                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetDataType)).ToList(),
                 DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
                 Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")

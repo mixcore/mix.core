@@ -26,7 +26,7 @@ app.controller('PostController', ['$scope', '$rootScope', '$location', '$filter'
             var resp = await service.getList($scope.request);
             if (resp && resp.isSucceed) {
        
-                $scope.activedData.postNavs = $rootScope.filterArray($scope.activedData.postNavs, 'isActived', true);
+                $scope.activedData.postNavs = $rootScope.filterArray($scope.activedData.postNavs, ['isActived'], [true]);
                 angular.forEach(resp.data.items, element => {
                     var obj = {
                         description: element.title,

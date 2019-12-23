@@ -1,11 +1,11 @@
-<div id="pills-rel" class="tab-pane">
+<div id="pills-rel" class="tab-pane container">
     <div class="row">
         <div class="col-12">
             <h6>Selected items</h6>
             <table class="table table-sm table-hover" id="tbl-related-posts">
                 <thead class="thead-light">
                     <tr>
-                        <th scope="col" width="5%">
+                        <th scope="col" width="15px">
                             <span class="oi oi-move"></span>
                         </th>
                         <th scope="col" width="5%">
@@ -18,7 +18,7 @@
                 </thead>
                 <tbody class="sortable post-navs" ng-init="">
 
-                    <tr class="sortable-item" ng-repeat="item in $ctrl.post.postNavs track by $index">
+                    <tr class="sortable-item" ng-repeat="post.postNavs track by $index">
                         <td style="cursor:grab;">
                             <span class="oi oi-move"></span>
                         </td>
@@ -44,6 +44,7 @@
                 </tbody>
             </table>
         </div>
-    </div><!--activePosts-->
+    </div>
+    <!--activePosts-->
 
 </div>

@@ -165,6 +165,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 });
             }
         }
+        [JsonProperty("attributeData")]
+        public MixRelatedAttributeDatas.ReadMvcViewModel AttributeData { get; set; }
 
         #endregion Views
 
@@ -193,12 +195,23 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
             this.FormView = MixTemplates.ReadListItemViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
             this.EdmView = MixTemplates.ReadListItemViewModel.GetTemplateByPath(EdmTemplate, Specificulture, _context, _transaction).Data;
+            LoadAttributes(_context, _transaction);
             // call load data from controller for padding parameter (postId, productId, ...)
         }
 
         #endregion Overrides
 
         #region Expand
+        private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == "module", _context, _transaction);
+            if (getAttrs.IsSucceed)
+            {
+                AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
+                a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId == getAttrs.Data.Id
+                    , _context, _transaction).Data;
+            }
+        }
 
         public static RepositoryResponse<ReadMvcViewModel> GetBy(
             Expression<Func<MixModule, bool>> predicate, int? postId = null, int? productid = null, int pageId = 0
@@ -292,7 +305,26 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 }
             }
         }
+        public T Property<T>(string fieldName)
+        {
+            if (AttributeData != null)
+            {
+                var field = AttributeData.Data.Data.GetValue(fieldName);
+                if (field != null)
+                {
+                    return field.Value<T>();
+                }
+                else
+                {
+                    return default(T);
+                }
+            }
+            else
+            {
+                return default(T);
+            }
 
+        }
         #endregion Expand
     }
 }

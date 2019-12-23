@@ -2,6 +2,19 @@
 //modules.controller('ImageController', );
 modules.component('customFile', {
     templateUrl: '/app/app-shared/components/custom-file/custom-file.html',
+    bindings: {
+        header: '=',
+        title: '=',
+        description: '=',
+        src: '=',
+        srcUrl: '=',
+        data: '=',
+        type: '=',
+        folder: '=',
+        auto: '=',
+        onDelete: '&',
+        save: '&',
+    },
     controller: ['$rootScope', '$scope', 'ngAppSettings', 'MediaService', function PortalTemplateController($rootScope, $scope, mediaService) {
         var ctrl = this;
         ctrl.media = null;
@@ -79,18 +92,5 @@ modules.component('customFile', {
             }
         };
 
-    }],
-    bindings: {
-        header: '=',
-        title: '=',
-        description: '=',
-        src: '=',
-        srcUrl: '=',
-        data: '=',
-        type: '=',
-        folder: '=',
-        auto: '=',
-        onDelete: '&',
-        save: '&',
-    }
+    }]
 });

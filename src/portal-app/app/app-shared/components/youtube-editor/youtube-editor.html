@@ -1,6 +1,6 @@
 <div class="form-group">
-    <label class="control-label" >Keyword</label>    
-    <input class="form-control" type="text" 
+    <label class="control-label" ng-if="$ctrl.isShowTitle">Keyword</label>    
+    <input class="form-control form-control-sm" type="text" 
         placeholder="Enter keyword and press enter" 
         ng-model-options="{debounce: 1000}"
         ng-enter="$ctrl.searchVideo()" 
@@ -8,7 +8,7 @@
 </div>
 <div class="form-group">
     <label class="control-label" ng-if="$ctrl.isShowTitle">Youtube code</label>    
-    <input class="form-control" type="text" placeholder="youtube code" ng-change="$ctrl.loadVideo()" ng-model="$ctrl.code">
+    <input class="form-control form-control-sm" type="text" placeholder="youtube code" ng-change="$ctrl.loadVideo()" ng-model="$ctrl.code">
 </div>
 <div class="youtube" data-embed="{{$ctrl.src}}" ng-init="$ctrl.loadVideo()">        
     <div ng-if="$ctrl.isPlay">

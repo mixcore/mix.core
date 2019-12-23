@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -161,6 +162,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 return $"/{MixConstants.Folder.TemplatesFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture)}/{Template}";
             }
         }
+        [JsonProperty("attributeData")]
+        public MixRelatedAttributeDatas.ReadMvcViewModel AttributeData { get; set; }
 
         #endregion Views
 
@@ -185,27 +188,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
             if (View != null)
             {
-                GetSubModules(_context, _transaction);
-                //switch (Type)
-                //{
-                //    case MixPageType.Home:
-                //    case MixPageType.Blank:
-                //    case MixPageType.Post:
-                //    case MixPageType.Modules:
-                //        break;
-
-                //    case MixPageType.ListPost:
-                //        GetSubPosts(_context, _transaction);
-                //        break;
-
-                //    case MixPageType.ListProduct:
-                //        GetSubProducts(_context, _transaction);
-                //        break;
-
-                //    default:
-                //        break;
-                //}
+                GetSubModules(_context, _transaction);                
             }
+
+            LoadAttributes(_context, _transaction);
         }
 
         #endregion Overrides
@@ -410,10 +396,39 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         }
 
         #endregion Sync
-
+        private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == "page", _context, _transaction);
+            if (getAttrs.IsSucceed)
+            {
+                AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
+                a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId==getAttrs.Data.Id
+                    , _context, _transaction).Data;
+            }
+        }
         public MixModules.ReadMvcViewModel GetModule(string name)
         {
             return Modules.FirstOrDefault(m => m.Module.Name == name)?.Module;
+        }
+        public T Property<T>(string fieldName)
+        {
+            if (AttributeData!=null)
+            {
+                var field = AttributeData.Data.Data.GetValue(fieldName);
+                if (field!=null)
+                {
+                    return field.Value<T>();
+                }
+                else
+                {
+                    return default(T);
+                }
+            }
+            else
+            {
+                return default(T);
+            }
+            
         }
         #endregion Expands
     }

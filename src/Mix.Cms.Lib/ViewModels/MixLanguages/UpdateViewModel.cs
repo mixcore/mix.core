@@ -37,7 +37,6 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         [JsonProperty("value")]
         public string Value { get; set; }
 
-        [Required]
         [JsonProperty("defaultValue")]
         public string DefaultValue { get; set; }
 
@@ -86,13 +85,13 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
             {
                 CreatedDateTime = DateTime.UtcNow;
             }
+            if (string.IsNullOrEmpty(DefaultValue))
+            {
+                DefaultValue = Value;
+            }
             return base.ParseModel(_context, _transaction);
         }
-        public override UpdateViewModel ParseView(bool isExpand = true, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            Property = new DataValueViewModel() { DataType = DataType, Value = Value, Name = Keyword };
-            return base.ParseView(isExpand, _context, _transaction);
-        }
+        
         #region Async
         public override Task<UpdateViewModel> ParseViewAsync(bool isExpand = true, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -102,6 +101,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         public override Task<bool> ExpandViewAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Cultures = LoadCultures(Specificulture, _context, _transaction);
+            Property = new DataValueViewModel() { DataType = DataType, Value = Value, Name = Keyword };
             this.Cultures.ForEach(c => c.IsSupported = true);
             IsClone = true;
 
@@ -152,6 +152,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Cultures = LoadCultures(Specificulture, _context, _transaction);
+            Property = new DataValueViewModel() { DataType = DataType, Value = Value, Name = Keyword };
             this.Cultures.ForEach(c => c.IsSupported = true);
             IsClone = true;
         }

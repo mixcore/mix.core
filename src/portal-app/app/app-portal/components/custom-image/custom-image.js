@@ -1,16 +1,16 @@
 ﻿modules.component('customImage', {
     templateUrl: '/app/app-portal/components/custom-image/custom-image.html',
     bindings: {
-        header: '=',
-        description: '=',
+        header: '=?',
+        description: '=?',
         src: '=',
         srcUrl: '=',
-        postedFile: '=',
-        type: '=',
-        folder: '=',
+        postedFile: '=?',
+        type: '=?',
+        folder: '=?',
         auto: '=',
-        onDelete: '&',
-        onUpdate: '&'
+        onDelete: '&?',
+        onUpdate: '&?'
     },
     controller: ['$rootScope', '$scope', 'ngAppSettings', 'MediaService', function ($rootScope, $scope, ngAppSettings, mediaService) {
         var ctrl = this;
@@ -46,7 +46,7 @@
                 ctrl.mediaFile.description = ctrl.description ? ctrl.description : '';
                 ctrl.mediaFile.file = file;
 
-                if (ctrl.auto) {
+                if (ctrl.auto=='true') {
                     ctrl.uploadFile(file);
                 }
                 else {
@@ -95,18 +95,20 @@
             }
         };
         ctrl.getBase64 = function (file) {
-            if (file !== null && ctrl.postedFile) {
+            if (file !== null) {
                 $rootScope.isBusy = true;
                 var reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = function () {
                     var index = reader.result.indexOf(',') + 1;
                     var base64 = reader.result.substring(index);
-                    ctrl.postedFile.fileName = file.name.substring(0, file.name.lastIndexOf('.'));
-                    ctrl.postedFile.extension = file.name.substring(file.name.lastIndexOf('.'));
-                    ctrl.postedFile.fileStream = reader.result;
+                    if(ctrl.postedFile){
+                        ctrl.postedFile.fileName = file.name.substring(0, file.name.lastIndexOf('.'));
+                        ctrl.postedFile.extension = file.name.substring(file.name.lastIndexOf('.'));
+                        ctrl.postedFile.fileStream = reader.result;
+                    }
                     ctrl.srcUrl = reader.result;
-                    ctrl.isImage = ctrl.srcUrl.toLowerCase().match(/([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png|svg)/g);
+                    ctrl.isImage = ctrl.srcUrl.indexOf('data:image/') >= 0 || ctrl.srcUrl.toLowerCase().match(/([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png|svg)/g);
                     ctrl.src = reader.result;
                     $rootScope.isBusy = false;
                     $scope.$apply();

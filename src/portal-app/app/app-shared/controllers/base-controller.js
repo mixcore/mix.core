@@ -65,6 +65,7 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
             var d = new Date($scope.request.toDate);
             $scope.request.toDate = d.toISOString();
         }
+        $rootScope.isBusy = true;
         var resp = await service.getList($scope.request);
         if (resp && resp.isSucceed) {
 
@@ -96,7 +97,7 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
     };
 
     $scope.remove = function (id) {
-        $rootScope.showConfirm($scope, 'removeConfirmed', [id], null, 'Remove', 'Are you sure');
+        $rootScope.showConfirm($scope, 'removeConfirmed', [id], null, 'Remove', 'Deleted data will not able to recover, are you sure you want to delete this item?');
     };
 
     $scope.removeConfirmed = async function (id) {
@@ -113,6 +114,36 @@ function BaseCtrl($scope, $rootScope, $routeParams, ngAppSettings, service) {
             $scope.$apply();
         }
     };
+    $scope.applyList = async function () {
+        $rootScope.showConfirm($scope, 'applyListConfirmed', [], null, 'Remove', 'Are you sure to ' + $scope.selectedList.action + ' these items');
+    };
+
+    $scope.applyListConfirmed = async function () {
+        $rootScope.isBusy = true;
+        var resp = await service.applyList($scope.selectedList);
+        if (resp && resp.isSucceed) {
+            $scope.activedData = resp.data;
+            $rootScope.showMessage('success', 'success');
+            switch ($scope.selectedList.action) {
+                case 'Delete':
+                    $scope.selectedList.isSelectAll = false;
+                    $scope.selectedList.data = [];
+                    $scope.getList();
+                    break;
+                case 'Export':
+                    window.open(resp.data.webPath, '_blank');
+                    $rootScope.isBusy = false;
+                    $scope.$apply();
+                    break;
+            }
+        } else {
+            if (resp) {
+                $rootScope.showErrors('Failed');
+            }
+            $rootScope.isBusy = false;
+            $scope.$apply();
+        }
+    }
 
     $scope.save = async function (data) {
         $rootScope.isBusy = true;

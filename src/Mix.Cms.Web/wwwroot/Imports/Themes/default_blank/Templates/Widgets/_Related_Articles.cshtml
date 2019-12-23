@@ -1,0 +1,41 @@
+@model List<Mix.Cms.Lib.ViewModels.MixArticleArticles.ReadViewModel>
+<div class="cd-section" id="blogs-5">
+   
+ <!--     *********    END BLOGS 5      *********      -->
+    <div class="blogs-5" data-background-color="gray">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 ml-auto mr-auto">
+                    <div class="row">
+                        @foreach(var item in Model)
+                        {
+                            var article = item.RelatedArticle;
+                            <div class="col-md-4">
+                                <div class="card card-blog">
+                                    <div class="card-image">
+                                        <a href="@article.DetailsUrl">
+                                           <img class="img rounded" src="@article.ImageUrl">
+                                       </a>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6 class="category text-primary">@article.Icon</h6>
+                                        <h5 class="card-title">
+                                            <a href="@article.DetailsUrl">
+                                            @article.Title
+                                            </a>
+                                        </h5>
+                                        <p class="card-description">
+                                            @Html.Raw(article.Excerpt)
+                                        </p>
+                                                                            
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--     *********    END BLOGS 5      *********      -->
+</div>

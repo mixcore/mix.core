@@ -13,6 +13,13 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
             };
             return await _getAnonymousApiResult(req);
         };
+        var _loadJsonData = async function (name) {
+            var req = {
+                method: 'GET',
+                url: '/portal/json-data/' + name
+            };
+            return await _getAnonymousApiResult(req);
+        };
         var _showAlertMsg = function (title, message) {
             $rootScope.message = {
                 title: title,
@@ -212,8 +219,8 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
             }
 
             var serviceUrl = appSettings.serviceBase + '/api/' + appSettings.apiVersion;
-            if (serviceBase !== undefined) {
-                serviceUrl = serviceBase + '/api/' + appSettings.apiVersion
+            if (serviceBase || req.serviceBase) {
+                serviceUrl = (serviceBase || req.serviceBase) + '/api/' + appSettings.apiVersion;
             }
 
             req.url = serviceUrl + req.url;
@@ -268,7 +275,12 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
                         return t;
                     }
                     else {
-                        return { isSucceed: false, errors: [error.statusText || error.status] };
+                        if (error.data) {
+                            return error.data;
+                        }
+                        else {
+                            return { isSucceed: false, errors: [error.statusText || error.status] };
+                        }
                     }
                 });
         };
@@ -302,6 +314,7 @@ app.factory('CommonService', ['$location', '$http', '$rootScope', 'AuthService',
         adminCommonFactory.settings = _settings;
         adminCommonFactory.genrateSitemap = _genrateSitemap;
         adminCommonFactory.loadJArrayData = _loadJArrayData;
+        adminCommonFactory.loadJsonData = _loadJsonData;
         return adminCommonFactory;
 
     }]);

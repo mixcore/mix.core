@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
@@ -141,6 +142,24 @@ namespace Mix.Cms.Api.Controllers.v1
                 return result;
             }
             return new RepositoryResponse<MixModule>();
+        }
+
+        // POST api/module
+        [HttpPost, HttpOptions]
+        [Route("data/save/{name}/{formName}")]
+        public async Task<ActionResult<JObject>> SaveData(string name, string formName, [FromBody]JObject obj)
+        {
+            // Get module by name
+            string _username = User?.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
+            var result = await ODataMobileViewModel.SaveByModuleName(_lang, _username, name, formName, obj);
+            if (result.IsSucceed)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
         }
 
         // GET api/module

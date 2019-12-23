@@ -1,4 +1,4 @@
-<div class="card mb-3" ng-if="$ctrl.customer.orders.length > 0">
+<div class="card mb-4" ng-if="$ctrl.customer.orders.length > 0">
     <h6 class="card-header">
         Orders
     </h6>
@@ -64,7 +64,7 @@
                     <td>
                         <div class="btn-group btn-group-sm btn-group-sm float-right" role="group" aria-label="Actions">
                             <a ng-click="$ctrl.removeOrder(order.id);" class="btn btn-dark">
-                                <span class="fas fa-times text-danger"></span>
+                                <span class="fas fa-trash-alt text-danger"></span>
                             </a>
                         </div>
                     </td>

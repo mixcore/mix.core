@@ -116,13 +116,15 @@ namespace Mix.Cms.Api.Controllers.v1
                     if (createResult.Succeeded)
                     {
                         user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
+                        await _userManager.AddToRoleAsync(user, "SuperAdmin");
+                        model.ExpandView();
                         model.Id = user.Id;
                         model.CreatedDateTime = DateTime.UtcNow;
                         model.Avatar = model.Avatar ?? MixService.GetConfig<string>("DefaultAvatar");
                         // Save to cms db context
 
                         await model.SaveModelAsync();
-                        await _userManager.AddToRoleAsync(user, "SuperAdmin");
+                        
                         var token = await _idHelper.GenerateAccessTokenAsync(user, true);
                         if (token != null)
                         {
@@ -209,6 +211,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         MixService.SetConfig("InitStatus", 4);
                         MixService.SetConfig("IsInit", true);
                         MixService.SaveSettings();
+                        _ = MixCacheService.RemoveCacheAsync();
                         MixService.Reload();
                     }
                 }
@@ -235,7 +238,7 @@ namespace Mix.Cms.Api.Controllers.v1
             if (theme != null)
             {
                 string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
-                FileRepository.Instance.SaveWebFile(theme, importFolder);
+                FileRepository.Instance.SaveWebFile(theme, theme.FileName, importFolder);
                 data.TemplateAsset = new Lib.ViewModels.FileViewModel(theme, importFolder);
             }
             else
@@ -273,7 +276,9 @@ namespace Mix.Cms.Api.Controllers.v1
                     // MixService.SetConfig<string>("SiteName", _lang, data.Title);
                     MixService.LoadFromDatabase();
                     MixService.SetConfig("InitStatus", 3);
+                    MixService.SetConfig("IsInit", true);
                     MixService.SaveSettings();
+                    _ = MixCacheService.RemoveCacheAsync();
                     MixService.Reload();
                 }
                 return result;
@@ -304,7 +309,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 MixService.SetConfig<string>("DefaultCulture", model.Culture.Specificulture);
                 MixService.SetConfig("InitStatus", 1);
                 MixService.SaveSettings();
-                MixService.Reload();
+                //MixService.Reload();
             }
             else
             {

@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card mb-4">
     <h6 class="card-header">
         Attribute
     </h6>
@@ -22,6 +22,7 @@
                     <input ng-model="$ctrl.model.type" type="radio" value="{{$index}}" class="custom-control-input"
                         id="model_type_{{$index}}">
                     <span ng-switch-when="System" class="" title="{{type}}"><i class="fas fa-cog"></i> System</span>
+                    <span ng-switch-when="Set" class="" title="{{type}}"><i class="fas fa-database"></i> Data Set</span>
                     <span ng-switch-when="Page" class="" title="{{type}}"><i class="far fa-file"></i> Page</span>
                     <span ng-switch-when="Post" class="" title="{{type}}"><i class="far fa-newspaper"></i> Post</span>
                     <span ng-switch-when="Module" class="" title="{{type}}"><i class="fas fa-puzzle-piece"></i>

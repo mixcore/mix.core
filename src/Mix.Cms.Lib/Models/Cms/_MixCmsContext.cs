@@ -63,6 +63,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public MixCmsContext(DbContextOptions<MixCmsContext> options)
                     : base(options)
         {
+            
         }
         public MixCmsContext()
         {
@@ -100,6 +101,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
+                entity.Property(e => e.AttributeSetName).HasMaxLength(250);
+
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.Name)
@@ -134,6 +137,14 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Description).HasMaxLength(250);
 
+                entity.Property(e => e.EdmFrom).HasMaxLength(250);
+
+                entity.Property(e => e.EdmSubject).HasMaxLength(250);
+
+                entity.Property(e => e.EdmTemplate).HasMaxLength(250);
+
+                entity.Property(e => e.FormTemplate).HasMaxLength(250);
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(250);
@@ -156,6 +167,8 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
                 entity.Property(e => e.AttributeSetName).HasMaxLength(250);
+
+                entity.Property(e => e.CreatedBy).HasMaxLength(250);
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
@@ -200,6 +213,8 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.AttributeFieldName)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.AttributeSetName).HasMaxLength(250);
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 

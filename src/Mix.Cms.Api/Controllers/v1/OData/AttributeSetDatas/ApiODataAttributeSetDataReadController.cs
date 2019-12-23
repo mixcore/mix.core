@@ -7,8 +7,11 @@ using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.ViewModels;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
+using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -57,6 +60,15 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         public async System.Threading.Tasks.Task<ActionResult<int>> CountAsync()
         {
             return (await ReadViewModel.Repository.CountAsync()).Data;
+        }
+        // GET api/attribute-set-datas/portal/count
+        [AllowAnonymous]
+        [EnableQuery]
+        [Route("count/{name}")]
+        [HttpGet, HttpOptions]
+        public async System.Threading.Tasks.Task<ActionResult<int>> CountByName(string name)
+        {
+            return (await ReadViewModel.Repository.CountAsync(m=>m.AttributeSetName== name && m.Specificulture== _lang)).Data;
         }
 
         // Save api/odata/{culture}/attribute-set-data/portal
@@ -122,6 +134,23 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         }
 
         #endregion Get
-
+        [HttpPost, HttpOptions]
+        [Route("apply-list")]
+        public async Task<ActionResult<JObject>> ListActionAsync([FromBody]ListAction<string> data)
+        {
+            Expression<Func<MixAttributeSetData, bool>> predicate = model =>
+                       model.Specificulture == _lang
+                       && data.Data.Contains(model.Id);
+            var result = new RepositoryResponse<bool>();
+            switch (data.Action)
+            {
+                case "Delete":
+                    return Ok(JObject.FromObject(await base.DeleteListAsync<DeleteViewModel>(predicate, true)));
+                case "Export":
+                    return Ok(JObject.FromObject(await base.ExportListAsync(predicate, MixEnums.MixStructureType.AttributeSet)));
+                default:
+                    return JObject.FromObject(new RepositoryResponse<bool>());
+            }
+        }
     }
 }

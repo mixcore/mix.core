@@ -2,70 +2,88 @@
 <section class="" ng-init="getSingle()">
     <form ng-class="{'submitted': submitted}" ng-submit="save(activedData)">
         <div class="row">
-            <section class="col-sm-8">
+            <!-- <section class="col-sm-8 pr-3">
                 <div class="row">
                     <div class="col-lg-12">
-                        <page-main page="activedData">
-                    </page-main></div>
+                        <page-main page="activedData"></page-main>
+                    </div>
                 </div>
-
-                <hr>
+                <div class="tab-pane fade active show">
+                    <add-addictional-field class="mb-4" model="activedData"></add-addictional-field>
+                </div>
                 <tabs-v select-callback="selectPane(pane)" class="mb-3">
-                    <pane-v header="General" class="card">
-                        <div class="card-body">
-                            <page-general page="activedData"></page-general>
-                        </div>
+                    <pane-v header="General">
+                        <page-general page="activedData"></page-general>
                     </pane-v>
-                    <pane-v header="Search Engine" class="card">
-                        <div class="card-body">
-                            <page-seo page="activedData"></page-seo>
-                        </div>
+                    <pane-v header="Search Engine">
+                        <page-seo page="activedData"></page-seo>
                     </pane-v>
-                    <pane-v header="Plug & Play" class="card">
-                        <div class="card-body">
-                            <page-plug-play page="activedData"></page-plug-play>
-                        </div>
+                    <pane-v header="Plug & Play">
+                        <page-plug-play page="activedData"></page-plug-play>
                     </pane-v>
-                    <pane-v header="Module" class="card">
-                        <div class="card-body">
-                            <page-modules page="activedData"></page-modules>
-                        </div>
+                    <pane-v header="Module">
+                        <page-modules page="activedData"></page-modules>
                     </pane-v>
                     <pane-v header="Page Layout">
-
-                        <template-editor folder-type="'Pages'" template="activedData.view" templates="activedData.templates">
+                        <template-editor folder-type="'Pages'" template="activedData.view"
+                            templates="activedData.templates">
                         </template-editor>
                     </pane-v>
                     <pane-v header="Master Layout">
-                        <template-editor folder-type="'Masters'" template="activedData.master" templates="activedData.masters">
+                        <template-editor folder-type="'Masters'" template="activedData.master"
+                            templates="activedData.masters">
                         </template-editor>
                     </pane-v>
                 </tabs-v>
-            </section>
-            <section class="col-sm-4" style="padding-left:0">
-                <actions preview-url="activedData.detailsUrl" back-url="'/portal/page/list'"></actions>
-                <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
-                <navs data="activedData.positionNavs" prefix="'pos'"></navs>
-                <div class="card mb-3">
-                    <h6 class="card-header">URL slugs
-                        <button class="btn btn-link text-primary btn-sm float-right py-0" type="button" data-toggle="collapse" data-target="#slug-tab" aria-controls="slug-tab" aria-expanded="false" aria-label="Toggle navigation"><span class="far fa-minus-square text-primary"></span> Show/Hide</button>
-                        <button class="btn btn-link text-primary btn-sm float-right py-0" type="button" ng-click="addAlias()"><span class="fas fa-plus text-primary"></span> Add slugs</button>
-
-                    </h6>
-                    <div id="slug-tab" class="card-body collapse">
-                        <url-alias ng-repeat="alias in activedData.urlAliases" index="$index" url-alias="alias" remove-callback="removeAliasCallback(index)"></url-alias>
+                <div class="tab-pane fade active show" id="pills-general" role="tabpanel"
+                    aria-labelledby="pills-general-tab">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h6>Attribute Sets</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-warning mb-0" role="alert" ng-if="!activedData.id">
+                                <i class="fas fa-exclamation-triangle mr-3"></i> Please save post to continues with
+                                attributtes section!
+                            </div>
+                            <attribute-set-navs ng-if="activedData.id" parent-id="activedData.id" parent-type="1">
+                            </attribute-set-navs>
+                        </div>
                     </div>
                 </div>
+            </section> -->
 
-                <div class="card mb-3">
-                    <h6 class="card-header">
+            <section class="col-sm-8 pr-3">
+                <tabs-v class="mb-3">
+                    <pane-v header="Content">
+                        <page-content model="activedData"></page-content>
+                    </pane-v>
+                    <pane-v header="Advanced">
+                        <page-advanced model="activedData"></page-advanced>
+                    </pane-v>
+                </tabs-v>
+            </section>
+            <section class="col-sm-4 pl-3" style="padding-left:0">
+                <actions preview-url="activedData.detailsUrl" back-url="'/portal/page/list'"></actions>
+
+                <div class="card mb-4">
+                    <h6 class="card-header position-sticky position-sticky-under-actionbar">
                         Info
                     </h6>
                     <div class="card-body">
                         <statuses status="activedData.status"></statuses>
+                        <div class="form-group" ng-if="activedData.status == 4">
+                            <label class="control-label">Published Date Time</label>
+                            <div class="input-group input-group-sm mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1"><i class="mi mi-Calendar"></i></span>
+                                </div>
+                                <input value="{{activedData.publishedDateTime}}" ng-model="activedData.publishedDateTime" type="datetime-local" class="form-control">
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="control-label">Created Date Time</label>
-                            <div class="input-group input-group-sm mb-3">
+                            <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1"><i class="mi mi-Calendar"></i></span>
                                 </div>
@@ -73,9 +91,9 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group mb-0">
                             <label class="control-label">Author</label>
-                            <div class="input-group input-group-sm mb-3">
+                            <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1"><i class="mi mi-Contact"></i></span>
                                 </div>
@@ -85,8 +103,27 @@
                     </div>
                 </div>
 
-                <custom-image header="'Image'" type="'Pages'" folder="activedData.seoName" title="activedData.title" description="activedData.excerpt" src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
-                <custom-image header="'Thumbnail'" type="'Pages'" folder="activedData.seoName" title="activedData.title" description="activedData.excerpt" src-url="activedData.thumbnailUrl" src="activedData.thumbnail" auto="'true'"></custom-image>
+                <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
+                <!-- <navs data="activedData.positionNavs" prefix="'pos'"></navs> -->
+                <div class="card mb-4">
+                    <h6 class="card-header position-sticky position-sticky-under-actionbar">URL Alias
+                        <button class="btn btn-link text-primary btn-sm float-right py-0" type="button" data-toggle="collapse" data-target="#slug-tab" aria-controls="slug-tab" aria-expanded="false" aria-label="Toggle navigation"><span class="far fa-minus-square text-primary"></span> Show/Hide</button>
+                        <button class="btn btn-link text-primary btn-sm float-right py-0" type="button" ng-click="addAlias()"><span class="fas fa-plus text-primary"></span> Add slugs</button>
+
+                    </h6>
+                    <div id="slug-tab" class="card-body collapse">
+                        <url-alias ng-repeat="alias in activedData.urlAliases" index="$index" url-alias="alias" remove-callback="removeAliasCallback(index)"></url-alias>
+                    </div>
+                </div>
+
+                <tabs-v ng-if="activedData" select-callback="selectPane(pane)" class="mb-4">
+                    <pane-v header="Feature Img">
+                        <custom-image header="'Image upload'" type="'Pages'" folder="activedData.seoName" title="activedData.title" description="activedData.excerpt" src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
+                    </pane-v>
+                    <pane-v header="Thumbnail Img">
+                        <custom-image header="'Thumbnail upload'" type="'Pages'" folder="activedData.seoName" title="activedData.title" description="activedData.excerpt" src-url="activedData.thumbnailUrl" src="activedData.thumbnail" auto="'true'"></custom-image>
+                    </pane-v>
+                </tabs-v>
             </section>
         </div>
     </form>

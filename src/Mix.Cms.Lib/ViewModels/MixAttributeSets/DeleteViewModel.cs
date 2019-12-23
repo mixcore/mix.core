@@ -50,9 +50,18 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             ViewModelHelper.HandleResult(removeData, ref result);
             if (result.IsSucceed)
             {
-                var removeFields = await MixAttributeFields.DeleteViewModel.Repository.RemoveListModelAsync(false, f => f.AttributeSetId == Id, _context, _transaction);
+                var removeFields = await MixAttributeFields.DeleteViewModel.Repository.RemoveListModelAsync(
+                    false, f => f.AttributeSetId == Id || f.ReferenceId == Id, _context, _transaction);
                 ViewModelHelper.HandleResult(removeFields, ref result);
             }
+            if (result.IsSucceed)
+            {
+                var removeRelated = await MixRelatedAttributeSets.DeleteViewModel.Repository.RemoveListModelAsync(false, 
+                    f => f.Id == Id || (f.ParentId == Id && f.ParentType == (int)MixEnums.MixAttributeSetDataType.Service)
+                    , _context, _transaction);
+                ViewModelHelper.HandleResult(removeRelated, ref result);
+            }
+            
             return result;
         }
         #endregion

@@ -1,0 +1,23 @@
+<div class="card mb-4">
+    <h6 class="card-header">
+        Page types
+    </h6>
+    <div class="card-body collapse show">
+        <div class="custom-control custom-switch custom-control-inline col-3" ng-repeat="type in $ctrl.settings.pageTypes track by $index" ng-switch="type" ng-class="{active: $index === $ctrl.model}" ng-click="$ctrl.model=$index;">
+            <input type="radio" ng-model="$ctrl.model" class="custom-control-input" ng-value="$index" id="page_type_{{$index}}" name="page_type_{{$index}}">
+
+
+
+            <label ng-switch-when="Blank" class="custom-control-label" for="page_type_{{$index}}" ng-click="$ctrl.model=$index;">Blank</label>
+            <label ng-switch-when="Post" class="custom-control-label" for="page_type_{{$index}}" ng-click="$ctrl.model=$index;">Post</label>
+            <label ng-switch-when="ListPost" class="custom-control-label" for="page_type_{{$index}}" ng-click="$ctrl.model=$index;">List Post</label>
+            <label ng-switch-when="ListProduct" class="custom-control-label" for="page_type_{{$index}}" ng-click="$ctrl.model=$index;">List Product</label>
+            <label ng-switch-when="List" class="custom-control-label" for="page_type_{{$index}}" ng-click="$ctrl.model=$index;">List</label>
+            <label ng-switch-when="Home" class="custom-control-label" for="page_type_{{$index}}" ng-click="$ctrl.model=$index;">Home</label>
+            <label ng-switch-when="StaticUrl" class="custom-control-label" for="page_type_{{$index}}" ng-click="$ctrl.model=$index;">Static Url</label>
+            <label ng-switch-when="Modules" class="custom-control-label" for="page_type_{{$index}}" ng-click="$ctrl.model=$index;">Modules</label>
+            <label ng-switch-when="Gallery" class="custom-control-label" for="page_type_{{$index}}" ng-click="$ctrl.model=$index;">Gallery</label>
+            <label ng-switch-when="System" class="custom-control-label" for="page_type_{{$index}}" ng-click="$ctrl.model=$index;">System</label>
+        </div>
+    </div>
+</div>

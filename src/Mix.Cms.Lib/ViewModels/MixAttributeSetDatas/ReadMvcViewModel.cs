@@ -21,9 +21,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public string AttributeSetName { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         [JsonProperty("status")]
         public int Status { get; set; }
-
         #endregion Models
         #region Views
 
@@ -70,7 +71,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
                 case MixEnums.MixDataType.Time:
                     return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
-                case MixEnums.MixDataType.Currency:
+                case MixEnums.MixDataType.Double:
                     return (new JProperty(item.AttributeFieldName, item.DoubleValue));
                 case MixEnums.MixDataType.Boolean:
                     return (new JProperty(item.AttributeFieldName, item.BooleanValue));
@@ -80,7 +81,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     JArray arr = new JArray();
                     foreach (var nav in item.DataNavs)
                     {
-                        nav.Data.Data.Add(new JProperty("id", nav.Data.Id));
+                        //nav.Data.Data.Add(new JProperty("id", nav.Data.Id));
                         arr.Add(nav.Data.Data);
                     }
                     return (new JProperty(item.AttributeFieldName, arr));
