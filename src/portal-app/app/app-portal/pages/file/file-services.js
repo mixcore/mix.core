@@ -37,11 +37,11 @@ app.factory('FileServices', ['$http', '$rootScope', 'CommonService', 'BaseServic
         return await commonService.getApiResult(req);
     };
 
-    var _removeFile = async function (id) {
+    var _removeFile = async function (fullPath) {
         var apiUrl = '/file/';
         var req = {
             method: 'GET',
-            url: apiUrl + 'delete/' + id
+            url: apiUrl + 'delete/?fullPath='+ fullPath
         };
         return await commonService.getApiResult(req)
     };

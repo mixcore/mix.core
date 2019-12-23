@@ -46,15 +46,11 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // GET api/files/id
         [HttpGet, HttpOptions]
-        [Route("delete/{id}")]
-        public RepositoryResponse<bool> Delete(RequestObject request)
+        [Route("delete")]
+        public RepositoryResponse<bool> Delete()
         {
-            string fullPath = CommonHelper.GetFullPath(new string[]
-            {
-                request.Key,
-                request.Keyword
-            });
-            var result = FileRepository.Instance.DeleteWebFile(fullPath);
+            string fullPath = Request.Query["fullPath"].ToString();
+            var result = FileRepository.Instance.DeleteFile(fullPath);
             return new RepositoryResponse<bool>()
             {
                 IsSucceed = result,
@@ -118,7 +114,5 @@ namespace Mix.Cms.Api.Controllers.v1
             };
         }
         #endregion Post
-
-
     }
 }
