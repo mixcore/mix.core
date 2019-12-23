@@ -5,7 +5,7 @@ app.component('initFbConfigurations', {
         var ctrl = this; 
         ctrl.data = [];
         ctrl.$onInit = function(){
-            ctrl.data = $rootScope.filterArray(ctrl.configurations, 'category', 'Social_Facebook');
+            ctrl.data = $rootScope.filterArray(ctrl.configurations, ['category'], ['Social_Facebook']);
         } 
     }],
     bindings: {

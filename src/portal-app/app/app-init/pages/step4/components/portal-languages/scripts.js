@@ -5,7 +5,7 @@ app.component('initPortalLanguages', {
         var ctrl = this; 
         ctrl.data = [];
         ctrl.$onInit = function(){
-            ctrl.data = $rootScope.filterArray(ctrl.languages, 'category', 'Portal');
+            ctrl.data = $rootScope.filterArray(ctrl.languages, ['category'], ['Portal']);
         } 
     }],
     bindings: {

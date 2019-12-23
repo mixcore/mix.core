@@ -54,7 +54,7 @@
                 }
             }
             ctrl.saveSelected = function(){
-                ctrl.selected = $rootScope.filterArray(ctrl.navs, 'isActived', true);
+                ctrl.selected = $rootScope.filterArray(ctrl.navs, ['isActived'], [true]);
                 setTimeout(() => {
                     ctrl.save().then(() => {
                         ctrl.loadPosts();

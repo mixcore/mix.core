@@ -5,7 +5,7 @@ app.component('initCommonLanguages', {
         var ctrl = this; 
         ctrl.data = [];
         ctrl.$onInit = function(){
-            ctrl.data = $rootScope.filterArray(ctrl.languages, 'category', 'Common');
+            ctrl.data = $rootScope.filterArray(ctrl.languages, ['category'], ['Common']);
         } 
     }],
     bindings: {

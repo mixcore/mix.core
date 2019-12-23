@@ -4,9 +4,9 @@ app.component('themeExportModules', {
     controller: ['$rootScope', '$scope', 'ngAppSettings', function ($rootScope, $scope) {
         var ctrl = this;
         ctrl.updateModuleExport = function(module){
-            ctrl.selectedExport.modules = angular.copy($rootScope.filterArray(ctrl.exportData.modules, 'isActived', true)); 
+            ctrl.selectedExport.modules = angular.copy($rootScope.filterArray(ctrl.exportData.modules, ['isActived'], [true])); 
             angular.forEach(ctrl.selectedExport.modules,function(e){
-                e.data.items = angular.copy($rootScope.filterArray(e.data.items, 'isActived', true));
+                e.data.items = angular.copy($rootScope.filterArray(e.data.items, ['isActived'], [true]));
             });
             
             
