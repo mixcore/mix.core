@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -139,6 +140,9 @@ namespace Mix.Cms.Web
             });
 
             var cachePeriod = _env.IsDevelopment() ? "600" : "604800";
+
+            FileExtensionContentTypeProvider provider = new FileExtensionContentTypeProvider();
+            provider.Mappings[".webmanifest"] = "application/manifest+json";
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>
@@ -146,7 +150,8 @@ namespace Mix.Cms.Web
                     // Requires the following import:
                     // using Microsoft.AspNetCore.Http;
                     ctx.Context.Response.Headers.Append("Cache-Control", $"public, max-age={cachePeriod}");
-                }
+                },
+                ContentTypeProvider = provider
             });
             app.UseCookiePolicy();
             app.UseSignalR(route =>
@@ -157,7 +162,7 @@ namespace Mix.Cms.Web
             });
 
             app.UseAuthentication();
-
+            
             ConfigRoutes(app);
         }
     }
