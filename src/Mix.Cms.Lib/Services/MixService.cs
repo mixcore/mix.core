@@ -107,7 +107,7 @@ namespace Mix.Cms.Lib.Services
             instance.Translator = JObject.FromObject(jsonSettings["Translator"]);
             instance.GlobalSettings = JObject.FromObject(jsonSettings["GlobalSettings"]);
             instance.LocalSettings = JObject.FromObject(jsonSettings["LocalSettings"]);
-
+            CommonHelper.WebConfigInstance = jsonSettings;
         }
 
         private void LoadDefaultConfiggurations()
