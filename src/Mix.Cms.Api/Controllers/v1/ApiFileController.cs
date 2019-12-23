@@ -2,6 +2,7 @@
 // The Mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
@@ -65,16 +66,16 @@ namespace Mix.Cms.Api.Controllers.v1
         /// <summary>
         /// Uploads the image.
         /// </summary>
-        /// <param name="image">The img information.</param>
+        /// <param name="image">The img information.</param>    
         /// <param name="file"></param> Ex: { "base64": "", "fileFolder":"" }
         /// <returns></returns>
-        [Route("uploadFile")]
+        [Route("upload-file")]
         [HttpPost, HttpOptions]
-        public IActionResult Edit(FileViewModel file)
+        public IActionResult Upload([FromForm] string folder, [FromForm]IFormFile file)
         {
             if (ModelState.IsValid)
             {
-                var result = FileRepository.Instance.SaveWebFile(file);
+                var result = FileRepository.Instance.SaveFile(file, file.FileName, folder);
                 return Ok(result);
             }
             return BadRequest();

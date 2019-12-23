@@ -2,8 +2,17 @@
   "data": [
     {
       "id": 1,
+      "type": 0,
       "title": "Menu Item",
       "name": "menu_item",
+      "description": null,
+      "formTemplate": null,
+      "edmTemplate": null,
+      "edmSubject": null,
+      "edmFrom": null,
+      "edmAutoSend": null,
+      "createdDateTime": "2019-12-05T05:54:56.813",
+      "status": 2,
       "fields": [
         {
           "id": 1,
@@ -14,7 +23,7 @@
           "title": "Title",
           "dataType": 7,
           "defaultValue": null,
-          "options": [],
+          "options": null,
           "name": "title",
           "isRequire": true,
           "isEncrypt": false,
@@ -36,8 +45,8 @@
           "title": "Uri",
           "dataType": 7,
           "defaultValue": null,
-          "options": [],
-          "name": "Uri",
+          "options": null,
+          "name": "uri",
           "isRequire": true,
           "isEncrypt": false,
           "isSelect": false,
@@ -50,6 +59,28 @@
           "specificulture": null
         },
         {
+          "id": 27,
+          "attributeSetId": 1,
+          "attributeSetName": null,
+          "referenceId": null,
+          "regex": null,
+          "title": "Icon",
+          "dataType": 19,
+          "defaultValue": null,
+          "options": [],
+          "name": "icon",
+          "isRequire": false,
+          "isEncrypt": false,
+          "isSelect": false,
+          "isUnique": false,
+          "status": 2,
+          "createdDateTime": "2019-12-21T08:18:12.13",
+          "isClone": false,
+          "cultures": null,
+          "priority": 2,
+          "specificulture": null
+        },
+        {
           "id": 13,
           "attributeSetId": 1,
           "attributeSetName": null,
@@ -57,18 +88,18 @@
           "regex": null,
           "title": "Type",
           "dataType": 7,
-          "defaultValue": "uri",
+          "defaultValue": "Uri",
           "options": [
             {
-              "value": "uri",
+              "value": "Uri",
               "dataType": 7
             },
             {
-              "value": "page",
+              "value": "Page",
               "dataType": 7
             },
             {
-              "value": "post",
+              "value": "Post",
               "dataType": 7
             }
           ],
@@ -81,7 +112,7 @@
           "createdDateTime": "2019-11-09T05:56:45.447",
           "isClone": false,
           "cultures": null,
-          "priority": 2,
+          "priority": 3,
           "specificulture": null
         },
         {
@@ -124,7 +155,7 @@
           "createdDateTime": "2019-11-09T04:59:07.743",
           "isClone": false,
           "cultures": null,
-          "priority": 3,
+          "priority": 4,
           "specificulture": null
         },
         {
@@ -136,7 +167,7 @@
           "title": "classes",
           "dataType": 7,
           "defaultValue": null,
-          "options": [],
+          "options": null,
           "name": "classes",
           "isRequire": false,
           "isEncrypt": false,
@@ -146,7 +177,7 @@
           "createdDateTime": "2019-11-09T04:59:07.793",
           "isClone": false,
           "cultures": null,
-          "priority": 4,
+          "priority": 5,
           "specificulture": null
         },
         {
@@ -158,7 +189,7 @@
           "title": "Description",
           "dataType": 9,
           "defaultValue": null,
-          "options": [],
+          "options": null,
           "name": "description",
           "isRequire": false,
           "isEncrypt": false,
@@ -168,7 +199,29 @@
           "createdDateTime": "2019-11-09T04:59:07.83",
           "isClone": false,
           "cultures": null,
-          "priority": 5,
+          "priority": 6,
+          "specificulture": null
+        },
+        {
+          "id": 24,
+          "attributeSetId": 1,
+          "attributeSetName": null,
+          "referenceId": 1,
+          "regex": null,
+          "title": "Menu Items",
+          "dataType": 23,
+          "defaultValue": null,
+          "options": null,
+          "name": "menu_items",
+          "isRequire": false,
+          "isEncrypt": false,
+          "isSelect": false,
+          "isUnique": false,
+          "status": 2,
+          "createdDateTime": "2019-12-17T13:29:02.05",
+          "isClone": false,
+          "cultures": null,
+          "priority": 7,
           "specificulture": null
         }
       ]
@@ -189,7 +242,29 @@
           "isEncrypt": false,
           "isSelect": false,
           "isUnique": false,
+          "priority": 1,
           "status": 2
+        },
+        {
+          "id": 23,
+          "attributesetId": 2,
+          "attributeSetName": null,
+          "referenceId": null,
+          "regex": null,
+          "title": "Name",
+          "dataType": 7,
+          "defaultValue": null,
+          "name": "name",
+          "isRequire": true,
+          "isEncrypt": false,
+          "isSelect": false,
+          "isUnique": false,
+          "status": 2,
+          "createdDateTime": "2019-12-17T13:19:42.663",
+          "isClone": false,
+          "cultures": null,
+          "priority": 2,
+          "specificulture": null
         },
         {
           "attributeSetId": 2,
@@ -199,6 +274,7 @@
           "name": "menu_items",
           "options": [],
           "referenceId": 1,
+          "priority": 3,
           "isRequire": false,
           "isEncrypt": false,
           "isSelect": false,
@@ -223,6 +299,12 @@
       "id": 5,
       "title": "Post",
       "name": "post",
+      "fields": []
+    },
+    {
+      "id": 6,
+      "title": "Addictional Field",
+      "name": "addictional_field",
       "fields": []
     }
   ]

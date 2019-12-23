@@ -37,7 +37,7 @@ app.controller('FileController', ['$scope', '$rootScope', 'ngAppSettings', '$rou
         };
         $scope.loadFile = async function () {
             $rootScope.isBusy = true;
-            $scope.listUrl = '/portal/file/list?folder=wwwroot/' + $routeParams.folder;
+            $scope.listUrl = '/portal/file/list?folder/' + $routeParams.folder;
             $rootScope.isBusy = true;
             var response = await fileServices.getFile($routeParams.folder, $routeParams.filename);
             if (response.isSucceed) {
