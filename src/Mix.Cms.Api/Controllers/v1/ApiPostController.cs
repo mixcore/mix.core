@@ -213,6 +213,17 @@ namespace Mix.Cms.Api.Controllers.v1
 
             switch (request.Key)
             {
+                case "service.store":
+                    var srvResult = await base.GetListAsync<Lib.ViewModels.Services.Store.PostViewModel>(key, request, predicate);
+                    if (srvResult.IsSucceed)
+                    {
+                        srvResult.Data.Items.ForEach(a =>
+                        {
+                            a.DetailsUrl = MixCmsHelper.GetRouterUrl(
+                                new { culture = _lang, action = "post", id = a.Id, seoName = a.SeoName }, Request, Url);
+                        });
+                    }
+                    return Ok(JObject.FromObject(srvResult));
                 case "mvc":
                     var mvcResult = await base.GetListAsync<ReadMvcViewModel>(key, request, predicate);
                     if (mvcResult.IsSucceed)

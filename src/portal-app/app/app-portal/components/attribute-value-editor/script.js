@@ -10,8 +10,9 @@ modules.component('attributeValueEditor', {
     controller: ['$rootScope', '$scope', 'ngAppSettings', '$location', 'RelatedAttributeSetDataService', 'AttributeSetDataService', 
         function ($rootScope, $scope, ngAppSettings,$location, navService,dataService) {
         var ctrl = this;
+        ctrl.goToPath = $rootScope.goToPath;
         ctrl.icons = ngAppSettings.icons;
-        ctrl.refData = [];
+        ctrl.refData = null;
         ctrl.defaultDataModel = null;
         ctrl.refDataModel = {
             id: null,
@@ -28,20 +29,24 @@ modules.component('attributeValueEditor', {
             }
         }.bind(ctrl);
         ctrl.$onInit = function () {
+            ctrl.initData();
         };
         ctrl.initData = async function(){
-            setTimeout(() => {
-                switch (ctrl.attributeValue.field.dataType) {
+            setTimeout(() => {                
+                if(!ctrl.attributeValue.id){
+                    ctrl.initDefaultValue();
+                }
+                switch (ctrl.attributeValue.dataType) {
                     case 1:
                     case 2:
-                    case 3:
+                    case 3:                        
                         if (ctrl.attributeValue.dateTimeValue) {
                             ctrl.attributeValue.dateObj = new Date(ctrl.attributeValue.dateTimeValue);
                             $scope.$apply();
                         }
                         break;
                     case 23: // reference
-                        if(ctrl.attributeValue.field.referenceId){
+                        if(ctrl.attributeValue.field.referenceId && ctrl.parentId){
                             ctrl.attributeValue.integerValue = ctrl.attributeValue.field.referenceId;
                             navService.getSingle('portal', [ctrl.parentId, ctrl.parentType, 'default', ctrl.attributeValue.field.referenceId]).then(resp=>{
                                 ctrl.defaultDataModel = resp;
@@ -52,20 +57,51 @@ modules.component('attributeValueEditor', {
                         }
                         break;
                     default:
-                        if (ctrl.attributeValue.field.isEncrypt && ctrl.attributeValue.encryptValue) {
+                        
+                        if (ctrl.attributeValue.field && ctrl.attributeValue.field.isEncrypt && ctrl.attributeValue.encryptValue) {
                             var encryptedData = {
                                 key: ctrl.attributeValue.encryptKey,
                                 data: ctrl.attributeValue.encryptValue
                             };
                             ctrl.attributeValue.stringValue = $rootScope.decrypt(encryptedData);
                         }
-                        if (!ctrl.attributeValue.stringValue) {
+                        if (ctrl.attributeValue.field && !ctrl.attributeValue.stringValue) {
                             ctrl.attributeValue.stringValue = ctrl.attributeValue.field.defaultValue;
                             $scope.$apply();
                         }
                         break;
                 }
             }, 200);
+        };
+        ctrl.initDefaultValue = async function () {
+            switch (ctrl.attributeValue.dataType) {
+                case 1:
+                case 2:
+                case 3:
+                    if (ctrl.attributeValue.field.defaultValue) {
+                        ctrl.attributeValue.dateObj = new Date(ctrl.attributeValue.field.defaultValue);
+                        ctrl.attributeValue.stringValue = ctrl.attributeValue.field.defaultValue;
+                    }
+                    break;
+                case 6:
+                    if (ctrl.attributeValue.field.defaultValue) {
+                        ctrl.attributeValue.doubleValue = parseFloat(ctrl.attributeValue.field.defaultValue);
+                        ctrl.attributeValue.stringValue = ctrl.attributeValue.field.defaultValue;
+                    }
+                    break;
+                case 18:
+                    if (ctrl.attributeValue.field.defaultValue) {
+                        ctrl.attributeValue.booleanValue = ctrl.attributeValue.field.defaultValue =='true';
+                        ctrl.attributeValue.stringValue = ctrl.attributeValue.field.defaultValue;
+                    }
+                    break;
+
+                default:
+                    if (ctrl.attributeValue.field.defaultValue) {
+                        ctrl.attributeValue.stringValue = ctrl.attributeValue.field.defaultValue;
+                    }
+                    break;
+            }
         };
         ctrl.updateStringValue = async function (dataType) {
             switch (dataType) {
@@ -83,7 +119,7 @@ modules.component('attributeValueEditor', {
                     }
                     break;
                 case 18:
-                    if (ctrl.attributeValue.booleanValue) {
+                    if (ctrl.attributeValue.booleanValue != null) {
                         ctrl.attributeValue.stringValue = ctrl.attributeValue.booleanValue.toString();
                     }
                     break;
@@ -105,15 +141,17 @@ modules.component('attributeValueEditor', {
                     if (resp) {
                         $rootScope.showErrors('Failed');
                     }
+                    ctrl.refData = [];
                     $rootScope.isBusy = false;
                     $scope.$apply();
                 }
             });
         }
         ctrl.updateRefData = function(nav){
-            ctrl.refDataModel = nav;
-            var e = $(".pane-form-" + ctrl.attributeValue.field.referenceId)[0];
-            angular.element(e).triggerHandler('click');
+            ctrl.goToPath('/portal/attribute-set-data/details?dataId=' + nav.data.id + '&attributeSetId=' + nav.data.attributeSetId)
+            // ctrl.refDataModel = nav;
+            // var e = $(".pane-form-" + ctrl.attributeValue.field.referenceId)[0];
+            // angular.element(e).triggerHandler('click');
             // $location.url('/portal/attribute-set-data/details?dataId='+ item.id +'&attributeSetId=' + item.attributeSetId+'&parentType=' + item.parentType+'&parentId=' + item.parentId);
         };
         ctrl.saveRefData = function(data){            
@@ -129,10 +167,10 @@ modules.component('attributeValueEditor', {
                                 [resp.data.parentId, resp.data.parentType, resp.data.id]);
                             if(!tmp){
                                 ctrl.refData.push(resp.data);
-                                var e = $(".pane-data-" + ctrl.attributeValue.field.referenceId)[0];
-                                angular.element(e).triggerHandler('click');
                             }
                             ctrl.refDataModel = angular.copy(ctrl.defaultDataModel);
+                            var e = $(".pane-data-" + ctrl.attributeValue.field.referenceId)[0];                                
+                            angular.element(e).triggerHandler('click');
                             $rootScope.isBusy = false;
                             $scope.$apply();
                         }else{
@@ -151,7 +189,7 @@ modules.component('attributeValueEditor', {
             })
         }
         ctrl.removeRefData = async function(nav){
-            $rootScope.showConfirm(ctrl, 'removeRefDataConfirmed', [nav], null, 'Remove', 'Are you sure');
+            $rootScope.showConfirm(ctrl, 'removeRefDataConfirmed', [nav], null, 'Remove', 'Deleted data will not able to recover, are you sure you want to delete this item?');
         };
         ctrl.removeRefDataConfirmed = async function(nav){
             $rootScope.isBusy = true;

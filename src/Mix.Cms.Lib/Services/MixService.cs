@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.Services
 {
@@ -106,7 +107,7 @@ namespace Mix.Cms.Lib.Services
             instance.Translator = JObject.FromObject(jsonSettings["Translator"]);
             instance.GlobalSettings = JObject.FromObject(jsonSettings["GlobalSettings"]);
             instance.LocalSettings = JObject.FromObject(jsonSettings["LocalSettings"]);
-
+            CommonHelper.WebConfigInstance = jsonSettings;
         }
 
         private void LoadDefaultConfiggurations()
@@ -336,12 +337,31 @@ namespace Mix.Cms.Lib.Services
             }
         }
 
+        public static Task SendEdm(string culture, string template, JObject data, string subject, string from)
+        {
+            return Task.Run(() => {
+                if (!string.IsNullOrEmpty(data["email"].Value<string>()))
+                {
+                    string to = data["email"].Value<string>();
+                    var getEdm = ViewModels.MixTemplates.UpdateViewModel.GetTemplateByPath(template, culture);
+                    if (getEdm.IsSucceed && !string.IsNullOrEmpty(getEdm.Data.Content))
+                    {
+                        string body = getEdm.Data.Content;
+                        foreach (var prop in data.Properties())
+                        {
+                            body = body.Replace($"[[{prop.Name}]]", data[prop.Name].Value<string>());
+                        }
+                        MixService.SendMail(subject, body, to, from);                        
+                    }
+                }
+            });
 
-        public static void SendMail(string subject, string message, string to)
+        }
+        public static void SendMail(string subject, string message, string to, string from = null)
         {
             MailMessage mailMessage = new MailMessage();
             mailMessage.IsBodyHtml = true;
-            mailMessage.From = new MailAddress(instance.Smtp.Value<string>("From"));
+            mailMessage.From = new MailAddress(from ?? instance.Smtp.Value<string>("From"));
             mailMessage.To.Add(to);
             mailMessage.Body = message;
             mailMessage.Subject = subject;

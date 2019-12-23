@@ -16,6 +16,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         public int Id { get; set; }
         [JsonProperty("attributesetId")]
         public int AttributeSetId { get; set; }
+        [JsonProperty("attributeSetName")]
+        public string AttributeSetName { get; set; }
         [JsonProperty("referenceId")]
         public int? ReferenceId { get; set; }
         [JsonProperty("regex")]
@@ -23,7 +25,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         [JsonProperty("title")]
         public string Title { get; set; }
         [JsonProperty("dataType")]
-        public int DataType { get; set; }
+        public MixEnums.MixDataType DataType { get; set; }
         [JsonProperty("defaultValue")]
         public string DefaultValue { get; set; }
         [JsonProperty("name")]

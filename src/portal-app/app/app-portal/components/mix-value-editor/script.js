@@ -18,15 +18,21 @@ modules.component('mixValueEditor', {
         ctrl.previousId = null;
         ctrl.initData = async function(){
             setTimeout(() => {
-                switch (ctrl.dataType) {
+                switch (ctrl.type) {
                     case 1:
                     case 2:
                     case 3:
-                        if (ctrl.dateTimeValue) {
-                            ctrl.dateObj = new Date(ctrl.dateTimeValue);
+                        if (ctrl.stringValue) {
+                            ctrl.dateObj = new Date(ctrl.stringValue);
                             $scope.$apply();
                         }
                         break;
+                    case 18:
+                        if (ctrl.stringValue) {
+                            ctrl.booleanValue = ctrl.stringValue =='true';
+                        }
+                        break;
+
                     case 23: // reference
                         if(ctrl.referenceId){
                             dataService.getList('read', ctrl.refRequest, ctrl.referenceId, ctrl.parentType, ctrl.parentId).then(resp=>{
@@ -52,10 +58,6 @@ modules.component('mixValueEditor', {
                             };
                             ctrl.stringValue = $rootScope.decrypt(encryptedData);
                         }
-                        if (!ctrl.stringValue) {
-                            ctrl.stringValue = ctrl.defaultValue;
-                            $scope.$apply();
-                        }
                         break;
                 }
             }, 200);
@@ -65,23 +67,22 @@ modules.component('mixValueEditor', {
                 case 1:
                 case 2:
                 case 3:
-                    if (ctrl.dateObj) {
-                        ctrl.dateTimeValue = ctrl.dateObj.toISOString();
-                        ctrl.stringValue = ctrl.dateTimeValue;
+                    if (ctrl.dateObj!=null) {
+                        ctrl.stringValue = ctrl.dateObj.toISOString();
+                    }
+                    else{
+                        ctrl.stringValue = null;
                     }
                     break;
                 case 6:
-                    if (ctrl.doubleValue) {
-                        ctrl.stringValue = ctrl.doubleValue.toString();
-                    }
+                    // ctrl.stringValue = ctrl.doubleValue;
                     break;
                 case 18:
-                    if (ctrl.booleanValue) {
-                        ctrl.stringValue = ctrl.booleanValue.toString();
-                    }
+                    // ctrl.stringValue = ctrl.booleanValue;
                     break;
 
                 default:
+                    ctrl.stringValue = ctrl.doubleValue;
                     break;
             }
         };
@@ -89,7 +90,7 @@ modules.component('mixValueEditor', {
             $location.url('/portal/attribute-set-data/details?dataId='+ item.id +'&attributeSetId=' + item.attributeSetId+'&parentType=' + item.parentType+'&parentId=' + item.parentId);
         };
         ctrl.removeRefData = async function(data){
-            $rootScope.showConfirm(ctrl, 'removeRefDataConfirmed', [data.id], null, 'Remove', 'Are you sure');
+            $rootScope.showConfirm(ctrl, 'removeRefDataConfirmed', [data.id], null, 'Remove', 'Deleted data will not able to recover, are you sure you want to delete this item?');
         };
         ctrl.removeRefDataConfirmed = async function(dataId){
             $rootScope.isBusy = true;

@@ -2,6 +2,7 @@
 using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Helpers;
 using Newtonsoft.Json;
 using System;
 
@@ -20,7 +21,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeValues
         [JsonProperty("attributeFieldId")]
         public int AttributeFieldId { get; set; }
         [JsonProperty("dataType")]
-        public int DataType { get; set; }
+        public MixEnums.MixDataType DataType { get; set; }
         [JsonProperty("attributeName")]
         public string AttributeName { get; set; }
         [JsonProperty("postId")]

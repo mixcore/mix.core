@@ -1,16 +1,52 @@
-<div class="row mb-3">
-    <div class="col-md-12 mb-2">
-        <filter-list request="request" callback="getList(pageIndex)"></filter-list>
-    </div>
-    <div class="col-md-12">
-        <a href="/portal/attribute-set-data/create?attributeSetId={{attributeSetId}}&attributeSetName={{attributeSetName}}&dataId=default" class="btn btn-sm btn-primary float-right px-4">
-            <i class="fas fa-plus"></i> Create data
-        </a>
+<div class="row mb-3" ng-init="init()">
+    <div class="card">
+        <div class="card-body row">
+
+            <div class="col-md-12 mb-3">
+                <filter-list request="request" callback="getList(pageIndex)"></filter-list>
+            </div>
+            <div class="col-md-12">
+
+                <a href="/portal/attribute-set/list" class="btn btn-sm btn-primary float-right px-4">
+                    <i class="fas fa-list"></i> Attribute List
+                </a>
+                <a href="/portal/attribute-set/details/{{attributeSetId}}" class="btn btn-sm btn-primary float-right px-4 mr-2">
+                    <i class="fas fa-pen"></i> Edit Attribute
+                </a>
+               
+                <a ng-click="export()" class="btn btn-sm btn-primary text-white float-right px-4 mr-2">
+                    <i class="fas fa-download"></i> Export
+                </a>
+                <a href="/portal/attribute-set-data/create?attributeSetId={{attributeSetId}}&attributeSetName={{attributeSetName}}&dataId=default" class="btn btn-sm btn-primary float-right px-4 mr-2">
+                    <i class="fas fa-plus"></i> Add data
+                </a>
+                <form action="" id="frm-import" class="float-right px-4 mr-2">
+                    <input id="inp-import-data" type="file" name="data" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ngf-select="selectImportFile($file, $invalidFiles)" data-file="file.file">
+                    <a ng-class="{'btn-secondary': !importFile.file}" ng-click="import()" class="btn btn-sm btn-primary text-white">
+                        <i class="fas fa-upload"></i> Import
+
+                    </a>                    
+                </form>
+
+            </div>
+
+            <div ng-init="getList()" class="col-md-12 mb-3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <em> Total: <span ng-bind="data.totalItems" class="text-muted"></span></em>
+                    </div>
+                </div>
+
+                <attribute-set-values on-update="edit(data)" on-delete="remove(data)" can-drag="canDrag" on-send-mail="sendMail(data)" filter-type="filterType" on-filter-list="getList(0)" on-apply-list="applyList()" selected-list="selectedList" header="''" data="data.items" queries="queries">
+                </attribute-set-values>
+            </div>
+        </div>
+        <div class="card-footer">
+            <paging class="small" page="data.page" page-size="data.pageSize" total="data.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
+            </paging>
+        </div>
     </div>
 </div>
-<div ng-init="getList()">
-    <attribute-set-values on-update="edit(data)" on-delete="remove(data)" header="''" data="data">
-    </attribute-set-values>
-</div>
-<paging class="small" page="request.pageIndex + 1" page-size="request.pageSize" total="request.totalItems" ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
-</paging>
+<!-- odata <paging class="small" page="request.pageIndex + 1" page-size="request.pageSize" total="request.totalItems"
+    ul-class="pagination justify-content-end m-0" a-class="page-link" paging-action="getList(page-1)" scroll-top="true">
+</paging> -->

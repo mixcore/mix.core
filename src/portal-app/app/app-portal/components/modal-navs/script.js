@@ -128,7 +128,7 @@
                 }
             };
             ctrl.saveSelected = function(){
-                ctrl.selected = $rootScope.filterArray(ctrl.data, 'isActived', true);
+                ctrl.selected = $rootScope.filterArray(ctrl.data, ['isActived'], [true]);
                 if(ctrl.save){
                     ctrl.save({selected: ctrl.selected});
                 }

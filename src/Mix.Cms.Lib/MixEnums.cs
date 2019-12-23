@@ -73,6 +73,15 @@
             Schedule = 4
         }
 
+        public enum ResponseStatus
+        {
+            Ok = 200,
+            BadRequest = 400,
+            UnAuthorized = 401,
+            Forbidden = 403,
+            ServerError = 500
+        }
+
         public enum MixOrderStatus
         {
             Deleted = 0,
@@ -117,21 +126,23 @@
             Gallery = 7
         }
 
-        public enum MixAttributeSetType
-        {
-            System = 0,
-            Page = 1,
-            Post = 2,
-            Module = 3,
-            Service = 4
-        }
+        //public enum MixAttributeSetType
+        //{
+        //    System = 0,
+        //    Page = 1,
+        //    Post = 2,
+        //    Module = 3,
+        //    Service = 4
+        //}
 
         public enum MixAttributeSetDataType
         {
+            System = 0,
             Set = 1,
             Post = 2,
             Page = 3,
-            Module = 4
+            Module = 4,
+            Service = 5
         }
 
         public enum MixDataType
@@ -160,7 +171,7 @@
             //
             // Summary:
             //     Represents a currency value.
-            Currency = 6,
+            Double = 6,
             //
             // Summary:
             //     Represents text that is displayed.
@@ -231,7 +242,8 @@
         {
             Page,
             Module,
-            Post
+            Post,
+            AttributeSet
         }
         #endregion
 

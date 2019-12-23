@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Web.Controllers
@@ -41,7 +42,7 @@ namespace Mix.Cms.Web.Controllers
 
         #region Routes
         [Route("")]
-        public async System.Threading.Tasks.Task<IActionResult> Index()
+        public IActionResult Index()
         {
             if (_forbidden)
             {
@@ -177,7 +178,7 @@ namespace Mix.Cms.Web.Controllers
             {
                 return Redirect($"/error/403");
             }
-            return await PostViewAsync(id, seoName);
+            return await Post(id, seoName);
         }
 
         [HttpGet]
@@ -293,7 +294,7 @@ namespace Mix.Cms.Web.Controllers
         #endregion
         #region Helper
 
-        async System.Threading.Tasks.Task<IActionResult> AliasAsync(string seoName)
+        async Task<IActionResult> AliasAsync(string seoName)
         {
             // Home Page
             int? pageSize = MixService.GetConfig<int?>("TagPageSize");
@@ -317,10 +318,10 @@ namespace Mix.Cms.Web.Controllers
                 && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
 
                 getAlias = await Lib.ViewModels.MixUrlAliases.UpdateViewModel.Repository.GetSingleModelAsync(predicate);
-                if (getAlias.IsSucceed)
-                {
-                    MixCacheService.SetAsync(cacheKey, getAlias);
-                }
+                //if (getAlias.IsSucceed)
+                //{
+                //    _ = Task.FromResult(MixCacheService.SetAsync(cacheKey, getAlias));
+                //}
 
             }
 
@@ -331,7 +332,7 @@ namespace Mix.Cms.Web.Controllers
                     case UrlAliasType.Page:
                         return await PageAsync(int.Parse(getAlias.Data.SourceId));
                     case UrlAliasType.Post:
-                        return await PostViewAsync(int.Parse(getAlias.Data.SourceId));
+                        return await Post(int.Parse(getAlias.Data.SourceId));
                     case UrlAliasType.Module: // TODO: Create view for module
                     case UrlAliasType.ModuleData: // TODO: Create view for module data
                     default:
@@ -352,41 +353,30 @@ namespace Mix.Cms.Web.Controllers
             string orderBy = MixService.GetConfig<string>("OrderBy");
             int orderDirection = MixService.GetConfig<int>("OrderDirection");
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
-            var cacheKey = $"mvc_{_culture}_page_{seoName}_{pageSize}_{pageIndex}_{orderBy}_{orderDirection}";
             RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
-
-            if (MixService.GetConfig<bool>("IsCache"))
+            Expression<Func<MixPage, bool>> predicate;
+            if (string.IsNullOrEmpty(seoName))
             {
-                getPage = await MixCacheService.GetAsync<RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>>(cacheKey);
+                predicate = p =>
+                p.Type == (int)MixPageType.Home
+                && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+            }
+            else
+            {
+                predicate = p =>
+                p.SeoName == seoName
+                && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
             }
 
-            // Try to get page if not cached yet
-            if (getPage == null)
+            getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+            if (getPage.IsSucceed)
             {
-                Expression<Func<MixPage, bool>> predicate;
-                if (string.IsNullOrEmpty(seoName))
+                if (getPage.Data != null)
                 {
-                    predicate = p =>
-                    p.Type == (int)MixPageType.Home
-                    && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+                    getPage.Data.LoadData(pageIndex: pageIndex, pageSize: pageSize);
                 }
-                else
-                {
-                    predicate = p =>
-                    p.SeoName == seoName
-                    && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
-                }
-
-                getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
-                if (getPage.IsSucceed)
-                {
-                    if (getPage.Data != null)
-                    {
-                        getPage.Data.LoadData(pageIndex: pageIndex, pageSize: pageSize);
-                    }
-                    GeneratePageDetailsUrls(getPage.Data);
-                    MixCacheService.SetAsync(cacheKey, getPage);
-                }
+                GeneratePageDetailsUrls(getPage.Data);
+                //_ = MixCacheService.SetAsync(cacheKey, getPage);
             }
 
             if (getPage.IsSucceed)
@@ -416,31 +406,23 @@ namespace Mix.Cms.Web.Controllers
             string orderBy = MixService.GetConfig<string>("OrderBy");
             int orderDirection = MixService.GetConfig<int>("OrderDirection");
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
-            var cacheKey = $"mvc_{_culture}_page_{pageId}_{pageSize}_{pageIndex}_{orderBy}_{orderDirection}";
             RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
 
-            if (MixService.GetConfig<bool>("IsCache"))
-            {
-                getPage = await MixCacheService.GetAsync<RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>>(cacheKey);
-            }
-            if (getPage == null)
-            {
-                Expression<Func<MixPage, bool>> predicate;
+            Expression<Func<MixPage, bool>> predicate;
 
-                predicate = p =>
-                p.Id == pageId
-                && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+            predicate = p =>
+            p.Id == pageId
+            && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
 
-                getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
-                if (getPage.IsSucceed)
-                {
-                    getPage.Data.LoadData(pageIndex: pageIndex, pageSize: pageSize);
-                    getPage.Data.DetailsUrl = GenerateDetailsUrl(
-                        new { culture = _culture, seoName = getPage.Data.SeoName }
-                        );
-                    GeneratePageDetailsUrls(getPage.Data);
-                    MixCacheService.SetAsync(cacheKey, getPage);
-                }
+            getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+            if (getPage.IsSucceed)
+            {
+                getPage.Data.LoadData(pageIndex: pageIndex, pageSize: pageSize);
+                getPage.Data.DetailsUrl = GenerateDetailsUrl(
+                    new { culture = _culture, seoName = getPage.Data.SeoName }
+                    );
+                GeneratePageDetailsUrls(getPage.Data);
+                //_ = MixCacheService.SetAsync(cacheKey, getPage);
             }
 
             if (getPage.IsSucceed)
@@ -478,29 +460,18 @@ namespace Mix.Cms.Web.Controllers
             string orderBy = MixService.GetConfig<string>("OrderBy");
             int orderDirection = MixService.GetConfig<int>("OrderDirection");
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
-            var cacheKey = $"mvc_{_culture}_tag_{tagName}_{pageSize}_{pageIndex}_{orderBy}_{orderDirection}";
             RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
+            Expression<Func<MixPage, bool>> predicate;
+            predicate = p =>
+            p.SeoName == "tag"
+            && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
 
-
-            if (MixService.GetConfig<bool>("IsCache"))
+            getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+            if (getPage.IsSucceed)
             {
-                getPage = await MixCacheService.GetAsync<RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>>(cacheKey);
-            }
-            if (getPage == null)
-            {
-                Expression<Func<MixPage, bool>> predicate;
-
-                predicate = p =>
-                p.SeoName == "tag"
-                && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
-
-                getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
-                if (getPage.IsSucceed)
-                {
-                    getPage.Data.LoadDataByTag(tagName, orderBy, orderDirection, pageIndex: pageIndex, pageSize: pageSize);
-                    GeneratePageDetailsUrls(getPage.Data);
-                    MixCacheService.SetAsync(cacheKey, getPage);
-                }
+                getPage.Data.LoadDataByTag(tagName, orderBy, orderDirection, pageIndex: pageIndex, pageSize: pageSize);
+                GeneratePageDetailsUrls(getPage.Data);
+                //_ = MixCacheService.SetAsync(cacheKey, getPage);
             }
 
             if (getPage.IsSucceed)// && getPage.Data.View != null
@@ -554,7 +525,7 @@ namespace Mix.Cms.Web.Controllers
                     GeneratePageDetailsUrls(getPage.Data);
                     getPage.Data.LoadDataByKeyword(keyword, orderBy, orderDirection, pageIndex: pageIndex, pageSize: pageSize);
 
-                    MixCacheService.SetAsync(cacheKey, getPage);
+                    //_ = MixCacheService.SetAsync(cacheKey, getPage);
                 }
             }
 
@@ -575,7 +546,7 @@ namespace Mix.Cms.Web.Controllers
             }
         }
 
-        async System.Threading.Tasks.Task<IActionResult> PostViewAsync(int id)
+        async System.Threading.Tasks.Task<IActionResult> Post(int id)
         {
 
             RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel> getPost = null;
@@ -606,7 +577,7 @@ namespace Mix.Cms.Web.Controllers
                             getPost.Data.PostNavs.ForEach(n => n.RelatedPost.DetailsUrl = GenerateDetailsUrl(
                                 new { culture = _culture, action = "post", id = n.RelatedPost.Id, seoName = n.RelatedPost.SeoName }));
                         }
-                        MixCacheService.SetAsync(cacheKey, getPost);
+                        //_ = MixCacheService.SetAsync(cacheKey, getPost);
                     }
                 }
 
@@ -631,7 +602,7 @@ namespace Mix.Cms.Web.Controllers
                 return Redirect($"/error/404");
             }
         }
-        async System.Threading.Tasks.Task<IActionResult> PostViewAsync(int id, string seoName)
+        async System.Threading.Tasks.Task<IActionResult> Post(int id, string seoName)
         {
             ViewData["TopPages"] = await GetCategoryAsync(CatePosition.Nav, seoName);
             ViewData["HeaderPages"] = await GetCategoryAsync(CatePosition.Top, seoName);
@@ -640,13 +611,13 @@ namespace Mix.Cms.Web.Controllers
 
             RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel> getPost = null;
 
-            var cacheKey = $"mvc_{_culture}_post_{seoName}";
+            //var cacheKey = $"mvc_{_culture}_post_{seoName}";
 
-            if (MixService.GetConfig<bool>("IsCache"))
-            {
-                getPost = await MixCacheService.GetAsync<RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel>>(cacheKey);
+            //if (MixService.GetConfig<bool>("IsCache"))
+            //{
+            //    getPost = await MixCacheService.GetAsync<RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel>>(cacheKey);
 
-            }
+            //}
 
             if (getPost == null)
             {
@@ -676,7 +647,7 @@ namespace Mix.Cms.Web.Controllers
                         getPost.Data.PostNavs.ForEach(n => n.RelatedPost.DetailsUrl = GenerateDetailsUrl(
                                 new { culture = _culture, action = "post", id = n.RelatedPost.Id, seoName = n.RelatedPost.SeoName }));
                     }
-                    MixCacheService.SetAsync(cacheKey, getPost);
+                    //_ = MixCacheService.SetAsync(cacheKey, getPost);
                 }
             }
 

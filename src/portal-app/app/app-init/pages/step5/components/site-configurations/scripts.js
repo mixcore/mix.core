@@ -5,7 +5,7 @@ app.component('initSiteConfigurations', {
         var ctrl = this; 
         ctrl.data = [];
         ctrl.$onInit = function(){
-            ctrl.data = $rootScope.filterArray(ctrl.configurations, 'category', 'Site_Common');
+            ctrl.data = $rootScope.filterArray(ctrl.configurations, ['category'], ['Site_Common']);
         } 
     }],
     bindings: {

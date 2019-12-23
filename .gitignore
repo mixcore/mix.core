@@ -288,3 +288,10 @@ src/Mix\.Cms\.Web/Cache/
 .DS_Store
 
 .vscode/
+
+src/Mix.Cms.Web/appsettings.*.json
+/src/_MixCore.sln
+
+src/Mix.Cms.Web/logs/
+
+src/Mix.Cms.Web.old/

@@ -3,7 +3,7 @@
     <form id="frm-theme" ng-class="{'submitted': submitted}" ng-submit="save(activedData)" ng-if="activedData">
         <div class="row justify-content-md-center">
             <div class="col-8">
-                <div class="card mb-3">
+                <div class="card mb-4">
                     <h6 class="card-header">
                         Main Content
                     </h6>
@@ -34,13 +34,11 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="form-group mt-3">
+                        <hr>
+                        <div class="">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" ng-model="activedData.isActived" id="isActived">
-                                <label class="custom-control-label" for="isActived">Activate this theme to be default
-                                    theme</label>
-
+                                <label class="custom-control-label" for="isActived">Activate this theme for your site!</label>
                             </div>
                         </div>
                     </div>
@@ -48,7 +46,11 @@
             </div>
             <div class="col-4">
                 <actions preview-url="activedData.detailsUrl" back-url="'/portal/theme/list'"></actions>
-                <custom-image header="'Image'" type="'Themes'" folder="activedData.name" src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
+                <div class="card">
+                    <div class="card-body">
+                        <custom-image header="'Theme Image'" type="'Themes'" folder="activedData.name" src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
+                    </div>
+                </div>
             </div>
         </div>
 

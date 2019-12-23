@@ -4,6 +4,7 @@ using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
+using System;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 {
@@ -17,12 +18,29 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         public int Id { get; set; }
         [JsonProperty("ReferenceId")]
         public int? ReferenceId { get; set; }
+        [JsonProperty("type")]
+        public int? Type { get; set; }
         [JsonProperty("title")]
         public string Title { get; set; }
         [JsonProperty("name")]
         public string Name { get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
+        [JsonProperty("formTemplate")]
+        public string FormTemplate { get; set; }
+
+        [JsonProperty("edmTemplate")]
+        public string EdmTemplate { get; set; }
+        [JsonProperty("edmSubject")]
+        public string EdmSubject { get; set; }
+        [JsonProperty("edmFrom")]
+        public string EdmFrom { get; set; }
+        [JsonProperty("edmAutoSend")]
+        public bool? EdmAutoSend { get; set; }
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("status")]
+        public int Status { get; set; }
 
         #endregion Models
         #region Views

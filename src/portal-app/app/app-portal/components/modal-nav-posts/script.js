@@ -1,5 +1,12 @@
 ﻿modules.component('modalNavPosts', {
     templateUrl: '/app/app-portal/components/modal-nav-posts/modal-nav-posts.html',
+    bindings: {
+        srcField: '=',
+        srcId: '=',
+        query:'=',
+        selected:'=',
+        save: '&'
+    },    
     controller: ['$rootScope', '$scope', 'ngAppSettings', 'PostService',
         function ($rootScope, $scope, ngAppSettings, postService) {
             var ctrl = this;
@@ -47,7 +54,7 @@
                 }
             }
             ctrl.saveSelected = function(){
-                ctrl.selected = $rootScope.filterArray(ctrl.navs, 'isActived', true);
+                ctrl.selected = $rootScope.filterArray(ctrl.navs, ['isActived'], [true]);
                 setTimeout(() => {
                     ctrl.save().then(() => {
                         ctrl.loadPosts();
@@ -58,12 +65,5 @@
             }
         }
 
-    ],
-    bindings: {
-        srcField: '=',
-        srcId: '=',
-        query:'=',
-        selected:'=',
-        save: '&'
-    }
+    ]
 });

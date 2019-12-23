@@ -1,8 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 {
@@ -17,17 +20,34 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         public UpdateViewModel() : base()
         {
         }
+
+        #region Model
+        /*
+         * Attribute Set Data Id
+         */
+        [JsonProperty("id")]
         public string Id { get; set; }
+        /*
+         * Parent Id: PostId / PageId / Module Id / Data Id / Attr Set Id
+         */
+        [JsonProperty("parentId")]
         public string ParentId { get; set; }
+        [JsonProperty("parentType")]
         public int ParentType { get; set; }
+        [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
+        [JsonProperty("attributeSetName")]
         public string AttributeSetName { get; set; }
+        [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("status")]
         public int Status { get; set; }
+        [JsonProperty("description")]
         public string Description { get; set; }
 
+        #endregion
         #region Views
-
+        [JsonProperty("data")]
         public MixAttributeSetDatas.UpdateViewModel Data { get; set; }
 
         #endregion Views
@@ -55,6 +75,15 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
             AttributeSetName = _context.MixAttributeSet.FirstOrDefault(m => m.Id == AttributeSetId)?.Name;   
         }
 
+        public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var tasks = new List<Task>();
+            tasks.Add(Task.Factory.StartNew(() =>
+            {
+                Data.GenerateCache(Data.Model, Data);
+            }));
+            return tasks;
+        }
 
         #region Async
 

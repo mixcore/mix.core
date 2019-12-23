@@ -1,228 +1,51 @@
 <!-- Main content -->
-<!-- <jumbotrons tag-name="'Post'" tag-type="'1'"></jumbotrons> -->
 <section class="" ng-init="getSingle()">
     <form ng-class="{'submitted': submitted}" ng-submit="save(activedData)">
         <div class="row">
-            <section class="col-sm-8">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <post-main post="activedData" generate-seo="generateSEO()"></post-main>
-                        
-                        <attribute-set-form ng-if="activedData.attributes" attr-set-id="activedData.attributes.id" attr-set-name="activedData.attributes.name" default-id="'default'" attrdata="activedData.attributeData" attr-data-id="dataId" save-data="save(data)">
-                                </attribute-set-form>
-                    </div>
-                </div>
-                <hr>
-                <tabs-v select-callback="selectPane(pane)" class="mb-3">
-                    <pane-v header="General" class="card">
-                        <div class="card-body">
-                            <post-general is-admin="isAdmin" post="activedData"></post-general>
-                        </div>
+            <section class="col-sm-8 pr-3">
+                <tabs-v class="mb-3">
+                    <pane-v header="Content">
+                        <post-content model="activedData"></post-content>
                     </pane-v>
-                    <pane-v header="Search Engine" class="card">
-                        <div class="card-body">
-                            <p class="text-muted">Add a title and description to see how this product might appear in a
-                                search engine listing.</p>                                
-                            <post-seo post="activedData"></post-seo>
-                        </div>
-                    </pane-v>
-                    <pane-v header="Parents" class="card">
-                        <div class="card-body">
-                            <post-parents post="activedData"></post-parents>
-                        </div>
-                    </pane-v>
-                    <pane-v header="Module" class="card">
-                        <div class="card-body">
-                            <post-modules post="activedData"></post-modules>
-                        </div>
-                    </pane-v>
-                    <pane-v header="Medias">
-                        <post-medias post="activedData" medias="activedData.mediaNavs"></post-medias>
-                    </pane-v>
-                    <pane-v header="Related Posts">
-                        <related-navs request="request" source-id="activedData.id" culture="activedData.specificulture" prefix="'post'" navs="activedData.postNavs" data="data" load-data="getListRelated(pageIndex)"></related-navs>
+                    <pane-v header="Advanced">
+
+                        <post-advanced model="activedData"></post-advanced>
                     </pane-v>
                 </tabs-v>
-                <div class="tab-pane fade active show" id="pills-general" role="tabpanel" aria-labelledby="pills-general-tab">
-                    <div class="card">
-                        <div class="card-header">
-                            <h6>Attribute Sets</h6>
-                        </div>
-                        <div class="card-body">
-                            <h6 class="text-danger" ng-if="!activedData.id">
-                                Please Save Post To Continues With Attributtes
-                            </h6>
-                            <attribute-set-navs ng-if="activedData.id" parent-id="activedData.id" parent-type="2"></attribute-set-navs>
-                        </div>
-                    </div>
-                </div>
-                <template-editor ng-if="isAdmin" folder-type="'Posts'" template="activedData.view" templates="activedData.templates">
-                </template-editor>
-                
-                <!-- <div class="card mb-3">
-                    <div class="card-header">
-                        <h6>General
-                            <button class="btn btn-link text-primary btn-sm float-right" type="button"
-                                data-toggle="collapse" data-target="#general-setting" aria-controls="general-setting"
-                                aria-expanded="false" aria-label="Toggle navigation"><span
-                                    class="far fa-edit text-primary"></span> Edit general settings</button>
-                        </h6>
-                        <p class="text-muted">...</p>
-                    </div>
-                    <div id="general-setting" class="card-body collapse">
-                        <post-general post="activedData"></post-general>
-                    </div>
-                </div>
-
-                <div class="card mb-3">
-                    <div class="card-header">
-                        <h6>Search engine listing preview
-                            <button class="btn btn-link text-primary btn-sm float-right" type="button"
-                                data-toggle="collapse" data-target="#seo-setting" aria-controls="seo-setting"
-                                aria-expanded="false" aria-label="Toggle navigation"><span
-                                    class="far fa-edit text-primary"></span> Edit website SEO</button>
-                        </h6>
-                        <p class="text-muted">Add a title and description to see how this product might appear in a
-                            search engine listing.</p>
-                    </div>
-                    <div id="seo-setting" class="card-body collapse">
-                        <post-seo post="activedData"></post-seo>
-                    </div>
-                </div>
-
-                <div class="card mb-3">
-                    <div class="card-header">
-                        <h6>Parent
-                            <button class="btn btn-link text-primary btn-sm float-right" type="button"
-                                data-toggle="collapse" data-target="#parent-setting" aria-controls="parent-setting"
-                                aria-expanded="false" aria-label="Toggle navigation"><span
-                                    class="far fa-edit text-primary"></span> Edit p&p settings</button>
-                        </h6>
-                        <p class="text-muted">...</p>
-                    </div>
-                    <div id="parent-setting" class="card-body collapse">
-                        <post-parents post="activedData"></post-parents>
-                    </div>
-                </div>
-
-                <div class="card mb-3">
-                    <div class="card-header">
-                        <h6>Modules
-                            <button class="btn btn-link text-primary btn-sm float-right" type="button"
-                                data-toggle="collapse" data-target="#module-setting" aria-controls="module-setting"
-                                aria-expanded="false" aria-label="Toggle navigation"><span
-                                    class="far fa-edit text-primary"></span> Edit modules setting</button>
-                        </h6>
-                        <p class="text-muted">...</p>
-                    </div>
-                    <div id="module-setting" class="card-body collapse">
-                        <post-modules post="activedData"></post-modules>
-                    </div>
-                </div>
-
-                <div class="card mb-3">
-                    <div class="card-header">
-                        <h6>Medias
-                            <button class="btn btn-link text-primary btn-sm float-right" type="button"
-                                data-toggle="collapse" data-target="#medias-setting" aria-controls="medias-setting"
-                                aria-expanded="false" aria-label="Toggle navigation"><span
-                                    class="far fa-edit text-primary"></span> Edit modules setting</button>
-                        </h6>
-                        <p class="text-muted">...</p>
-                    </div>
-                    <div id="medias-setting" class="card-body collapse">
-                        
-                    </div>
-                </div>
-
-                <div class="card mb-3">
-                    <div class="card-header">
-                        <h6>Related pots
-                            <button class="btn btn-link text-primary btn-sm float-right" type="button"
-                                data-toggle="collapse" data-target="#related-setting" aria-controls="related-setting"
-                                aria-expanded="false" aria-label="Toggle navigation"><span
-                                    class="fas fa-plus text-primary"></span> Add related posts</button>
-                        </h6>
-                        <p class="text-muted">...</p>
-                    </div>
-                    <div id="related-setting" class="card-body collapse">
-                        <related-navs request="request" source-id="activedData.id" culture="activedData.specificulture"
-                            prefix="'post'" navs="activedData.postNavs" data="data"
-                            load-data="getList(pageIndex)"></related-navs>
-                    </div>
-                </div>
-
-                <template-editor folder-type="'Posts'" template="activedData.view" templates="activedData.templates">
-                </template-editor> -->
-                <!-- 
-                <tabs-v>
-                    <pane-v header="General">
-                        <post-general post="activedData"></post-general>
-                    </pane-v>
-                    <pane-v header="Seo">
-                        <post-seo post="activedData"></post-seo>
-                    </pane-v>
-                    <pane-v header="Parents">
-                        <post-parents post="activedData"></post-parents>
-                    </pane-v>
-                    <pane-v header="Modules">
-                        <post-modules post="activedData"></post-modules>
-                    </pane-v>
-                    <pane-v header="Layout">
-                        <div class="tab-pane">
-                            <template-editor folder-type="'Posts'" template="activedData.view"
-                                templates="activedData.templates"></template-editor>
-                        </div>
-                    </pane-v>
-                    <pane-v header="Medias">
-                        <post-medias post="activedData" medias="activedData.mediaNavs"></post-medias>
-                        
-                    </pane-v>
-                    <pane-v header="Related">
-                        <related-navs request="request" source-id="activedData.id" culture="activedData.specificulture"
-                            prefix="'post'" navs="activedData.postNavs" data="data"
-                            load-data="getList(pageIndex)"></related-navs>
-                    </pane-v>
-                </tabs-v> -->
             </section>
-            <section class="col-sm-4" style="padding-left:0">
+            <section class="col-sm-4 pl-3" style="padding-left:0">
 
                 <actions preview-url="activedData.detailsUrl" back-url="referrerUrl"></actions>
-                <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
-                
-                <collape-container title="'URL slugs'" actived-data="activedData" add-callback="addAlias()">
-                    <pane-collape>
-                        <url-alias ng-repeat="alias in activedData.urlAliases" index="$index" url-alias="alias" remove-callback="removeAliasCallback(index)"></url-alias>
-                    </pane-collape>
-                </collape-container>
 
-                <div class="card mb-3">
-                    <h6 class="card-header">
+                <div class="card mb-4">
+                    <h6 class="card-header position-sticky position-sticky-under-actionbar">
                         Info
                     </h6>
                     <div class="card-body">
                         <statuses status="activedData.status"></statuses>
                         <div class="form-group" ng-if="activedData.status == 4">
                             <label class="control-label">Published Date Time</label>
-                            <div class="input-group input-group-sm mb-3">
+                            <div class="input-group input-group-sm">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1"><i class="mi mi-Calendar"></i></span>
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="mi mi-Calendar"></i>
+                                    </span>
                                 </div>
                                 <input value="{{activedData.publishedDateTime}}" ng-model="activedData.publishedDateTime" type="datetime-local" class="form-control">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label">Created Date Time</label>
-                            <div class="input-group input-group-sm mb-3">
+                            <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1"><i class="mi mi-Calendar"></i></span>
                                 </div>
                                 <input ng-model="activedData.createdDateTime" type="text" class="form-control" readonly="readonly">
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-0">
                             <label class="control-label">Author</label>
-                            <div class="input-group input-group-sm mb-3">
+                            <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1"><i class="mi mi-Contact"></i></span>
                                 </div>
@@ -232,9 +55,24 @@
 
                     </div>
                 </div>
-                <custom-image header="'Image'" type="'Posts'" folder="activedData.seoName" header="activedData.title" description="activedData.excerpt" src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
+                <cultures is-clone="activedData.isClone" data="activedData.cultures"></cultures>
 
-                <custom-image header="'Thumnail'" type="'Posts'" folder="activedData.seoName" title="activedData.title" description="activedData.excerpt" src-url="activedData.thumbnailUrl" src="activedData.thumbnail" auto="'true'"></custom-image>
+                <collape-container title="'URL alias'" actived-data="activedData" add-callback="addAlias()">
+                    <pane-collape>
+                        <url-alias ng-repeat="alias in activedData.urlAliases" index="$index" url-alias="alias" remove-callback="removeAliasCallback(index)"></url-alias>
+                    </pane-collape>
+                </collape-container>
+
+                <tabs-v ng-if="activedData" select-callback="selectPane(pane)" class="mb-4">
+                    <pane-v header="Feature Img">
+                        <custom-image header="'Feature Upload'" type="'Posts'" folder="activedData.seoName" header="activedData.title" description="activedData.excerpt" src-url="activedData.imageUrl" src="activedData.image" auto="'true'"></custom-image>
+                    </pane-v>
+                    <pane-v header="Thumbnail Img">
+                        <custom-image header="'Thumbnail Upload'" type="'Posts'" folder="activedData.seoName" title="activedData.title" description="activedData.excerpt" src-url="activedData.thumbnailUrl" src="activedData.thumbnail" auto="'true'"></custom-image>
+                    </pane-v>
+                </tabs-v>
+
+
             </section>
         </div>
     </form>

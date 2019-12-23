@@ -25,6 +25,9 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int>("AttributeSetId");
 
+                    b.Property<string>("AttributeSetName")
+                        .HasMaxLength(250);
+
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
@@ -78,6 +81,20 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(250);
 
+                    b.Property<bool?>("EdmAutoSend");
+
+                    b.Property<string>("EdmFrom")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("EdmSubject")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("EdmTemplate")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("FormTemplate")
+                        .HasMaxLength(250);
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(250);
@@ -108,6 +125,9 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<int>("AttributeSetId");
 
                     b.Property<string>("AttributeSetName")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("CreatedBy")
                         .HasMaxLength(250);
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -164,6 +184,9 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("AttributeFieldName")
                         .IsRequired()
                         .HasMaxLength(50);
+
+                    b.Property<string>("AttributeSetName")
+                        .HasMaxLength(250);
 
                     b.Property<bool?>("BooleanValue");
 

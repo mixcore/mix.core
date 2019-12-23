@@ -97,12 +97,12 @@ namespace Mix.Cms.Api.Controllers.v1
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("save")]
-        public async Task<RepositoryResponse<UpdateViewModel>> Save(UpdateViewModel data)
+        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromBody]UpdateViewModel model)
         {
-            if (data != null)
+            if (model != null)
             {
-                data.Specificulture = _lang;
-                var result = await base.SaveAsync<UpdateViewModel>(data, true);
+                model.Specificulture = _lang;
+                var result = await base.SaveAsync<UpdateViewModel>(model, true);
                 if (result.IsSucceed)
                 {
                     MixService.LoadFromDatabase();

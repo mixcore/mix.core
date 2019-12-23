@@ -5,7 +5,7 @@ app.component('initGgConfigurations', {
         var ctrl = this; 
         ctrl.data = [];
         ctrl.$onInit = function(){
-            ctrl.data = $rootScope.filterArray(ctrl.configurations, 'category', 'Social_Google');
+            ctrl.data = $rootScope.filterArray(ctrl.configurations, ['category'], ['Social_Google']);
         } 
     }],
     bindings: {

@@ -78,15 +78,17 @@ namespace Mix.Cms.Api.Controllers.v1
         #region Post
 
         // POST api/media
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("save")]
-        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromBody]UpdateViewModel model)
+        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromForm]string model, [FromForm]IFormFile file)
         {
             if (model != null)
             {
-                model.Specificulture = _lang;
-                var result = await base.SaveAsync<UpdateViewModel>(model, true);
+                var json = JObject.Parse(model);
+                var data = json.ToObject<UpdateViewModel>();
+                data.Specificulture = _lang;
+                data.File = file;
+                var result = await base.SaveAsync<UpdateViewModel>(data, true);
                 return result;
             }
             return new RepositoryResponse<UpdateViewModel>() { Status = 501 };

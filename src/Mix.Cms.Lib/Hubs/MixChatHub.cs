@@ -22,7 +22,7 @@ namespace Mix.Cms.Lib.Hubs
             request.Data.ConnectionId = Context.ConnectionId;
             request.Data.DeviceId = request.Data.DeviceId ?? defaultDevice;
             // Mapping connecting user to db  models
-            var user = new ViewModels.MixMessengerUsers.ConnectViewModel(request.Data);
+            var user = new Messenger.ViewModels.MixMessengerUsers.ConnectViewModel(request.Data);
             
             user.CreatedDate = DateTime.UtcNow;
             // Save user and current device to db
@@ -33,7 +33,7 @@ namespace Mix.Cms.Lib.Hubs
             {
 
                 //  Send success msg to caller 
-                var getAvailableUsers = ViewModels.MixMessengerUsers.DefaultViewModel.Repository.GetModelListBy(u => u.Status == (int)MixChatEnums.OnlineStatus.Connected);
+                var getAvailableUsers = Messenger.ViewModels.MixMessengerUsers.DefaultViewModel.Repository.GetModelListBy(u => u.Status == (int)MixChatEnums.OnlineStatus.Connected);
                 SendToCaller(getAvailableUsers.Data, MessageReponseKey.ConnectSuccess);
                 // Announce every one there's new member
                 SendToAll(user, MessageReponseKey.NewMember, false);
@@ -522,22 +522,22 @@ namespace Mix.Cms.Lib.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, "SignalR Users");
+            await Groups.AddToGroupAsync(Context.ConnectionId, defaultRoom);
             await base.OnConnectedAsync();
         }
         public override Task OnDisconnectedAsync(Exception exception)
         {
             // Get current disconnected device
-            var getUserDevice = ViewModels.MixMessengerUserDevices.DefaultViewModel.Repository.GetSingleModel(u => u.ConnectionId == Context.ConnectionId);
+            var getUserDevice = Messenger.ViewModels.MixMessengerUserDevices.DefaultViewModel.Repository.GetSingleModel(u => u.ConnectionId == Context.ConnectionId);
             if (getUserDevice.IsSucceed)
             {
                 getUserDevice.Data.Status = DeviceStatus.Disconnected;
-                var countOnlineDevice = ViewModels.MixMessengerUserDevices.DefaultViewModel.Repository.Count(d => d.UserId == getUserDevice.Data.UserId && d.DeviceId != getUserDevice.Data.DeviceId && d.Status == (int)DeviceStatus.Actived).Data;
+                var countOnlineDevice = Messenger.ViewModels.MixMessengerUserDevices.DefaultViewModel.Repository.Count(d => d.UserId == getUserDevice.Data.UserId && d.DeviceId != getUserDevice.Data.DeviceId && d.Status == (int)DeviceStatus.Actived).Data;
                 if (countOnlineDevice == 0)
                 {
                     SendToAll(getUserDevice.Data.UserId, MessageReponseKey.MemberOffline, false);
                 }
-                var getUser = ViewModels.MixMessengerUsers.DefaultViewModel.Repository.GetSingleModel(u => u.Id == getUserDevice.Data.UserId);
+                var getUser = Messenger.ViewModels.MixMessengerUsers.DefaultViewModel.Repository.GetSingleModel(u => u.Id == getUserDevice.Data.UserId);
                 if (getUser.IsSucceed)
                 {
                     getUser.Data.Status = OnlineStatus.DisConnected;

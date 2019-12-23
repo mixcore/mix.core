@@ -96,19 +96,19 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("value")]
         public string Value { get; set; }
     }
-    public class CryptoViewModel<T>
-    {
-        [JsonProperty("base64Key")]
-        public string Base64Key { get; set; }
-        [JsonProperty("base64IV")]
-        public string Base64IV { get; set; }
-        [JsonProperty("data")]
-        public T Data { get; set; }
-    }
+    //public class CryptoViewModel<T>
+    //{
+    //    [JsonProperty("base64Key")]
+    //    public string Base64Key { get; set; }
+    //    [JsonProperty("base64IV")]
+    //    public string Base64IV { get; set; }
+    //    [JsonProperty("data")]
+    //    public T Data { get; set; }
+    //}
     public class DataValueViewModel
     {
         [JsonProperty("dataType")]
-        public MixDataType DataType { get; set; }
+        public MixDataType DataType { get; set; } = MixDataType.Text;
         [JsonProperty("value")]
         public string Value { get; set; }
         [JsonProperty("name")]
@@ -125,7 +125,7 @@ namespace Mix.Cms.Lib.ViewModels
             {
                 _fullPath = CommonHelper.GetFullPath(new string[] {
                     FileFolder,
-                    FolderName,
+                    //FolderName,
                     $"{Filename}{Extension}"
                 });
 
@@ -141,11 +141,7 @@ namespace Mix.Cms.Lib.ViewModels
         {
             get
             {
-                _webPath = CommonHelper.GetFullPath(new string[] {
-                     MixService.GetConfig<string>("Domain"),
-                    FileFolder,
-                    $"{Filename}{Extension}"
-                });
+                _webPath = FullPath.Replace("wwwroot", string.Empty);
                 return _webPath;
             }
             set

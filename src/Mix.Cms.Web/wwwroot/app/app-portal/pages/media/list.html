@@ -1,5 +1,5 @@
-<section class="card mb-3 manual">
-    <div class="card-header">
+<section class="card mb-4 manual">
+    <!-- <div class="card-header">
         <div ng-init="getSingle()" class="row">
             <div class="col-md-12">
                 <div class="form-group">
@@ -10,7 +10,9 @@
                     <label>Excerpt</label>
                     <textarea class="form-control" ng-model="activedData.description">{{activedData.excerpt}}</textarea>
                 </div>
-                <custom-file header="''" folder="'Medias'" media-file="activedData.mediaFile" data="activedData" src-url="activedData.mediaFile.fullPath" on-update="getList()" save="save(activedData)" auto="'false'" class=""></custom-file>
+                <custom-file header="''" folder="'Medias'" media-file="activedData.mediaFile" data="activedData"
+                    src-url="activedData.mediaFile.fullPath" on-update="getList()" save="save(activedData)"
+                    auto="'false'" class=""></custom-file>
             </div>
         </div>
         <div class="row">
@@ -18,8 +20,10 @@
                 <filter-list request="request" callback="getList(pageIndex)"></filter-list>
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="card-body">
+        <filter-list request="request" callback="getList(pageIndex)" create-url="'/portal/media/create'" create-text="'Upload Media'"></filter-list>
+        <hr>
         <table class="table table-sm table-hover" cellspacing="0">
             <thead class="thead-light">
                 <tr>
@@ -77,12 +81,12 @@
                                 <span class="fa fa-pen text-primary"></span>
                             </a>
                             <a href="{{item.fullPath}}" target="_blank" class="btn btn-link">
-                                <span class="far fa-eye text-primary"></span>
+                                <span class="fas fa-eye text-primary"></span>
                             </a>
                             <a ng-click="clone(item.id)" class="btn btn-sm btn-link d-inline-block"><span class="fas fa-sync-alt text-primary"></span></a>
 
                             <button type="button" class="btn btn-link del-popover" ng-click="remove(item.id)">
-                                <span class="fa fa-times text-danger"></span>
+                                <span class="fas fa-trash-alt text-danger"></span>
                             </button>
                             <div class="popover-body d-none">
                                 <a href="/{{currentLanguage}}/portal/medias/delete/{{item.id}}" class="btn btn btn-danger">Yes,

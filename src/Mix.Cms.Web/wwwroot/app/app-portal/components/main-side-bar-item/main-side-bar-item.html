@@ -9,7 +9,7 @@
             </a>
         </div>
     </div>
-    <div class="sw-toc-link mt-1 mb-1" data-toggle="collapse" data-target="#{{$ctrl.item.title}}" role="button" aria-expanded="false" aria-controls="{{$ctrl.item.title}}">
+    <div class="sw-toc-link mt-1 mb-1" data-toggle="collapse" data-target="#{{$ctrl.item.title}}" role="button" aria-expanded="false" aria-controls="{{$ctrl.item.title}}" ng-if="!$ctrl.item.isHiden">
         <i class="{{$ctrl.item.icon}} mi-lg mi-fw text-primary"></i>
         <a href="{{$ctrl.item.path}}" class="text" ng-bind-html="$ctrl.translate($ctrl.item.title)"></a>
     </div>

@@ -13,6 +13,10 @@
     {
         try
         {
+            @*foreach (var item in navs)
+            {
+                @item.ToString()
+            }*@
             <partial name="@Model.TemplatePath" model="@Model" />
         }
         catch (System.InvalidOperationException invalidOperationException)

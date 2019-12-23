@@ -16,9 +16,12 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
         $scope.init = function () {
             if (!$rootScope.isBusy) {
                 $rootScope.isBusy = true;
-                
-                commonService.loadJArrayData('micon.json').then(resp=>{
+
+                commonService.loadJArrayData('micon.json').then(resp => {
                     ngAppSettings.icons = resp.data;
+                });
+                commonService.loadJsonData('enums.json').then(resp => {
+                    ngAppSettings.enums = resp.data;
                 });
                 commonService.fillAllSettings($scope.lang).then(function (response) {
                     if ($rootScope.globalSettings) {
@@ -63,12 +66,20 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
         }
         $scope.$on('$routeChangeStart', function ($event, next, current) {
             // ... you could trigger something here ...
-            if(current && current.$$route){
+            if (current && current.$$route) {
                 $rootScope.referrerUrl = current.$$route.originalPath;
-                Object.keys(current.params).forEach(function(key,index) {
+                Object.keys(current.params).forEach(function (key, index) {
                     // key: the name of the object key
                     // index: the ordinal position of the key within the object 
-                    $rootScope.referrerUrl = $rootScope.referrerUrl.replace(':' + key, current.params[key]);
+                    if ($rootScope.referrerUrl.indexOf(':' + key) >= 0) {
+                        $rootScope.referrerUrl = $rootScope.referrerUrl.replace(':' + key, current.params[key]);
+                    }
+                    else {
+                        if ($rootScope.referrerUrl.indexOf('?') < 0) {
+                            $rootScope.referrerUrl += '?';
+                        }
+                        $rootScope.referrerUrl += key + '=' + current.params[key] + '&';
+                    }
                 });
             }
             $scope.pageTagName = $location.$$path.toString().split('/')[2];

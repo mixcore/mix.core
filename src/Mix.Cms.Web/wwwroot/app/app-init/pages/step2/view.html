@@ -1,22 +1,12 @@
-<!-- <div class="text-center mb-6 mt-6">
-    <img src="/assets/mixcore-logo-full-white-text.png" alt="">
-</div> -->
 <div ng-init="loadProgress(25)"></div>
 <form ng-class="{'submitted': submitted}" ng-submit="register()">
     <div class="">
-        <h1 class="display-4">Now, creating the most powerful account!
+        <h1 class="lead">We are now creating your most powerful account!
         </h1>
-        <p class="lead">
-            Please keep this account credential safe and only share this account to the most trusted!
-        </p>
         <hr>
         <div class="form-group">
-            <div class="row">
-                <div class="col">Administrator Username</div>
-                <div class="col"><input ng-model="user.userName" class="form-control" required placeholder="Handsome..."></div>
-            </div>
-
-
+            <label>Administrator Username</label>
+            <input ng-model="user.userName" class="form-control" required placeholder="Handsome...">
         </div>
         <div class="row">
             <div class="col">
@@ -32,19 +22,24 @@
                     <label class="form-label">
                         Confirm Password
                     </label>
-                    <input ng-model="user.confirmPassword" type="password" required class="form-control" placeholder="Re-type the password">
+                    <input ng-model="user.confirmPassword" type="password" required class="form-control" placeholder="MyM0stC0mpl3xP@ssw0rd">
                 </div>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="form-label">Email Address
+            <label class="form-label">Your Email Address
             </label>
-            <input ng-model="user.email" class="form-control" type="email" required placeholder="Email@mixcore.org">
+            <input ng-model="user.email" class="form-control" type="email" required placeholder="your-email-address@domain.com">
         </div>
+
+        <p class="text-info">
+            * Please keep this account credential safe and only share this account to your most trusted!
+        </p>
+        <hr>
         <div class="form-group">
             <label class="custom-control custom-checkbox">
-                <input ng-model="user.isAgreed" class="custom-control-input" type="checkbox">
+                <input ng-model="user.isAgreed" class="custom-control-input" type="checkbox" required>
                 <span class="custom-control-label">
                     I agree to the <a href="#" data-toggle="modal" data-target="#termAndCondition">terms and
                         conditions</a>.</span>
@@ -54,12 +49,9 @@
             </div>
         </div>
         <div class="text-right">
-            <button type="submit" class="btn btn-primary">Continue <i class="fa fa-angle-right"></i></button>
+            <button type="submit" class="btn btn-primary px-4" style="min-width:200px">Continue <i class="fa fa-angle-right"></i></button>
             <!-- <button type="button" class="btn btn-link" ng-click="advanceSetup()">Advance Setup</button> -->
         </div>
-        <!-- <div class="form-footer">
-            
-        </div> -->
     </div>
 
 </form>
