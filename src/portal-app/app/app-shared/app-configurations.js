@@ -384,7 +384,7 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'BaseODataService'
             var result = [];
             for (var i = 0; i < array.length; i++) {
                 var matched = true;
-                for (var j = 0; i < keys.length; i++) {
+                for (var j = 0; j < keys.length; j++) {
                     if (array[i][keys[j]] !== values[j]) {
                         matched = false;
                         break;

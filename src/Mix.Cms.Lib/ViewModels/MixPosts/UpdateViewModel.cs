@@ -934,6 +934,96 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         #endregion  Methods
 
+        public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var tasks = new List<Task>();
+            tasks.Add(Task.Run(() =>
+            {
+                AttributeData.Data.RemoveCache(AttributeData.Data.Model, context, transaction);
+            }));
+            foreach (var item in AttributeData.Data.Values)
+            {
+                tasks.Add(Task.Run(() =>
+                {
+                    item.RemoveCache(item.Model, context, transaction);
+                }));
+
+            }
+
+            tasks.AddRange(RemoveCacheRelatedPosts(context, transaction));
+
+            tasks.AddRange(RemoveCacheRelatedPages(context, transaction));
+
+            tasks.AddRange(RemoveCacheRelatedModules(context, transaction));
+
+            return tasks;
+        }
+
+        private List<Task> RemoveCacheRelatedPosts(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var tasks = new List<Task>();
+            // Remove parent Pages
+            var relatedPages = context.MixRelatedPost.Include(m => m.S).Where(d => d.Specificulture == Specificulture && (d.DestinationId == Id))
+                .AsEnumerable();
+            foreach (var item in relatedPages)
+            {
+                tasks.Add(Task.Run(() =>
+                {
+                    MixPostPosts.ReadViewModel.Repository.RemoveCache(item, context, transaction);
+                }));
+
+                tasks.Add(Task.Run(() =>
+                {
+                    MixPosts.ReadListItemViewModel.Repository.RemoveCache(item.S, context, transaction);
+                }));
+
+            }
+            return tasks;
+        }
+        private List<Task> RemoveCacheRelatedModules(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var tasks = new List<Task>();
+            // Remove parent Pages
+            var relatedPages = context.MixModulePost.Include(m => m.MixModule).Where(d => d.Specificulture == Specificulture && (d.PostId == Id))
+                .AsEnumerable();
+            foreach (var item in relatedPages)
+            {
+                tasks.Add(Task.Run(() =>
+                {
+                    MixModulePosts.ReadViewModel.Repository.RemoveCache(item, context, transaction);
+                }));
+
+                tasks.Add(Task.Run(() =>
+                {
+                    MixModules.ReadListItemViewModel.Repository.RemoveCache(item.MixModule, context, transaction);
+                }));
+
+            }
+            return tasks;
+        }
+
+        private List<Task> RemoveCacheRelatedPages(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var tasks = new List<Task>();
+            // Remove parent Pages
+            var relatedPages = context.MixPagePost.Include(m => m.MixPage).Where(d => d.Specificulture == Specificulture && (d.PostId == Id))
+                .AsEnumerable();
+            foreach (var item in relatedPages)
+            {
+                tasks.Add(Task.Run(() =>
+                {
+                    MixPagePosts.ReadViewModel.Repository.RemoveCache(item, context, transaction);
+                }));
+
+                tasks.Add(Task.Run(() =>
+                {
+                    MixPages.ReadViewModel.Repository.RemoveCache(item.MixPage, context, transaction);
+                }));
+
+            }
+            return tasks;
+        }
+
         #endregion Overrides
 
         #region Expands

@@ -280,10 +280,24 @@ namespace Mix.Cms.Lib
 
         }
 
-        public static async System.Threading.Tasks.Task<ViewModels.MixAttributeSetDatas.Navigation> GetNavigation(string name, string culture)
+        public static async System.Threading.Tasks.Task<ViewModels.MixAttributeSetDatas.Navigation> GetNavigation(string name, string culture, string activePath = null)
         {
             var navs = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.NavigationViewModel>(culture, "navigation", "equal", "name", name);
-            return navs.Data.FirstOrDefault()?.Nav;
+            var nav = navs.Data.FirstOrDefault()?.Nav;
+            if (nav != null && !string.IsNullOrEmpty(activePath))
+            {
+                foreach (var cate in nav.MenuItems)
+                {
+                    cate.IsActive = cate.Uri == activePath;
+                    foreach (var item in cate.MenuItems)
+                    {
+                        item.IsActive = item.Uri == activePath;
+                        cate.IsActive = cate.IsActive || item.IsActive;
+                    }
+                }
+            }
+
+            return nav;
         }
 
         

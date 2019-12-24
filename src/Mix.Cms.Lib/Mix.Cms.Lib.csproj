@@ -7,6 +7,7 @@
     <ItemGroup>
         <PackageReference Include="CommonMark.NET" Version="0.15.1" />
         <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.2.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.2.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.3" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.3">
             <PrivateAssets>all</PrivateAssets>
