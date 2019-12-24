@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -409,7 +410,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             {
                 Attributes = getAttrs.Data.Fields;
                 AttributeData.AttributeSetId = getAttrs.Data.Id;
-                AttributeData.AttributeSetName = getAttrs.Data.Name; 
+                AttributeData.AttributeSetName = getAttrs.Data.Name;
                 AttributeData.Data.AttributeSetId = getAttrs.Data.Id;
                 AttributeData.Data.AttributeSetName = getAttrs.Data.Name;
                 AttributeData.ParentId = id.ToString();
@@ -429,15 +430,31 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
         {
             var tasks = new List<Task>();
+            tasks.Add(Task.Run(() =>
+            {
+                AttributeData.Data.RemoveCache(AttributeData.Data.Model, context, transaction);
+            }));
+            foreach (var item in AttributeData.Data.Values)
+            {
+                tasks.Add(Task.Run(() =>
+                {
+                    item.RemoveCache(item.Model, context, transaction);
+                }));
+
+            }
             // Remove parent Pages
-            var relatedPages = context.MixPage.Where(m => m.MixPageModule
-                 .Any(d => d.Specificulture == Specificulture && (d.ModuleId == Id)));
+            var relatedPages = context.MixPageModule.Include(m => m.MixPage).Where(d => d.Specificulture == Specificulture && (d.ModuleId == Id))
+                .AsEnumerable();
             foreach (var item in relatedPages)
             {
                 tasks.Add(Task.Run(() =>
                 {
-                    var data = new MixPages.ReadViewModel(item, context, transaction);
-                    data.RemoveCache(item, context, transaction);
+                    MixPageModules.ReadMvcViewModel.Repository.RemoveCache(item, context, transaction);
+                }));
+
+                tasks.Add(Task.Run(() =>
+                {
+                    MixPages.ReadViewModel.Repository.RemoveCache(item.MixPage, context, transaction);
                 }));
 
             }
@@ -445,14 +462,14 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             return tasks;
         }
 
-    #endregion Async
+        #endregion Async
 
 
 
-    #endregion Overrides
+        #endregion Overrides
 
-    #region Expand
-    private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
+        #region Expand
+        private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             LoadAttributeData(_context, _transaction);
             LoadAttributeFields(_context, _transaction);
@@ -517,7 +534,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 }
                 );
             }
-            
+
         }
 
         public void LoadData(int? postId = null, int? productId = null, int? pageId = null
