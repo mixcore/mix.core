@@ -282,7 +282,7 @@ namespace Mix.Cms.Lib
 
         public static async System.Threading.Tasks.Task<ViewModels.MixAttributeSetDatas.Navigation> GetNavigation(string name, string culture, string activePath = null)
         {
-            var navs = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.NavigationViewModel>(culture, "navigation", "equal", "name", name);
+            var navs = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.NavigationViewModel>(culture, MixConstants.AttributeSetName.NAVIGATION, "equal", "name", name);
             var nav = navs.Data.FirstOrDefault()?.Nav;
             if (nav != null && !string.IsNullOrEmpty(activePath))
             {

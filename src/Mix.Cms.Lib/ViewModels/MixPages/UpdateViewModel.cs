@@ -543,7 +543,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         #region Expands
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == "page", _context, _transaction);
+            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_PAGE
+                , _context, _transaction);
             if (getAttrs.IsSucceed)
             {
                 Attributes = getAttrs.Data;

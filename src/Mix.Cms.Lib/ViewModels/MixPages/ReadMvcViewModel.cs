@@ -206,7 +206,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             try
             {
                 pageSize = pageSize > 0 ? pageSize : PageSize;
-                pageIndex = pageIndex ?? 0;
+                pageIndex = pageIndex > 0 ? pageIndex : 0;
                 Expression<Func<MixPageModule, bool>> dataExp = null;
                 Expression<Func<MixPagePost, bool>> postExp = null;
                 foreach (var item in Modules)
@@ -398,7 +398,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         #endregion Sync
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == "page", _context, _transaction);
+            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_PAGE, _context, _transaction);
             if (getAttrs.IsSucceed)
             {
                 AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
