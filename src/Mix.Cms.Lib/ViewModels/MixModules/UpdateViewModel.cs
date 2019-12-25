@@ -405,7 +405,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         private async Task<RepositoryResponse<bool>> SaveAttributeAsync(int id, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == "module", context, transaction);
+            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_MODULE, context, transaction);
             if (getAttrs.IsSucceed)
             {
                 Attributes = getAttrs.Data.Fields;
@@ -496,7 +496,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
             if (string.IsNullOrEmpty(AttributeData.Id))
             {
-                var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == "module", context, transaction);
+                var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_MODULE, context, transaction);
                 if (getAttrs.IsSucceed)
                 {
                     Attributes = getAttrs.Data.Fields;

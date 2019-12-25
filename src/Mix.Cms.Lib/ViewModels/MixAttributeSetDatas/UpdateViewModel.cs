@@ -99,7 +99,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (result.IsSucceed)
             {
-                var addictionalSet = _context.MixAttributeSet.FirstOrDefault(m => m.Name == "additional_field");
+                var addictionalSet = _context.MixAttributeSet.FirstOrDefault(m => m.Name == "sys_additional_field");
                 foreach (var item in Values)
                 {
                     if (result.IsSucceed)

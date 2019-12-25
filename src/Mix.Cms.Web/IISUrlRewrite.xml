@@ -28,7 +28,7 @@
 
     <rule name="Rewrite to alias page paging" stopProcessing="true">
       <match url="^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/(.*)\/(\d+)\/(\d+)$" />
-      <action type="Rewrite" url="/{R:1}/alias?alias={R:5}&amp;pageSize={R:6}&amp;pageIndex={R:7}" appendQueryString="false"/>
+      <action type="Rewrite" url="/{R:1}/alias?alias={R:5}&amp;pageSize={R:6}&amp;page={R:7}" appendQueryString="false"/>
     </rule>
 
     <rule name="Rewrite to alias page" stopProcessing="true">

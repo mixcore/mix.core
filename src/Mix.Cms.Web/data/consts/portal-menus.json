@@ -14,10 +14,10 @@
                 {
                     "title": "Create New",
                     "icon": "mi mi-Add",
-                    "path": "/portal/navigation/create?attributeName=navigation&attributeSetId=2&dataId=default"
+                    "path": "/portal/navigation/create?attributeName=sys_navigation&attributeSetId=2&dataId=default"
                 },
                 {
-                    "path": "/portal/navigation/list?attributeSetId=2&attributeSetName=navigation",
+                    "path": "/portal/navigation/list?attributeSetId=2&attributeSetName=sys_navigation",
                     "title": "List",
                     "icon": "mi mi-List"
                 }

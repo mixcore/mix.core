@@ -42,7 +42,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("nav")]
         public Navigation Nav { get {
-                if (AttributeSetName == "navigation" && Data!=null)
+                if (AttributeSetName == MixConstants.AttributeSetName.NAVIGATION && Data!=null)
                 {
                     return Data.ToObject<Navigation>();
                 }
@@ -158,7 +158,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue));
                 case MixEnums.MixDataType.Reference:
                     JArray arr = new JArray();
-                    foreach (var nav in item.DataNavs)
+                    foreach (var nav in item.DataNavs.OrderBy(d=>d.Priority))
                     {
                         arr.Add(nav.Data.Data);
                     }

@@ -54,6 +54,19 @@
                         // });
 
                     }
+
+                    $(document).on('click', 'a', function(e){                        
+                        var href = $(this).attr('href');
+                        var target = $(this).attr('target');
+                        if(href.indexOf('#') !== 0 && target!='_blank'){
+                            e.preventDefault();                            
+                            $scope.$apply($scope.isBusy = true);
+                            setTimeout(() => {
+                                // window.location.href = href;
+                                window.open(href, target || '_top');
+                            }, (200));
+                        }
+                    });
                 };
 
                 $scope.translate = $rootScope.translate;
