@@ -1,6 +1,5 @@
 <div class="card">
     <div class="card-body">
-
         <div class="row mb-3">
             <div class="col-12">
                 <filter-list request="request" callback="loadFiles(pageIndex)"></filter-list>
@@ -63,12 +62,11 @@
                                         <span class="fas fa-eye text-primary"></span>
                                     </a>
 
-                                    <button type="button" class="btn btn-link del-popover" ng-click="removeFile(item.id)">
+                                    <button type="button" class="btn btn-link del-popover" ng-click="removeFile(item.fullPath)">
                                         <span class="fas fa-trash-alt text-danger"></span>
                                     </button>
                                     <div class="popover-body d-none">
-                                        <a href="/{{currentLanguage}}/portal/files/delete/{{item.id}}" class="btn btn btn-danger">Yes,
-                                            I want to delete!</a>
+                                        <a href="/{{currentLanguage}}/portal/files/delete/{{item.fullPath}}" class="btn btn btn-danger">Yes, I want to delete!</a>
                                     </div>
                                 </div>
                             </td>

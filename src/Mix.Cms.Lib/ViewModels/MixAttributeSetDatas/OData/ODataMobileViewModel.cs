@@ -79,7 +79,29 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
             if (getValues.IsSucceed)
             {
+                Fields = MixAttributeFields.ODataMobileViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
                 Values = getValues.Data.OrderBy(a => a.Priority).ToList();
+                foreach (var field in Fields.OrderBy(f => f.Priority))
+                {
+                    var val = Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
+                    if (val == null)
+                    {
+                        val = new MixAttributeSetValues.ODataMobileViewModel(
+                            new MixAttributeSetValue()
+                            {
+                                AttributeFieldId = field.Id,
+                                AttributeFieldName = field.Name,
+                            }
+                            , _context, _transaction);
+                        val.Priority = field.Priority;
+                        Values.Add(val);
+                    }
+                    val.Priority = field.Priority;
+                    val.AttributeSetName = AttributeSetName;
+                    
+                }
+                
+
                 ParseData();
             }
             

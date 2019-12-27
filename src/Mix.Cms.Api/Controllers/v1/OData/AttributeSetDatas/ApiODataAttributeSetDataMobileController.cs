@@ -26,7 +26,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
 {
     [Produces("application/json")]
     [Route("api/v1/odata/{culture}/attribute-set-data/mobile")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ApiODataAttributeSetDataMobileController :
         ODataBaseApiController<MixCmsContext, MixAttributeSetData>
     {

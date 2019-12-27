@@ -4,7 +4,7 @@
       "id": 1,
       "type": 0,
       "title": "Menu Item",
-      "name": "menu_item",
+      "name": "sys_menu_item",
       "description": null,
       "formTemplate": null,
       "edmTemplate": null,
@@ -17,7 +17,7 @@
         {
           "id": 1,
           "attributeSetId": 1,
-          "attributeSetName": "menu_item",
+          "attributeSetName": "sys_menu_item",
           "referenceId": null,
           "regex": null,
           "title": "Title",
@@ -39,7 +39,7 @@
         {
           "id": 2,
           "attributeSetId": 1,
-          "attributeSetName": "menu_item",
+          "attributeSetName": "sys_menu_item",
           "referenceId": null,
           "regex": null,
           "title": "Uri",
@@ -61,7 +61,7 @@
         {
           "id": 27,
           "attributeSetId": 1,
-          "attributeSetName": null,
+          "attributeSetName": "sys_menu_item",
           "referenceId": null,
           "regex": null,
           "title": "Icon",
@@ -83,7 +83,7 @@
         {
           "id": 13,
           "attributeSetId": 1,
-          "attributeSetName": null,
+          "attributeSetName": "sys_menu_item",
           "referenceId": null,
           "regex": null,
           "title": "Type",
@@ -118,7 +118,7 @@
         {
           "id": 10,
           "attributeSetId": 1,
-          "attributeSetName": null,
+          "attributeSetName": "sys_menu_item",
           "referenceId": null,
           "regex": null,
           "title": "Target",
@@ -161,7 +161,7 @@
         {
           "id": 11,
           "attributeSetId": 1,
-          "attributeSetName": null,
+          "attributeSetName": "sys_menu_item",
           "referenceId": null,
           "regex": null,
           "title": "classes",
@@ -183,7 +183,7 @@
         {
           "id": 12,
           "attributeSetId": 1,
-          "attributeSetName": null,
+          "attributeSetName": "sys_menu_item",
           "referenceId": null,
           "regex": null,
           "title": "Description",
@@ -205,7 +205,7 @@
         {
           "id": 24,
           "attributeSetId": 1,
-          "attributeSetName": null,
+          "attributeSetName": "sys_menu_item",
           "referenceId": 1,
           "regex": null,
           "title": "Menu Items",
@@ -229,11 +229,11 @@
     {
       "id": 2,
       "title": "Navigation",
-      "name": "navigation",
+      "name": "sys_navigation",
       "fields": [
         {
           "attributeSetId": 2,
-          "attributeSetName": "navigation",
+          "attributeSetName": "sys_navigation",
           "title": "Title",
           "dataType": 7,
           "name": "title",
@@ -248,7 +248,7 @@
         {
           "id": 23,
           "attributesetId": 2,
-          "attributeSetName": null,
+          "attributeSetName": "sys_navigation",
           "referenceId": null,
           "regex": null,
           "title": "Name",
@@ -268,7 +268,7 @@
         },
         {
           "attributeSetId": 2,
-          "attributeSetName": "navigation",
+          "attributeSetName": "sys_navigation",
           "title": "Menu Items",
           "dataType": 23,
           "name": "menu_items",
@@ -286,25 +286,25 @@
     {
       "id": 3,
       "title": "Page",
-      "name": "page",
+      "name": "sys_additional_field_page",
       "fields": []
     },
     {
       "id": 4,
       "title": "Module",
-      "name": "module",
+      "name": "sys_additional_field_module",
       "fields": []
     },
     {
       "id": 5,
       "title": "Post",
-      "name": "post",
+      "name": "sys_additional_field_post",
       "fields": []
     },
     {
       "id": 6,
       "title": "Addictional Field",
-      "name": "addictional_field",
+      "name": "sys_addictional_field",
       "fields": []
     }
   ]
