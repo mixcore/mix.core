@@ -1,4 +1,4 @@
-@model List<Mix.Cms.Lib.ViewModels.MixArticleArticles.ReadViewModel>
+@model List<Mix.Cms.Lib.ViewModels.MixPostPosts.ReadViewModel>
 <div class="cd-section" id="blogs-5">
    
  <!--     *********    END BLOGS 5      *********      -->
@@ -9,7 +9,7 @@
                     <div class="row">
                         @foreach(var item in Model)
                         {
-                            var article = item.RelatedArticle;
+                            var article = item.RelatedPost;
                             <div class="col-md-4">
                                 <div class="card card-blog">
                                     <div class="card-image">

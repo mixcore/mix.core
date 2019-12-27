@@ -1,4 +1,4 @@
-@model Mix.Cms.Lib.ViewModels.MixArticles.ReadMvcViewModel
+@model Mix.Cms.Lib.ViewModels.MixPosts.ReadMvcViewModel
 @{
     var bg = Model.ThumbnailUrl ?? "/content/templates/mavee-spa/uploads/2019-07/4a75fe622d4ac814915b1024x576af0b2b8f1c0942c8973fc146da80f390.jpg";
 }
@@ -81,7 +81,7 @@
                         <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
                             <div class="card-body">
                                 <!--<p>
-                                <fb-send class="hide-on-mb" app-id="'@(MixService.GetConfig<string>("FacebookAppId", ViewBag.culture as string))'"></fb-send>
+                                <fb-send class="hide-on-mb" app-id="'@(Mix.Cms.Lib.Services.MixService.GetConfig<string>("FacebookAppId", ViewBag.culture as string))'"></fb-send>
                                 <fb-share></fb-share>
                                 </p>
                                 <p><fb-like href="'@Model.DetailsUrl'"></fb-like></p>

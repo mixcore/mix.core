@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
@@ -280,10 +281,26 @@ namespace Mix.Cms.Lib
 
         }
 
-        public static async System.Threading.Tasks.Task<ViewModels.MixAttributeSetDatas.Navigation> GetNavigation(string name, string culture, string activePath = null)
+        public static async System.Threading.Tasks.Task<ViewModels.MixAttributeSetDatas.Navigation> GetNavigation(string name, string culture, IUrlHelper Url)
         {
-            var navs = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.NavigationViewModel>(culture, MixConstants.AttributeSetName.NAVIGATION, "equal", "name", name);
+            var navs = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.NavigationViewModel>(culture, MixConstants.AttributeSetName.NAVIGATION, "equal", "name", name);            
             var nav = navs.Data.FirstOrDefault()?.Nav;
+            string action = Url.ActionContext.ActionDescriptor.RouteValues["action"];
+            string controller = Url.ActionContext.ActionDescriptor.RouteValues["controller"];
+            string activePath = string.Empty;
+            switch (action)
+            {
+                case "Page":                    
+                case "Post":
+                    string seoName = Url.ActionContext.RouteData.Values["seoName"].ToString();
+                    string id = Url.ActionContext.RouteData.Values["id"].ToString();
+                    activePath = $"/{culture}/post/{id}/{seoName}";
+                    break;
+                case "Alias":
+                    string alias = Url.ActionContext.HttpContext.Request.Query["alias"].ToString();
+                    activePath = $"/{culture}/{alias}";
+                    break;
+            }
             if (nav != null && !string.IsNullOrEmpty(activePath))
             {
                 foreach (var cate in nav.MenuItems)
