@@ -298,10 +298,6 @@ namespace Mix.Cms.Web.Controllers
         async Task<IActionResult> AliasAsync(string seoName)
         {
             // Home Page
-            int? pageSize = MixService.GetConfig<int?>("TagPageSize");
-            string orderBy = MixService.GetConfig<string>("OrderBy");
-            int orderDirection = MixService.GetConfig<int>("OrderDirection");
-            int.TryParse(Request.Query["page"], out int page);
             RepositoryResponse<Lib.ViewModels.MixUrlAliases.UpdateViewModel> getAlias = null;
 
             if (getAlias == null)
@@ -344,11 +340,13 @@ namespace Mix.Cms.Web.Controllers
         {
 
             // Home Page
-            //int? pageSize = MixService.GetConfig<int?>("TagPageSize");
+            int maxPageSize = MixService.GetConfig<int>("MaxPageSize");
             string orderBy = MixService.GetConfig<string>("OrderBy");
             int orderDirection = MixService.GetConfig<int>("OrderDirection");
             int.TryParse(Request.Query["page"], out int page);
             int.TryParse(Request.Query["pageSize"], out int pageSize);
+            pageSize = (pageSize < maxPageSize) ? pageSize : maxPageSize;
+
             RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
             Expression<Func<MixPage, bool>> predicate;
             if (string.IsNullOrEmpty(seoName))
@@ -372,7 +370,6 @@ namespace Mix.Cms.Web.Controllers
                     getPage.Data.LoadData(pageSize: pageSize, pageIndex: page - 1);
                 }
                 GeneratePageDetailsUrls(getPage.Data);
-                //_ = MixCacheService.SetAsync(cacheKey, getPage);
             }
 
             if (getPage.IsSucceed)
