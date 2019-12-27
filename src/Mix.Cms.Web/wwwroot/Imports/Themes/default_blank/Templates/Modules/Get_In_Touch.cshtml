@@ -11,7 +11,7 @@
                     <h2 class="title">@Model.Title</h2>
                     <h4 class="description">@Model.Description</h4>
                     <p class="description text-primary">
-                        @(MixService.GetConfig<string>("working_time", ViewBag.culture))
+                        @(Mix.Cms.Lib.Services.MixService.GetConfig<string>("working_time", ViewBag.culture))
                     </p>                   
                     <div class="info info-horizontal">
                         <div class="icon icon-primary">
@@ -20,7 +20,7 @@
                         <div class="description">
                             <h4 class="info-title">Address</h4>
                             <p class="description"> 
-                            <a class="text-primary" target="_blank" href="https://www.google.com/maps/place/H%E1%BB%93+Ch%C3%AD+Minh,+Vi%E1%BB%87t+Nam/@@10.7546664,106.4150311,10z/data=!3m1!4b1!4m5!3m4!1s0x317529292e8d3dd1:0xf15f5aad773c112b!8m2!3d10.8230989!4d106.6296638">@(MixService.GetConfig<string>("ContactAddress", ViewBag.culture))</a>
+                            <a class="text-primary" target="_blank" href="https://www.google.com/maps/place/H%E1%BB%93+Ch%C3%AD+Minh,+Vi%E1%BB%87t+Nam/@@10.7546664,106.4150311,10z/data=!3m1!4b1!4m5!3m4!1s0x317529292e8d3dd1:0xf15f5aad773c112b!8m2!3d10.8230989!4d106.6296638">@(Mix.Cms.Lib.Services.MixService.GetConfig<string>("ContactAddress", ViewBag.culture))</a>
                             </p>
                         </div>
                     </div>
@@ -31,7 +31,7 @@
                         <div class="description">
                             <h4 class="info-title">Phone</h4>
                             <p class="description"> 
-                                <a class="text-primary" href="tel:@(MixService.GetConfig<string>("ContactPhone", ViewBag.culture))">@(MixService.GetConfig<string>("ContactPhone", ViewBag.culture))</a>
+                                <a class="text-primary" href="tel:@(Mix.Cms.Lib.Services.MixService.GetConfig<string>("ContactPhone", ViewBag.culture))">@(Mix.Cms.Lib.Services.MixService.GetConfig<string>("ContactPhone", ViewBag.culture))</a>
                             </p>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                         <div class="description">
                             <h4 class="info-title">Email</h4>
                             <p class="description">                              
-                                <a class="text-primary" href="mailto:@(MixService.GetConfig<string>("ContactEmail", ViewBag.culture))">@(MixService.GetConfig<string>("ContactEmail", ViewBag.culture))</a>
+                                <a class="text-primary" href="mailto:@(Mix.Cms.Lib.Services.MixService.GetConfig<string>("ContactEmail", ViewBag.culture))">@(Mix.Cms.Lib.Services.MixService.GetConfig<string>("ContactEmail", ViewBag.culture))</a>
                                 
                             </p>
                         </div>

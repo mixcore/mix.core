@@ -27,13 +27,10 @@ modules.component('navigationForm', {
                     If input is data id => load ctrl.attrData from service and handle it independently
                     Else modify input ctrl.attrData
                 */
-                $rootScope.isBusy = true;
-                ctrl.defaultData = await service.getSingle('portal', [ctrl.defaultId, ctrl.attrSetId, ctrl.attrSetName]);
+                $rootScope.isBusy = true;                
                 if (ctrl.attrDataId) {
                     ctrl.attrData = await service.getSingle('portal', [ctrl.attrDataId, ctrl.attrSetId, ctrl.attrSetName]);
                     if (ctrl.attrData) {
-                        ctrl.defaultData.attributeSetId = ctrl.attrData.attributeSetId;
-                        ctrl.defaultData.attributeSetName = ctrl.attrData.attributeSetName;
                         $rootScope.isBusy = false;
                         $scope.$apply();
                     } else {
@@ -46,8 +43,9 @@ modules.component('navigationForm', {
 
                 }
                 else {
-                    if (!ctrl.attrData) {
-                        ctrl.attrData = angular.copy(ctrl.defaultData);
+                    
+                    if (!ctrl.attrData) {                        
+                        ctrl.attrData = await service.getSingle('portal', [ctrl.defaultId, ctrl.attrSetId, ctrl.attrSetName]);
                     }
                     $rootScope.isBusy = false;
                     $scope.$apply();

@@ -2,7 +2,7 @@
 @inject IAuthorizationService AuthorizationService
 
 @{
-    var cates = await MixCmsHelper.GetNavigation("footer", ViewBag.culture);
+    var cates = await Mix.Cms.Lib.MixCmsHelper.GetNavigation("footer", ViewBag.culture);
 }
 <footer class="footer footer-default ">
     <div class="container">

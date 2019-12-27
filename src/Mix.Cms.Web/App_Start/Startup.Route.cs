@@ -45,19 +45,19 @@ namespace Mix.Cms.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
                 routes.MapRoute(
-                    name: "areaRoute",
+                    name: "areaRoute",                    
                     template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{area:exists}/{controller=Portal}/{action=Init}");
                 routes.MapRoute(
-                    name: "alias",
+                    name: "Alias",
                     template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{seoName}");
                 routes.MapRoute(
-                   name: "page",
+                   name: "Page",
                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{seoName}");
                 routes.MapRoute(
-                    name: "file",
+                    name: "File",
                     template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/portal/file");
                 routes.MapRoute(
-                    name: "post",
+                    name: "Post",
                     template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/post/{id}/{seoName}");
 
                 // uncomment the following line to Work-around for #1175 in beta1

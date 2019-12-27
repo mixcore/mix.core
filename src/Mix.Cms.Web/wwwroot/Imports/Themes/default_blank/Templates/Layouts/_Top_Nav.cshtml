@@ -3,16 +3,16 @@
 
 @{
     string culture = ViewBag.culture;
-    var topCates = await MixCmsHelper.GetNavigation("top", ViewBag.culture);
-    var socials = MixCmsHelper.GetModule("social", ViewBag.culture);
-    string assetFolder = MixCmsHelper.GetAssetFolder(ViewBag.culture);
+    var topCates = await Mix.Cms.Lib.MixCmsHelper.GetNavigation("top", ViewBag.culture);
+    var socials = Mix.Cms.Lib.MixCmsHelper.GetModule("social", ViewBag.culture);
+    string assetFolder = Mix.Cms.Lib.MixCmsHelper.GetAssetFolder(ViewBag.culture);
 }
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg bg-white navbar-absolute navbar-transparent">
     <div class="container">        
         <div class="navbar-translate">
             <a class="navbar-brand" href="/@ViewBag.culture">
-                    <img class="logo" height="120" src="@(MixService.GetConfig<string>("Logo", ViewBag.culture))" />
+                    <img class="logo" height="120" src="@(Mix.Cms.Lib.Services.MixService.GetConfig<string>("Logo", ViewBag.culture))" />
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-bar top-bar"></span>
@@ -22,7 +22,7 @@
         </div>
         <div class="collapse navbar-collapse" data-nav-image="@assetFolder/assets/img/blurred-image-1.jpg" data-color="orange">
              <ul class="navbar-nav ml-auto">
-                @foreach (var cate in topCates)
+                @foreach (var cate in topCates.MenuItems)
                 {
                     string activedClass = cate.IsActive ? "active" : string.Empty;
                     if (string.IsNullOrEmpty(cate.Uri))

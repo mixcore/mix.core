@@ -19,12 +19,12 @@ app.controller('NavigationController',
                 $scope.dataId = $routeParams.dataId;
                 $scope.parentId = $routeParams.parentId;
                 $scope.parentType = $routeParams.parentType;
-                $scope.refParentId = $routeParams.refParentId;
-                $scope.refParentType = $routeParams.refParentType;
-                if ($scope.refParentId && $scope.refParentType) {
+                // $scope.refParentId = $routeParams.refParentId;
+                // $scope.refParentType = $routeParams.refParentType;
+                if ($scope.parentId && $scope.parentType) {
                     $scope.refDataModel = {
-                        parentId: $scope.refParentId,
-                        parentType: $scope.refParentType
+                        parentId: $scope.parentId,
+                        parentType: $scope.parentType
                     };
                 }
             };

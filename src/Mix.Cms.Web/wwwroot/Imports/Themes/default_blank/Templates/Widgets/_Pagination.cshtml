@@ -4,32 +4,32 @@
 <div class="row">
     
     <div class="col-md-8 ml-auto mr-auto">
-        @if (Model.Articles.TotalPage > 1)
+        @if (Model.TotalPage > 1)
         {
             <div class="tr-pagination text-center">
                 <ul class="pagination" style="display: inline-flex!important;">
-                    @if (Model.Articles.PageIndex > 0)
+                    @if (Model.PageIndex > 0)
                     {
                         <li class="float-left page-item">
-                            <a class="page-link"  href="@detailsUrl/@Model.PageSize/@(Model.Articles.PageIndex-1)">
-                                 @(MixService.Translate<string>("previous_page", ViewBag.culture))
+                            <a class="page-link"  href="@detailsUrl/@Model.PageSize/@(Model.PageIndex-1)">
+                                 @(Mix.Cms.Lib.Services.MixService.Translate<string>("previous_page", ViewBag.culture))
                             </a>
                         </li>
                     }
-                    @for (int i = 0; i < Model.Articles.TotalPage; i++)
+                    @for (int i = 0; i < Model.TotalPage; i++)
                     {
-                        string cl = i == Model.Articles.PageIndex ? "active" : string.Empty;
+                        string cl = i == Model.PageIndex ? "active" : string.Empty;
                         <li class="@cl  page-item">
                             <a class="page-link" href="@detailsUrl/@Model.PageSize/@i">
                                 @(i + 1)
                             </a>
                         </li>
                     }
-                    @if (Model.Articles.PageIndex < Model.Articles.TotalPage - 1)
+                    @if (Model.PageIndex < Model.TotalPage - 1)
                     {
                         <li class="float-right page-item">
-                            <a class="page-link" href="@detailsUrl/@Model.PageSize/@(Model.Articles.PageIndex+1)">
-                                @(MixService.Translate<string>("next_page", ViewBag.culture))
+                            <a class="page-link" href="@detailsUrl/@Model.PageSize/@(Model.PageIndex+1)">
+                                @(Mix.Cms.Lib.Services.MixService.Translate<string>("next_page", ViewBag.culture))
                             </a>
                         </li>
                     }

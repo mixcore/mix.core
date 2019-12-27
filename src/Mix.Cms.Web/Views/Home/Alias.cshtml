@@ -2,11 +2,10 @@
     string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, ViewBag.culture);
     string layout = Model.Layout ?? "Masters/_Layout";
     Layout = $"Templates/{master}/{layout}";
-    var materTemplate = await MixCmsHelper.GetTemplateByPath(layout);
+    var materTemplate = await MixCmsHelper.GetTemplateByPath(layout);    
 }
 <div>
     <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
-    
     <input type="hidden" id="view-type" value="Page" />
     <input type="hidden" id="view-id" value="@Model.Id" />
     @if (!string.IsNullOrEmpty(Model.TemplatePath))

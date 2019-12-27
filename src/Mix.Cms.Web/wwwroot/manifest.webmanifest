@@ -2,7 +2,7 @@
     "name": "Mixcore CMS",
     "short_name": "Mixcore",
     "description": "Fully Open Source UI Tools to create multi-purpose Web Apps & Application Services. CMS and Dashboards built on top of ASP.Net Core / Dotnet Core, SignalR, Angular.JS and Bootstrap.",
-    "start_url": "https://mixcore.org/pwa-index.html",
+    "start_url": "https://mixcore.org/pwa",
     "scope": "Displaying Mixcore CMS Contents",
     "orientation": "any",
     "lang": "English",

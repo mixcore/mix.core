@@ -61,12 +61,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
         public UpdateViewModel() : base()
         {
-            IsCache = false;
+            //IsCache = false;
         }
 
         public UpdateViewModel(MixAttributeSetValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
-            IsCache = false;
+            //IsCache = false;
         }
 
         #endregion Contructors
