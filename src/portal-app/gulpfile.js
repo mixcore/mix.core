@@ -109,6 +109,9 @@ paths.framework = {
         paths.scriptLib + "angularjs/angular-route.min.js",
         paths.scriptLib + "angularjs/angular-animate.min.js",
         paths.scriptLib + "angularjs/angular-sanitize.min.js",
+        paths.scriptLib + "angularjs/ui-bootstrap-tpls-2.5.0.min.js",
+        paths.scriptLib + "onsen/onsenui.min.js",
+        paths.scriptLib + "onsen/angular-onsenui.js",
         paths.scriptLib + "jquery/jquery.min.js",
         paths.scriptLib + "jquery/jquery-ui.min.js",
         paths.scriptLib + "bootstrap/js/popper.min.js",
@@ -136,7 +139,8 @@ paths.appCss = {
         paths.webapp + "app-shared/**/*.css",
         paths.webapp + "app-portal/**/*.css",
         paths.webapp + "app-client/**/*.css",
-        paths.webapp + "app-init/**/*.css"
+        paths.webapp + "app-init/**/*.css",
+        paths.scriptLib + "**/*.css"
     ],
     dest: paths.webroot + "css/app-vendor.min.css"
 };
