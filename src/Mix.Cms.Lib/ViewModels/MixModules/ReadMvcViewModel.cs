@@ -204,7 +204,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #region Expand
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == "module", _context, _transaction);
+            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_MODULE, _context, _transaction);
             if (getAttrs.IsSucceed)
             {
                 AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
@@ -234,8 +234,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                pageSize = pageSize > 0 ? PageSize : PageSize;
-                pageIndex = pageIndex ?? 0;
+                pageSize = pageSize > 0 ? pageSize : PageSize;
+                pageIndex = pageIndex > 0 ? pageIndex : 0;
                 Expression<Func<MixModuleData, bool>> dataExp = null;
                 Expression<Func<MixModulePost, bool>> postExp = null;
                 switch (Type)

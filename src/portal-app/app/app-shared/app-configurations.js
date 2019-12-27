@@ -380,10 +380,17 @@ app.run(['$http', '$rootScope', 'ngAppSettings', '$location', 'BaseODataService'
                 return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
             });
         };
-        $rootScope.filterArray = function (array, key, value) {
+        $rootScope.filterArray = function (array, keys, values) {
             var result = [];
             for (var i = 0; i < array.length; i++) {
-                if (array[i][key] === value) {
+                var matched = true;
+                for (var j = 0; j < keys.length; j++) {
+                    if (array[i][keys[j]] !== values[j]) {
+                        matched = false;
+                        break;
+                    }
+                }
+                if(matched){
                     result.push(array[i]);
                 }
             }
