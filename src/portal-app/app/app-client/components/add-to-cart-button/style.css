@@ -1,4 +1,4 @@
-#mix-messenger{    
+.add-to-card #mix-messenger{    
     /* overflow: auto; */
     padding: 10px;
     position: fixed;
@@ -42,7 +42,7 @@
 } 
 */
 
-#mix-messenger .contact{
+.add-to-card #mix-messenger .contact{
     position: absolute;
     right: 0;
     top: 40px;
@@ -52,13 +52,13 @@
     text-align: right;
     padding: 10px;
 }
-#mix-messenger .contact.collape{
+.add-to-card #mix-messenger .contact.collape{
     display: none;
 }
-#mix-messenger .contact ul{
+.add-to-card #mix-messenger .contact ul{
      padding: 0;     
 }
-#mix-messenger .contact ul li{
+.add-to-card #mix-messenger .contact ul li{
      list-style: none;
 }
 
@@ -67,11 +67,11 @@
 General Style
 ---------------------*/
 
-.left-side {
+.add-to-card .left-side {
   float: left;
 }
 
-.right-side {
+.add-to-card .right-side {
   float: right;
 }
 
@@ -79,7 +79,7 @@ General Style
 Background Elements
 ---------------------*/
 
-.ui {
+.add-to-card .ui {
   width: 80%;
   height: 96%;
   position: relative;
@@ -88,7 +88,7 @@ Background Elements
   box-shadow: 0 30px 48px rgba(50,54,70,0.24);
 }
 
-a.btn-support {
+.add-to-card a.btn-support {
   width: 50px;
   height: 50px;
   position: absolute;
@@ -106,7 +106,7 @@ a.btn-support {
 Message Widget
 ---------------------*/
 
-.widget {
+.add-to-card .widget {
   width: calc(52% - 100px);
   min-width: 400px;
   /* height: calc(32% - 60px);
@@ -119,7 +119,7 @@ Message Widget
   box-shadow: 0 30px 48px rgba(50,54,70,0.24);
 }
 
-.widget:before {
+.add-to-card .widget:before {
 	content: ' ';
 	position: absolute;
 	width: 0;
@@ -130,7 +130,7 @@ Message Widget
 	border-color: #fff transparent transparent transparent;
 }
 
-.widget-header {
+.add-to-card .widget-header {
   width: 100%;
   height: 30px;
   background-color: #fff;
@@ -143,7 +143,7 @@ Message Widget
   padding-top: 10px;
 }
 
-.widget-header>a{
+.add-to-card .widget-header>a{
   cursor: pointer;
 }
 
@@ -157,23 +157,23 @@ Message Widget
   min-height: 50px;
 }
 
-ul {
+.add-to-card ul {
   list-style: none;
 }
 
-li.message-left,
-li.message-right {
+.add-to-card li.message-left,
+.add-to-card li.message-right {
   position: relative;
   width: 100%;
   display: unset ;
 }
 
-.message-avatar {
+.add-to-card .message-avatar {
   width: 40px;
   margin-top: 12px;
 }
 
-li.message-left > .message-avatar {
+.add-to-card li.message-left > .message-avatar {
   float: left;
 }
 
@@ -181,39 +181,39 @@ li.message-right > .message-avatar {
   float: right;
 }
 
-.avatar {
+.add-to-card .avatar {
   border-radius: 20px;
   font-size: 3.1em;
   line-height: 32px;
   text-align: center;
   overflow: hidden;
 }
-.avatar img{
+.add-to-card .avatar img{
   width:auto;
   height: 32px;
 }
-li.message-left .avatar {
+.add-to-card li.message-left .avatar {
   float: left;
   color: #9bc6b6;
   background-color: #55967e;
 }
 
-li.message-right .avatar {
+.add-to-card li.message-right .avatar {
   float: right;
   color: #b3becc;
   background-color: #6d819c;
 }
 
-li.message-right .name{
+.add-to-card li.message-right .name{
   text-align: right;
 }
 
-li.message-left .name{
+.add-to-card li.message-left .name{
   text-align: left;
   margin-left: 50px;
 }
 
-.name {
+.add-to-card .name {
   font-size: 0.6em;
   color: #6d819c;
   text-align: center;
@@ -223,7 +223,7 @@ li.message-left .name{
 
 
 
-.message-text {
+.add-to-card .message-text {
   max-width: calc(100% - 43px);
   padding: 12px;
   border-radius: 4px;
@@ -232,20 +232,20 @@ li.message-left .name{
   color: #263959;
 }
 
-li.message-left > .message-text {
+.add-to-card li.message-left > .message-text {
   text-align: left;
   left: 16px;
   margin-left: 43px;
   font-size: 9pt;
 }
 
-li.message-right > .message-text {
+.add-to-card li.message-right > .message-text {
   text-align: right;
   right: 16px;
   font-size: 9pt;
 }
 
-.message-text:before {
+.add-to-card .message-text:before {
   content: ' ';
 	position: absolute;
 	width: 0;
@@ -254,17 +254,17 @@ li.message-right > .message-text {
 	border: 8px solid;
 }
 
-li.message-left > .message-text:before {
+.add-to-card li.message-left > .message-text:before {
   left: 44px;
   border-color: transparent #e7e9f2 transparent transparent;
 }
 
-li.message-right > .message-text:before {
+.add-to-card li.message-right > .message-text:before {
   right: 45px;
   border-color: transparent transparent transparent #e7e9f2;
 }
 
-.message-hour {
+.add-to-card .message-hour {
   max-width: calc(100% - 43px);
   padding: 2px;
   color: #a8b0cf;
@@ -272,20 +272,20 @@ li.message-right > .message-text:before {
   margin-bottom: 12px;
 }
 
-.message-hour > span {
+.add-to-card .message-hour > span {
   color: #2CA8FF;
 }
 
-li.message-left > .message-hour {
+.add-to-card li.message-left > .message-hour {
   text-align: left;
   margin-left: 60px;
 }
 
-li.message-right > .message-hour {
+.add-to-card li.message-right > .message-hour {
   text-align: right;
 }
 
-.widget-form {
+.add-to-card .widget-form {
   height: 60px;
   padding: 8px 8px;
   position: relative;
@@ -293,7 +293,7 @@ li.message-right > .message-hour {
   border-top: 1px solid rgba(50,54,70,0.08);
 }
 
-.msgContent {
+.add-to-card .msgContent {
   resize: none;
   width: calc(100% - 44px);
   padding: 3px;
@@ -305,20 +305,20 @@ li.message-right > .message-hour {
   height: 38px;
 }
 
-textarea::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+.add-to-card textarea::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: lightgray;
 }
-textarea::-moz-placeholder { /* Firefox 19+ */
+.add-to-card textarea::-moz-placeholder { /* Firefox 19+ */
   color: lightgray;
 }
-textarea:-ms-input-placeholder { /* IE 10+ */
+.add-to-card textarea:-ms-input-placeholder { /* IE 10+ */
   color: lightgray;
 }
-textarea:-moz-placeholder { /* Firefox 18- */
+.add-to-card textarea:-moz-placeholder { /* Firefox 18- */
   color: lightgray;
 }
 
-button.sendMsgBtn {
+.add-to-card button.sendMsgBtn {
   color: #2CA8FF;
   background-color: transparent;
   border: 1px solid #2CA8FF;
@@ -329,14 +329,14 @@ button.sendMsgBtn {
   outline: none;
 }
 
-button.sendMsgBtn:hover {
+.add-to-card button.sendMsgBtn:hover {
   color: #fff;
   background-color: #2CA8FF;
   border: 1px solid #2CA8FF;
 }
 
-.message-avatar, .message-text,
-.message-hour, button.sendMsgBtn {
+.add-to-card .message-avatar, .message-text,
+.add-to-card .message-hour, button.sendMsgBtn {
   -webkit-transition: all 0.6s ease;
      -moz-transition: all 0.6s ease;
       -ms-transition: all 0.6s ease;
@@ -344,7 +344,7 @@ button.sendMsgBtn:hover {
           transition: all 0.6s ease;
 }
 
-.hidden{
+.add-to-card .hidden{
       color: #FFFFFF;
     text-align: center;
 
@@ -355,7 +355,7 @@ button.sendMsgBtn:hover {
      opacity: 0;
 }
 
-#quest {
+.add-to-card #quest {
   /* background: lightgray; */
   
   border-radius: 50%;
