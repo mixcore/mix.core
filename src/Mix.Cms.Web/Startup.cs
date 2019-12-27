@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -88,6 +89,7 @@ namespace Mix.Cms.Web
             services.AddTransient<ISmsSender, AuthSmsMessageSender>();
             services.AddSingleton<MixService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             // add signalr
             services.AddSignalR();
             services.AddOData();
@@ -105,11 +107,13 @@ namespace Mix.Cms.Web
                     {
                         Location = ResponseCacheLocation.None,
                         NoStore = true
-                    });
+                    });                
             }).AddJsonOptions(options => options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver())
-
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            
+            services.Configure<RazorViewEngineOptions>(options => {
+                options.AllowRecompilingViewsOnFileChange = true;
+            });
             services.AddMemoryCache();
 
         }

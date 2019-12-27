@@ -61,6 +61,9 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
                 });
             }
         };
+        $scope.alert = function(message) {
+            ons.notification.alert(message);
+          };
         $scope.prettyJsonObj = function (obj) {
             return JSON.stringify(obj, null, '\t');
         }
