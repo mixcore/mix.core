@@ -1,7 +1,7 @@
 @model Mix.Cms.Lib.ViewModels.MixPages.ReadMvcViewModel
 @{
     string culture = ViewBag.culture;
-    var social = MixCmsHelper.GetModule("Social", ViewBag.culture);
+    var social = Mix.Cms.Lib.MixCmsHelper.GetModule("Social", ViewBag.culture);
     ViewData["DetailsUrl"] = Model.DetailsUrl;
 }
 <div>
@@ -28,9 +28,9 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8 ml-auto mr-auto">
-                    @foreach (var nav in Model.Articles.Items)
+                    @foreach (var nav in Model.Posts.Items)
                     {
-                        var product = nav.Article;
+                        var product = nav.Post;
                         <div class="card card-plain card-blog">
                             <div class="card-image">
                                 <a href="@product.DetailsUrl">
@@ -44,7 +44,7 @@
                                 @Html.Raw(product.Excerpt)
                             </h5>
                             <a href="@product.DetailsUrl" class="btn btn-primary btn-round">
-                                @(MixService.Translate<string>("read_more", ViewBag.culture))                                    
+                                @(Mix.Cms.Lib.Services.MixService.Translate<string>("read_more", ViewBag.culture))                                    
                                 </a>
                         </div>
                     }
