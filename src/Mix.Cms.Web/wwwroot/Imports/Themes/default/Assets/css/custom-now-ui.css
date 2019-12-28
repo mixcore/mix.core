@@ -1,0 +1,38 @@
+:root{
+    --primary-color:#729f00;
+    --primary-color-hover:#9bd112;
+  }
+  @media screen and (max-width: 580px) {
+    .hide-on-mb{
+      display: none !important;
+    }
+    .navbar-transparent .logo,.navbar .logo{
+      height:25px;
+    }
+  }
+  @media screen and (min-width: 580px) {
+    .hide-on-desktop{
+      display: none !important;
+    }
+    .navbar-transparent .logo{
+      height:35px;
+    }
+  }  
+  .page-header:before {
+      background-color: rgba(0, 0, 0, 0.4);
+  }
+  .card-body p, .card-description p{
+    margin-bottom:0;
+  }
+  .booking iframe{
+    border:0;
+  }
+  .booking iframe .schedul-page .body{
+    overflow: visible!important;
+  }
+  a.text-primary:focus, a.text-primary:hover {
+      color: var(--primary-color-hover)!important;
+  }
+  
+
+

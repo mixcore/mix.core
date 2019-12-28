@@ -1,0 +1,178 @@
+@{ 
+    string assetFolder = MixCmsHelper.GetAssetFolder(ViewBag.culture);
+}
+<!DOCTYPE html>
+<html lang="@ViewBag.culture" amp>
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" sizes="16x16" href="@(MixService.GetConfig<string>("Favicon", ViewBag.culture) ?? "/favicon-16x16.png")">
+    @*<link rel="manifest" href="/manifest.json">*@
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' />
+    <meta property="fb:app_id" content="@(MixService.GetConfig<string>("FacebookAppId", ViewBag.culture))" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    
+    
+    @RenderSection("Seo", false)     
+    <!-- amp required -->
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+<style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+    <!-- end amp required -->
+    <!--     Fonts and icons     -->    
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200|Open+Sans+Condensed:700" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <!-- CSS Files -->
+    <link href="@assetFolder/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="@assetFolder/assets/css/now-ui-kit.css?v=1.3.0" rel="stylesheet" />
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link href="@assetFolder/assets/css/custom-now-ui.css" rel="stylesheet" />
+    
+    
+    <!--[STYLES]-->
+    @RenderSection("Styles", false)
+    <link rel="stylesheet" href="~/css/shared.min.css" />
+    <link rel="stylesheet" href="~/css/app-vendor.min.css" />
+    <base href="/@ViewBag.culture">
+     @if (!string.IsNullOrEmpty(MixService.GetConfig<string>("Recaptcha_Key", ViewBag.culture)))
+    {
+        <script src='https://www.google.com/recaptcha/api.js?render=@(MixService.GetConfig<string>("Recaptcha_Key", ViewBag.culture))'></script>
+    }
+    @if (!string.IsNullOrEmpty(MixService.GetConfig<string>("Google_Analytic_Key", ViewBag.culture)))
+    {
+        <!-- Google Analytics -->
+        <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', '@(MixService.GetConfig<string>("Google_Analytic_Key", ViewBag.culture))', 'auto');
+        ga('send', 'pageview');
+        </script>
+        <!-- End Google Analytics -->
+    }
+    <!-- Facebook sdk -->
+    @if (!string.IsNullOrEmpty(MixService.GetConfig<string>("FacebookAppId", ViewBag.culture)))
+    {
+        <script>
+            window.fbAsyncInit = function() {
+                FB.init({
+                appId            : '@(MixService.GetConfig<string>("FacebookAppId", ViewBag.culture))',
+                autoLogAppEvents : true,
+                xfbml            : true,
+                version          : 'v3.3'
+                });
+            };
+            
+            (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = "https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+             (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+            fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+        </script>
+        <script async defer src="https://connect.facebook.net/en_US/all.js"></script>
+    }
+    <!-- End Facebook sdk -->
+</head>
+
+<body class="@ViewData["PageClass"]" 
+ 
+ ng-app="MixClient" ng-controller="AppClientController" ng-init="init('@ViewBag.culture')">
+    <div id="fb-root"></div>
+    @if(!string.IsNullOrEmpty(MixService.GetConfig<string>("Facebook_Page_Id", ViewBag.culture))){
+        <!-- Your customer chat code -->    
+    
+    <div class="fb-customerchat"
+    attribution=setup_tool
+    page_id="@(MixService.GetConfig<string>("Facebook_Page_Id", ViewBag.culture))"
+    theme_color="#47c5d1"
+    logged_in_greeting="Chào Bạn !"
+    logged_out_greeting="Chào Bạn !">
+    </div>
+    
+    }
+
+    <partial name="../Layouts/_Top_Nav.cshtml" />
+    <div class="wrapper">
+        <div class="wrapper">
+        @RenderBody()
+        <partial name="../Layouts/_Footer.cshtml" />
+        </div>
+    </div>
+   <!--   Core JS Files   -->
+    <script src="~/js/framework.min.js"></script>
+    <script src="~/js/app-client-required.min.js"></script>
+    <script src="~/js/app-client.min.js"></script>
+    <script src="~/js/app-shared.min.js"></script>
+    <!-- <script src="~/js/bootstrap.min.js"></script>
+    
+     -->
+     <script>
+         $(document).ready(function(){
+            
+            $('.nav-item').on('click', function(){
+                $('.nav-item').removeClass('active');
+                var dest = $(this).data('scroll-to');
+                $(this).addClass('active');
+                $('html, body').animate({
+                    scrollTop: $(dest).offset().top - 50
+                }, 1000);
+                if (nowuiKit.misc.navbar_menu_visible == 1) {
+                    $('html').removeClass('nav-open');
+                    nowuiKit.misc.navbar_menu_visible = 0;
+                    $('#bodyClick').remove();
+                    setTimeout(function() {
+                    $toggle.removeClass('toggled');
+                    }, 550);
+                }
+            });
+            setTimeout(() => {
+                var activeSection = getActiveSection();
+                if(activeSection){
+                    if($('#'+activeSection).length){
+                    $('html, body').animate({
+                        scrollTop: $('#'+activeSection).offset().top - 50
+                    }, 1000);
+                    }
+                    $('.nav-item').removeClass('active');
+                    $('.navbar-nav').find('.'+ activeSection).addClass('active');
+                }
+            }, 1000);
+            
+         })
+         function getActiveSection() {            
+            var res = window.location.href.match(/#!#([^&]*)/g, '$1')
+            if(res){
+                res= res.toString().replace(/#!#/g, '');
+            }
+            return res;
+        }
+     </script>
+    <!-- <script src="~/app-client/shared/controllers/app-client-controller.js"></script> -->
+    <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200|Open+Sans+Condensed:700" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">             
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script> -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script> -->
+
+    <!--  Google Maps Plugin    -->
+    <!o-- Control Center for Now Ui Kit: parallax effects, scripts for the example pages etc -->
+    <script src="@assetFolder/assets/js/now-ui-kit.js?v=1.2.2" type="text/javascript"></script>
+
+    <!--[SCRIPTS]-->
+    @RenderSection("Scripts", false)
+</body>
+</html>

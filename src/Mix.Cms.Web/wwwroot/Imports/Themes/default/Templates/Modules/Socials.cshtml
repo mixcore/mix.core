@@ -1,0 +1,8 @@
+@model Mix.Cms.Lib.ViewModels.MixModules.ReadMvcViewModel
+@if(Model != null){
+    foreach(var item in Model.Data.Items){
+        <a href="@item.Property("url")" target="_blank" class="btn btn-primary btn-icon  btn-round">
+            <i class="@item.Property("icon")"></i>
+        </a>
+    }
+}
