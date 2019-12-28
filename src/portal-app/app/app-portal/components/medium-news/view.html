@@ -6,7 +6,7 @@
     </div>
     <div class="card-body">
         <div >
-            <ul class="list-group list-group-flush" ng-repeat="item in $ctrl.items">
+            <ul class="list-group list-group-flush" ng-repeat="item in $ctrl.items|limitTo:5">
                 <li class="list-group-item">{{item.title}} [ <a href="{{item.link}}" target="_blank">Read more...</a> ]</li>
             </ul>
             <!-- <pre>

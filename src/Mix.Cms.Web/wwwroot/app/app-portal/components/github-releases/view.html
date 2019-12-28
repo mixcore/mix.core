@@ -6,7 +6,7 @@
     </div>
     <div class="card-body">
         <div>
-            <ul class="list-group list-group-flush" ng-repeat="item in $ctrl.items">
+            <ul class="list-group list-group-flush" ng-repeat="item in $ctrl.items|limitTo:5">
                 <li class="list-group-item">{{item.published_at | date:'medium'}} - {{item.tag_name}} {{item.prerelease? '(Prerelease)' : ''}} [ <a href="{{item.html_url}}" target="_blank">Read</a> | <a href="{{item.zipball_url}}" target="_blank">Zip</a> ]</li>
             </ul>
             <!-- <pre>
