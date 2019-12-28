@@ -19,7 +19,7 @@ Codefactor     |[![CodeFactor](https://www.codefactor.io/repository/github/mixco
 
 |  |Links  |
 |---------|---------|
-|Demo     |https://demo.mixcore.org / https://demo.mixcore.org/portal (admin/P@ssw0rd)|
+|Demo     |https://demo.mixcore.org / https://demo.mixcore.org/portal (admin/P@ssw0rd)<br>https://dev.mixcore.org/en-us/|
 |Dev docs     |https://docs.mixcore.org / https://mixcore.dev|
 |Youtube     |https://www.youtube.com/channel/UChqzh6JnC8HBUSQ9AWIcZAw|
 |Twitter     |https://twitter.com/mixcore_cms         |
