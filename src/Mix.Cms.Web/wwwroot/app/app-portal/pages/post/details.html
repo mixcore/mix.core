@@ -43,13 +43,27 @@
                                 <input ng-model="activedData.createdDateTime" type="text" class="form-control" readonly="readonly">
                             </div>
                         </div>
-                        <div class="form-group mb-0">
+                        <div class="form-group">
                             <label class="control-label">Author</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1"><i class="mi mi-Contact"></i></span>
                                 </div>
                                 <input ng-model="activedData.createdBy" class="form-control" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label class="control-label">Template</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1"><i class="mi mi-Layout"></i></span>
+                                </div>
+                                <select class="custom-select">
+                                    <option selected="selected">Choose...</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
                             </div>
                         </div>
 
