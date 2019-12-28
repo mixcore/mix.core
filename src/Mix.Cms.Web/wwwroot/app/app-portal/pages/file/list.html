@@ -3,9 +3,14 @@
         <div class="row mb-3">
             <div class="col-12">
                 <filter-list request="request" callback="loadFiles(pageIndex)"></filter-list>
-                <a class="btn btn-sm btn-primary px-3 mt-3" ng-if="backUrl" href="{{backUrl}}"><i class="fas fa-reply"></i> Back</a>
+                
             </div>
-            <div class="col-12">
+        </div>
+        <div class="row mb-3">
+            <div class="col-6">
+                <a class="btn btn-sm btn-primary px-3" ng-if="backUrl" href="{{backUrl}}"><i class="fas fa-reply"></i> Back</a>
+            </div>
+            <div class="col-6">
                 <mix-file-upload folder="request.key" on-success="loadFiles()">
                 </mix-file-upload>
             </div>
