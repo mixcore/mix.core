@@ -3,7 +3,7 @@
     <a class="navbar-brand ml-2" href="/{{$ctrl.settings.lang}}" target="_blank" aria-label="mixcore">
         <div class="mixcore-logo" style="width: 120px;height: 25px;background-color: hsla(var(--primary-color-hue,211),var(--primary-color-saturation,100%),var(--primary-color-brightness,50%),1);-webkit-mask:  url(../assets/mixcore-logo-green.svg) no-repeat 50% 50%; mask: url(../assets/mixcore-logo-green.svg) no-repeat 50% 50%;">
         </div>
-        
+
         <!-- <img src="{{$ctrl.settings.data.Logo}}" alt="Kiwi standing on oval" height="25px"> -->
     </a>
 
@@ -52,9 +52,7 @@
             </a>
         </li>
     </ul>
-    <div class="avatar border">
-        <a href="/portal/my-profile">
-            <img class="rounded-circle" alt="200x200" ng-src="{{$ctrl.avatar}}" data-holder-rendered="true">
-        </a>
-    </div>
+    <a href="/portal/my-profile">
+        <img class="rounded-circle border" alt="200x200" ng-src="{{$ctrl.avatar}}" data-holder-rendered="true" width="32" height="32">
+    </a>
 </header>
