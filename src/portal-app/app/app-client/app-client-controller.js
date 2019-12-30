@@ -1,9 +1,8 @@
 (function (angular) {
     'use strict';
     app.controller('AppClientController',
-        ['$rootScope', '$scope', 'GlobalSettingsService', 'CommonService', 'AuthService', 'BaseService'
-            , 'localStorageService', 'TranslatorService', 'SharedModuleDataService',
-            function ($rootScope, $scope, globalSettingsService, commonService, authService, baseService,
+        ['$rootScope', '$scope', 'GlobalSettingsService', 'CommonService', 'AuthService', 'localStorageService', 'TranslatorService', 'SharedModuleDataService',
+            function ($rootScope, $scope, globalSettingsService, commonService, authService,
                 localStorageService, translatorService, moduleDataService) {
                 $scope.lang = '';
                 $scope.isInit = false;
@@ -110,51 +109,7 @@
                         }
                     }, 500);
                 };
-                $scope.saveEmployee = function () {
-                    var msg = $rootScope.settings.data['employee_confirm_msg'] || 'Are you sure you want to submit this form? Please be noted that after submission, all information cannot be changed or adjusted.';
-                    $rootScope.showConfirm($scope, 'saveEmployeeConfirmed', [], null, '', msg);
-                };
-                $scope.saveEmployeeConfirmed = async function () {
-                    if ($scope.validateEmployee($scope.activedModuleData.jItem)) {
-                        var mediaService = angular.copy(baseService);
-                        mediaService.init('media');
-                        $rootScope.isBusy = true;
-                        var getMedia = await mediaService.getSingle(['portal']);
-                        if (getMedia.isSucceed) {
-                            // mediaFile.fileName = file.name.substring(0, file.name.lastIndexOf('.'));
-                            // mediaFile.extension = file.name.substring(file.name.lastIndexOf('.'));
-                            // mediaFile.fileStream = imgData;
-                            var media = getMedia.data;
-                            media.title = '';
-                            media.description = '';
-                            media.mediaFile = $scope.mediaFile;
-                            var resp = await mediaService.save(media);
-                            if (resp && resp.isSucceed) {
-                                $scope.activedModuleData.jItem['avatar'].value = resp.data.fullPath;
-                                return $scope.saveModuleData();
-                            }
-                            else {
-                                if (resp) { $rootScope.showErrors(resp.errors); }
-                                $rootScope.isBusy = false;
-                                $scope.$apply();
-                            }
-                        }
-
-                    }
-                };
-                $scope.validateEmployee = function (data) {
-                    var year = parseInt(data.start_year.value);
-                    if (year < 1900 || year > 2019) {
-                        $rootScope.showErrors([$rootScope.translate('invalid_year')]);
-                        return false;
-                    } else if (!$scope.mediaFile.fileName) {
-                        $rootScope.showErrors([$rootScope.translate('avatar_required')]);
-                        return false;
-                    } else {
-                        return true;
-                    }
-
-                };
+               
                 $scope.saveModuleData = async function () {
 
                     var resp = await moduleDataService.saveModuleData($scope.activedModuleData);

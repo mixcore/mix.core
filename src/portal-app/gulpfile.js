@@ -105,11 +105,7 @@ paths.sharedApp = {
 
 paths.framework = {
     src: [
-        paths.scriptLib + "angularjs/angular.min.js",
-        paths.scriptLib + "angularjs/angular-route.min.js",
-        paths.scriptLib + "angularjs/angular-animate.min.js",
-        paths.scriptLib + "angularjs/angular-sanitize.min.js",
-        paths.scriptLib + "angularjs/ui-bootstrap-tpls-2.5.0.min.js",
+        paths.scriptLib + "angularjs/**/*.js",
         paths.scriptLib + "jquery/jquery.min.js",
         paths.scriptLib + "jquery/jquery-ui.min.js",
         // paths.scriptLib + "jquery/jquery.qrcode.min.js",
