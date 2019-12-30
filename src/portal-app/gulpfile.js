@@ -115,6 +115,7 @@ paths.framework = {
         paths.scriptLib + "bootstrap/js/popper.min.js",
         paths.scriptLib + "bootstrap/js/bootstrap.min.js",
         paths.scriptLib + "lazysizes-5.2.0/lazysizes.min.js",
+        paths.scriptLib + "clipboard.js-2.0.4/clipboard.min.js"
     ],
     dest: paths.webroot + "js/framework.min.js"
 };

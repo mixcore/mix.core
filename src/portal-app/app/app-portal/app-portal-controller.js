@@ -14,6 +14,9 @@ app.controller('AppPortalController', ['$rootScope', '$scope', 'ngAppSettings', 
         $scope.settings = {};
         $scope.portalThemeSettings = {};
         $scope.init = function () {
+            
+            new ClipboardJS('.btn-clipboard');
+
             if (!$rootScope.isBusy) {
                 $rootScope.isBusy = true;
 
