@@ -135,13 +135,8 @@
             "title": "Files",
             "path": "#",
             "icon": "mi mi-FileExplorer",
-            "isHiden": true,
+            "isHiden": false,
             "subMenus": [
-                {
-                    "title": "Create New",
-                    "icon": "mi mi-Add",
-                    "path": "/portal/file/create"
-                },
                 {
                     "path": "/portal/file/list",
                     "title": "List",
