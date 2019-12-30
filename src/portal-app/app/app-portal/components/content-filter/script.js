@@ -2,6 +2,7 @@
     templateUrl: '/app/app-portal/components/content-filter/view.html',
     bindings: {
         query: '=',
+        initData: '=?',
         selected: '=',
         callback: '&?',
         save: '&?'
@@ -15,7 +16,16 @@
             ctrl.navs = [];
             ctrl.data = { items: [] };
             ctrl.goToPath = $rootScope.goToPath;
+            ctrl.$onInit = function(){
+                if(ctrl.initData){
+                    ctrl.data = ctrl.initData;   
+                }
+                else{
+                    ctrl.loadData();
+                }
+            };
             ctrl.loadData = async function (pageIndex) {
+                $rootScope.isBusy = true;
                 ctrl.request.query = ctrl.query + ctrl.srcId;
                 ctrl.navs = [];
                 if (pageIndex !== undefined) {

@@ -3,7 +3,7 @@
     <div class="col-sm-12">
         <form ng-class="{'submitted': submitted}" ng-submit="$ctrl.submit()">
             <actions back-url="$ctrl.backUrl" ng-if="$ctrl.backUrl"></actions>
-            <content-filter callback="$ctrl.loadSelected(nav,type)"></content-filter>
+            <content-filter ng-if="$ctrl.attrData" callback="$ctrl.loadSelected(nav,type)"></content-filter>
             <div class="card mb-4">
                 <div class="card-header text-right" ng-if="$ctrl.attrSetName=='sys_menu_item'">
                     <a href="/portal/navigation/details?dataId={{$ctrl.parentId}}"

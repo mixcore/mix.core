@@ -11,6 +11,8 @@ using Mix.Cms.Lib.Services;
 using Mix.Cms.Web.Models;
 using Mix.Domain.Core.ViewModels;
 using Mix.Identity.Models;
+using Mix.Services;
+using OpenHtmlToPdf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -351,6 +353,16 @@ namespace Mix.Cms.Web.Controllers
             Expression<Func<MixPage, bool>> predicate;
             if (string.IsNullOrEmpty(seoName))
             {
+                string html = FileRepository.Instance.GetFile("index", ".html", "wwwroot/edms", true, "<p>File not found</p>").Content;
+
+                var bytes = Pdf
+                    .From(html)
+                    .Content();
+
+                using (var writer = System.IO.File.Create("test.pdf"))
+                {
+                    writer.Write(bytes, 0, bytes.Length);
+                }
                 predicate = p =>
                 p.Type == (int)MixPageType.Home
                 && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
