@@ -58,7 +58,7 @@
                     $(document).on('click', 'a', function(e){                        
                         var href = $(this).attr('href');
                         var target = $(this).attr('target');
-                        if(href.indexOf('#') !== 0 && target!='_blank'){
+                        if(href && href.indexOf('#') !== 0 && target!='_blank'){
                             e.preventDefault();                            
                             $scope.$apply($scope.isBusy = true);
                             setTimeout(() => {

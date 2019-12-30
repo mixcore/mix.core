@@ -19,7 +19,6 @@ namespace Mix.Cms.Web
            .SetBasePath(Directory.GetCurrentDirectory())
            .AddJsonFile(MixConstants.CONST_FILE_APPSETTING, optional: true, reloadOnChange: true)
            .Build();
-
             return WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(config)
                 .UseSetting("https_port", "443")
