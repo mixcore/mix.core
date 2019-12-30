@@ -123,6 +123,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
                     if (result.IsSucceed)
                     {
                         item.AttributeSetId = parent.Id;
+                        item.AttributeSetName = parent.Name;
                         var saveResult = await item.SaveModelAsync(false, _context, _transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
                     }

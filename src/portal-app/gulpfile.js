@@ -112,6 +112,7 @@ paths.framework = {
         paths.scriptLib + "angularjs/ui-bootstrap-tpls-2.5.0.min.js",
         paths.scriptLib + "jquery/jquery.min.js",
         paths.scriptLib + "jquery/jquery-ui.min.js",
+        // paths.scriptLib + "jquery/jquery.qrcode.min.js",
         paths.scriptLib + "bootstrap/js/popper.min.js",
         paths.scriptLib + "bootstrap/js/bootstrap.min.js",
         paths.scriptLib + "lazysizes-5.2.0/lazysizes.min.js",
