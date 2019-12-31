@@ -566,7 +566,7 @@
             ]
         },
         {
-            "cate": "language",
+            "cate": "localize",
             "items": [
                 {
                     "path": "/portal/localize/create",
@@ -582,6 +582,26 @@
                     "path": "/portal/localize/details/:id",
                     "templatePath": "/app/app-portal/pages/language/details.html",
                     "controller": "LanguageController"
+                }
+            ]
+        },
+        {
+            "cate": "language",
+            "items": [
+                {
+                    "path": "/portal/language/create",
+                    "templatePath": "/app/app-portal/pages/culture/details.html",
+                    "controller": "CultureController"
+                },
+                {
+                    "path": "/portal/language/list",
+                    "templatePath": "/app/app-portal/pages/culture/list.html",
+                    "controller": "CultureController"
+                },
+                {
+                    "path": "/portal/language/details/:id",
+                    "templatePath": "/app/app-portal/pages/culture/details.html",
+                    "controller": "CultureController"
                 }
             ]
         },
