@@ -14,6 +14,7 @@
         };
     }],
     bindings: {
+        imgWidth: '=',
         imgHeight: '=',
         imgSrc: '='
     }
