@@ -1,38 +1,41 @@
 ﻿'use strict';
-app.controller('Step4Controller', ['$scope', '$rootScope', 
-    'CommonService', 'Step4Services',
-    function ($scope, $rootScope, commonService, service) {
+app.controller('Step4Controller', ['$scope', '$rootScope',
+    'CommonService', 'AuthService', 'Step4Services',
+    function ($scope, $rootScope, commonService, authService, service) {
         var rand = Math.random();
         $scope.data = [];
         $scope.init = async function () {
             var getData = await commonService.loadJArrayData('languages.json');
-            if(getData.isSucceed){
+            if (getData.isSucceed) {
                 $scope.data = getData.data;
                 $rootScope.isBusy = false;
                 $scope.$apply();
-            }else {
+            } else {
                 if (getData) {
                     $rootScope.showErrors(getData.errors);
                 }
                 $rootScope.isBusy = false;
                 $scope.$apply();
             }
-           
+
         };
         $scope.loadProgress = async function (percent) {
-            var elem = document.getElementsByClassName("progress-bar")[0]; 
-            elem.style.width = percent + '%'; 
+            var elem = document.getElementsByClassName("progress-bar")[0];
+            elem.style.width = percent + '%';
         };
         $scope.submit = async function () {
-            $rootScope.isBusy = true;            
+            $rootScope.isBusy = true;
             var result = await service.submit($scope.data);
             if (result.isSucceed) {
-                $rootScope.isBusy = false;
-                window.top.location  = '/';
+                authService.initSettings().then(function () {
+                    $rootScope.isBusy = false;
+                    window.top.location = '/';
+                });
+
             }
             else {
                 if (result) { $rootScope.showErrors(result.errors); }
-                $rootScope.isBusy = false;                
+                $rootScope.isBusy = false;
             }
         }
     }]);
