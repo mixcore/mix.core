@@ -352,17 +352,7 @@ namespace Mix.Cms.Web.Controllers
             RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
             Expression<Func<MixPage, bool>> predicate;
             if (string.IsNullOrEmpty(seoName))
-            {
-                string html = FileRepository.Instance.GetFile("index", ".html", "wwwroot/edms", true, "<p>File not found</p>").Content;
-
-                var bytes = Pdf
-                    .From(html)
-                    .Content();
-
-                using (var writer = System.IO.File.Create("test.pdf"))
-                {
-                    writer.Write(bytes, 0, bytes.Length);
-                }
+            {                
                 predicate = p =>
                 p.Type == (int)MixPageType.Home
                 && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
