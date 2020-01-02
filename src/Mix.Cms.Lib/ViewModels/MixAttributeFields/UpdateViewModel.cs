@@ -62,6 +62,18 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
 
         #endregion Contructors
         #region Overrides
+        public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            base.Validate(_context, _transaction);
+            if (IsValid)
+            {
+                IsValid = !Repository.CheckIsExists(f => f.Name == Name);
+                if (!IsValid)
+                {
+                    Errors.Add($"Field {Name} Existed");
+                }
+            }
+        }
         public override MixAttributeField ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)

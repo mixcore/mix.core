@@ -4,10 +4,11 @@ app.controller('ThemeController', ['$scope', '$rootScope', 'ngAppSettings', '$ro
         BaseCtrl.call(this, $scope, $rootScope, $routeParams, ngAppSettings, service);
         $scope.exportData = null;
         $scope.selectedExport = {
-            pages:[],
-            modules:[]
+            pages: [],
+            modules: [],
+            attributeSets: []
         };
-        
+
         $scope.getSingleSuccessCallback = function () {
             $scope.assets = null;
             $scope.theme = null;
@@ -51,7 +52,7 @@ app.controller('ThemeController', ['$scope', '$rootScope', 'ngAppSettings', '$ro
                 $scope.$apply();
             }
         };
-        
+
         $scope.export = async function () {
             var id = $routeParams.id;
             $rootScope.isBusy = true;
@@ -71,16 +72,16 @@ app.controller('ThemeController', ['$scope', '$rootScope', 'ngAppSettings', '$ro
             commonService.initAllSettings().then(function () {
                 $location.path('/portal/theme/list');
             });
-        }
+        };
         $scope.removeCallback = function () {
             commonService.initAllSettings().then(function () {
                 $location.path('/portal/theme/list');
             });
-        }
+        };
 
-        $scope.getExportData = async function(){
+        $scope.getExportData = async function () {
             var id = $routeParams.id;
-            var resp = await service.getExportData(id);  
+            var resp = await service.getExportData(id);
             if (resp && resp.isSucceed) {
                 $scope.exportData = resp.data;
                 $rootScope.isBusy = false;
@@ -91,10 +92,10 @@ app.controller('ThemeController', ['$scope', '$rootScope', 'ngAppSettings', '$ro
                 }
                 $rootScope.isBusy = false;
                 $scope.$apply();
-            }          
+            }
         };
-        
-        $scope.generateSEO = function(){
+
+        $scope.generateSEO = function () {
             $scope.activedData.name = $rootScope.generateKeyword($scope.activedData.title, '-');
-        }
+        };
     }]);

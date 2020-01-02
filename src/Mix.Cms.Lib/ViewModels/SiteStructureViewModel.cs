@@ -19,6 +19,8 @@ namespace Mix.Cms.Lib.ViewModels
         public List<MixPages.ImportViewModel> Pages { get; set; }
         [JsonProperty("modules")]
         public List<MixModules.ImportViewModel> Modules { get; set; }
+        [JsonProperty("attributeSets")]
+        public List<MixAttributeSets.ImportViewModel> AttributeSets { get; set; }
         [JsonProperty("themeName")]
         public string ThemeName { get; set; }
         public SiteStructureViewModel()
@@ -29,6 +31,7 @@ namespace Mix.Cms.Lib.ViewModels
         {
             Pages = (await MixPages.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
             Modules = (await MixModules.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
+            AttributeSets = (await MixAttributeSets.ImportViewModel.Repository.GetModelListAsync()).Data;
         }
 
         public async Task<RepositoryResponse<bool>> ImportAsync(string destCulture,
@@ -55,6 +58,24 @@ namespace Mix.Cms.Lib.ViewModels
                                     module.Id = context.MixModule.Max(m => m.Id) + 1;
                                     module.CreatedDateTime = DateTime.UtcNow;
                                     var saveResult = await module.SaveModelAsync(true, context, transaction);
+                                    ViewModelHelper.HandleResult(saveResult, ref result);
+                                }
+
+                            }
+                        }
+                    }
+
+                    if (AttributeSets != null)
+                    {
+                        foreach (var set in AttributeSets)
+                        {
+                            if (result.IsSucceed)
+                            {
+                                if (!context.MixAttributeSet.Any(m => m.Name == set.Name))
+                                {
+                                    set.Id = context.MixAttributeSet.Max(m => m.Id) + 1;
+                                    set.CreatedDateTime = DateTime.UtcNow;
+                                    var saveResult = await set.SaveModelAsync(true, context, transaction);
                                     ViewModelHelper.HandleResult(saveResult, ref result);
                                 }
 
