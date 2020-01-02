@@ -66,27 +66,27 @@ namespace Mix.Cms.Lib.Services
                         /**
                          * Init System Pages
                          */
-                        if (isSucceed && context.MixPage.Count() == 0)
-                        {
-                            InitPages(culture.Specificulture, context, transaction);
-                            isSucceed = (await context.SaveChangesAsync().ConfigureAwait(false)) > 0;
-                        }
-                        else
-                        {
-                            result.Errors.Add("Cannot init Pages");
-                        }
+                        //if (isSucceed && context.MixPage.Count() == 0)
+                        //{
+                        //    InitPages(culture.Specificulture, context, transaction);
+                        //    isSucceed = (await context.SaveChangesAsync().ConfigureAwait(false)) > 0;
+                        //}
+                        //else
+                        //{
+                        //    result.Errors.Add("Cannot init Pages");
+                        //}
 
-                        /**
-                         * Init System Positions
-                         */
-                        if (isSucceed && context.MixPosition.Count() == 0)
-                        {
-                            isSucceed = await InitPositionsAsync(context, transaction);
-                        }
-                        else
-                        {
-                            result.Errors.Add("Cannot init Positions");
-                        }
+                        ///**
+                        // * Init System Positions
+                        // */
+                        //if (isSucceed && context.MixPosition.Count() == 0)
+                        //{
+                        //    isSucceed = await InitPositionsAsync(context, transaction);
+                        //}
+                        //else
+                        //{
+                        //    result.Errors.Add("Cannot init Positions");
+                        //}
 
                         /**
                          * Init System Configurations
@@ -101,18 +101,18 @@ namespace Mix.Cms.Lib.Services
                             result.Errors.Add("Cannot init Configurations");
                         }
 
-                        /**
-                        * Init System Attribute Sets
-                        */
-                        if (isSucceed && context.MixAttributeField.Count() == 0)
-                        {
-                            var saveResult = await InitAttributeSetsAsync(siteName, culture.Specificulture, context, transaction);
-                            isSucceed = saveResult.IsSucceed;
-                        }
-                        else
-                        {
-                            result.Errors.Add("Cannot init Attribute Sets");
-                        }
+                        ///**
+                        //* Init System Attribute Sets
+                        //*/
+                        //if (isSucceed && context.MixAttributeField.Count() == 0)
+                        //{
+                        //    var saveResult = await InitAttributeSetsAsync(siteName, culture.Specificulture, context, transaction);
+                        //    isSucceed = saveResult.IsSucceed;
+                        //}
+                        //else
+                        //{
+                        //    result.Errors.Add("Cannot init Attribute Sets");
+                        //}
                     }
                     if (isSucceed)
                     {
