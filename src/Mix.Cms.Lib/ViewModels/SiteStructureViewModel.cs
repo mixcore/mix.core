@@ -92,17 +92,19 @@ namespace Mix.Cms.Lib.ViewModels
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                int id = MixPages.UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data + 1;
-                var pages = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, "data", true, "{}");
-                var obj = JObject.Parse(pages.Content);
-                var initPages = obj["data"].ToObject<JArray>();
+                int startId = MixPages.UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data + 1;
+                //var pages = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, "data", true, "{}");
+                //var obj = JObject.Parse(pages.Content);
+                //var initPages = obj["data"].ToObject<JArray>();
                 foreach (var item in arrPage)
                 {
-                    if (item.Id > initPages.Count)
-                    {
-                        item.Id = id;
-                        item.CreatedDateTime = DateTime.UtcNow;
-                    }
+                    item.Id = startId;
+                    item.CreatedDateTime = DateTime.UtcNow;
+                    //if (_context.MixPage.Any(m=>m.Id == startId)) //(item.Id > initPages.Count)
+                    //{
+                    //    item.Id = _context.MixPage.Max(m => m.Id) + 1;
+                    //    item.CreatedDateTime = DateTime.UtcNow;
+                    //}
                     if (!string.IsNullOrEmpty(item.Image))
                     {
                         item.Image = item.Image.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
@@ -120,12 +122,11 @@ namespace Mix.Cms.Lib.ViewModels
                         result.Errors = saveResult.Errors;
                         break;
                     }
-                    else if (item.Id > initPages.Count)
+                    else
                     {
-                        id++;
+                        startId++;
                     }
                 }
-                result.Data = true;
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only

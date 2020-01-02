@@ -11,8 +11,6 @@ using Mix.Cms.Lib.Services;
 using Mix.Cms.Web.Models;
 using Mix.Domain.Core.ViewModels;
 using Mix.Identity.Models;
-using Mix.Services;
-using OpenHtmlToPdf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
