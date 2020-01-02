@@ -66,7 +66,7 @@ namespace Mix.Cms.Lib.Services
                         /**
                          * Init System Pages
                          */
-                        if (isSucceed)
+                        if (isSucceed && context.MixPage.Count() == 0)
                         {
                             InitPages(culture.Specificulture, context, transaction);
                             isSucceed = (await context.SaveChangesAsync().ConfigureAwait(false)) > 0;
@@ -79,7 +79,7 @@ namespace Mix.Cms.Lib.Services
                         /**
                          * Init System Positions
                          */
-                        if (isSucceed)
+                        if (isSucceed && context.MixPosition.Count() == 0)
                         {
                             isSucceed = await InitPositionsAsync(context, transaction);
                         }
@@ -91,7 +91,7 @@ namespace Mix.Cms.Lib.Services
                         /**
                          * Init System Configurations
                          */
-                        if (isSucceed)
+                        if (isSucceed && context.MixConfiguration.Count() == 0)
                         {
                             var saveResult = await InitConfigurationsAsync(siteName, culture.Specificulture, context, transaction);
                             isSucceed = saveResult.IsSucceed;
@@ -104,7 +104,7 @@ namespace Mix.Cms.Lib.Services
                         /**
                         * Init System Attribute Sets
                         */
-                        if (isSucceed)
+                        if (isSucceed && context.MixAttributeField.Count() == 0)
                         {
                             var saveResult = await InitAttributeSetsAsync(siteName, culture.Specificulture, context, transaction);
                             isSucceed = saveResult.IsSucceed;
@@ -303,7 +303,7 @@ namespace Mix.Cms.Lib.Services
         }
         protected static void InitPages(string culture, MixCmsContext context, IDbContextTransaction transaction)
         {
-            /* Init Languages */
+            /* Init Pages */
             var pages = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, "data", true, "{}");
             var obj = JObject.Parse(pages.Content);
             var arrPage = obj["data"].ToObject<List<MixPage>>();

@@ -1,14 +1,14 @@
 ﻿'use strict';
 app.controller('Step3Controller', ['$scope', '$rootScope',
-    'CommonService', 'Step3Services',
-    function ($scope, $rootScope, commonService, service) {
+    'CommonService', 'AuthService', 'Step3Services',
+    function ($scope, $rootScope, commonService, authService, service) {
         var rand = Math.random();
         $scope.data = {
             isCreateDefault: true,
             theme: null,
         };
         $scope.init = async function () {
-            $('.preventUncheck').on('change', function(e) {
+            $('.preventUncheck').on('change', function (e) {
                 if ($('.preventUncheck:checked').length == 0 && !this.checked)
                     this.checked = true;
             });
@@ -16,16 +16,16 @@ app.controller('Step3Controller', ['$scope', '$rootScope',
                 $(".option").removeClass("active");
                 $(this).addClass("active");
             });
-            $("#theme-1").change(function() {                
-                $('.bg-register-image')[0].style.backgroundImage = "url('../assets/img/bgs/r_theme1.png')";                
-            });            
-            $("#theme-2").change(function() {                
-                $('.bg-register-image')[0].style.backgroundImage = "url('../assets/img/bgs/r_theme2.png')";                
+            $("#theme-1").change(function () {
+                $('.bg-register-image')[0].style.backgroundImage = "url('../assets/img/bgs/r_theme1.png')";
             });
-            $("#theme-3").change(function() {                
-                $('.bg-register-image')[0].style.backgroundImage = "url('../assets/img/bgs/right-bg.png')";                
+            $("#theme-2").change(function () {
+                $('.bg-register-image')[0].style.backgroundImage = "url('../assets/img/bgs/r_theme2.png')";
             });
-            $("input:checkbox").click(function() {
+            $("#theme-3").change(function () {
+                $('.bg-register-image')[0].style.backgroundImage = "url('../assets/img/bgs/right-bg.png')";
+            });
+            $("input:checkbox").click(function () {
                 if ($(this).is(":checked")) {
                     var group = "input:checkbox[name='" + $(this).attr("name") + "']";
                     $(group).prop("checked", false);
@@ -54,10 +54,13 @@ app.controller('Step3Controller', ['$scope', '$rootScope',
             var response = await service.ajaxSubmitForm(frm, url);
             if (response.isSucceed) {
                 $scope.activedData = response.data;
-                $rootScope.isBusy = false;                
-                // window.location.href = '/init/step4';
-                window.location.href = '/portal';
-                $scope.$apply();
+                authService.initSettings().then(function () {
+                    $rootScope.isBusy = false;
+                    // window.location.href = '/init/step4';
+                    window.location.href = '/portal';
+                    $scope.$apply();
+                });
+
             } else {
                 $rootScope.showErrors(response.errors);
                 $rootScope.isBusy = false;
