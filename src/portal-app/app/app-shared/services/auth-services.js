@@ -305,6 +305,7 @@ app.factory('AuthService',
             authServiceFactory.forgotPassword = _forgotPassword;
             authServiceFactory.resetPassword = _resetPassword;
             authServiceFactory.login = _login;
+            authServiceFactory.initSettings = _initSettings;
             authServiceFactory.logOut = _logOut;
             authServiceFactory.referredUrl = _referredUrl;
             authServiceFactory.fillAuthData = _fillAuthData;

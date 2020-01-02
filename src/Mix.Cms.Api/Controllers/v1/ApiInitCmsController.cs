@@ -291,8 +291,6 @@ namespace Mix.Cms.Api.Controllers.v1
 
         private async Task<RepositoryResponse<bool>> InitStep1Async(InitCmsViewModel model)
         {
-            var result = new RepositoryResponse<bool>();
-
             MixService.SetConnectionString(MixConstants.CONST_CMS_CONNECTION, model.ConnectionString);
             MixService.SetConnectionString(MixConstants.CONST_MESSENGER_CONNECTION, model.ConnectionString);
             MixService.SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, model.ConnectionString);
@@ -300,8 +298,9 @@ namespace Mix.Cms.Api.Controllers.v1
             MixService.SetConfig(MixConstants.CONST_SETTING_DATABASE_PROVIDER, model.DatabaseProvider);
             MixService.SetConfig(MixConstants.CONST_SETTING_LANGUAGE, model.Culture.Specificulture);
 
-            var initResult = await InitCmsService.InitCms(model.SiteName, model.Culture);
-            if (initResult.IsSucceed)
+            var result = await InitCmsService.InitCms(model.SiteName, model.Culture);
+            
+            if (result.IsSucceed)
             {
                 await InitRolesAsync();
                 result.IsSucceed = true;
@@ -318,15 +317,6 @@ namespace Mix.Cms.Api.Controllers.v1
                 //  => save to appSettings
                 MixService.Reload();
                 MixService.SaveSettings();
-                if (initResult.Exception != null)
-                {
-                    result.Errors.Add(initResult.Exception.Message);
-                    result.Exception = initResult.Exception;
-                }
-                foreach (var item in initResult.Errors)
-                {
-                    result.Errors.Add(item);
-                }
             }
             return result;
         }
