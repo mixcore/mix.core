@@ -1,21 +1,37 @@
 <!-- Main content -->
 <section>
+    <div class="row">
+        <div class="col-md-12">
+            <input type="checkbox" ng-model="$ctrl.selectedList.isSelectAll" ng-change="$ctrl.selectAll($ctrl.selectedList.isSelectAll, $ctrl.exportData.pages)">
+            Select All
+        </div>
+    </div>
     <div class="row justify-content-md-center" ng-repeat="page in $ctrl.exportData.pages track by page.id">
         <div class="col-md-1">
-            <checkbox-switch data="page" callback="$ctrl.updatePageExport(page)"></checkbox-switch>
+            <checkbox-switch data="page" callback="$ctrl.updatePageExport()"></checkbox-switch>
         </div>
         <div class="col-md-11" ng-bind="page.title"></div>
+        <div class="col-md-1"></div>
+        <div class="col-md-11" ng-show="page.isActived && page.moduleNavs.length">
+            <input type="checkbox" ng-model="page.isSelectAll" ng-change="$ctrl.selectAll(page.isSelectAll, page.moduleNavs)">
+            Select All Module
+        </div>
         <div class="col-md-12 row" ng-show="page.isActived" ng-repeat="nav in page.moduleNavs">
             <div class="col-sm-1"></div>
             <div class="col-sm-1">
-                <checkbox-switch data="nav" callback="$ctrl.updatePageExport(page)"></checkbox-switch>
+                <checkbox-switch data="nav" callback="$ctrl.updatePageExport()"></checkbox-switch>
             </div>
             <div class="col-sm-10" ng-bind="nav.description"></div>
+            <div class="col-md-2"></div>
+            <div class="col-md-10" ng-show="nav.isActived && nav.module.data.items.length">
+                <input type="checkbox" ng-model="nav.isSelectAll" ng-change="$ctrl.selectAll(nav.isSelectAll, nav.module.data.items)">
+                Select All Data
+            </div>
             <div class="col-md-12 row" ng-show="nav.isActived" ng-repeat="data in nav.module.data.items">
                 <div class="col-sm-1"></div>
                 <div class="col-sm-1"></div>
                 <div class="col-sm-1">
-                    <checkbox-switch data="data" callback="$ctrl.updatePageExport(module)"></checkbox-switch>
+                    <checkbox-switch data="data" callback="$ctrl.updatePageExport()"></checkbox-switch>
                 </div>
                 <div class="col-sm-9">
                     {{data.id}}
