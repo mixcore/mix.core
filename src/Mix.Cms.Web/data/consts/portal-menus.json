@@ -427,6 +427,11 @@
                     "path": "/portal/theme/details/:id",
                     "templatePath": "/app/app-portal/pages/theme/details.html",
                     "controller": "ThemeController"
+                },
+                {
+                    "path": "/portal/theme/export/:id",
+                    "templatePath": "/app/app-portal/pages/theme/export.html",
+                    "controller": "ThemeController"
                 }
             ]
         },
