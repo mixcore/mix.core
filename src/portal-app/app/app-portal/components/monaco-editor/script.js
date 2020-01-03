@@ -73,6 +73,7 @@
                         };
                         switch (ctrl.ext) {
                             case '.json':
+                            case '.webmanifest':
                                 model.language = 'json';
                                 break;
                             case '.js':
