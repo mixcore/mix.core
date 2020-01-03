@@ -45,43 +45,13 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     result = await ImportPagesAsync(Pages, destCulture, context, transaction);
                 }
-                if (result.IsSucceed)
+                if (result.IsSucceed && Modules != null)
                 {
-                    if (Modules != null)
-                    {
-                        foreach (var module in Modules)
-                        {
-                            if (result.IsSucceed)
-                            {
-                                if (!context.MixModule.Any(m => m.Name == module.Name && m.Specificulture == destCulture))
-                                {
-                                    module.Id = context.MixModule.Max(m => m.Id) + 1;
-                                    module.CreatedDateTime = DateTime.UtcNow;
-                                    var saveResult = await module.SaveModelAsync(true, context, transaction);
-                                    ViewModelHelper.HandleResult(saveResult, ref result);
-                                }
-
-                            }
-                        }
-                    }
-
-                    if (AttributeSets != null)
-                    {
-                        foreach (var set in AttributeSets)
-                        {
-                            if (result.IsSucceed)
-                            {
-                                if (!context.MixAttributeSet.Any(m => m.Name == set.Name))
-                                {
-                                    set.Id = context.MixAttributeSet.Max(m => m.Id) + 1;
-                                    set.CreatedDateTime = DateTime.UtcNow;
-                                    var saveResult = await set.SaveModelAsync(true, context, transaction);
-                                    ViewModelHelper.HandleResult(saveResult, ref result);
-                                }
-
-                            }
-                        }
-                    }
+                    result = await ImportModulesAsync(Modules, destCulture, context, transaction);
+                }
+                if (result.IsSucceed && AttributeSets!=null)
+                {
+                    result = await ImportAttributeSetsAsync(AttributeSets, context, transaction);
                 }
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
             }
@@ -101,6 +71,59 @@ namespace Mix.Cms.Lib.ViewModels
                     context?.Dispose();
                 }
 
+            }
+            return result;
+        }
+
+        private async Task<RepositoryResponse<bool>> ImportModulesAsync(List<MixModules.ImportViewModel> modules, string destCulture, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var module in modules)
+            {
+                if (result.IsSucceed)
+                {
+                    if (!context.MixModule.Any(m => m.Name == module.Name && m.Specificulture == destCulture))
+                    {
+                        module.Id = context.MixModule.Max(m => m.Id) + 1;
+                        module.CreatedDateTime = DateTime.UtcNow;
+                        var saveResult = await module.SaveModelAsync(true, context, transaction);
+                        ViewModelHelper.HandleResult(saveResult, ref result);
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return result;
+        }
+
+
+        private async Task<RepositoryResponse<bool>> ImportAttributeSetsAsync(List<MixAttributeSets.ImportViewModel> attributeSets, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            if (attributeSets != null)
+            {
+                var startId = MixAttributeSets.ImportViewModel.Repository.Max(m => m.Id).Data;
+                foreach (var set in attributeSets)
+                {
+                    if (result.IsSucceed)
+                    {
+                        startId++;
+                        if (!context.MixAttributeSet.Any(m => m.Name == set.Name))
+                        {
+                            set.Id = startId;
+                            set.CreatedDateTime = DateTime.UtcNow;
+                            var saveResult = await set.SaveModelAsync(true, context, transaction);
+                            ViewModelHelper.HandleResult(saveResult, ref result);
+                        }
+
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
             }
             return result;
         }
