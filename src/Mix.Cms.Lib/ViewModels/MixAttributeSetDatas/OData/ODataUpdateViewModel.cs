@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Common.Helper;
@@ -158,14 +159,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
         {
             var tasks = new List<Task>();
-            var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
-                .Any(d => d.Specificulture == Specificulture && d.Id == Id));
-            foreach (var item in attrDatas)
+            //var attrDatas = context.MixAttributeSetData.Include(m => m.MixRelatedAttributeData).Where(m => m.MixRelatedAttributeData
+            //    .Any(d => d.Specificulture == Specificulture && d.Id == Id));
+            var relatedData = context.MixRelatedAttributeData.Include(m=>m.MixAttributeSetData).Where(m => m.Specificulture == Specificulture && (m.Id == Id || m.ParentId == Id));
+            foreach (var item in relatedData)
             {
                 tasks.Add(Task.Run(() =>
                 {
-                    var data = new ReadViewModel(item, context, transaction);
-                    data.RemoveCache(item, context, transaction);
+                    ReadViewModel.Repository.RemoveCache(item.MixAttributeSetData, context, transaction);
+                    MixRelatedAttributeDatas.ReadViewModel.Repository.RemoveCache(item, context, transaction);
                 }));
 
             }
