@@ -10,27 +10,16 @@
     <div class="row justify-content-md-center"
         ng-repeat="attributeSet in $ctrl.exportData.attributeSets track by attributeSet.id">
         <div class="col-md-1">
-            <checkbox-switch data="attributeSet" callback="$ctrl.updateAttributeSetExport(attributeSet)">
+            <checkbox-switch data="attributeSet" callback="$ctrl.updateAttributeSetExport()">
             </checkbox-switch>
         </div>
         <div class="col-md-11" ng-bind="attributeSet.title"></div>
         <div class="col-md-1"></div>
-        <div class="col-md-11" ng-show="attributeSet.isActived && attributeSet.data.length">
-            <input type="checkbox" ng-model="attributeSet.isSelectAll"
-                ng-change="$ctrl.selectAll(attributeSet.isSelectAll, attributeSet.data)" />
-            Select All Data
+        <div class="col-md-11" ng-show="attributeSet.isActived">
+            <input type="checkbox" ng-model="attributeSet.isExportData" ng-change="$ctrl.updateAttributeSetExport()"
+                />
+            Export Data
         </div>
-        <div class="col-md-12 row" ng-show="attributeSet.isActived" ng-repeat="data in attributeSet.data">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-1">
-                <checkbox-switch data="data" callback="$ctrl.updateAttributeSetExport(attributeSet)"></checkbox-switch>
-            </div>
-            <div class="col-sm-10">
-                {{data.id}}
-            </div>
-        </div>
-    </div>
-
     </div>
 </section>
 <!-- /.content -->
