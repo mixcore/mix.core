@@ -19,6 +19,8 @@ modules.component('menuItemEditor', {
             };
             ctrl.refRequest = angular.copy(ngAppSettings.request);
             ctrl.refRequest.pageSize = 100;
+            ctrl.refRequest.orderBy = 'Priority asc';
+            ctrl.refRequest.direction = 0;
             ctrl.dataTypes = $rootScope.globalSettings.dataTypes;
             ctrl.previousId = null;
             ctrl.$doCheck = function () {
