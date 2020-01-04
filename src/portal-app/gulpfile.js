@@ -84,17 +84,6 @@ paths.clientAppRequired={
     dest: paths.webroot + "js/app-client-required.min.js"
 }
 
-paths.tablerJs = {
-    src: [        
-        paths.scriptLib + "plugins/tabler-0.0.32/js/vendors/**/*.js",
-        paths.scriptLib + "plugins/tabler-0.0.32/js/vendors/**/*.*.js",
-        paths.scriptLib + "plugins/tabler-0.0.32/js/core.js",
-        paths.scriptLib + "plugins/tabler-0.0.32/js/require.min.js",        
-        paths.scriptLib + "plugins/tabler-0.0.32/js/dashboard.js",
-    ],
-    dest: paths.webroot + "js/tabler.min.js"
-};
-
 paths.sharedApp = {
     src: [
         paths.webapp + "app-shared/**/*.js",
@@ -160,13 +149,6 @@ paths.sharedCss = {
         "./lib/shared/**/*.*.css"
     ],
     dest: paths.webroot + "css/shared.min.css"
-};
-paths.tablerCss = {
-    src: [
-        "./lib/plugins/tabler-0.0.32/css/*.css",
-        "./lib/plugins/tabler-0.0.32/css/*..*css",
-    ],
-    dest: paths.webroot + "css/tabler.min.css"
 };
 
 paths.views = {
@@ -252,22 +234,10 @@ gulp.task("min:portal", function (cb) {
         //.pipe(minify(paths.jsOptions))
         .pipe(gulp.dest(dest));
 });
-gulp.task("min:tablerJs", function (cb) {
-    return gulp.src(paths.tablerJs.src, { base: "." })
-        .pipe(concat(paths.tablerJs.dest))
-        //.pipe(minify(paths.jsOptions))
-        .pipe(gulp.dest(dest));
-});
 gulp.task("min:appCss", function (cb) {
     return gulp.src(paths.appCss.src, { base: "." })
         .pipe(concat(paths.appCss.dest))
         .pipe(cssmin(paths.appCssOptions))
-        .pipe(gulp.dest(dest));
-});
-gulp.task("min:tablerCss", function (cb) {
-    return gulp.src(paths.tablerCss.src, { base: "." })
-        .pipe(concat(paths.tablerCss.dest))
-        .pipe(cssmin(paths.tablerCss))
         .pipe(gulp.dest(dest));
 });
 gulp.task("min:appInitCss", function (cb) {
@@ -331,13 +301,6 @@ gulp.task("clean:securityApp", function (cb) {
     rimraf(paths.securityApp.dest, cb);
 });
 
-gulp.task("clean:tablerJs", function (cb) {
-    rimraf(paths.tablerJs.dest, cb);
-});
-
-gulp.task("clean:tablerCss", function (cb) {
-    rimraf(paths.tablerCss.dest, cb);
-});
 gulp.task("clean:appCss", function (cb) {
     rimraf(paths.appCss.dest, cb);
 });
