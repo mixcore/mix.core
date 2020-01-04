@@ -21,9 +21,12 @@
     </div>
     <div class="card-body py-0" ng-if="$ctrl.data">
         <div dnd-list="$ctrl.data" dnd-inserted="$ctrl.updateOrders(index)">
-            <div ng-repeat="item in $ctrl.data | orderBy: 'priority' track by $index" dnd-draggable="item"
-                dnd-type="'item'" dnd-effect-allowed="copyMove" dnd-selected="$ctrl.selectedItem = item"
-                dnd-dragstart="$ctrl.dragStart($index)" ng-class="{'selected': $ctrl.selectedItem === item}"
+            <div ng-repeat="item in $ctrl.data track by $index" dnd-draggable="item"
+                dnd-type="'item'" 
+                dnd-effect-allowed="copyMove" 
+                dnd-selected="$ctrl.selectedItem = item"
+                dnd-dragstart="$ctrl.dragStart($index)" 
+                ng-class="{'selected': $ctrl.selectedItem === item}"
                 class="row border-top">
                 <div class="col-md-1 form-inline">
                     <div class="">
