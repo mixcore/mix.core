@@ -305,10 +305,11 @@ namespace Mix.Cms.Lib
             {
                 foreach (var cate in nav.MenuItems)
                 {
-                    cate.IsActive = cate.Uri == activePath;
+                    cate.IsActive = cate.Property<string>("uri") == activePath;
+
                     foreach (var item in cate.MenuItems)
                     {
-                        item.IsActive = item.Uri == activePath;
+                        item.IsActive = item.Property<string>("uri") == activePath;
                         cate.IsActive = cate.IsActive || item.IsActive;
                     }
                 }

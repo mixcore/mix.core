@@ -115,7 +115,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("urlAliases")]
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
-
+        [JsonProperty("isExportData")]
+        public bool IsExportData { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -136,11 +137,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Cultures = Helper.LoadCultures(Id, Specificulture, _context, _transaction);
-            this.ModuleNavs = GetModuleNavs(_context, _transaction);
-            //this.ParentNavs = GetParentNavs(_context, _transaction);
-            //this.ChildNavs = GetChildNavs(_context, _transaction);
-            this.UrlAliases = GetAliases(_context, _transaction);
+            //Cultures = Helper.LoadCultures(Id, Specificulture, _context, _transaction);
+            //this.ModuleNavs = GetModuleNavs(_context, _transaction);
+            ////this.ParentNavs = GetParentNavs(_context, _transaction);
+            ////this.ChildNavs = GetChildNavs(_context, _transaction);
+            //this.UrlAliases = GetAliases(_context, _transaction);
         }
 
         #region Async
@@ -165,7 +166,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             // End Save Alias
 
             //Save Module Navigations
-            if (result.IsSucceed)
+            if (result.IsSucceed && ModuleNavs!=null)
             {
                 foreach (var item in ModuleNavs)
                 {

@@ -38,9 +38,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #region Views
 
         [JsonIgnore]
-        public List<MixAttributeSetValues.ODataMobileViewModel> Values { get; set; }
+        public List<MixAttributeSetValues.ImportViewModel> Values { get; set; }
         [JsonIgnore]
-        public List<MixAttributeFields.ODataMobileViewModel> Fields { get; set; }
+        public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
         //[JsonIgnore]
         public List<MixAttributeSetDatas.ODataMobileViewModel> RefData { get; set; } = new List<ODataMobileViewModel>();
         [JsonProperty("data")]
@@ -68,18 +68,21 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Values = MixAttributeSetValues.ODataMobileViewModel
-                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
+            Values = MixAttributeSetValues.ImportViewModel.Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
             ParseData();
         }
         public override MixAttributeSetData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Id = Guid.NewGuid().ToString();
-            CreatedDateTime = DateTime.UtcNow;
-            Values = new List<MixAttributeSetValues.ODataMobileViewModel>();            
+            if (string.IsNullOrEmpty(Id))
+            {
+                Id = Guid.NewGuid().ToString();
+                CreatedDateTime = DateTime.UtcNow;
+                
+            }
+            Values = new List<MixAttributeSetValues.ImportViewModel>();
             foreach (var field in Fields)
             {
-                var val = new MixAttributeSetValues.ODataMobileViewModel()
+                var val = new MixAttributeSetValues.ImportViewModel()
                 {
                     AttributeFieldId = field.Id,
                     AttributeFieldName = field.Name,
@@ -87,7 +90,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     Priority = field.Priority,
                     Field = field
                 };
-                
+
                 val.Priority = field.Priority;
                 val.DataType = field.DataType;
                 val.AttributeSetName = AttributeSetName;
@@ -130,6 +133,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 Values.Add(val);
             }
 
+
             return base.ParseModel(_context, _transaction); ;
         }
         public override void GenerateCache(MixAttributeSetData model, ImportViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -163,26 +167,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         }
 
         #region Async
-        public override async Task<RepositoryResponse<ImportViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var result = await base.SaveModelAsync(isSaveSubModels, _context, _transaction);
-            if (result.IsSucceed)
-            {
-                ParseData();
-            }
-            return result;
-        }
 
-
-        public override RepositoryResponse<ImportViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var result = base.SaveModel(isSaveSubModels, _context, _transaction);
-            if (result.IsSucceed)
-            {
-                ParseData();
-            }
-            return result;
-        }
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSetData parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -310,7 +295,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #endregion
 
         #region Expand
-        JProperty ParseValue(MixAttributeSetValues.ODataMobileViewModel item)
+        JProperty ParseValue(MixAttributeSetValues.ImportViewModel item)
         {
             switch (item.DataType)
             {
@@ -350,7 +335,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     return (new JProperty(item.AttributeFieldName, item.StringValue));
             }
         }
-        void ParseModelValue(JToken property, MixAttributeSetValues.ODataMobileViewModel item)
+        void ParseModelValue(JToken property, MixAttributeSetValues.ImportViewModel item)
         {
             switch (item.Field.DataType)
             {
