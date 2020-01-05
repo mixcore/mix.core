@@ -8,8 +8,8 @@
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
-    <MvcRazorCompileOnPublish>true</MvcRazorCompileOnPublish>
-    <MvcRazorCompileOnBuild>true</MvcRazorCompileOnBuild>
+    <MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
+    <MvcRazorCompileOnBuild>false</MvcRazorCompileOnBuild>
     <GenerateProgramFile>false</GenerateProgramFile>
     <PublishWithAspNetCoreTargetManifest>False</PublishWithAspNetCoreTargetManifest>
     

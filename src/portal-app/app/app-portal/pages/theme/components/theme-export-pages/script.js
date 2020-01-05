@@ -7,19 +7,19 @@ app.component('themeExportPages', {
             // Filter actived page
             ctrl.selectedExport.pages = angular.copy($rootScope.filterArray(ctrl.exportData.pages, ['isActived'], [true]));
 
-            // Loop actived page 
-            angular.forEach(ctrl.selectedExport.pages, function (e) {
-                // filter list actived modules
-                e.moduleNavs = angular.copy($rootScope.filterArray(e.moduleNavs, ['isActived'], [true]));
+            // // Loop actived page 
+            // angular.forEach(ctrl.selectedExport.pages, function (e) {
+            //     // filter list actived modules
+            //     e.moduleNavs = angular.copy($rootScope.filterArray(e.moduleNavs, ['isActived'], [true]));
 
-                // Loop actived modules
-                angular.forEach(e.moduleNavs, function (n) {
-                    // filter list actived data
-                    n.module.data.items = angular.copy($rootScope.filterArray(n.module.data.items, ['isActived'], [true]));
-                    $rootScope.removeObjectByKey(ctrl.exportData.modules, 'id', n.moduleId);
-                    $rootScope.removeObjectByKey(ctrl.selectedExport.modules, 'id', n.moduleId);
-                });
-            });
+            //     // Loop actived modules
+            //     angular.forEach(e.moduleNavs, function (n) {
+            //         // filter list actived data
+            //         n.module.data.items = angular.copy($rootScope.filterArray(n.module.data.items, ['isActived'], [true]));
+            //         $rootScope.removeObjectByKey(ctrl.exportData.modules, 'id', n.moduleId);
+            //         $rootScope.removeObjectByKey(ctrl.selectedExport.modules, 'id', n.moduleId);
+            //     });
+            // });
 
 
         };
@@ -27,8 +27,8 @@ app.component('themeExportPages', {
             ctrl.selectedList.data = [];
             angular.forEach(arr, function (e) {
                 e.isActived = isSelectAll;
-                ctrl.updatePageExport();
             });
+            ctrl.updatePageExport();
         };        
     }],
     bindings: {

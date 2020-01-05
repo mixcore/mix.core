@@ -51,8 +51,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         [JsonProperty("fields")]
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
         [JsonProperty("data")]
-        public List<MixAttributeSetDatas.UpdateViewModel> Data { get; set; }
-
+        public List<MixAttributeSetDatas.ImportViewModel> Data { get; set; }
+        [JsonProperty("isExportData")]
+        public bool IsExportData { get; set; }
         #endregion
         #endregion Properties
 
@@ -71,8 +72,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         #region Overrides
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList();
-            Data = MixAttributeSetDatas.UpdateViewModel.Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList();
+            //Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList();
+            //Data = MixAttributeSetDatas.UpdateViewModel.Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList();
         }
         public override MixAttributeSet ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -116,19 +117,23 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         private async Task<RepositoryResponse<bool>> SaveDataAsync(MixAttributeSet parent, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            foreach (var item in Data)
+            if (Data != null)
             {
-                if (result.IsSucceed)
+                foreach (var item in Data)
                 {
-                    item.AttributeSetId = parent.Id;
-                    item.AttributeSetName = parent.Name;
-                    item.Fields = Fields;
-                    var saveResult = await item.SaveModelAsync(false, context, transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-                }
-                else
-                {
-                    break;
+                    if (result.IsSucceed)
+                    {
+                        item.AttributeSetId = parent.Id;
+                        item.AttributeSetName = parent.Name;
+                        item.Fields = Fields;
+                        item.CreatedDateTime = DateTime.UtcNow;
+                        var saveResult = await item.SaveModelAsync(true, context, transaction);
+                        ViewModelHelper.HandleResult(saveResult, ref result);
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
             return result;

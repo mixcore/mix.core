@@ -5,9 +5,9 @@ app.component('themeExportAttributeSets', {
         var ctrl = this;
         ctrl.updateAttributeSetExport = function(){
             ctrl.selectedExport.attributeSets = angular.copy($rootScope.filterArray(ctrl.exportData.attributeSets, ['isActived'], [true])); 
-            angular.forEach(ctrl.selectedExport.attributeSets,function(e){
-                e.data = angular.copy($rootScope.filterArray(e.data, ['isActived'], [true]));
-            });
+            // angular.forEach(ctrl.selectedExport.attributeSets,function(e){
+            //     e.data = angular.copy($rootScope.filterArray(e.data, ['isActived'], [true]));
+            // });
         };    
         ctrl.selectAll = function (isSelectAll, arr) {
             ctrl.selectedList.data = [];
