@@ -154,7 +154,7 @@ namespace Mix.Cms.Api.Controllers.v1
             int.TryParse(queries.Get("attributeSetId"), out int attributeSetId);
             string attributeSetName = queries.Get("attributeSetName");
             ParseRequestPagingDate(request);
-            
+
             switch (request.Key)
             {
                 case "portal":
@@ -170,6 +170,19 @@ namespace Mix.Cms.Api.Controllers.v1
                         var portalResult = await base.GetListAsync<UpdateViewModel>(request.Key, request, predicate);
                         return Ok(JObject.FromObject(portalResult));
                     }
+                case "readData":
+                    if (!string.IsNullOrEmpty(request.Query))
+                    {
+                        var portalResult = await Helper.FilterByKeywordAsync<ReadDataViewModel>(_lang, attributeSetName,
+                        request, request.Keyword, queryDictionary);
+                        return Ok(JObject.FromObject(portalResult));
+                    }
+                    else
+                    {
+                        Expression<Func<MixAttributeSetData, bool>> predicate = m => (m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName) && m.Specificulture == _lang;
+                        var portalResult = await base.GetListAsync<ReadDataViewModel>(request.Key, request, predicate);
+                        return Ok(JObject.FromObject(portalResult));
+                    }  
                 default:
                     if (!string.IsNullOrEmpty(request.Query))
                     {
