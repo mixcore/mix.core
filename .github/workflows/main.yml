@@ -28,6 +28,9 @@ jobs:
         git config --global user.name "smilefounder"
         
         git clone https://github.com/mixcore/mix.spa.portal.git ${HOME}/work/${GITHUB_REPOSITORY}/mix.spa.portal/
+        
+        git checkout develop
+        
         cp -a ${HOME}/work/${GITHUB_REPOSITORY}/mix.spa.portal/dist/. ${GITHUB_WORKSPACE}/mix.core/src/
         
         # Update origin with token
