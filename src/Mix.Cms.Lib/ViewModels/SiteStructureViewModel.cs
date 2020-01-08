@@ -2,6 +2,7 @@
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels.MixModules;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json;
@@ -25,6 +26,8 @@ namespace Mix.Cms.Lib.ViewModels
         public List<MixConfigurations.ReadViewModel> Configurations { get; set; }
         [JsonProperty("relatedData")]
         public List<MixRelatedAttributeDatas.ReadViewModel> RelatedData { get; set; } = new List<MixRelatedAttributeDatas.ReadViewModel>();
+        [JsonProperty("attributeSetDatas")]
+        public List<MixAttributeSetDatas.ImportViewModel> AttributeSetDatas { get; set; } = new List<MixAttributeSetDatas.ImportViewModel>();
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
         [JsonProperty("themeName")]
@@ -38,47 +41,6 @@ namespace Mix.Cms.Lib.ViewModels
             Pages = (await MixPages.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
             Modules = (await MixModules.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
             AttributeSets = (await MixAttributeSets.ImportViewModel.Repository.GetModelListAsync()).Data;
-        }
-
-        public async Task<RepositoryResponse<bool>> ImportAsync(string destCulture,
-            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            try
-            {
-                if (Pages != null)
-                {
-                    result = await ImportPagesAsync(Pages, destCulture, context, transaction);
-                }
-                if (result.IsSucceed && Modules != null)
-                {
-                    result = await ImportModulesAsync(Modules, destCulture, context, transaction);
-                }
-                if (result.IsSucceed && AttributeSets != null)
-                {
-                    result = await ImportAttributeSetsAsync(AttributeSets, context, transaction);
-                }
-                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
-            }
-            catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
-            {
-
-                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<MixPages.ImportViewModel>(ex, isRoot, transaction);
-                result.IsSucceed = false;
-                result.Errors = error.Errors;
-                result.Exception = error.Exception;
-            }
-            finally
-            {
-                //if current Context is Root
-                if (isRoot)
-                {
-                    context?.Dispose();
-                }
-
-            }
-            return result;
         }
 
         public void ProcessSelectedExportDataAsync()
@@ -111,7 +73,6 @@ namespace Mix.Cms.Lib.ViewModels
             foreach (var item in AttributeSets)
             {
                 item.Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(a => a.AttributeSetId == item.Id, context, transaction).Data?.OrderBy(a => a.Priority).ToList();
-
                 // Filter list reference field => Add to Export Data if not exist
                 var refFields = item.Fields.Where(f => f.DataType == MixEnums.MixDataType.Reference);
 
@@ -127,9 +88,13 @@ namespace Mix.Cms.Lib.ViewModels
                             // Load ref data if export parent Data
                             if (item.IsExportData)
                             {
-                                refSet.Data = MixAttributeSetDatas.ImportViewModel.Repository.GetModelListBy(
+                                var refData = MixAttributeSetDatas.ImportViewModel.Repository.GetModelListBy(
                                     a => a.Specificulture == Specificulture && a.AttributeSetId == refSet.Id, context, transaction)
                                     .Data?.OrderBy(a => a.Priority).ToList();
+                                if (refData != null)
+                                {
+                                    AttributeSetDatas.AddRange(refData);
+                                }
                             }
                             AttributeSets.Add(getSet.Data);
                         }
@@ -149,9 +114,13 @@ namespace Mix.Cms.Lib.ViewModels
                 // Load export data if checked and did not process
                 if (item.IsExportData)
                 {
-                    item.Data = item.Data ?? MixAttributeSetDatas.ImportViewModel.Repository.GetModelListBy(
+                    var data = item.Data ?? MixAttributeSetDatas.ImportViewModel.Repository.GetModelListBy(
                         a => a.Specificulture == Specificulture && a.AttributeSetId == item.Id, context, transaction)
                         .Data?.OrderBy(a => a.Priority).ToList();
+                    if (data != null)
+                    {
+                        AttributeSetDatas.AddRange(data);
+                    }
                     foreach (var d in item.Data)
                     {
                         var getRelatedData = MixRelatedAttributeDatas.ReadViewModel.Repository.GetModelListBy(
@@ -171,16 +140,7 @@ namespace Mix.Cms.Lib.ViewModels
             {
                 if (item.IsExportData)
                 {
-                    var getDataResult = MixModuleDatas.ReadViewModel.Repository
-                               .GetModelListBy(m => m.ModuleId == item.Id && m.Specificulture == item.Specificulture
-                               , "Priority", 0, null, null
-                               , context, transaction);
-                    if (getDataResult.IsSucceed)
-                    {
-                        getDataResult.Data.JsonItems = new List<JObject>();
-                        getDataResult.Data.Items.ForEach(d => getDataResult.Data.JsonItems.Add(d.JItem));
-                        item.Data = getDataResult.Data;
-                    }
+                    ProcessModuleData(item, context, transaction);
                 }
             }
         }
@@ -196,7 +156,14 @@ namespace Mix.Cms.Lib.ViewModels
                     foreach (var nav in item.ModuleNavs)
                     {
                         nav.Module.IsExportData = true;
+                        ProcessModuleData(nav.Module, context, transaction);
+                        var dupModule = Modules.FirstOrDefault(m => m.Id == nav.ModuleId && m.Specificulture == Specificulture);
+                        if (dupModule!=null)
+                        {
+                            Modules.Remove(dupModule);
+                        }
                     }
+                    GetAdditionalData(item.Id.ToString(), MixEnums.MixAttributeSetDataType.Page, context, transaction);
                     //this.ParentNavs = GetParentNavs(_context, _transaction);
                     //this.ChildNavs = GetChildNavs(_context, _transaction);
                     item.UrlAliases = item.GetAliases(context, transaction);
@@ -204,10 +171,102 @@ namespace Mix.Cms.Lib.ViewModels
             }
         }
 
-        private async Task<RepositoryResponse<bool>> ImportModulesAsync(List<MixModules.ImportViewModel> modules, string destCulture, MixCmsContext context, IDbContextTransaction transaction)
+
+        private void ProcessModuleData(ImportViewModel item, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var getDataResult = MixModuleDatas.ReadViewModel.Repository
+                               .GetModelListBy(m => m.ModuleId == item.Id && m.Specificulture == item.Specificulture
+                               , "Priority", 0, null, null
+                               , context, transaction);
+
+            if (getDataResult.IsSucceed)
+            {
+                getDataResult.Data.JsonItems = new List<JObject>();
+                getDataResult.Data.Items.ForEach(d => getDataResult.Data.JsonItems.Add(d.JItem));
+                item.Data = getDataResult.Data;
+            }
+
+            GetAdditionalData(item.Id.ToString(), MixEnums.MixAttributeSetDataType.Module, context, transaction);
+        }
+
+        private void GetAdditionalData(string id, MixEnums.MixAttributeSetDataType type, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var getRelatedData = MixRelatedAttributeDatas.ReadViewModel.Repository.GetSingleModel(
+                            m => m.Specificulture == Specificulture && m.ParentType == (int)type
+                                && m.ParentId == id, context, transaction);
+            if (getRelatedData.IsSucceed)
+            {
+                RelatedData.Add(getRelatedData.Data);
+                var getData = MixAttributeSetDatas.ImportViewModel.Repository.GetSingleModel(
+                    m => m.Specificulture == Specificulture && m.Id == getRelatedData.Data.Id);
+                if (getData.IsSucceed)
+                {
+                    getData.Data.Fields = new List<MixAttributeFields.UpdateViewModel>();
+                    foreach (var item in getData.Data.Values)
+                    {
+                        getData.Data.Fields.Add(item.Field);
+                    }
+                    AttributeSetDatas.Add(getData.Data);
+                }
+            }
+        }
+
+
+        #region Import
+
+        public async Task<RepositoryResponse<bool>> ImportAsync(string destCulture,
+            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            foreach (var module in modules)
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                if (Pages != null)
+                {
+                    result = await ImportPagesAsync(destCulture, context, transaction);
+                }
+                if (result.IsSucceed && Modules != null)
+                {
+                    result = await ImportModulesAsync(destCulture, context, transaction);
+                }
+                if (result.IsSucceed && AttributeSets != null)
+                {
+                    result = await ImportAttributeSetsAsync(context, transaction);
+                }
+                if (result.IsSucceed && AttributeSetDatas.Count > 0)
+                {
+                    result = await ImportAttributeSetDatas(context, transaction);
+                }
+                if (result.IsSucceed && RelatedData.Count > 0)
+                {
+                    result = await ImportRelatedDatas(context, transaction);
+                }
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+            }
+            catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
+            {
+
+                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<MixPages.ImportViewModel>(ex, isRoot, transaction);
+                result.IsSucceed = false;
+                result.Errors = error.Errors;
+                result.Exception = error.Exception;
+            }
+            finally
+            {
+                //if current Context is Root
+                if (isRoot)
+                {
+                    context?.Dispose();
+                }
+
+            }
+            return result;
+        }
+
+        private async Task<RepositoryResponse<bool>> ImportModulesAsync(string destCulture, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var module in Modules)
             {
                 if (result.IsSucceed)
                 {
@@ -228,13 +287,13 @@ namespace Mix.Cms.Lib.ViewModels
         }
 
 
-        private async Task<RepositoryResponse<bool>> ImportAttributeSetsAsync(List<MixAttributeSets.ImportViewModel> attributeSets, MixCmsContext context, IDbContextTransaction transaction)
+        private async Task<RepositoryResponse<bool>> ImportAttributeSetsAsync(MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            if (attributeSets != null)
+            if (AttributeSets != null)
             {
                 var startId = MixAttributeSets.ImportViewModel.Repository.Max(m => m.Id).Data;
-                foreach (var set in attributeSets)
+                foreach (var set in AttributeSets)
                 {
                     if (result.IsSucceed)
                     {
@@ -253,27 +312,11 @@ namespace Mix.Cms.Lib.ViewModels
                         break;
                     }
                 }
-
-                if (result.IsSucceed)
-                {
-                    foreach (var item in RelatedData)
-                    {
-                        if (result.IsSucceed)
-                        {
-                            var saveResult = await item.SaveModelAsync(false, context, transaction);
-                            ViewModelHelper.HandleResult(saveResult, ref result);
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                }
             }
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> ImportPagesAsync(List<MixPages.ImportViewModel> arrPage, string destCulture,
+        private async Task<RepositoryResponse<bool>> ImportPagesAsync(string destCulture,
           MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -285,7 +328,7 @@ namespace Mix.Cms.Lib.ViewModels
                 //var pages = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, "data", true, "{}");
                 //var obj = JObject.Parse(pages.Content);
                 //var initPages = obj["data"].ToObject<JArray>();
-                foreach (var item in arrPage)
+                foreach (var item in Pages)
                 {
                     item.Id = startId;
                     item.CreatedDateTime = DateTime.UtcNow;
@@ -337,6 +380,49 @@ namespace Mix.Cms.Lib.ViewModels
             }
             return result;
         }
+
+        private async Task<RepositoryResponse<bool>> ImportAttributeSetDatas(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var item in AttributeSetDatas)
+            {
+                if (result.IsSucceed)
+                {
+                    if (!context.MixAttributeSetData.Any(m => m.Id == item.Id && m.Specificulture == item.Specificulture))
+                    {
+                        item.Fields = item.Fields ?? MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(
+                            m => m.AttributeSetId == item.AttributeSetId, context, transaction).Data;
+                        var saveResult = await item.SaveModelAsync(true, context, transaction);
+                        ViewModelHelper.HandleResult(saveResult, ref result);
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return result;
+        }
+
+        private async Task<RepositoryResponse<bool>> ImportRelatedDatas(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var item in RelatedData)
+            {
+                if (result.IsSucceed)
+                {
+                    var saveResult = await item.SaveModelAsync(false, context, transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return result;
+        }
+
+        #endregion
 
     }
 }

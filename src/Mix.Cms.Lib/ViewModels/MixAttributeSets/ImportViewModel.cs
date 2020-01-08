@@ -50,6 +50,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         #region Views        
         [JsonProperty("fields")]
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
+        [JsonIgnore]
         [JsonProperty("data")]
         public List<MixAttributeSetDatas.ImportViewModel> Data { get; set; }
         [JsonProperty("isExportData")]
@@ -103,13 +104,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             // Save Fields
-            result = await SaveFieldsAsync(parent, _context, _transaction);
-
-            if (result.IsSucceed)
+            if (Fields!=null)
             {
-                // Save Data
-                result = await SaveDataAsync(parent, _context, _transaction);
+                result = await SaveFieldsAsync(parent, _context, _transaction);
             }
+            //if (result.IsSucceed)
+            //{
+            //    // Save Data
+            //    result = await SaveDataAsync(parent, _context, _transaction);
+            //}
 
             return result;
         }
