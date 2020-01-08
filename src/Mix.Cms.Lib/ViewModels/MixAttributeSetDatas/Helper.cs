@@ -211,7 +211,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     IsSucceed = true,
                     Data = new PaginationModel<TView>()
                 };
-                var filterType = queryDictionary.First(q => q.Key == "filterType");
+                var filterType = queryDictionary.FirstOrDefault(q => q.Key == "filterType");
                 var tasks = new List<Task<RepositoryResponse<TView>>>();
                 if (queryDictionary != null)
                 {
