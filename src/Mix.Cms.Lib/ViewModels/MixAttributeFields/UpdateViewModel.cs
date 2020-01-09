@@ -67,7 +67,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
             base.Validate(_context, _transaction);
             if (IsValid)
             {
-                IsValid = !Repository.CheckIsExists(f => f.Name == Name);
+                // Check if there is field name in the same attribute set
+                IsValid = !Repository.CheckIsExists(f => f.Id != Id && f.Name == Name && f.AttributeSetId == AttributeSetId);
                 if (!IsValid)
                 {
                     Errors.Add($"Field {Name} Existed");
