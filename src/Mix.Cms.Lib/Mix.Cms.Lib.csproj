@@ -5,6 +5,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="ViewModels\MixAttributeSetDatas\ExportViewModel.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Include="ViewModels\MixAttributeSetDatas\ExportViewModel.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="CommonMark.NET" Version="0.15.1" />
         <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.2.1" />
         <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.2.0" />
