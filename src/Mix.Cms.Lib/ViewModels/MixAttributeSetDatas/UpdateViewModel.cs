@@ -4,6 +4,7 @@ using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +37,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
         [JsonProperty("dataNavs")]
         public List<MixRelatedAttributeDatas.UpdateViewModel> DataNavs { get; set; }
-
+        [JsonProperty("data")]
+        public JObject Data { get; set; }
         #endregion
         #endregion Properties
 
@@ -81,7 +83,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 val.Priority = field.Priority;
                 val.Field = field;
             }
-
+            ParseData();
 
         }
         public override MixAttributeSetData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -179,6 +181,59 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             return tasks;
         }
         #endregion
-
+        #region Expand
+        JProperty ParseValue(MixAttributeSetValues.UpdateViewModel item)
+        {
+            switch (item.DataType)
+            {
+                case MixEnums.MixDataType.DateTime:
+                    return new JProperty(item.AttributeFieldName, item.DateTimeValue);
+                case MixEnums.MixDataType.Date:
+                    return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
+                case MixEnums.MixDataType.Time:
+                    return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
+                case MixEnums.MixDataType.Double:
+                    return (new JProperty(item.AttributeFieldName, item.DoubleValue));
+                case MixEnums.MixDataType.Boolean:
+                    return (new JProperty(item.AttributeFieldName, item.BooleanValue));
+                case MixEnums.MixDataType.Number:
+                    return (new JProperty(item.AttributeFieldName, item.IntegerValue));
+                case MixEnums.MixDataType.Reference:
+                    //string url = $"/api/v1/odata/en-us/related-attribute-set-data/mobile/parent/set/{Id}/{item.Field.ReferenceId}";
+                    return (new JProperty(item.AttributeFieldName, new JArray()));
+                case MixEnums.MixDataType.Custom:
+                case MixEnums.MixDataType.Duration:
+                case MixEnums.MixDataType.PhoneNumber:
+                case MixEnums.MixDataType.Text:
+                case MixEnums.MixDataType.Html:
+                case MixEnums.MixDataType.MultilineText:
+                case MixEnums.MixDataType.EmailAddress:
+                case MixEnums.MixDataType.Password:
+                case MixEnums.MixDataType.Url:
+                case MixEnums.MixDataType.ImageUrl:
+                case MixEnums.MixDataType.CreditCard:
+                case MixEnums.MixDataType.PostalCode:
+                case MixEnums.MixDataType.Upload:
+                case MixEnums.MixDataType.Color:
+                case MixEnums.MixDataType.Icon:
+                case MixEnums.MixDataType.VideoYoutube:
+                case MixEnums.MixDataType.TuiEditor:
+                default:
+                    return (new JProperty(item.AttributeFieldName, item.StringValue));
+            }
+        }
+        private void ParseData()
+        {
+            Data = new JObject
+            {
+                new JProperty("id", Id),
+                new JProperty("createdDateTime", CreatedDateTime)
+            };
+            foreach (var item in Values.OrderBy(v => v.Priority))
+            {
+                Data.Add(ParseValue(item));
+            }
+        }
+        #endregion
     }
 }

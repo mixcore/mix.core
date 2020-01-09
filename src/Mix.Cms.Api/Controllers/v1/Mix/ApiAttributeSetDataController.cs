@@ -17,6 +17,7 @@ using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web;
@@ -141,6 +142,48 @@ namespace Mix.Cms.Api.Controllers.v1
                 return result;
             }
             return new RepositoryResponse<MobileViewModel>() { Status = 501 };
+        }
+
+        [HttpPost, HttpOptions]
+        [Route("save/{name}")]
+        public async Task<ActionResult<MobileViewModel>> SaveByName(string culture, string name, [FromBody]JObject obj)
+        {
+            var getAttrSet = await Mix.Cms.Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModelAsync(m => m.Name == name);
+            string _username = User?.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
+            if (getAttrSet.IsSucceed)
+            {
+                MobileViewModel data = new MobileViewModel()
+                {
+                    Id = obj["id"]?.Value<string>(),
+                    CreatedBy = _username,
+                    AttributeSetId = getAttrSet.Data.Id,
+                    AttributeSetName = getAttrSet.Data.Name,
+                    Specificulture = culture,
+                    Data = obj
+                };
+                var portalResult = await base.SaveAsync<MobileViewModel>(data, true);
+                if (portalResult.IsSucceed)
+                {
+                    if (getAttrSet.Data.EdmAutoSend.HasValue && getAttrSet.Data.EdmAutoSend.Value)
+                    {
+                        _ = MixService.SendEdm(_lang, getAttrSet.Data.EdmTemplate, portalResult.Data.Data, getAttrSet.Data.EdmSubject, getAttrSet.Data.EdmFrom);
+                    }
+
+                    return Ok(new RepositoryResponse<MobileViewModel>
+                    {
+                        IsSucceed = true,
+                        Data = portalResult.Data
+                    });
+                }
+                else
+                {
+                    return BadRequest(portalResult);
+                }
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         // GET api/attribute-set-data
