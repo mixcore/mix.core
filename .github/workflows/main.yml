@@ -31,7 +31,7 @@ jobs:
         
         git checkout develop
         
-        cp -a ${HOME}/work/${GITHUB_REPOSITORY}/mix.spa.portal/dist/. ${GITHUB_WORKSPACE}/src/
+        cp -a ${HOME}/work/${GITHUB_REPOSITORY}/mix.spa.portal/dist/ ${GITHUB_WORKSPACE}/src/
         
         # Update origin with token
         git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
