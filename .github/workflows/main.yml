@@ -1,0 +1,40 @@
+name: CI
+# e722a7d0dcc71babbc54735654d403d1ac0eb2b9
+on: [repository_dispatch]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run a one-line script
+      run: echo Hello, world!
+    - name: Run a multi-line script
+      run: |
+        echo Add other actions to build,
+        echo test, and deploy your project.
+        
+    - name: Commit to repository
+      env:
+        GITHUB_TOKEN: ${{ secrets.github_token }}
+        COMMIT_MSG: |
+          Commit latest code from mix.spa.portal
+          skip-checks: true
+      run: |
+        # Hard-code user configuration
+        git config --global user.email "i.love.to.smile.around@gmail.com"
+        git config --global user.name "smilefounder"
+        
+        git clone https://github.com/mixcore/mix.spa.portal.git ${HOME}/work/${GITHUB_REPOSITORY}/mix.spa.portal/
+        
+        git checkout develop
+        
+        cp -a ${HOME}/work/${GITHUB_REPOSITORY}/mix.spa.portal/dist/. ${GITHUB_WORKSPACE}/src/
+        
+        # Update origin with token
+        git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+        git add .
+        # Only commit and push if we have changes
+        git diff --quiet && git diff --staged --quiet || (git commit -m "${COMMIT_MSG}"; git push origin develop)
