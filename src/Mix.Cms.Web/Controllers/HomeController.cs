@@ -181,6 +181,17 @@ namespace Mix.Cms.Web.Controllers
             return await Post(id, seoName);
         }
 
+        [Route("module/{id}/{seoName}")]
+        [Route("{culture}/module/{id}/{seoName}")]
+        public async System.Threading.Tasks.Task<IActionResult> Module(int id, string culture, string seoName)
+        {
+            if (_forbidden)
+            {
+                return Redirect($"/error/403");
+            }
+            return await Module(id, seoName);
+        }
+
         [HttpGet]
         [Authorize]
         [Route("portal")]
@@ -596,6 +607,53 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["Title"] = getPost.Data.SeoTitle;
                 ViewData["Description"] = getPost.Data.SeoDescription;
                 ViewData["Keywords"] = getPost.Data.SeoKeywords;
+                ViewData["Image"] = getPost.Data.ImageUrl;
+                getPost.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+                return View(getPost.Data);
+            }
+            else
+            {
+                return Redirect($"/error/404");
+            }
+        }
+        
+        async System.Threading.Tasks.Task<IActionResult> Module(int id, string seoName)
+        {
+            RepositoryResponse<Lib.ViewModels.MixModules.ReadMvcViewModel> getPost = null;
+
+            Expression<Func<MixModule, bool>> predicate;
+            if (string.IsNullOrEmpty(seoName))
+            {
+                predicate = p =>
+                p.Type == (int)MixPageType.Home
+                && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+            }
+            else
+            {
+                predicate = p =>
+                p.Id == id
+                && p.Status == (int)MixContentStatus.Published
+                && p.Specificulture == _culture;
+            }
+
+            getPost = await Lib.ViewModels.MixModules.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+            if (getPost.IsSucceed)
+            {
+                getPost.Data.DetailsUrl = GenerateDetailsUrl(
+                    new { culture = _culture, action = "post", id = getPost.Data.Id, seoName = getPost.Data.Name });
+                //Generate details url for related posts
+                if (getPost.Data.Posts != null && getPost.Data.Posts.TotalItems > 0)
+                {
+                    getPost.Data.Posts.Items.ForEach(n => n.Post.DetailsUrl = GenerateDetailsUrl(
+                            new { culture = _culture, action = "post", id = n.Post.Id, seoName = n.Post.SeoName }));
+                }
+            }
+
+            if (getPost.IsSucceed)
+            {
+                ViewData["Title"] = getPost.Data.Title;
+                ViewData["Description"] = getPost.Data.Title;
+                ViewData["Keywords"] = getPost.Data.Title;
                 ViewData["Image"] = getPost.Data.ImageUrl;
                 getPost.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
                 return View(getPost.Data);
