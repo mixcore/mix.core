@@ -1,5 +1,5 @@
 name: CI
-# e722a7d0dcc71babbc54735654d403d1ac0eb2b9
+
 on: [repository_dispatch]
 
 jobs:
@@ -31,10 +31,10 @@ jobs:
         
         git checkout develop
         
-        cp -a ${HOME}/work/${GITHUB_REPOSITORY}/mix.spa.portal/dist/ ${GITHUB_WORKSPACE}/src/
+        #cp -a ${HOME}/work/${GITHUB_REPOSITORY}/mix.spa.portal/dist/ ${GITHUB_WORKSPACE}/src/
         
         # Update origin with token
-        git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-        git add .
+        #git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+        #git add .
         # Only commit and push if we have changes
-        git diff --quiet && git diff --staged --quiet || (git commit -m "${COMMIT_MSG}"; git push origin develop)
+        #git diff --quiet && git diff --staged --quiet || (git commit -m "${COMMIT_MSG}"; git push origin develop)
