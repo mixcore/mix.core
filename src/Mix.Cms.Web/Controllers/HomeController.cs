@@ -439,27 +439,21 @@ namespace Mix.Cms.Web.Controllers
             string orderBy = MixService.GetConfig<string>("OrderBy");
             int orderDirection = MixService.GetConfig<int>("OrderDirection");
             int.TryParse(Request.Query["page"], out int page);
-            RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
-            Expression<Func<MixPage, bool>> predicate;
-            predicate = p =>
-            p.SeoName == "tag"
+            Expression<Func<MixPage, bool>> predicate = p =>
+            p.SeoName == seoName
             && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
 
-            getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
-            if (getPage.IsSucceed)
-            {
-                getPage.Data.LoadDataByTag(tagName, orderBy, orderDirection, pageIndex: page-1, pageSize: pageSize);
-                GeneratePageDetailsUrls(getPage.Data);
-                //_ = MixCacheService.SetAsync(cacheKey, getPage);
-            }
-
+            var getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+            var getPosts = await Lib.ViewModels.MixPosts.Helper.GetModelistByMeta<Lib.ViewModels.MixPosts.ReadListItemViewModel>(
+                _culture, MixConstants.AttributeSetName.SYSTEM_TAG, tagName, orderBy, orderDirection, pageSize, page-1);
             if (getPage.IsSucceed)// && getPage.Data.View != null
             {
-                ViewData["Title"] = getPage.Data.SeoTitle;
-                ViewData["Description"] = getPage.Data.SeoDescription;
-                ViewData["Keywords"] = getPage.Data.SeoKeywords;
+                ViewData["Title"] = $"Tag: {tagName}";
+                ViewData["Description"] = $"Tag: {tagName}";
+                ViewData["Keywords"] = $"Tag: {tagName}";
                 ViewData["Image"] = getPage.Data.ImageUrl;
                 ViewData["PageClass"] = getPage.Data.CssClass;
+                ViewData["Posts"] = getPosts.Data;
                 getPage.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
                 return View(getPage.Data);
             }
