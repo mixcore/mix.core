@@ -75,6 +75,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
                 Priority = Repository.Count(m => m.AttributeSetName == AttributeSetName && m.Specificulture == Specificulture,_context,_transaction).Data + 1;
+                Data["id"] = Id;
+                Data["createdDateTime"] = CreatedDateTime;
+                Data["priority"] = Priority;
+
             }
             Values = Values ?? MixAttributeSetValues.MobileViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
