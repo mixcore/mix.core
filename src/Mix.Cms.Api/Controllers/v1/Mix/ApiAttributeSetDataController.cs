@@ -17,6 +17,7 @@ using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web;
@@ -143,6 +144,48 @@ namespace Mix.Cms.Api.Controllers.v1
             return new RepositoryResponse<MobileViewModel>() { Status = 501 };
         }
 
+        [HttpPost, HttpOptions]
+        [Route("save/{name}")]
+        public async Task<ActionResult<MobileViewModel>> SaveByName(string culture, string name, [FromBody]JObject obj)
+        {
+            var getAttrSet = await Mix.Cms.Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModelAsync(m => m.Name == name);
+            string _username = User?.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
+            if (getAttrSet.IsSucceed)
+            {
+                MobileViewModel data = new MobileViewModel()
+                {
+                    Id = obj["id"]?.Value<string>(),
+                    CreatedBy = _username,
+                    AttributeSetId = getAttrSet.Data.Id,
+                    AttributeSetName = getAttrSet.Data.Name,
+                    Specificulture = culture,
+                    Data = obj
+                };
+                var portalResult = await base.SaveAsync<MobileViewModel>(data, true);
+                if (portalResult.IsSucceed)
+                {
+                    if (getAttrSet.Data.EdmAutoSend.HasValue && getAttrSet.Data.EdmAutoSend.Value)
+                    {
+                        _ = MixService.SendEdm(_lang, getAttrSet.Data.EdmTemplate, portalResult.Data.Data, getAttrSet.Data.EdmSubject, getAttrSet.Data.EdmFrom);
+                    }
+
+                    return Ok(new RepositoryResponse<MobileViewModel>
+                    {
+                        IsSucceed = true,
+                        Data = portalResult.Data
+                    });
+                }
+                else
+                {
+                    return BadRequest(portalResult);
+                }
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
         // GET api/attribute-set-data
         [HttpPost, HttpOptions]
         [Route("list")]
@@ -154,7 +197,7 @@ namespace Mix.Cms.Api.Controllers.v1
             int.TryParse(queries.Get("attributeSetId"), out int attributeSetId);
             string attributeSetName = queries.Get("attributeSetName");
             ParseRequestPagingDate(request);
-            
+
             switch (request.Key)
             {
                 case "portal":
@@ -168,6 +211,49 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         Expression<Func<MixAttributeSetData, bool>> predicate = m => (m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName) && m.Specificulture == _lang;
                         var portalResult = await base.GetListAsync<UpdateViewModel>(request.Key, request, predicate);
+                        return Ok(JObject.FromObject(portalResult));
+                    }
+                case "readData":
+                    if (!string.IsNullOrEmpty(request.Query))
+                    {
+                        var portalResult = await Helper.FilterByKeywordAsync<ReadDataViewModel>(_lang, attributeSetName,
+                        request, request.Keyword, queryDictionary);
+                        return Ok(JObject.FromObject(portalResult));
+                    }
+                    else
+                    {
+                        Expression<Func<MixAttributeSetData, bool>> predicate = m => (m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName) && m.Specificulture == _lang;
+                        var portalResult = await base.GetListAsync<ReadDataViewModel>(request.Key, request, predicate);
+                        return Ok(JObject.FromObject(portalResult));
+                    }
+                case "data":
+                    if (!string.IsNullOrEmpty(request.Query))
+                    {
+                        var result = await Helper.FilterByKeywordAsync<ReadDataViewModel>(_lang, attributeSetName,
+                        request, request.Keyword, queryDictionary);
+                        var parsed = new PaginationModel<JObject>()
+                        {
+                            Items = new List<JObject>(),
+                            TotalItems = result.Data.TotalItems,
+                            TotalPage = result.Data.TotalPage,
+                            PageIndex = result.Data.PageIndex,
+                            PageSize = result.Data.PageSize
+                        };
+                        foreach (var item in result.Data.Items)
+                        {
+                            parsed.Items.Add(item.Data);
+                        }
+                        return Ok(JObject.FromObject(new RepositoryResponse<PaginationModel<JObject>>() { 
+                            IsSucceed = result.IsSucceed,
+                            Data = parsed,
+                            Errors = result.Errors,
+                            Exception = result.Exception
+                        }));
+                    }
+                    else
+                    {
+                        Expression<Func<MixAttributeSetData, bool>> predicate = m => (m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName) && m.Specificulture == _lang;
+                        var portalResult = await base.GetListAsync<ReadDataViewModel>(request.Key, request, predicate);
                         return Ok(JObject.FromObject(portalResult));
                     }
                 default:
@@ -262,5 +348,9 @@ namespace Mix.Cms.Api.Controllers.v1
             
         }
         #endregion Post
+
+        #region Helpers
+       
+        #endregion
     }
 }

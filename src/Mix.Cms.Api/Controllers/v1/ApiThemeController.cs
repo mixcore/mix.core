@@ -77,6 +77,8 @@ namespace Mix.Cms.Api.Controllers.v1
             string tempPath = $"wwwroot/Exports/Themes/{getTheme.Data.Name}/temp";
             string outputPath = $"Exports/Themes/{getTheme.Data.Name}";
             data.ThemeName = getTheme.Data.Name;
+            data.Specificulture = _lang;
+            data.ProcessSelectedExportDataAsync();
             string filename = $"schema";
             var file = new FileViewModel()
             {

@@ -32,7 +32,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     List<ImportViewModel> data = LoadFileData(culture, attributeSet, file);
                     
-                    var fields = MixAttributeFields.ODataMobileViewModel.Repository.GetModelListBy(f => f.AttributeSetId == attributeSet.Id).Data;
+                    var fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == attributeSet.Id).Data;
                     var priority = ImportViewModel.Repository.Count(m => m.AttributeSetName == attributeSet.Name && m.Specificulture == culture).Data;
                     foreach (var item in data)
                     {
@@ -211,7 +211,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     IsSucceed = true,
                     Data = new PaginationModel<TView>()
                 };
-                var filterType = queryDictionary.First(q => q.Key == "filterType");
+                var filterType = queryDictionary.FirstOrDefault(q => q.Key == "filterType");
                 var tasks = new List<Task<RepositoryResponse<TView>>>();
                 if (queryDictionary != null)
                 {

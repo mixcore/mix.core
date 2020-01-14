@@ -295,3 +295,5 @@ src/Mix.Cms.Web/appsettings.*.json
 src/Mix.Cms.Web/logs/
 
 src/Mix.Cms.Web.old/
+
+src/Mix.Cms.Web/wwwroot/edms/

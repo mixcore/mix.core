@@ -5,8 +5,17 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="ViewModels\MixAttributeSetDatas\ExportViewModel.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Include="ViewModels\MixAttributeSetDatas\ExportViewModel.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="CommonMark.NET" Version="0.15.1" />
         <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.2.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.2.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.3" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.3">
             <PrivateAssets>all</PrivateAssets>
@@ -15,6 +24,8 @@
         <PackageReference Include="Mix.Heart" Version="0.0.5.8" />
        
         <PackageReference Include="Mix.Identity" Version="0.0.2" />
+       
+        <PackageReference Include="OpenHtmlToPdf" Version="1.12.0" />
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
     </ItemGroup>
 

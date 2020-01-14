@@ -27,13 +27,13 @@
     </rule>
 
     <rule name="Rewrite to alias page paging" stopProcessing="true">
-      <match url="^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/(.*)\/(\d+)\/(\d+)$" />
-      <action type="Rewrite" url="/{R:1}/alias?alias={R:5}&amp;pageSize={R:6}&amp;pageIndex={R:7}" appendQueryString="false"/>
+      <match url="^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/(\w+)[\?](.*)$" />
+      <action type="Rewrite" url="/{R:1}/alias?alias={R:5}&amp;{R:6}" appendQueryString="false"/>
     </rule>
 
-    <rule name="Rewrite to alias page" stopProcessing="true">
+    <!--<rule name="Rewrite to alias page" stopProcessing="true">
       <match url="^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/(.*)$" />
       <action type="Rewrite" url="/{R:1}/alias?alias={R:5}" appendQueryString="false"/>
-    </rule>
+    </rule>-->
   </rules>
 </rewrite>

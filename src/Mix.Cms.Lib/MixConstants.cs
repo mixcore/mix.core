@@ -32,6 +32,17 @@ namespace Mix.Cms.Lib
 
         public static List<string> cachedKeys = new List<string>();
 
+        public static class AttributeSetName
+        {
+            public const string ADDITIONAL_FIELD_PAGE = "sys_additional_field_page";
+            public const string ADDITIONAL_FIELD_POST = "sys_additional_field_post";
+            public const string ADDITIONAL_FIELD_MODULE = "sys_additional_field_module";
+            public const string NAVIGATION = "sys_navigation";
+            public const string MENU_ITEM = "sys_menu_item";
+            public const string SYSTEM_CATEGORY = "sys_category";
+            public const string SYSTEM_TAG = "sys_tag";
+        }
+
         public static class ConfigurationKeyword
         {
             public const string ConnectionString = "ConnectionString";

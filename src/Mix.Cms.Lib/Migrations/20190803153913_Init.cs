@@ -354,7 +354,7 @@ namespace Mix.Cms.Lib.Migrations
                     Content = table.Column<string>(nullable: true),
                     CreatedBy = table.Column<string>(maxLength: 250, nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    CssClass = table.Column<string>(maxLength: 50, nullable: true),
+                    CssClass = table.Column<string>(maxLength: 250, nullable: true),
                     Excerpt = table.Column<string>(nullable: true),
                     Icon = table.Column<string>(maxLength: 50, nullable: true),
                     Image = table.Column<string>(maxLength: 250, nullable: true),
