@@ -44,7 +44,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         [EnableQuery]
         [HttpGet, HttpOptions]
         [Route("{id}")]
-        [Route("{id}/{attributeSetId}")]
+        [Route("{id}/{attributeSetName}")]
         [Route("{id}/{attributeSetId}/{attributeSetName}")]
         public async Task<ActionResult<ODataUpdateViewModel>> Details(string culture, string id, int? attributeSetId, string attributeSetName)
         {

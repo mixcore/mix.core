@@ -244,7 +244,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     break;
                 case MixEnums.MixDataType.Boolean:
                     item.BooleanValue = property.Value<bool?>();
-                    item.StringValue = property.Value<string>().ToLower();
+                    item.StringValue = property.Value<string>()?.ToLower();
                     break;
                 case MixEnums.MixDataType.Number:
                     item.IntegerValue = property.Value<int?>();
