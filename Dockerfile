@@ -1,14 +1,15 @@
 #Depending on the operating system of the host machines(s) that will build or run the containers, the image specified in the FROM statement may need to be changed.
 #For more information, please see https://aka.ms/containercompat
 
-FROM node:10.16.3 AS node-env
-WORKDIR /app
-COPY src/. ./
-WORKDIR /app/portal-app
-RUN npm install
-RUN npm install gulp-cli -g
-RUN npm install gulp -D
-RUN gulp build
+# Removed because SPA Portal to new repo here: https://github.com/mixcore/mix.spa.portal
+# FROM node:10.16.3 AS node-env
+# WORKDIR /app
+# COPY src/. ./
+# WORKDIR /app/portal-app
+# RUN npm install
+# RUN npm install gulp-cli -g
+# RUN npm install gulp -D
+# RUN gulp build
 
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
 WORKDIR /app
