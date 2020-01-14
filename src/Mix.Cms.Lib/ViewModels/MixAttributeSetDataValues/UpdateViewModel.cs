@@ -61,12 +61,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
         public UpdateViewModel() : base()
         {
-            IsCache = false;
+            //IsCache = false;
         }
 
         public UpdateViewModel(MixAttributeSetValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
-            IsCache = false;
+            //IsCache = false;
         }
 
         #endregion Contructors
@@ -79,12 +79,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
             }
-            Priority = Field?.Priority??Priority;
+            Priority = Field?.Priority ?? Priority;
             DataType = Field?.DataType ?? DataType;
+
+            AttributeFieldName = Field?.Name;
+            AttributeFieldId = Field?.Id ?? 0;
             if (string.IsNullOrEmpty(StringValue) && !string.IsNullOrEmpty(Field?.DefaultValue))
             {
                 ParseDefaultValue(Field.DefaultValue);
-            }            
+            }
             return base.ParseModel(_context, _transaction);
         }
 
@@ -99,7 +102,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                     break;
                 case MixEnums.MixDataType.Time:
                     break;
-                case MixEnums.MixDataType.Double:                    
+                case MixEnums.MixDataType.Double:
                     double.TryParse(defaultValue, out double doubleValue);
                     DoubleValue = DoubleValue;
                     break;
@@ -110,7 +113,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                 case MixEnums.MixDataType.Number:
                     int.TryParse(defaultValue, out int intValue);
                     IntegerValue = intValue;
-                    break;                
+                    break;
             }
         }
 
@@ -133,9 +136,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                     Title = AttributeFieldName,
                     Name = AttributeFieldName,
                     Priority = Priority
-                };                
+                };
             }
-            
+
         }
         #endregion
 
@@ -144,7 +147,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             base.Validate(_context, _transaction);
-            if (IsValid && Field!=null)
+            if (IsValid && Field != null)
             {
                 if (Field.IsUnique)
                 {
@@ -154,7 +157,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                     {
                         IsValid = false;
                         Errors.Add($"{Field.Title} = {StringValue} is existed");
-                    }                    
+                    }
                 }
                 if (Field.IsRequire)
                 {

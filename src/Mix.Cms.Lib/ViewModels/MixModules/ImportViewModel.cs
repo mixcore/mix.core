@@ -86,7 +86,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         //Parent Category Id
         [JsonProperty("pageId")]
         public int PageId { get; set; }
-
+        [JsonProperty("isExportData")]
+        public bool IsExportData { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -129,16 +130,16 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         }
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getDataResult = MixModuleDatas.ReadViewModel.Repository
-                       .GetModelListBy(m => m.ModuleId == Id && m.Specificulture == Specificulture
-                       , "Priority", 0, null, null
-                       , _context, _transaction);
-            if (getDataResult.IsSucceed)
-            {
-                getDataResult.Data.JsonItems = new List<JObject>();
-                getDataResult.Data.Items.ForEach(d => getDataResult.Data.JsonItems.Add(d.JItem));
-                Data = getDataResult.Data;
-            }
+            //var getDataResult = MixModuleDatas.ReadViewModel.Repository
+            //           .GetModelListBy(m => m.ModuleId == Id && m.Specificulture == Specificulture
+            //           , "Priority", 0, null, null
+            //           , _context, _transaction);
+            //if (getDataResult.IsSucceed)
+            //{
+            //    getDataResult.Data.JsonItems = new List<JObject>();
+            //    getDataResult.Data.Items.ForEach(d => getDataResult.Data.JsonItems.Add(d.JItem));
+            //    Data = getDataResult.Data;
+            //}
         }
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixModule parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {

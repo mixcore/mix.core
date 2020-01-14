@@ -181,6 +181,17 @@ namespace Mix.Cms.Web.Controllers
             return await Post(id, seoName);
         }
 
+        [Route("module/{id}/{seoName}")]
+        [Route("{culture}/module/{id}/{seoName}")]
+        public async System.Threading.Tasks.Task<IActionResult> Module(int id, string culture, string seoName)
+        {
+            if (_forbidden)
+            {
+                return Redirect($"/error/403");
+            }
+            return await Module(id, seoName);
+        }
+
         [HttpGet]
         [Authorize]
         [Route("portal")]
@@ -292,23 +303,14 @@ namespace Mix.Cms.Web.Controllers
         }
 
         #endregion
+
         #region Helper
 
         async Task<IActionResult> AliasAsync(string seoName)
         {
             // Home Page
-            int? pageSize = MixService.GetConfig<int?>("TagPageSize");
-            string orderBy = MixService.GetConfig<string>("OrderBy");
-            int orderDirection = MixService.GetConfig<int>("OrderDirection");
-            int.TryParse(Request.Query["pageIndex"], out int pageIndex);
-            var cacheKey = $"mvc_{_culture}_alias_{seoName}_{pageSize}_{pageIndex}_{orderBy}_{orderDirection}";
-
             RepositoryResponse<Lib.ViewModels.MixUrlAliases.UpdateViewModel> getAlias = null;
 
-            if (MixService.GetConfig<bool>("IsCache"))
-            {
-                getAlias = await MixCacheService.GetAsync<RepositoryResponse<Lib.ViewModels.MixUrlAliases.UpdateViewModel>>(cacheKey);
-            }
             if (getAlias == null)
             {
                 Expression<Func<MixUrlAlias, bool>> predicate;
@@ -349,14 +351,17 @@ namespace Mix.Cms.Web.Controllers
         {
 
             // Home Page
-            int? pageSize = MixService.GetConfig<int?>("TagPageSize");
+            int maxPageSize = MixService.GetConfig<int>("MaxPageSize");
             string orderBy = MixService.GetConfig<string>("OrderBy");
             int orderDirection = MixService.GetConfig<int>("OrderDirection");
-            int.TryParse(Request.Query["pageIndex"], out int pageIndex);
+            int.TryParse(Request.Query["page"], out int page);
+            int.TryParse(Request.Query["pageSize"], out int pageSize);
+            pageSize = (pageSize < maxPageSize) ? pageSize : maxPageSize;
+
             RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
             Expression<Func<MixPage, bool>> predicate;
             if (string.IsNullOrEmpty(seoName))
-            {
+            {                
                 predicate = p =>
                 p.Type == (int)MixPageType.Home
                 && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
@@ -373,19 +378,13 @@ namespace Mix.Cms.Web.Controllers
             {
                 if (getPage.Data != null)
                 {
-                    getPage.Data.LoadData(pageIndex: pageIndex, pageSize: pageSize);
+                    getPage.Data.LoadData(pageSize: pageSize, pageIndex: page - 1);
                 }
                 GeneratePageDetailsUrls(getPage.Data);
-                //_ = MixCacheService.SetAsync(cacheKey, getPage);
             }
 
             if (getPage.IsSucceed)
             {
-                ViewData["TopPages"] = await GetCategoryAsync(CatePosition.Nav, seoName);
-                ViewData["HeaderPages"] = await GetCategoryAsync(CatePosition.Top, seoName);
-                ViewData["FooterPages"] = await GetCategoryAsync(CatePosition.Footer, seoName);
-                ViewData["LeftPages"] = await GetCategoryAsync(CatePosition.Left, seoName);
-
                 ViewData["Title"] = getPage.Data.SeoTitle;
                 ViewData["Description"] = getPage.Data.SeoDescription;
                 ViewData["Keywords"] = getPage.Data.SeoKeywords;
@@ -405,7 +404,7 @@ namespace Mix.Cms.Web.Controllers
             int? pageSize = MixService.GetConfig<int?>("TagPageSize");
             string orderBy = MixService.GetConfig<string>("OrderBy");
             int orderDirection = MixService.GetConfig<int>("OrderDirection");
-            int.TryParse(Request.Query["pageIndex"], out int pageIndex);
+            int.TryParse(Request.Query["page"], out int page);
             RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
 
             Expression<Func<MixPage, bool>> predicate;
@@ -417,7 +416,7 @@ namespace Mix.Cms.Web.Controllers
             getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
             if (getPage.IsSucceed)
             {
-                getPage.Data.LoadData(pageIndex: pageIndex, pageSize: pageSize);
+                getPage.Data.LoadData(pageIndex: page - 1, pageSize: pageSize);
                 getPage.Data.DetailsUrl = GenerateDetailsUrl(
                     new { culture = _culture, seoName = getPage.Data.SeoName }
                     );
@@ -427,11 +426,6 @@ namespace Mix.Cms.Web.Controllers
 
             if (getPage.IsSucceed)
             {
-                ViewData["TopPages"] = await GetCategoryAsync(CatePosition.Nav, getPage.Data.SeoName);
-                ViewData["HeaderPages"] = await GetCategoryAsync(CatePosition.Top, getPage.Data.SeoName);
-                ViewData["FooterPages"] = await GetCategoryAsync(CatePosition.Footer, getPage.Data.SeoName);
-                ViewData["LeftPages"] = await GetCategoryAsync(CatePosition.Left, getPage.Data.SeoName);
-
                 ViewData["Title"] = getPage.Data.SeoTitle;
                 ViewData["Description"] = getPage.Data.SeoDescription;
                 ViewData["Keywords"] = getPage.Data.SeoKeywords;
@@ -450,37 +444,27 @@ namespace Mix.Cms.Web.Controllers
         async System.Threading.Tasks.Task<IActionResult> TagAsync(string tagName)
         {
             string seoName = "tag";
-            ViewData["TopPages"] = await GetCategoryAsync(CatePosition.Nav, seoName);
-            ViewData["HeaderPages"] = await GetCategoryAsync(CatePosition.Top, seoName);
-            ViewData["FooterPages"] = await GetCategoryAsync(CatePosition.Footer, seoName);
-            ViewData["LeftPages"] = await GetCategoryAsync(CatePosition.Left, seoName);
             ViewData["TagName"] = tagName;
 
             int? pageSize = MixService.GetConfig<int?>("TagPageSize");
             string orderBy = MixService.GetConfig<string>("OrderBy");
             int orderDirection = MixService.GetConfig<int>("OrderDirection");
-            int.TryParse(Request.Query["pageIndex"], out int pageIndex);
-            RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
-            Expression<Func<MixPage, bool>> predicate;
-            predicate = p =>
-            p.SeoName == "tag"
+            int.TryParse(Request.Query["page"], out int page);
+            Expression<Func<MixPage, bool>> predicate = p =>
+            p.SeoName == seoName
             && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
 
-            getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
-            if (getPage.IsSucceed)
-            {
-                getPage.Data.LoadDataByTag(tagName, orderBy, orderDirection, pageIndex: pageIndex, pageSize: pageSize);
-                GeneratePageDetailsUrls(getPage.Data);
-                //_ = MixCacheService.SetAsync(cacheKey, getPage);
-            }
-
+            var getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+            var getPosts = await Lib.ViewModels.MixPosts.Helper.GetModelistByMeta<Lib.ViewModels.MixPosts.ReadListItemViewModel>(
+                _culture, MixConstants.AttributeSetName.SYSTEM_TAG, tagName, orderBy, orderDirection, pageSize, page-1);
             if (getPage.IsSucceed)// && getPage.Data.View != null
             {
-                ViewData["Title"] = getPage.Data.SeoTitle;
-                ViewData["Description"] = getPage.Data.SeoDescription;
-                ViewData["Keywords"] = getPage.Data.SeoKeywords;
+                ViewData["Title"] = $"Tag: {tagName}";
+                ViewData["Description"] = $"Tag: {tagName}";
+                ViewData["Keywords"] = $"Tag: {tagName}";
                 ViewData["Image"] = getPage.Data.ImageUrl;
                 ViewData["PageClass"] = getPage.Data.CssClass;
+                ViewData["Posts"] = getPosts.Data;
                 getPage.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
                 return View(getPage.Data);
             }
@@ -492,24 +476,13 @@ namespace Mix.Cms.Web.Controllers
         async System.Threading.Tasks.Task<IActionResult> SearchAsync(string keyword)
         {
             string seoName = "search";
-            ViewData["TopPages"] = await GetCategoryAsync(CatePosition.Nav, seoName);
-            ViewData["HeaderPages"] = await GetCategoryAsync(CatePosition.Top, seoName);
-            ViewData["FooterPages"] = await GetCategoryAsync(CatePosition.Footer, seoName);
-            ViewData["LeftPages"] = await GetCategoryAsync(CatePosition.Left, seoName);
 
             int? pageSize = MixService.GetConfig<int?>("SearchPageSize");
             string orderBy = MixService.GetConfig<string>("OrderBy");
             int orderDirection = MixService.GetConfig<int>("OrderDirection");
-            int.TryParse(Request.Query["pageIndex"], out int pageIndex);
+            int.TryParse(Request.Query["page"], out int page);
             RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
-            var cacheKey = $"mvc_{_culture}_search_{keyword}_{pageSize}_{pageIndex}_{orderBy}_{orderDirection}";
-
-            // Try load data from cache
-            if (MixService.GetConfig<bool>("IsCache"))
-            {
-                getPage = await MixCacheService.GetAsync<RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel>>(cacheKey);
-            }
-
+            
             // If cannot load from cache => try query new data
             if (getPage == null)
             {
@@ -523,7 +496,7 @@ namespace Mix.Cms.Web.Controllers
                 if (getPage.IsSucceed)
                 {
                     GeneratePageDetailsUrls(getPage.Data);
-                    getPage.Data.LoadDataByKeyword(keyword, orderBy, orderDirection, pageIndex: pageIndex, pageSize: pageSize);
+                    getPage.Data.LoadDataByKeyword(keyword, orderBy, orderDirection, pageIndex: page-1, pageSize: pageSize);
 
                     //_ = MixCacheService.SetAsync(cacheKey, getPage);
                 }
@@ -585,11 +558,6 @@ namespace Mix.Cms.Web.Controllers
 
             if (getPost.IsSucceed)
             {
-                ViewData["TopPages"] = await GetCategoryAsync(CatePosition.Nav, getPost.Data.SeoName);
-                ViewData["HeaderPages"] = await GetCategoryAsync(CatePosition.Top, getPost.Data.SeoName);
-                ViewData["FooterPages"] = await GetCategoryAsync(CatePosition.Footer, getPost.Data.SeoName);
-                ViewData["LeftPages"] = await GetCategoryAsync(CatePosition.Left, getPost.Data.SeoName);
-
                 ViewData["Title"] = getPost.Data.SeoTitle;
                 ViewData["Description"] = getPost.Data.SeoDescription;
                 ViewData["Keywords"] = getPost.Data.SeoKeywords;
@@ -604,50 +572,33 @@ namespace Mix.Cms.Web.Controllers
         }
         async System.Threading.Tasks.Task<IActionResult> Post(int id, string seoName)
         {
-            ViewData["TopPages"] = await GetCategoryAsync(CatePosition.Nav, seoName);
-            ViewData["HeaderPages"] = await GetCategoryAsync(CatePosition.Top, seoName);
-            ViewData["FooterPages"] = await GetCategoryAsync(CatePosition.Footer, seoName);
-            ViewData["LeftPages"] = await GetCategoryAsync(CatePosition.Left, seoName);
-
             RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel> getPost = null;
 
-            //var cacheKey = $"mvc_{_culture}_post_{seoName}";
-
-            //if (MixService.GetConfig<bool>("IsCache"))
-            //{
-            //    getPost = await MixCacheService.GetAsync<RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel>>(cacheKey);
-
-            //}
-
-            if (getPost == null)
+            Expression<Func<MixPost, bool>> predicate;
+            if (string.IsNullOrEmpty(seoName))
             {
-                Expression<Func<MixPost, bool>> predicate;
-                if (string.IsNullOrEmpty(seoName))
-                {
-                    predicate = p =>
-                    p.Type == (int)MixPageType.Home
-                    && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
-                }
-                else
-                {
-                    predicate = p =>
-                    p.Id == id
-                    && p.Status == (int)MixContentStatus.Published
-                    && p.Specificulture == _culture;
-                }
+                predicate = p =>
+                p.Type == (int)MixPageType.Home
+                && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+            }
+            else
+            {
+                predicate = p =>
+                p.Id == id
+                && p.Status == (int)MixContentStatus.Published
+                && p.Specificulture == _culture;
+            }
 
-                getPost = await Lib.ViewModels.MixPosts.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
-                if (getPost.IsSucceed)
+            getPost = await Lib.ViewModels.MixPosts.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+            if (getPost.IsSucceed)
+            {
+                getPost.Data.DetailsUrl = GenerateDetailsUrl(
+                    new { culture = _culture, action = "post", id = getPost.Data.Id, seoName = getPost.Data.SeoName });
+                //Generate details url for related posts
+                if (getPost.Data.PostNavs != null && getPost.Data.PostNavs.Count > 0)
                 {
-                    getPost.Data.DetailsUrl = GenerateDetailsUrl(
-                        new { culture = _culture, action = "post", id = getPost.Data.Id, seoName = getPost.Data.SeoName });
-                    //Generate details url for related posts
-                    if (getPost.Data.PostNavs != null && getPost.Data.PostNavs.Count > 0)
-                    {
-                        getPost.Data.PostNavs.ForEach(n => n.RelatedPost.DetailsUrl = GenerateDetailsUrl(
-                                new { culture = _culture, action = "post", id = n.RelatedPost.Id, seoName = n.RelatedPost.SeoName }));
-                    }
-                    //_ = MixCacheService.SetAsync(cacheKey, getPost);
+                    getPost.Data.PostNavs.ForEach(n => n.RelatedPost.DetailsUrl = GenerateDetailsUrl(
+                            new { culture = _culture, action = "post", id = n.RelatedPost.Id, seoName = n.RelatedPost.SeoName }));
                 }
             }
 
@@ -665,11 +616,58 @@ namespace Mix.Cms.Web.Controllers
                 return Redirect($"/error/404");
             }
         }
+        
+        async System.Threading.Tasks.Task<IActionResult> Module(int id, string seoName)
+        {
+            RepositoryResponse<Lib.ViewModels.MixModules.ReadMvcViewModel> getPost = null;
+
+            Expression<Func<MixModule, bool>> predicate;
+            if (string.IsNullOrEmpty(seoName))
+            {
+                predicate = p =>
+                p.Type == (int)MixPageType.Home
+                && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+            }
+            else
+            {
+                predicate = p =>
+                p.Id == id
+                && p.Status == (int)MixContentStatus.Published
+                && p.Specificulture == _culture;
+            }
+
+            getPost = await Lib.ViewModels.MixModules.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+            if (getPost.IsSucceed)
+            {
+                getPost.Data.DetailsUrl = GenerateDetailsUrl(
+                    new { culture = _culture, action = "post", id = getPost.Data.Id, seoName = getPost.Data.Name });
+                //Generate details url for related posts
+                if (getPost.Data.Posts != null && getPost.Data.Posts.TotalItems > 0)
+                {
+                    getPost.Data.Posts.Items.ForEach(n => n.Post.DetailsUrl = GenerateDetailsUrl(
+                            new { culture = _culture, action = "post", id = n.Post.Id, seoName = n.Post.SeoName }));
+                }
+            }
+
+            if (getPost.IsSucceed)
+            {
+                ViewData["Title"] = getPost.Data.Title;
+                ViewData["Description"] = getPost.Data.Title;
+                ViewData["Keywords"] = getPost.Data.Title;
+                ViewData["Image"] = getPost.Data.ImageUrl;
+                getPost.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+                return View(getPost.Data);
+            }
+            else
+            {
+                return Redirect($"/error/404");
+            }
+        }
 
         void GeneratePageDetailsUrls(Lib.ViewModels.MixPages.ReadMvcViewModel page)
         {
-            page.DetailsUrl = GenerateDetailsUrl(
-                new { culture = _culture, action = "alias", seoName = page.SeoName });
+            page.DetailsUrl = MixCmsHelper.GetRouterUrl(
+                                   new { culture = _culture, seoName = page.SeoName }, Request, Url);
             if (page.Posts != null)
             {
                 foreach (var postNav in page.Posts.Items)
@@ -708,11 +706,12 @@ namespace Mix.Cms.Web.Controllers
         }
 
         string GenerateDetailsUrl(object routeValues)
-        {
+        {            
             return MixCmsHelper.GetRouterUrl(routeValues, Request, Url);
         }
 
         #endregion
+
         async System.Threading.Tasks.Task<List<Lib.ViewModels.MixPages.ReadListItemViewModel>> GetCategoryAsync(MixEnums.CatePosition position, string seoName)
         {
             List<Lib.ViewModels.MixPages.ReadListItemViewModel> result = null;

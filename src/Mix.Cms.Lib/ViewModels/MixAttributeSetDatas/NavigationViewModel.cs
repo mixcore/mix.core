@@ -42,7 +42,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("nav")]
         public Navigation Nav { get {
-                if (AttributeSetName == "navigation" && Data!=null)
+                if (AttributeSetName == MixConstants.AttributeSetName.NAVIGATION && Data!=null)
                 {
                     return Data.ToObject<Navigation>();
                 }
@@ -158,8 +158,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue));
                 case MixEnums.MixDataType.Reference:
                     JArray arr = new JArray();
-                    foreach (var nav in item.DataNavs)
+                    foreach (var nav in item.DataNavs.OrderBy(d=>d.Priority))
                     {
+                        nav.Data.Data.Add(new JProperty("data", nav.Data.Data));
                         arr.Add(nav.Data.Data);
                     }
                     return (new JProperty(item.AttributeFieldName, arr));
@@ -238,6 +239,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             item.StringValue = property.Value<string>();
         }
+
+        
         #endregion
     }
     public class Navigation
@@ -253,6 +256,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
     }
     public class MenuItem
     {
+        [JsonProperty("data")]
+        public JObject Data { get; set; }
         [JsonProperty("id")]
         public string Id { get; set; }
         [JsonProperty("title")]
@@ -273,5 +278,25 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public bool IsActive { get; set; }
         [JsonProperty("menu_items")]
         public List<MenuItem> MenuItems { get; set; }
+        public T Property<T>(string fieldName)
+        {
+            if (Data != null)
+            {
+                var field = Data.GetValue(fieldName);
+                if (field != null)
+                {
+                    return field.Value<T>();
+                }
+                else
+                {
+                    return default;
+                }
+            }
+            else
+            {
+                return default;
+            }
+
+        }
     }
 }
