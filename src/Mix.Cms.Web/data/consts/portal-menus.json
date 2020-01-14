@@ -14,10 +14,44 @@
                 {
                     "title": "Create New",
                     "icon": "mi mi-Add",
-                    "path": "/portal/navigation/create?attributeName=sys_navigation&attributeSetId=2&dataId=default"
+                    "path": "/portal/navigation/create?attributeSetName=sys_navigation&&dataId=default"
                 },
                 {
-                    "path": "/portal/navigation/list?attributeSetId=2&attributeSetName=sys_navigation",
+                    "path": "/portal/navigation/list?attributeSetName=sys_navigation",
+                    "title": "List",
+                    "icon": "mi mi-List"
+                }
+            ]
+        },
+        {
+            "title": "Categories",
+            "path": "#",
+            "icon": "mi mi-Relationship",
+            "subMenus": [
+                {
+                    "title": "Create New",
+                    "icon": "mi mi-Add",
+                    "path": "/portal/navigation/create?attributeSetName=sys_category&&dataId=default"
+                },
+                {
+                    "path": "/portal/attribute-set-data/list?attributeSetName=sys_category",
+                    "title": "List",
+                    "icon": "mi mi-List"
+                }
+            ]
+        },
+        {
+            "title": "Tags",
+            "path": "#",
+            "icon": "mi mi-Relationship",
+            "subMenus": [
+                {
+                    "title": "Create New",
+                    "icon": "mi mi-Add",
+                    "path": "/portal/navigation/create?attributeSetName=sys_tag&&dataId=default"
+                },
+                {
+                    "path": "/portal/attribute-set-data/list?attributeSetName=sys_tag",
                     "title": "List",
                     "icon": "mi mi-List"
                 }

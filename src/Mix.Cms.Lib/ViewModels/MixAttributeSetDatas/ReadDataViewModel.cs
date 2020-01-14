@@ -107,6 +107,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             Data = new JObject
             {
                 new JProperty("id", Id),
+                new JProperty("specificulture", Specificulture),
                 new JProperty("createdDateTime", CreatedDateTime)
             };
             foreach (var item in Values.OrderBy(v => v.Priority))
