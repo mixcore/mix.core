@@ -380,6 +380,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
             var result = new RepositoryResponse<bool> { IsSucceed = true };
 
+
             var saveViewResult = await View.SaveModelAsync(true, _context, _transaction);
             ViewModelHelper.HandleResult(saveViewResult, ref result);
 
@@ -507,7 +508,11 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 Attributes = new List<MixAttributeFields.UpdateViewModel>();
                 foreach (var item in AttributeData.Data.Values)
                 {
-                    Attributes.Add(item.Field);
+                    if (item.Field != null)
+                    {
+                        Attributes.Add(item.Field);
+                    }
+
                 }
             }
         }
