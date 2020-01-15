@@ -16,10 +16,10 @@
       <action type="None" appendQueryString="false"/>
     </rule>
   
-    <rule name="Rewrite to alias splash" stopProcessing="true">
+    <!--<rule name="Rewrite to alias splash" stopProcessing="true">
       <match url="^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))$" />
       <action type="Redirect" url="/{R:1}/" appendQueryString="true"/>
-    </rule>
+    </rule>-->
 
     <rule name="Rewrite to alias page" stopProcessing="true">
       <match url="^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/\w$" />

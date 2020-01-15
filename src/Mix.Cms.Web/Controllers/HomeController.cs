@@ -61,13 +61,11 @@ namespace Mix.Cms.Web.Controllers
         #region Routes
 
         [Route("")]
-        [Route("{alias}")]
-        public async Task<IActionResult> Index(string alias)
+        public async Task<IActionResult> Index()
         {
             if (_isValid)
             {
                 string seoName = Request.Query["alias"];
-                seoName = seoName ?? alias;
                 return await AliasAsync(seoName);
             }
             else
