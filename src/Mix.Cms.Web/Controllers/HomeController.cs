@@ -18,7 +18,7 @@ using static Mix.Cms.Lib.MixEnums;
 namespace Mix.Cms.Web.Controllers
 {
     public class HomeController : BaseController
-    {
+    {        
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IApiDescriptionGroupCollectionProvider _apiExplorer;
         IApplicationLifetime _lifetime;

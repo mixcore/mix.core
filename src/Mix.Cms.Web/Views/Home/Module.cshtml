@@ -1,7 +1,7 @@
 ﻿@model Mix.Cms.Lib.ViewModels.MixModules.ReadMvcViewModel
 @{
     string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, ViewBag.culture);
-    Layout = null;
+    Layout = null;    
 }
 @if (!string.IsNullOrEmpty(Model.TemplatePath))
 {
@@ -31,3 +31,6 @@ else
         <h1>@(MixService.Translate<string>("Please choose template", ViewBag.culture))</h1>
     </section>
 }
+
+@Html.Raw(Model.View?.Styles)
+@Html.Raw(Model.View?.Scripts)

@@ -59,7 +59,7 @@ namespace Mix.Cms.Web
                 routes.MapRoute(
                     name: "Post",
                     template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/post/{id}/{seoName}");
-                routes.MapRoute(
+                routes.MapRoute( 
                     name: "Module",
                     template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/md/{id}/{seoName}");
 
