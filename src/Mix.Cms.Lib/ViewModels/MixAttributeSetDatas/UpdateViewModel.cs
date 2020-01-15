@@ -82,6 +82,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 val.AttributeSetName = AttributeSetName;
                 val.Priority = field.Priority;
                 val.Field = field;
+                val.DataType = val.Field.DataType;
+                val.AttributeFieldName = val.AttributeFieldName ?? val.Field?.Name;
             }
             ParseData();
 
