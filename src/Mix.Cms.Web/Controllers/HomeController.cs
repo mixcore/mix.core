@@ -181,8 +181,8 @@ namespace Mix.Cms.Web.Controllers
             return await Post(id, seoName);
         }
 
-        [Route("module/{id}/{seoName}")]
-        [Route("{culture}/module/{id}/{seoName}")]
+        [Route("md/{id}/{seoName}")]
+        [Route("{culture}/md/{id}/{seoName}")]
         public async System.Threading.Tasks.Task<IActionResult> Module(int id, string culture, string seoName)
         {
             if (_forbidden)
@@ -690,6 +690,9 @@ namespace Mix.Cms.Web.Controllers
 
         void GeneratePageDetailsUrls(Lib.ViewModels.MixModules.ReadMvcViewModel module)
         {
+            module.DetailsUrl = GenerateDetailsUrl(
+                            new { culture = _culture, action = "md", id = module.Id, seoName = module.Name }
+                            );
             if (module.Posts != null)
             {
 
