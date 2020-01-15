@@ -17,6 +17,8 @@ namespace Mix.Cms.Web.Controllers
     {
         protected string _domain;
         protected bool _forbidden = false;
+        protected bool _isValid = true;
+        protected string _redirectUrl;
         protected bool _forbiddenPortal
         {
             get
@@ -71,6 +73,7 @@ namespace Mix.Cms.Web.Controllers
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
+            ValidateRequest();
             ViewBag.culture = _culture;
             if (!string.IsNullOrEmpty(_culture))
             {
@@ -99,10 +102,21 @@ namespace Mix.Cms.Web.Controllers
             base.OnActionExecuting(context);
         }
 
-        protected void GetLanguage()
+        protected virtual void ValidateRequest()
         {
+            // If IP retricted in appsettings
+            if (_forbidden)
+            {
+                _isValid = false;
+                _redirectUrl = $"/error/403";
+            }
 
+            // If mode Maintenance enabled in appsettings
+            if (MixService.GetConfig<bool>("IsMaintenance"))
+            {
+                _isValid = false;
+                _redirectUrl = $"/{_culture}/maintenance";
+            }
         }
-
     }
 }
