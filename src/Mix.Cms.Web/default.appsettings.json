@@ -54,7 +54,7 @@
         }
     },
     "GlobalSettings": {
-        "IsInit": false,
+        "IsInit": true,
         "InitStatus": 0,
         "IsMaintenance": false,
         "IsRewrite": true,
