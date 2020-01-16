@@ -1,29 +1,36 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib;
+using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Domain.Core.ViewModels;
 using Mix.Identity.Models;
+using System;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using static Mix.Cms.Lib.MixEnums;
+
 
 namespace Mix.Cms.Web.Controllers
 {
-    public class SecurityController : BaseController
-    {
+    public class PageController : BaseController
+    {        
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IApiDescriptionGroupCollectionProvider _apiExplorer;
         IApplicationLifetime _lifetime;
-        #region overrides
-        public SecurityController(IHostingEnvironment env,
-           IMemoryCache memoryCache,
-            UserManager<ApplicationUser> userManager,
-            IApiDescriptionGroupCollectionProvider apiExplorer,
-           IHttpContextAccessor accessor,
-           IApplicationLifetime lifetime
-           ) : base(env, memoryCache, accessor)
+
+        #region contructor
+        public PageController(IHostingEnvironment env,
+            IMemoryCache memoryCache,
+             UserManager<ApplicationUser> userManager,
+             IApiDescriptionGroupCollectionProvider apiExplorer,
+            IHttpContextAccessor accessor,
+            IApplicationLifetime lifetime
+            ) : base(env, memoryCache, accessor)
         {
 
             this._userManager = userManager;
@@ -50,22 +57,25 @@ namespace Mix.Cms.Web.Controllers
                 }
             }
         }
-
         #endregion
+
         #region Routes
-        [HttpGet]
-        [Route("security/{page}")]
-        public IActionResult Index(string page)
+
+        [Route("page/{id}/{seoName}")]
+        [Route("page/{culture}/{id}/{seoName}")]
+        public async Task<IActionResult> Index(int id, string culture, string seoName)
         {
             if (_isValid)
             {
-                return View();
+                return await Page(id);
             }
             else
             {
                 return Redirect(_redirectUrl);
-            }
+            }            
         }
+
         #endregion
+
     }
 }
