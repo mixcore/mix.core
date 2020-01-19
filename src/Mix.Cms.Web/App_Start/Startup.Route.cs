@@ -59,9 +59,9 @@ namespace Mix.Cms.Web
                 routes.MapRoute(
                     name: "Post",
                     template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/post/{id}/{seoName}");
-                routes.MapRoute(
+                routes.MapRoute( 
                     name: "Module",
-                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/module/{id}/{seoName}");
+                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/md/{id}/{seoName}");
 
                 // uncomment the following line to Work-around for #1175 in beta1
                 routes.EnableDependencyInjection();

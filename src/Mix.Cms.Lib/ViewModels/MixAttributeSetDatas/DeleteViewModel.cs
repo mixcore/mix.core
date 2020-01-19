@@ -29,6 +29,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         }
 
         #endregion Contructors
+
         #region Overrides
         public override RepositoryResponse<bool> RemoveRelatedModels(DeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -63,15 +64,19 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             // remove related navs
             if (result.IsSucceed)
             {
-                var removeRelated = await MixRelatedAttributeDatas.DeleteViewModel.Repository.RemoveListModelAsync(true, d => (d.Id == Id || d.ParentId == Id) && d.Specificulture == Specificulture);
+                var removeRelated = await MixRelatedAttributeDatas.DeleteViewModel.Repository.RemoveListModelAsync
+                    (true, d => (d.Id == Id || d.ParentId == Id) && d.Specificulture == Specificulture
+                    , _context, _transaction);
                 ViewModelHelper.HandleResult(removeRelated, ref result);
             }
 
             if (result.IsSucceed)
             {
-                var removeChildFields = await MixAttributeSetValues.DeleteViewModel.Repository.RemoveListModelAsync(false, f => (f.DataId == Id) && f.Specificulture == Specificulture, _context, _transaction);
+                var removeChildFields = await MixAttributeSetValues.DeleteViewModel.Repository.RemoveListModelAsync(
+                    false, f => (f.DataId == Id) && f.Specificulture == Specificulture, _context, _transaction);
                 ViewModelHelper.HandleResult(removeChildFields, ref result);
-                var removeChilds = await MixAttributeSetDatas.DeleteViewModel.Repository.RemoveListModelAsync(false, f => (f.Id == Id) && f.Specificulture == Specificulture, _context, _transaction);
+                var removeChilds = await MixAttributeSetDatas.DeleteViewModel.Repository.RemoveListModelAsync(
+                    false, f => (f.Id == Id) && f.Specificulture == Specificulture, _context, _transaction);
                 ViewModelHelper.HandleResult(removeChilds, ref result);
             }
             return result;
