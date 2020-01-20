@@ -135,10 +135,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public MixAttributeSets.UpdateViewModel Attributes { get; set; }
         [JsonProperty("attributeData")]
         public MixRelatedAttributeDatas.UpdateViewModel AttributeData { get; set; }
-        [JsonProperty("sysCategories")]
-        public List<MixRelatedAttributeDatas.UpdateViewModel> SysCategories{ get; set; }
-        [JsonProperty("sysTags")]
-        public List<MixRelatedAttributeDatas.UpdateViewModel> SysTags { get; set; }
 
         #region Template
 
@@ -414,10 +410,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
         }
 
-        private async Task<RepositoryResponse<bool>> SaveAttributeAsync(int parentId, MixCmsContext context, IDbContextTransaction transaction)
+        private async Task<RepositoryResponse<bool>> SaveAttributeAsync(int id, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            AttributeData.ParentId = parentId.ToString();
+            AttributeData.ParentId = id.ToString();
             AttributeData.ParentType = (int)MixEnums.MixAttributeSetDataType.Post;
             var saveData = await AttributeData.Data.SaveModelAsync(true, context, transaction);
             ViewModelHelper.HandleResult(saveData, ref result);
@@ -427,31 +423,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 var saveRelated = await AttributeData.SaveModelAsync(true, context, transaction);
                 ViewModelHelper.HandleResult(saveRelated    , ref result);
             }
-
-            foreach (var item in SysCategories)
-            {
-                if (result.IsSucceed)
-                {
-                    item.ParentId = parentId.ToString();
-                    item.ParentType = (int)MixEnums.MixAttributeSetDataType.Post;
-                    item.Specificulture = Specificulture;
-                    var saveResult = await item.SaveModelAsync(false, context, transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-                }
-            }
-
-            foreach (var item in SysTags)
-            {
-                if (result.IsSucceed)
-                {
-                    item.ParentId = parentId.ToString();
-                    item.ParentType = (int)MixEnums.MixAttributeSetDataType.Post;
-                    item.Specificulture = Specificulture;
-                    var saveResult = await item.SaveModelAsync(false, context, transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-                }
-            }
-
             return result;
         }
 
@@ -747,37 +718,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
         }
 
-        private RepositoryResponse<bool> SaveAttribute(int parentId, MixCmsContext context, IDbContextTransaction transaction)
+        private RepositoryResponse<bool> SaveAttribute(int id, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            AttributeData.ParentId = parentId.ToString();
+            AttributeData.ParentId = id.ToString();
             AttributeData.ParentType = (int)MixEnums.MixAttributeSetDataType.Post;
             var saveData = AttributeData.SaveModel(true, context, transaction);
             ViewModelHelper.HandleResult(saveData, ref result);
-            foreach (var item in SysCategories)
-            {
-                if (result.IsSucceed)
-                {
-                    item.ParentId = parentId.ToString();
-                    item.ParentType = (int)MixEnums.MixAttributeSetDataType.Post;
-                    item.Specificulture = Specificulture;
-                    var saveResult = item.SaveModel(false, context, transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-                }
-            }
-
-            foreach (var item in SysTags)
-            {
-                if (result.IsSucceed)
-                {
-                    item.ParentId = parentId.ToString();
-                    item.ParentType = (int)MixEnums.MixAttributeSetDataType.Post;
-                    item.Specificulture = Specificulture;
-                    var saveResult = item.SaveModel(false, context, transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-                }
-            }
-
             return result;
         }
 
@@ -1208,22 +1155,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     val.Priority = field.Priority;
                     val.Field = field;
                 }
-            }
-
-            var getCategories = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(m => m.Specificulture== Specificulture 
-                && m.ParentId == Id.ToString() && m.ParentType== (int)MixEnums.MixAttributeSetDataType.Post
-                && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_CATEGORY, _context, _transaction);
-            if (getCategories.IsSucceed)
-            {
-                SysCategories = getCategories.Data;
-            }
-            
-            var getTags = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(m => m.Specificulture== Specificulture 
-                && m.ParentId == Id.ToString() && m.ParentType== (int)MixEnums.MixAttributeSetDataType.Post
-                && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_TAG, _context, _transaction);
-            if (getTags.IsSucceed)
-            {
-                SysTags = getTags.Data;
             }
         }
 

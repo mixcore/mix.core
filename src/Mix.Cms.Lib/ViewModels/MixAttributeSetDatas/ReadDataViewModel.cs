@@ -101,7 +101,65 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 default:
                     return (new JProperty(item.AttributeFieldName, item.StringValue));
             }
-        }      
+        }
+        void ParseModelValue(JToken property, MixAttributeSetValues.ImportViewModel item)
+        {
+            switch (item.Field.DataType)
+            {
+                case MixEnums.MixDataType.DateTime:
+                    item.DateTimeValue = property.Value<DateTime?>();
+                    item.StringValue = property.Value<string>();
+                    break;
+                case MixEnums.MixDataType.Date:
+                    item.DateTimeValue = property.Value<DateTime?>();
+                    item.StringValue = property.Value<string>();
+                    break;
+                case MixEnums.MixDataType.Time:
+                    item.DateTimeValue = property.Value<DateTime?>();
+                    item.StringValue = property.Value<string>();
+                    break;
+                case MixEnums.MixDataType.Double:
+                    item.DoubleValue = property.Value<double?>();
+                    item.StringValue = property.Value<string>();
+                    break;
+                case MixEnums.MixDataType.Boolean:
+                    item.BooleanValue = property.Value<bool?>();
+                    item.StringValue = property.Value<string>().ToLower();
+                    break;
+                case MixEnums.MixDataType.Number:
+                    item.IntegerValue = property.Value<int?>();
+                    item.StringValue = property.Value<string>();
+                    break;
+                case MixEnums.MixDataType.Reference:
+                    item.StringValue = property.Value<string>();
+                    break;
+                case MixEnums.MixDataType.Upload:
+                    item.StringValue = property.Value<string>();
+                    break;
+
+                case MixEnums.MixDataType.Custom:
+                case MixEnums.MixDataType.Duration:
+                case MixEnums.MixDataType.PhoneNumber:
+                case MixEnums.MixDataType.Text:
+                case MixEnums.MixDataType.Html:
+                case MixEnums.MixDataType.MultilineText:
+                case MixEnums.MixDataType.EmailAddress:
+                case MixEnums.MixDataType.Password:
+                case MixEnums.MixDataType.Url:
+                case MixEnums.MixDataType.ImageUrl:
+                case MixEnums.MixDataType.CreditCard:
+                case MixEnums.MixDataType.PostalCode:
+                case MixEnums.MixDataType.Color:
+                case MixEnums.MixDataType.Icon:
+                case MixEnums.MixDataType.VideoYoutube:
+                case MixEnums.MixDataType.TuiEditor:
+                default:
+                    item.StringValue = property.Value<string>();
+                    break;
+            }
+        }
+
+
         private void ParseData()
         {
             Data = new JObject
