@@ -51,7 +51,7 @@ namespace Mix.Cms.Web.Controllers
             _memoryCache = memoryCache;
             _accessor = accessor;
             // Set CultureInfo
-            var cultureInfo = new CultureInfo(_culture);
+            var cultureInfo = new CultureInfo(culture);
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
         }
@@ -62,28 +62,36 @@ namespace Mix.Cms.Web.Controllers
             _accessor = accessor;
             _env = env;
             // Set CultureInfo
-            var cultureInfo = new CultureInfo(_culture);
+            var cultureInfo = new CultureInfo(culture);
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
         }
 
         public ViewContext ViewContext { get; set; }
-
-        protected string _culture
+        private string _culture;
+        public string culture
         {
-            get => RouteData?.Values["culture"]?.ToString().ToLower() == null
+            get
+            {
+                if (string.IsNullOrEmpty(_culture))
+                {
+                    _culture = RouteData?.Values["culture"]?.ToString().ToLower() == null
                     || RouteData?.Values["culture"]?.ToString().ToLower() == "init"
                 ? MixService.GetConfig<string>("DefaultCulture")
                 : RouteData?.Values["culture"].ToString();
+                }
+                return _culture;
+            }
+            set { _culture = value; }
         }
-
+       
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             ValidateRequest();
-            ViewBag.culture = _culture;
-            if (!string.IsNullOrEmpty(_culture))
+            ViewBag.culture = culture;
+            if (!string.IsNullOrEmpty(culture))
             {
-                ViewBag.assetFolder = MixCmsHelper.GetAssetFolder(_culture);
+                ViewBag.assetFolder = MixCmsHelper.GetAssetFolder(culture);
             }
             _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
             if (MixService.GetIpConfig<bool>("IsRetrictIp"))
@@ -121,7 +129,7 @@ namespace Mix.Cms.Web.Controllers
             if (MixService.GetConfig<bool>("IsMaintenance"))
             {
                 _isValid = false;
-                _redirectUrl = $"/{_culture}/maintenance";
+                _redirectUrl = $"/{culture}/maintenance";
             }
         }
 
@@ -143,7 +151,7 @@ namespace Mix.Cms.Web.Controllers
 
                 predicate = p =>
                 p.Alias == seoName
-                && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+                && p.Status == (int)MixContentStatus.Published && p.Specificulture == culture;
 
                 getAlias = await Lib.ViewModels.MixUrlAliases.UpdateViewModel.Repository.GetSingleModelAsync(predicate);
                 if (getAlias.IsSucceed)// && getPage.Data.View != null
@@ -162,7 +170,7 @@ namespace Mix.Cms.Web.Controllers
                 }
                 else
                 {
-                    return Redirect($"{UrlAliasType.Page}");
+                    return await Page(seoName);
                 }
             }
 
@@ -181,17 +189,18 @@ namespace Mix.Cms.Web.Controllers
 
             RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
             Expression<Func<MixPage, bool>> predicate;
+
             if (string.IsNullOrEmpty(seoName))
             {
                 predicate = p =>
                 p.Type == (int)MixPageType.Home
-                && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+                && p.Status == (int)MixContentStatus.Published && p.Specificulture == culture;
             }
             else
             {
                 predicate = p =>
                 p.SeoName == seoName
-                && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+                && p.Status == (int)MixContentStatus.Published && p.Specificulture == culture;
             }
 
             getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
@@ -216,7 +225,7 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return Redirect($"/error/404");
+                return await Error("404");
             }
         }
 
@@ -233,14 +242,14 @@ namespace Mix.Cms.Web.Controllers
 
             predicate = p =>
             p.Id == pageId
-            && p.Status == (int)MixContentStatus.Published && p.Specificulture == _culture;
+            && p.Status == (int)MixContentStatus.Published && p.Specificulture == culture;
 
             getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
             if (getPage.IsSucceed)
             {
                 getPage.Data.LoadData(pageIndex: page - 1, pageSize: pageSize);
                 getPage.Data.DetailsUrl = GenerateDetailsUrl(
-                    new { culture = _culture, seoName = getPage.Data.SeoName }
+                    new { culture = culture, seoName = getPage.Data.SeoName }
                     );
                 GeneratePageDetailsUrls(getPage.Data);
                 //_ = MixCacheService.SetAsync(cacheKey, getPage);
@@ -253,20 +262,20 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["Keywords"] = getPage.Data.SeoKeywords;
                 ViewData["Image"] = getPage.Data.ImageUrl;
                 ViewData["PageClass"] = getPage.Data.CssClass;
-
+                ViewData["Layout"] = getPage.Data.Layout ?? "Masters/_Layout";
                 getPage.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
                 return View(getPage.Data);
             }
             else
             {
-                return Redirect($"/error/404");
+                return await Error("404");
             }
         }
         protected async System.Threading.Tasks.Task<IActionResult> Post(int id)
         {
 
             RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel> getPost = null;
-            var cacheKey = $"mvc_{_culture}_post_{id}";
+            var cacheKey = $"mvc_{culture}_post_{id}";
             if (MixService.GetConfig<bool>("IsCache"))
             {
                 getPost = await MixCacheService.GetAsync<RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel>>(cacheKey);
@@ -277,13 +286,13 @@ namespace Mix.Cms.Web.Controllers
                 predicate = p =>
                 p.Id == id
                 && p.Status == (int)MixContentStatus.Published
-                && p.Specificulture == _culture;
+                && p.Specificulture == culture;
 
                 getPost = await Lib.ViewModels.MixPosts.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
                 if (getPost.IsSucceed)
                 {
                     getPost.Data.DetailsUrl = GenerateDetailsUrl(
-                        new { culture = _culture, action = "post", id = getPost.Data.Id, seoName = getPost.Data.SeoName }
+                        new { culture = culture, action = "post", id = getPost.Data.Id, seoName = getPost.Data.SeoName }
                         );
                     //Generate details url for related posts
                     if (getPost.IsSucceed)
@@ -291,7 +300,7 @@ namespace Mix.Cms.Web.Controllers
                         if (getPost.Data.PostNavs != null && getPost.Data.PostNavs.Count > 0)
                         {
                             getPost.Data.PostNavs.ForEach(n => n.RelatedPost.DetailsUrl = GenerateDetailsUrl(
-                                new { culture = _culture, action = "post", id = n.RelatedPost.Id, seoName = n.RelatedPost.SeoName }));
+                                new { culture = culture, action = "post", id = n.RelatedPost.Id, seoName = n.RelatedPost.SeoName }));
                         }
                         //_ = MixCacheService.SetAsync(cacheKey, getPost);
                     }
@@ -310,20 +319,62 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return Redirect($"/error/404");
+                return await Error("404");
             }
         }
+
+        protected async System.Threading.Tasks.Task<IActionResult> Module(int id)
+        {
+            // Home Page
+            int? pageSize = MixService.GetConfig<int?>("TagPageSize");
+            string orderBy = MixService.GetConfig<string>("OrderBy");
+            int orderDirection = MixService.GetConfig<int>("OrderDirection");
+            int.TryParse(Request.Query["page"], out int page);
+            RepositoryResponse<Lib.ViewModels.MixModules.ReadMvcViewModel> getData = null;
+
+            Expression<Func<MixModule, bool>> predicate;
+
+            predicate = p =>
+            p.Id == id
+            && p.Status == (int)MixContentStatus.Published && p.Specificulture == culture;
+
+            getData = await Lib.ViewModels.MixModules.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+            if (getData.IsSucceed)
+            {
+                getData.Data.LoadData(pageIndex: page - 1, pageSize: pageSize);
+                getData.Data.DetailsUrl = GenerateDetailsUrl(
+                    new { culture = culture, seoName = getData.Data.Name }
+                    );
+                GeneratePageDetailsUrls(getData.Data);
+                //_ = MixCacheService.SetAsync(cacheKey, getPage);
+            }
+
+            if (getData.IsSucceed)
+            {
+                ViewData["Title"] = getData.Data.Title;
+                ViewData["Description"] = getData.Data.Description;
+                ViewData["Keywords"] = getData.Data.Title;
+                ViewData["Image"] = getData.Data.ImageUrl;
+                getData.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+                return View(getData.Data);
+            }
+            else
+            {
+                return await Error("404");
+            }
+        }
+
         protected void GeneratePageDetailsUrls(Lib.ViewModels.MixPages.ReadMvcViewModel page)
         {
             page.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                   new { culture = _culture, seoName = page.SeoName }, Request, Url);
+                                   new { culture = culture, seoName = page.SeoName }, Request, Url);
             if (page.Posts != null)
             {
                 foreach (var postNav in page.Posts.Items)
                 {
                     if (postNav.Post != null)
                     {
-                        postNav.Post.DetailsUrl = GenerateDetailsUrl(new { culture = _culture, action = "post", id = postNav.PostId, seoName = postNav.Post.SeoName });
+                        postNav.Post.DetailsUrl = GenerateDetailsUrl(new { culture = culture, action = "post", id = postNav.PostId, seoName = postNav.Post.SeoName });
                     }
                 }
             }
@@ -339,7 +390,7 @@ namespace Mix.Cms.Web.Controllers
         protected void GeneratePageDetailsUrls(Lib.ViewModels.MixModules.ReadMvcViewModel module)
         {
             module.DetailsUrl = GenerateDetailsUrl(
-                            new { culture = _culture, action = "md", id = module.Id, seoName = module.Name }
+                            new { culture = culture, action = "md", id = module.Id, seoName = module.Name }
                             );
             if (module.Posts != null)
             {
@@ -349,7 +400,7 @@ namespace Mix.Cms.Web.Controllers
                     if (postNav.Post != null)
                     {
                         postNav.Post.DetailsUrl = GenerateDetailsUrl(
-                            new { culture = _culture, action = "post", id = postNav.PostId, seoName = postNav.Post.SeoName }
+                            new { culture = culture, action = "post", id = postNav.PostId, seoName = postNav.Post.SeoName }
                             );
                     }
                 }
@@ -360,6 +411,12 @@ namespace Mix.Cms.Web.Controllers
         {
             return MixCmsHelper.GetRouterUrl(routeValues, Request, Url);
         }
+
+        public async System.Threading.Tasks.Task<IActionResult> Error(string page = "404")
+        {
+            return await Page(page);
+        }
+
         #endregion
     }
 }
