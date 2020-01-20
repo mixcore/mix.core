@@ -25,12 +25,12 @@ namespace Mix.Cms.Web
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
-            _env = env;
+            this.env = env;
 
         }
 
         public IConfiguration Configuration { get; }
-        public IHostingEnvironment _env { get; }
+        public IHostingEnvironment env { get; }
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -44,7 +44,7 @@ namespace Mix.Cms.Web
                 }
             }
             // Enforce Request using https schema
-            if (_env.IsDevelopment())
+            if (env.IsDevelopment())
             {
                 if (MixService.GetConfig<bool>("IsHttps"))
                 {
@@ -121,7 +121,7 @@ namespace Mix.Cms.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
-            if (_env.IsDevelopment())
+            if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -143,7 +143,7 @@ namespace Mix.Cms.Web
                 opt.AllowAnyMethod();
             });
 
-            var cachePeriod = _env.IsDevelopment() ? "600" : "604800";
+            var cachePeriod = env.IsDevelopment() ? "600" : "604800";
 
             FileExtensionContentTypeProvider provider = new FileExtensionContentTypeProvider();
             provider.Mappings[".webmanifest"] = "application/manifest+json";
