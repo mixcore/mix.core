@@ -58,7 +58,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         if (portalResult.IsSucceed)
                         {
                             portalResult.Data.Post.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                new { culture = _lang, action = "post", portalResult.Data.Post.SeoName }, Request, Url);
+                                new { action = "post", culture = _lang,  portalResult.Data.Post.SeoName }, Request, Url);
                         }
 
                         return Ok(JObject.FromObject(portalResult));
@@ -148,7 +148,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     var listItemResult = await base.GetListAsync<ReadViewModel>(key, request, predicate);
                     listItemResult.Data.Items.ForEach(n => n.IsActived = true);
                     listItemResult.Data.Items.ForEach(n => n.Post.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                new { culture = _lang, action = "post", id = n.Post.Id, seoName = n.Post.SeoName }, Request, Url));
+                                new { action = "post", culture = _lang, id = n.Post.Id, seoName = n.Post.SeoName }, Request, Url));
                     return JObject.FromObject(listItemResult);
             }
         }

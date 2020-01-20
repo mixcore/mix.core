@@ -11,21 +11,20 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Identity.Models;
 using System;
 using System.Linq.Expressions;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
 
 namespace Mix.Cms.Web.Controllers
 {
-    public class HomeController : BaseController
+    public class ModuleController : BaseController
     {        
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IApiDescriptionGroupCollectionProvider _apiExplorer;
         IApplicationLifetime _lifetime;
 
         #region contructor
-        public HomeController(IHostingEnvironment env,
+        public ModuleController(IHostingEnvironment env,
             IMemoryCache memoryCache,
              UserManager<ApplicationUser> userManager,
              IApiDescriptionGroupCollectionProvider apiExplorer,
@@ -62,15 +61,13 @@ namespace Mix.Cms.Web.Controllers
 
         #region Routes
 
-        [Route("")]
-        public async Task<IActionResult> Index()
+        [Route("module/{id}/{seoName}")]
+        [Route("module/{culture}/{id}/{seoName}")]
+        public async Task<IActionResult> Index(int id, string culture, string seoName)
         {
             if (_isValid)
             {
-                string seoName = Request.Query["alias"];
-                HandleSeoName(ref seoName);
-                ViewData["Layout"] = "Masters/_Layout";
-                return await AliasAsync(seoName);
+                return await Module(id);
             }
             else
             {
@@ -78,18 +75,7 @@ namespace Mix.Cms.Web.Controllers
             }            
         }
 
-        private void HandleSeoName(ref string seoName)
-        {
-            string regex = @"^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/(.*)$";
-            System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex(regex, RegexOptions.IgnoreCase);
-            Match m = r.Match(seoName);
-            if (m.Success)
-            {
-                culture = m.Groups[1].Value;
-                seoName = m.Groups[5].Value;
-            }
-        }
-
         #endregion
+
     }
 }

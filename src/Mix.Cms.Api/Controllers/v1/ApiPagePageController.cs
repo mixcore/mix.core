@@ -58,7 +58,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         if (portalResult.IsSucceed)
                         {
                             portalResult.Data.Page.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                new { culture = _lang, action = "post", portalResult.Data.Page.SeoName }, Request, Url);
+                                new { action = "post", culture = _lang, portalResult.Data.Page.SeoName }, Request, Url);
                         }
 
                         return Ok(JObject.FromObject(portalResult));

@@ -62,7 +62,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         if (portalResult.IsSucceed)
                         {
                             portalResult.Data.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                new { culture = _lang, action = "post", id = portalResult.Data.Id, SeoName = portalResult.Data.SeoName }, Request, Url);
+                                new { action = "post", culture = _lang, id = portalResult.Data.Id, SeoName = portalResult.Data.SeoName }, Request, Url);
                         }
 
                         return Ok(JObject.FromObject(portalResult));
@@ -86,7 +86,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         if (beResult.IsSucceed)
                         {
                             beResult.Data.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                new { culture = _lang, action = "post", id = beResult.Data.Id, beResult.Data.SeoName }, Request, Url);
+                                new { action = "post", culture = _lang, id = beResult.Data.Id, beResult.Data.SeoName }, Request, Url);
                         }
                         return Ok(JObject.FromObject(beResult));
                     }
@@ -220,7 +220,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         srvResult.Data.Items.ForEach(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                new { culture = _lang, action = "post", id = a.Id, seoName = a.SeoName }, Request, Url);
+                                new { action = "post", culture = _lang, id = a.Id, seoName = a.SeoName }, Request, Url);
                         });
                     }
                     return Ok(JObject.FromObject(srvResult));
@@ -231,7 +231,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         mvcResult.Data.Items.ForEach(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                new { culture = _lang, action = "post", id = a.Id, seoName = a.SeoName }, Request, Url);
+                                new { action = "post", culture = _lang, id = a.Id, seoName = a.SeoName }, Request, Url);
                         });
                     }
                     return Ok(JObject.FromObject(mvcResult));
@@ -242,7 +242,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         portalResult.Data.Items.ForEach(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                new { culture = _lang, action = "post", id = a.Id, seoName = a.SeoName }, Request, Url);
+                                new { action = "post", culture = _lang, id = a.Id, seoName = a.SeoName }, Request, Url);
                         });
                     }
                     return Ok(JObject.FromObject(portalResult));
@@ -254,7 +254,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         listItemResult.Data.Items.ForEach((Action<ReadListItemViewModel>)(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                new { culture = _lang, action = "post", id = a.Id, seoName = a.SeoName }, Request, Url);
+                                new { action = "post", culture = _lang, id = a.Id, seoName = a.SeoName }, Request, Url);
                         }));
                     }
 

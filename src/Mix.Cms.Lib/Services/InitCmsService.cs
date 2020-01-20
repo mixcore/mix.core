@@ -55,7 +55,7 @@ namespace Mix.Cms.Lib.Services
 
                     var isInit = MixService.GetConfig<bool>("IsInit");
 
-                    if (!isInit)
+                    if (isInit)
                     {
 
                         /**
