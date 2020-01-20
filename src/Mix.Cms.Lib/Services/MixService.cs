@@ -223,12 +223,12 @@ namespace Mix.Cms.Lib.Services
 
         public static JObject GetTranslator(string culture)
         {
-            return JObject.FromObject(Instance.Translator[culture]);
+            return JObject.FromObject(Instance.Translator[culture] ?? new JObject());
         }
 
         public static JObject GetLocalSettings(string culture)
         {
-            return JObject.FromObject(Instance.LocalSettings[culture]);
+            return JObject.FromObject(Instance.LocalSettings[culture] ?? new JObject());
         }
 
         public static JObject GetGlobalSetting()

@@ -36,7 +36,7 @@ namespace Mix.Cms.Web
         {
             services.AddDbContext<MixCmsContext>();
             services.AddDbContext<MixDbContext>();
-            if (MixService.GetConfig<bool>("IsInit"))
+            if (!MixService.GetConfig<bool>("IsInit"))
             {
                 using (var ctx = new MixCmsContext())
                 {
