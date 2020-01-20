@@ -59,7 +59,7 @@
         "IsMaintenance": false,
         "IsRewrite": true,
         "IsHttps": false,
-        "IsCache": false,
+        "IsCache": true,
         "IsRegistration": true,
         "ImageSize": 2000,
         "DefaultAvatar": "/assets/img/user.png",

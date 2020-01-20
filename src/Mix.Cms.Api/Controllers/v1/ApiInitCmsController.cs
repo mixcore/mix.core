@@ -276,7 +276,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     // MixService.SetConfig<string>("SiteName", _lang, data.Title);
                     MixService.LoadFromDatabase();
                     MixService.SetConfig("InitStatus", 3);
-                    MixService.SetConfig("IsInit", true);
+                    MixService.SetConfig("IsInit", false);
                     MixService.SaveSettings();
                     _ = MixCacheService.RemoveCacheAsync();
                     MixService.Reload();

@@ -17,14 +17,14 @@ using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Web.Controllers
 {
-    public class PageController : BaseController
+    public class ModuleController : BaseController
     {        
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IApiDescriptionGroupCollectionProvider _apiExplorer;
         IApplicationLifetime _lifetime;
 
         #region contructor
-        public PageController(IHostingEnvironment env,
+        public ModuleController(IHostingEnvironment env,
             IMemoryCache memoryCache,
              UserManager<ApplicationUser> userManager,
              IApiDescriptionGroupCollectionProvider apiExplorer,
@@ -61,13 +61,13 @@ namespace Mix.Cms.Web.Controllers
 
         #region Routes
 
-        [Route("page/{seoName}")]
-        [Route("page/{culture}/{seoName}")]
-        public async Task<IActionResult> Index(string culture, string seoName)
+        [Route("module/{id}/{seoName}")]
+        [Route("module/{culture}/{id}/{seoName}")]
+        public async Task<IActionResult> Index(int id, string culture, string seoName)
         {
             if (_isValid)
             {
-                return await Page(seoName);
+                return await Module(id);
             }
             else
             {

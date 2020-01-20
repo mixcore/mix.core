@@ -11,6 +11,7 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Identity.Models;
 using System;
 using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
@@ -67,12 +68,26 @@ namespace Mix.Cms.Web.Controllers
             if (_isValid)
             {
                 string seoName = Request.Query["alias"];
+                HandleSeoName(ref seoName);
+                ViewData["Layout"] = "Masters/_Layout";
                 return await AliasAsync(seoName);
             }
             else
             {
                 return Redirect(_redirectUrl);
             }            
+        }
+
+        private void HandleSeoName(ref string seoName)
+        {
+            string regex = @"^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/(.*)$";
+            System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex(regex, RegexOptions.IgnoreCase);
+            Match m = r.Match(seoName);
+            if (m.Success)
+            {
+                culture = m.Groups[1].Value;
+                seoName = m.Groups[5].Value;
+            }
         }
 
         #endregion
