@@ -45,7 +45,7 @@ namespace Mix.Cms.Web.Controllers
             // If this site has not been inited yet
             if (MixService.GetConfig<bool>("IsInit"))
             {
-                _isValid = false;
+                isValid = false;
                 if (string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
                 {
                     _redirectUrl = $"Init";
@@ -65,7 +65,7 @@ namespace Mix.Cms.Web.Controllers
         [Route("post/{culture}/{id}/{seoName}")]
         public async Task<IActionResult> Index(int id, string culture, string seoName)
         {
-            if (_isValid)
+            if (isValid)
             {
                 return await Post(id);
             }

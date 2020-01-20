@@ -23,9 +23,7 @@
         </PackageReference>
         <PackageReference Include="Mix.Heart" Version="0.0.5.8" />
        
-        <PackageReference Include="Mix.Identity" Version="0.0.2" />
-       
-        <PackageReference Include="OpenHtmlToPdf" Version="1.12.0" />
+        <PackageReference Include="Mix.Identity" Version="0.0.2" />       
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
     </ItemGroup>
 

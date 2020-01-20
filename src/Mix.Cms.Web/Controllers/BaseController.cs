@@ -21,9 +21,9 @@ namespace Mix.Cms.Web.Controllers
 {
     public class BaseController : Controller
     {
-        protected string _domain;
-        protected bool _forbidden = false;
-        protected bool _isValid = true;
+        protected string domain;
+        protected bool forbidden = false;
+        protected bool isValid = true;
         protected string _redirectUrl;
         protected bool _forbiddenPortal
         {
@@ -31,7 +31,7 @@ namespace Mix.Cms.Web.Controllers
             {
                 var allowedIps = MixService.GetIpConfig<JArray>("AllowedPortalIps") ?? new JArray();
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
-                return _forbidden || (
+                return forbidden || (
                     // allow localhost
                     //remoteIp != "::1" &&
                     (
@@ -93,7 +93,7 @@ namespace Mix.Cms.Web.Controllers
             {
                 ViewBag.assetFolder = MixCmsHelper.GetAssetFolder(culture);
             }
-            _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
+            domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
             if (MixService.GetIpConfig<bool>("IsRetrictIp"))
             {
                 var allowedIps = MixService.GetIpConfig<JArray>("AllowedIps") ?? new JArray();
@@ -110,7 +110,7 @@ namespace Mix.Cms.Web.Controllers
                         )
                     )
                 {
-                    _forbidden = true;
+                    forbidden = true;
                 }
             }
             base.OnActionExecuting(context);
@@ -119,16 +119,16 @@ namespace Mix.Cms.Web.Controllers
         protected virtual void ValidateRequest()
         {
             // If IP retricted in appsettings
-            if (_forbidden)
+            if (forbidden)
             {
-                _isValid = false;
+                isValid = false;
                 _redirectUrl = $"/error/403";
             }
 
             // If mode Maintenance enabled in appsettings
             if (MixService.GetConfig<bool>("IsMaintenance"))
             {
-                _isValid = false;
+                isValid = false;
                 _redirectUrl = $"/{culture}/maintenance";
             }
         }

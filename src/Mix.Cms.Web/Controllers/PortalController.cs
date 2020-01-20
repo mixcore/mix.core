@@ -38,7 +38,7 @@ namespace Mix.Cms.Web.Controllers
             // If this site has not been inited yet
             if (MixService.GetConfig<bool>("IsInit"))
             {
-                _isValid = false;
+                isValid = false;
                 if (string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
                 {
                     _redirectUrl = $"Init";
@@ -68,7 +68,7 @@ namespace Mix.Cms.Web.Controllers
         [Route("portal/{pageName}/{type}/{param}/{param1}/{param2}/{param3}/{param4}")]
         public IActionResult Index(string page)
         {
-            if (_isValid)
+            if (isValid)
             {
                 return View();
             }
