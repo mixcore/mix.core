@@ -286,7 +286,6 @@ namespace Mix.Cms.Lib
             var navs = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.NavigationViewModel>(culture, MixConstants.AttributeSetName.NAVIGATION, "equal", "name", name);            
             var nav = navs.Data.FirstOrDefault()?.Nav;
             string action = Url.ActionContext.ActionDescriptor.RouteValues["action"];
-            string controller = Url.ActionContext.ActionDescriptor.RouteValues["controller"];
             string activePath = string.Empty;
             switch (action)
             {

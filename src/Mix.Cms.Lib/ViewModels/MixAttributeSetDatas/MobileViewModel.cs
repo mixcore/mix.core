@@ -58,9 +58,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Data = new JObject();
-            Data.Add(new JProperty("id", Id));
-            Data.Add(new JProperty("details", $"/api/v1/odata/{Specificulture}/attribute-set-data/mobile/{Id}"));
+            Data = new JObject
+            {
+                new JProperty("id", Id),
+                new JProperty("details", $"/api/v1/odata/{Specificulture}/attribute-set-data/mobile/{Id}")
+            };
             Values = MixAttributeSetValues.MobileViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
             foreach (var item in Values.OrderBy(v=>v.Priority))
@@ -89,12 +91,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (val == null)
                 {
                     val = new MixAttributeSetValues.MobileViewModel(
-                        new MixAttributeSetValue() {
+                        new MixAttributeSetValue()
+                        {
                             AttributeFieldId = field.Id,
-                            AttributeFieldName = field.Name,                            
+                            AttributeFieldName = field.Name,
                         }
-                        , _context, _transaction);
-                    val.Priority = field.Priority;
+                        , _context, _transaction)
+                    {
+                        Priority = field.Priority
+                    };
                     Values.Add(val);
                 }
                 val.Priority = field.Priority;

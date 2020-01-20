@@ -59,9 +59,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Data = new JObject();
-            Data.Add(new JProperty("id", Id));
-            Data.Add(new JProperty("details", $"/api/v1/odata/{Specificulture}/attribute-set-data/web/{Id}"));
+            Data = new JObject
+            {
+                new JProperty("id", Id),
+                new JProperty("details", $"/api/v1/odata/{Specificulture}/attribute-set-data/web/{Id}")
+            };
             Values = MixAttributeSetValues.ODataWebViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
             Fields = MixAttributeFields.ODataWebViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
@@ -72,11 +74,13 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     val = new MixAttributeSetValues.ODataWebViewModel(
                         new MixAttributeSetValue() { AttributeFieldId = field.Id }
-                        , _context, _transaction);
-                    val.Field = field;
-                    val.AttributeFieldName = field.Name;
-                    val.StringValue = field.DefaultValue;
-                    val.Priority = field.Priority;
+                        , _context, _transaction)
+                    {
+                        Field = field,
+                        AttributeFieldName = field.Name,
+                        StringValue = field.DefaultValue,
+                        Priority = field.Priority
+                    };
                     Values.Add(val);
                 }
                 val.AttributeSetName = AttributeSetName;
@@ -102,12 +106,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (val == null)
                 {
                     val = new MixAttributeSetValues.ODataWebViewModel(
-                        new MixAttributeSetValue() {
+                        new MixAttributeSetValue()
+                        {
                             AttributeFieldId = field.Id,
-                            AttributeFieldName = field.Name,                            
+                            AttributeFieldName = field.Name,
                         }
-                        , _context, _transaction);
-                    val.Priority = field.Priority;
+                        , _context, _transaction)
+                    {
+                        Priority = field.Priority
+                    };
                     Values.Add(val);
                 }
                 val.Priority = field.Priority;

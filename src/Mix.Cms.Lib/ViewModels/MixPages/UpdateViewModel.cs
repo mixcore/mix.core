@@ -108,7 +108,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         #region Views
 
-        [JsonProperty("details")]
+        [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }
 
         [JsonProperty("moduleNavs")]
