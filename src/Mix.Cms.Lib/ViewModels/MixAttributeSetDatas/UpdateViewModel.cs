@@ -4,7 +4,6 @@ using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,8 +36,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
         [JsonProperty("dataNavs")]
         public List<MixRelatedAttributeDatas.UpdateViewModel> DataNavs { get; set; }
-        [JsonProperty("data")]
-        public JObject Data { get; set; }
+
         #endregion
         #endregion Properties
 
@@ -85,7 +83,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 val.DataType = val.Field.DataType;
                 val.AttributeFieldName = val.AttributeFieldName ?? val.Field?.Name;
             }
-            ParseData();
+
 
         }
         public override MixAttributeSetData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
