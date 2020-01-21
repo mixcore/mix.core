@@ -725,6 +725,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             AttributeData.ParentType = (int)MixEnums.MixAttributeSetDataType.Post;
             var saveData = AttributeData.SaveModel(true, context, transaction);
             ViewModelHelper.HandleResult(saveData, ref result);
+            if (result.IsSucceed)
+            {
+                MixAttributeSetDatas.ReadViewModel.Repository.RemoveCache(AttributeData.Data.Model, context, transaction);
+            }
             return result;
         }
 
@@ -746,6 +750,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                         result.Exception = saveResult.Exception;
                         Errors.AddRange(saveResult.Errors);
                     }
+                    else
+                    {
+                        MixModules.ReadListItemViewModel.Repository.RemoveCache(item.Module.Model, _context, _transaction);
+                    }
                 }
                 else
                 {
@@ -755,6 +763,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     {
                         result.Exception = saveResult.Exception;
                         Errors.AddRange(saveResult.Errors);
+                    }
+                    else
+                    {
+                        MixModules.ReadListItemViewModel.Repository.RemoveCache(item.Module.Model, _context, _transaction);
                     }
                 }
             }
@@ -779,6 +791,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                         result.Exception = saveResult.Exception;
                         Errors.AddRange(saveResult.Errors);
                     }
+                    else
+                    {
+                        MixPages.ReadListItemViewModel.Repository.RemoveCache(item.Page.Model, _context, _transaction);
+                    }
                 }
                 else
                 {
@@ -788,6 +804,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     {
                         result.Exception = saveResult.Exception;
                         Errors.AddRange(saveResult.Errors);
+                    }
+                    else
+                    {
+                        MixPages.ReadListItemViewModel.Repository.RemoveCache(item.Page.Model, _context, _transaction);
                     }
                 }
             }
@@ -811,6 +831,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                         result.Exception = saveResult.Exception;
                         Errors.AddRange(saveResult.Errors);
                     }
+                    else
+                    {
+                        MixPosts.ReadViewModel.Repository.RemoveCache(navPost.RelatedPost.Model);
+                    }
                 }
                 else
                 {
@@ -820,6 +844,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     {
                         result.Exception = saveResult.Exception;
                         Errors.AddRange(saveResult.Errors);
+                    }
+                    else
+                    {
+                        MixPosts.ReadViewModel.Repository.RemoveCache(navPost.RelatedPost.Model);
                     }
                 }
             }
@@ -947,7 +975,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 {
                     item.RemoveCache(item.Model, context, transaction);
                 }));
-
             }
 
             tasks.AddRange(RemoveCacheRelatedPosts(context, transaction));

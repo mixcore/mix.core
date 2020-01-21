@@ -187,11 +187,13 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
             bool isLevel = int.TryParse(parsed.Get("level"), out int level);
+            bool isType = int.TryParse(parsed.Get("pageType"), out int pageType);
             ParseRequestPagingDate(request);
             Expression<Func<MixPage, bool>> predicate = model =>
                         model.Specificulture == _lang
                         && (!request.Status.HasValue || model.Status == request.Status.Value)
                         && (!isLevel || model.Level == level)
+                        && (!isType || model.Type == pageType)
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (model.Title.Contains(request.Keyword)
                             || model.Excerpt.Contains(request.Keyword)))
