@@ -39,21 +39,8 @@ namespace Mix.Cms.Lib
             {
                 switch (cate.Type)
                 {
-                    case MixPageType.Blank:
-                        foreach (var child in cate.Childs)
-                        {
-                            child.Page.DetailsUrl = Url.RouteUrl("Alias", new { culture, seoName = child.Page.SeoName });
-                        }
-                        break;
-
-                    case MixPageType.StaticUrl:
-                        cate.DetailsUrl = cate.StaticUrl;
-                        break;
-
                     case MixPageType.Home:
                     case MixPageType.ListPost:
-                    case MixPageType.Post:
-                    case MixPageType.Modules:
                     default:
                         cate.DetailsUrl = Url.RouteUrl("Alias", new { culture, seoName = cate.SeoName });
                         break;
@@ -81,21 +68,8 @@ namespace Mix.Cms.Lib
             {
                 switch (cate.Type)
                 {
-                    case MixPageType.Blank:
-                        foreach (var child in cate.Childs)
-                        {
-                            child.Page.DetailsUrl = Url.RouteUrl("Alias", new { culture, seoName = child.Page.SeoName });
-                        }
-                        break;
-
-                    case MixPageType.StaticUrl:
-                        cate.DetailsUrl = cate.StaticUrl;
-                        break;
-
                     case MixPageType.Home:
                     case MixPageType.ListPost:
-                    case MixPageType.Post:
-                    case MixPageType.Modules:
                     default:
                         cate.DetailsUrl = Url.RouteUrl("Alias", new { culture, seoName = cate.SeoName });
                         break;
