@@ -4,6 +4,7 @@
 
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
@@ -35,18 +36,12 @@ namespace Mix.Cms.Web
 
                     app.UseRewriter(options);
                 }
-                //    app.Run(context => context.Response.WriteAsync(
-                //$"Rewritten or Redirected Url: " +
-                //$"{context.Request.Path + context.Request.QueryString}"));
+            //    app.Run(context => context.Response.WriteAsync(
+            //$"Rewritten or Redirected Url: " +
+            //$"{context.Request.Path + context.Request.QueryString}"));
             }
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-                routes.MapRoute(
-                    name: "areaRoute",                    
-                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{area:exists}/{controller=Portal}/{action=Init}");
                 routes.MapRoute(
                     name: "Alias",
                     template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{seoName}");

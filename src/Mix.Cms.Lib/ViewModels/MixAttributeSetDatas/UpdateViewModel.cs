@@ -72,11 +72,13 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     val = new MixAttributeSetValues.UpdateViewModel(
                         new MixAttributeSetValue() { AttributeFieldId = field.Id }
-                        , _context, _transaction);
-                    val.Field = field;
-                    val.AttributeFieldName = field.Name;
-                    val.StringValue = field.DefaultValue;
-                    val.Priority = field.Priority;
+                        , _context, _transaction)
+                    {
+                        Field = field,
+                        AttributeFieldName = field.Name,
+                        StringValue = field.DefaultValue,
+                        Priority = field.Priority
+                    };
                     Values.Add(val);
                 }
                 val.AttributeSetName = AttributeSetName;
@@ -85,7 +87,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 val.DataType = val.Field.DataType;
                 val.AttributeFieldName = val.AttributeFieldName ?? val.Field?.Name;
             }
-            ParseData();
+
 
         }
         public override MixAttributeSetData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)

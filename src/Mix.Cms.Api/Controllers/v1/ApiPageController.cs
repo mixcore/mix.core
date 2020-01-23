@@ -187,11 +187,13 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
             bool isLevel = int.TryParse(parsed.Get("level"), out int level);
+            bool isType = int.TryParse(parsed.Get("pageType"), out int pageType);
             ParseRequestPagingDate(request);
             Expression<Func<MixPage, bool>> predicate = model =>
                         model.Specificulture == _lang
                         && (!request.Status.HasValue || model.Status == request.Status.Value)
                         && (!isLevel || model.Level == level)
+                        && (!isType || model.Type == pageType)
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (model.Title.Contains(request.Keyword)
                             || model.Excerpt.Contains(request.Keyword)))
@@ -211,7 +213,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         mvcResult.Data.Items.ForEach(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                new { culture = _lang, seoName = a.SeoName }, Request, Url);
+                                new { action = "page", culture = _lang, seoName = a.SeoName }, Request, Url);
                         });
                     }
 
@@ -223,7 +225,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         portalResult.Data.Items.ForEach(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                new { culture = _lang, seoName = a.SeoName }, Request, Url);
+                                new { action = "page", culture = _lang, seoName = a.SeoName }, Request, Url);
                         });
                     }
 
@@ -236,11 +238,11 @@ namespace Mix.Cms.Api.Controllers.v1
                         listItemResult.Data.Items.ForEach((Action<ReadListItemViewModel>)(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                new { culture = _lang, seoName = a.SeoName }, Request, Url);
+                                new { action="page", culture = _lang, seoName = a.SeoName }, Request, Url);
                             a.Childs.ForEach((Action<Lib.ViewModels.MixPagePages.ReadViewModel>)(c =>
                             {
                                 c.Page.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                    new { culture = _lang, seoName = c.Page.SeoName }, Request, Url);
+                                    new { action = "page", culture = _lang, seoName = c.Page.SeoName }, Request, Url);
                             }));
                         }));
                     }

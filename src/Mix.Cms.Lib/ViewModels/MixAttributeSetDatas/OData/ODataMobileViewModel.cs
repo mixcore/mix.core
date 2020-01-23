@@ -92,8 +92,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                                 AttributeFieldId = field.Id,
                                 AttributeFieldName = field.Name,
                             }
-                            , _context, _transaction);
-                        val.Priority = field.Priority;
+                            , _context, _transaction)
+                        {
+                            Priority = field.Priority
+                        };
                         Values.Add(val);
                     }
                     val.Priority = field.Priority;
