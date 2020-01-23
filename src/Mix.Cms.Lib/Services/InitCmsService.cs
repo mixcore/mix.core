@@ -55,7 +55,7 @@ namespace Mix.Cms.Lib.Services
 
                     var isInit = MixService.GetConfig<bool>("IsInit");
 
-                    if (!isInit)
+                    if (isInit)
                     {
 
                         /**
@@ -184,7 +184,7 @@ namespace Mix.Cms.Lib.Services
         /// <param name="_context"></param>
         /// <param name="_transaction"></param>
         /// <returns></returns>
-        public static async Task<RepositoryResponse<bool>> InitAttributeSetsAsync(string siteName, string specifiCulture, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public static async Task<RepositoryResponse<bool>> InitAttributeSetsAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             /* Init Configs */
 
@@ -249,7 +249,6 @@ namespace Mix.Cms.Lib.Services
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            var getThemes = ViewModels.MixThemes.InitViewModel.Repository.GetModelList(_context: context, _transaction: transaction);
             if (!context.MixTheme.Any())
             {
                 ViewModels.MixThemes.InitViewModel theme = new ViewModels.MixThemes.InitViewModel(new MixTheme()

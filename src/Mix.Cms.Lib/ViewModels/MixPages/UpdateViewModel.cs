@@ -108,7 +108,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         #region Views
 
-        [JsonProperty("details")]
+        [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }
 
         [JsonProperty("moduleNavs")]
@@ -223,10 +223,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("attributeData")]
         public MixRelatedAttributeDatas.UpdateViewModel AttributeData { get; set; }
-        [JsonProperty("sysCategories")]
-        public List<MixRelatedAttributeDatas.UpdateViewModel> SysCategories { get; set; }
-        [JsonProperty("sysTags")]
-        public List<MixRelatedAttributeDatas.UpdateViewModel> SysTags { get; set; }
+
         #endregion Views
 
         #endregion Properties
@@ -523,10 +520,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             //}
             return result;
         }
-        private async Task<RepositoryResponse<bool>> SaveAttributeAsync(int parentId, MixCmsContext context, IDbContextTransaction transaction)
+        private async Task<RepositoryResponse<bool>> SaveAttributeAsync(int id, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            AttributeData.ParentId = parentId.ToString();
+            AttributeData.ParentId = id.ToString();
             AttributeData.ParentType = (int)MixEnums.MixAttributeSetDataType.Page;
             var saveData = await AttributeData.Data.SaveModelAsync(true, context, transaction);
             ViewModelHelper.HandleResult(saveData, ref result);
@@ -535,29 +532,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 AttributeData.Id = saveData.Data.Id;
                 var saveRelated = await AttributeData.SaveModelAsync(true, context, transaction);
                 ViewModelHelper.HandleResult(saveRelated, ref result);
-            }
-            foreach (var item in SysCategories)
-            {
-                if (result.IsSucceed)
-                {
-                    item.ParentId = parentId.ToString();
-                    item.ParentType = (int)MixEnums.MixAttributeSetDataType.Page;
-                    item.Specificulture = Specificulture;
-                    var saveResult = await item.SaveModelAsync(false, context, transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-                }
-            }
-
-            foreach (var item in SysTags)
-            {
-                if (result.IsSucceed)
-                {
-                    item.ParentId = parentId.ToString();
-                    item.ParentType = (int)MixEnums.MixAttributeSetDataType.Page;
-                    item.Specificulture = Specificulture;
-                    var saveResult = await item.SaveModelAsync(false, context, transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-                }
             }
             return result;
         }
@@ -618,22 +592,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     val.Priority = field.Priority;
                     val.Field = field;
                 }
-            }
-
-            var getCategories = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
-                && m.ParentId == Id.ToString() && m.ParentType == (int)MixEnums.MixAttributeSetDataType.Page
-                && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_CATEGORY, _context, _transaction);
-            if (getCategories.IsSucceed)
-            {
-                SysCategories = getCategories.Data;
-            }
-
-            var getTags = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
-                && m.ParentId == Id.ToString() && m.ParentType == (int)MixEnums.MixAttributeSetDataType.Page
-                && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_TAG, _context, _transaction);
-            if (getTags.IsSucceed)
-            {
-                SysTags = getTags.Data;
             }
         }
 

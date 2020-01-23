@@ -85,7 +85,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Views\Home\Alias.cshtml">
+    <Content Update="Views\Home\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="wwwroot\assets\icons.svg">

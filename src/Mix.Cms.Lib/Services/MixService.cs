@@ -154,7 +154,7 @@ namespace Mix.Cms.Lib.Services
             {
                 result = DefaultInstance.Authentication[name];
             }
-            return result != null ? result.Value<T>() : default(T);
+            return result != null ? result.Value<T>() : default;
         }
 
         public static void SetAuthConfig<T>(string name, T value)
@@ -168,7 +168,7 @@ namespace Mix.Cms.Lib.Services
             {
                 result = DefaultInstance.IpSecuritySettings[name];
             }
-            return result != null ? result.Value<T>() : default(T);
+            return result != null ? result.Value<T>() : default;
         }
 
         public static void SetIpConfig<T>(string name, T value)
@@ -183,7 +183,7 @@ namespace Mix.Cms.Lib.Services
             {
                 result = DefaultInstance.GlobalSettings[name];
             }
-            return result != null ? result.Value<T>() : default(T);
+            return result != null ? result.Value<T>() : default;
         }
 
         public static void SetConfig<T>(string name, T value)
@@ -203,7 +203,7 @@ namespace Mix.Cms.Lib.Services
                     result = DefaultInstance.LocalSettings[MixService.GetConfig<string>("DefaultCulture")][name];
                 }
             }
-            return result != null ? result.Value<T>() : default(T);
+            return result != null ? result.Value<T>() : default;
         }
 
         public static void SetConfig<T>(string name, string culture, T value)
@@ -218,17 +218,17 @@ namespace Mix.Cms.Lib.Services
             {
                 result = DefaultInstance.Translator[culture][name];
             }
-            return result != null ? result.Value<T>() : default(T);
+            return result != null ? result.Value<T>() : default;
         }
 
         public static JObject GetTranslator(string culture)
         {
-            return JObject.FromObject(Instance.Translator[culture]);
+            return JObject.FromObject(Instance.Translator[culture] ?? new JObject());
         }
 
         public static JObject GetLocalSettings(string culture)
         {
-            return JObject.FromObject(Instance.LocalSettings[culture]);
+            return JObject.FromObject(Instance.LocalSettings[culture] ?? new JObject());
         }
 
         public static JObject GetGlobalSetting()
@@ -359,19 +359,23 @@ namespace Mix.Cms.Lib.Services
         }
         public static void SendMail(string subject, string message, string to, string from = null)
         {
-            MailMessage mailMessage = new MailMessage();
-            mailMessage.IsBodyHtml = true;
-            mailMessage.From = new MailAddress(from ?? instance.Smtp.Value<string>("From"));
+            MailMessage mailMessage = new MailMessage
+            {
+                IsBodyHtml = true,
+                From = new MailAddress(from ?? instance.Smtp.Value<string>("From"))
+            };
             mailMessage.To.Add(to);
             mailMessage.Body = message;
             mailMessage.Subject = subject;
             try
             {
-                SmtpClient client = new SmtpClient(instance.Smtp.Value<string>("Server"));
-                client.UseDefaultCredentials = false;
-                client.Credentials = new NetworkCredential(instance.Smtp.Value<string>("User"), instance.Smtp.Value<string>("Password"));
-                client.Port = instance.Smtp.Value<int>("Port");
-                client.EnableSsl = instance.Smtp.Value<bool>("SSL");
+                SmtpClient client = new SmtpClient(instance.Smtp.Value<string>("Server"))
+                {
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(instance.Smtp.Value<string>("User"), instance.Smtp.Value<string>("Password")),
+                    Port = instance.Smtp.Value<int>("Port"),
+                    EnableSsl = instance.Smtp.Value<bool>("SSL")
+                };
 
                 client.Send(mailMessage);
             }
@@ -379,8 +383,10 @@ namespace Mix.Cms.Lib.Services
             {
                 try
                 {
-                    SmtpClient smtpClient = new SmtpClient();
-                    smtpClient.UseDefaultCredentials = true;
+                    SmtpClient smtpClient = new SmtpClient
+                    {
+                        UseDefaultCredentials = true
+                    };
                     smtpClient.Send(mailMessage);
                 }
                 catch

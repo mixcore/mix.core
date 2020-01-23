@@ -50,9 +50,10 @@ namespace Mix.Cms.Hub
             connection.ConnectionId = Context.ConnectionId;
             connection.DeviceId = connection.DeviceId ?? MixConstants.ServiceHub.DefaultDevice;
             // Mapping connecting user to db  models
-            var user = new Messenger.ViewModels.MixMessengerUsers.ConnectViewModel(connection);
-
-            user.CreatedDate = DateTime.UtcNow;
+            var user = new Messenger.ViewModels.MixMessengerUsers.ConnectViewModel(connection)
+            {
+                CreatedDate = DateTime.UtcNow
+            };
             // Save user and current device to db
             return user.Join().ContinueWith((task)=> {
                 //  save success
