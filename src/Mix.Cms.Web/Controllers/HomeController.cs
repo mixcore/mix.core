@@ -80,13 +80,28 @@ namespace Mix.Cms.Web.Controllers
 
         private void HandleSeoName(ref string seoName)
         {
-            string regex = @"^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/(.*)$";
+            //string regex = @"^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/(.*)$";
+            string regex = @"(.*)[(\/|\?|#)]$";
             System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex(regex, RegexOptions.IgnoreCase);
             Match m = r.Match(seoName);
             if (m.Success)
             {
-                culture = m.Groups[1].Value;
-                seoName = m.Groups[5].Value;
+                seoName = m.Groups[1].Value;
+                regex = @"^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/(.*)$";
+                m = r.Match(seoName);
+                if (m.Success)
+                {
+                    if (MixService.Instance.CheckValidCulture(m.Groups[1].Value))
+                    {
+                        culture = m.Groups[1].Value;
+                        seoName = m.Groups[5].Value;
+                    }
+                }
+            }
+            if (MixService.Instance.CheckValidCulture(seoName))
+            {
+                culture = seoName;
+                seoName = string.Empty;
             }
         }
 

@@ -98,7 +98,7 @@ namespace Mix.Cms.Lib.Services
 
             string content = string.IsNullOrWhiteSpace(settings.Content) ? "{}" : settings.Content;
             jsonSettings = JObject.Parse(content);
-
+            //var cultures = CommonRepository.Instance.LoadCultures();
 
             instance.ConnectionStrings = JObject.FromObject(jsonSettings["ConnectionStrings"]);
             instance.Authentication = JObject.FromObject(jsonSettings["Authentication"]);
@@ -107,6 +107,7 @@ namespace Mix.Cms.Lib.Services
             instance.Translator = JObject.FromObject(jsonSettings["Translator"]);
             instance.GlobalSettings = JObject.FromObject(jsonSettings["GlobalSettings"]);
             instance.LocalSettings = JObject.FromObject(jsonSettings["LocalSettings"]);
+            //instance.Cultures = cultures.Select(c=>c.Specificulture).ToList();
             CommonHelper.WebConfigInstance = jsonSettings;
         }
 
@@ -145,6 +146,16 @@ namespace Mix.Cms.Lib.Services
         public static void SetConnectionString(string name, string value)
         {
             Instance.ConnectionStrings[name] = value;
+        }
+
+        public bool CheckValidCulture(string specificulture)
+        {
+            if (Instance.Cultures == null)
+            {
+                var cultures = ViewModels.MixCultures.ReadViewModel.Repository.GetModelList().Data;
+                Instance.Cultures = cultures?.Select(c=>c.Specificulture).ToList() ?? new List<string>();
+            }
+            return Instance.Cultures.Any(c => c == specificulture);
         }
 
         public static T GetAuthConfig<T>(string name)
