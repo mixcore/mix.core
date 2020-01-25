@@ -1,11 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1365" height="1338" viewBox="0 0 1365 1338">
-  <g id="logo" transform="translate(-814.5 -386)">
-    <g id="Layer_2" data-name="Layer 2" transform="translate(1065.5 385.998)">
-      <g id="Layer_1" data-name="Layer 1">
-        <path id="Path_1161" data-name="Path 1161" d="M20,297.55V664a94.337,94.337,0,0,0,47.164,81.708L384.53,928.94a94.29,94.29,0,0,0,94.31,0L796.22,745.7A94.31,94.31,0,0,0,843.38,664V297.55a94.319,94.319,0,0,0-47.157-81.678L478.84,32.64a94.29,94.29,0,0,0-94.31,0L67.15,215.87A94.33,94.33,0,0,0,20,297.55Z" fill="#007bff" stroke="#fff" stroke-miterlimit="10" stroke-width="40"/>
-        <path id="Path_1162" data-name="Path 1162" d="M533.7,503.26a60.41,60.41,0,0,0,0-85.43,75.52,75.52,0,0,0-106.78,0,94.39,94.39,0,0,0,0,133.47,118,118,0,0,0,166.84,0,147.45,147.45,0,0,0,0-208.54c-72-72-188.7-72-260.68,0-90,90-90,235.87,0,325.85,112.47,112.48,294.84,112.48,407.31,0a358.521,358.521,0,0,0,103-212.39" fill="#007bff" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="40"/>
-      </g>
-    </g>
-    <text id="mixcore" transform="translate(814.5 1328)" fill="#007bff" font-size="355" font-family="Arial-BoldMT, Arial" font-weight="700"><tspan x="0" y="321">mixcore</tspan></text>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1365" height="1338" viewBox="0 0 1365 1338"><g id="logo" transform="translate(-814.5 -386)"><g id="Layer_2" data-name="Layer 2" transform="translate(1065.5 385.998)"><g id="Layer_1" data-name="Layer 1"><path id="Path_1161" fill="#007bff" stroke="#fff" stroke-miterlimit="10" stroke-width="40" d="M20,297.55V664a94.337,94.337,0,0,0,47.164,81.708L384.53,928.94a94.29,94.29,0,0,0,94.31,0L796.22,745.7A94.31,94.31,0,0,0,843.38,664V297.55a94.319,94.319,0,0,0-47.157-81.678L478.84,32.64a94.29,94.29,0,0,0-94.31,0L67.15,215.87A94.33,94.33,0,0,0,20,297.55Z" data-name="Path 1161"/><path id="Path_1162" fill="#007bff" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="40" d="M533.7,503.26a60.41,60.41,0,0,0,0-85.43,75.52,75.52,0,0,0-106.78,0,94.39,94.39,0,0,0,0,133.47,118,118,0,0,0,166.84,0,147.45,147.45,0,0,0,0-208.54c-72-72-188.7-72-260.68,0-90,90-90,235.87,0,325.85,112.47,112.48,294.84,112.48,407.31,0a358.521,358.521,0,0,0,103-212.39" data-name="Path 1162"/></g></g><text id="mixcore" fill="#007bff" font-family="Arial-BoldMT, Arial" font-size="355" font-weight="700" transform="translate(814.5 1328)"><tspan x="0" y="321">mixcore</tspan></text></g></svg>
