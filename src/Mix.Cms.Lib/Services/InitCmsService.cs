@@ -329,18 +329,6 @@ namespace Mix.Cms.Lib.Services
                 context.Entry(alias).State = EntityState.Added;
             }
         }
-        public static async Task<bool> InitPositionsAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            /* Init Positions */
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            var positions = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_POSITIONS, "data", true, "{}");
-            var obj = JObject.Parse(positions.Content);
-            var arrPosition = obj["data"].ToObject<List<MixPosition>>();
-            var result = await ViewModels.MixPositions.ReadViewModel.ImportPositions(arrPosition, context, transaction);
-            UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
-            return result.IsSucceed;
-        }
-
-
+        
     }
 }

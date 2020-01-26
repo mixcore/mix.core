@@ -117,6 +117,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
         [JsonProperty("isExportData")]
         public bool IsExportData { get; set; }
+        [JsonProperty("themeName")]
+        public string ThemeName { get; set; } = "default";
         #endregion Views
 
         #endregion Properties
@@ -178,11 +180,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                         item.Module.Specificulture = parent.Specificulture;
                         if (!string.IsNullOrEmpty(item.Image))
                         {
-                            item.Image = item.Image.Replace("content/templates/default", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", parent.Specificulture)}");
+                            item.Image = item.Image.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", parent.Specificulture)}");
                         }
                         if (!string.IsNullOrEmpty(item.Module.Image))
                         {
-                            item.Module.Image = item.Module.Image.Replace("content/templates/default", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", parent.Specificulture)}");
+                            item.Module.Image = item.Module.Image.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", parent.Specificulture)}");
                         }
                         if (!string.IsNullOrEmpty(item.Module.Thumbnail))
                         {
