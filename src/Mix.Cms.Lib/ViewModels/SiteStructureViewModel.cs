@@ -273,6 +273,10 @@ namespace Mix.Cms.Lib.ViewModels
                     if (!context.MixModule.Any(m => m.Name == module.Name && m.Specificulture == destCulture))
                     {
                         module.Id = context.MixModule.Max(m => m.Id) + 1;
+                        if (!string.IsNullOrEmpty(module.Image))
+                        {
+                            module.Image = module.Image.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
+                        }
                         module.CreatedDateTime = DateTime.UtcNow;
                         var saveResult = await module.SaveModelAsync(true, context, transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
@@ -332,6 +336,7 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     item.Id = startId;
                     item.CreatedDateTime = DateTime.UtcNow;
+                    item.ThemeName = ThemeName;
                     //if (_context.MixPage.Any(m=>m.Id == startId)) //(item.Id > initPages.Count)
                     //{
                     //    item.Id = _context.MixPage.Max(m => m.Id) + 1;
