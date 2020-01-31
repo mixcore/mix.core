@@ -244,12 +244,6 @@ src/Mix.Cms.Web/appsettings.json
 src/Mix.Cms.Web/mixCmsSettings.json
 src/Mix.Cms.Web/wwwroot/content/*
 src/Mix.Cms.Web/wwwroot/Exports/*
-src/Mix.Cms.Web/wwwroot/js/app-portal.min.js
-src/Mix.Cms.Web/wwwroot/js/app-shared.min.js
-src/Mix.Cms.Web/wwwroot/js/portal.min.js
-src/Mix.Cms.Web/wwwroot/css/portal.min.css
-src/Mix.Cms.Web/wwwroot/css/now-ui.min.css
-src/Mix.Cms.Web/wwwroot/css/bootstrap.min.css
 docs/videos/create-article-page.mp4
 docs/videos/demo-create-crickettour.mp4
 docs/videos/init-mixcore-cms.mp4
@@ -262,7 +256,6 @@ src/Mix.Cms.Web/appsettings.json
 /docs
 src/Mix.Cms.Web/appsettings.json
 src/Mix.Cms.Web.Templates/*
-/src/Mix.Cms.Web/wwwroot/css/portal.min.css
 /src/Mix.Cms.Web/Exports
 /src/Mix.Cms.Web/wwwroot/content/Uploads
 /src/Mix.Cms.Web/wwwroot/content/Uploads
@@ -275,11 +268,6 @@ src/Mix.Cms.Web/tisa-appsettings.json
 src/Mix.Cms.Web/Views/Shared/Templates/*
 src/Mix.Cms.Web/wwwroot/content/templates/*
 src/Mix.Cms.Web/wwwroot/content/templates/theme-import/*
-src/Mix.Cms.Web/wwwroot/js/app-portal.min.js
-src/Mix.Cms.Web/wwwroot/js/app-client.min.js
-src/Mix.Cms.Web/wwwroot/js/app-shared.min.js
-src/Mix.Cms.Web/wwwroot/js/portal.min.js
-src/Mix.Cms.Web/wwwroot/js/shared.min.js
 
 src/Mix\.Cms\.Web/Cache/
 /src/Mix.Cms.Web/content/templates
