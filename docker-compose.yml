@@ -4,6 +4,7 @@ services:
         build: .
         ports:
             - "5000:80"
+            - "5001:443"
         depends_on:
             - db
     db:
@@ -11,17 +12,24 @@ services:
         environment:
             SA_PASSWORD: "P@ssw0rd"
             ACCEPT_EULA: "Y"
+        ports:
+            - "1433:1433"
+        restart: always
+    redis:
+        image: redis
 
-#     db:
-#         image: mysql:5.7
-#         volumes:
-#           - db_data:/var/lib/mysql
-#         restart: always
-#         environment:
-#           MYSQL_ROOT_PASSWORD: P@ssw0rd
-#           MYSQL_DATABASE: mixcore
-#           MYSQL_USER: mixcore
-#           MYSQL_PASSWORD: P@ssw0rd
+    mysql:
+        image: mysql:5.7
+        volumes:
+          - db_data:/var/lib/mysql
+        restart: always
+        environment:
+          MYSQL_ROOT_PASSWORD: P@ssw0rd
+          MYSQL_DATABASE: mixcore
+          MYSQL_USER: mixcore
+          MYSQL_PASSWORD: P@ssw0rd
+        ports:
+        - 3306:3306
 
-# volumes:
-#     db_data: {}
+volumes:
+    db_data: {}
