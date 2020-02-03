@@ -45,6 +45,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         [JsonProperty("post")]
         public MixPosts.ReadListItemViewModel Post { get; set; }
 
+        [JsonProperty("page")]
+        public MixPages.ReadViewModel Page { get; set; }
+
         #endregion Views
 
         #region overrides
@@ -54,9 +57,16 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
             var getPost = MixPosts.ReadListItemViewModel.Repository.GetSingleModel(p => p.Id == PostId && p.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction
             );
+            var getPage = MixPages.ReadViewModel.Repository.GetSingleModel(p => p.Id == PageId && p.Specificulture == Specificulture
+                , _context: _context, _transaction: _transaction
+            );
             if (getPost.IsSucceed)
             {
                 Post = getPost.Data;
+            }
+            if (getPage.IsSucceed)
+            {
+                Page = getPage.Data;
             }
         }
 
@@ -77,7 +87,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
             try
             {
                 var navCategoryPostViewModels = context.MixPage.Include(cp => cp.MixPagePost).Where(a => a.Specificulture == specificulture
-                    && (a.Type == (int)MixEnums.MixPageType.ListPost || a.Type == (int)MixEnums.MixPageType.ListProduct)
+                    && (a.Type == (int)MixEnums.MixPageType.ListPost)
                     )
                     .AsEnumerable()
                     .Select(p => new MixPagePosts.ReadViewModel(

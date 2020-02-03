@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Common.Helper;
@@ -63,7 +64,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
             Values = MixAttributeSetValues.UpdateViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-            Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
+            Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => (f.AttributeSetId == AttributeSetId || f.AttributeSetName == AttributeSetName), _context, _transaction).Data;
             foreach (var field in Fields.OrderBy(f=>f.Priority))
             {
                 var val = Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
@@ -71,13 +72,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     val = new MixAttributeSetValues.UpdateViewModel(
                         new MixAttributeSetValue() { AttributeFieldId = field.Id }
-                        , _context, _transaction);                    
-                    val.Field = field;
-                    val.DataType = field.DataType;
-                    val.AttributeFieldName = field.Name;
-                    val.AttributeSetName = field.AttributeSetName;
-                    val.StringValue = field.DefaultValue;
-                    val.Priority = field.Priority;
+                        , _context, _transaction)
+                    {
+                        Field = field,
+                        DataType = field.DataType,
+                        AttributeFieldName = field.Name,
+                        AttributeSetName = field.AttributeSetName,
+                        StringValue = field.DefaultValue,
+                        Priority = field.Priority
+                    };
                     Values.Add(val);
                 }
                 val.DataId = Id;
@@ -158,18 +161,18 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
         {
             var tasks = new List<Task>();
-            var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
-                .Any(d => d.Specificulture == Specificulture && d.Id == Id));
-            foreach (var item in attrDatas)
+            //var attrDatas = context.MixAttributeSetData.Include(m => m.MixRelatedAttributeData).Where(m => m.MixRelatedAttributeData
+            //    .Any(d => d.Specificulture == Specificulture && d.Id == Id));
+            var relatedData = context.MixRelatedAttributeData.Include(m=>m.MixAttributeSetData).Where(m => m.Specificulture == Specificulture && (m.Id == Id || m.ParentId == Id));
+            foreach (var item in relatedData)
             {
                 tasks.Add(Task.Run(() =>
                 {
-                    var data = new ReadViewModel(item, context, transaction);
-                    data.RemoveCache(item, context, transaction);
+                    ReadViewModel.Repository.RemoveCache(item.MixAttributeSetData, context, transaction);
+                    MixRelatedAttributeDatas.ReadViewModel.Repository.RemoveCache(item, context, transaction);
                 }));
 
             }
-            
             foreach (var item in Values)
             {
                 tasks.Add(Task.Run(() =>
@@ -178,52 +181,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }));
 
             }
-           
-            var relatedNav = context.MixRelatedAttributeData.Where(m => m.Specificulture == Specificulture && m.Id == Id);
-            foreach (var item in relatedNav)
-            {
-                switch (item.ParentType)
-                {
-                    case (int)MixEnums.MixAttributeSetDataType.Module:
-                        int.TryParse(item.ParentId, out int moduleId);
-                        var relatedModule = context.MixModule.FirstOrDefault(m => m.Id == moduleId);
-                        if (relatedModule!=null)
-                        {
-                            tasks.Add(Task.Run(() =>
-                            {
-                                var data = new MixModules.ReadListItemViewModel(relatedModule, context, transaction);
-                                data.RemoveCache(relatedModule, context, transaction);
-                            }));
-                        }
-                        break;
-                    case (int)MixEnums.MixAttributeSetDataType.Page:
-                        int.TryParse(item.ParentId, out int pageId);
-                        var relatedPage = context.MixPage.FirstOrDefault(m => m.Id == pageId);
-                        if (relatedPage != null)
-                        {
-                            tasks.Add(Task.Run(() =>
-                            {
-                                var data = new MixPages.ReadListItemViewModel(relatedPage, context, transaction);
-                                data.RemoveCache(relatedPage, context, transaction);
-                            }));
-                        }
-                        break;
-                    case (int)MixEnums.MixAttributeSetDataType.Post:
-                        int.TryParse(item.ParentId, out int postId);
-                        var relatedPost = context.MixPost.FirstOrDefault(m => m.Id == postId);
-                        if (relatedPost != null)
-                        {
-                            tasks.Add(Task.Run(() =>
-                            {
-                                var data = new MixPosts.ReadListItemViewModel(relatedPost, context, transaction);
-                                data.RemoveCache(relatedPost, context, transaction);
-                            }));
-                        }
-                        break;
-                }
-            }
             return tasks;
         }
+
         private void HandleEdm(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var getAttrSet = Mix.Cms.Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModel(m => m.Name == AttributeSetName || m.Id == AttributeSetId, _context, _transaction);

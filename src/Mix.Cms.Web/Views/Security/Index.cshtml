@@ -1,0 +1,11 @@
+﻿@{
+    ViewData["Title"] = "Security";
+    Layout = "~/Views/Shared/_LayoutSecurity_Angular.cshtml";
+}
+
+<section class="content">
+    <div class="{{pageClass}}" ng-view>
+    </div>
+    <message message="message"></message>
+    <confirm message="confirmMessage"></confirm>
+</section>

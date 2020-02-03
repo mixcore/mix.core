@@ -176,7 +176,7 @@ namespace Mix.Cms.Api.Controllers.v1
             int.TryParse(queries.Get("attributeSetId"), out int attributeSetId);
             string attributeSetName = queries.Get("attributeSetName");
             ParseRequestPagingDate(request);
-            var data = await Lib.ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ExportViewModel>(_lang, attributeSetName,
+            var data = await Lib.ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<Lib.ViewModels.MixAttributeSetDatas.ImportViewModel>(_lang, attributeSetName,
                         request, request.Keyword, queryDictionary);
             string exportPath = $"exports/module/{attributeSetName}";
             var jData = new List<JObject>();

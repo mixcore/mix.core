@@ -33,12 +33,21 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #endregion Models
         #region Views
         [JsonIgnore]
-        public List<MixAttributeSetValues.MobileViewModel> Values { get; set; }
+        public List<MixAttributeSetValues.NavigationViewModel> Values { get; set; }
         [JsonIgnore]
-        public List<MixAttributeFields.MobileViewModel> Fields { get; set; }
+        public List<MixAttributeFields.ReadViewModel> Fields { get; set; }
 
         [JsonProperty("data")]
         public JObject Data { get; set; }
+
+        [JsonProperty("nav")]
+        public Navigation Nav { get {
+                if (AttributeSetName == MixConstants.AttributeSetName.NAVIGATION && Data!=null)
+                {
+                    return Data.ToObject<Navigation>();
+                }
+                return null;
+            } }
         #endregion
         #endregion Properties
 
@@ -58,57 +67,18 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Data = new JObject();
-            Data.Add(new JProperty("id", Id));
-            Data.Add(new JProperty("details", $"/api/v1/odata/{Specificulture}/attribute-set-data/mobile/{Id}"));
-            Values = MixAttributeSetValues.MobileViewModel
+            Data = new JObject
+            {
+                new JProperty("id", Id)
+            };
+            Values = MixAttributeSetValues.NavigationViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
             foreach (var item in Values.OrderBy(v => v.Priority))
             {
                 Data.Add(ParseValue(item));
             }
         }
-        public override MixAttributeSetData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            if (string.IsNullOrEmpty(Id))
-            {
-                Id = Guid.NewGuid().ToString();
-                CreatedDateTime = DateTime.UtcNow;
-                Priority = Repository.Count(m => m.AttributeSetName == AttributeSetName && m.Specificulture == Specificulture, _context, _transaction).Data + 1;
-            }
-            Values = Values ?? MixAttributeSetValues.MobileViewModel
-                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-            Fields = MixAttributeFields.MobileViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
-            foreach (var field in Fields.OrderBy(f => f.Priority))
-            {
-                var val = Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
-                if (val == null)
-                {
-                    val = new MixAttributeSetValues.MobileViewModel(
-                        new MixAttributeSetValue()
-                        {
-                            AttributeFieldId = field.Id,
-                            AttributeFieldName = field.Name,
-                        }
-                        , _context, _transaction);
-                    val.Priority = field.Priority;
-                    Values.Add(val);
-                }
-                val.Priority = field.Priority;
-                val.AttributeSetName = AttributeSetName;
-                if (Data[val.AttributeFieldName] != null)
-                {
-                    ParseModelValue(Data[val.AttributeFieldName], val);
-                }
-                else
-                {
-                    Data.Add(ParseValue(val));
-                }
-            }
-
-            return base.ParseModel(_context, _transaction); ;
-        }
-
+        
         #region Async
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSetData parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
@@ -153,7 +123,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 tasks.Add(Task.Run(() =>
                 {
-                    var updModel = new MobileViewModel(item, context, transaction);
+                    var updModel = new NavigationViewModel(item, context, transaction);
                     updModel.GenerateCache(item, updModel);
                 }));
 
@@ -170,7 +140,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         }
 
         #region Expands
-        JProperty ParseValue(MixAttributeSetValues.MobileViewModel item)
+        JProperty ParseValue(MixAttributeSetValues.NavigationViewModel item)
         {
             switch (item.DataType)
             {
@@ -188,8 +158,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue));
                 case MixEnums.MixDataType.Reference:
                     JArray arr = new JArray();
-                    foreach (var nav in item.DataNavs)
+                    foreach (var nav in item.DataNavs.OrderBy(d=>d.Priority))
                     {
+                        nav.Data.Data.Add(new JProperty("data", nav.Data.Data));
                         arr.Add(nav.Data.Data);
                     }
                     return (new JProperty(item.AttributeFieldName, arr));
@@ -214,7 +185,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     return (new JProperty(item.AttributeFieldName, item.StringValue));
             }
         }
-        void ParseModelValue(JToken property, MixAttributeSetValues.MobileViewModel item)
+        void ParseModelValue(JToken property, MixAttributeSetValues.NavigationViewModel item)
         {
             switch (item.DataType)
             {
@@ -268,6 +239,64 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             item.StringValue = property.Value<string>();
         }
+
+        
         #endregion
+    }
+    public class Navigation
+    {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+        [JsonProperty("title")]
+        public string Title { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
+        [JsonProperty("menu_items")]
+        public List<MenuItem> MenuItems { get; set; }
+    }
+    public class MenuItem
+    {
+        [JsonProperty("data")]
+        public JObject Data { get; set; }
+        [JsonProperty("id")]
+        public string Id { get; set; }
+        [JsonProperty("title")]
+        public string Title { get; set; }
+        [JsonProperty("uri")]
+        public string Uri { get; set; }
+        [JsonProperty("icon")]
+        public string Icon { get; set; }
+        [JsonProperty("type")]
+        public string Type { get; set; }
+        [JsonProperty("target")]
+        public string Target { get; set; }
+        [JsonProperty("classes")]
+        public string Classes { get; set; }
+        [JsonProperty("description")]
+        public string Description { get; set; }
+        [JsonProperty("isActive")]
+        public bool IsActive { get; set; }
+        [JsonProperty("menu_items")]
+        public List<MenuItem> MenuItems { get; set; }
+        public T Property<T>(string fieldName)
+        {
+            if (Data != null)
+            {
+                var field = Data.GetValue(fieldName);
+                if (field != null)
+                {
+                    return field.Value<T>();
+                }
+                else
+                {
+                    return default;
+                }
+            }
+            else
+            {
+                return default;
+            }
+
+        }
     }
 }

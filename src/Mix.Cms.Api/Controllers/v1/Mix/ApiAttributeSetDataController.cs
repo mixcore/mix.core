@@ -154,7 +154,7 @@ namespace Mix.Cms.Api.Controllers.v1
             int.TryParse(queries.Get("attributeSetId"), out int attributeSetId);
             string attributeSetName = queries.Get("attributeSetName");
             ParseRequestPagingDate(request);
-            
+
             switch (request.Key)
             {
                 case "portal":
@@ -168,6 +168,49 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         Expression<Func<MixAttributeSetData, bool>> predicate = m => (m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName) && m.Specificulture == _lang;
                         var portalResult = await base.GetListAsync<UpdateViewModel>(request, predicate);
+                        return Ok(JObject.FromObject(portalResult));
+                    }
+                case "readData":
+                    if (!string.IsNullOrEmpty(request.Query))
+                    {
+                        var portalResult = await Helper.FilterByKeywordAsync<ReadDataViewModel>(_lang, attributeSetName,
+                        request, request.Keyword, queryDictionary);
+                        return Ok(JObject.FromObject(portalResult));
+                    }
+                    else
+                    {
+                        Expression<Func<MixAttributeSetData, bool>> predicate = m => (m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName) && m.Specificulture == _lang;
+                        var portalResult = await base.GetListAsync<ReadDataViewModel>(request.Key, request, predicate);
+                        return Ok(JObject.FromObject(portalResult));
+                    }
+                case "data":
+                    if (!string.IsNullOrEmpty(request.Query))
+                    {
+                        var result = await Helper.FilterByKeywordAsync<ReadDataViewModel>(_lang, attributeSetName,
+                        request, request.Keyword, queryDictionary);
+                        var parsed = new PaginationModel<JObject>()
+                        {
+                            Items = new List<JObject>(),
+                            TotalItems = result.Data.TotalItems,
+                            TotalPage = result.Data.TotalPage,
+                            PageIndex = result.Data.PageIndex,
+                            PageSize = result.Data.PageSize
+                        };
+                        foreach (var item in result.Data.Items)
+                        {
+                            parsed.Items.Add(item.Data);
+                        }
+                        return Ok(JObject.FromObject(new RepositoryResponse<PaginationModel<JObject>>() { 
+                            IsSucceed = result.IsSucceed,
+                            Data = parsed,
+                            Errors = result.Errors,
+                            Exception = result.Exception
+                        }));
+                    }
+                    else
+                    {
+                        Expression<Func<MixAttributeSetData, bool>> predicate = m => (m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName) && m.Specificulture == _lang;
+                        var portalResult = await base.GetListAsync<ReadDataViewModel>(request.Key, request, predicate);
                         return Ok(JObject.FromObject(portalResult));
                     }
                 default:
@@ -262,5 +305,9 @@ namespace Mix.Cms.Api.Controllers.v1
             
         }
         #endregion Post
+
+        #region Helpers
+       
+        #endregion
     }
 }

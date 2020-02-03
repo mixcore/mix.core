@@ -4,6 +4,7 @@ using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +37,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
         [JsonProperty("dataNavs")]
         public List<MixRelatedAttributeDatas.UpdateViewModel> DataNavs { get; set; }
-
+        [JsonProperty("data")]
+        public JObject Data { get; set; }
         #endregion
         #endregion Properties
 
@@ -62,7 +64,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
             Values = MixAttributeSetValues.UpdateViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-            Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
+            Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => (f.AttributeSetId == AttributeSetId || f.AttributeSetName == AttributeSetName), _context, _transaction).Data;
             foreach (var field in Fields.OrderBy(f=>f.Priority))
             {
                 var val = Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
@@ -70,17 +72,20 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     val = new MixAttributeSetValues.UpdateViewModel(
                         new MixAttributeSetValue() { AttributeFieldId = field.Id }
-                        , _context, _transaction);
-                    val.Field = field;
-                    val.AttributeFieldName = field.Name;
-                    val.StringValue = field.DefaultValue;
-                    val.Priority = field.Priority;
+                        , _context, _transaction)
+                    {
+                        Field = field,
+                        AttributeFieldName = field.Name,
+                        StringValue = field.DefaultValue,
+                        Priority = field.Priority
+                    };
                     Values.Add(val);
                 }
                 val.AttributeSetName = AttributeSetName;
                 val.Priority = field.Priority;
                 val.Field = field;
-                val.DataType = field.DataType;
+                val.DataType = val.Field.DataType;
+                val.AttributeFieldName = val.AttributeFieldName ?? val.Field?.Name;
             }
 
 
@@ -100,15 +105,31 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (result.IsSucceed)
             {
+                // TODO: Double check logic code
+                var addictionalSet = _context.MixAttributeSet.FirstOrDefault(m => m.Name == "sys_additional_field");
                 foreach (var item in Values)
                 {
                     if (result.IsSucceed)
                     {
-                        item.Priority = item.Field?.Priority??item.Priority;
-                        item.DataId = parent.Id;
-                        item.Specificulture = parent.Specificulture;
-                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
+
+                        if (addictionalSet != null && item.Field != null && item.Field.Id == 0)
+                        {
+                            // Add field to addictional_field set
+                            item.Field.AttributeSetId = addictionalSet.Id;
+                            item.Field.AttributeSetName = addictionalSet.Name;
+                            var saveField = await item.Field.SaveModelAsync(false, _context, _transaction);
+                            ViewModelHelper.HandleResult(saveField, ref result);
+                        }
+                        if (result.IsSucceed)
+                        {
+                            item.AttributeFieldId = item.Field.Id;
+                            item.AttributeFieldName = item.Field.Name;
+                            item.Priority = item.Field?.Priority ?? item.Priority;
+                            item.DataId = parent.Id;
+                            item.Specificulture = parent.Specificulture;
+                            var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+                            ViewModelHelper.HandleResult(saveResult, ref result);
+                        }
                     }
                     else
                     {
@@ -129,6 +150,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     if (result.IsSucceed)
                     {
+                        item.Field = Fields.Find(f => f.Name == item.AttributeFieldName);
                         item.Priority = item.Field?.Priority?? item.Priority;
                         item.DataId = parent.Id;
                         item.Specificulture = parent.Specificulture;
@@ -163,6 +185,60 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             return tasks;
         }
         #endregion
-
+        #region Expand
+        JProperty ParseValue(MixAttributeSetValues.UpdateViewModel item)
+        {
+            switch (item.DataType)
+            {
+                case MixEnums.MixDataType.DateTime:
+                    return new JProperty(item.AttributeFieldName, item.DateTimeValue);
+                case MixEnums.MixDataType.Date:
+                    return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
+                case MixEnums.MixDataType.Time:
+                    return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
+                case MixEnums.MixDataType.Double:
+                    return (new JProperty(item.AttributeFieldName, item.DoubleValue));
+                case MixEnums.MixDataType.Boolean:
+                    return (new JProperty(item.AttributeFieldName, item.BooleanValue));
+                case MixEnums.MixDataType.Number:
+                    return (new JProperty(item.AttributeFieldName, item.IntegerValue));
+                case MixEnums.MixDataType.Reference:
+                    //string url = $"/api/v1/odata/en-us/related-attribute-set-data/mobile/parent/set/{Id}/{item.Field.ReferenceId}";
+                    return (new JProperty(item.AttributeFieldName, new JArray()));
+                case MixEnums.MixDataType.Custom:
+                case MixEnums.MixDataType.Duration:
+                case MixEnums.MixDataType.PhoneNumber:
+                case MixEnums.MixDataType.Text:
+                case MixEnums.MixDataType.Html:
+                case MixEnums.MixDataType.MultilineText:
+                case MixEnums.MixDataType.EmailAddress:
+                case MixEnums.MixDataType.Password:
+                case MixEnums.MixDataType.Url:
+                case MixEnums.MixDataType.ImageUrl:
+                case MixEnums.MixDataType.CreditCard:
+                case MixEnums.MixDataType.PostalCode:
+                case MixEnums.MixDataType.Upload:
+                case MixEnums.MixDataType.Color:
+                case MixEnums.MixDataType.Icon:
+                case MixEnums.MixDataType.VideoYoutube:
+                case MixEnums.MixDataType.TuiEditor:
+                default:
+                    return (new JProperty(item.AttributeFieldName, item.StringValue));
+            }
+        }
+        private void ParseData()
+        {
+            Data = new JObject
+            {
+                new JProperty("id", Id),
+                new JProperty("specificulture", Specificulture),
+                new JProperty("createdDateTime", CreatedDateTime)
+            };
+            foreach (var item in Values.OrderBy(v => v.Priority))
+            {
+                Data.Add(ParseValue(item));
+            }
+        }
+        #endregion
     }
 }

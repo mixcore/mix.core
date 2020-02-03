@@ -238,7 +238,7 @@ namespace Mix.Cms.Api.Controllers.v1
             if (theme != null)
             {
                 string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
-                FileRepository.Instance.SaveWebFile(theme, importFolder);
+                FileRepository.Instance.SaveWebFile(theme, theme.FileName, importFolder);
                 data.TemplateAsset = new Lib.ViewModels.FileViewModel(theme, importFolder);
             }
             else
@@ -276,7 +276,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     // MixService.SetConfig<string>("SiteName", _lang, data.Title);
                     MixService.LoadFromDatabase();
                     MixService.SetConfig("InitStatus", 3);
-                    MixService.SetConfig("IsInit", true);
+                    MixService.SetConfig("IsInit", false);
                     MixService.SaveSettings();
                     _ = MixCacheService.RemoveCacheAsync();
                     MixService.Reload();
@@ -291,8 +291,6 @@ namespace Mix.Cms.Api.Controllers.v1
 
         private async Task<RepositoryResponse<bool>> InitStep1Async(InitCmsViewModel model)
         {
-            var result = new RepositoryResponse<bool>();
-
             MixService.SetConnectionString(MixConstants.CONST_CMS_CONNECTION, model.ConnectionString);
             MixService.SetConnectionString(MixConstants.CONST_MESSENGER_CONNECTION, model.ConnectionString);
             MixService.SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, model.ConnectionString);
@@ -300,8 +298,9 @@ namespace Mix.Cms.Api.Controllers.v1
             MixService.SetConfig(MixConstants.CONST_SETTING_DATABASE_PROVIDER, model.DatabaseProvider);
             MixService.SetConfig(MixConstants.CONST_SETTING_LANGUAGE, model.Culture.Specificulture);
 
-            var initResult = await InitCmsService.InitCms(model.SiteName, model.Culture);
-            if (initResult.IsSucceed)
+            var result = await InitCmsService.InitCms(model.SiteName, model.Culture);
+            
+            if (result.IsSucceed)
             {
                 await InitRolesAsync();
                 result.IsSucceed = true;
@@ -318,15 +317,6 @@ namespace Mix.Cms.Api.Controllers.v1
                 //  => save to appSettings
                 MixService.Reload();
                 MixService.SaveSettings();
-                if (initResult.Exception != null)
-                {
-                    result.Errors.Add(initResult.Exception.Message);
-                    result.Exception = initResult.Exception;
-                }
-                foreach (var item in initResult.Errors)
-                {
-                    result.Errors.Add(item);
-                }
             }
             return result;
         }

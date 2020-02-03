@@ -81,7 +81,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     JArray arr = new JArray();
                     foreach (var nav in item.DataNavs)
                     {
-                        nav.Data.Data.Add(new JProperty("id", nav.Data.Id));
+                        //nav.Data.Data.Add(new JProperty("id", nav.Data.Id));
                         arr.Add(nav.Data.Data);
                     }
                     return (new JProperty(item.AttributeFieldName, arr));

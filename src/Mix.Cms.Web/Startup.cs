@@ -1,7 +1,7 @@
+using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +9,6 @@ using Microsoft.Extensions.Hosting;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Identity.Services;
 using Newtonsoft.Json.Serialization;
 
 namespace Mix.Cms.Web
@@ -42,10 +41,12 @@ namespace Mix.Cms.Web
             /* Mix: End Add db contexts */
 
             /* Mix: Inject Services */
-            services.AddTransient<IEmailSender, AuthEmailMessageSender>();
-            services.AddTransient<ISmsSender, AuthSmsMessageSender>();
             services.AddSingleton<MixService>();
             services.AddSignalR();
+            services.AddControllers(mvcOptions =>
+               mvcOptions.EnableEndpointRouting = false);
+
+            services.AddOData();
             /* Mix: End Inject Services */
 
 
@@ -95,7 +96,7 @@ namespace Mix.Cms.Web
         {
             // Mix: Migrate db if already inited
 
-            if (MixService.GetConfig<bool>("IsInit"))
+            if (!MixService.GetConfig<bool>("IsInit"))
             {
                 using (var ctx = new MixCmsContext())
                 {

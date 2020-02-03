@@ -11,22 +11,18 @@
     <Compile Remove="Controllers\v1\Mix\AttributeSetDataValues\**" />
     <Compile Remove="Controllers\v1\Mix\RelatedAttributeDatas\**" />
     <Compile Remove="Controllers\v1\Mix\RelatedAttributeSets\**" />
-    <Compile Remove="Controllers\v1\OData\**" />
     <Content Remove="Controllers\v1\Mix\AttributeSetDatas\**" />
     <Content Remove="Controllers\v1\Mix\AttributeSetDataValues\**" />
     <Content Remove="Controllers\v1\Mix\RelatedAttributeDatas\**" />
     <Content Remove="Controllers\v1\Mix\RelatedAttributeSets\**" />
-    <Content Remove="Controllers\v1\OData\**" />
     <EmbeddedResource Remove="Controllers\v1\Mix\AttributeSetDatas\**" />
     <EmbeddedResource Remove="Controllers\v1\Mix\AttributeSetDataValues\**" />
     <EmbeddedResource Remove="Controllers\v1\Mix\RelatedAttributeDatas\**" />
     <EmbeddedResource Remove="Controllers\v1\Mix\RelatedAttributeSets\**" />
-    <EmbeddedResource Remove="Controllers\v1\OData\**" />
     <None Remove="Controllers\v1\Mix\AttributeSetDatas\**" />
     <None Remove="Controllers\v1\Mix\AttributeSetDataValues\**" />
     <None Remove="Controllers\v1\Mix\RelatedAttributeDatas\**" />
     <None Remove="Controllers\v1\Mix\RelatedAttributeSets\**" />
-    <None Remove="Controllers\v1\OData\**" />
   </ItemGroup>
 
   <ItemGroup>
