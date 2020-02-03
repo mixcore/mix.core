@@ -174,7 +174,15 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         #endregion Common
 
         #region Async
-
+        public override async Task<RepositoryResponse<UpdateViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = await base.SaveModelAsync(isSaveSubModels, _context, _transaction);
+            if (result.IsSucceed)
+            {
+                // Save other themes if not exist
+            }
+            return result;
+        }
         public override RepositoryResponse<MixTemplate> RemoveModel(bool isRemoveRelatedModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = base.RemoveModel(isRemoveRelatedModels, _context, _transaction);

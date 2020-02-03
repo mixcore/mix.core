@@ -68,6 +68,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         }
 
         #endregion Contructors
+
         #region Override
 
         #endregion

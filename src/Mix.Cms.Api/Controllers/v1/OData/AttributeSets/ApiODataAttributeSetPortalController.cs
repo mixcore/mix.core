@@ -35,15 +35,16 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSets
         [EnableQuery]
         [HttpGet, HttpOptions]
         [Route("{id}")]
-        public async Task<ActionResult<UpdateViewModel>> Details(string culture, int id)
+        [Route("by-name/{name}")]
+        public async Task<ActionResult<UpdateViewModel>> Details(string culture, int id, string name)
         {
             string msg = string.Empty;
             Expression<Func<MixAttributeSet, bool>> predicate = null;
             MixAttributeSet model = null;
             // Get Details if has id or else get default
-            if (id > 0)
+            if (id > 0 || !string.IsNullOrEmpty(name))
             {
-                predicate = m => m.Id == id;
+                predicate = m => m.Id == id || m.Name == name;
             }
             else
             {

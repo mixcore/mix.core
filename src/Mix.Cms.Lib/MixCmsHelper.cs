@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
@@ -38,21 +39,8 @@ namespace Mix.Cms.Lib
             {
                 switch (cate.Type)
                 {
-                    case MixPageType.Blank:
-                        foreach (var child in cate.Childs)
-                        {
-                            child.Page.DetailsUrl = Url.RouteUrl("Alias", new { culture, seoName = child.Page.SeoName });
-                        }
-                        break;
-
-                    case MixPageType.StaticUrl:
-                        cate.DetailsUrl = cate.StaticUrl;
-                        break;
-
                     case MixPageType.Home:
                     case MixPageType.ListPost:
-                    case MixPageType.Post:
-                    case MixPageType.Modules:
                     default:
                         cate.DetailsUrl = Url.RouteUrl("Alias", new { culture, seoName = cate.SeoName });
                         break;
@@ -80,21 +68,8 @@ namespace Mix.Cms.Lib
             {
                 switch (cate.Type)
                 {
-                    case MixPageType.Blank:
-                        foreach (var child in cate.Childs)
-                        {
-                            child.Page.DetailsUrl = Url.RouteUrl("Alias", new { culture, seoName = child.Page.SeoName });
-                        }
-                        break;
-
-                    case MixPageType.StaticUrl:
-                        cate.DetailsUrl = cate.StaticUrl;
-                        break;
-
                     case MixPageType.Home:
                     case MixPageType.ListPost:
-                    case MixPageType.Post:
-                    case MixPageType.Modules:
                     default:
                         cate.DetailsUrl = Url.RouteUrl("Alias", new { culture, seoName = cate.SeoName });
                         break;
@@ -156,8 +131,7 @@ namespace Mix.Cms.Lib
                 return false;
             }
             number = number.Replace(",", "");
-
-            return double.TryParse(number, out double t);
+            return double.TryParse(number, out _);
         }
 
         public static double ReversePrice(string formatedPrice)
@@ -245,19 +219,10 @@ namespace Mix.Cms.Lib
 
         public static async System.Threading.Tasks.Task<ViewModels.MixPages.ReadMvcViewModel> GetPageAsync(int id, string culture)
         {
-            var cacheKey = $"vm_{culture}_page_{id}_mvc";
             RepositoryResponse<ViewModels.MixPages.ReadMvcViewModel> getPage = null;
-            //if (MixService.GetConfig<bool>("IsCache"))
-            //{
-            //    getPage = await MixCacheService.GetAsync<RepositoryResponse<ViewModels.MixPages.ReadMvcViewModel>>(cacheKey);
-            //}
             if (getPage == null)
             {
-                getPage = ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModel(m => m.Id == id && m.Specificulture == culture);
-                //if (getPage.IsSucceed)
-                //{
-                //    await MixCacheService.SetAsync(cacheKey, getPage);
-                //}
+                getPage = await ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(m => m.Id == id && m.Specificulture == culture);
             }
 
             return getPage.Data;
@@ -290,10 +255,42 @@ namespace Mix.Cms.Lib
 
         }
 
-        public static async System.Threading.Tasks.Task<JObject> GetNavigation(string name, string culture)
+        public static async System.Threading.Tasks.Task<ViewModels.MixAttributeSetDatas.Navigation> GetNavigation(string name, string culture, IUrlHelper Url)
         {
-            var navs = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.NavigationViewModel>(culture, "navigation", "equal", "name", name);
-            return navs.Data.FirstOrDefault()?.Data;
+            var navs = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.NavigationViewModel>(culture, MixConstants.AttributeSetName.NAVIGATION, "equal", "name", name);            
+            var nav = navs.Data.FirstOrDefault()?.Nav;
+            string action = Url.ActionContext.ActionDescriptor.RouteValues["action"];
+            string activePath = string.Empty;
+            switch (action)
+            {
+                case "Page":                    
+                case "Post":
+                    string seoName = Url.ActionContext.RouteData.Values["seoName"].ToString();
+                    string id = Url.ActionContext.RouteData.Values["id"].ToString();
+                    activePath = $"/{culture}/post/{id}/{seoName}";
+                    break;
+                case "Alias":
+                    string alias = Url.ActionContext.HttpContext.Request.Query["alias"].ToString();
+                    activePath = $"/{culture}/{alias}";
+                    break;
+            }
+            if (nav != null && !string.IsNullOrEmpty(activePath))
+            {
+                foreach (var cate in nav.MenuItems)
+                {
+                    cate.IsActive = cate.Property<string>("uri") == activePath;
+
+                    foreach (var item in cate.MenuItems)
+                    {
+                        item.IsActive = item.Property<string>("uri") == activePath;
+                        cate.IsActive = cate.IsActive || item.IsActive;
+                    }
+                }
+            }
+
+            return nav;
         }
+
+        
     }
 }

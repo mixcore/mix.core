@@ -14,10 +14,44 @@
                 {
                     "title": "Create New",
                     "icon": "mi mi-Add",
-                    "path": "/portal/navigation/create?attributeName=navigation&attributeSetId=2&dataId=default"
+                    "path": "/portal/navigation/create?attributeSetName=sys_navigation&&dataId=default"
                 },
                 {
-                    "path": "/portal/navigation/list?attributeSetId=2&attributeSetName=navigation",
+                    "path": "/portal/navigation/list?attributeSetName=sys_navigation",
+                    "title": "List",
+                    "icon": "mi mi-List"
+                }
+            ]
+        },
+        {
+            "title": "Categories",
+            "path": "#",
+            "icon": "mi mi-Relationship",
+            "subMenus": [
+                {
+                    "title": "Create New",
+                    "icon": "mi mi-Add",
+                    "path": "/portal/navigation/create?attributeSetName=sys_category&&dataId=default"
+                },
+                {
+                    "path": "/portal/attribute-set-data/list?attributeSetName=sys_category",
+                    "title": "List",
+                    "icon": "mi mi-List"
+                }
+            ]
+        },
+        {
+            "title": "Tags",
+            "path": "#",
+            "icon": "mi mi-Relationship",
+            "subMenus": [
+                {
+                    "title": "Create New",
+                    "icon": "mi mi-Add",
+                    "path": "/portal/navigation/create?attributeSetName=sys_tag&&dataId=default"
+                },
+                {
+                    "path": "/portal/attribute-set-data/list?attributeSetName=sys_tag",
                     "title": "List",
                     "icon": "mi mi-List"
                 }
@@ -135,13 +169,8 @@
             "title": "Files",
             "path": "#",
             "icon": "mi mi-FileExplorer",
-            "isHiden": true,
+            "isHiden": false,
             "subMenus": [
-                {
-                    "title": "Create New",
-                    "icon": "mi mi-Add",
-                    "path": "/portal/file/create"
-                },
                 {
                     "path": "/portal/file/list",
                     "title": "List",
@@ -432,6 +461,11 @@
                     "path": "/portal/theme/details/:id",
                     "templatePath": "/app/app-portal/pages/theme/details.html",
                     "controller": "ThemeController"
+                },
+                {
+                    "path": "/portal/theme/export/:id",
+                    "templatePath": "/app/app-portal/pages/theme/export.html",
+                    "controller": "ThemeController"
                 }
             ]
         },
@@ -571,7 +605,7 @@
             ]
         },
         {
-            "cate": "language",
+            "cate": "localize",
             "items": [
                 {
                     "path": "/portal/localize/create",
@@ -587,6 +621,26 @@
                     "path": "/portal/localize/details/:id",
                     "templatePath": "/app/app-portal/pages/language/details.html",
                     "controller": "LanguageController"
+                }
+            ]
+        },
+        {
+            "cate": "language",
+            "items": [
+                {
+                    "path": "/portal/language/create",
+                    "templatePath": "/app/app-portal/pages/culture/details.html",
+                    "controller": "CultureController"
+                },
+                {
+                    "path": "/portal/language/list",
+                    "templatePath": "/app/app-portal/pages/culture/list.html",
+                    "controller": "CultureController"
+                },
+                {
+                    "path": "/portal/language/details/:id",
+                    "templatePath": "/app/app-portal/pages/culture/details.html",
+                    "controller": "CultureController"
                 }
             ]
         },

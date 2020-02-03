@@ -55,7 +55,7 @@ namespace Mix.Cms.Lib.Services
 
                     var isInit = MixService.GetConfig<bool>("IsInit");
 
-                    if (!isInit)
+                    if (isInit)
                     {
 
                         /**
@@ -66,32 +66,32 @@ namespace Mix.Cms.Lib.Services
                         /**
                          * Init System Pages
                          */
-                        if (isSucceed)
-                        {
-                            InitPages(culture.Specificulture, context, transaction);
-                            isSucceed = (await context.SaveChangesAsync().ConfigureAwait(false)) > 0;
-                        }
-                        else
-                        {
-                            result.Errors.Add("Cannot init Pages");
-                        }
+                        //if (isSucceed && context.MixPage.Count() == 0)
+                        //{
+                        //    InitPages(culture.Specificulture, context, transaction);
+                        //    isSucceed = (await context.SaveChangesAsync().ConfigureAwait(false)) > 0;
+                        //}
+                        //else
+                        //{
+                        //    result.Errors.Add("Cannot init Pages");
+                        //}
 
-                        /**
-                         * Init System Positions
-                         */
-                        if (isSucceed)
-                        {
-                            isSucceed = await InitPositionsAsync(context, transaction);
-                        }
-                        else
-                        {
-                            result.Errors.Add("Cannot init Positions");
-                        }
+                        ///**
+                        // * Init System Positions
+                        // */
+                        //if (isSucceed && context.MixPosition.Count() == 0)
+                        //{
+                        //    isSucceed = await InitPositionsAsync(context, transaction);
+                        //}
+                        //else
+                        //{
+                        //    result.Errors.Add("Cannot init Positions");
+                        //}
 
                         /**
                          * Init System Configurations
                          */
-                        if (isSucceed)
+                        if (isSucceed && context.MixConfiguration.Count() == 0)
                         {
                             var saveResult = await InitConfigurationsAsync(siteName, culture.Specificulture, context, transaction);
                             isSucceed = saveResult.IsSucceed;
@@ -101,18 +101,18 @@ namespace Mix.Cms.Lib.Services
                             result.Errors.Add("Cannot init Configurations");
                         }
 
-                        /**
-                        * Init System Attribute Sets
-                        */
-                        if (isSucceed)
-                        {
-                            var saveResult = await InitAttributeSetsAsync(siteName, culture.Specificulture, context, transaction);
-                            isSucceed = saveResult.IsSucceed;
-                        }
-                        else
-                        {
-                            result.Errors.Add("Cannot init Attribute Sets");
-                        }
+                        ///**
+                        //* Init System Attribute Sets
+                        //*/
+                        //if (isSucceed && context.MixAttributeField.Count() == 0)
+                        //{
+                        //    var saveResult = await InitAttributeSetsAsync(siteName, culture.Specificulture, context, transaction);
+                        //    isSucceed = saveResult.IsSucceed;
+                        //}
+                        //else
+                        //{
+                        //    result.Errors.Add("Cannot init Attribute Sets");
+                        //}
                     }
                     if (isSucceed)
                     {
@@ -184,7 +184,7 @@ namespace Mix.Cms.Lib.Services
         /// <param name="_context"></param>
         /// <param name="_transaction"></param>
         /// <returns></returns>
-        public static async Task<RepositoryResponse<bool>> InitAttributeSetsAsync(string siteName, string specifiCulture, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public static async Task<RepositoryResponse<bool>> InitAttributeSetsAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             /* Init Configs */
 
@@ -249,7 +249,6 @@ namespace Mix.Cms.Lib.Services
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            var getThemes = ViewModels.MixThemes.InitViewModel.Repository.GetModelList(_context: context, _transaction: transaction);
             if (!context.MixTheme.Any())
             {
                 ViewModels.MixThemes.InitViewModel theme = new ViewModels.MixThemes.InitViewModel(new MixTheme()
@@ -303,7 +302,7 @@ namespace Mix.Cms.Lib.Services
         }
         protected static void InitPages(string culture, MixCmsContext context, IDbContextTransaction transaction)
         {
-            /* Init Languages */
+            /* Init Pages */
             var pages = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, "data", true, "{}");
             var obj = JObject.Parse(pages.Content);
             var arrPage = obj["data"].ToObject<List<MixPage>>();
@@ -330,18 +329,6 @@ namespace Mix.Cms.Lib.Services
                 context.Entry(alias).State = EntityState.Added;
             }
         }
-        public static async Task<bool> InitPositionsAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            /* Init Positions */
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            var positions = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_POSITIONS, "data", true, "{}");
-            var obj = JObject.Parse(positions.Content);
-            var arrPosition = obj["data"].ToObject<List<MixPosition>>();
-            var result = await ViewModels.MixPositions.ReadViewModel.ImportPositions(arrPosition, context, transaction);
-            UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
-            return result.IsSucceed;
-        }
-
-
+        
     }
 }

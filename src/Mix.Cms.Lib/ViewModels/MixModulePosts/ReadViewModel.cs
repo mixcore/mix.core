@@ -41,7 +41,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
         #region Views
         [JsonProperty("post")]
         public MixPosts.ReadListItemViewModel Post { get; set; }
-
+        [JsonProperty("module")]
+        public MixModules.ReadListItemViewModel Module { get; set; }
         #endregion Views
 
         #region overrides
@@ -54,6 +55,14 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
             if (getPost.IsSucceed)
             {
                 Post = getPost.Data;
+            }
+
+            var getModule = MixModules.ReadListItemViewModel.Repository.GetSingleModel(p => p.Id == ModuleId && p.Specificulture == Specificulture
+               , _context: _context, _transaction: _transaction
+           );
+            if (getModule.IsSucceed)
+            {
+                Module = getModule.Data;
             }
         }
 

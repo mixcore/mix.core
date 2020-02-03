@@ -161,8 +161,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             {
                 result = await CreateDefaultThemeTemplatesAsync(_context, _transaction);
             }
-
-            result = await ActivedThemeAsync(_context, _transaction);
+            if (result.IsSucceed)
+            {
+                result = await ActivedThemeAsync(_context, _transaction);
+            }
 
             return result;
         }

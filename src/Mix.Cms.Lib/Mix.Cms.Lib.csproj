@@ -2,17 +2,23 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <UserSecretsId>5e53bcce-df59-411e-8aca-95fd87811b6d</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Helpers\AesEncryptionHelper.cs" />
     <Compile Remove="Helpers\RSAEncryptionHelper.cs" />
+    <Compile Remove="ViewModels\MixAttributeSetDatas\ExportViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="ViewModels\MixAttributeSetDatas\ExportViewModel.cs" />
   </ItemGroup>
 
   
   <ItemGroup>
     <PackageReference Include="CommonMark.NET" Version="0.15.1" />
-    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.0">
       <PrivateAssets>all</PrivateAssets>
@@ -22,10 +28,7 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\..\..\mix.heart\src\Mix.Heart\Mix.Heart.csproj" />
   </ItemGroup>

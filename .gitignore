@@ -257,3 +257,7 @@ src/_MixCore.sln
 src/Mix.Cms.Web/logs/
 
 src/Mix.Cms.Web.old/
+
+src/Mix.Cms.Web/wwwroot/edms/
+
+src/portal-app/

@@ -141,11 +141,7 @@ namespace Mix.Cms.Lib.ViewModels
         {
             get
             {
-                _webPath = CommonHelper.GetFullPath(new string[] {
-                     MixService.GetConfig<string>("Domain"),
-                    FileFolder,
-                    $"{Filename}{Extension}"
-                });
+                _webPath = FullPath.Replace("wwwroot", string.Empty);
                 return _webPath;
             }
             set

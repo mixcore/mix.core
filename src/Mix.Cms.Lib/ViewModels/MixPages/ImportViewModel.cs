@@ -115,7 +115,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("urlAliases")]
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
-
+        [JsonProperty("isExportData")]
+        public bool IsExportData { get; set; }
+        [JsonProperty("themeName")]
+        public string ThemeName { get; set; } = "default";
         #endregion Views
 
         #endregion Properties
@@ -136,11 +139,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Cultures = Helper.LoadCultures(Id, Specificulture, _context, _transaction);
-            this.ModuleNavs = GetModuleNavs(_context, _transaction);
-            //this.ParentNavs = GetParentNavs(_context, _transaction);
-            //this.ChildNavs = GetChildNavs(_context, _transaction);
-            this.UrlAliases = GetAliases(_context, _transaction);
+            //Cultures = Helper.LoadCultures(Id, Specificulture, _context, _transaction);
+            //this.ModuleNavs = GetModuleNavs(_context, _transaction);
+            ////this.ParentNavs = GetParentNavs(_context, _transaction);
+            ////this.ChildNavs = GetChildNavs(_context, _transaction);
+            //this.UrlAliases = GetAliases(_context, _transaction);
         }
 
         #region Async
@@ -165,7 +168,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             // End Save Alias
 
             //Save Module Navigations
-            if (result.IsSucceed)
+            if (result.IsSucceed && ModuleNavs!=null)
             {
                 foreach (var item in ModuleNavs)
                 {
@@ -177,11 +180,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                         item.Module.Specificulture = parent.Specificulture;
                         if (!string.IsNullOrEmpty(item.Image))
                         {
-                            item.Image = item.Image.Replace("content/templates/default", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", parent.Specificulture)}");
+                            item.Image = item.Image.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", parent.Specificulture)}");
                         }
                         if (!string.IsNullOrEmpty(item.Module.Image))
                         {
-                            item.Module.Image = item.Module.Image.Replace("content/templates/default", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", parent.Specificulture)}");
+                            item.Module.Image = item.Module.Image.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", parent.Specificulture)}");
                         }
                         if (!string.IsNullOrEmpty(item.Module.Thumbnail))
                         {

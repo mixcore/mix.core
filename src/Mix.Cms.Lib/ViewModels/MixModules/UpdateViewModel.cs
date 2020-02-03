@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -379,6 +380,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
             var result = new RepositoryResponse<bool> { IsSucceed = true };
 
+
             var saveViewResult = await View.SaveModelAsync(true, _context, _transaction);
             ViewModelHelper.HandleResult(saveViewResult, ref result);
 
@@ -404,12 +406,12 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         private async Task<RepositoryResponse<bool>> SaveAttributeAsync(int id, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == "module", context, transaction);
+            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_MODULE, context, transaction);
             if (getAttrs.IsSucceed)
             {
                 Attributes = getAttrs.Data.Fields;
                 AttributeData.AttributeSetId = getAttrs.Data.Id;
-                AttributeData.AttributeSetName = getAttrs.Data.Name; 
+                AttributeData.AttributeSetName = getAttrs.Data.Name;
                 AttributeData.Data.AttributeSetId = getAttrs.Data.Id;
                 AttributeData.Data.AttributeSetName = getAttrs.Data.Name;
                 AttributeData.ParentId = id.ToString();
@@ -429,15 +431,31 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
         {
             var tasks = new List<Task>();
+            tasks.Add(Task.Run(() =>
+            {
+                AttributeData.Data.RemoveCache(AttributeData.Data.Model, context, transaction);
+            }));
+            foreach (var item in AttributeData.Data.Values)
+            {
+                tasks.Add(Task.Run(() =>
+                {
+                    item.RemoveCache(item.Model, context, transaction);
+                }));
+
+            }
             // Remove parent Pages
-            var relatedPages = context.MixPage.Where(m => m.MixPageModule
-                 .Any(d => d.Specificulture == Specificulture && (d.ModuleId == Id)));
+            var relatedPages = context.MixPageModule.Include(m => m.MixPage).Where(d => d.Specificulture == Specificulture && (d.ModuleId == Id))
+                .AsEnumerable();
             foreach (var item in relatedPages)
             {
                 tasks.Add(Task.Run(() =>
                 {
-                    var data = new MixPages.ReadViewModel(item, context, transaction);
-                    data.RemoveCache(item, context, transaction);
+                    MixPageModules.ReadMvcViewModel.Repository.RemoveCache(item, context, transaction);
+                }));
+
+                tasks.Add(Task.Run(() =>
+                {
+                    MixPages.ReadViewModel.Repository.RemoveCache(item.MixPage, context, transaction);
                 }));
 
             }
@@ -445,14 +463,14 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             return tasks;
         }
 
-    #endregion Async
+        #endregion Async
 
 
 
-    #endregion Overrides
+        #endregion Overrides
 
         #region Expand
-    private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
+        private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             LoadAttributeData(_context, _transaction);
             LoadAttributeFields(_context, _transaction);
@@ -479,7 +497,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
             if (string.IsNullOrEmpty(AttributeData.Id))
             {
-                var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == "module", context, transaction);
+                var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_MODULE, context, transaction);
                 if (getAttrs.IsSucceed)
                 {
                     Attributes = getAttrs.Data.Fields;
@@ -490,12 +508,11 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 Attributes = new List<MixAttributeFields.UpdateViewModel>();
                 foreach (var item in AttributeData.Data.Values)
                 {
-                    Attributes.Add(new MixAttributeFields.UpdateViewModel()
+                    if (item.Field != null)
                     {
-                        Name = item.AttributeFieldName,
-                        DataType = item.DataType,
-                        Priority = item.Priority
-                    });
+                        Attributes.Add(item.Field);
+                    }
+
                 }
             }
         }
@@ -522,7 +539,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 }
                 );
             }
-            
+
         }
 
         public void LoadData(int? postId = null, int? productId = null, int? pageId = null

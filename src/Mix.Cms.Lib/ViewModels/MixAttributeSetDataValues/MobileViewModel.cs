@@ -64,12 +64,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
         public MobileViewModel() : base()
         {
-            IsCache = false;
+            //IsCache = false;
+            //Repository.IsCache = false;
         }
 
         public MobileViewModel(MixAttributeSetValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
-            IsCache = false;
+            //IsCache = false;
+            //Repository.IsCache = false;
         }
 
         #endregion Contructors

@@ -997,7 +997,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("CssClass")
-                        .HasMaxLength(50);
+                        .HasMaxLength(250);
 
                     b.Property<string>("Excerpt");
 

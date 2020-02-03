@@ -103,14 +103,9 @@
         #region Types
         public enum MixPageType
         {
-            Blank = 0,
-            Post = 1,
+            Article = 1,
             ListPost = 2,
             Home = 3,
-            StaticUrl = 4,
-            Modules = 5,
-            ListProduct = 6,
-            Gallery = 7,
             System = 8
         }
 

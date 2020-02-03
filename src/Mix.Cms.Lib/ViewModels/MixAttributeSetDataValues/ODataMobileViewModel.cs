@@ -73,6 +73,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         }
 
         #endregion Contructors
+
         #region Override
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

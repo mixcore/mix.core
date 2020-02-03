@@ -40,16 +40,17 @@ namespace Mix.Cms.Api.Controllers.v1
         // GET api/attribute-sets/id
         [HttpGet, HttpOptions]
         [Route("details/{id}/{viewType}")]
+        [Route("details/{name}/{viewType}")]
         [Route("details/{viewType}")]
-        public async Task<ActionResult<JObject>> Details(string viewType, int? id)
+        public async Task<ActionResult<JObject>> Details(string viewType, string name, int? id)
         {
             string msg = string.Empty;
             switch (viewType)
             {
                 case "portal":
-                    if (id.HasValue)
+                    if (id.HasValue || !string.IsNullOrEmpty(name))
                     {
-                        Expression<Func<MixAttributeSet, bool>> predicate = model => model.Id == id;
+                        Expression<Func<MixAttributeSet, bool>> predicate = model => (model.Id == id || model.Name == name);
                         var portalResult = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_{id}", predicate);
                         return Ok(JObject.FromObject(portalResult));
                     }
@@ -66,9 +67,9 @@ namespace Mix.Cms.Api.Controllers.v1
                         return Ok(JObject.FromObject(result));
                     }
                 default:
-                    if (id.HasValue)
+                    if (id.HasValue || !string.IsNullOrEmpty(name))
                     {
-                        Expression<Func<MixAttributeSet, bool>> predicate = model => model.Id == id;
+                        Expression<Func<MixAttributeSet, bool>> predicate = model => model.Id == id || model.Name == name;
                         var result = await base.GetSingleAsync<ReadViewModel>($"{viewType}_{id}", predicate);
                         return Ok(JObject.FromObject(result));
                     }

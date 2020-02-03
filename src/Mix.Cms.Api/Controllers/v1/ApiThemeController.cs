@@ -77,6 +77,8 @@ namespace Mix.Cms.Api.Controllers.v1
             string tempPath = $"wwwroot/Exports/Themes/{getTheme.Data.Name}/temp";
             string outputPath = $"Exports/Themes/{getTheme.Data.Name}";
             data.ThemeName = getTheme.Data.Name;
+            data.Specificulture = _lang;
+            data.ProcessSelectedExportDataAsync();
             string filename = $"schema";
             var file = new FileViewModel()
             {
@@ -199,13 +201,13 @@ namespace Mix.Cms.Api.Controllers.v1
             if (assets != null)
             {
                 data.Asset = new Lib.ViewModels.FileViewModel(assets, data.AssetFolder);
-                FileRepository.Instance.SaveWebFile(assets, data.AssetFolder);
+                FileRepository.Instance.SaveWebFile(assets, assets.FileName, data.AssetFolder);
             }
             if (theme != null)
             {
                 string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
                 data.TemplateAsset = new Lib.ViewModels.FileViewModel(theme, importFolder);
-                FileRepository.Instance.SaveWebFile(theme, importFolder);
+                FileRepository.Instance.SaveWebFile(theme, theme.FileName, importFolder);
             }
 
 

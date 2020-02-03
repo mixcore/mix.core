@@ -25,33 +25,59 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public static async Task<RepositoryResponse<bool>> ImportData(
             string culture, Lib.ViewModels.MixAttributeSets.ReadViewModel attributeSet, IFormFile file)
         {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(null, null, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            try
+            using(var context = new MixCmsContext())
             {
-                List<ImportViewModel> data = LoadFileData(culture, attributeSet, file);
-                foreach (var item in data)
+                var result = new RepositoryResponse<bool>() { IsSucceed = true };
+                try
                 {
-                    var saveResult = await item.SaveModelAsync(true, context, transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-                }
-                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                transaction.Rollback();
-                return UnitOfWorkHelper<MixCmsContext>.HandleException<bool>(ex, isRoot, transaction);
-            }
-            finally
-            {
-                if (isRoot)
-                {
-                    //if current Context is Root
-                    context.Dispose();
-                }
-            }
+                    List<ImportViewModel> data = LoadFileData(culture, attributeSet, file);
+                    
+                    var fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == attributeSet.Id).Data;
+                    var priority = ImportViewModel.Repository.Count(m => m.AttributeSetName == attributeSet.Name && m.Specificulture == culture).Data;
+                    foreach (var item in data)
+                    {
+                        priority += 1;
 
+                        //item.Model.Id = Guid.NewGuid().ToString();
+                        //item.Model.Specificulture = culture;
+                        //item.Model.CreatedDateTime = DateTime.UtcNow;
+                        //item.Model.Priority = context.MixAttributeSetData.Count() + 1;
+                        item.Priority = priority;
+                        item.Fields = fields;
+                        item.AttributeSetName = attributeSet.Name;
+                        item.ParseModel();
+                        context.Entry(item.Model).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                        foreach (var val in item.Values)
+                        {
+                            val.DataId = item.Id;
+                            val.Specificulture = culture;
+                            val.ParseModel();
+                            //val.Model.DataId = item.Id;
+                            //val.Model.CreatedDateTime = DateTime.UtcNow;
+                            //val.Model.Specificulture = culture;
+                            //val.Model.Id = Guid.NewGuid().ToString();                        
+                            context.Entry(val.Model).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                        }
+                    }
+                    int tmp = await context.SaveChangesAsync();
+                    //if (result.IsSucceed)
+                    //{
+                    //    foreach (var item in data)
+                    //    {
+                    //       item.GenerateCache(item.Model, item);
+                    //    }
+                    //}
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    result.IsSucceed = false;
+                    result.Exception = ex;
+                    result.Errors.Add(ex.Message);
+                    return result;
+                }
+
+            }            
         }
         private static List<ImportViewModel> LoadFileData(
            string culture, Lib.ViewModels.MixAttributeSets.ReadViewModel attributeSet, IFormFile file)
@@ -185,7 +211,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     IsSucceed = true,
                     Data = new PaginationModel<TView>()
                 };
-                var filterType = queryDictionary.First(q => q.Key == "filterType");
+                var filterType = queryDictionary.FirstOrDefault(q => q.Key == "filterType");
                 var tasks = new List<Task<RepositoryResponse<TView>>>();
                 if (queryDictionary != null)
                 {
