@@ -140,6 +140,19 @@
             Service = 5
         }
 
+        public enum MixRelatedType
+        {
+            PageToPage = 0,
+            PageToPost = 1,
+            PageToModule = 2,
+            PageToData = 3,
+            ModuleToPost = 4,
+            ModuleToPage = 5,
+            ModuleToData = 6,
+            PostToData = 7,
+            DataToData = 8
+        }
+
         public enum MixDataType
         {
             Custom = 0,
