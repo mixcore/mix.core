@@ -3,7 +3,6 @@ using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Data.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Hub;
@@ -25,6 +24,7 @@ using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 using Mix.Cms.Lib.Extensions;
 using Mix.Heart.Helpers;
+using Microsoft.OData;
 
 namespace Mix.Cms.Api.Controllers.v1.OData
 {
