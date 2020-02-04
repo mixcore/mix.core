@@ -89,8 +89,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
-
             modelBuilder.Entity<MixAttributeField>(entity =>
             {
                 entity.ToTable("mix_attribute_field");
@@ -206,9 +204,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => e.DataId);
 
-                entity.Property(e => e.Id)
-                    .HasMaxLength(50)
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.AttributeFieldName)
                     .IsRequired()
@@ -244,9 +240,7 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.HasIndex(e => e.ExpiredDateTime)
                     .HasName("Index_ExpiresAtTime");
 
-                entity.Property(e => e.Id)
-                    .HasMaxLength(250)
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasMaxLength(250);
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
@@ -258,8 +252,6 @@ namespace Mix.Cms.Lib.Models.Cms
             modelBuilder.Entity<MixCmsUser>(entity =>
             {
                 entity.ToTable("mix_cms_user");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.Address).HasMaxLength(450);
 
@@ -584,9 +576,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => new { e.ModuleId, e.Specificulture });
 
-                entity.Property(e => e.Id)
-                    .HasMaxLength(50)
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
@@ -654,9 +644,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => e.DataId);
 
-                entity.Property(e => e.Id)
-                    .HasMaxLength(50)
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.AttributeName)
                     .IsRequired()
@@ -892,9 +880,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => new { e.PageId, e.Specificulture });
 
-                entity.Property(e => e.Id)
-                    .HasMaxLength(50)
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
@@ -946,9 +932,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => e.DataId);
 
-                entity.Property(e => e.Id)
-                    .HasMaxLength(50)
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.AttributeName)
                     .IsRequired()
@@ -1101,9 +1085,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.ToTable("mix_parameter");
 
-                entity.Property(e => e.Name)
-                    .HasMaxLength(50)
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.Value).IsRequired();
             });
@@ -1265,9 +1247,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => new { e.PostId, e.Specificulture });
 
-                entity.Property(e => e.Id)
-                    .HasMaxLength(50)
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
@@ -1317,9 +1297,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => e.DataId);
 
-                entity.Property(e => e.Id)
-                    .HasMaxLength(50)
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.AttributeName)
                     .IsRequired()
@@ -1460,6 +1438,25 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasConstraintName("FK_mix_related_attribute_set_mix_attribute_set");
             });
 
+            modelBuilder.Entity<MixRelatedData>(entity =>
+            {
+                entity.HasKey(e => new { e.Id, e.Type, e.Specificulture, e.ParentId, e.ParentType });
+
+                entity.ToTable("mix_related_data");
+
+                entity.Property(e => e.Id).HasMaxLength(50);
+
+                entity.Property(e => e.Specificulture).HasMaxLength(10);
+
+                entity.Property(e => e.ParentId).HasMaxLength(50);
+
+                entity.Property(e => e.AttributeSetName).HasMaxLength(250);
+
+                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Description).HasMaxLength(450);
+            });
+
             modelBuilder.Entity<MixRelatedPost>(entity =>
             {
                 entity.HasKey(e => new { e.SourceId, e.DestinationId, e.Specificulture });
@@ -1584,6 +1581,10 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasForeignKey(d => d.Specificulture)
                     .HasConstraintName("FK_Mix_Url_Alias_Mix_Culture");
             });
+
+            OnModelCreatingPartial(modelBuilder);
         }
+
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
