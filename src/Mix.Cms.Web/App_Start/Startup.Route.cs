@@ -40,32 +40,34 @@ namespace Mix.Cms.Web
             //$"Rewritten or Redirected Url: " +
             //$"{context.Request.Path + context.Request.QueryString}"));
             }
+            app.UseEndpoints(routes =>
+            {
+                routes.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{alias}");
+                routes.MapControllerRoute(
+                   name: "page",
+                   pattern: "{controller=Page}/{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{seoName}");
+                routes.MapControllerRoute(
+                    name: "file",
+                    pattern: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/portal/file");
+                routes.MapControllerRoute(
+                    name: "post",
+                    pattern: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/post/{id}/{seoName}");
+
+                
+
+
+            });
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
-                    name: "Alias",
-                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{seoName}");
-                routes.MapRoute(
-                   name: "Page",
-                   template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{seoName}");
-                routes.MapRoute(
-                    name: "File",
-                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/portal/file");
-                routes.MapRoute(
-                    name: "Post",
-                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/post/{id}/{seoName}");
-                routes.MapRoute( 
-                    name: "Module",
-                    template: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/md/{id}/{seoName}");
-
                 // uncomment the following line to Work-around for #1175 in beta1
                 routes.EnableDependencyInjection();
 
-                // and this line to enable OData query option, for example $filter
-                routes.Select().Expand().Filter().OrderBy().MaxTop(100).Count();
-                //routes.MapODataServiceRoute("ODataRoute", "odata", builder.GetEdmModel());
+                //and this line to enable OData query option, for example $filter
 
-
+               routes.Select().Expand().Filter().OrderBy().MaxTop(100).Count();
+               //routes.MapODataServiceRoute("ODataRoute", "odata", builder.GetEdmModel());
             });
         }
 

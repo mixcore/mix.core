@@ -184,20 +184,19 @@ namespace Mix.Cms.Api.Controllers.v1
                         && (!request.ToDate.HasValue
                             || (model.CreatedDateTime <= request.ToDate.Value)
                         );
-            string key = $"{request.Query}_{request.PageSize}_{request.PageIndex}";
             switch (request.Key)
             {
                 case "mvc":
-                    var mvcResult = await base.GetListAsync<ReadMvcViewModel>(key, request, predicate);
+                    var mvcResult = await base.GetListAsync<ReadMvcViewModel>(request, predicate);
 
                     return Ok(JObject.FromObject(mvcResult));
                 case "portal":
-                    var portalResult = await base.GetListAsync<UpdateViewModel>(key, request, predicate);
+                    var portalResult = await base.GetListAsync<UpdateViewModel>(request, predicate);
 
                     return Ok(JObject.FromObject(portalResult));
                 default:
 
-                    var listItemResult = await base.GetListAsync<ReadListItemViewModel>(key, request, predicate);
+                    var listItemResult = await base.GetListAsync<ReadListItemViewModel>(request, predicate);
                     return JObject.FromObject(listItemResult);
             }
         }

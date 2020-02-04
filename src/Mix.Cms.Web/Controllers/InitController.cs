@@ -13,20 +13,7 @@ namespace Mix.Cms.Web.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IApiDescriptionGroupCollectionProvider _apiExplorer;
-        IApplicationLifetime _lifetime;
-        public InitController(IHostingEnvironment env,
-            IMemoryCache memoryCache,
-             UserManager<ApplicationUser> userManager,
-             IApiDescriptionGroupCollectionProvider apiExplorer,
-            IHttpContextAccessor accessor,
-            IApplicationLifetime lifetime
-            ) : base(env, memoryCache, accessor)
-        {
-
-            this._userManager = userManager;
-            _apiExplorer = apiExplorer;
-            _lifetime = lifetime;
-        }
+        
         [HttpGet]
         [Route("init")]
         [Route("init/{page}")]

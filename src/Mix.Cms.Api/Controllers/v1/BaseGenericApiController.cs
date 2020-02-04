@@ -236,7 +236,7 @@ namespace Mix.Cms.Api.Controllers.v1
             };
 
         }
-        protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync<TView>(string key, RequestPaging request, Expression<Func<TModel, bool>> predicate = null, TModel model = null)
+        protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync<TView>(RequestPaging request, Expression<Func<TModel, bool>> predicate = null, TModel model = null)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
 
