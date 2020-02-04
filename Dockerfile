@@ -22,7 +22,7 @@ RUN dotnet publish Mix.Cms.Web/Mix.Cms.Web.csproj -c Release
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2 AS runtime
 WORKDIR /app
-COPY --from=node-env /app/Mix.Cms.Web/wwwroot .
+# COPY --from=node-env /app/Mix.Cms.Web/wwwroot .
 COPY --from=build-env /app/Mix.Cms.Web/bin/Release/netcoreapp2.2/publish .
 ENTRYPOINT ["dotnet", "Mix.Cms.Web.dll"]
 
