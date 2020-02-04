@@ -1,74 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-    <DockerTargetOS>Windows</DockerTargetOS>
-    <UserSecretsId>206d0599-2e80-42e1-b45e-a479cb90baa3</UserSecretsId>
-    <RuntimeFrameworkVersion>2.2.3</RuntimeFrameworkVersion>
-    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
-    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
-    <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
-    <MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
-    <MvcRazorCompileOnBuild>false</MvcRazorCompileOnBuild>
-    <GenerateProgramFile>false</GenerateProgramFile>
-    <PublishWithAspNetCoreTargetManifest>False</PublishWithAspNetCoreTargetManifest>
-    
+    <TargetFramework>netcoreapp3.1</TargetFramework>    
+    <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
   </PropertyGroup>
-  
+
   <ItemGroup>
-    <Compile Remove="app-client\shared\controllers\**" />
-    <Compile Remove="app-portal\**" />
-    <Compile Remove="app\**" />
-    <Compile Remove="Cache\**" />
-    <Compile Remove="Views\Shared\Templates\**" />
-    <Compile Remove="wwwroot\content\**" />
-    <Content Remove="app-client\shared\controllers\**" />
-    <Content Remove="app-portal\**" />
-    <Content Remove="app\**" />
-    <Content Remove="Cache\**" />
-    <Content Remove="Views\Shared\Templates\**" />
-    <Content Remove="wwwroot\content\**" />
-    <EmbeddedResource Remove="app-client\shared\controllers\**" />
-    <EmbeddedResource Remove="app-portal\**" />
-    <EmbeddedResource Remove="app\**" />
-    <EmbeddedResource Remove="Cache\**" />
-    <EmbeddedResource Remove="Views\Shared\Templates\**" />
-    <EmbeddedResource Remove="wwwroot\content\**" />
-    <None Remove="app-client\shared\controllers\**" />
-    <None Remove="app-portal\**" />
-    <None Remove="app\**" />
-    <None Remove="Cache\**" />
-    <None Remove="Views\Shared\Templates\**" />
-    <None Remove="wwwroot\content\**" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Compile Remove="App_Start\Validattors\CookieValidator.cs" />
-    <Compile Remove="App_Start\Validattors\JwtValidator.cs" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Content Remove="appsettings-moderntrailer.json" />
-    <Content Remove="appsettings-stag.json" />
+    <Compile Remove="Views\Shared\Templates\test-31\**" />
+    <Content Remove="Views\Shared\Templates\test-31\**" />
+    <EmbeddedResource Remove="Views\Shared\Templates\test-31\**" />
+    <None Remove="Views\Shared\Templates\test-31\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EPPlus" Version="4.5.3.1" />
-    <PackageReference Include="Microsoft.AspNetCore.App">
-      <PrivateAssets Condition="'%(PackageReference.Version)' == ''">all</PrivateAssets>
-      <Publish Condition="'%(PackageReference.Version)' == ''">true</Publish>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.ApiExplorer" Version="2.2.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
-    <PackageReference Include="SonarQube.Scanner.DotNetCore.Tool" Version="4.3.1" />
-    <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.6.362" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="App_Start\Validattors\" />
-    <Folder Include="logs\" />
-    <Folder Include="wwwroot\lib\portal\Trumbowyg\" />
-   
   </ItemGroup>
 
   <ItemGroup>
@@ -77,40 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
+    <Folder Include="Views\Shared\Templates\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Update="Views\Home\Index.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="wwwroot\assets\icons.svg">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="ApacheModRewrite.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="IISUrlRewrite.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="_run.bat">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  
 
 </Project>

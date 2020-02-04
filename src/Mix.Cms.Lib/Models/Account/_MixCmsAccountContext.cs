@@ -48,12 +48,13 @@ namespace Mix.Cms.Lib.Models.Account
             }
         }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AspNetRoleClaims>(entity =>
             {
                 entity.HasIndex(e => e.RoleId);
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.RoleId).IsRequired();
 
@@ -69,11 +70,9 @@ namespace Mix.Cms.Lib.Models.Account
                     .IsUnique()
                     .HasFilter("([NormalizedName] IS NOT NULL)");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Name).HasMaxLength(250);
 
-                entity.Property(e => e.Name).HasMaxLength(256);
-
-                entity.Property(e => e.NormalizedName).HasMaxLength(256);
+                entity.Property(e => e.NormalizedName).HasMaxLength(250);
             });
 
             modelBuilder.Entity<AspNetUserClaims>(entity =>
@@ -81,6 +80,8 @@ namespace Mix.Cms.Lib.Models.Account
                 entity.HasIndex(e => e.ApplicationUserId);
 
                 entity.HasIndex(e => e.UserId);
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.UserId).IsRequired();
 
@@ -133,6 +134,15 @@ namespace Mix.Cms.Lib.Models.Account
                     .HasForeignKey(d => d.UserId);
             });
 
+            modelBuilder.Entity<AspNetUserTokens>(entity =>
+            {
+                entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserTokens)
+                    .HasForeignKey(d => d.UserId);
+            });
+
             modelBuilder.Entity<AspNetUsers>(entity =>
             {
                 entity.HasIndex(e => e.NormalizedEmail)
@@ -143,32 +153,19 @@ namespace Mix.Cms.Lib.Models.Account
                     .IsUnique()
                     .HasFilter("([NormalizedUserName] IS NOT NULL)");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Dob).HasColumnName("DOB");
 
-                entity.Property(e => e.Email).HasMaxLength(256);
+                entity.Property(e => e.Email).HasMaxLength(250);
 
-                entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
+                entity.Property(e => e.NormalizedEmail).HasMaxLength(250);
 
-                entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
+                entity.Property(e => e.NormalizedUserName).HasMaxLength(250);
 
-                entity.Property(e => e.UserName).HasMaxLength(256);
-            });
-
-            modelBuilder.Entity<AspNetUserTokens>(entity =>
-            {
-                entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserTokens)
-                    .HasForeignKey(d => d.UserId);
+                entity.Property(e => e.UserName).HasMaxLength(250);
             });
 
             modelBuilder.Entity<Clients>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.AllowedOrigin).HasMaxLength(100);
 
                 entity.Property(e => e.Name)
@@ -180,12 +177,12 @@ namespace Mix.Cms.Lib.Models.Account
 
             modelBuilder.Entity<RefreshTokens>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Email).IsRequired();
-
-                entity.Property(e => e.Username);
             });
+
+            OnModelCreatingPartial(modelBuilder);
         }
+
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

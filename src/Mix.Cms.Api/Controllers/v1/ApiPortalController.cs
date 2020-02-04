@@ -36,16 +36,12 @@ namespace Mix.Cms.Api.Controllers.v1
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IApplicationLifetime _appLifetime;
-        private readonly IHostingEnvironment _env;
         public ApiPortalController(
            UserManager<ApplicationUser> userManager,
            SignInManager<ApplicationUser> signInManager,
            RoleManager<IdentityRole> roleManager,
            MixCmsContext context,
             Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext,
-            IApplicationLifetime appLifetime,
-            IHostingEnvironment env,
             IMemoryCache memoryCache
             )
             : base(context, memoryCache, hubContext)
@@ -53,8 +49,6 @@ namespace Mix.Cms.Api.Controllers.v1
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
-            _appLifetime = appLifetime;
-            _env = env;
         }
 
         #region Get
@@ -391,7 +385,7 @@ namespace Mix.Cms.Api.Controllers.v1
             return new RepositoryResponse<string>()
             {
 
-                Data = Lib.Helpers.RSAEncryptionHelper.GetEncryptedText(data)
+                Data = RSAEncryptionHelper.GetEncryptedText(data)
             };
         }
 
