@@ -38,4 +38,4 @@ jobs:
         git add .
         
         # Only commit and push if we have changes
-        git diff --quiet && git diff --staged --quiet || (git commit -m "${COMMIT_MSG}"; git push origin develop)
+        # git diff --quiet && git diff --staged --quiet || (git commit -m "${COMMIT_MSG}"; git push origin develop)
