@@ -1,3 +1,5 @@
+using System;
+
 namespace Mix.Cms.Web.Models
 {
     public class ErrorViewModel

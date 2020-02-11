@@ -1,20 +1,39 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <DockerTargetOS>Windows</DockerTargetOS>
     <UserSecretsId>8d8e7493-9576-4341-89be-19d4e1c62ac2</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\v1\Mix\AttributeSetDatas\**" />
     <Compile Remove="Controllers\v1\Mix\AttributeSetDataValues\**" />
+    <Compile Remove="Controllers\v1\Mix\RelatedAttributeDatas\**" />
+    <Compile Remove="Controllers\v1\Mix\RelatedAttributeSets\**" />
+    <Content Remove="Controllers\v1\Mix\AttributeSetDatas\**" />
     <Content Remove="Controllers\v1\Mix\AttributeSetDataValues\**" />
+    <Content Remove="Controllers\v1\Mix\RelatedAttributeDatas\**" />
+    <Content Remove="Controllers\v1\Mix\RelatedAttributeSets\**" />
+    <EmbeddedResource Remove="Controllers\v1\Mix\AttributeSetDatas\**" />
     <EmbeddedResource Remove="Controllers\v1\Mix\AttributeSetDataValues\**" />
+    <EmbeddedResource Remove="Controllers\v1\Mix\RelatedAttributeDatas\**" />
+    <EmbeddedResource Remove="Controllers\v1\Mix\RelatedAttributeSets\**" />
+    <None Remove="Controllers\v1\Mix\AttributeSetDatas\**" />
     <None Remove="Controllers\v1\Mix\AttributeSetDataValues\**" />
+    <None Remove="Controllers\v1\Mix\RelatedAttributeDatas\**" />
+    <None Remove="Controllers\v1\Mix\RelatedAttributeSets\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Controllers\v1\Mix\AttributeSetDataValues\ApiODataAttributeSetValuePortalController.cs" />
+    <Compile Remove="Controllers\v1\Mix\ApiAttributeSetDataController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Controllers\v1\Mix\AttributeSetDatas\ApiAttributeSetDataPortalController.cs" />
+    <Compile Include="Controllers\v1\Mix\AttributeSetDataValues\ApiAttributeSetValuePortalController.cs" />
+    <Compile Include="Controllers\v1\Mix\RelatedAttributeDatas\ApiRelatedAttributeSetDataPortalController.cs" />
+    <Compile Include="Controllers\v1\Mix\RelatedAttributeSets\ApiRelatedAttributeSetPortalController.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,12 +41,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App">
-      <PrivateAssets Condition="'%(PackageReference.Version)' == ''">all</PrivateAssets>
-      <Publish Condition="'%(PackageReference.Version)' == ''">true</Publish>
-    </PackageReference>
-    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.2.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
   </ItemGroup>
 
   <ItemGroup>

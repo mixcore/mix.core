@@ -114,9 +114,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("moduleNavs")]
         public List<MixPageModules.ReadMvcViewModel> ModuleNavs { get; set; } // Parent to Modules
 
-        [JsonProperty("positionNavs")]
-        public List<MixPagePositions.ReadViewModel> PositionNavs { get; set; } // Parent to Modules
-
         [JsonProperty("parentNavs")]
         public List<MixPagePages.ReadViewModel> ParentNavs { get; set; } // Parent to  Parent
 
@@ -298,7 +295,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             this.ModuleNavs = GetModuleNavs(_context, _transaction);
             this.ParentNavs = GetParentNavs(_context, _transaction);
             //this.ChildNavs = GetChildNavs(_context, _transaction);
-            this.PositionNavs = GetPositionNavs(_context, _transaction);
             this.UrlAliases = GetAliases(_context, _transaction);
         }
 
@@ -315,7 +311,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 var saveLayout = Master.SaveModel(true, _context, _transaction);
                 ViewModelHelper.HandleResult(saveLayout, ref result);
             }
-            if (result.IsSucceed)
+            if (result.IsSucceed && UrlAliases != null)
             {
                 foreach (var item in UrlAliases)
                 {
@@ -339,24 +335,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 {
                     item.PageId = parent.Id;
 
-                    if (item.IsActived)
-                    {
-                        var saveResult = item.SaveModel(false, _context, _transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
-                    }
-                    else
-                    {
-                        var saveResult = item.RemoveModel(false, _context, _transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
-                    }
-                }
-            }
-
-            if (result.IsSucceed)
-            {
-                foreach (var item in PositionNavs)
-                {
-                    item.PageId = parent.Id;
                     if (item.IsActived)
                     {
                         var saveResult = item.SaveModel(false, _context, _transaction);
@@ -423,7 +401,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 var saveLayout = Master.SaveModel(true, _context, _transaction);
                 ViewModelHelper.HandleResult(saveLayout, ref result);
             }
-            if (result.IsSucceed)
+            if (result.IsSucceed && UrlAliases != null)
             {
                 foreach (var item in UrlAliases)
                 {
@@ -447,24 +425,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 {
                     item.PageId = parent.Id;
 
-                    if (item.IsActived)
-                    {
-                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
-                    }
-                    else
-                    {
-                        var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
-                    }
-                }
-            }
-
-            if (result.IsSucceed)
-            {
-                foreach (var item in PositionNavs)
-                {
-                    item.PageId = parent.Id;
                     if (item.IsActived)
                     {
                         var saveResult = await item.SaveModelAsync(false, _context, _transaction);
@@ -624,23 +584,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 this.SeoKeywords = SeoHelper.GetSEOString(this.Title);
             }
-        }
-
-        public List<MixPagePositions.ReadViewModel> GetPositionNavs(MixCmsContext context, IDbContextTransaction transaction)
-        {
-            var query = context.MixPosition
-                  .Include(cp => cp.MixPagePosition)
-                  //.Where(p => p.Specificulture == Specificulture)
-                  .Select(p => new MixPagePositions.ReadViewModel()
-                  {
-                      PageId = Id,
-                      PositionId = p.Id,
-                      Specificulture = Specificulture,
-                      Description = p.Description,
-                      IsActived = context.MixPagePosition.Count(m => m.PageId == Id && m.PositionId == p.Id && m.Specificulture == Specificulture) > 0
-                  });
-
-            return query.OrderBy(m => m.Priority).ToList();
         }
 
         public List<MixUrlAliases.UpdateViewModel> GetAliases(MixCmsContext context, IDbContextTransaction transaction)

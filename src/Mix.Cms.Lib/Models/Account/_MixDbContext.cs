@@ -44,7 +44,6 @@ namespace Mix.Cms.Lib.Models.Account
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
             string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {

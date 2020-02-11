@@ -1,10 +1,7 @@
 ﻿using AutoMapper.Configuration;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -42,25 +39,8 @@ namespace Mix.Cms.Web.Controllers
             }
         }
         protected IConfiguration _configuration;
-        protected IHostingEnvironment _env;
-        protected readonly IMemoryCache _memoryCache;
-        protected readonly IHttpContextAccessor _accessor;
-        public BaseController(IHostingEnvironment env, IMemoryCache memoryCache, IHttpContextAccessor accessor)
+        public BaseController()
         {
-            _env = env;
-            _memoryCache = memoryCache;
-            _accessor = accessor;
-            // Set CultureInfo
-            var cultureInfo = new CultureInfo(culture);
-            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
-            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
-        }
-
-        public BaseController(IHostingEnvironment env, IConfiguration configuration, IHttpContextAccessor accessor)
-        {
-            _configuration = configuration;
-            _accessor = accessor;
-            _env = env;
             // Set CultureInfo
             var cultureInfo = new CultureInfo(culture);
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
@@ -84,7 +64,7 @@ namespace Mix.Cms.Web.Controllers
             }
             set { _culture = value; }
         }
-       
+
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             ValidateRequest();
@@ -113,7 +93,6 @@ namespace Mix.Cms.Web.Controllers
                     forbidden = true;
                 }
             }
-            base.OnActionExecuting(context);
         }
 
         protected virtual void ValidateRequest()
@@ -300,7 +279,7 @@ namespace Mix.Cms.Web.Controllers
                         if (getPost.Data.PostNavs != null && getPost.Data.PostNavs.Count > 0)
                         {
                             getPost.Data.PostNavs.ForEach(n => n.RelatedPost.DetailsUrl = GenerateDetailsUrl(
-                                new { culture = culture, action = "post", id = n.RelatedPost.Id, seoName = n.RelatedPost.SeoName }));
+                                new { action = "post", culture = culture, id = n.RelatedPost.Id, seoName = n.RelatedPost.SeoName }));
                         }
                         //_ = MixCacheService.SetAsync(cacheKey, getPost);
                     }
@@ -374,7 +353,7 @@ namespace Mix.Cms.Web.Controllers
                 {
                     if (postNav.Post != null)
                     {
-                        postNav.Post.DetailsUrl = GenerateDetailsUrl(new { culture = culture, action = "post", id = postNav.PostId, seoName = postNav.Post.SeoName });
+                        postNav.Post.DetailsUrl = GenerateDetailsUrl(new { action = "post", culture = culture, id = postNav.PostId, seoName = postNav.Post.SeoName });
                     }
                 }
             }
@@ -390,7 +369,7 @@ namespace Mix.Cms.Web.Controllers
         protected void GeneratePageDetailsUrls(Lib.ViewModels.MixModules.ReadMvcViewModel module)
         {
             module.DetailsUrl = GenerateDetailsUrl(
-                            new { culture = culture, action = "md", id = module.Id, seoName = module.Name }
+                            new { action = "module", culture = culture, id = module.Id, seoName = module.Name }
                             );
             if (module.Posts != null)
             {
@@ -400,7 +379,7 @@ namespace Mix.Cms.Web.Controllers
                     if (postNav.Post != null)
                     {
                         postNav.Post.DetailsUrl = GenerateDetailsUrl(
-                            new { culture = culture, action = "post", id = postNav.PostId, seoName = postNav.Post.SeoName }
+                            new { action = "post", culture = culture, id = postNav.PostId, seoName = postNav.Post.SeoName }
                             );
                     }
                 }

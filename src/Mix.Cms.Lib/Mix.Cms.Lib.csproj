@@ -1,30 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <UserSecretsId>5e53bcce-df59-411e-8aca-95fd87811b6d</UserSecretsId>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <None Remove="ViewModels\MixAttributeSetDatas\ExportViewModel.txt" />
-    </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Helpers\AesEncryptionHelper.cs" />
+    <Compile Remove="Helpers\RSAEncryptionHelper.cs" />
+    <Compile Remove="ViewModels\MixAttributeSetDatas\ExportViewModel.cs" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <Compile Include="ViewModels\MixAttributeSetDatas\ExportViewModel.txt" />
-    </ItemGroup>
+  <ItemGroup>
+    <None Include="ViewModels\MixAttributeSetDatas\ExportViewModel.cs" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="CommonMark.NET" Version="0.15.1" />
-        <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.2.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.2.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.3">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Mix.Heart" Version="0.0.5.8" />
-       
-        <PackageReference Include="Mix.Identity" Version="0.0.2" />       
-        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
-    </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="CommonMark.NET" Version="0.15.1" />
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.OData.Core" Version="7.6.3" />
+    <PackageReference Include="Mix.Heart" Version="0.0.5.9" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Mix.Identity\Mix.Identity.csproj" />
+  </ItemGroup>
 
 </Project>

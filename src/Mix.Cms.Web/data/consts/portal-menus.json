@@ -24,40 +24,6 @@
             ]
         },
         {
-            "title": "Categories",
-            "path": "#",
-            "icon": "mi mi-Relationship",
-            "subMenus": [
-                {
-                    "title": "Create New",
-                    "icon": "mi mi-Add",
-                    "path": "/portal/navigation/create?attributeSetName=sys_category&&dataId=default"
-                },
-                {
-                    "path": "/portal/attribute-set-data/list?attributeSetName=sys_category",
-                    "title": "List",
-                    "icon": "mi mi-List"
-                }
-            ]
-        },
-        {
-            "title": "Tags",
-            "path": "#",
-            "icon": "mi mi-Relationship",
-            "subMenus": [
-                {
-                    "title": "Create New",
-                    "icon": "mi mi-Add",
-                    "path": "/portal/navigation/create?attributeSetName=sys_tag&&dataId=default"
-                },
-                {
-                    "path": "/portal/attribute-set-data/list?attributeSetName=sys_tag",
-                    "title": "List",
-                    "icon": "mi mi-List"
-                }
-            ]
-        },
-        {
             "title": "Posts",
             "path": "#",
             "icon": "mi mi-ReadingList",
@@ -138,6 +104,40 @@
                 },
                 {
                     "path": "/portal/attribute-set/list",
+                    "title": "List",
+                    "icon": "mi mi-List"
+                }
+            ]
+        },
+        {
+            "title": "Categories",
+            "path": "#",
+            "icon": "mi mi-Label",
+            "subMenus": [
+                {
+                    "title": "Create New",
+                    "icon": "mi mi-Add",
+                    "path": "/portal/navigation/create?attributeSetName=sys_category&&dataId=default"
+                },
+                {
+                    "path": "/portal/attribute-set-data/list?attributeSetName=sys_category",
+                    "title": "List",
+                    "icon": "mi mi-List"
+                }
+            ]
+        },
+        {
+            "title": "Tags",
+            "path": "#",
+            "icon": "mi mi-Tag",
+            "subMenus": [
+                {
+                    "title": "Create New",
+                    "icon": "mi mi-Add",
+                    "path": "/portal/navigation/create?attributeSetName=sys_tag&&dataId=default"
+                },
+                {
+                    "path": "/portal/attribute-set-data/list?attributeSetName=sys_tag",
                     "title": "List",
                     "icon": "mi mi-List"
                 }
@@ -745,7 +745,7 @@
                 {
                     "path": "/portal/attribute-set-data/list",
                     "templatePath": "/app/app-portal/pages/attribute-set-data/list.html?v=1",
-                    "controller": "MixAttributeSetDataController"
+                    "controller": "AttributeSetDataController"
                 },
                 {
                     "path": "/portal/attribute-set-data/details",
