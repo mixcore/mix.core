@@ -24,7 +24,7 @@ RUN dotnet publish Mix.Cms.Web/Mix.Cms.Web.csproj -c Release
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
 WORKDIR /app
 # COPY --from=node-env /app/Mix.Cms.Web/wwwroot .
-COPY --from=build-env /app/Mix.Cms.Web/bin/Release/netcoreapp2.2/publish .
+COPY --from=build-env /app/Mix.Cms.Web/bin/Release/netcoreapp3.1/publish .
 ENTRYPOINT ["dotnet", "Mix.Cms.Web.dll"]
 
 # Build -> Tag -> Push process
