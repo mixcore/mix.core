@@ -15,22 +15,8 @@ namespace Mix.Cms.Web.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IApiDescriptionGroupCollectionProvider _apiExplorer;
-        IApplicationLifetime _lifetime;
         #region overrides
-        public PortalController(IHostingEnvironment env,
-           IMemoryCache memoryCache,
-            UserManager<ApplicationUser> userManager,
-            IApiDescriptionGroupCollectionProvider apiExplorer,
-           IHttpContextAccessor accessor,
-           IApplicationLifetime lifetime
-           ) : base(env, memoryCache, accessor)
-        {
-
-            this._userManager = userManager;
-            _apiExplorer = apiExplorer;
-            _lifetime = lifetime;
-        }
-
+        
         protected override void ValidateRequest()
         {
             base.ValidateRequest();

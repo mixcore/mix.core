@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Memory;
@@ -28,13 +27,13 @@ namespace Mix.Cms.Api.Controllers.v1
         protected readonly UserManager<ApplicationUser> _userManager;
         protected readonly SignInManager<ApplicationUser> _signInManager;
         protected readonly RoleManager<IdentityRole> _roleManager;
-        protected readonly IEmailSender _emailSender;
+        //protected readonly IEmailSender _emailSender;
         protected readonly ILogger _logger;
 
         public ApiRoleController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             RoleManager<IdentityRole> roleManager,
-            IEmailSender emailSender,
+            //IEmailSender emailSender,
             ILogger<ApiRoleController> logger,
             IMemoryCache memoryCache,
             IHubContext<PortalHub> hubContext) : base(null, memoryCache, hubContext)
@@ -42,7 +41,7 @@ namespace Mix.Cms.Api.Controllers.v1
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
-            _emailSender = emailSender;
+            //_emailSender = emailSender;
             _logger = logger;
         }
 

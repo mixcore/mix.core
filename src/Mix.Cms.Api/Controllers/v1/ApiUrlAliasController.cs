@@ -101,8 +101,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         && (!request.ToDate.HasValue
                             || (model.CreatedDateTime <= request.ToDate.Value)
                         );
-            string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
-            var portalResult = await base.GetListAsync<UpdateViewModel>(key, request, predicate);
+            var portalResult = await base.GetListAsync<UpdateViewModel>(request, predicate);
             return Ok(JObject.FromObject(portalResult));
         }
 

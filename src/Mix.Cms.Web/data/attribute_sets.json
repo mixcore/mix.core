@@ -224,7 +224,8 @@
           "priority": 7,
           "specificulture": null
         }
-      ]
+      ],
+      "status": 2
     },
     {
       "id": 2,
@@ -281,7 +282,8 @@
           "isUnique": false,
           "status": 2
         }
-      ]
+      ],
+      "status": 2
     },
     {
       "id": 3,

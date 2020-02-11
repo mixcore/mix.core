@@ -12,13 +12,19 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
         #region Properties
 
         #region Models
-
+        [JsonProperty("id")]
         public int Id { get; set; }
+        [JsonProperty("parentId")]
         public int ParentId { get; set; }
+        [JsonProperty("parentType")]
         public int ParentType { get; set; }
+        [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("status")]
         public int Status { get; set; }
+        [JsonProperty("description")]
         public string Description { get; set; }
+        [JsonProperty("image")]
         public string Image { get; set; }
 
         #endregion Models
@@ -28,7 +34,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
         [JsonProperty("isActived")]
         public bool IsActived { get; set; }
 
-        [JsonProperty("RelatedAttributeSet")]
+        [JsonProperty("relatedAttributeSet")]
         public MixAttributeSets.ReadViewModel RelatedAttributeSet { get; set; }
 
         #endregion Views
