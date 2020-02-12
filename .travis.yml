@@ -1,6 +1,6 @@
 language: csharp
 mono: none
-dotnet: 2.2
+dotnet: 3.1
 before_install:
   - git clone --depth=50 --branch=master https://github.com/mixcore/mix.heart.git /home/travis/build/mixcore/mix.heart
   - git clone --depth=50 --branch=master https://github.com/mixcore/mix.identity.git /home/travis/build/mixcore/mix.identity
