@@ -7,10 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Remove="Views\Shared\Templates\test-31\**" />
-        <Content Remove="Views\Shared\Templates\test-31\**" />
-        <EmbeddedResource Remove="Views\Shared\Templates\test-31\**" />
-        <None Remove="Views\Shared\Templates\test-31\**" />
+      <Compile Remove="Views\Shared\Templates\**" />
+      <Content Remove="Views\Shared\Templates\**" />
+      <EmbeddedResource Remove="Views\Shared\Templates\**" />
+      <None Remove="Views\Shared\Templates\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -26,10 +26,6 @@
     <ItemGroup>
         <ProjectReference Include="..\Mix.Cms.Api\Mix.Cms.Api.csproj" />
         <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="Views\Shared\Templates\" />
     </ItemGroup>
 
     <ItemGroup>
