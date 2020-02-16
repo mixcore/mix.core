@@ -194,7 +194,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 result = await siteStructures.ImportAsync(Specificulture);
                 if (result.IsSucceed)
                 {
-
                     // Save template files to db                
                     var files = FileRepository.Instance.GetFilesWithContent(TemplateFolder);
                     //TODO: Create default asset

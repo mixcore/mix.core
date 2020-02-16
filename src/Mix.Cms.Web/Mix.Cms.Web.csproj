@@ -7,10 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="Views\Shared\Templates\**" />
-      <Content Remove="Views\Shared\Templates\**" />
-      <EmbeddedResource Remove="Views\Shared\Templates\**" />
-      <None Remove="Views\Shared\Templates\**" />
+        <Compile Remove="Views\Shared\Templates\test-31\**" />
+        <Content Remove="Views\Shared\Templates\test-31\**" />
+        <EmbeddedResource Remove="Views\Shared\Templates\test-31\**" />
+        <None Remove="Views\Shared\Templates\test-31\**" />
     </ItemGroup>
 
     <ItemGroup>

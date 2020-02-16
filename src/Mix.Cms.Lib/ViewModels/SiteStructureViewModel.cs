@@ -43,19 +43,26 @@ namespace Mix.Cms.Lib.ViewModels
             AttributeSets = (await MixAttributeSets.ImportViewModel.Repository.GetModelListAsync()).Data;
         }
 
-        public void ProcessSelectedExportDataAsync()
+        public RepositoryResponse<string> ProcessSelectedExportDataAsync()
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(null, null, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            var result = new RepositoryResponse<string>(){ IsSucceed = true };
             try
             {
                 //Configurations = MixConfigurations.ReadViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture, context, transaction).Data;
                 ProcessPages(context, transaction);
                 ProcessModules(context, transaction);
                 ProcessAttributeSetsAsync(context, transaction);
+                ProcessAttributeSetData(context, transaction);
+                return result;
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
                 var error = UnitOfWorkHelper<MixCmsContext>.HandleException<MixPages.ImportViewModel>(ex, isRoot, transaction);
+                result.IsSucceed = false;
+                result.Errors = error.Errors;
+                result.Exception = ex;
+                return result;
             }
             finally
             {
@@ -64,7 +71,7 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     context?.Dispose();
                 }
-
+                
             }
         }
 
@@ -85,55 +92,24 @@ namespace Mix.Cms.Lib.ViewModels
                         if (getSet.IsSucceed)
                         {
                             refSet = getSet.Data;
-                            // Load ref data if export parent Data
-                            if (item.IsExportData)
-                            {
-                                var refData = MixAttributeSetDatas.ImportViewModel.Repository.GetModelListBy(
-                                    a => a.Specificulture == Specificulture && a.AttributeSetId == refSet.Id, context, transaction)
-                                    .Data?.OrderBy(a => a.Priority).ToList();
-                                if (refData != null)
-                                {
-                                    AttributeSetDatas.AddRange(refData);
-                                }
-                            }
-                            AttributeSets.Add(getSet.Data);
+                            refSet.IsExportData = refSet.IsExportData || item.IsExportData;
+                            AttributeSets.Add(refSet);
                         }
 
                     }
                     else
                     {
-                        refSet.IsExportData = refSet.IsExportData || item.IsExportData;
-                        if (item.IsExportData)
-                        {
-                            refSet.Data = refSet.Data ?? MixAttributeSetDatas.ImportViewModel.Repository.GetModelListBy(
-                                a => a.Specificulture == Specificulture && a.AttributeSetId == refSet.Id, context, transaction)
-                                .Data?.OrderBy(a => a.Priority).ToList();
-                        }
+                        refSet.IsExportData = refSet.IsExportData || item.IsExportData;                        
                     }
                 }
                 // Load export data if checked and did not process
-                if (item.IsExportData)
+                if (item.IsExportData && item.Data!=null)
                 {
-                    var data = item.Data ?? MixAttributeSetDatas.ImportViewModel.Repository.GetModelListBy(
-                        a => a.Specificulture == Specificulture && a.AttributeSetId == item.Id, context, transaction)
-                        .Data?.OrderBy(a => a.Priority).ToList();
-                    if (data != null)
-                    {
-                        AttributeSetDatas.AddRange(data);
-                    }
-                    foreach (var d in item.Data)
-                    {
-                        var getRelatedData = MixRelatedAttributeDatas.ReadViewModel.Repository.GetModelListBy(
-                            m => m.ParentId == d.Id && d.Specificulture == Specificulture);
-                        if (getRelatedData.IsSucceed)
-                        {
-                            RelatedData.AddRange(getRelatedData.Data);
-                        }
-                    }
+                    
                 }
             }
         }
-
+        
         private void ProcessModules(MixCmsContext context, IDbContextTransaction transaction)
         {
             foreach (var item in Modules)
@@ -151,22 +127,23 @@ namespace Mix.Cms.Lib.ViewModels
             {
                 if (item.IsExportData)
                 {
-                    item.Cultures = MixPages.Helper.LoadCultures(item.Id, item.Specificulture, context, transaction);
                     item.ModuleNavs = item.GetModuleNavs(context, transaction);
                     foreach (var nav in item.ModuleNavs)
                     {
-                        nav.Module.IsExportData = true;
-                        ProcessModuleData(nav.Module, context, transaction);
                         var dupModule = Modules.FirstOrDefault(m => m.Id == nav.ModuleId && m.Specificulture == Specificulture);
                         if (dupModule!=null)
                         {
-                            Modules.Remove(dupModule);
+                            dupModule.IsExportData = true;
+                        }
+                        else
+                        {
+                            Modules.Add(dupModule);
                         }
                     }
+                    item.UrlAliases = item.GetAliases(context, transaction);
                     GetAdditionalData(item.Id.ToString(), MixEnums.MixAttributeSetDataType.Page, context, transaction);
                     //this.ParentNavs = GetParentNavs(_context, _transaction);
                     //this.ChildNavs = GetChildNavs(_context, _transaction);
-                    item.UrlAliases = item.GetAliases(context, transaction);
                 }
             }
         }
@@ -191,22 +168,50 @@ namespace Mix.Cms.Lib.ViewModels
 
         private void GetAdditionalData(string id, MixEnums.MixAttributeSetDataType type, MixCmsContext context, IDbContextTransaction transaction)
         {
-            var getRelatedData = MixRelatedAttributeDatas.ReadViewModel.Repository.GetSingleModel(
+            if (!RelatedData.Any(m=>m.ParentId == id && m.ParentType==(int)type))
+            {
+                var getRelatedData = MixRelatedAttributeDatas.ReadViewModel.Repository.GetSingleModel(
                             m => m.Specificulture == Specificulture && m.ParentType == (int)type
                                 && m.ParentId == id, context, transaction);
-            if (getRelatedData.IsSucceed)
-            {
-                RelatedData.Add(getRelatedData.Data);
-                var getData = MixAttributeSetDatas.ImportViewModel.Repository.GetSingleModel(
-                    m => m.Specificulture == Specificulture && m.Id == getRelatedData.Data.Id);
-                if (getData.IsSucceed)
+                if (getRelatedData.IsSucceed)
                 {
-                    getData.Data.Fields = new List<MixAttributeFields.UpdateViewModel>();
-                    foreach (var item in getData.Data.Values)
+                    RelatedData.Add(getRelatedData.Data);
+                }
+            }
+        }
+
+        private void ProcessAttributeSetData(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            AttributeSetDatas = new List<MixAttributeSetDatas.ImportViewModel>();
+            // Load AttributeSet data
+            foreach (var item in AttributeSets)
+            {
+                if (item.IsExportData)
+                {
+                    var getData = MixAttributeSetDatas.ImportViewModel.Repository.GetModelListBy(
+                        a => a.Specificulture == Specificulture && a.AttributeSetId == item.Id, context, transaction)
+                        .Data?.OrderBy(a => a.Priority).ToList();
+                    if (getData!=null)
                     {
-                        getData.Data.Fields.Add(item.Field);
+                        AttributeSetDatas.AddRange(getData);
                     }
-                    AttributeSetDatas.Add(getData.Data);
+                }
+            }
+            // Load Related Data
+            foreach (var item in RelatedData)
+            {
+                if (!AttributeSetDatas.Any(m=>m.Id== item.Id))
+                {
+                    var getData = MixAttributeSetDatas.ImportViewModel.Repository.GetSingleModel(
+                        m => m.Id == item.Id, context, transaction);
+                    if (getData.IsSucceed)
+                    {
+                        AttributeSetDatas.Add(getData.Data);
+                    }
+                    else
+                    {
+                        RelatedData.Remove(item);
+                    }
                 }
             }
         }
