@@ -294,7 +294,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             this.Masters = this.Masters ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == MixEnums.EnumTemplateFolder.Masters.ToString(), _context, _transaction).Data;
             var masterName = Layout?.Split('/')[1] ?? MixConstants.DefaultTemplate.Master;
-            this.Master = Masters.First(t => !string.IsNullOrEmpty(masterName) && masterName.Equals($"{t.FileName}{t.Extension}"));
+            this.Master = Masters.First(t => !string.IsNullOrEmpty(masterName) && masterName.Equals($"{t.FileName}"));
             this.Layout = $"{this.Master?.FileFolder}/{this.Master?.FileName}";
 
             this.ModuleNavs = GetModuleNavs(_context, _transaction);
