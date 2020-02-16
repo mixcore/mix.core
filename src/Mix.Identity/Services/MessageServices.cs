@@ -2,12 +2,11 @@
 // The Swastika I/O Foundation licenses this file to you under the GNU General Public License v3.0 license.
 // See the LICENSE file in the project root for more information.
 
-using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Threading.Tasks;
 
 namespace Mix.Identity.Services
 {
-    public class AuthEmailMessageSender : IEmailSender
+    public class AuthEmailMessageSender
     {
         /// <summary>
         /// Sends the email asynchronous.

@@ -78,43 +78,51 @@ namespace Mix.Cms.Api.Controllers.v1
             string outputPath = $"Exports/Themes/{getTheme.Data.Name}";
             data.ThemeName = getTheme.Data.Name;
             data.Specificulture = _lang;
-            data.ProcessSelectedExportDataAsync();
-            string filename = $"schema";
-            var file = new FileViewModel()
+            var result = data.ProcessSelectedExportDataAsync();
+            if (result.IsSucceed)
             {
-                Filename = filename,
-                Extension = ".json",
-                FileFolder = $"{tempPath}/Data",
-                Content = JObject.FromObject(data).ToString()
-            };
 
-            // Delete Existing folder
-            FileRepository.Instance.DeleteFolder(outputPath);
-            // Copy current templates file
-            FileRepository.Instance.CopyDirectory($"{getTheme.Data.TemplateFolder}", $"{tempPath}/Templates");
-            // Copy current assets files
-            FileRepository.Instance.CopyDirectory($"wwwroot/{getTheme.Data.AssetFolder}", $"{tempPath}/Assets");
-            // Copy current uploads files
-            FileRepository.Instance.CopyDirectory($"wwwroot/{getTheme.Data.UploadsFolder}", $"{tempPath}/Uploads");
-            // Save Site Structures
-            FileRepository.Instance.SaveFile(file);
+                string filename = $"schema";
+                var file = new FileViewModel()
+                {
+                    Filename = filename,
+                    Extension = ".json",
+                    FileFolder = $"{tempPath}/Data",
+                    Content = JObject.FromObject(data).ToString()
+                };
 
-            // Zip to [theme_name].zip ( wwwroot for web path)
-            string filePath = FileRepository.Instance.ZipFolder($"{tempPath}", outputPath, $"{getTheme.Data.Name}-{Guid.NewGuid()}");
+                // Delete Existing folder
+                FileRepository.Instance.DeleteFolder(outputPath);
+                // Copy current templates file
+                FileRepository.Instance.CopyDirectory($"{getTheme.Data.TemplateFolder}", $"{tempPath}/Templates");
+                // Copy current assets files
+                FileRepository.Instance.CopyDirectory($"wwwroot/{getTheme.Data.AssetFolder}", $"{tempPath}/Assets");
+                // Copy current uploads files
+                FileRepository.Instance.CopyDirectory($"wwwroot/{getTheme.Data.UploadsFolder}", $"{tempPath}/Uploads");
+                // Save Site Structures
+                FileRepository.Instance.SaveFile(file);
+
+                // Zip to [theme_name].zip ( wwwroot for web path)
+                string filePath = FileRepository.Instance.ZipFolder($"{tempPath}", outputPath, $"{getTheme.Data.Name}-{Guid.NewGuid()}");
 
 
 
-            // Delete temp folder
-            FileRepository.Instance.DeleteWebFolder($"{outputPath}/Assets");
-            FileRepository.Instance.DeleteWebFolder($"{outputPath}/Uploads");
-            FileRepository.Instance.DeleteWebFolder($"{outputPath}/Templates");
-            FileRepository.Instance.DeleteWebFolder($"{outputPath}/Data");
+                // Delete temp folder
+                FileRepository.Instance.DeleteWebFolder($"{outputPath}/Assets");
+                FileRepository.Instance.DeleteWebFolder($"{outputPath}/Uploads");
+                FileRepository.Instance.DeleteWebFolder($"{outputPath}/Templates");
+                FileRepository.Instance.DeleteWebFolder($"{outputPath}/Data");
 
-            return new RepositoryResponse<string>()
+                return new RepositoryResponse<string>()
+                {
+                    IsSucceed = !string.IsNullOrEmpty(outputPath),
+                    Data = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/{filePath}"
+                };
+            }
+            else
             {
-                IsSucceed = !string.IsNullOrEmpty(outputPath),
-                Data = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/{filePath}"
-            };
+                return result;
+            }
         }
 
         // GET api/theme/id
