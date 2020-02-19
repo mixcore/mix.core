@@ -102,7 +102,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
 
 
-            return base.ParseModel(_context, _transaction); ;
+            return base.ParseModel(_context, _transaction);
         }
         public override void GenerateCache(MixAttributeSetData model, ImportViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

@@ -182,7 +182,8 @@ namespace Mix.Cms.Web.Controllers
                 && p.Status == (int)MixContentStatus.Published && p.Specificulture == culture;
             }
 
-            getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+            getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetFirstModelAsync(predicate);
+
             if (getPage.IsSucceed)
             {
                 if (getPage.Data != null)
