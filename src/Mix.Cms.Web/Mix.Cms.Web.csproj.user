@@ -5,12 +5,5 @@
   </PropertyGroup>
   <PropertyGroup>
     <ActiveDebugProfile>Mix.Cms.Web</ActiveDebugProfile>
-    <_SelectedScaffolderID>IdentityScaffolder</_SelectedScaffolderID>
-    <_SelectedScaffolderCategoryPath>root/Identity</_SelectedScaffolderCategoryPath>
-    <WebStackScaffolding_ViewDialogWidth>600</WebStackScaffolding_ViewDialogWidth>
-    <NameOfLastUsedPublishProfile>FolderProfile</NameOfLastUsedPublishProfile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

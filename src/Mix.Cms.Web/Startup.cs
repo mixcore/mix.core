@@ -9,7 +9,6 @@ using Microsoft.Extensions.Hosting;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Newtonsoft.Json.Serialization;
 
 namespace Mix.Cms.Web
 {
@@ -27,9 +26,7 @@ namespace Mix.Cms.Web
         {
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation()
-                .AddNewtonsoftJson(options =>
-            options.SerializerSettings.ContractResolver =
-              new CamelCasePropertyNamesContractResolver()); ;
+                .AddNewtonsoftJson();
 
             #region Addictionals Config for Mixcore Cms
 
