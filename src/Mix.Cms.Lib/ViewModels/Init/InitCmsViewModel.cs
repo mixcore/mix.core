@@ -64,7 +64,7 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
         public string Lang { get; set; }
 
         [JsonProperty("isMysql")]
-        public bool IsMysql { get; set; }
+        public bool IsMysql { get { return DatabaseProvider == MixEnums.DatabaseProvider.MySQL; } }
 
         [JsonProperty("databaseProvider")]
         public MixEnums.DatabaseProvider DatabaseProvider { get; set; }

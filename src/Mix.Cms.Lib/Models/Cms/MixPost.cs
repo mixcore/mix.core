@@ -7,7 +7,6 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixPost()
         {
-            MixComment = new HashSet<MixComment>();
             MixModuleData = new HashSet<MixModuleData>();
             MixModulePost = new HashSet<MixModulePost>();
             MixOrderItem = new HashSet<MixOrderItem>();
@@ -48,7 +47,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public string ExtraFields { get; set; }
 
         public virtual MixCulture SpecificultureNavigation { get; set; }
-        public virtual ICollection<MixComment> MixComment { get; set; }
         public virtual ICollection<MixModuleData> MixModuleData { get; set; }
         public virtual ICollection<MixModulePost> MixModulePost { get; set; }
         public virtual ICollection<MixOrderItem> MixOrderItem { get; set; }

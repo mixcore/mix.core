@@ -15,51 +15,66 @@ namespace Mix.Cms.Lib.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "3.1.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeField", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<int>("AttributeSetId");
+                    b.Property<int>("AttributeSetId")
+                        .HasColumnType("int");
 
                     b.Property<string>("AttributeSetName")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("DataType");
+                    b.Property<int>("DataType")
+                        .HasColumnType("int");
 
-                    b.Property<string>("DefaultValue");
+                    b.Property<string>("DefaultValue")
+                        .HasColumnType("text");
 
-                    b.Property<bool>("IsEncrypt");
+                    b.Property<bool>("IsEncrypt")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("IsRequire");
+                    b.Property<bool>("IsRequire")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("IsSelect");
+                    b.Property<bool>("IsSelect")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("IsUnique");
+                    b.Property<bool>("IsUnique")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<string>("Options")
-                        .HasMaxLength(4000);
-
-                    b.Property<int>("Priority");
-
-                    b.Property<int?>("ReferenceId");
-
-                    b.Property<string>("Regex")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Status");
+                    b.Property<string>("Options")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ReferenceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Regex")
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.HasKey("Id");
@@ -73,41 +88,53 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeSet", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<bool?>("EdmAutoSend");
+                    b.Property<bool?>("EdmAutoSend")
+                        .HasColumnType("bit");
 
                     b.Property<string>("EdmFrom")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("EdmSubject")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("EdmTemplate")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("FormTemplate")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Type");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -117,25 +144,32 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeSetData", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<int>("AttributeSetId");
+                    b.Property<int>("AttributeSetId")
+                        .HasColumnType("int");
 
                     b.Property<string>("AttributeSetName")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id", "Specificulture");
 
@@ -146,26 +180,34 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeSetReference", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<int>("AttributeSetId");
+                    b.Property<int>("AttributeSetId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(450)")
                         .HasMaxLength(450);
 
                     b.Property<string>("Image")
+                        .HasColumnType("nvarchar(450)")
                         .HasMaxLength(450);
 
-                    b.Property<int>("ParentId");
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("ParentType");
+                    b.Property<int>("ParentType")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -177,55 +219,72 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeSetValue", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("AttributeFieldId");
+                    b.Property<int>("AttributeFieldId")
+                        .HasColumnType("int");
 
                     b.Property<string>("AttributeFieldName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("AttributeSetName")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<bool?>("BooleanValue");
+                    b.Property<bool?>("BooleanValue")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("DataId")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("DataType");
+                    b.Property<int>("DataType")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DateTimeValue")
                         .HasColumnType("datetime");
 
-                    b.Property<double?>("DoubleValue");
+                    b.Property<double?>("DoubleValue")
+                        .HasColumnType("float");
 
                     b.Property<string>("EncryptKey")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("EncryptType");
+                    b.Property<int>("EncryptType")
+                        .HasColumnType("int");
 
                     b.Property<string>("EncryptValue")
+                        .HasColumnType("nvarchar(4000)")
                         .HasMaxLength(4000);
 
-                    b.Property<int?>("IntegerValue");
+                    b.Property<int?>("IntegerValue")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
                     b.Property<string>("Regex")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("StringValue")
+                        .HasColumnType("nvarchar(4000)")
                         .HasMaxLength(4000);
 
                     b.HasKey("Id");
@@ -238,7 +297,8 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCache", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(250);
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -246,10 +306,13 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<DateTime?>("ExpiredDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Value")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(4000)")
+                        .HasMaxLength(4000);
 
                     b.HasKey("Id");
 
@@ -261,126 +324,97 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCmsUser", b =>
                 {
-                    b.Property<string>("Id");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Address")
-                        .HasMaxLength(450);
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
 
                     b.Property<string>("Avatar")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(256);
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
 
                     b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("MiddleName")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Username")
-                        .HasMaxLength(256);
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
 
                     b.HasKey("Id");
 
                     b.ToTable("mix_cms_user");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixComment", b =>
-                {
-                    b.Property<Guid>("Id");
-
-                    b.Property<string>("Content");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(250);
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("FullName")
-                        .HasMaxLength(250);
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<bool?>("IsReviewed");
-
-                    b.Property<bool?>("IsVisible");
-
-                    b.Property<int?>("OrderId");
-
-                    b.Property<int?>("PostId");
-
-                    b.Property<int>("Priority");
-
-                    b.Property<double?>("Rating");
-
-                    b.Property<string>("Specificulture")
-                        .HasMaxLength(10);
-
-                    b.Property<int>("Status");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(250);
-
-                    b.Property<DateTime?>("UpdatedDateTime")
-                        .HasColumnType("datetime");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId", "Specificulture");
-
-                    b.HasIndex("PostId", "Specificulture");
-
-                    b.ToTable("mix_comment");
-                });
-
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixConfiguration", b =>
                 {
                     b.Property<string>("Keyword")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<string>("Category")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("DataType");
+                    b.Property<int>("DataType")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Value");
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(4000)")
+                        .HasMaxLength(4000);
 
                     b.HasKey("Keyword", "Specificulture");
 
@@ -392,19 +426,26 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCopy", b =>
                 {
                     b.Property<string>("Culture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<string>("Keyword")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Note")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Value");
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(4000)")
+                        .HasMaxLength(4000);
 
                     b.HasKey("Culture", "Keyword");
 
@@ -413,37 +454,47 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCulture", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Alias")
+                        .HasColumnType("nvarchar(150)")
                         .HasMaxLength(150);
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(150)")
                         .HasMaxLength(150);
 
                     b.Property<string>("Icon")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("Lcid")
                         .HasColumnName("LCID")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -456,51 +507,66 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCustomer", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Address")
+                        .HasColumnType("nvarchar(450)")
                         .HasMaxLength(450);
 
                     b.Property<string>("Avatar")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<DateTime?>("BirthDay")
                         .HasColumnType("datetime");
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Email")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<bool>("IsAgreeNotified");
+                    b.Property<bool>("IsAgreeNotified")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("MiddleName")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("Username")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
@@ -512,44 +578,56 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Content")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(4000)")
+                        .HasMaxLength(4000);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Extension")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("FileFolder")
                         .IsRequired()
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("FileName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("FolderType")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("ThemeId");
+                    b.Property<int?>("ThemeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ThemeName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.HasKey("Id");
@@ -562,33 +640,44 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixLanguage", b =>
                 {
                     b.Property<string>("Keyword")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<string>("Category")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("DataType");
+                    b.Property<int>("DataType")
+                        .HasColumnType("int");
 
                     b.Property<string>("DefaultValue")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Value");
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(4000)")
+                        .HasMaxLength(4000);
 
                     b.HasKey("Keyword", "Specificulture");
 
@@ -599,58 +688,74 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixMedia", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(4000)")
                         .HasMaxLength(4000);
 
                     b.Property<string>("Extension")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("FileFolder")
                         .IsRequired()
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("FileName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("FileProperties")
+                        .HasColumnType("nvarchar(4000)")
                         .HasMaxLength(4000);
 
-                    b.Property<long>("FileSize");
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("FileType")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
                     b.Property<string>("Source")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Tags")
+                        .HasColumnType("nvarchar(400)")
                         .HasMaxLength(400);
 
                     b.Property<string>("TargetUrl")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Title")
+                        .HasColumnType("nvarchar(4000)")
                         .HasMaxLength(4000);
 
                     b.HasKey("Id", "Specificulture");
@@ -660,55 +765,71 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModule", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(4000)")
                         .HasMaxLength(4000);
 
                     b.Property<string>("EdmTemplate")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Fields")
+                        .HasColumnType("nvarchar(4000)")
                         .HasMaxLength(4000);
 
                     b.Property<string>("FormTemplate")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Image")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int?>("PageSize");
+                    b.Property<int?>("PageSize")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Template")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Thumbnail")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Title")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Type");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.HasKey("Id", "Specificulture");
 
@@ -720,22 +841,28 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleAttributeData", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("AttributeSetId");
+                    b.Property<int>("AttributeSetId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("ModuleId");
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -748,22 +875,29 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleAttributeSet", b =>
                 {
-                    b.Property<int>("ModuleId");
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<int>("AttributeSetId");
+                    b.Property<int>("AttributeSetId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Image")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("ModuleId", "Specificulture", "AttributeSetId")
                         .HasName("PK_mix_module_attribute_set_1");
@@ -781,54 +915,71 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleAttributeValue", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("AttributeFieldId");
+                    b.Property<int>("AttributeFieldId")
+                        .HasColumnType("int");
 
                     b.Property<string>("AttributeName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<bool?>("BooleanValue");
+                    b.Property<bool?>("BooleanValue")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("DataId")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("DataType");
+                    b.Property<int>("DataType")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DateTimeValue")
                         .HasColumnType("datetime");
 
-                    b.Property<double?>("DoubleValue");
+                    b.Property<double?>("DoubleValue")
+                        .HasColumnType("float");
 
                     b.Property<string>("EncryptKey")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("EncryptType");
+                    b.Property<int>("EncryptType")
+                        .HasColumnType("int");
 
                     b.Property<string>("EncryptValue")
+                        .HasColumnType("nvarchar(4000)")
                         .HasMaxLength(4000);
 
-                    b.Property<int?>("IntegerValue");
+                    b.Property<int?>("IntegerValue")
+                        .HasColumnType("int");
 
-                    b.Property<int>("ModuleId");
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
                     b.Property<string>("Regex")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("StringValue")
+                        .HasColumnType("nvarchar(4000)")
                         .HasMaxLength(4000);
 
                     b.HasKey("Id");
@@ -843,11 +994,14 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleData", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("ModuleId");
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -855,20 +1009,27 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Fields")
                         .IsRequired()
+                        .HasColumnType("nvarchar(4000)")
                         .HasMaxLength(4000);
 
-                    b.Property<int?>("PageId");
+                    b.Property<int?>("PageId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("PostId");
+                    b.Property<int?>("PostId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("Value");
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(4000)")
+                        .HasMaxLength(4000);
 
                     b.HasKey("Id", "ModuleId", "Specificulture");
 
@@ -885,22 +1046,29 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModulePost", b =>
                 {
-                    b.Property<int>("PostId");
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("ModuleId");
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Image")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("PostId", "ModuleId", "Specificulture");
 
@@ -913,24 +1081,31 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixOrder", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<int?>("CustomerId");
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
-                    b.Property<int>("StoreId");
+                    b.Property<int>("StoreId")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.HasKey("Id", "Specificulture");
@@ -944,26 +1119,35 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixOrderItem", b =>
                 {
-                    b.Property<int>("PostId");
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("OrderId");
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(4000)")
                         .HasMaxLength(4000);
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<double>("Price");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<string>("PriceUnit")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("Quantity");
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("PostId", "OrderId", "Specificulture");
 
@@ -982,79 +1166,100 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPage", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("CssClass")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<string>("Excerpt");
+                    b.Property<string>("Excerpt")
+                        .HasColumnType("text");
 
                     b.Property<string>("ExtraFields")
-                        .HasMaxLength(4000);
+                        .HasColumnType("text");
 
                     b.Property<string>("Icon")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("Image")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Layout")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int?>("Level");
+                    b.Property<int?>("Level")
+                        .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int?>("PageSize");
+                    b.Property<int?>("PageSize")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
                     b.Property<string>("SeoDescription")
-                        .HasMaxLength(4000);
+                        .HasColumnType("text");
 
                     b.Property<string>("SeoKeywords")
-                        .HasMaxLength(4000);
+                        .HasColumnType("text");
 
                     b.Property<string>("SeoName")
+                        .HasColumnType("varchar(500)")
                         .HasMaxLength(500)
                         .IsUnicode(false);
 
                     b.Property<string>("SeoTitle")
-                        .HasMaxLength(4000);
+                        .HasColumnType("varchar(250)")
+                        .HasMaxLength(250)
+                        .IsUnicode(false);
 
                     b.Property<string>("StaticUrl")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Tags")
-                        .HasMaxLength(500);
+                        .HasColumnType("text");
 
                     b.Property<string>("Template")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Title")
-                        .HasMaxLength(4000);
+                        .HasColumnType("text");
 
-                    b.Property<int>("Type");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("Views");
+                    b.Property<int?>("Views")
+                        .HasColumnType("int");
 
                     b.HasKey("Id", "Specificulture");
 
@@ -1066,22 +1271,28 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageAttributeData", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("AttributeSetId");
+                    b.Property<int>("AttributeSetId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("PageId");
+                    b.Property<int>("PageId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedDateTime")
                         .HasColumnType("datetime");
@@ -1095,22 +1306,29 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageAttributeSet", b =>
                 {
-                    b.Property<int>("PageId");
+                    b.Property<int>("PageId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<int>("AttributeSetId");
+                    b.Property<int>("AttributeSetId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Image")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("PageId", "Specificulture", "AttributeSetId");
 
@@ -1122,49 +1340,64 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageAttributeValue", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("AttributeFieldId");
+                    b.Property<int>("AttributeFieldId")
+                        .HasColumnType("int");
 
                     b.Property<string>("AttributeName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<bool?>("BooleanValue");
+                    b.Property<bool?>("BooleanValue")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("DataId")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<DateTime?>("DateTimeValue")
                         .HasColumnType("datetime");
 
-                    b.Property<double?>("DoubleValue");
+                    b.Property<double?>("DoubleValue")
+                        .HasColumnType("float");
 
                     b.Property<string>("EncryptKey")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("EncryptType");
+                    b.Property<int>("EncryptType")
+                        .HasColumnType("int");
 
                     b.Property<string>("EncryptValue")
+                        .HasColumnType("nvarchar(4000)")
                         .HasMaxLength(4000);
 
-                    b.Property<int?>("IntegerValue");
+                    b.Property<int?>("IntegerValue")
+                        .HasColumnType("int");
 
-                    b.Property<int>("PageId");
+                    b.Property<int>("PageId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("StringValue")
+                        .HasColumnType("nvarchar(4000)")
                         .HasMaxLength(4000);
 
                     b.HasKey("Id");
@@ -1178,24 +1411,32 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageModule", b =>
                 {
-                    b.Property<int>("ModuleId");
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("PageId");
+                    b.Property<int>("PageId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Image")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Position");
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("ModuleId", "PageId", "Specificulture");
 
@@ -1208,22 +1449,29 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPagePage", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<int>("ParentId");
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Image")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id", "ParentId", "Specificulture");
 
@@ -1236,19 +1484,25 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPagePosition", b =>
                 {
-                    b.Property<int>("PositionId");
+                    b.Property<int>("PositionId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("PageId");
+                    b.Property<int>("PageId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("PositionId", "PageId", "Specificulture");
 
@@ -1259,22 +1513,29 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPagePost", b =>
                 {
-                    b.Property<int>("PostId");
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("PageId");
+                    b.Property<int>("PageId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Image")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("PostId", "PageId", "Specificulture");
 
@@ -1288,16 +1549,23 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixParameter", b =>
                 {
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(4000)")
+                        .HasMaxLength(4000);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Value")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(4000)")
+                        .HasMaxLength(4000);
 
                     b.HasKey("Name");
 
@@ -1306,33 +1574,43 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPortalPage", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(450)")
                         .HasMaxLength(450);
 
                     b.Property<string>("Icon")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("Level");
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("TextDefault")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("TextKeyword")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Url")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.HasKey("Id");
@@ -1342,19 +1620,25 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPortalPageNavigation", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<int>("ParentId");
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Image")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id", "ParentId");
 
@@ -1365,16 +1649,21 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPortalPagePosition", b =>
                 {
-                    b.Property<int>("PositionId");
+                    b.Property<int>("PositionId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("PortalPageId");
+                    b.Property<int>("PortalPageId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("PositionId", "PortalPageId");
 
@@ -1385,20 +1674,26 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPortalPageRole", b =>
                 {
-                    b.Property<string>("RoleId");
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<int>("PageId");
+                    b.Property<int>("PageId")
+                        .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("RoleId", "PageId");
 
@@ -1409,15 +1704,19 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPosition", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1426,75 +1725,92 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPost", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("Excerpt");
+                    b.Property<string>("Excerpt")
+                        .HasColumnType("text");
 
                     b.Property<string>("ExtraFields")
-                        .HasMaxLength(4000);
+                        .HasColumnType("text");
 
-                    b.Property<string>("ExtraProperties");
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text");
 
-                    b.Property<string>("Icon");
+                    b.Property<string>("Icon")
+                        .HasColumnType("text");
 
                     b.Property<string>("Image")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("PublishedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("SeoDescription")
-                        .HasMaxLength(4000);
+                        .HasColumnType("text");
 
                     b.Property<string>("SeoKeywords")
-                        .HasMaxLength(4000);
+                        .HasColumnType("text");
 
                     b.Property<string>("SeoName")
+                        .HasColumnType("varchar(500)")
                         .HasMaxLength(500)
                         .IsUnicode(false);
 
                     b.Property<string>("SeoTitle")
-                        .HasMaxLength(4000);
+                        .HasColumnType("text");
 
                     b.Property<string>("Source")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Tags")
-                        .HasMaxLength(500);
+                        .HasColumnType("text");
 
                     b.Property<string>("Template")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Thumbnail")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Title")
-                        .HasMaxLength(4000);
+                        .HasColumnType("text");
 
-                    b.Property<int>("Type");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("Views");
+                    b.Property<int?>("Views")
+                        .HasColumnType("int");
 
                     b.HasKey("Id", "Specificulture");
 
@@ -1506,22 +1822,28 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostAttributeData", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("AttributeSetId");
+                    b.Property<int>("AttributeSetId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("PostId");
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1532,22 +1854,29 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostAttributeSet", b =>
                 {
-                    b.Property<int>("PostId");
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<int>("AttributeSetId");
+                    b.Property<int>("AttributeSetId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Image")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("PostId", "Specificulture", "AttributeSetId");
 
@@ -1559,51 +1888,67 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostAttributeValue", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("AttributeFieldId");
+                    b.Property<int>("AttributeFieldId")
+                        .HasColumnType("int");
 
                     b.Property<string>("AttributeName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<bool?>("BooleanValue");
+                    b.Property<bool?>("BooleanValue")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("DataId")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("DataType");
+                    b.Property<int>("DataType")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DateTimeValue")
                         .HasColumnType("datetime");
 
-                    b.Property<double?>("DoubleValue");
+                    b.Property<double?>("DoubleValue")
+                        .HasColumnType("float");
 
                     b.Property<string>("EncryptKey")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("EncryptType");
+                    b.Property<int>("EncryptType")
+                        .HasColumnType("int");
 
                     b.Property<string>("EncryptValue")
+                        .HasColumnType("nvarchar(4000)")
                         .HasMaxLength(4000);
 
-                    b.Property<int?>("IntegerValue");
+                    b.Property<int?>("IntegerValue")
+                        .HasColumnType("int");
 
-                    b.Property<int>("PostId");
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("StringValue")
+                        .HasColumnType("nvarchar(4000)")
                         .HasMaxLength(4000);
 
                     b.HasKey("Id");
@@ -1617,24 +1962,32 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostMedia", b =>
                 {
-                    b.Property<int>("MediaId");
+                    b.Property<int>("MediaId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("PostId");
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Image")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Position");
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("MediaId", "PostId", "Specificulture");
 
@@ -1647,24 +2000,32 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostModule", b =>
                 {
-                    b.Property<int>("ModuleId");
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("PostId");
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Image")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Position");
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("ModuleId", "PostId", "Specificulture");
 
@@ -1678,30 +2039,39 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedAttributeData", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<string>("ParentId")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("ParentType");
+                    b.Property<int>("ParentType")
+                        .HasColumnType("int");
 
-                    b.Property<int>("AttributeSetId");
+                    b.Property<int>("AttributeSetId")
+                        .HasColumnType("int");
 
                     b.Property<string>("AttributeSetName")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(450)")
                         .HasMaxLength(450);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id", "Specificulture", "ParentId", "ParentType")
                         .HasName("PK_mix_related_attribute_data_1");
@@ -1711,54 +2081,114 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedAttributeSet", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<int>("ParentId");
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("ParentType");
+                    b.Property<int>("ParentType")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(450)")
                         .HasMaxLength(450);
 
                     b.Property<string>("Image")
+                        .HasColumnType("nvarchar(450)")
                         .HasMaxLength(450);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id", "Specificulture", "ParentId", "ParentType");
 
                     b.ToTable("mix_related_attribute_set");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedPost", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedData", b =>
                 {
-                    b.Property<int>("SourceId");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<int>("DestinationId");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
+
+                    b.Property<string>("ParentId")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("ParentType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AttributeSetId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AttributeSetName")
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(450)")
+                        .HasMaxLength(450);
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id", "Type", "Specificulture", "ParentId", "ParentType");
+
+                    b.ToTable("mix_related_data");
+                });
+
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedPost", b =>
+                {
+                    b.Property<int>("SourceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DestinationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(450)")
                         .HasMaxLength(450);
 
                     b.Property<string>("Image")
+                        .HasColumnType("nvarchar(450)")
                         .HasMaxLength(450);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("SourceId", "DestinationId", "Specificulture");
 
@@ -1771,52 +2201,67 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixTemplate", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Content")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Extension")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("FileFolder")
                         .IsRequired()
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("FileName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("FolderType")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("MobileContent");
+                    b.Property<string>("MobileContent")
+                        .HasColumnType("text");
 
                     b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Scripts");
+                    b.Property<string>("Scripts")
+                        .HasColumnType("text");
 
-                    b.Property<string>("SpaContent");
+                    b.Property<string>("SpaContent")
+                        .HasColumnType("text");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Styles");
+                    b.Property<string>("Styles")
+                        .HasColumnType("text");
 
-                    b.Property<int>("ThemeId");
+                    b.Property<int>("ThemeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ThemeName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.HasKey("Id");
@@ -1829,33 +2274,42 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixTheme", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Image")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("PreviewUrl")
+                        .HasColumnType("nvarchar(450)")
                         .HasMaxLength(450);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Thumbnail")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Title")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.HasKey("Id");
@@ -1865,28 +2319,36 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixUrlAlias", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<string>("Alias")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(4000)")
                         .HasMaxLength(4000);
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
                     b.Property<string>("SourceId")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Type");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.HasKey("Id", "Specificulture");
 
@@ -1900,7 +2362,8 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
                         .WithMany("MixAttributeFieldAttributeSet")
                         .HasForeignKey("AttributeSetId")
-                        .HasConstraintName("FK_mix_attribute_field_mix_attribute_set");
+                        .HasConstraintName("FK_mix_attribute_field_mix_attribute_set")
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "Reference")
                         .WithMany("MixAttributeFieldReference")
@@ -1913,7 +2376,8 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
                         .WithMany("MixAttributeSetData")
                         .HasForeignKey("AttributeSetId")
-                        .HasConstraintName("FK_mix_attribute_set_data_mix_attribute_set");
+                        .HasConstraintName("FK_mix_attribute_set_data_mix_attribute_set")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeSetReference", b =>
@@ -1921,20 +2385,8 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
                         .WithMany("MixAttributeSetReference")
                         .HasForeignKey("AttributeSetId")
-                        .HasConstraintName("FK_mix_attribute_set_reference_mix_attribute_set");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixComment", b =>
-                {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixOrder", "MixOrder")
-                        .WithMany("MixComment")
-                        .HasForeignKey("OrderId", "Specificulture")
-                        .HasConstraintName("FK_mix_comment_mix_order");
-
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
-                        .WithMany("MixComment")
-                        .HasForeignKey("PostId", "Specificulture")
-                        .HasConstraintName("FK_mix_comment_mix_post");
+                        .HasConstraintName("FK_mix_attribute_set_reference_mix_attribute_set")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixConfiguration", b =>
@@ -1944,7 +2396,8 @@ namespace Mix.Cms.Lib.Migrations
                         .HasForeignKey("Specificulture")
                         .HasConstraintName("FK_Mix_Configuration_Mix_Culture")
                         .HasPrincipalKey("Specificulture")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixFile", b =>
@@ -1962,7 +2415,8 @@ namespace Mix.Cms.Lib.Migrations
                         .HasForeignKey("Specificulture")
                         .HasConstraintName("FK_Mix_Language_Mix_Culture")
                         .HasPrincipalKey("Specificulture")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModule", b =>
@@ -1972,7 +2426,8 @@ namespace Mix.Cms.Lib.Migrations
                         .HasForeignKey("Specificulture")
                         .HasConstraintName("FK_Mix_Module_Mix_Culture")
                         .HasPrincipalKey("Specificulture")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleAttributeData", b =>
@@ -1980,12 +2435,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
                         .WithMany("MixModuleAttributeData")
                         .HasForeignKey("AttributeSetId")
-                        .HasConstraintName("FK_mix_module_attribute_data_mix_attribute_set");
+                        .HasConstraintName("FK_mix_module_attribute_data_mix_attribute_set")
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixModule", "MixModule")
                         .WithMany("MixModuleAttributeData")
                         .HasForeignKey("ModuleId", "Specificulture")
-                        .HasConstraintName("FK_mix_module_attribute_data_mix_module");
+                        .HasConstraintName("FK_mix_module_attribute_data_mix_module")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleAttributeSet", b =>
@@ -1993,17 +2450,20 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
                         .WithMany("MixModuleAttributeSet")
                         .HasForeignKey("AttributeSetId")
-                        .HasConstraintName("FK_mix_module_attribute_set_mix_attribute_set");
+                        .HasConstraintName("FK_mix_module_attribute_set_mix_attribute_set")
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixModule", "MixModule")
                         .WithMany("MixModuleAttributeSet")
                         .HasForeignKey("ModuleId", "Specificulture")
-                        .HasConstraintName("FK_mix_module_attribute_set_mix_module1");
+                        .HasConstraintName("FK_mix_module_attribute_set_mix_module1")
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPostModule", "MixPostModule")
                         .WithMany("MixModuleAttributeSet")
                         .HasForeignKey("ModuleId", "AttributeSetId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Module_Attribute_set_Mix_Post_Module");
+                        .HasConstraintName("FK_Mix_Module_Attribute_set_Mix_Post_Module")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleAttributeValue", b =>
@@ -2011,12 +2471,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeField", "AttributeField")
                         .WithMany("MixModuleAttributeValue")
                         .HasForeignKey("AttributeFieldId")
-                        .HasConstraintName("FK_mix_module_attribute_value_mix_attribute_field");
+                        .HasConstraintName("FK_mix_module_attribute_value_mix_attribute_field")
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixModuleAttributeData", "Data")
                         .WithMany("MixModuleAttributeValue")
                         .HasForeignKey("DataId")
-                        .HasConstraintName("FK_mix_module_attribute_value_mix_module_attribute_data");
+                        .HasConstraintName("FK_mix_module_attribute_value_mix_module_attribute_data")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleData", b =>
@@ -2025,7 +2487,8 @@ namespace Mix.Cms.Lib.Migrations
                         .WithMany("MixModuleData")
                         .HasForeignKey("ModuleId", "Specificulture")
                         .HasConstraintName("FK_Mix_Module_Data_Mix_Module")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPage", "MixPage")
                         .WithMany("MixModuleData")
@@ -2048,12 +2511,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixModule", "MixModule")
                         .WithMany("MixModulePost")
                         .HasForeignKey("ModuleId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Module_Post_Mix_Module");
+                        .HasConstraintName("FK_Mix_Module_Post_Mix_Module")
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
                         .WithMany("MixModulePost")
                         .HasForeignKey("PostId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Module_Post_Mix_Post");
+                        .HasConstraintName("FK_Mix_Module_Post_Mix_Post")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixOrder", b =>
@@ -2069,12 +2534,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixOrder", "MixOrder")
                         .WithMany("MixOrderItem")
                         .HasForeignKey("OrderId", "Specificulture")
-                        .HasConstraintName("FK_Order_Item_Order");
+                        .HasConstraintName("FK_Order_Item_Order")
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
                         .WithMany("MixOrderItem")
                         .HasForeignKey("PostId", "Specificulture")
-                        .HasConstraintName("FK_Order_Item_Product");
+                        .HasConstraintName("FK_Order_Item_Product")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPage", b =>
@@ -2083,7 +2550,8 @@ namespace Mix.Cms.Lib.Migrations
                         .WithMany("MixPage")
                         .HasForeignKey("Specificulture")
                         .HasConstraintName("FK_Mix_Page_Mix_Culture")
-                        .HasPrincipalKey("Specificulture");
+                        .HasPrincipalKey("Specificulture")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageAttributeData", b =>
@@ -2091,7 +2559,8 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPage", "MixPage")
                         .WithMany("MixPageAttributeData")
                         .HasForeignKey("PageId", "Specificulture")
-                        .HasConstraintName("FK_mix_page_attribute_data_mix_page");
+                        .HasConstraintName("FK_mix_page_attribute_data_mix_page")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageAttributeSet", b =>
@@ -2099,12 +2568,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
                         .WithMany("MixPageAttributeSet")
                         .HasForeignKey("AttributeSetId")
-                        .HasConstraintName("FK_mix_page_attribute_set_mix_attribute_set");
+                        .HasConstraintName("FK_mix_page_attribute_set_mix_attribute_set")
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPage", "MixPage")
                         .WithMany("MixPageAttributeSet")
                         .HasForeignKey("PageId", "Specificulture")
-                        .HasConstraintName("FK_mix_page_attribute_set_mix_page");
+                        .HasConstraintName("FK_mix_page_attribute_set_mix_page")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageAttributeValue", b =>
@@ -2112,12 +2583,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeField", "AttributeField")
                         .WithMany("MixPageAttributeValue")
                         .HasForeignKey("AttributeFieldId")
-                        .HasConstraintName("FK_mix_page_attribute_value_mix_attribute_field");
+                        .HasConstraintName("FK_mix_page_attribute_value_mix_attribute_field")
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPageAttributeData", "Data")
                         .WithMany("MixPageAttributeValue")
                         .HasForeignKey("DataId")
-                        .HasConstraintName("FK_mix_page_attribute_value_mix_page_attribute_data");
+                        .HasConstraintName("FK_mix_page_attribute_value_mix_page_attribute_data")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageModule", b =>
@@ -2126,12 +2599,14 @@ namespace Mix.Cms.Lib.Migrations
                         .WithMany("MixPageModule")
                         .HasForeignKey("ModuleId", "Specificulture")
                         .HasConstraintName("FK_Mix_Menu_Module_Mix_Module1")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPage", "MixPage")
                         .WithMany("MixPageModule")
                         .HasForeignKey("PageId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Page_Module_Mix_Page");
+                        .HasConstraintName("FK_Mix_Page_Module_Mix_Page")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPagePage", b =>
@@ -2139,12 +2614,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPage", "MixPage")
                         .WithMany("MixPagePageMixPage")
                         .HasForeignKey("Id", "Specificulture")
-                        .HasConstraintName("FK_Mix_Page_Page_Mix_Page");
+                        .HasConstraintName("FK_Mix_Page_Page_Mix_Page")
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPage", "MixPageNavigation")
                         .WithMany("MixPagePageMixPageNavigation")
                         .HasForeignKey("ParentId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Page_Page_Mix_Page1");
+                        .HasConstraintName("FK_Mix_Page_Page_Mix_Page1")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPagePosition", b =>
@@ -2153,12 +2630,14 @@ namespace Mix.Cms.Lib.Migrations
                         .WithMany("MixPagePosition")
                         .HasForeignKey("PositionId")
                         .HasConstraintName("FK_Mix_Page_Position_Mix_Position")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPage", "MixPage")
                         .WithMany("MixPagePosition")
                         .HasForeignKey("PageId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Page_Position_Mix_Page");
+                        .HasConstraintName("FK_Mix_Page_Position_Mix_Page")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPagePost", b =>
@@ -2166,12 +2645,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPage", "MixPage")
                         .WithMany("MixPagePost")
                         .HasForeignKey("PageId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Page_Post_Mix_Page");
+                        .HasConstraintName("FK_Mix_Page_Post_Mix_Page")
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
                         .WithMany("MixPagePost")
                         .HasForeignKey("PostId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Page_Post_Mix_Post");
+                        .HasConstraintName("FK_Mix_Page_Post_Mix_Post")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPortalPageNavigation", b =>
@@ -2179,12 +2660,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPortalPage", "IdNavigation")
                         .WithMany("MixPortalPageNavigationIdNavigation")
                         .HasForeignKey("Id")
-                        .HasConstraintName("FK_mix_portal_page_navigation_mix_portal_page");
+                        .HasConstraintName("FK_mix_portal_page_navigation_mix_portal_page")
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPortalPage", "Parent")
                         .WithMany("MixPortalPageNavigationParent")
                         .HasForeignKey("ParentId")
-                        .HasConstraintName("FK_mix_portal_page_navigation_mix_portal_page1");
+                        .HasConstraintName("FK_mix_portal_page_navigation_mix_portal_page1")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPortalPagePosition", b =>
@@ -2192,13 +2675,15 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPortalPage", "PortalPage")
                         .WithMany("MixPortalPagePosition")
                         .HasForeignKey("PortalPageId")
-                        .HasConstraintName("FK_Mix_PortalPage_Position_Mix_PortalPage");
+                        .HasConstraintName("FK_Mix_PortalPage_Position_Mix_PortalPage")
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPosition", "Position")
                         .WithMany("MixPortalPagePosition")
                         .HasForeignKey("PositionId")
                         .HasConstraintName("FK_Mix_PortalPage_Position_Mix_Position")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPortalPageRole", b =>
@@ -2207,7 +2692,8 @@ namespace Mix.Cms.Lib.Migrations
                         .WithMany("MixPortalPageRole")
                         .HasForeignKey("PageId")
                         .HasConstraintName("FK_mix_portal_page_role_mix_portal_page")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPost", b =>
@@ -2216,7 +2702,8 @@ namespace Mix.Cms.Lib.Migrations
                         .WithMany("MixPost")
                         .HasForeignKey("Specificulture")
                         .HasConstraintName("FK_Mix_Post_Mix_Culture")
-                        .HasPrincipalKey("Specificulture");
+                        .HasPrincipalKey("Specificulture")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostAttributeData", b =>
@@ -2224,7 +2711,8 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
                         .WithMany("MixPostAttributeData")
                         .HasForeignKey("PostId", "Specificulture")
-                        .HasConstraintName("FK_mix_post_attribute_data_mix_post");
+                        .HasConstraintName("FK_mix_post_attribute_data_mix_post")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostAttributeSet", b =>
@@ -2232,12 +2720,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
                         .WithMany("MixPostAttributeSet")
                         .HasForeignKey("AttributeSetId")
-                        .HasConstraintName("FK_mix_post_attribute_set_mix_attribute_set");
+                        .HasConstraintName("FK_mix_post_attribute_set_mix_attribute_set")
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
                         .WithMany("MixPostAttributeSet")
                         .HasForeignKey("PostId", "Specificulture")
-                        .HasConstraintName("FK_mix_post_attribute_set_mix_post");
+                        .HasConstraintName("FK_mix_post_attribute_set_mix_post")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostAttributeValue", b =>
@@ -2245,12 +2735,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeField", "AttributeField")
                         .WithMany("MixPostAttributeValue")
                         .HasForeignKey("AttributeFieldId")
-                        .HasConstraintName("FK_mix_post_attribute_value_mix_attribute_field");
+                        .HasConstraintName("FK_mix_post_attribute_value_mix_attribute_field")
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPostAttributeData", "Data")
                         .WithMany("MixPostAttributeValue")
                         .HasForeignKey("DataId")
-                        .HasConstraintName("FK_mix_post_attribute_value_mix_post_attribute_data");
+                        .HasConstraintName("FK_mix_post_attribute_value_mix_post_attribute_data")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostMedia", b =>
@@ -2258,12 +2750,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixMedia", "MixMedia")
                         .WithMany("MixPostMedia")
                         .HasForeignKey("MediaId", "Specificulture")
-                        .HasConstraintName("FK_mix_post_media_mix_media");
+                        .HasConstraintName("FK_mix_post_media_mix_media")
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
                         .WithMany("MixPostMedia")
                         .HasForeignKey("PostId", "Specificulture")
-                        .HasConstraintName("FK_mix_post_media_mix_post");
+                        .HasConstraintName("FK_mix_post_media_mix_post")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostModule", b =>
@@ -2272,12 +2766,14 @@ namespace Mix.Cms.Lib.Migrations
                         .WithMany("MixPostModule")
                         .HasForeignKey("ModuleId", "Specificulture")
                         .HasConstraintName("FK_Mix_Post_Module_Mix_Module1")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
                         .WithMany("MixPostModule")
                         .HasForeignKey("PostId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Post_Module_Mix_Post");
+                        .HasConstraintName("FK_Mix_Post_Module_Mix_Post")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedAttributeData", b =>
@@ -2285,7 +2781,8 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSetData", "MixAttributeSetData")
                         .WithMany("MixRelatedAttributeData")
                         .HasForeignKey("Id", "Specificulture")
-                        .HasConstraintName("FK_mix_related_attribute_data_mix_attribute_set_data2");
+                        .HasConstraintName("FK_mix_related_attribute_data_mix_attribute_set_data2")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedAttributeSet", b =>
@@ -2293,7 +2790,8 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "IdNavigation")
                         .WithMany("MixRelatedAttributeSet")
                         .HasForeignKey("Id")
-                        .HasConstraintName("FK_mix_related_attribute_set_mix_attribute_set");
+                        .HasConstraintName("FK_mix_related_attribute_set_mix_attribute_set")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedPost", b =>
@@ -2301,12 +2799,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
                         .WithMany("MixRelatedPostMixPost")
                         .HasForeignKey("DestinationId", "Specificulture")
-                        .HasConstraintName("FK_mix_related_post_mix_post1");
+                        .HasConstraintName("FK_mix_related_post_mix_post1")
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "S")
                         .WithMany("MixRelatedPostS")
                         .HasForeignKey("SourceId", "Specificulture")
-                        .HasConstraintName("FK_mix_related_post_mix_post");
+                        .HasConstraintName("FK_mix_related_post_mix_post")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixTemplate", b =>
@@ -2314,7 +2814,8 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixTheme", "Theme")
                         .WithMany("MixTemplate")
                         .HasForeignKey("ThemeId")
-                        .HasConstraintName("FK_mix_template_mix_theme");
+                        .HasConstraintName("FK_mix_template_mix_theme")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixUrlAlias", b =>
@@ -2324,7 +2825,8 @@ namespace Mix.Cms.Lib.Migrations
                         .HasForeignKey("Specificulture")
                         .HasConstraintName("FK_Mix_Url_Alias_Mix_Culture")
                         .HasPrincipalKey("Specificulture")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

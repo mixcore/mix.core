@@ -7,7 +7,6 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixOrder()
         {
-            MixComment = new HashSet<MixComment>();
             MixOrderItem = new HashSet<MixOrderItem>();
         }
 
@@ -21,7 +20,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Status { get; set; }
 
         public virtual MixCustomer Customer { get; set; }
-        public virtual ICollection<MixComment> MixComment { get; set; }
         public virtual ICollection<MixOrderItem> MixOrderItem { get; set; }
     }
 }

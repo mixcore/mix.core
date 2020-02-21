@@ -12,7 +12,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual DbSet<MixAttributeSetValue> MixAttributeSetValue { get; set; }
         public virtual DbSet<MixCache> MixCache { get; set; }
         public virtual DbSet<MixCmsUser> MixCmsUser { get; set; }
-        public virtual DbSet<MixComment> MixComment { get; set; }
         public virtual DbSet<MixConfiguration> MixConfiguration { get; set; }
         public virtual DbSet<MixCopy> MixCopy { get; set; }
         public virtual DbSet<MixCulture> MixCulture { get; set; }
@@ -103,11 +102,13 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
+                entity.Property(e => e.DefaultValue).HasColumnType("text");
+
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasMaxLength(250);
 
-                entity.Property(e => e.Options).HasMaxLength(4000);
+                entity.Property(e => e.Options).HasColumnType("text");
 
                 entity.Property(e => e.Regex).HasMaxLength(250);
 
@@ -240,20 +241,24 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.HasIndex(e => e.ExpiredDateTime)
                     .HasName("Index_ExpiresAtTime");
 
-                entity.Property(e => e.Id).HasMaxLength(250);
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.ExpiredDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Value).IsRequired();
+                entity.Property(e => e.Value)
+                    .IsRequired()
+                    .HasMaxLength(4000);
             });
 
             modelBuilder.Entity<MixCmsUser>(entity =>
             {
                 entity.ToTable("mix_cms_user");
 
-                entity.Property(e => e.Address).HasMaxLength(450);
+                entity.Property(e => e.Id).HasMaxLength(50);
+
+                entity.Property(e => e.Address).HasMaxLength(250);
 
                 entity.Property(e => e.Avatar).HasMaxLength(250);
 
@@ -261,7 +266,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Email).HasMaxLength(256);
+                entity.Property(e => e.Email).HasMaxLength(250);
 
                 entity.Property(e => e.FirstName).HasMaxLength(50);
 
@@ -271,42 +276,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.PhoneNumber).HasMaxLength(50);
 
-                entity.Property(e => e.Username).HasMaxLength(256);
-            });
-
-            modelBuilder.Entity<MixComment>(entity =>
-            {
-                entity.ToTable("mix_comment");
-
-                entity.HasIndex(e => new { e.OrderId, e.Specificulture });
-
-                entity.HasIndex(e => new { e.PostId, e.Specificulture });
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.CreatedBy).HasMaxLength(250);
-
-                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.Email).HasMaxLength(250);
-
-                entity.Property(e => e.FullName).HasMaxLength(250);
-
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
-
-                entity.Property(e => e.UpdatedBy).HasMaxLength(250);
-
-                entity.Property(e => e.UpdatedDateTime).HasColumnType("datetime");
-
-                entity.HasOne(d => d.MixOrder)
-                    .WithMany(p => p.MixComment)
-                    .HasForeignKey(d => new { d.OrderId, d.Specificulture })
-                    .HasConstraintName("FK_mix_comment_mix_order");
-
-                entity.HasOne(d => d.MixPost)
-                    .WithMany(p => p.MixComment)
-                    .HasForeignKey(d => new { d.PostId, d.Specificulture })
-                    .HasConstraintName("FK_mix_comment_mix_post");
+                entity.Property(e => e.Username).HasMaxLength(250);
             });
 
             modelBuilder.Entity<MixConfiguration>(entity =>
@@ -329,6 +299,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Description).HasMaxLength(250);
 
+                entity.Property(e => e.Value).HasMaxLength(4000);
+
                 entity.HasOne(d => d.SpecificultureNavigation)
                     .WithMany(p => p.MixConfiguration)
                     .HasPrincipalKey(p => p.Specificulture)
@@ -347,6 +319,8 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Keyword).HasMaxLength(250);
 
                 entity.Property(e => e.Note).HasMaxLength(250);
+
+                entity.Property(e => e.Value).HasMaxLength(4000);
             });
 
             modelBuilder.Entity<MixCulture>(entity =>
@@ -419,7 +393,9 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => e.ThemeId);
 
-                entity.Property(e => e.Content).IsRequired();
+                entity.Property(e => e.Content)
+                    .IsRequired()
+                    .HasMaxLength(4000);
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
@@ -474,6 +450,8 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.DefaultValue).HasMaxLength(250);
 
                 entity.Property(e => e.Description).HasMaxLength(250);
+
+                entity.Property(e => e.Value).HasMaxLength(4000);
 
                 entity.HasOne(d => d.SpecificultureNavigation)
                     .WithMany(p => p.MixLanguage)
@@ -709,6 +687,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.UpdatedDateTime).HasColumnType("datetime");
 
+                entity.Property(e => e.Value).HasMaxLength(4000);
+
                 entity.HasOne(d => d.MixModule)
                     .WithMany(p => p.MixModuleData)
                     .HasForeignKey(d => new { d.ModuleId, d.Specificulture })
@@ -828,6 +808,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
+                entity.Property(e => e.Content).HasColumnType("text");
+
                 entity.Property(e => e.CreatedBy)
                     .IsRequired()
                     .HasMaxLength(250);
@@ -836,7 +818,9 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.CssClass).HasMaxLength(250);
 
-                entity.Property(e => e.ExtraFields).HasMaxLength(4000);
+                entity.Property(e => e.Excerpt).HasColumnType("text");
+
+                entity.Property(e => e.ExtraFields).HasColumnType("text");
 
                 entity.Property(e => e.Icon).HasMaxLength(50);
 
@@ -848,23 +832,25 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.ModifiedBy).HasMaxLength(250);
 
-                entity.Property(e => e.SeoDescription).HasMaxLength(4000);
+                entity.Property(e => e.SeoDescription).HasColumnType("text");
 
-                entity.Property(e => e.SeoKeywords).HasMaxLength(4000);
+                entity.Property(e => e.SeoKeywords).HasColumnType("text");
 
                 entity.Property(e => e.SeoName)
                     .HasMaxLength(500)
                     .IsUnicode(false);
 
-                entity.Property(e => e.SeoTitle).HasMaxLength(4000);
+                entity.Property(e => e.SeoTitle)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.StaticUrl).HasMaxLength(250);
 
-                entity.Property(e => e.Tags).HasMaxLength(500);
+                entity.Property(e => e.Tags).HasColumnType("text");
 
                 entity.Property(e => e.Template).HasMaxLength(250);
 
-                entity.Property(e => e.Title).HasMaxLength(4000);
+                entity.Property(e => e.Title).HasColumnType("text");
 
                 entity.HasOne(d => d.SpecificultureNavigation)
                     .WithMany(p => p.MixPage)
@@ -1087,7 +1073,11 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Name).HasMaxLength(50);
 
-                entity.Property(e => e.Value).IsRequired();
+                entity.Property(e => e.Description).HasMaxLength(4000);
+
+                entity.Property(e => e.Value)
+                    .IsRequired()
+                    .HasMaxLength(4000);
             });
 
             modelBuilder.Entity<MixPortalPage>(entity =>
@@ -1166,6 +1156,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => e.PageId);
 
+                entity.Property(e => e.RoleId).HasMaxLength(50);
+
                 entity.Property(e => e.CreatedBy)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -1199,11 +1191,19 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
+                entity.Property(e => e.Content).HasColumnType("text");
+
                 entity.Property(e => e.CreatedBy).HasMaxLength(250);
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.ExtraFields).HasMaxLength(4000);
+                entity.Property(e => e.Excerpt).HasColumnType("text");
+
+                entity.Property(e => e.ExtraFields).HasColumnType("text");
+
+                entity.Property(e => e.ExtraProperties).HasColumnType("text");
+
+                entity.Property(e => e.Icon).HasColumnType("text");
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
@@ -1213,25 +1213,25 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.PublishedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.SeoDescription).HasMaxLength(4000);
+                entity.Property(e => e.SeoDescription).HasColumnType("text");
 
-                entity.Property(e => e.SeoKeywords).HasMaxLength(4000);
+                entity.Property(e => e.SeoKeywords).HasColumnType("text");
 
                 entity.Property(e => e.SeoName)
                     .HasMaxLength(500)
                     .IsUnicode(false);
 
-                entity.Property(e => e.SeoTitle).HasMaxLength(4000);
+                entity.Property(e => e.SeoTitle).HasColumnType("text");
 
                 entity.Property(e => e.Source).HasMaxLength(250);
 
-                entity.Property(e => e.Tags).HasMaxLength(500);
+                entity.Property(e => e.Tags).HasColumnType("text");
 
                 entity.Property(e => e.Template).HasMaxLength(250);
 
                 entity.Property(e => e.Thumbnail).HasMaxLength(250);
 
-                entity.Property(e => e.Title).HasMaxLength(4000);
+                entity.Property(e => e.Title).HasColumnType("text");
 
                 entity.HasOne(d => d.SpecificultureNavigation)
                     .WithMany(p => p.MixPost)
@@ -1497,7 +1497,9 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.Property(e => e.Content).IsRequired();
+                entity.Property(e => e.Content)
+                    .IsRequired()
+                    .HasColumnType("text");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
@@ -1519,7 +1521,15 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
+                entity.Property(e => e.MobileContent).HasColumnType("text");
+
                 entity.Property(e => e.ModifiedBy).HasMaxLength(250);
+
+                entity.Property(e => e.Scripts).HasColumnType("text");
+
+                entity.Property(e => e.SpaContent).HasColumnType("text");
+
+                entity.Property(e => e.Styles).HasColumnType("text");
 
                 entity.Property(e => e.ThemeName)
                     .IsRequired()
