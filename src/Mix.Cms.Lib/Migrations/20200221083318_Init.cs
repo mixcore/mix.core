@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using System;
 
 namespace Mix.Cms.Lib.Migrations
 {
@@ -17,6 +16,11 @@ namespace Mix.Cms.Lib.Migrations
                     Title = table.Column<string>(maxLength: 250, nullable: false),
                     Name = table.Column<string>(maxLength: 250, nullable: false),
                     Description = table.Column<string>(maxLength: 250, nullable: true),
+                    FormTemplate = table.Column<string>(maxLength: 250, nullable: true),
+                    EdmTemplate = table.Column<string>(maxLength: 250, nullable: true),
+                    EdmSubject = table.Column<string>(maxLength: 250, nullable: true),
+                    EdmFrom = table.Column<string>(maxLength: 250, nullable: true),
+                    EdmAutoSend = table.Column<bool>(nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     Priority = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false)
@@ -27,11 +31,40 @@ namespace Mix.Cms.Lib.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "mix_attribute_set_value",
+                columns: table => new
+                {
+                    Id = table.Column<string>(maxLength: 50, nullable: false),
+                    Specificulture = table.Column<string>(maxLength: 10, nullable: false),
+                    AttributeFieldId = table.Column<int>(nullable: false),
+                    AttributeFieldName = table.Column<string>(maxLength: 50, nullable: false),
+                    AttributeSetName = table.Column<string>(maxLength: 250, nullable: true),
+                    Regex = table.Column<string>(maxLength: 250, nullable: true),
+                    DataType = table.Column<int>(nullable: false),
+                    Priority = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    BooleanValue = table.Column<bool>(nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    DataId = table.Column<string>(maxLength: 50, nullable: false),
+                    DateTimeValue = table.Column<DateTime>(type: "datetime", nullable: true),
+                    DoubleValue = table.Column<double>(nullable: true),
+                    IntegerValue = table.Column<int>(nullable: true),
+                    StringValue = table.Column<string>(maxLength: 4000, nullable: true),
+                    EncryptValue = table.Column<string>(maxLength: 4000, nullable: true),
+                    EncryptKey = table.Column<string>(maxLength: 50, nullable: true),
+                    EncryptType = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_attribute_set_value", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "mix_cache",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 250, nullable: false),
-                    Value = table.Column<string>(nullable: false),
+                    Id = table.Column<string>(maxLength: 50, nullable: false),
+                    Value = table.Column<string>(maxLength: 4000, nullable: false),
                     ExpiredDateTime = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     Status = table.Column<int>(nullable: false)
@@ -45,8 +78,8 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_cms_user",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    Address = table.Column<string>(maxLength: 450, nullable: true),
+                    Id = table.Column<string>(maxLength: 50, nullable: false),
+                    Address = table.Column<string>(maxLength: 250, nullable: true),
                     Avatar = table.Column<string>(maxLength: 250, nullable: true),
                     CreatedBy = table.Column<string>(maxLength: 50, nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -56,8 +89,8 @@ namespace Mix.Cms.Lib.Migrations
                     PhoneNumber = table.Column<string>(maxLength: 50, nullable: true),
                     Priority = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
-                    Username = table.Column<string>(maxLength: 256, nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true)
+                    Username = table.Column<string>(maxLength: 250, nullable: true),
+                    Email = table.Column<string>(maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -73,7 +106,7 @@ namespace Mix.Cms.Lib.Migrations
                     Note = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
-                    Value = table.Column<string>(nullable: true)
+                    Value = table.Column<string>(maxLength: 4000, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -162,10 +195,10 @@ namespace Mix.Cms.Lib.Migrations
                 columns: table => new
                 {
                     Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Description = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(maxLength: 4000, nullable: true),
                     Priority = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
-                    Value = table.Column<string>(nullable: false)
+                    Value = table.Column<string>(maxLength: 4000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -208,6 +241,27 @@ namespace Mix.Cms.Lib.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "mix_related_data",
+                columns: table => new
+                {
+                    Id = table.Column<string>(maxLength: 50, nullable: false),
+                    Type = table.Column<int>(nullable: false),
+                    Specificulture = table.Column<string>(maxLength: 10, nullable: false),
+                    ParentId = table.Column<string>(maxLength: 50, nullable: false),
+                    ParentType = table.Column<int>(nullable: false),
+                    AttributeSetId = table.Column<int>(nullable: false),
+                    AttributeSetName = table.Column<string>(maxLength: 250, nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Priority = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(maxLength: 450, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_related_data", x => new { x.Id, x.Type, x.Specificulture, x.ParentId, x.ParentType });
+                });
+
+            migrationBuilder.CreateTable(
                 name: "mix_theme",
                 columns: table => new
                 {
@@ -233,19 +287,21 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     Id = table.Column<int>(nullable: false),
                     AttributeSetId = table.Column<int>(nullable: false),
+                    AttributeSetName = table.Column<string>(maxLength: 250, nullable: true),
                     Regex = table.Column<string>(maxLength: 250, nullable: true),
                     Title = table.Column<string>(maxLength: 250, nullable: true),
                     DataType = table.Column<int>(nullable: false),
-                    DefaultValue = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Options = table.Column<string>(maxLength: 4000, nullable: true),
+                    DefaultValue = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(maxLength: 250, nullable: false),
+                    Options = table.Column<string>(type: "text", nullable: true),
                     IsRequire = table.Column<bool>(nullable: false),
                     IsEncrypt = table.Column<bool>(nullable: false),
                     IsSelect = table.Column<bool>(nullable: false),
                     IsUnique = table.Column<bool>(nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false)
+                    Status = table.Column<int>(nullable: false),
+                    ReferenceId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -253,6 +309,86 @@ namespace Mix.Cms.Lib.Migrations
                     table.ForeignKey(
                         name: "FK_mix_attribute_field_mix_attribute_set",
                         column: x => x.AttributeSetId,
+                        principalTable: "mix_attribute_set",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_mix_attribute_field_mix_attribute_set1",
+                        column: x => x.ReferenceId,
+                        principalTable: "mix_attribute_set",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "mix_attribute_set_data",
+                columns: table => new
+                {
+                    Id = table.Column<string>(maxLength: 50, nullable: false),
+                    Specificulture = table.Column<string>(maxLength: 10, nullable: false),
+                    AttributeSetId = table.Column<int>(nullable: false),
+                    AttributeSetName = table.Column<string>(maxLength: 250, nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    CreatedBy = table.Column<string>(maxLength: 250, nullable: true),
+                    Priority = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_attribute_set_data", x => new { x.Id, x.Specificulture });
+                    table.ForeignKey(
+                        name: "FK_mix_attribute_set_data_mix_attribute_set",
+                        column: x => x.AttributeSetId,
+                        principalTable: "mix_attribute_set",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "mix_attribute_set_reference",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false),
+                    ParentId = table.Column<int>(nullable: false),
+                    ParentType = table.Column<int>(nullable: false),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Priority = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(maxLength: 450, nullable: true),
+                    Image = table.Column<string>(maxLength: 450, nullable: true),
+                    AttributeSetId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_attribute_set_reference", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_mix_attribute_set_reference_mix_attribute_set",
+                        column: x => x.AttributeSetId,
+                        principalTable: "mix_attribute_set",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "mix_related_attribute_set",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false),
+                    Specificulture = table.Column<string>(maxLength: 10, nullable: false),
+                    ParentId = table.Column<int>(nullable: false),
+                    ParentType = table.Column<int>(nullable: false),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Priority = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(maxLength: 450, nullable: true),
+                    Image = table.Column<string>(maxLength: 450, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_related_attribute_set", x => new { x.Id, x.Specificulture, x.ParentId, x.ParentType });
+                    table.ForeignKey(
+                        name: "FK_mix_related_attribute_set_mix_attribute_set",
+                        column: x => x.Id,
                         principalTable: "mix_attribute_set",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -269,7 +405,7 @@ namespace Mix.Cms.Lib.Migrations
                     Description = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
-                    Value = table.Column<string>(nullable: true),
+                    Value = table.Column<string>(maxLength: 4000, nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     CreatedBy = table.Column<string>(maxLength: 50, nullable: true)
                 },
@@ -295,7 +431,7 @@ namespace Mix.Cms.Lib.Migrations
                     Description = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
-                    Value = table.Column<string>(nullable: true),
+                    Value = table.Column<string>(maxLength: 4000, nullable: true),
                     DefaultValue = table.Column<string>(maxLength: 250, nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     CreatedBy = table.Column<string>(maxLength: 50, nullable: true)
@@ -351,11 +487,11 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     Id = table.Column<int>(nullable: false),
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
-                    Content = table.Column<string>(nullable: true),
+                    Content = table.Column<string>(type: "text", nullable: true),
                     CreatedBy = table.Column<string>(maxLength: 250, nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     CssClass = table.Column<string>(maxLength: 250, nullable: true),
-                    Excerpt = table.Column<string>(nullable: true),
+                    Excerpt = table.Column<string>(type: "text", nullable: true),
                     Icon = table.Column<string>(maxLength: 50, nullable: true),
                     Image = table.Column<string>(maxLength: 250, nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -363,19 +499,19 @@ namespace Mix.Cms.Lib.Migrations
                     Level = table.Column<int>(nullable: true),
                     ModifiedBy = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    SeoDescription = table.Column<string>(maxLength: 4000, nullable: true),
-                    SeoKeywords = table.Column<string>(maxLength: 4000, nullable: true),
+                    SeoDescription = table.Column<string>(type: "text", nullable: true),
+                    SeoKeywords = table.Column<string>(type: "text", nullable: true),
                     SeoName = table.Column<string>(unicode: false, maxLength: 500, nullable: true),
-                    SeoTitle = table.Column<string>(maxLength: 4000, nullable: true),
+                    SeoTitle = table.Column<string>(unicode: false, maxLength: 250, nullable: true),
                     StaticUrl = table.Column<string>(maxLength: 250, nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    Tags = table.Column<string>(maxLength: 500, nullable: true),
+                    Tags = table.Column<string>(type: "text", nullable: true),
                     Template = table.Column<string>(maxLength: 250, nullable: true),
-                    Title = table.Column<string>(maxLength: 4000, nullable: true),
+                    Title = table.Column<string>(type: "text", nullable: true),
                     Type = table.Column<int>(nullable: false),
                     Views = table.Column<int>(nullable: true),
                     PageSize = table.Column<int>(nullable: true),
-                    ExtraFields = table.Column<string>(maxLength: 4000, nullable: true)
+                    ExtraFields = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -394,30 +530,30 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     Id = table.Column<int>(nullable: false),
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
-                    Content = table.Column<string>(nullable: true),
+                    Content = table.Column<string>(type: "text", nullable: true),
                     CreatedBy = table.Column<string>(maxLength: 250, nullable: true),
                     PublishedDateTime = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Excerpt = table.Column<string>(nullable: true),
-                    ExtraProperties = table.Column<string>(nullable: true),
-                    Icon = table.Column<string>(nullable: true),
+                    Excerpt = table.Column<string>(type: "text", nullable: true),
+                    ExtraProperties = table.Column<string>(type: "text", nullable: true),
+                    Icon = table.Column<string>(type: "text", nullable: true),
                     Image = table.Column<string>(maxLength: 250, nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     ModifiedBy = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    SeoDescription = table.Column<string>(maxLength: 4000, nullable: true),
-                    SeoKeywords = table.Column<string>(maxLength: 4000, nullable: true),
+                    SeoDescription = table.Column<string>(type: "text", nullable: true),
+                    SeoKeywords = table.Column<string>(type: "text", nullable: true),
                     SeoName = table.Column<string>(unicode: false, maxLength: 500, nullable: true),
-                    SeoTitle = table.Column<string>(maxLength: 4000, nullable: true),
+                    SeoTitle = table.Column<string>(type: "text", nullable: true),
                     Source = table.Column<string>(maxLength: 250, nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    Tags = table.Column<string>(maxLength: 500, nullable: true),
+                    Tags = table.Column<string>(type: "text", nullable: true),
                     Template = table.Column<string>(maxLength: 250, nullable: true),
                     Thumbnail = table.Column<string>(maxLength: 250, nullable: true),
-                    Title = table.Column<string>(maxLength: 4000, nullable: true),
+                    Title = table.Column<string>(type: "text", nullable: true),
                     Type = table.Column<int>(nullable: false),
                     Views = table.Column<int>(nullable: true),
-                    ExtraFields = table.Column<string>(maxLength: 4000, nullable: true)
+                    ExtraFields = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -512,7 +648,7 @@ namespace Mix.Cms.Lib.Migrations
                 columns: table => new
                 {
                     PageId = table.Column<int>(nullable: false),
-                    RoleId = table.Column<string>(nullable: false),
+                    RoleId = table.Column<string>(maxLength: 50, nullable: false),
                     CreatedBy = table.Column<string>(maxLength: 50, nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     Priority = table.Column<int>(nullable: false),
@@ -561,8 +697,8 @@ namespace Mix.Cms.Lib.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Content = table.Column<string>(nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Content = table.Column<string>(maxLength: 4000, nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     Extension = table.Column<string>(maxLength: 50, nullable: false),
                     FileFolder = table.Column<string>(maxLength: 250, nullable: false),
@@ -591,20 +727,20 @@ namespace Mix.Cms.Lib.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false),
-                    Content = table.Column<string>(nullable: false),
+                    Content = table.Column<string>(type: "text", nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     Extension = table.Column<string>(maxLength: 50, nullable: false),
                     FileFolder = table.Column<string>(maxLength: 250, nullable: false),
                     FileName = table.Column<string>(maxLength: 250, nullable: false),
                     FolderType = table.Column<string>(maxLength: 50, nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    MobileContent = table.Column<string>(nullable: true),
+                    MobileContent = table.Column<string>(type: "text", nullable: true),
                     ModifiedBy = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
-                    Scripts = table.Column<string>(nullable: true),
-                    SpaContent = table.Column<string>(nullable: true),
+                    Scripts = table.Column<string>(type: "text", nullable: true),
+                    SpaContent = table.Column<string>(type: "text", nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    Styles = table.Column<string>(nullable: true),
+                    Styles = table.Column<string>(type: "text", nullable: true),
                     ThemeId = table.Column<int>(nullable: false),
                     ThemeName = table.Column<string>(maxLength: 250, nullable: false)
                 },
@@ -616,6 +752,32 @@ namespace Mix.Cms.Lib.Migrations
                         column: x => x.ThemeId,
                         principalTable: "mix_theme",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "mix_related_attribute_data",
+                columns: table => new
+                {
+                    Id = table.Column<string>(maxLength: 50, nullable: false),
+                    Specificulture = table.Column<string>(maxLength: 10, nullable: false),
+                    ParentId = table.Column<string>(maxLength: 50, nullable: false),
+                    ParentType = table.Column<int>(nullable: false),
+                    AttributeSetId = table.Column<int>(nullable: false),
+                    AttributeSetName = table.Column<string>(maxLength: 250, nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Priority = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(maxLength: 450, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_related_attribute_data_1", x => new { x.Id, x.Specificulture, x.ParentId, x.ParentType });
+                    table.ForeignKey(
+                        name: "FK_mix_related_attribute_data_mix_attribute_set_data2",
+                        columns: x => new { x.Id, x.Specificulture },
+                        principalTable: "mix_attribute_set_data",
+                        principalColumns: new[] { "Id", "Specificulture" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -989,45 +1151,6 @@ namespace Mix.Cms.Lib.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_comment",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Specificulture = table.Column<string>(maxLength: 10, nullable: true),
-                    PostId = table.Column<int>(nullable: true),
-                    OrderId = table.Column<int>(nullable: true),
-                    Content = table.Column<string>(nullable: true),
-                    CreatedBy = table.Column<string>(maxLength: 250, nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Email = table.Column<string>(maxLength: 250, nullable: true),
-                    FullName = table.Column<string>(maxLength: 250, nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    IsReviewed = table.Column<bool>(nullable: true),
-                    IsVisible = table.Column<bool>(nullable: true),
-                    Rating = table.Column<double>(nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false),
-                    UpdatedBy = table.Column<string>(maxLength: 250, nullable: true),
-                    UpdatedDateTime = table.Column<DateTime>(type: "datetime", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_comment", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_mix_comment_mix_order",
-                        columns: x => new { x.OrderId, x.Specificulture },
-                        principalTable: "mix_order",
-                        principalColumns: new[] { "Id", "Specificulture" },
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_mix_comment_mix_post",
-                        columns: x => new { x.PostId, x.Specificulture },
-                        principalTable: "mix_post",
-                        principalColumns: new[] { "Id", "Specificulture" },
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "mix_order_item",
                 columns: table => new
                 {
@@ -1152,7 +1275,7 @@ namespace Mix.Cms.Lib.Migrations
                     Priority = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     UpdatedDateTime = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Value = table.Column<string>(nullable: true)
+                    Value = table.Column<string>(maxLength: 4000, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1264,19 +1387,29 @@ namespace Mix.Cms.Lib.Migrations
                 column: "AttributeSetId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_mix_attribute_field_ReferenceId",
+                table: "mix_attribute_field",
+                column: "ReferenceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mix_attribute_set_data_AttributeSetId",
+                table: "mix_attribute_set_data",
+                column: "AttributeSetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mix_attribute_set_reference_AttributeSetId",
+                table: "mix_attribute_set_reference",
+                column: "AttributeSetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mix_attribute_set_value_DataId",
+                table: "mix_attribute_set_value",
+                column: "DataId");
+
+            migrationBuilder.CreateIndex(
                 name: "Index_ExpiresAtTime",
                 table: "mix_cache",
                 column: "ExpiredDateTime");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_comment_OrderId_Specificulture",
-                table: "mix_comment",
-                columns: new[] { "OrderId", "Specificulture" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_comment_PostId_Specificulture",
-                table: "mix_comment",
-                columns: new[] { "PostId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_mix_configuration_Specificulture",
@@ -1544,13 +1677,16 @@ namespace Mix.Cms.Lib.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "mix_attribute_set_reference");
+
+            migrationBuilder.DropTable(
+                name: "mix_attribute_set_value");
+
+            migrationBuilder.DropTable(
                 name: "mix_cache");
 
             migrationBuilder.DropTable(
                 name: "mix_cms_user");
-
-            migrationBuilder.DropTable(
-                name: "mix_comment");
 
             migrationBuilder.DropTable(
                 name: "mix_configuration");
@@ -1616,6 +1752,15 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_post_media");
 
             migrationBuilder.DropTable(
+                name: "mix_related_attribute_data");
+
+            migrationBuilder.DropTable(
+                name: "mix_related_attribute_set");
+
+            migrationBuilder.DropTable(
+                name: "mix_related_data");
+
+            migrationBuilder.DropTable(
                 name: "mix_related_post");
 
             migrationBuilder.DropTable(
@@ -1655,6 +1800,9 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_media");
 
             migrationBuilder.DropTable(
+                name: "mix_attribute_set_data");
+
+            migrationBuilder.DropTable(
                 name: "mix_theme");
 
             migrationBuilder.DropTable(
@@ -1667,10 +1815,10 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_page");
 
             migrationBuilder.DropTable(
-                name: "mix_attribute_set");
+                name: "mix_post");
 
             migrationBuilder.DropTable(
-                name: "mix_post");
+                name: "mix_attribute_set");
 
             migrationBuilder.DropTable(
                 name: "mix_culture");
