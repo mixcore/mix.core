@@ -2,8 +2,8 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: ''
-assignees: ''
+labels: 'bug'
+assignees: 'nhathoang989,Smilefounder'
 
 ---
 
@@ -16,6 +16,9 @@ Steps to reproduce the behavior:
 2. Click on '....'
 3. Scroll down to '....'
 4. See error
+
+**Git branch or source version**
+developer or master...
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.
