@@ -57,13 +57,14 @@ namespace Mix.Cms.Api.Controllers.v1.OData.Posts
 
             return Ok(readResult.Data);
         }
+
         // GET api/Posts/id
         [EnableQuery(MaxExpansionDepth = 4)]
         [HttpGet, HttpOptions]
         [Route("type/{type}")]
         public async Task<ActionResult<JObject>> ListByType(string culture, int type, ODataQueryOptions<MixPost> queryOptions)
         {
-            Expression<Func<MixPost, bool>> predicate = m => m.Type == type && m.Specificulture== culture;
+            Expression<Func<MixPost, bool>> predicate = m => m.Type == type && m.Specificulture == culture;
             var data = await base.GetListAsync<ReadMvcViewModel>(predicate, $"type_{type}", queryOptions);
             return Ok(data);
         }
@@ -76,6 +77,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.Posts
             var data = await base.GetListAsync<ReadMvcViewModel>(queryOptions);
             return Ok(data);
         }
+
         // GET api/attribute-sets/read/count
         [AllowAnonymous]
         [EnableQuery]
@@ -118,8 +120,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData.Posts
             }
         }
 
-        
         #endregion Get
-
     }
 }

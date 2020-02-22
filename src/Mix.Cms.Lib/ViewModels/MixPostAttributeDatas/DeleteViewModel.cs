@@ -12,19 +12,28 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
        : ViewModelBase<MixCmsContext, MixPostAttributeData, DeleteViewModel>
     {
         #region Properties
+
         #region Models
+
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("attributeSetId")]
         public int SetAttributeId { get; set; }
+
         [JsonProperty("postId")]
         public int PostId { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("status")]
         public int Status { get; set; }
-        #endregion
-        #endregion
+
+        #endregion Models
+
+        #endregion Properties
+
         public DeleteViewModel(MixPostAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
@@ -33,6 +42,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
         public DeleteViewModel() : base()
         {
         }
+
         #region Overrides
 
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(DeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -46,6 +56,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
                 Errors = result.Errors
             };
         }
+
         public override RepositoryResponse<bool> RemoveRelatedModels(DeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = MixPostAttributeValues.DeleteViewModel.ModelRepository.RemoveListModel(v => v.DataId == Id && v.Specificulture == Specificulture,
@@ -58,6 +69,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
             };
         }
 
-        #endregion
+        #endregion Overrides
     }
 }

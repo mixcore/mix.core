@@ -13,25 +13,35 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
        : ViewModelBase<MixCmsContext, MixPostAttributeData, UpdateViewModel>
     {
         #region Properties
+
         #region Models
+
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
+
         [JsonProperty("postId")]
         public int PostId { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("status")]
         public int Status { get; set; }
-        #endregion
+
+        #endregion Models
 
         #region Views
+
         [JsonProperty("data")]
         public List<MixPostAttributeValues.UpdateViewModel> Data { get; set; }
-        #endregion
 
-        #endregion
+        #endregion Views
+
+        #endregion Properties
+
         public UpdateViewModel(MixPostAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
@@ -40,6 +50,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
         public UpdateViewModel() : base()
         {
         }
+
         public UpdateViewModel(int attributeSetId, List<MixAttributeFields.UpdateViewModel> attributes)
         {
             AttributeSetId = attributeSetId;
@@ -73,6 +84,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
                 });
             }
         }
+
         #region overrides
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -81,7 +93,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
             {
                 Data = MixPostAttributeValues.UpdateViewModel.Repository.GetModelListBy(
                     v => v.DataId == Id && v.Specificulture == Specificulture, _context, _transaction).Data;
-
             }
             else
             {
@@ -100,8 +111,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
                     });
                 }
             }
-
         }
+
         public override MixPostAttributeData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))
@@ -111,7 +122,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
             }
             return base.ParseModel(_context, _transaction);
         }
+
         #region Async
+
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixPostAttributeData parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -126,6 +139,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
             }
             return result;
         }
+
         #endregion Async
 
         #endregion overrides

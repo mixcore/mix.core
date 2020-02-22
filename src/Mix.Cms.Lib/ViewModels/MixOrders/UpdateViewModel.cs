@@ -20,8 +20,10 @@ namespace Mix.Cms.Lib.ViewModels.MixOrders
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("userId")]
         public string UserId { get; set; }
+
         [JsonProperty("customerId")]
         public int CustomerId { get; set; }
 
@@ -30,13 +32,15 @@ namespace Mix.Cms.Lib.ViewModels.MixOrders
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonIgnore]
         [JsonProperty("storeId")]
         public int StoreId { get; set; }
 
-        #endregion
+        #endregion Models
 
         #region View
+
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }
 
@@ -57,9 +61,10 @@ namespace Mix.Cms.Lib.ViewModels.MixOrders
 
         [JsonProperty("totalSpent")]
         public double TotalSpent { get; set; }
-        #endregion
 
-        #endregion
+        #endregion View
+
+        #endregion Properties
 
         #region Contructors
 
@@ -75,6 +80,7 @@ namespace Mix.Cms.Lib.ViewModels.MixOrders
         #endregion Contructors
 
         #region Overrides
+
         public override void Validate(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             base.Validate(_context, _transaction);
@@ -101,6 +107,7 @@ namespace Mix.Cms.Lib.ViewModels.MixOrders
             }
             return base.ParseModel(_context, _transaction);
         }
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getCustomer = MixCustomers.ReadViewModel.Repository.GetSingleModel(c => c.Id == CustomerId);
@@ -112,6 +119,7 @@ namespace Mix.Cms.Lib.ViewModels.MixOrders
             Comments = getComments.Data;
             TotalSpent = _context.MixOrderItem.Where(i => i.OrderId == Id && i.Specificulture == Specificulture).Sum(i => i.Price);
         }
+
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -132,6 +140,7 @@ namespace Mix.Cms.Lib.ViewModels.MixOrders
             }
             return result;
         }
+
         #endregion Overrides
     }
 }

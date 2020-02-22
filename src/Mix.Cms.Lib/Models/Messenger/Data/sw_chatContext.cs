@@ -47,7 +47,6 @@ namespace Mix.Cms.Messenger.Models.Data
             }
         }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MixMessengerHubRoom>(entity =>

@@ -64,13 +64,12 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public MixContentStatus Status { get; set; }
 
         public DateTime CreatedDateTime { get; set; }
+
         #endregion Models
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl
-        {
-            get
-            {
+        public string ImageUrl {
+            get {
                 if (!string.IsNullOrWhiteSpace(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -85,10 +84,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl
-        {
-            get
-            {
+        public string ThumbnailUrl {
+            get {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -101,7 +98,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 }
             }
         }
-
 
         #endregion Properties
 
@@ -125,13 +121,13 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         public override Task<bool> ExpandViewAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-
             return base.ExpandViewAsync(_context, _transaction);
         }
 
-        #endregion
+        #endregion Overrides
 
         #region Expands
+
         public static async Task<RepositoryResponse<JObject>> SaveByModuleName(string culture, string createdBy, string name, string formName, JObject obj
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -142,7 +138,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 string dataId = obj["id"]?.Value<string>();
                 if (getModule.IsSucceed)
                 {
-                    // Get Attribute set 
+                    // Get Attribute set
                     var getAttrSet = await Mix.Cms.Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModelAsync(m => m.Name == formName, context, transaction);
                     if (getAttrSet.IsSucceed)
                     {
@@ -175,7 +171,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                         if (portalResult.IsSucceed)
                         {
                             _ = SendEdm(getModule.Data.Specificulture, getModule.Data.EdmTemplate, obj);
-                            
                         }
                         return new RepositoryResponse<JObject>()
                         {
@@ -219,7 +214,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         private static Task SendEdm(string culture, string template, JObject data)
         {
-            return Task.Run(()=>{
+            return Task.Run(() =>
+            {
                 if (!string.IsNullOrEmpty(data["email"].Value<string>()))
                 {
                     var getEdm = MixTemplates.UpdateViewModel.GetTemplateByPath(template, culture);
@@ -232,10 +228,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                         }
                         MixService.SendMail("Invitation", getEdm.Data.Content, data["email"].Value<string>());
                     }
-                }                
+                }
             });
-            
         }
-        #endregion
+
+        #endregion Expands
     }
 }

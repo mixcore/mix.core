@@ -1,18 +1,14 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
+﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
-using Mix.Identity.Models;
 using System.Threading.Tasks;
-
 
 namespace Mix.Cms.Web.Controllers
 {
     public class ModuleController : BaseController
-    { 
+    {
         #region contructor
+
         protected override void ValidateRequest()
         {
             base.ValidateRequest();
@@ -32,7 +28,8 @@ namespace Mix.Cms.Web.Controllers
                 }
             }
         }
-        #endregion
+
+        #endregion contructor
 
         #region Routes
 
@@ -47,10 +44,9 @@ namespace Mix.Cms.Web.Controllers
             else
             {
                 return Redirect(_redirectUrl);
-            }            
+            }
         }
 
-        #endregion
-
+        #endregion Routes
     }
 }

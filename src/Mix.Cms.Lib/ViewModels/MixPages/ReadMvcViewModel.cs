@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -102,6 +101,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("pageSize")]
         public int? PageSize { get; set; }
+
         #endregion Models
 
         #region Views
@@ -113,10 +113,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl
-        {
-            get
-            {
+        public string ImageUrl {
+            get {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -129,11 +127,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 }
             }
         }
+
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl
-        {
-            get
-            {
+        public string ThumbnailUrl {
+            get {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -146,6 +143,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 }
             }
         }
+
         [JsonProperty("view")]
         public MixTemplates.ReadListItemViewModel View { get; set; }
 
@@ -155,13 +153,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("modules")]
         public List<MixPageModules.ReadMvcViewModel> Modules { get; set; } = new List<MixPageModules.ReadMvcViewModel>(); // Get All Module
 
-        public string TemplatePath
-        {
-            get
-            {
+        public string TemplatePath {
+            get {
                 return $"/{MixConstants.Folder.TemplatesFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture)}/{Template}";
             }
         }
+
         [JsonProperty("attributeData")]
         public MixRelatedAttributeDatas.ReadMvcViewModel AttributeData { get; set; }
 
@@ -188,7 +185,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
             if (View != null)
             {
-                GetSubModules(_context, _transaction);                
+                GetSubModules(_context, _transaction);
             }
 
             LoadAttributes(_context, _transaction);
@@ -199,6 +196,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         #region Expands
 
         #region Sync
+
         public void LoadData(int? pageSize = null, int? pageIndex = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -218,6 +216,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     case MixPageType.ListPost:
                         postExp = n => n.PageId == Id && n.Specificulture == Specificulture;
                         break;
+
                     default:
                         dataExp = m => m.PageId == Id && m.Specificulture == Specificulture;
                         postExp = n => n.PageId == Id && n.Specificulture == Specificulture;
@@ -291,7 +290,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                         }
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -306,6 +304,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 }
             }
         }
+
         public void LoadDataByKeyword(string keyword
            , string orderBy, int orderDirection
            , int? pageSize = null, int? pageIndex = null
@@ -345,7 +344,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                         }
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -396,26 +394,29 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         }
 
         #endregion Sync
+
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_PAGE, _context, _transaction);
             if (getAttrs.IsSucceed)
             {
                 AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
-                a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId==getAttrs.Data.Id
+                a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId == getAttrs.Data.Id
                     , _context, _transaction).Data;
             }
         }
+
         public MixModules.ReadMvcViewModel GetModule(string name)
         {
             return Modules.FirstOrDefault(m => m.Module.Name == name)?.Module;
         }
+
         public T Property<T>(string fieldName)
         {
-            if (AttributeData!=null)
+            if (AttributeData != null)
             {
                 var field = AttributeData.Data.Data.GetValue(fieldName);
-                if (field!=null)
+                if (field != null)
                 {
                     return field.Value<T>();
                 }
@@ -428,8 +429,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 return default(T);
             }
-            
         }
+
         #endregion Expands
     }
 }

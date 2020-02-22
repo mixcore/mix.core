@@ -24,8 +24,8 @@ namespace Mix.Cms.Api.Controllers.v1
     {
         public ApiUrlAliasController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
-
         }
+
         #region Get
 
         // GET api/url-alias/id
@@ -63,7 +63,6 @@ namespace Mix.Cms.Api.Controllers.v1
                 return Ok(JObject.FromObject(result));
             }
         }
-
 
         #endregion Get
 

@@ -85,8 +85,6 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSetValues
             }
         }
 
-
-
         #region Post
 
         // POST api/attribute-set-value
@@ -133,14 +131,16 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSetValues
             switch (request.Key)
             {
                 case "mvc":
-                    var mvcResult = await base.GetListAsync<ReadMvcViewModel>(request, predicate);                    
+                    var mvcResult = await base.GetListAsync<ReadMvcViewModel>(request, predicate);
                     return Ok(JObject.FromObject(mvcResult));
+
                 default:
 
-                    var listItemResult = await base.GetListAsync<ReadViewModel>(request, predicate);                    
+                    var listItemResult = await base.GetListAsync<ReadViewModel>(request, predicate);
                     return JObject.FromObject(listItemResult);
             }
         }
+
         #endregion Post
     }
 }

@@ -7,7 +7,6 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 
-
 namespace Mix.Cms.Lib.ViewModels.MixTemplates
 {
     public class ReadListItemViewModel
@@ -63,10 +62,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         [JsonIgnore]
         [JsonProperty("assetFolder")]
-        public string AssetFolder
-        {
-            get
-            {
+        public string AssetFolder {
+            get {
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.FileFolder,
                     MixConstants.Folder.TemplatesAssetFolder,
@@ -76,19 +73,15 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         [JsonIgnore]
         [JsonProperty("templateFolder")]
-        public string TemplateFolder
-        {
-            get
-            {
+        public string TemplateFolder {
+            get {
                 return CommonHelper.GetFullPath(new string[] { MixConstants.Folder.TemplatesFolder, TemplateName });
             }
         }
 
         [JsonProperty("templatePath")]
-        public string TemplatePath
-        {
-            get
-            {
+        public string TemplatePath {
+            get {
                 return $"/{FileFolder}/{FileName}{Extension}";
             }
         }
@@ -162,9 +155,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                 FileName = MixService.GetConfig<string>("DefaultTemplate"),
                 Content = "<div></div>"
             });
-
         }
-        #endregion Expands
 
+        #endregion Expands
     }
 }

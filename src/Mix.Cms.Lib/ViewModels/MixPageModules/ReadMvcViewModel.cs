@@ -53,10 +53,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPageModules
             }
         }
 
-        #region Async
-
-        #endregion Async
-
         #endregion overrides
     }
 }

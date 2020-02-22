@@ -29,11 +29,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                             Lcid = culture.Lcid,
                             IsSupported = culture.Specificulture == initCulture || _context.MixPage.Any(p => p.Id == id && p.Specificulture == culture.Specificulture)
                         });
-
                 }
             }
             return result;
         }
-
     }
 }

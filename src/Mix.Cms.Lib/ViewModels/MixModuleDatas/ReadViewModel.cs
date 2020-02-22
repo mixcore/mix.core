@@ -25,21 +25,27 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
 
         [JsonProperty("moduleId")]
         public int ModuleId { get; set; }
+
         [JsonIgnore]
         [JsonProperty("fields")]
         public string Fields { get; set; } = "[]";
+
         [JsonProperty("value")]
         [JsonIgnore]
         public string Value { get; set; }
 
         [JsonProperty("postId")]
         public int? PostId { get; set; }
+
         [JsonProperty("productId")]
         public int? ProductId { get; set; }
+
         [JsonProperty("pageId")]
         public int? PageId { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("updatedDateTime")]
         public DateTime? UpdatedDateTime { get; set; }
 
@@ -70,6 +76,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         #endregion Contructors
 
         #region Overrides
+
         public override MixModuleData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))
@@ -101,6 +108,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                         case MixEnums.MixDataType.Upload:
                             val = Path.Combine(MixService.GetConfig<string>("Domain"), JItem[item.Name]?.Value<JObject>().Value<string>("value"));
                             break;
+
                         default:
                             val = JItem[item.Name]?.Value<JObject>().Value<string>("value");
                             break;
@@ -170,7 +178,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
 
         public string Property(string name)
         {
-
             return JItem[name]?.Value<JObject>().Value<string>("value");
         }
 
@@ -219,6 +226,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                 transaction.Dispose();
                 context.Dispose();
             }
+
             #endregion Expands
         }
     }

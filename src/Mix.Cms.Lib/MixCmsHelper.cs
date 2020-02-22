@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
@@ -23,10 +22,12 @@ namespace Mix.Cms.Lib
         {
             return FileRepository.Instance.GetFile(name, folder, true, "[]");
         }
+
         public static string GetAssetFolder(string culture)
         {
             return $"/{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, culture)}";
         }
+
         public static List<ViewModels.MixPages.ReadListItemViewModel> GetPage(IUrlHelper Url, string culture, MixEnums.CatePosition position, string activePath = "")
         {
             var getTopCates = ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelListBy
@@ -216,7 +217,6 @@ namespace Mix.Cms.Lib
             return Task.FromResult(module.Data);
         }
 
-
         public static async System.Threading.Tasks.Task<ViewModels.MixPages.ReadMvcViewModel> GetPageAsync(int id, string culture)
         {
             RepositoryResponse<ViewModels.MixPages.ReadMvcViewModel> getPage = null;
@@ -226,7 +226,6 @@ namespace Mix.Cms.Lib
             }
 
             return getPage.Data;
-
         }
 
         public static ViewModels.MixModules.ReadMvcViewModel GetModule(string name, string culture)
@@ -243,7 +242,6 @@ namespace Mix.Cms.Lib
 
         public static async System.Threading.Tasks.Task<ViewModels.MixTemplates.ReadListItemViewModel> GetTemplateByPath(string templatePath)
         {
-            
             string[] tmp = templatePath.Split('/');
             if (tmp[1].IndexOf('.') > 0)
             {
@@ -252,23 +250,23 @@ namespace Mix.Cms.Lib
             var getData = await ViewModels.MixTemplates.ReadListItemViewModel.Repository.GetFirstModelAsync(m => m.FolderType == tmp[0] && m.FileName == tmp[1]);
 
             return getData.Data;
-
         }
 
         public static async System.Threading.Tasks.Task<ViewModels.MixAttributeSetDatas.Navigation> GetNavigation(string name, string culture, IUrlHelper Url)
         {
-            var navs = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.NavigationViewModel>(culture, MixConstants.AttributeSetName.NAVIGATION, "equal", "name", name);            
+            var navs = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.NavigationViewModel>(culture, MixConstants.AttributeSetName.NAVIGATION, "equal", "name", name);
             var nav = navs.Data.FirstOrDefault()?.Nav;
             string action = Url.ActionContext.ActionDescriptor.RouteValues["action"];
             string activePath = string.Empty;
             switch (action)
             {
-                case "Page":                    
+                case "Page":
                 case "Post":
                     string seoName = Url.ActionContext.RouteData.Values["seoName"].ToString();
                     string id = Url.ActionContext.RouteData.Values["id"].ToString();
                     activePath = $"/{culture}/post/{id}/{seoName}";
                     break;
+
                 case "Alias":
                     string alias = Url.ActionContext.HttpContext.Request.Query["alias"].ToString();
                     activePath = $"/{culture}/{alias}";
@@ -290,7 +288,5 @@ namespace Mix.Cms.Lib
 
             return nav;
         }
-
-        
     }
 }

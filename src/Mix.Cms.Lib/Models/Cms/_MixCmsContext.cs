@@ -54,7 +54,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual DbSet<MixTheme> MixTheme { get; set; }
         public virtual DbSet<MixUrlAlias> MixUrlAlias { get; set; }
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationDbContext" /> class.
         /// </summary>
@@ -62,11 +61,10 @@ namespace Mix.Cms.Lib.Models.Cms
         public MixCmsContext(DbContextOptions<MixCmsContext> options)
                     : base(options)
         {
-            
         }
+
         public MixCmsContext()
         {
-
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

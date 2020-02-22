@@ -46,7 +46,7 @@ namespace Mix.Cms.Api.Controllers.v1.RelatedAttributeDatas
                 {
                     Specificulture = _lang,
                     ParentType = parentType,
-                    ParentId = parentId,                    
+                    ParentId = parentId,
                     Priority = UpdateViewModel.Repository.Max(p => p.Priority).Data + 1
                 };
                 if (attributeSetId.HasValue)
@@ -66,13 +66,11 @@ namespace Mix.Cms.Api.Controllers.v1.RelatedAttributeDatas
             }
         }
 
-        
         // Save api//{culture}/attribute-set-data/portal
         [HttpPost, HttpOptions]
         [Route("")]
         public async Task<ActionResult> Save(string culture, [FromBody]UpdateViewModel data)
         {
-            
             var portalResult = await base.SaveAsync<UpdateViewModel>(data, true);
             if (portalResult.IsSucceed)
             {
@@ -153,7 +151,7 @@ namespace Mix.Cms.Api.Controllers.v1.RelatedAttributeDatas
             string parentId = parsed.Get("parentId");
             int.TryParse(parsed.Get("parentType"), out int parentType);
             int.TryParse(parsed.Get("attributeSetId"), out int attributeSetId);
-            
+
             Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
                         (!request.Status.HasValue || model.Status == request.Status.Value)
                         && (string.IsNullOrWhiteSpace(parentId)
@@ -177,15 +175,17 @@ namespace Mix.Cms.Api.Controllers.v1.RelatedAttributeDatas
                         && (!request.ToDate.HasValue
                             || (model.CreatedDateTime <= request.ToDate.Value)
                         );
-            
+
             switch (request.Key)
             {
                 case "portal":
                     var portalResult = await base.GetListAsync<UpdateViewModel>(request, predicate);
                     return Ok(JObject.FromObject(portalResult));
+
                 case "mvc":
                     var mvcResult = await base.GetListAsync<ReadMvcViewModel>(request, predicate);
                     return Ok(JObject.FromObject(mvcResult));
+
                 default:
 
                     var listItemResult = await base.GetListAsync<ReadViewModel>(request, predicate);
@@ -194,6 +194,5 @@ namespace Mix.Cms.Api.Controllers.v1.RelatedAttributeDatas
         }
 
         #endregion Get
-
     }
 }

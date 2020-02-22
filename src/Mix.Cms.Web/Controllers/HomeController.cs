@@ -6,14 +6,14 @@ using Mix.Identity.Models;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-
 namespace Mix.Cms.Web.Controllers
 {
     public class HomeController : BaseController
-    {        
+    {
         private readonly UserManager<ApplicationUser> _userManager;
 
         #region contructor
+
         protected override void ValidateRequest()
         {
             base.ValidateRequest();
@@ -33,7 +33,8 @@ namespace Mix.Cms.Web.Controllers
                 }
             }
         }
-        #endregion
+
+        #endregion contructor
 
         #region Routes
 
@@ -51,7 +52,7 @@ namespace Mix.Cms.Web.Controllers
             else
             {
                 return Redirect(_redirectUrl);
-            }            
+            }
         }
 
         private void HandleSeoName(ref string seoName)
@@ -64,7 +65,6 @@ namespace Mix.Cms.Web.Controllers
             if (m.Success)
             {
                 seoName = m.Groups[1].Value;
-                
             }
 
             // Check first group is culture
@@ -88,6 +88,6 @@ namespace Mix.Cms.Web.Controllers
             }
         }
 
-        #endregion
+        #endregion Routes
     }
 }

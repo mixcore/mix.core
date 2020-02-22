@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixModules;
 using Mix.Common.Helper;
@@ -18,24 +17,32 @@ namespace Mix.Cms.Lib.ViewModels
     {
         [JsonProperty("pages")]
         public List<MixPages.ImportViewModel> Pages { get; set; }
+
         [JsonProperty("modules")]
         public List<MixModules.ImportViewModel> Modules { get; set; }
+
         [JsonProperty("attributeSets")]
         public List<MixAttributeSets.ImportViewModel> AttributeSets { get; set; }
+
         [JsonProperty("configurations")]
         public List<MixConfigurations.ReadViewModel> Configurations { get; set; }
+
         [JsonProperty("relatedData")]
         public List<MixRelatedAttributeDatas.ReadViewModel> RelatedData { get; set; } = new List<MixRelatedAttributeDatas.ReadViewModel>();
+
         [JsonProperty("attributeSetDatas")]
         public List<MixAttributeSetDatas.ImportViewModel> AttributeSetDatas { get; set; } = new List<MixAttributeSetDatas.ImportViewModel>();
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("themeName")]
         public string ThemeName { get; set; }
+
         public SiteStructureViewModel()
         {
-
         }
+
         public async Task InitAsync(string culture)
         {
             Pages = (await MixPages.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
@@ -44,6 +51,7 @@ namespace Mix.Cms.Lib.ViewModels
         }
 
         #region Export
+
         public RepositoryResponse<string> ProcessSelectedExportDataAsync()
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(null, null, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
@@ -72,7 +80,6 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     context?.Dispose();
                 }
-
             }
         }
 
@@ -96,7 +103,6 @@ namespace Mix.Cms.Lib.ViewModels
                             refSet.IsExportData = refSet.IsExportData || item.IsExportData;
                             AttributeSets.Add(refSet);
                         }
-
                     }
                     else
                     {
@@ -106,7 +112,6 @@ namespace Mix.Cms.Lib.ViewModels
                 // Load export data if checked and did not process
                 if (item.IsExportData && item.Data != null)
                 {
-
                 }
             }
         }
@@ -149,7 +154,6 @@ namespace Mix.Cms.Lib.ViewModels
                 }
             }
         }
-
 
         private void ProcessModuleData(ImportViewModel item, MixCmsContext context, IDbContextTransaction transaction)
         {
@@ -214,8 +218,7 @@ namespace Mix.Cms.Lib.ViewModels
             }
         }
 
-
-        #endregion
+        #endregion Export
 
         #region Import
 
@@ -250,7 +253,6 @@ namespace Mix.Cms.Lib.ViewModels
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
-
                 var error = UnitOfWorkHelper<MixCmsContext>.HandleException<MixPages.ImportViewModel>(ex, isRoot, transaction);
                 result.IsSucceed = false;
                 result.Errors = error.Errors;
@@ -263,7 +265,6 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     context?.Dispose();
                 }
-
             }
             return result;
         }
@@ -289,7 +290,7 @@ namespace Mix.Cms.Lib.ViewModels
                     }
                     // update new id to related attribute data
                     var related = RelatedData.Where(
-                    
+
                     m => m.ParentType == (int)MixEnums.MixAttributeSetDataType.Module && m.ParentId == oldId.ToString());
                     foreach (var r in related)
                     {
@@ -303,7 +304,6 @@ namespace Mix.Cms.Lib.ViewModels
             }
             return result;
         }
-
 
         private async Task<RepositoryResponse<bool>> ImportAttributeSetsAsync(MixCmsContext context, IDbContextTransaction transaction)
         {
@@ -322,9 +322,7 @@ namespace Mix.Cms.Lib.ViewModels
                             set.CreatedDateTime = DateTime.UtcNow;
                             var saveResult = await set.SaveModelAsync(true, context, transaction);
                             ViewModelHelper.HandleResult(saveResult, ref result);
-                            
                         }
-
                     }
                     else
                     {
@@ -355,7 +353,7 @@ namespace Mix.Cms.Lib.ViewModels
                     item.Id = startId;
                     item.CreatedDateTime = DateTime.UtcNow;
                     item.ThemeName = ThemeName;
-                    
+
                     //if (_context.MixPage.Any(m=>m.Id == startId)) //(item.Id > initPages.Count)
                     //{
                     //    item.Id = _context.MixPage.Max(m => m.Id) + 1;
@@ -394,7 +392,6 @@ namespace Mix.Cms.Lib.ViewModels
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
-
                 var error = UnitOfWorkHelper<MixCmsContext>.HandleException<MixPages.ImportViewModel>(ex, isRoot, transaction);
                 result.IsSucceed = false;
                 result.Errors = error.Errors;
@@ -407,7 +404,6 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     context?.Dispose();
                 }
-
             }
             return result;
         }
@@ -427,7 +423,7 @@ namespace Mix.Cms.Lib.ViewModels
                         {
                             var newSet = AttributeSets.FirstOrDefault(m => m.Name == field.AttributeSetName);
                             var newField = newSet?.Fields.FirstOrDefault(m => m.Name == field.Name);
-                            if (newField!=null)
+                            if (newField != null)
                             {
                                 field.Id = newField.Id;
                                 field.AttributeSetId = newSet.Id;
@@ -464,7 +460,6 @@ namespace Mix.Cms.Lib.ViewModels
             return result;
         }
 
-        #endregion
-
+        #endregion Import
     }
 }

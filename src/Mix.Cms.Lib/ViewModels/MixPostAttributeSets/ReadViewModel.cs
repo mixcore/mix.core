@@ -34,7 +34,5 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeSets
 
         [JsonProperty("status")]
         public MixEnums.MixContentStatus Status { get; set; }
-
-
     }
 }

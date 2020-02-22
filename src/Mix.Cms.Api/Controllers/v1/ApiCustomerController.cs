@@ -25,8 +25,8 @@ namespace Mix.Cms.Api.Controllers.v1
     {
         public ApiCustomerController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
-
         }
+
         #region Get
 
         // GET api/customer/id
@@ -88,7 +88,6 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
-
         #endregion Get
 
         #region Post
@@ -131,6 +130,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 case "portal":
                     var portalResult = await base.GetListAsync<UpdateViewModel>(request, predicate);
                     return Ok(JObject.FromObject(portalResult));
+
                 default:
 
                     var listItemResult = await base.GetListAsync<ReadViewModel>(request, predicate);

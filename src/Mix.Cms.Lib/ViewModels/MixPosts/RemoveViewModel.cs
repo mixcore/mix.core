@@ -14,7 +14,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
     public class RemoveViewModel
          : ViewModelBase<MixCmsContext, MixPost, RemoveViewModel>
     {
-
         #region Properties
 
         #region Models
@@ -207,7 +206,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         #region Sync Methods
 
-
         public override RepositoryResponse<bool> RemoveRelatedModels(RemoveViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>()
@@ -272,9 +270,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             return result;
         }
 
-        #endregion  Methods
+        #endregion Sync Methods
 
         #endregion Overrides
-
     }
 }

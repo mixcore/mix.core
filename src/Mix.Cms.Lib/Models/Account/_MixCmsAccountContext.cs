@@ -1,5 +1,5 @@
 ﻿// Licensed to the Mixcore Foundation under one or more agreements.
-// The Mixcore Foundation licenses this file to you under the GNU General Public License v3.0.
+// The Mixcore Foundation licenses this file to you under the MIT.
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +19,7 @@ namespace Mix.Cms.Lib.Models.Account
         public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
         public virtual DbSet<Clients> Clients { get; set; }
         public virtual DbSet<RefreshTokens> RefreshTokens { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationDbContext" /> class.
         /// </summary>

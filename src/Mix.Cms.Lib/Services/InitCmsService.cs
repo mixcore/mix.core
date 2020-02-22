@@ -57,9 +57,8 @@ namespace Mix.Cms.Lib.Services
 
                     if (isInit)
                     {
-
                         /**
-                         * Init Selected Language as default 
+                         * Init Selected Language as default
                          */
                         isSucceed = InitCultures(culture, context, transaction);
 
@@ -141,7 +140,6 @@ namespace Mix.Cms.Lib.Services
             }
         }
 
-
         /// <summary>
         /// Step 2
         ///     - Init Configurations
@@ -171,9 +169,7 @@ namespace Mix.Cms.Lib.Services
             UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
 
             return result;
-
         }
-
 
         /// <summary>
         /// Step 2
@@ -210,9 +206,7 @@ namespace Mix.Cms.Lib.Services
             UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
 
             return result;
-
         }
-
 
         /// <summary>
         /// Step 3
@@ -232,12 +226,10 @@ namespace Mix.Cms.Lib.Services
 
             UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
             return result;
-
         }
 
-
         /// <summary>
-        /// Step 4 
+        /// Step 4
         ///     - Init default theme
         /// </summary>
         /// <param name="siteName"></param>
@@ -275,7 +267,6 @@ namespace Mix.Cms.Lib.Services
             {
                 if (context.MixCulture.Count() == 0)
                 {
-
                     // EN-US
 
                     var enCulture = new MixCulture()
@@ -300,6 +291,7 @@ namespace Mix.Cms.Lib.Services
             }
             return isSucceed;
         }
+
         protected static void InitPages(string culture, MixCmsContext context, IDbContextTransaction transaction)
         {
             /* Init Pages */
@@ -329,6 +321,5 @@ namespace Mix.Cms.Lib.Services
                 context.Entry(alias).State = EntityState.Added;
             }
         }
-        
     }
 }

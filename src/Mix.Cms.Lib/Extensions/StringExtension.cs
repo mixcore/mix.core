@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mix.Cms.Lib.Extensions
 {
@@ -14,6 +12,7 @@ namespace Mix.Cms.Lib.Extensions
             }
             return str;
         }
+
         public static string ToTitleCase(this string str)
         {
             if (!string.IsNullOrEmpty(str) && str.Length > 1)
@@ -22,6 +21,7 @@ namespace Mix.Cms.Lib.Extensions
             }
             return str;
         }
+
         public static bool IsBase64(this string base64String)
         {
             base64String = base64String.IndexOf(',') >= 0 ? base64String.Split(',')[1] : base64String;
@@ -38,7 +38,6 @@ namespace Mix.Cms.Lib.Extensions
             {
                 return false;
             }
-            
         }
     }
 }

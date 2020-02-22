@@ -12,7 +12,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
-
 namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
 {
     public class UpdateViewModel : ViewModelBase<MixCmsAccountContext, AspNetRoles, UpdateViewModel>
@@ -21,26 +20,27 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
 
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("concurrencyStamp")]
         public string ConcurrencyStamp { get; set; }
+
         [Required]
         [JsonProperty("name")]
         public string Name { get; set; }
+
         [JsonProperty("normalizedName")]
         public string NormalizedName { get; set; }
 
-        #region Models
 
-        #endregion
 
         #region Views
 
         [JsonProperty("permissions")]
         public List<MixPortalPages.UpdateRolePermissionViewModel> Permissions { get; set; }
 
-        #endregion
+        #endregion Views
 
-        #endregion
+        #endregion Properties
 
         #region Contructors
 
@@ -53,9 +53,10 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
         {
         }
 
-        #endregion
+        #endregion Contructors
 
         #region Overrides
+
         public override AspNetRoles ParseModel(MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))
@@ -64,6 +65,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
             }
             return base.ParseModel(_context, _transaction);
         }
+
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = await UserRoleViewModel.Repository.RemoveListModelAsync(false, ur => ur.RoleId == Id, _context, _transaction);
@@ -77,7 +79,6 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
 
         public override void ExpandView(MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
         {
-
             Permissions = MixPortalPages.UpdateRolePermissionViewModel.Repository.GetModelListBy(p => p.Level == 0).Data;
             foreach (var item in Permissions)
             {
@@ -120,7 +121,6 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
 
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(AspNetRoles parent, MixCmsAccountContext _context, IDbContextTransaction _transaction)
         {
-
             MixCmsContext context = new MixCmsContext();
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             var transaction = context.Database.BeginTransaction();
@@ -159,14 +159,13 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
                 transaction.Dispose();
                 context.Dispose();
             }
-
         }
 
-        #endregion
+        #endregion Overrides
 
         #region Expands
 
-        List<MixPortalPageRoles.ReadViewModel> GetPermission()
+        private List<MixPortalPageRoles.ReadViewModel> GetPermission()
         {
             using (MixCmsContext context = new MixCmsContext())
             {
@@ -192,7 +191,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
             }
         }
 
-        async Task<RepositoryResponse<bool>> HandlePermission(MixPortalPages.UpdateRolePermissionViewModel item, MixCmsContext context, IDbContextTransaction transaction)
+        private async Task<RepositoryResponse<bool>> HandlePermission(MixPortalPages.UpdateRolePermissionViewModel item, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
 
@@ -218,7 +217,6 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
                 {
                     result.Exception = saveResult.Exception;
                     Errors.AddRange(saveResult.Errors);
-
                 }
             }
             else
@@ -244,7 +242,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
 
             return result;
         }
-        #endregion
 
+        #endregion Expands
     }
 }

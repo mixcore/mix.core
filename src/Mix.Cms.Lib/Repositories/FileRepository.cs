@@ -1,9 +1,9 @@
 ﻿// Licensed to the Mixcore Foundation under one or more agreements.
-// The Mixcore Foundation licenses this file to you under the GNU General Public License v3.0 license.
+// The Mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 // Licensed to the Mixcore Foundation under one or more agreements.
-// The Mixcore Foundation licenses this file to you under the GNU General Public License v3.0.
+// The Mixcore Foundation licenses this file to you under the MIT.
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.AspNetCore.Http;
@@ -36,10 +36,8 @@ namespace Mix.Cms.Lib.Repositories
         /// Gets the instance.
         /// </summary>
         /// <returns></returns>
-        public static FileRepository Instance
-        {
-            get
-            {
+        public static FileRepository Instance {
+            get {
                 if (instance == null)
                 {
                     lock (syncRoot)
@@ -50,8 +48,7 @@ namespace Mix.Cms.Lib.Repositories
                 }
                 return instance;
             }
-            set
-            {
+            set {
                 instance = value;
             }
         }
@@ -189,7 +186,6 @@ namespace Mix.Cms.Lib.Repositories
                 {
                     using (var stream = File.Open(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
                     {
-
                         using (StreamReader s = new StreamReader(stream))
                         {
                             result = new FileViewModel()
@@ -200,7 +196,6 @@ namespace Mix.Cms.Lib.Repositories
                                 Content = s.ReadToEnd()
                             };
                         }
-
                     }
                 }
                 catch
@@ -230,7 +225,7 @@ namespace Mix.Cms.Lib.Repositories
             var arr = fullname.Split('.');
             if (arr.Length >= 2)
             {
-                return GetFile(fullname.Substring(0,fullname.LastIndexOf('.')), $".{arr[arr.Length-1]}", FileFolder, isCreate, defaultContent);
+                return GetFile(fullname.Substring(0, fullname.LastIndexOf('.')), $".{arr[arr.Length - 1]}", FileFolder, isCreate, defaultContent);
             }
             else
             {
@@ -260,7 +255,6 @@ namespace Mix.Cms.Lib.Repositories
             }
             return true;
         }
-
 
         public bool DeleteFile(string fullPath)
         {
@@ -308,6 +302,7 @@ namespace Mix.Cms.Lib.Repositories
             }
             return true;
         }
+
         public bool CopyWebDirectory(string srcPath, string desPath)
         {
             if (srcPath != desPath)
@@ -328,7 +323,6 @@ namespace Mix.Cms.Lib.Repositories
             }
             return true;
         }
-
 
         public void CreateDirectoryIfNotExist(string fullPath)
         {
@@ -530,7 +524,7 @@ namespace Mix.Cms.Lib.Repositories
                     }
                     else
                     {
-                        string base64 = file.FileStream.IndexOf(',') >= 0 ?  file.FileStream.Split(',')[1] : file.FileStream;
+                        string base64 = file.FileStream.IndexOf(',') >= 0 ? file.FileStream.Split(',')[1] : file.FileStream;
 
                         if (!string.IsNullOrEmpty(ImageResizer.getContentType(fileName)))
                         {
@@ -577,13 +571,12 @@ namespace Mix.Cms.Lib.Repositories
                         file.CopyTo(stream);
                     }
                     result.IsSucceed = true;
-                    result.Data =  new FileViewModel()
+                    result.Data = new FileViewModel()
                     {
                         Filename = filename.Substring(0, file.FileName.LastIndexOf('.')),
                         Extension = filename.Substring(file.FileName.LastIndexOf('.')),
                         FileFolder = folder
                     };
-                    
                 }
                 else
                 {
@@ -591,7 +584,7 @@ namespace Mix.Cms.Lib.Repositories
                     result.Errors.Add("File not found");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result.IsSucceed = false;
                 result.Exception = ex;

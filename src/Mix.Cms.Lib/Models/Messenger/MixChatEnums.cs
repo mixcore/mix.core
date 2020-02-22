@@ -26,11 +26,13 @@
             RejectInvite,
             Error
         }
+
         public enum ApiResponseKey
         {
             Succeed,
             Failed
         }
+
         public enum TeamResponseKey
         {
             GetTeamsSucceed,
@@ -51,11 +53,13 @@
             NotAuthorized,
             TeamFulled
         }
+
         public enum OnlineStatus
         {
             DisConnected = 0,
             Connected = 1
         }
+
         public enum MemberStatus
         {
             Requested = 0,
@@ -88,6 +92,7 @@
             Join = 1,
             Left = 2
         }
+
         public enum DeviceStatus
         {
             Deactived = 0,

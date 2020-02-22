@@ -22,8 +22,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPositions
 
         [JsonProperty("description")]
         public string Description { get; set; }
+
         [JsonProperty("status")]
         public MixEnums.MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #endregion Properties
@@ -41,6 +43,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPositions
         #endregion Contructors
 
         #region Expands
+
         public static async Task<RepositoryResponse<bool>> ImportPositions(List<MixPosition> arrPosition,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -60,7 +63,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPositions
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
-
                 var error = UnitOfWorkHelper<MixCmsContext>.HandleException<MixPosition>(ex, isRoot, transaction);
                 result.IsSucceed = false;
                 result.Errors = error.Errors;
@@ -73,10 +75,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPositions
                 {
                     context?.Dispose();
                 }
-
             }
             return result;
         }
-        #endregion
+
+        #endregion Expands
     }
 }

@@ -50,17 +50,17 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
+
         [JsonProperty("domain")]
         public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl
-        {
-            get
-            {
+        public string ImageUrl {
+            get {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -73,11 +73,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 }
             }
         }
+
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl
-        {
-            get
-            {
+        public string ThumbnailUrl {
+            get {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -90,6 +89,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 }
             }
         }
+
         [JsonProperty("isActived")]
         public bool IsActived { get; set; }
 
@@ -100,26 +100,21 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public FileViewModel Asset { get; set; }
 
         [JsonProperty("assetFolder")]
-        public string AssetFolder
-        {
-            get
-            {
+        public string AssetFolder {
+            get {
                 return $"content/templates/{Name}/assets";
             }
         }
-        public string UploadsFolder
-        {
-            get
-            {
+
+        public string UploadsFolder {
+            get {
                 return $"content/templates/{Name}/uploads";
             }
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder
-        {
-            get
-            {
+        public string TemplateFolder {
+            get {
                 return $"{MixConstants.Folder.TemplatesFolder}/{Name}";
             }
         }
@@ -197,7 +192,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             return result;
         }
 
-
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = await MixTemplates.InitViewModel.Repository.RemoveListModelAsync(false, t => t.ThemeId == Id);
@@ -215,6 +209,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         }
 
         #endregion Async
+
         #region Sync
 
         public override RepositoryResponse<bool> RemoveRelatedModels(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -233,12 +228,13 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             };
         }
 
-        #endregion
+        #endregion Sync
 
         #endregion Overrides
 
         #region Expand
-        async Task<RepositoryResponse<bool>> ImportThemeAsync(MixTheme parent, MixCmsContext _context, IDbContextTransaction _transaction)
+
+        private async Task<RepositoryResponse<bool>> ImportThemeAsync(MixTheme parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             string filePath = $"wwwroot/{TemplateAsset.FileFolder}/{TemplateAsset.Filename}{TemplateAsset.Extension}";
@@ -263,8 +259,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 result = await siteStructures.ImportAsync(Specificulture);
                 if (result.IsSucceed)
                 {
-
-                    // Save template files to db                
+                    // Save template files to db
                     var files = FileRepository.Instance.GetFilesWithContent(TemplateFolder);
                     //TODO: Create default asset
                     foreach (var file in files)
@@ -337,7 +332,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
             if (result.IsSucceed)
             {
-
                 SystemConfigurationViewModel configId = (await SystemConfigurationViewModel.Repository.GetSingleModelAsync(
                       c => c.Keyword == MixConstants.ConfigurationKeyword.ThemeId && c.Specificulture == Specificulture, _context, _transaction)).Data;
                 if (configId == null)
@@ -415,20 +409,17 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 FileRepository.Instance.UnZipFile(fullPath, Asset.FileFolder);
                 //InitAssetStyle();
                 result.IsSucceed = true;
-
             }
             else
             {
                 result.Errors.Add("Cannot saved asset file");
             }
 
-
             return result;
         }
 
         private async Task InitAssetStyleAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-
             var files = FileRepository.Instance.GetWebFiles(AssetFolder);
             StringBuilder strStyles = new StringBuilder();
 
@@ -454,6 +445,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             await layout.Data.SaveModelAsync(true, _context, _transaction);
         }
 
-        #endregion
+        #endregion Expand
     }
 }

@@ -53,6 +53,7 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
 
         [JsonProperty("property")]
         public DataValueViewModel Property { get; set; }
+
         #endregion Views
 
         #endregion Properties
@@ -91,8 +92,10 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
         }
 
         #endregion Overrides
+
         #region Expand
-        List<SupportedCulture> LoadCultures(string initCulture = null, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+
+        private List<SupportedCulture> LoadCultures(string initCulture = null, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getCultures = SystemCultureViewModel.Repository.GetModelList(_context, _transaction);
             var result = new List<SupportedCulture>();
@@ -112,12 +115,11 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
                             Lcid = culture.Lcid,
                             IsSupported = culture.Specificulture == initCulture || _context.MixConfiguration.Any(p => p.Keyword == Keyword && p.Specificulture == culture.Specificulture)
                         });
-
                 }
             }
             return result;
         }
 
-        #endregion
+        #endregion Expand
     }
 }

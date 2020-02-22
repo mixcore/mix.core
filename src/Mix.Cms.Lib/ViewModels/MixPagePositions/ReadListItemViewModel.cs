@@ -31,6 +31,5 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePositions
 
         [JsonProperty("description")]
         public string Description { get; set; }
-
     }
 }

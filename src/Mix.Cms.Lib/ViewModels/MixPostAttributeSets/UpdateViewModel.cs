@@ -36,7 +36,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeSets
 
         [JsonProperty("status")]
         public MixEnums.MixContentStatus Status { get; set; }
+
         #region Views
+
         [JsonProperty("attributeSet")]
         public MixAttributeSets.ContentUpdateViewModel MixAttributeSet { get; set; }
 
@@ -65,7 +67,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeSets
             ViewModelHelper.HandleResult(saveResult, ref result);
             return result;
         }
-
 
         #endregion Async
 

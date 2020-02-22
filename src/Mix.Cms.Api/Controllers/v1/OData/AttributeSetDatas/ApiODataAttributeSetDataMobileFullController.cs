@@ -102,7 +102,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
 
         [HttpPost, HttpOptions]
         [Route("")]
-
         public async Task<ActionResult<ODataMobileFullViewModel>> Save(string culture, [FromBody]JObject data)
         {
             string id = data["id"]?.Value<string>();
@@ -130,7 +129,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                     {
                         return Unauthorized();
                     }
-
                 }
                 else
                 {
@@ -141,9 +139,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             {
                 return NotFound();
             }
-
         }
-
 
         // Save api/odata/{culture}/attribute-set-data/portal
         [HttpPost, HttpOptions]
@@ -321,6 +317,5 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         }
 
         #endregion Get
-
     }
 }

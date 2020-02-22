@@ -40,6 +40,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
 
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #region Views
 
         [JsonProperty("post")]
@@ -70,14 +71,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
             }
         }
 
-        #region Async
-
-        #endregion Async
-
         #endregion overrides
 
         #region Expand
-
 
         public static RepositoryResponse<List<MixPagePosts.ReadViewModel>> GetPagePostNavAsync(int postId, string specificulture
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -132,6 +128,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
             }
         }
 
-        #endregion
+        #endregion Expand
     }
 }

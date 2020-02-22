@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using Newtonsoft.Json;
 
 namespace Mix.Identity.Models.AccountViewModels
 {
@@ -11,10 +6,13 @@ namespace Mix.Identity.Models.AccountViewModels
     {
         [JsonProperty("userId")]
         public string UserId { get; set; }
+
         [JsonProperty("roleId")]
         public string RoleId { get; set; }
+
         [JsonProperty("roleName")]
         public string RoleName { get; set; }
+
         [JsonProperty("isUserInRole")]
         public bool IsUserInRole { get; set; }
     }

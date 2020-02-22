@@ -50,10 +50,14 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         public DateTime CreatedDateTime { get; set; }
 
         #endregion Models
+
         #region Views
+
         [JsonProperty("childNavs")]
         public List<MixPortalPagePortalPages.ReadViewModel> ChildNavs { get; set; }
-        #endregion
+
+        #endregion Views
+
         #endregion Properties
 
         #region Contructors
@@ -69,6 +73,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         #endregion Contructors
 
         #region Overrides
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getChilds = MixPortalPagePortalPages.ReadViewModel.Repository.GetModelListBy(n => n.ParentId == Id, _context, _transaction);
@@ -77,6 +82,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
                 ChildNavs = getChilds.Data.OrderBy(c => c.Priority).ToList();
             }
         }
+
         public override MixPortalPage ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (CreatedDateTime == default(DateTime))
@@ -97,8 +103,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
             return result;
         }
 
+        #endregion Overrides
 
-        #endregion
         #region Expands
 
         public static async System.Threading.Tasks.Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfosAsync(List<ReadViewModel> cates)
@@ -108,7 +114,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
             var result = new RepositoryResponse<List<ReadViewModel>>();
             try
             {
-
                 foreach (var item in cates)
                 {
                     var saveResult = await item.SaveModelAsync(false, context, transaction);
@@ -140,6 +145,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
                 context.Dispose();
             }
         }
-        #endregion
+
+        #endregion Expands
     }
 }

@@ -16,29 +16,38 @@ namespace Mix.Cms.Lib.ViewModels.MixOrderItems
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonIgnore]
         [JsonProperty("userId")]
         public string UserId { get; set; }
+
         [JsonProperty("customerId")]
         public string CustomerId { get; set; }
+
         [JsonIgnore]
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonIgnore]
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonIgnore]
         [JsonProperty("storeId")]
         public int StoreId { get; set; }
+
         [JsonProperty("status")]
         public MixEnums.MixOrderStatus Status { get; set; }
+
         #endregion Models
+
         #region View
 
         [JsonProperty("totalSpent")]
         public double TotalSpent { get; set; }
 
-        #endregion
+        #endregion View
+
         #endregion Properties
 
         #region Contructors
@@ -60,6 +69,6 @@ namespace Mix.Cms.Lib.ViewModels.MixOrderItems
             TotalSpent = _context.MixOrderItem.Where(i => i.OrderId == Id && i.Specificulture == Specificulture).Sum(i => i.Price);
         }
 
-        #endregion
+        #endregion Overrides
     }
 }

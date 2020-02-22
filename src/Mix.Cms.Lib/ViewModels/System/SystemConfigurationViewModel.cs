@@ -23,20 +23,28 @@ namespace Mix.Cms.Lib.ViewModels.MixSystem
         [Required]
         [JsonProperty("keyword")]
         public string Keyword { get; set; }
+
         [JsonProperty("category")]
         public string Category { get; set; }
+
         [JsonProperty("value")]
         public string Value { get; set; }
+
         [JsonProperty("dataType")]
         public MixDataType DataType { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         [JsonProperty("description")]
         public string Description { get; set; }
+
         [JsonProperty("createdDatetime")]
         public DateTime CreatedDatetime { get; set; }
+
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         #endregion Models
 
         #region Views
@@ -48,6 +56,7 @@ namespace Mix.Cms.Lib.ViewModels.MixSystem
         public DataValueViewModel Property { get; set; }
 
         #endregion Views
+
         #endregion Properties
 
         #region Contructors
@@ -56,6 +65,7 @@ namespace Mix.Cms.Lib.ViewModels.MixSystem
             : base()
         {
         }
+
         public SystemConfigurationViewModel(MixConfiguration model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
@@ -64,6 +74,7 @@ namespace Mix.Cms.Lib.ViewModels.MixSystem
         #endregion Contructors
 
         #region Overrides
+
         public override MixConfiguration ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (CreatedDatetime == default(DateTime))
@@ -72,12 +83,13 @@ namespace Mix.Cms.Lib.ViewModels.MixSystem
             }
             return base.ParseModel(_context, _transaction);
         }
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Property = new DataValueViewModel() { DataType = DataType, Value = Value, Name = Keyword };
         }
 
-        #endregion
+        #endregion Overrides
 
         #region Expands
 
@@ -119,6 +131,7 @@ namespace Mix.Cms.Lib.ViewModels.MixSystem
             return result;
         }
 
-        #endregion   
+        #endregion Expands
+
     }
 }

@@ -9,11 +9,12 @@ namespace RewriteRules
     public class MethodRules
     {
         #region snippet1
+
         public static void RedirectXMLRequests(RewriteContext context)
         {
             var request = context.HttpContext.Request;
 
-            // Because we're redirecting back to the same app, stop 
+            // Because we're redirecting back to the same app, stop
             // processing if the request has already been redirected
             if (request.Path.StartsWithSegments(new PathString("/xmlfiles")))
             {
@@ -29,10 +30,12 @@ namespace RewriteRules
                     "/xmlfiles" + request.Path + request.QueryString;
             }
         }
-        #endregion
+
+        #endregion snippet1
     }
 
     #region snippet2
+
     public class RedirectImageRequests : IRule
     {
         private readonly string _extension;
@@ -63,7 +66,7 @@ namespace RewriteRules
         {
             var request = context.HttpContext.Request;
 
-            // Because we're redirecting back to the same app, stop 
+            // Because we're redirecting back to the same app, stop
             // processing if the request has already been redirected
             if (request.Path.StartsWithSegments(new PathString(_newPath)))
             {
@@ -80,5 +83,6 @@ namespace RewriteRules
             }
         }
     }
-    #endregion
+
+    #endregion snippet2
 }

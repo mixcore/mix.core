@@ -98,18 +98,17 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("pageSize")]
         public int? PageSize { get; set; }
-        #endregion Models
 
+        #endregion Models
 
         #region Views
 
         [JsonProperty("domain")]
         public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
+
         [JsonProperty("imageUrl")]
-        public string ImageUrl
-        {
-            get
-            {
+        public string ImageUrl {
+            get {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -122,11 +121,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 }
             }
         }
+
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl
-        {
-            get
-            {
+        public string ThumbnailUrl {
+            get {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -139,6 +137,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 }
             }
         }
+
         [JsonProperty("childs")]
         public List<MixPagePages.ReadViewModel> Childs { get; set; }
 
@@ -187,11 +186,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 TotalPost = countPost.Data;
             }
-
         }
 
         #endregion Overrides
-
-
     }
 }

@@ -36,18 +36,20 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 case "post":
                     return await GetPostDataAsync(setId, viewType, id);
+
                 case "module":
                     break;
+
                 case "page":
                     break;
+
                 default:
                     break;
             }
             return BadRequest();
-
         }
 
-        async Task<ActionResult<JObject>> GetPostDataAsync(int setId, string viewType, string id)
+        private async Task<ActionResult<JObject>> GetPostDataAsync(int setId, string viewType, string id)
         {
             switch (viewType)
             {
@@ -94,8 +96,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
             }
         }
+
         #endregion Get
-
-
     }
 }

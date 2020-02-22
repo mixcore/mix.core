@@ -12,21 +12,29 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
        : ViewModelBase<MixCmsContext, MixPostAttributeData, ReadMvcViewModel>
     {
         #region Properties
+
         #region Models
+
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
+
         [JsonProperty("postId")]
         public int PostId { get; set; }
-        #endregion
+
+        #endregion Models
 
         #region Views
+
         [JsonProperty("data")]
         public List<MixPostAttributeValues.ReadMvcViewModel> Data { get; set; }
-        #endregion
 
-        #endregion
+        #endregion Views
+
+        #endregion Properties
+
         public ReadMvcViewModel(MixPostAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
@@ -45,6 +53,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
         }
 
         #endregion overrides
+
         #region Helper
 
         public string GetStringValue(string name)
@@ -76,7 +85,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeDatas
         {
             return Data.FirstOrDefault(v => v.AttributeName == name)?.DecryptValue;
         }
-        #endregion
 
+        #endregion Helper
     }
 }

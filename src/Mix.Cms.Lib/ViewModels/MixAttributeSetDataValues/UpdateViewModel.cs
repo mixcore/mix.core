@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
@@ -13,47 +12,68 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
       : ViewModelBase<MixCmsContext, MixAttributeSetValue, UpdateViewModel>
     {
         #region Properties
+
         #region Models
+
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("attributeFieldId")]
         public int AttributeFieldId { get; set; }
+
         [JsonProperty("regex")]
         public string Regex { get; set; }
+
         [JsonProperty("dataType")]
         public MixEnums.MixDataType DataType { get; set; }
+
         [JsonProperty("status")]
         public int Status { get; set; }
+
         [JsonProperty("attributeFieldName")]
         public string AttributeFieldName { get; set; }
+
         [JsonProperty("attributeSetName")]
         public string AttributeSetName { get; set; }
+
         [JsonProperty("booleanValue")]
         public bool? BooleanValue { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("dataId")]
         public string DataId { get; set; }
+
         [JsonProperty("dateTimeValue")]
         public DateTime? DateTimeValue { get; set; }
+
         [JsonProperty("doubleValue")]
         public double? DoubleValue { get; set; }
+
         [JsonProperty("integerValue")]
         public int? IntegerValue { get; set; }
+
         [JsonProperty("stringValue")]
         public string StringValue { get; set; }
+
         [JsonProperty("encryptValue")]
         public string EncryptValue { get; set; }
+
         [JsonProperty("encryptKey")]
         public string EncryptKey { get; set; }
+
         [JsonProperty("encryptType")]
         public int EncryptType { get; set; }
+
         #endregion Models
 
-        #region Views       
+        #region Views
+
         [JsonProperty("field")]
         public MixAttributeFields.UpdateViewModel Field { get; set; }
-        #endregion
+
+        #endregion Views
 
         #endregion Properties
 
@@ -72,6 +92,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         #endregion Contructors
 
         #region Overrides
+
         public override MixAttributeSetValue ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))
@@ -98,18 +119,23 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
             {
                 case MixEnums.MixDataType.DateTime:
                     break;
+
                 case MixEnums.MixDataType.Date:
                     break;
+
                 case MixEnums.MixDataType.Time:
                     break;
+
                 case MixEnums.MixDataType.Double:
                     double.TryParse(defaultValue, out double doubleValue);
                     DoubleValue = DoubleValue;
                     break;
+
                 case MixEnums.MixDataType.Boolean:
                     bool.TryParse(defaultValue, out bool boolValue);
                     BooleanValue = boolValue;
                     break;
+
                 case MixEnums.MixDataType.Number:
                     int.TryParse(defaultValue, out int intValue);
                     IntegerValue = intValue;
@@ -119,7 +145,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-
             if (AttributeFieldId > 0)
             {
                 Field = MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId).Data;
@@ -138,9 +163,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                     Priority = Priority
                 };
             }
-
         }
-        #endregion
+
+        #endregion Overrides
 
         #region Expands
 
@@ -180,6 +205,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
             }
         }
 
-        #endregion
+        #endregion Expands
     }
 }

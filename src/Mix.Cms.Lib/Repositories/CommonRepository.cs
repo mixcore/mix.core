@@ -1,5 +1,5 @@
 ﻿// Licensed to the Mixcore Foundation under one or more agreements.
-// The Mixcore Foundation licenses this file to you under the GNU General Public License v3.0.
+// The Mixcore Foundation licenses this file to you under the MIT.
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.EntityFrameworkCore.Storage;
@@ -20,10 +20,8 @@ namespace Mix.Cms.Lib.Repositories
         {
         }
 
-        public static CommonRepository Instance
-        {
-            get
-            {
+        public static CommonRepository Instance {
+            get {
                 if (instance == null)
                 {
                     lock (syncRoot)
@@ -57,7 +55,6 @@ namespace Mix.Cms.Lib.Repositories
                             Lcid = culture.Lcid,
                             IsSupported = culture.Specificulture == initCulture
                         });
-
                 }
             }
             return result;

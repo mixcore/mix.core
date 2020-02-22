@@ -132,6 +132,5 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSets
         }
 
         #endregion Get
-
     }
 }
