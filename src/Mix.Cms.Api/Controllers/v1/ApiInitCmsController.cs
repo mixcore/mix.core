@@ -34,16 +34,12 @@ namespace Mix.Cms.Api.Controllers.v1
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IApplicationLifetime _appLifetime;
-        private readonly IHostingEnvironment _env;
         private readonly IdentityHelper _idHelper;
         public ApiInitCmsController(
            UserManager<ApplicationUser> userManager,
            SignInManager<ApplicationUser> signInManager,
            RoleManager<IdentityRole> roleManager,
             Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext,
-            IApplicationLifetime appLifetime,
-            IHostingEnvironment env,
             IMemoryCache memoryCache
             )
             : base(null, memoryCache, hubContext)
@@ -51,13 +47,7 @@ namespace Mix.Cms.Api.Controllers.v1
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
-            _appLifetime = appLifetime;
-            _env = env;
             _idHelper = new IdentityHelper(userManager, signInManager, roleManager);
-        }
-        public void ShutdownSite()
-        {
-            _appLifetime.StopApplication();
         }
 
         #region Post
@@ -296,7 +286,7 @@ namespace Mix.Cms.Api.Controllers.v1
             MixService.SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, model.ConnectionString);
             MixService.SetConfig(MixConstants.CONST_SETTING_IS_MYSQL, model.IsMysql);
             MixService.SetConfig(MixConstants.CONST_SETTING_DATABASE_PROVIDER, model.DatabaseProvider);
-            MixService.SetConfig(MixConstants.CONST_SETTING_LANGUAGE, model.Culture.Specificulture);
+            MixService.SetConfig(MixConstants.CONST_SETTING_LANGUAGE, model.Culture.Specificulture);            
 
             var result = await InitCmsService.InitCms(model.SiteName, model.Culture);
             

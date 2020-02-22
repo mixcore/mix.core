@@ -55,7 +55,7 @@ namespace Mix.Cms.Lib.Services
                     {
                         if (instance == null)
                         {
-                            instance = new MixService();
+                            instance = new MixService();                            
                             instance.LoadConfiggurations();
                         }
                     }
@@ -306,11 +306,12 @@ namespace Mix.Cms.Lib.Services
             try
             {
                 Instance.Translator = new JObject();
-                var ListLanguage = context.MixLanguage;
-                foreach (var culture in context.MixCulture)
+                var ListLanguage = context.MixLanguage.ToList();
+                var cultures = context.MixCulture.ToList();
+                foreach (var culture in cultures)
                 {
                     JObject arr = new JObject();
-                    foreach (var lang in ListLanguage.Where(l => l.Specificulture == culture.Specificulture))
+                    foreach (var lang in ListLanguage.Where(l => l.Specificulture == culture.Specificulture).ToList())
                     {
                         JProperty l = new JProperty(lang.Keyword, lang.Value ?? lang.DefaultValue);
                         arr.Add(l);
@@ -319,11 +320,11 @@ namespace Mix.Cms.Lib.Services
                 }
 
                 Instance.LocalSettings = new JObject();
-                var listLocalSettings = context.MixConfiguration;
-                foreach (var culture in context.MixCulture)
+                var listLocalSettings = context.MixConfiguration.ToList();
+                foreach (var culture in cultures)
                 {
                     JObject arr = new JObject();
-                    foreach (var cnf in listLocalSettings.Where(l => l.Specificulture == culture.Specificulture))
+                    foreach (var cnf in listLocalSettings.Where(l => l.Specificulture == culture.Specificulture).ToList())
                     {
                         JProperty l = new JProperty(cnf.Keyword, cnf.Value);
                         arr.Add(l);

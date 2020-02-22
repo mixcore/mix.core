@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Mix.Cms.Lib;
+using Mix.Cms.Lib.Services;
 
 namespace Mix.Cms.Messenger.Models.Data
 {
@@ -26,22 +28,22 @@ namespace Mix.Cms.Messenger.Models.Data
             if (!optionsBuilder.IsConfigured)
             {
                 //define the database to use
-                string cnn = "Data Source=mix-messenger.db";
+                //string cnn = "Data Source=mix-messenger.db";
                 //string cnn = "Server=(localdb)\\mssqllocaldb;Database=mix-cms.db;Trusted_Connection=True;MultipleActiveResultSets=true";
-                optionsBuilder.UseSqlite(cnn);
+                //optionsBuilder.UseSqlite(cnn);
                 //define the database to use
-                //string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
-                //if (!string.IsNullOrEmpty(cnn))
-                //{
-                //    if (MixService.GetConfig<bool>("IsMysql"))
-                //    {
-                //        optionsBuilder.UseSqlite(cnn);
-                //    }
-                //    else
-                //    {
-                //        optionsBuilder.UseSqlServer(cnn);
-                //    }
-                //}
+                string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+                if (!string.IsNullOrEmpty(cnn))
+                {
+                    if (MixService.GetConfig<bool>("IsMysql"))
+                    {
+                        optionsBuilder.UseMySql(cnn);
+                    }
+                    else
+                    {
+                        optionsBuilder.UseSqlServer(cnn);
+                    }
+                }
             }
         }
 

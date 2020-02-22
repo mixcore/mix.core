@@ -1,10 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Mix.Cms.Lib.Services;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixCmsContext : DbContext
+    public partial class mix_structure1Context : DbContext
     {
+        public mix_structure1Context()
+        {
+        }
+
+        public mix_structure1Context(DbContextOptions<mix_structure1Context> options)
+            : base(options)
+        {
+        }
+
         public virtual DbSet<MixAttributeField> MixAttributeField { get; set; }
         public virtual DbSet<MixAttributeSet> MixAttributeSet { get; set; }
         public virtual DbSet<MixAttributeSetData> MixAttributeSetData { get; set; }
@@ -49,40 +59,18 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual DbSet<MixPostModule> MixPostModule { get; set; }
         public virtual DbSet<MixRelatedAttributeData> MixRelatedAttributeData { get; set; }
         public virtual DbSet<MixRelatedAttributeSet> MixRelatedAttributeSet { get; set; }
+        public virtual DbSet<MixRelatedData> MixRelatedData { get; set; }
         public virtual DbSet<MixRelatedPost> MixRelatedPost { get; set; }
         public virtual DbSet<MixTemplate> MixTemplate { get; set; }
         public virtual DbSet<MixTheme> MixTheme { get; set; }
         public virtual DbSet<MixUrlAlias> MixUrlAlias { get; set; }
 
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ApplicationDbContext" /> class.
-        /// </summary>
-        /// <param name="options">The options.</param>
-        public MixCmsContext(DbContextOptions<MixCmsContext> options)
-                    : base(options)
-        {
-            
-        }
-        public MixCmsContext()
-        {
-
-        }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //define the database to use
-            string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
-            if (!string.IsNullOrEmpty(cnn))
+            if (!optionsBuilder.IsConfigured)
             {
-                if (MixService.GetConfig<int>(MixConstants.CONST_SETTING_DATABASE_PROVIDER) == (int)MixEnums.DatabaseProvider.MySQL)
-                {
-                    optionsBuilder.UseMySql(cnn);
-                }
-                else
-                {
-                    optionsBuilder.UseSqlServer(cnn);
-                }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("Server=localhost;Database=mix_structure1;UID=sa;Pwd=1234qwe@;MultipleActiveResultSets=true;");
             }
         }
 

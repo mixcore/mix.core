@@ -136,7 +136,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
             {
                 var query = context.AspNetRoles
                   .Include(cp => cp.AspNetUserRoles)
-                  .AsEnumerable()
+                  .ToList()
                   .Select(p => new NavUserRoleViewModel()
                   {
                       UserId = Id,

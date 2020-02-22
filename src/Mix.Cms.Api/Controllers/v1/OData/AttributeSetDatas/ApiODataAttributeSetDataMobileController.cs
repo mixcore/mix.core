@@ -4,16 +4,12 @@
 
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
-using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
