@@ -89,7 +89,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
                 val.Priority = field.Priority;
                 val.DataType = field.DataType;
-                val.AttributeSetName = AttributeSetName;
+                val.AttributeSetName = field.AttributeSetName;
                 if (Data[val.AttributeFieldName] != null)
                 {
                     if (val.Field.DataType != MixEnums.MixDataType.Reference)
@@ -102,7 +102,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
 
 
-            return base.ParseModel(_context, _transaction); ;
+            return base.ParseModel(_context, _transaction);
         }
         public override void GenerateCache(MixAttributeSetData model, ImportViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

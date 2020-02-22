@@ -133,6 +133,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                 Field = new MixAttributeFields.UpdateViewModel()
                 {
                     DataType = DataType,
+                    Id = AttributeFieldId,
                     Title = AttributeFieldName,
                     Name = AttributeFieldName,
                     Priority = Priority
