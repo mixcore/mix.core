@@ -62,13 +62,12 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public MixContentStatus Status { get; set; }
 
         public DateTime CreatedDateTime { get; set; }
+
         #endregion Models
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl
-        {
-            get
-            {
+        public string ImageUrl {
+            get {
                 if (!string.IsNullOrWhiteSpace(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -83,10 +82,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl
-        {
-            get
-            {
+        public string ThumbnailUrl {
+            get {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -99,7 +96,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 }
             }
         }
-
 
         #endregion Properties
 
@@ -123,10 +119,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         public override Task<bool> ExpandViewAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-
             return base.ExpandViewAsync(_context, _transaction);
         }
 
-        #endregion
+        #endregion Overrides
     }
 }

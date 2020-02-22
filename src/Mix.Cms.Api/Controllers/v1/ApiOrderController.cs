@@ -103,7 +103,6 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
-
         #endregion Get
 
         #region Post
@@ -141,7 +140,6 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         break;
                     }
-
                 }
                 return result;
             }
@@ -182,6 +180,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
 
                     return Ok(JObject.FromObject(mvcResult));
+
                 case "portal":
                     var portalResult = await base.GetListAsync<UpdateViewModel>(request, predicate);
                     if (portalResult.IsSucceed)
@@ -194,6 +193,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
 
                     return Ok(JObject.FromObject(portalResult));
+
                 default:
 
                     var listItemResult = await base.GetListAsync<ReadListItemViewModel>(request, predicate);
@@ -223,6 +223,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 return new RepositoryResponse<List<ReadListItemViewModel>>();
             }
         }
+
         #endregion Post
     }
 }

@@ -26,6 +26,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             }
             return getDataResult;
         }
+
         public static async System.Threading.Tasks.Task<RepositoryResponse<PaginationModel<MixPostAttributeDatas.UpdateViewModel>>> LoadPostDataAsync(int postId, string specificulture, int? pageSize = null, int? pageIndex = 0
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -43,6 +44,5 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             }
             return getDataResult;
         }
-
     }
 }

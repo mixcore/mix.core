@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.OData;
 using Mix.Cms.Hub;
+using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
@@ -13,6 +15,7 @@ using Mix.Cms.Lib.ViewModels;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Helpers;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -21,9 +24,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
-using Mix.Cms.Lib.Extensions;
-using Mix.Heart.Helpers;
-using Microsoft.OData;
 
 namespace Mix.Cms.Api.Controllers.v1.OData
 {
@@ -41,10 +41,9 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         protected string _lang;
 
         protected bool _forbidden = false;
-        protected bool _forbiddenPortal
-        {
-            get
-            {
+
+        protected bool _forbiddenPortal {
+            get {
                 var allowedIps = MixService.GetIpConfig<JArray>("AllowedPortalIps") ?? new JArray();
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 return _forbidden || (
@@ -84,7 +83,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
             //}
             if (data == null)
             {
-
                 if (predicate != null)
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
@@ -102,9 +100,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                         IsSucceed = true,
                         Data = DefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model)
                     };
-
                 }
-
             }
             data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
             return data;
@@ -113,7 +109,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         protected async Task<RepositoryResponse<TModel>> DeleteAsync<TView>(Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-
             var result = new RepositoryResponse<TModel>();
             var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
             if (data.IsSucceed)
@@ -129,9 +124,8 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         {
             if (data != null)
             {
-
                 var result = await data.RemoveModelAsync(isDeleteRelated).ConfigureAwait(false);
-                
+
                 return result;
             }
             return new RepositoryResponse<TModel>() { IsSucceed = false };
@@ -140,15 +134,12 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         protected async Task<RepositoryResponse<List<TModel>>> DeleteListAsync<TView>(Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-
             var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.RemoveListModelAsync(isDeleteRelated, predicate);
             return data;
         }
 
-
         protected async Task<RepositoryResponse<FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate, MixStructureType type)
         {
-
             var getData = await DefaultModelRepository<TDbContext, TModel>.Instance.GetModelListByAsync(predicate);
             FileViewModel file = null;
             if (getData.IsSucceed)
@@ -168,7 +159,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                 };
                 // Copy current templates file
                 FileRepository.Instance.SaveWebFile(file);
-
             }
 
             return new RepositoryResponse<FileViewModel>()
@@ -176,8 +166,8 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                 IsSucceed = true,
                 Data = file,
             };
-
         }
+
         protected async Task<List<TView>> GetListAsync<TView>(ODataQueryOptions<TModel> queryOptions)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
@@ -199,10 +189,9 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                 Skip = queryOptions.Skip?.Value
             };
             List<TView> data = null;
-            
+
             if (data == null)
             {
-
                 if (predicate != null)
                 {
                     var getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate,
@@ -211,7 +200,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                     {
                         data = getData.Data.Items;
                     }
-
                 }
                 else
                 {
@@ -222,7 +210,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                     {
                         data = getData.Data.Items;
                     }
-
                 }
             }
 
@@ -231,7 +218,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
 
         protected async Task<List<TView>> GetListAsync<TView>(Expression<Func<TModel, bool>> predicate, string key, ODataQueryOptions<TModel> queryOptions)
            where TView : ViewModelBase<TDbContext, TModel, TView>
-        {            
+        {
             if (queryOptions.Filter != null)
             {
                 ODataHelper<TModel>.ParseFilter(queryOptions.Filter.FilterClause.Expression, ref predicate);
@@ -249,7 +236,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
             List<TView> data = null;
             if (data == null)
             {
-
                 if (predicate != null)
                 {
                     var getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate,
@@ -258,7 +244,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                     {
                         data = getData.Data.Items;
                     }
-
                 }
                 else
                 {
@@ -269,7 +254,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                     {
                         data = getData.Data.Items;
                     }
-
                 }
             }
 
@@ -281,7 +265,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         {
             if (vm != null)
             {
-
                 var result = await vm.SaveModelAsync(isSaveSubModel).ConfigureAwait(false);
 
                 return result;
@@ -320,15 +303,14 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         protected async Task<RepositoryResponse<List<TView>>> SaveListAsync<TView>(List<TView> lstVm, bool isSaveSubModel)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-
             var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.SaveListModelAsync(lstVm, isSaveSubModel);
-            
+
             return result;
         }
+
         protected RepositoryResponse<List<TView>> SaveList<TView>(List<TView> lstVm, bool isSaveSubModel)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-
             var result = new RepositoryResponse<List<TView>>() { IsSucceed = true };
             if (lstVm != null)
             {
@@ -399,10 +381,12 @@ namespace Mix.Cms.Api.Controllers.v1.OData
             request.ToDate = request.ToDate.HasValue ? new DateTime(request.ToDate.Value.Year, request.ToDate.Value.Month, request.ToDate.Value.Day).ToUniversalTime().AddDays(1)
                 : default(DateTime?);
         }
+
         protected QueryString ParseQuery(RequestPaging request)
         {
             return new QueryString(request.Query);
         }
+
         /// <summary>
         /// Gets the language.
         /// </summary>
@@ -410,6 +394,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData
         {
             _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : MixService.GetConfig<string>("Language");
         }
+
         private void ValidateODataRequest(ODataQueryOptions<TModel> options)
         {
             var settings = new ODataValidationSettings

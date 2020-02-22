@@ -3,7 +3,6 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
-using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
@@ -11,11 +10,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
       : ViewModelBase<MixCmsContext, MixAttributeSetData, DeleteViewModel>
     {
         #region Properties
+
         #region Models
 
         [JsonProperty("id")]
         public string Id { get; set; }
+
         #endregion Models
+
         #endregion Properties
 
         #region Contructors
@@ -31,6 +33,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #endregion Contructors
 
         #region Overrides
+
         public override RepositoryResponse<bool> RemoveRelatedModels(DeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -54,6 +57,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             return result;
         }
+
         public override async System.Threading.Tasks.Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(DeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -81,7 +85,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             return result;
         }
-        #endregion
 
+        #endregion Overrides
     }
 }

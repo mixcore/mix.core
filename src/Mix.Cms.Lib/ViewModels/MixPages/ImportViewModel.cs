@@ -100,6 +100,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("pageSize")]
         public int? PageSize { get; set; }
+
         #endregion Models
 
         #region Views
@@ -115,10 +116,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("urlAliases")]
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
+
         [JsonProperty("isExportData")]
         public bool IsExportData { get; set; }
+
         [JsonProperty("themeName")]
         public string ThemeName { get; set; } = "default";
+
         #endregion Views
 
         #endregion Properties
@@ -168,7 +172,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             // End Save Alias
 
             //Save Module Navigations
-            if (result.IsSucceed && ModuleNavs!=null)
+            if (result.IsSucceed && ModuleNavs != null)
             {
                 foreach (var item in ModuleNavs)
                 {
@@ -211,7 +215,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                         }
                     }
                 }
-
             }
             // End Save Module Navigations
             /*
@@ -224,7 +227,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
                     var saveResult = await item.SaveModelAsync(false, _context, _transaction);
                     ViewModelHelper.HandleResult(saveResult, ref result);
-
                 }
             }
             // End Save Parents Pages

@@ -12,6 +12,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPageRoles
         #region Properties
 
         #region Model
+
         [JsonProperty("id")]
         public int Id { get; set; }
 
@@ -27,7 +28,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPageRoles
         [JsonProperty("roleId")]
         public string RoleId { get; set; }
 
-        #endregion
+        #endregion Model
 
         #region Views
 
@@ -39,7 +40,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPageRoles
 
         #endregion Views
 
-        #endregion
+        #endregion Properties
 
         public ReadViewModel(MixPortalPageRole model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
@@ -49,7 +50,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPageRoles
         public ReadViewModel() : base()
         {
         }
-
 
         #region overrides
 

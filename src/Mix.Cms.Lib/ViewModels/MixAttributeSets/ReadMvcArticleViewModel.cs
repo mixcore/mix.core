@@ -12,42 +12,59 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
       : ViewModelBase<MixCmsContext, MixAttributeSet, ReadMvcPostViewModel>
     {
         #region Properties
+
         #region Models
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("ReferenceId")]
         public int? ReferenceId { get; set; }
+
         [JsonProperty("type")]
         public int? Type { get; set; }
+
         [JsonProperty("title")]
         public string Title { get; set; }
+
         [JsonProperty("name")]
         public string Name { get; set; }
+
         [JsonProperty("description")]
         public string Description { get; set; }
+
         [JsonProperty("formTemplate")]
         public string FormTemplate { get; set; }
 
         [JsonProperty("edmTemplate")]
         public string EdmTemplate { get; set; }
+
         [JsonProperty("edmSubject")]
         public string EdmSubject { get; set; }
+
         [JsonProperty("edmFrom")]
         public string EdmFrom { get; set; }
+
         [JsonProperty("edmAutoSend")]
         public bool? EdmAutoSend { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("status")]
         public int Status { get; set; }
 
         #endregion Models
+
         #region Views
+
         [JsonProperty("postData")]
         public PaginationModel<MixPostAttributeDatas.ReadMvcViewModel> PostData { get; set; }
-        #endregion
+
+        #endregion Views
+
         #endregion Properties
+
         #region Contructors
 
         public ReadMvcPostViewModel() : base()
@@ -59,7 +76,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         }
 
         #endregion Contructors
+
         #region Overrides
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             PostData = MixPostAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(
@@ -67,9 +86,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
                     , _context, _transaction).Data;
         }
 
-        #endregion
+        #endregion Overrides
 
         #region Expand
+
         public void LoadPostData(int postId, string specificulture, int? pageSize = null, int? pageIndex = 0
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -83,6 +103,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             PostData = getData.Data;
         }
 
-        #endregion
+        #endregion Expand
     }
 }

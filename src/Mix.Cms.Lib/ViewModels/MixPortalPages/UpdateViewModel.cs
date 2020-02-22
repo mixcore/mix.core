@@ -51,6 +51,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
 
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
@@ -81,6 +82,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         #endregion Contructors
 
         #region Overrides
+
         public override MixPortalPage ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)
@@ -106,9 +108,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
 
             return base.ParseModel(_context, _transaction);
         }
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-
             this.ParentNavs = GetParentNavs(_context, _transaction);
             this.ChildNavs = GetChildNavs(_context, _transaction);
             this.PositionNavs = GetPositionNavs(_context, _transaction);
@@ -202,6 +204,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
             }
             return result;
         }
+
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -220,6 +223,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
             await _context.SaveChangesAsync();
             return result;
         }
+
         #endregion Overrides
 
         #region Expands
@@ -289,7 +293,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
             return query.OrderBy(m => m.Priority).ToList();
         }
 
-
-        #endregion
+        #endregion Expands
     }
 }

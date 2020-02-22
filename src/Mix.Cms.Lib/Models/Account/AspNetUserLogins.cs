@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Mix.Cms.Lib.Models.Account
+﻿namespace Mix.Cms.Lib.Models.Account
 {
     public partial class AspNetUserLogins
     {

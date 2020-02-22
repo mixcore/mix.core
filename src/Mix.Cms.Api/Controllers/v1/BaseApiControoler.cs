@@ -63,8 +63,8 @@ namespace Mix.Cms.Api.Controllers.v1
             base.OnActionExecuting(context);
         }
 
+        #endregion Overrides
 
-        #endregion
         protected void RemoveCache()
         {
             if (_memoryCache != null)
@@ -77,6 +77,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 AlertAsync("Empty Cache", 200);
             }
         }
+
         protected async Task<RepositoryResponse<TView>> GetSingleAsync<TView, TModel>(string key, Expression<Func<TModel, bool>> predicate = null, TModel model = null)
             where TView : ViewModelBase<TDbContext, TModel, TView>
             where TModel : class
@@ -89,7 +90,6 @@ namespace Mix.Cms.Api.Controllers.v1
             //}
             if (data == null)
             {
-
                 if (predicate != null)
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
@@ -103,13 +103,13 @@ namespace Mix.Cms.Api.Controllers.v1
                         IsSucceed = true,
                         Data = DefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model)
                     };
-
                 }
                 AlertAsync("Add Cache", 200, cacheKey);
             }
             data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
             return data;
         }
+
         protected void AlertAsync(string action, int status, string message = null)
         {
             var logMsg = new JObject()
@@ -132,10 +132,12 @@ namespace Mix.Cms.Api.Controllers.v1
             request.ToDate = request.ToDate.HasValue ? new DateTime(request.ToDate.Value.Year, request.ToDate.Value.Month, request.ToDate.Value.Day).ToUniversalTime().AddDays(1)
                 : default(DateTime?);
         }
+
         protected QueryString ParseQuery(RequestPaging request)
         {
             return new QueryString(request.Query);
         }
+
         /// <summary>
         /// Gets the language.
         /// </summary>

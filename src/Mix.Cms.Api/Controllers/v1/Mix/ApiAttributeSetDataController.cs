@@ -8,11 +8,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
-using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
@@ -34,10 +32,11 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         #region Get
+
         // GET api/attribute-set-data/id
         [HttpGet, HttpOptions]
         [Route("sendmail/{id}")]
-        public  Task<RepositoryResponse<JArray>> SendMailAsync(string id)
+        public Task<RepositoryResponse<JArray>> SendMailAsync(string id)
         {
             return SendMailListAsync(model => model.Id == id && model.Specificulture == _lang);
         }
@@ -100,10 +99,10 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
-
         #endregion Get
 
         #region Post
+
         // POST api/attribute-set-data
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
@@ -200,7 +199,8 @@ namespace Mix.Cms.Api.Controllers.v1
                         {
                             parsed.Items.Add(item.Data);
                         }
-                        return Ok(JObject.FromObject(new RepositoryResponse<PaginationModel<JObject>>() { 
+                        return Ok(JObject.FromObject(new RepositoryResponse<PaginationModel<JObject>>()
+                        {
                             IsSucceed = result.IsSucceed,
                             Data = parsed,
                             Errors = result.Errors,
@@ -225,7 +225,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         Expression<Func<MixAttributeSetData, bool>> predicate = m => (m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName) && m.Specificulture == _lang;
                         var portalResult = await base.GetListAsync<ReadViewModel>(request, predicate);
                         return Ok(JObject.FromObject(portalResult));
-                    }                    
+                    }
             }
         }
 
@@ -264,10 +264,13 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 case "Delete":
                     return Ok(JObject.FromObject(await base.DeleteListAsync<MobileViewModel>(predicate, true)));
+
                 case "SendMail":
                     return Ok(JObject.FromObject(await SendMailListAsync(predicate)));
+
                 case "Export":
                     return Ok(JObject.FromObject(await base.ExportListAsync(predicate, MixStructureType.AttributeSet)));
+
                 default:
                     return JObject.FromObject(new RepositoryResponse<bool>());
             }
@@ -296,18 +299,14 @@ namespace Mix.Cms.Api.Controllers.v1
                 result.Data = array;
                 return result;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result.Exception = ex;
                 result.IsSucceed = false;
                 return result;
             }
-            
         }
-        #endregion Post
 
-        #region Helpers
-       
-        #endregion
+        #endregion Post
     }
 }

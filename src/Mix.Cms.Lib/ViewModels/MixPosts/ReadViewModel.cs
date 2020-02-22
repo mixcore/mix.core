@@ -78,6 +78,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonIgnore]
         [JsonProperty("extraProperties")]
         public string ExtraProperties { get; set; } = "[]";
+
         #endregion Models
 
         #region Views
@@ -86,10 +87,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public string Domain { get { return MixService.GetConfig<string>("Domain", Specificulture); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl
-        {
-            get
-            {
+        public string ImageUrl {
+            get {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -104,10 +103,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl
-        {
-            get
-            {
+        public string ThumbnailUrl {
+            get {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -123,8 +120,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }
+
         [JsonProperty("properties")]
         public List<ExtraProperty> Properties { get; set; }
+
         #endregion Views
 
         #endregion Properties
@@ -142,13 +141,14 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #endregion Contructors
 
         #region Expands
+
         //Get Property by name
         public string Property(string name)
         {
             var prop = Properties.FirstOrDefault(p => p.Name.ToLower() == name.ToLower());
             return prop?.Value;
-
         }
+
         public static async Task<RepositoryResponse<PaginationModel<ReadViewModel>>> GetModelListByCategoryAsync(
             int pageId, string specificulture
             , string orderByPropertyName, int direction
@@ -310,6 +310,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #endregion Expands
 
         #region Overrides
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Properties = new List<ExtraProperty>();
@@ -323,6 +324,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 }
             }
         }
-        #endregion
+
+        #endregion Overrides
     }
 }

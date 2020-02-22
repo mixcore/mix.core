@@ -3,9 +3,6 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixRelatedDatas
 {
@@ -22,32 +19,41 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedDatas
         }
 
         #region Model
+
         /*
          * Attribute Set Data Id
          */
+
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("type")]
         public MixEnums.MixRelatedType Type { get; set; }
+
         [JsonProperty("parentId")]
         public string ParentId { get; set; }
+
         [JsonProperty("parentType")]
         public int ParentType { get; set; }
+
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
+
         [JsonProperty("attributeSetName")]
         public string AttributeSetName { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("status")]
         public int Status { get; set; }
+
         [JsonProperty("description")]
         public string Description { get; set; }
 
-        #endregion
-        #region Views
-        
-        #endregion Views
+        #endregion Model
+
+
 
         #region overrides
 
@@ -62,13 +68,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            
         }
-
-        #region Async
-
-
-        #endregion Async
 
         #endregion overrides
     }

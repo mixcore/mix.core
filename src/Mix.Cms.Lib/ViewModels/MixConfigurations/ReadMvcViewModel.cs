@@ -23,16 +23,22 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
         [Required]
         [JsonProperty("keyword")]
         public string Keyword { get; set; }
+
         [JsonProperty("category")]
         public string Category { get; set; }
+
         [JsonProperty("value")]
         public string Value { get; set; }
+
         [JsonProperty("dataType")]
         public MixDataType DataType { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         [JsonProperty("description")]
         public string Description { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
 
@@ -45,7 +51,9 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
 
         [JsonProperty("property")]
         public DataValueViewModel Property { get; set; }
+
         #endregion Views
+
         #endregion Properties
 
         #region Contructors
@@ -69,7 +77,7 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
             Property = new DataValueViewModel() { DataType = DataType, Value = Value, Name = Keyword };
         }
 
-        #endregion
+        #endregion Overrides
 
         #region Expands
 
@@ -102,7 +110,6 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
-
                 var error = UnitOfWorkHelper<MixCmsContext>.HandleException<ReadMvcViewModel>(ex, isRoot, transaction);
                 result.IsSucceed = false;
                 result.Errors = error.Errors;
@@ -115,11 +122,11 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
                 {
                     context?.Dispose();
                 }
-
             }
             return result;
         }
 
-        #endregion   
+        #endregion Expands
+
     }
 }

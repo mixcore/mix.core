@@ -11,7 +11,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-
 namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
 {
     public class ReadViewModel : ViewModelBase<MixCmsAccountContext, AspNetRoles, ReadViewModel>
@@ -20,26 +19,27 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
 
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("concurrencyStamp")]
         public string ConcurrencyStamp { get; set; }
+
         [Required]
         [JsonProperty("name")]
         public string Name { get; set; }
+
         [JsonProperty("normalizedName")]
         public string NormalizedName { get; set; }
 
-        #region Models
 
-        #endregion
 
         #region Views
 
         [JsonProperty("permissions")]
         public List<MixPortalPages.ReadRolePermissionViewModel> Permissions { get; set; }
 
-        #endregion
+        #endregion Views
 
-        #endregion
+        #endregion Properties
 
         #region Contructors
 
@@ -52,9 +52,10 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
         {
         }
 
-        #endregion
+        #endregion Contructors
 
         #region Overrides
+
         public override AspNetRoles ParseModel(MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))
@@ -63,6 +64,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
             }
             return base.ParseModel(_context, _transaction);
         }
+
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(ReadViewModel view, MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = await UserRoleViewModel.Repository.RemoveListModelAsync(false, ur => ur.RoleId == Id, _context, _transaction);
@@ -76,7 +78,6 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
 
         public override void ExpandView(MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
         {
-
             Permissions = MixPortalPages.ReadRolePermissionViewModel.Repository.GetModelListBy(p => p.Level == 0
             && (p.MixPortalPageRole.Any(r => r.RoleId == Id) || Name == "SuperAdmin")
             ).Data;
@@ -91,11 +92,11 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
             }
         }
 
-        #endregion
+        #endregion Overrides
 
         #region Expands
 
-        List<MixPortalPageRoles.ReadViewModel> GetPermission()
+        private List<MixPortalPageRoles.ReadViewModel> GetPermission()
         {
             using (MixCmsContext context = new MixCmsContext())
             {
@@ -122,7 +123,6 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
             }
         }
 
-        #endregion
-
+        #endregion Expands
     }
 }

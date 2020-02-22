@@ -41,7 +41,6 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
 
         #endregion Models
 
-        
         #endregion Properties
 
         #region Contructors
@@ -56,11 +55,5 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
         }
 
         #endregion Contructors
-
-        #region Overrides
-
-        #endregion Overrides
-        #region Expand
-        #endregion
     }
 }

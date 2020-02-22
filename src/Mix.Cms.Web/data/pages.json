@@ -16,7 +16,7 @@
       "image": "/assets/img/bgs/tag.jpg",
       "template": "Pages/_Tag.cshtml",
       "type": 8,
-      "status":2
+      "status": 2
     },
     {
       "id": 3,

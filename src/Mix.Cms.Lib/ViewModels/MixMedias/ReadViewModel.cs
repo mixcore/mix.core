@@ -64,6 +64,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
 
         [JsonProperty("status")]
         public MixEnums.MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
@@ -72,10 +73,8 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("fullPath")]
-        public string FullPath
-        {
-            get
-            {
+        public string FullPath {
+            get {
                 if (!string.IsNullOrEmpty(FileName) && string.IsNullOrEmpty(TargetUrl))
                 {
                     return FileFolder.IndexOf("http") > 0 ? $"{FileFolder}/{FileName}{Extension}"
@@ -87,11 +86,10 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
                 }
             }
         }
+
         [JsonProperty("filePath")]
-        public string FilePath
-        {
-            get
-            {
+        public string FilePath {
+            get {
                 if (!string.IsNullOrEmpty(FileName) && string.IsNullOrEmpty(TargetUrl))
                 {
                     return FileFolder.IndexOf("http") > 0 ? $"{FileFolder}/{FileName}{Extension}"
@@ -106,6 +104,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
 
         [JsonProperty("mediaFile")]
         public FileViewModel MediaFile { get; set; }
+
         #endregion Views
 
         #endregion Properties
@@ -123,12 +122,11 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
 
         #endregion Contructors
 
-        #region Overrides
 
 
-        #endregion Overrides
         #region Expand
-        List<SupportedCulture> LoadCultures(string initCulture = null, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+
+        private List<SupportedCulture> LoadCultures(string initCulture = null, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getCultures = SystemCultureViewModel.Repository.GetModelList(_context, _transaction);
             var result = new List<SupportedCulture>();
@@ -148,12 +146,11 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
                             Lcid = culture.Lcid,
                             IsSupported = culture.Specificulture == initCulture || _context.MixMedia.Any(p => p.Id == Id && p.Specificulture == culture.Specificulture)
                         });
-
                 }
             }
             return result;
         }
-        #endregion
 
+        #endregion Expand
     }
 }

@@ -95,7 +95,6 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
-
         #endregion Get
 
         #region Post
@@ -141,10 +140,12 @@ namespace Mix.Cms.Api.Controllers.v1
                     var mvcResult = await base.GetListAsync<ReadMvcViewModel>(request, predicate);
 
                     return Ok(JObject.FromObject(mvcResult));
+
                 case "portal":
                     var portalResult = await base.GetListAsync<UpdateViewModel>(request, predicate);
 
                     return Ok(JObject.FromObject(portalResult));
+
                 default:
 
                     var listItemResult = await base.GetListAsync<ReadMvcViewModel>(request, predicate);

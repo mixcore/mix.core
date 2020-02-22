@@ -27,7 +27,6 @@
                 <section class="container-fluid mb-5">
                     <!--<jumbotrons ng-if="isInit" tag-name="pageTagName" tag-type="pageTagType"></jumbotrons>-->
                     <div class="{{pageClass}}" ng-view>
-
                     </div>
                     <portal-theme-settings></portal-theme-settings>
                     <medias ng-if="isInit"></medias>
@@ -44,9 +43,7 @@
                             <p class="copyright text-right">
                                 <small>
                                     <span style="display:inline-block;transform: rotate(180deg);">&copy;</span>
-                                    <script>
-                                        document.write(new Date().getFullYear());
-                                    </script>
+                                    <script>document.write(new Date().getFullYear());</script>
                                     <strong><a href="https://www.mixcore.org">mixcore</a></strong>, made by human on earth.
                                 </small>
                             </p>
@@ -57,4 +54,3 @@
         </div>
     </div>
 </div>
-

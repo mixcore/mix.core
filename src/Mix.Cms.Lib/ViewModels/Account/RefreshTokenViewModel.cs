@@ -6,7 +6,6 @@ using System;
 
 namespace Mix.Cms.Lib.ViewModels.Account
 {
-
     public class RefreshTokenViewModel
         : ViewModelBase<MixCmsAccountContext, RefreshTokens, RefreshTokenViewModel>
     {

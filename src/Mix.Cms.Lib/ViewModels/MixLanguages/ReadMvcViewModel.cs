@@ -38,16 +38,22 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
 
         [JsonProperty("defaultValue")]
         public string DefaultValue { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         #endregion Models
 
         #region Views
+
         [JsonProperty("property")]
         public DataValueViewModel Property { get; set; }
-        #endregion
+
+        #endregion Views
+
         #endregion Properties
 
         #region Contructors
@@ -64,12 +70,14 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         #endregion Contructors
 
         #region Overrides
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Property = new DataValueViewModel() { DataType = DataType, Value = Value, Name = Keyword };
             this.Cultures.ForEach(c => c.IsSupported = true);
             IsClone = true;
         }
+
         public override RepositoryResponse<bool> RemoveRelatedModels(ReadMvcViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             foreach (var culture in Cultures.Where(c => c.Specificulture != Specificulture))
@@ -149,6 +157,6 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
             return result;
         }
 
-        #endregion
+        #endregion Expands
     }
 }

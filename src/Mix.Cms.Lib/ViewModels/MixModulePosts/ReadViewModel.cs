@@ -36,13 +36,18 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
 
         [JsonProperty("description")]
         public string Description { get; set; }
+
         [JsonProperty("status")]
         public MixEnums.MixContentStatus Status { get; set; }
+
         #region Views
+
         [JsonProperty("post")]
         public MixPosts.ReadListItemViewModel Post { get; set; }
+
         [JsonProperty("module")]
         public MixModules.ReadListItemViewModel Module { get; set; }
+
         #endregion Views
 
         #region overrides
@@ -66,15 +71,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
             }
         }
 
-        #region Async
-
-        #endregion Async
-
         #endregion overrides
 
-
         #region Expand
-
 
         public static RepositoryResponse<List<MixModulePosts.ReadViewModel>> GetModulePostNavAsync(int postId, string specificulture
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -129,6 +128,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
             }
         }
 
-        #endregion
+        #endregion Expand
     }
 }

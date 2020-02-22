@@ -41,13 +41,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePositions
         #endregion Views
 
         #region overrides
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Page = MixPages.ReadListItemViewModel.Repository.GetSingleModel(p => p.Id == PageId && p.Specificulture == Specificulture, _context, _transaction).Data;
         }
-        #region Async
-
-        #endregion Async
 
         #endregion overrides
     }

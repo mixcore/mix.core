@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Services;
-using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -16,49 +14,66 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
       : ViewModelBase<MixCmsContext, MixAttributeSet, UpdateViewModel>
     {
         #region Properties
+
         #region Models
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("ReferenceId")]
         public int? ReferenceId { get; set; }
+
         [JsonProperty("type")]
         public int? Type { get; set; }
+
         [JsonProperty("title")]
         public string Title { get; set; }
+
         [JsonProperty("name")]
         public string Name { get; set; }
+
         [JsonProperty("description")]
         public string Description { get; set; }
+
         [JsonProperty("formTemplate")]
         public string FormTemplate { get; set; }
 
         [JsonProperty("edmTemplate")]
         public string EdmTemplate { get; set; }
+
         [JsonProperty("edmSubject")]
         public string EdmSubject { get; set; }
+
         [JsonProperty("edmFrom")]
         public string EdmFrom { get; set; }
+
         [JsonProperty("edmAutoSend")]
         public bool? EdmAutoSend { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("status")]
         public int Status { get; set; }
 
         #endregion Models
-        #region Views        
+
+        #region Views
+
         [JsonProperty("fields")]
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
+
         [JsonProperty("removeAttributes")]
         public List<MixAttributeFields.DeleteViewModel> RemoveAttributes { get; set; } = new List<MixAttributeFields.DeleteViewModel>();
 
         [JsonProperty("formView")]
         public MixTemplates.UpdateViewModel FormView { get; set; }
+
         [JsonProperty("edmView")]
         public MixTemplates.UpdateViewModel EdmView { get; set; }
 
-        #endregion
+        #endregion Views
+
         #endregion Properties
 
         #region Contructors
@@ -74,9 +89,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         #endregion Contructors
 
         #region Overrides
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (Id>0)
+            if (Id > 0)
             {
                 Fields = MixAttributeFields.UpdateViewModel
                 .Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList();
@@ -88,6 +104,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
                 Fields = new List<MixAttributeFields.UpdateViewModel>();
             }
         }
+
         public override MixAttributeSet ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)
@@ -105,7 +122,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             base.Validate(_context, _transaction);
             if (IsValid)
             {
-                if (_context.MixAttributeSet.Any(s=>s.Name== Name && s.Id != Id))
+                if (_context.MixAttributeSet.Any(s => s.Name == Name && s.Id != Id))
                 {
                     IsValid = false;
                     Errors.Add($"{Name} is Existed");
@@ -196,9 +213,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             }
             return tasks;
         }
-        #endregion
 
-        #region Expand       
-        #endregion
+        #endregion Overrides
     }
 }

@@ -7,7 +7,6 @@ using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Newtonsoft.Json.Linq;
@@ -57,7 +56,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         {
             var result = await base.GetListAsync<ReadMvcViewModel>(queryOptions);
             return Ok(result);
-        }       
+        }
 
         // GET api/attribute-set-datas/portal/count
         [AllowAnonymous]
@@ -122,8 +121,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             }
         }
 
-
         #endregion Get
-
     }
 }

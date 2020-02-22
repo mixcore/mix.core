@@ -31,6 +31,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         #region Get
+
         // GET api/attribute-set-data/id
         [HttpGet, HttpOptions]
         [Route("sendmail/{id}")]
@@ -96,7 +97,6 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
             }
         }
-
 
         #endregion Get
 
@@ -200,10 +200,13 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 case "Delete":
                     return Ok(JObject.FromObject(await base.DeleteListAsync<MobileViewModel>(predicate, true)));
+
                 case "SendMail":
                     return Ok(JObject.FromObject(await SendMailListAsync(predicate)));
+
                 case "Export":
                     return Ok(JObject.FromObject(await base.ExportListAsync(predicate, MixStructureType.AttributeSet)));
+
                 default:
                     return JObject.FromObject(new RepositoryResponse<bool>());
             }
@@ -238,8 +241,8 @@ namespace Mix.Cms.Api.Controllers.v1
                 result.IsSucceed = false;
                 return result;
             }
-
         }
+
         #endregion Post
     }
 }

@@ -11,20 +11,26 @@ namespace Mix.Cms.Messenger.ViewModels.MixMessengerUsers
     public class ConnectViewModel
     {
         #region Properties
+
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("name")]
         public string Name { get; set; }
+
         [JsonProperty("avatar")]
         public string Avatar { get; set; }
+
         [JsonProperty("device")]
         public MixMessengerUserDevice Device { get; set; }
+
         [JsonProperty("createdDate")]
         public DateTime CreatedDate { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
 
-        #endregion
+        #endregion Properties
 
         #region Contructor
 
@@ -41,11 +47,13 @@ namespace Mix.Cms.Messenger.ViewModels.MixMessengerUsers
             };
             // TODO - verify cnn before add/update connections
         }
-        #endregion
+
+        #endregion Contructor
 
         #region Override
 
         #region Async
+
         public async Task<RepositoryResponse<bool>> Join()
         {
             using (MixChatServiceContext _context = new MixChatServiceContext())
@@ -86,7 +94,6 @@ namespace Mix.Cms.Messenger.ViewModels.MixMessengerUsers
                             Device.StartDate = DateTime.UtcNow;
                             _context.Entry(Device).State = Microsoft.EntityFrameworkCore.EntityState.Added;
                         }
-
                     }
                     result.IsSucceed = (await _context.SaveChangesAsync()) > 0;
                 }
@@ -97,10 +104,10 @@ namespace Mix.Cms.Messenger.ViewModels.MixMessengerUsers
                 }
                 return result;
             }
-
         }
-        #endregion
 
-        #endregion
+        #endregion Async
+
+        #endregion Override
     }
 }

@@ -72,6 +72,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         #endregion Contructors
 
         #region Overrides
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getChilds = MixPortalPagePortalPages.ReadViewModel.Repository.GetModelListBy(n => n.ParentId == Id, _context, _transaction);

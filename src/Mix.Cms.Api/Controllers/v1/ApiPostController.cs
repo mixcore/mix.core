@@ -107,7 +107,6 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
-
         #endregion Get
 
         #region Post
@@ -154,6 +153,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 return new RepositoryResponse<List<SyncViewModel>>();
             }
         }
+
         // POST api/post
         [HttpPost, HttpOptions]
         [Route("save/{id}")]
@@ -172,7 +172,6 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         break;
                     }
-
                 }
                 return result;
             }
@@ -223,6 +222,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         });
                     }
                     return Ok(JObject.FromObject(srvResult));
+
                 case "mvc":
                     var mvcResult = await base.GetListAsync<ReadMvcViewModel>(request, predicate);
                     if (mvcResult.IsSucceed)
@@ -234,6 +234,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         });
                     }
                     return Ok(JObject.FromObject(mvcResult));
+
                 case "portal":
                     var portalResult = await base.GetListAsync<UpdateViewModel>(request, predicate);
                     if (portalResult.IsSucceed)
@@ -245,6 +246,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         });
                     }
                     return Ok(JObject.FromObject(portalResult));
+
                 default:
 
                     var listItemResult = await base.GetListAsync<ReadListItemViewModel>(request, predicate);
@@ -260,6 +262,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     return JObject.FromObject(listItemResult);
             }
         }
+
         // POST api/update-infos
         [HttpPost, HttpOptions]
         [Route("update-infos")]
@@ -287,15 +290,18 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 case "Delete":
                     return Ok(JObject.FromObject(await base.DeleteListAsync<RemoveViewModel>(predicate, true)));
+
                 case "Export":
                     return Ok(JObject.FromObject(await base.ExportListAsync(predicate, MixStructureType.Module)));
+
                 default:
                     return JObject.FromObject(new RepositoryResponse<bool>());
             }
         }
+
         #endregion Post
 
-        DateTime? PublishPosts()
+        private DateTime? PublishPosts()
         {
             var nextSync = MixService.GetConfig<DateTime?>(MixConstants.ConfigurationKeyword.NextSyncContent);
             if (nextSync.HasValue && nextSync.Value <= DateTime.UtcNow)

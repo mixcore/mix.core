@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Common.Helper;
-using Mix.Domain.Core.Models;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -17,29 +15,42 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
       : ViewModelBase<MixCmsContext, MixAttributeSetData, MobileViewModel>
     {
         #region Properties
+
         #region Models
+
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
+
         [JsonProperty("attributeSetName")]
         public string AttributeSetName { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("status")]
         public int Status { get; set; }
+
         #endregion Models
+
         #region Views
+
         [JsonIgnore]
         public List<MixAttributeSetValues.MobileViewModel> Values { get; set; }
+
         [JsonIgnore]
         public List<MixAttributeFields.MobileViewModel> Fields { get; set; }
 
         [JsonProperty("data")]
         public JObject Data { get; set; }
-        #endregion
+
+        #endregion Views
+
         #endregion Properties
 
         #region Contructors
@@ -65,22 +76,22 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             };
             Values = MixAttributeSetValues.MobileViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-            foreach (var item in Values.OrderBy(v=>v.Priority))
+            foreach (var item in Values.OrderBy(v => v.Priority))
             {
                 Data.Add(ParseValue(item));
             }
         }
+
         public override MixAttributeSetData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))
             {
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
-                Priority = Repository.Count(m => m.AttributeSetName == AttributeSetName && m.Specificulture == Specificulture,_context,_transaction).Data + 1;
+                Priority = Repository.Count(m => m.AttributeSetName == AttributeSetName && m.Specificulture == Specificulture, _context, _transaction).Data + 1;
                 Data["id"] = Id;
                 Data["createdDateTime"] = CreatedDateTime;
                 Data["priority"] = Priority;
-
             }
             Values = Values ?? MixAttributeSetValues.MobileViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
@@ -113,11 +124,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     Data.Add(ParseValue(val));
                 }
             }
-                
+
             return base.ParseModel(_context, _transaction); ;
         }
 
         #region Async
+
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSetData parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -150,8 +162,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
             return result;
         }
-        #endregion
-        #endregion
+
+        #endregion Async
+
+        #endregion Overrides
+
         public override void GenerateCache(MixAttributeSetData model, MobileViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Data["id"] == null)
@@ -162,6 +177,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             base.GenerateCache(model, view, _context, _transaction);
         }
+
         public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
         {
             var tasks = new List<Task>();
@@ -174,7 +190,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     var updModel = new MobileViewModel(item, context, transaction);
                     updModel.GenerateCache(item, updModel);
                 }));
-
             }
             foreach (var item in Values)
             {
@@ -182,29 +197,34 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     item.RemoveCache(item.Model);
                 }));
-
             }
             return tasks;
         }
 
         #region Expands
-        JProperty ParseValue(MixAttributeSetValues.MobileViewModel item)
+
+        private JProperty ParseValue(MixAttributeSetValues.MobileViewModel item)
         {
-            
             switch (item.DataType)
             {
                 case MixEnums.MixDataType.DateTime:
                     return new JProperty(item.AttributeFieldName, item.DateTimeValue);
+
                 case MixEnums.MixDataType.Date:
                     return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
+
                 case MixEnums.MixDataType.Time:
                     return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
+
                 case MixEnums.MixDataType.Double:
                     return (new JProperty(item.AttributeFieldName, item.DoubleValue));
+
                 case MixEnums.MixDataType.Boolean:
                     return (new JProperty(item.AttributeFieldName, item.BooleanValue));
+
                 case MixEnums.MixDataType.Number:
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue));
+
                 case MixEnums.MixDataType.Reference:
                     string url = $"/api/v1/odata/en-us/related-attribute-set-data/mobile/parent/set/{Id}/{item.Field.ReferenceId}";
                     //foreach (var nav in item.DataNavs)
@@ -212,6 +232,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     //    arr.Add(nav.Data.Data);
                     //}
                     return (new JProperty(item.AttributeFieldName, url));
+
                 case MixEnums.MixDataType.Custom:
                 case MixEnums.MixDataType.Duration:
                 case MixEnums.MixDataType.PhoneNumber:
@@ -233,28 +254,35 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     return (new JProperty(item.AttributeFieldName, item.StringValue));
             }
         }
-        void ParseModelValue(JToken property, MixAttributeSetValues.MobileViewModel item)
+
+        private void ParseModelValue(JToken property, MixAttributeSetValues.MobileViewModel item)
         {
             switch (item.DataType)
             {
                 case MixEnums.MixDataType.DateTime:
                     item.DateTimeValue = property.Value<DateTime?>();
                     break;
+
                 case MixEnums.MixDataType.Date:
                     item.DateTimeValue = property.Value<DateTime?>();
-                    break;                    
+                    break;
+
                 case MixEnums.MixDataType.Time:
                     item.DateTimeValue = property.Value<DateTime?>();
                     break;
+
                 case MixEnums.MixDataType.Double:
                     item.DoubleValue = property.Value<double?>();
                     break;
+
                 case MixEnums.MixDataType.Boolean:
                     item.BooleanValue = property.Value<bool?>();
                     break;
+
                 case MixEnums.MixDataType.Number:
                     item.IntegerValue = property.Value<int?>();
                     break;
+
                 case MixEnums.MixDataType.Reference:
                     //string url = $"/api/v1/odata/en-us/related-attribute-set-data/mobile/parent/set/{Id}/{item.Field.ReferenceId}";
 
@@ -264,6 +292,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     //}
                     //return (new JProperty(item.AttributeFieldName, url));
                     break;
+
                 case MixEnums.MixDataType.Custom:
                 case MixEnums.MixDataType.Duration:
                 case MixEnums.MixDataType.PhoneNumber:
@@ -287,6 +316,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             item.StringValue = property.Value<string>();
         }
-        #endregion
+
+        #endregion Expands
     }
 }

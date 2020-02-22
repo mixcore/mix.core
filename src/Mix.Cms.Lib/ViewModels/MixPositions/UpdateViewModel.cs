@@ -27,7 +27,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPositions
 
         [JsonProperty("pages")]
         public List<MixPagePositions.UpdateViewModel> Pages { get; set; } = new List<MixPagePositions.UpdateViewModel>();
-        #endregion
+
+        #endregion Views
+
         #endregion Properties
 
         #region Contructors
@@ -52,7 +54,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPositions
             }
             return base.ParseModel(_context, _transaction);
         }
+
         #region Async
+
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixPosition parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -78,9 +82,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPositions
             }
             return result;
         }
-        #endregion
 
-        #endregion
+        #endregion Async
+
+        #endregion Overrides
 
         #region Expands
 
@@ -91,6 +96,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPositions
             Pages = getPages.Data;
         }
 
-        #endregion
+        #endregion Expands
     }
 }

@@ -10,13 +10,17 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
       : ViewModelBase<MixCmsContext, MixAttributeSet, DeleteViewModel>
     {
         #region Properties
+
         #region Models
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("ReferenceId")]
         public int? ReferenceId { get; set; }
+
         #endregion Models
+
         #endregion Properties
 
         #region Contructors
@@ -30,7 +34,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         }
 
         #endregion Contructors
+
         #region Overrides
+
         public override RepositoryResponse<bool> RemoveRelatedModels(DeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -43,6 +49,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             }
             return result;
         }
+
         public override async System.Threading.Tasks.Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(DeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -56,15 +63,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             }
             if (result.IsSucceed)
             {
-                var removeRelated = await MixRelatedAttributeSets.DeleteViewModel.Repository.RemoveListModelAsync(false, 
+                var removeRelated = await MixRelatedAttributeSets.DeleteViewModel.Repository.RemoveListModelAsync(false,
                     f => f.Id == Id || (f.ParentId == Id && f.ParentType == (int)MixEnums.MixAttributeSetDataType.Service)
                     , _context, _transaction);
                 ViewModelHelper.HandleResult(removeRelated, ref result);
             }
-            
+
             return result;
         }
-        #endregion
 
+        #endregion Overrides
     }
 }

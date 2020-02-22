@@ -146,6 +146,5 @@ namespace Mix.Cms.Api.Controllers.v1.OData.Positions
         }
 
         #endregion Get
-
     }
 }

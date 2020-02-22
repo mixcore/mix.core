@@ -4,17 +4,13 @@
 
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
-using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
-using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
@@ -29,7 +25,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
     [Produces("application/json")]
     [Route("api/v1/odata/{culture}/attribute-set-data/portal")]
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
-    public class ApiODataAttributeSetDataPortalController:
+    public class ApiODataAttributeSetDataPortalController :
         ODataBaseApiController<MixCmsContext, MixAttributeSetData>
     {
         public ApiODataAttributeSetDataPortalController(
@@ -64,7 +60,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                 };
                 if (attributeSetId.HasValue)
                 {
-                    model.AttributeSetId = attributeSetId.Value;  
+                    model.AttributeSetId = attributeSetId.Value;
                 }
                 if (!string.IsNullOrEmpty(attributeSetName))
                 {
@@ -104,7 +100,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                 data.CreatedBy = _username;
             }
             var portalResult = await base.SaveAsync<ODataUpdateViewModel>(data, true);
-            
+
             if (portalResult.IsSucceed)
             {
                 return Ok(portalResult);
@@ -120,8 +116,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         [Route("{id}")]
         public async Task<ActionResult<ODataUpdateViewModel>> Save(string culture, string id, [FromBody]JObject data)
         {
-            
-            var portalResult = await base.SaveAsync<ODataUpdateViewModel>(data, p => p.Id == id && p.Specificulture == _lang);            
+            var portalResult = await base.SaveAsync<ODataUpdateViewModel>(data, p => p.Id == id && p.Specificulture == _lang);
             if (portalResult.IsSucceed)
             {
                 return Ok(portalResult);
@@ -160,10 +155,11 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             var result = await base.GetListAsync<ODataUpdateViewModel>(queryOptions);
             return Ok(result);
         }
-        
+
         #endregion Get
 
         #region Post
+
         [HttpPost, HttpOptions]
         [Route("apply-list")]
         public async Task<ActionResult<JObject>> ListActionAsync([FromBody]ListAction<string> data)
@@ -176,13 +172,15 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             {
                 case "Delete":
                     return Ok(JObject.FromObject(await base.DeleteListAsync<ODataUpdateViewModel>(predicate, true)));
+
                 case "Export":
                     return Ok(JObject.FromObject(await base.ExportListAsync(predicate, MixEnums.MixStructureType.AttributeSet)));
+
                 default:
                     return JObject.FromObject(new RepositoryResponse<bool>());
             }
         }
-        #endregion
 
+        #endregion Post
     }
 }

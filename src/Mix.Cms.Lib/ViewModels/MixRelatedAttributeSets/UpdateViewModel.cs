@@ -9,7 +9,9 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
        : ViewModelBase<MixCmsContext, MixRelatedAttributeSet, UpdateViewModel>
     {
         #region Properties
+
         #region Models
+
         public int Id { get; set; }
         public int ParentId { get; set; }
         public int ParentType { get; set; }
@@ -18,13 +20,16 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
         public string Description { get; set; }
         public string Image { get; set; }
 
-        #endregion
+        #endregion Models
+
         #region Views
 
         public MixAttributeSets.UpdateViewModel Data { get; set; }
 
         #endregion Views
-        #endregion
+
+        #endregion Properties
+
         public UpdateViewModel(MixRelatedAttributeSet model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
@@ -33,7 +38,6 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
         public UpdateViewModel() : base()
         {
         }
-        
 
         #region overrides
 
@@ -56,12 +60,6 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
                 Data = getData.Data;
             }
         }
-
-
-        #region Async
-
-
-        #endregion Async
 
         #endregion overrides
     }

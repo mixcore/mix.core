@@ -26,8 +26,8 @@ namespace Mix.Cms.Api.Controllers.v1
     {
         public ApiAttributeFieldController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
-
         }
+
         #region Get
 
         // GET api/attribute-field/id
@@ -130,7 +130,6 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<ActionResult<JObject>> GetList(
             [FromBody] RequestPaging request)
         {
-
             ParseRequestPagingDate(request);
             Expression<Func<MixAttributeField, bool>> predicate = model =>
                 string.IsNullOrWhiteSpace(request.Keyword)
@@ -141,6 +140,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 case "portal":
                     var portalResult = await base.GetListAsync<UpdateViewModel>(request, predicate);
                     return Ok(JObject.FromObject(portalResult));
+
                 default:
 
                     var listItemResult = await base.GetListAsync<ReadViewModel>(request, predicate);

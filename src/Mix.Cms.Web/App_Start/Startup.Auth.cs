@@ -1,5 +1,5 @@
 ﻿// Licensed to the mixcore Foundation under one or more agreements.
-// The mixcore Foundation licenses this file to you under the GNU General Public License v3.0 license.
+// The mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -12,7 +12,6 @@ using Mix.Cms.Lib.Services;
 using Mix.Identity.Models;
 using System;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Mix.Cms.Web
 {
@@ -102,7 +101,6 @@ namespace Mix.Cms.Web
                 options.LogoutPath = "/"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
                 options.AccessDeniedPath = "/security/login"; // If the MixConstants.Default.DefaultCulture is not set here, ASP.NET Core will default to /Account/AccessDenied
                 options.SlidingExpiration = true;
-
             });
         }
 
