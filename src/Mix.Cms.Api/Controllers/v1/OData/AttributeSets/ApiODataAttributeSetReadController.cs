@@ -133,9 +133,10 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSets
             return Ok(result);
         }
 
-
         #endregion Get
+
         #region Post
+
         [HttpPost, HttpOptions]
         [Route("apply-list")]
         public async Task<ActionResult<JObject>> ListActionAsync([FromBody]ListAction<int> data)
@@ -147,12 +148,15 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSets
             {
                 case "Delete":
                     return Ok(JObject.FromObject(await base.DeleteListAsync<DeleteViewModel>(predicate, true)));
+
                 case "Export":
                     return Ok(JObject.FromObject(await base.ExportListAsync(predicate, MixEnums.MixStructureType.AttributeSet)));
+
                 default:
                     return JObject.FromObject(new RepositoryResponse<bool>());
             }
         }
-        #endregion
+
+        #endregion Post
     }
 }

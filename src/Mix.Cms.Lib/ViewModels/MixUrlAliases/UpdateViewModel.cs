@@ -17,21 +17,29 @@ namespace Mix.Cms.Lib.ViewModels.MixUrlAliases
         #region Properties
 
         #region Models
+
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("sourceId")]
         public string SourceId { get; set; }
+
         [JsonProperty("type")]
         public MixEnums.UrlAliasType Type { get; set; }
+
         [JsonProperty("description")]
         public string Description { get; set; }
+
         [JsonProperty("status")]
         public MixEnums.MixContentStatus Status { get; set; }
+
         [Required]
         [JsonProperty("alias")]
         public string Alias { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         #endregion Models
 
         #endregion Properties
@@ -82,10 +90,12 @@ namespace Mix.Cms.Lib.ViewModels.MixUrlAliases
                 }
             }
         }
+
         #endregion Overrides
 
         #region Expand
-        List<SupportedCulture> LoadCultures(string initCulture = null, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+
+        private List<SupportedCulture> LoadCultures(string initCulture = null, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getCultures = SystemCultureViewModel.Repository.GetModelList(_context, _transaction);
             var result = new List<SupportedCulture>();
@@ -105,12 +115,11 @@ namespace Mix.Cms.Lib.ViewModels.MixUrlAliases
                             Lcid = culture.Lcid,
                             IsSupported = culture.Specificulture == initCulture || _context.MixUrlAlias.Any(p => p.Id == Id && p.Specificulture == culture.Specificulture)
                         });
-
                 }
             }
             return result;
         }
-        #endregion
 
+        #endregion Expand
     }
 }

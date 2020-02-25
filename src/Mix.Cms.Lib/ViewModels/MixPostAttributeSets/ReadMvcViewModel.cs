@@ -27,6 +27,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeSets
         public string Description { get; set; }
 
         #region Views
+
         [JsonProperty("attributeSet")]
         public MixAttributeSets.ReadMvcPostViewModel MixAttributeSet { get; set; }
 

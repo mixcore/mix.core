@@ -52,6 +52,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("type")]
         public MixModuleType Type { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
 
@@ -63,19 +64,20 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("pageSize")]
         public int? PageSize { get; set; }
+
         #endregion Models
 
         #region Views
+
         [JsonProperty("domain")]
         public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }
+
         [JsonProperty("imageUrl")]
-        public string ImageUrl
-        {
-            get
-            {
+        public string ImageUrl {
+            get {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -88,11 +90,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 }
             }
         }
+
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl
-        {
-            get
-            {
+        public string ThumbnailUrl {
+            get {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -107,29 +108,28 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         }
 
         [JsonProperty("columns")]
-        public List<ModuleFieldViewModel> Columns
-        {
+        public List<ModuleFieldViewModel> Columns {
             get { return Fields == null ? null : JsonConvert.DeserializeObject<List<ModuleFieldViewModel>>(Fields); }
             set { Fields = JsonConvert.SerializeObject(value); }
         }
 
         [JsonProperty("view")]
         public MixTemplates.ReadListItemViewModel View { get; set; }
+
         [JsonProperty("formView")]
         public MixTemplates.ReadListItemViewModel FormView { get; set; }
 
         [JsonProperty("edmView")]
         public MixTemplates.ReadListItemViewModel EdmView { get; set; }
+
         [JsonProperty("data")]
         public PaginationModel<ViewModels.MixModuleDatas.ReadViewModel> Data { get; set; } = new PaginationModel<ViewModels.MixModuleDatas.ReadViewModel>();
 
         [JsonProperty("posts")]
         public PaginationModel<MixModulePosts.ReadViewModel> Posts { get; set; } = new PaginationModel<MixModulePosts.ReadViewModel>();
 
-        public string TemplatePath
-        {
-            get
-            {
+        public string TemplatePath {
+            get {
                 return CommonHelper.GetFullPath(new string[]
                 {
                     ""
@@ -139,10 +139,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 });
             }
         }
-        public string FormTemplatePath
-        {
-            get
-            {
+
+        public string FormTemplatePath {
+            get {
                 return CommonHelper.GetFullPath(new string[]
                 {
                     ""
@@ -152,10 +151,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 });
             }
         }
-        public string EdmTemplatePath
-        {
-            get
-            {
+
+        public string EdmTemplatePath {
+            get {
                 return CommonHelper.GetFullPath(new string[]
                 {
                     ""
@@ -165,6 +163,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 });
             }
         }
+
         [JsonProperty("attributeData")]
         public MixRelatedAttributeDatas.ReadMvcViewModel AttributeData { get; set; }
 
@@ -202,6 +201,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #endregion Overrides
 
         #region Expand
+
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_MODULE, _context, _transaction);
@@ -255,9 +255,11 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                     case MixModuleType.SubPost:
                         dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture && (m.PostId == postId);
                         break;
+
                     case MixModuleType.ListPost:
                         postExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
                         break;
+
                     default:
                         dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture;
                         postExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
@@ -305,6 +307,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 }
             }
         }
+
         public T Property<T>(string fieldName)
         {
             if (AttributeData != null)
@@ -323,8 +326,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             {
                 return default(T);
             }
-
         }
+
         #endregion Expand
     }
 }

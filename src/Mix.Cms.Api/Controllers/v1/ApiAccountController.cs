@@ -338,7 +338,6 @@ namespace Mix.Cms.Api.Controllers.v1
                 };
                 return JObject.FromObject(result);
             }
-
         }
 
         // POST api/template
@@ -376,7 +375,6 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         Request.HttpContext.Response.StatusCode = 401;
                     }
-
                 }
                 return result;
             }
@@ -479,6 +477,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
             return result;
         }
+
         [HttpGet]
         [Authorize(Roles = "SuperAdmin")]
         [Route("remove-user/{id}")]
@@ -505,7 +504,5 @@ namespace Mix.Cms.Api.Controllers.v1
 
             return result;
         }
-
-
     }
 }

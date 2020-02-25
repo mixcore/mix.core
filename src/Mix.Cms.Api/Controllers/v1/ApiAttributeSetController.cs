@@ -88,7 +88,6 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
-
         #endregion Get
 
         #region Post
@@ -119,7 +118,6 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<ActionResult<JObject>> GetList(
             [FromBody] RequestPaging request)
         {
-
             ParseRequestPagingDate(request);
             Expression<Func<MixAttributeSet, bool>> predicate = model =>
                 string.IsNullOrWhiteSpace(request.Keyword)
@@ -137,6 +135,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 case "portal":
                     var portalResult = await base.GetListAsync<UpdateViewModel>(request, predicate);
                     return Ok(JObject.FromObject(portalResult));
+
                 default:
 
                     var listItemResult = await base.GetListAsync<ReadViewModel>(request, predicate);

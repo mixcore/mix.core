@@ -22,13 +22,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
         {
         }
 
-
         [JsonProperty("id")]
         public int Id { get; set; }
 
         [JsonProperty("parentId")]
         public int ParentId { get; set; }
-
 
         [JsonProperty("image")]
         public string Image { get; set; }
@@ -38,7 +36,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
 
         [JsonProperty("level")]
         public int Level { get; set; }
-
 
         #region Views
 
@@ -54,6 +51,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
         #endregion Views
 
         #region overrides
+
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixPortalPageNavigation parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             if (Page != null)
@@ -71,8 +69,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
             {
                 return await base.SaveSubModelsAsync(parent, _context, _transaction);
             }
-
         }
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getCategory = MixPortalPages.UpdateRolePermissionViewModel.Repository.GetSingleModel(p => p.Id == Id
@@ -102,7 +100,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
             var result = new RepositoryResponse<List<UpdateViewModel>>();
             try
             {
-
                 foreach (var item in cates)
                 {
                     var saveResult = await item.SaveModelAsync(false, context, transaction);
@@ -134,6 +131,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
                 context.Dispose();
             }
         }
-        #endregion
+
+        #endregion Expands
     }
 }

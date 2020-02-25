@@ -6,7 +6,6 @@ using Mix.Domain.Core.ViewModels;
 using Mix.UI.Core.SignalR;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using static Mix.Cms.Messenger.MixChatEnums;
@@ -15,7 +14,6 @@ namespace Mix.Cms.Hub
 {
     public class ServiceHub : BaseSignalRHub
     {
-       
         // TODO Handle Join/Leave group
         public Task HandleRequest(HubRequest<JObject> request)
         {
@@ -23,13 +21,13 @@ namespace Mix.Cms.Hub
             {
                 case MixConstants.ServiceHub.SaveData:
                     return SaveData(request);
+
                 case MixConstants.ServiceHub.JoinGroup:
                     return JoinGroup(request);
+
                 default:
                     return SendToCaller(MixConstants.ServiceHub.UnknowErrorMsg, MessageReponseKey.Error);
             }
-
-            
         }
 
         private Task SaveData(HubRequest<JObject> request)
@@ -55,10 +53,11 @@ namespace Mix.Cms.Hub
                 CreatedDate = DateTime.UtcNow
             };
             // Save user and current device to db
-            return user.Join().ContinueWith((task)=> {
+            return user.Join().ContinueWith((task) =>
+            {
                 //  save success
                 if (task.Result.IsSucceed)
-                {                    
+                {
                     // Get Online users
                     var getAvailableUsers = Messenger.ViewModels.MixMessengerUsers.DefaultViewModel.Repository.GetModelListBy(u => u.Status == (int)Messenger.MixChatEnums.OnlineStatus.Connected);
                     var hubMsg = new RepositoryResponse<MessengerConnection>()
@@ -77,22 +76,22 @@ namespace Mix.Cms.Hub
                 }
                 else
                 {
-                    //  Send failed msg to caller 
+                    //  Send failed msg to caller
                     return SendToConnection(task.Result, MessageReponseKey.ConnectFailed, Context.ConnectionId, false);
                 }
             });
-
-            
         }
 
         private object GetGroupMembers(HubRequest<JObject> request)
         {
-            Expression<Func<MixAttributeSetValue, bool>> predicate= m => m.Specificulture == request.Specificulture 
-                && m.AttributeSetName == MixConstants.ServiceHub.HubMemberName && m.AttributeFieldName == request.Room;
+            Expression<Func<MixAttributeSetValue, bool>> predicate = m => m.Specificulture == request.Specificulture
+                 && m.AttributeSetName == MixConstants.ServiceHub.HubMemberName && m.AttributeFieldName == request.Room;
             var data = Lib.ViewModels.MixAttributeSetDatas.HubViewModel.FilterByValue(predicate);
             return data;
         }
+
         #region Send Methods
+
         public void SendMessage(JObject request)
         {
             var data = request.ToObject<HubRequest<HubMessage>>();
@@ -104,7 +103,6 @@ namespace Mix.Cms.Hub
         {
             if (!string.IsNullOrEmpty(connectionId))
             {
-
                 HubResponse<T> result = new HubResponse<T>()
                 {
                     IsSucceed = true,
@@ -114,7 +112,6 @@ namespace Mix.Cms.Hub
 
                 if (isMySelf)
                 {
-
                     return Clients.Client(connectionId).SendAsync(MixConstants.ServiceHub.ReceiveMethod, JObject.FromObject(result));
                 }
                 else
@@ -143,7 +140,6 @@ namespace Mix.Cms.Hub
         {
             if (!string.IsNullOrEmpty(groupName))
             {
-
                 HubResponse<T> result = new HubResponse<T>()
                 {
                     IsSucceed = true,
@@ -190,11 +186,10 @@ namespace Mix.Cms.Hub
             return Enum.GetName(typeof(T), e);
         }
 
-        #endregion
-
+        #endregion Send Methods
 
         public override Task OnConnectedAsync()
-        {            
+        {
             return base.OnConnectedAsync();
         }
 

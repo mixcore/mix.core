@@ -31,17 +31,15 @@ namespace Mix.Cms.Api.Controllers.v1
     {
         public ApiThemeController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
-
         }
-        #region Get
 
+        #region Get
 
         // GET api/theme/id
         [HttpGet, HttpOptions]
         [Route("sync/{id}")]
         public async Task<RepositoryResponse<List<Lib.ViewModels.MixTemplates.UpdateViewModel>>> Sync(int id)
         {
-
             var getTemplate = await Lib.ViewModels.MixTemplates.UpdateViewModel.Repository.GetModelListByAsync(
                  template => template.ThemeId == id).ConfigureAwait(false);
             foreach (var item in getTemplate.Data)
@@ -81,7 +79,6 @@ namespace Mix.Cms.Api.Controllers.v1
             var result = data.ProcessSelectedExportDataAsync();
             if (result.IsSucceed)
             {
-
                 string filename = $"schema";
                 var file = new FileViewModel()
                 {
@@ -104,8 +101,6 @@ namespace Mix.Cms.Api.Controllers.v1
 
                 // Zip to [theme_name].zip ( wwwroot for web path)
                 string filePath = FileRepository.Instance.ZipFolder($"{tempPath}", outputPath, $"{getTheme.Data.Name}-{Guid.NewGuid()}");
-
-
 
                 // Delete temp folder
                 FileRepository.Instance.DeleteWebFolder($"{outputPath}/Assets");
@@ -192,7 +187,6 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
-
         #endregion Get
 
         #region Post
@@ -218,7 +212,6 @@ namespace Mix.Cms.Api.Controllers.v1
                 FileRepository.Instance.SaveWebFile(theme, theme.FileName, importFolder);
             }
 
-
             if (data != null)
             {
                 data.CreatedBy = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
@@ -240,7 +233,6 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<ActionResult<JObject>> GetList(
             [FromBody] RequestPaging request)
         {
-
             ParseRequestPagingDate(request);
             Expression<Func<MixTheme, bool>> predicate = model =>
                 string.IsNullOrWhiteSpace(request.Keyword)
@@ -258,6 +250,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 case "portal":
                     var portalResult = await base.GetListAsync<UpdateViewModel>(request, predicate);
                     return Ok(JObject.FromObject(portalResult));
+
                 default:
 
                     var listItemResult = await base.GetListAsync<ReadViewModel>(request, predicate);

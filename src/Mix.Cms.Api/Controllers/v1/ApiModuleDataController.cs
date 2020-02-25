@@ -35,10 +35,8 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("details/{viewType}/{moduleId}")]
         public async Task<RepositoryResponse<UpdateViewModel>> DetailsAsync(string viewType, int moduleId, string id = null)
         {
-
             if (string.IsNullOrEmpty(id))
             {
-
                 var getModule = await Lib.ViewModels.MixModules.ReadListItemViewModel.Repository.GetSingleModelAsync(
         m => m.Id == moduleId && m.Specificulture == _lang).ConfigureAwait(false);
                 if (getModule.IsSucceed)
@@ -274,7 +272,6 @@ namespace Mix.Cms.Api.Controllers.v1
             string exportPath = $"Exports/Module/{moduleId}";
             var result = CommonHelper.ExportJObjectToExcel(portalResult.Data.JsonItems, string.Empty, exportPath, Guid.NewGuid().ToString(), null);
             return Ok(JObject.FromObject(result));
-
         }
 
         // GET api/moduleData
@@ -289,7 +286,7 @@ namespace Mix.Cms.Api.Controllers.v1
             int.TryParse(query.Get("post_id"), out int postId);
             int.TryParse(query.Get("product_id"), out int productId);
             int.TryParse(query.Get("category_id"), out int pageId);
-            
+
             string key = $"{request.Key}_{request.PageSize}_{request.PageIndex}";
             Expression<Func<MixModuleData, bool>> predicate = model =>
                 model.Specificulture == _lang

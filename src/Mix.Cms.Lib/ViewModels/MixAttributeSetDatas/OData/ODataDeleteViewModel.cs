@@ -3,7 +3,6 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,11 +12,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
       : ODataViewModelBase<MixCmsContext, MixAttributeSetData, ODataDeleteViewModel>
     {
         #region Properties
+
         #region Models
 
         [JsonProperty("id")]
         public string Id { get; set; }
+
         #endregion Models
+
         #endregion Properties
 
         #region Contructors
@@ -31,7 +33,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         }
 
         #endregion Contructors
+
         #region Overrides
+
         public override RepositoryResponse<bool> RemoveRelatedModels(ODataDeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -56,8 +60,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             return result;
         }
 
-        
-
         public override async System.Threading.Tasks.Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(ODataDeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -81,6 +83,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             return result;
         }
+
         private RepositoryResponse<bool> RemoveRelated(MixCmsContext context, IDbContextTransaction transaction)
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -108,8 +111,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
             }
             return result;
-
         }
+
         private async Task<RepositoryResponse<bool>> RemoveRelatedAsync(MixCmsContext context, IDbContextTransaction transaction)
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -138,7 +141,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             return result;
         }
-        #endregion
 
+        #endregion Overrides
     }
 }

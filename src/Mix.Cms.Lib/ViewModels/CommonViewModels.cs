@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.Models;
 using Mix.Domain.Core.ViewModels;
@@ -50,6 +49,7 @@ namespace Mix.Cms.Lib.ViewModels
 
         [JsonProperty("moduleTypes")]
         public List<string> ModuleTypes { get; set; }
+
         [JsonProperty("attributeSetTypes")]
         public List<string> AttributeSetTypes { get; set; }
 
@@ -62,26 +62,34 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("lastUpdateConfiguration")]
         public DateTime? LastUpdateConfiguration { get; set; }
     }
+
     public class FilePageViewModel
     {
         [JsonProperty("files")]
         public List<FileViewModel> Files { get; set; }
+
         [JsonProperty("directories")]
         public List<string> Directories { get; set; }
     }
+
     public class InitCulture
     {
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("fullName")]
         public string FullName { get; set; }
+
         [JsonProperty("description")]
         public string Description { get; set; }
+
         [JsonProperty("icon")]
         public string Icon { get; set; }
+
         [JsonProperty("alias")]
         public string Alias { get; set; }
     }
+
     public class ExtraProperty
     {
         [JsonProperty("title")]
@@ -96,6 +104,7 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("value")]
         public string Value { get; set; }
     }
+
     //public class CryptoViewModel<T>
     //{
     //    [JsonProperty("base64Key")]
@@ -109,20 +118,22 @@ namespace Mix.Cms.Lib.ViewModels
     {
         [JsonProperty("dataType")]
         public MixDataType DataType { get; set; } = MixDataType.Text;
+
         [JsonProperty("value")]
         public string Value { get; set; }
+
         [JsonProperty("name")]
         public string Name { get; set; }
     }
+
     public class FileViewModel
     {
         private string _fullPath = string.Empty;
         private string _webPath = string.Empty;
+
         [JsonProperty("fullPath")]
-        public string FullPath
-        {
-            get
-            {
+        public string FullPath {
+            get {
                 _fullPath = CommonHelper.GetFullPath(new string[] {
                     FileFolder,
                     //FolderName,
@@ -131,41 +142,44 @@ namespace Mix.Cms.Lib.ViewModels
 
                 return _fullPath;
             }
-            set
-            {
+            set {
                 _fullPath = value;
             }
         }
+
         [JsonProperty("webPath")]
-        public string WebPath
-        {
-            get
-            {
+        public string WebPath {
+            get {
                 _webPath = FullPath.Replace("wwwroot", string.Empty);
                 return _webPath;
             }
-            set
-            {
+            set {
                 _webPath = value;
             }
         }
+
         [JsonProperty("folderName")]
         public string FolderName { get; set; }
+
         [JsonProperty("fileFolder")]
         public string FileFolder { get; set; }
+
         [JsonProperty("fileName")]
         public string Filename { get; set; }
+
         [JsonProperty("extension")]
         public string Extension { get; set; }
+
         [JsonProperty("content")]
         public string Content { get; set; }
+
         [JsonProperty("fileStream")]
         public string FileStream { get; set; }
 
         public FileViewModel()
         {
-
         }
+
         public FileViewModel(IFormFile file, string folder)
         {
             Filename = file.FileName.Substring(0, file.FileName.LastIndexOf('.'));
@@ -249,17 +263,19 @@ namespace Mix.Cms.Lib.ViewModels
 
         [JsonProperty("isDisplay")]
         public bool IsDisplay { get; set; }
+
         [JsonProperty("isSelect")]
         public bool IsSelect { get; set; }
+
         [JsonProperty("isGroupBy")]
         public bool IsGroupBy { get; set; }
+
         [JsonProperty("options")]
         public JArray Options { get; set; } = new JArray();
 
         public RepositoryResponse<bool> Validate<T>(IConvertible id, string specificulture, JObject jItem, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where T : class
         {
-
             string val = jItem[Name]["value"].Value<string>();
             var jVal = new JProperty(Name, jItem[Name]);
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -290,6 +306,7 @@ namespace Mix.Cms.Lib.ViewModels
             return result;
         }
     }
+
     public class MobileComponent
     {
         [JsonProperty("id")]
@@ -371,6 +388,7 @@ namespace Mix.Cms.Lib.ViewModels
             }
         }
     }
+
     public class SiteMap
     {
         public DateTime? LastMod { get; set; }
@@ -378,6 +396,7 @@ namespace Mix.Cms.Lib.ViewModels
         public double Priority { get; set; }
         public string Loc { get; set; }
         public List<SitemapLanguage> OtherLanguages { get; set; }
+
         public XElement ParseXElement()
         {
             XNamespace xhtml = "http://www.w3.org/1999/xhtml";
@@ -401,18 +420,22 @@ namespace Mix.Cms.Lib.ViewModels
             return e;
         }
     }
+
     public class ListAction<T>
     {
         [JsonProperty("action")]
         public string Action { get; set; }
+
         [JsonProperty("data")]
         public List<T> Data { get; set; }
     }
+
     public class SitemapLanguage
     {
         public string HrefLang { get; set; }
         public string Href { get; set; }
     }
+
     public class FileInputModel
     {
         public IFormFile FileToUpload { get; set; }

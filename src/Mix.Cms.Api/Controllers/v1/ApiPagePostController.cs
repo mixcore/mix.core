@@ -28,8 +28,8 @@ namespace Mix.Cms.Api.Controllers.v1
     {
         public ApiPagePostController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
-
         }
+
         #region Get
 
         // GET api/page/id
@@ -49,7 +49,6 @@ namespace Mix.Cms.Api.Controllers.v1
             string msg = string.Empty;
             switch (viewType)
             {
-
                 default:
                     if (pageId.HasValue && postId.HasValue)
                     {
@@ -58,7 +57,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         if (portalResult.IsSucceed)
                         {
                             portalResult.Data.Post.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                new { action = "post", culture = _lang,  portalResult.Data.Post.SeoName }, Request, Url);
+                                new { action = "post", culture = _lang, portalResult.Data.Post.SeoName }, Request, Url);
                         }
 
                         return Ok(JObject.FromObject(portalResult));
@@ -77,7 +76,6 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
             }
         }
-
 
         #endregion Get
 
@@ -115,7 +113,6 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         break;
                     }
-
                 }
                 return result;
             }
@@ -165,6 +162,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 return new RepositoryResponse<List<ReadViewModel>>();
             }
         }
+
         // POST api/update-infos
         [HttpPost, HttpOptions]
         [Route("save-list")]
@@ -179,6 +177,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 return new RepositoryResponse<List<ReadViewModel>>();
             }
         }
+
         #endregion Post
     }
 }

@@ -28,8 +28,8 @@ namespace Mix.Cms.Api.Controllers.v1
     {
         public ApiModulePostController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
-
         }
+
         #region Get
 
         // GET api/module/id
@@ -49,7 +49,6 @@ namespace Mix.Cms.Api.Controllers.v1
             string msg = string.Empty;
             switch (viewType)
             {
-
                 default:
                     if (moduleId.HasValue && postId.HasValue)
                     {
@@ -77,7 +76,6 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
             }
         }
-
 
         #endregion Get
 
@@ -115,7 +113,6 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         break;
                     }
-
                 }
                 return result;
             }
@@ -167,6 +164,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 return new RepositoryResponse<List<ReadViewModel>>();
             }
         }
+
         // POST api/update-infos
         [HttpPost, HttpOptions]
         [Route("save-list")]
@@ -181,6 +179,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 return new RepositoryResponse<List<ReadViewModel>>();
             }
         }
+
         #endregion Post
     }
 }

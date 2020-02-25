@@ -4,7 +4,7 @@
 <head>
     <base href="/portal">
     <meta charset="utf-8" />
-    <link rel="apple-touch-icon" sizes="76x76" href="~/lib/now-ui-kit-pro-v1.2.2/assets/img/apple-icon.png">   
+    <link rel="apple-touch-icon" sizes="76x76" href="~/lib/now-ui-kit-pro-v1.2.2/assets/img/apple-icon.png">
     <link rel="icon" href="@(MixService.GetConfig<string>("Favicon") ?? "/css/portal/img/mixcore-logo-green-16x16.png")">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>@ViewData["Title"] - Mixcore</title>
@@ -26,43 +26,45 @@
                 padding-bottom: 40px;
                 background-color: #000;
                 height: 100%;
-                
             }
-            body::before{
-                content: "";
-                background: black;
-                opacity: 0.8;
-                top: 0;
-                left: 0;
-                bottom: 0;
-                right: 0;
-                position: fixed;
-                z-index: -1;   
-                background-image: url("/img/background.jpg");
-                background-repeat: no-repeat;
-                background-position: right top;
-                background-attachment: fixed;
-                background-size: cover;
-            }
-            body::after{
-                content: "";
-                background: black;
-                opacity: 0.5;
-                top: 0;
-                left: 0;
-                bottom: 0;
-                right: 0;
-                position: fixed;
-                z-index: -1;   
-                background-image: url("/img/background.jpg");
-                background-repeat: no-repeat;
-                background-position: right top;
-                background-attachment: fixed;
-                background-size: cover;
-                /* Add the blur effect */
-                filter: blur(8px);
-                -webkit-filter: blur(8px);
-            }
+
+                body::before {
+                    content: "";
+                    background: black;
+                    opacity: 0.8;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;
+                    position: fixed;
+                    z-index: -1;
+                    background-image: url("/img/background.jpg");
+                    background-repeat: no-repeat;
+                    background-position: right top;
+                    background-attachment: fixed;
+                    background-size: cover;
+                }
+
+                body::after {
+                    content: "";
+                    background: black;
+                    opacity: 0.5;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;
+                    position: fixed;
+                    z-index: -1;
+                    background-image: url("/img/background.jpg");
+                    background-repeat: no-repeat;
+                    background-position: right top;
+                    background-attachment: fixed;
+                    background-size: cover;
+                    /* Add the blur effect */
+                    filter: blur(8px);
+                    -webkit-filter: blur(8px);
+                }
+
             .form-init {
                 width: 100%;
                 max-width: 530px;
@@ -71,49 +73,46 @@
             }
         </style>
     </environment>
-    
-    <link href="~/css/app-vendor.min.css" rel="stylesheet" />  
-    <link href="~/css/shared.min.css" rel="stylesheet" />  
-    
-    <link href="~/css/app-init.min.css" rel="stylesheet" />  
 
-  <script src="~/js/particles/particles.min.js"></script>
+    <link href="~/css/app-vendor.min.css" rel="stylesheet" />
+    <link href="~/css/shared.min.css" rel="stylesheet" />
 
+    <link href="~/css/app-init.min.css" rel="stylesheet" />
+
+    <script src="~/js/particles/particles.min.js"></script>
 </head>
 
-<!-- <body class="login-page app-init" ng-app="MixPortal" style="background-image: url('/assets/img/bgs/bg.png');background-position: center;background-repeat: no-repeat;background-size: cover;" >
+<!-- <body class="login-page app-init" ng-app="MixPortal" style="background-image: url('/assets/img/bgs/bg.png');background-position: center;background-repeat: no-repeat;background-size: cover;">
 
     <mix-loader ng-show="isBusy"></mix-loader>
      <div class="container init-pages">
-        
+
         <div class="card o-hidden border-0 shadow-lg">
             <div class="card-body p-0">
                 <div class="progress" style="height: 2px;">
                         <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
                 <div class="row no-gutters">
-                        
+
                     <div class="col-lg-8">
-                            
+
                         <div class="left-coloumn">
                         </div>
                     </div>
                     <div class="col-lg-4 d-none d-lg-block bg-register-image">
-                           
                     </div>
                 </div>
             </div>
         </div>
-               
     </div> -->
 
 <body class="" ng-app="MixPortal">
     <div id="particles-js" class="position-absolute w-100 h-100"></div>
     <mix-loader ng-show="isBusy"></mix-loader>
     <div class="progress" style="height: 2px;">
-      <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100"></div>
+        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
-                      
+
     <div class="card form-init mb-5">
         <div class="p-5">
             <img class="mb-4" src="/css/portal/img/mixcore-logo-green.svg" alt="Mixcore CMS" height="35">
@@ -125,8 +124,8 @@
     </environment>
     <script src="~/js/framework.min.js"></script>
     <script src="~/js/app-init.min.js"></script>
-    <script src="~/js/app-shared.min.js"></script>   
-    
+    <script src="~/js/app-shared.min.js"></script>
+
     @RenderSection("Scripts", required: false)
 
     <!-- Modal -->
@@ -140,7 +139,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                   Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
+                    Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">I have read and understand!</button>
@@ -149,8 +148,7 @@
         </div>
     </div>
 
-
-  <script>
+    <script>
     particlesJS('particles-js',
       {
         "particles": {
@@ -262,7 +260,6 @@
         },
         "retina_detect": true
       });
-  </script>
-
+    </script>
 </body>
 </html>

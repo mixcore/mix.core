@@ -10,28 +10,40 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
        : ViewModelBase<MixCmsContext, MixRelatedAttributeData, HubViewModel>
     {
         #region Model
+
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("parentId")]
         public string ParentId { get; set; }
+
         [JsonProperty("parentType")]
         public MixEnums.MixAttributeSetDataType ParentType { get; set; }
+
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
+
         [JsonProperty("attributeSetName")]
         public string AttributeSetName { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("status")]
         public int Status { get; set; }
+
         [JsonProperty("description")]
         public string Description { get; set; }
 
-        #endregion
+        #endregion Model
+
         #region Views
+
         [JsonProperty("data")]
         public MixAttributeSetDatas.HubViewModel Data { get; set; }
+
         #endregion Views
+
         public HubViewModel(MixRelatedAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
@@ -40,7 +52,6 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         public HubViewModel() : base()
         {
         }
-        
 
         #region overrides
 
@@ -54,12 +65,6 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
                 Data = getData.Data;
             }
         }
-
-
-        #region Async
-
-
-        #endregion Async
 
         #endregion overrides
     }

@@ -32,17 +32,5 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePositions
         [JsonRequired]
         [JsonProperty("description")]
         public string Description { get; set; }
-
-        #region Views
-
-        #endregion Views
-
-        #region overrides
-
-        #region Async
-
-        #endregion Async
-
-        #endregion overrides
     }
 }

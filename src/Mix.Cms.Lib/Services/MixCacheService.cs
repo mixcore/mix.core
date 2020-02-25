@@ -1,7 +1,5 @@
 ﻿using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
-using Mix.Cms.Lib.ViewModels;
-using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Newtonsoft.Json.Linq;
 using System;
@@ -15,6 +13,7 @@ namespace Mix.Cms.Lib.Services
         /// The synchronize root
         /// </summary>
         private static readonly object syncRoot = new Object();
+
         /// <summary>
         /// The instance
         /// </summary>
@@ -27,10 +26,8 @@ namespace Mix.Cms.Lib.Services
             Repository = DefaultModelRepository<MixCmsContext, MixCache>.Instance;
         }
 
-        public static MixCacheService Instance
-        {
-            get
-            {
+        public static MixCacheService Instance {
+            get {
                 if (instance == null)
                 {
                     lock (syncRoot)
@@ -67,7 +64,6 @@ namespace Mix.Cms.Lib.Services
 
         //public static Task<RepositoryResponse<bool>> SetAsync<T>(string key, T value)
         //{
-
         //    if (value != null)
         //    {
         //        var jobj = JObject.FromObject(value);
@@ -93,7 +89,6 @@ namespace Mix.Cms.Lib.Services
         //    //MixCache data = null;
         //    //if (value != null)
         //    //{
-
         //    //    if (getData.IsSucceed)
         //    //    {
         //    //        data = getData.Data;

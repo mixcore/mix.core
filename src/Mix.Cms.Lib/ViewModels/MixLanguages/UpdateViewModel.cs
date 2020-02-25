@@ -40,7 +40,6 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         [JsonProperty("defaultValue")]
         public string DefaultValue { get; set; }
 
-
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
 
@@ -49,6 +48,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
 
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
@@ -58,6 +58,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
 
         [JsonProperty("property")]
         public DataValueViewModel Property { get; set; }
+
         #endregion Views
 
         #endregion Properties
@@ -77,7 +78,6 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
 
         #region Overrides
 
-
         public override MixLanguage ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Value = Property.Value ?? Value;
@@ -91,13 +91,15 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
             }
             return base.ParseModel(_context, _transaction);
         }
-        
+
         #region Async
+
         public override Task<UpdateViewModel> ParseViewAsync(bool isExpand = true, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Property = new DataValueViewModel() { DataType = DataType, Value = Value, Name = Keyword };
             return base.ParseViewAsync(isExpand, _context, _transaction);
         }
+
         public override Task<bool> ExpandViewAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Cultures = LoadCultures(Specificulture, _context, _transaction);
@@ -107,6 +109,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
 
             return base.ExpandViewAsync(_context, _transaction);
         }
+
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             foreach (var culture in Cultures.Where(c => c.Specificulture != Specificulture))
@@ -122,6 +125,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
                 IsSucceed = (await _context.SaveChangesAsync()) > 0
             };
         }
+
         public override async Task<RepositoryResponse<UpdateViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = await base.SaveModelAsync(isSaveSubModels, _context, _transaction);
@@ -147,7 +151,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
             return result;
         }
 
-        #endregion
+        #endregion Async
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -173,13 +177,11 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
             };
         }
 
-
-
         #endregion Overrides
 
         #region Expand
 
-        List<SupportedCulture> LoadCultures(string initCulture = null, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        private List<SupportedCulture> LoadCultures(string initCulture = null, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getCultures = SystemCultureViewModel.Repository.GetModelList(_context, _transaction);
             var result = new List<SupportedCulture>();
@@ -199,11 +201,11 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
                             Lcid = culture.Lcid,
                             IsSupported = culture.Specificulture == initCulture || _context.MixLanguage.Any(p => p.Keyword == Keyword && p.Specificulture == culture.Specificulture)
                         });
-
                 }
             }
             return result;
         }
-        #endregion
+
+        #endregion Expand
     }
 }

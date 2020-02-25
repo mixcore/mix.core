@@ -15,34 +15,45 @@ namespace Mix.Cms.Lib.ViewModels.Account
         : ViewModelBase<MixCmsContext, MixCmsUser, UserInfoViewModel>
     {
         #region Properties
+
         //[JsonProperty("id")]
 
         #region Models
 
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("username")]
         public string Username { get; set; }
+
         [JsonProperty("email")]
         public string Email { get; set; }
+
         [JsonProperty("firstName")]
         public string FirstName { get; set; }
+
         [JsonProperty("middleName")]
         public string MiddleName { get; set; }
+
         [JsonProperty("lastName")]
         public string LastName { get; set; }
+
         [JsonProperty("avatar")]
         public string Avatar { get; set; }
+
         [JsonProperty("address")]
         public string Address { get; set; }
+
         [JsonProperty("phoneNumber")]
         public string PhoneNumber { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
 
-        #endregion
+        #endregion Models
 
         #region Views
 
@@ -52,15 +63,12 @@ namespace Mix.Cms.Lib.ViewModels.Account
         [JsonProperty("userRoles")]
         public List<UserRoleViewModel> UserRoles { get; set; } = new List<UserRoleViewModel>();
 
-
         [JsonProperty("domain")]
         public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("avatarUrl")]
-        public string AvatarUrl
-        {
-            get
-            {
+        public string AvatarUrl {
+            get {
                 if (Avatar != null && (Avatar.IndexOf("http") == -1 && Avatar[0] != '/'))
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -73,6 +81,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
                 }
             }
         }
+
         [JsonProperty("mediaFile")]
         public FileViewModel MediaFile { get; set; } = new FileViewModel();
 
@@ -84,9 +93,10 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         [JsonProperty("changePassword")]
         public ChangePasswordViewModel ChangePassword { get; set; }
-        #endregion
 
-        #endregion
+        #endregion Views
+
+        #endregion Properties
 
         #region Contructors
 
@@ -99,9 +109,10 @@ namespace Mix.Cms.Lib.ViewModels.Account
         {
         }
 
-        #endregion
+        #endregion Contructors
 
         #region Overrides
+
         public override MixCmsUser ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (MediaFile.FileStream != null)
@@ -119,7 +130,6 @@ namespace Mix.Cms.Lib.ViewModels.Account
                 {
                     IsValid = false;
                 }
-
             }
             return base.ParseModel(_context, _transaction);
         }
@@ -130,12 +140,9 @@ namespace Mix.Cms.Lib.ViewModels.Account
             ResetPassword = new ResetPasswordViewModel();
         }
 
-        #endregion
-
-        #region Expands
-
-        #endregion
+        #endregion Overrides
     }
+
     public class ChangePasswordViewModel
     {
         public string CurrentPassword { get; set; }

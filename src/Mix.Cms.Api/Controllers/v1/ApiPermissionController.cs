@@ -27,8 +27,8 @@ namespace Mix.Cms.Api.Controllers.v1
     {
         public ApiPermissionController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
-
         }
+
         #region Get
 
         // GET api/portalPage/id
@@ -90,7 +90,6 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
-
         #endregion Get
 
         #region Post
@@ -132,7 +131,6 @@ namespace Mix.Cms.Api.Controllers.v1
                         );
             switch (request.Key)
             {
-
                 default:
                     var portalResult = await base.GetListAsync<ReadViewModel>(request, predicate);
                     return Ok(JObject.FromObject(portalResult));

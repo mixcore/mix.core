@@ -19,10 +19,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePositions
 
         [JsonProperty("positionId")]
         public int PositionId { get; set; }
+
         [JsonProperty("portalPageId")]
         public int PortalPageId { get; set; }
+
         [JsonProperty("isActived")]
         public bool IsActived { get; set; }
+
         [JsonProperty("description")]
         public string Description { get; set; }
 
@@ -33,6 +36,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePositions
         #endregion Views
 
         #region overrides
+
         public override MixPortalPagePosition ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Priority == 0)
@@ -41,9 +45,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePositions
             }
             return base.ParseModel(_context, _transaction);
         }
-        #region Async
-
-        #endregion Async
 
         #endregion overrides
     }

@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Common.Helper;
-using Mix.Domain.Core.Models;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -17,23 +15,34 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
       : ViewModelBase<MixCmsContext, MixAttributeSetData, NavigationViewModel>
     {
         #region Properties
+
         #region Models
+
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
+
         [JsonProperty("attributeSetName")]
         public string AttributeSetName { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("status")]
         public int Status { get; set; }
+
         #endregion Models
+
         #region Views
+
         [JsonIgnore]
         public List<MixAttributeSetValues.NavigationViewModel> Values { get; set; }
+
         [JsonIgnore]
         public List<MixAttributeFields.ReadViewModel> Fields { get; set; }
 
@@ -41,14 +50,18 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public JObject Data { get; set; }
 
         [JsonProperty("nav")]
-        public Navigation Nav { get {
-                if (AttributeSetName == MixConstants.AttributeSetName.NAVIGATION && Data!=null)
+        public Navigation Nav {
+            get {
+                if (AttributeSetName == MixConstants.AttributeSetName.NAVIGATION && Data != null)
                 {
                     return Data.ToObject<Navigation>();
                 }
                 return null;
-            } }
-        #endregion
+            }
+        }
+
+        #endregion Views
+
         #endregion Properties
 
         #region Contructors
@@ -78,8 +91,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 Data.Add(ParseValue(item));
             }
         }
-        
+
         #region Async
+
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSetData parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -112,8 +126,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
             return result;
         }
-        #endregion
-        #endregion
+
+        #endregion Async
+
+        #endregion Overrides
+
         public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
         {
             var tasks = new List<Task>();
@@ -126,7 +143,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     var updModel = new NavigationViewModel(item, context, transaction);
                     updModel.GenerateCache(item, updModel);
                 }));
-
             }
             foreach (var item in Values)
             {
@@ -134,36 +150,43 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     item.RemoveCache(item.Model);
                 }));
-
             }
             return tasks;
         }
 
         #region Expands
-        JProperty ParseValue(MixAttributeSetValues.NavigationViewModel item)
+
+        private JProperty ParseValue(MixAttributeSetValues.NavigationViewModel item)
         {
             switch (item.DataType)
             {
                 case MixEnums.MixDataType.DateTime:
                     return new JProperty(item.AttributeFieldName, item.DateTimeValue);
+
                 case MixEnums.MixDataType.Date:
                     return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
+
                 case MixEnums.MixDataType.Time:
                     return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
+
                 case MixEnums.MixDataType.Double:
                     return (new JProperty(item.AttributeFieldName, item.DoubleValue));
+
                 case MixEnums.MixDataType.Boolean:
                     return (new JProperty(item.AttributeFieldName, item.BooleanValue));
+
                 case MixEnums.MixDataType.Number:
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue));
+
                 case MixEnums.MixDataType.Reference:
                     JArray arr = new JArray();
-                    foreach (var nav in item.DataNavs.OrderBy(d=>d.Priority))
+                    foreach (var nav in item.DataNavs.OrderBy(d => d.Priority))
                     {
                         nav.Data.Data.Add(new JProperty("data", nav.Data.Data));
                         arr.Add(nav.Data.Data);
                     }
                     return (new JProperty(item.AttributeFieldName, arr));
+
                 case MixEnums.MixDataType.Custom:
                 case MixEnums.MixDataType.Duration:
                 case MixEnums.MixDataType.PhoneNumber:
@@ -185,28 +208,35 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     return (new JProperty(item.AttributeFieldName, item.StringValue));
             }
         }
-        void ParseModelValue(JToken property, MixAttributeSetValues.NavigationViewModel item)
+
+        private void ParseModelValue(JToken property, MixAttributeSetValues.NavigationViewModel item)
         {
             switch (item.DataType)
             {
                 case MixEnums.MixDataType.DateTime:
                     item.DateTimeValue = property.Value<DateTime?>();
                     break;
+
                 case MixEnums.MixDataType.Date:
                     item.DateTimeValue = property.Value<DateTime?>();
                     break;
+
                 case MixEnums.MixDataType.Time:
                     item.DateTimeValue = property.Value<DateTime?>();
                     break;
+
                 case MixEnums.MixDataType.Double:
                     item.DoubleValue = property.Value<double?>();
                     break;
+
                 case MixEnums.MixDataType.Boolean:
                     item.BooleanValue = property.Value<bool?>();
                     break;
+
                 case MixEnums.MixDataType.Number:
                     item.IntegerValue = property.Value<int?>();
                     break;
+
                 case MixEnums.MixDataType.Reference:
                     //string url = $"/api/v1/odata/en-us/related-attribute-set-data/mobile/parent/set/{Id}/{item.Field.ReferenceId}";
 
@@ -216,6 +246,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     //}
                     //return (new JProperty(item.AttributeFieldName, url));
                     break;
+
                 case MixEnums.MixDataType.Custom:
                 case MixEnums.MixDataType.Duration:
                 case MixEnums.MixDataType.PhoneNumber:
@@ -240,44 +271,59 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             item.StringValue = property.Value<string>();
         }
 
-        
-        #endregion
+        #endregion Expands
     }
+
     public class Navigation
     {
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("title")]
         public string Title { get; set; }
+
         [JsonProperty("name")]
         public string Name { get; set; }
+
         [JsonProperty("menu_items")]
         public List<MenuItem> MenuItems { get; set; }
     }
+
     public class MenuItem
     {
         [JsonProperty("data")]
         public JObject Data { get; set; }
+
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("title")]
         public string Title { get; set; }
+
         [JsonProperty("uri")]
         public string Uri { get; set; }
+
         [JsonProperty("icon")]
         public string Icon { get; set; }
+
         [JsonProperty("type")]
         public string Type { get; set; }
+
         [JsonProperty("target")]
         public string Target { get; set; }
+
         [JsonProperty("classes")]
         public string Classes { get; set; }
+
         [JsonProperty("description")]
         public string Description { get; set; }
+
         [JsonProperty("isActive")]
         public bool IsActive { get; set; }
+
         [JsonProperty("menu_items")]
         public List<MenuItem> MenuItems { get; set; }
+
         public T Property<T>(string fieldName)
         {
             if (Data != null)
@@ -296,7 +342,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 return default;
             }
-
         }
     }
 }

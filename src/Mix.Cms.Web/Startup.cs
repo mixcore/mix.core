@@ -46,15 +46,13 @@ namespace Mix.Cms.Web
             services.AddOData();
             /* Mix: End Inject Services */
 
-
             VerifyInitData(services);
 
             ConfigAuthorization(services, Configuration);
 
-
             /* End Addictional Config for Mixcore Cms  */
 
-            #endregion
+            #endregion Addictionals Config for Mixcore Cms
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,17 +73,17 @@ namespace Mix.Cms.Web
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            
+
             #region Addictionals Config for Mixcore Cms
+
             if (MixService.GetConfig<bool>("IsHttps"))
             {
                 app.UseHttpsRedirection();
             }
 
             ConfigRoutes(app);
-           
-            #endregion
 
+            #endregion Addictionals Config for Mixcore Cms
         }
 
         // Mix: Check custom cms config

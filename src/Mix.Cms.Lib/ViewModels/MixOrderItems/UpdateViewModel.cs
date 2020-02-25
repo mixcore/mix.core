@@ -14,32 +14,41 @@ namespace Mix.Cms.Lib.ViewModels.MixOrderItems
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("orderId")]
         public int OrderId { get; set; }
+
         [JsonProperty("productId")]
         public int ProductId { get; set; }
+
         [JsonProperty("quantity")]
         public int Quantity { get; set; }
+
         [JsonProperty("price")]
         public double Price { get; set; }
+
         [JsonProperty("priceUnit")]
         public string PriceUnit { get; set; }
+
         [JsonProperty("description")]
         public string Description { get; set; }
+
         [JsonIgnore]
         [JsonProperty("storeId")]
         public int StoreId { get; set; }
+
         [JsonProperty("status")]
         public MixEnums.MixOrderStatus Status { get; set; }
-        #endregion
+
+        #endregion Models
 
         #region Views
 
         public MixPosts.ReadListItemViewModel Product { get; set; }
 
-        #endregion
+        #endregion Views
 
-        #endregion
+        #endregion Properties
 
         #region Contructors
 
@@ -87,6 +96,7 @@ namespace Mix.Cms.Lib.ViewModels.MixOrderItems
         {
             Product = MixPosts.ReadListItemViewModel.Repository.GetSingleModel(p => p.Id == ProductId && p.Specificulture == Specificulture, _context, _transaction).Data;
         }
+
         #endregion Overrides
     }
 }

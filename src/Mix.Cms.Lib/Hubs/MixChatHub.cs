@@ -1,20 +1,20 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Mix.Cms.Messenger;
 using Mix.Cms.Messenger.Models;
+using Mix.UI.Core.SignalR;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Mix.Cms.Messenger;
 using static Mix.Cms.Messenger.MixChatEnums;
-using Mix.UI.Core.SignalR;
 
 namespace Mix.Cms.Lib.Hubs
 {
     public class MixChatHub : BaseSignalRHub
     {
-        const string receiveMethod = "ReceiveMessage";
-        const string defaultRoom = "public";
-        const string defaultDevice = "website";
+        private const string receiveMethod = "ReceiveMessage";
+        private const string defaultRoom = "public";
+        private const string defaultDevice = "website";
 
         public async Task Join(HubRequest<MessengerConnection> request)
         {
@@ -23,7 +23,7 @@ namespace Mix.Cms.Lib.Hubs
             request.Data.DeviceId = request.Data.DeviceId ?? defaultDevice;
             // Mapping connecting user to db  models
             var user = new Messenger.ViewModels.MixMessengerUsers.ConnectViewModel(request.Data);
-            
+
             user.CreatedDate = DateTime.UtcNow;
             // Save user and current device to db
             var result = await user.Join();
@@ -31,8 +31,7 @@ namespace Mix.Cms.Lib.Hubs
             //  save success
             if (result.IsSucceed)
             {
-
-                //  Send success msg to caller 
+                //  Send success msg to caller
                 var getAvailableUsers = Messenger.ViewModels.MixMessengerUsers.DefaultViewModel.Repository.GetModelListBy(u => u.Status == (int)MixChatEnums.OnlineStatus.Connected);
                 SendToCaller(getAvailableUsers.Data, MessageReponseKey.ConnectSuccess);
                 // Announce every one there's new member
@@ -40,10 +39,9 @@ namespace Mix.Cms.Lib.Hubs
             }
             else
             {
-                //  Send failed msg to caller 
+                //  Send failed msg to caller
                 SendToConnection(result, MessageReponseKey.ConnectFailed, Context.ConnectionId, false);
             }
-
         }
 
         public void SendMessage(JObject request)
@@ -68,7 +66,6 @@ namespace Mix.Cms.Lib.Hubs
         {
             if (!string.IsNullOrEmpty(connectionId))
             {
-
                 HubResponse<T> result = new HubResponse<T>()
                 {
                     IsSucceed = true,
@@ -78,7 +75,6 @@ namespace Mix.Cms.Lib.Hubs
 
                 if (isMySelf)
                 {
-
                     Clients.Client(connectionId).SendAsync(receiveMethod, JObject.FromObject(result));
                 }
                 else
@@ -103,7 +99,6 @@ namespace Mix.Cms.Lib.Hubs
         {
             if (!string.IsNullOrEmpty(groupName))
             {
-
                 HubResponse<T> result = new HubResponse<T>()
                 {
                     IsSucceed = true,
@@ -147,6 +142,7 @@ namespace Mix.Cms.Lib.Hubs
         }
 
         #region Team - TODO Write these functions
+
         /*
         [HubMethodName("getTeam")]
         public async System.Threading.Tasks.Task GetTeam(JObject request)
@@ -169,7 +165,6 @@ namespace Mix.Cms.Lib.Hubs
                         team.IsAdmin = request.UserId == team.HostId;
                         if (team.IsAdmin)
                         {
-
                             team.TotalRequest = TTXTeamMemberRepository<FETeamMemberViewModel>.Instance.CountRequests(request.TeamId);
                         }
 
@@ -203,7 +198,6 @@ namespace Mix.Cms.Lib.Hubs
                     };
                     Clients.Caller.receiveMessage(result);
                 }
-
             }
             catch (Exception ex)
             {
@@ -221,7 +215,6 @@ namespace Mix.Cms.Lib.Hubs
                 UpdatePlayerConnectionIdAsync(request.UserId);
             }
         }
-
 
         [HubMethodName("getTeamMessages")]
         public async System.Threading.Tasks.Task GetTeamMessages(ApiGetTeamMemberViewMdoel request)
@@ -258,7 +251,6 @@ namespace Mix.Cms.Lib.Hubs
                     };
                     Clients.Caller.receiveMessage(result);
                 }
-
             }
             catch (Exception ex)
             {
@@ -307,14 +299,12 @@ namespace Mix.Cms.Lib.Hubs
                         var requests = await TTXTeamMemberRepository<FETeamMemberViewModel>.Instance.GetModelListByAsync(m => m.TTX_Team.HostId == request.UserId && m.TeamId == request.TeamId && m.Status == (int)MemberStatus.Requested);
                         if (requests.Count > 0)
                         {
-
                             var lastSeenTeamRequest = DAL.TTXApp.TTXUserLogDAL.Instance.GetSingleModel(l => l.UserId == request.UserId
                         && l.Action == TTXConstants.UserLogActions.LastSeenTeamRequest.ToString());
                             requests.ForEach(i => i.IsNew = lastSeenTeamRequest == null || lastSeenTeamRequest.LastUpdate.Value < i.CreatedDate);
 
                             if (lastSeenTeamRequest == null)
                             {
-
                                 lastSeenTeamRequest = new TTX_User_Log()
                                 {
                                     Id = Guid.NewGuid(),
@@ -342,6 +332,7 @@ namespace Mix.Cms.Lib.Hubs
                         Clients.Caller.receiveMessage(result);
 
                         break;
+
                     case MemberStatus.Invited:
                         var invitations = await TTXTeamMemberRepository<InvitationViewModel>.Instance.GetModelListByAsync(m => m.MemberId == request.UserId && m.Status == (int)MemberStatus.Invited);
                         var lastSeenTeamInvitation = DAL.TTXApp.TTXUserLogDAL.Instance.GetSingleModel(l => l.UserId == request.UserId
@@ -350,7 +341,6 @@ namespace Mix.Cms.Lib.Hubs
 
                         if (lastSeenTeamInvitation == null)
                         {
-
                             lastSeenTeamInvitation = new TTX_User_Log()
                             {
                                 Id = Guid.NewGuid(),
@@ -377,30 +367,34 @@ namespace Mix.Cms.Lib.Hubs
                         Clients.Caller.receiveMessage(inviteResult);
 
                         break;
+
                     case MemberStatus.AdminRejected:
                         break;
+
                     case MemberStatus.MemberRejected:
                         break;
+
                     case MemberStatus.Banned:
                         break;
+
                     case MemberStatus.Membered:
                         break;
+
                     case MemberStatus.AdminRemoved:
                         break;
+
                     case MemberStatus.MemberCanceled:
                         break;
+
                     case MemberStatus.Guest:
                         break;
+
                     default:
                         break;
                 }
-
-
-
             }
             catch (Exception ex)
             {
-
             }
             finally
             {
@@ -411,7 +405,6 @@ namespace Mix.Cms.Lib.Hubs
         [HubMethodName("getMyTeams")]
         public async System.Threading.Tasks.Task GetMyTeams(RequestPaging request)
         {
-
             string errorMsg = string.Empty;
             int status = 0;
             MessengerHubResponse<PaginationModel<ChatTeamViewModel>> result = null;
@@ -419,7 +412,6 @@ namespace Mix.Cms.Lib.Hubs
             //PaginationModel<ChatTeamViewModel> currentMessages = new PaginationModel<ChatTeamViewModel>();
             try
             {
-
                 PaginationModel<ChatTeamViewModel> teams = await TTXTeamRepository<ChatTeamViewModel>.Instance.GetModelListByAsync(
                     t => t.TTX_Team_Member.Count(m => m.MemberId == request.UserId && m.Status == (int)MemberStatus.Membered) > 0,
                     t => t.CreatedDate, "desc", request.PageIndex, request.PageSize
@@ -465,7 +457,6 @@ namespace Mix.Cms.Lib.Hubs
 
                     if (removeResult.IsSucceed)
                     {
-
                         result = new MessengerHubResponse<bool>()
                         {
                             status = 1,
@@ -496,7 +487,6 @@ namespace Mix.Cms.Lib.Hubs
                     };
                     Clients.Caller.receiveMessage(result);
                 }
-
             }
             catch (Exception ex)
             {
@@ -516,7 +506,7 @@ namespace Mix.Cms.Lib.Hubs
         }
         */
 
-        #endregion
+        #endregion Team - TODO Write these functions
 
         #region Overrides
 
@@ -525,6 +515,7 @@ namespace Mix.Cms.Lib.Hubs
             await Groups.AddToGroupAsync(Context.ConnectionId, defaultRoom);
             await base.OnConnectedAsync();
         }
+
         public override Task OnDisconnectedAsync(Exception exception)
         {
             // Get current disconnected device
@@ -549,7 +540,7 @@ namespace Mix.Cms.Lib.Hubs
 
             return base.OnDisconnectedAsync(exception);
         }
-        #endregion
 
+        #endregion Overrides
     }
 }

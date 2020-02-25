@@ -34,7 +34,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPostModules
 
         [JsonProperty("status")]
         public MixEnums.MixContentStatus Status { get; set; }
+
         #region Views
+
         [JsonProperty("module")]
         public MixModules.ReadMvcViewModel Module { get; set; }
 
@@ -52,10 +54,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPostModules
                 Module = getModule.Data;
             }
         }
-
-        #region Async
-
-        #endregion Async
 
         #endregion overrides
     }
