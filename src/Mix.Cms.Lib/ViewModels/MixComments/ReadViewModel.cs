@@ -14,23 +14,23 @@ namespace Mix.Cms.Lib.ViewModels.MixComments
 
         [JsonProperty("id")]
         public Guid Id { get; set; }
+
         [JsonProperty("orderId")]
         public int OrderId { get; set; }
+
         [JsonProperty("content")]
         public string Content { get; set; }
+
         [JsonProperty("customerId")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDate")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("rating")]
         public double Rating { get; set; }
 
         #endregion Models
-
-        #region Views
-
-
-        #endregion Views
 
         #endregion Properties
 

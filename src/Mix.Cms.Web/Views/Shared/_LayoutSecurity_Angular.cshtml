@@ -18,6 +18,7 @@
     <environment names="Development,Staging,Production">
         <!-- CSS Files -->
         <style>
+
             body {
                 display: -ms-flexbox;
                 display: flex;
@@ -27,43 +28,45 @@
                 padding-bottom: 40px;
                 background-color: #000;
                 height: 100%;
-                
             }
-            body::before{
-                content: "";
-                background: black;
-                opacity: 0.8;
-                top: 0;
-                left: 0;
-                bottom: 0;
-                right: 0;
-                position: fixed;
-                z-index: -1;   
-                background-image: url("/img/background.jpg");
-                background-repeat: no-repeat;
-                background-position: right top;
-                background-attachment: fixed;
-                background-size: cover;
-            }
-            body::after{
-                content: "";
-                background: black;
-                opacity: 0.5;
-                top: 0;
-                left: 0;
-                bottom: 0;
-                right: 0;
-                position: fixed;
-                z-index: -1;   
-                background-image: url("/img/background.jpg");
-                background-repeat: no-repeat;
-                background-position: right top;
-                background-attachment: fixed;
-                background-size: cover;
-                /* Add the blur effect */
-                filter: blur(8px);
-                -webkit-filter: blur(8px);
-            }
+
+                body::before {
+                    content: "";
+                    background: black;
+                    opacity: 0.8;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;
+                    position: fixed;
+                    z-index: -1;
+                    background-image: url("/img/background.jpg");
+                    background-repeat: no-repeat;
+                    background-position: right top;
+                    background-attachment: fixed;
+                    background-size: cover;
+                }
+
+                body::after {
+                    content: "";
+                    background: black;
+                    opacity: 0.5;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;
+                    position: fixed;
+                    z-index: -1;
+                    background-image: url("/img/background.jpg");
+                    background-repeat: no-repeat;
+                    background-position: right top;
+                    background-attachment: fixed;
+                    background-size: cover;
+                    /* Add the blur effect */
+                    filter: blur(8px);
+                    -webkit-filter: blur(8px);
+                }
+
             .form-signin {
                 width: 100%;
                 max-width: 330px;
@@ -72,19 +75,18 @@
             }
         </style>
     </environment>
-    
-    <link href="~/css/app-vendor.min.css" rel="stylesheet" />  
-    <link href="~/css/shared.min.css" rel="stylesheet" />  
-    <link href="~/css/app-security.min.css" rel="stylesheet" />  
 
-  <script src="~/js/particles/particles.min.js"></script>
+    <link href="~/css/app-vendor.min.css" rel="stylesheet" />
+    <link href="~/css/shared.min.css" rel="stylesheet" />
+    <link href="~/css/app-security.min.css" rel="stylesheet" />
 
+    <script src="~/js/particles/particles.min.js"></script>
 </head>
-<!-- 
-<body class="login-page app-security app-init" ng-app="MixPortal" style="background-image: url('/assets/img/bgs/bg.png');background-position: center;background-repeat: no-repeat;background-size: cover;" >
+<!--
+<body class="login-page app-security app-init" ng-app="MixPortal" style="background-image: url('/assets/img/bgs/bg.png');background-position: center;background-repeat: no-repeat;background-size: cover;">
    <mix-loader ng-show="isBusy"></mix-loader>
      <div class="container init-pages">
-        
+
         <div class="card o-hidden border-0 shadow-lg">
             <div class="card-body p-0">
                 <div class="progress" style="height: 2px;">
@@ -96,11 +98,10 @@
                         </div>
                     </div>
                     <div class="col-lg-4 d-none d-lg-block bg-register-image">
-                           
                     </div>
                 </div>
             </div>
-        </div>    
+        </div>
     </div> -->
 
 <body class="" ng-app="MixPortal">
@@ -115,8 +116,8 @@
     </environment>
     <script src="~/js/framework.min.js"></script>
     <script src="~/js/app-security.min.js"></script>
-    <script src="~/js/app-shared.min.js"></script>   
-    
+    <script src="~/js/app-shared.min.js"></script>
+
     @RenderSection("Scripts", required: false)
 
     <!-- Modal -->
@@ -130,7 +131,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                   Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
+                    Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">I have read and understand!</button>
@@ -139,8 +140,7 @@
         </div>
     </div>
 
-    <script>
-      particlesJS('particles-js',
+    <script>particlesJS('particles-js',
         {
           "particles": {
             "number": {
@@ -250,8 +250,6 @@
             }
           },
           "retina_detect": true
-        });
-    </script>
-
+        });</script>
 </body>
 </html>

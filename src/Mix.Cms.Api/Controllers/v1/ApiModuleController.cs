@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
@@ -99,7 +98,6 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
-
         #endregion Get
 
         #region Post
@@ -137,7 +135,6 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         break;
                     }
-
                 }
                 return result;
             }
@@ -190,10 +187,12 @@ namespace Mix.Cms.Api.Controllers.v1
                     var mvcResult = await base.GetListAsync<ReadMvcViewModel>(request, predicate);
 
                     return Ok(JObject.FromObject(mvcResult));
+
                 case "portal":
                     var portalResult = await base.GetListAsync<UpdateViewModel>(request, predicate);
 
                     return Ok(JObject.FromObject(portalResult));
+
                 default:
 
                     var listItemResult = await base.GetListAsync<ReadListItemViewModel>(request, predicate);
@@ -227,12 +226,15 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 case "Delete":
                     return Ok(JObject.FromObject(await base.DeleteListAsync<UpdateViewModel>(predicate, true)));
+
                 case "Export":
                     return Ok(JObject.FromObject(await base.ExportListAsync(predicate, MixStructureType.Module)));
+
                 default:
                     return JObject.FromObject(new RepositoryResponse<bool>());
             }
         }
+
         #endregion Post
     }
 }

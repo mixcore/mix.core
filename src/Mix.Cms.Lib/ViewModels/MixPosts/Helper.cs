@@ -6,9 +6,7 @@ using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixPosts
@@ -21,7 +19,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
         {
-            
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
@@ -53,19 +50,18 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                             if (int.TryParse(item.ParentId, out int postId))
                             {
                                 var getData = await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetSingleModelAsync(
-                                m => m.Specificulture == item.Specificulture && m.Id == postId 
+                                m => m.Specificulture == item.Specificulture && m.Id == postId
                                     , context, transaction);
                                 if (getData.IsSucceed)
                                 {
                                     result.Data.Items.Add(getData.Data);
                                 }
                             }
-                            
                         }
                         result.Data.TotalItems = getRelatedData.Data.TotalItems;
                         result.Data.TotalPage = getRelatedData.Data.TotalPage;
                     }
-                    //var query = context.MixRelatedAttributeData.Where(m=> m.Specificulture == culture 
+                    //var query = context.MixRelatedAttributeData.Where(m=> m.Specificulture == culture
                     //    && m.Id == getVal.Data.DataId && m.ParentId == parentId && m.ParentType == (int) MixEnums.MixAttributeSetDataType.Post)
                     //    .Select(m => m.ParentId).Distinct().ToList();
                 }

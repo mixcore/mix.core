@@ -96,7 +96,6 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
-
         #endregion Get
 
         #region Post
@@ -133,7 +132,6 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         break;
                     }
-
                 }
                 return result;
             }
@@ -160,10 +158,12 @@ namespace Mix.Cms.Api.Controllers.v1
                     var mvcResult = await base.GetListAsync<ReadViewModel>(request, predicate);
 
                     return Ok(JObject.FromObject(mvcResult));
+
                 case "portal":
                     var portalResult = await base.GetListAsync<UpdateViewModel>(request, predicate);
 
                     return Ok(JObject.FromObject(portalResult));
+
                 default:
 
                     var listItemResult = await base.GetListAsync<ReadViewModel>(request, predicate);
@@ -196,10 +196,12 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 case "Delete":
                     return Ok(JObject.FromObject(await base.DeleteListAsync<UpdateViewModel>(predicate, true)));
+
                 default:
                     return JObject.FromObject(new RepositoryResponse<bool>());
             }
         }
+
         #endregion Post
     }
 }

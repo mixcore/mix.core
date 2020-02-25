@@ -86,7 +86,6 @@ namespace Mix.Cms.Api.Controllers.v1.RelatedAttributeSets
 
         #region Post
 
-
         // Save api/odata/{culture}/related-attribute-set/portal
         [HttpPost, HttpOptions]
         [Route("save")]
@@ -147,7 +146,7 @@ namespace Mix.Cms.Api.Controllers.v1.RelatedAttributeSets
         public async Task<ActionResult> GetList(
             [FromBody] RequestPaging request)
         {
-            var parsed = HttpUtility.ParseQueryString(request.Query ?? "");            
+            var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
             int.TryParse(parsed.Get("parentType"), out int parentType);
             int.TryParse(parsed.Get("parentId"), out int parentId);
             ParseRequestPagingDate(request);
@@ -174,16 +173,18 @@ namespace Mix.Cms.Api.Controllers.v1.RelatedAttributeSets
                 case "portal":
                     var portalResult = await base.GetListAsync<UpdateViewModel>(request, predicate);
                     return Ok(JObject.FromObject(portalResult));
+
                 case "mvc":
                     var mvcResult = await base.GetListAsync<ReadMvcViewModel>(request, predicate);
                     return Ok(JObject.FromObject(mvcResult));
+
                 default:
 
                     var listItemResult = await base.GetListAsync<ReadViewModel>(request, predicate);
                     return Ok(JObject.FromObject(listItemResult));
             }
         }
-        #endregion
 
+        #endregion Post
     }
 }

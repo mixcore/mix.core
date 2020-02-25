@@ -61,6 +61,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         {
             return (await ReadViewModel.Repository.CountAsync()).Data;
         }
+
         // GET api/attribute-set-datas/portal/count
         [AllowAnonymous]
         [EnableQuery]
@@ -68,7 +69,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         [HttpGet, HttpOptions]
         public async System.Threading.Tasks.Task<ActionResult<int>> CountByName(string name)
         {
-            return (await ReadViewModel.Repository.CountAsync(m=>m.AttributeSetName== name && m.Specificulture== _lang)).Data;
+            return (await ReadViewModel.Repository.CountAsync(m => m.AttributeSetName == name && m.Specificulture == _lang)).Data;
         }
 
         // Save api/odata/{culture}/attribute-set-data/portal
@@ -134,6 +135,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         }
 
         #endregion Get
+
         [HttpPost, HttpOptions]
         [Route("apply-list")]
         public async Task<ActionResult<JObject>> ListActionAsync([FromBody]ListAction<string> data)
@@ -146,8 +148,10 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             {
                 case "Delete":
                     return Ok(JObject.FromObject(await base.DeleteListAsync<DeleteViewModel>(predicate, true)));
+
                 case "Export":
                     return Ok(JObject.FromObject(await base.ExportListAsync(predicate, MixEnums.MixStructureType.AttributeSet)));
+
                 default:
                     return JObject.FromObject(new RepositoryResponse<bool>());
             }

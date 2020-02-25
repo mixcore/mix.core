@@ -16,6 +16,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
         public ReadMvcViewModel() : base()
         {
         }
+
         public int Id { get; set; }
         public int ParentId { get; set; }
         public int ParentType { get; set; }
@@ -23,6 +24,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
         public int Status { get; set; }
         public string Description { get; set; }
         public string Image { get; set; }
+
         #region Views
 
         public MixAttributeSets.ReadMvcViewModel AttributeSet { get; set; }
@@ -41,12 +43,6 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
                 AttributeSet = getData.Data;
             }
         }
-
-
-        #region Async
-
-
-        #endregion Async
 
         #endregion overrides
     }

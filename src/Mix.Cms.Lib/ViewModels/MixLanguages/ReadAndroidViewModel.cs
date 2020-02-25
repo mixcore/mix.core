@@ -24,8 +24,6 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         [JsonProperty("keyword")]
         public string Keyword { get; set; }
 
-
-
         [JsonProperty("dataType")]
         public MixDataType DataType { get; set; }
 
@@ -35,6 +33,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         [Required]
         [JsonProperty("defaultValue")]
         public string DefaultValue { get; set; }
+
         #endregion Models
 
         #endregion Properties
@@ -132,6 +131,6 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
             return result;
         }
 
-        #endregion
+        #endregion Expands
     }
 }

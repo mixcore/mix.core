@@ -4,7 +4,6 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +35,7 @@ namespace Mix.Cms.Api.Controllers.v1
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+
         public ApiPortalController(
            UserManager<ApplicationUser> userManager,
            SignInManager<ApplicationUser> signInManager,
@@ -75,7 +75,6 @@ namespace Mix.Cms.Api.Controllers.v1
                 DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
                 Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
-
             };
             settings.LangIcon = culture?.Icon ?? MixService.GetConfig<string>("Language");
             return new RepositoryResponse<GlobalSettingsViewModel>()
@@ -118,7 +117,6 @@ namespace Mix.Cms.Api.Controllers.v1
                     Data = null
                 };
             }
-            
         }
 
         [AllowAnonymous]
@@ -134,7 +132,6 @@ namespace Mix.Cms.Api.Controllers.v1
                 Data = obj["data"] as JObject
             };
         }
-
 
         // GET api/category/id
         [HttpGet, HttpOptions]
@@ -305,7 +302,7 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
-        // GET 
+        // GET
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpGet, HttpOptions]
         [Route("app-settings/details")]
@@ -352,8 +349,7 @@ namespace Mix.Cms.Api.Controllers.v1
                             IsSucceed = getPage.IsSucceed,
                             Data = MixCmsHelper.GetRouterUrl(
                                 new { culture = _lang, seoName = getPage.Data.SeoName }, Request, Url)
-                    };
-
+                        };
                     }
                     else
                     {
@@ -384,7 +380,6 @@ namespace Mix.Cms.Api.Controllers.v1
             string data = model.GetValue("data").Value<string>();
             return new RepositoryResponse<string>()
             {
-
                 Data = RSAEncryptionHelper.GetEncryptedText(data)
             };
         }
@@ -397,7 +392,6 @@ namespace Mix.Cms.Api.Controllers.v1
             string data = model.GetValue("data").Value<string>();
             return new RepositoryResponse<string>()
             {
-
                 Data = Lib.Helpers.RSAEncryptionHelper.GetDecryptedText(data)
             };
         }
@@ -415,6 +409,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 Data = AesEncryptionHelper.EncryptString(data, Convert.ToBase64String(key))
             };
         }
+
         [AllowAnonymous]
         [HttpPost, HttpOptions]
         [Route("decrypt")]
@@ -428,6 +423,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 Data = AesEncryptionHelper.DecryptString(data, Convert.ToBase64String(key))
             };
         }
+
         // POST api/category
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
@@ -462,6 +458,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 case "PortalThemeSettings":
                     MixService.SetConfig(name, model);
                     break;
+
                 default:
                     MixService.SetConfig(name, model["value"].ToString());
                     break;
@@ -510,6 +507,7 @@ namespace Mix.Cms.Api.Controllers.v1
                             base.RemoveCache();
                         }
                         return result;
+
                     case "Configuration":
                         var arrConfiguration = obj["data"].ToObject<List<MixConfiguration>>();
                         result = await Lib.ViewModels.MixConfigurations.ReadMvcViewModel.ImportConfigurations(arrConfiguration, _lang);
@@ -518,6 +516,7 @@ namespace Mix.Cms.Api.Controllers.v1
                             base.RemoveCache();
                         }
                         return result;
+
                     case "Module":
                         var arrModule = obj["data"].ToObject<List<MixModule>>();
                         result = await Lib.ViewModels.MixModules.Helper.Import(arrModule, _lang);
@@ -526,18 +525,18 @@ namespace Mix.Cms.Api.Controllers.v1
                             base.RemoveCache();
                         }
                         return result;
+
                     default:
                         return new RepositoryResponse<bool>() { IsSucceed = false };
                 }
             }
             return new RepositoryResponse<bool>();
-
         }
-
 
         #endregion Post
 
         #region Helpers
+
         private RepositoryResponse<JObject> GetAllSettings()
         {
             var cultures = CommonRepository.Instance.LoadCultures();
@@ -593,7 +592,6 @@ namespace Mix.Cms.Api.Controllers.v1
             };
         }
 
-
-        #endregion
+        #endregion Helpers
     }
 }

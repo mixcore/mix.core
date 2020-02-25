@@ -27,6 +27,7 @@ namespace Mix.Cms.Api.Controllers.v1
         protected readonly UserManager<ApplicationUser> _userManager;
         protected readonly SignInManager<ApplicationUser> _signInManager;
         protected readonly RoleManager<IdentityRole> _roleManager;
+
         //protected readonly IEmailSender _emailSender;
         protected readonly ILogger _logger;
 
@@ -49,7 +50,6 @@ namespace Mix.Cms.Api.Controllers.v1
         [HttpGet("claims")]
         public object Claims()
         {
-
             return User.Claims.Select(c =>
             new
             {
@@ -70,11 +70,11 @@ namespace Mix.Cms.Api.Controllers.v1
                 case "portal":
                     var beResult = await UpdateViewModel.Repository.GetSingleModelAsync(r => r.Id == id);
                     return JObject.FromObject(beResult);
+
                 default:
                     var result = await RoleViewModel.Repository.GetSingleModelAsync(r => r.Id == id);
                     return JObject.FromObject(result);
             }
-
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -129,7 +129,6 @@ namespace Mix.Cms.Api.Controllers.v1
             };
         }
 
-
         // POST api/role
         [HttpPost, HttpOptions]
         [Route("save")]
@@ -164,7 +163,6 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         result.Exception = saveResult.Exception;
                         result.Errors.AddRange(saveResult.Errors);
-
                     }
                 }
                 else
@@ -181,14 +179,12 @@ namespace Mix.Cms.Api.Controllers.v1
             return new RepositoryResponse<Lib.ViewModels.MixPortalPageRoles.ReadViewModel>();
         }
 
-
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin")]
         [Route("delete/{name}")]
         public async Task<RepositoryResponse<AspNetRoles>> Delete(string name)
         {
             if (name != "SuperAdmin")
             {
-
                 var result = await RoleViewModel.Repository.RemoveModelAsync(r => r.Name == name);
                 return result;
             }
@@ -199,7 +195,5 @@ namespace Mix.Cms.Api.Controllers.v1
                 };
             }
         }
-
-
     }
 }

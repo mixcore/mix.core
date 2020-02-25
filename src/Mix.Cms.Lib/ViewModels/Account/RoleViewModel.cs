@@ -16,23 +16,18 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("concurrencyStamp")]
         public string ConcurrencyStamp { get; set; }
+
         [Required]
         [JsonProperty("name")]
         public string Name { get; set; }
+
         [JsonProperty("normalizedName")]
         public string NormalizedName { get; set; }
 
-        #region Models
-
-        #endregion
-
-        #region Views
-
-        #endregion
-
-        #endregion
+        #endregion Properties
 
         #region Contructors
 
@@ -45,9 +40,10 @@ namespace Mix.Cms.Lib.ViewModels.Account
         {
         }
 
-        #endregion
+        #endregion Contructors
 
         #region Overrides
+
         public override AspNetRoles ParseModel(MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))
@@ -56,6 +52,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
             }
             return base.ParseModel(_context, _transaction);
         }
+
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(RoleViewModel view, MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = await UserRoleViewModel.Repository.RemoveListModelAsync(false, ur => ur.RoleId == Id, _context, _transaction);
@@ -67,11 +64,6 @@ namespace Mix.Cms.Lib.ViewModels.Account
             };
         }
 
-        #endregion
-
-        #region Expands
-
-        #endregion
-
+        #endregion Overrides
     }
 }

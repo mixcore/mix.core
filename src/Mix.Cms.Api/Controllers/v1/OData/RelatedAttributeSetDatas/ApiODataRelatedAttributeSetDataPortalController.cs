@@ -11,7 +11,6 @@ using Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -52,7 +51,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
                 {
                     Specificulture = _lang,
                     ParentType = parentType,
-                    ParentId = parentId,                    
+                    ParentId = parentId,
                     Priority = ODataUpdateViewModel.Repository.Max(p => p.Priority).Data + 1
                 };
                 if (attributeSetId.HasValue)
@@ -87,7 +86,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
         [Route("")]
         public async Task<ActionResult<ODataUpdateViewModel>> Save(string culture, [FromBody]ODataUpdateViewModel data)
         {
-            
             var portalResult = await base.SaveAsync<ODataUpdateViewModel>(data, true);
             if (portalResult.IsSucceed)
             {
@@ -167,6 +165,5 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
         }
 
         #endregion Get
-
     }
 }

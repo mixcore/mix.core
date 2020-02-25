@@ -30,8 +30,8 @@ namespace Mix.Cms.Api.Controllers.v1
     {
         public ApiPageController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
-
         }
+
         #region Get
 
         // GET api/page/id
@@ -134,7 +134,6 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
-
         #endregion Get
 
         #region Post
@@ -172,7 +171,6 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         break;
                     }
-
                 }
                 return result;
             }
@@ -217,6 +215,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
 
                     return Ok(JObject.FromObject(mvcResult));
+
                 case "portal":
                     var portalResult = await base.GetListAsync<UpdateViewModel>(request, predicate);
                     if (portalResult.IsSucceed)
@@ -229,6 +228,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
 
                     return Ok(JObject.FromObject(portalResult));
+
                 default:
 
                     var listItemResult = await base.GetListAsync<ReadListItemViewModel>(request, predicate);
@@ -237,7 +237,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         listItemResult.Data.Items.ForEach((Action<ReadListItemViewModel>)(a =>
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                new { action="page", culture = _lang, seoName = a.SeoName }, Request, Url);
+                                new { action = "page", culture = _lang, seoName = a.SeoName }, Request, Url);
                             a.Childs.ForEach((Action<Lib.ViewModels.MixPagePages.ReadViewModel>)(c =>
                             {
                                 c.Page.DetailsUrl = MixCmsHelper.GetRouterUrl(

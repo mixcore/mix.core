@@ -18,6 +18,7 @@ namespace Mix.Cms.Api.Helpers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+
         public IdentityHelper(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
@@ -27,6 +28,7 @@ namespace Mix.Cms.Api.Helpers
             _signInManager = signInManager;
             _roleManager = roleManager;
         }
+
         public async Task<AccessTokenViewModel> GenerateAccessTokenAsync(ApplicationUser user, bool isRemember)
         {
             var dtIssued = DateTime.UtcNow;
@@ -117,6 +119,7 @@ namespace Mix.Cms.Api.Helpers
         {
             return new Claim(type, value, ClaimValueTypes.String);
         }
+
         public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
         {
             var tokenValidationParameters = new TokenValidationParameters
@@ -137,6 +140,7 @@ namespace Mix.Cms.Api.Helpers
 
             return principal;
         }
+
         public static class JwtSecurityKey
         {
             public static SymmetricSecurityKey Create(string secret)

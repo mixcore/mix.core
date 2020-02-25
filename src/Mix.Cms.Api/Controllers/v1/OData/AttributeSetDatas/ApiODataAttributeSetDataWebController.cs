@@ -4,7 +4,6 @@
 
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -103,7 +102,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
 
         [HttpPost, HttpOptions]
         [Route("")]
-
         public async Task<ActionResult<ODataWebViewModel>> Save(string culture, [FromBody]JObject data)
         {
             string id = data["id"]?.Value<string>();
@@ -131,7 +129,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                     {
                         return Unauthorized();
                     }
-
                 }
                 else
                 {
@@ -142,9 +139,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
             {
                 return NotFound();
             }
-
         }
-
 
         // Save api/odata/{culture}/attribute-set-data/portal
         [HttpPost, HttpOptions]
@@ -201,7 +196,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
                     Specificulture = _lang
                 };
 
-                result.IsSucceed = true; 
+                result.IsSucceed = true;
                 result.Data = new ODataWebViewModel(model);
                 result.Status = (int)MixEnums.ResponseStatus.Ok;
                 return Ok(result);
@@ -350,6 +345,5 @@ namespace Mix.Cms.Api.Controllers.v1.OData.AttributeSetDatas
         }
 
         #endregion Get
-
     }
 }

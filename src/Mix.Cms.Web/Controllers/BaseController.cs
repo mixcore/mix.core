@@ -22,10 +22,9 @@ namespace Mix.Cms.Web.Controllers
         protected bool forbidden = false;
         protected bool isValid = true;
         protected string _redirectUrl;
-        protected bool _forbiddenPortal
-        {
-            get
-            {
+
+        protected bool _forbiddenPortal {
+            get {
                 var allowedIps = MixService.GetIpConfig<JArray>("AllowedPortalIps") ?? new JArray();
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 return forbidden || (
@@ -38,7 +37,9 @@ namespace Mix.Cms.Web.Controllers
                 );
             }
         }
+
         protected IConfiguration _configuration;
+
         public BaseController()
         {
             // Set CultureInfo
@@ -49,10 +50,9 @@ namespace Mix.Cms.Web.Controllers
 
         public ViewContext ViewContext { get; set; }
         private string _culture;
-        public string culture
-        {
-            get
-            {
+
+        public string culture {
+            get {
                 if (string.IsNullOrEmpty(_culture))
                 {
                     _culture = RouteData?.Values["culture"]?.ToString().ToLower() == null
@@ -81,7 +81,7 @@ namespace Mix.Cms.Web.Controllers
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 if (
                         // allow localhost
-                        //remoteIp != "::1" &&                    
+                        //remoteIp != "::1" &&
                         allowedIps.Count > 0 &&
                         !allowedIps.Any(t => t["text"].Value<string>() == remoteIp) ||
                         (
@@ -113,9 +113,10 @@ namespace Mix.Cms.Web.Controllers
         }
 
         #region Helper
+
         protected async Task<IActionResult> AliasAsync(string seoName)
         {
-            // Home Page            
+            // Home Page
 
             // If page name is null => return home page
             if (string.IsNullOrEmpty(seoName))
@@ -139,8 +140,10 @@ namespace Mix.Cms.Web.Controllers
                     {
                         case UrlAliasType.Page:
                             return await Page(int.Parse(getAlias.Data.SourceId));
+
                         case UrlAliasType.Post:
                             return await Post(int.Parse(getAlias.Data.SourceId));
+
                         case UrlAliasType.Module: // TODO: Create view for module
                         case UrlAliasType.ModuleData: // TODO: Create view for module data
                         default:
@@ -152,12 +155,10 @@ namespace Mix.Cms.Web.Controllers
                     return await Page(seoName);
                 }
             }
-
         }
 
         protected async System.Threading.Tasks.Task<IActionResult> Page(string seoName)
         {
-
             // Home Page
             int maxPageSize = MixService.GetConfig<int>("MaxPageSize");
             string orderBy = MixService.GetConfig<string>("OrderBy");
@@ -251,9 +252,9 @@ namespace Mix.Cms.Web.Controllers
                 return await Error("404");
             }
         }
+
         protected async System.Threading.Tasks.Task<IActionResult> Post(int id)
         {
-
             RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel> getPost = null;
             var cacheKey = $"mvc_{culture}_post_{id}";
             if (MixService.GetConfig<bool>("IsCache"))
@@ -285,7 +286,6 @@ namespace Mix.Cms.Web.Controllers
                         //_ = MixCacheService.SetAsync(cacheKey, getPost);
                     }
                 }
-
             }
 
             if (getPost.IsSucceed)
@@ -367,6 +367,7 @@ namespace Mix.Cms.Web.Controllers
                 }
             }
         }
+
         protected void GeneratePageDetailsUrls(Lib.ViewModels.MixModules.ReadMvcViewModel module)
         {
             module.DetailsUrl = GenerateDetailsUrl(
@@ -374,7 +375,6 @@ namespace Mix.Cms.Web.Controllers
                             );
             if (module.Posts != null)
             {
-
                 foreach (var postNav in module.Posts.Items)
                 {
                     if (postNav.Post != null)
@@ -397,6 +397,6 @@ namespace Mix.Cms.Web.Controllers
             return await Page(page);
         }
 
-        #endregion
+        #endregion Helper
     }
 }

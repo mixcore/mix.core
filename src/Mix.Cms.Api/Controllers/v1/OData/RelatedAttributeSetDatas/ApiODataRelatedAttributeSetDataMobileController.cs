@@ -72,7 +72,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
         [HttpGet, HttpOptions]
         [Route("parent/{parentType}/{parentId}")]
         [Route("parent/{parentType}/{parentId}/{attributeSetName}")]
-        public async Task<ActionResult<List<Lib.ViewModels.MixAttributeSetDatas.MobileViewModel>>> ListDataByParent(string culture, MixEnums.MixAttributeSetDataType parentType, 
+        public async Task<ActionResult<List<Lib.ViewModels.MixAttributeSetDatas.MobileViewModel>>> ListDataByParent(string culture, MixEnums.MixAttributeSetDataType parentType,
                 string parentId, string attributeSetName, ODataQueryOptions<MixRelatedAttributeData> queryOptions)
         {
             var data = new List<Lib.ViewModels.MixAttributeSetDatas.MobileViewModel>();
@@ -193,6 +193,5 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
         }
 
         #endregion Get
-
     }
 }

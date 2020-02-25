@@ -21,13 +21,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
         {
         }
 
-
         [JsonProperty("id")]
         public int Id { get; set; }
 
         [JsonProperty("parentId")]
         public int ParentId { get; set; }
-
 
         [JsonProperty("image")]
         public string Image { get; set; }
@@ -38,7 +36,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
         [JsonProperty("level")]
         public int Level { get; set; }
 
-
         #region Views
 
         [JsonProperty("isActived")]
@@ -46,7 +43,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
 
         [JsonProperty("page")]
         public MixPortalPages.ReadRolePermissionViewModel Page { get; set; }
-
 
         #endregion Views
 
@@ -74,7 +70,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
             var result = new RepositoryResponse<List<ReadViewModel>>();
             try
             {
-
                 foreach (var item in cates)
                 {
                     var saveResult = await item.SaveModelAsync(false, context, transaction);
@@ -106,6 +101,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
                 context.Dispose();
             }
         }
-        #endregion
+
+        #endregion Expands
     }
 }

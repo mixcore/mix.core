@@ -47,6 +47,5 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
         }
 
         #endregion Contructors
-
     }
 }

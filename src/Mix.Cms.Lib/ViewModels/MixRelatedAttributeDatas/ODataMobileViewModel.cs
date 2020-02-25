@@ -10,30 +10,43 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
        : ODataViewModelBase<MixCmsContext, MixRelatedAttributeData, ODataMobileViewModel>
     {
         #region Model
+
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("parentId")]
         public string ParentId { get; set; }
+
         [JsonProperty("parentType")]
         public MixEnums.MixAttributeSetDataType ParentType { get; set; }
+
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
+
         [JsonProperty("attributeSetName")]
         public string AttributeSetName { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("status")]
         public int Status { get; set; }
+
         [JsonProperty("description")]
         public string Description { get; set; }
 
-        #endregion
+        #endregion Model
+
         #region Views
+
         [JsonProperty("parentName")]
         public string ParentName { get; set; }
+
         [JsonProperty("data")]
         public MixAttributeSetDatas.ODataMobileViewModel Data { get; set; }
+
         #endregion Views
+
         public ODataMobileViewModel(MixRelatedAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
@@ -42,7 +55,6 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         public ODataMobileViewModel() : base()
         {
         }
-        
 
         #region overrides
 
@@ -56,12 +68,6 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
                 Data = getData.Data;
             }
         }
-
-
-        #region Async
-
-
-        #endregion Async
 
         #endregion overrides
     }

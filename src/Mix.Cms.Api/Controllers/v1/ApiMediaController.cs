@@ -2,8 +2,6 @@
 // The Mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -72,7 +70,6 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
-
         #endregion Get
 
         #region Post
@@ -117,12 +114,10 @@ namespace Mix.Cms.Api.Controllers.v1
                         );
             switch (request.Key)
             {
-
                 default:
                     var portalResult = await base.GetListAsync<ReadViewModel>(request, predicate);
 
                     return Ok(JObject.FromObject(portalResult));
-
             }
         }
 
@@ -140,6 +135,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 return new RepositoryResponse<List<UpdateViewModel>>();
             }
         }
+
         #endregion Post
 
         #region Helpers
@@ -173,7 +169,6 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
-
-        #endregion
+        #endregion Helpers
     }
 }

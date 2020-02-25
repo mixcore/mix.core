@@ -53,6 +53,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostMedias
                 Media = getMedia.Data;
             }
         }
+
         public override RepositoryResponse<bool> SaveSubModels(MixPostMedia parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -65,6 +66,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostMedias
             }
             return result;
         }
+
         #region Async
 
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixPostMedia parent, MixCmsContext _context, IDbContextTransaction _transaction)
@@ -79,6 +81,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostMedias
             }
             return result;
         }
+
         #endregion Async
 
         #endregion overrides

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
@@ -23,25 +22,33 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
 
         [JsonProperty("moduleId")]
         public int ModuleId { get; set; }
+
         [JsonIgnore]
         [JsonProperty("fields")]
         public string Fields { get; set; } = "[]";
+
         [JsonProperty("value")]
         [JsonIgnore]
         public string Value { get; set; }
 
         [JsonProperty("postId")]
         public string PostId { get; set; }
+
         [JsonProperty("productId")]
         public string ProductId { get; set; }
+
         [JsonProperty("pageId")]
         public int? PageId { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("updatedDateTime")]
         public DateTime? UpdatedDateTime { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
@@ -69,6 +76,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         #endregion Contructors
 
         #region Overrides
+
         public override MixModuleData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))

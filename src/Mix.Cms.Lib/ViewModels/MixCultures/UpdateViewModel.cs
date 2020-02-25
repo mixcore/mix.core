@@ -47,6 +47,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
 
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
@@ -54,7 +55,8 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
         [JsonProperty("configurations")]
         public List<MixConfigurations.ReadMvcViewModel> Configurations { get; set; }
 
-        #endregion
+        #endregion Views
+
         #endregion Properties
 
         #region Contructors
@@ -70,6 +72,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
         #endregion Contructors
 
         #region Overrides
+
         public override MixCulture ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)
@@ -79,6 +82,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             }
             return base.ParseModel(_context, _transaction);
         }
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getConfigurations = MixConfigurations.ReadMvcViewModel.Repository.GetModelListBy(c => c.Specificulture == Specificulture, _context, _transaction);
@@ -87,7 +91,9 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 Configurations = getConfigurations.Data;
             }
         }
+
         #region Async
+
         public override async Task<RepositoryResponse<UpdateViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = await base.SaveModelAsync(isSaveSubModels, _context, _transaction);
@@ -127,13 +133,12 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 ViewModelHelper.HandleResult(cloneResult, ref result);
             }
 
-            // Clone Pages 
+            // Clone Pages
             if (result.IsSucceed)
             {
                 var cloneResult = await ClonePagesAsync(parent, _context, _transaction);
                 ViewModelHelper.HandleResult(cloneResult, ref result);
             }
-
 
             // Clone Post from Default culture
             if (result.IsSucceed)
@@ -630,7 +635,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             return result;
         }
 
-        #endregion
+        #endregion Async
 
         #endregion Overrides
     }

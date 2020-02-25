@@ -104,6 +104,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("pageSize")]
         public int? PageSize { get; set; }
+
         #endregion Models
 
         #region Views
@@ -128,11 +129,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("domain")]
         public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
+
         [JsonProperty("imageUrl")]
-        public string ImageUrl
-        {
-            get
-            {
+        public string ImageUrl {
+            get {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -147,10 +147,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl
-        {
-            get
-            {
+        public string ThumbnailUrl {
+            get {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -179,28 +177,22 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public List<MixTemplates.UpdateViewModel> Masters { get; set; }
 
         [JsonIgnore]
-        public int ActivedTheme
-        {
-            get
-            {
+        public int ActivedTheme {
+            get {
                 return MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
             }
         }
 
         [JsonIgnore]
-        public string TemplateFolderType
-        {
-            get
-            {
+        public string TemplateFolderType {
+            get {
                 return MixEnums.EnumTemplateFolder.Pages.ToString();
             }
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder
-        {
-            get
-            {
+        public string TemplateFolder {
+            get {
                 return CommonHelper.GetFullPath(new string[]
                 {
                     MixConstants.Folder.TemplatesFolder
@@ -215,15 +207,19 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("urlAliases")]
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
+
         [JsonProperty("attributes")]
         public MixAttributeSets.UpdateViewModel Attributes { get; set; }
 
         [JsonProperty("attributeData")]
         public MixRelatedAttributeDatas.UpdateViewModel AttributeData { get; set; }
-		[JsonProperty("sysCategories")]
+
+        [JsonProperty("sysCategories")]
         public List<MixRelatedAttributeDatas.UpdateViewModel> SysCategories { get; set; }
+
         [JsonProperty("sysTags")]
         public List<MixRelatedAttributeDatas.UpdateViewModel> SysTags { get; set; }
+
         #endregion Views
 
         #endregion Properties
@@ -484,6 +480,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             //}
             return result;
         }
+
         private async Task<RepositoryResponse<bool>> SaveAttributeAsync(int parentId, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -528,6 +525,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         #endregion Overrides
 
         #region Expands
+
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_PAGE
@@ -582,18 +580,18 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 var getCategories = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
                 && m.ParentId == Id.ToString() && m.ParentType == (int)MixEnums.MixAttributeSetDataType.Page
                 && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_CATEGORY, _context, _transaction);
-	            if (getCategories.IsSucceed)
-	            {
-	                SysCategories = getCategories.Data;
-	            }
-	
-	            var getTags = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
-	                && m.ParentId == Id.ToString() && m.ParentType == (int)MixEnums.MixAttributeSetDataType.Page
-	                && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_TAG, _context, _transaction);
-	            if (getTags.IsSucceed)
-	            {
-	                SysTags = getTags.Data;
-	            }
+                if (getCategories.IsSucceed)
+                {
+                    SysCategories = getCategories.Data;
+                }
+
+                var getTags = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
+                    && m.ParentId == Id.ToString() && m.ParentType == (int)MixEnums.MixAttributeSetDataType.Page
+                    && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_TAG, _context, _transaction);
+                if (getTags.IsSucceed)
+                {
+                    SysTags = getTags.Data;
+                }
             }
         }
 
@@ -720,8 +718,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
         {
             var tasks = new List<Task>();
-            var relatedPages= context.MixPage.Where(m => m.MixPagePageMixPage
-                .Any(d => d.Specificulture == Specificulture && (d.Id == Id || d.ParentId == Id)));
+            var relatedPages = context.MixPage.Where(m => m.MixPagePageMixPage
+                 .Any(d => d.Specificulture == Specificulture && (d.Id == Id || d.ParentId == Id)));
             foreach (var item in relatedPages)
             {
                 tasks.Add(Task.Run(() =>
@@ -729,9 +727,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     var data = new ReadViewModel(item, context, transaction);
                     data.RemoveCache(item, context, transaction);
                 }));
-
             }
-            
+
             return tasks;
         }
 

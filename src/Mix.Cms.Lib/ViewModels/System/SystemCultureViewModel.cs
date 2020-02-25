@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-
 namespace Mix.Cms.Lib.ViewModels.MixSystem
 {
     public class SystemCultureViewModel

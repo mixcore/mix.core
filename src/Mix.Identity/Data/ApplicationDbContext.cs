@@ -1,5 +1,5 @@
-﻿// Licensed to the Swastika I/O Foundation under one or more agreements.
-// The Swastika I/O Foundation licenses this file to you under the MIT license.
+﻿// Licensed to the Mixcore Foundation under one or more agreements.
+// The Mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -59,6 +59,7 @@ namespace Mix.Identity.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var config = new ConfigurationBuilder()
@@ -72,7 +73,6 @@ namespace Mix.Identity.Data
                 optionsBuilder.UseSqlServer(cnn);
                 base.OnConfiguring(optionsBuilder);
             }
-           
         }
     }
 }

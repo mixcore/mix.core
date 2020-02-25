@@ -12,7 +12,6 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixConfigurations;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -44,6 +43,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.Configurations
             var readResult = await base.GetSingleAsync<MobileViewModel>(keyword, predicate, null);
             return Ok(readResult.Data?.Value);
         }
+
         // GET api/Configurations/keyword
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [EnableQuery(MaxExpansionDepth = 4)]
@@ -51,7 +51,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.Configurations
         [Route("type/{type}")]
         public async Task<ActionResult<JObject>> ListByType(string culture, string type, ODataQueryOptions<MixConfiguration> queryOptions)
         {
-            Expression<Func<MixConfiguration, bool>> predicate = m => m.Category == type && m.Specificulture== culture;
+            Expression<Func<MixConfiguration, bool>> predicate = m => m.Category == type && m.Specificulture == culture;
             var data = await base.GetListAsync<MobileViewModel>(predicate, $"type_{type}", queryOptions);
             JObject result = new JObject();
             foreach (var item in data)
@@ -75,6 +75,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.Configurations
             }
             return Ok(result);
         }
+
         // GET api/attribute-sets/read/count
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [EnableQuery]
@@ -85,11 +86,10 @@ namespace Mix.Cms.Api.Controllers.v1.OData.Configurations
             return (await MobileViewModel.Repository.CountAsync()).Data;
         }
 
-
         // Save api/odata/{culture}/attribute-set/read/{keyword}
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
-        [Route("{keyword}")]        
+        [Route("{keyword}")]
         public async Task<ActionResult<MobileViewModel>> Save(string culture, string keyword, [FromBody]JObject data)
         {
             Expression<Func<MixConfiguration, bool>> predicate = model => model.Keyword == keyword && model.Specificulture == culture;
@@ -116,7 +116,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.Configurations
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpDelete, HttpOptions]
-        [Route("{keyword}")]        
+        [Route("{keyword}")]
         public async Task<ActionResult<DeleteViewModel>> Delete(string culture, string keyword)
         {
             Expression<Func<MixConfiguration, bool>> predicate = model => model.Keyword == keyword;
@@ -137,6 +137,5 @@ namespace Mix.Cms.Api.Controllers.v1.OData.Configurations
         }
 
         #endregion Get
-
     }
 }

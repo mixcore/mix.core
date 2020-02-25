@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
-using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -60,10 +59,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         public string SpaContent { get; set; }
 
         [JsonProperty("spaView")]
-        public XElement SpaView
-        {
-            get
-            {
+        public XElement SpaView {
+            get {
                 return !string.IsNullOrEmpty(SpaContent)
                     ? XElement.Parse(Regex.Replace(SpaContent, "(?<!\r)\n|\r\n|\t", "").Trim())
                     : new XElement("div");
@@ -94,10 +91,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         [JsonIgnore]
         [JsonProperty("assetFolder")]
-        public string AssetFolder
-        {
-            get
-            {
+        public string AssetFolder {
+            get {
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.FileFolder,
                     MixConstants.Folder.TemplatesAssetFolder,
@@ -107,10 +102,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         [JsonIgnore]
         [JsonProperty("templateFolder")]
-        public string TemplateFolder
-        {
-            get
-            {
+        public string TemplateFolder {
+            get {
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.TemplatesFolder,
                     ThemeName
@@ -119,10 +112,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         }
 
         [JsonProperty("templatePath")]
-        public string TemplatePath
-        {
-            get
-            {
+        public string TemplatePath {
+            get {
                 return $"/{FileFolder}/{FileName}{Extension}";
             }
         }
@@ -150,6 +141,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         #region Overrides
 
         #region Common
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var file = FileRepository.Instance.GetFile(FileName, Extension, FileFolder);
@@ -190,6 +182,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             }
             return result;
         }
+
         #endregion Async
 
         #region Async
@@ -207,8 +200,5 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         #endregion Async
 
         #endregion Overrides
-
-        
-
     }
 }

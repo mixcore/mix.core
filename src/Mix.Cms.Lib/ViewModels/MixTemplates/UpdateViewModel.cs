@@ -74,10 +74,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         public string Layout { get; set; }
 
         [JsonProperty("assetFolder")]
-        public string AssetFolder
-        {
-            get
-            {
+        public string AssetFolder {
+            get {
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.FileFolder,
                     MixConstants.Folder.TemplatesAssetFolder,
@@ -86,24 +84,19 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder
-        {
-            get
-            {
+        public string TemplateFolder {
+            get {
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.TemplatesFolder, SeoHelper.GetSEOString(ThemeName) });
             }
         }
 
         [JsonProperty("templatePath")]
-        public string TemplatePath
-        {
-            get
-            {
+        public string TemplatePath {
+            get {
                 return $"/{FileFolder}/{FileName}{Extension}";
             }
         }
-
 
         #endregion Views
 
@@ -174,6 +167,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         #endregion Common
 
         #region Async
+
         public override async Task<RepositoryResponse<UpdateViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = await base.SaveModelAsync(isSaveSubModels, _context, _transaction);
@@ -183,6 +177,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             }
             return result;
         }
+
         public override RepositoryResponse<MixTemplate> RemoveModel(bool isRemoveRelatedModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = base.RemoveModel(isRemoveRelatedModels, _context, _transaction);
@@ -236,7 +231,6 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         #endregion Overrides
 
         #region Expands
-
 
         /// <summary>
         /// Gets the template by path.
@@ -297,8 +291,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                 FolderType = folderType.ToString(),
                 FileFolder = folder.ToString()
             });
-
         }
-        #endregion
+
+        #endregion Expands
     }
 }

@@ -45,7 +45,7 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSets
             switch (viewType)
             {
                 case "portal":
-                    if (id>0)
+                    if (id > 0)
                     {
                         Expression<Func<MixAttributeSet, bool>> predicate = model => model.Id == id;
                         var portalResult = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_{id}", predicate);
@@ -129,16 +129,16 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSets
             switch (request.Key)
             {
                 case "mvc":
-                    var mvcResult = await base.GetListAsync<ReadMvcViewModel>(request, predicate);                    
+                    var mvcResult = await base.GetListAsync<ReadMvcViewModel>(request, predicate);
                     return Ok(JObject.FromObject(mvcResult));
+
                 default:
 
-                    var listItemResult = await base.GetListAsync<ReadViewModel>(request, predicate);                    
+                    var listItemResult = await base.GetListAsync<ReadViewModel>(request, predicate);
                     return JObject.FromObject(listItemResult);
             }
         }
 
-        
         #endregion Post
     }
 }

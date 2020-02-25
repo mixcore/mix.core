@@ -1,18 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.Services.Store
 {
@@ -78,6 +73,7 @@ namespace Mix.Cms.Lib.ViewModels.Services.Store
         [JsonIgnore]
         [JsonProperty("extraProperties")]
         public string ExtraProperties { get; set; } = "[]";
+
         #endregion Models
 
         #region Views
@@ -86,10 +82,8 @@ namespace Mix.Cms.Lib.ViewModels.Services.Store
         public string Domain { get { return MixService.GetConfig<string>("Domain", Specificulture); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl
-        {
-            get
-            {
+        public string ImageUrl {
+            get {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -104,10 +98,8 @@ namespace Mix.Cms.Lib.ViewModels.Services.Store
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl
-        {
-            get
-            {
+        public string ThumbnailUrl {
+            get {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -127,8 +119,10 @@ namespace Mix.Cms.Lib.ViewModels.Services.Store
         [JsonIgnore]
         [JsonProperty("attributeData")]
         public AttributeDataViewModel AttributeData { get; set; }
+
         [JsonProperty("properties")]
         public JObject Properties { get { return AttributeData?.Data; } }
+
         #endregion Views
 
         #endregion Properties
@@ -146,6 +140,7 @@ namespace Mix.Cms.Lib.ViewModels.Services.Store
         #endregion Contructors
 
         #region Expands
+
         //Get Property by name
         public T Property<T>(string fieldName)
         {
@@ -165,21 +160,18 @@ namespace Mix.Cms.Lib.ViewModels.Services.Store
             {
                 return default(T);
             }
-
         }
-
-        #region Sync
-
-        #endregion Sync
 
         #endregion Expands
 
         #region Overrides
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             AttributeData = AttributeDataViewModel.Repository.GetFirstModel(m => m.MixRelatedAttributeData.Any(
                 n => n.ParentId == Id.ToString() && n.ParentType == (int)MixEnums.MixAttributeSetDataType.Post && n.AttributeSetName == "post" && n.Specificulture == Specificulture))?.Data;
         }
-        #endregion
+
+        #endregion Overrides
     }
 }

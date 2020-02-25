@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Mix.Cms.Lib.Models.Cms
+﻿namespace Mix.Cms.Lib.Models.Cms
 {
     public partial class MixPostAttributeSet
     {

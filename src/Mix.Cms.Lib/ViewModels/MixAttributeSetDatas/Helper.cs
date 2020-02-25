@@ -14,24 +14,22 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
     public class Helper
     {
-
         public static async Task<RepositoryResponse<bool>> ImportData(
             string culture, Lib.ViewModels.MixAttributeSets.ReadViewModel attributeSet, IFormFile file)
         {
-            using(var context = new MixCmsContext())
+            using (var context = new MixCmsContext())
             {
                 var result = new RepositoryResponse<bool>() { IsSucceed = true };
                 try
                 {
                     List<ImportViewModel> data = LoadFileData(culture, attributeSet, file);
-                    
+
                     var fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == attributeSet.Id).Data;
                     var priority = ImportViewModel.Repository.Count(m => m.AttributeSetName == attributeSet.Name && m.Specificulture == culture).Data;
                     foreach (var item in data)
@@ -55,7 +53,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             //val.Model.DataId = item.Id;
                             //val.Model.CreatedDateTime = DateTime.UtcNow;
                             //val.Model.Specificulture = culture;
-                            //val.Model.Id = Guid.NewGuid().ToString();                        
+                            //val.Model.Id = Guid.NewGuid().ToString();
                             context.Entry(val.Model).State = Microsoft.EntityFrameworkCore.EntityState.Added;
                         }
                     }
@@ -76,9 +74,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     result.Errors.Add(ex.Message);
                     return result;
                 }
-
-            }            
+            }
         }
+
         private static List<ImportViewModel> LoadFileData(
            string culture, Lib.ViewModels.MixAttributeSets.ReadViewModel attributeSet, IFormFile file)
         {
@@ -94,7 +92,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     // First row is supose to be headers (list field name) => start from row 2
                     int startRow = 2;//worksheet.Dimension.Start.Row
-                    //loop all rows                    
+                    //loop all rows
                     for (int i = startRow; i <= worksheet.Dimension.End.Row; i++)
                     {
                         JObject obj = new JObject();
@@ -126,7 +124,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             try
             {
                 Expression<Func<MixAttributeSetValue, bool>> valPredicate = m => m.Specificulture == culture && m.AttributeSetName == attributeSetName;
-                RepositoryResponse<List<TView>> result = new RepositoryResponse<List<TView>>() {
+                RepositoryResponse<List<TView>> result = new RepositoryResponse<List<TView>>()
+                {
                     IsSucceed = true,
                     Data = new List<TView>()
                 };
@@ -142,16 +141,16 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     }
                 }
                 var query = context.MixAttributeSetValue.Where(valPredicate).Select(m => m.DataId).Distinct().ToList();
-                if (query!=null)
+                if (query != null)
                 {
                     foreach (var item in query)
                     {
-                        tasks.Add(Task.Run(async () => {
+                        tasks.Add(Task.Run(async () =>
+                        {
                             var resp = await ODataDefaultRepository<MixCmsContext, MixAttributeSetData, TView>.Instance.GetSingleModelAsync(
                                 m => m.Id == item && m.Specificulture == culture);
                             return resp;
                         }));
-
                     }
                     var continuation = Task.WhenAll(tasks);
                     continuation.Wait();
@@ -177,7 +176,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             result.Errors.Add($"Task {t.Id}: {t.Status}");
                         }
                     }
-
                 }
                 return Task.FromResult(result);
             }
@@ -243,7 +241,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                                     valPredicate = pre;
                                 }
                             }
-                                
                         }
                     }
                     if (valPredicate != null)
@@ -257,15 +254,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeSetName == attributeSetName && m.Specificulture == culture && m.StringValue.Contains(keyword);
                     attrPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(attrPredicate, pre, Microsoft.OData.UriParser.BinaryOperatorKind.And);
                 }
-                
+
                 var query = context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
                 var dataIds = query.ToList();
                 if (query != null)
                 {
-                    Expression<Func<MixAttributeSetData, bool>> predicate = m => dataIds.Any(id => m.Id == id); 
+                    Expression<Func<MixAttributeSetData, bool>> predicate = m => dataIds.Any(id => m.Id == id);
                     result = await DefaultRepository<MixCmsContext, MixAttributeSetData, TView>.Instance.GetModelListByAsync(
                         predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null, context, transaction);
-
                 }
                 return result;
             }
@@ -282,7 +278,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
             }
         }
-
 
         public static async Task<RepositoryResponse<List<TView>>> FilterByKeywordAsync<TView>(string culture, string attributeSetName
             , string filterType, string fieldName, string keyword
@@ -335,7 +330,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     Expression<Func<MixAttributeSetData, bool>> predicate = m => dataIds.Any(id => m.Id == id);
                     result = await DefaultRepository<MixCmsContext, MixAttributeSetData, TView>.Instance.GetModelListByAsync(
                         predicate, context, transaction);
-
                 }
                 return result;
             }
@@ -369,7 +363,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
                     if (headers == null)
                     {
-
                         // get first item
                         var listColumn = lstData[0].Properties();
 
@@ -416,22 +409,18 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
                         return result;
                     }
-
                 }
                 else
                 {
                     result.Errors.Add("Can not export data of empty list");
                     return result;
                 }
-
             }
             catch (Exception ex)
             {
                 result.Errors.Add(ex.Message);
                 return result;
             }
-
-
         }
     }
 }
