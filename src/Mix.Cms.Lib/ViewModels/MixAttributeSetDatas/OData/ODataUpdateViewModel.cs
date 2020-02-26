@@ -109,14 +109,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
             }
-            if (AttributeSetId > 0 && string.IsNullOrEmpty(AttributeSetName))
+            var attr = _context.MixAttributeSet.FirstOrDefault(m => m.Id == AttributeSetId || m.Name == AttributeSetName);
+
+            if (attr != null)
             {
-                var attr = _context.MixAttributeSet.FirstOrDefault(m => m.Id == AttributeSetId);
-                if (attr != null)
-                {
-                    AttributeSetName = attr.Name;
-                }
+                AttributeSetName = attr.Name;
+                AttributeSetId = attr.Id;
             }
+            
             HandleEdm(_context, _transaction);
 
             return base.ParseModel(_context, _transaction);
