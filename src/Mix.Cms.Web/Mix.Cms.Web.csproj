@@ -6,9 +6,21 @@
 
   <ItemGroup>
     <Compile Remove="%2a%2a\**" />
+    <Compile Remove="cache\**" />
+    <Compile Remove="logs\**" />
+    <Compile Remove="Views\Shared\Templates\**" />
     <Content Remove="%2a%2a\**" />
+    <Content Remove="cache\**" />
+    <Content Remove="logs\**" />
+    <Content Remove="Views\Shared\Templates\**" />
     <EmbeddedResource Remove="%2a%2a\**" />
+    <EmbeddedResource Remove="cache\**" />
+    <EmbeddedResource Remove="logs\**" />
+    <EmbeddedResource Remove="Views\Shared\Templates\**" />
     <None Remove="%2a%2a\**" />
+    <None Remove="cache\**" />
+    <None Remove="logs\**" />
+    <None Remove="Views\Shared\Templates\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,10 +34,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Mix.Cms.Api\Mix.Cms.Api.csproj" />
     <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\Shared\Templates\" />
   </ItemGroup>
 
 

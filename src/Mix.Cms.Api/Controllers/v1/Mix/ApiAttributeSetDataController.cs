@@ -126,12 +126,12 @@ namespace Mix.Cms.Api.Controllers.v1
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("save")]
-        public async Task<RepositoryResponse<MobileViewModel>> Save([FromBody]MobileViewModel data)
+        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromBody]UpdateViewModel data)
         {
             if (data != null)
             {
                 data.Specificulture = _lang;
-                var result = await base.SaveAsync<MobileViewModel>(data, true);
+                var result = await base.SaveAsync<UpdateViewModel>(data, true);
                 if (result.IsSucceed)
                 {
                     MixService.LoadFromDatabase();
@@ -139,7 +139,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 }
                 return result;
             }
-            return new RepositoryResponse<MobileViewModel>() { Status = 501 };
+            return new RepositoryResponse<UpdateViewModel>() { Status = 501 };
         }
 
         // GET api/attribute-set-data
