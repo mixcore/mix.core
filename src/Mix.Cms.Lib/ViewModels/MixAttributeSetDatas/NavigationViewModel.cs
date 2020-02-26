@@ -291,6 +291,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
     public class MenuItem
     {
+        [JsonIgnore]
         [JsonProperty("data")]
         public JObject Data { get; set; }
 
