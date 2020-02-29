@@ -1,0 +1,50 @@
+name: .NET Core
+
+on:
+  push:
+    branches:
+    - develop
+  schedule:
+  - cron: "0 2 * * 1-5"
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.2
+    
+    #- name: Install Dependencies
+    #  run: npm install
+    
+    - name: Pull Mix Heart & Identity
+      run: |
+        git clone --depth=50 --branch=master https://github.com/mixcore/mix.heart.git /home/runner/work/mix.core/mix.heart
+        git clone --depth=50 --branch=master https://github.com/mixcore/mix.identity.git /home/runner/work/mix.core/mix.identity
+    
+    - name: Build with dotnet
+      run: |
+        cd src/Mix.Cms.Web
+        dotnet build --configuration Release
+        dotnet pack -c Release -o out
+        
+    
+    - name: FTP Deploy
+      uses: SamKirkland/FTP-Deploy-Action@3.0.0
+      with:
+        # Deployment destination server & path. Formatted as protocol://domain.com:port/full/destination/path/
+        ftp-server: ftp://115.79.139.90:2121/ #${{ secrets.FTP_SERVER }}
+        # FTP account username
+        ftp-username: ${{ secrets.FTP_USERNAME }}
+        # FTP account password
+        ftp-password: ${{ secrets.FTP_PASSWORD }}
+        # The local folder to copy, defaults to root project folder
+        # local-dir: dist/Mix.Cms.Web/wwwroot/ # optional
+        # remoteDir: /mixcore.org/dev/wwwroot/
+        # Passes through options into git-ftp
+        git-ftp-args: --syncroot D:\a\mix.core\mix.core\src\Mix.Cms.Web\bin\Release\netcoreapp3.1\ --remote-root /mixcore.org/dev/ --verbose # optional
