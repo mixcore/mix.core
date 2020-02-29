@@ -17,7 +17,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.2
+        dotnet-version: 3.1.102
     
     #- name: Install Dependencies
     #  run: npm install
