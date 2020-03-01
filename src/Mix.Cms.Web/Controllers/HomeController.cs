@@ -38,8 +38,9 @@ namespace Mix.Cms.Web.Controllers
 
         #region Routes
 
+        [HttpGet]
         [Route("")]
-        [Route("{seoName}")]
+        //[Route("{seoName}")]
         public async Task<IActionResult> Index()
         {
             if (isValid)

@@ -7,7 +7,7 @@
     </rule>
 
      <rule name="Not rewrite" stopProcessing="true">
-      <match url="^(init|security|portal|api|page|post|module|error|swagger)(.*){0,}" />
+      <match url="^(init|security|portal|api|page|post|module|error|swagger|graphql)(.*){0,}" />
       <action type="None" appendQueryString="false"/>
     </rule>
     

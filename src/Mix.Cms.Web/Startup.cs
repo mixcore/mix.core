@@ -69,7 +69,7 @@ namespace Mix.Cms.Web
                 app.UseHsts();
             }
             app.UseStaticFiles();
-
+            //app.UseGraphiQl("/graphql");
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

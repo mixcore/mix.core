@@ -131,28 +131,28 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #endregion Overrides
 
-        public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        {
-            var tasks = new List<Task>();
-            var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
-                .Any(d => d.Specificulture == Specificulture && d.Id == Id));
-            foreach (var item in attrDatas)
-            {
-                tasks.Add(Task.Run(() =>
-                {
-                    var updModel = new NavigationViewModel(item, context, transaction);
-                    updModel.GenerateCache(item, updModel);
-                }));
-            }
-            foreach (var item in Values)
-            {
-                tasks.Add(Task.Run(() =>
-                {
-                    item.RemoveCache(item.Model);
-                }));
-            }
-            return tasks;
-        }
+        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
+        //{
+        //    var tasks = new List<Task>();
+        //    var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
+        //        .Any(d => d.Specificulture == Specificulture && d.Id == Id));
+        //    foreach (var item in attrDatas)
+        //    {
+        //        tasks.Add(Task.Run(() =>
+        //        {
+        //            var updModel = new NavigationViewModel(item, context, transaction);
+        //            updModel.GenerateCache(item, updModel);
+        //        }));
+        //    }
+        //    foreach (var item in Values)
+        //    {
+        //        tasks.Add(Task.Run(() =>
+        //        {
+        //            item.RemoveCache(item.Model);
+        //        }));
+        //    }
+        //    return tasks;
+        //}
 
         #region Expands
 
