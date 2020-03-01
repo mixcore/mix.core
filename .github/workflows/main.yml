@@ -20,7 +20,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.github_token }}
         COMMIT_MSG: |
-          Commit latest code from mix.spa.portal
+          [CI/CD] Commit latest code from mix.spa.portal
           skip-checks: true
       run: |
         # Hard-code user configuration
@@ -38,4 +38,4 @@ jobs:
         git add .
         
         # Only commit and push if we have changes
-        # git diff --quiet && git diff --staged --quiet || (git commit -m "${COMMIT_MSG}"; git push origin develop)
+        git diff --quiet && git diff --staged --quiet || (git commit -m "${COMMIT_MSG}"; git push origin develop)
