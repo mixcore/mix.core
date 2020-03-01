@@ -175,6 +175,11 @@
           "path": "/portal/file/list",
           "title": "List",
           "icon": "mi mi-List"
+        },
+        {
+          "path": "/portal/file/list?folder=logs",
+          "title": "Logs",
+          "icon": "mi mi-Error"
         }
       ]
     },

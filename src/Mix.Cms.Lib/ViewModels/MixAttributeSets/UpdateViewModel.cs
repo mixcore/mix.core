@@ -191,28 +191,28 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             return result;
         }
 
-        public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        {
-            var tasks = new List<Task>();
-            var attrDatas = context.MixAttributeSetData.Where(m => m.AttributeSetId == Id);
-            var attrFields = context.MixAttributeField.Where(m => m.AttributeSetId == Id);
+        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
+        //{
+        //    var tasks = new List<Task>();
+        //    var attrDatas = context.MixAttributeSetData.Where(m => m.AttributeSetId == Id);
+        //    var attrFields = context.MixAttributeField.Where(m => m.AttributeSetId == Id);
 
-            foreach (var item in attrDatas)
-            {
-                tasks.Add(Task.Run(() =>
-                {
-                    MixAttributeSetDatas.UpdateViewModel.Repository.RemoveCache(item, context, transaction);
-                }));
-            }
-            foreach (var item in attrFields)
-            {
-                tasks.Add(Task.Run(() =>
-                {
-                    MixAttributeFields.UpdateViewModel.Repository.RemoveCache(item, context, transaction);
-                }));
-            }
-            return tasks;
-        }
+        //    foreach (var item in attrDatas)
+        //    {
+        //        tasks.Add(Task.Run(() =>
+        //        {
+        //            MixAttributeSetDatas.UpdateViewModel.Repository.RemoveCache(item, context, transaction);
+        //        }));
+        //    }
+        //    foreach (var item in attrFields)
+        //    {
+        //        tasks.Add(Task.Run(() =>
+        //        {
+        //            MixAttributeFields.UpdateViewModel.Repository.RemoveCache(item, context, transaction);
+        //        }));
+        //    }
+        //    return tasks;
+        //}
 
         #endregion Overrides
     }

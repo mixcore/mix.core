@@ -241,6 +241,7 @@
             VideoYoutube = 20,
             TuiEditor = 21,
             Number = 22,
+            QRCode = 24,
             Reference = 23,
         }
 

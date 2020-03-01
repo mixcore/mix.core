@@ -445,11 +445,18 @@ namespace Mix.Cms.Api.Controllers.v1
                     await _userManager.GeneratePasswordResetTokenAsync(user);
 
             var callbackurl = $"{Request.Scheme}://{Request.Host}/security/reset-password/?token={System.Web.HttpUtility.UrlEncode(confrimationCode)}";
-
+            var getEdmTemplate = await Lib.ViewModels.MixTemplates.ReadViewModel.Repository.GetSingleModelAsync(
+                m => m.FolderType == MixConstants.TemplateFolder.Edms && m.FileName == "ForgotPassword");
+            string content = callbackurl;
+            if (getEdmTemplate.IsSucceed)
+            {
+                content = getEdmTemplate.Data.Content.Replace("[URL]", callbackurl);
+                
+            }
             MixService.SendMail(
-                to: user.Email,
-                subject: "Reset Password",
-                message: callbackurl);
+                    to: user.Email,
+                    subject: "Reset Password",
+                    message: content);
 
             return result;
         }
