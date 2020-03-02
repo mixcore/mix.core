@@ -33,18 +33,3 @@ jobs:
         dotnet build --configuration Release
         dotnet pack -c Release -o out
         
-    
-    - name: FTP Deploy
-      uses: SamKirkland/FTP-Deploy-Action@3.0.0
-      with:
-        # Deployment destination server & path. Formatted as protocol://domain.com:port/full/destination/path/
-        ftp-server: ftp://115.79.139.90:2121/ #${{ secrets.FTP_SERVER }}
-        # FTP account username
-        ftp-username: ${{ secrets.FTP_USERNAME }}
-        # FTP account password
-        ftp-password: ${{ secrets.FTP_PASSWORD }}
-        # The local folder to copy, defaults to root project folder
-        # local-dir: dist/Mix.Cms.Web/wwwroot/ # optional
-        # remoteDir: /mixcore.org/dev/wwwroot/
-        # Passes through options into git-ftp
-        git-ftp-args: --syncroot D:\a\mix.core\mix.core\src\Mix.Cms.Web\bin\Release\netcoreapp3.1\ --remote-root /mixcore.org/dev/ --verbose # optional
