@@ -1,3 +1,4 @@
+using GraphiQl;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -69,7 +70,7 @@ namespace Mix.Cms.Web
                 app.UseHsts();
             }
             app.UseStaticFiles();
-            //app.UseGraphiQl("/graphql");
+            app.UseGraphiQl("/api/graphql");
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

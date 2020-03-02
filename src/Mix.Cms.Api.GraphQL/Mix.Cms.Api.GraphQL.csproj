@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="graphiql" Version="1.2.0" />
+    <PackageReference Include="GraphQL" Version="3.0.0-preview-1490" />
+    <PackageReference Include="GraphQL-Parser" Version="5.1.0" />
+    <PackageReference Include="GraphQL.NewtonsoftJson" Version="3.0.0-preview-1490" />
+    <PackageReference Include="GraphQL.SystemTextJson" Version="3.0.0-preview-1490" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mix.Identity\Mix.Identity.csproj" />
+  </ItemGroup>
+
+
+</Project>
