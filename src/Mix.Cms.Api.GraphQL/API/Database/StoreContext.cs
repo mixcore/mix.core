@@ -11,7 +11,7 @@ namespace Api.Database
     { }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            optionsBuilder.UseInMemoryDatabase("BooksDb");
+            //optionsBuilder.UseInMemoryDatabase("BooksDb");
         }
 
     public DbSet<Book> Books { get; set; }

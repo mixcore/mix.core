@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Mix.Cms.Api.GraphQL;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -45,6 +46,8 @@ namespace Mix.Cms.Web
                mvcOptions.EnableEndpointRouting = false);
 
             services.AddOData();
+            services.AddMyGraphQL();
+
             /* Mix: End Inject Services */
 
             VerifyInitData(services);
@@ -71,6 +74,7 @@ namespace Mix.Cms.Web
             }
             app.UseStaticFiles();
             app.UseGraphiQl("/api/graphql");
+            
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

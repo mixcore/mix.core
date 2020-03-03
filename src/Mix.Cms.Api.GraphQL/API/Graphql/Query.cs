@@ -3,6 +3,7 @@ using GraphQL;
 using System.Linq;
 using Api.Database;
 using Microsoft.EntityFrameworkCore;
+using Mix.Cms.Lib.Models.Cms;
 
 namespace Api.Graphql 
 {
@@ -18,6 +19,23 @@ namespace Api.Graphql
         .Include(b => b.Author)
         .ToList();
       }
+    }
+        
+    [GraphQLMetadata("posts")]
+    public IEnumerable<Mix.Cms.Lib.Models.Cms.MixPost> GetPosts(int? first = 5, int? offset = 0)
+    {
+        using(var db = new MixCmsContext())
+        {
+            return db.MixPost.Skip(offset.Value).Take(first.Value).ToList();
+        }
+    }
+    [GraphQLMetadata("post")]
+    public Mix.Cms.Lib.Models.Cms.MixPost GetPost(int id)
+    {
+        using(var db = new MixCmsContext())
+        {
+            return db.MixPost.SingleOrDefault(m=>m.Id== id);
+        }
     }
 
     [GraphQLMetadata("authors")]

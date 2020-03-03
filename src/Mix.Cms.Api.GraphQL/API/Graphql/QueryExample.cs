@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using GraphQL;
 using System.Linq;
 using Api.Database;
+using Mix.Cms.Lib.Models.Cms;
 
 namespace Api.Graphql
 {
@@ -12,6 +13,11 @@ namespace Api.Graphql
     public IEnumerable<Book> GetBooks()
     {
       return Enumerable.Empty<Book>();
+    }
+    [GraphQLMetadata("posts")]
+    public IEnumerable<MixPost> GetPosts()
+    {
+      return Enumerable.Empty<MixPost>();
     }
 
     [GraphQLMetadata("authors")]

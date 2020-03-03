@@ -18,6 +18,12 @@ namespace Api.Graphql
     public MySchema() 
     {
       this._schema = Schema.For(@"
+          type Post {
+            id: ID,
+            title: String,
+            image: String
+          }
+
           type Book {
             id: ID
             name: String,
@@ -37,7 +43,9 @@ namespace Api.Graphql
           }
 
           type Query {
-              books: [Book]
+              books: [Book],              
+              posts(first: Int, offset:Int): [Post],
+              post(id: Int): Post,
               author(id: ID): Author,
               authors: [Author]
               hello: String
