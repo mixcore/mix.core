@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Api.GraphQL.Infrastructure.Interfaces;
 using System;
+using System.Linq;
 using System.Reflection;
 
 namespace Mix.Cms.Api.GraphQL.Infrastructure
@@ -19,10 +20,13 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure
             _dbMetadata = dbMetadata;
             _tableNameLookup = tableNameLookup;
             _dbContext = dbContext; 
-            Name = "Query"; 
+            Name = "Query";
+            var assem = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.ManifestModule.Name == "Mix.Cms.Lib.dll");
+            
             foreach (var metaTable in _dbMetadata.GetTableMetadatas())
             {
-                var tableType = new TableType(metaTable);
+                var type = assem.GetType(metaTable.AssemblyFullName);
+                var tableType = new TableType(metaTable, type);
                 var friendlyTableName = metaTable.TableName;                
                 // _tableNameLookup.GetFriendlyName(metaTable.TableName); 
                 AddField(new FieldType
@@ -35,11 +39,10 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure
                 });
                 // lets add key to get list of current table
                 var listType = new ListGraphType(tableType);
-                var type = listType.GetType();
                 AddField(new FieldType
                 {
                     Name = $"{friendlyTableName}_list",
-                    Type = type,
+                    Type = listType.GetType(),
                     ResolvedType = listType,
                     Resolver = new MyFieldResolver(metaTable, _dbContext),
                     Arguments = new QueryArguments(
