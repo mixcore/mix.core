@@ -1,4 +1,4 @@
-﻿using EntityGraphQL.Schema;
+﻿//using EntityGraphQL.Schema;
 //using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
 //using Mix.Cms.Api.GraphQL.Infrastructure.Interfaces;
@@ -28,7 +28,7 @@ namespace Mix.Cms.Api.GraphQL
             //services.AddDbContext<MixCmsContext>();
             // add schema provider so we don't need to create it everytime
             // Also for this demo we expose all fields on MyDbContext. See below for details on building custom fields etc.
-            services.AddSingleton(SchemaBuilder.FromObject<MixCmsContext>(true));
+            //services.AddSingleton(SchemaBuilder.FromObject<MixCmsContext>(true));
             return services;
         }
     }

@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Cms.Lib", "Mix.Cms.Lib\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Identity", "Mix.Identity\Mix.Identity.csproj", "{08480B8D-2BA4-4E6F-8A08-D668E6F4C13D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Cms.Api.GraphQL", "Mix.Cms.Api.GraphQL\Mix.Cms.Api.GraphQL.csproj", "{23887DA7-76F8-4DF0-AA7D-F57B92448733}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{08480B8D-2BA4-4E6F-8A08-D668E6F4C13D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08480B8D-2BA4-4E6F-8A08-D668E6F4C13D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08480B8D-2BA4-4E6F-8A08-D668E6F4C13D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23887DA7-76F8-4DF0-AA7D-F57B92448733}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23887DA7-76F8-4DF0-AA7D-F57B92448733}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23887DA7-76F8-4DF0-AA7D-F57B92448733}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23887DA7-76F8-4DF0-AA7D-F57B92448733}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +50,7 @@ Global
 		{BC4D7CE6-F507-482E-A939-B9F8D6533929} = {C45D03E7-0453-4199-A5DE-E61B5FF29AF4}
 		{46A6FAC4-B138-4AB8-AAB2-597EE1774371} = {C45D03E7-0453-4199-A5DE-E61B5FF29AF4}
 		{08480B8D-2BA4-4E6F-8A08-D668E6F4C13D} = {C45D03E7-0453-4199-A5DE-E61B5FF29AF4}
+		{23887DA7-76F8-4DF0-AA7D-F57B92448733} = {C45D03E7-0453-4199-A5DE-E61B5FF29AF4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B133AF3-4413-4B56-9BEC-8C4509008F85}

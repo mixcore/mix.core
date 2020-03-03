@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EntityGraphQL\src\EntityGraphQL\EntityGraphQL.csproj" />
     <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
     <ProjectReference Include="..\Mix.Identity\Mix.Identity.csproj" />
   </ItemGroup>
