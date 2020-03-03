@@ -1,5 +1,6 @@
 ﻿using GraphQL;
 using GraphQL.Types;
+using Mix.Cms.Lib.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure
             get; set;
         }
         private IDictionary<string, Type> _databaseTypeToSystemType;
+        public Type _type { get; set; }
         protected IDictionary<string, Type> DatabaseTypeToSystemType
         {
             get
@@ -34,8 +36,9 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure
                 return _databaseTypeToSystemType;
             }
         }
-        public TableType(TableMetadata tableMetadata)
+        public TableType(TableMetadata tableMetadata, Type type)
         {
+            _type = type;
             Name = tableMetadata.TableName;
             foreach (var tableColumn in tableMetadata.Columns)
             {
@@ -54,22 +57,35 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure
         }
         private void FillArgs(string columnName)
         {
+            var dataType = ReflectionHelper.GetPropertyType(_type, columnName);
             if (TableArgs == null)
             {
-                TableArgs = new QueryArguments(
-                    new QueryArgument<StringGraphType>()
-                    {
-                        Name = columnName
-                    }
-                );
+                TableArgs = new QueryArguments();
+                TableArgs.Add(new QueryArgument<IntGraphType> { Name = "first" });
+                TableArgs.Add(new QueryArgument<IntGraphType> { Name = "offset" });
             }
-            else
+            if (dataType != null)
             {
-                TableArgs.Add(new QueryArgument<StringGraphType> { Name = columnName });
+
+                switch (dataType.Name)
+                {
+                    case "Int32":
+                        TableArgs.Add(new QueryArgument<IntGraphType> { Name = columnName });
+                        break;
+                    case "DateTime":
+                        TableArgs.Add(new QueryArgument<DateGraphType> { Name = columnName });
+                        break;
+                    case "Boolean":
+                        TableArgs.Add(new QueryArgument<BooleanGraphType> { Name = columnName });
+                        break;
+                    default:
+                        TableArgs.Add(new QueryArgument<StringGraphType> { Name = columnName });
+                        break;
+                }
             }
-            TableArgs.Add(new QueryArgument<IdGraphType> { Name = "id" });
-            TableArgs.Add(new QueryArgument<IntGraphType> { Name = "first" });
-            TableArgs.Add(new QueryArgument<IntGraphType> { Name = "offset" });
+            //TableArgs.Add(new QueryArgument<IntGraphType> { Name = "id" });
+            //TableArgs.Add(new QueryArgument<IntGraphType> { Name = "first" });
+            //TableArgs.Add(new QueryArgument<IntGraphType> { Name = "offset" });
         }
         private Type ResolveColumnMetaType(string dbType)
         {
