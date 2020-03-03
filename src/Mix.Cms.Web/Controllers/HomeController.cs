@@ -10,7 +10,6 @@ namespace Mix.Cms.Web.Controllers
 {
     public class HomeController : BaseController
     {
-        private readonly UserManager<ApplicationUser> _userManager;
 
         #region contructor
 
