@@ -2,9 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Api.GraphQL.Infrastructure.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Mix.Cms.Api.GraphQL.Infrastructure
 {
@@ -25,7 +23,7 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure
             foreach (var metaTable in _dbMetadata.GetTableMetadatas())
             {
                 var tableType = new TableType(metaTable);
-                var friendlyTableName = metaTable.TableName;
+                var friendlyTableName = metaTable.TableName;                
                 // _tableNameLookup.GetFriendlyName(metaTable.TableName); 
                 AddField(new FieldType
                 {
