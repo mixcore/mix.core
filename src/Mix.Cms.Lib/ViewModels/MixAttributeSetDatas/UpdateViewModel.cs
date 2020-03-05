@@ -179,24 +179,24 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             return result;
         }
 
-        public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        {
-            var tasks = new List<Task>();
+        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
+        //{
+        //    var tasks = new List<Task>();
 
-            // Remove parent caches
+        //    // Remove parent caches
 
-            // 1. Remove Parent Attribute Data
-            var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
-            .Any(d => d.Specificulture == Specificulture && d.Id == Id && d.ParentType == (int)MixEnums.MixAttributeSetDataType.Set));
-            foreach (var item in attrDatas)
-            {
-                tasks.Add(Task.Run(() =>
-                {
-                    UpdateViewModel.Repository.RemoveCache(item, context, transaction);
-                }));
-            }
-            return tasks;
-        }
+        //    // 1. Remove Parent Attribute Data
+        //    var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
+        //    .Any(d => d.Specificulture == Specificulture && d.Id == Id && d.ParentType == (int)MixEnums.MixAttributeSetDataType.Set));
+        //    foreach (var item in attrDatas)
+        //    {
+        //        tasks.Add(Task.Run(() =>
+        //        {
+        //            UpdateViewModel.Repository.RemoveCache(item, context, transaction);
+        //        }));
+        //    }
+        //    return tasks;
+        //}
 
         #endregion Overrides
 

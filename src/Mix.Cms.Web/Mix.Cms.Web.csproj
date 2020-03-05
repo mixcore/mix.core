@@ -2,24 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <StartupObject>Mix.Cms.Web.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="%2a%2a\**" />
     <Compile Remove="cache\**" />
     <Compile Remove="logs\**" />
     <Compile Remove="Views\Shared\Templates\**" />
-    <Content Remove="%2a%2a\**" />
-    <Content Remove="cache\**" />
-    <Content Remove="logs\**" />
     <Content Remove="Views\Shared\Templates\**" />
-    <EmbeddedResource Remove="%2a%2a\**" />
-    <EmbeddedResource Remove="cache\**" />
-    <EmbeddedResource Remove="logs\**" />
     <EmbeddedResource Remove="Views\Shared\Templates\**" />
-    <None Remove="%2a%2a\**" />
-    <None Remove="cache\**" />
-    <None Remove="logs\**" />
     <None Remove="Views\Shared\Templates\**" />
   </ItemGroup>
 
@@ -32,8 +23,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Mix.Cms.Api.GraphQL\Mix.Cms.Api.GraphQL.csproj" />
+    <ProjectReference Include="..\Mix.Cms.Api.RestFul\Mix.Cms.Api.RestFul.csproj" />
     <ProjectReference Include="..\Mix.Cms.Api\Mix.Cms.Api.csproj" />
     <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ApacheModRewrite.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="IISUrlRewrite.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 

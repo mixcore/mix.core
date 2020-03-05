@@ -9,8 +9,6 @@ namespace Mix.Cms.Web.Controllers
 {
     public class SecurityController : BaseController
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IApiDescriptionGroupCollectionProvider _apiExplorer;
 
         #region overrides
 

@@ -175,6 +175,11 @@
           "path": "/portal/file/list",
           "title": "List",
           "icon": "mi mi-List"
+        },
+        {
+          "path": "/portal/file/list?folder=logs",
+          "title": "Logs",
+          "icon": "mi mi-Error"
         }
       ]
     },
@@ -609,17 +614,17 @@
       "items": [
         {
           "path": "/portal/localize/create",
-          "templatePath": "/app/app-portal/pages/language/details.html",
-          "controller": "LanguageController"
+          "templatePath": "/app/app-portal/pages/localize/details.html",
+          "controller": "LocalizeController"
         },
         {
           "path": "/portal/localize/list",
-          "templatePath": "/app/app-portal/pages/language/list.html",
-          "controller": "LanguageController"
+          "templatePath": "/app/app-portal/pages/localize/list.html",
+          "controller": "LocalizeController"
         },
         {
           "path": "/portal/localize/details/:id",
-          "templatePath": "/app/app-portal/pages/language/details.html",
+          "templatePath": "/app/app-portal/pages/localize/details.html",
           "controller": "LanguageController"
         }
       ]

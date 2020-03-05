@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Controllers\v1\Mix\AttributeSetDatas\ApiAttributeSetDataController.cs" />
     <Compile Include="Controllers\v1\Mix\AttributeSetDatas\ApiAttributeSetDataNavigationController.cs" />
     <Compile Include="Controllers\v1\Mix\AttributeSetDatas\ApiAttributeSetDataPortalController.cs" />
     <Compile Include="Controllers\v1\Mix\AttributeSetDataValues\ApiAttributeSetValuePortalController.cs" />
@@ -38,7 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.3.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
   </ItemGroup>
