@@ -242,7 +242,7 @@ ModelManifest.xml
 # Source
 .gitignore
 src/Mix.Cms.Web.old
-src/Mix.Cms.Web/appsettings.json
+src/Mix.Cms.Web/appsettings.*.*
 src/Mix.Cms.Web/wwwroot/content/*
 src/Mix.Cms.Web/wwwroot/Exports/*
 src/Mix.Cms.Web/Exports
@@ -262,3 +262,4 @@ src/Mix.Cms.Web/wwwroot/edms/
 
 src/portal-app/
 src/Mix.Cms.Webbk
+src/ref

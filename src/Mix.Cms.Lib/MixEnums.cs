@@ -4,6 +4,17 @@
     {
         #region Common
 
+        public enum ExpressionMethod
+        {
+            Eq = 1,
+            Lt = 2,
+            Gt = 3,
+            Lte = 4,
+            Gte = 5,
+            And = 6,
+            Or = 7
+        }
+
         public enum DatabaseProvider
         {
             MSSQL = 1,
@@ -241,6 +252,7 @@
             VideoYoutube = 20,
             TuiEditor = 21,
             Number = 22,
+            QRCode = 24,
             Reference = 23,
         }
 

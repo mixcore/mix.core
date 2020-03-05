@@ -349,21 +349,21 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
         }
 
-        public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        {
-            var tasks = new List<Task>();
-            var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
-                .Any(d => d.Specificulture == Specificulture && d.Id == Id));
-            foreach (var item in attrDatas)
-            {
-                tasks.Add(Task.Run(() =>
-                {
-                    var updModel = new ExportViewModel(item, context, transaction);
-                    updModel.GenerateCache(item, updModel, context, transaction);
-                }));
-            }
-            return tasks;
-        }
+        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
+        //{
+        //    var tasks = new List<Task>();
+        //    var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
+        //        .Any(d => d.Specificulture == Specificulture && d.Id == Id));
+        //    foreach (var item in attrDatas)
+        //    {
+        //        tasks.Add(Task.Run(() =>
+        //        {
+        //            var updModel = new ExportViewModel(item, context, transaction);
+        //            updModel.GenerateCache(item, updModel, context, transaction);
+        //        }));
+        //    }
+        //    return tasks;
+        //}
 
         private void ParseData()
         {

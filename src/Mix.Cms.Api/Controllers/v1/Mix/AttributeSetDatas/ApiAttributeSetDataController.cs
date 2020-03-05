@@ -141,6 +141,34 @@ namespace Mix.Cms.Api.Controllers.v1
             }
             return new RepositoryResponse<UpdateViewModel>() { Status = 501 };
         }
+        
+        // POST api/attribute-set-data
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
+        [HttpPost, HttpOptions]
+        [Route("save/{name}")]
+        public async Task<RepositoryResponse<MobileViewModel>> Save([FromBody]JObject data, string name)
+        {
+            var getAttr = await Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModelAsync(m => m.Name == name);
+            if (data != null && getAttr.Data!=null)
+            {
+                
+                var vm = new MobileViewModel()
+                {
+                    AttributeSetName = getAttr.Data.Name,
+                    AttributeSetId = getAttr.Data.Id,
+                    Data = data
+                };
+                vm.Specificulture = _lang;
+                var result = await base.SaveAsync<MobileViewModel>(vm, true);
+                if (result.IsSucceed)
+                {
+                    MixService.LoadFromDatabase();
+                    MixService.SaveSettings();
+                }
+                return result;
+            }
+            return new RepositoryResponse<MobileViewModel>() { Status = 501 };
+        }
 
         // GET api/attribute-set-data
         [HttpPost, HttpOptions]

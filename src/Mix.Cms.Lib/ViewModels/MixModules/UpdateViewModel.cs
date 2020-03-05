@@ -420,38 +420,38 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             return result;
         }
 
-        public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        {
-            var tasks = new List<Task>();
-            tasks.Add(Task.Run(() =>
-            {
-                AttributeData.Data.RemoveCache(AttributeData.Data.Model, context, transaction);
-            }));
-            foreach (var item in AttributeData.Data.Values)
-            {
-                tasks.Add(Task.Run(() =>
-                {
-                    item.RemoveCache(item.Model, context, transaction);
-                }));
-            }
-            // Remove parent Pages
-            var relatedPages = context.MixPageModule.Include(m => m.MixPage).Where(d => d.Specificulture == Specificulture && (d.ModuleId == Id))
-                .AsEnumerable();
-            foreach (var item in relatedPages)
-            {
-                tasks.Add(Task.Run(() =>
-                {
-                    MixPageModules.ReadMvcViewModel.Repository.RemoveCache(item, context, transaction);
-                }));
+        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
+        //{
+        //    var tasks = new List<Task>();
+        //    tasks.Add(Task.Run(() =>
+        //    {
+        //        AttributeData.Data.RemoveCache(AttributeData.Data.Model, context, transaction);
+        //    }));
+        //    foreach (var item in AttributeData.Data.Values)
+        //    {
+        //        tasks.Add(Task.Run(() =>
+        //        {
+        //            item.RemoveCache(item.Model, context, transaction);
+        //        }));
+        //    }
+        //    // Remove parent Pages
+        //    var relatedPages = context.MixPageModule.Include(m => m.MixPage).Where(d => d.Specificulture == Specificulture && (d.ModuleId == Id))
+        //        .AsEnumerable();
+        //    foreach (var item in relatedPages)
+        //    {
+        //        tasks.Add(Task.Run(() =>
+        //        {
+        //            MixPageModules.ReadMvcViewModel.Repository.RemoveCache(item, context, transaction);
+        //        }));
 
-                tasks.Add(Task.Run(() =>
-                {
-                    MixPages.ReadViewModel.Repository.RemoveCache(item.MixPage, context, transaction);
-                }));
-            }
+        //        tasks.Add(Task.Run(() =>
+        //        {
+        //            MixPages.ReadViewModel.Repository.RemoveCache(item.MixPage, context, transaction);
+        //        }));
+        //    }
 
-            return tasks;
-        }
+        //    return tasks;
+        //}
 
         #endregion Async
 

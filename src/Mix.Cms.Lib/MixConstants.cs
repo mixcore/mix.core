@@ -29,6 +29,7 @@ namespace Mix.Cms.Lib
         public const string CONST_DOMAIN_NOTIFICATION = "DomainNotification";
         public const string CONST_DEFAULT_EXTENSIONS_FILE_PATH = "\\Contents\\Extensions\\";
         public const string CONST_DEFAULT_EXTENSION_FILE_NAME = "extensions.json";
+        public const string CONST_DEFAULT_STRING_ID = "default";
 
         public static List<string> cachedKeys = new List<string>();
 

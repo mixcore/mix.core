@@ -4,6 +4,7 @@
 
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
@@ -35,9 +36,9 @@ namespace Mix.Cms.Web
 
                     app.UseRewriter(options);
                 }
-                //    app.Run(context => context.Response.WriteAsync(
-                //$"Rewritten or Redirected Url: " +
-                //$"{context.Request.Path + context.Request.QueryString}"));
+            //    app.Run(context => context.Response.WriteAsync(
+            //$"Rewritten or Redirected Url: " +
+            //$"{context.Request.Path + context.Request.QueryString}"));
             }
             app.UseEndpoints(routes =>
             {

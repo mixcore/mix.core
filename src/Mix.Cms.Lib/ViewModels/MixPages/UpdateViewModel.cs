@@ -715,22 +715,22 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             return result.OrderBy(m => m.Priority).ToList();
         }
 
-        public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        {
-            var tasks = new List<Task>();
-            var relatedPages = context.MixPage.Where(m => m.MixPagePageMixPage
-                 .Any(d => d.Specificulture == Specificulture && (d.Id == Id || d.ParentId == Id)));
-            foreach (var item in relatedPages)
-            {
-                tasks.Add(Task.Run(() =>
-                {
-                    var data = new ReadViewModel(item, context, transaction);
-                    data.RemoveCache(item, context, transaction);
-                }));
-            }
+        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
+        //{
+        //    var tasks = new List<Task>();
+        //    var relatedPages = context.MixPage.Where(m => m.MixPagePageMixPage
+        //         .Any(d => d.Specificulture == Specificulture && (d.Id == Id || d.ParentId == Id)));
+        //    foreach (var item in relatedPages)
+        //    {
+        //        tasks.Add(Task.Run(() =>
+        //        {
+        //            var data = new ReadViewModel(item, context, transaction);
+        //            data.RemoveCache(item, context, transaction);
+        //        }));
+        //    }
 
-            return tasks;
-        }
+        //    return tasks;
+        //}
 
         #endregion Expands
     }

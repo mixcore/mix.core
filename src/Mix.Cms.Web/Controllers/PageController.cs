@@ -11,9 +11,6 @@ namespace Mix.Cms.Web.Controllers
 {
     public class PageController : BaseController
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IApiDescriptionGroupCollectionProvider _apiExplorer;
-        private IApplicationLifetime _lifetime;
 
         #region contructor
 

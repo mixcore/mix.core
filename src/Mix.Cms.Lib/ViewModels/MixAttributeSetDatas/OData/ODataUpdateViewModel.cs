@@ -172,29 +172,29 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             return result;
         }
 
-        public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        {
-            var tasks = new List<Task>();
-            //var attrDatas = context.MixAttributeSetData.Include(m => m.MixRelatedAttributeData).Where(m => m.MixRelatedAttributeData
-            //    .Any(d => d.Specificulture == Specificulture && d.Id == Id));
-            var relatedData = context.MixRelatedAttributeData.Include(m => m.MixAttributeSetData).Where(m => m.Specificulture == Specificulture && (m.Id == Id || m.ParentId == Id));
-            foreach (var item in relatedData)
-            {
-                tasks.Add(Task.Run(() =>
-                {
-                    ReadViewModel.Repository.RemoveCache(item.MixAttributeSetData, context, transaction);
-                    MixRelatedAttributeDatas.ReadViewModel.Repository.RemoveCache(item, context, transaction);
-                }));
-            }
-            foreach (var item in Values)
-            {
-                tasks.Add(Task.Run(() =>
-                {
-                    item.RemoveCache(item.Model);
-                }));
-            }
-            return tasks;
-        }
+        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
+        //{
+        //    var tasks = new List<Task>();
+        //    //var attrDatas = context.MixAttributeSetData.Include(m => m.MixRelatedAttributeData).Where(m => m.MixRelatedAttributeData
+        //    //    .Any(d => d.Specificulture == Specificulture && d.Id == Id));
+        //    var relatedData = context.MixRelatedAttributeData.Include(m => m.MixAttributeSetData).Where(m => m.Specificulture == Specificulture && (m.Id == Id || m.ParentId == Id));
+        //    foreach (var item in relatedData)
+        //    {
+        //        tasks.Add(Task.Run(() =>
+        //        {
+        //            ReadViewModel.Repository.RemoveCache(item.MixAttributeSetData, context, transaction);
+        //            MixRelatedAttributeDatas.ReadViewModel.Repository.RemoveCache(item, context, transaction);
+        //        }));
+        //    }
+        //    foreach (var item in Values)
+        //    {
+        //        tasks.Add(Task.Run(() =>
+        //        {
+        //            item.RemoveCache(item.Model);
+        //        }));
+        //    }
+        //    return tasks;
+        //}
 
         private void HandleEdm(MixCmsContext _context, IDbContextTransaction _transaction)
         {

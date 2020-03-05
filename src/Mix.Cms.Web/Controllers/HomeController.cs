@@ -10,7 +10,6 @@ namespace Mix.Cms.Web.Controllers
 {
     public class HomeController : BaseController
     {
-        private readonly UserManager<ApplicationUser> _userManager;
 
         #region contructor
 
@@ -38,8 +37,9 @@ namespace Mix.Cms.Web.Controllers
 
         #region Routes
 
+        [HttpGet]
         [Route("")]
-        [Route("{seoName}")]
+        //[Route("{seoName}")]
         public async Task<IActionResult> Index()
         {
             if (isValid)
