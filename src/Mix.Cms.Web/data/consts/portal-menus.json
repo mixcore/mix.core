@@ -625,7 +625,7 @@
         {
           "path": "/portal/localize/details/:id",
           "templatePath": "/app/app-portal/pages/localize/details.html",
-          "controller": "LanguageController"
+          "controller": "LocalizeController"
         }
       ]
     },

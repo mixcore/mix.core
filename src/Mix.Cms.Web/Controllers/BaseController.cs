@@ -53,14 +53,9 @@ namespace Mix.Cms.Web.Controllers
 
         public string culture {
             get {
-                if (string.IsNullOrEmpty(_culture))
-                {
-                    _culture = RouteData?.Values["culture"]?.ToString().ToLower() == null
-                    || RouteData?.Values["culture"]?.ToString().ToLower() == "init"
-                ? MixService.GetConfig<string>("DefaultCulture")
-                : RouteData?.Values["culture"].ToString();
-                }
-                return _culture;
+                return RouteData?.Values["culture"]?.ToString().ToLower()
+                    ?? _culture
+                    ?? MixService.GetConfig<string>("DefaultCulture");
             }
             set { _culture = value; }
         }
