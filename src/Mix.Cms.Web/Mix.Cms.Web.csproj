@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Mix.Cms.Api.GraphQL\Mix.Cms.Api.GraphQL.csproj" />
+    <ProjectReference Include="..\Mix.Cms.Api.RestFul\Mix.Cms.Api.RestFul.csproj" />
     <ProjectReference Include="..\Mix.Cms.Api\Mix.Cms.Api.csproj" />
     <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
   </ItemGroup>
