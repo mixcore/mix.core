@@ -1,10 +1,10 @@
 open_collective: mixcore
+community_bridge: mixcore
 patreon: mixcore
 custom: ["https://www.paypal.me/mixcore", "https://www.buymeacoffee.com/mixcore"]
 #custom: ["https://www.paypal.me/mixcore"]
 #ko_fi: mixcore
 #liberapay: mixcore
-#community_bridge: mixcore
 #tidelift: mixcore/mix.core
 #issuehunt: mixcore
 #otechie: mixcore
