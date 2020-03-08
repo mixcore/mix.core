@@ -20,7 +20,7 @@ Codefactor     |[![CodeFactor](https://www.codefactor.io/repository/github/mixco
 
 |  |Links  |
 |---------|---------|
-|STAG / Demo     |http://stag.mixcore.org or https://demo.mixcore.org/portal (admin/P@ssw0rd)|
+|STAG / Demo     |https://dev.mixcore.org|
 |Dev docs     |https://docs.mixcore.org / https://mixcore.dev|
 |Youtube     |https://www.youtube.com/channel/UChqzh6JnC8HBUSQ9AWIcZAw|
 |Twitter     |https://twitter.com/mixcore_cms         |
