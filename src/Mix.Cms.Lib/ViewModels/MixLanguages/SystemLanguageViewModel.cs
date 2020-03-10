@@ -11,7 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
-namespace Mix.Cms.Lib.ViewModels.MixSystem
+namespace Mix.Cms.Lib.ViewModels.MixLanguages
 {
     public class SystemLanguageViewModel
         : ViewModelBase<MixCmsContext, MixLanguage, SystemLanguageViewModel>

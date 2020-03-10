@@ -277,8 +277,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             // Load page views
             this.Templates = this.Templates ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType, _context, _transaction).Data;
-            var templateName = Template?.Split('/')[1] ?? MixConstants.DefaultTemplate.Page;
-            this.View = Templates.First(t => !string.IsNullOrEmpty(templateName) && templateName.Equals($"{t.FileName}{t.Extension}"));
+            var templateName = Template?.Substring(Template.LastIndexOf('/') + 1) ?? MixConstants.DefaultTemplate.Page;
+            this.View = Templates.FirstOrDefault(t => !string.IsNullOrEmpty(templateName) && templateName.Equals($"{t.FileName}{t.Extension}"));
             this.Template = CommonHelper.GetFullPath(new string[]
                {
                     this.View?.FileFolder
@@ -289,8 +289,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             // Load master views
             this.Masters = this.Masters ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == MixEnums.EnumTemplateFolder.Masters.ToString(), _context, _transaction).Data;
-            var masterName = Layout?.Split('/')[1] ?? MixConstants.DefaultTemplate.Master;
-            this.Master = Masters.First(t => !string.IsNullOrEmpty(masterName) && masterName.Equals($"{t.FileName}"));
+            var masterName = Layout?.Substring(Template.LastIndexOf('/') + 1) ?? MixConstants.DefaultTemplate.Master;
+            this.Master = Masters.FirstOrDefault(t => !string.IsNullOrEmpty(masterName) && masterName.Equals($"{t.FileName}"));
             this.Layout = $"{this.Master?.FileFolder}/{this.Master?.FileName}";
 
             this.ModuleNavs = GetModuleNavs(_context, _transaction);

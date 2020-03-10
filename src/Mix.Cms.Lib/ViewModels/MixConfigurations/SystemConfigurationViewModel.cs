@@ -11,7 +11,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
-namespace Mix.Cms.Lib.ViewModels.MixSystem
+namespace Mix.Cms.Lib.ViewModels.MixConfigurations
 {
     public class SystemConfigurationViewModel
       : ViewModelBase<MixCmsContext, MixConfiguration, SystemConfigurationViewModel>
