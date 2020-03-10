@@ -52,7 +52,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         #region Get
-
+        
         // GET api/category/id
         [AllowAnonymous]
         [HttpGet, HttpOptions]
@@ -69,11 +69,11 @@ namespace Mix.Cms.Api.Controllers.v1
                 PortalThemeSettings = MixService.GetConfig<JObject>(MixConstants.ConfigurationKeyword.PortalThemeSettings),
                 ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, _lang),
                 Cultures = cultures,
-                PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
-                ModuleTypes = Enum.GetNames(typeof(MixModuleType)).ToList(),
-                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetDataType)).ToList(),
-                DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
-                Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
+                PageTypes = EnumToObject(typeof(MixPageType)),
+                ModuleTypes = EnumToObject(typeof(MixModuleType)),
+                AttributeSetTypes = EnumToObject(typeof(MixAttributeSetDataType)),
+                DataTypes = EnumToObject(typeof(MixDataType)),                
+                Statuses = EnumToObject(typeof(MixContentStatus)),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
             };
             settings.LangIcon = culture?.Icon ?? MixService.GetConfig<string>("Language");
@@ -167,11 +167,11 @@ namespace Mix.Cms.Api.Controllers.v1
                 ApiEncryptIV = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ApiEncryptIV),
                 IsEncryptApi = MixService.GetConfig<bool>(MixConstants.ConfigurationKeyword.IsEncryptApi),
                 Cultures = cultures,
-                PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
-                ModuleTypes = Enum.GetNames(typeof(MixModuleType)).ToList(),
-                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetDataType)).ToList(),
-                DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
-                Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
+                PageTypes = EnumToObject(typeof(MixPageType)),
+                ModuleTypes = EnumToObject(typeof(MixModuleType)),
+                AttributeSetTypes = EnumToObject(typeof(MixAttributeSetDataType)),
+                DataTypes = EnumToObject(typeof(MixDataType)),
+                Statuses = EnumToObject(typeof(MixContentStatus)),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
             };
 
@@ -553,11 +553,11 @@ namespace Mix.Cms.Api.Controllers.v1
                 ApiEncryptIV = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ApiEncryptIV),
                 IsEncryptApi = MixService.GetConfig<bool>(MixConstants.ConfigurationKeyword.IsEncryptApi),
                 Cultures = cultures,
-                PageTypes = Enum.GetNames(typeof(MixPageType)).ToList(),
-                ModuleTypes = Enum.GetNames(typeof(MixModuleType)).ToList(),
-                AttributeSetTypes = Enum.GetNames(typeof(MixAttributeSetDataType)).ToList(),
-                DataTypes = Enum.GetNames(typeof(MixDataType)).ToList(),
-                Statuses = Enum.GetNames(typeof(MixContentStatus)).ToList(),
+                PageTypes = EnumToObject(typeof(MixPageType)),
+                ModuleTypes = EnumToObject(typeof(MixModuleType)),
+                AttributeSetTypes = EnumToObject(typeof(MixAttributeSetDataType)),
+                DataTypes = EnumToObject(typeof(MixDataType)),
+                Statuses = EnumToObject(typeof(MixContentStatus)),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
             };
 
