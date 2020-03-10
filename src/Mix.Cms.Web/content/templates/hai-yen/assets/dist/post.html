@@ -1,0 +1,439 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Landing Page built with Mixcore CMS - A Modern Opensource Dotnet Core CMS</title>
+  <meta name="description"
+    content="A demo landing page for agencies or product oriented businesses built using Mixcore CMS, a free, modern and lightweight UI toolkit based on Bootstrap 4.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CSS Dependencies -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="css/shards.min.css?v=3.0.0">
+  <link rel="stylesheet" href="css/shards-extras.min.css?version=3.0.0">
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+  <style>
+    .container .squeezed {
+      width: 82%;
+      margin: 0 auto;
+    }
+
+    .page .post-thumbnail,
+    .single .post-thumbnail {
+      overflow: hidden;
+      border-radius: 20px;
+      box-shadow: inset 0 0 50px rgba(0, 0, 0, .1), inset 0 0 25px rgba(0, 0, 0, .15);
+    }
+
+    .page .article-content,
+    .single .article-content {
+      position: relative;
+      top: -100px;
+      margin-bottom: -50px;
+    }
+  </style>
+</head>
+
+<body class="shards-landing-page--1">
+
+
+  <!-- Welcome Section -->
+  <div class="blog-header d-flex justify-content-center flex-column"
+    style="background-image: url(images/agency-landing/2927262.jpg);">
+    <div class="container">
+      <div id="particles-js" class="position-absolute w-100 h-100"></div>
+      <!-- Navigation -->
+      <nav class="navbar navbar-expand-lg navbar-dark pt-4 px-0">
+        <a class="navbar-brand" href="#">
+          <img src="images/agency-landing/shards-logo-white.svg" class="mr-2" alt="Shards - Agency Landing Page">
+          Mixcore Agency
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#our-services">Our Services</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="blog.html" id="dropdown-blog" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">Blog</a>
+              <div class="dropdown-menu" aria-labelledby="dropdown-blog">
+                <a class="dropdown-item" href="blog.html">Category 1</a>
+                <a class="dropdown-item" href="blog.html">Category 2</a>
+                <a class="dropdown-item" href="blog.html">Category 3</a>
+                <a class="dropdown-item" href="blog.html">Category 4</a>
+                <a class="dropdown-item" href="blog.html">Category 5</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Testimonials</a>
+            </li>
+          </ul>
+
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="https://twitter.com/mix.core"><i class="fa fa-twitter"></i></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://www.facebook.com/mix.core"><i class="fa fa-facebook"></i></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://dribbble.com"><i class="fa fa-dribbble"></i></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/mixcore"><i class="fa fa-github"></i></a>
+            </li>
+            <li class="nav-item dropdown lang-switcher">
+              <a class="nav-link dropdown-toggle" href="#" id="dropdown09" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false"><span class="flag-icon flag-icon-us"> </span> English</a>
+              <div class="dropdown-menu" aria-labelledby="dropdown09">
+                <a class="dropdown-item" href="#fr"><span class="flag-icon flag-icon-fr"> </span> French</a>
+                <a class="dropdown-item" href="#it"><span class="flag-icon flag-icon-it"> </span> Italian</a>
+                <a class="dropdown-item" href="#ru"><span class="flag-icon flag-icon-ru"> </span> Russian</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- / Navigation -->
+    </div> <!-- .container -->
+
+    <!-- Inner Wrapper -->
+    <div class="inner-wrapper mt-auto mb-auto container">
+      <div class="row">
+        <div class="col-md-7">
+          <h1 class="welcome-heading display-5 text-white">UI Frameworks Review: Vue.js vs React in 2019</h1>
+          <p class="text-white">By Admin on 26 Oct 2019 15:22</p>
+          <!-- <a href="#our-services" class="btn btn-lg btn-outline-white btn-pill align-self-center">Learn More</a> -->
+        </div>
+      </div>
+    </div>
+    <!-- / Inner Wrapper -->
+  </div>
+  <!-- / Welcome Section -->
+
+    <!-- Our Services Section -->
+    <div id="our-services" class="section py-4">
+      <!-- <h3 class="section-title text-center my-5">
+        UI Frameworks Review: Vue.js vs React in 2019
+      </h3> -->
+
+      <div class="article-content container">
+        <div class="squeezed wrapper">
+          <div class="inner-content">
+            <!-- <h6 class="text-muted d-block text-center pb-4">By Admin on 26 Oct 2019 15:22</h6> -->
+            <p>The front-end is a central battleground for JavaScript—as various frameworks contend for dominance in
+              developing user interfaces (UIs). Two combatants that are constantly struggling to outdo each other are
+              Vue.js (commonly referred to as Vue) and React (also referred to as React.js or ReactJS).</p>
+            <p>In this article, we’ll review the two UI frameworks so that you can determine the one that best suits
+              your
+              use case in 2019 (and beyond).</p>
+            <h2 id="background">Background</h2>
+            <p>Vue.js was created by Evan You, an ex-Googler, in February 2014. He was motivated by the desire to create
+              a
+              framework that encapsulates the best front-end development approaches so that web applications can be
+              versatile, performant, and faster.</p>
+            <p>From the onset, Vue has been a true open source project, largely depending on the community,
+              crowdfunding,
+              and contributors to release new features. It operates under the MIT License.</p>
+            <p>On the other hand, React was created by a Facebook employee in 2011. Although it was initially designed
+              to
+              target some specific needs at Facebook, the framework was open-sourced in May 2013, making it freely
+              available to the public. Currently, it also operates under the MIT License. The framework’s corporate
+              backing, particularly from such a major player in the tech industry, has propelled its continuous
+              development over the years.
+              Here is a table that summarizes the status of Vue.js vs React in 2019.</p>
+            <h2 id="architecture">Architecture</h2>
+            <p>React and Vue have well-designed architectural structures that make them useful in creating adaptable UIs
+              and sophisticated single-page applications. Generally, the two frameworks are similar in scope with some
+              shared features.</p>
+            <p>Here are some common features in both React and Vue:</p>
+            <ul>
+              <li>Utilization of the virtual DOM to accelerate performance by avoiding heavy DOM manipulation;</li>
+              <li>Provision of reactive and composable view of components to enhance the development process;</li>
+              <li>Concentrating on the core library such that the concerns for state management, routing, and others are
+                handled separately.</li>
+            </ul>
+            <p>In spite of their similarities, there are subtle differences that make each framework to outshine the
+              other
+              in a number of ways.</p>
+            <p>For example, one of the major differences between Vue.js and React.js is the syntax for the view layer.
+              React depends on JavaScript Expressions (JSX), a declarative XML-like syntax, that let developers create
+              self-contained components that define how the UI should look like. Although it’s possible to use React
+              without JSX, most developers use JSX for templating because it assists in debugging and enables quicker
+              optimization when compiling code to JavaScript.</p>
+            <p>On the other hand, Vue uses HTML templates by default—but it also offers support for JSX. The HTML-based
+              templates make building Vue applications much easier, especially to developers who are already familiar
+              with
+              HTML.</p>
+            <div class="toolbar">
+              <div class="toolbar-item"><a>Copy</a></div>
+            </div>
+          </div>
+          <p>As you can see above, starting to use Vue.js is much simpler. After providing a single script tag, you’ll
+            be up and running. You can make the most of Vue’s features without having to learn JSX, build systems, or
+            ES2015+. However, before you can start using React, you need to know how to use JSX and other technologies,
+            something which steepens its learning curve.</p>
+          <p>Fortunately, there is extensive documentation, vibrant community, and several resources to assist you in
+            getting started using the React JavaScript library with ease. Since it’s backed by Facebook, the largest
+            social media platform in the world, React has a dedicated team that constantly updates its documentation and
+            creates how-to tutorials to make the library easier to consume.</p>
+          <p>Unlike React, Vue does not have any significant corporate backing. However, it also has an active community
+            that is dedicated to making the framework easier to use. Nonetheless, when learning React, you’re likely to
+            get quick community assistance than when learning Vue.</p>
+          <h2 id="popularity">Popularity</h2>
+          <p>In terms of popularity, React beats Vue. According to the Stack Overflow’s Developer Survey 2019, React.js
+            is the second-most popular web framework, at 31.3%. Vue.js is ranked 7th, at 15.2%.</p>
+          <p>Another ranking tool gives React an overall score of 96 and places it as the most popular web
+            framework—while Vue is ranked 7th with a score of 91.</p>
+          <h2 id="job-market">Job Market</h2>
+          <p>The demand for React in the job market is huge. Because it’s popularly used for creating front-end
+            applications, it has a larger market share than Vue. Furthermore, since React Native allows for the creation
+            of Android and iOS applications using the same React component architecture, developers with React skills
+            are highly sought after.</p>
+          <p>Although Vue is also trying to venture into cross-platform development using Weex, a UI framework developed
+            by the Alibaba Group, the technology is still immature and has not been battle-tried as React Native. The
+            absence of robust cross-platform capabilities has greatly diminished Vue’s job prospects.</p>
+          <p>In fact, according to HackerRank’s 2019 Developer Skills Report, the hiring demand for Vue and React are at
+            18.47% and 38.38% respectively.</p>
+          <p>Furthermore, React developers also earn a higher salary than Vue developers. According to one survey, Vue
+            developers make an average of $62,400 per year while React developers make an average of $73,600 per year.
+          </p>
+          <h2 id="conclusion">Conclusion</h2>
+          <p>Eventually, the decision to choose either Vue.js or React for your UI development needs depends on your
+            current requirements, capabilities, and preferences. If you are looking for a lightweight, simple, and easy
+            to learn JavaScript web framework, then Vue may be the best go-to option.</p>
+          <p>On the other hand, if you are looking for a popular, mobile-friendly, and performant framework for
+            developing complex applications, then React may best serve your needs.</p>
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+  <!-- / Our Services Section -->
+
+  <!-- Our Blog Section -->
+  <div class="blog section section-invert py-4">
+    <h3 class="section-title text-center m-5">Related Posts</h3>
+
+    <div class="container">
+      <div class="py-4">
+        <div class="row">
+          <div class="card-deck">
+            <div class="col-md-12 col-lg-4">
+              <div class="card mb-4">
+                <img class="card-img-top" src="images/common/card-1.jpg" alt="Card image cap">
+                <div class="card-body">
+                  <h4 class="card-title">Find Great Places to Work While Travelling</h4>
+                  <p class="card-text">He seems sinking under the evidence could not only grieve and a visit. The father
+                    is to bless and placed in his length hid...</p>
+                  <a class="btn btn-primary btn-pill" href="#">Read More &rarr;</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12 col-lg-4">
+              <div class="card mb-4">
+                <img class="card-img-top" src="images/common/card-3.jpg" alt="Card image cap">
+                <div class="card-body">
+                  <h4 class="card-title">Quick Tips for Improving Your Website's Design</h4>
+                  <p class="card-text">He seems sinking under the evidence could not only grieve and a visit. The father
+                    is to bless and placed in his length hid...</p>
+                  <a class="btn btn-primary btn-pill" href="#">Read More &rarr;</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12 col-lg-4">
+              <div class="card mb-4">
+                <img class="card-img-top" src="images/common/card-2.jpg" alt="Card image cap">
+                <div class="card-body">
+                  <h4 class="card-title">A Designer's Tips While Travelling and Working</h4>
+                  <p class="card-text">He seems sinking under the evidence could not only grieve and a visit. The father
+                    is to bless and placed in his length hid...</p>
+                  <a class="btn btn-primary btn-pill" href="#">Read More &rarr;</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- / Our Blog Section -->
+
+
+  <!-- Footer Section -->
+  <footer>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="#">Mixcore Agency</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Our Services</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Blog</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Testimonials</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Contact Us</a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </nav>
+  </footer>
+  <!-- / Footer Section -->
+
+  <!-- JavaScript Dependencies -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+    integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+
+  <script>
+    particlesJS('particles-js',
+      {
+        "particles": {
+          "number": {
+            "value": 50,
+            "density": {
+              "enable": true,
+              "value_area": 800
+            }
+          },
+          "color": {
+            "value": "#ffffff"
+          },
+          "shape": {
+            "type": "circle",
+            "stroke": {
+              "width": 0,
+              "color": "#000000"
+            },
+            "polygon": {
+              "nb_sides": 5
+            },
+            "image": {
+              "src": "img/github.svg",
+              "width": 100,
+              "height": 100
+            }
+          },
+          "opacity": {
+            "value": 0.2,
+            "random": false,
+            "anim": {
+              "enable": false,
+              "speed": 1,
+              "opacity_min": 0.1,
+              "sync": false
+            }
+          },
+          "size": {
+            "value": 3,
+            "random": true,
+            "anim": {
+              "enable": false,
+              "speed": 40,
+              "size_min": 0.1,
+              "sync": false
+            }
+          },
+          "line_linked": {
+            "enable": true,
+            "distance": 150,
+            "color": "#ffffff",
+            "opacity": 0.2,
+            "width": 1
+          },
+          "move": {
+            "enable": true,
+            "speed": 3,
+            "direction": "none",
+            "random": false,
+            "straight": false,
+            "out_mode": "out",
+            "bounce": false,
+            "attract": {
+              "enable": false,
+              "rotateX": 600,
+              "rotateY": 1200
+            }
+          }
+        },
+        "interactivity": {
+          "detect_on": "window",
+          "events": {
+            "onhover": {
+              "enable": true,
+              "mode": "grab"
+            },
+            "onclick": {
+              "enable": true,
+              "mode": "push"
+            },
+            "resize": true
+          },
+          "modes": {
+            "grab": {
+              "distance": 200,
+              "line_linked": {
+                "opacity": 0.2
+              }
+            },
+            "bubble": {
+              "distance": 400,
+              "size": 40,
+              "duration": 2,
+              "opacity": 8,
+              "speed": 3
+            },
+            "repulse": {
+              "distance": 200,
+              "duration": 0.4
+            },
+            "push": {
+              "particles_nb": 4
+            },
+            "remove": {
+              "particles_nb": 2
+            }
+          }
+        },
+        "retina_detect": true
+      });
+  </script>
+</body>
+
+</html>
