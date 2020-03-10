@@ -85,13 +85,13 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         [JsonProperty("assetFolder")]
         public string AssetFolder {
             get {
-                return $"content/templates/{Name}/assets";
+                return $"wwwroot/content/templates/{Name}/assets";
             }
         }
 
         public string UploadsFolder {
             get {
-                return $"content/templates/{Name}/uploads";
+                return $"wwwroot/content/templates/{Name}/uploads";
             }
         }
 
