@@ -16,10 +16,12 @@ const networkFirstPaths = [
 const avoidCachingPaths = [
   /* Add an array of regex of paths that shouldn't be cached */
   // Example: /\/api\/.*/
-  '/\/api\/.*',
-  '/\/portal\/.*',
-  '/\/app\/.*',
-  '/\/security\/.*'
+  '\/api\/.*',
+  '\/portal\/.*',
+  '\/app\/.*',
+  '\/security\/.*',
+  '\/js\/.*', // TODO: Remove when release v1.0
+  '\/css\/.*' // TODO: Remove when release v1.0
 ];
 
 function pathComparer(requestUrl, pathRegEx) {
@@ -158,4 +160,9 @@ function updateCache(request, response) {
 
   return Promise.resolve();
 }
+
+
+
+
+
 
