@@ -1,12 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.ViewModels.MixConfigurations;
+using Mix.Cms.Lib.ViewModels.MixLanguages;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-namespace Mix.Cms.Lib.ViewModels.MixSystem
+namespace Mix.Cms.Lib.ViewModels.MixCultures
 {
     public class SystemCultureViewModel
         : ViewModelBase<MixCmsContext, MixCulture, SystemCultureViewModel>
