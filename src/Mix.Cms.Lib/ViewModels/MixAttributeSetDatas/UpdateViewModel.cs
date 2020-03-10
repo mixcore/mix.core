@@ -110,6 +110,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
+                if (AttributeSetId==0 && !string.IsNullOrEmpty(AttributeSetName))
+                {
+                    AttributeSetId = MixAttributeSets.ReadViewModel.Repository.GetSingleModel(m => m.Name == AttributeSetName, _context, _transaction).Data?.Id ?? 0;
+                }
+                else if (AttributeSetId > 0 && string.IsNullOrEmpty(AttributeSetName))
+                {
+                    AttributeSetName = MixAttributeSets.ReadViewModel.Repository.GetSingleModel(m => m.Name == AttributeSetName, _context, _transaction).Data?.Name;
+                }
             }
             return base.ParseModel(_context, _transaction);
         }

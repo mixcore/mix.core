@@ -289,7 +289,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             // Load master views
             this.Masters = this.Masters ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == MixEnums.EnumTemplateFolder.Masters.ToString(), _context, _transaction).Data;
-            var masterName = Layout?.Substring(Template.LastIndexOf('/') + 1) ?? MixConstants.DefaultTemplate.Master;
+            var masterName = Layout?.Substring(Layout.LastIndexOf('/') + 1) ?? MixConstants.DefaultTemplate.Master;
             this.Master = Masters.FirstOrDefault(t => !string.IsNullOrEmpty(masterName) && masterName.Equals($"{t.FileName}"));
             this.Layout = $"{this.Master?.FileFolder}/{this.Master?.FileName}";
 

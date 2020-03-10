@@ -45,19 +45,19 @@ namespace Mix.Cms.Lib.ViewModels
         public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("pageTypes")]
-        public List<string> PageTypes { get; set; }
+        public List<object> PageTypes { get; set; }
 
         [JsonProperty("moduleTypes")]
-        public List<string> ModuleTypes { get; set; }
+        public List<object> ModuleTypes { get; set; }
 
         [JsonProperty("attributeSetTypes")]
-        public List<string> AttributeSetTypes { get; set; }
+        public List<object> AttributeSetTypes { get; set; }
 
         [JsonProperty("dataTypes")]
-        public List<string> DataTypes { get; set; }
+        public List<object> DataTypes { get; set; }
 
         [JsonProperty("statuses")]
-        public List<string> Statuses { get; set; }
+        public List<object> Statuses { get; set; }
 
         [JsonProperty("lastUpdateConfiguration")]
         public DateTime? LastUpdateConfiguration { get; set; }
