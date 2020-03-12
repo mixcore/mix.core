@@ -1,4 +1,7 @@
-﻿namespace Mix.Cms.Lib.Models.Account
+﻿using System;
+using System.Collections.Generic;
+
+namespace Mix.Cms.Lib.Models.Account
 {
     public partial class AspNetUserTokens
     {

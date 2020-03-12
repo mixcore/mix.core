@@ -327,8 +327,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             LoadAttributes(_context, _transaction);
 
             this.Templates = this.Templates ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
-                t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
-            this.View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Modules, _context, _transaction);
+                t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType, _context, _transaction).Data;
+            var templateName = Template?.Substring(Template.LastIndexOf('/') + 1) ?? MixConstants.DefaultTemplate.Module;
+            this.View = Templates.FirstOrDefault(t => !string.IsNullOrEmpty(templateName) && templateName.Equals($"{t.FileName}{t.Extension}"));
             this.Template = CommonHelper.GetFullPath(new string[]
                {
                     this.View?.FileFolder

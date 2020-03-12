@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200221083318_Init.cs" />
+    <Compile Remove="Migrations\20200221083318_Init.Designer.cs" />
+    <Compile Remove="Migrations\MixCmsAccount\20190804034827_init_mysql.cs" />
+    <Compile Remove="Migrations\MixCmsAccount\20190804034827_init_mysql.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommonMark.NET" Version="0.15.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />

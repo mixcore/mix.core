@@ -1,51 +1,36 @@
-﻿// Licensed to the Mixcore Foundation under one or more agreements.
-// The Mixcore Foundation licenses this file to you under the MIT.
-// See the LICENSE file in the project root for more information.
-
+﻿using System;
 using Microsoft.EntityFrameworkCore;
-using Mix.Cms.Lib.Services;
-using Mix.Identity.Data;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Mix.Cms.Lib.Models.Account
 {
-    public partial class MixCmsAccountContext : DbContext
+    public partial class mix_structure_accountContext : DbContext
     {
+        public mix_structure_accountContext()
+        {
+        }
+
+        public mix_structure_accountContext(DbContextOptions<mix_structure_accountContext> options)
+            : base(options)
+        {
+        }
+
         public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
-        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
+        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Clients> Clients { get; set; }
         public virtual DbSet<RefreshTokens> RefreshTokens { get; set; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ApplicationDbContext" /> class.
-        /// </summary>
-        /// <param name="options">The options.</param>
-        public MixCmsAccountContext(DbContextOptions<ApplicationDbContext> options)
-                    : base(options)
-        {
-        }
-
-        public MixCmsAccountContext()
-        {
-        }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
-            if (!string.IsNullOrEmpty(cnn))
+            if (!optionsBuilder.IsConfigured)
             {
-                if (MixService.GetConfig<int>(MixConstants.CONST_SETTING_DATABASE_PROVIDER) == (int)MixEnums.DatabaseProvider.MySQL)
-                {
-                    optionsBuilder.UseMySql(cnn);
-                }
-                else
-                {
-                    optionsBuilder.UseSqlServer(cnn);
-                }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("Server=115.79.139.90,4444;Database=mix_structure_account;UID=tinku;Pwd=1234qwe@;MultipleActiveResultSets=true;");
             }
         }
 
@@ -276,6 +261,7 @@ namespace Mix.Cms.Lib.Models.Account
 
             OnModelCreatingPartial(modelBuilder);
         }
+
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
