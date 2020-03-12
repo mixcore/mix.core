@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Mix.Cms.Lib.Migrations.MixCmsAccount
 {
-    public partial class init_mysql : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,8 +11,8 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    Id = table.Column<string>(maxLength: 50, nullable: false),
+                    ConcurrencyStamp = table.Column<string>(maxLength: 400, nullable: true),
                     Name = table.Column<string>(maxLength: 250, nullable: true),
                     NormalizedName = table.Column<string>(maxLength: 250, nullable: true)
                 },
@@ -25,33 +25,33 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<string>(maxLength: 50, nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    Avatar = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    Avatar = table.Column<string>(maxLength: 250, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(maxLength: 250, nullable: true),
                     CountryId = table.Column<int>(nullable: false),
-                    Culture = table.Column<string>(nullable: true),
-                    DOB = table.Column<DateTime>(nullable: true),
+                    Culture = table.Column<string>(maxLength: 50, nullable: true),
+                    DOB = table.Column<DateTime>(type: "datetime", nullable: true),
                     Email = table.Column<string>(maxLength: 250, nullable: true),
-                    EmailConfirmed = table.Column<short>(nullable: false),
-                    FirstName = table.Column<string>(nullable: true),
-                    Gender = table.Column<string>(nullable: true),
-                    IsActived = table.Column<short>(nullable: false),
-                    JoinDate = table.Column<DateTime>(nullable: false),
-                    LastModified = table.Column<DateTime>(nullable: false),
-                    LastName = table.Column<string>(nullable: true),
-                    LockoutEnabled = table.Column<short>(nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    ModifiedBy = table.Column<string>(nullable: true),
-                    NickName = table.Column<string>(nullable: true),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    FirstName = table.Column<string>(maxLength: 50, nullable: true),
+                    Gender = table.Column<string>(maxLength: 50, nullable: true),
+                    IsActived = table.Column<bool>(nullable: false),
+                    JoinDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime", nullable: false),
+                    LastName = table.Column<string>(maxLength: 50, nullable: true),
+                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    LockoutEnd = table.Column<DateTime>(type: "datetime", nullable: true),
+                    ModifiedBy = table.Column<string>(maxLength: 250, nullable: true),
+                    NickName = table.Column<string>(maxLength: 50, nullable: true),
                     NormalizedEmail = table.Column<string>(maxLength: 250, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 250, nullable: true),
-                    PasswordHash = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<short>(nullable: false),
-                    RegisterType = table.Column<string>(nullable: true),
-                    SecurityStamp = table.Column<string>(nullable: true),
-                    TwoFactorEnabled = table.Column<short>(nullable: false),
+                    PasswordHash = table.Column<string>(maxLength: 250, nullable: true),
+                    PhoneNumber = table.Column<string>(maxLength: 50, nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    RegisterType = table.Column<string>(maxLength: 50, nullable: true),
+                    SecurityStamp = table.Column<string>(maxLength: 50, nullable: true),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false),
                     UserName = table.Column<string>(maxLength: 250, nullable: true)
                 },
                 constraints: table =>
@@ -63,13 +63,13 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                 name: "Clients",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    Active = table.Column<short>(nullable: false),
+                    Id = table.Column<string>(maxLength: 50, nullable: false),
+                    Active = table.Column<bool>(nullable: false),
                     AllowedOrigin = table.Column<string>(maxLength: 100, nullable: true),
                     ApplicationType = table.Column<int>(nullable: false),
                     Name = table.Column<string>(maxLength: 100, nullable: false),
                     RefreshTokenLifeTime = table.Column<int>(nullable: false),
-                    Secret = table.Column<string>(nullable: false)
+                    Secret = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -80,12 +80,12 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                 name: "RefreshTokens",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    ClientId = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: false),
-                    Username = table.Column<string>(nullable: true),
-                    ExpiresUtc = table.Column<DateTime>(nullable: false),
-                    IssuedUtc = table.Column<DateTime>(nullable: false)
+                    Id = table.Column<string>(maxLength: 50, nullable: false),
+                    ClientId = table.Column<string>(maxLength: 50, nullable: true),
+                    Email = table.Column<string>(maxLength: 250, nullable: false),
+                    Username = table.Column<string>(maxLength: 250, nullable: true),
+                    ExpiresUtc = table.Column<DateTime>(type: "datetime", nullable: false),
+                    IssuedUtc = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -96,11 +96,10 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
-                    ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true),
-                    RoleId = table.Column<string>(nullable: false)
+                    Id = table.Column<int>(nullable: false),
+                    ClaimType = table.Column<string>(maxLength: 400, nullable: true),
+                    ClaimValue = table.Column<string>(maxLength: 400, nullable: true),
+                    RoleId = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -117,12 +116,11 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
-                    ApplicationUserId = table.Column<string>(nullable: true),
-                    ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: false)
+                    Id = table.Column<int>(nullable: false),
+                    ApplicationUserId = table.Column<string>(maxLength: 50, nullable: true),
+                    ClaimType = table.Column<string>(maxLength: 400, nullable: true),
+                    ClaimValue = table.Column<string>(maxLength: 400, nullable: true),
+                    UserId = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -145,15 +143,15 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(nullable: false),
-                    ProviderKey = table.Column<string>(nullable: false),
-                    ApplicationUserId = table.Column<string>(nullable: true),
-                    ProviderDisplayName = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: false)
+                    LoginProvider = table.Column<string>(maxLength: 50, nullable: false),
+                    ProviderKey = table.Column<string>(maxLength: 50, nullable: false),
+                    ApplicationUserId = table.Column<string>(maxLength: 50, nullable: true),
+                    ProviderDisplayName = table.Column<string>(maxLength: 400, nullable: true),
+                    UserId = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.PrimaryKey("PK_AspNetUserLogins_1", x => new { x.LoginProvider, x.ProviderKey });
                     table.ForeignKey(
                         name: "FK_AspNetUserLogins_AspNetUsers_ApplicationUserId",
                         column: x => x.ApplicationUserId,
@@ -172,9 +170,9 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    RoleId = table.Column<string>(nullable: false),
-                    ApplicationUserId = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(maxLength: 50, nullable: false),
+                    RoleId = table.Column<string>(maxLength: 50, nullable: false),
+                    ApplicationUserId = table.Column<string>(maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -203,10 +201,10 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    LoginProvider = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Value = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(maxLength: 50, nullable: false),
+                    LoginProvider = table.Column<string>(maxLength: 50, nullable: false),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Value = table.Column<string>(maxLength: 400, nullable: true)
                 },
                 constraints: table =>
                 {
