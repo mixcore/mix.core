@@ -18,7 +18,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPostAttributeSets
         public UpdateViewModel() : base()
         {
         }
-
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
 

@@ -15,6 +15,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
 
         [JsonProperty("id")]
         public int Id { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
 
         [JsonProperty("attributesetId")]
         public int AttributeSetId { get; set; }

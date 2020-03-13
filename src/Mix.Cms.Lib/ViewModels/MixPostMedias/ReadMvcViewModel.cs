@@ -19,7 +19,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPostMedias
         public ReadViewModel() : base()
         {
         }
-
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("mediaId")]
         public int MediaId { get; set; }
 
