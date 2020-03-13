@@ -25,6 +25,12 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
 
         [JsonProperty("id")]
         public int Id { get; set; }
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("cultures")]
+        public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("extension")]
         public string Extension { get; set; }
@@ -136,7 +142,6 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
             {
                 Id = Id > 0 ? Id : UpdateViewModel.Repository.Max(c => c.Id).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
-                IsClone = true;
                 Cultures = Cultures ?? LoadCultures(Specificulture, _context, _transaction);
                 Cultures.ForEach(c => c.IsSupported = true);
             }

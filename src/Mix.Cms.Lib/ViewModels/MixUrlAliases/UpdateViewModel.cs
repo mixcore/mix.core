@@ -20,6 +20,12 @@ namespace Mix.Cms.Lib.ViewModels.MixUrlAliases
 
         [JsonProperty("id")]
         public int Id { get; set; }
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("cultures")]
+        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("sourceId")]
         public string SourceId { get; set; }
@@ -65,7 +71,6 @@ namespace Mix.Cms.Lib.ViewModels.MixUrlAliases
             {
                 Id = UpdateViewModel.Repository.Max(c => c.Id).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
-                IsClone = true;
                 Cultures = Cultures ?? LoadCultures(Specificulture, _context, _transaction);
                 Cultures.ForEach(c => c.IsSupported = true);
             }
