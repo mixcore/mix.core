@@ -5,6 +5,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
@@ -198,8 +199,9 @@ namespace Mix.Cms.Api.Controllers.v1
                         && (!isModule || model.MixModulePost.Any(nav => nav.ModuleId == moduleId && nav.PostId == model.Id))
                         && (!isNotModule || !model.MixModulePost.Any(nav => nav.ModuleId == notModuleId && nav.PostId == model.Id))
                         && (string.IsNullOrWhiteSpace(request.Keyword)
-                            || (model.Title.Contains(request.Keyword)
-                            || model.Excerpt.Contains(request.Keyword)))
+                            || (EF.Functions.Like(model.Title, $"%{request.Keyword}%"))
+                            || (EF.Functions.Like(model.Excerpt, $"%{request.Keyword}%"))
+                            )
                         && (!request.FromDate.HasValue
                             || (model.CreatedDateTime >= request.FromDate.Value)
                         )

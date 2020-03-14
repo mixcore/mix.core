@@ -210,7 +210,7 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
 
                     b.Property<DateTime?>("Dob")
                         .HasColumnName("DOB")
-                        .HasColumnType("datetime");
+                        ;
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(250)")
@@ -231,10 +231,10 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("JoinDate")
-                        .HasColumnType("datetime");
+                        ;
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime");
+                        ;
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(50)")
@@ -243,8 +243,8 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("LockoutEnd")
-                        .HasColumnType("datetime");
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        ;
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(250)")
@@ -351,10 +351,10 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                         .HasMaxLength(250);
 
                     b.Property<DateTime>("ExpiresUtc")
-                        .HasColumnType("datetime");
+                        ;
 
                     b.Property<DateTime>("IssuedUtc")
-                        .HasColumnType("datetime");
+                        ;
 
                     b.Property<string>("Username")
                         .HasColumnType("nvarchar(250)")
