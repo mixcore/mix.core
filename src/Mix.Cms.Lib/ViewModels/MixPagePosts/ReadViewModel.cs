@@ -22,7 +22,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         public ReadViewModel() : base()
         {
         }
-
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("postId")]
         public int PostId { get; set; }
 

@@ -16,6 +16,10 @@ namespace Mix.Cms.Lib.ViewModels.MixOrders
 
         [JsonProperty("id")]
         public int Id { get; set; }
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
 
         [JsonIgnore]
         [JsonProperty("userId")]
