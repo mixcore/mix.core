@@ -31,17 +31,17 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                     ConcurrencyStamp = table.Column<string>(maxLength: 250, nullable: true),
                     CountryId = table.Column<int>(nullable: false),
                     Culture = table.Column<string>(maxLength: 50, nullable: true),
-                    DOB = table.Column<DateTime>(type: "datetime", nullable: true),
+                    DOB = table.Column<DateTime>(nullable: true),
                     Email = table.Column<string>(maxLength: 250, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
                     FirstName = table.Column<string>(maxLength: 50, nullable: true),
                     Gender = table.Column<string>(maxLength: 50, nullable: true),
                     IsActived = table.Column<bool>(nullable: false),
-                    JoinDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: false),
+                    JoinDate = table.Column<DateTime>(nullable: false),
+                    LastModified = table.Column<DateTime>(nullable: false),
                     LastName = table.Column<string>(maxLength: 50, nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    LockoutEnd = table.Column<DateTime>(type: "datetime", nullable: true),
+                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     ModifiedBy = table.Column<string>(maxLength: 250, nullable: true),
                     NickName = table.Column<string>(maxLength: 50, nullable: true),
                     NormalizedEmail = table.Column<string>(maxLength: 250, nullable: true),
@@ -84,8 +84,8 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                     ClientId = table.Column<string>(maxLength: 50, nullable: true),
                     Email = table.Column<string>(maxLength: 250, nullable: false),
                     Username = table.Column<string>(maxLength: 250, nullable: true),
-                    ExpiresUtc = table.Column<DateTime>(type: "datetime", nullable: false),
-                    IssuedUtc = table.Column<DateTime>(type: "datetime", nullable: false)
+                    ExpiresUtc = table.Column<DateTime>(nullable: false),
+                    IssuedUtc = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
