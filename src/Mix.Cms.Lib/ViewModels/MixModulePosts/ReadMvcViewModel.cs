@@ -21,7 +21,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
         public ReadMvcViewModel() : base()
         {
         }
-
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("postId")]
         public int PostId { get; set; }
 

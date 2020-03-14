@@ -11,7 +11,10 @@ namespace Mix.Cms.Lib.ViewModels.Account
         #region Properties
 
         #region Models
-
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("userId")]
         public string UserId { get; set; }
 

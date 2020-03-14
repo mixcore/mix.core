@@ -21,7 +21,6 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         [JsonProperty("id")]
         public string Id { get; set; }
-
         [JsonProperty("username")]
         public string Username { get; set; }
 
@@ -150,7 +149,6 @@ namespace Mix.Cms.Lib.ViewModels.Account
                   {
                       UserId = Id,
                       RoleId = p.Id,
-                      Specificulture = Specificulture,
                       Description = p.Name,
                       IsActived = context.AspNetUserRoles.Any(m => m.UserId == Id && m.RoleId == p.Id)
                   });

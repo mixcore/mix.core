@@ -19,6 +19,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePages
 
         [JsonProperty("id")]
         public int Id { get; set; }
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
 
         [JsonProperty("parentId")]
         public int ParentId { get; set; }

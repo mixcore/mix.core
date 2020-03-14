@@ -16,7 +16,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePositions
         public UpdateViewModel() : base()
         {
         }
-
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("PositionId")]
         public int PositionId { get; set; }
 

@@ -24,9 +24,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPageRoles
 
         [JsonProperty("pageId")]
         public int PageId { get; set; }
-
         [JsonProperty("roleId")]
         public string RoleId { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
 
         #endregion Model
 
