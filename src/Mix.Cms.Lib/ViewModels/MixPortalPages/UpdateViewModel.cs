@@ -237,6 +237,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
             var query = context.MixPortalPage
                 .Include(cp => cp.MixPortalPageNavigationParent)
                 .Where(PortalPage => PortalPage.Id != Id && PortalPage.Level == 0)
+                .AsEnumerable()
                 .Select(PortalPage =>
                     new MixPortalPagePortalPages.UpdateViewModel()
                     {
@@ -261,6 +262,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
             var query = context.MixPortalPage
                 .Include(cp => cp.MixPortalPageNavigationParent)
                 .Where(PortalPage => PortalPage.Id != Id)
+                .AsEnumerable()
                 .Select(PortalPage =>
                 new MixPortalPagePortalPages.UpdateViewModel(
                       new MixPortalPageNavigation()
@@ -285,6 +287,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         {
             var query = context.MixPosition
                   .Include(cp => cp.MixPortalPagePosition)
+                  .AsEnumerable()
                   .Select(p => new MixPortalPagePositions.ReadViewModel()
                   {
                       PortalPageId = Id,
