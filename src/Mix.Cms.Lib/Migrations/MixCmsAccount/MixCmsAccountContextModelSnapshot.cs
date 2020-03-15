@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Cms.Lib.Models.Account;
 
@@ -14,19 +15,27 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
+                .HasAnnotation("ProductVersion", "3.1.2")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Account.AspNetRoleClaims", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("int");
 
-                    b.Property<string>("ClaimType");
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
 
-                    b.Property<string>("ClaimValue");
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
 
                     b.Property<string>("RoleId")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
@@ -37,14 +46,20 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Account.AspNetRoles", b =>
                 {
-                    b.Property<string>("Id");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("ConcurrencyStamp");
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("NormalizedName")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.HasKey("Id");
@@ -60,16 +75,24 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
             modelBuilder.Entity("Mix.Cms.Lib.Models.Account.AspNetUserClaims", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("int");
 
-                    b.Property<string>("ApplicationUserId");
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("ClaimType");
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
 
-                    b.Property<string>("ClaimValue");
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
 
                     b.Property<string>("UserId")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
@@ -82,18 +105,29 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Account.AspNetUserLogins", b =>
                 {
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("ProviderKey");
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("ApplicationUserId");
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("ProviderDisplayName");
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
 
                     b.Property<string>("UserId")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.HasKey("LoginProvider", "ProviderKey");
+                    b.HasKey("LoginProvider", "ProviderKey")
+                        .HasName("PK_AspNetUserLogins_1");
 
                     b.HasIndex("ApplicationUserId");
 
@@ -104,11 +138,17 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Account.AspNetUserRoles", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("RoleId");
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("ApplicationUserId");
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.HasKey("UserId", "RoleId");
 
@@ -121,13 +161,21 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Account.AspNetUserTokens", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("Value");
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
@@ -136,65 +184,106 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Account.AspNetUsers", b =>
                 {
-                    b.Property<string>("Id");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<int>("AccessFailedCount");
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Avatar");
-
-                    b.Property<string>("ConcurrencyStamp");
-
-                    b.Property<int>("CountryId");
-
-                    b.Property<string>("Culture");
-
-                    b.Property<DateTime?>("Dob")
-                        .HasColumnName("DOB");
-
-                    b.Property<string>("Email")
+                    b.Property<string>("Avatar")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<bool>("EmailConfirmed");
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
 
-                    b.Property<string>("FirstName");
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Gender");
+                    b.Property<string>("Culture")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<bool>("IsActived");
+                    b.Property<DateTime?>("Dob")
+                        .HasColumnName("DOB")
+                        ;
 
-                    b.Property<DateTime>("JoinDate");
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
 
-                    b.Property<DateTime>("LastModified");
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<bool>("LockoutEnabled");
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<DateTimeOffset?>("LockoutEnd");
+                    b.Property<bool>("IsActived")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("ModifiedBy");
+                    b.Property<DateTime>("JoinDate")
+                        ;
 
-                    b.Property<string>("NickName");
+                    b.Property<DateTime>("LastModified")
+                        ;
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        ;
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("NickName")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<string>("PasswordHash");
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
 
-                    b.Property<string>("PhoneNumber");
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<bool>("PhoneNumberConfirmed");
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("RegisterType");
+                    b.Property<string>("RegisterType")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("SecurityStamp");
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<bool>("TwoFactorEnabled");
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.HasKey("Id");
@@ -212,23 +301,32 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Account.Clients", b =>
                 {
-                    b.Property<string>("Id");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<bool>("Active");
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
 
                     b.Property<string>("AllowedOrigin")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<int>("ApplicationType");
+                    b.Property<int>("ApplicationType")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<int>("RefreshTokenLifeTime");
+                    b.Property<int>("RefreshTokenLifeTime")
+                        .HasColumnType("int");
 
                     b.Property<string>("Secret")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
@@ -237,18 +335,28 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Account.RefreshTokens", b =>
                 {
-                    b.Property<string>("Id");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("ClientId");
+                    b.Property<string>("ClientId")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Email")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
 
-                    b.Property<DateTime>("ExpiresUtc");
+                    b.Property<DateTime>("ExpiresUtc")
+                        ;
 
-                    b.Property<DateTime>("IssuedUtc");
+                    b.Property<DateTime>("IssuedUtc")
+                        ;
 
-                    b.Property<string>("Username");
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
 
                     b.HasKey("Id");
 
@@ -260,7 +368,8 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                     b.HasOne("Mix.Cms.Lib.Models.Account.AspNetRoles", "Role")
                         .WithMany("AspNetRoleClaims")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Account.AspNetUserClaims", b =>
@@ -272,7 +381,8 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                     b.HasOne("Mix.Cms.Lib.Models.Account.AspNetUsers", "User")
                         .WithMany("AspNetUserClaimsUser")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Account.AspNetUserLogins", b =>
@@ -284,7 +394,8 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                     b.HasOne("Mix.Cms.Lib.Models.Account.AspNetUsers", "User")
                         .WithMany("AspNetUserLoginsUser")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Account.AspNetUserRoles", b =>
@@ -296,12 +407,14 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                     b.HasOne("Mix.Cms.Lib.Models.Account.AspNetRoles", "Role")
                         .WithMany("AspNetUserRoles")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Account.AspNetUsers", "User")
                         .WithMany("AspNetUserRolesUser")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Account.AspNetUserTokens", b =>
@@ -309,7 +422,8 @@ namespace Mix.Cms.Lib.Migrations.MixCmsAccount
                     b.HasOne("Mix.Cms.Lib.Models.Account.AspNetUsers", "User")
                         .WithMany("AspNetUserTokens")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

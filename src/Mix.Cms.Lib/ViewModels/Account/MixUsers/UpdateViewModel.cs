@@ -21,7 +21,10 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixUsers
 
         [JsonProperty("id")]
         public string Id { get; set; }
-
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("username")]
         public string Username { get; set; }
 
@@ -145,6 +148,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixUsers
             {
                 var query = context.AspNetRoles
                   .Include(cp => cp.AspNetUserRoles)
+                  .ToList()
                   .Select(p => new NavUserRoleViewModel()
                   {
                       UserId = Id,

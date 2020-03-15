@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Mix.Cms.Lib.Migrations
 {
@@ -102,7 +102,7 @@ namespace Mix.Cms.Lib.Migrations
                 columns: table => new
                 {
                     Culture = table.Column<string>(maxLength: 10, nullable: false),
-                    Keyword = table.Column<string>(maxLength: 250, nullable: false),
+                    Keyword = table.Column<string>(maxLength: 50, nullable: false),
                     Note = table.Column<string>(maxLength: 250, nullable: true),
                     Priority = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
@@ -398,7 +398,7 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_configuration",
                 columns: table => new
                 {
-                    Keyword = table.Column<string>(maxLength: 250, nullable: false),
+                    Keyword = table.Column<string>(maxLength: 50, nullable: false),
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
                     Category = table.Column<string>(maxLength: 250, nullable: true),
                     DataType = table.Column<int>(nullable: false),
@@ -424,7 +424,7 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_language",
                 columns: table => new
                 {
-                    Keyword = table.Column<string>(maxLength: 250, nullable: false),
+                    Keyword = table.Column<string>(maxLength: 50, nullable: false),
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
                     Category = table.Column<string>(maxLength: 250, nullable: true),
                     DataType = table.Column<int>(nullable: false),
@@ -1506,22 +1506,6 @@ namespace Mix.Cms.Lib.Migrations
                 name: "IX_mix_order_CustomerId",
                 table: "mix_order",
                 column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_order_Specificulture",
-                table: "mix_order",
-                column: "Specificulture");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_order_item_Specificulture",
-                table: "mix_order_item",
-                column: "Specificulture");
-
-            migrationBuilder.CreateIndex(
-                name: "AK_mix_order_item_Id_Specificulture",
-                table: "mix_order_item",
-                columns: new[] { "Id", "Specificulture" },
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_mix_order_item_OrderId_Specificulture",

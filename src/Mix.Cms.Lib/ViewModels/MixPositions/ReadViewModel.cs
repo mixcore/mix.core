@@ -19,6 +19,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPositions
 
         [JsonProperty("id")]
         public int Id { get; set; }
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
 
         [JsonProperty("description")]
         public string Description { get; set; }

@@ -21,7 +21,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
         public UpdateViewModel() : base()
         {
         }
-
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("id")]
         public int Id { get; set; }
 

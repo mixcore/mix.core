@@ -285,7 +285,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => e.Specificulture);
 
-                entity.Property(e => e.Keyword).HasMaxLength(250);
+                entity.Property(e => e.Keyword).HasMaxLength(50);
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
@@ -314,7 +314,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Culture).HasMaxLength(10);
 
-                entity.Property(e => e.Keyword).HasMaxLength(250);
+                entity.Property(e => e.Keyword).HasMaxLength(50);
 
                 entity.Property(e => e.Note).HasMaxLength(250);
 
@@ -435,7 +435,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => e.Specificulture);
 
-                entity.Property(e => e.Keyword).HasMaxLength(250);
+                entity.Property(e => e.Keyword).HasMaxLength(50);
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
@@ -743,10 +743,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.ToTable("mix_order");
 
-                entity.HasIndex(e => e.CustomerId);
-
-                entity.HasIndex(e => e.Specificulture);
-
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
                 entity.Property(e => e.CreatedBy).HasMaxLength(50);
@@ -766,16 +762,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.HasKey(e => new { e.PostId, e.OrderId, e.Specificulture });
 
                 entity.ToTable("mix_order_item");
-
-                entity.HasIndex(e => e.Specificulture);
-
-                entity.HasIndex(e => new { e.Id, e.Specificulture })
-                    .HasName("AK_mix_order_item_Id_Specificulture")
-                    .IsUnique();
-
-                entity.HasIndex(e => new { e.OrderId, e.Specificulture });
-
-                entity.HasIndex(e => new { e.PostId, e.Specificulture });
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 

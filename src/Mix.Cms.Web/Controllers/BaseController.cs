@@ -128,7 +128,7 @@ namespace Mix.Cms.Web.Controllers
                 p.Alias == seoName
                 && p.Status == (int)MixContentStatus.Published && p.Specificulture == culture;
 
-                getAlias = await Lib.ViewModels.MixUrlAliases.UpdateViewModel.Repository.GetSingleModelAsync(predicate);
+                getAlias = await Lib.ViewModels.MixUrlAliases.UpdateViewModel.Repository.GetFirstModelAsync(predicate);
                 if (getAlias.IsSucceed)// && getPage.Data.View != null
                 {
                     switch (getAlias.Data.Type)
@@ -220,7 +220,7 @@ namespace Mix.Cms.Web.Controllers
             p.Id == pageId
             && p.Status == (int)MixContentStatus.Published && p.Specificulture == culture;
 
-            getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+            getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetFirstModelAsync(predicate);
             if (getPage.IsSucceed)
             {
                 getPage.Data.LoadData(pageIndex: page - 1, pageSize: pageSize);
@@ -264,7 +264,7 @@ namespace Mix.Cms.Web.Controllers
                 && p.Status == (int)MixContentStatus.Published
                 && p.Specificulture == culture;
 
-                getPost = await Lib.ViewModels.MixPosts.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+                getPost = await Lib.ViewModels.MixPosts.ReadMvcViewModel.Repository.GetFirstModelAsync(predicate);
                 if (getPost.IsSucceed)
                 {
                     getPost.Data.DetailsUrl = GenerateDetailsUrl(
@@ -313,7 +313,7 @@ namespace Mix.Cms.Web.Controllers
             p.Id == id
             && p.Status == (int)MixContentStatus.Published && p.Specificulture == culture;
 
-            getData = await Lib.ViewModels.MixModules.ReadMvcViewModel.Repository.GetSingleModelAsync(predicate);
+            getData = await Lib.ViewModels.MixModules.ReadMvcViewModel.Repository.GetFirstModelAsync(predicate);
             if (getData.IsSucceed)
             {
                 getData.Data.LoadData(pageIndex: page - 1, pageSize: pageSize);

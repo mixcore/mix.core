@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels.MixSystem;
+using Mix.Cms.Lib.ViewModels.MixCultures;
 using Mix.Domain.Core.Models;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -18,7 +18,12 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
         #region Properties
 
         #region Models
-
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("cultures")]
+        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
         [Required]
         [JsonProperty("keyword")]
         public string Keyword { get; set; }

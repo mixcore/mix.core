@@ -280,6 +280,7 @@ namespace Mix.Cms.Lib.ViewModels
                     if (!context.MixModule.Any(m => m.Name == module.Name && m.Specificulture == destCulture))
                     {
                         module.Id = context.MixModule.Max(m => m.Id) + 1;
+                        module.Specificulture = destCulture;
                         if (!string.IsNullOrEmpty(module.Image))
                         {
                             module.Image = module.Image.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
@@ -290,8 +291,7 @@ namespace Mix.Cms.Lib.ViewModels
                     }
                     // update new id to related attribute data
                     var related = RelatedData.Where(
-
-                    m => m.ParentType == (int)MixEnums.MixAttributeSetDataType.Module && m.ParentId == oldId.ToString());
+                        m => m.ParentType == (int)MixEnums.MixAttributeSetDataType.Module && m.ParentId == oldId.ToString());
                     foreach (var r in related)
                     {
                         r.ParentId = module.Id.ToString();

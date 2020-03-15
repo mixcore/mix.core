@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels.MixSystem;
+using Mix.Cms.Lib.ViewModels.MixCultures;
 using Mix.Domain.Core.Models;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -20,7 +20,12 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         #region Properties
 
         #region Models
-
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("cultures")]
+        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
         [Required]
         [JsonProperty("keyword")]
         public string Keyword { get; set; }
@@ -105,8 +110,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
             Cultures = LoadCultures(Specificulture, _context, _transaction);
             Property = new DataValueViewModel() { DataType = DataType, Value = Value, Name = Keyword };
             this.Cultures.ForEach(c => c.IsSupported = true);
-            IsClone = true;
-
+            
             return base.ExpandViewAsync(_context, _transaction);
         }
 
@@ -157,8 +161,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         {
             Cultures = LoadCultures(Specificulture, _context, _transaction);
             Property = new DataValueViewModel() { DataType = DataType, Value = Value, Name = Keyword };
-            this.Cultures.ForEach(c => c.IsSupported = true);
-            IsClone = true;
+            this.Cultures.ForEach(c => c.IsSupported = true);            
         }
 
         public override RepositoryResponse<bool> RemoveRelatedModels(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)

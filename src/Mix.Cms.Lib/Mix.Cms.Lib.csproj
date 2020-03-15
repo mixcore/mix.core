@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200221083318_Init.cs" />
+    <Compile Remove="Migrations\20200221083318_Init.Designer.cs" />
+    <Compile Remove="Migrations\MixCmsAccount\20190804034827_init_mysql.cs" />
+    <Compile Remove="Migrations\MixCmsAccount\20190804034827_init_mysql.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommonMark.NET" Version="0.15.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
@@ -20,7 +27,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.OData.Core" Version="7.6.3" />
-    <PackageReference Include="Mix.Heart" Version="0.0.6.1" />
+    <PackageReference Include="Mix.Heart" Version="0.0.6.2" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
   </ItemGroup>
 

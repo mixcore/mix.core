@@ -11,8 +11,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPostPosts
         : ViewModelBase<MixCmsContext, MixRelatedPost, ReadViewModel>
     {
         #region Properties
-
         #region Models
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }        
 
         [JsonProperty("sourceId")]
         public int SourceId { get; set; }
