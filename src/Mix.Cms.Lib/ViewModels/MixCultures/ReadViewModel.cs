@@ -14,6 +14,10 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
 
         [JsonProperty("id")]
         public int Id { get; set; }
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
 
         [JsonProperty("alias")]
         public string Alias { get; set; }

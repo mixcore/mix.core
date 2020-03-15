@@ -25,7 +25,7 @@ namespace Mix.Cms.Lib
 
         public static string GetAssetFolder(string culture)
         {
-            return $"/{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, culture)}";
+            return $"/{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, culture)}/assets";
         }
 
         public static List<ViewModels.MixPages.ReadListItemViewModel> GetPage(IUrlHelper Url, string culture, MixEnums.CatePosition position, string activePath = "")
@@ -256,31 +256,31 @@ namespace Mix.Cms.Lib
         {
             var navs = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.NavigationViewModel>(culture, MixConstants.AttributeSetName.NAVIGATION, "equal", "name", name);
             var nav = navs.Data.FirstOrDefault()?.Nav;
-            string action = Url.ActionContext.ActionDescriptor.RouteValues["action"];
-            string activePath = string.Empty;
-            switch (action)
-            {
-                case "Page":
-                case "Post":
-                    string seoName = Url.ActionContext.RouteData.Values["seoName"].ToString();
-                    string id = Url.ActionContext.RouteData.Values["id"].ToString();
-                    activePath = $"/{culture}/post/{id}/{seoName}";
-                    break;
+            string activePath = Url.ActionContext.HttpContext.Request.Path;
+            //string controller = Url.ActionContext.ActionDescriptor.RouteValues["controller"];
+            //switch (controller)
+            //{
+            //    case "Page":
+            //    case "Post":
+            //        string seoName = Url.ActionContext.RouteData.Values["seoName"].ToString();
+            //        string id = Url.ActionContext.RouteData.Values["id"].ToString();
+            //        activePath = $"/{culture}/post/{id}/{seoName}";
+            //        break;
 
-                case "Alias":
-                    string alias = Url.ActionContext.HttpContext.Request.Query["alias"].ToString();
-                    activePath = $"/{culture}/{alias}";
-                    break;
-            }
+            //    case "Home":
+            //        string alias = Url.ActionContext.HttpContext.Request.Query["alias"].ToString();
+            //        activePath = $"/{culture}/{alias}";
+            //        break;
+            //}
             if (nav != null && !string.IsNullOrEmpty(activePath))
             {
                 foreach (var cate in nav.MenuItems)
                 {
-                    cate.IsActive = cate.Property<string>("uri") == activePath;
+                    cate.IsActive = cate.Uri == activePath;
 
                     foreach (var item in cate.MenuItems)
                     {
-                        item.IsActive = item.Property<string>("uri") == activePath;
+                        item.IsActive = item.Uri == activePath;
                         cate.IsActive = cate.IsActive || item.IsActive;
                     }
                 }

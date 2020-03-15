@@ -1,4 +1,7 @@
-﻿namespace Mix.Cms.Lib
+﻿using System;
+using System.Collections.Generic;
+
+namespace Mix.Cms.Lib
 {
     public class MixEnums
     {
@@ -288,6 +291,17 @@
             NotFound = 0,
             OK = 1,
             BadRequest = 2
+        }
+
+        public static List<object> EnumToObject(Type enumType)
+        {
+            List<object> result = new List<object>();
+            var values = Enum.GetValues(enumType);
+            foreach (var item in values)
+            {
+                result.Add(new { name = Enum.GetName(enumType, item), value = Enum.ToObject(enumType, item) });
+            }
+            return result;
         }
     }
 }

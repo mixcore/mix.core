@@ -20,7 +20,10 @@ namespace Mix.Cms.Lib.ViewModels.Services.Store
 
         [JsonProperty("id")]
         public int Id { get; set; }
-
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("template")]
         public string Template { get; set; }
 

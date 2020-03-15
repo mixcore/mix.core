@@ -5,6 +5,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
@@ -39,7 +40,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("delete/{id}")]
         public async Task<RepositoryResponse<MixPage>> DeleteAsync(int id)
         {
-            return await base.DeleteAsync<UpdateViewModel>(
+            return await base.DeleteAsync<DeleteViewModel>(
                 model => model.Id == id && model.Specificulture == _lang, true);
         }
 
@@ -192,9 +193,10 @@ namespace Mix.Cms.Api.Controllers.v1
                         && (!request.Status.HasValue || model.Status == request.Status.Value)
                         && (!isLevel || model.Level == level)
                         && (!isType || model.Type == pageType)
-                        && (string.IsNullOrWhiteSpace(request.Keyword)
-                            || (model.Title.Contains(request.Keyword)
-                            || model.Excerpt.Contains(request.Keyword)))
+                        && (string.IsNullOrWhiteSpace(request.Keyword)                            
+                            || (EF.Functions.Like(model.Title, $"%{request.Keyword}%"))
+                            || (EF.Functions.Like(model.Excerpt, $"%{request.Keyword}%"))
+                            )
                         && (!request.FromDate.HasValue
                             || (model.CreatedDateTime >= request.FromDate.Value)
                         )

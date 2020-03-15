@@ -11,7 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
-namespace Mix.Cms.Lib.ViewModels.MixSystem
+namespace Mix.Cms.Lib.ViewModels.MixLanguages
 {
     public class SystemLanguageViewModel
         : ViewModelBase<MixCmsContext, MixLanguage, SystemLanguageViewModel>
@@ -19,7 +19,12 @@ namespace Mix.Cms.Lib.ViewModels.MixSystem
         #region Properties
 
         #region Models
-
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("cultures")]
+        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
         [Required]
         [JsonProperty("keyword")]
         public string Keyword { get; set; }

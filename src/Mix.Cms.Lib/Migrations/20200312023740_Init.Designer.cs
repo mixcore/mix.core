@@ -10,7 +10,7 @@ using Mix.Cms.Lib.Models.Cms;
 namespace Mix.Cms.Lib.Migrations
 {
     [DbContext(typeof(MixCmsContext))]
-    [Migration("20200221083318_Init")]
+    [Migration("20200312023740_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -383,8 +383,8 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixConfiguration", b =>
                 {
                     b.Property<string>("Keyword")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("nvarchar(10)")
@@ -432,8 +432,8 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(10);
 
                     b.Property<string>("Keyword")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(250)")
@@ -642,8 +642,8 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixLanguage", b =>
                 {
                     b.Property<string>("Keyword")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("nvarchar(10)")
@@ -1114,8 +1114,6 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("Specificulture");
-
                     b.ToTable("mix_order");
                 });
 
@@ -1152,12 +1150,6 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("PostId", "OrderId", "Specificulture");
-
-                    b.HasIndex("Specificulture");
-
-                    b.HasIndex("Id", "Specificulture")
-                        .IsUnique()
-                        .HasName("AK_mix_order_item_Id_Specificulture");
 
                     b.HasIndex("OrderId", "Specificulture");
 

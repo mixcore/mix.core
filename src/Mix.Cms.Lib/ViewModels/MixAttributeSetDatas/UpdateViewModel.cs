@@ -20,6 +20,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("id")]
         public string Id { get; set; }
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
 
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
@@ -110,6 +114,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
+                if (AttributeSetId==0 && !string.IsNullOrEmpty(AttributeSetName))
+                {
+                    AttributeSetId = MixAttributeSets.ReadViewModel.Repository.GetSingleModel(m => m.Name == AttributeSetName, _context, _transaction).Data?.Id ?? 0;
+                }
+                else if (AttributeSetId > 0 && string.IsNullOrEmpty(AttributeSetName))
+                {
+                    AttributeSetName = MixAttributeSets.ReadViewModel.Repository.GetSingleModel(m => m.Name == AttributeSetName, _context, _transaction).Data?.Name;
+                }
             }
             return base.ParseModel(_context, _transaction);
         }

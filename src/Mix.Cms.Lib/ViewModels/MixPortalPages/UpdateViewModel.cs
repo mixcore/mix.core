@@ -21,6 +21,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
 
         [JsonProperty("id")]
         public int Id { get; set; }
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
 
         [JsonProperty("textKeyword")]
         public string TextKeyword { get; set; }
@@ -233,6 +237,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
             var query = context.MixPortalPage
                 .Include(cp => cp.MixPortalPageNavigationParent)
                 .Where(PortalPage => PortalPage.Id != Id && PortalPage.Level == 0)
+                .AsEnumerable()
                 .Select(PortalPage =>
                     new MixPortalPagePortalPages.UpdateViewModel()
                     {
@@ -257,6 +262,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
             var query = context.MixPortalPage
                 .Include(cp => cp.MixPortalPageNavigationParent)
                 .Where(PortalPage => PortalPage.Id != Id)
+                .AsEnumerable()
                 .Select(PortalPage =>
                 new MixPortalPagePortalPages.UpdateViewModel(
                       new MixPortalPageNavigation()
@@ -281,6 +287,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         {
             var query = context.MixPosition
                   .Include(cp => cp.MixPortalPagePosition)
+                  .AsEnumerable()
                   .Select(p => new MixPortalPagePositions.ReadViewModel()
                   {
                       PortalPageId = Id,

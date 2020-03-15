@@ -16,7 +16,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPageModules
         public ReadMvcViewModel() : base()
         {
         }
-
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("moduleId")]
         public int ModuleId { get; set; }
 

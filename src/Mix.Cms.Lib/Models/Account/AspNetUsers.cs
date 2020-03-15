@@ -32,7 +32,7 @@ namespace Mix.Cms.Lib.Models.Account
         public DateTime LastModified { get; set; }
         public string LastName { get; set; }
         public bool LockoutEnabled { get; set; }
-        public DateTimeOffset? LockoutEnd { get; set; }
+        public DateTime? LockoutEnd { get; set; }
         public string ModifiedBy { get; set; }
         public string NickName { get; set; }
         public string NormalizedEmail { get; set; }
