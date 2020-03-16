@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
@@ -231,7 +232,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             }
                             else
                             {
-                                Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeFieldName == q.Key && m.StringValue.Contains(q.Value.ToString());
+                                Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeFieldName == q.Key &&
+                                    (EF.Functions.Like(m.StringValue, $"%{q.Value.ToString()}%"));
                                 if (valPredicate != null)
                                 {
                                     valPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(valPredicate, pre, Microsoft.OData.UriParser.BinaryOperatorKind.And);
