@@ -332,17 +332,21 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             // Load Attributes
             LoadAttributes(_context, _transaction);
 
-            this.Templates = this.Templates ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
+            this.Templates = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType, _context, _transaction).Data;
             var templateName = Template?.Substring(Template.LastIndexOf('/') + 1) ?? MixConstants.DefaultTemplate.Module;
             this.View = Templates.FirstOrDefault(t => !string.IsNullOrEmpty(templateName) && templateName.Equals($"{t.FileName}{t.Extension}"));
+            if (this.View==null)
+            {
+                this.View = Templates.FirstOrDefault(t => MixConstants.DefaultTemplate.Module.Equals($"{t.FileName}{t.Extension}"));
+            }
             this.Template = CommonHelper.GetFullPath(new string[]
                {
                     this.View?.FileFolder
                     , this.View?.FileName
                });
 
-            this.Forms = this.Forms ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
+            this.Forms = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == this.FormFolderType).Data;
             this.FormView = MixTemplates.UpdateViewModel.GetTemplateByPath(FormTemplate, Specificulture, MixEnums.EnumTemplateFolder.Forms, _context, _transaction);
             this.FormTemplate = CommonHelper.GetFullPath(new string[]
@@ -351,7 +355,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                     , this.FormView?.FileName
                });
 
-            this.Edms = this.Edms ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
+            this.Edms = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == this.EdmFolderType).Data;
             this.EdmView = MixTemplates.UpdateViewModel.GetTemplateByPath(EdmTemplate, Specificulture, MixEnums.EnumTemplateFolder.Edms, _context, _transaction);
             this.EdmTemplate = CommonHelper.GetFullPath(new string[]

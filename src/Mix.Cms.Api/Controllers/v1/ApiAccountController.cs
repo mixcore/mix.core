@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Mix.Cms.Api.Helpers;
 using Mix.Cms.Lib;
@@ -391,9 +392,9 @@ namespace Mix.Cms.Api.Controllers.v1
                 (!request.Status.HasValue || model.Status == request.Status.Value)
                 && (string.IsNullOrWhiteSpace(request.Keyword)
                 || (
-                    model.Username.Contains(request.Keyword)
-                   || model.FirstName.Contains(request.Keyword)
-                   || model.LastName.Contains(request.Keyword)
+                    (EF.Functions.Like(model.Username, $"%{request.Keyword}%"))
+                   || (EF.Functions.Like(model.FirstName, $"%{request.Keyword}%"))
+                   || (EF.Functions.Like(model.LastName, $"%{request.Keyword}%"))
                    )
                 )
                 && (!request.FromDate.HasValue
