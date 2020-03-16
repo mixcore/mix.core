@@ -1,15 +1,15 @@
 ﻿@{
     string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, ViewBag.culture);
-    string layout = Model.Layout ?? "Masters/_Layout";
-    Layout = $"Templates/{master}/{layout}";
-    var materTemplate = await MixCmsHelper.GetTemplateByPath(layout);
+    string templateFolder = MixCmsHelper.GetTemplateFolder(ViewBag.culture);
+    string layout = $"{templateFolder}/{ Model.Layout ?? "Masters/_Layout"}";
+    var materTemplate = await MixCmsHelper.GetTemplateByPath(master, Model.Layout);
+    Layout = $"{layout}.cshtml";
 }
 @* <mix-loader ng-show="isBusy"></mix-loader>
     <confirm ng-if="isInit" message="confirmMessage"></confirm>
     <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup> *@
 <input type="hidden" id="view-type" value="Page" />
 <input type="hidden" id="view-id" value="@Model.Id" />
-
 @if (!string.IsNullOrEmpty(Model.TemplatePath))
 {
     try
@@ -62,10 +62,10 @@ else
     <meta name="keywords" content="@desc" />
 }
 @section Styles{
-    @Html.Raw(materTemplate.Styles)
+    @Html.Raw(materTemplate?.Styles)
     @Html.Raw(Model.View?.Styles)
 }
 @section Scripts{
-    @Html.Raw(materTemplate.Scripts)
+    @Html.Raw(materTemplate?.Scripts)
     @Html.Raw(Model.View?.Scripts)
 }

@@ -244,14 +244,15 @@ namespace Mix.Cms.Lib
             return page.Data;
         }
 
-        public static async System.Threading.Tasks.Task<ViewModels.MixTemplates.ReadListItemViewModel> GetTemplateByPath(string templatePath)
+        public static async System.Threading.Tasks.Task<ViewModels.MixTemplates.ReadListItemViewModel> GetTemplateByPath(string themeName, string templatePath)
         {
             string[] tmp = templatePath.Split('/');
             if (tmp[1].IndexOf('.') > 0)
             {
                 tmp[1] = tmp[1].Substring(0, tmp[1].IndexOf('.'));
             }
-            var getData = await ViewModels.MixTemplates.ReadListItemViewModel.Repository.GetFirstModelAsync(m => m.FolderType == tmp[0] && m.FileName == tmp[1]);
+            var getData = await ViewModels.MixTemplates.ReadListItemViewModel.Repository.GetFirstModelAsync(
+                m => m.ThemeName == themeName && m.FolderType == tmp[0] && m.FileName == tmp[1]);
 
             return getData.Data;
         }

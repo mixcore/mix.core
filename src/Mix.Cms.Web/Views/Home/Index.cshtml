@@ -1,8 +1,9 @@
 ﻿@{
     string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, ViewBag.culture);
-    string layout = ViewData["Layout"] as string;
-    Layout = $"Templates/{master}/{layout}";
-    var materTemplate = await MixCmsHelper.GetTemplateByPath(layout);
+    string templateFolder = MixCmsHelper.GetTemplateFolder(ViewBag.culture);
+    string layout = $"{templateFolder}/{ Model.Layout ?? "Masters/_Layout"}";
+    var materTemplate = await MixCmsHelper.GetTemplateByPath(master, Model.Layout);
+    Layout = $"{layout}.cshtml";
 }
 @* <mix-loader ng-show="isBusy"></mix-loader>
     <confirm ng-if="isInit" message="confirmMessage"></confirm>
