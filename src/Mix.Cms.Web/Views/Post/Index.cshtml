@@ -1,9 +1,9 @@
 ﻿@model Mix.Cms.Lib.ViewModels.MixPosts.ReadMvcViewModel
 @{
     string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, ViewBag.culture);
-    string layout = "Masters/_Layout";
-    Layout = $"Templates/{master}/{layout}";
+    string layout = "Masters/_Layout.cshtml";
     var materTemplate = await MixCmsHelper.GetTemplateByPath(master, layout);
+    Layout = $"Templates/{master}/{layout}";
 }
 <div>
     <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>

@@ -259,8 +259,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 Level = 0;
             }
 
-            Template = View != null ? string.Format(@"{0}/{1}{2}", View.FolderType, View.FileName, View.Extension) : Template;
-            Layout = Master != null ? string.Format(@"{0}/{1}", Master.FolderType, Master.FileName) : null;
+            Template = View != null ? $"{View.FolderType}/{View.FileName}{View.Extension}" : Template;
+            Layout = Master != null ? $"{Master.FolderType}/{Master.FileName}{Master.Extension}" : null;
             if (Id == 0)
             {
                 Id = Repository.Max(c => c.Id, _context, _transaction).Data + 1;
@@ -289,11 +289,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 this.View = Templates.FirstOrDefault(t => MixConstants.DefaultTemplate.Module.Equals($"{t.FileName}{t.Extension}"));
             }
-            this.Template = CommonHelper.GetFullPath(new string[]
-               {
-                    this.View?.FileFolder
-                    , this.View?.FileName
-               });
+            this.Template = $"{View?.FileFolder}/{View?.FileName}{View.Extension}";
             // Load Attributes
             LoadAttributes(_context, _transaction);
             // Load master views
@@ -303,9 +299,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             this.Master = Masters.FirstOrDefault(t => !string.IsNullOrEmpty(masterName) && masterName.Equals($"{t.FileName}"));
             if (this.Master == null)
             {
-                this.Master = Templates.FirstOrDefault(t => MixConstants.DefaultTemplate.Master.Equals($"{t.FileName}"));
+                this.Master = Templates.FirstOrDefault(t => MixConstants.DefaultTemplate.Master.Equals($"{t.FileName}{t.Extension}"));
             }
-            this.Layout = $"{this.Master?.FileFolder}/{this.Master?.FileName}";
+            this.Layout = $"{Master?.FileFolder}/{Master?.FileName}{Master?.Extension}";
 
             this.ModuleNavs = GetModuleNavs(_context, _transaction);
             this.ParentNavs = GetParentNavs(_context, _transaction);

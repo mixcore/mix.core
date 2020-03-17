@@ -340,29 +340,17 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             {
                 this.View = Templates.FirstOrDefault(t => MixConstants.DefaultTemplate.Module.Equals($"{t.FileName}{t.Extension}"));
             }
-            this.Template = CommonHelper.GetFullPath(new string[]
-               {
-                    this.View?.FileFolder
-                    , this.View?.FileName
-               });
+            this.Template = $"{View?.FileFolder}/{View?.FileName}{View.Extension}";
 
             this.Forms = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == this.FormFolderType).Data;
             this.FormView = MixTemplates.UpdateViewModel.GetTemplateByPath(FormTemplate, Specificulture, MixEnums.EnumTemplateFolder.Forms, _context, _transaction);
-            this.FormTemplate = CommonHelper.GetFullPath(new string[]
-               {
-                    this.FormView?.FileFolder
-                    , this.FormView?.FileName
-               });
+            this.FormTemplate = $"{FormView?.FileFolder}/{FormView?.FileName}{View.Extension}"; 
 
             this.Edms = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == this.EdmFolderType).Data;
             this.EdmView = MixTemplates.UpdateViewModel.GetTemplateByPath(EdmTemplate, Specificulture, MixEnums.EnumTemplateFolder.Edms, _context, _transaction);
-            this.EdmTemplate = CommonHelper.GetFullPath(new string[]
-               {
-                    this.EdmView?.FileFolder
-                    , this.EdmView?.FileName
-               });
+            this.EdmTemplate = $"{EdmView?.FileFolder}/{EdmView?.FileName}{View.Extension}";
             if (SetAttributeId.HasValue)
             {
                 AttributeSet = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(s => s.Id == SetAttributeId.Value).Data;
