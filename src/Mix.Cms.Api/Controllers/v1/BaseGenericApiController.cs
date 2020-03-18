@@ -356,10 +356,16 @@ namespace Mix.Cms.Api.Controllers.v1
 
         protected void ParseRequestPagingDate(RequestPaging request)
         {
-            request.FromDate = request.FromDate.HasValue ? new DateTime(request.FromDate.Value.Year, request.FromDate.Value.Month, request.FromDate.Value.Day).ToUniversalTime()
-                : default(DateTime?);
-            request.ToDate = request.ToDate.HasValue ? new DateTime(request.ToDate.Value.Year, request.ToDate.Value.Month, request.ToDate.Value.Day).ToUniversalTime().AddDays(1)
-                : default(DateTime?);
+            if (request.FromDate.HasValue)
+            {
+                request.FromDate = request.FromDate.Value.Kind == DateTimeKind.Utc ? request.FromDate.Value
+                    :request.FromDate.Value.ToUniversalTime();
+            }
+            if (request.ToDate.HasValue)
+            {
+                request.ToDate = request.ToDate.Value.Kind == DateTimeKind.Utc ? request.ToDate.Value
+                    :request.ToDate.Value.ToUniversalTime();
+            }
         }
 
         protected QueryString ParseQuery(RequestPaging request)
