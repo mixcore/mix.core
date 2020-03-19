@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="graphiql" Version="1.2.0" />
     <PackageReference Include="GraphQL" Version="2.4.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="1.0.21" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.21" />
   </ItemGroup>
 

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
+using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -47,6 +48,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("fields")]
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
 
+        [JsonProperty("parentId")]
+        public string ParentId { get; set; }
+        [JsonProperty("parentType")]
+        public int ParentType { get; set; }
         //[JsonProperty("dataNavs")]
         //public List<MixRelatedAttributeDatas.UpdateViewModel> DataNavs { get; set; }
 
@@ -121,7 +126,45 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
             return base.ParseModel(_context, _transaction);
         }
+        public override async Task<RepositoryResponse<ODataUpdateViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                var result = await base.SaveModelAsync(isSaveSubModels, context, transaction);
+                // if save current data success and there is related parent data
+                if (result.IsSucceed && !string.IsNullOrEmpty(ParentId))
+                {
+                    MixRelatedAttributeDatas.UpdateViewModel nav = new MixRelatedAttributeDatas.UpdateViewModel()
+                    {
+                        Id = result.Data.Id,
+                        Specificulture = Specificulture,
+                        AttributeSetId = result.Data.AttributeSetId,
+                        AttributeSetName = result.Data.AttributeSetName,
+                        ParentId = ParentId,
+                        ParentType = ParentType
+                    };
+                    var saveNav = await nav.SaveModelAsync(true, context, transaction);
+                    result.IsSucceed = result.IsSucceed && saveNav.IsSucceed;
+                    result.Errors = saveNav.Errors;
+                    result.Exception = saveNav.Exception;
+                }
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<ODataUpdateViewModel>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    context.Dispose();
+                }
 
+            }
+        }
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSetData parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -55,6 +56,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("data")]
         public JObject Data { get; set; }
+        [JsonProperty("parentId")]
+        public string ParentId { get; set; }
+        [JsonProperty("parentType")]
+        public int ParentType { get; set; }
 
         #endregion Views
 
@@ -125,6 +130,45 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             return base.ParseModel(_context, _transaction);
         }
+        public override async Task<RepositoryResponse<UpdateViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                var result = await base.SaveModelAsync(isSaveSubModels, context, transaction);
+                // if save current data success and there is related parent data
+                if (result.IsSucceed && !string.IsNullOrEmpty(ParentId))
+                {
+                    MixRelatedAttributeDatas.UpdateViewModel nav = new MixRelatedAttributeDatas.UpdateViewModel()
+                    {
+                        Id = result.Data.Id,
+                        Specificulture = Specificulture,
+                        AttributeSetId = result.Data.AttributeSetId,
+                        AttributeSetName = result.Data.AttributeSetName,
+                        ParentId = ParentId,
+                        ParentType = ParentType
+                    };
+                    var saveNav = await nav.SaveModelAsync(true, context, transaction);
+                    result.IsSucceed = result.IsSucceed && saveNav.IsSucceed;
+                    result.Errors = saveNav.Errors;
+                    result.Exception = saveNav.Exception;
+                }
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<UpdateViewModel>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    context.Dispose();
+                }
+
+            }            
+        }
 
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSetData parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
@@ -191,25 +235,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             return result;
         }
 
-        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        //{
-        //    var tasks = new List<Task>();
-
-        //    // Remove parent caches
-
-        //    // 1. Remove Parent Attribute Data
-        //    var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
-        //    .Any(d => d.Specificulture == Specificulture && d.Id == Id && d.ParentType == (int)MixEnums.MixAttributeSetDataType.Set));
-        //    foreach (var item in attrDatas)
-        //    {
-        //        tasks.Add(Task.Run(() =>
-        //        {
-        //            UpdateViewModel.Repository.RemoveCache(item, context, transaction);
-        //        }));
-        //    }
-        //    return tasks;
-        //}
-
+        
         #endregion Overrides
 
         #region Expand

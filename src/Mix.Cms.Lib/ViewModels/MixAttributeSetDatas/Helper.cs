@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
@@ -202,7 +203,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                Expression<Func<MixAttributeSetValue, bool>> attrPredicate = m => m.Specificulture == culture && m.AttributeSetName == attributeSetName;
+                Expression<Func<MixAttributeSetValue, bool>> attrPredicate = 
+                    m => m.Specificulture == culture && m.AttributeSetName == attributeSetName
+                     && (!request.FromDate.HasValue
+                                        || (m.CreatedDateTime >= request.FromDate.Value)
+                                    )
+                                    && (!request.ToDate.HasValue
+                                        || (m.CreatedDateTime <= request.ToDate.Value)
+                                        )
+                    ;
                 Expression<Func<MixAttributeSetValue, bool>> valPredicate = null;
                 RepositoryResponse<PaginationModel<TView>> result = new RepositoryResponse<PaginationModel<TView>>()
                 {
@@ -219,7 +228,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         {
                             if (!string.IsNullOrEmpty(filterType.Value) && filterType.Value == "equal")
                             {
-                                Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeFieldName == q.Key && m.StringValue == (q.Value.ToString());
+                                Expression<Func<MixAttributeSetValue, bool>> pre = m => 
+                                    m.AttributeFieldName == q.Key && m.StringValue == (q.Value.ToString());
                                 if (valPredicate != null)
                                 {
                                     valPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(valPredicate, pre, Microsoft.OData.UriParser.BinaryOperatorKind.And);
@@ -231,7 +241,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             }
                             else
                             {
-                                Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeFieldName == q.Key && m.StringValue.Contains(q.Value.ToString());
+                                Expression<Func<MixAttributeSetValue, bool>> pre = 
+                                    m => m.AttributeFieldName == q.Key &&
+                                    (EF.Functions.Like(m.StringValue, $"%{q.Value.ToString()}%"));
                                 if (valPredicate != null)
                                 {
                                     valPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(valPredicate, pre, Microsoft.OData.UriParser.BinaryOperatorKind.And);
