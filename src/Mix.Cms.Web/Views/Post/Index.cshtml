@@ -1,9 +1,10 @@
 ﻿@model Mix.Cms.Lib.ViewModels.MixPosts.ReadMvcViewModel
 @{
     string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, ViewBag.culture);
-    string layout = "Masters/_Layout";
-    Layout = $"Templates/{master}/{layout}";
-    var materTemplate = await MixCmsHelper.GetTemplateByPath(layout);
+    string templateFolder = MixCmsHelper.GetTemplateFolder(ViewBag.culture);
+    string layout = $"{templateFolder}/Masters/_Layout.cshtml";
+    var materTemplate = await MixCmsHelper.GetTemplateByPath(master, layout);
+    Layout = layout;
 }
 <div>
     <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
@@ -61,10 +62,10 @@
     <meta name="keywords" content="@desc" />
 }
 @section Styles{
-    @Html.Raw(materTemplate.Styles)
+    @Html.Raw(materTemplate?.Styles)
     @Html.Raw(Model.View?.Styles)
 }
 @section Scripts{
-    @Html.Raw(materTemplate.Scripts)
+    @Html.Raw(materTemplate?.Scripts)
     @Html.Raw(Model.View?.Scripts)
 }

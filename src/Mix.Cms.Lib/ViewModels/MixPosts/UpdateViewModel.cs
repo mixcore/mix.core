@@ -1028,7 +1028,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             if (getPostMedia.IsSucceed)
             {
                 MediaNavs = getPostMedia.Data.OrderBy(p => p.Priority).ToList();
-                MediaNavs.ForEach(n => n.IsActived = true);
+                MediaNavs.ForEach(n => { n.Specificulture = Specificulture; n.IsActived = true; });
             }
         }
 
@@ -1039,8 +1039,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 foreach (var item in getModulePost.Data)
                 {
-                    item.Description = item.Module.Title;
-                    item.Image = item.Module.ImageUrl;
+                    item.Description = item.Module?.Title ?? item.Description;
+                    item.Specificulture = Specificulture;
+                    item.Image = item.Module?.ImageUrl ?? item.Image;
                 }
                 this.Modules = getModulePost.Data;
                 this.Modules.ForEach(c =>
@@ -1079,7 +1080,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 this.Pages = getPagePost.Data;
                 this.Pages.ForEach(c =>
                 {
-                    c.Description = c.Page.Title;
+                    c.Specificulture = Specificulture;
+                    c.Description = c.Page?.Title ?? c.Description;
                     c.IsActived = MixPagePosts.ReadViewModel.Repository.CheckIsExists(n => n.PageId == c.PageId && n.PostId == Id, _context, _transaction);
                 });
             }
@@ -1265,7 +1267,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<MixPostPosts.ReadViewModel> GetRelated(MixCmsContext context, IDbContextTransaction transaction)
         {
             var navs = MixPostPosts.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, context, transaction).Data;
-            navs.ForEach(n => n.IsActived = true);
+            navs.ForEach(n => { n.Specificulture = Specificulture; n.IsActived = true; });
             return navs.OrderBy(p => p.Priority).ToList();
         }
 

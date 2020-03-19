@@ -1,16 +1,11 @@
-﻿using GraphQL;
-using GraphQL.Resolvers;
+﻿using GraphQL.Resolvers;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Extensions;
-using Mix.Domain.Data.Repository;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.GraphQL.Infrastructure
 {
@@ -30,11 +25,11 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure
             var queryable = _dbContext.Query(_tableMetadata.AssemblyFullName);
 
             // Get filters
-            string predicates = string.Empty;
-            int paramsCount = -1;
-            var filters = context.Arguments.Where(c => c.Key != "first" && c.Key != "offset");
-            object[] args = new object[filters.Count()];
             LambdaExpression lamda = null;
+            var filters = context.Arguments.Where(c => c.Key != "first" && c.Key != "offset");
+            string predicates = string.Empty;
+            object[] args = new object[filters.Count()];
+            int paramsCount = -1;
 
             foreach (var item in filters)
             {
@@ -44,8 +39,8 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure
                     predicates += " and ";
                 }
                 args[paramsCount] = item.Value;
+                // Note: check for like function https://github.com/StefH/System.Linq.Dynamic.Core/issues/105                
                 predicates += $"{item.Key.ToTitleCase()} == @{paramsCount}";
-
             }
 
             if (context.FieldName.Contains("_list"))
@@ -54,11 +49,11 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure
                     context.GetArgument("first", int.MaxValue) : int.MaxValue; 
                 var offset = context.Arguments["offset"] != null ?
                     context.GetArgument("offset", 0) : 0;
-
+                
                 if (paramsCount >= 0)
                 {
                     
-                    queryable = queryable.Where(lamda);
+                    queryable = queryable.Where(predicates, args);
                 }
 
                 return queryable.Skip(offset).Take(first).ToDynamicList<object>();
@@ -68,6 +63,7 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure
                 return paramsCount >= 0 ? queryable.FirstOrDefault(predicates, args) : null;
             }
         }
+
         protected LambdaExpression GetLambda(string propName, bool isGetDefault = false)
         {
             var parameter = Expression.Parameter(_type);

@@ -5,6 +5,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Attributes;
 using Mix.Cms.Lib.Models.Cms;
@@ -132,8 +133,8 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             ParseRequestPagingDate(request);
             Expression<Func<MixAttributeField, bool>> predicate = model =>
-                string.IsNullOrWhiteSpace(request.Keyword)
-                    || (model.Name.Contains(request.Keyword)
+                (string.IsNullOrWhiteSpace(request.Keyword)
+                    || (EF.Functions.Like(model.Name, $"%{request.Keyword}%"))
                     );
             switch (request.Key)
             {
