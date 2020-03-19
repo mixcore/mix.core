@@ -252,7 +252,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
             if (navParent != null)
             {
-                Level = Repository.GetSingleModel(c => c.Id == navParent.ParentId, _context, _transaction).Data.Level + 1;
+                Level = 1; //Repository.GetSingleModel(c => c.Id == navParent.ParentId, _context, _transaction).Data.Level + 1;
             }
             else
             {
