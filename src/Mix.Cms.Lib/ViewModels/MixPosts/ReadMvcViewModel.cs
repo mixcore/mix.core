@@ -246,6 +246,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         #region Expands
 
+        /// <summary>Loads the attributes.</summary>
+        /// <param name="_context">The context.</param>
+        /// <param name="_transaction">The transaction.</param>
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST, _context, _transaction);
@@ -257,6 +260,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
         }
 
+        /// <summary>Get Post's Property by type and name</summary>
+        /// <typeparam name="T">Type of field</typeparam>
+        /// <param name="fieldName">Name of the field.</param>
+        /// <returns>T</returns>
         public T Property<T>(string fieldName)
         {
             if (AttributeData != null)
@@ -277,11 +284,17 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
         }
 
+        /// <summary>Gets the module.</summary>
+        /// <param name="name">The name.</param>
+        /// <returns>MixModules.ReadMvcViewModel</returns>
         public MixModules.ReadMvcViewModel GetModule(string name)
         {
             return ModuleNavs.FirstOrDefault(m => m.Module.Name == name)?.Module;
         }
 
+        /// <summary>Gets the attribute set.</summary>
+        /// <param name="name">The name.</param>
+        /// <returns>MixAttributeSets.ReadMvcViewModel</returns>
         public MixAttributeSets.ReadMvcPostViewModel GetAttributeSet(string name)
         {
             return AttributeSets.FirstOrDefault(m => m.Name == name);
