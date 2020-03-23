@@ -150,6 +150,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     };
                 }
             }
+            AlertAsync($"Get {typeof(TView).Name}", data?.Status?? 400, data?.ResponseKey);
             data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
             return data;
         }
@@ -234,6 +235,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
                 }
             }
+            AlertAsync($"Get List {typeof(TView).Name}", data?.Status ?? 400, data?.ResponseKey);
             data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
             return data;
         }
@@ -341,7 +343,7 @@ namespace Mix.Cms.Api.Controllers.v1
             }
             var logMsg = new JObject()
                 {
-                    new JProperty("created_at", DateTime.UtcNow),
+                    new JProperty("created_at", DateTime.UtcNow),   
                     new JProperty("id", Request.HttpContext.Connection.Id.ToString()),
                     new JProperty("address", address),
                     new JProperty("ip_address", Request.HttpContext.Connection.RemoteIpAddress.ToString()),

@@ -6,6 +6,7 @@ using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
+using Mix.Cms.Hub;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
 using RewriteRules;
@@ -54,6 +55,7 @@ namespace Mix.Cms.Web
                 routes.MapControllerRoute(
                     name: "post",
                     pattern: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/post/{id}/{seoName}");
+                routes.MapHub<PortalHub>("/portalHub");
             });
             app.UseMvc(routes =>
             {

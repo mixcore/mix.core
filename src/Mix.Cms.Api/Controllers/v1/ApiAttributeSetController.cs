@@ -123,6 +123,7 @@ namespace Mix.Cms.Api.Controllers.v1
             Expression<Func<MixAttributeSet, bool>> predicate = model =>
                 (string.IsNullOrWhiteSpace(request.Keyword)
                     || (EF.Functions.Like(model.Name, $"%{request.Keyword}%"))
+                    || (EF.Functions.Like(model.Title, $"%{request.Keyword}%"))
                     )
                 && (!request.FromDate.HasValue
                     || (model.CreatedDateTime >= request.FromDate.Value)
