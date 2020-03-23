@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Caching.Memory;
-using Mix.Cms.Hub;
+using Mix.Cms.Service.SignalR.Hubs;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
@@ -31,7 +31,7 @@ namespace Mix.Cms.Api.Controllers.v1
     {
         protected static TDbContext _context;
         protected static IDbContextTransaction _transaction;
-        protected readonly IHubContext<PortalHub> _hubContext;
+        protected readonly IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> _hubContext;
 
         protected IMemoryCache _memoryCache;
 
@@ -65,7 +65,7 @@ namespace Mix.Cms.Api.Controllers.v1
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseApiController"/> class.
         /// </summary>
-        public BaseGenericApiController(TDbContext context, IMemoryCache memoryCache, IHubContext<PortalHub> hubContext)
+        public BaseGenericApiController(TDbContext context, IMemoryCache memoryCache, IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext)
         {
             _context = context;
             _hubContext = hubContext;
@@ -353,7 +353,9 @@ namespace Mix.Cms.Api.Controllers.v1
                     new JProperty("status", status),
                     new JProperty("message", message)
                 };
-            _hubContext.Clients.All.SendAsync("ReceiveMessage", logMsg);
+            //It's not possible to configure JSON serialization in the JavaScript client at this time.
+            //https://docs.microsoft.com/en-us/aspnet/core/signalr/configuration?view=aspnetcore-3.1&tabs=dotnet
+            _hubContext.Clients.All.SendAsync("ReceiveMessage", logMsg.ToString(Newtonsoft.Json.Formatting.None));
         }
 
         protected void ParseRequestPagingDate(RequestPaging request)

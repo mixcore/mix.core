@@ -27,7 +27,7 @@ namespace Mix.Cms.Api.Controllers.v1
     public class ApiOrderController :
         BaseGenericApiController<MixCmsContext, MixOrder>
     {
-        public ApiOrderController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
+        public ApiOrderController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
         }
 

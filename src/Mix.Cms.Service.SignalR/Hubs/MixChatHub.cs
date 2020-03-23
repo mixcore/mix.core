@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Mix.Cms.Messenger;
 using Mix.Cms.Messenger.Models;
-using Mix.UI.Core.SignalR;
+using Mix.Cms.Service.SignalR;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

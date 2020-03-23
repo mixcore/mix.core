@@ -45,7 +45,10 @@ namespace Mix.Cms.Web.Controllers
             if (isValid)
             {
                 string seoName = Request.Query["alias"];
-                HandleSeoName(ref seoName);
+                if (!string.IsNullOrEmpty(seoName))
+                {
+                    HandleSeoName(ref seoName);
+                }
                 ViewData["Layout"] = "Masters/_Layout";
                 return await AliasAsync(seoName);
             }

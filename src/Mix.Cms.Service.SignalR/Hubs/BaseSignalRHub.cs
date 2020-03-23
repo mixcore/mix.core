@@ -9,13 +9,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Mix.UI.Core.SignalR
+namespace Mix.Cms.Service.SignalR
 {
     /// <summary>
     /// Base SignalR Hub
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.SignalR.Hub"/>
-    public abstract class BaseSignalRHub : Hub
+    public abstract class BaseSignalRHub : Microsoft.AspNetCore.SignalR.Hub
     {
         /// <summary>
         /// The users

@@ -24,7 +24,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.Positions
         BaseApiODataController<MixCmsContext, MixPosition>
     {
         public ApiODataPositionPortalController(
-            IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(memoryCache, hubContext)
+            IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext) : base(memoryCache, hubContext)
         {
         }
 
