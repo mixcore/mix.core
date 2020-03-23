@@ -2,8 +2,8 @@
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Messenger.Models;
+using Mix.Cms.Service.SignalR;
 using Mix.Domain.Core.ViewModels;
-using Mix.UI.Core.SignalR;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq.Expressions;

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Service.Gprc;
 
 namespace Mix.Cms.Web
 {
@@ -40,11 +41,17 @@ namespace Mix.Cms.Web
 
             /* Mix: Inject Services */
             services.AddSingleton<MixService>();
-            services.AddSignalR();
+            services.AddSignalR()
+                .AddJsonProtocol(options =>
+                {
+                    options.PayloadSerializerOptions.PropertyNamingPolicy = null;
+                });
             services.AddControllers(mvcOptions =>
                mvcOptions.EnableEndpointRouting = false);
 
             services.AddOData();
+
+            services.AddMixGprc();
 
             /* Mix: End Inject Services */
 
@@ -55,6 +62,7 @@ namespace Mix.Cms.Web
             /* End Addictional Config for Mixcore Cms  */
 
             #endregion Addictionals Config for Mixcore Cms
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,6 +91,8 @@ namespace Mix.Cms.Web
             {
                 app.UseHttpsRedirection();
             }
+
+            app.UseMixGprc();
 
             ConfigRoutes(app);
 

@@ -39,7 +39,7 @@ namespace Mix.Cms.Api.Controllers.v1
            UserManager<ApplicationUser> userManager,
            SignInManager<ApplicationUser> signInManager,
            RoleManager<IdentityRole> roleManager,
-            Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext,
+            Microsoft.AspNetCore.SignalR.IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext,
             IMemoryCache memoryCache
             )
             : base(null, memoryCache, hubContext)

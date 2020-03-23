@@ -29,7 +29,7 @@ namespace Mix.Cms.Api.Controllers.v1
     public class ApiPageController :
         BaseGenericApiController<MixCmsContext, MixPage>
     {
-        public ApiPageController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
+        public ApiPageController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
         }
 

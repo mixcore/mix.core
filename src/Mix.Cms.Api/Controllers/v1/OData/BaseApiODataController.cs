@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.OData;
-using Mix.Cms.Hub;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
+using Mix.Cms.Service.SignalR.Hubs;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
@@ -86,12 +86,6 @@ namespace Mix.Cms.Api.Controllers.v1.OData
                 if (predicate != null)
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
-                    //if (data.IsSucceed)
-                    //{
-                    //    //_memoryCache.Set(cacheKey, data);
-                    //    await MixCacheService.SetAsync(cacheKey, data);
-                    //    AlertAsync("Add Cache", 200, cacheKey);
-                    //}
                 }
                 else
                 {

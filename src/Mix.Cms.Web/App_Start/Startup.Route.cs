@@ -6,9 +6,9 @@ using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
-using Mix.Cms.Hub;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Service.SignalR.Hubs;
 using RewriteRules;
 using System.IO;
 

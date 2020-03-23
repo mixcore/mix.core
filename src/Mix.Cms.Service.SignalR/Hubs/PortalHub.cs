@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Mix.UI.Core.SignalR;
+using Mix.Cms.Service.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Mix.Cms.Hub
+namespace Mix.Cms.Service.SignalR.Hubs
 {
     public class PortalHub : BaseSignalRHub
     {

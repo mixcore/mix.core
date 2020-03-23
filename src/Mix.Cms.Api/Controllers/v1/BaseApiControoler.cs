@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Caching.Memory;
-using Mix.Cms.Hub;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Service.SignalR.Hubs;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
@@ -22,7 +22,7 @@ namespace Mix.Cms.Api.Controllers.v1
     public class BaseApiController<TDbContext> : Controller
         where TDbContext : DbContext
     {
-        protected readonly IHubContext<PortalHub> _hubContext;
+        protected readonly IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> _hubContext;
         protected static TDbContext _context;
         protected static IDbContextTransaction _transaction;
         protected readonly IMemoryCache _memoryCache;

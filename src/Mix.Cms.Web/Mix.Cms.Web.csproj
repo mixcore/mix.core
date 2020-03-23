@@ -1,42 +1,46 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <StartupObject>Mix.Cms.Web.Program</StartupObject>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <StartupObject>Mix.Cms.Web.Program</StartupObject>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="cache\**" />
-    <Compile Remove="logs\**" />
-    <Compile Remove="Views\Shared\Templates\**" />
-    <Content Remove="Views\Shared\Templates\**" />
-    <EmbeddedResource Remove="Views\Shared\Templates\**" />
-    <None Remove="Views\Shared\Templates\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="cache\**" />
+        <Compile Remove="logs\**" />
+        <Compile Remove="Views\Shared\Templates\**" />
+        <Content Remove="Views\Shared\Templates\**" />
+        <EmbeddedResource Remove="Views\Shared\Templates\**" />
+        <None Remove="Views\Shared\Templates\**" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+    <ItemGroup>
+        <Protobuf Include="Protos\greet.proto" GrpcServices="Client" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Mix.Cms.Api.GraphQL\Mix.Cms.Api.GraphQL.csproj" />
+        <ProjectReference Include="..\Mix.Cms.Api.RestFul\Mix.Cms.Api.RestFul.csproj" />
+        <ProjectReference Include="..\Mix.Cms.Api\Mix.Cms.Api.csproj" />
+        <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
+        <ProjectReference Include="..\Mix.Cms.Service.Gprc\Mix.Cms.Service.Gprc.csproj" />
+        <ProjectReference Include="..\Mix.Cms.Service.SignalR\Mix.Cms.Service.SignalR.csproj" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Mix.Cms.Api.GraphQL\Mix.Cms.Api.GraphQL.csproj" />
-    <ProjectReference Include="..\Mix.Cms.Api.RestFul\Mix.Cms.Api.RestFul.csproj" />
-    <ProjectReference Include="..\Mix.Cms.Api\Mix.Cms.Api.csproj" />
-    <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="ApacheModRewrite.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="IISUrlRewrite.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+    <ItemGroup>
+        <None Update="ApacheModRewrite.txt">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="IISUrlRewrite.xml">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 
 
 
