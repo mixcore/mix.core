@@ -7,12 +7,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using static Mix.Cms.Messenger.MixChatEnums;
+using static Mix.Cms.Service.SignalR.Constants.Enums;
 
 namespace Mix.Cms.Lib.Hubs
 {
     public class MixChatHub : BaseSignalRHub
     {
-        private const string receiveMethod = "ReceiveMessage";
         private const string defaultRoom = "public";
         private const string defaultDevice = "website";
 
@@ -22,7 +22,7 @@ namespace Mix.Cms.Lib.Hubs
             request.Data.ConnectionId = Context.ConnectionId;
             request.Data.DeviceId = request.Data.DeviceId ?? defaultDevice;
             // Mapping connecting user to db  models
-            var user = new Messenger.ViewModels.MixMessengerUsers.ConnectViewModel(request.Data);
+            var user = new Service.SignalR.ViewModels.MixMessengerUsers.ConnectViewModel(request.Data);
 
             user.CreatedDate = DateTime.UtcNow;
             // Save user and current device to db
@@ -32,15 +32,15 @@ namespace Mix.Cms.Lib.Hubs
             if (result.IsSucceed)
             {
                 //  Send success msg to caller
-                var getAvailableUsers = Messenger.ViewModels.MixMessengerUsers.DefaultViewModel.Repository.GetModelListBy(u => u.Status == (int)MixChatEnums.OnlineStatus.Connected);
-                SendToCaller(getAvailableUsers.Data, MessageReponseKey.ConnectSuccess);
+                var getAvailableUsers = Service.SignalR.ViewModels.MixMessengerUsers.DefaultViewModel.Repository.GetModelListBy(u => u.Status == 1);
+                SendToCaller(getAvailableUsers.Data, Constants.Enums.MessageReponseKey.ConnectSuccess);
                 // Announce every one there's new member
-                SendToAll(user, MessageReponseKey.NewMember, false);
+                SendToAll(user, Constants.Enums.MessageReponseKey.NewMember, false);
             }
             else
             {
                 //  Send failed msg to caller
-                SendToConnection(result, MessageReponseKey.ConnectFailed, Context.ConnectionId, false);
+                SendToConnection(result, Constants.Enums.MessageReponseKey.ConnectFailed, Context.ConnectionId, false);
             }
         }
 
@@ -48,21 +48,21 @@ namespace Mix.Cms.Lib.Hubs
         {
             var data = request.ToObject<HubRequest<HubMessage>>();
             data.Data.CreatedDate = DateTime.UtcNow;
-            SendToAll(data.Data, MessageReponseKey.NewMessage, true);
+            SendToAll(data.Data, Constants.Enums.MessageReponseKey.NewMessage, true);
         }
 
         public Task SendMessageToCaller(string message)
         {
-            return Clients.Caller.SendAsync(receiveMethod, message);
+            return Clients.Caller.SendAsync(Constants.HubMethods.ReceiveMethod, message);
         }
 
         public Task SendMessageToGroups(string message)
         {
             List<string> groups = new List<string>() { "SignalR Users" };
-            return Clients.Groups(groups).SendAsync("ReceiveMessage", message);
+            return Clients.Groups(groups).SendAsync(Constants.HubMethods.ReceiveMethod, message);
         }
 
-        private void SendToConnection<T>(T message, MessageReponseKey action, string connectionId, bool isMySelf)
+        private void SendToConnection<T>(T message, Constants.Enums.MessageReponseKey action, string connectionId, bool isMySelf)
         {
             if (!string.IsNullOrEmpty(connectionId))
             {
@@ -75,16 +75,16 @@ namespace Mix.Cms.Lib.Hubs
 
                 if (isMySelf)
                 {
-                    Clients.Client(connectionId).SendAsync(receiveMethod, JObject.FromObject(result));
+                    Clients.Client(connectionId).SendAsync(Constants.HubMethods.ReceiveMethod, JObject.FromObject(result));
                 }
                 else
                 {
-                    Clients.OthersInGroup(connectionId).SendAsync(receiveMethod, JObject.FromObject(result));
+                    Clients.OthersInGroup(connectionId).SendAsync(Constants.HubMethods.ReceiveMethod, JObject.FromObject(result));
                 }
             }
         }
 
-        private void SendToCaller<T>(T message, MessageReponseKey action)
+        private void SendToCaller<T>(T message, Constants.Enums.MessageReponseKey action)
         {
             HubResponse<T> result = new HubResponse<T>()
             {
@@ -92,10 +92,10 @@ namespace Mix.Cms.Lib.Hubs
                 Data = message,
                 ResponseKey = GetResponseKey(action)
             };
-            Clients.Caller.SendAsync(receiveMethod, JObject.FromObject(result));
+            Clients.Caller.SendAsync(Constants.HubMethods.ReceiveMethod, JObject.FromObject(result));
         }
 
-        private void SendToGroup<T>(T message, MessageReponseKey action, string groupName, bool isMySelf)
+        private void SendToGroup<T>(T message, Constants.Enums.MessageReponseKey action, string groupName, bool isMySelf)
         {
             if (!string.IsNullOrEmpty(groupName))
             {
@@ -108,16 +108,16 @@ namespace Mix.Cms.Lib.Hubs
 
                 if (isMySelf)
                 {
-                    Clients.Group(groupName).SendAsync(receiveMethod, JObject.FromObject(result));
+                    Clients.Group(groupName).SendAsync(Constants.HubMethods.ReceiveMethod, JObject.FromObject(result));
                 }
                 else
                 {
-                    Clients.OthersInGroup(groupName).SendAsync(receiveMethod, JObject.FromObject(result));
+                    Clients.OthersInGroup(groupName).SendAsync(Constants.HubMethods.ReceiveMethod, JObject.FromObject(result));
                 }
             }
         }
 
-        private void SendToAll<T>(T message, MessageReponseKey action, bool isMySelf)
+        private void SendToAll<T>(T message, Constants.Enums.MessageReponseKey action, bool isMySelf)
         {
             HubResponse<T> result = new HubResponse<T>()
             {
@@ -128,11 +128,11 @@ namespace Mix.Cms.Lib.Hubs
 
             if (isMySelf)
             {
-                Clients.All.SendAsync(receiveMethod, result);
+                Clients.All.SendAsync(Constants.HubMethods.ReceiveMethod, result);
             }
             else
             {
-                Clients.Others.SendAsync(receiveMethod, result);
+                Clients.Others.SendAsync(Constants.HubMethods.ReceiveMethod, result);
             }
         }
 
@@ -150,7 +150,7 @@ namespace Mix.Cms.Lib.Hubs
             string errorMsg = string.Empty;
             int status = 0;
             MessengerHubResponse<ChatTeamViewModel> result = null;
-            string action = Enum.GetName(typeof(TeamMessageReponseKey), TeamMessageReponseKey.GetTeam);
+            string action = Enum.GetName(typeof(TeamConstants.Enums.MessageReponseKey), TeamConstants.Enums.MessageReponseKey.GetTeam);
             //PaginationModel<ChatTeamViewModel> currentMessages = new PaginationModel<ChatTeamViewModel>();
             try
             {
@@ -181,7 +181,7 @@ namespace Mix.Cms.Lib.Hubs
                         result = new MessengerHubResponse<ChatTeamViewModel>()
                         {
                             status = 0,
-                            responseKey = TeamMessageReponseKey.NotMembered.ToString(),
+                            responseKey = TeamConstants.Enums.MessageReponseKey.NotMembered.ToString(),
                             data = null,
                             errors = null
                         };
@@ -222,7 +222,7 @@ namespace Mix.Cms.Lib.Hubs
             string errorMsg = string.Empty;
             int status = 0;
             MessengerHubResponse<ChatTeamViewModel> result = null;
-            string action = Enum.GetName(typeof(TeamMessageReponseKey), TeamMessageReponseKey.GetTeamMessages);
+            string action = Enum.GetName(typeof(TeamConstants.Enums.MessageReponseKey), TeamConstants.Enums.MessageReponseKey.GetTeamMessages);
             //PaginationModel<ChatTeamViewModel> currentMessages = new PaginationModel<ChatTeamViewModel>();
             try
             {
@@ -290,7 +290,7 @@ namespace Mix.Cms.Lib.Hubs
         public async System.Threading.Tasks.Task GetTeamNotifications(ApiGetTeamMemberViewMdoel request)
         {
             string errorMsg = string.Empty;
-            string action = Enum.GetName(typeof(TeamMessageReponseKey), TeamMessageReponseKey.GetTeamNotifications);
+            string action = Enum.GetName(typeof(TeamConstants.Enums.MessageReponseKey), TeamConstants.Enums.MessageReponseKey.GetTeamNotifications);
             try
             {
                 switch (request.MemberStatus)
@@ -447,7 +447,7 @@ namespace Mix.Cms.Lib.Hubs
             string errorMsg = string.Empty;
             int status = 0;
             MessengerHubResponse<bool> result = null;
-            string action = Enum.GetName(typeof(TeamMessageReponseKey), TeamMessageReponseKey.RemovedTeam);
+            string action = Enum.GetName(typeof(TeamConstants.Enums.MessageReponseKey), TeamConstants.Enums.MessageReponseKey.RemovedTeam);
             //PaginationModel<ChatTeamViewModel> currentMessages = new PaginationModel<ChatTeamViewModel>();
             try
             {
@@ -470,7 +470,7 @@ namespace Mix.Cms.Lib.Hubs
                         result = new MessengerHubResponse<bool>()
                         {
                             status = 0,
-                            responseKey = TeamMessageReponseKey.NotMembered.ToString(),
+                            responseKey = TeamConstants.Enums.MessageReponseKey.NotMembered.ToString(),
                             data = false,
                             errors = null
                         };
@@ -519,24 +519,24 @@ namespace Mix.Cms.Lib.Hubs
         public override Task OnDisconnectedAsync(Exception exception)
         {
             // Get current disconnected device
-            var getUserDevice = Messenger.ViewModels.MixMessengerUserDevices.DefaultViewModel.Repository.GetSingleModel(u => u.ConnectionId == Context.ConnectionId);
+            var getUserDevice = Service.SignalR.ViewModels.MixMessengerUserDevices.DefaultViewModel.Repository.GetSingleModel(u => u.ConnectionId == Context.ConnectionId);
             if (getUserDevice.IsSucceed)
             {
                 getUserDevice.Data.Status = DeviceStatus.Disconnected;
-                var countOnlineDevice = Messenger.ViewModels.MixMessengerUserDevices.DefaultViewModel.Repository.Count(d => d.UserId == getUserDevice.Data.UserId && d.DeviceId != getUserDevice.Data.DeviceId && d.Status == (int)DeviceStatus.Actived).Data;
+                var countOnlineDevice = Service.SignalR.ViewModels.MixMessengerUserDevices.DefaultViewModel.Repository.Count(d => d.UserId == getUserDevice.Data.UserId && d.DeviceId != getUserDevice.Data.DeviceId && d.Status == 1).Data;
                 if (countOnlineDevice == 0)
                 {
-                    SendToAll(getUserDevice.Data.UserId, MessageReponseKey.MemberOffline, false);
+                    SendToAll(getUserDevice.Data.UserId, Constants.Enums.MessageReponseKey.MemberOffline, false);
                 }
-                var getUser = Messenger.ViewModels.MixMessengerUsers.DefaultViewModel.Repository.GetSingleModel(u => u.Id == getUserDevice.Data.UserId);
+                var getUser = Service.SignalR.ViewModels.MixMessengerUsers.DefaultViewModel.Repository.GetSingleModel(u => u.Id == getUserDevice.Data.UserId);
                 if (getUser.IsSucceed)
                 {
                     getUser.Data.Status = OnlineStatus.DisConnected;
                     getUser.Data.SaveModel();
-                    SendToAll(getUserDevice.Data.UserId, MessageReponseKey.MemberOffline, false);
+                    SendToAll(getUserDevice.Data.UserId, Constants.Enums.MessageReponseKey.MemberOffline, false);
                 }
             }
-            //SendToAll(user, MessageReponseKey.RemoveMember, false);
+            //SendToAll(user, Constants.Enums.MessageReponseKey.RemoveMember, false);
 
             return base.OnDisconnectedAsync(exception);
         }

@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Mix.Cms.Messenger.ViewModels.MixMessengerUsers
+namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
 {
     public class ConnectViewModel
     {
@@ -68,7 +68,7 @@ namespace Mix.Cms.Messenger.ViewModels.MixMessengerUsers
                         Avatar = Avatar,
                         CreatedDate = DateTime.UtcNow,
                         Name = Name,
-                        Status = (int)MixChatEnums.OnlineStatus.Connected
+                        Status = (int)Constants.Enums.OnlineStatus.Connected
                     };
                     if (_context.MixMessengerUser.Any(u => u.Id == user.Id))
                     {
@@ -84,13 +84,13 @@ namespace Mix.Cms.Messenger.ViewModels.MixMessengerUsers
                         if (_context.MixMessengerUserDevice.Any(c => c.UserId == Device.UserId && c.DeviceId == Device.DeviceId))
                         {
                             Device.ConnectionId = Device.ConnectionId;
-                            Device.Status = (int)MixChatEnums.DeviceStatus.Actived;
+                            Device.Status = (int)Constants.Enums.DeviceStatus.Actived;
                             Device.StartDate = DateTime.UtcNow;
                             _context.Entry(Device).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         }
                         else
                         {
-                            Device.Status = (int)MixChatEnums.DeviceStatus.Actived;
+                            Device.Status = (int)Constants.Enums.DeviceStatus.Actived;
                             Device.StartDate = DateTime.UtcNow;
                             _context.Entry(Device).State = Microsoft.EntityFrameworkCore.EntityState.Added;
                         }

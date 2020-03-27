@@ -248,16 +248,16 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             GenerateSEO();
 
-            var navParent = ParentNavs?.FirstOrDefault(p => p.IsActived);
+            //var navParent = ParentNavs?.FirstOrDefault(p => p.IsActived);
 
-            if (navParent != null)
-            {
-                Level = 1; //Repository.GetSingleModel(c => c.Id == navParent.ParentId, _context, _transaction).Data.Level + 1;
-            }
-            else
-            {
-                Level = 0;
-            }
+            //if (navParent != null)
+            //{
+            //    Level = 1; //Repository.GetSingleModel(c => c.Id == navParent.ParentId, _context, _transaction).Data.Level + 1;
+            //}
+            //else
+            //{
+            //    Level = 0;
+            //}
 
             Template = View != null ? $"{View.FolderType}/{View.FileName}{View.Extension}" : Template;
             Layout = Master != null ? $"{Master.FolderType}/{Master.FileName}{Master.Extension}" : null;
@@ -296,7 +296,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             this.Masters = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == MixEnums.EnumTemplateFolder.Masters.ToString(), _context, _transaction).Data;
             var masterName = Layout?.Substring(Layout.LastIndexOf('/') + 1) ?? MixConstants.DefaultTemplate.Master;
-            this.Master = Masters.FirstOrDefault(t => !string.IsNullOrEmpty(masterName) && masterName.Equals($"{t.FileName}"));
+            this.Master = Masters.FirstOrDefault(t => !string.IsNullOrEmpty(masterName) && masterName.Equals($"{t.FileName}{t.Extension}"));
             if (this.Master == null)
             {
                 this.Master = Templates.FirstOrDefault(t => MixConstants.DefaultTemplate.Master.Equals($"{t.FileName}{t.Extension}"));
@@ -304,7 +304,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             this.Layout = $"{Master?.FileFolder}/{Master?.FileName}{Master?.Extension}";
 
             this.ModuleNavs = GetModuleNavs(_context, _transaction);
-            this.ParentNavs = GetParentNavs(_context, _transaction);
+            //this.ParentNavs = GetParentNavs(_context, _transaction);
             //this.ChildNavs = GetChildNavs(_context, _transaction);
             this.UrlAliases = GetAliases(_context, _transaction);
         }
@@ -358,23 +358,23 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     }
                 }
             }
-            if (result.IsSucceed)
-            {
-                foreach (var item in ParentNavs)
-                {
-                    item.Id = parent.Id;
-                    if (item.IsActived)
-                    {
-                        var saveResult = item.SaveModel(false, _context, _transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
-                    }
-                    else
-                    {
-                        var saveResult = item.RemoveModel(false, _context, _transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
-                    }
-                }
-            }
+            //if (result.IsSucceed)
+            //{
+            //    foreach (var item in ParentNavs)
+            //    {
+            //        item.Id = parent.Id;
+            //        if (item.IsActived)
+            //        {
+            //            var saveResult = item.SaveModel(false, _context, _transaction);
+            //            ViewModelHelper.HandleResult(saveResult, ref result);
+            //        }
+            //        else
+            //        {
+            //            var saveResult = item.RemoveModel(false, _context, _transaction);
+            //            ViewModelHelper.HandleResult(saveResult, ref result);
+            //        }
+            //    }
+            //}
 
             //if (result.IsSucceed)
             //{
@@ -448,23 +448,23 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 }
             }
 
-            if (result.IsSucceed)
-            {
-                foreach (var item in ParentNavs)
-                {
-                    item.Id = parent.Id;
-                    if (item.IsActived)
-                    {
-                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
-                    }
-                    else
-                    {
-                        var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
-                    }
-                }
-            }
+            //if (result.IsSucceed)
+            //{
+            //    foreach (var item in ParentNavs)
+            //    {
+            //        item.Id = parent.Id;
+            //        if (item.IsActived)
+            //        {
+            //            var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+            //            ViewModelHelper.HandleResult(saveResult, ref result);
+            //        }
+            //        else
+            //        {
+            //            var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
+            //            ViewModelHelper.HandleResult(saveResult, ref result);
+            //        }
+            //    }
+            //}
 
             if (result.IsSucceed)
             {

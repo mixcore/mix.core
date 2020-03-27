@@ -55,7 +55,6 @@ namespace Mix.Cms.Web
                 routes.MapControllerRoute(
                     name: "post",
                     pattern: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/post/{id}/{seoName}");
-                routes.MapHub<PortalHub>("/portalHub");
             });
             app.UseMvc(routes =>
             {

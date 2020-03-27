@@ -83,7 +83,7 @@ namespace Mix.Cms.Lib
 
         public static class DefaultTemplate
         {
-            public const string Master = "_Layout";
+            public const string Master = "_Layout.cshtml";
             public const string Page = "_Blank.cshtml";
             public const string Post = "_Blank.cshtml";
             public const string Module = "_Blank.cshtml";
@@ -100,19 +100,5 @@ namespace Mix.Cms.Lib
             public const string WebRootPath = @"wwwroot";
         }
 
-        public class ServiceHub
-        {
-            public const string ReceiveMethod = "receive_message";
-            public const string HubMemberName = "hub_member";
-            public const string HubMemberFieldName = "hub_name";
-            public const string DefaultDevice = "website";
-            public const string UnknowErrorMsg = "Unknow";
-
-            public const string SaveData = "save_data";
-            public const string JoinGroup = "join_group";
-            public const string NewMessage = "new_message";
-            public const string NewNotification = "new_notification";
-            public const string NewMember = "new_member";
-        }
     }
 }
