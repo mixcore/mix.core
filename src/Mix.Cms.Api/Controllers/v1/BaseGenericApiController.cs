@@ -22,6 +22,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
+using System.IO;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -235,8 +236,8 @@ namespace Mix.Cms.Api.Controllers.v1
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
                 }
             }
-            AlertAsync($"Get List {typeof(TView).Name}", data?.Status ?? 400, data?.ResponseKey);
             data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+            AlertAsync($"Get List {typeof(TView).Name}", data?.Status ?? 400, data?.ResponseKey);
             return data;
         }
 
@@ -353,9 +354,55 @@ namespace Mix.Cms.Api.Controllers.v1
                     new JProperty("status", status),
                     new JProperty("message", message)
                 };
-            //It's not possible to configure JSON serialization in the JavaScript client at this time.
+
+            //It's not possible to configure JSON serialization in the JavaScript client at this time (March 25th 2020).
             //https://docs.microsoft.com/en-us/aspnet/core/signalr/configuration?view=aspnetcore-3.1&tabs=dotnet
+
             _hubContext.Clients.All.SendAsync("ReceiveMessage", logMsg.ToString(Newtonsoft.Json.Formatting.None));
+        }
+
+        public static void Log(dynamic request, dynamic response)
+        {
+            string fullPath = $"{Environment.CurrentDirectory}/logs/api/{DateTime.Now.ToString("dd-MM-yyyy")}";
+            if (!string.IsNullOrEmpty(fullPath) && !Directory.Exists(fullPath))
+            {
+                Directory.CreateDirectory(fullPath);
+            }
+            string filePath = $"{fullPath}/log_api.json";
+
+            try
+            {
+                FileInfo file = new FileInfo(filePath);
+                string content = "[]";
+                if (file.Exists)
+                {
+                    using (StreamReader s = file.OpenText())
+                    {
+                        content = s.ReadToEnd();
+                    }
+                    System.IO.File.Delete(filePath);
+                }
+
+                JArray arrExceptions = JArray.Parse(content);
+                JObject jex = new JObject
+                {
+                    new JProperty("CreatedDateTime", DateTime.UtcNow),
+                    new JProperty("request", JObject.FromObject(request)),
+                    new JProperty("response", JObject.FromObject(response)  )
+                };
+                arrExceptions.Add(jex);
+                content = arrExceptions.ToString(Newtonsoft.Json.Formatting.None);
+
+                using (var writer = System.IO.File.CreateText(filePath))
+                {
+                    writer.WriteLine(content);
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+                // File invalid
+            }
         }
 
         protected void ParseRequestPagingDate(RequestPaging request)

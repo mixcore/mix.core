@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Mix.Cms.Messenger.ViewModels.MixMessengerUsers
+namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
 {
     public class DefaultViewModel : ViewModelBase<MixChatServiceContext, MixMessengerUser, DefaultViewModel>
     {
@@ -22,7 +22,7 @@ namespace Mix.Cms.Messenger.ViewModels.MixMessengerUsers
         public string Avatar { get; set; }
 
         [JsonProperty("connections")]
-        private List<MixMessengerUserDevices.DefaultViewModel> Connections { get; set; }
+        private List<Mix.Cms.Service.SignalR.ViewModels.MixMessengerUserDevices.DefaultViewModel> Connections { get; set; }
 
         [JsonProperty("createdDate")]
         public DateTime CreatedDate { get; set; }
@@ -31,7 +31,7 @@ namespace Mix.Cms.Messenger.ViewModels.MixMessengerUsers
         public DateTime? LastModified { get; set; }
 
         [JsonProperty("status")]
-        public MixChatEnums.OnlineStatus Status { get; set; }
+        public Constants.Enums.OnlineStatus Status { get; set; }
 
         #endregion Properties
 

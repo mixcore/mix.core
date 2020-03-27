@@ -11,6 +11,7 @@ using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Service.Gprc;
+using Mix.Cms.Service.SignalR;
 
 namespace Mix.Cms.Web
 {
@@ -28,7 +29,8 @@ namespace Mix.Cms.Web
         {
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation()
-                .AddNewtonsoftJson();
+                .AddNewtonsoftJson()
+                .AddJsonOptions(options => options.JsonSerializerOptions.MaxDepth = 4);
 
             #region Addictionals Config for Mixcore Cms
 
@@ -41,16 +43,12 @@ namespace Mix.Cms.Web
 
             /* Mix: Inject Services */
             services.AddSingleton<MixService>();
-            services.AddSignalR()
-                .AddJsonProtocol(options =>
-                {
-                    options.PayloadSerializerOptions.PropertyNamingPolicy = null;
-                });
             services.AddControllers(mvcOptions =>
                mvcOptions.EnableEndpointRouting = false);
 
             services.AddOData();
 
+            services.AddMixSignalR();
             services.AddMixGprc();
 
             /* Mix: End Inject Services */
@@ -93,6 +91,7 @@ namespace Mix.Cms.Web
             }
 
             app.UseMixGprc();
+            app.UseMixSignalR();
 
             ConfigRoutes(app);
 

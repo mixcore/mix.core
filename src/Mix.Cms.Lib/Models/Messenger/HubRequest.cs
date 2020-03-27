@@ -7,6 +7,10 @@ namespace Mix.Cms.Messenger.Models
     {
         [JsonProperty("uid")]
         public string Uid { get; set; }
+        [JsonProperty("from")]
+        public string From { get; set; }
+        [JsonProperty("to")]
+        public string To { get; set; }
 
         [JsonProperty("attributeSetName")]
         public string AttributeSetName { get; set; }

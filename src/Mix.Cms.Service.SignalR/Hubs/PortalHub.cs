@@ -10,18 +10,18 @@ namespace Mix.Cms.Service.SignalR.Hubs
     {
         public async Task SendMessage(string user, string message)
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            await Clients.All.SendAsync(Constants.HubMethods.ReceiveMethod, user, message);
         }
 
         public Task SendMessageToCaller(string message)
         {
-            return Clients.Caller.SendAsync("ReceiveMessage", message);
+            return Clients.Caller.SendAsync(Constants.HubMethods.ReceiveMethod, message);
         }
 
         public Task SendMessageToGroups(string message)
         {
             List<string> groups = new List<string>() { "SignalR Users" };
-            return Clients.Groups(groups).SendAsync("ReceiveMessage", message);
+            return Clients.Groups(groups).SendAsync(Constants.HubMethods.ReceiveMethod, message);
         }
 
         public override async Task OnConnectedAsync()

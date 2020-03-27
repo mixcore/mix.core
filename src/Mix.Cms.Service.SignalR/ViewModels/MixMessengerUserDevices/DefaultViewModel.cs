@@ -4,7 +4,7 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 
-namespace Mix.Cms.Messenger.ViewModels.MixMessengerUserDevices
+namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUserDevices
 {
     public class DefaultViewModel : ViewModelBase<MixChatServiceContext, MixMessengerUserDevice, DefaultViewModel>
     {
@@ -23,7 +23,7 @@ namespace Mix.Cms.Messenger.ViewModels.MixMessengerUserDevices
         public string DeviceId { get; set; }
 
         [JsonProperty("status")]
-        public MixChatEnums.DeviceStatus Status { get; set; }
+        public Constants.Enums.DeviceStatus Status { get; set; }
 
         [JsonProperty("startDate")]
         public DateTime StartDate { get; set; }
