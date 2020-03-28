@@ -26,7 +26,7 @@ namespace Mix.Cms.Api.Controllers.v1
     public class ApiPositionController :
          BaseGenericApiController<MixCmsContext, MixPosition>
     {
-        public ApiPositionController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
+        public ApiPositionController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
         }
 
