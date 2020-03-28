@@ -5,6 +5,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -27,7 +28,7 @@ namespace Mix.Cms.Api.Controllers.v1
     public class ApiModuleController :
          BaseGenericApiController<MixCmsContext, MixModule>
     {
-        public ApiModuleController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Hub.PortalHub> hubContext) : base(context, memoryCache, hubContext)
+        public ApiModuleController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
         }
 
@@ -173,8 +174,10 @@ namespace Mix.Cms.Api.Controllers.v1
                         && (!request.Status.HasValue || model.Status == request.Status.Value)
                         && (!isType || model.Type == moduleType)
                         && (string.IsNullOrWhiteSpace(request.Keyword)
-                            || (model.Title.Contains(request.Keyword)
-                            || model.Description.Contains(request.Keyword)))
+                            || (EF.Functions.Like(model.Name, $"%{request.Keyword}%"))
+                            || (EF.Functions.Like(model.Title, $"%{request.Keyword}%"))
+                            || (EF.Functions.Like(model.Description, $"%{request.Keyword}%"))
+                            )
                         && (!request.FromDate.HasValue
                             || (model.CreatedDateTime >= request.FromDate.Value)
                         )

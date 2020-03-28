@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Service.SignalR.Hubs;
 using RewriteRules;
 using System.IO;
 

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Caching.Memory;
-using Mix.Cms.Hub;
+using Mix.Cms.Service.SignalR.Hubs;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
@@ -22,6 +22,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
+using System.IO;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -31,7 +32,7 @@ namespace Mix.Cms.Api.Controllers.v1
     {
         protected static TDbContext _context;
         protected static IDbContextTransaction _transaction;
-        protected readonly IHubContext<PortalHub> _hubContext;
+        protected readonly IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> _hubContext;
 
         protected IMemoryCache _memoryCache;
 
@@ -65,7 +66,7 @@ namespace Mix.Cms.Api.Controllers.v1
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseApiController"/> class.
         /// </summary>
-        public BaseGenericApiController(TDbContext context, IMemoryCache memoryCache, IHubContext<PortalHub> hubContext)
+        public BaseGenericApiController(TDbContext context, IMemoryCache memoryCache, IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext)
         {
             _context = context;
             _hubContext = hubContext;
@@ -150,6 +151,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     };
                 }
             }
+            AlertAsync($"Get {typeof(TView).Name}", data?.Status?? 400, data?.ResponseKey);
             data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
             return data;
         }
@@ -235,6 +237,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 }
             }
             data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+            AlertAsync($"Get List {typeof(TView).Name}", data?.Status ?? 400, data?.ResponseKey);
             return data;
         }
 
@@ -341,7 +344,7 @@ namespace Mix.Cms.Api.Controllers.v1
             }
             var logMsg = new JObject()
                 {
-                    new JProperty("created_at", DateTime.UtcNow),
+                    new JProperty("created_at", DateTime.UtcNow),   
                     new JProperty("id", Request.HttpContext.Connection.Id.ToString()),
                     new JProperty("address", address),
                     new JProperty("ip_address", Request.HttpContext.Connection.RemoteIpAddress.ToString()),
@@ -351,7 +354,55 @@ namespace Mix.Cms.Api.Controllers.v1
                     new JProperty("status", status),
                     new JProperty("message", message)
                 };
-            _hubContext.Clients.All.SendAsync("ReceiveMessage", logMsg);
+
+            //It's not possible to configure JSON serialization in the JavaScript client at this time (March 25th 2020).
+            //https://docs.microsoft.com/en-us/aspnet/core/signalr/configuration?view=aspnetcore-3.1&tabs=dotnet
+
+            _hubContext.Clients.All.SendAsync("ReceiveMessage", logMsg.ToString(Newtonsoft.Json.Formatting.None));
+        }
+
+        public static void Log(dynamic request, dynamic response)
+        {
+            string fullPath = $"{Environment.CurrentDirectory}/logs/api/{DateTime.Now.ToString("dd-MM-yyyy")}";
+            if (!string.IsNullOrEmpty(fullPath) && !Directory.Exists(fullPath))
+            {
+                Directory.CreateDirectory(fullPath);
+            }
+            string filePath = $"{fullPath}/log_api.json";
+
+            try
+            {
+                FileInfo file = new FileInfo(filePath);
+                string content = "[]";
+                if (file.Exists)
+                {
+                    using (StreamReader s = file.OpenText())
+                    {
+                        content = s.ReadToEnd();
+                    }
+                    System.IO.File.Delete(filePath);
+                }
+
+                JArray arrExceptions = JArray.Parse(content);
+                JObject jex = new JObject
+                {
+                    new JProperty("CreatedDateTime", DateTime.UtcNow),
+                    new JProperty("request", JObject.FromObject(request)),
+                    new JProperty("response", JObject.FromObject(response)  )
+                };
+                arrExceptions.Add(jex);
+                content = arrExceptions.ToString(Newtonsoft.Json.Formatting.None);
+
+                using (var writer = System.IO.File.CreateText(filePath))
+                {
+                    writer.WriteLine(content);
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+                // File invalid
+            }
         }
 
         protected void ParseRequestPagingDate(RequestPaging request)
