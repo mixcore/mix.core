@@ -1,6 +1,6 @@
-# Mixcore CMS 
+# Mixcore CMS [![Become a Backer](https://opencollective.com/mixcore/tiers/backer.svg?avatarHeight=36)](https://opencollective.com/mixcore#support) 
 
-[![Donate](https://img.shields.io/badge/$-donate-ff69b4.svg)](https://www.paypal.me/mixcore) [![Buy us a coffee](https://img.shields.io/badge/$-BuyMeACoffee-orange.svg)](https://www.buymeacoffee.com/mixcore)
+[![backer](https://opencollective.com/mixcore/tiers/backer/badge.svg?label=backer&color=brightgreen)](https://opencollective.com/mixcore#support) [![Donate](https://img.shields.io/badge/$-donate-ff69b4.svg)](https://www.paypal.me/mixcore) [![Buy us a coffee](https://img.shields.io/badge/$-BuyMeACoffee-orange.svg)](https://www.buymeacoffee.com/mixcore) 
 
 ## Fully Open Source UI Tools to create multi-purpose Web Apps, Mobile Apps & Application Services
 
@@ -20,7 +20,7 @@ Codefactor     |[![CodeFactor](https://www.codefactor.io/repository/github/mixco
 
 |  |Links  |
 |---------|---------|
-|STAG / Demo     |http://stag.mixcore.org or https://demo.mixcore.org/portal (admin/P@ssw0rd)|
+|STAG / Demo     |https://dev.mixcore.org|
 |Dev docs     |https://docs.mixcore.org / https://mixcore.dev|
 |Youtube     |https://www.youtube.com/channel/UChqzh6JnC8HBUSQ9AWIcZAw|
 |Twitter     |https://twitter.com/mixcore_cms         |
