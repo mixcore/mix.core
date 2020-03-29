@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Messenger.Models;
-using Mix.Cms.Service.SignalR;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using static Mix.Cms.Messenger.MixChatEnums;
 
 namespace Mix.Cms.Service.SignalR.Hubs
 {
@@ -198,6 +195,13 @@ namespace Mix.Cms.Service.SignalR.Hubs
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
+            var getDevice = ViewModels.MixMessengerUserDevices.DefaultViewModel.Repository.GetSingleModel(m => m.ConnectionId == Context.ConnectionId);
+            if (getDevice.IsSucceed)
+            {
+                getDevice.Data.Status = Constants.Enums.DeviceStatus.Disconnected;
+                getDevice.Data.SaveModel(false);
+            }
+
             return base.OnDisconnectedAsync(exception);
         }
         #endregion
