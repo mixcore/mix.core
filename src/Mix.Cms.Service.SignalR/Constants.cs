@@ -46,6 +46,7 @@ namespace Mix.Cms.Service.SignalR
                 ConnectInitData,
                 GetTeam,
                 GetTeamMessages,
+                PreviousMessages,
                 SendMessage,
                 GetTeamNotifications,
                 NotMembered,
@@ -83,7 +84,7 @@ namespace Mix.Cms.Service.SignalR
 
             public enum OnlineStatus
             {
-                DisConnected = 0,
+                Disconnected = 0,
                 Connected = 1
             }
 

@@ -14,6 +14,8 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
 
         [JsonProperty("id")]
         public string Id { get; set; }
+        [JsonProperty("facebookId")]
+        public string FacebookId { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }

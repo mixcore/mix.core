@@ -1,12 +1,14 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace Mix.Cms.Messenger.Models
+namespace Mix.Cms.Service.SignalR.Models
 {
     public class HubRequest<T>
     {
         [JsonProperty("uid")]
         public string Uid { get; set; }
+        [JsonProperty("connection")]
+        public MessengerConnection Connection { get; set; }
         [JsonProperty("from")]
         public string From { get; set; }
         [JsonProperty("to")]
@@ -29,6 +31,8 @@ namespace Mix.Cms.Messenger.Models
 
         [JsonProperty("isMyself")]
         public bool IsMySelf { get; set; }
+        [JsonProperty("isSave")]
+        public bool IsSave { get; set; }
 
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }

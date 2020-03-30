@@ -280,6 +280,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 ListTag = JArray.Parse(this.Tags);
             }
 
+            LoadAttributes(_context, _transaction);
             // Load page views
             this.Templates = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType, _context, _transaction).Data;
@@ -291,7 +292,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             }
             this.Template = $"{View?.FileFolder}/{View?.FileName}{View.Extension}";
             // Load Attributes
-            LoadAttributes(_context, _transaction);
             // Load master views
             this.Masters = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == MixEnums.EnumTemplateFolder.Masters.ToString(), _context, _transaction).Data;
@@ -299,7 +299,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             this.Master = Masters.FirstOrDefault(t => !string.IsNullOrEmpty(masterName) && masterName.Equals($"{t.FileName}{t.Extension}"));
             if (this.Master == null)
             {
-                this.Master = Templates.FirstOrDefault(t => MixConstants.DefaultTemplate.Master.Equals($"{t.FileName}{t.Extension}"));
+                this.Master = Masters.FirstOrDefault(t => MixConstants.DefaultTemplate.Master.Equals($"{t.FileName}{t.Extension}"));
             }
             this.Layout = $"{Master?.FileFolder}/{Master?.FileName}{Master?.Extension}";
 

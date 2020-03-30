@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace Mix.Cms.Messenger.Models
+namespace Mix.Cms.Service.SignalR.Models
 {
     public class MessengerConnection
     {

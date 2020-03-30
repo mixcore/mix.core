@@ -1,5 +1,8 @@
-﻿using Mix.Cms.Messenger.Models;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.ViewModels;
 using Mix.Cms.Messenger.Models.Data;
+using Mix.Cms.Service.SignalR.Models;
+using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json;
 using System;
@@ -29,7 +32,8 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
 
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
-
+        [JsonProperty("isJoin")]
+        public bool IsJoin { get; set; }
         #endregion Properties
 
         #region Contructor
@@ -45,7 +49,20 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
                 ConnectionId = connection.ConnectionId,
                 DeviceId = connection.DeviceId,
             };
-            // TODO - verify cnn before add/update connections
+            // TODO - verify cnn before add/update connections         
+        }
+
+        private bool CheckIsJoin()
+        {
+            var getUser = MixMessengerUsers.DefaultViewModel.Repository.GetSingleModel(u => u.Id == Id);
+            if (getUser.IsSucceed)
+            {
+                return getUser.Data.Status == Constants.Enums.OnlineStatus.Connected;
+            }
+            else
+            {                
+                return false;
+            }
         }
 
         #endregion Contructor
@@ -56,54 +73,92 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
 
         public async Task<RepositoryResponse<bool>> Join()
         {
-            using (MixChatServiceContext _context = new MixChatServiceContext())
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            UnitOfWorkHelper<MixChatServiceContext>.InitTransaction(null, null, out MixChatServiceContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
             {
-                var result = new RepositoryResponse<bool>() { IsSucceed = true };
-                try
+                result = await UpdateUser(context, transaction);
+
+                if (result.IsSucceed)
                 {
-                    var user = new MixMessengerUser()
-                    {
-                        Id = Id,
-                        FacebookId = Id,
-                        Avatar = Avatar,
-                        CreatedDate = DateTime.UtcNow,
-                        Name = Name,
-                        Status = (int)Constants.Enums.OnlineStatus.Connected
-                    };
-                    if (_context.MixMessengerUser.Any(u => u.Id == user.Id))
-                    {
-                        _context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                    }
-                    else
-                    {
-                        _context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                    }
-                    if (Device != null)
-                    {
-                        //var cnn = _context.MixMessengerUserDevice.FirstOrDefault(c => c.UserId == Device.UserId && c.DeviceId == Device.DeviceId);
-                        if (_context.MixMessengerUserDevice.Any(c => c.UserId == Device.UserId && c.DeviceId == Device.DeviceId))
-                        {
-                            Device.ConnectionId = Device.ConnectionId;
-                            Device.Status = (int)Constants.Enums.DeviceStatus.Actived;
-                            Device.StartDate = DateTime.UtcNow;
-                            _context.Entry(Device).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                        }
-                        else
-                        {
-                            Device.Status = (int)Constants.Enums.DeviceStatus.Actived;
-                            Device.StartDate = DateTime.UtcNow;
-                            _context.Entry(Device).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                        }
-                    }
-                    result.IsSucceed = (await _context.SaveChangesAsync()) > 0;
+                    result = await UpdateDevice(context, transaction);
                 }
-                catch (Exception ex)
-                {
-                    result.IsSucceed = false;
-                    result.Exception = ex;
-                }
+                UnitOfWorkHelper<MixChatServiceContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
                 return result;
             }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixChatServiceContext>.HandleException<bool>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    transaction.Dispose();
+                    context.Dispose();
+                }
+            }            
+        }
+
+        private async Task<RepositoryResponse<bool>> UpdateUser(MixChatServiceContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            // Load User from db
+            var getUser = await MixMessengerUsers.DefaultViewModel.Repository.GetSingleModelAsync(m => m.Id == Id, context, transaction);
+            if (getUser.IsSucceed)
+            {
+                // if existed => update status = connected
+                if (getUser.Data.Status == Constants.Enums.OnlineStatus.Disconnected)
+                {
+                    getUser.Data.Status = Constants.Enums.OnlineStatus.Connected;
+                    var saveUser = await getUser.Data.SaveModelAsync(false, context, transaction);
+                    ViewModelHelper.HandleResult(saveUser, ref result);
+                }
+            }
+            else
+            {
+                // if not existed => add new with status  = connected
+                var user = new MixMessengerUsers.DefaultViewModel()
+                {
+                    Id = Id,
+                    FacebookId = Id,
+                    Avatar = Avatar,
+                    CreatedDate = DateTime.UtcNow,
+                    Name = Name,
+                    Status = Constants.Enums.OnlineStatus.Connected
+                };
+                var saveUser = await user.SaveModelAsync(false, context,transaction);
+                ViewModelHelper.HandleResult(saveUser, ref result);
+            }
+            return result;
+        }
+
+        private async Task<RepositoryResponse<bool>> UpdateDevice(MixChatServiceContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            if (Device != null)
+            {
+                //var cnn = _context.MixMessengerUserDevice.FirstOrDefault(c => c.UserId == Device.UserId && c.DeviceId == Device.DeviceId);
+                var getDevice = await MixMessengerUserDevices.DefaultViewModel.Repository.GetSingleModelAsync(c => c.UserId == Device.UserId && c.DeviceId == Device.DeviceId, context, transaction);
+                if (getDevice.IsSucceed)
+                {
+                    getDevice.Data.Status = Constants.Enums.DeviceStatus.Actived;
+                    getDevice.Data.StartDate = DateTime.UtcNow;
+                    getDevice.Data.ConnectionId = Device.ConnectionId;
+                    var saveDevice = await getDevice.Data.SaveModelAsync(false, context, transaction);
+                    ViewModelHelper.HandleResult(saveDevice, ref result);
+                }
+                else
+                {
+                    Device.Status = (int)Constants.Enums.DeviceStatus.Actived;
+                    Device.StartDate = DateTime.UtcNow;
+                    var dv = new MixMessengerUserDevices.DefaultViewModel(Device, context, transaction);
+                    var saveDevice = await dv.SaveModelAsync(false, context, transaction);
+                    ViewModelHelper.HandleResult(saveDevice, ref result);
+                }
+            }
+            return result;
         }
 
         #endregion Async
