@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Mix.Cms.Messenger.Models
+namespace Mix.Cms.Service.SignalR.Models
 {
     public class HubResponse<T>
     {

@@ -3,7 +3,6 @@ using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
-using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -15,7 +14,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
+namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
 {
     public class FormViewModel
       : ViewModelBase<MixCmsContext, MixAttributeSetData, FormViewModel>
@@ -54,13 +53,13 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("relatedData")]
         [JsonIgnore]
-        public List<MixRelatedAttributeDatas.UpdateViewModel> RelatedData { get; set; } = new List<MixRelatedAttributeDatas.UpdateViewModel>();
+        public List<Lib.ViewModels.MixRelatedAttributeDatas.UpdateViewModel> RelatedData { get; set; } = new List<Lib.ViewModels.MixRelatedAttributeDatas.UpdateViewModel>();
 
         [JsonIgnore]
-        public List<MixAttributeSetValues.UpdateViewModel> Values { get; set; }
+        public List<Lib.ViewModels.MixAttributeSetValues.UpdateViewModel> Values { get; set; }
 
         [JsonIgnore]
-        public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
+        public List<Lib.ViewModels.MixAttributeFields.UpdateViewModel> Fields { get; set; }
 
         [JsonIgnore]
         public List<MixAttributeSetDatas.FormViewModel> RefData { get; set; } = new List<FormViewModel>();
@@ -87,18 +86,18 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getValues = MixAttributeSetValues.UpdateViewModel
+            var getValues = Lib.ViewModels.MixAttributeSetValues.UpdateViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
             if (getValues.IsSucceed)
             {
-                Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
+                Fields = Lib.ViewModels.MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
                 Values = getValues.Data.OrderBy(a => a.Priority).ToList();
                 foreach (var field in Fields.OrderBy(f => f.Priority))
                 {
                     var val = Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
                     if (val == null)
                     {
-                        val = new MixAttributeSetValues.UpdateViewModel(
+                        val = new Lib.ViewModels.MixAttributeSetValues.UpdateViewModel(
                             new MixAttributeSetValue()
                             {
                                 AttributeFieldId = field.Id,
@@ -135,16 +134,16 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 AttributeSetId = _context.MixAttributeSet.First(m => m.Name == AttributeSetName)?.Id ?? 0;
             }
-            Values = Values ?? MixAttributeSetValues.UpdateViewModel
+            Values = Values ?? Lib.ViewModels.MixAttributeSetValues.UpdateViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-            Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
+            Fields = Lib.ViewModels.MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
 
             foreach (var field in Fields.OrderBy(f => f.Priority))
             {
                 var val = Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
                 if (val == null)
                 {
-                    val = new MixAttributeSetValues.UpdateViewModel(
+                    val = new Lib.ViewModels.MixAttributeSetValues.UpdateViewModel(
                         new MixAttributeSetValue()
                         {
                             AttributeFieldId = field.Id,
@@ -162,7 +161,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 val.AttributeSetName = AttributeSetName;
                 if (Data[val.AttributeFieldName] != null)
                 {
-                    if (val.Field.DataType == MixEnums.MixDataType.Reference)
+                    if (val.Field.DataType == Lib.MixEnums.MixDataType.Reference)
                     {
                         var arr = Data[val.AttributeFieldName].Value<JArray>();
                         if (arr != null)
@@ -215,7 +214,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     body = body.Replace($"[[{prop.Name}]]", Data[prop.Name].Value<string>());
                 }
-                var edmFile = new FileViewModel()
+                var edmFile = new Lib.ViewModels.FileViewModel()
                 {
                     Content = body,
                     Extension = ".html",
@@ -261,20 +260,20 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             if (result.IsSucceed)
             {
                 RepositoryResponse<bool> saveValues = await SaveValues(parent, _context, _transaction);
-                ViewModelHelper.HandleResult(saveValues, ref result);
+                Lib.ViewModels.ViewModelHelper.HandleResult(saveValues, ref result);
             }
             // Save Ref Data
             if (result.IsSucceed)
             {
                 RepositoryResponse<bool> saveRefData = await SaveRefDataAsync(parent, _context, _transaction);
-                ViewModelHelper.HandleResult(saveRefData, ref result);
+                Lib.ViewModels.ViewModelHelper.HandleResult(saveRefData, ref result);
             }
 
             // Save Related Data
             if (result.IsSucceed)
             {
                 RepositoryResponse<bool> saveRelated = await SaveRelatedDataAsync(parent, _context, _transaction);
-                ViewModelHelper.HandleResult(saveRelated, ref result);
+                Lib.ViewModels.ViewModelHelper.HandleResult(saveRelated, ref result);
             }
 
             return result;
@@ -293,12 +292,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         item.DataId = parent.Id;
                         item.Specificulture = parent.Specificulture;
                         var saveResult = await item.SaveModelAsync(false, context, transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
+                        Lib.ViewModels.ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                     else
                     {
                         var delResult = await item.RemoveModelAsync(false, context, transaction);
-                        ViewModelHelper.HandleResult(delResult, ref result);
+                        Lib.ViewModels.ViewModelHelper.HandleResult(delResult, ref result);
                     }
                 }
                 else
@@ -320,18 +319,18 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     var saveRef = await item.SaveModelAsync(true, context, transaction);
                     if (saveRef.IsSucceed)
                     {
-                        RelatedData.Add(new MixRelatedAttributeDatas.UpdateViewModel()
+                        RelatedData.Add(new Lib.ViewModels.MixRelatedAttributeDatas.UpdateViewModel()
                         {
                             Id = saveRef.Data.Id,
                             ParentId = Id,
-                            ParentType = (int)MixEnums.MixAttributeSetDataType.Set,
+                            ParentType = (int)Lib.MixEnums.MixAttributeSetDataType.Set,
                             AttributeSetId = saveRef.Data.AttributeSetId,
                             AttributeSetName = saveRef.Data.AttributeSetName,
                             CreatedDateTime = DateTime.UtcNow,
                             Specificulture = Specificulture
                         });
                     }
-                    ViewModelHelper.HandleResult(saveRef, ref result);
+                    Lib.ViewModels.ViewModelHelper.HandleResult(saveRef, ref result);
                 }
                 else
                 {
@@ -361,12 +360,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     {
                         item.ParentId = parent.Id;
                     }
-                    item.Priority = MixRelatedAttributeDatas.UpdateViewModel.Repository.Count(
+                    item.Priority = Lib.ViewModels.MixRelatedAttributeDatas.UpdateViewModel.Repository.Count(
                                     m => m.ParentId == Id && m.Specificulture == Specificulture, context, transaction).Data + 1;
                     item.Specificulture = Specificulture;
                     item.CreatedDateTime = DateTime.UtcNow;
                     var saveResult = await item.SaveModelAsync(true, context, transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
+                    Lib.ViewModels.ViewModelHelper.HandleResult(saveResult, ref result);
                 }
                 else
                 {
@@ -383,101 +382,101 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #region Expands
 
-        private JProperty ParseValue(MixAttributeSetValues.UpdateViewModel item)
+        private JProperty ParseValue(Lib.ViewModels.MixAttributeSetValues.UpdateViewModel item)
         {
             switch (item.DataType)
             {
-                case MixEnums.MixDataType.DateTime:
+                case Lib.MixEnums.MixDataType.DateTime:
                     return new JProperty(item.AttributeFieldName, item.DateTimeValue);
 
-                case MixEnums.MixDataType.Date:
+                case Lib.MixEnums.MixDataType.Date:
                     return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
 
-                case MixEnums.MixDataType.Time:
+                case Lib.MixEnums.MixDataType.Time:
                     return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
 
-                case MixEnums.MixDataType.Double:
+                case Lib.MixEnums.MixDataType.Double:
                     return (new JProperty(item.AttributeFieldName, item.DoubleValue));
 
-                case MixEnums.MixDataType.Boolean:
+                case Lib.MixEnums.MixDataType.Boolean:
                     return (new JProperty(item.AttributeFieldName, item.BooleanValue));
 
-                case MixEnums.MixDataType.Number:
+                case Lib.MixEnums.MixDataType.Number:
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue));
 
-                case MixEnums.MixDataType.Reference:
+                case Lib.MixEnums.MixDataType.Reference:
                     //string url = $"/api/v1/odata/en-us/related-attribute-set-data/mobile/parent/set/{Id}/{item.Field.ReferenceId}";
                     return (new JProperty(item.AttributeFieldName, new JArray()));
 
-                case MixEnums.MixDataType.Custom:
-                case MixEnums.MixDataType.Duration:
-                case MixEnums.MixDataType.PhoneNumber:
-                case MixEnums.MixDataType.Text:
-                case MixEnums.MixDataType.Html:
-                case MixEnums.MixDataType.MultilineText:
-                case MixEnums.MixDataType.EmailAddress:
-                case MixEnums.MixDataType.Password:
-                case MixEnums.MixDataType.Url:
-                case MixEnums.MixDataType.ImageUrl:
-                case MixEnums.MixDataType.CreditCard:
-                case MixEnums.MixDataType.PostalCode:
-                case MixEnums.MixDataType.Upload:
-                case MixEnums.MixDataType.Color:
-                case MixEnums.MixDataType.Icon:
-                case MixEnums.MixDataType.VideoYoutube:
-                case MixEnums.MixDataType.TuiEditor:
+                case Lib.MixEnums.MixDataType.Custom:
+                case Lib.MixEnums.MixDataType.Duration:
+                case Lib.MixEnums.MixDataType.PhoneNumber:
+                case Lib.MixEnums.MixDataType.Text:
+                case Lib.MixEnums.MixDataType.Html:
+                case Lib.MixEnums.MixDataType.MultilineText:
+                case Lib.MixEnums.MixDataType.EmailAddress:
+                case Lib.MixEnums.MixDataType.Password:
+                case Lib.MixEnums.MixDataType.Url:
+                case Lib.MixEnums.MixDataType.ImageUrl:
+                case Lib.MixEnums.MixDataType.CreditCard:
+                case Lib.MixEnums.MixDataType.PostalCode:
+                case Lib.MixEnums.MixDataType.Upload:
+                case Lib.MixEnums.MixDataType.Color:
+                case Lib.MixEnums.MixDataType.Icon:
+                case Lib.MixEnums.MixDataType.VideoYoutube:
+                case Lib.MixEnums.MixDataType.TuiEditor:
                 default:
                     return (new JProperty(item.AttributeFieldName, item.StringValue));
             }
         }
 
-        private void ParseModelValue(JToken property, MixAttributeSetValues.UpdateViewModel item)
+        private void ParseModelValue(JToken property, Lib.ViewModels.MixAttributeSetValues.UpdateViewModel item)
         {
             switch (item.Field.DataType)
             {
-                case MixEnums.MixDataType.DateTime:
+                case Lib.MixEnums.MixDataType.DateTime:
                     item.DateTimeValue = property.Value<DateTime?>();
                     item.StringValue = property.Value<string>();
                     break;
 
-                case MixEnums.MixDataType.Date:
+                case Lib.MixEnums.MixDataType.Date:
                     item.DateTimeValue = property.Value<DateTime?>();
                     item.StringValue = property.Value<string>();
                     break;
 
-                case MixEnums.MixDataType.Time:
+                case Lib.MixEnums.MixDataType.Time:
                     item.DateTimeValue = property.Value<DateTime?>();
                     item.StringValue = property.Value<string>();
                     break;
 
-                case MixEnums.MixDataType.Double:
+                case Lib.MixEnums.MixDataType.Double:
                     item.DoubleValue = property.Value<double?>();
                     item.StringValue = property.Value<string>();
                     break;
 
-                case MixEnums.MixDataType.Boolean:
+                case Lib.MixEnums.MixDataType.Boolean:
                     item.BooleanValue = property.Value<bool?>();
                     item.StringValue = property.Value<string>().ToLower();
                     break;
 
-                case MixEnums.MixDataType.Number:
+                case Lib.MixEnums.MixDataType.Number:
                     item.IntegerValue = property.Value<int?>();
                     item.StringValue = property.Value<string>();
                     break;
 
-                case MixEnums.MixDataType.Reference:
+                case Lib.MixEnums.MixDataType.Reference:
                     item.StringValue = property.Value<string>();
                     break;
 
-                case MixEnums.MixDataType.Upload:
+                case Lib.MixEnums.MixDataType.Upload:
                     string mediaData = property.Value<string>();
                     if (mediaData.IsBase64())
                     {
-                        MixMedias.UpdateViewModel media = new MixMedias.UpdateViewModel()
+                        Lib.ViewModels.MixMedias.UpdateViewModel media = new Lib.ViewModels.MixMedias.UpdateViewModel()
                         {
                             Specificulture = Specificulture,
-                            Status = MixEnums.MixContentStatus.Published,
-                            MediaFile = new FileViewModel()
+                            Status = Lib.MixEnums.MixContentStatus.Published,
+                            MediaFile = new Lib.ViewModels.FileViewModel()
                             {
                                 FileStream = mediaData,
                                 Extension = ".png",
@@ -498,22 +497,22 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     }
                     break;
 
-                case MixEnums.MixDataType.Custom:
-                case MixEnums.MixDataType.Duration:
-                case MixEnums.MixDataType.PhoneNumber:
-                case MixEnums.MixDataType.Text:
-                case MixEnums.MixDataType.Html:
-                case MixEnums.MixDataType.MultilineText:
-                case MixEnums.MixDataType.EmailAddress:
-                case MixEnums.MixDataType.Password:
-                case MixEnums.MixDataType.Url:
-                case MixEnums.MixDataType.ImageUrl:
-                case MixEnums.MixDataType.CreditCard:
-                case MixEnums.MixDataType.PostalCode:
-                case MixEnums.MixDataType.Color:
-                case MixEnums.MixDataType.Icon:
-                case MixEnums.MixDataType.VideoYoutube:
-                case MixEnums.MixDataType.TuiEditor:
+                case Lib.MixEnums.MixDataType.Custom:
+                case Lib.MixEnums.MixDataType.Duration:
+                case Lib.MixEnums.MixDataType.PhoneNumber:
+                case Lib.MixEnums.MixDataType.Text:
+                case Lib.MixEnums.MixDataType.Html:
+                case Lib.MixEnums.MixDataType.MultilineText:
+                case Lib.MixEnums.MixDataType.EmailAddress:
+                case Lib.MixEnums.MixDataType.Password:
+                case Lib.MixEnums.MixDataType.Url:
+                case Lib.MixEnums.MixDataType.ImageUrl:
+                case Lib.MixEnums.MixDataType.CreditCard:
+                case Lib.MixEnums.MixDataType.PostalCode:
+                case Lib.MixEnums.MixDataType.Color:
+                case Lib.MixEnums.MixDataType.Icon:
+                case Lib.MixEnums.MixDataType.VideoYoutube:
+                case Lib.MixEnums.MixDataType.TuiEditor:
                 default:
                     item.StringValue = property.Value<string>();
                     break;

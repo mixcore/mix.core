@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Mix.Cms.Messenger;
-using Mix.Cms.Messenger.Models;
 using Mix.Cms.Service.SignalR;
+using Mix.Cms.Service.SignalR.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using static Mix.Cms.Messenger.MixChatEnums;
 using static Mix.Cms.Service.SignalR.Constants.Enums;
 
 namespace Mix.Cms.Lib.Hubs
@@ -531,7 +529,7 @@ namespace Mix.Cms.Lib.Hubs
                 var getUser = Service.SignalR.ViewModels.MixMessengerUsers.DefaultViewModel.Repository.GetSingleModel(u => u.Id == getUserDevice.Data.UserId);
                 if (getUser.IsSucceed)
                 {
-                    getUser.Data.Status = OnlineStatus.DisConnected;
+                    getUser.Data.Status = OnlineStatus.Disconnected;
                     getUser.Data.SaveModel();
                     SendToAll(getUserDevice.Data.UserId, Constants.Enums.MessageReponseKey.MemberOffline, false);
                 }

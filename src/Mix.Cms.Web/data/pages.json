@@ -6,6 +6,7 @@
       "title": "Home",
       "image": "/assets/img/bgs/home.jpeg",
       "template": "Pages/_Home.cshtml",
+      "layout": "Masters/_Layout.cshtml",
       "type": 3,
       "status": 2
     },
@@ -15,6 +16,7 @@
       "title": "Tag",
       "image": "/assets/img/bgs/tag.jpg",
       "template": "Pages/_Tag.cshtml",
+      "layout": "Masters/_Layout.cshtml",
       "type": 8,
       "status": 2
     },
@@ -24,6 +26,7 @@
       "title": "Search",
       "image": "/assets/img/bgs/search.jpg",
       "template": "Pages/_Search.cshtml",
+      "layout": "Masters/_Layout.cshtml",
       "type": 8,
       "status": 2
     },
@@ -33,7 +36,7 @@
       "title": "404",
       "image": "/assets/img/bgs/404.jpg",
       "template": "Pages/_404.cshtml",
-      "layout": "Masters/_Blank",
+      "layout": "Masters/_Blank.cshtml",
       "type": 8,
       "status": 2
     },
@@ -43,7 +46,7 @@
       "title": "403",
       "image": "/assets/img/bgs/403.png",
       "template": "Pages/_403.cshtml",
-      "layout": "Masters/_Blank",
+      "layout": "Masters/_Blank.cshtml",
       "type": 8,
       "status": 2
     },
@@ -53,7 +56,7 @@
       "title": "500",
       "image": "/assets/img/bgs/500.png",
       "template": "Pages/_403.cshtml",
-      "layout": "Masters/_Blank",
+      "layout": "Masters/_Blank.cshtml",
       "type": 8,
       "status": 2
     },
@@ -63,7 +66,7 @@
       "title": "Maintenance",
       "image": "/assets/img/bgs/Maintenance.jpg",
       "template": "Pages/_Maintenance.cshtml",
-      "layout": "Masters/_Blank",
+      "layout": "Masters/_Blank.cshtml",
       "type": 8,
       "status": 2
     }
