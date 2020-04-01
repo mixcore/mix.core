@@ -4,7 +4,6 @@ on:
   push:
     branches:
     - master
-    - develop
     - release/v1.0.0
   schedule:
   - cron: "0 2 * * 1-5"
@@ -19,10 +18,10 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 2.2.207
+        dotnet-version: 3.1.102
     
-    - name: Install Dependencies
-      run: npm install
+    #- name: Install Dependencies
+    #  run: npm install
     
     - name: Pull Mix Heart & Identity
       run: |
