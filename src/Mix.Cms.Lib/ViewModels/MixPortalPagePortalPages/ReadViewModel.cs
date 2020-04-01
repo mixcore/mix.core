@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
@@ -101,7 +102,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
             {
                 //if current Context is Root
                 transaction.Dispose();
-                context.Dispose();
+                context.Database.CloseConnection();transaction.Dispose();context.Dispose();
             }
         }
 

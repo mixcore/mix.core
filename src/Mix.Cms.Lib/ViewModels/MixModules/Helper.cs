@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixCultures;
 using Mix.Common.Helper;
@@ -49,7 +50,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 //if current Context is Root
                 if (isRoot)
                 {
-                    context?.Dispose();
+                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
                 }
             }
             return result;

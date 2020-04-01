@@ -61,10 +61,10 @@ else
     <meta name="keywords" content="@desc" />
 }
 @section Styles{
-    @Html.Raw(materTemplate.Styles)
+    @Html.Raw(materTemplate?.Styles)
     @Html.Raw(Model.View?.Styles)
 }
 @section Scripts{
-    @Html.Raw(materTemplate.Scripts)
+    @Html.Raw(materTemplate?.Scripts)
     @Html.Raw(Model.View?.Scripts)
 }

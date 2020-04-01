@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixModules;
@@ -78,7 +79,7 @@ namespace Mix.Cms.Lib.ViewModels
                 //if current Context is Root
                 if (isRoot)
                 {
-                    context?.Dispose();
+                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
                 }
             }
         }
@@ -263,7 +264,7 @@ namespace Mix.Cms.Lib.ViewModels
                 //if current Context is Root
                 if (isRoot)
                 {
-                    context?.Dispose();
+                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
                 }
             }
             return result;
@@ -402,7 +403,7 @@ namespace Mix.Cms.Lib.ViewModels
                 //if current Context is Root
                 if (isRoot)
                 {
-                    context?.Dispose();
+                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
                 }
             }
             return result;

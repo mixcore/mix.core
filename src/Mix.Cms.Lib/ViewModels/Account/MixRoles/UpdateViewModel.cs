@@ -156,7 +156,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
             }
             finally
             {                
-                context.Dispose();
+                context.Database.CloseConnection();transaction.Dispose();context.Dispose();
             }
         }
 

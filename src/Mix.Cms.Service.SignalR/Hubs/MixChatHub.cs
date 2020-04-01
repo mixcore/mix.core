@@ -24,7 +24,7 @@ namespace Mix.Cms.Lib.Hubs
 
             user.CreatedDate = DateTime.UtcNow;
             // Save user and current device to db
-            var result = await user.Join();
+            var result = user.Join();
 
             //  save success
             if (result.IsSucceed)

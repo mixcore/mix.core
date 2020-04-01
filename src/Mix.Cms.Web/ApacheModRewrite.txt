@@ -2,10 +2,10 @@
 # RewriteRule ^([a-z]{2}[-][a-z]{2})$ /$1/home [L,R=302]
 
 # ref https://aloneonahill.com/blog/url-rewriting-for-beginners
-RewriteRule ^(init|security|portal|api|page|post|module|error|swagger|graphql)(.*){0,}$ [NC,L]
-RewriteRule \.(xml|json|html|css|js|jpg|png|gif|jpeg|svg|map|ico|webmanifest|woff|woff2|ttf|eot)$ [NC,L]
-RewriteRule ^admin(.*)$ backend/$1
-RewriteRule ^(.*)$ /?alias=$1
+#RewriteRule ^(init|security|portal|api|page|post|module|error|swagger|graphql)(.*){0,}$ [NC,L]
+#RewriteRule \.(xml|json|html|css|js|jpg|png|gif|jpeg|svg|map|ico|webmanifest|woff|woff2|ttf|eot)$ [NC,L]
+#RewriteRule ^admin(.*)$ backend/$1
+#RewriteRule ^(.*)$ /?alias=$1
 
 # RewriteRule ^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))/post(\/(.*)){1,8}$    undefined
 # RewriteRule ^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))$    /$1/
