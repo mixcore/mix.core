@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
@@ -433,91 +434,102 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         private void ParseModelValue(JToken property, MixAttributeSetValues.UpdateViewModel item)
         {
-            switch (item.Field.DataType)
+            if (item.Field.IsEncrypt)
             {
-                case MixEnums.MixDataType.DateTime:
-                    item.DateTimeValue = property.Value<DateTime?>();
-                    item.StringValue = property.Value<string>();
-                    break;
-
-                case MixEnums.MixDataType.Date:
-                    item.DateTimeValue = property.Value<DateTime?>();
-                    item.StringValue = property.Value<string>();
-                    break;
-
-                case MixEnums.MixDataType.Time:
-                    item.DateTimeValue = property.Value<DateTime?>();
-                    item.StringValue = property.Value<string>();
-                    break;
-
-                case MixEnums.MixDataType.Double:
-                    item.DoubleValue = property.Value<double?>();
-                    item.StringValue = property.Value<string>();
-                    break;
-
-                case MixEnums.MixDataType.Boolean:
-                    item.BooleanValue = property.Value<bool?>();
-                    item.StringValue = property.Value<string>().ToLower();
-                    break;
-
-                case MixEnums.MixDataType.Number:
-                    item.IntegerValue = property.Value<int?>();
-                    item.StringValue = property.Value<string>();
-                    break;
-
-                case MixEnums.MixDataType.Reference:
-                    item.StringValue = property.Value<string>();
-                    break;
-
-                case MixEnums.MixDataType.Upload:
-                    string mediaData = property.Value<string>();
-                    if (mediaData.IsBase64())
-                    {
-                        MixMedias.UpdateViewModel media = new MixMedias.UpdateViewModel()
-                        {
-                            Specificulture = Specificulture,
-                            Status = MixEnums.MixContentStatus.Published,
-                            MediaFile = new FileViewModel()
-                            {
-                                FileStream = mediaData,
-                                Extension = ".png",
-                                Filename = Guid.NewGuid().ToString(),
-                                FileFolder = "Attributes"
-                            }
-                        };
-                        var saveMedia = media.SaveModel(true);
-                        if (saveMedia.IsSucceed)
-                        {
-                            item.StringValue = saveMedia.Data.FullPath;
-                            Data[item.AttributeFieldName] = item.StringValue;
-                        }
-                    }
-                    else
-                    {
-                        item.StringValue = mediaData;
-                    }
-                    break;
-
-                case MixEnums.MixDataType.Custom:
-                case MixEnums.MixDataType.Duration:
-                case MixEnums.MixDataType.PhoneNumber:
-                case MixEnums.MixDataType.Text:
-                case MixEnums.MixDataType.Html:
-                case MixEnums.MixDataType.MultilineText:
-                case MixEnums.MixDataType.EmailAddress:
-                case MixEnums.MixDataType.Password:
-                case MixEnums.MixDataType.Url:
-                case MixEnums.MixDataType.ImageUrl:
-                case MixEnums.MixDataType.CreditCard:
-                case MixEnums.MixDataType.PostalCode:
-                case MixEnums.MixDataType.Color:
-                case MixEnums.MixDataType.Icon:
-                case MixEnums.MixDataType.VideoYoutube:
-                case MixEnums.MixDataType.TuiEditor:
-                default:
-                    item.StringValue = property.Value<string>();
-                    break;
+                var obj = property.Value<JObject>();
+                item.StringValue = obj.ToString(Formatting.None);
+                item.EncryptValue = obj["data"]?.ToString();
+                item.EncryptKey = obj["key"]?.ToString();
             }
+            else
+            {
+                switch (item.Field.DataType)
+                {
+                    case MixEnums.MixDataType.DateTime:
+                        item.DateTimeValue = property.Value<DateTime?>();
+                        item.StringValue = property.Value<string>();
+                        break;
+
+                    case MixEnums.MixDataType.Date:
+                        item.DateTimeValue = property.Value<DateTime?>();
+                        item.StringValue = property.Value<string>();
+                        break;
+
+                    case MixEnums.MixDataType.Time:
+                        item.DateTimeValue = property.Value<DateTime?>();
+                        item.StringValue = property.Value<string>();
+                        break;
+
+                    case MixEnums.MixDataType.Double:
+                        item.DoubleValue = property.Value<double?>();
+                        item.StringValue = property.Value<string>();
+                        break;
+
+                    case MixEnums.MixDataType.Boolean:
+                        item.BooleanValue = property.Value<bool?>();
+                        item.StringValue = property.Value<string>().ToLower();
+                        break;
+
+                    case MixEnums.MixDataType.Number:
+                        item.IntegerValue = property.Value<int?>();
+                        item.StringValue = property.Value<string>();
+                        break;
+
+                    case MixEnums.MixDataType.Reference:
+                        item.StringValue = property.Value<string>();
+                        break;
+
+                    case MixEnums.MixDataType.Upload:
+                        string mediaData = property.Value<string>();
+                        if (mediaData.IsBase64())
+                        {
+                            MixMedias.UpdateViewModel media = new MixMedias.UpdateViewModel()
+                            {
+                                Specificulture = Specificulture,
+                                Status = MixEnums.MixContentStatus.Published,
+                                MediaFile = new FileViewModel()
+                                {
+                                    FileStream = mediaData,
+                                    Extension = ".png",
+                                    Filename = Guid.NewGuid().ToString(),
+                                    FileFolder = "Attributes"
+                                }
+                            };
+                            var saveMedia = media.SaveModel(true);
+                            if (saveMedia.IsSucceed)
+                            {
+                                item.StringValue = saveMedia.Data.FullPath;
+                                Data[item.AttributeFieldName] = item.StringValue;
+                            }
+                        }
+                        else
+                        {
+                            item.StringValue = mediaData;
+                        }
+                        break;
+
+                    case MixEnums.MixDataType.Custom:
+                    case MixEnums.MixDataType.Duration:
+                    case MixEnums.MixDataType.PhoneNumber:
+                    case MixEnums.MixDataType.Text:
+                    case MixEnums.MixDataType.Html:
+                    case MixEnums.MixDataType.MultilineText:
+                    case MixEnums.MixDataType.EmailAddress:
+                    case MixEnums.MixDataType.Password:
+                    case MixEnums.MixDataType.Url:
+                    case MixEnums.MixDataType.ImageUrl:
+                    case MixEnums.MixDataType.CreditCard:
+                    case MixEnums.MixDataType.PostalCode:
+                    case MixEnums.MixDataType.Color:
+                    case MixEnums.MixDataType.Icon:
+                    case MixEnums.MixDataType.VideoYoutube:
+                    case MixEnums.MixDataType.TuiEditor:
+                    default:
+                        item.StringValue = property.Value<string>();
+                        break;
+                }
+            }
+            
         }
 
         public static Task<RepositoryResponse<List<FormViewModel>>> FilterByValueAsync(string culture, string attributeSetName
@@ -557,7 +569,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Dispose();
+                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
                 }
             }
         }

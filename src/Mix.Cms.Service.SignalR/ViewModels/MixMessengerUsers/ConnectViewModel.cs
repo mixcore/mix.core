@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Cms.Messenger.Models.Data;
 using Mix.Cms.Service.SignalR.Models;
@@ -70,18 +71,18 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
         #region Override
 
         #region Async
-
-        public async Task<RepositoryResponse<bool>> Join()
+        // Cannot use asyn method for signalr hub
+        public RepositoryResponse<bool> Join(MixChatServiceContext _context=null, IDbContextTransaction _transaction= null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            UnitOfWorkHelper<MixChatServiceContext>.InitTransaction(null, null, out MixChatServiceContext context, out IDbContextTransaction transaction, out bool isRoot);
+            UnitOfWorkHelper<MixChatServiceContext>.InitTransaction(_context, _transaction, out MixChatServiceContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                result = await UpdateUser(context, transaction);
+                result = UpdateUser(context, transaction);
 
                 if (result.IsSucceed)
                 {
-                    result = await UpdateDevice(context, transaction);
+                    result = UpdateDevice(context, transaction);
                 }
                 UnitOfWorkHelper<MixChatServiceContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
                 return result;
@@ -96,23 +97,23 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
                 {
                     //if current Context is Root
                     transaction.Dispose();
-                    context.Dispose();
+                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
                 }
             }            
         }
 
-        private async Task<RepositoryResponse<bool>> UpdateUser(MixChatServiceContext context, IDbContextTransaction transaction)
+        private RepositoryResponse<bool> UpdateUser(MixChatServiceContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             // Load User from db
-            var getUser = await MixMessengerUsers.DefaultViewModel.Repository.GetSingleModelAsync(m => m.Id == Id, context, transaction);
+            var getUser = MixMessengerUsers.DefaultViewModel.Repository.GetSingleModel(m => m.Id == Id, context, transaction);
             if (getUser.IsSucceed)
             {
                 // if existed => update status = connected
                 if (getUser.Data.Status == Constants.Enums.OnlineStatus.Disconnected)
                 {
                     getUser.Data.Status = Constants.Enums.OnlineStatus.Connected;
-                    var saveUser = await getUser.Data.SaveModelAsync(false, context, transaction);
+                    var saveUser = getUser.Data.SaveModel(false, context, transaction);
                     ViewModelHelper.HandleResult(saveUser, ref result);
                 }
             }
@@ -128,25 +129,24 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
                     Name = Name,
                     Status = Constants.Enums.OnlineStatus.Connected
                 };
-                var saveUser = await user.SaveModelAsync(false, context,transaction);
+                var saveUser = user.SaveModel(false, context,transaction);
                 ViewModelHelper.HandleResult(saveUser, ref result);
             }
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> UpdateDevice(MixChatServiceContext context, IDbContextTransaction transaction)
+        private RepositoryResponse<bool> UpdateDevice(MixChatServiceContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (Device != null)
             {
-                //var cnn = _context.MixMessengerUserDevice.FirstOrDefault(c => c.UserId == Device.UserId && c.DeviceId == Device.DeviceId);
-                var getDevice = await MixMessengerUserDevices.DefaultViewModel.Repository.GetSingleModelAsync(c => c.UserId == Device.UserId && c.DeviceId == Device.DeviceId, context, transaction);
+                var getDevice = MixMessengerUserDevices.DefaultViewModel.Repository.GetSingleModel(c => c.UserId == Device.UserId && c.DeviceId == Device.DeviceId, context, transaction);
                 if (getDevice.IsSucceed)
                 {
                     getDevice.Data.Status = Constants.Enums.DeviceStatus.Actived;
                     getDevice.Data.StartDate = DateTime.UtcNow;
                     getDevice.Data.ConnectionId = Device.ConnectionId;
-                    var saveDevice = await getDevice.Data.SaveModelAsync(false, context, transaction);
+                    var saveDevice = getDevice.Data.SaveModel(false, context, transaction);
                     ViewModelHelper.HandleResult(saveDevice, ref result);
                 }
                 else
@@ -154,7 +154,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
                     Device.Status = (int)Constants.Enums.DeviceStatus.Actived;
                     Device.StartDate = DateTime.UtcNow;
                     var dv = new MixMessengerUserDevices.DefaultViewModel(Device, context, transaction);
-                    var saveDevice = await dv.SaveModelAsync(false, context, transaction);
+                    var saveDevice = dv.SaveModel(false, context, transaction);
                     ViewModelHelper.HandleResult(saveDevice, ref result);
                 }
             }

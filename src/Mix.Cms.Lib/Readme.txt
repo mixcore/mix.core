@@ -35,6 +35,6 @@ finally
     if (isRoot)
     {
         //if current Context is Root
-        context.Dispose();
+        context.Database.CloseConnection();transaction.Dispose();context.Dispose();
     }
 }

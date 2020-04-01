@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -277,7 +278,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                     var getDataResult = MixModuleDatas.ReadViewModel.Repository
                     .GetModelListBy(
                         dataExp
-                        , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+                        , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy
+                        ), 0
                         , pageSize, pageIndex
                         , _context: context, _transaction: transaction);
                     if (getDataResult.IsSucceed)
@@ -309,7 +311,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Dispose();
+                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
                 }
             }
         }
