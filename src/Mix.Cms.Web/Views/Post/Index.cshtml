@@ -1,9 +1,9 @@
 ﻿@model Mix.Cms.Lib.ViewModels.MixPosts.ReadMvcViewModel
 @{
-    string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, ViewBag.culture);
+    string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, ViewBag.culture);
     string templateFolder = MixCmsHelper.GetTemplateFolder(ViewBag.culture);
     string layout = "Masters/_Layout.cshtml";
-    var materTemplate = await MixCmsHelper.GetTemplateByPath(master, layout);
+    var masterTemplate = await MixCmsHelper.GetTemplateByPath(master, layout);
     Layout = $"{templateFolder}/{layout}";
 }
 <div>
@@ -62,10 +62,10 @@
     <meta name="keywords" content="@desc" />
 }
 @section Styles{
-    @Html.Raw(materTemplate?.Styles)
+    @Html.Raw(masterTemplate?.Styles)
     @Html.Raw(Model.View?.Styles)
 }
 @section Scripts{
-    @Html.Raw(materTemplate?.Scripts)
+    @Html.Raw(masterTemplate?.Scripts)
     @Html.Raw(Model.View?.Scripts)
 }

@@ -20,39 +20,39 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         #region Models
 
-        [JsonIgnore]
+        
         [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonIgnore]
+        
         [JsonProperty("templateId")]
         public int TemplateId { get; set; }
 
-        [JsonIgnore]
+        
         [JsonProperty("themeName")]
         public string ThemeName { get; set; }
 
-        [JsonIgnore]
+        
         [JsonProperty("folderType")]
         public string FolderType { get; set; }
 
-        [JsonIgnore]
+        
         [JsonProperty("fileFolder")]
         public string FileFolder { get; set; }
 
-        [JsonIgnore]
+        
         [JsonProperty("fileName")]
         public string FileName { get; set; }
 
-        [JsonIgnore]
+        
         [JsonProperty("extension")]
         public string Extension { get; set; }
 
-        [JsonIgnore]
+        
         [JsonProperty("content")]
         public string Content { get; set; }
 
-        [JsonIgnore]
+        
         [JsonProperty("mobileContent")]
         public string MobileContent { get; set; }
 
@@ -74,15 +74,15 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         [JsonProperty("styles")]
         public string Styles { get; set; }
 
-        [JsonIgnore]
+        
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
 
-        [JsonIgnore]
+        
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
 
-        [JsonIgnore]
+        
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
 
@@ -90,7 +90,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         #region Views
 
-        [JsonIgnore]
+        
         [JsonProperty("assetFolder")]
         public string AssetFolder {
             get {
@@ -101,7 +101,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             }
         }
 
-        [JsonIgnore]
+        
         [JsonProperty("templateFolder")]
         public string TemplateFolder {
             get {
