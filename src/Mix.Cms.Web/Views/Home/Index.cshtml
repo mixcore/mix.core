@@ -1,8 +1,11 @@
-﻿@{
-    string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, ViewBag.culture);
+﻿@using Mix.Cms.Lib;
+@using Mix.Cms.Lib.Services;
+@model Mix.Cms.Lib.ViewModels.MixPages.ReadMvcViewModel
+@{
+    string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, ViewBag.culture);
     string templateFolder = MixCmsHelper.GetTemplateFolder(ViewBag.culture);
     string layout = Model.Layout ?? "Masters/_Layout.cshtml";
-    var materTemplate = await MixCmsHelper.GetTemplateByPath(master, layout);
+    var masterTemplate = await MixCmsHelper.GetTemplateByPath(master, layout);
     Layout = $"{templateFolder}/{layout}";
 }
 @* <mix-loader ng-show="isBusy"></mix-loader>
@@ -16,8 +19,7 @@
 
     try
     {
-       
-        <partial name="@Model.TemplatePath" model="@Model" />
+       @await Html.PartialAsync(Model.TemplatePath, Model)
     }
     catch (System.InvalidOperationException invalidOperationException)
     {
@@ -61,10 +63,10 @@ else
     <meta name="keywords" content="@desc" />
 }
 @section Styles{
-    @Html.Raw(materTemplate?.Styles)
+    @Html.Raw(masterTemplate?.Styles)
     @Html.Raw(Model.View?.Styles)
 }
 @section Scripts{
-    @Html.Raw(materTemplate?.Scripts)
+    @Html.Raw(masterTemplate?.Scripts)
     @Html.Raw(Model.View?.Scripts)
 }

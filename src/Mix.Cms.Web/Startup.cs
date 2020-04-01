@@ -44,7 +44,6 @@ namespace Mix.Cms.Web
             /* Mix: End Add db contexts */
 
             /* Mix: Inject Services */
-            services.AddSingleton<MixService>();
             services.AddControllers(mvcOptions =>
                mvcOptions.EnableEndpointRouting = false);
 

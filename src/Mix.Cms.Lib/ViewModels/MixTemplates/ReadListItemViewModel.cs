@@ -16,11 +16,11 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         #region Models
 
-        [JsonIgnore]
+        
         [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonIgnore]
+        
         [JsonProperty("templateId")]
         public int TemplateId { get; set; }
 
@@ -48,11 +48,11 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
 
-        [JsonIgnore]
+        
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
 
-        [JsonIgnore]
+        
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
 
@@ -60,7 +60,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         #region Views
 
-        [JsonIgnore]
+        
         [JsonProperty("assetFolder")]
         public string AssetFolder {
             get {
@@ -71,7 +71,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             }
         }
 
-        [JsonIgnore]
+        
         [JsonProperty("templateFolder")]
         public string TemplateFolder {
             get {
