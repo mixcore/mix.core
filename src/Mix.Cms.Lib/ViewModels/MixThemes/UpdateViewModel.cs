@@ -196,41 +196,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             return result;
         }
 
-        public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var result = await MixTemplates.InitViewModel.Repository.RemoveListModelAsync(false, t => t.ThemeId == Id);
-            if (result.IsSucceed)
-            {
-                FileRepository.Instance.DeleteWebFolder(AssetFolder);
-                FileRepository.Instance.DeleteFolder(TemplateFolder);
-            }
-            return new RepositoryResponse<bool>()
-            {
-                IsSucceed = result.IsSucceed,
-                Errors = result.Errors,
-                Exception = result.Exception
-            };
-        }
-
         #endregion Async
 
         #region Sync
 
-        public override RepositoryResponse<bool> RemoveRelatedModels(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var result = MixTemplates.InitViewModel.Repository.RemoveListModel(false, t => t.ThemeId == Id);
-            if (result.IsSucceed)
-            {
-                FileRepository.Instance.DeleteWebFolder(AssetFolder);
-                FileRepository.Instance.DeleteFolder(TemplateFolder);
-            }
-            return new RepositoryResponse<bool>()
-            {
-                IsSucceed = result.IsSucceed,
-                Errors = result.Errors,
-                Exception = result.Exception
-            };
-        }
 
         #endregion Sync
 
@@ -241,7 +210,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         private async Task<RepositoryResponse<bool>> ImportThemeAsync(MixTheme parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            string filePath = $"{TemplateAsset.FileFolder}/{TemplateAsset.Filename}{TemplateAsset.Extension}";
+            string filePath = $"wwwroot/{TemplateAsset.FileFolder}/{TemplateAsset.Filename}{TemplateAsset.Extension}";
             if (File.Exists(filePath))
             {
                 string outputFolder = $"{TemplateAsset.FileFolder}/Extract";

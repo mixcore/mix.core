@@ -212,6 +212,17 @@ namespace Mix.Cms.Api.Controllers.v1
                 FileRepository.Instance.SaveFile(theme, theme.FileName, importFolder);
             }
 
+            // Load default blank if created new without upload theme
+            if (data.Id==0 && theme ==null)
+            {
+                data.TemplateAsset = new Lib.ViewModels.FileViewModel()
+                {
+                    Filename = "default_blank",
+                    Extension = ".zip",
+                    FileFolder = "Imports/Themes"
+                };
+            }
+
             if (data != null)
             {
                 data.CreatedBy = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
