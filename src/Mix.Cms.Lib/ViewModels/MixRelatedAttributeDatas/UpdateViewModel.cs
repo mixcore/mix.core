@@ -2,6 +2,7 @@
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,7 +66,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         #region Views
 
         [JsonProperty("data")]
-        public MixAttributeSetDatas.UpdateViewModel Data { get; set; }
+        public MixAttributeSetDatas.FormViewModel Data { get; set; }
 
         #endregion Views
 
@@ -82,7 +83,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getData = MixAttributeSetDatas.UpdateViewModel.Repository.GetSingleModel(p => p.Id == Id && p.Specificulture == Specificulture
+            var getData = MixAttributeSetDatas.FormViewModel.Repository.GetSingleModel(p => p.Id == Id && p.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction
             );
             if (getData.IsSucceed)
