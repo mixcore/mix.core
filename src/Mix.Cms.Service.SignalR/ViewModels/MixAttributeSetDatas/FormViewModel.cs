@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Cms.Lib.Extensions;
+using Mix.Heart.Extensions;
 using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
@@ -261,20 +261,20 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
             if (result.IsSucceed)
             {
                 RepositoryResponse<bool> saveValues = await SaveValues(parent, _context, _transaction);
-                Lib.ViewModels.ViewModelHelper.HandleResult(saveValues, ref result);
+                ViewModelHelper.HandleResult(saveValues, ref result);
             }
             // Save Ref Data
             if (result.IsSucceed)
             {
                 RepositoryResponse<bool> saveRefData = await SaveRefDataAsync(parent, _context, _transaction);
-                Lib.ViewModels.ViewModelHelper.HandleResult(saveRefData, ref result);
+                ViewModelHelper.HandleResult(saveRefData, ref result);
             }
 
             // Save Related Data
             if (result.IsSucceed)
             {
                 RepositoryResponse<bool> saveRelated = await SaveRelatedDataAsync(parent, _context, _transaction);
-                Lib.ViewModels.ViewModelHelper.HandleResult(saveRelated, ref result);
+                ViewModelHelper.HandleResult(saveRelated, ref result);
             }
 
             return result;
@@ -293,12 +293,12 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
                         item.DataId = parent.Id;
                         item.Specificulture = parent.Specificulture;
                         var saveResult = await item.SaveModelAsync(false, context, transaction);
-                        Lib.ViewModels.ViewModelHelper.HandleResult(saveResult, ref result);
+                        ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                     else
                     {
                         var delResult = await item.RemoveModelAsync(false, context, transaction);
-                        Lib.ViewModels.ViewModelHelper.HandleResult(delResult, ref result);
+                        ViewModelHelper.HandleResult(delResult, ref result);
                     }
                 }
                 else
@@ -331,7 +331,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
                             Specificulture = Specificulture
                         });
                     }
-                    Lib.ViewModels.ViewModelHelper.HandleResult(saveRef, ref result);
+                    ViewModelHelper.HandleResult(saveRef, ref result);
                 }
                 else
                 {
@@ -366,7 +366,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
                     item.Specificulture = Specificulture;
                     item.CreatedDateTime = DateTime.UtcNow;
                     var saveResult = await item.SaveModelAsync(true, context, transaction);
-                    Lib.ViewModels.ViewModelHelper.HandleResult(saveResult, ref result);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
                 }
                 else
                 {

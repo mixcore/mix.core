@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Services;
 
 namespace Mix.Cms.Lib.Models.Cms
@@ -82,6 +83,13 @@ namespace Mix.Cms.Lib.Models.Cms
                     optionsBuilder.UseSqlServer(cnn);
                 }
             }
+        }
+        
+        //Ref https://github.com/dotnet/efcore/issues/10169
+        public override void Dispose()
+        {
+            SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
+            base.Dispose();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
