@@ -185,13 +185,13 @@ namespace Mix.Cms.Api.Controllers.v1
             [FromBody] RequestPaging request)
         {
             var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
-            bool isLevel = int.TryParse(parsed.Get("level"), out int level);
+            //bool isLevel = int.TryParse(parsed.Get("level"), out int level);
             bool isType = int.TryParse(parsed.Get("pageType"), out int pageType);
             ParseRequestPagingDate(request);
             Expression<Func<MixPage, bool>> predicate = model =>
                         model.Specificulture == _lang
                         && (!request.Status.HasValue || model.Status == request.Status.Value)
-                        && (!isLevel || model.Level == level)
+                        //&& (!isLevel || model.Level == level)
                         && (!isType || model.Type == pageType)
                         && (string.IsNullOrWhiteSpace(request.Keyword)                            
                             || (EF.Functions.Like(model.Title, $"%{request.Keyword}%"))

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
@@ -164,7 +165,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                 if (isRoot && (result.Status == TaskStatus.RanToCompletion || result.Status == TaskStatus.Canceled || result.Status == TaskStatus.Faulted))
                 {
                     //if current Context is Root
-                    context.Dispose();
+                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
                 }
             }
         }
