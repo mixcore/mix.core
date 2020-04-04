@@ -109,7 +109,6 @@ namespace Mix.Cms.Web
                 using (var ctx = new MixCmsContext())
                 {
                     ctx.Database.Migrate();
-                    ctx.Database.CloseConnection();
                 }
             }
 

@@ -2,6 +2,7 @@
 // The Mixcore Foundation licenses this file to you under the MIT.
 // See the LICENSE file in the project root for more information.
 
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Services;
 using Mix.Identity.Data;
@@ -48,7 +49,12 @@ namespace Mix.Cms.Lib.Models.Account
                 }
             }
         }
-
+        //Ref https://github.com/dotnet/efcore/issues/10169
+        public override void Dispose()
+        {
+            SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
+            base.Dispose();
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AspNetRoleClaims>(entity =>

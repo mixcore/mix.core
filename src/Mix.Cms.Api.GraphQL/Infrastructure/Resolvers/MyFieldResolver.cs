@@ -1,7 +1,7 @@
 ﻿using GraphQL.Resolvers;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
-using Mix.Cms.Lib.Extensions;
+using Mix.Heart.Extensions;
 using System;
 using System.Linq;
 using System.Linq.Dynamic.Core;

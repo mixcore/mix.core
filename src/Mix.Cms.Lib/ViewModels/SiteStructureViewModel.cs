@@ -244,11 +244,11 @@ namespace Mix.Cms.Lib.ViewModels
                 }
                 if (result.IsSucceed && AttributeSetDatas.Count > 0)
                 {
-                    result = await ImportAttributeSetDatas(context, transaction);
+                    result = await ImportAttributeSetDatas(destCulture, context, transaction);
                 }
                 if (result.IsSucceed && RelatedData.Count > 0)
                 {
-                    result = await ImportRelatedDatas(context, transaction);
+                    result = await ImportRelatedDatas(destCulture, context, transaction);
                 }
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
             }
@@ -409,7 +409,7 @@ namespace Mix.Cms.Lib.ViewModels
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> ImportAttributeSetDatas(MixCmsContext context, IDbContextTransaction transaction)
+        private async Task<RepositoryResponse<bool>> ImportAttributeSetDatas(string destCulture, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             foreach (var item in AttributeSetDatas)
@@ -418,10 +418,12 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     if (!context.MixAttributeSetData.Any(m => m.Id == item.Id && m.Specificulture == item.Specificulture))
                     {
+                        item.Specificulture = destCulture;
                         item.Fields = item.Fields ?? MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(
                             m => m.AttributeSetId == item.AttributeSetId, context, transaction).Data;
                         foreach (var field in item.Fields)
                         {
+                            field.Specificulture = destCulture;
                             var newSet = AttributeSets.FirstOrDefault(m => m.Name == field.AttributeSetName);
                             var newField = newSet?.Fields.FirstOrDefault(m => m.Name == field.Name);
                             if (newField != null)
@@ -443,11 +445,12 @@ namespace Mix.Cms.Lib.ViewModels
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> ImportRelatedDatas(MixCmsContext context, IDbContextTransaction transaction)
+        private async Task<RepositoryResponse<bool>> ImportRelatedDatas(string desCulture, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             foreach (var item in RelatedData)
             {
+                item.Specificulture = desCulture;
                 if (result.IsSucceed)
                 {
                     var saveResult = await item.SaveModelAsync(false, context, transaction);
