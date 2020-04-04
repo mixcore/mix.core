@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
@@ -102,9 +103,9 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
 
         public static async Task<RepositoryResponse<bool>> ImportLanguages(List<MixLanguage> arrLanguage, string destCulture)
         {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(null, null, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            var context = new MixCmsContext();
-            var transaction = context.Database.BeginTransaction();
 
             try
             {
@@ -133,7 +134,9 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
             finally
             {
                 //if current Context is Root
-                context?.Dispose();
+                if(isRoot){
+                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                }
             }
             return result;
         }

@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Cms.Lib.Extensions;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Heart.Extensions;
 using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
@@ -544,7 +545,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Dispose();
+                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
                 }
             }
         }

@@ -17,9 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Cms.Api.GraphQL", "Mix.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Cms.Api.RestFul", "Mix.Cms.Api.RestFul\Mix.Cms.Api.RestFul.csproj", "{D174224F-710A-43EA-AB67-296156EA6599}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mix.Cms.Service.Gprc", "Mix.Cms.Service.Gprc\Mix.Cms.Service.Gprc.csproj", "{FE4CADCC-B7DD-40A7-8783-0A3C10756A01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Cms.Service.Gprc", "Mix.Cms.Service.Gprc\Mix.Cms.Service.Gprc.csproj", "{FE4CADCC-B7DD-40A7-8783-0A3C10756A01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mix.Cms.Service.SignalR", "Mix.Cms.Service.SignalR\Mix.Cms.Service.SignalR.csproj", "{940730E0-9409-4DBF-A38A-3CFEC2D9A22E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Cms.Service.SignalR", "Mix.Cms.Service.SignalR\Mix.Cms.Service.SignalR.csproj", "{940730E0-9409-4DBF-A38A-3CFEC2D9A22E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

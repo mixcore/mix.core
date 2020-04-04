@@ -126,7 +126,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
                 {
                     //if current Context is Root
                     transaction.Dispose();
-                    context.Dispose();
+                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
                 }
             }
         }

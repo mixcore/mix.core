@@ -9,8 +9,14 @@
         <Compile Remove="cache\**" />
         <Compile Remove="logs\**" />
         <Compile Remove="Views\Shared\Templates\**" />
+        <Content Remove="cache\**" />
+        <Content Remove="logs\**" />
         <Content Remove="Views\Shared\Templates\**" />
+        <EmbeddedResource Remove="cache\**" />
+        <EmbeddedResource Remove="logs\**" />
         <EmbeddedResource Remove="Views\Shared\Templates\**" />
+        <None Remove="cache\**" />
+        <None Remove="logs\**" />
         <None Remove="Views\Shared\Templates\**" />
     </ItemGroup>
 

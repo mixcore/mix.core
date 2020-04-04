@@ -33,35 +33,6 @@
             "sizes": "96x96",
             "type": "image\/png",
             "density": "2.0"
-        },
-        {
-            "src": "\/assets\/icons\/android-icon-144x144.png",
-            "sizes": "144x144",
-            "type": "image\/png",
-            "density": "3.0"
-        },
-        {
-            "src": "\/assets\/icons\/android-icon-192x192.png",
-            "sizes": "192x192",
-            "type": "image\/png",
-            "density": "4.0"
-        },
-        {
-            "src": "\/assets\/img\/mixcore-square-logo.png",
-            "sizes": "512x512",
-            "type": "image\/png",
-            "density": "4.0"
         }
     ]
 }
-
-
-
-
-
-
-
-
-
-
-

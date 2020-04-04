@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
 
@@ -62,7 +63,12 @@ namespace Mix.Cms.Messenger.Models.Data
                 }
             }
         }
-
+        //Ref https://github.com/dotnet/efcore/issues/10169
+        public override void Dispose()
+        {
+            SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
+            base.Dispose();
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MixMessengerHubRoom>(entity =>

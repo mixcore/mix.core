@@ -32,6 +32,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
 
         [JsonProperty("regex")]
         public string Regex { get; set; }
+        [JsonProperty("isRegex")]
+        public bool IsRegex { get { return !string.IsNullOrEmpty(Regex); } }
 
         [JsonProperty("title")]
         public string Title { get; set; }

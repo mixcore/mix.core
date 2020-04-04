@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Services;
 using Mix.Identity.Entities;
@@ -57,6 +58,12 @@ namespace Mix.Cms.Lib.Models.Account
                     optionsBuilder.UseSqlServer(cnn);
                 }
             }
+        }
+        //Ref https://github.com/dotnet/efcore/issues/10169
+        public override void Dispose()
+        {
+            SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
+            base.Dispose();
         }
     }
 }

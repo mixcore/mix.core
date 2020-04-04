@@ -135,7 +135,9 @@ namespace Mix.Cms.Lib.Services
             }
             finally
             {
+                context?.Database.CloseConnection();
                 context?.Dispose();
+                accountContext?.Database.CloseConnection();
                 accountContext?.Dispose();
             }
         }

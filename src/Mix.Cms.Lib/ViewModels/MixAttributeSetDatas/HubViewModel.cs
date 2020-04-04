@@ -167,10 +167,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #region Expands
 
-        public static List<HubViewModel> FilterByValue(Expression<Func<MixAttributeSetValue, bool>> predicate)
+        public static List<HubViewModel> FilterByValue(Expression<Func<MixAttributeSetValue, bool>> predicate, MixCmsContext context)
         {
-            using (var context = new MixCmsContext())
-            {
+            
                 List<HubViewModel> result = new List<HubViewModel>();
                 var values = context.MixAttributeSetValue.Where(predicate);
                 var data = context.MixAttributeSetData.Where(m => values.Any(v => v.DataId == m.Id && v.Specificulture == m.Specificulture));
@@ -179,7 +178,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     result.Add(new HubViewModel(item));
                 }
                 return result;
-            }
+            
         }
 
         private JProperty ParseValue(MixAttributeSetValues.HubViewModel item)

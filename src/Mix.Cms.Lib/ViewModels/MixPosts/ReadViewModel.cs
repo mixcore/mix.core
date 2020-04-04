@@ -202,7 +202,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (_context == null)
                 {
                     //if current Context is Root
-                    context.Dispose();
+                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
                 }
             }
         }
@@ -255,7 +255,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (_context == null)
                 {
                     //if current Context is Root
-                    context.Dispose();
+                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
                 }
             }
         }
@@ -306,7 +306,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (_context == null)
                 {
                     //if current Context is Root
-                    context.Dispose();
+                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
                 }
             }
         }

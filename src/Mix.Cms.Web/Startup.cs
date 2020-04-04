@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Messenger.Models.Data;
 using Mix.Cms.Service.Gprc;
 using Mix.Cms.Service.SignalR;
 
@@ -39,10 +40,10 @@ namespace Mix.Cms.Web
             /* Mix: Add db contexts */
             services.AddDbContext<MixCmsContext>();
             services.AddDbContext<MixDbContext>();
+            services.AddDbContext<MixChatServiceContext>();
             /* Mix: End Add db contexts */
 
             /* Mix: Inject Services */
-            services.AddSingleton<MixService>();
             services.AddControllers(mvcOptions =>
                mvcOptions.EnableEndpointRouting = false);
 

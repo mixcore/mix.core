@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Cms.Lib.Extensions;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Heart.Extensions;
 using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
@@ -53,15 +54,16 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public JObject Data { get; set; }
 
         [JsonProperty("relatedData")]
+        [JsonIgnore]
         public List<MixRelatedAttributeDatas.UpdateViewModel> RelatedData { get; set; } = new List<MixRelatedAttributeDatas.UpdateViewModel>();
 
         [JsonIgnore]
         public List<MixAttributeSetValues.UpdateViewModel> Values { get; set; }
 
-        //[JsonIgnore]
+        [JsonIgnore]
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
 
-        //[JsonIgnore]
+        [JsonIgnore]
         public List<MixAttributeSetDatas.FormViewModel> RefData { get; set; } = new List<FormViewModel>();
 
         
@@ -125,14 +127,19 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 CreatedDateTime = DateTime.UtcNow;
                 Priority = Repository.Count(m => m.AttributeSetName == AttributeSetName && m.Specificulture == Specificulture, _context, _transaction).Data + 1;
             }
-            Values = Values ?? MixAttributeSetValues.UpdateViewModel
-                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-            Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
-
+            
             if (string.IsNullOrEmpty(AttributeSetName))
             {
                 AttributeSetName = _context.MixAttributeSet.First(m => m.Id == AttributeSetId)?.Name;
             }
+            if (AttributeSetId == 0)
+            {
+                AttributeSetId = _context.MixAttributeSet.First(m => m.Name == AttributeSetName)?.Id ?? 0;
+            }
+            Values = Values ?? MixAttributeSetValues.UpdateViewModel
+                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
+            Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
+
             foreach (var field in Fields.OrderBy(f => f.Priority))
             {
                 var val = Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
@@ -159,27 +166,31 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     if (val.Field.DataType == MixEnums.MixDataType.Reference)
                     {
                         var arr = Data[val.AttributeFieldName].Value<JArray>();
-                        foreach (JObject objData in arr)
+                        if (arr != null)
                         {
-                            string id = objData["id"]?.Value<string>();
-                            // if have id => update data, else add new
-                            if (!string.IsNullOrEmpty(id))
+
+                            foreach (JObject objData in arr)
                             {
-                                //var getData = Repository.GetSingleModel(m => m.Id == id && m.Specificulture == Specificulture, _context, _transaction);
-                                //if (getData.IsSucceed)
-                                //{
-                                //    getData.Data.Data = objData;
-                                //    RefData.Add(getData.Data);
-                                //}
-                            }
-                            else
-                            {
-                                RefData.Add(new FormViewModel()
+                                string id = objData["id"]?.Value<string>();
+                                // if have id => update data, else add new
+                                if (!string.IsNullOrEmpty(id))
                                 {
-                                    Specificulture = Specificulture,
-                                    AttributeSetId = field.ReferenceId.Value,
-                                    Data = objData
-                                });
+                                    //var getData = Repository.GetSingleModel(m => m.Id == id && m.Specificulture == Specificulture, _context, _transaction);
+                                    //if (getData.IsSucceed)
+                                    //{
+                                    //    getData.Data.Data = objData;
+                                    //    RefData.Add(getData.Data);
+                                    //}
+                                }
+                                else
+                                {
+                                    RefData.Add(new FormViewModel()
+                                    {
+                                        Specificulture = Specificulture,
+                                        AttributeSetId = field.ReferenceId.Value,
+                                        Data = objData
+                                    });
+                                }
                             }
                         }
                     }
@@ -423,91 +434,102 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         private void ParseModelValue(JToken property, MixAttributeSetValues.UpdateViewModel item)
         {
-            switch (item.Field.DataType)
+            if (item.Field.IsEncrypt)
             {
-                case MixEnums.MixDataType.DateTime:
-                    item.DateTimeValue = property.Value<DateTime?>();
-                    item.StringValue = property.Value<string>();
-                    break;
-
-                case MixEnums.MixDataType.Date:
-                    item.DateTimeValue = property.Value<DateTime?>();
-                    item.StringValue = property.Value<string>();
-                    break;
-
-                case MixEnums.MixDataType.Time:
-                    item.DateTimeValue = property.Value<DateTime?>();
-                    item.StringValue = property.Value<string>();
-                    break;
-
-                case MixEnums.MixDataType.Double:
-                    item.DoubleValue = property.Value<double?>();
-                    item.StringValue = property.Value<string>();
-                    break;
-
-                case MixEnums.MixDataType.Boolean:
-                    item.BooleanValue = property.Value<bool?>();
-                    item.StringValue = property.Value<string>().ToLower();
-                    break;
-
-                case MixEnums.MixDataType.Number:
-                    item.IntegerValue = property.Value<int?>();
-                    item.StringValue = property.Value<string>();
-                    break;
-
-                case MixEnums.MixDataType.Reference:
-                    item.StringValue = property.Value<string>();
-                    break;
-
-                case MixEnums.MixDataType.Upload:
-                    string mediaData = property.Value<string>();
-                    if (mediaData.IsBase64())
-                    {
-                        MixMedias.UpdateViewModel media = new MixMedias.UpdateViewModel()
-                        {
-                            Specificulture = Specificulture,
-                            Status = MixEnums.MixContentStatus.Published,
-                            MediaFile = new FileViewModel()
-                            {
-                                FileStream = mediaData,
-                                Extension = ".png",
-                                Filename = Guid.NewGuid().ToString(),
-                                FileFolder = "Attributes"
-                            }
-                        };
-                        var saveMedia = media.SaveModel(true);
-                        if (saveMedia.IsSucceed)
-                        {
-                            item.StringValue = saveMedia.Data.FullPath;
-                            Data[item.AttributeFieldName] = item.StringValue;
-                        }
-                    }
-                    else
-                    {
-                        item.StringValue = mediaData;
-                    }
-                    break;
-
-                case MixEnums.MixDataType.Custom:
-                case MixEnums.MixDataType.Duration:
-                case MixEnums.MixDataType.PhoneNumber:
-                case MixEnums.MixDataType.Text:
-                case MixEnums.MixDataType.Html:
-                case MixEnums.MixDataType.MultilineText:
-                case MixEnums.MixDataType.EmailAddress:
-                case MixEnums.MixDataType.Password:
-                case MixEnums.MixDataType.Url:
-                case MixEnums.MixDataType.ImageUrl:
-                case MixEnums.MixDataType.CreditCard:
-                case MixEnums.MixDataType.PostalCode:
-                case MixEnums.MixDataType.Color:
-                case MixEnums.MixDataType.Icon:
-                case MixEnums.MixDataType.VideoYoutube:
-                case MixEnums.MixDataType.TuiEditor:
-                default:
-                    item.StringValue = property.Value<string>();
-                    break;
+                var obj = property.Value<JObject>();
+                item.StringValue = obj.ToString(Formatting.None);
+                item.EncryptValue = obj["data"]?.ToString();
+                item.EncryptKey = obj["key"]?.ToString();
             }
+            else
+            {
+                switch (item.Field.DataType)
+                {
+                    case MixEnums.MixDataType.DateTime:
+                        item.DateTimeValue = property.Value<DateTime?>();
+                        item.StringValue = property.Value<string>();
+                        break;
+
+                    case MixEnums.MixDataType.Date:
+                        item.DateTimeValue = property.Value<DateTime?>();
+                        item.StringValue = property.Value<string>();
+                        break;
+
+                    case MixEnums.MixDataType.Time:
+                        item.DateTimeValue = property.Value<DateTime?>();
+                        item.StringValue = property.Value<string>();
+                        break;
+
+                    case MixEnums.MixDataType.Double:
+                        item.DoubleValue = property.Value<double?>();
+                        item.StringValue = property.Value<string>();
+                        break;
+
+                    case MixEnums.MixDataType.Boolean:
+                        item.BooleanValue = property.Value<bool?>();
+                        item.StringValue = property.Value<string>().ToLower();
+                        break;
+
+                    case MixEnums.MixDataType.Number:
+                        item.IntegerValue = property.Value<int?>();
+                        item.StringValue = property.Value<string>();
+                        break;
+
+                    case MixEnums.MixDataType.Reference:
+                        item.StringValue = property.Value<string>();
+                        break;
+
+                    case MixEnums.MixDataType.Upload:
+                        string mediaData = property.Value<string>();
+                        if (mediaData.IsBase64())
+                        {
+                            MixMedias.UpdateViewModel media = new MixMedias.UpdateViewModel()
+                            {
+                                Specificulture = Specificulture,
+                                Status = MixEnums.MixContentStatus.Published,
+                                MediaFile = new FileViewModel()
+                                {
+                                    FileStream = mediaData,
+                                    Extension = ".png",
+                                    Filename = Guid.NewGuid().ToString(),
+                                    FileFolder = "Attributes"
+                                }
+                            };
+                            var saveMedia = media.SaveModel(true);
+                            if (saveMedia.IsSucceed)
+                            {
+                                item.StringValue = saveMedia.Data.FullPath;
+                                Data[item.AttributeFieldName] = item.StringValue;
+                            }
+                        }
+                        else
+                        {
+                            item.StringValue = mediaData;
+                        }
+                        break;
+
+                    case MixEnums.MixDataType.Custom:
+                    case MixEnums.MixDataType.Duration:
+                    case MixEnums.MixDataType.PhoneNumber:
+                    case MixEnums.MixDataType.Text:
+                    case MixEnums.MixDataType.Html:
+                    case MixEnums.MixDataType.MultilineText:
+                    case MixEnums.MixDataType.EmailAddress:
+                    case MixEnums.MixDataType.Password:
+                    case MixEnums.MixDataType.Url:
+                    case MixEnums.MixDataType.ImageUrl:
+                    case MixEnums.MixDataType.CreditCard:
+                    case MixEnums.MixDataType.PostalCode:
+                    case MixEnums.MixDataType.Color:
+                    case MixEnums.MixDataType.Icon:
+                    case MixEnums.MixDataType.VideoYoutube:
+                    case MixEnums.MixDataType.TuiEditor:
+                    default:
+                        item.StringValue = property.Value<string>();
+                        break;
+                }
+            }
+            
         }
 
         public static Task<RepositoryResponse<List<FormViewModel>>> FilterByValueAsync(string culture, string attributeSetName
@@ -547,7 +569,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Dispose();
+                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
                 }
             }
         }

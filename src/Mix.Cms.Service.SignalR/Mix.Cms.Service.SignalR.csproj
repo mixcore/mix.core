@@ -12,4 +12,10 @@
     <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModels\MixRelatedAttributeDatas\" />
+    <Folder Include="ViewModels\MixAttributeSetValues\" />
+    <Folder Include="ViewModels\MixAttributeFields\" />
+  </ItemGroup>
+
 </Project>
