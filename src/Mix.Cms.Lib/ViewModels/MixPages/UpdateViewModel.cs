@@ -559,7 +559,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                         }
                         )
                     {
-                        Data = new MixAttributeSetDatas.UpdateViewModel(
+                        Data = new MixAttributeSetDatas.FormViewModel(
                     new MixAttributeSetData()
                     {
                         Specificulture = Specificulture,
