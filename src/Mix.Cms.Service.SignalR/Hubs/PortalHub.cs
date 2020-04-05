@@ -8,9 +8,9 @@ namespace Mix.Cms.Service.SignalR.Hubs
 {
     public class PortalHub : BaseSignalRHub
     {
-        public async Task SendMessage(string user, string message)
+        public async Task SendMessage(string message)
         {
-            await Clients.All.SendAsync(Constants.HubMethods.ReceiveMethod, user, message);
+            await Clients.All.SendAsync(Constants.HubMethods.ReceiveMethod, message);
         }
 
         public Task SendMessageToCaller(string message)

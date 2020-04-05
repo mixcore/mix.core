@@ -6,6 +6,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Services;
 using Mix.Identity.Data;
+using MySql.Data.MySqlClient;
 
 namespace Mix.Cms.Lib.Models.Account
 {
@@ -52,7 +53,14 @@ namespace Mix.Cms.Lib.Models.Account
         //Ref https://github.com/dotnet/efcore/issues/10169
         public override void Dispose()
         {
-            SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
+            if (MixService.GetConfig<int>(MixConstants.CONST_SETTING_DATABASE_PROVIDER) == (int)MixEnums.DatabaseProvider.MySQL)
+            {
+                MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
+            }
+            else
+            {
+                SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
+            }
             base.Dispose();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
