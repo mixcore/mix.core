@@ -19,8 +19,8 @@ using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixThemes
 {
-    public class UpdateViewModel
-      : ViewModelBase<MixCmsContext, MixTheme, UpdateViewModel>
+    public class DeleteViewModel
+      : ViewModelBase<MixCmsContext, MixTheme, DeleteViewModel>
     {
         #region Properties
 
@@ -123,7 +123,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             }
         }
 
-        public List<MixTemplates.UpdateViewModel> Templates { get; set; }
+        public List<MixTemplates.DeleteViewModel> Templates { get; set; }
 
         #endregion Views
 
@@ -131,12 +131,12 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         #region Contructors
 
-        public UpdateViewModel()
+        public DeleteViewModel()
             : base()
         {
         }
 
-        public UpdateViewModel(MixTheme model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public DeleteViewModel(MixTheme model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
@@ -145,20 +145,9 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         #region Overrides
 
-        public override MixTheme ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            if (Id == 0)
-            {
-                Id = Repository.Max(m => m.Id).Data + 1;
-                Name = SeoHelper.GetSEOString(Title);
-                CreatedDateTime = DateTime.UtcNow;
-            }
-            return base.ParseModel(_context, _transaction);
-        }
-
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Templates = MixTemplates.UpdateViewModel.Repository.GetModelListBy(t => t.ThemeId == Id,
+            Templates = MixTemplates.DeleteViewModel.Repository.GetModelListBy(t => t.ThemeId == Id,
                 _context: _context, _transaction: _transaction).Data;
             TemplateAsset = new FileViewModel() { FileFolder = $"wwwroot/import/themes/{DateTime.UtcNow.ToShortDateString()}/{Name}" };
             Asset = new FileViewModel() { FileFolder = AssetFolder };
@@ -166,42 +155,25 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         #region Async
 
-        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixTheme parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(DeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            RepositoryResponse<bool> result = new RepositoryResponse<bool>() { IsSucceed = true };
-
-            //Import From existing Theme (zip)
-            if (!string.IsNullOrEmpty(TemplateAsset.Filename))
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var item in Templates)
             {
-                result = await ImportThemeAsync(parent, _context, _transaction);
+                if (result.IsSucceed)
+                {
+                    var tmp = await item.RemoveModelAsync(true, _context, _transaction);
+                    ViewModelHelper.HandleResult(tmp, ref result);
+                }
             }
-
-            // Import Assets
-            if (result.IsSucceed && !string.IsNullOrEmpty(Asset.Filename))
+            if (result.IsSucceed)
             {
-                result = ImportAssetsAsync(_context, _transaction);
-            }
-
-            // New themes without import existing theme => create from default folder
-            if (result.IsSucceed && !Directory.Exists(TemplateFolder) && string.IsNullOrEmpty(TemplateAsset.Filename))
-            {
-                result = await CreateDefaultThemeTemplatesAsync(_context, _transaction);
-            }
-
-            // Actived Theme
-            if (IsActived)
-            {
-                result = await ActivedThemeAsync(_context, _transaction);
+                FileRepository.Instance.DeleteFolder(AssetFolder);
             }
             return result;
         }
 
         #endregion Async
-
-        #region Sync
-
-
-        #endregion Sync
 
         #endregion Overrides
 
@@ -227,7 +199,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 var strSchema = FileRepository.Instance.GetFile("schema.json", $"{outputFolder}/Data");
                 var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteStructureViewModel>();
                 FileRepository.Instance.DeleteFolder(outputFolder);
-                //FileRepository.Instance.DeleteFile(filePath);
+                FileRepository.Instance.DeleteFile(filePath);
                 //Import Site Structures
                 result = await siteStructures.ImportAsync(Specificulture);
                 if (result.IsSucceed)
@@ -239,7 +211,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                     {
                         string content = file.Content.Replace($"/Content/Templates/{siteStructures.ThemeName}/",
                         $"/Content/Templates/{Name}/");
-                        MixTemplates.UpdateViewModel template = new MixTemplates.UpdateViewModel(
+                        MixTemplates.DeleteViewModel template = new MixTemplates.DeleteViewModel(
                             new MixTemplate()
                             {
                                 FileFolder = file.FileFolder,

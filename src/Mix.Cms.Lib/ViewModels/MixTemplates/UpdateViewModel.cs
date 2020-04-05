@@ -293,6 +293,14 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             });
         }
 
+        public async Task<RepositoryResponse<UpdateViewModel>> CopyAsync()
+        {
+            var result = await Repository.GetSingleModelAsync(m => m.Id == Id);
+            result.Data.Id = 0;
+            result.Data.FileName = $"Copy_{result.Data.FileName}";
+            // Not write file to disk
+            return await result.Data.SaveModelAsync(false);
+        }
         #endregion Expands
     }
 }

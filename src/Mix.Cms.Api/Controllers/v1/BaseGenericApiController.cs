@@ -163,7 +163,6 @@ namespace Mix.Cms.Api.Controllers.v1
             if (data.IsSucceed)
             {
                 var result = await data.Data.RemoveModelAsync(isDeleteRelated).ConfigureAwait(false);
-
                 return result;
             }
             return new RepositoryResponse<TModel>() { IsSucceed = false };
