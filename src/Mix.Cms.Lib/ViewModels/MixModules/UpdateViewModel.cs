@@ -561,7 +561,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                         ParentId = Id.ToString()
                     }
                     );
-                AttributeData.Data = new MixAttributeSetDatas.FormViewModel(
+                AttributeData.Data = new MixAttributeSetDatas.UpdateViewModel(
                 new MixAttributeSetData()
                 {
                     Specificulture = Specificulture

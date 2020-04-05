@@ -13,7 +13,8 @@ namespace Mix.Cms.Service.SignalR
                    .AddJsonProtocol(options =>
                    {
                        options.PayloadSerializerOptions.PropertyNamingPolicy = null;
-                   });
+                   })
+                   .AddMessagePackProtocol();
             return services;
         }
 
