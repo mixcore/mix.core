@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -75,7 +76,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         #region Views
 
         [JsonProperty("field")]
-        public MixAttributeFields.UpdateViewModel Field { get; set; }
+        public Mix.Cms.Lib.ViewModels.MixAttributeFields.UpdateViewModel Field { get; set; }
 
         #endregion Views
 
@@ -151,7 +152,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         {
             if (AttributeFieldId > 0)
             {
-                Field = MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId).Data;
+                Field = Lib.ViewModels.MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId).Data;
                 if (Field != null && DataType == MixEnums.MixDataType.Reference)
                 {
                     AttributeSetName = _context.MixAttributeSet.FirstOrDefault(m => m.Id == Field.ReferenceId)?.Name;
@@ -159,7 +160,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
             }
             else // addictional field for page / post / module => id = 0
             {
-                Field = new MixAttributeFields.UpdateViewModel()
+                Field = new Lib.ViewModels.MixAttributeFields.UpdateViewModel()
                 {
                     DataType = DataType,
                     Id = AttributeFieldId,

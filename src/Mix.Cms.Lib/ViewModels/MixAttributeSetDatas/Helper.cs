@@ -291,15 +291,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
         }
         
-        public static async Task<RepositoryResponse<PaginationModel<TView>>> FilterByKeywordAsync<TView>(HttpRequest request, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public static async Task<RepositoryResponse<PaginationModel<TView>>> FilterByKeywordAsync<TView>(string culture, HttpRequest request, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixAttributeSetData, TView>
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
                 var queryDictionary = request.Query.ToList();
-                var attributeSetName = request.Query["filterType"].ToString();
-                var culture = request.Query["culture"].ToString();
+                var attributeSetName = request.Query["attributeSetName"].ToString();
                 var keyword = request.Query["keyword"].ToString();
                 var filterType = request.Query["filterType"].ToString();
                 var orderBy = request.Query["orderBy"].ToString();
@@ -312,21 +311,29 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 var tasks = new List<Task<RepositoryResponse<TView>>>();
                 var getfields = await MixAttributeFields.ReadViewModel.Repository.GetModelListByAsync(m => m.AttributeSetName == attributeSetName, context, transaction);
                 var fields = getfields.IsSucceed ? getfields.Data : new List<MixAttributeFields.ReadViewModel>();
-                Expression<Func<MixAttributeSetValue, bool>> attrPredicate = 
-                    m => m.Specificulture == culture && m.AttributeSetName == attributeSetName
-                     && (!isStatus || (m.Status == status))
-                     && (!isFromDate || (m.CreatedDateTime >= fromDate))
-                     && (!isToDate || (m.CreatedDateTime <= toDate))
-                    ;
+
+                // fitler list query by field name
+                var fieldQueries = queryDictionary?.Where(m => fields.Any(f => f.Name == m.Key)).ToList()
+                    ?? new List<KeyValuePair<string, Microsoft.Extensions.Primitives.StringValues>>();
+
+                Expression<Func<MixAttributeSetValue, bool>> attrPredicate = null;
+                // val predicate
                 Expression<Func<MixAttributeSetValue, bool>> valPredicate = null;
-                RepositoryResponse<PaginationModel<TView>> result = new RepositoryResponse<PaginationModel<TView>>()
+                // Data predicate
+                Expression<Func<MixAttributeSetData, bool>> predicate = m => m.Specificulture == culture && m.AttributeSetName == attributeSetName
+                    && (!isStatus || (m.Status == status))
+                    && (!isFromDate || (m.CreatedDateTime >= fromDate))
+                    && (!isToDate || (m.CreatedDateTime <= toDate));
+                RepositoryResponse <PaginationModel<TView>> result = new RepositoryResponse<PaginationModel<TView>>()
                 {
                     IsSucceed = true,
                     Data = new PaginationModel<TView>()
                 };
 
-                if (queryDictionary != null)
-                {        
+                // if filter by field name or keyword => filter by attr value
+                if (fieldQueries.Count>0 || !string.IsNullOrEmpty(keyword))
+                {
+
                     // filter by all fields if have keyword
                     if (!string.IsNullOrEmpty(keyword))
                     {
@@ -346,9 +353,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             }
                         }
                     }
-                    else // filter by specific field name
+                    if(fieldQueries.Count > 0) // filter by specific field name
                     {
-                        foreach (var q in queryDictionary)
+                        foreach (var q in fieldQueries)
                         {
                             if (fields.Any(f => f.Name == q.Key) && !string.IsNullOrEmpty(q.Value))
                             {
@@ -371,16 +378,17 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     {
                         attrPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(valPredicate, attrPredicate, Microsoft.OData.UriParser.BinaryOperatorKind.And);
                     }
+                    var query = context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
+                    var dataIds = query.ToList();
+                    if (query != null)
+                    {
+                        Expression<Func<MixAttributeSetData, bool>> pre = m => dataIds.Any(id => m.Id == id);
+                        predicate = ODataHelper<MixAttributeSetData>.CombineExpression(pre, predicate, Microsoft.OData.UriParser.BinaryOperatorKind.And);
+                        
+                    }
                 }
-                
-                var query = context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
-                var dataIds = query.ToList();
-                if (query != null)
-                {
-                    Expression<Func<MixAttributeSetData, bool>> predicate = m => dataIds.Any(id => m.Id == id);
-                    result = await DefaultRepository<MixCmsContext, MixAttributeSetData, TView>.Instance.GetModelListByAsync(
-                        predicate, orderBy, direction, pageSize, pageIndex, null, null, context, transaction);
-                }
+                result = await DefaultRepository<MixCmsContext, MixAttributeSetData, TView>.Instance.GetModelListByAsync(
+                            predicate, orderBy, direction, pageSize, pageIndex, null, null, context, transaction);
                 return result;
             }
             catch (Exception ex)

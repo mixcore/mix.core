@@ -61,7 +61,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         #region Views
 
         [JsonProperty("fields")]
-        public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
+        public List<Lib.ViewModels.MixAttributeFields.UpdateViewModel> Fields { get; set; }
 
         [JsonIgnore]
         [JsonProperty("data")]

@@ -149,7 +149,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             // Get module by name
             string _username = User?.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
-            var result = await ODataMobileViewModel.SaveByModuleName(_lang, _username, name, formName, obj);
+            var result = await UpdateViewModel.SaveByModuleName(_lang, _username, name, formName, obj);
             if (result.IsSucceed)
             {
                 return Ok(result);

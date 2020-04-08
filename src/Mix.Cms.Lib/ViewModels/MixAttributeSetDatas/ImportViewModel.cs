@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mix.Cms.Lib;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
@@ -50,7 +51,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public List<MixAttributeSetValues.ImportViewModel> Values { get; set; }
 
         [JsonProperty("fields")]
-        public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
+        public List<Lib.ViewModels.MixAttributeFields.UpdateViewModel> Fields { get; set; }
 
         ////[JsonIgnore]
         //public List<MixAttributeSetDatas.ODataMobileViewModel> RefData { get; set; } = new List<ODataMobileViewModel>();
@@ -58,7 +59,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public JObject Data { get; set; }
 
         [JsonProperty("relatedData")]
-        public List<MixRelatedAttributeDatas.ODataMobileViewModel> RelatedData { get; set; } = new List<MixRelatedAttributeDatas.ODataMobileViewModel>();
+        public List<MixRelatedAttributeDatas.UpdateViewModel> RelatedData { get; set; } = new List<MixRelatedAttributeDatas.UpdateViewModel>();
 
         #endregion Views
 
@@ -91,7 +92,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
             }
-            Fields = Fields ?? new List<MixAttributeFields.UpdateViewModel>();
+            Fields = Fields ?? new List<Lib.ViewModels.MixAttributeFields.UpdateViewModel>();
             Values = new List<MixAttributeSetValues.ImportViewModel>();
             foreach (var field in Fields)
             {
@@ -289,11 +290,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     string mediaData = property.Value<string>();
                     if (mediaData.IsBase64())
                     {
-                        MixMedias.UpdateViewModel media = new MixMedias.UpdateViewModel()
+                        Lib.ViewModels.MixMedias.UpdateViewModel media = new Lib.ViewModels.MixMedias.UpdateViewModel()
                         {
                             Specificulture = Specificulture,
                             Status = MixEnums.MixContentStatus.Published,
-                            MediaFile = new FileViewModel()
+                            MediaFile = new Lib.ViewModels.FileViewModel()
                             {
                                 FileStream = mediaData,
                                 Extension = ".png",

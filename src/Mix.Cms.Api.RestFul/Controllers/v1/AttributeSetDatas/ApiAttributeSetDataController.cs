@@ -23,11 +23,10 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet]
         public async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> Get()
         {
-
-            var getData = await Helper.FilterByKeywordAsync<ReadMvcViewModel>(Request);
+            var getData = await Helper.FilterByKeywordAsync<ReadMvcViewModel>(_lang, Request);
             if (getData.IsSucceed)
             {
-                return getData.Data;
+                return Ok(getData.Data);
             }
             else
             {
