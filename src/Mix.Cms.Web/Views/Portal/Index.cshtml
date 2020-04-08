@@ -5,7 +5,7 @@
 
     var menus = MixCmsHelper.LoadDataFile("data/consts", "portal-menus.json");
 }
-<div class="w-100" ng-show="isInit && authService.authentication.isAuth">
+<div class="w-100" ng-show="isAuth">
     <input type="hidden" id="portal-menus" value="@menus.Content" />
     <mix-loader ng-show="isBusy"></mix-loader>
     <header-nav ng-if="isInit" settings="settings" bread-crumbs="breadCrumbs"></header-nav>
