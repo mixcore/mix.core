@@ -253,6 +253,11 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("attributeData")]
         public MixRelatedAttributeDatas.UpdateViewModel AttributeData { get; set; }
 
+         [JsonProperty("sysCategories")]
+        public List<MixRelatedAttributeDatas.UpdateViewModel> SysCategories { get; set; }
+
+        [JsonProperty("sysTags")]
+        public List<MixRelatedAttributeDatas.UpdateViewModel> SysTags { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -394,7 +399,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> SaveAttributeAsync(int id, MixCmsContext context, IDbContextTransaction transaction)
+        private async Task<RepositoryResponse<bool>> SaveAttributeAsync(int parentId, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_MODULE, context, transaction);
@@ -405,7 +410,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 AttributeData.AttributeSetName = getAttrs.Data.Name;
                 AttributeData.Data.AttributeSetId = getAttrs.Data.Id;
                 AttributeData.Data.AttributeSetName = getAttrs.Data.Name;
-                AttributeData.ParentId = id.ToString();
+                AttributeData.ParentId = parentId.ToString();
                 AttributeData.ParentType = (int)MixEnums.MixAttributeSetDataType.Module;
                 var saveData = await AttributeData.Data.SaveModelAsync(true, context, transaction);
                 ViewModelHelper.HandleResult(saveData, ref result);
@@ -414,6 +419,29 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                     AttributeData.Id = saveData.Data.Id;
                     var saveRelated = await AttributeData.SaveModelAsync(true, context, transaction);
                     ViewModelHelper.HandleResult(saveRelated, ref result);
+                }
+            }
+            foreach (var item in SysCategories)
+            {
+                if (result.IsSucceed)
+                {
+                    item.ParentId = parentId.ToString();
+                    item.ParentType = (int)MixEnums.MixAttributeSetDataType.Module;
+                    item.Specificulture = Specificulture;
+                    var saveResult = await item.SaveModelAsync(false, context, transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                }
+            }
+
+            foreach (var item in SysTags)
+            {
+                if (result.IsSucceed)
+                {
+                    item.ParentId = parentId.ToString();
+                    item.ParentType = (int)MixEnums.MixAttributeSetDataType.Module;
+                    item.Specificulture = Specificulture;
+                    var saveResult = await item.SaveModelAsync(false, context, transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
                 }
             }
             return result;
@@ -477,6 +505,21 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 }
                 val.Priority = field.Priority;
                 val.Field = field;
+            }
+            var getCategories = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
+               && m.ParentId == Id.ToString() && m.ParentType == (int)MixEnums.MixAttributeSetDataType.Module
+               && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_CATEGORY, _context, _transaction);
+            if (getCategories.IsSucceed)
+            {
+                SysCategories = getCategories.Data;
+            }
+
+            var getTags = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
+                && m.ParentId == Id.ToString() && m.ParentType == (int)MixEnums.MixAttributeSetDataType.Module
+                && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_TAG, _context, _transaction);
+            if (getTags.IsSucceed)
+            {
+                SysTags = getTags.Data;
             }
         }
 

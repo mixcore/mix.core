@@ -14,7 +14,7 @@ namespace Mix.Cms.Lib.Hubs
         private const string defaultRoom = "public";
         private const string defaultDevice = "website";
 
-        public async Task Join(HubRequest<MessengerConnection> request)
+        public void Join(HubRequest<MessengerConnection> request)
         {
             // Set connection Id
             request.Data.ConnectionId = Context.ConnectionId;
