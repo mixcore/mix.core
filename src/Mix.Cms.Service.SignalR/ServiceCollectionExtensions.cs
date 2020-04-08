@@ -13,7 +13,8 @@ namespace Mix.Cms.Service.SignalR
                    .AddJsonProtocol(options =>
                    {
                        options.PayloadSerializerOptions.PropertyNamingPolicy = null;
-                   });
+                   })
+                   .AddMessagePackProtocol();
             return services;
         }
 
@@ -23,6 +24,7 @@ namespace Mix.Cms.Service.SignalR
             {
                 endpoints.MapHub<PortalHub>("/portalHub");
                 endpoints.MapHub<ServiceHub>("/serviceHub");
+                endpoints.MapHub<VideoChatHub>("/videoChatHub");
             });
             return app;
         }

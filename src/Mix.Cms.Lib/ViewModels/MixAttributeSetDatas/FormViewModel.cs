@@ -605,14 +605,26 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         private void ParseData()
         {
-            Data = new JObject();
+            Data = new JObject(
+                new JProperty("id", Id)    
+            );
             foreach (var item in Values.OrderBy(v => v.Priority))
             {
                 item.AttributeFieldName = item.Field.Name;
                 Data.Add(ParseValue(item));
             }
         }
-
+        public static async Task<RepositoryResponse<FormViewModel>> SaveObjectAsync(JObject data, string attributeSetName)
+        {
+            var vm = new FormViewModel()
+            {
+                Id = data["id"]?.Value<string>(),
+                Specificulture = data["specificulture"]?.Value<string>(),
+                AttributeSetName = attributeSetName,
+                Data = data
+            };
+            return await vm.SaveModelAsync();
+        }
         #endregion Expands
     }
 }
