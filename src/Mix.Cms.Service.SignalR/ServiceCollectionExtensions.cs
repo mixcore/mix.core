@@ -24,6 +24,7 @@ namespace Mix.Cms.Service.SignalR
             {
                 endpoints.MapHub<PortalHub>("/portalHub");
                 endpoints.MapHub<ServiceHub>("/serviceHub");
+                endpoints.MapHub<VideoChatHub>("/videoChatHub");
             });
             return app;
         }
