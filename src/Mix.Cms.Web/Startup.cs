@@ -1,5 +1,4 @@
 using GraphiQl;
-using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Mix.Cms.Api.OData;
+using Mix.Cms.Api.RestFul;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -44,19 +45,19 @@ namespace Mix.Cms.Web
             /* Mix: End Add db contexts */
 
             /* Mix: Inject Services */
-            services.AddControllers(mvcOptions =>
-               mvcOptions.EnableEndpointRouting = false);
+            services.AddControllers(mvcOptions => mvcOptions.EnableEndpointRouting = false);
 
-            services.AddOData();
-
+            services.AddMixODataApi();
+            services.AddMixRestApi();
             services.AddMixSignalR();
             services.AddMixGprc();
 
+            
             /* Mix: End Inject Services */
 
             VerifyInitData(services);
 
-            ConfigAuthorization(services, Configuration);
+            services.AddMixAuthorize(Configuration);
 
             /* End Addictional Config for Mixcore Cms  */
 
@@ -83,18 +84,20 @@ namespace Mix.Cms.Web
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseMixRestApi();
             #region Addictionals Config for Mixcore Cms
 
             if (MixService.GetConfig<bool>("IsHttps"))
             {
                 app.UseHttpsRedirection();
             }
-
+            app.UseMixRestApi();
+            app.UseMixODataApi();
             app.UseMixGprc();
+
             app.UseMixSignalR();
 
-            ConfigRoutes(app);
+            app.UseMixRoutes();
 
             #endregion Addictionals Config for Mixcore Cms
         }

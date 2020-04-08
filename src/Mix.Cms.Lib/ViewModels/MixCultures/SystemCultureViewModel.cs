@@ -37,7 +37,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
 
         [Required]
         [JsonProperty("specificulture")]
-        public new string Specificulture { get; set; }
+        public string Specificulture { get; set; }
 
         #endregion Models
 

@@ -485,6 +485,86 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #endregion Overrides
 
         #region Expand
+        public static async Task<RepositoryResponse<JObject>> SaveByModuleName(string culture, string createdBy, string name, string formName, JObject obj
+       , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                var getModule = await Repository.GetSingleModelAsync(m => m.Specificulture == culture && m.Name == name, context, transaction);
+                string dataId = obj["id"]?.Value<string>();
+                if (getModule.IsSucceed)
+                {
+                    // Get Attribute set
+                    var getAttrSet = await Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModelAsync(m => m.Name == formName, context, transaction);
+                    if (getAttrSet.IsSucceed)
+                    {
+                        // Save attr data + navigation
+                        MixAttributeSetDatas.MobileViewModel data = new MixAttributeSetDatas.MobileViewModel()
+                        {
+                            Id = dataId,
+                            CreatedBy = createdBy,
+                            AttributeSetId = getAttrSet.Data.Id,
+                            AttributeSetName = getAttrSet.Data.Name,
+                            Specificulture = culture,
+                            Data = obj
+                        };
+
+                        // Create navigation module - attr data
+                        var getNavigation = await MixRelatedAttributeDatas.ReadViewModel.Repository.GetSingleModelAsync(
+                            m => m.ParentId == getModule.Data.Id.ToString() && m.ParentType == (int)MixEnums.MixAttributeSetDataType.Module && m.Specificulture == culture
+                            , context, transaction);
+                        if (!getNavigation.IsSucceed)
+                        {
+                            data.RelatedData.Add(new MixRelatedAttributeDatas.MobileViewModel()
+                            {
+                                ParentId = getModule.Data.Id.ToString(),
+                                Specificulture = culture,
+                                ParentType = MixAttributeSetDataType.Module
+                            });
+                        }
+                        var portalResult = await data.SaveModelAsync(true, context, transaction);
+                        UnitOfWorkHelper<MixCmsContext>.HandleTransaction(portalResult.IsSucceed, isRoot, transaction);
+                       
+                        return new RepositoryResponse<JObject>()
+                        {
+                            IsSucceed = portalResult.IsSucceed,
+                            Data = portalResult.Data?.Data,
+                            Exception = portalResult.Exception,
+                            Errors = portalResult.Errors
+                        };
+                    }
+                    else
+                    {
+                        return new RepositoryResponse<JObject>()
+                        {
+                            IsSucceed = false,
+                            Status = (int)MixEnums.ResponseStatus.BadRequest
+                        };
+                    }
+                }
+                else
+                {
+                    return new RepositoryResponse<JObject>()
+                    {
+                        IsSucceed = false,
+                        Status = (int)MixEnums.ResponseStatus.BadRequest
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return (UnitOfWorkHelper<MixCmsContext>.HandleException<JObject>(ex, isRoot, transaction));
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                }
+            }
+        }
 
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {

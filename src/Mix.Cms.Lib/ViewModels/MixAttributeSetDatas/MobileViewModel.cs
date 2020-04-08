@@ -52,6 +52,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("data")]
         public JObject Data { get; set; }
+        [JsonProperty("relatedData")]
+        public List<MixRelatedAttributeDatas.MobileViewModel> RelatedData { get; set; } = new List<MixRelatedAttributeDatas.MobileViewModel>();
 
         #endregion Views
 
@@ -163,7 +165,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     }
                 }
             }
-
+            // Save Related Data
+            if (result.IsSucceed)
+            {
+                RepositoryResponse<bool> saveRelated = await SaveRelatedDataAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(saveRelated, ref result);
+            }
             return result;
         }
 
@@ -182,9 +189,38 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             base.GenerateCache(model, view, _context, _transaction);
         }
 
-       
+
 
         #region Expands
+        private async Task<RepositoryResponse<bool>> SaveRelatedDataAsync(MixAttributeSetData parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+
+            foreach (var item in RelatedData)
+            {
+                if (result.IsSucceed)
+                {
+                    if (string.IsNullOrEmpty(item.ParentId) && item.ParentType == MixEnums.MixAttributeSetDataType.Set)
+                    {
+                        var set = context.MixAttributeSet.First(s => s.Name == item.ParentName);
+                        item.ParentId = set.Id.ToString();
+                    }
+                    item.Specificulture = Specificulture;
+                    item.AttributeSetId = parent.AttributeSetId;
+                    item.AttributeSetName = parent.AttributeSetName;
+                    item.Id = parent.Id;
+                    item.CreatedDateTime = DateTime.UtcNow;
+                    var saveResult = await item.SaveModelAsync(true, context, transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return result;
+        }
 
         private JProperty ParseValue(MixAttributeSetValues.MobileViewModel item)
         {

@@ -26,6 +26,7 @@ namespace Mix.Cms.Api.RestFul
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddMixRestApi();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,7 +40,7 @@ namespace Mix.Cms.Api.RestFul
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseMixRestApi();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
