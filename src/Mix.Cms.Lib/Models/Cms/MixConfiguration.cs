@@ -5,8 +5,9 @@ namespace Mix.Cms.Lib.Models.Cms
 {
     public partial class MixConfiguration
     {
-        public string Keyword { get; set; }
+        public int Id { get; set; }
         public string Specificulture { get; set; }
+        public string Keyword { get; set; }
         public string Category { get; set; }
         public int DataType { get; set; }
         public string Description { get; set; }

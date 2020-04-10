@@ -2,6 +2,7 @@
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixCultures;
+using Mix.Common.Helper;
 using Mix.Domain.Core.Models;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -20,6 +21,8 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         #region Properties
 
         #region Models
+        [JsonProperty("id")]
+        public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
         [JsonProperty("priority")]
@@ -85,6 +88,11 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
 
         public override MixLanguage ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            if (Id == 0)
+            {
+                Id = Repository.Max(s => s.Id, _context, _transaction).Data + 1;
+                CreatedDateTime = DateTime.UtcNow;
+            }
             Value = Property.Value ?? Value;
             if (CreatedDateTime == default(DateTime))
             {
@@ -183,6 +191,48 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         #endregion Overrides
 
         #region Expand
+        public static async Task<RepositoryResponse<bool>> ImportLanguages(List<MixLanguage> arrLanguage, string destCulture
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            bool isRoot = _context == null;
+            var context = _context ?? new MixCmsContext();
+            var transaction = _transaction ?? context.Database.BeginTransaction();
+
+            try
+            {
+                foreach (var item in arrLanguage)
+                {
+                    var lang = new UpdateViewModel(item, context, transaction);
+                    lang.Specificulture = destCulture;
+                    lang.CreatedDateTime = DateTime.UtcNow;
+                    var saveResult = await lang.SaveModelAsync(false, context, transaction);
+                    result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
+                    if (!result.IsSucceed)
+                    {
+                        result.Exception = saveResult.Exception;
+                        result.Errors = saveResult.Errors;
+                        break;
+                    }
+                }
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+            }
+            catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
+            {
+                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<ReadMvcViewModel>(ex, isRoot, transaction);
+                result.IsSucceed = false;
+                result.Errors = error.Errors;
+                result.Exception = error.Exception;
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    context.Dispose();
+                }
+            }
+            return result;
+        }
 
         private List<SupportedCulture> LoadCultures(string initCulture = null, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

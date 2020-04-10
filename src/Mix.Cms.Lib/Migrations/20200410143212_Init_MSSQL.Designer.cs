@@ -10,14 +10,14 @@ using Mix.Cms.Lib.Models.Cms;
 namespace Mix.Cms.Lib.Migrations
 {
     [DbContext(typeof(MixCmsContext))]
-    [Migration("20200312023740_Init")]
-    partial class Init
+    [Migration("20200410143212_Init_MSSQL")]
+    partial class Init_MSSQL
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.2")
+                .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -382,9 +382,8 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixConfiguration", b =>
                 {
-                    b.Property<string>("Keyword")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("nvarchar(10)")
@@ -408,6 +407,11 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
+                    b.Property<string>("Keyword")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
@@ -418,40 +422,12 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("nvarchar(4000)")
                         .HasMaxLength(4000);
 
-                    b.HasKey("Keyword", "Specificulture");
+                    b.HasKey("Id", "Specificulture")
+                        .HasName("PK_mix_configuration_1");
 
                     b.HasIndex("Specificulture");
 
                     b.ToTable("mix_configuration");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCopy", b =>
-                {
-                    b.Property<string>("Culture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
-
-                    b.Property<string>("Keyword")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("Note")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
-
-                    b.HasKey("Culture", "Keyword");
-
-                    b.ToTable("mix_copy");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCulture", b =>
@@ -505,75 +481,6 @@ namespace Mix.Cms.Lib.Migrations
                         .HasName("IX_Mix_Culture");
 
                     b.ToTable("mix_culture");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCustomer", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(450)")
-                        .HasMaxLength(450);
-
-                    b.Property<string>("Avatar")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
-
-                    b.Property<DateTime?>("BirthDay")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("FullName")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
-
-                    b.Property<bool>("IsAgreeNotified")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("MiddleName")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("Username")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("mix_customer");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixFile", b =>
@@ -641,9 +548,8 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixLanguage", b =>
                 {
-                    b.Property<string>("Keyword")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("nvarchar(10)")
@@ -671,6 +577,11 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
+                    b.Property<string>("Keyword")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
@@ -681,7 +592,8 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("nvarchar(4000)")
                         .HasMaxLength(4000);
 
-                    b.HasKey("Keyword", "Specificulture");
+                    b.HasKey("Id", "Specificulture")
+                        .HasName("PK_mix_language_1");
 
                     b.HasIndex("Specificulture");
 
@@ -1081,83 +993,6 @@ namespace Mix.Cms.Lib.Migrations
                     b.ToTable("mix_module_post");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixOrder", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
-
-                    b.Property<int?>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StoreId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.HasKey("Id", "Specificulture");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("mix_order");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixOrderItem", b =>
-                {
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<string>("PriceUnit")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("PostId", "OrderId", "Specificulture");
-
-                    b.HasIndex("OrderId", "Specificulture");
-
-                    b.HasIndex("PostId", "Specificulture");
-
-                    b.ToTable("mix_order_item");
-                });
-
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPage", b =>
                 {
                     b.Property<int>("Id")
@@ -1476,35 +1311,6 @@ namespace Mix.Cms.Lib.Migrations
                     b.ToTable("mix_page_page");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPagePosition", b =>
-                {
-                    b.Property<int>("PositionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PageId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("PositionId", "PageId", "Specificulture");
-
-                    b.HasIndex("PageId", "Specificulture");
-
-                    b.ToTable("mix_page_position");
-                });
-
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPagePost", b =>
                 {
                     b.Property<int>("PostId")
@@ -1538,32 +1344,6 @@ namespace Mix.Cms.Lib.Migrations
                     b.HasIndex("PostId", "Specificulture");
 
                     b.ToTable("mix_page_post");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixParameter", b =>
-                {
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
-
-                    b.HasKey("Name");
-
-                    b.ToTable("mix_parameter");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPortalPage", b =>
@@ -2515,29 +2295,6 @@ namespace Mix.Cms.Lib.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixOrder", b =>
-                {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixCustomer", "Customer")
-                        .WithMany("MixOrder")
-                        .HasForeignKey("CustomerId")
-                        .HasConstraintName("FK_mix_order_mix_cms_customer");
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixOrderItem", b =>
-                {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixOrder", "MixOrder")
-                        .WithMany("MixOrderItem")
-                        .HasForeignKey("OrderId", "Specificulture")
-                        .HasConstraintName("FK_Order_Item_Order")
-                        .IsRequired();
-
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
-                        .WithMany("MixOrderItem")
-                        .HasForeignKey("PostId", "Specificulture")
-                        .HasConstraintName("FK_Order_Item_Product")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPage", b =>
                 {
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixCulture", "SpecificultureNavigation")
@@ -2615,22 +2372,6 @@ namespace Mix.Cms.Lib.Migrations
                         .WithMany("MixPagePageMixPageNavigation")
                         .HasForeignKey("ParentId", "Specificulture")
                         .HasConstraintName("FK_Mix_Page_Page_Mix_Page1")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPagePosition", b =>
-                {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPosition", "Position")
-                        .WithMany("MixPagePosition")
-                        .HasForeignKey("PositionId")
-                        .HasConstraintName("FK_Mix_Page_Position_Mix_Position")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPage", "MixPage")
-                        .WithMany("MixPagePosition")
-                        .HasForeignKey("PageId", "Specificulture")
-                        .HasConstraintName("FK_Mix_Page_Position_Mix_Page")
                         .IsRequired();
                 });
 

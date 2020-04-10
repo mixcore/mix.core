@@ -20,6 +20,8 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         #region Properties
 
         #region Models
+        [JsonProperty("id")]
+        public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
         [JsonProperty("priority")]
@@ -64,38 +66,6 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         #endregion Contructors
 
         #region Overrides
-
-        public override RepositoryResponse<bool> RemoveRelatedModels(SystemLanguageViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            foreach (var culture in Cultures.Where(c => c.Specificulture != Specificulture))
-            {
-                var lang = _context.MixLanguage.First(c => c.Keyword == Keyword && c.Specificulture == culture.Specificulture);
-                if (lang != null)
-                {
-                    _context.MixLanguage.Remove(lang);
-                }
-            }
-            return new RepositoryResponse<bool>()
-            {
-                IsSucceed = _context.SaveChanges() > 0
-            };
-        }
-
-        public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(SystemLanguageViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            foreach (var culture in Cultures.Where(c => c.Specificulture != Specificulture))
-            {
-                var lang = _context.MixLanguage.First(c => c.Keyword == Keyword && c.Specificulture == culture.Specificulture);
-                if (lang != null)
-                {
-                    _context.MixLanguage.Remove(lang);
-                }
-            }
-            return new RepositoryResponse<bool>()
-            {
-                IsSucceed = (await _context.SaveChangesAsync()) > 0
-            };
-        }
 
         #endregion Overrides
 
