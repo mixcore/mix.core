@@ -10,7 +10,8 @@ namespace Mix.Cms.Lib
         public enum DatabaseProvider
         {
             MSSQL = 1,
-            MySQL = 2
+            MySQL = 2,
+            PostgreSQL = 3
         }
 
         public enum CatePosition

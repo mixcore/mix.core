@@ -15,9 +15,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual DbSet<MixCache> MixCache { get; set; }
         public virtual DbSet<MixCmsUser> MixCmsUser { get; set; }
         public virtual DbSet<MixConfiguration> MixConfiguration { get; set; }
-        public virtual DbSet<MixCopy> MixCopy { get; set; }
         public virtual DbSet<MixCulture> MixCulture { get; set; }
-        public virtual DbSet<MixCustomer> MixCustomer { get; set; }
         public virtual DbSet<MixFile> MixFile { get; set; }
         public virtual DbSet<MixLanguage> MixLanguage { get; set; }
         public virtual DbSet<MixMedia> MixMedia { get; set; }
@@ -27,17 +25,13 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual DbSet<MixModuleAttributeValue> MixModuleAttributeValue { get; set; }
         public virtual DbSet<MixModuleData> MixModuleData { get; set; }
         public virtual DbSet<MixModulePost> MixModulePost { get; set; }
-        public virtual DbSet<MixOrder> MixOrder { get; set; }
-        public virtual DbSet<MixOrderItem> MixOrderItem { get; set; }
         public virtual DbSet<MixPage> MixPage { get; set; }
         public virtual DbSet<MixPageAttributeData> MixPageAttributeData { get; set; }
         public virtual DbSet<MixPageAttributeSet> MixPageAttributeSet { get; set; }
         public virtual DbSet<MixPageAttributeValue> MixPageAttributeValue { get; set; }
         public virtual DbSet<MixPageModule> MixPageModule { get; set; }
         public virtual DbSet<MixPagePage> MixPagePage { get; set; }
-        public virtual DbSet<MixPagePosition> MixPagePosition { get; set; }
         public virtual DbSet<MixPagePost> MixPagePost { get; set; }
-        public virtual DbSet<MixParameter> MixParameter { get; set; }
         public virtual DbSet<MixPortalPage> MixPortalPage { get; set; }
         public virtual DbSet<MixPortalPageNavigation> MixPortalPageNavigation { get; set; }
         public virtual DbSet<MixPortalPagePosition> MixPortalPagePosition { get; set; }
@@ -51,6 +45,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual DbSet<MixPostModule> MixPostModule { get; set; }
         public virtual DbSet<MixRelatedAttributeData> MixRelatedAttributeData { get; set; }
         public virtual DbSet<MixRelatedAttributeSet> MixRelatedAttributeSet { get; set; }
+        public virtual DbSet<MixRelatedData> MixRelatedData { get; set; }
         public virtual DbSet<MixRelatedPost> MixRelatedPost { get; set; }
         public virtual DbSet<MixTemplate> MixTemplate { get; set; }
         public virtual DbSet<MixTheme> MixTheme { get; set; }
@@ -68,39 +63,49 @@ namespace Mix.Cms.Lib.Models.Cms
         public MixCmsContext()
         {
         }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //define the database to use
             string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {
-                if (MixService.GetConfig<int>(MixConstants.CONST_SETTING_DATABASE_PROVIDER) == (int)MixEnums.DatabaseProvider.MySQL)
+                var provider = (MixEnums.DatabaseProvider)MixService.GetConfig<int>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+                switch (provider)
                 {
-                    optionsBuilder.UseMySql(cnn);
-                }
-                else
-                {
-                    optionsBuilder.UseSqlServer(cnn);
+                    case MixEnums.DatabaseProvider.MSSQL:
+                        optionsBuilder.UseSqlServer(cnn);
+                        break;
+                    case MixEnums.DatabaseProvider.MySQL:
+                        optionsBuilder.UseMySql(cnn);
+                        break;
+                    case MixEnums.DatabaseProvider.PostgreSQL:
+                        optionsBuilder.UseNpgsql(cnn);
+                        break;
+                    default:
+                        break;
                 }
             }
         }
-        
+
         //Ref https://github.com/dotnet/efcore/issues/10169
         public override void Dispose()
         {
-            if (MixService.GetConfig<int>(MixConstants.CONST_SETTING_DATABASE_PROVIDER) == (int)MixEnums.DatabaseProvider.MySQL)
+            var provider = (MixEnums.DatabaseProvider)MixService.GetConfig<int>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+            switch (provider)
             {
-                MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
+                case MixEnums.DatabaseProvider.MSSQL:
+                    SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
+                    break;
+                case MixEnums.DatabaseProvider.MySQL:
+                    MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
+                    break;
+                case MixEnums.DatabaseProvider.PostgreSQL:
+                    Npgsql.NpgsqlConnection.ClearPool((Npgsql.NpgsqlConnection)Database.GetDbConnection());
+                    break;
+
             }
-            else
-            {
-                SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
-            }            
-           
             base.Dispose();
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MixAttributeField>(entity =>
@@ -296,13 +301,12 @@ namespace Mix.Cms.Lib.Models.Cms
 
             modelBuilder.Entity<MixConfiguration>(entity =>
             {
-                entity.HasKey(e => new { e.Keyword, e.Specificulture });
+                entity.HasKey(e => new { e.Id, e.Specificulture })
+                    .HasName("PK_mix_configuration_1");
 
                 entity.ToTable("mix_configuration");
 
                 entity.HasIndex(e => e.Specificulture);
-
-                entity.Property(e => e.Keyword).HasMaxLength(50);
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
@@ -314,6 +318,10 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Description).HasMaxLength(250);
 
+                entity.Property(e => e.Keyword)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
                 entity.Property(e => e.Value).HasMaxLength(4000);
 
                 entity.HasOne(d => d.SpecificultureNavigation)
@@ -321,21 +329,6 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasPrincipalKey(p => p.Specificulture)
                     .HasForeignKey(d => d.Specificulture)
                     .HasConstraintName("FK_Mix_Configuration_Mix_Culture");
-            });
-
-            modelBuilder.Entity<MixCopy>(entity =>
-            {
-                entity.HasKey(e => new { e.Culture, e.Keyword });
-
-                entity.ToTable("mix_copy");
-
-                entity.Property(e => e.Culture).HasMaxLength(10);
-
-                entity.Property(e => e.Keyword).HasMaxLength(50);
-
-                entity.Property(e => e.Note).HasMaxLength(250);
-
-                entity.Property(e => e.Value).HasMaxLength(4000);
             });
 
             modelBuilder.Entity<MixCulture>(entity =>
@@ -367,39 +360,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.Specificulture)
                     .IsRequired()
                     .HasMaxLength(10);
-            });
-
-            modelBuilder.Entity<MixCustomer>(entity =>
-            {
-                entity.ToTable("mix_customer");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.Address).HasMaxLength(450);
-
-                entity.Property(e => e.Avatar).HasMaxLength(250);
-
-                entity.Property(e => e.BirthDay).HasColumnType("datetime");
-
-                entity.Property(e => e.CreatedBy).HasMaxLength(50);
-
-                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.Email).HasMaxLength(256);
-
-                entity.Property(e => e.FirstName).HasMaxLength(50);
-
-                entity.Property(e => e.FullName).HasMaxLength(250);
-
-                entity.Property(e => e.LastName).HasMaxLength(50);
-
-                entity.Property(e => e.MiddleName).HasMaxLength(50);
-
-                entity.Property(e => e.PhoneNumber).HasMaxLength(50);
-
-                entity.Property(e => e.UserId).HasMaxLength(256);
-
-                entity.Property(e => e.Username).HasMaxLength(256);
             });
 
             modelBuilder.Entity<MixFile>(entity =>
@@ -446,13 +406,12 @@ namespace Mix.Cms.Lib.Models.Cms
 
             modelBuilder.Entity<MixLanguage>(entity =>
             {
-                entity.HasKey(e => new { e.Keyword, e.Specificulture });
+                entity.HasKey(e => new { e.Id, e.Specificulture })
+                    .HasName("PK_mix_language_1");
 
                 entity.ToTable("mix_language");
 
                 entity.HasIndex(e => e.Specificulture);
-
-                entity.Property(e => e.Keyword).HasMaxLength(50);
 
                 entity.Property(e => e.Specificulture).HasMaxLength(10);
 
@@ -465,6 +424,10 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.DefaultValue).HasMaxLength(250);
 
                 entity.Property(e => e.Description).HasMaxLength(250);
+
+                entity.Property(e => e.Keyword)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.Value).HasMaxLength(4000);
 
@@ -754,51 +717,6 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasConstraintName("FK_Mix_Module_Post_Mix_Post");
             });
 
-            modelBuilder.Entity<MixOrder>(entity =>
-            {
-                entity.HasKey(e => new { e.Id, e.Specificulture });
-
-                entity.ToTable("mix_order");
-
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
-
-                entity.Property(e => e.CreatedBy).HasMaxLength(50);
-
-                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.UserId).HasMaxLength(50);
-
-                entity.HasOne(d => d.Customer)
-                    .WithMany(p => p.MixOrder)
-                    .HasForeignKey(d => d.CustomerId)
-                    .HasConstraintName("FK_mix_order_mix_cms_customer");
-            });
-
-            modelBuilder.Entity<MixOrderItem>(entity =>
-            {
-                entity.HasKey(e => new { e.PostId, e.OrderId, e.Specificulture });
-
-                entity.ToTable("mix_order_item");
-
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
-
-                entity.Property(e => e.Description).HasMaxLength(4000);
-
-                entity.Property(e => e.PriceUnit).HasMaxLength(50);
-
-                entity.HasOne(d => d.MixOrder)
-                    .WithMany(p => p.MixOrderItem)
-                    .HasForeignKey(d => new { d.OrderId, d.Specificulture })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Order_Item_Order");
-
-                entity.HasOne(d => d.MixPost)
-                    .WithMany(p => p.MixOrderItem)
-                    .HasForeignKey(d => new { d.PostId, d.Specificulture })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Order_Item_Product");
-            });
-
             modelBuilder.Entity<MixPage>(entity =>
             {
                 entity.HasKey(e => new { e.Id, e.Specificulture });
@@ -1013,30 +931,6 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasConstraintName("FK_Mix_Page_Page_Mix_Page1");
             });
 
-            modelBuilder.Entity<MixPagePosition>(entity =>
-            {
-                entity.HasKey(e => new { e.PositionId, e.PageId, e.Specificulture });
-
-                entity.ToTable("mix_page_position");
-
-                entity.HasIndex(e => new { e.PageId, e.Specificulture });
-
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
-
-                entity.Property(e => e.Description).HasMaxLength(250);
-
-                entity.HasOne(d => d.Position)
-                    .WithMany(p => p.MixPagePosition)
-                    .HasForeignKey(d => d.PositionId)
-                    .HasConstraintName("FK_Mix_Page_Position_Mix_Position");
-
-                entity.HasOne(d => d.MixPage)
-                    .WithMany(p => p.MixPagePosition)
-                    .HasForeignKey(d => new { d.PageId, d.Specificulture })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Mix_Page_Position_Mix_Page");
-            });
-
             modelBuilder.Entity<MixPagePost>(entity =>
             {
                 entity.HasKey(e => new { e.PostId, e.PageId, e.Specificulture });
@@ -1064,21 +958,6 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasForeignKey(d => new { d.PostId, d.Specificulture })
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Mix_Page_Post_Mix_Post");
-            });
-
-            modelBuilder.Entity<MixParameter>(entity =>
-            {
-                entity.HasKey(e => e.Name);
-
-                entity.ToTable("mix_parameter");
-
-                entity.Property(e => e.Name).HasMaxLength(50);
-
-                entity.Property(e => e.Description).HasMaxLength(4000);
-
-                entity.Property(e => e.Value)
-                    .IsRequired()
-                    .HasMaxLength(4000);
             });
 
             modelBuilder.Entity<MixPortalPage>(entity =>
@@ -1132,8 +1011,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.HasKey(e => new { e.PositionId, e.PortalPageId });
 
                 entity.ToTable("mix_portal_page_position");
-
-                entity.HasIndex(e => e.PortalPageId);
 
                 entity.Property(e => e.Description).HasMaxLength(250);
 

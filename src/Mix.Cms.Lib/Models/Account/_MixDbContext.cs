@@ -63,13 +63,19 @@ namespace Mix.Cms.Lib.Models.Account
         //Ref https://github.com/dotnet/efcore/issues/10169
         public override void Dispose()
         {
-            if (MixService.GetConfig<int>(MixConstants.CONST_SETTING_DATABASE_PROVIDER) == (int)MixEnums.DatabaseProvider.MySQL)
+            var provider = (MixEnums.DatabaseProvider)MixService.GetConfig<int>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+            switch (provider)
             {
-                MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
-            }
-            else
-            {
-                SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
+                case MixEnums.DatabaseProvider.MSSQL:
+                    SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
+                    break;
+                case MixEnums.DatabaseProvider.MySQL:
+                    MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
+                    break;
+                case MixEnums.DatabaseProvider.PostgreSQL:
+                    Npgsql.NpgsqlConnection.ClearPool((Npgsql.NpgsqlConnection)Database.GetDbConnection());
+                    break;
+
             }
             base.Dispose();
         }

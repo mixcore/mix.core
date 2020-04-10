@@ -32,35 +32,35 @@ namespace Mix.Cms.Lib
             return $"/{MixConstants.Folder.TemplatesFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, culture)}";
         }
 
-        public static List<ViewModels.MixPages.ReadListItemViewModel> GetPage(IUrlHelper Url, string culture, MixEnums.CatePosition position, string activePath = "")
-        {
-            var getTopCates = ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelListBy
-            (c => c.Specificulture == culture && c.MixPagePosition.Any(
-              p => p.PositionId == (int)position)
-            );
-            var cates = getTopCates.Data ?? new List<ViewModels.MixPages.ReadListItemViewModel>();
-            activePath = activePath.ToLower();
-            foreach (var cate in cates)
-            {
-                switch (cate.Type)
-                {
-                    case MixPageType.Home:
-                    case MixPageType.ListPost:
-                    default:
-                        cate.DetailsUrl = Url.RouteUrl("Alias", new { culture, seoName = cate.SeoName });
-                        break;
-                }
-                cate.IsActived = (cate.DetailsUrl == activePath
-                    || (cate.Type == MixPageType.Home && activePath == string.Format("/{0}/home", culture)));
-                cate.Childs.ForEach((Action<ViewModels.MixPagePages.ReadViewModel>)(c =>
-                {
-                    c.IsActived = (
-                    c.Page.DetailsUrl == activePath);
-                    cate.IsActived = cate.IsActived || c.IsActived;
-                }));
-            }
-            return cates;
-        }
+        //public static List<ViewModels.MixPages.ReadListItemViewModel> GetPage(IUrlHelper Url, string culture, MixEnums.CatePosition position, string activePath = "")
+        //{
+        //    var getTopCates = ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelListBy
+        //    (c => c.Specificulture == culture && c.MixPagePosition.Any(
+        //      p => p.PositionId == (int)position)
+        //    );
+        //    var cates = getTopCates.Data ?? new List<ViewModels.MixPages.ReadListItemViewModel>();
+        //    activePath = activePath.ToLower();
+        //    foreach (var cate in cates)
+        //    {
+        //        switch (cate.Type)
+        //        {
+        //            case MixPageType.Home:
+        //            case MixPageType.ListPost:
+        //            default:
+        //                cate.DetailsUrl = Url.RouteUrl("Alias", new { culture, seoName = cate.SeoName });
+        //                break;
+        //        }
+        //        cate.IsActived = (cate.DetailsUrl == activePath
+        //            || (cate.Type == MixPageType.Home && activePath == string.Format("/{0}/home", culture)));
+        //        cate.Childs.ForEach((Action<ViewModels.MixPagePages.ReadViewModel>)(c =>
+        //        {
+        //            c.IsActived = (
+        //            c.Page.DetailsUrl == activePath);
+        //            cate.IsActived = cate.IsActived || c.IsActived;
+        //        }));
+        //    }
+        //    return cates;
+        //}
 
         public static List<ViewModels.MixPages.ReadListItemViewModel> GetCategory(IUrlHelper Url, string culture, MixPageType cateType, string activePath = "")
         {
