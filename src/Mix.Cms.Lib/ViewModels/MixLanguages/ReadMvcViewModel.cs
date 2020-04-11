@@ -22,6 +22,8 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
 
         #region Models
 
+        [JsonProperty("id")]
+        public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
         [JsonProperty("priority")]
@@ -121,49 +123,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
 
         #region Expands
 
-        public static async Task<RepositoryResponse<bool>> ImportLanguages(List<MixLanguage> arrLanguage, string destCulture
-            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            bool isRoot = _context == null;
-            var context = _context ?? new MixCmsContext();
-            var transaction = _transaction ?? context.Database.BeginTransaction();
-
-            try
-            {
-                foreach (var item in arrLanguage)
-                {
-                    var lang = new ReadMvcViewModel(item, context, transaction);
-                    lang.Specificulture = destCulture;
-                    lang.CreatedDateTime = DateTime.UtcNow;
-                    var saveResult = await lang.SaveModelAsync(false, context, transaction);
-                    result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
-                    if (!result.IsSucceed)
-                    {
-                        result.Exception = saveResult.Exception;
-                        result.Errors = saveResult.Errors;
-                        break;
-                    }
-                }
-                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
-            }
-            catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
-            {
-                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<ReadMvcViewModel>(ex, isRoot, transaction);
-                result.IsSucceed = false;
-                result.Errors = error.Errors;
-                result.Exception = error.Exception;
-            }
-            finally
-            {
-                if (isRoot)
-                {
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
-                }
-            }
-            return result;
-        }
-
+        
         #endregion Expands
     }
 }

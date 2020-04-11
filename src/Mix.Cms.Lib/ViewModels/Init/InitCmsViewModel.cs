@@ -26,7 +26,8 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
                     case MixEnums.DatabaseProvider.MySQL:
                         return $"Server={DatabaseServer};port={DatabasePort};Database={DatabaseName}" +
                       $";User={DatabaseUser};Password={DatabasePassword};";
-
+                    case MixEnums.DatabaseProvider.PostgreSQL:
+                        return $"Host={DatabaseServer};Port={DatabasePort};Database={DatabaseName};Username={DatabaseUser};Password={DatabasePassword}";
                     default:
                         return string.Empty;
                 }

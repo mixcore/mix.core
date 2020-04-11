@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Mix.Cms.Lib.Migrations
 {
-    public partial class Init : Migration
+    public partial class Init_MSSQL : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -98,22 +98,6 @@ namespace Mix.Cms.Lib.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_copy",
-                columns: table => new
-                {
-                    Culture = table.Column<string>(maxLength: 10, nullable: false),
-                    Keyword = table.Column<string>(maxLength: 50, nullable: false),
-                    Note = table.Column<string>(maxLength: 250, nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false),
-                    Value = table.Column<string>(maxLength: 4000, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_copy", x => new { x.Culture, x.Keyword });
-                });
-
-            migrationBuilder.CreateTable(
                 name: "mix_culture",
                 columns: table => new
                 {
@@ -133,33 +117,6 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     table.PrimaryKey("PK_mix_culture", x => x.Id);
                     table.UniqueConstraint("AK_mix_culture_Specificulture", x => x.Specificulture);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_customer",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false),
-                    UserId = table.Column<string>(maxLength: 256, nullable: true),
-                    Username = table.Column<string>(maxLength: 256, nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true),
-                    FirstName = table.Column<string>(maxLength: 50, nullable: true),
-                    MiddleName = table.Column<string>(maxLength: 50, nullable: true),
-                    LastName = table.Column<string>(maxLength: 50, nullable: true),
-                    FullName = table.Column<string>(maxLength: 250, nullable: true),
-                    BirthDay = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Avatar = table.Column<string>(maxLength: 250, nullable: true),
-                    Address = table.Column<string>(maxLength: 450, nullable: true),
-                    PhoneNumber = table.Column<string>(maxLength: 50, nullable: true),
-                    Status = table.Column<int>(nullable: false),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    CreatedBy = table.Column<string>(maxLength: 50, nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    IsAgreeNotified = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_customer", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -188,21 +145,6 @@ namespace Mix.Cms.Lib.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_mix_media", x => new { x.Id, x.Specificulture });
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_parameter",
-                columns: table => new
-                {
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Description = table.Column<string>(maxLength: 4000, nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false),
-                    Value = table.Column<string>(maxLength: 4000, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_parameter", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -398,8 +340,9 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_configuration",
                 columns: table => new
                 {
-                    Keyword = table.Column<string>(maxLength: 50, nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
+                    Keyword = table.Column<string>(maxLength: 50, nullable: false),
                     Category = table.Column<string>(maxLength: 250, nullable: true),
                     DataType = table.Column<int>(nullable: false),
                     Description = table.Column<string>(maxLength: 250, nullable: true),
@@ -411,7 +354,7 @@ namespace Mix.Cms.Lib.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_configuration", x => new { x.Keyword, x.Specificulture });
+                    table.PrimaryKey("PK_mix_configuration_1", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
                         name: "FK_Mix_Configuration_Mix_Culture",
                         column: x => x.Specificulture,
@@ -424,8 +367,9 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_language",
                 columns: table => new
                 {
-                    Keyword = table.Column<string>(maxLength: 50, nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
+                    Keyword = table.Column<string>(maxLength: 50, nullable: false),
                     Category = table.Column<string>(maxLength: 250, nullable: true),
                     DataType = table.Column<int>(nullable: false),
                     Description = table.Column<string>(maxLength: 250, nullable: true),
@@ -438,7 +382,7 @@ namespace Mix.Cms.Lib.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_language", x => new { x.Keyword, x.Specificulture });
+                    table.PrimaryKey("PK_mix_language_1", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
                         name: "FK_Mix_Language_Mix_Culture",
                         column: x => x.Specificulture,
@@ -589,30 +533,6 @@ namespace Mix.Cms.Lib.Migrations
                         principalTable: "mix_culture",
                         principalColumn: "Specificulture",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_order",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false),
-                    Specificulture = table.Column<string>(maxLength: 10, nullable: false),
-                    UserId = table.Column<string>(maxLength: 50, nullable: true),
-                    CustomerId = table.Column<int>(nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    CreatedBy = table.Column<string>(maxLength: 50, nullable: true),
-                    StoreId = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_order", x => new { x.Id, x.Specificulture });
-                    table.ForeignKey(
-                        name: "FK_mix_order_mix_cms_customer",
-                        column: x => x.CustomerId,
-                        principalTable: "mix_customer",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -923,34 +843,6 @@ namespace Mix.Cms.Lib.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_page_position",
-                columns: table => new
-                {
-                    PositionId = table.Column<int>(nullable: false),
-                    PageId = table.Column<int>(nullable: false),
-                    Specificulture = table.Column<string>(maxLength: 10, nullable: false),
-                    Description = table.Column<string>(maxLength: 250, nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_page_position", x => new { x.PositionId, x.PageId, x.Specificulture });
-                    table.ForeignKey(
-                        name: "FK_Mix_Page_Position_Mix_Position",
-                        column: x => x.PositionId,
-                        principalTable: "mix_position",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Mix_Page_Position_Mix_Page",
-                        columns: x => new { x.PageId, x.Specificulture },
-                        principalTable: "mix_page",
-                        principalColumns: new[] { "Id", "Specificulture" },
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "mix_module_post",
                 columns: table => new
                 {
@@ -1145,37 +1037,6 @@ namespace Mix.Cms.Lib.Migrations
                     table.ForeignKey(
                         name: "FK_mix_related_post_mix_post",
                         columns: x => new { x.SourceId, x.Specificulture },
-                        principalTable: "mix_post",
-                        principalColumns: new[] { "Id", "Specificulture" },
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_order_item",
-                columns: table => new
-                {
-                    OrderId = table.Column<int>(nullable: false),
-                    PostId = table.Column<int>(nullable: false),
-                    Specificulture = table.Column<string>(maxLength: 10, nullable: false),
-                    Id = table.Column<int>(nullable: false),
-                    Quantity = table.Column<int>(nullable: false),
-                    Price = table.Column<double>(nullable: false),
-                    PriceUnit = table.Column<string>(maxLength: 50, nullable: true),
-                    Description = table.Column<string>(maxLength: 4000, nullable: true),
-                    Status = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_order_item", x => new { x.PostId, x.OrderId, x.Specificulture });
-                    table.ForeignKey(
-                        name: "FK_Order_Item_Order",
-                        columns: x => new { x.OrderId, x.Specificulture },
-                        principalTable: "mix_order",
-                        principalColumns: new[] { "Id", "Specificulture" },
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Order_Item_Product",
-                        columns: x => new { x.PostId, x.Specificulture },
                         principalTable: "mix_post",
                         principalColumns: new[] { "Id", "Specificulture" },
                         onDelete: ReferentialAction.Restrict);
@@ -1503,21 +1364,6 @@ namespace Mix.Cms.Lib.Migrations
                 columns: new[] { "PostId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_order_CustomerId",
-                table: "mix_order",
-                column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_order_item_OrderId_Specificulture",
-                table: "mix_order_item",
-                columns: new[] { "OrderId", "Specificulture" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_order_item_PostId_Specificulture",
-                table: "mix_order_item",
-                columns: new[] { "PostId", "Specificulture" });
-
-            migrationBuilder.CreateIndex(
                 name: "IX_mix_page_Specificulture",
                 table: "mix_page",
                 column: "Specificulture");
@@ -1561,11 +1407,6 @@ namespace Mix.Cms.Lib.Migrations
                 name: "IX_mix_page_page_ParentId_Specificulture",
                 table: "mix_page_page",
                 columns: new[] { "ParentId", "Specificulture" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_page_position_PageId_Specificulture",
-                table: "mix_page_position",
-                columns: new[] { "PageId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_mix_page_post_PageId_Specificulture",
@@ -1676,9 +1517,6 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_configuration");
 
             migrationBuilder.DropTable(
-                name: "mix_copy");
-
-            migrationBuilder.DropTable(
                 name: "mix_file");
 
             migrationBuilder.DropTable(
@@ -1697,9 +1535,6 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_module_post");
 
             migrationBuilder.DropTable(
-                name: "mix_order_item");
-
-            migrationBuilder.DropTable(
                 name: "mix_page_attribute_set");
 
             migrationBuilder.DropTable(
@@ -1709,13 +1544,7 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_page_page");
 
             migrationBuilder.DropTable(
-                name: "mix_page_position");
-
-            migrationBuilder.DropTable(
                 name: "mix_page_post");
-
-            migrationBuilder.DropTable(
-                name: "mix_parameter");
 
             migrationBuilder.DropTable(
                 name: "mix_portal_page_navigation");
@@ -1763,9 +1592,6 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_page_module");
 
             migrationBuilder.DropTable(
-                name: "mix_order");
-
-            migrationBuilder.DropTable(
                 name: "mix_page_attribute_data");
 
             migrationBuilder.DropTable(
@@ -1791,9 +1617,6 @@ namespace Mix.Cms.Lib.Migrations
 
             migrationBuilder.DropTable(
                 name: "mix_module");
-
-            migrationBuilder.DropTable(
-                name: "mix_customer");
 
             migrationBuilder.DropTable(
                 name: "mix_page");
