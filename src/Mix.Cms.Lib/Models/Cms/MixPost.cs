@@ -9,7 +9,6 @@ namespace Mix.Cms.Lib.Models.Cms
         {
             MixModuleData = new HashSet<MixModuleData>();
             MixModulePost = new HashSet<MixModulePost>();
-            MixOrderItem = new HashSet<MixOrderItem>();
             MixPagePost = new HashSet<MixPagePost>();
             MixPostAttributeData = new HashSet<MixPostAttributeData>();
             MixPostAttributeSet = new HashSet<MixPostAttributeSet>();
@@ -49,7 +48,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual MixCulture SpecificultureNavigation { get; set; }
         public virtual ICollection<MixModuleData> MixModuleData { get; set; }
         public virtual ICollection<MixModulePost> MixModulePost { get; set; }
-        public virtual ICollection<MixOrderItem> MixOrderItem { get; set; }
         public virtual ICollection<MixPagePost> MixPagePost { get; set; }
         public virtual ICollection<MixPostAttributeData> MixPostAttributeData { get; set; }
         public virtual ICollection<MixPostAttributeSet> MixPostAttributeSet { get; set; }

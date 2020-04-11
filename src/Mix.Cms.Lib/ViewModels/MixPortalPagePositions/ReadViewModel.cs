@@ -34,8 +34,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePositions
 
         #region Views
 
-        public MixPositions.ReadViewModel Position { get; set; }
-
         #endregion Views
 
         #region overrides

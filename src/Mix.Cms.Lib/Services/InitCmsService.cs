@@ -166,7 +166,7 @@ namespace Mix.Cms.Lib.Services
                 configurations.Find(c => c.Keyword == "ThemeName").Value = Common.Helper.SeoHelper.GetSEOString(cnfSiteName.Value);
                 configurations.Find(c => c.Keyword == "ThemeFolder").Value = Common.Helper.SeoHelper.GetSEOString(cnfSiteName.Value);
             }
-            var result = await ViewModels.MixConfigurations.ReadMvcViewModel.ImportConfigurations(configurations, specifiCulture, context, transaction);
+            var result = await ViewModels.MixConfigurations.UpdateViewModel.ImportConfigurations(configurations, specifiCulture, context, transaction);
 
             UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
 
@@ -224,7 +224,7 @@ namespace Mix.Cms.Lib.Services
             /* Init Languages */
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
 
-            var result = await ViewModels.MixLanguages.ReadMvcViewModel.ImportLanguages(languages, specificulture, context, transaction);
+            var result = await ViewModels.MixLanguages.UpdateViewModel.ImportLanguages(languages, specificulture, context, transaction);
 
             UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
             return result;

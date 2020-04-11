@@ -13,7 +13,6 @@ namespace Mix.Cms.Lib.Models.Cms
             MixPageModule = new HashSet<MixPageModule>();
             MixPagePageMixPage = new HashSet<MixPagePage>();
             MixPagePageMixPageNavigation = new HashSet<MixPagePage>();
-            MixPagePosition = new HashSet<MixPagePosition>();
             MixPagePost = new HashSet<MixPagePost>();
         }
 
@@ -52,7 +51,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual ICollection<MixPageModule> MixPageModule { get; set; }
         public virtual ICollection<MixPagePage> MixPagePageMixPage { get; set; }
         public virtual ICollection<MixPagePage> MixPagePageMixPageNavigation { get; set; }
-        public virtual ICollection<MixPagePosition> MixPagePosition { get; set; }
         public virtual ICollection<MixPagePost> MixPagePost { get; set; }
     }
 }

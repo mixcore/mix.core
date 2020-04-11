@@ -7,7 +7,6 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixPosition()
         {
-            MixPagePosition = new HashSet<MixPagePosition>();
             MixPortalPagePosition = new HashSet<MixPortalPagePosition>();
         }
 
@@ -16,7 +15,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Priority { get; set; }
         public int Status { get; set; }
 
-        public virtual ICollection<MixPagePosition> MixPagePosition { get; set; }
         public virtual ICollection<MixPortalPagePosition> MixPortalPagePosition { get; set; }
     }
 }
