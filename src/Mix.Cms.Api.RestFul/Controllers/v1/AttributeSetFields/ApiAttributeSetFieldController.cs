@@ -46,10 +46,12 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
         // GET: api/v1/rest/en-us/attribute-field/client
-        [HttpGet("init/{attributeSetName}")]
-        public async Task<ActionResult<PaginationModel<UpdateViewModel>>> Init(string attributeSetName)
+        [HttpGet("init/{attributeSet}")]
+        public async Task<ActionResult<PaginationModel<UpdateViewModel>>> Init(string attributeSet)
         {
-            var getData = UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetName == attributeSetName, _context, _transaction);
+            int.TryParse(attributeSet, out int attributeSetId);
+            var getData = UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetName == attributeSet || f.AttributeSetId == attributeSetId
+            , _context, _transaction);
 
             if (getData.IsSucceed)
             {

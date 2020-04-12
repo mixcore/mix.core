@@ -10,15 +10,15 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 {
-    public class UpdateViewModel
-       : ViewModelBase<MixCmsContext, MixRelatedAttributeData, UpdateViewModel>
+    public class FormViewModel
+       : ViewModelBase<MixCmsContext, MixRelatedAttributeData, FormViewModel>
     {
-        public UpdateViewModel(MixRelatedAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public FormViewModel(MixRelatedAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
 
-        public UpdateViewModel() : base()
+        public FormViewModel() : base()
         {
         }
 
@@ -66,7 +66,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         #region Views
 
         [JsonProperty("data")]
-        public MixAttributeSetDatas.UpdateViewModel Data { get; set; }
+        public MixAttributeSetDatas.FormViewModel Data { get; set; }
 
         #endregion Views
 
@@ -83,7 +83,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getData = MixAttributeSetDatas.UpdateViewModel.Repository.GetSingleModel(p => p.Id == Id && p.Specificulture == Specificulture
+            var getData = MixAttributeSetDatas.FormViewModel.Repository.GetSingleModel(p => p.Id == Id && p.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction
             );
             if (getData.IsSucceed)

@@ -45,13 +45,20 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public string CreatedBy { get; set; }
 
         [JsonProperty("status")]
-        public int Status { get; set; }
+        public MixEnums.MixContentStatus Status { get; set; }
 
         #endregion Models
 
         #region Views
         [JsonProperty("data")]
         public JObject Data { get; set; }
+
+        [JsonProperty("parentId")]
+        public string ParentId { get; set; }
+
+        [JsonProperty("parentType")]
+        public int ParentType { get; set; }
+
 
         [JsonProperty("relatedData")]
         [JsonIgnore]
@@ -88,34 +95,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getValues = MixAttributeSetValues.UpdateViewModel
-                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
-            if (getValues.IsSucceed)
+            if (Data == null)
             {
-                Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
-                Values = getValues.Data.OrderBy(a => a.Priority).ToList();
-                foreach (var field in Fields.OrderBy(f => f.Priority))
-                {
-                    var val = Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
-                    if (val == null)
-                    {
-                        val = new MixAttributeSetValues.UpdateViewModel(
-                            new MixAttributeSetValue()
-                            {
-                                AttributeFieldId = field.Id,
-                                AttributeFieldName = field.Name,
-                            }
-                            , _context, _transaction)
-                        {
-                            Priority = field.Priority
-                        };
-                        Values.Add(val);
-                    }
-                    val.Priority = field.Priority;
-                    val.AttributeSetName = AttributeSetName;
-                }
-
-                ParseData();
+                ParseData(_context, _transaction);
             }
         }
 
@@ -237,12 +219,56 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override async Task<RepositoryResponse<FormViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var result = await base.SaveModelAsync(isSaveSubModels, _context, _transaction);
-            if (result.IsSucceed)
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
             {
-                ParseData();
+
+                var result = await base.SaveModelAsync(isSaveSubModels, context, transaction);
+                if (result.IsSucceed && !string.IsNullOrEmpty(ParentId))
+                {
+                    var getNav = MixRelatedAttributeDatas.UpdateViewModel.Repository.CheckIsExists(
+                        m => m.Id == Id && m.ParentId == ParentId && m.ParentType == ParentType && m.Specificulture == Specificulture
+                        , context, transaction);
+                    if (!getNav)
+                    {
+                        var nav = new MixRelatedAttributeDatas.UpdateViewModel()
+                        {
+                            AttributeSetId = AttributeSetId,
+                            AttributeSetName = AttributeSetName,
+                            Id = Id,
+                            Specificulture = Specificulture,
+                            ParentType = ParentType,
+                            ParentId = ParentId,
+                            Status = MixEnums.MixContentStatus.Published 
+                        };
+                        var saveResult = await nav.SaveModelAsync(false, context, transaction);
+                        if (!saveResult.IsSucceed)
+                        {
+                            result.IsSucceed = false;
+                            result.Exception = saveResult.Exception;
+                            result.Errors = saveResult.Errors;
+                        }
+                    }
+                }
+                if (result.IsSucceed)
+                {
+                    ParseData();
+                }
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+                return result;
             }
-            return result;
+            catch(Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<FormViewModel>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    context.Dispose();
+                }
+            }
+            
         }
 
         public override RepositoryResponse<FormViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -603,15 +629,43 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         //    return tasks;
         //}
 
-        private void ParseData()
+        private void ParseData(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Data = new JObject(
-                new JProperty("id", Id)    
-            );
-            foreach (var item in Values.OrderBy(v => v.Priority))
+            var getValues = MixAttributeSetValues.UpdateViewModel
+                       .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
+            if (getValues.IsSucceed)
             {
-                item.AttributeFieldName = item.Field.Name;
-                Data.Add(ParseValue(item));
+                Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
+                Values = getValues.Data.OrderBy(a => a.Priority).ToList();
+                foreach (var field in Fields.OrderBy(f => f.Priority))
+                {
+                    var val = Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
+                    if (val == null)
+                    {
+                        val = new MixAttributeSetValues.UpdateViewModel(
+                            new MixAttributeSetValue()
+                            {
+                                AttributeFieldId = field.Id,
+                                AttributeFieldName = field.Name,
+                            }
+                            , _context, _transaction)
+                        {
+                            Priority = field.Priority
+                        };
+                        Values.Add(val);
+                    }
+                    val.Priority = field.Priority;
+                    val.AttributeSetName = AttributeSetName;
+                }
+
+                Data = new JObject(
+                new JProperty("id", Id)
+            );
+                foreach (var item in Values.OrderBy(v => v.Priority))
+                {
+                    item.AttributeFieldName = item.Field.Name;
+                    Data.Add(ParseValue(item));
+                }
             }
         }
         public static async Task<RepositoryResponse<FormViewModel>> SaveObjectAsync(JObject data, string attributeSetName)

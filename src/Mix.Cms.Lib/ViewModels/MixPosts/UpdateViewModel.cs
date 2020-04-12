@@ -143,10 +143,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public MixRelatedAttributeDatas.UpdateViewModel AttributeData { get; set; }
 
         [JsonProperty("sysCategories")]
-        public List<MixRelatedAttributeDatas.UpdateViewModel> SysCategories { get; set; }
+        public List<MixRelatedAttributeDatas.FormViewModel> SysCategories { get; set; }
 
         [JsonProperty("sysTags")]
-        public List<MixRelatedAttributeDatas.UpdateViewModel> SysTags { get; set; }
+        public List<MixRelatedAttributeDatas.FormViewModel> SysTags { get; set; }
 
         #region Template
 
@@ -1151,7 +1151,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     val.Priority = field.Priority;
                     val.Field = field;
                 }
-                var getCategories = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
+                var getCategories = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
                     && m.ParentId == Id.ToString() && m.ParentType == (int)MixEnums.MixAttributeSetDataType.Post
                     && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_CATEGORY, _context, _transaction);
                 if (getCategories.IsSucceed)
@@ -1159,7 +1159,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     SysCategories = getCategories.Data;
                 }
 
-                var getTags = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
+                var getTags = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
                     && m.ParentId == Id.ToString() && m.ParentType == (int)MixEnums.MixAttributeSetDataType.Post
                     && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_TAG, _context, _transaction);
                 if (getTags.IsSucceed)
