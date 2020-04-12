@@ -62,8 +62,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 
         #region Views
 
-        [JsonProperty("postData")]
-        public PaginationModel<MixPostAttributeDatas.ReadMvcViewModel> PostData { get; set; }
+        //[JsonProperty("postData")]
+        //public PaginationModel<MixPostAttributeDatas.ReadMvcViewModel> PostData { get; set; }
 
         #endregion Views
 
@@ -85,9 +85,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            PostData = MixPostAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(
-                m => m.PostId == Id && m.Specificulture == Specificulture, "Priority", 0, null, null
-                    , _context, _transaction).Data;
+            //PostData = MixPostAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(
+            //    m => m.PostId == Id && m.Specificulture == Specificulture, "Priority", 0, null, null
+            //        , _context, _transaction).Data;
         }
 
         #endregion Overrides
@@ -97,14 +97,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         public void LoadPostData(int postId, string specificulture, int? pageSize = null, int? pageIndex = 0
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getData = MixPostAttributeDatas.ReadMvcViewModel.Repository
-            .GetModelListBy(
-                m => m.PostId == postId && m.Specificulture == specificulture && m.AttributeSetId == Id
-                , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
-                , pageSize, pageIndex
-                , _context: _context, _transaction: _transaction);
+            //var getData = MixPostAttributeDatas.ReadMvcViewModel.Repository
+            //.GetModelListBy(
+            //    m => m.PostId == postId && m.Specificulture == specificulture && m.AttributeSetId == Id
+            //    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+            //    , pageSize, pageIndex
+            //    , _context: _context, _transaction: _transaction);
 
-            PostData = getData.Data;
+            //PostData = getData.Data;
         }
 
         #endregion Expand

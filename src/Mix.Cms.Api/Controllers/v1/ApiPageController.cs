@@ -240,11 +240,6 @@ namespace Mix.Cms.Api.Controllers.v1
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
                                 new { action = "page", culture = _lang, seoName = a.SeoName }, Request, Url);
-                            a.Childs.ForEach((Action<Lib.ViewModels.MixPagePages.ReadViewModel>)(c =>
-                            {
-                                c.Page.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                    new { action = "page", culture = _lang, seoName = c.Page.SeoName }, Request, Url);
-                            }));
                         }));
                     }
 

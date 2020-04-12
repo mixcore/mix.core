@@ -121,12 +121,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("moduleNavs")]
         public List<MixPageModules.ReadMvcViewModel> ModuleNavs { get; set; } // Parent to Modules
 
-        [JsonProperty("parentNavs")]
-        public List<MixPagePages.ReadViewModel> ParentNavs { get; set; } // Parent to  Parent
-
-        [JsonProperty("childNavs")]
-        public List<MixPagePages.ReadViewModel> ChildNavs { get; set; } // Parent to  Parent
-
         [JsonProperty("listTag")]
         public JArray ListTag { get; set; } = new JArray();
 
@@ -674,73 +668,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             });
             return result.OrderBy(m => m.Priority).ToList();
         }
-
-        public List<MixPagePages.ReadViewModel> GetParentNavs(MixCmsContext context, IDbContextTransaction transaction)
-        {
-            var query = context.MixPage
-                .Include(cp => cp.MixPagePageMixPage)
-                .Where(Category => Category.Specificulture == Specificulture && Category.Id != Id)
-                .Select(Category =>
-                    new MixPagePages.ReadViewModel()
-                    {
-                        Id = Id,
-                        ParentId = Category.Id,
-                        Specificulture = Specificulture,
-                        Description = Category.Title,
-                    }
-                );
-
-            var result = query.ToList();
-            result.ForEach(nav =>
-            {
-                nav.IsActived = context.MixPagePage.Any(
-                        m => m.ParentId == nav.ParentId && m.Id == Id && m.Specificulture == Specificulture);
-            });
-            return result.OrderBy(m => m.Priority).ToList();
-        }
-
-        public List<MixPagePages.ReadViewModel> GetChildNavs(MixCmsContext context, IDbContextTransaction transaction)
-        {
-            var query = context.MixPage
-                .Include(cp => cp.MixPagePageMixPage)
-                .Where(Category => Category.Specificulture == Specificulture && Category.Id != Id)
-                .Select(Category =>
-                new MixPagePages.ReadViewModel(
-                      new MixPagePage()
-                      {
-                          Id = Category.Id,
-                          ParentId = Id,
-                          Specificulture = Specificulture,
-                          Description = Category.Title,
-                      }, context, transaction));
-
-            var result = query.ToList();
-            result.ForEach(nav =>
-            {
-                var currentNav = context.MixPagePage.FirstOrDefault(
-                        m => m.ParentId == Id && m.Id == nav.Id && m.Specificulture == Specificulture);
-                nav.Priority = currentNav?.Priority ?? 0;
-                nav.IsActived = currentNav != null;
-            });
-            return result.OrderBy(m => m.Priority).ToList();
-        }
-
-        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        //{
-        //    var tasks = new List<Task>();
-        //    var relatedPages = context.MixPage.Where(m => m.MixPagePageMixPage
-        //         .Any(d => d.Specificulture == Specificulture && (d.Id == Id || d.ParentId == Id)));
-        //    foreach (var item in relatedPages)
-        //    {
-        //        tasks.Add(Task.Run(() =>
-        //        {
-        //            var data = new ReadViewModel(item, context, transaction);
-        //            data.RemoveCache(item, context, transaction);
-        //        }));
-        //    }
-
-        //    return tasks;
-        //}
 
         #endregion Expands
     }

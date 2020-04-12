@@ -227,7 +227,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (result.IsSucceed && !string.IsNullOrEmpty(ParentId))
                 {
                     var getNav = MixRelatedAttributeDatas.UpdateViewModel.Repository.CheckIsExists(
-                        m => m.Id == Id && m.ParentId == ParentId && m.ParentType == ParentType && m.Specificulture == Specificulture
+                        m => m.DataId == Id && m.ParentId == ParentId && m.ParentType == ParentType && m.Specificulture == Specificulture
                         , context, transaction);
                     if (!getNav)
                     {

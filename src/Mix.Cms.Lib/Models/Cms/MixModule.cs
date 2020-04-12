@@ -7,8 +7,6 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixModule()
         {
-            MixModuleAttributeData = new HashSet<MixModuleAttributeData>();
-            MixModuleAttributeSet = new HashSet<MixModuleAttributeSet>();
             MixModuleData = new HashSet<MixModuleData>();
             MixModulePost = new HashSet<MixModulePost>();
             MixPageModule = new HashSet<MixPageModule>();
@@ -35,8 +33,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public DateTime? LastModified { get; set; }
 
         public virtual MixCulture SpecificultureNavigation { get; set; }
-        public virtual ICollection<MixModuleAttributeData> MixModuleAttributeData { get; set; }
-        public virtual ICollection<MixModuleAttributeSet> MixModuleAttributeSet { get; set; }
         public virtual ICollection<MixModuleData> MixModuleData { get; set; }
         public virtual ICollection<MixModulePost> MixModulePost { get; set; }
         public virtual ICollection<MixPageModule> MixPageModule { get; set; }

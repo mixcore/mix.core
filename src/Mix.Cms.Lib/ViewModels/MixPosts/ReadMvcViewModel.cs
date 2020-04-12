@@ -235,11 +235,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             PostNavs = MixPostPosts.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
 
             // Get Attribute Sets
-            var navs = MixPostAttributeSets.ReadMvcViewModel.Repository.GetModelListBy(n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
-            foreach (var item in navs)
-            {
-                AttributeSets.Add(item.MixAttributeSet);
-            }
+            //var navs = MixPostAttributeSets.ReadMvcViewModel.Repository.GetModelListBy(n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
+            //foreach (var item in navs)
+            //{
+            //    AttributeSets.Add(item.MixAttributeSet);
+            //}
         }
 
         #endregion Overrides

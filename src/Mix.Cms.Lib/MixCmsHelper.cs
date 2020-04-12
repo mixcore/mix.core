@@ -84,12 +84,6 @@ namespace Mix.Cms.Lib
                     cate.DetailsUrl == activePath || (cate.Type == MixPageType.Home && activePath == string.Format("/{0}/home", culture))
                     );
 
-                cate.Childs.ForEach((Action<ViewModels.MixPagePages.ReadViewModel>)(c =>
-                {
-                    c.IsActived = (
-                    c.Page.DetailsUrl == activePath);
-                    cate.IsActived = cate.IsActived || c.IsActived;
-                }));
             }
             return cates;
         }

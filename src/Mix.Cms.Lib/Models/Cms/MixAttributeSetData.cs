@@ -5,11 +5,6 @@ namespace Mix.Cms.Lib.Models.Cms
 {
     public partial class MixAttributeSetData
     {
-        public MixAttributeSetData()
-        {
-            MixRelatedAttributeData = new HashSet<MixRelatedAttributeData>();
-        }
-
         public string Id { get; set; }
         public string Specificulture { get; set; }
         public int AttributeSetId { get; set; }
@@ -20,6 +15,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Status { get; set; }
 
         public virtual MixAttributeSet AttributeSet { get; set; }
-        public virtual ICollection<MixRelatedAttributeData> MixRelatedAttributeData { get; set; }
+        public virtual MixRelatedAttributeData MixRelatedAttributeData { get; set; }
     }
 }

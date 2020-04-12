@@ -172,8 +172,8 @@ namespace Mix.Cms.Api.OData.ViewModels.Services.Store
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            AttributeData = AttributeDataViewModel.Repository.GetFirstModel(m => m.MixRelatedAttributeData.Any(
-                n => n.ParentId == Id.ToString() && n.ParentType == (int)MixEnums.MixAttributeSetDataType.Post && n.AttributeSetName == "post" && n.Specificulture == Specificulture))?.Data;
+            //AttributeData = AttributeDataViewModel.Repository.GetFirstModel(m => m.MixRelatedAttributeData.Any(
+            //    n => n.ParentId == Id.ToString() && n.ParentType == (int)MixEnums.MixAttributeSetDataType.Post && n.AttributeSetName == "post" && n.Specificulture == Specificulture))?.Data;
         }
 
         #endregion Overrides

@@ -102,7 +102,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
             var tasks = new List<Task>();
             try
             {
-                var navs = context.MixRelatedAttributeData.Where(m => m.Id == model.DataId && m.Specificulture == model.Specificulture);
+                var navs = context.MixRelatedAttributeData.Where(m => m.DataId == model.DataId && m.Specificulture == model.Specificulture);
                 if (navs != null)
                 {
                     foreach (var item in navs)

@@ -6,8 +6,9 @@ namespace Mix.Cms.Lib.Models.Cms
     public partial class MixModuleData
     {
         public string Id { get; set; }
-        public int ModuleId { get; set; }
         public string Specificulture { get; set; }
+        public string DataId { get; set; }
+        public int ModuleId { get; set; }
         public int? PageId { get; set; }
         public int? PostId { get; set; }
         public DateTime CreatedDateTime { get; set; }
@@ -19,7 +20,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
         public virtual MixModule MixModule { get; set; }
         public virtual MixPage MixPage { get; set; }
-        public virtual MixPageModule MixPageModule { get; set; }
         public virtual MixPost MixPost { get; set; }
     }
 }

@@ -60,9 +60,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
 
         #region Views
 
-        [JsonProperty("positionNavs")]
-        public List<MixPortalPagePositions.ReadViewModel> PositionNavs { get; set; }
-
         [JsonProperty("childNavs")]
         public List<MixPortalPagePortalPages.UpdateViewModel> ChildNavs { get; set; }
 
@@ -117,40 +114,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         {
             this.ParentNavs = GetParentNavs(_context, _transaction);
             this.ChildNavs = GetChildNavs(_context, _transaction);
-            this.PositionNavs = GetPositionNavs(_context, _transaction);
         }
 
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixPortalPage parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool> { IsSucceed = true };
-            if (result.IsSucceed)
-            {
-                foreach (var item in PositionNavs)
-                {
-                    item.PortalPageId = parent.Id;
-                    if (item.IsActived)
-                    {
-                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Exception = saveResult.Exception;
-                            Errors.AddRange(saveResult.Errors);
-                        }
-                    }
-                    else
-                    {
-                        var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
-                        result.IsSucceed = saveResult.IsSucceed;
-                        if (!result.IsSucceed)
-                        {
-                            result.Exception = saveResult.Exception;
-                            Errors.AddRange(saveResult.Errors);
-                        }
-                    }
-                }
-            }
-
+            
             if (result.IsSucceed)
             {
                 foreach (var item in ParentNavs)
@@ -212,8 +181,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-
-            await _context.MixPortalPagePosition.Where(p => p.PortalPageId == Id).ForEachAsync(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
             var navs = _context.MixPortalPageNavigation.Where(p => p.Id == Id || p.ParentId == Id);
             foreach (var item in navs)
@@ -281,23 +248,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
                 nav.IsActived = currentNav != null;
             });
             return result.OrderBy(m => m.Priority).ToList();
-        }
-
-        public List<MixPortalPagePositions.ReadViewModel> GetPositionNavs(MixCmsContext context, IDbContextTransaction transaction)
-        {
-            var query = context.MixPosition
-                  .Include(cp => cp.MixPortalPagePosition)
-                  .AsEnumerable()
-                  .Select(p => new MixPortalPagePositions.ReadViewModel()
-                  {
-                      PortalPageId = Id,
-                      PositionId = p.Id,
-                      Specificulture = Specificulture,
-                      Description = p.Description,
-                      IsActived = context.MixPortalPagePosition.Count(m => m.PortalPageId == Id && m.PositionId == p.Id) > 0
-                  });
-
-            return query.OrderBy(m => m.Priority).ToList();
         }
 
         #endregion Expands

@@ -144,9 +144,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             }
         }
 
-        [JsonProperty("childs")]
-        public List<MixPagePages.ReadViewModel> Childs { get; set; }
-
         [JsonProperty("totalPost")]
         public int TotalPost { get; set; }
 
@@ -179,12 +176,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getChilds = MixPagePages.ReadViewModel.Repository.GetModelListBy(
-                p => p.ParentId == Id && p.Specificulture == Specificulture, _context, _transaction);
-            if (getChilds.IsSucceed)
-            {
-                Childs = getChilds.Data.OrderBy(p => p.Priority).ToList();
-            }
             var countPost = MixPagePosts.ReadViewModel.Repository.Count(c => c.PageId == Id && c.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction);
 

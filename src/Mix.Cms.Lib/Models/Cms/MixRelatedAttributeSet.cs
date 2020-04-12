@@ -7,6 +7,7 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public int Id { get; set; }
         public string Specificulture { get; set; }
+        public int SetId { get; set; }
         public int ParentId { get; set; }
         public int ParentType { get; set; }
         public DateTime CreatedDateTime { get; set; }
