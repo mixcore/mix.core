@@ -16,6 +16,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPageModules
         public ImportViewModel() : base()
         {
         }
+        [JsonProperty("id")]
+        public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
         [JsonProperty("priority")]
@@ -42,8 +44,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPageModules
 
         #endregion Views
 
-        #region overrides
-
+        #region overrides        
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getModule = MixModules.ImportViewModel.Repository.GetSingleModel(p => p.Id == ModuleId && p.Specificulture == Specificulture

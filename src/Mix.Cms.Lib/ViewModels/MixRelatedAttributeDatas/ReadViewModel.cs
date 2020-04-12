@@ -17,6 +17,8 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         public string Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+        [JsonProperty("dataId")]
+        public string DataId { get; set; }
         [JsonProperty("priority")]
         public int Priority { get; set; }
 

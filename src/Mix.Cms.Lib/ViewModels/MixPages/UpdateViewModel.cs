@@ -494,7 +494,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             ViewModelHelper.HandleResult(saveData, ref result);
             if (result.IsSucceed)
             {
-                AttributeData.Id = saveData.Data.Id;
+                AttributeData.DataId = saveData.Data.Id;
                 var saveRelated = await AttributeData.SaveModelAsync(true, context, transaction);
                 ViewModelHelper.HandleResult(saveRelated, ref result);
             }

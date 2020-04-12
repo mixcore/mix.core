@@ -32,6 +32,8 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         public string Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+        [JsonProperty("dataId")]
+        public string DataId { get; set; }
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("cultures")]
@@ -74,8 +76,9 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         public override MixRelatedAttributeData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (CreatedDateTime == default(DateTime))
+            if (string.IsNullOrEmpty(Id))
             {
+                Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
             }
             return base.ParseModel(_context, _transaction);
@@ -83,7 +86,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getData = MixAttributeSetDatas.FormViewModel.Repository.GetSingleModel(p => p.Id == Id && p.Specificulture == Specificulture
+            var getData = MixAttributeSetDatas.FormViewModel.Repository.GetSingleModel(p => p.Id == DataId && p.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction
             );
             if (getData.IsSucceed)

@@ -19,6 +19,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPostMedias
         public ReadViewModel() : base()
         {
         }
+        [JsonProperty("id")]
+        public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
         [JsonProperty("priority")]
@@ -45,7 +47,14 @@ namespace Mix.Cms.Lib.ViewModels.MixPostMedias
         #endregion Views
 
         #region overrides
-
+        public override MixPostMedia ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            if (Id == 0)
+            {
+                Id = Repository.Max(m => m.Id, _context, _transaction).Data + 1;
+            }
+            return base.ParseModel(_context, _transaction);
+        }
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getMedia = UpdateViewModel.Repository.GetSingleModel(p => p.Id == MediaId && p.Specificulture == Specificulture

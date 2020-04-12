@@ -180,8 +180,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             //Save Module Navigations
             if (result.IsSucceed && ModuleNavs != null)
             {
+                var startId = MixPageModules.ImportViewModel.Repository.Max(m => m.Id).Data;
                 foreach (var item in ModuleNavs)
                 {
+
                     if (!MixModules.ImportViewModel.Repository.CheckIsExists(m => m.Name == item.Module.Name && m.Specificulture == parent.Specificulture,
                             _context, _transaction))
                     {
@@ -207,6 +209,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                         }
                         else // Save Module Success
                         {
+                            startId++;
+                            item.Id = startId;
                             item.PageId = parent.Id;
                             item.ModuleId = saveModule.Data.Id;
                             item.Specificulture = parent.Specificulture;

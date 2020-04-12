@@ -16,6 +16,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPostModules
         public ReadViewModel() : base()
         {
         }
+        [JsonProperty("id")]
+        public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
         [JsonProperty("priority")]
@@ -46,7 +48,14 @@ namespace Mix.Cms.Lib.ViewModels.MixPostModules
         #endregion Views
 
         #region overrides
-
+        public override MixPostModule ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            if (Id == 0)
+            {
+                Id = Repository.Max(m => m.Id, _context, _transaction).Data + 1;
+            }
+            return base.ParseModel(_context, _transaction);
+        }
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getModule = MixModules.ReadMvcViewModel.Repository.GetSingleModel(p => p.Id == ModuleId && p.Specificulture == Specificulture
