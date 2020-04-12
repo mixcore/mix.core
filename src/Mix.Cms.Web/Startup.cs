@@ -107,13 +107,13 @@ namespace Mix.Cms.Web
         {
             // Mix: Migrate db if already inited
 
-            if (!MixService.GetConfig<bool>("IsInit"))
-            {
-                using (var ctx = new MixCmsContext())
-                {
-                    ctx.Database.Migrate();
-                }
-            }
+            //if (!MixService.GetConfig<bool>("IsInit"))
+            //{
+            //    using (var ctx = new MixCmsContext())
+            //    {
+            //        ctx.Database.Migrate();
+            //    }
+            //}
 
             // Mix: Check if require ssl
             if (MixService.GetConfig<bool>("IsHttps"))

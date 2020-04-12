@@ -186,7 +186,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                             _context, _transaction))
                     {
                         //  Force to create new module
-                        item.Module.Id = 0;
                         item.Module.Specificulture = parent.Specificulture;
                         if (!string.IsNullOrEmpty(item.Image))
                         {
