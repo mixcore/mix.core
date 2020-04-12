@@ -7,7 +7,6 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public string Id { get; set; }
         public string Specificulture { get; set; }
-        public string DataId { get; set; }
         public int ModuleId { get; set; }
         public int? PageId { get; set; }
         public int? PostId { get; set; }

@@ -532,10 +532,6 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.DataId)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
                 entity.Property(e => e.Fields)
                     .IsRequired()
                     .HasMaxLength(4000);

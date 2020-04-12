@@ -489,6 +489,7 @@ namespace Mix.Cms.Lib.ViewModels
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             foreach (var item in RelatedData)
             {
+                item.Id = Guid.NewGuid().ToString();
                 item.Specificulture = desCulture;
                 if (result.IsSucceed)
                 {

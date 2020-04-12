@@ -26,6 +26,8 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedDatas
 
         [JsonProperty("id")]
         public string Id { get; set; }
+        [JsonProperty("dataId")]
+        public string DataId { get; set; }
 
         [JsonProperty("type")]
         public MixEnums.MixRelatedType Type { get; set; }

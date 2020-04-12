@@ -142,7 +142,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     MixRelatedAttributeDatas.UpdateViewModel nav = new MixRelatedAttributeDatas.UpdateViewModel()
                     {
-                        Id = result.Data.Id,
+                        DataId = result.Data.Id,
                         Specificulture = Specificulture,
                         AttributeSetId = result.Data.AttributeSetId,
                         AttributeSetName = result.Data.AttributeSetName,
