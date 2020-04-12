@@ -10,8 +10,6 @@ namespace Mix.Cms.Lib.Models.Cms
             MixModuleData = new HashSet<MixModuleData>();
             MixModulePost = new HashSet<MixModulePost>();
             MixPagePost = new HashSet<MixPagePost>();
-            MixPostAttributeData = new HashSet<MixPostAttributeData>();
-            MixPostAttributeSet = new HashSet<MixPostAttributeSet>();
             MixPostMedia = new HashSet<MixPostMedia>();
             MixPostModule = new HashSet<MixPostModule>();
             MixRelatedPostMixPost = new HashSet<MixRelatedPost>();
@@ -49,8 +47,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual ICollection<MixModuleData> MixModuleData { get; set; }
         public virtual ICollection<MixModulePost> MixModulePost { get; set; }
         public virtual ICollection<MixPagePost> MixPagePost { get; set; }
-        public virtual ICollection<MixPostAttributeData> MixPostAttributeData { get; set; }
-        public virtual ICollection<MixPostAttributeSet> MixPostAttributeSet { get; set; }
         public virtual ICollection<MixPostMedia> MixPostMedia { get; set; }
         public virtual ICollection<MixPostModule> MixPostModule { get; set; }
         public virtual ICollection<MixRelatedPost> MixRelatedPostMixPost { get; set; }

@@ -5,14 +5,10 @@ namespace Mix.Cms.Lib.Models.Cms
 {
     public partial class MixPostModule
     {
-        public MixPostModule()
-        {
-            MixModuleAttributeSet = new HashSet<MixModuleAttributeSet>();
-        }
-
+        public int Id { get; set; }
+        public string Specificulture { get; set; }
         public int ModuleId { get; set; }
         public int PostId { get; set; }
-        public string Specificulture { get; set; }
         public string Description { get; set; }
         public string Image { get; set; }
         public int Position { get; set; }
@@ -21,6 +17,5 @@ namespace Mix.Cms.Lib.Models.Cms
 
         public virtual MixModule MixModule { get; set; }
         public virtual MixPost MixPost { get; set; }
-        public virtual ICollection<MixModuleAttributeSet> MixModuleAttributeSet { get; set; }
     }
 }

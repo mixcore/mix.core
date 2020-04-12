@@ -179,14 +179,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getChilds = Repository.GetModelListBy
-                (p => p.MixPagePageMixPage.Any(c => c.ParentId == Id
-                && c.Specificulture == Specificulture)
-                );
-            if (getChilds.IsSucceed)
-            {
-                Childs = getChilds.Data;
-            }
             var countPost = MixPagePosts.ReadViewModel.Repository.Count(c => c.PageId == Id && c.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction);
 

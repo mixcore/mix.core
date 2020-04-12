@@ -51,50 +51,51 @@ namespace Mix.Cms.Api.Controllers.v1
 
         private async Task<ActionResult<JObject>> GetPostDataAsync(int setId, string viewType, string id)
         {
-            switch (viewType)
-            {
-                case "portal":
-                    if (!string.IsNullOrEmpty(id))
-                    {
-                        var result = new Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel(setId);
-                        return Ok(JObject.FromObject(result));
-                    }
-                    else
-                    {
-                        var model = new MixPostAttributeData()
-                        {
-                            Status = MixService.GetConfig<int>("DefaultStatus"),
-                            AttributeSetId = setId,
-                            Specificulture = _lang,
-                            Priority = Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
-                        };
+            return new JObject();
+            //switch (viewType)
+            //{
+            //    case "portal":
+            //        if (!string.IsNullOrEmpty(id))
+            //        {
+            //            var result = new Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel(setId);
+            //            return Ok(JObject.FromObject(result));
+            //        }
+            //        else
+            //        {
+            //            var model = new MixPostAttributeData()
+            //            {
+            //                Status = MixService.GetConfig<int>("DefaultStatus"),
+            //                AttributeSetId = setId,
+            //                Specificulture = _lang,
+            //                Priority = Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
+            //            };
 
-                        RepositoryResponse<Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel> result =
-                            await base.GetSingleAsync<Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel, MixPostAttributeData>($"{viewType}_default", null, model);
-                        return Ok(JObject.FromObject(result));
-                    }
-                default:
-                    if (!string.IsNullOrEmpty(id))
-                    {
-                        Expression<Func<MixPostAttributeData, bool>> predicate = model => model.Id == id;
-                        var result = await base.GetSingleAsync<Lib.ViewModels.MixPostAttributeDatas.ReadViewModel, MixPostAttributeData>(
-                            $"{viewType}_{id}", predicate);
-                        return Ok(JObject.FromObject(result));
-                    }
-                    else
-                    {
-                        var model = new MixPostAttributeData()
-                        {
-                            Status = MixService.GetConfig<int>("DefaultStatus")
-                           ,
-                            Priority = Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
-                        };
+            //            RepositoryResponse<Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel> result =
+            //                await base.GetSingleAsync<Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel, MixPostAttributeData>($"{viewType}_default", null, model);
+            //            return Ok(JObject.FromObject(result));
+            //        }
+            //    default:
+            //        if (!string.IsNullOrEmpty(id))
+            //        {
+            //            Expression<Func<MixPostAttributeData, bool>> predicate = model => model.Id == id;
+            //            var result = await base.GetSingleAsync<Lib.ViewModels.MixPostAttributeDatas.ReadViewModel, MixPostAttributeData>(
+            //                $"{viewType}_{id}", predicate);
+            //            return Ok(JObject.FromObject(result));
+            //        }
+            //        else
+            //        {
+            //            var model = new MixPostAttributeData()
+            //            {
+            //                Status = MixService.GetConfig<int>("DefaultStatus")
+            //               ,
+            //                Priority = Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
+            //            };
 
-                        RepositoryResponse<Lib.ViewModels.MixPostAttributeDatas.ReadViewModel> result = await base.GetSingleAsync<Lib.ViewModels.MixPostAttributeDatas.ReadViewModel, MixPostAttributeData>(
-                            $"{viewType}_default", null, model);
-                        return Ok(JObject.FromObject(result));
-                    }
-            }
+            //            RepositoryResponse<Lib.ViewModels.MixPostAttributeDatas.ReadViewModel> result = await base.GetSingleAsync<Lib.ViewModels.MixPostAttributeDatas.ReadViewModel, MixPostAttributeData>(
+            //                $"{viewType}_default", null, model);
+            //            return Ok(JObject.FromObject(result));
+            //        }
+            //}
         }
 
         #endregion Get

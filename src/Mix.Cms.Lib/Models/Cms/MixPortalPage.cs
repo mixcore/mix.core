@@ -7,9 +7,7 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixPortalPage()
         {
-            MixPortalPageNavigationIdNavigation = new HashSet<MixPortalPageNavigation>();
             MixPortalPageNavigationParent = new HashSet<MixPortalPageNavigation>();
-            MixPortalPagePosition = new HashSet<MixPortalPagePosition>();
             MixPortalPageRole = new HashSet<MixPortalPageRole>();
         }
 
@@ -25,9 +23,8 @@ namespace Mix.Cms.Lib.Models.Cms
         public string TextDefault { get; set; }
         public int Level { get; set; }
 
-        public virtual ICollection<MixPortalPageNavigation> MixPortalPageNavigationIdNavigation { get; set; }
+        public virtual MixPortalPageNavigation MixPortalPageNavigationIdNavigation { get; set; }
         public virtual ICollection<MixPortalPageNavigation> MixPortalPageNavigationParent { get; set; }
-        public virtual ICollection<MixPortalPagePosition> MixPortalPagePosition { get; set; }
         public virtual ICollection<MixPortalPageRole> MixPortalPageRole { get; set; }
     }
 }

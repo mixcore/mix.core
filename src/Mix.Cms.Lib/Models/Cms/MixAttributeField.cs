@@ -5,13 +5,6 @@ namespace Mix.Cms.Lib.Models.Cms
 {
     public partial class MixAttributeField
     {
-        public MixAttributeField()
-        {
-            MixModuleAttributeValue = new HashSet<MixModuleAttributeValue>();
-            MixPageAttributeValue = new HashSet<MixPageAttributeValue>();
-            MixPostAttributeValue = new HashSet<MixPostAttributeValue>();
-        }
-
         public int Id { get; set; }
         public int AttributeSetId { get; set; }
         public string AttributeSetName { get; set; }
@@ -32,8 +25,5 @@ namespace Mix.Cms.Lib.Models.Cms
 
         public virtual MixAttributeSet AttributeSet { get; set; }
         public virtual MixAttributeSet Reference { get; set; }
-        public virtual ICollection<MixModuleAttributeValue> MixModuleAttributeValue { get; set; }
-        public virtual ICollection<MixPageAttributeValue> MixPageAttributeValue { get; set; }
-        public virtual ICollection<MixPostAttributeValue> MixPostAttributeValue { get; set; }
     }
 }

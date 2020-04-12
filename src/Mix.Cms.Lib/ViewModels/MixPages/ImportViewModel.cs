@@ -277,16 +277,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 context, transaction).Data;
         }
 
-        public List<MixPagePages.ReadViewModel> GetParentNavs(MixCmsContext context, IDbContextTransaction transaction)
-        {
-            return MixPagePages.ReadViewModel.Repository.GetModelListBy(p => p.Specificulture == Specificulture && p.Id == Id).Data;
-        }
-
-        public List<MixPagePages.ReadViewModel> GetChildNavs(MixCmsContext context, IDbContextTransaction transaction)
-        {
-            return MixPagePages.ReadViewModel.Repository.GetModelListBy(p => p.Specificulture == Specificulture && p.ParentId == Id).Data;
-        }
-
         #endregion Expands
     }
 }

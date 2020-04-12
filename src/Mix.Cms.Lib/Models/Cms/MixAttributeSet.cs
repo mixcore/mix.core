@@ -11,10 +11,6 @@ namespace Mix.Cms.Lib.Models.Cms
             MixAttributeFieldReference = new HashSet<MixAttributeField>();
             MixAttributeSetData = new HashSet<MixAttributeSetData>();
             MixAttributeSetReference = new HashSet<MixAttributeSetReference>();
-            MixModuleAttributeData = new HashSet<MixModuleAttributeData>();
-            MixModuleAttributeSet = new HashSet<MixModuleAttributeSet>();
-            MixPageAttributeSet = new HashSet<MixPageAttributeSet>();
-            MixPostAttributeSet = new HashSet<MixPostAttributeSet>();
             MixRelatedAttributeSet = new HashSet<MixRelatedAttributeSet>();
         }
 
@@ -36,10 +32,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual ICollection<MixAttributeField> MixAttributeFieldReference { get; set; }
         public virtual ICollection<MixAttributeSetData> MixAttributeSetData { get; set; }
         public virtual ICollection<MixAttributeSetReference> MixAttributeSetReference { get; set; }
-        public virtual ICollection<MixModuleAttributeData> MixModuleAttributeData { get; set; }
-        public virtual ICollection<MixModuleAttributeSet> MixModuleAttributeSet { get; set; }
-        public virtual ICollection<MixPageAttributeSet> MixPageAttributeSet { get; set; }
-        public virtual ICollection<MixPostAttributeSet> MixPostAttributeSet { get; set; }
         public virtual ICollection<MixRelatedAttributeSet> MixRelatedAttributeSet { get; set; }
     }
 }

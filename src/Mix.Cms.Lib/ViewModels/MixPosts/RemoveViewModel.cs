@@ -180,31 +180,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 }
             }
 
-            // Remove Attributes Value
-            if (result.IsSucceed)
-            {
-                var values = await _context.MixPostAttributeValue.Where(n => n.PostId == Id
-                    && n.Specificulture == Specificulture).ToListAsync();
-                foreach (var item in values)
-                {
-                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-                }
-
-                var data = await _context.MixPostAttributeData.Where(n => n.PostId == Id
-                    && n.Specificulture == Specificulture).ToListAsync();
-                foreach (var item in data)
-                {
-                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-                }
-
-                var sets = await _context.MixPostAttributeSet.Where(n => n.PostId == Id
-                     && n.Specificulture == Specificulture).ToListAsync();
-                foreach (var item in sets)
-                {
-                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-                }
-            }
-
             await _context.SaveChangesAsync();
             return result;
         }
