@@ -54,8 +54,9 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
 
         public override MixRelatedAttributeSet ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (CreatedDateTime == default(DateTime))
+            if (Id==0)
             {
+                Id = Repository.Count(m => m.Specificulture == Specificulture).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
             return base.ParseModel(_context, _transaction);

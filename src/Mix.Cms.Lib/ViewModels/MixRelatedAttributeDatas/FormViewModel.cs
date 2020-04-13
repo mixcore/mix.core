@@ -96,16 +96,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
             AttributeSetName = _context.MixAttributeSet.FirstOrDefault(m => m.Id == AttributeSetId)?.Name;
         }
 
-        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        //{
-        //    var tasks = new List<Task>();
-        //    tasks.Add(Task.Factory.StartNew(() =>
-        //    {
-        //        Data.GenerateCache(Data.Model, Data);
-        //    }));
-        //    return tasks;
-        //}
-
+        
         #endregion overrides
     }
 }
