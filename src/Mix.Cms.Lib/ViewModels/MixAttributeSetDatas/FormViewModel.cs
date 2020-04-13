@@ -233,10 +233,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     {
                         var nav = new MixRelatedAttributeDatas.UpdateViewModel()
                         {
+                            DataId = Id,
+                            Specificulture = Specificulture,
                             AttributeSetId = AttributeSetId,
                             AttributeSetName = AttributeSetName,
-                            Id = Id,
-                            Specificulture = Specificulture,
                             ParentType = ParentType,
                             ParentId = ParentId,
                             Status = MixEnums.MixContentStatus.Published 
