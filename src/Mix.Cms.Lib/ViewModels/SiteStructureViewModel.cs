@@ -175,7 +175,7 @@ namespace Mix.Cms.Lib.ViewModels
 
         private void GetAdditionalData(string id, MixEnums.MixAttributeSetDataType type, MixCmsContext context, IDbContextTransaction transaction)
         {
-            if (!RelatedData.Any(m => m.ParentId == id && m.ParentType == (int)type))
+            if (!RelatedData.Any(m => m.ParentId == id && m.ParentType == type))
             {
                 var getRelatedData = MixRelatedAttributeDatas.ImportViewModel.Repository.GetSingleModel(
                             m => m.Specificulture == Specificulture && m.ParentType == (int)type
@@ -276,7 +276,7 @@ namespace Mix.Cms.Lib.ViewModels
         private async Task<RepositoryResponse<bool>> ImportModulesAsync(string destCulture, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            dicModuleIds = new Dictionary<int, int>();
+            
             foreach (var module in Modules)
             {
                 
@@ -304,18 +304,6 @@ namespace Mix.Cms.Lib.ViewModels
                 }
             }
 
-            // map data id
-            foreach (var item in dicModuleIds)
-            {
-                var related = RelatedData.Where(
-                        m => !m.IsProcessed && m.ParentType == (int)MixEnums.MixAttributeSetDataType.Module && m.ParentId == item.Key.ToString());
-                foreach (var r in related)
-                {
-                    r.IsProcessed = true;
-                    r.ParentId = item.Value.ToString();
-                }
-            }
-            
             return result;
         }
 
@@ -415,17 +403,6 @@ namespace Mix.Cms.Lib.ViewModels
                         result.Errors = saveResult.Errors;
                         break;
                     }
-                    else
-                    {
-                        // update new id to related attribute data
-                        var related = RelatedData.Where(
-                        m => m.ParentType == (int)MixEnums.MixAttributeSetDataType.Page && m.ParentId == oldId.ToString());
-                        foreach (var r in related)
-                        {
-                            r.ParentId = item.Id.ToString();
-                        }
-                        
-                    }
                 }
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
             }
@@ -491,6 +468,40 @@ namespace Mix.Cms.Lib.ViewModels
             {
                 item.Id = Guid.NewGuid().ToString();
                 item.Specificulture = desCulture;
+                switch (item.ParentType)
+                {
+                    case MixEnums.MixAttributeSetDataType.System:
+                        break;
+                    case MixEnums.MixAttributeSetDataType.Set:
+                        item.AttributeSetId = dicAttributeSetIds[int.Parse(item.ParentId)];
+                        break;
+                    case MixEnums.MixAttributeSetDataType.Post:
+                        break;
+                    case MixEnums.MixAttributeSetDataType.Page:
+                        if (dicPageIds.TryGetValue(int.Parse(item.ParentId), out int pageId))
+                        {
+                            item.ParentId = pageId.ToString();
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                        break;
+                    case MixEnums.MixAttributeSetDataType.Module:
+                        if (dicModuleIds.TryGetValue(int.Parse(item.ParentId), out int moduleId))
+                        {
+                            item.ParentId = moduleId.ToString();
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                        break;
+                    case MixEnums.MixAttributeSetDataType.Service:
+                        break;
+                    default:
+                        break;
+                }
                 if (result.IsSucceed)
                 {
                     var saveResult = await item.SaveModelAsync(false, context, transaction);
