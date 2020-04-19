@@ -77,25 +77,24 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         public async Task<ActionResult<UpdateViewModel>> Get(int id)
         {
             Expression<Func<MixAttributeSet, bool>> predicate = null;
-            MixAttributeSet risk = null;
             if (id == 0)
             {
-                risk = new MixAttributeSet()
-                {
-                };
+                var set = new UpdateViewModel();
+                set.ExpandView();
+                return Ok(set);
             }
             else
             {
                 predicate = model => (model.Id == id);
-            }
-            var getData = await base.GetSingleAsync<UpdateViewModel>(predicate, risk);
-            if (getData.IsSucceed)
-            {
-                return getData.Data;
-            }
-            else
-            {
-                return NotFound();
+                var getData = await base.GetSingleAsync<UpdateViewModel>(predicate);
+                if (getData.IsSucceed)
+                {
+                    return getData.Data;
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
         }
 

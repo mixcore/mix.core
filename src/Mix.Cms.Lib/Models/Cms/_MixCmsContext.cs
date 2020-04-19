@@ -53,6 +53,7 @@ namespace Mix.Cms.Lib.Models.Cms
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.EnableSensitiveDataLogging(true);
             //define the database to use
             string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
@@ -913,12 +914,6 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.ParentId)
                     .IsRequired()
                     .HasMaxLength(50);
-
-                entity.HasOne(d => d.MixAttributeSetData)
-                    .WithOne(p => p.MixRelatedAttributeData)
-                    .HasForeignKey<MixRelatedAttributeData>(d => new { d.Id, d.Specificulture })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_mix_related_attribute_data_mix_attribute_set_data2");
             });
 
             modelBuilder.Entity<MixRelatedAttributeSet>(entity =>

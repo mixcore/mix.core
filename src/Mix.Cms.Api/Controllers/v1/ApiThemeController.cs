@@ -15,6 +15,7 @@ using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Cms.Lib.ViewModels.MixThemes;
 using Mix.Domain.Core.ViewModels;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -198,8 +199,8 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("save")]
         public async Task<RepositoryResponse<UpdateViewModel>> Save([FromForm]string model, [FromForm]IFormFile assets, [FromForm]IFormFile theme)
         {
-            var json = JObject.Parse(model);
-            var data = json.ToObject<UpdateViewModel>();
+            var data = JsonConvert.DeserializeObject<UpdateViewModel>(model);
+
             if (assets != null)
             {
                 data.Asset = new Lib.ViewModels.FileViewModel(assets, data.AssetFolder);

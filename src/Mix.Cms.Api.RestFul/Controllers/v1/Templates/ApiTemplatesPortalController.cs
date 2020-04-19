@@ -59,27 +59,47 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         {
             Expression<Func<MixTemplate, bool>> predicate = null;
             MixTemplate risk = null;
+            string folderType = Request.Query["folderType"];
+            bool isThemeId = int.TryParse(Request.Query["themeId"], out int themeId);
             if (id == 0)
             {
-                risk = new MixTemplate()
-                {
-                };
+
+                UpdateViewModel data = LoadDefaultTheme(themeId, folderType);
+                return Ok(data);
             }
             else
             {
                 predicate = model => (model.Id == id);
-            }
-            var getData = await base.GetSingleAsync<UpdateViewModel>(predicate, risk);
-            if (getData.IsSucceed)
-            {
-                return getData.Data;
-            }
-            else
-            {
-                return NotFound();
+
+                var getData = await base.GetSingleAsync<UpdateViewModel>(predicate);
+
+                if (getData.IsSucceed)
+                {
+                    return Ok(getData.Data);
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
         }
-        
+
+        private UpdateViewModel LoadDefaultTheme(int themeId, string folderType)
+        {
+            var data = new UpdateViewModel()
+            {
+                FolderType = folderType,
+                ThemeId = themeId
+            };
+            if (themeId>0)
+            {
+                var theme = Lib.ViewModels.MixThemes.ReadViewModel.Repository.GetSingleModel(m => m.Id == themeId).Data;
+                data.ThemeName = theme.Name;
+            }
+            data.ExpandView();
+            return data;
+        }
+
         // GET: api/s/5
         [HttpGet("copy/{id}")]
         public async Task<ActionResult<UpdateViewModel>> Copy(int id)
@@ -93,24 +113,25 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             else
             {
                 predicate = model => (model.Id == id);
-            }
-            var getData = await base.GetSingleAsync<UpdateViewModel>(predicate, risk);
-            if (getData.IsSucceed)
-            {
-                var copyResult = await getData.Data.CopyAsync();
-                if (copyResult.IsSucceed)
-                {
-                    return Ok(copyResult.Data);
 
+                var getData = await base.GetSingleAsync<UpdateViewModel>(predicate);
+                if (getData.IsSucceed)
+                {
+                    var copyResult = await getData.Data.CopyAsync();
+                    if (copyResult.IsSucceed)
+                    {
+                        return Ok(copyResult.Data);
+
+                    }
+                    else
+                    {
+                        return BadRequest(copyResult.Errors);
+                    }
                 }
                 else
                 {
-                    return BadRequest(copyResult.Errors);
+                    return NotFound();
                 }
-            }
-            else
-            {
-                return NotFound();
             }
         }
 
@@ -145,7 +166,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpPatch("{id}")]
         public async Task<IActionResult> Patch(int id, [FromBody]JObject fields)
         {
-            var result = await base.GetSingleAsync<UpdateViewModel>(m => m.Id == id, null);
+            var result = await base.GetSingleAsync<UpdateViewModel>(m => m.Id == id);
             if (result.IsSucceed)
             {
                 var saveResult = await result.Data.UpdateFieldsAsync(fields);

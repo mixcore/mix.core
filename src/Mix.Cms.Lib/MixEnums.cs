@@ -283,6 +283,16 @@ namespace Mix.Cms.Lib
             BadRequest = 2
         }
 
+        public enum CompareType
+        {
+            Eq = 1,
+            Lt = 2,
+            Gt = 3,
+            Lte = 4,
+            Gte = 5,
+            In = 6
+        }
+
         public static List<object> EnumToObject(Type enumType)
         {
             List<object> result = new List<object>();

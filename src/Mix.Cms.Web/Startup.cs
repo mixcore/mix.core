@@ -2,11 +2,9 @@ using GraphiQl;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Mix.Cms.Api.OData;
 using Mix.Cms.Api.RestFul;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
@@ -47,7 +45,6 @@ namespace Mix.Cms.Web
             /* Mix: Inject Services */
             services.AddControllers(mvcOptions => mvcOptions.EnableEndpointRouting = false);
 
-            services.AddMixODataApi();
             services.AddMixRestApi();
             services.AddMixSignalR();
             services.AddMixGprc();
@@ -92,7 +89,6 @@ namespace Mix.Cms.Web
                 app.UseHttpsRedirection();
             }
             app.UseMixRestApi();
-            app.UseMixODataApi();
             app.UseMixGprc();
 
             app.UseMixSignalR();

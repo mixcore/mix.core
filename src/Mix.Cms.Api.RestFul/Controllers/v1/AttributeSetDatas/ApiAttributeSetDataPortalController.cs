@@ -67,23 +67,23 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             MixAttributeSetData risk = null;
             if (id == MixConstants.CONST_DEFAULT_STRING_ID)
             {
-                risk = new MixAttributeSetData()
-                {
-                    Specificulture = _lang
-                };
+                var data = new UpdateViewModel();
+                data.ExpandView();
+                return Ok(data);
             }
             else
             {
                 predicate = model => model.Specificulture == _lang && (model.Id == id);
-            }
-            var getData = await base.GetSingleAsync<FormViewModel>(predicate, risk);
-            if (getData.IsSucceed)
-            {
-                return getData.Data;
-            }
-            else
-            {
-                return NotFound();
+            
+            var getData = await base.GetSingleAsync<FormViewModel>(predicate);
+                if (getData.IsSucceed)
+                {
+                    return getData.Data;
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
         }
 

@@ -94,13 +94,26 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
             base.Validate(_context, _transaction);
             if (IsValid)
             {
-                // Check if there is field name in the same attribute set
-                IsValid = !Repository.CheckIsExists(f => f.Id != Id && f.Name == Name && f.AttributeSetId == AttributeSetId);
-                if (!IsValid)
+                if (AttributeSetName != "sys_additional_field")
                 {
-                    Errors.Add($"Field {Name} Existed");
+                    // Check if there is field name in the same attribute set
+                    IsValid = !Repository.CheckIsExists(f => f.Id != Id && f.Name == Name && f.AttributeSetId == AttributeSetId);
+                    if (!IsValid)
+                    {
+                        Errors.Add($"Field {Name} Existed");
+                    }
+                }
+                else
+                {
+                    var currentField = Repository.GetSingleModel(m => m.Name == Name && m.DataType == (int)DataType, _context, _transaction);
+                    if (currentField.IsSucceed)
+                    {
+                        Id = currentField.Data.Id;
+                        CreatedDateTime = currentField.Data.CreatedDateTime;
+                    }
                 }
             }
+
         }
 
         public override MixAttributeField ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
