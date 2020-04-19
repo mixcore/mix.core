@@ -15,6 +15,5 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Status { get; set; }
 
         public virtual MixAttributeSet AttributeSet { get; set; }
-        public virtual MixRelatedAttributeData MixRelatedAttributeData { get; set; }
     }
 }

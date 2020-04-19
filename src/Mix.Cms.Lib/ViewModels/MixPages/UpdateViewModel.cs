@@ -646,26 +646,26 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public List<MixPageModules.ReadMvcViewModel> GetModuleNavs(MixCmsContext context, IDbContextTransaction transaction)
         {
-            var query = context.MixModule
-                .Include(cp => cp.MixPageModule)
-                .Where(module => module.Specificulture == Specificulture)
-                .Select(module => new MixPageModules.ReadMvcViewModel()
-                {
-                    PageId = Id,
-                    ModuleId = module.Id,
-                    Specificulture = Specificulture,
-                    Description = module.Title,
-                    Image = module.Image
-                });
-
-            var result = query.ToList();
+            // Load Actived Modules
+            var result = MixPageModules.ReadMvcViewModel.Repository.GetModelListBy(m => m.PageId == Id && m.Specificulture == Specificulture).Data;
             result.ForEach(nav =>
             {
-                var currentNav = context.MixPageModule.FirstOrDefault(
-                        m => m.ModuleId == nav.ModuleId && m.PageId == Id && m.Specificulture == Specificulture);
-                nav.Priority = currentNav?.Priority ?? 0;
-                nav.IsActived = currentNav != null;
+                nav.IsActived = true;
             });
+            var moduleids = result.Select(m => m.ModuleId);
+            // Load inactived modules
+            var otherModules = MixModules.ReadListItemViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture && !moduleids.Any(r => r == m.Id)).Data;
+            foreach (var item in otherModules)
+            {
+                result.Add(new MixPageModules.ReadMvcViewModel()
+                {
+                    Specificulture = Specificulture,
+                    PageId = Id,
+                    ModuleId = item.Id,
+                    Image = item.ImageUrl,
+                    Description = item.Title
+                });
+            }
             return result.OrderBy(m => m.Priority).ToList();
         }
 

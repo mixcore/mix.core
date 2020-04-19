@@ -56,23 +56,23 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             MixRelatedAttributeData risk = null;
             if (id == MixConstants.CONST_DEFAULT_STRING_ID)
             {
-                risk = new MixRelatedAttributeData()
-                {
-                    Specificulture = _lang
-                };
+                var data = new FormViewModel();
+                data.ExpandView();
+                return Ok(data);
             }
             else
             {
                 predicate = model => model.Specificulture == _lang && (model.Id == id);
-            }
-            var getData = await base.GetSingleAsync<FormViewModel>(predicate, risk);
-            if (getData.IsSucceed)
-            {
-                return getData.Data;
-            }
-            else
-            {
-                return NotFound();
+
+                var getData = await base.GetSingleAsync<FormViewModel>(predicate);
+                if (getData.IsSucceed)
+                {
+                    return getData.Data;
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
         }
 
@@ -124,7 +124,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpPatch("{id}")]
         public async Task<IActionResult> Patch(string id, [FromBody]JObject fields)
         {
-            var result = await base.GetSingleAsync<FormViewModel>(m => m.Id == id, null);
+            var result = await base.GetSingleAsync<FormViewModel>(m => m.Id == id);
             if (result.IsSucceed)
             {
                 var saveResult = await result.Data.UpdateFieldsAsync(fields);

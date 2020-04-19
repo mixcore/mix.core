@@ -39,7 +39,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         public string FileName { get; set; }
 
         [JsonProperty("extension")]
-        public string Extension { get; set; }
+        public string Extension { get; set; } = ".cshtml";
 
         [Required]
         [JsonProperty("content")]
@@ -122,11 +122,14 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var file = FileRepository.Instance.GetFile(FileName, Extension, FileFolder);
-            if (!string.IsNullOrWhiteSpace(file?.Content))
+            if (!string.IsNullOrEmpty(FileName))
             {
-                Content = file.Content;
-            }
+                var file = FileRepository.Instance.GetFile(FileName, Extension, FileFolder);
+                if (!string.IsNullOrWhiteSpace(file?.Content))
+                {
+                    Content = file.Content;
+                }
+            }            
         }
 
         public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)

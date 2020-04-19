@@ -99,22 +99,22 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             MixAttributeField risk = null;
             if (id == 0)
             {
-                risk = new MixAttributeField()
-                {
-                };
+                var data = new UpdateViewModel();
+                data.ExpandView();
+                return Ok(data);
             }
             else
             {
                 predicate = model => (model.Id == id);
-            }
-            var getData = await base.GetSingleAsync<UpdateViewModel>(predicate, risk);
-            if (getData.IsSucceed)
-            {
-                return getData.Data;
-            }
-            else
-            {
-                return NotFound();
+                var getData = await base.GetSingleAsync<UpdateViewModel>(predicate);
+                if (getData.IsSucceed)
+                {
+                    return getData.Data;
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
         }
 

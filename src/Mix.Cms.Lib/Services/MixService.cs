@@ -205,10 +205,10 @@ namespace Mix.Cms.Lib.Services
             if (!string.IsNullOrEmpty(culture) && Instance.LocalSettings[culture] != null)
             {
                 result = Instance.LocalSettings[culture][name];
-                if (result == null)
-                {
-                    result = DefaultInstance.LocalSettings[MixService.GetConfig<string>("DefaultCulture")][name];
-                }
+                //if (result == null)
+                //{
+                //    result = DefaultInstance.LocalSettings[MixService.GetConfig<string>("DefaultCulture")][name];
+                //}
             }
             return result != null ? result.Value<T>() : default;
         }

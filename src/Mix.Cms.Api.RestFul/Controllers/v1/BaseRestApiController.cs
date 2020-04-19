@@ -67,21 +67,13 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         }
         #endregion Overrides
 
-        protected async Task<RepositoryResponse<TView>> GetSingleAsync<TView>(Expression<Func<TModel, bool>> predicate = null, TModel model = null)
+        protected async Task<RepositoryResponse<TView>> GetSingleAsync<TView>(Expression<Func<TModel, bool>> predicate = null)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
             RepositoryResponse<TView> data = null;
             if (predicate != null)
             {
                 data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
-            }
-            else if (model != null)
-            {
-                data = new RepositoryResponse<TView>()
-                {
-                    IsSucceed = true,
-                    Data = DefaultRepository<TDbContext, TModel, TView>.Instance.ParseView(model)
-                };
             }
             return data;
         }

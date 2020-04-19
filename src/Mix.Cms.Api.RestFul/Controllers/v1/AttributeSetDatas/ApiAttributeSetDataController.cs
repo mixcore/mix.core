@@ -62,26 +62,28 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         public async Task<ActionResult<UpdateViewModel>> Get(string id)
         {
             Expression<Func<MixAttributeSetData, bool>> predicate = null;
-            MixAttributeSetData risk = null;
             if (id == MixConstants.CONST_DEFAULT_STRING_ID)
             {
-                risk = new MixAttributeSetData()
+                var risk = new UpdateViewModel()
                 {
                     Specificulture = _lang
                 };
+                risk.ExpandView();
+                return Ok(risk);
             }
             else
             {
                 predicate = model => model.Specificulture == _lang && (model.Id == id);
-            }
-            var getData = await base.GetSingleAsync<UpdateViewModel>(predicate, risk);
-            if (getData.IsSucceed)
-            {
-                return getData.Data;
-            }
-            else
-            {
-                return NotFound();
+
+                var getData = await base.GetSingleAsync<UpdateViewModel>(predicate);
+                if (getData.IsSucceed)
+                {
+                    return getData.Data;
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
         }
 

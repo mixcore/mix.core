@@ -281,11 +281,13 @@ namespace Mix.Cms.Lib.ViewModels
             {
                 
                 var oldId = module.Id;
+                var startId = context.MixModule.Max(m => m.Id);
                 if (result.IsSucceed)
                 {
                     if (!context.MixModule.Any(m => m.Name == module.Name && m.Specificulture == destCulture))
                     {
-                        module.Id = context.MixModule.Max(m => m.Id) + 1;
+                        startId++;
+                        module.Id = startId;
                         module.Specificulture = destCulture;
                         if (!string.IsNullOrEmpty(module.Image))
                         {
@@ -434,7 +436,12 @@ namespace Mix.Cms.Lib.ViewModels
                     if (!context.MixAttributeSetData.Any(m => m.Id == item.Id && m.Specificulture == item.Specificulture))
                     {
                         item.Specificulture = destCulture;
-                        item.AttributeSetId = dicAttributeSetIds[item.AttributeSetId];                        
+
+                        // update new Id if not system attribute
+                        if (item.AttributeSetName.IndexOf("sys_") !=0 && dicAttributeSetIds.ContainsKey(item.AttributeSetId))
+                        {
+                            item.AttributeSetId = dicAttributeSetIds[item.AttributeSetId];
+                        }
                         item.Fields = item.Fields ?? MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(
                             m => m.AttributeSetId == item.AttributeSetId, context, transaction).Data;
                         foreach (var field in item.Fields)

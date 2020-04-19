@@ -5,6 +5,8 @@
     string layout = "Masters/_Layout.cshtml";
     var masterTemplate = await MixCmsHelper.GetTemplateByPath(master, layout);
     Layout = $"{templateFolder}/{layout}";
+    var posts = Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetModelistByAddictionalField<Mix.Cms.Lib.ViewModels.MixPosts.ReadListItemViewModel>("highlight", "true", ViewBag.culture, MixEnums.MixDataType.Boolean, MixEnums.CompareType.Eq
+            , null, 0, null, null, null, null);
 }
 <div>
     <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
