@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Common.Helper;
+using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -67,8 +69,8 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         #region Views
 
-        [JsonProperty("data")]
-        public MixAttributeSetDatas.FormViewModel Data { get; set; }
+        [JsonProperty("attributeData")]
+        public MixAttributeSetDatas.FormViewModel AttributeData { get; set; }
 
         #endregion Views
 
@@ -91,12 +93,55 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
             );
             if (getData.IsSucceed)
             {
-                Data = getData.Data;
+                AttributeData = getData.Data;
             }
             AttributeSetName = _context.MixAttributeSet.FirstOrDefault(m => m.Id == AttributeSetId)?.Name;
         }
 
-        
+        public override async Task<RepositoryResponse<FormViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<FormViewModel>() { IsSucceed = true };
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                if (AttributeData!= null && string.IsNullOrEmpty(AttributeData.Id))
+                {
+                    var saveData = await AttributeData.SaveModelAsync(true, context, transaction);
+                    if (!saveData.IsSucceed)
+                    {
+                        result.IsSucceed = false;
+                        result.Errors = saveData.Errors;
+                        result.Exception = saveData.Exception;
+                    }
+                    else
+                    {
+                        DataId = saveData.Data.Id;
+                    }
+                }
+                else
+                {
+                    DataId = AttributeData.Id;
+                }
+                if (result.IsSucceed)
+                {
+                    result = await base.SaveModelAsync(true, context, transaction);
+                }
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<FormViewModel>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    context.Dispose();
+                }
+            }
+        }
+
         #endregion overrides
     }
 }

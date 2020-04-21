@@ -1,0 +1,16 @@
+@using Mix.Cms.Lib
+@using Mix.Cms.Lib.Services
+@model Mix.Cms.Lib.ViewModels.MixPosts.ReadMvcViewModel
+@{ 
+   string assetFolder = MixCmsHelper.GetAssetFolder(ViewBag.culture); 
+   string templateFolder = MixCmsHelper.GetTemplateFolder(ViewBag.culture);
+}
+@*
+    // Get Configuration
+    @MixService.GetConfig<T>("conf_name", ViewBag.culture)
+
+    // Get Extra Attribute
+    @(Model.Property<TDataType>("[propertyName]"))
+    ex: @(Model.Property<string>("html_title"))
+*@
+@Model.Title

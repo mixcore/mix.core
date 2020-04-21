@@ -60,7 +60,7 @@ namespace Mix.Cms.Service.SignalR.Hubs
             {
                 Specificulture = request.Specificulture,
                 AttributeSetName = request.Room,
-                Data = request.Data,
+                Obj = request.Data,
                 CreatedBy = request.Uid
             };
             var saveData = await data.SaveModelAsync(true);

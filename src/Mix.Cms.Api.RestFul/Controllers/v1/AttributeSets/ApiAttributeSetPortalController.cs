@@ -17,7 +17,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
-    [Route("api/v1/rest/{culture}/attribute-set/portal")]
+    [Route("api/v1/rest/attribute-set/portal")]
     public class ApiAttributeSetPortalController :
         BaseRestApiController<MixCmsContext, MixAttributeSet>
     {
