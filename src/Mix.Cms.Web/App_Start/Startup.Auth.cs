@@ -29,10 +29,11 @@ namespace Mix.Cms.Web
                 RequireNonAlphanumeric = false,
                 RequireUppercase = false
             };
-
+            
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password = pOpt;
+                
             })
                 .AddEntityFrameworkStores<MixDbContext>()
                 .AddDefaultTokenProviders()

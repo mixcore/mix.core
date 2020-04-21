@@ -46,6 +46,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                     Specificulture = _lang,
                     AttributeSetId = getAttrSet.Data.Id,
                     AttributeSetName = getAttrSet.Data.Name,
+                    Status = MixEnums.MixContentStatus.Published,
                     Fields = getAttrSet.Data.Fields
                 };
                 result.ExpandView();

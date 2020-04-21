@@ -99,9 +99,14 @@ namespace Mix.Cms.Api.Controllers.v1
                         return Ok(loginResult);
                     }
                 }
+                if (result.IsLockedOut)
+                {
+                    loginResult.Errors.Add("This account has been locked out, please try again later.");
+                    return BadRequest(loginResult);
+                }
                 else
                 {
-                    loginResult.Errors.Add("login failed");
+                    loginResult.Errors.Add("Login failed");
                     return BadRequest(loginResult);
                 }
             }

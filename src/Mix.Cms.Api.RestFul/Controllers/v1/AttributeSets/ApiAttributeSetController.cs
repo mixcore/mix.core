@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
     [Produces("application/json")]
-    [Route("api/v1/rest/{culture}/attribute-set/client")]
+    [Route("api/v1/rest/attribute-set/client")]
     public class ApiAttributeSetController :
         BaseRestApiController<MixCmsContext, MixAttributeSet>
     {

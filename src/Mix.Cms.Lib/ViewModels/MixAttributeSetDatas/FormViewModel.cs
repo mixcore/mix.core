@@ -50,8 +50,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #endregion Models
 
         #region Views
-        [JsonProperty("data")]
-        public JObject Data { get; set; }
+        [JsonProperty("obj")]
+        public JObject Obj { get; set; }
 
         [JsonProperty("parentId")]
         public string ParentId { get; set; }
@@ -95,7 +95,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (Data == null)
+            if (Obj == null)
             {
                 ParseData(_context, _transaction);
             }
@@ -143,11 +143,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
                 val.Priority = field.Priority;
                 val.AttributeSetName = AttributeSetName;
-                if (Data[val.AttributeFieldName] != null)
+                if (Obj[val.AttributeFieldName] != null)
                 {
                     if (val.Field.DataType == MixEnums.MixDataType.Reference)
                     {
-                        var arr = Data[val.AttributeFieldName].Value<JArray>();
+                        var arr = Obj[val.AttributeFieldName].Value<JArray>();
                         if (arr != null)
                         {
 
@@ -170,7 +170,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                                     {
                                         Specificulture = Specificulture,
                                         AttributeSetId = field.ReferenceId.Value,
-                                        Data = objData
+                                        Obj = objData
                                     });
                                 }
                             }
@@ -178,12 +178,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     }
                     else
                     {
-                        ParseModelValue(Data[val.AttributeFieldName], val);
+                        ParseModelValue(Obj[val.AttributeFieldName], val);
                     }
                 }
                 else
                 {
-                    Data.Add(ParseValue(val));
+                    Obj.Add(ParseValue(val));
                 }
             }
 
@@ -194,9 +194,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             if (edmField != null && getEdm.IsSucceed && !string.IsNullOrEmpty(getEdm.Data.Content))
             {
                 string body = getEdm.Data.Content;
-                foreach (var prop in Data.Properties())
+                foreach (var prop in Obj.Properties())
                 {
-                    body = body.Replace($"[[{prop.Name}]]", Data[prop.Name].Value<string>());
+                    body = body.Replace($"[[{prop.Name}]]", Obj[prop.Name].Value<string>());
                 }
                 var edmFile = new FileViewModel()
                 {
@@ -207,7 +207,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 };
                 if (FileRepository.Instance.SaveWebFile(edmFile))
                 {
-                    Data["edm"] = edmFile.WebPath;
+                    Obj["edm"] = edmFile.WebPath;
                     edmField.StringValue = edmFile.WebPath;
                 }
             }
@@ -217,59 +217,59 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #region Async
 
-        public override async Task<RepositoryResponse<FormViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            try
-            {
+        //public override async Task<RepositoryResponse<FormViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        //{
+        //    UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+        //    try
+        //    {
 
-                var result = await base.SaveModelAsync(isSaveSubModels, context, transaction);
-                if (result.IsSucceed && !string.IsNullOrEmpty(ParentId))
-                {
-                    var getNav = MixRelatedAttributeDatas.UpdateViewModel.Repository.CheckIsExists(
-                        m => m.DataId == Id && m.ParentId == ParentId && m.ParentType == ParentType && m.Specificulture == Specificulture
-                        , context, transaction);
-                    if (!getNav)
-                    {
-                        var nav = new MixRelatedAttributeDatas.UpdateViewModel()
-                        {
-                            DataId = Id,
-                            Specificulture = Specificulture,
-                            AttributeSetId = AttributeSetId,
-                            AttributeSetName = AttributeSetName,
-                            ParentType = ParentType,
-                            ParentId = ParentId,
-                            Status = MixEnums.MixContentStatus.Published 
-                        };
-                        var saveResult = await nav.SaveModelAsync(false, context, transaction);
-                        if (!saveResult.IsSucceed)
-                        {
-                            result.IsSucceed = false;
-                            result.Exception = saveResult.Exception;
-                            result.Errors = saveResult.Errors;
-                        }
-                    }
-                }
-                if (result.IsSucceed)
-                {
-                    ParseData();
-                }
-                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
-                return result;
-            }
-            catch(Exception ex)
-            {
-                return UnitOfWorkHelper<MixCmsContext>.HandleException<FormViewModel>(ex, isRoot, transaction);
-            }
-            finally
-            {
-                if (isRoot)
-                {
-                    context.Dispose();
-                }
-            }
+        //        var result = await base.SaveModelAsync(isSaveSubModels, context, transaction);
+        //        if (result.IsSucceed && !string.IsNullOrEmpty(ParentId))
+        //        {
+        //            var getNav = MixRelatedAttributeDatas.UpdateViewModel.Repository.CheckIsExists(
+        //                m => m.DataId == Id && m.ParentId == ParentId && m.ParentType == ParentType && m.Specificulture == Specificulture
+        //                , context, transaction);
+        //            if (!getNav)
+        //            {
+        //                var nav = new MixRelatedAttributeDatas.UpdateViewModel()
+        //                {
+        //                    DataId = Id,
+        //                    Specificulture = Specificulture,
+        //                    AttributeSetId = AttributeSetId,
+        //                    AttributeSetName = AttributeSetName,
+        //                    ParentType = ParentType,
+        //                    ParentId = ParentId,
+        //                    Status = MixEnums.MixContentStatus.Published 
+        //                };
+        //                var saveResult = await nav.SaveModelAsync(false, context, transaction);
+        //                if (!saveResult.IsSucceed)
+        //                {
+        //                    result.IsSucceed = false;
+        //                    result.Exception = saveResult.Exception;
+        //                    result.Errors = saveResult.Errors;
+        //                }
+        //            }
+        //        }
+        //        if (result.IsSucceed)
+        //        {
+        //            ParseData();
+        //        }
+        //        UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+        //        return result;
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        return UnitOfWorkHelper<MixCmsContext>.HandleException<FormViewModel>(ex, isRoot, transaction);
+        //    }
+        //    finally
+        //    {
+        //        if (isRoot)
+        //        {
+        //            context.Dispose();
+        //        }
+        //    }
             
-        }
+        //}
 
         public override RepositoryResponse<FormViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -525,7 +525,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             if (saveMedia.IsSucceed)
                             {
                                 item.StringValue = saveMedia.Data.FullPath;
-                                Data[item.AttributeFieldName] = item.StringValue;
+                                Obj[item.AttributeFieldName] = item.StringValue;
                             }
                         }
                         else
@@ -658,13 +658,13 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     val.AttributeSetName = AttributeSetName;
                 }
 
-                Data = new JObject(
+                Obj = new JObject(
                 new JProperty("id", Id)
             );
                 foreach (var item in Values.OrderBy(v => v.Priority))
                 {
                     item.AttributeFieldName = item.Field.Name;
-                    Data.Add(ParseValue(item));
+                    Obj.Add(ParseValue(item));
                 }
             }
         }
@@ -675,7 +675,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 Id = data["id"]?.Value<string>(),
                 Specificulture = data["specificulture"]?.Value<string>(),
                 AttributeSetName = attributeSetName,
-                Data = data
+                Obj = data
             };
             return await vm.SaveModelAsync();
         }

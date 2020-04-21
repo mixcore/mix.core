@@ -22,9 +22,9 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     {
         // GET: api/v1/rest/{culture}/attribute-set-data
         [HttpGet]
-        public async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> Get()
+        public async Task<ActionResult<PaginationModel<FormViewModel>>> Get()
         {
-            var getData = await Helper.FilterByKeywordAsync<ReadMvcViewModel>(_lang, Request);
+            var getData = await Helper.FilterByKeywordAsync<FormViewModel>(_lang, Request);
             if (getData.IsSucceed)
             {
                 return Ok(getData.Data);
@@ -147,7 +147,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         public async Task<ActionResult<MixAttributeSetData>> Delete(string id)
         {
             Expression<Func<MixAttributeSetData, bool>> predicate = m => m.Id == id && m.Specificulture == _lang;
-            var result = await base.DeleteAsync<UpdateViewModel>(predicate, false);
+            var result = await base.DeleteAsync<DeleteViewModel>(predicate, true);
             if (result.IsSucceed)
             {
                 return Ok(result.Data);

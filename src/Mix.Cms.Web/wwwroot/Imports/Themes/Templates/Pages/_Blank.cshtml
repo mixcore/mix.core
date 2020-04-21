@@ -1,0 +1,27 @@
+@using Mix.Cms.Lib
+@using Mix.Cms.Lib.Services
+@model Mix.Cms.Lib.ViewModels.MixPages.ReadMvcViewModel
+@{ 
+   string assetFolder = MixCmsHelper.GetAssetFolder(ViewBag.culture); 
+   string templateFolder = MixCmsHelper.GetTemplateFolder(ViewBag.culture);
+}
+@*
+    // Get Configuration
+    @MixService.GetConfig<T>("conf_name", ViewBag.culture)
+
+    // Get Extra Attribute
+    @(Model.Property<TDataType>("[propertyName]"))
+    ex: @(Model.Property<string>("html_title"))
+
+    // Loop Data
+    @foreach(var item in Model.Posts.Items){
+        // get simple Data value
+        var post = item.Post
+        @post.Property("[propertyName]")
+    }
+    @foreach(var item in Model.Modules.Items){
+        // get simple Data value
+        @item.Property("[propertyName]")
+    }
+*@
+Page: @Model.Title
