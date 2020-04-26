@@ -38,6 +38,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\mix.heart\src\Mix.Heart\Mix.Heart.csproj" />
+    <ProjectReference Include="..\Mix.Heart.NetCore\Mix.Heart.NetCore.csproj" />
     <ProjectReference Include="..\Mix.Identity\Mix.Identity.csproj" />
   </ItemGroup>
 

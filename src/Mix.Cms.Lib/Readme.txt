@@ -39,3 +39,44 @@ finally
         context.Database.CloseConnection();transaction.Dispose();context.Dispose();
     }
 }
+
+--- Default ViewModel -----
+
+[GeneratedController("api/v1/rest/{culture}/attribute-set-data/portal")]
+public class DefaultViewModel
+       : ViewModelBase<MixCmsContext, MixPage, DefaultViewModel>
+{
+    #region Properties
+
+    #region Models
+
+    [JsonProperty("id")]
+    public int Id { get; set; }
+    [JsonProperty("specificulture")]
+    public string Specificulture { get; set; }
+
+    #endregion Models
+
+    #region Views
+
+    
+    #endregion Views
+
+    #endregion Properties
+
+    #region Contructors
+
+    public DefaultViewModel() : base()
+    {
+    }
+
+    public DefaultViewModel(MixPage model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+    {
+    }
+
+    #endregion Contructors
+
+    #region Overrides
+    
+    #endregion Overrides
+}

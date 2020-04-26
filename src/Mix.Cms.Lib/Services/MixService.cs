@@ -136,11 +136,13 @@ namespace Mix.Cms.Lib.Services
 
         public static string GetConnectionString(string name)
         {
+            // Enhance: Add Encrypt / Decrypt appconnection string
             return Instance.ConnectionStrings?[name].Value<string>();
         }
 
         public static void SetConnectionString(string name, string value)
         {
+            // Enhance: Add Encrypt / Decrypt appconnection string
             Instance.ConnectionStrings[name] = value;
         }
 
