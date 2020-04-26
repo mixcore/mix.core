@@ -9,25 +9,27 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Heart.Extensions;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
-using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json.Linq;
+using Mix.Services;
+using Mix.Heart.Helpers;
 
-namespace Mix.Cms.Api.RestFul.Controllers.v1
+namespace Mix.Cms.Lib.Controllers
 {
-    public class BaseRestApiController<TDbContext, TModel> : Controller
+    [Produces("application/json")]
+    public class BaseRestApiController<TDbContext, TModel, TView> : Controller
         where TDbContext : DbContext
         where TModel : class
+        where TView : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, TView>
     {
         protected static TDbContext _context;
         protected static IDbContextTransaction _transaction;
         protected string _lang;
         protected bool _forbidden;
+        
         /// <summary>
         /// The domain
         /// </summary>
@@ -61,14 +63,26 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         }
         protected void GetLanguage()
         {
-            _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : MixService.GetConfig<string>("Language");
-            ViewBag.culture = _lang;
+            _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : string.Empty;
             _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
         }
         #endregion Overrides
 
-        protected async Task<RepositoryResponse<TView>> GetSingleAsync<TView>(Expression<Func<TModel, bool>> predicate = null)
-            where TView : ViewModelBase<TDbContext, TModel, TView>
+
+        #region Helpers
+        protected async Task<RepositoryResponse<TView>> GetSingleAsync(string id)
+        {
+            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>("Id", id, Heart.Enums.MixEnums.ExpressionMethod.Eq);
+            if (!string.IsNullOrEmpty(_lang))
+            {
+                var idPre = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixEnums.ExpressionMethod.Eq);
+                predicate = ReflectionHelper.CombineExpression(predicate, idPre, Heart.Enums.MixEnums.ExpressionMethod.And);
+            }
+
+            return await GetSingleAsync(predicate);
+        }
+
+        protected async Task<RepositoryResponse<TView>> GetSingleAsync(Expression<Func<TModel, bool>> predicate = null)
         {
             RepositoryResponse<TView> data = null;
             if (predicate != null)
@@ -78,23 +92,20 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             return data;
         }
 
-
-        protected async Task<RepositoryResponse<TModel>> DeleteAsync<TView>(Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
-           where TView : ViewModelBase<TDbContext, TModel, TView>
+        protected async Task<RepositoryResponse<TModel>> DeleteAsync(Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
         {
 
             var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
             if (data.IsSucceed)
             {
-                var result = await data.Data.RemoveModelAsync(isDeleteRelated).ConfigureAwait(false);
+                var result = await DeleteAsync(data.Data, isDeleteRelated);
 
                 return result;
             }
             return new RepositoryResponse<TModel>() { IsSucceed = false };
         }
 
-        protected async Task<RepositoryResponse<TModel>> DeleteAsync<TView>(TView data, bool isDeleteRelated = false)
-            where TView : ViewModelBase<TDbContext, TModel, TView>
+        protected async Task<RepositoryResponse<TModel>> DeleteAsync(TView data, bool isDeleteRelated = false)
         {
             if (data != null)
             {
@@ -106,8 +117,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             return new RepositoryResponse<TModel>() { IsSucceed = false };
         }
 
-        protected async Task<RepositoryResponse<List<TModel>>> DeleteListAsync<TView>(Expression<Func<TModel, bool>> predicate, bool isRemoveRelatedModel = false)
-            where TView : ViewModelBase<TDbContext, TModel, TView>
+        protected async Task<RepositoryResponse<List<TModel>>> DeleteListAsync(Expression<Func<TModel, bool>> predicate, bool isRemoveRelatedModel = false)
         {
 
             var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.RemoveListModelAsync(isRemoveRelatedModel, predicate);
@@ -115,12 +125,11 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             return data;
         }
 
-
-        protected async Task<RepositoryResponse<FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate, string type)
+        protected async Task<RepositoryResponse<Lib.ViewModels.FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate, string type)
         {
 
             var getData = await DefaultModelRepository<TDbContext, TModel>.Instance.GetModelListByAsync(predicate, _context);
-            FileViewModel file = null;
+            Lib.ViewModels.FileViewModel file = null;
             if (getData.IsSucceed)
             {
                 string exportPath = $"Exports/Structures/{typeof(TModel).Name}";
@@ -129,7 +138,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                     new JProperty("type", type.ToString()),
                     new JProperty("data", JArray.FromObject(getData.Data))
                     );
-                file = new FileViewModel()
+                file = new Lib.ViewModels.FileViewModel()
                 {
                     Filename = filename,
                     Extension = ".json",
@@ -137,24 +146,25 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                     Content = objContent.ToString()
                 };
                 // Copy current templates file
-                FileRepository.Instance.SaveWebFile(file);
+                Lib.Repositories.FileRepository.Instance.SaveWebFile(file);
 
             }
             UnitOfWorkHelper<TDbContext>.HandleTransaction(getData.IsSucceed, true, _transaction);
-            return new RepositoryResponse<FileViewModel>()
+            return new RepositoryResponse<Lib.ViewModels.FileViewModel>()
             {
                 IsSucceed = true,
                 Data = file,
             };
 
         }
-        protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync<TView>(Expression<Func<TModel, bool>> predicate = null)
-            where TView : ViewModelBase<TDbContext, TModel, TView>
+        protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync(Expression<Func<TModel, bool>> predicate = null)
         {
+            bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
+            bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
-            int.TryParse(Request.Query["direction"], out int direction);            
+            int.TryParse(Request.Query["direction"], out int direction);
             bool isPageSize = int.TryParse(Request.Query["pageSize"], out int pageSize);
-            
+
             RequestPaging request = new RequestPaging()
             {
                 PageIndex = pageIndex,
@@ -162,6 +172,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 OrderBy = Request.Query["orderBy"].ToString().ToTitleCase(),
                 Direction = direction
             };
+
             RepositoryResponse<PaginationModel<TView>> data = null;
 
             if (data == null)
@@ -182,8 +193,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             return data;
         }
 
-        protected async Task<RepositoryResponse<TView>> SaveAsync<TView>(TView vm, bool isSaveSubModel)
-            where TView : ViewModelBase<TDbContext, TModel, TView>
+        protected async Task<RepositoryResponse<TView>> SaveAsync(TView vm, bool isSaveSubModel)
         {
             if (vm != null)
             {
@@ -195,8 +205,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             return new RepositoryResponse<TView>();
         }
 
-        protected async Task<RepositoryResponse<TModel>> SaveAsync<TView>(JObject obj, Expression<Func<TModel, bool>> predicate)
-            where TView : ViewModelBase<TDbContext, TModel, TView>
+        protected async Task<RepositoryResponse<TModel>> SaveAsync(JObject obj, Expression<Func<TModel, bool>> predicate)
         {
             if (obj != null)
             {
@@ -227,16 +236,14 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             return new RepositoryResponse<TModel>();
         }
 
-        protected async Task<RepositoryResponse<List<TView>>> SaveListAsync<TView>(List<TView> lstVm, bool isSaveSubModel)
-            where TView : ViewModelBase<TDbContext, TModel, TView>
+        protected async Task<RepositoryResponse<List<TView>>> SaveListAsync(List<TView> lstVm, bool isSaveSubModel)
         {
 
             var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.SaveListModelAsync(lstVm, isSaveSubModel);
 
             return result;
         }
-        protected RepositoryResponse<List<TView>> SaveList<TView>(List<TView> lstVm, bool isSaveSubModel)
-            where TView : ViewModelBase<TDbContext, TModel, TView>
+        protected RepositoryResponse<List<TView>> SaveList(List<TView> lstVm, bool isSaveSubModel)
         {
 
             var result = new RepositoryResponse<List<TView>>() { IsSucceed = true };
@@ -258,6 +265,149 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
 
             return result;
         }
+
+
+        #endregion
+
+        #region Routes
+        [HttpGet]
+        public virtual async Task<ActionResult<PaginationModel<TView>>> Get()
+        {
+            bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
+            bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
+            int.TryParse(Request.Query["pageIndex"], out int pageIndex);
+            int.TryParse(Request.Query["direction"], out int direction);
+            bool isPageSize = int.TryParse(Request.Query["pageSize"], out int pageSize);
+
+            RequestPaging request = new RequestPaging()
+            {
+                PageIndex = pageIndex,
+                PageSize = isPageSize ? pageSize : 100,
+                OrderBy = Request.Query["orderBy"].ToString().ToTitleCase(),
+                Direction = direction
+            };
+
+            RepositoryResponse<PaginationModel<TView>> getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(
+                request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
+
+            if (getData.IsSucceed)
+            {
+                return Ok(getData.Data);
+            }
+            else
+            {
+                return BadRequest(getData.Errors);
+            }
+        }
+
+        // GET: api/v1/rest/{culture}/attribute-set-data/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TView>> Get(string id)
+        {
+            var getData = await GetSingleAsync(id);
+            if (getData.IsSucceed)
+            {
+                return getData.Data;
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        // POST: api/s
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
+        [HttpPost]
+        public async Task<ActionResult<TModel>> Create([FromBody]TView data)
+        {
+            var result = await SaveAsync(data, true);
+            if (result.IsSucceed)
+            {
+                return Ok(result.Data);
+            }
+            else
+            {
+                return BadRequest(result.Errors);
+            }
+        }
+
+        // PUT: api/s/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(string id, [FromBody]TView data)
+        {
+            var currentId = ReflectionHelper.GetPropertyValue(data, "id") as string;
+            if (id != currentId)
+            {
+                return BadRequest();
+            }
+            var result = await SaveAsync(data, true);
+            if (result.IsSucceed)
+            {
+                return NoContent();
+            }
+            else
+            {
+                var current = await GetSingleAsync(currentId);
+                if (!current.IsSucceed)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return BadRequest(result.Errors);
+                }
+            }
+        }
+
+        // PATCH: api/v1/rest/en-us/attribute-set/portal/5
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> Patch(string id, [FromBody]JObject fields)
+        {
+            var result = await GetSingleAsync(id);
+            if (result.IsSucceed)
+            {
+                var saveResult = await result.Data.UpdateFieldsAsync(fields);
+                if (saveResult.IsSucceed)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    return BadRequest(saveResult.Errors);
+                }
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        // DELETE: api/v1/rest/en-us/attribute-set/portal/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<TModel>> Delete(string id)
+        {
+            var predicate = ReflectionHelper.GetExpression<TModel>("id", id, Heart.Enums.MixEnums.ExpressionMethod.Eq);
+            var result = await DeleteAsync(predicate, false);
+            if (result.IsSucceed)
+            {
+                return Ok(result.Data);
+            }
+            else
+            {
+                return BadRequest(result.Errors);
+            }
+
+        }
+
+        [HttpGet("clear-cache")]
+        protected async Task ClearCacheAsync(Type type)
+        {
+            await CacheService.RemoveCacheAsync(type: type);
+        }
+        #endregion
     }
 
 }

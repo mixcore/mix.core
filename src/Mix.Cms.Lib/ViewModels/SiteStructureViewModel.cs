@@ -165,8 +165,8 @@ namespace Mix.Cms.Lib.ViewModels
 
             if (getDataResult.IsSucceed)
             {
-                getDataResult.Data.JsonItems = new List<JObject>();
-                getDataResult.Data.Items.ForEach(d => getDataResult.Data.JsonItems.Add(d.JItem));
+                //getDataResult.Data.JsonItems = new List<JObject>();
+                //getDataResult.Data.Items.ForEach(d => getDataResult.Data.JsonItems.Add(d.JItem));
                 item.Data = getDataResult.Data;
             }
 

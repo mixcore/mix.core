@@ -15,14 +15,13 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
-    [Produces("application/json")]
     [Route("api/v1/rest/{culture}/attribute-set-data/portal")]
-    public class ApiAttributeSetDataPortalController :
-        BaseRestApiController<MixCmsContext, MixAttributeSetData>
+    public class AttributeSetDataPortalController :
+        BaseRestApiController<MixCmsContext, MixAttributeSetData, FormViewModel>
     {
         // GET: api/v1/rest/{culture}/attribute-set-data
-        [HttpGet]
-        public async Task<ActionResult<PaginationModel<FormViewModel>>> Get()
+        [HttpGet("search")]
+        public override async Task<ActionResult<PaginationModel<FormViewModel>>> Get()
         {
             var getData = await Helper.FilterByKeywordAsync<FormViewModel>(_lang, Request);
             if (getData.IsSucceed)
@@ -34,7 +33,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 return BadRequest(getData.Errors);
             }
         }
-        
+
         // GET: api/v1/rest/{culture}/attribute-set-data
         [HttpGet("init/{attributeSet}")]
         public async Task<ActionResult<FormViewModel>> Init(string attributeSet)

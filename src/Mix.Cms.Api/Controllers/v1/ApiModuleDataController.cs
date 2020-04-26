@@ -259,19 +259,19 @@ namespace Mix.Cms.Api.Controllers.v1
                 );
 
             var portalResult = await base.GetListAsync<ReadViewModel>(request, predicate);
-            foreach (var item in portalResult.Data.Items)
-            {
-                item.JItem["created_date"] = new JObject()
-                {
-                    new JProperty("dataType", 1),
-                    new JProperty("value", item.CreatedDateTime.ToLocalTime().ToString("dd-MM-yyyy hh:mm:ss"))
-                };
-                portalResult.Data.JsonItems.Add(item.JItem);
-            }
+            //foreach (var item in portalResult.Data.Items)
+            //{
+            //    item.JItem["created_date"] = new JObject()
+            //    {
+            //        new JProperty("dataType", 1),
+            //        new JProperty("value", item.CreatedDateTime.ToLocalTime().ToString("dd-MM-yyyy hh:mm:ss"))
+            //    };
+            //    portalResult.Data.JsonItems.Add(item.JItem);
+            //}
 
-            string exportPath = $"Exports/Module/{moduleId}";
-            var result = CommonHelper.ExportJObjectToExcel(portalResult.Data.JsonItems, string.Empty, exportPath, Guid.NewGuid().ToString(), null);
-            return Ok(JObject.FromObject(result));
+            //string exportPath = $"Exports/Module/{moduleId}";
+            //var result = CommonHelper.ExportJObjectToExcel(portalResult.Data.JsonItems, string.Empty, exportPath, Guid.NewGuid().ToString(), null);
+            return Ok(JObject.FromObject(portalResult));
         }
 
         // GET api/moduleData

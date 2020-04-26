@@ -284,8 +284,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                         , _context: context, _transaction: transaction);
                     if (getDataResult.IsSucceed)
                     {
-                        getDataResult.Data.JsonItems = new List<JObject>();
-                        getDataResult.Data.Items.ForEach(d => getDataResult.Data.JsonItems.Add(d.JItem));
+                        //getDataResult.Data.JsonItems = new List<JObject>();
+                        //getDataResult.Data.Items.ForEach(d => getDataResult.Data.JsonItems.Add(d.JItem));
                         Data = getDataResult.Data;
                     }
                 }
