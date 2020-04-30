@@ -31,7 +31,7 @@ namespace Mix.Cms.Lib
 
         public static string GetAssetFolder(string culture)
         {
-            return $"/{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, culture)}/assets";
+            return $"{MixService.GetConfig<string>("Domain")}/{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, culture)}/assets";
         }
         public static string GetTemplateFolder(string culture)
         {

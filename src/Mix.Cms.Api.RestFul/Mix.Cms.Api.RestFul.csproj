@@ -8,48 +8,24 @@
     <Compile Remove="Attributes\**" />
     <Compile Remove="cache\**" />
     <Compile Remove="Controllers\v1\AttributeSetDatas\**" />
-    <Compile Remove="Controllers\v1\AttributeSetFields\**" />
-    <Compile Remove="Controllers\v1\AttributeSets\**" />
-    <Compile Remove="Controllers\v1\Languages\**" />
-    <Compile Remove="Controllers\v1\RelatedAttributeData\**" />
-    <Compile Remove="Controllers\v1\RelatedAttributeSet\**" />
-    <Compile Remove="Controllers\v1\Templates\**" />
     <Compile Remove="Conventions\**" />
     <Compile Remove="Providers\**" />
     <Compile Remove="ViewModels\**" />
     <Content Remove="Attributes\**" />
     <Content Remove="cache\**" />
     <Content Remove="Controllers\v1\AttributeSetDatas\**" />
-    <Content Remove="Controllers\v1\AttributeSetFields\**" />
-    <Content Remove="Controllers\v1\AttributeSets\**" />
-    <Content Remove="Controllers\v1\Languages\**" />
-    <Content Remove="Controllers\v1\RelatedAttributeData\**" />
-    <Content Remove="Controllers\v1\RelatedAttributeSet\**" />
-    <Content Remove="Controllers\v1\Templates\**" />
     <Content Remove="Conventions\**" />
     <Content Remove="Providers\**" />
     <Content Remove="ViewModels\**" />
     <EmbeddedResource Remove="Attributes\**" />
     <EmbeddedResource Remove="cache\**" />
     <EmbeddedResource Remove="Controllers\v1\AttributeSetDatas\**" />
-    <EmbeddedResource Remove="Controllers\v1\AttributeSetFields\**" />
-    <EmbeddedResource Remove="Controllers\v1\AttributeSets\**" />
-    <EmbeddedResource Remove="Controllers\v1\Languages\**" />
-    <EmbeddedResource Remove="Controllers\v1\RelatedAttributeData\**" />
-    <EmbeddedResource Remove="Controllers\v1\RelatedAttributeSet\**" />
-    <EmbeddedResource Remove="Controllers\v1\Templates\**" />
     <EmbeddedResource Remove="Conventions\**" />
     <EmbeddedResource Remove="Providers\**" />
     <EmbeddedResource Remove="ViewModels\**" />
     <None Remove="Attributes\**" />
     <None Remove="cache\**" />
     <None Remove="Controllers\v1\AttributeSetDatas\**" />
-    <None Remove="Controllers\v1\AttributeSetFields\**" />
-    <None Remove="Controllers\v1\AttributeSets\**" />
-    <None Remove="Controllers\v1\Languages\**" />
-    <None Remove="Controllers\v1\RelatedAttributeData\**" />
-    <None Remove="Controllers\v1\RelatedAttributeSet\**" />
-    <None Remove="Controllers\v1\Templates\**" />
     <None Remove="Conventions\**" />
     <None Remove="Providers\**" />
     <None Remove="ViewModels\**" />
@@ -57,6 +33,7 @@
 
   <ItemGroup>
     <Compile Include="Controllers\v1\AttributeSetDatas\ApiAttributeSetDataController.cs" />
+    <Compile Include="Controllers\v1\AttributeSetDatas\AttributeSetDataPortalController.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -61,6 +61,7 @@
         "IsHttps": false,
         "IsCache": true,
         "IsRegistration": true,
+        "MaxPageSize": 100,
         "ImageSize": 2000,
         "DefaultAvatar": "/assets/img/user.png",
         "DefaultCulture": "en-us",
