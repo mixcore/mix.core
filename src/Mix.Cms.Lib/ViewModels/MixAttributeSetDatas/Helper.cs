@@ -302,6 +302,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 var keyword = request.Query["keyword"].ToString();
                 var filterType = request.Query["filterType"].ToString();
                 var orderBy = request.Query["orderBy"].ToString();
+                int.TryParse(request.Query["attributeSetId"], out int attributeSetId);
                 int.TryParse(request.Query["direction"], out int direction);
                 int.TryParse(request.Query["pageIndex"], out int pageIndex);
                 int.TryParse(request.Query["pageSize"], out int pageSize);
@@ -309,7 +310,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 bool isToDate = DateTime.TryParse(request.Query["toDate"], out DateTime toDate);
                 bool isStatus = int.TryParse(request.Query["status"], out int status);
                 var tasks = new List<Task<RepositoryResponse<TView>>>();
-                var getfields = await MixAttributeFields.ReadViewModel.Repository.GetModelListByAsync(m => m.AttributeSetName == attributeSetName, context, transaction);
+                var getfields = await MixAttributeFields.ReadViewModel.Repository.GetModelListByAsync(
+                    m => m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName, context, transaction);
                 var fields = getfields.IsSucceed ? getfields.Data : new List<MixAttributeFields.ReadViewModel>();
 
                 // fitler list query by field name
@@ -320,7 +322,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 // val predicate
                 Expression<Func<MixAttributeSetValue, bool>> valPredicate = null;
                 // Data predicate
-                Expression<Func<MixAttributeSetData, bool>> predicate = m => m.Specificulture == culture && m.AttributeSetName == attributeSetName
+                Expression<Func<MixAttributeSetData, bool>> predicate = m => m.Specificulture == culture 
+                    && (m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName)
                     && (!isStatus || (m.Status == status))
                     && (!isFromDate || (m.CreatedDateTime >= fromDate))
                     && (!isToDate || (m.CreatedDateTime <= toDate));

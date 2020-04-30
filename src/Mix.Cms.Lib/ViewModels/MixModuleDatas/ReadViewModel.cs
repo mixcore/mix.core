@@ -105,24 +105,15 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
             JItem = Value == null ? InitValue() : JsonConvert.DeserializeObject<JObject>(Value);
             foreach (var item in DataProperties)
             {
-                if (!JItem.TryGetValue(item.Name, out JToken tmp))
+                JItem[item.Name] = Helper.ParseValue(JItem, item);
+                if (JItem[item.Name] == null)
                 {
-                    string val = string.Empty;
-                    switch (item.DataType)
-                    {
-                        case MixEnums.MixDataType.Upload:
-                            val = Path.Combine(MixService.GetConfig<string>("Domain"), JItem[item.Name]?.Value<JObject>().Value<string>("value"));
-                            break;
-
-                        default:
-                            val = JItem[item.Name]?.Value<JObject>().Value<string>("value");
-                            break;
-                    }
                     JItem[item.Name] = new JObject()
                     {
                         new JProperty("dataType", item.DataType),
-                        new JProperty("value", val)
+                        new JProperty("value", JItem[item.Name]?.Value<JObject>().Value<string>("value"))
                     };
+
                 }
             }
         }

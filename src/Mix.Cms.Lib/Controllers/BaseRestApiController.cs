@@ -34,6 +34,154 @@ namespace Mix.Cms.Lib.Controllers
         /// The domain
         /// </summary>
         protected string _domain;
+        #region Routes
+        [HttpGet]
+        public virtual async Task<ActionResult<PaginationModel<TView>>> Get()
+        {
+            bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
+            bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
+            int.TryParse(Request.Query["pageIndex"], out int pageIndex);
+            int.TryParse(Request.Query["direction"], out int direction);
+            bool isPageSize = int.TryParse(Request.Query["pageSize"], out int pageSize);
+
+            RequestPaging request = new RequestPaging()
+            {
+                PageIndex = pageIndex,
+                PageSize = isPageSize ? pageSize : 100,
+                OrderBy = Request.Query["orderBy"].ToString().ToTitleCase(),
+                Direction = direction
+            };
+
+            RepositoryResponse<PaginationModel<TView>> getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(
+                request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
+
+            if (getData.IsSucceed)
+            {
+                return Ok(getData.Data);
+            }
+            else
+            {
+                return BadRequest(getData.Errors);
+            }
+        }
+
+        // GET: api/v1/rest/{culture}/attribute-set-data/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TView>> Get(string id)
+        {
+            var getData = await GetSingleAsync(id);
+            if (getData.IsSucceed)
+            {
+                return getData.Data;
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        // GET: api/v1/rest/{culture}/attribute-set-data/5
+        [HttpGet("default")]
+        public ActionResult<TView> Default()
+        {
+            TView data = ReflectionHelper.InitModel<TView>();
+            data.ExpandView();
+            return Ok(data);
+        }
+
+
+        // POST: api/s
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
+        [HttpPost]
+        public async Task<ActionResult<TModel>> Create([FromBody]TView data)
+        {
+            var result = await SaveAsync(data, true);
+            if (result.IsSucceed)
+            {
+                return Ok(result.Data);
+            }
+            else
+            {
+                return BadRequest(result.Errors);
+            }
+        }
+
+        // PUT: api/s/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(string id, [FromBody]TView data)
+        {
+            var currentId = ReflectionHelper.GetPropertyValue(data, "id").ToString();
+            if (id != currentId)
+            {
+                return BadRequest();
+            }
+            var result = await SaveAsync(data, true);
+            if (result.IsSucceed)
+            {
+                return NoContent();
+            }
+            else
+            {
+                var current = await GetSingleAsync(currentId);
+                if (!current.IsSucceed)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return BadRequest(result.Errors);
+                }
+            }
+        }
+
+        // PATCH: api/v1/rest/en-us/attribute-set/portal/5
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> Patch(string id, [FromBody]JObject fields)
+        {
+            var result = await GetSingleAsync(id);
+            if (result.IsSucceed)
+            {
+                var saveResult = await result.Data.UpdateFieldsAsync(fields);
+                if (saveResult.IsSucceed)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    return BadRequest(saveResult.Errors);
+                }
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        // DELETE: api/v1/rest/en-us/attribute-set/portal/5
+        [HttpDelete("{id}")]
+        public virtual async Task<ActionResult<TModel>> Delete(string id)
+        {
+            var result = await DeleteAsync(id, true);
+            if (result.IsSucceed)
+            {
+                return Ok(result.Data);
+            }
+            else
+            {
+                return BadRequest(result.Errors);
+            }
+
+        }
+
+        [HttpGet("clear-cache")]
+        protected async Task ClearCacheAsync(Type type)
+        {
+            await CacheService.RemoveCacheAsync(type: type);
+        }
+        #endregion
 
         #region Overrides
 
@@ -68,8 +216,20 @@ namespace Mix.Cms.Lib.Controllers
         }
         #endregion Overrides
 
-
         #region Helpers
+        protected async Task<RepositoryResponse<T>> GetSingleAsync<T>(string id)
+            where T: Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
+        {
+            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>("Id", id, Heart.Enums.MixEnums.ExpressionMethod.Eq);
+            if (!string.IsNullOrEmpty(_lang))
+            {
+                var idPre = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixEnums.ExpressionMethod.Eq);
+                predicate = ReflectionHelper.CombineExpression(predicate, idPre, Heart.Enums.MixEnums.ExpressionMethod.And);
+            }
+
+            return await GetSingleAsync<T>(predicate);
+        }
+        
         protected async Task<RepositoryResponse<TView>> GetSingleAsync(string id)
         {
             Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>("Id", id, Heart.Enums.MixEnums.ExpressionMethod.Eq);
@@ -91,11 +251,35 @@ namespace Mix.Cms.Lib.Controllers
             }
             return data;
         }
+        
+        protected async Task<RepositoryResponse<T>> GetSingleAsync<T>(Expression<Func<TModel, bool>> predicate = null)
+            where T: Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
+        {
+            RepositoryResponse<T> data = null;
+            if (predicate != null)
+            {
+                data = await DefaultRepository<TDbContext, TModel, T>.Instance.GetSingleModelAsync(predicate);
+            }
+            return data;
+        }
 
-        protected async Task<RepositoryResponse<TModel>> DeleteAsync(Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
+        protected async Task<RepositoryResponse<TModel>> DeleteAsync<T>(string id, bool isDeleteRelated = false)
+            where T: Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
 
-            var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
+            var data = await GetSingleAsync<T>(id);
+            if (data.IsSucceed)
+            {
+                var result = await DeleteAsync<T>(data.Data, isDeleteRelated);
+
+                return result;
+            }
+            return new RepositoryResponse<TModel>() { IsSucceed = false };
+        }
+        protected async Task<RepositoryResponse<TModel>> DeleteAsync(string id, bool isDeleteRelated = false)
+        {
+
+            var data = await GetSingleAsync(id);
             if (data.IsSucceed)
             {
                 var result = await DeleteAsync(data.Data, isDeleteRelated);
@@ -106,6 +290,19 @@ namespace Mix.Cms.Lib.Controllers
         }
 
         protected async Task<RepositoryResponse<TModel>> DeleteAsync(TView data, bool isDeleteRelated = false)
+        {
+            if (data != null)
+            {
+
+                var result = await data.RemoveModelAsync(isDeleteRelated).ConfigureAwait(false);
+
+                return result;
+            }
+            return new RepositoryResponse<TModel>() { IsSucceed = false };
+        }
+
+        protected async Task<RepositoryResponse<TModel>> DeleteAsync<T>(T data, bool isDeleteRelated = false)
+            where T: Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
             if (data != null)
             {
@@ -268,146 +465,7 @@ namespace Mix.Cms.Lib.Controllers
 
 
         #endregion
-
-        #region Routes
-        [HttpGet]
-        public virtual async Task<ActionResult<PaginationModel<TView>>> Get()
-        {
-            bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
-            bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
-            int.TryParse(Request.Query["pageIndex"], out int pageIndex);
-            int.TryParse(Request.Query["direction"], out int direction);
-            bool isPageSize = int.TryParse(Request.Query["pageSize"], out int pageSize);
-
-            RequestPaging request = new RequestPaging()
-            {
-                PageIndex = pageIndex,
-                PageSize = isPageSize ? pageSize : 100,
-                OrderBy = Request.Query["orderBy"].ToString().ToTitleCase(),
-                Direction = direction
-            };
-
-            RepositoryResponse<PaginationModel<TView>> getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(
-                request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
-
-            if (getData.IsSucceed)
-            {
-                return Ok(getData.Data);
-            }
-            else
-            {
-                return BadRequest(getData.Errors);
-            }
-        }
-
-        // GET: api/v1/rest/{culture}/attribute-set-data/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<TView>> Get(string id)
-        {
-            var getData = await GetSingleAsync(id);
-            if (getData.IsSucceed)
-            {
-                return getData.Data;
-            }
-            else
-            {
-                return NotFound();
-            }
-        }
-
-        // POST: api/s
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPost]
-        public async Task<ActionResult<TModel>> Create([FromBody]TView data)
-        {
-            var result = await SaveAsync(data, true);
-            if (result.IsSucceed)
-            {
-                return Ok(result.Data);
-            }
-            else
-            {
-                return BadRequest(result.Errors);
-            }
-        }
-
-        // PUT: api/s/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, [FromBody]TView data)
-        {
-            var currentId = ReflectionHelper.GetPropertyValue(data, "id") as string;
-            if (id != currentId)
-            {
-                return BadRequest();
-            }
-            var result = await SaveAsync(data, true);
-            if (result.IsSucceed)
-            {
-                return NoContent();
-            }
-            else
-            {
-                var current = await GetSingleAsync(currentId);
-                if (!current.IsSucceed)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    return BadRequest(result.Errors);
-                }
-            }
-        }
-
-        // PATCH: api/v1/rest/en-us/attribute-set/portal/5
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(string id, [FromBody]JObject fields)
-        {
-            var result = await GetSingleAsync(id);
-            if (result.IsSucceed)
-            {
-                var saveResult = await result.Data.UpdateFieldsAsync(fields);
-                if (saveResult.IsSucceed)
-                {
-                    return NoContent();
-                }
-                else
-                {
-                    return BadRequest(saveResult.Errors);
-                }
-            }
-            else
-            {
-                return NotFound();
-            }
-        }
-
-        // DELETE: api/v1/rest/en-us/attribute-set/portal/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<TModel>> Delete(string id)
-        {
-            var predicate = ReflectionHelper.GetExpression<TModel>("id", id, Heart.Enums.MixEnums.ExpressionMethod.Eq);
-            var result = await DeleteAsync(predicate, false);
-            if (result.IsSucceed)
-            {
-                return Ok(result.Data);
-            }
-            else
-            {
-                return BadRequest(result.Errors);
-            }
-
-        }
-
-        [HttpGet("clear-cache")]
-        protected async Task ClearCacheAsync(Type type)
-        {
-            await CacheService.RemoveCacheAsync(type: type);
-        }
-        #endregion
+                
     }
 
 }

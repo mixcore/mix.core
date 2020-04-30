@@ -217,59 +217,59 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #region Async
 
-        //public override async Task<RepositoryResponse<FormViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        //{
-        //    UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-        //    try
-        //    {
+        public override async Task<RepositoryResponse<FormViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
 
-        //        var result = await base.SaveModelAsync(isSaveSubModels, context, transaction);
-        //        if (result.IsSucceed && !string.IsNullOrEmpty(ParentId))
-        //        {
-        //            var getNav = MixRelatedAttributeDatas.UpdateViewModel.Repository.CheckIsExists(
-        //                m => m.DataId == Id && m.ParentId == ParentId && m.ParentType == ParentType && m.Specificulture == Specificulture
-        //                , context, transaction);
-        //            if (!getNav)
-        //            {
-        //                var nav = new MixRelatedAttributeDatas.UpdateViewModel()
-        //                {
-        //                    DataId = Id,
-        //                    Specificulture = Specificulture,
-        //                    AttributeSetId = AttributeSetId,
-        //                    AttributeSetName = AttributeSetName,
-        //                    ParentType = ParentType,
-        //                    ParentId = ParentId,
-        //                    Status = MixEnums.MixContentStatus.Published 
-        //                };
-        //                var saveResult = await nav.SaveModelAsync(false, context, transaction);
-        //                if (!saveResult.IsSucceed)
-        //                {
-        //                    result.IsSucceed = false;
-        //                    result.Exception = saveResult.Exception;
-        //                    result.Errors = saveResult.Errors;
-        //                }
-        //            }
-        //        }
-        //        if (result.IsSucceed)
-        //        {
-        //            ParseData();
-        //        }
-        //        UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
-        //        return result;
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        return UnitOfWorkHelper<MixCmsContext>.HandleException<FormViewModel>(ex, isRoot, transaction);
-        //    }
-        //    finally
-        //    {
-        //        if (isRoot)
-        //        {
-        //            context.Dispose();
-        //        }
-        //    }
-            
-        //}
+                var result = await base.SaveModelAsync(isSaveSubModels, context, transaction);
+                if (result.IsSucceed && !string.IsNullOrEmpty(ParentId))
+                {
+                    var getNav = MixRelatedAttributeDatas.UpdateViewModel.Repository.CheckIsExists(
+                        m => m.DataId == Id && m.ParentId == ParentId && m.ParentType == ParentType && m.Specificulture == Specificulture
+                        , context, transaction);
+                    if (!getNav)
+                    {
+                        var nav = new MixRelatedAttributeDatas.UpdateViewModel()
+                        {
+                            DataId = Id,
+                            Specificulture = Specificulture,
+                            AttributeSetId = AttributeSetId,
+                            AttributeSetName = AttributeSetName,
+                            ParentType = ParentType,
+                            ParentId = ParentId,
+                            Status = MixEnums.MixContentStatus.Published
+                        };
+                        var saveResult = await nav.SaveModelAsync(false, context, transaction);
+                        if (!saveResult.IsSucceed)
+                        {
+                            result.IsSucceed = false;
+                            result.Exception = saveResult.Exception;
+                            result.Errors = saveResult.Errors;
+                        }
+                    }
+                }
+                if (result.IsSucceed)
+                {
+                    ParseData();
+                }
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<FormViewModel>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    context.Dispose();
+                }
+            }
+
+        }
 
         public override RepositoryResponse<FormViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -344,12 +344,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (result.IsSucceed)
                 {
                     item.Specificulture = Specificulture;
+                    item.ParentId = parent.Id;
+                    item.ParentType = (int)MixEnums.MixAttributeSetDataType.Set;
                     var saveRef = await item.SaveModelAsync(true, context, transaction);
                     if (saveRef.IsSucceed)
                     {
                         RelatedData.Add(new MixRelatedAttributeDatas.UpdateViewModel()
                         {
-                            Id = saveRef.Data.Id,
+                            DataId = saveRef.Data.Id,
                             ParentId = Id,
                             ParentType = (int)MixEnums.MixAttributeSetDataType.Set,
                             AttributeSetId = saveRef.Data.AttributeSetId,
@@ -434,7 +436,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
                 case MixEnums.MixDataType.Reference:
                     //string url = $"/api/v1/odata/en-us/related-attribute-set-data/mobile/parent/set/{Id}/{item.Field.ReferenceId}";
-                    return (new JProperty(item.AttributeFieldName, new JArray()));
+                    var children = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(
+                            m => m.Specificulture == Specificulture && m.ParentId == Id && m.ParentType == (int)MixEnums.MixAttributeSetDataType.Set);
+                    var arr = new JArray();
+                    foreach (var child in children.Data)
+                    {
+                        arr.Add(JObject.FromObject(child.AttributeData));
+                    }
+                    return (new JProperty(item.AttributeFieldName, arr));
 
                 case MixEnums.MixDataType.Custom:
                 case MixEnums.MixDataType.Duration:

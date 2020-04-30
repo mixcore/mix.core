@@ -299,7 +299,7 @@ namespace Mix.Heart.NetCore.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, [FromBody]TView data)
         {
-            var currentId = ReflectionHelper.GetPropertyValue(data, "id") as string;
+            var currentId = ReflectionHelper.GetPropertyValue(data, "id").ToString();
             if (id != currentId)
             {
                 return BadRequest();

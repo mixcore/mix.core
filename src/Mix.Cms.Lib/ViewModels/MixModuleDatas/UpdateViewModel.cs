@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -34,7 +35,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         public string Fields { get; set; } = "[]";
 
         [JsonProperty("value")]
-        [JsonIgnore]
         public string Value { get; set; }
 
         [JsonProperty("postId")]
@@ -106,13 +106,15 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
             JItem = Value == null ? InitValue() : JsonConvert.DeserializeObject<JObject>(Value);
             foreach (var item in DataProperties)
             {
-                if (!JItem.TryGetValue(item.Name, out JToken tmp))
+                JItem[item.Name] = Helper.ParseValue(JItem, item);
+                if (JItem[item.Name] == null)
                 {
                     JItem[item.Name] = new JObject()
                     {
                         new JProperty("dataType", item.DataType),
                         new JProperty("value", JItem[item.Name]?.Value<JObject>().Value<string>("value"))
                     };
+                    
                 }
             }
         }
