@@ -17,7 +17,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         BaseRestApiController<MixCmsContext, MixAttributeSetData, FormViewModel>
     {
         // GET: api/v1/rest/{culture}/attribute-set-data/client/search
-        [HttpGet("search")]
+        [HttpGet]
         public override async Task<ActionResult<PaginationModel<FormViewModel>>> Get()
         {
             var getData = await Helper.FilterByKeywordAsync<FormViewModel>(_lang, Request);

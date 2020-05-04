@@ -129,7 +129,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                 {
                     Content = file.Content;
                 }
-            }            
+            }
+            
         }
 
         public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
@@ -143,6 +144,10 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                     {
                         FileName = $"{FileName}_1";
                     }
+                }
+                if (string.IsNullOrEmpty(ThemeName) && ThemeId > 0)
+                {
+                    ThemeName = _context.MixTheme.FirstOrDefault(m => m.Id == ThemeId)?.Name;
                 }
             }
         }

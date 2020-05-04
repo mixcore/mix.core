@@ -26,17 +26,22 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         public override async Task<ActionResult<PaginationModel<FormViewModel>>> Get()
         {
             bool isStatus = int.TryParse(Request.Query["status"], out int status);
+            int.TryParse(Request.Query["attributeSetId"], out int attributeSetId);
             bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
             int.TryParse(Request.Query["parentType"], out int parentType);
             string parentId = Request.Query["parentId"];
+            string attributeSetName = Request.Query["attributeSetName"];
             Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
                 (!isStatus || model.Status == status)
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
+                && (model.AttributeSetId == attributeSetId || model.AttributeSetName == attributeSetName)
                 && (string.IsNullOrEmpty(parentId)
                  || (model.ParentId.Equals(parentId) && model.ParentType == parentType)
                  );
+                
+                
             var getData = await base.GetListAsync(predicate);
             if (getData.IsSucceed)
             {

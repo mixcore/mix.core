@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
     [Produces("application/json")]
-    [Route("api/v1/rest/{culture}/template/portal")]
+    [Route("api/v1/rest/template/portal")]
     public class ApiTemplateController :
         BaseRestApiController<MixCmsContext, MixTemplate, UpdateViewModel>
     {
@@ -52,6 +52,32 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 return BadRequest(getData.Errors);
             }
         }
+
+
+        // GET: api/s/5
+        [HttpGet("copy/{id}")]
+        public async Task<ActionResult<UpdateViewModel>> Copy(string id)
+        {            
+            var getData = await GetSingleAsync<UpdateViewModel>(id);
+            if (getData.IsSucceed)
+            {
+                var copyResult = await getData.Data.CopyAsync();
+                if (copyResult.IsSucceed)
+                {
+                    return Ok(copyResult.Data);
+
+                }
+                else
+                {
+                    return BadRequest(copyResult.Errors);
+                }
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
     }
 
 }
