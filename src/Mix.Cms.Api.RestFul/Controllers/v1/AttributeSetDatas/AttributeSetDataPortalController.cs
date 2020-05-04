@@ -8,19 +8,21 @@ using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Mix.Domain.Core.ViewModels;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
     [Route("api/v1/rest/{culture}/attribute-set-data/portal")]
     public class AttributeSetDataPortalController :
-        BaseRestApiController<MixCmsContext, MixAttributeSetData, FormViewModel>
+        BaseRestApiController<MixCmsContext, MixAttributeSetData, FormPortalViewModel>
     {
         // GET: api/v1/rest/{culture}/attribute-set-data
         [HttpGet]
-        public override async Task<ActionResult<PaginationModel<FormViewModel>>> Get()
+        public override async Task<ActionResult<PaginationModel<FormPortalViewModel>>> Get()
         {
-            var getData = await Helper.FilterByKeywordAsync<FormViewModel>(_lang, Request);
+            var getData = await Helper.FilterByKeywordAsync<FormPortalViewModel>(_lang, Request);
             if (getData.IsSucceed)
             {
                 return Ok(getData.Data);
@@ -33,13 +35,13 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
 
         // GET: api/v1/rest/{culture}/attribute-set-data
         [HttpGet("init/{attributeSet}")]
-        public async Task<ActionResult<FormViewModel>> Init(string attributeSet)
+        public async Task<ActionResult<FormPortalViewModel>> Init(string attributeSet)
         {
             int.TryParse(attributeSet, out int attributeSetId);
             var getAttrSet = await Lib.ViewModels.MixAttributeSets.UpdateViewModel.Repository.GetSingleModelAsync(m => m.Name == attributeSet || m.Id == attributeSetId);
             if (getAttrSet.IsSucceed)
             {
-                FormViewModel result = new FormViewModel() { 
+                FormPortalViewModel result = new FormPortalViewModel() { 
                     Specificulture = _lang,
                     AttributeSetId = getAttrSet.Data.Id,
                     AttributeSetName = getAttrSet.Data.Name,
@@ -52,6 +54,30 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             else
             {
                 return BadRequest(getAttrSet.Errors);
+            }
+        }
+
+        // GET api/attribute-set-data
+        [HttpGet("export")]
+        public async Task<ActionResult> Export()
+        {
+            string attributeSetName = Request.Query["attributeSetName"].ToString();
+            string exportPath = $"exports/module/{attributeSetName}";
+            var getData = await Helper.FilterByKeywordAsync<FormPortalViewModel>(_lang, Request);
+            
+            var jData = new List<JObject>();
+            if (getData.IsSucceed)
+            {
+                foreach (var item in getData.Data.Items)
+                {
+                    jData.Add(item.Obj);
+                }
+                var result = Lib.ViewModels.MixAttributeSetDatas.Helper.ExportAttributeToExcel(jData, string.Empty, exportPath, $"{attributeSetName}", null);
+                return Ok(result.Data);
+            }
+            else
+            {
+                return BadRequest(getData.Errors);
             }
         }
 

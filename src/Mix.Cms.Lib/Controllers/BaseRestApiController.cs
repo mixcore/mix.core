@@ -89,6 +89,21 @@ namespace Mix.Cms.Lib.Controllers
             return Ok(data);
         }
 
+        [HttpGet("remove-cache/{id}")]
+        public async Task<ActionResult> ClearCacheAsync(string id)
+        {
+            string key = $"_{id}";
+            key += !string.IsNullOrEmpty(_lang) ? $"_{_lang}" : string.Empty;
+            await CacheService.RemoveCacheAsync(typeof(TView), key);
+            return NoContent();
+        }
+        
+        [HttpGet("remove-cache")]
+        public async Task<ActionResult> ClearCacheAsync()
+        {
+            await CacheService.RemoveCacheAsync(typeof(TView));
+            return NoContent();
+        }
 
         // POST: api/s
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
@@ -121,7 +136,7 @@ namespace Mix.Cms.Lib.Controllers
             var result = await SaveAsync(data, true);
             if (result.IsSucceed)
             {
-                return NoContent();
+                return Ok(result.Data);
             }
             else
             {
@@ -176,11 +191,7 @@ namespace Mix.Cms.Lib.Controllers
 
         }
 
-        [HttpGet("clear-cache")]
-        protected async Task ClearCacheAsync(Type type)
-        {
-            await CacheService.RemoveCacheAsync(type: type);
-        }
+        
         #endregion
 
         #region Overrides

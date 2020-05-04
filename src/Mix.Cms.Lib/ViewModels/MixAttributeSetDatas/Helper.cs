@@ -7,6 +7,7 @@ using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Helpers;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
 using OfficeOpenXml.Table;
@@ -138,7 +139,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     if (!string.IsNullOrEmpty(q.Key) && !string.IsNullOrEmpty(q.Value))
                     {
                         Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeFieldName == q.Key && m.StringValue.Contains(q.Value);
-                        valPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(valPredicate, pre, Microsoft.OData.UriParser.BinaryOperatorKind.And);
+                        valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixEnums.ExpressionMethod.And);
                     }
                 }
                 var query = context.MixAttributeSetValue.Where(valPredicate).Select(m => m.DataId).Distinct().ToList();
@@ -232,7 +233,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                                     m.AttributeFieldName == q.Key && m.StringValue == (q.Value.ToString());
                                 if (valPredicate != null)
                                 {
-                                    valPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(valPredicate, pre, Microsoft.OData.UriParser.BinaryOperatorKind.And);
+                                    valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixEnums.ExpressionMethod.And);
                                 }
                                 else
                                 {
@@ -246,7 +247,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                                     (EF.Functions.Like(m.StringValue, $"%{q.Value.ToString()}%"));
                                 if (valPredicate != null)
                                 {
-                                    valPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(valPredicate, pre, Microsoft.OData.UriParser.BinaryOperatorKind.And);
+                                    valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixEnums.ExpressionMethod.And);
                                 }
                                 else
                                 {
@@ -257,14 +258,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     }
                     if (valPredicate != null)
                     {
-                        attrPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(valPredicate, attrPredicate, Microsoft.OData.UriParser.BinaryOperatorKind.And);
+                        attrPredicate = ReflectionHelper.CombineExpression(valPredicate, attrPredicate, Heart.Enums.MixEnums.ExpressionMethod.And);
                     }
                 }
                 // Loop queries string => predicate
                 if (!string.IsNullOrEmpty(keyword))
                 {
                     Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeSetName == attributeSetName && m.Specificulture == culture && m.StringValue.Contains(keyword);
-                    attrPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(attrPredicate, pre, Microsoft.OData.UriParser.BinaryOperatorKind.And);
+                    attrPredicate = ReflectionHelper.CombineExpression(attrPredicate, pre, Heart.Enums.MixEnums.ExpressionMethod.And);
                 }
 
                 var query = context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
@@ -348,7 +349,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                                             (filterType == "contain" && (EF.Functions.Like(m.StringValue, $"%{keyword}%")));
                             if (valPredicate != null)
                             {
-                                valPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(valPredicate, pre, Microsoft.OData.UriParser.BinaryOperatorKind.And);
+                                valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixEnums.ExpressionMethod.And);
                             }
                             else
                             {
@@ -368,7 +369,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                                             (filterType == "contain" && (EF.Functions.Like(m.StringValue, $"%{q.Value.ToString()}%")));
                                 if (valPredicate != null)
                                 {
-                                    valPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(valPredicate, pre, Microsoft.OData.UriParser.BinaryOperatorKind.And);
+                                    valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixEnums.ExpressionMethod.Or);
                                 }
                                 else
                                 {
@@ -379,15 +380,20 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     }
                     if (valPredicate != null)
                     {
-                        attrPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(valPredicate, attrPredicate, Microsoft.OData.UriParser.BinaryOperatorKind.And);
+                        attrPredicate = attrPredicate == null ? valPredicate
+                                : ReflectionHelper.CombineExpression(valPredicate, attrPredicate, Heart.Enums.MixEnums.ExpressionMethod.And);
                     }
-                    var query = context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
-                    var dataIds = query.ToList();
-                    if (query != null)
+
+                    if (attrPredicate != null)
                     {
-                        Expression<Func<MixAttributeSetData, bool>> pre = m => dataIds.Any(id => m.Id == id);
-                        predicate = ODataHelper<MixAttributeSetData>.CombineExpression(pre, predicate, Microsoft.OData.UriParser.BinaryOperatorKind.And);
-                        
+                        var query = context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
+                        var dataIds = query.ToList();
+                        if (query != null)
+                        {
+                            Expression<Func<MixAttributeSetData, bool>> pre = m => dataIds.Any(id => m.Id == id);
+                            predicate = ReflectionHelper.CombineExpression(pre, predicate, Heart.Enums.MixEnums.ExpressionMethod.And);
+
+                        }
                     }
                 }
                 result = await DefaultRepository<MixCmsContext, MixAttributeSetData, TView>.Instance.GetModelListByAsync(
@@ -428,7 +434,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeFieldName == fieldName && m.StringValue == keyword;
                     if (valPredicate != null)
                     {
-                        valPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(valPredicate, pre, Microsoft.OData.UriParser.BinaryOperatorKind.And);
+                        valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixEnums.ExpressionMethod.And);
                     }
                     else
                     {
@@ -440,7 +446,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeFieldName == fieldName && m.StringValue.Contains(keyword);
                     if (valPredicate != null)
                     {
-                        valPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(valPredicate, pre, Microsoft.OData.UriParser.BinaryOperatorKind.And);
+                        valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixEnums.ExpressionMethod.And);
                     }
                     else
                     {
@@ -449,7 +455,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
                 if (valPredicate != null)
                 {
-                    attrPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(valPredicate, attrPredicate, Microsoft.OData.UriParser.BinaryOperatorKind.And);
+                    attrPredicate = ReflectionHelper.CombineExpression(valPredicate, attrPredicate, Heart.Enums.MixEnums.ExpressionMethod.And);
                 }
 
                 var query = context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
@@ -515,7 +521,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         var r = dtable.NewRow();
                         foreach (var prop in a.Properties())
                         {
-                            r[prop.Name] = a[prop.Name].Value<string>();
+                            bool isHaveValue = a.TryGetValue(prop.Name, out JToken val);
+                            if (isHaveValue)
+                            {
+                                r[prop.Name] = val.ToString();
+                            }
                         }
                         dtable.Rows.Add(r);
                     }
