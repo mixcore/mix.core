@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
@@ -540,11 +541,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
                         CommonHelper.SaveFileBytes(folderPath, filenameE, pck.GetAsByteArray());
                         result.IsSucceed = true;
-                        result.Data = CommonHelper.GetFullPath(new string[]
-                        {
-                            folderPath,
-                            filenameE
-                        });
+                        result.Data = $"{MixService.GetConfig<string>("Domain")}/{folderPath}/{filenameE}";
 
                         return result;
                     }
