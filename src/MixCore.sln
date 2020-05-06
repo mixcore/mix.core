@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Cms.Scheduler", "Mix.Cm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Heart.NetCore", "Mix.Heart.NetCore\Mix.Heart.NetCore.csproj", "{EEA39C49-5113-4772-87C1-2F1D0487A8CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCLController", "TCLController\TCLController.csproj", "{80A26294-BE05-4C49-ABF2-B75C711507A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{EEA39C49-5113-4772-87C1-2F1D0487A8CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEA39C49-5113-4772-87C1-2F1D0487A8CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEA39C49-5113-4772-87C1-2F1D0487A8CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80A26294-BE05-4C49-ABF2-B75C711507A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80A26294-BE05-4C49-ABF2-B75C711507A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80A26294-BE05-4C49-ABF2-B75C711507A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80A26294-BE05-4C49-ABF2-B75C711507A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,6 +2,9 @@
 // The Mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Controllers;
@@ -79,6 +82,25 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             {
                 return BadRequest(getData.Errors);
             }
+        }
+
+        // POST api/attribute-set-data
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
+        [HttpPost, HttpOptions]
+        [Route("import-data/{attributeSetName}")]
+        public async Task<ActionResult<RepositoryResponse<ImportViewModel>>> ImportData(string attributeSetName, [FromForm]IFormFile file)
+        {
+            var getAttributeSet = await Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModelAsync(
+                    m => m.Name == attributeSetName);
+            if (getAttributeSet.IsSucceed)
+            {
+                if (file != null)
+                {
+                    var result = await Helper.ImportData(_lang, getAttributeSet.Data, file);
+                    return Ok(result);
+                }
+            }
+            return new RepositoryResponse<ImportViewModel>() { Status = 501 };
         }
 
         // DELETE: api/v1/rest/en-us/attribute-set/portal/5
