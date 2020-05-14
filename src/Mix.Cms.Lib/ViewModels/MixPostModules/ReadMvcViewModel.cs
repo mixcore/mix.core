@@ -2,6 +2,7 @@
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
+using System;
 
 namespace Mix.Cms.Lib.ViewModels.MixPostModules
 {
@@ -16,12 +17,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPostModules
         public ReadViewModel() : base()
         {
         }
+        #region Properties
+
+        #region Models
         [JsonProperty("id")]
         public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
         [JsonProperty("moduleId")]
         public int ModuleId { get; set; }
 
@@ -37,15 +39,27 @@ namespace Mix.Cms.Lib.ViewModels.MixPostModules
         [JsonProperty("description")]
         public string Description { get; set; }
 
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("status")]
         public MixEnums.MixContentStatus Status { get; set; }
-
+        #endregion
         #region Views
 
         [JsonProperty("module")]
         public MixModules.ReadMvcViewModel Module { get; set; }
 
         #endregion Views
+
+        #endregion
 
         #region overrides
         public override MixPostModule ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)

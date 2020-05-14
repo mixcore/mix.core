@@ -55,7 +55,7 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeFields
                     {
                         var model = new MixAttributeField()
                         {
-                            Status = MixService.GetConfig<int>("DefaultStatus")
+                            Status = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.DefaultContentStatus)
                             ,
                             Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
@@ -74,7 +74,7 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeFields
                     {
                         var model = new MixAttributeField()
                         {
-                            Status = MixService.GetConfig<int>("DefaultStatus")
+                            Status = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.DefaultContentStatus)
                             ,
                             Priority = ReadViewModel.Repository.Max(a => a.Priority).Data + 1
                         };

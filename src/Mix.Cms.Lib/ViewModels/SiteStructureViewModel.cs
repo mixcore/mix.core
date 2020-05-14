@@ -178,7 +178,7 @@ namespace Mix.Cms.Lib.ViewModels
             if (!RelatedData.Any(m => m.ParentId == id && m.ParentType == type))
             {
                 var getRelatedData = MixRelatedAttributeDatas.ImportViewModel.Repository.GetSingleModel(
-                            m => m.Specificulture == Specificulture && m.ParentType == (int)type
+                            m => m.Specificulture == Specificulture && m.ParentType == type.ToString()
                                 && m.ParentId == id, context, transaction);
                 if (getRelatedData.IsSucceed)
                 {

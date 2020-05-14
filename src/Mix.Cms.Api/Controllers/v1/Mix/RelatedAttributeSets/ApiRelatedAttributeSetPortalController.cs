@@ -151,7 +151,7 @@ namespace Mix.Cms.Api.Controllers.v1.RelatedAttributeSets
             int.TryParse(parsed.Get("parentId"), out int parentId);
             ParseRequestPagingDate(request);
             Expression<Func<MixRelatedAttributeSet, bool>> predicate = model =>
-                        (!request.Status.HasValue || model.Status == request.Status.Value)
+                        (string.IsNullOrEmpty(request.Status) || model.Status == request.Status)
                         && (parentId == 0
                             || (model.ParentId == parentId)
                             )

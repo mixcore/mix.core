@@ -22,8 +22,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         public string Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
@@ -35,26 +33,30 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         public string Fields { get; set; } = "[]";
 
         [JsonProperty("value")]
+        [JsonIgnore]
         public string Value { get; set; }
 
         [JsonProperty("postId")]
-        public string PostId { get; set; }
+        public int? PostId { get; set; }
 
         [JsonProperty("productId")]
-        public string ProductId { get; set; }
+        public int? ProductId { get; set; }
 
         [JsonProperty("pageId")]
         public int? PageId { get; set; }
 
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
-        [JsonProperty("updatedDateTime")]
-        public DateTime? UpdatedDateTime { get; set; }
-
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixContentStatus Status { get; set; }
-
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -90,10 +92,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
             }
-            else
-            {
-                UpdatedDateTime = DateTime.UtcNow;
-            }
+            LastModified = DateTime.UtcNow;
             Value = JsonConvert.SerializeObject(JItem);
             Fields = JsonConvert.SerializeObject(DataProperties);
             return base.ParseModel(_context, _transaction);

@@ -310,7 +310,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 int.TryParse(request.Query["pageSize"], out int pageSize);
                 bool isFromDate = DateTime.TryParse(request.Query["fromDate"], out DateTime fromDate);
                 bool isToDate = DateTime.TryParse(request.Query["toDate"], out DateTime toDate);
-                bool isStatus = int.TryParse(request.Query["status"], out int status);
+                bool isStatus = Enum.TryParse(request.Query["status"], out MixEnums.MixContentStatus status);
                 var tasks = new List<Task<RepositoryResponse<TView>>>();
                 var getfields = await MixAttributeFields.ReadViewModel.Repository.GetModelListByAsync(
                     m => m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName, context, transaction);
@@ -326,7 +326,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 // Data predicate
                 Expression<Func<MixAttributeSetData, bool>> predicate = m => m.Specificulture == culture 
                     && (m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName)
-                    && (!isStatus || (m.Status == status))
+                    && (!isStatus || (m.Status == status.ToString()))
                     && (!isFromDate || (m.CreatedDateTime >= fromDate))
                     && (!isToDate || (m.CreatedDateTime <= toDate));
                 RepositoryResponse <PaginationModel<TView>> result = new RepositoryResponse<PaginationModel<TView>>()

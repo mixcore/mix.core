@@ -29,24 +29,26 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public string Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
+        [JsonProperty("cultures")]
+        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
 
         [JsonProperty("attributeSetName")]
         public string AttributeSetName { get; set; }
-
-        [JsonProperty("createdDateTime")]
-        public DateTime CreatedDateTime { get; set; }
-
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
-
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("status")]
         public MixEnums.MixContentStatus Status { get; set; }
-
         #endregion Models
 
         #region Views
@@ -57,7 +59,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public string ParentId { get; set; }
 
         [JsonProperty("parentType")]
-        public int ParentType { get; set; }
+        public MixEnums.MixAttributeSetDataType ParentType { get; set; }
 
 
         [JsonProperty("relatedData")]
@@ -222,7 +224,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (result.IsSucceed && !string.IsNullOrEmpty(ParentId))
                 {
                     var getNav = MixRelatedAttributeDatas.UpdateViewModel.Repository.CheckIsExists(
-                        m => m.DataId == Id && m.ParentId == ParentId && m.ParentType == ParentType && m.Specificulture == Specificulture
+                        m => m.DataId == Id && m.ParentId == ParentId && m.ParentType == ParentType.ToString() && m.Specificulture == Specificulture
                         , context, transaction);
                     if (!getNav)
                     {
@@ -312,7 +314,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         item.DataId = parent.Id;
                         item.Specificulture = parent.Specificulture;
                         item.Priority = item.Field.Priority;
-                        item.Status = (int)MixEnums.MixContentStatus.Published;
+                        item.Status = MixEnums.MixContentStatus.Published;
                         var saveResult = await item.SaveModelAsync(false, context, transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
                     }
@@ -339,7 +341,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     item.Specificulture = Specificulture;
                     item.ParentId = parent.Id;
-                    item.ParentType = (int)MixEnums.MixAttributeSetDataType.Set;
+                    item.ParentType = MixEnums.MixAttributeSetDataType.Set;
                     item.Status = MixEnums.MixContentStatus.Published;
                     var saveRef = await item.SaveModelAsync(true, context, transaction);
                     if (saveRef.IsSucceed)
@@ -348,7 +350,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         {
                             DataId = saveRef.Data.Id,
                             ParentId = Id,
-                            ParentType = (int)MixEnums.MixAttributeSetDataType.Set,
+                            ParentType = MixEnums.MixAttributeSetDataType.Set,
                             AttributeSetId = saveRef.Data.AttributeSetId,
                             AttributeSetName = saveRef.Data.AttributeSetName,
                             CreatedDateTime = DateTime.UtcNow,

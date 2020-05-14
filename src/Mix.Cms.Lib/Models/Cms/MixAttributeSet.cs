@@ -24,9 +24,12 @@ namespace Mix.Cms.Lib.Models.Cms
         public string EdmSubject { get; set; }
         public string EdmFrom { get; set; }
         public bool? EdmAutoSend { get; set; }
+        public string ModifiedBy { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime? LastModified { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public int Priority { get; set; }
-        public int Status { get; set; }
+        public string Status { get; set; }
 
         public virtual ICollection<MixAttributeField> MixAttributeFieldAttributeSet { get; set; }
         public virtual ICollection<MixAttributeField> MixAttributeFieldReference { get; set; }

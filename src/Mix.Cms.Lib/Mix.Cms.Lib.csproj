@@ -12,6 +12,20 @@
     <Compile Remove="Migrations\20200409113816_Init.Designer.cs" />
     <Compile Remove="Migrations\MixCmsAccount\20190804034827_init_mysql.cs" />
     <Compile Remove="Migrations\MixCmsAccount\20190804034827_init_mysql.Designer.cs" />
+    <Compile Remove="ViewModels\MixAttributeFields\HubViewModel.cs" />
+    <Compile Remove="ViewModels\MixAttributeFields\MobileViewModel.cs" />
+    <Compile Remove="ViewModels\MixAttributeSetDatas\HubViewModel.cs" />
+    <Compile Remove="ViewModels\MixAttributeSetDatas\MobileViewModel.cs" />
+    <Compile Remove="ViewModels\MixAttributeSetDatas\ReadDataViewModel.cs" />
+    <Compile Remove="ViewModels\MixAttributeSetDataValues\HubViewModel.cs" />
+    <Compile Remove="ViewModels\MixAttributeSetDataValues\MobileViewModel.cs" />
+    <Compile Remove="ViewModels\MixAttributeSets\ContentUpdateViewModel.cs" />
+    <Compile Remove="ViewModels\MixAttributeSets\ReadMvcArticleViewModel.cs" />
+    <Compile Remove="ViewModels\MixConfigurations\MobileViewModel.cs" />
+    <Compile Remove="ViewModels\MixLanguages\MobileViewModel.cs" />
+    <Compile Remove="ViewModels\MixLanguages\ReadAndroidViewModel.cs" />
+    <Compile Remove="ViewModels\MixRelatedAttributeDatas\HubViewModel.cs" />
+    <Compile Remove="ViewModels\MixRelatedAttributeDatas\MobileViewModel.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -150,7 +150,7 @@ namespace Mix.Cms.Lib.Services
         {
             if (Instance.Cultures == null)
             {
-                var cultures = ViewModels.MixCultures.ReadViewModel.Repository.GetModelList().Data;
+                var cultures = ViewModels.MixCultures.UpdateViewModel.Repository.GetModelList().Data;
                 Instance.Cultures = cultures?.Select(c => c.Specificulture).ToList() ?? new List<string>();
             }
             return Instance.Cultures.Any(c => c == specificulture);
