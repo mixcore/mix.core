@@ -79,7 +79,7 @@ namespace Mix.Cms.Lib.Models.Cms
         //Ref https://github.com/dotnet/efcore/issues/10169
         public override void Dispose()
         {
-            var provider = (MixEnums.DatabaseProvider)MixService.GetConfig<int>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+            var provider = (MixEnums.DatabaseProvider)MixService.GetConfig<MixEnums.DatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
             switch (provider)
             {
                 case MixEnums.DatabaseProvider.MSSQL:
