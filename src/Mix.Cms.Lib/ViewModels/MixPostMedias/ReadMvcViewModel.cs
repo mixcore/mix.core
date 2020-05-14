@@ -5,6 +5,7 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using System;
 
 namespace Mix.Cms.Lib.ViewModels.MixPostMedias
 {
@@ -19,12 +20,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPostMedias
         public ReadViewModel() : base()
         {
         }
+        #region Properties
+        #region Models
         [JsonProperty("id")]
         public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
         [JsonProperty("mediaId")]
         public int MediaId { get; set; }
 
@@ -40,11 +41,25 @@ namespace Mix.Cms.Lib.ViewModels.MixPostMedias
         [JsonProperty("description")]
         public string Description { get; set; }
 
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
+        #endregion
         #region Views
 
         public UpdateViewModel Media { get; set; }
 
         #endregion Views
+        #endregion
 
         #region overrides
         public override MixPostMedia ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)

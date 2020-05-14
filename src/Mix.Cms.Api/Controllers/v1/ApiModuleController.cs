@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
@@ -64,7 +65,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         var model = new MixModule()
                         {
                             Specificulture = _lang,
-                            Status = MixService.GetConfig<int>("DefaultStatus"),
+                            Status = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
                             Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 
@@ -171,7 +172,7 @@ namespace Mix.Cms.Api.Controllers.v1
             ParseRequestPagingDate(request);
             Expression<Func<MixModule, bool>> predicate = model =>
                         model.Specificulture == _lang
-                        && (!request.Status.HasValue || model.Status == request.Status.Value)
+                        && (string.IsNullOrEmpty(request.Status) || model.Status == request.Status)
                         && (!isType || model.Type == moduleType)
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (EF.Functions.Like(model.Name, $"%{request.Keyword}%"))

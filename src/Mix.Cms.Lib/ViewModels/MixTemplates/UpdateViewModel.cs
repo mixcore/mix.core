@@ -39,7 +39,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         public string FileName { get; set; }
 
         [JsonProperty("extension")]
-        public string Extension { get; set; } = ".cshtml";
+        public string Extension { get; set; }
 
         [Required]
         [JsonProperty("content")]
@@ -57,14 +57,18 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         [JsonProperty("styles")]
         public string Styles { get; set; }
 
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
-        [JsonProperty("lastModified")]
-        public DateTime? LastModified { get; set; }
-
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
 
         #endregion Models
 

@@ -25,18 +25,18 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         public string Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("moduleId")]
         public int ModuleId { get; set; }
 
+        [JsonIgnore]
         [JsonProperty("fields")]
         public string Fields { get; set; } = "[]";
 
         [JsonProperty("value")]
+        [JsonIgnore]
         public string Value { get; set; }
 
         [JsonProperty("postId")]
@@ -48,12 +48,18 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         [JsonProperty("pageId")]
         public int? PageId { get; set; }
 
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
-        [JsonProperty("updatedDateTime")]
-        public DateTime? UpdatedDateTime { get; set; }
-
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -89,10 +95,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
             }
-            else
-            {
-                UpdatedDateTime = DateTime.UtcNow;
-            }
+            
+            LastModified = DateTime.UtcNow;
             Value = JsonConvert.SerializeObject(JItem);
             Fields = JsonConvert.SerializeObject(DataProperties);
             return base.ParseModel(_context, _transaction);

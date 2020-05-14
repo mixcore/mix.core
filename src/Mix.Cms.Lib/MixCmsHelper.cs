@@ -71,7 +71,7 @@ namespace Mix.Cms.Lib
         public static List<ViewModels.MixPages.ReadListItemViewModel> GetCategory(IUrlHelper Url, string culture, MixPageType cateType, string activePath = "")
         {
             var getTopCates = ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelListBy
-            (c => c.Specificulture == culture && c.Type == (int)cateType
+            (c => c.Specificulture == culture && c.Type == cateType.ToString()
             );
             var cates = getTopCates.Data ?? new List<ViewModels.MixPages.ReadListItemViewModel>();
             activePath = activePath.ToLower();
@@ -326,7 +326,7 @@ namespace Mix.Cms.Lib
                 var query = context.MixAttributeSetValue.Where(valPredicate).Select(m => m.DataId).Distinct();
                 var dataIds = query.ToList();
                 var relatedQuery = context.MixRelatedAttributeData.Where(
-                         m => m.ParentType == (int)MixEnums.MixAttributeSetDataType.Post && m.Specificulture == culture
+                         m => m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString() && m.Specificulture == culture
                             && dataIds.Any(d => d == m.DataId));
                 var postIds = relatedQuery.Select(m => int.Parse(m.ParentId)).Distinct().AsEnumerable().ToList();
                 result = await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(

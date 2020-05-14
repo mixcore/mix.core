@@ -18,9 +18,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
-
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
 
@@ -64,13 +61,20 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
 
         [JsonProperty("isUnique")]
         public bool IsUnique { get; set; }
-
-        [JsonProperty("status")]
-        public int Status { get; set; }
-
+        [JsonProperty("isMultiple")]
+        public bool IsMultiple { get; set; }
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #endregion Properties

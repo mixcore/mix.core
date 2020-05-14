@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetValues;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
@@ -55,7 +56,7 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSetValues
                     {
                         var model = new MixAttributeSetValue()
                         {
-                            Status = MixService.GetConfig<int>("DefaultStatus")
+                            Status = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.DefaultContentStatus)
                             ,
                             Priority = MobileViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
@@ -74,7 +75,7 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSetValues
                     {
                         var model = new MixAttributeSetValue()
                         {
-                            Status = MixService.GetConfig<int>("DefaultStatus")
+                            Status = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.DefaultContentStatus)
                             ,
                             Priority = ReadViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
@@ -91,12 +92,12 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSetValues
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("save")]
-        public async Task<RepositoryResponse<MobileViewModel>> Save([FromBody]MobileViewModel data)
+        public async Task<RepositoryResponse<FormViewModel>> Save([FromBody]FormViewModel data)
         {
             if (data != null)
             {
                 data.Specificulture = _lang;
-                var result = await base.SaveAsync<MobileViewModel>(data, true);
+                var result = await base.SaveAsync<FormViewModel>(data, true);
                 if (result.IsSucceed)
                 {
                     MixService.LoadFromDatabase();
@@ -104,7 +105,7 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSetValues
                 }
                 return result;
             }
-            return new RepositoryResponse<MobileViewModel>() { Status = 501 };
+            return new RepositoryResponse<FormViewModel>() { Status = 501 };
         }
 
         // GET api/attribute-set-value
@@ -118,7 +119,7 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSetValues
             ParseRequestPagingDate(request);
             Expression<Func<MixAttributeSetValue, bool>> predicate = model =>
                         model.Specificulture == _lang
-                        && (!request.Status.HasValue || model.Status == request.Status.Value)
+                        && (string.IsNullOrEmpty(request.Status) || model.Status == request.Status)
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (model.StringValue.Contains(request.Keyword))
                             )

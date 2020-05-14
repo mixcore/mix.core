@@ -94,7 +94,7 @@ namespace Mix.Cms.Service.SignalR.Hubs
                 getPreviousMsgs.Data.Items = getPreviousMsgs.Data.Items.OrderBy(m => m.CreatedDateTime).ToList();
                 await SendToCaller(getPreviousMsgs.Data, Constants.Enums.MessageReponseKey.PreviousMessages);
             }
-            var groupMembers = GetGroupMembers(request);
+            var groupMembers = GetGroupMembersAsync(request);
 
 
             var result = new RepositoryResponse<bool>();
@@ -107,11 +107,11 @@ namespace Mix.Cms.Service.SignalR.Hubs
            
         }
 
-        private object GetGroupMembers(HubRequest<JObject> request)
+        private async Task<object> GetGroupMembersAsync(HubRequest<JObject> request)
         {
             Expression<Func<MixAttributeSetValue, bool>> predicate = m => m.Specificulture == request.Specificulture
                  && m.AttributeSetName == Constants.HubMessages.HubMemberName && m.AttributeFieldName == request.Room;
-            var data = Lib.ViewModels.MixAttributeSetDatas.HubViewModel.FilterByValue(predicate, _msgContext);
+            var data = await Lib.ViewModels.MixAttributeSetDatas.FormViewModel.FilterByValueAsync(request.Specificulture, request.Room, new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>());
             return data;
         }
 

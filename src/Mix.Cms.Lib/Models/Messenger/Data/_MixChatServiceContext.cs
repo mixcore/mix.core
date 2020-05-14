@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
 using MySql.Data.MySqlClient;
+using System;
 
 namespace Mix.Cms.Messenger.Models.Data
 {
@@ -53,7 +54,7 @@ namespace Mix.Cms.Messenger.Models.Data
                 string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
                 if (!string.IsNullOrEmpty(cnn))
                 {
-                    var provider = (MixEnums.DatabaseProvider)MixService.GetConfig<int>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+                    var provider = Enum.Parse<MixEnums.DatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
                     switch (provider)
                     {
                         case MixEnums.DatabaseProvider.MSSQL:
@@ -74,7 +75,7 @@ namespace Mix.Cms.Messenger.Models.Data
         //Ref https://github.com/dotnet/efcore/issues/10169
         public override void Dispose()
         {
-            var provider = (MixEnums.DatabaseProvider)MixService.GetConfig<int>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+            var provider = Enum.Parse<MixEnums.DatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
             switch (provider)
             {
                 case MixEnums.DatabaseProvider.MSSQL:

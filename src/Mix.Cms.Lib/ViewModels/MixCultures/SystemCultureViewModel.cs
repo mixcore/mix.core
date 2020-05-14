@@ -5,6 +5,7 @@ using Mix.Cms.Lib.ViewModels.MixLanguages;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
@@ -19,7 +20,9 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
 
         [JsonProperty("id")]
         public int Id { get; set; }
-
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        
         [JsonProperty("alias")]
         public string Alias { get; set; }
 
@@ -35,9 +38,18 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
         [JsonProperty("lcid")]
         public string Lcid { get; set; }
 
-        [Required]
-        [JsonProperty("specificulture")]
-        public string Specificulture { get; set; }
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
 
         #endregion Models
 

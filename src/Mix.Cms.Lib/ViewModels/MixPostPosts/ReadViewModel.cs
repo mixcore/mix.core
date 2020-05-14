@@ -16,26 +16,29 @@ namespace Mix.Cms.Lib.ViewModels.MixPostPosts
         public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }        
-
+        
         [JsonProperty("sourceId")]
         public int SourceId { get; set; }
 
         [JsonProperty("destinationId")]
         public int DestinationId { get; set; }
 
-        [JsonProperty("createdDateTime")]
-        public DateTime CreatedDateTime { get; set; }
-
         [JsonProperty("image")]
         public string Image { get; set; }
 
         [JsonProperty("description")]
         public string Description { get; set; }
-
+        public string CreatedBy { get; set; }
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixContentStatus Status { get; set; }
+        public MixEnums.MixContentStatus Status { get; set; }
 
         #endregion Models
 

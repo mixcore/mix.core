@@ -12,8 +12,8 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
-    public class RemoveViewModel
-         : ViewModelBase<MixCmsContext, MixPost, RemoveViewModel>
+    public class DeleteViewModel
+         : ViewModelBase<MixCmsContext, MixPost, DeleteViewModel>
     {
         #region Properties
 
@@ -23,8 +23,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
@@ -79,38 +77,34 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("type")]
         public int Type { get; set; }
 
-        [JsonProperty("createdDateTime")]
-        public DateTime CreatedDateTime { get; set; }
-
         [JsonProperty("publishedDateTime")]
         public DateTime? PublishedDateTime { get; set; }
-
-        [JsonProperty("createdBy")]
-        public string CreatedBy { get; set; }
-
-        [JsonProperty("lastModified")]
-        public DateTime? LastModified { get; set; }
-
-        [JsonProperty("modifiedBy")]
-        public string ModifiedBy { get; set; }
 
         [JsonProperty("tags")]
         public string Tags { get; set; } = "[]";
 
+        public string CreatedBy { get; set; }
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("status")]
         public MixEnums.MixContentStatus Status { get; set; }
-
         #endregion Models
 
         #endregion Properties
 
         #region Contructors
 
-        public RemoveViewModel() : base()
+        public DeleteViewModel() : base()
         {
         }
 
-        public RemoveViewModel(MixPost model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public DeleteViewModel(MixPost model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -120,7 +114,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         #region Async Methods
 
-        public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(RemoveViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(DeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>()
             {
@@ -188,7 +182,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         #region Sync Methods
 
-        public override RepositoryResponse<bool> RemoveRelatedModels(RemoveViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override RepositoryResponse<bool> RemoveRelatedModels(DeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>()
             {

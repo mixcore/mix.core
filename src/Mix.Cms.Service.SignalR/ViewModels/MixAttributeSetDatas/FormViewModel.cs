@@ -324,7 +324,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
                         {
                             Id = saveRef.Data.Id,
                             ParentId = Id,
-                            ParentType = (int)Lib.MixEnums.MixAttributeSetDataType.Set,
+                            ParentType = Lib.MixEnums.MixAttributeSetDataType.Set,
                             AttributeSetId = saveRef.Data.AttributeSetId,
                             AttributeSetName = saveRef.Data.AttributeSetName,
                             CreatedDateTime = DateTime.UtcNow,

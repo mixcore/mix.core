@@ -5,6 +5,7 @@ using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
@@ -20,8 +21,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
+        [JsonProperty("cultures")]
+        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -47,26 +48,27 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("description")]
         public string Description { get; set; }
 
-        [JsonProperty("lastModified")]
-        public DateTime? LastModified { get; set; }
-
-        [JsonProperty("modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
-
         [JsonProperty("fields")]
         public string Fields { get; set; }
 
         [JsonProperty("type")]
         public MixModuleType Type { get; set; }
 
-        [JsonProperty("status")]
-        public MixContentStatus Status { get; set; }
+        [JsonProperty("pageSize")]
+        public int? PageSize { get; set; }
 
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
+        [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         [JsonProperty("imageUrl")]
@@ -74,9 +76,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             get {
                 if (!string.IsNullOrWhiteSpace(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
-                    return CommonHelper.GetFullPath(new string[] {
-                    Domain,  Image
-                });
+                    return $"{MixService.GetConfig<string>("Domain")}/{Image}";
                 }
                 else
                 {
@@ -90,9 +90,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             get {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
-                    return CommonHelper.GetFullPath(new string[] {
-                    Domain,  Thumbnail
-                });
+                    return $"{MixService.GetConfig<string>("Domain")}/{Thumbnail}";
                 }
                 else
                 {

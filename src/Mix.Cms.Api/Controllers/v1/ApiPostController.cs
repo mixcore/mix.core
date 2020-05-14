@@ -41,7 +41,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("delete/{id}")]
         public async Task<RepositoryResponse<MixPost>> DeleteAsync(int id)
         {
-            return await base.DeleteAsync<RemoveViewModel>(
+            return await base.DeleteAsync<DeleteViewModel>(
                 model => model.Id == id && model.Specificulture == _lang, true);
         }
 
@@ -73,7 +73,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         var model = new MixPost()
                         {
                             Specificulture = _lang,
-                            Status = MixService.GetConfig<int>("DefaultStatus"),
+                            Status = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
                             Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 
@@ -193,7 +193,7 @@ namespace Mix.Cms.Api.Controllers.v1
             ParseRequestPagingDate(request);
             Expression<Func<MixPost, bool>> predicate = model =>
                         model.Specificulture == _lang
-                        && (!request.Status.HasValue || model.Status == request.Status.Value)
+                        && (string.IsNullOrEmpty(request.Status) || model.Status == request.Status)
                         && (!isPage || model.MixPagePost.Any(nav => nav.PageId == pageId && nav.PostId == model.Id && nav.Specificulture == _lang))
                         && (!isNotPage || !model.MixPagePost.Any(nav => nav.PageId == notPageId && nav.PostId == model.Id && nav.Specificulture == _lang))
                         && (!isModule || model.MixModulePost.Any(nav => nav.ModuleId == moduleId && nav.PostId == model.Id))
@@ -279,7 +279,7 @@ namespace Mix.Cms.Api.Controllers.v1
             switch (data.Action)
             {
                 case "Delete":
-                    return Ok(JObject.FromObject(await base.DeleteListAsync<RemoveViewModel>(predicate, true)));
+                    return Ok(JObject.FromObject(await base.DeleteListAsync<DeleteViewModel>(predicate, true)));
 
                 case "Export":
                     return Ok(JObject.FromObject(await base.ExportListAsync(predicate, MixStructureType.Module)));
@@ -297,12 +297,12 @@ namespace Mix.Cms.Api.Controllers.v1
             if (nextSync.HasValue && nextSync.Value <= DateTime.UtcNow)
             {
                 var publishedPosts = ReadListItemViewModel.Repository.GetModelListBy(
-                    a => a.Status == (int)MixContentStatus.Schedule
+                    a => a.Status == MixContentStatus.Schedule.ToString()
                         && (!a.PublishedDateTime.HasValue || a.PublishedDateTime.Value <= DateTime.UtcNow)
                         );
                 publishedPosts.Data.ForEach(a => a.Status = MixContentStatus.Published);
                 base.SaveList(publishedPosts.Data, false);
-                var next = ReadListItemViewModel.Repository.Min(a => a.Type == (int)MixContentStatus.Schedule,
+                var next = ReadListItemViewModel.Repository.Min(a => a.Type == MixContentStatus.Schedule.ToString(),
                             a => a.PublishedDateTime);
                 nextSync = next.Data;
                 MixService.SetConfig(MixConstants.ConfigurationKeyword.NextSyncContent, nextSync);

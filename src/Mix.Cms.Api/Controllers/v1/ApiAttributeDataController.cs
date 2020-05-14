@@ -64,7 +64,7 @@ namespace Mix.Cms.Api.Controllers.v1
             //        {
             //            var model = new MixPostAttributeData()
             //            {
-            //                Status = MixService.GetConfig<int>("DefaultStatus"),
+            //                Status = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
             //                AttributeSetId = setId,
             //                Specificulture = _lang,
             //                Priority = Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
@@ -86,7 +86,7 @@ namespace Mix.Cms.Api.Controllers.v1
             //        {
             //            var model = new MixPostAttributeData()
             //            {
-            //                Status = MixService.GetConfig<int>("DefaultStatus")
+            //                Status = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.DefaultContentStatus)
             //               ,
             //                Priority = Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
             //            };

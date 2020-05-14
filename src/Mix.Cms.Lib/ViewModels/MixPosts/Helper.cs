@@ -56,7 +56,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 {
                     var getRelatedData = await MixRelatedAttributeDatas.ReadViewModel.Repository.GetModelListByAsync(
                         m => m.Specificulture == culture && m.DataId == getVal.Data.DataId
-                        && m.ParentType == (int)MixEnums.MixAttributeSetDataType.Post
+                        && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
                         , orderByPropertyName, direction, pageIndex, pageSize
                         , _context: context, _transaction: transaction
                         );

@@ -3,6 +3,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas;
 using Mix.Domain.Core.ViewModels;
@@ -30,7 +31,7 @@ namespace Mix.Cms.Api.Controllers.v1.RelatedAttributeDatas
         [HttpGet, HttpOptions]
         [Route("details/{parentId}/{parentType}/{id}")]
         [Route("details/{parentId}/{parentType}/{id}/{attributeSetId}")]
-        public async Task<ActionResult> Details(string culture, string parentId, int parentType, string id, int? attributeSetId)
+        public async Task<ActionResult> Details(string culture, string parentId, MixEnums.MixAttributeSetDataType parentType, string id, int? attributeSetId)
         {
             string msg = string.Empty;
             Expression<Func<MixRelatedAttributeData, bool>> predicate = null;
@@ -38,14 +39,14 @@ namespace Mix.Cms.Api.Controllers.v1.RelatedAttributeDatas
             // Get Details if has id or else get default
             if (id != "default")
             {
-                predicate = m => m.Id == id && m.ParentId == parentId && m.ParentType == parentType && m.Specificulture == _lang;
+                predicate = m => m.Id == id && m.ParentId == parentId && m.ParentType == parentType.ToString() && m.Specificulture == _lang;
             }
             else
             {
                 model = new MixRelatedAttributeData()
                 {
                     Specificulture = _lang,
-                    ParentType = parentType,
+                    ParentType = parentType.ToString(),
                     ParentId = parentId,
                     Priority = UpdateViewModel.Repository.Max(p => p.Priority).Data + 1
                 };
@@ -85,9 +86,9 @@ namespace Mix.Cms.Api.Controllers.v1.RelatedAttributeDatas
         // Save api//{culture}/attribute-set-data/portal/{id}
         [HttpPost, HttpOptions]
         [Route("{parentId}/{parentType}/{id}")]
-        public async Task<ActionResult> Save(string culture, string parentId, int parentType, string id, [FromBody]JObject data)
+        public async Task<ActionResult> Save(string culture, string parentId, MixEnums.MixAttributeSetDataType parentType, string id, [FromBody]JObject data)
         {
-            var portalResult = await base.SaveAsync<UpdateViewModel>(data, p => p.Id == id && p.ParentId == parentId && p.ParentType == parentType && p.Specificulture == _lang);
+            var portalResult = await base.SaveAsync<UpdateViewModel>(data, p => p.Id == id && p.ParentId == parentId && p.ParentType == parentType.ToString() && p.Specificulture == _lang);
             if (portalResult.IsSucceed)
             {
                 return Ok(portalResult);
@@ -110,8 +111,8 @@ namespace Mix.Cms.Api.Controllers.v1.RelatedAttributeDatas
                 JObject properties = item.Value<JObject>("properties");
                 string id = keys.Value<string>("id");
                 string parentId = keys.Value<string>("parentId");
-                int parentType = keys.Value<int>("parentType");
-                var portalResult = await base.SaveAsync<UpdateViewModel>(properties, p => p.Id == id && p.ParentId == parentId && p.ParentType == parentType && p.Specificulture == _lang);
+                var parentType = keys.Value<MixEnums.MixAttributeSetDataType>("parentType");
+                var portalResult = await base.SaveAsync<UpdateViewModel>(properties, p => p.Id == id && p.ParentId == parentId && p.ParentType == parentType.ToString() && p.Specificulture == _lang);
                 if (!portalResult.IsSucceed)
                 {
                     return BadRequest(portalResult);
@@ -122,9 +123,9 @@ namespace Mix.Cms.Api.Controllers.v1.RelatedAttributeDatas
 
         [HttpDelete, HttpOptions]
         [Route("{parentId}/{parentType}/{id}")]
-        public async Task<ActionResult> Delete(string culture, string parentId, int parentType, string id)
+        public async Task<ActionResult> Delete(string culture, string parentId, MixEnums.MixAttributeSetDataType parentType, string id)
         {
-            Expression<Func<MixRelatedAttributeData, bool>> predicate = model => model.Id == id && model.ParentId == parentId && model.ParentType == parentType && model.Specificulture == _lang;
+            Expression<Func<MixRelatedAttributeData, bool>> predicate = model => model.Id == id && model.ParentId == parentId && model.ParentType == parentType.ToString() && model.Specificulture == _lang;
 
             // Get Details if has id or else get default
             var portalResult = await base.GetSingleAsync<DeleteViewModel>(predicate);
@@ -149,11 +150,11 @@ namespace Mix.Cms.Api.Controllers.v1.RelatedAttributeDatas
             var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
             ParseRequestPagingDate(request);
             string parentId = parsed.Get("parentId");
-            int.TryParse(parsed.Get("parentType"), out int parentType);
+            Enum.TryParse(parsed.Get("parentType"), out MixEnums.MixAttributeSetDataType parentType);
             int.TryParse(parsed.Get("attributeSetId"), out int attributeSetId);
 
             Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
-                        (!request.Status.HasValue || model.Status == request.Status.Value)
+                        (string.IsNullOrEmpty(request.Status) || model.Status == request.Status)
                         && (string.IsNullOrWhiteSpace(parentId)
                             || (model.ParentId == parentId)
                             )
@@ -161,7 +162,7 @@ namespace Mix.Cms.Api.Controllers.v1.RelatedAttributeDatas
                             || (model.ParentId == parentId)
                             )
                         && (parentType == 0
-                            || (model.ParentType == parentType)
+                            || (model.ParentType == parentType.ToString())
                             )
                         && (attributeSetId == 0
                             || (model.AttributeSetId == attributeSetId)

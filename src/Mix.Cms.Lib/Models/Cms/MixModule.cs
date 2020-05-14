@@ -19,18 +19,19 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Fields { get; set; }
         public string Thumbnail { get; set; }
         public string Image { get; set; }
-        public string ModifiedBy { get; set; }
         public string Name { get; set; }
-        public int Priority { get; set; }
-        public int Status { get; set; }
         public string Template { get; set; }
         public string FormTemplate { get; set; }
         public string EdmTemplate { get; set; }
         public string Title { get; set; }
         public int Type { get; set; }
         public int? PageSize { get; set; }
+        public string CreatedBy { get; set; }
         public DateTime CreatedDateTime { get; set; }
+        public string ModifiedBy { get; set; }
         public DateTime? LastModified { get; set; }
+        public int Priority { get; set; }
+        public string Status { get; set; }
 
         public virtual MixCulture SpecificultureNavigation { get; set; }
         public virtual ICollection<MixModuleData> MixModuleData { get; set; }

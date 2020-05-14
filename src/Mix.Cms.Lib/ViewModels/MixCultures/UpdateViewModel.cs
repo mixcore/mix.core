@@ -24,9 +24,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
         [JsonProperty("id")]
         public int Id { get; set; }
         [JsonProperty("specificulture")]
-        public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
+        public string Specificulture { get; set; }        
 
         [JsonProperty("alias")]
         public string Alias { get; set; }
@@ -45,12 +43,16 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
-
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixContentStatus Status { get; set; }
+        public MixEnums.MixContentStatus Status { get; set; }
 
         #endregion Models
 

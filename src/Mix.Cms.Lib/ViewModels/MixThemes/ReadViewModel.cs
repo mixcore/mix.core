@@ -18,6 +18,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         [JsonProperty("id")]
         public int Id { get; set; }
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -25,21 +27,23 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         [JsonProperty("title")]
         public string Title { get; set; }
 
-        [JsonProperty("previewUrl")]
-        public string PreviewUrl { get; set; }
-
         [JsonProperty("image")]
         public string Image { get; set; }
-
         [JsonProperty("thumbnail")]
         public string Thumbnail { get; set; }
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
-
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views

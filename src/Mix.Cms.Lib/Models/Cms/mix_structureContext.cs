@@ -1,15 +1,20 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using System;
 using Microsoft.EntityFrameworkCore;
-using Mix.Cms.Lib.Services;
-using Mix.Common.Utility;
-using MySql.Data.MySqlClient;
-using System;
-using Mix.Heart.Extensions;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixCmsContext : DbContext
+    public partial class mix_structureContext : DbContext
     {
+        public mix_structureContext()
+        {
+        }
+
+        public mix_structureContext(DbContextOptions<mix_structureContext> options)
+            : base(options)
+        {
+        }
+
         public virtual DbSet<MixAttributeField> MixAttributeField { get; set; }
         public virtual DbSet<MixAttributeSet> MixAttributeSet { get; set; }
         public virtual DbSet<MixAttributeSetData> MixAttributeSetData { get; set; }
@@ -42,62 +47,15 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual DbSet<MixTheme> MixTheme { get; set; }
         public virtual DbSet<MixUrlAlias> MixUrlAlias { get; set; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ApplicationDbContext" /> class.
-        /// </summary>
-        /// <param name="options">The options.</param>
-        public MixCmsContext(DbContextOptions<MixCmsContext> options)
-                    : base(options)
-        {
-        }
-
-        public MixCmsContext()
-        {
-        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.EnableSensitiveDataLogging(true);
-            //define the database to use
-            string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
-            if (!string.IsNullOrEmpty(cnn))
+            if (!optionsBuilder.IsConfigured)
             {
-                var provider = Enum.Parse<MixEnums.DatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
-                switch (provider)
-                {
-                    case MixEnums.DatabaseProvider.MSSQL:
-                        optionsBuilder.UseSqlServer(cnn);
-                        break;
-                    case MixEnums.DatabaseProvider.MySQL:
-                        optionsBuilder.UseMySql(cnn);
-                        break;
-                    case MixEnums.DatabaseProvider.PostgreSQL:
-                        optionsBuilder.UseNpgsql(cnn);
-                        break;
-                    default:
-                        break;
-                }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("Server=localhost;Database=mix_structure;UID=sa;Pwd=1234qwe@;MultipleActiveResultSets=true;");
             }
         }
 
-        //Ref https://github.com/dotnet/efcore/issues/10169
-        public override void Dispose()
-        {
-            var provider = Enum.Parse<MixEnums.DatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
-            switch (provider)
-            {
-                case MixEnums.DatabaseProvider.MSSQL:
-                    SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
-                    break;
-                case MixEnums.DatabaseProvider.MySQL:
-                    MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
-                    break;
-                case MixEnums.DatabaseProvider.PostgreSQL:
-                    Npgsql.NpgsqlConnection.ClearPool((Npgsql.NpgsqlConnection)Database.GetDbConnection());
-                    break;
-
-            }
-            base.Dispose();
-        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MixAttributeField>(entity =>

@@ -40,7 +40,7 @@ namespace Mix.Cms.Lib.Models.Account
             string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {
-                var provider = (MixEnums.DatabaseProvider)MixService.GetConfig<int>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+                var provider = System.Enum.Parse<MixEnums.DatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
                 switch (provider)
                 {
                     case MixEnums.DatabaseProvider.MSSQL:
@@ -61,7 +61,7 @@ namespace Mix.Cms.Lib.Models.Account
         public override void Dispose()
         {
 
-            var provider = (MixEnums.DatabaseProvider)MixService.GetConfig<int>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+            var provider = System.Enum.Parse<MixEnums.DatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
             switch (provider)
             {
                 case MixEnums.DatabaseProvider.MSSQL:
