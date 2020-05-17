@@ -194,6 +194,10 @@ namespace Mix.Cms.Api.Controllers.v1
                     user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
                     model.Id = user.Id;
                     model.CreatedDateTime = DateTime.UtcNow;
+                    model.Status = MixUserStatus.Actived;
+                    model.LastModified = DateTime.UtcNow;
+                    model.CreatedBy = User.Identity.Name;
+                    model.ModifiedBy = User.Identity.Name;
                     // Save to cms db context
                     await model.SaveModelAsync();
                     var token = await _helper.GenerateAccessTokenAsync(user, true);
