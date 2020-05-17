@@ -9,6 +9,7 @@ using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -297,7 +298,7 @@ namespace Mix.Cms.Lib
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetListPostByAddictionalField<TView>(
             string fieldName, object fieldValue, string culture, MixEnums.MixDataType dataType
             , MixEnums.CompareType filterType = MixEnums.CompareType.Eq
-            , string orderByPropertyName = null, int direction = 0, int? pageSize = null, int? pageIndex = null
+            , string orderByPropertyName = null, Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Asc , int? pageSize = null, int? pageIndex = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
         {
@@ -320,7 +321,7 @@ namespace Mix.Cms.Lib
                 var pre = GetValuePredicate(fieldValue.ToString(), filterType, dataType);
                 if (pre != null)
                 {
-                    valPredicate = Mix.Heart.Helpers.ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixEnums.ExpressionMethod.And);
+                    valPredicate = Mix.Heart.Helpers.ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
                 }
 
                 var query = context.MixAttributeSetValue.Where(valPredicate).Select(m => m.DataId).Distinct();
@@ -376,7 +377,7 @@ namespace Mix.Cms.Lib
                         valPredicate = FilterObjectSet<MixAttributeSetValue, bool>("BooleanValue", boolValue, filterType);
                     }
                     break;
-                case MixEnums.MixDataType.Number:
+                case MixEnums.MixDataType.Integer:
                     if (int.TryParse(fieldValue, out int intValue))
                     {
                         valPredicate = FilterObjectSet<MixAttributeSetValue, int>("IntegerValue", intValue, filterType);

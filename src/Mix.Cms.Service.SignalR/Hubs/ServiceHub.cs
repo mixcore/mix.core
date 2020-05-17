@@ -87,7 +87,7 @@ namespace Mix.Cms.Service.SignalR.Hubs
             }
             var getPreviousMsgs = Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas.ReadViewModel.Repository.GetModelListBy(
                         m => m.AttributeSetName == request.Room && m.Specificulture == request.Specificulture
-                        , "CreatedDateTime", 1, 10, 0);
+                        , "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection.Desc, 10, 0);
             // Get previous messages
             if (getPreviousMsgs.IsSucceed)
             {

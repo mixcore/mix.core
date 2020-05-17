@@ -32,7 +32,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         /// <returns></returns>
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetModelistByMeta<TView>(
             string metaName, string metaValue, string culture
-            , string orderByPropertyName, int direction, int? pageSize, int? pageIndex
+            , string orderByPropertyName, Heart.Enums.MixHeartEnums.DisplayDirection direction, int? pageSize, int? pageIndex
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
         {

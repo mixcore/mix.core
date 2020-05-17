@@ -181,7 +181,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 case MixEnums.MixDataType.Boolean:
                     return (new JProperty(item.AttributeFieldName, item.BooleanValue));
 
-                case MixEnums.MixDataType.Number:
+                case MixEnums.MixDataType.Integer:
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue));
 
                 case MixEnums.MixDataType.Reference:
@@ -239,7 +239,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     item.BooleanValue = property.Value<bool?>();
                     break;
 
-                case MixEnums.MixDataType.Number:
+                case MixEnums.MixDataType.Integer:
                     item.IntegerValue = property.Value<int?>();
                     break;
 

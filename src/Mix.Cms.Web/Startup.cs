@@ -13,6 +13,8 @@ using Mix.Cms.Lib.Services;
 using Mix.Cms.Messenger.Models.Data;
 using Mix.Cms.Service.Gprc;
 using Mix.Cms.Service.SignalR;
+using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 
 namespace Mix.Cms.Web
 {
@@ -30,8 +32,7 @@ namespace Mix.Cms.Web
         {
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation()
-                .AddNewtonsoftJson()
-                .AddJsonOptions(options => options.JsonSerializerOptions.MaxDepth = 4);
+                .AddNewtonsoftJson(options => { options.SerializerSettings.Converters.Add(new StringEnumConverter()); });
 
             #region Addictionals Config for Mixcore Cms
 

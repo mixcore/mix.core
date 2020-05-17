@@ -11,7 +11,6 @@
     <header-nav ng-if="isInit" settings="settings" bread-crumbs="breadCrumbs"></header-nav>
     <div class="container-fluid wrapper">
         <div class="row flex-xl-nowrap">
-
             <main-side-bar ng-if="isAdmin"></main-side-bar>
             <main-side-bar-dynamic ng-if="roles" roles="roles" actived-role="roles[0]"></main-side-bar-dynamic>
             <!-- <main class="py-md-4 px-md-2 sw-content" role="main"> -->
@@ -46,7 +45,7 @@
                     <medias ng-if="isInit"></medias>
                     <hub-messages ng-if="isInit"></hub-messages>
                     <message ng-if="isInit" message="message"></message>
-                    <confirm ng-if="isInit" message="confirmMessage"></confirm>
+                    <modal-confirm ng-if="isInit" message="confirmMessage"></modal-confirm>
                     <modal-favorite ng-if="isInit"></modal-favorite>
                     <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
                 </section>

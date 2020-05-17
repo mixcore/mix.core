@@ -67,11 +67,11 @@ namespace Mix.Cms.Lib
 
         public enum MixContentStatus
         {
-            Deleted = 0,
-            Preview = 1,
-            Published = 2,
-            Draft = 3,
-            Schedule = 4
+            Deleted,
+            Preview,
+            Published,
+            Draft,
+            Schedule
         }
 
         public enum ResponseStatus
@@ -244,7 +244,7 @@ namespace Mix.Cms.Lib
             Icon = 19,
             VideoYoutube = 20,
             TuiEditor = 21,
-            Number = 22,
+            Integer = 22,
             QRCode = 24,
             Reference = 23,
         }
