@@ -103,7 +103,29 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 return BadRequest(getData.Errors);
             }
         }
-
+        // GET api/module-data/create/id
+        [HttpGet, HttpOptions]
+        [Route("init-form/{moduleId}")]
+        public async Task<ActionResult<UpdateViewModel>> InitByIdAsync(int moduleId)
+        {
+            var getModule = await Lib.ViewModels.MixModules.ReadListItemViewModel.Repository.GetSingleModelAsync(
+                m => m.Id == moduleId && m.Specificulture == _lang).ConfigureAwait(false);
+            if (getModule.IsSucceed)
+            {
+                var ModuleData = new UpdateViewModel(
+                    new MixModuleData()
+                    {
+                        ModuleId = getModule.Data.Id,
+                        Specificulture = _lang,
+                        Fields = getModule.Data.Fields
+                    });
+                return Ok(ModuleData);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
         // GET api/module-data/create/id
         [HttpPost, HttpOptions]
         [Route("save/{moduleName}")]
