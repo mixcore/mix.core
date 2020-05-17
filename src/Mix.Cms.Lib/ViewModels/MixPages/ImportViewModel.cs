@@ -206,6 +206,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                             item.ModuleId = saveModule.Data.Id;
                             item.Specificulture = parent.Specificulture;
                             item.Description = saveModule.Data.Title;
+                            item.CreatedDateTime = DateTime.UtcNow;
+                            item.CreatedBy = CreatedBy;
                             var saveResult = await item.SaveModelAsync(false, _context, _transaction);
                             ViewModelHelper.HandleResult(saveResult, ref result);
                             if (!result.IsSucceed)

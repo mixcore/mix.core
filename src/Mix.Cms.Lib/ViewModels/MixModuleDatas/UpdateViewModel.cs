@@ -28,12 +28,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         [JsonProperty("moduleId")]
         public int ModuleId { get; set; }
 
-        [JsonIgnore]
         [JsonProperty("fields")]
         public string Fields { get; set; } = "[]";
 
         [JsonProperty("value")]
-        [JsonIgnore]
         public string Value { get; set; }
 
         [JsonProperty("postId")]
@@ -100,7 +98,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Fields = _context.MixModule.First(m => m.Id == ModuleId && m.Specificulture == Specificulture)?.Fields;
+            Fields = Fields ?? _context.MixModule.First(m => m.Id == ModuleId && m.Specificulture == Specificulture)?.Fields;
             DataProperties = Fields == null ? null : JsonConvert.DeserializeObject<List<ApiModuleDataValueViewModel>>(Fields);
             JItem = Value == null ? InitValue() : JsonConvert.DeserializeObject<JObject>(Value);
             foreach (var item in DataProperties)

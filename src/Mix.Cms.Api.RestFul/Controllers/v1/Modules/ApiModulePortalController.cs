@@ -19,12 +19,12 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/module/portal")]
     public class ApiModuleController :
-        BaseRestApiController<MixCmsContext, MixModule, UpdateViewModel>
+        BaseRestApiController<MixCmsContext, MixModule, UpdateViewModel, ReadListItemViewModel>
     {
 
         // GET: api/s
         [HttpGet]
-        public override async Task<ActionResult<PaginationModel<UpdateViewModel>>> Get()
+        public override async Task<ActionResult<PaginationModel<ReadListItemViewModel>>> Get()
         {
             bool isStatus = Enum.TryParse(Request.Query["status"], out MixEnums.MixContentStatus status);
             bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
