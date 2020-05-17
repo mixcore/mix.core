@@ -8,6 +8,7 @@ using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Enums;
 using Mix.Heart.Helpers;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
@@ -140,7 +141,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     if (!string.IsNullOrEmpty(q.Key) && !string.IsNullOrEmpty(q.Value))
                     {
                         Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeFieldName == q.Key && m.StringValue.Contains(q.Value);
-                        valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixEnums.ExpressionMethod.And);
+                        valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
                     }
                 }
                 var query = context.MixAttributeSetValue.Where(valPredicate).Select(m => m.DataId).Distinct().ToList();
@@ -234,7 +235,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                                     m.AttributeFieldName == q.Key && m.StringValue == (q.Value.ToString());
                                 if (valPredicate != null)
                                 {
-                                    valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixEnums.ExpressionMethod.And);
+                                    valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
                                 }
                                 else
                                 {
@@ -248,7 +249,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                                     (EF.Functions.Like(m.StringValue, $"%{q.Value.ToString()}%"));
                                 if (valPredicate != null)
                                 {
-                                    valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixEnums.ExpressionMethod.And);
+                                    valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
                                 }
                                 else
                                 {
@@ -259,14 +260,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     }
                     if (valPredicate != null)
                     {
-                        attrPredicate = ReflectionHelper.CombineExpression(valPredicate, attrPredicate, Heart.Enums.MixEnums.ExpressionMethod.And);
+                        attrPredicate = ReflectionHelper.CombineExpression(valPredicate, attrPredicate, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
                     }
                 }
                 // Loop queries string => predicate
                 if (!string.IsNullOrEmpty(keyword))
                 {
                     Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeSetName == attributeSetName && m.Specificulture == culture && m.StringValue.Contains(keyword);
-                    attrPredicate = ReflectionHelper.CombineExpression(attrPredicate, pre, Heart.Enums.MixEnums.ExpressionMethod.And);
+                    attrPredicate = ReflectionHelper.CombineExpression(attrPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
                 }
 
                 var query = context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
@@ -305,7 +306,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 var filterType = request.Query["filterType"].ToString();
                 var orderBy = request.Query["orderBy"].ToString();
                 int.TryParse(request.Query["attributeSetId"], out int attributeSetId);
-                int.TryParse(request.Query["direction"], out int direction);
+                bool isDirection = Enum.TryParse(request.Query["direction"], out Heart.Enums.MixHeartEnums.DisplayDirection direction);
                 int.TryParse(request.Query["pageIndex"], out int pageIndex);
                 int.TryParse(request.Query["pageSize"], out int pageSize);
                 bool isFromDate = DateTime.TryParse(request.Query["fromDate"], out DateTime fromDate);
@@ -350,7 +351,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                                             (filterType == "contain" && (EF.Functions.Like(m.StringValue, $"%{keyword}%")));
                             if (valPredicate != null)
                             {
-                                valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixEnums.ExpressionMethod.And);
+                                valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
                             }
                             else
                             {
@@ -370,7 +371,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                                             (filterType == "contain" && (EF.Functions.Like(m.StringValue, $"%{q.Value.ToString()}%")));
                                 if (valPredicate != null)
                                 {
-                                    valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixEnums.ExpressionMethod.Or);
+                                    valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.Or);
                                 }
                                 else
                                 {
@@ -382,7 +383,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     if (valPredicate != null)
                     {
                         attrPredicate = attrPredicate == null ? valPredicate
-                                : ReflectionHelper.CombineExpression(valPredicate, attrPredicate, Heart.Enums.MixEnums.ExpressionMethod.And);
+                                : ReflectionHelper.CombineExpression(valPredicate, attrPredicate, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
                     }
 
                     if (attrPredicate != null)
@@ -392,7 +393,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         if (query != null)
                         {
                             Expression<Func<MixAttributeSetData, bool>> pre = m => dataIds.Any(id => m.Id == id);
-                            predicate = ReflectionHelper.CombineExpression(pre, predicate, Heart.Enums.MixEnums.ExpressionMethod.And);
+                            predicate = ReflectionHelper.CombineExpression(pre, predicate, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
 
                         }
                     }
@@ -435,7 +436,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeFieldName == fieldName && m.StringValue == keyword;
                     if (valPredicate != null)
                     {
-                        valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixEnums.ExpressionMethod.And);
+                        valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
                     }
                     else
                     {
@@ -447,7 +448,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeFieldName == fieldName && m.StringValue.Contains(keyword);
                     if (valPredicate != null)
                     {
-                        valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixEnums.ExpressionMethod.And);
+                        valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
                     }
                     else
                     {
@@ -456,7 +457,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
                 if (valPredicate != null)
                 {
-                    attrPredicate = ReflectionHelper.CombineExpression(valPredicate, attrPredicate, Heart.Enums.MixEnums.ExpressionMethod.And);
+                    attrPredicate = ReflectionHelper.CombineExpression(valPredicate, attrPredicate, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
                 }
 
                 var query = context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct();

@@ -170,7 +170,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public static async Task<RepositoryResponse<PaginationModel<ReadViewModel>>> GetModelListByCategoryAsync(
             int pageId, string specificulture
-            , string orderByPropertyName, int direction
+            , string orderByPropertyName, Heart.Enums.MixHeartEnums.DisplayDirection direction
             , int? pageSize = 1, int? pageIndex = 0, int? skip = null, int? top = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -224,7 +224,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public static RepositoryResponse<PaginationModel<ReadViewModel>> GetModelListByCategory(
            int pageId, string specificulture
-           , string orderByPropertyName, int direction
+           , string orderByPropertyName, Heart.Enums.MixHeartEnums.DisplayDirection direction
            , int? pageSize = 1, int? pageIndex = 0
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -275,7 +275,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public static RepositoryResponse<PaginationModel<ReadViewModel>> GetModelListByModule(
           int ModuleId, string specificulture
-          , string orderByPropertyName, int direction
+          , string orderByPropertyName, Heart.Enums.MixHeartEnums.DisplayDirection direction
           , int? pageSize = 1, int? pageIndex = 0
           , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

@@ -30,7 +30,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                     case MixEnums.MixDataType.Time:
                     case MixEnums.MixDataType.Double:
                     case MixEnums.MixDataType.Boolean:
-                    case MixEnums.MixDataType.Number:
+                    case MixEnums.MixDataType.Integer:
                     case MixEnums.MixDataType.Custom:
                     case MixEnums.MixDataType.Duration:
                     case MixEnums.MixDataType.PhoneNumber:

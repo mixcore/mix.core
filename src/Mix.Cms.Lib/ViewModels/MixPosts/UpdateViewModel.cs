@@ -428,7 +428,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (result.IsSucceed)
                 {
                     item.ParentId = parentId.ToString();
-                    item.ParentType = (int)MixEnums.MixAttributeSetDataType.Post;
+                    item.ParentType = MixEnums.MixAttributeSetDataType.Post;
                     item.Specificulture = Specificulture;
                     var saveResult = await item.SaveModelAsync(false, context, transaction);
                     ViewModelHelper.HandleResult(saveResult, ref result);
@@ -440,7 +440,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (result.IsSucceed)
                 {
                     item.ParentId = parentId.ToString();
-                    item.ParentType = (int)MixEnums.MixAttributeSetDataType.Post;
+                    item.ParentType = MixEnums.MixAttributeSetDataType.Post;
                     item.Specificulture = Specificulture;
                     var saveResult = await item.SaveModelAsync(false, context, transaction);
                     ViewModelHelper.HandleResult(saveResult, ref result);
@@ -755,7 +755,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (result.IsSucceed)
                 {
                     item.ParentId = parentId.ToString();
-                    item.ParentType = (int)MixEnums.MixAttributeSetDataType.Post;
+                    item.ParentType = MixEnums.MixAttributeSetDataType.Post;
                     item.Specificulture = Specificulture;
                     var saveResult = item.SaveModel(false, context, transaction);
                     ViewModelHelper.HandleResult(saveResult, ref result);
@@ -767,7 +767,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (result.IsSucceed)
                 {
                     item.ParentId = parentId.ToString();
-                    item.ParentType = (int)MixEnums.MixAttributeSetDataType.Post;
+                    item.ParentType = MixEnums.MixAttributeSetDataType.Post;
                     item.Specificulture = Specificulture;
                     var saveResult = item.SaveModel(false, context, transaction);
                     ViewModelHelper.HandleResult(saveResult, ref result);
@@ -1047,7 +1047,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 m => (m.Type == (int)MixEnums.MixModuleType.Content || m.Type == (int)MixEnums.MixModuleType.ListPost)
                 && m.Specificulture == Specificulture
                 //&& !Modules.Any(n => n.ModuleId == m.Id && n.Specificulture == m.Specificulture)
-                , "CreatedDateTime", 1, null, 0, _context, _transaction);
+                , "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection.Desc, null, 0, _context, _transaction);
             if (otherModules.Data != null)
             {
                 foreach (var item in otherModules.Data.Items)

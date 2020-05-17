@@ -142,7 +142,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                     BooleanValue = boolValue;
                     break;
 
-                case MixEnums.MixDataType.Number:
+                case MixEnums.MixDataType.Integer:
                     int.TryParse(defaultValue, out int intValue);
                     IntegerValue = intValue;
                     break;

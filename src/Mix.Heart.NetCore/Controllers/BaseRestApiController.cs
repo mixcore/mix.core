@@ -41,7 +41,7 @@ namespace Mix.Heart.NetCore.Controllers
         #region Helpers
         protected async Task<RepositoryResponse<TView>> GetSingleAsync(string id)
         {
-            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>("Id", id, Heart.Enums.MixEnums.ExpressionMethod.Eq);
+            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>("Id", id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
             RepositoryResponse<TView> data = null;
             if (predicate != null)
             {
@@ -126,7 +126,7 @@ namespace Mix.Heart.NetCore.Controllers
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
-            int.TryParse(Request.Query["direction"], out int direction);
+            Enum.TryParse(Request.Query["direction"], out Heart.Enums.MixHeartEnums.DisplayDirection direction);
             bool isPageSize = int.TryParse(Request.Query["pageSize"], out int pageSize);
 
             RequestPaging request = new RequestPaging()
@@ -237,7 +237,7 @@ namespace Mix.Heart.NetCore.Controllers
             bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
-            int.TryParse(Request.Query["direction"], out int direction);
+            Enum.TryParse(Request.Query["direction"], out Heart.Enums.MixHeartEnums.DisplayDirection direction);
             bool isPageSize = int.TryParse(Request.Query["pageSize"], out int pageSize);
 
             RequestPaging request = new RequestPaging()
@@ -350,7 +350,7 @@ namespace Mix.Heart.NetCore.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<TModel>> Delete(string id)
         {
-            var predicate = ReflectionHelper.GetExpression<TModel>("id", id, Enums.MixEnums.ExpressionMethod.Eq);
+            var predicate = ReflectionHelper.GetExpression<TModel>("id", id, Enums.MixHeartEnums.ExpressionMethod.Eq);
             var result = await DeleteAsync(predicate, false);
             if (result.IsSucceed)
             {

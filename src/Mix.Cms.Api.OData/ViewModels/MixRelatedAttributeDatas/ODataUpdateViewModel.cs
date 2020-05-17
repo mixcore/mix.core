@@ -38,7 +38,7 @@ namespace Mix.Cms.Api.OData.ViewModels.MixRelatedAttributeDatas
         public string ParentId { get; set; }
 
         [JsonProperty("parentType")]
-        public int ParentType { get; set; } // cannot use mixenum for odata request
+        public MixEnums.MixAttributeSetDataType ParentType { get; set; } // cannot use mixenum for odata request
 
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
