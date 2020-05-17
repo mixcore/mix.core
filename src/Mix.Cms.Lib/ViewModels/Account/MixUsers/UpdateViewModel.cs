@@ -21,10 +21,10 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixUsers
 
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
+
         [JsonProperty("username")]
         public string Username { get; set; }
 
@@ -49,12 +49,18 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixUsers
         [JsonProperty("phoneNumber")]
         public string PhoneNumber { get; set; }
 
+        [JsonProperty("createdby")]
+        public string CreatedBy { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
-        [JsonProperty("createdBy")]
-        public string CreatedBy { get; set; }
-
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixUserStatus Status { get; set; }
         #endregion Models
 
         #region Views
