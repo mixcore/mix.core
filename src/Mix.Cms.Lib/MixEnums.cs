@@ -299,7 +299,7 @@ namespace Mix.Cms.Lib
             var values = Enum.GetValues(enumType);
             foreach (var item in values)
             {
-                result.Add(new { name = Enum.GetName(enumType, item), value = Enum.ToObject(enumType, item) });
+                result.Add(new { name = Enum.GetName(enumType, item), value = Enum.GetName(enumType, item) });
             }
             return result;
         }

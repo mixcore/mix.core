@@ -4,6 +4,7 @@ using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -68,6 +69,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 

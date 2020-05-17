@@ -85,9 +85,15 @@ namespace Mix.Cms.Lib.Controllers
         [HttpGet("default")]
         public ActionResult<TView> Default()
         {
-            TView data = ReflectionHelper.InitModel<TView>();
-            data.ExpandView();
-            return Ok(data);
+            using (TDbContext context = UnitOfWorkHelper<TDbContext>.InitContext())
+            {
+                var transaction = context.Database.BeginTransaction();
+                TView data = ReflectionHelper.InitModel<TView>();
+                ReflectionHelper.SetPropertyValue(data, new JProperty("Specificulture", _lang));
+                ReflectionHelper.SetPropertyValue(data, new JProperty("Status", MixService.GetConfig<string>("DefaultContentStatus")));
+                data.ExpandView(context, transaction);
+                return Ok(data);
+            }
         }
 
         [HttpGet("remove-cache/{id}")]
@@ -129,27 +135,35 @@ namespace Mix.Cms.Lib.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, [FromBody]TView data)
         {
-            var currentId = ReflectionHelper.GetPropertyValue(data, "id").ToString();
-            if (id != currentId)
+            if (data != null)
             {
-                return BadRequest();
-            }
-            var result = await SaveAsync(data, true);
-            if (result.IsSucceed)
-            {
-                return Ok(result.Data);
-            }
-            else
-            {
-                var current = await GetSingleAsync(currentId);
-                if (!current.IsSucceed)
+
+                var currentId = ReflectionHelper.GetPropertyValue(data, "Id").ToString();
+                if (id != currentId)
                 {
-                    return NotFound();
+                    return BadRequest();
+                }
+                var result = await SaveAsync(data, true);
+                if (result.IsSucceed)
+                {
+                    return Ok(result.Data);
                 }
                 else
                 {
-                    return BadRequest(result.Errors);
+                    var current = await GetSingleAsync(currentId);
+                    if (!current.IsSucceed)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        return BadRequest(result.Errors);
+                    }
                 }
+            }
+            else
+            {
+                return BadRequest(new NullReferenceException());
             }
         }
 
