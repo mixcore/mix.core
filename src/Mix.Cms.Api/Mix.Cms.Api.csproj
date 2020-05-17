@@ -34,8 +34,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\v1\ApiPageController.cs" />
     <Compile Remove="Controllers\v1\ApiPostAttributeDataController.cs" />
     <Compile Remove="Controllers\v1\ApiPostAttributeValueController.cs" />
+    <Compile Remove="Controllers\v1\ApiPostController.cs" />
   </ItemGroup>
 
   <ItemGroup>

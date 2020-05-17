@@ -21,7 +21,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                         val["value"] = new JArray();
                         break;
                     case MixEnums.MixDataType.Upload:
-                        string fullUrl = val["value"].ToString();
+                        string fullUrl = val["value"].ToString().TrimStart('/');
+
                         fullUrl = fullUrl.IndexOf("http") >= 0 ? fullUrl : $"{MixService.GetConfig<string>("Domain")}/{fullUrl}";
                         val["value"] = fullUrl;
                         break;
