@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixModuleDatas;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
@@ -117,7 +118,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                     {
                         ModuleId = getModule.Data.Id,
                         Specificulture = _lang,
-                        Fields = getModule.Data.Fields
+                        Fields = getModule.Data.Fields,
+                        Status = MixService.GetConfig<string>("DefaultContentStatus")
                     });
                 return Ok(ModuleData);
             }

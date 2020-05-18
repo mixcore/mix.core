@@ -666,8 +666,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
                 }
             }
-
-            result.IsSucceed = (await _context.SaveChangesAsync() > 0);
+            await _context.SaveChangesAsync();
             return result;
         }
 
