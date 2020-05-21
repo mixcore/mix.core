@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Web.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class HomeController : BaseController
     {
 
@@ -39,7 +40,7 @@ namespace Mix.Cms.Web.Controllers
 
         [HttpGet]
         [Route("")]
-        //[Route("{seoName}")]
+        [Route("{seoName}")]
         public async Task<IActionResult> Index()
         {
             if (isValid)

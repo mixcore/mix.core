@@ -324,7 +324,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
                         {
                             Id = saveRef.Data.Id,
                             ParentId = Id,
-                            ParentType = (int)Lib.MixEnums.MixAttributeSetDataType.Set,
+                            ParentType = Lib.MixEnums.MixAttributeSetDataType.Set,
                             AttributeSetId = saveRef.Data.AttributeSetId,
                             AttributeSetName = saveRef.Data.AttributeSetName,
                             CreatedDateTime = DateTime.UtcNow,
@@ -402,7 +402,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
                 case Lib.MixEnums.MixDataType.Boolean:
                     return (new JProperty(item.AttributeFieldName, item.BooleanValue));
 
-                case Lib.MixEnums.MixDataType.Number:
+                case Lib.MixEnums.MixDataType.Integer:
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue));
 
                 case Lib.MixEnums.MixDataType.Reference:
@@ -460,7 +460,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
                     item.StringValue = property.Value<string>().ToLower();
                     break;
 
-                case Lib.MixEnums.MixDataType.Number:
+                case Lib.MixEnums.MixDataType.Integer:
                     item.IntegerValue = property.Value<int?>();
                     item.StringValue = property.Value<string>();
                     break;

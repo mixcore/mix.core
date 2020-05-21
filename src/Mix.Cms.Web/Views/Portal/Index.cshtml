@@ -6,12 +6,11 @@
     var menus = MixCmsHelper.LoadDataFile("data/consts", "portal-menus.json");
 }
 <div class="w-100" ng-show="isAuth">
-    <input type="hidden" id="portal-menus" value="@menus.Content" />
+    
     <mix-loader ng-show="isBusy"></mix-loader>
     <header-nav ng-if="isInit" settings="settings" bread-crumbs="breadCrumbs"></header-nav>
     <div class="container-fluid wrapper">
         <div class="row flex-xl-nowrap">
-
             <main-side-bar ng-if="isAdmin"></main-side-bar>
             <main-side-bar-dynamic ng-if="roles" roles="roles" actived-role="roles[0]"></main-side-bar-dynamic>
             <!-- <main class="py-md-4 px-md-2 sw-content" role="main"> -->
@@ -30,14 +29,14 @@
                         </nav>
                     </div>
                 </footer>
-                <div class="position-sticky" style="
+                @*<div class="position-sticky" style="
                         width: 100%;
                         height: 1.5rem;
                         background-color: var(--bg-color,hsla(var(--primary-color-hue,211),var(--primary-color-saturation,100%),100%,1));
                         top: 4rem;
                         left: 0;
                         z-index: 999;
-                    "></div>
+                    "></div>*@
                 <section class="container-fluid mb-5">
                     <!--<jumbotrons ng-if="isInit" tag-name="pageTagName" tag-type="pageTagType"></jumbotrons>-->
                     <div class="{{pageClass}}" ng-view>
@@ -46,7 +45,7 @@
                     <medias ng-if="isInit"></medias>
                     <hub-messages ng-if="isInit"></hub-messages>
                     <message ng-if="isInit" message="message"></message>
-                    <confirm ng-if="isInit" message="confirmMessage"></confirm>
+                    <modal-confirm ng-if="isInit" message="confirmMessage"></modal-confirm>
                     <modal-favorite ng-if="isInit"></modal-favorite>
                     <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
                 </section>
@@ -54,4 +53,5 @@
             </main>
         </div>
     </div>
+    <input type="hidden" id="portal-menus" value="@menus.Content" />
 </div>

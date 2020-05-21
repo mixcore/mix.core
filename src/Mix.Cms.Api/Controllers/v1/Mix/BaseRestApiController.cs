@@ -160,7 +160,7 @@ namespace Mix.Cms.Api.Controllers.v1
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
-            int.TryParse(Request.Query["direction"], out int direction);            
+            bool isDirection = Enum.TryParse(Request.Query["direction"], out Heart.Enums.MixHeartEnums.DisplayDirection direction);            
             bool isPageSize = int.TryParse(Request.Query["pageSize"], out int pageSize);
             
             RequestPaging request = new RequestPaging()

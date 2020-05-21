@@ -24,27 +24,31 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public string Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
+        [JsonProperty("cultures")]
+        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
 
         [JsonProperty("attributeSetName")]
         public string AttributeSetName { get; set; }
-
-        [JsonProperty("createdDateTime")]
-        public DateTime CreatedDateTime { get; set; }
-
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
-
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("status")]
-        public int Status { get; set; }
-
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
+        [JsonProperty("relatedData")]
+        public List<MixRelatedAttributeDatas.UpdateViewModel> RelatedData { get; set; } = new List<MixRelatedAttributeDatas.UpdateViewModel>();
 
         [JsonProperty("values")]
         public List<MixAttributeSetValues.UpdateViewModel> Values { get; set; }
@@ -60,7 +64,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("parentId")]
         public string ParentId { get; set; }
         [JsonProperty("parentType")]
-        public int ParentType { get; set; }
+        public MixEnums.MixAttributeSetDataType ParentType { get; set; }
 
         #endregion Views
 
@@ -84,7 +88,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         {
             // Related Datas
             DataNavs = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(
-                n => n.ParentId == Id && n.ParentType == (int)MixEnums.MixAttributeSetDataType.Set && n.Specificulture == Specificulture,
+                n => n.ParentId == Id && n.ParentType == MixEnums.MixAttributeSetDataType.Set.ToString() && n.Specificulture == Specificulture,
                 _context, _transaction).Data;
 
             Values = MixAttributeSetValues.UpdateViewModel
@@ -142,7 +146,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     MixRelatedAttributeDatas.UpdateViewModel nav = new MixRelatedAttributeDatas.UpdateViewModel()
                     {
-                        Id = result.Data.Id,
+                        DataId = result.Data.Id,
                         Specificulture = Specificulture,
                         AttributeSetId = result.Data.AttributeSetId,
                         AttributeSetName = result.Data.AttributeSetName,
@@ -236,11 +240,39 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             return result;
         }
 
-        
+
         #endregion Overrides
 
         #region Expand
+        private async Task<RepositoryResponse<bool>> SaveRelatedDataAsync(MixAttributeSetData parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
 
+            foreach (var item in RelatedData)
+            {
+                if (result.IsSucceed)
+                {
+                    if (string.IsNullOrEmpty(item.ParentId) && item.ParentType == MixEnums.MixAttributeSetDataType.Set)
+                    {
+                        var set = context.MixAttributeSet.First(s => s.Name == item.ParentName);
+                        item.ParentId = set.Id.ToString();
+                    }
+                    item.Specificulture = Specificulture;
+                    item.AttributeSetId = parent.AttributeSetId;
+                    item.AttributeSetName = parent.AttributeSetName;
+                    item.Id = parent.Id;
+                    item.CreatedDateTime = DateTime.UtcNow;
+                    var saveResult = await item.SaveModelAsync(true, context, transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return result;
+        }
         private JProperty ParseValue(MixAttributeSetValues.UpdateViewModel item)
         {
             switch (item.DataType)
@@ -260,7 +292,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 case MixEnums.MixDataType.Boolean:
                     return (new JProperty(item.AttributeFieldName, item.BooleanValue));
 
-                case MixEnums.MixDataType.Number:
+                case MixEnums.MixDataType.Integer:
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue));
 
                 case MixEnums.MixDataType.Reference:

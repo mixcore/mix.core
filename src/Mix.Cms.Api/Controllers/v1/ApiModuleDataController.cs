@@ -5,6 +5,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixModuleDatas;
@@ -47,7 +48,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         ModuleId = moduleId,
                         Specificulture = _lang,
                         Fields = getModule.Data.Fields,
-                        Status = MixService.GetConfig<int>("DefaultContentStatus")
+                        Status = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultContentStatus)
                     };
                     RepositoryResponse<UpdateViewModel> result = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_default", null, model);
 
@@ -259,19 +260,19 @@ namespace Mix.Cms.Api.Controllers.v1
                 );
 
             var portalResult = await base.GetListAsync<ReadViewModel>(request, predicate);
-            foreach (var item in portalResult.Data.Items)
-            {
-                item.JItem["created_date"] = new JObject()
-                {
-                    new JProperty("dataType", 1),
-                    new JProperty("value", item.CreatedDateTime.ToLocalTime().ToString("dd-MM-yyyy hh:mm:ss"))
-                };
-                portalResult.Data.JsonItems.Add(item.JItem);
-            }
+            //foreach (var item in portalResult.Data.Items)
+            //{
+            //    item.JItem["created_date"] = new JObject()
+            //    {
+            //        new JProperty("dataType", 1),
+            //        new JProperty("value", item.CreatedDateTime.ToLocalTime().ToString("dd-MM-yyyy hh:mm:ss"))
+            //    };
+            //    portalResult.Data.JsonItems.Add(item.JItem);
+            //}
 
-            string exportPath = $"Exports/Module/{moduleId}";
-            var result = CommonHelper.ExportJObjectToExcel(portalResult.Data.JsonItems, string.Empty, exportPath, Guid.NewGuid().ToString(), null);
-            return Ok(JObject.FromObject(result));
+            //string exportPath = $"Exports/Module/{moduleId}";
+            //var result = CommonHelper.ExportJObjectToExcel(portalResult.Data.JsonItems, string.Empty, exportPath, Guid.NewGuid().ToString(), null);
+            return Ok(JObject.FromObject(portalResult));
         }
 
         // GET api/moduleData

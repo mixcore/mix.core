@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
 using MySql.Data.MySqlClient;
+using System;
 
 namespace Mix.Cms.Messenger.Models.Data
 {
@@ -53,13 +54,20 @@ namespace Mix.Cms.Messenger.Models.Data
                 string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
                 if (!string.IsNullOrEmpty(cnn))
                 {
-                    if (MixService.GetConfig<int>(MixConstants.CONST_SETTING_DATABASE_PROVIDER) == (int)MixEnums.DatabaseProvider.MySQL)
+                    var provider = Enum.Parse<MixEnums.DatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
+                    switch (provider)
                     {
-                        optionsBuilder.UseMySql(cnn);
-                    }
-                    else
-                    {
-                        optionsBuilder.UseSqlServer(cnn);
+                        case MixEnums.DatabaseProvider.MSSQL:
+                            optionsBuilder.UseSqlServer(cnn);
+                            break;
+                        case MixEnums.DatabaseProvider.MySQL:
+                            optionsBuilder.UseMySql(cnn);
+                            break;
+                        case MixEnums.DatabaseProvider.PostgreSQL:
+                            optionsBuilder.UseNpgsql(cnn);
+                            break;
+                        default:
+                            break;
                     }
                 }
             }
@@ -67,13 +75,19 @@ namespace Mix.Cms.Messenger.Models.Data
         //Ref https://github.com/dotnet/efcore/issues/10169
         public override void Dispose()
         {
-            if (MixService.GetConfig<int>(MixConstants.CONST_SETTING_DATABASE_PROVIDER) == (int)MixEnums.DatabaseProvider.MySQL)
+            var provider = Enum.Parse<MixEnums.DatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
+            switch (provider)
             {
-                MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
-            }
-            else
-            {
-                SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
+                case MixEnums.DatabaseProvider.MSSQL:
+                    SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
+                    break;
+                case MixEnums.DatabaseProvider.MySQL:
+                    MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
+                    break;
+                case MixEnums.DatabaseProvider.PostgreSQL:
+                    Npgsql.NpgsqlConnection.ClearPool((Npgsql.NpgsqlConnection)Database.GetDbConnection());
+                    break;
+                
             }
             base.Dispose();
         }

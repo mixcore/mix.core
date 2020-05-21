@@ -7,8 +7,25 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200221083318_Init.cs" />
     <Compile Remove="Migrations\20200221083318_Init.Designer.cs" />
+    <Compile Remove="Migrations\20200312023740_Init.cs" />
+    <Compile Remove="Migrations\20200312023740_Init.Designer.cs" />
+    <Compile Remove="Migrations\20200409113816_Init.Designer.cs" />
     <Compile Remove="Migrations\MixCmsAccount\20190804034827_init_mysql.cs" />
     <Compile Remove="Migrations\MixCmsAccount\20190804034827_init_mysql.Designer.cs" />
+    <Compile Remove="ViewModels\MixAttributeFields\HubViewModel.cs" />
+    <Compile Remove="ViewModels\MixAttributeFields\MobileViewModel.cs" />
+    <Compile Remove="ViewModels\MixAttributeSetDatas\HubViewModel.cs" />
+    <Compile Remove="ViewModels\MixAttributeSetDatas\MobileViewModel.cs" />
+    <Compile Remove="ViewModels\MixAttributeSetDatas\ReadDataViewModel.cs" />
+    <Compile Remove="ViewModels\MixAttributeSetDataValues\HubViewModel.cs" />
+    <Compile Remove="ViewModels\MixAttributeSetDataValues\MobileViewModel.cs" />
+    <Compile Remove="ViewModels\MixAttributeSets\ContentUpdateViewModel.cs" />
+    <Compile Remove="ViewModels\MixAttributeSets\ReadMvcArticleViewModel.cs" />
+    <Compile Remove="ViewModels\MixConfigurations\MobileViewModel.cs" />
+    <Compile Remove="ViewModels\MixLanguages\MobileViewModel.cs" />
+    <Compile Remove="ViewModels\MixLanguages\ReadAndroidViewModel.cs" />
+    <Compile Remove="ViewModels\MixRelatedAttributeDatas\HubViewModel.cs" />
+    <Compile Remove="ViewModels\MixRelatedAttributeDatas\MobileViewModel.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,11 +45,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.OData.Core" Version="7.6.4" />
-    <PackageReference Include="Mix.Heart" Version="0.0.6.4" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.3" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Mix.Heart.NetCore\Mix.Heart.NetCore.csproj" />
     <ProjectReference Include="..\Mix.Identity\Mix.Identity.csproj" />
   </ItemGroup>
 

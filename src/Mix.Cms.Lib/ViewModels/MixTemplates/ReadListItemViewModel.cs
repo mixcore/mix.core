@@ -16,16 +16,14 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         #region Models
 
-        
         [JsonProperty("id")]
         public int Id { get; set; }
 
-        
-        [JsonProperty("templateId")]
-        public int TemplateId { get; set; }
+        [JsonProperty("themeId")]
+        public int ThemeId { get; set; }
 
-        [JsonProperty("templateName")]
-        public string TemplateName { get; set; }
+        [JsonProperty("themeName")]
+        public string ThemeName { get; set; }
 
         [JsonProperty("folderType")]
         public string FolderType { get; set; }
@@ -36,38 +34,49 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         [JsonProperty("fileName")]
         public string FileName { get; set; }
 
+        [JsonProperty("extension")]
+        public string Extension { get; set; }
+
+        [JsonProperty("content")]
+        public string Content { get; set; }
+
+        [JsonProperty("mobileContent")]
+        public string MobileContent { get; set; } = "{}";
+
+        [JsonProperty("spaContent")]
+        public string SpaContent { get; set; } = "";
+
         [JsonProperty("scripts")]
         public string Scripts { get; set; }
 
         [JsonProperty("styles")]
         public string Styles { get; set; }
 
-        [JsonProperty("extension")]
-        public string Extension { get; set; }
-
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
-        
-        [JsonProperty("lastModified")]
-        public DateTime? LastModified { get; set; }
-
-        
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
 
         #endregion Models
 
         #region Views
 
-        
+
         [JsonProperty("assetFolder")]
         public string AssetFolder {
             get {
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.FileFolder,
                     MixConstants.Folder.TemplatesAssetFolder,
-                    TemplateName });
+                    ThemeName });
             }
         }
 
@@ -75,7 +84,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         [JsonProperty("templateFolder")]
         public string TemplateFolder {
             get {
-                return CommonHelper.GetFullPath(new string[] { MixConstants.Folder.TemplatesFolder, TemplateName });
+                return CommonHelper.GetFullPath(new string[] { MixConstants.Folder.TemplatesFolder, ThemeName });
             }
         }
 

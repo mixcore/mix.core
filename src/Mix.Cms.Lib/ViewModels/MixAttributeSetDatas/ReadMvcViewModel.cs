@@ -4,6 +4,7 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
@@ -19,23 +20,26 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public string Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
+        [JsonProperty("cultures")]
+        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
 
         [JsonProperty("attributeSetName")]
         public string AttributeSetName { get; set; }
-
-        [JsonProperty("createdDateTime")]
-        public DateTime CreatedDateTime { get; set; }
-
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
-
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("status")]
-        public int Status { get; set; }
-
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -96,7 +100,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 case MixEnums.MixDataType.Boolean:
                     return (new JProperty(item.AttributeFieldName, item.BooleanValue));
 
-                case MixEnums.MixDataType.Number:
+                case MixEnums.MixDataType.Integer:
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue));
 
                 case MixEnums.MixDataType.Reference:

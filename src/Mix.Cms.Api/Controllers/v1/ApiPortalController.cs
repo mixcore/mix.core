@@ -501,7 +501,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 {
                     case "Language":
                         var arrLanguage = obj["data"].ToObject<List<MixLanguage>>();
-                        result = await Lib.ViewModels.MixLanguages.ReadMvcViewModel.ImportLanguages(arrLanguage, _lang);
+                        result = await Lib.ViewModels.MixLanguages.UpdateViewModel.ImportLanguages(arrLanguage, _lang);
                         if (result.IsSucceed)
                         {
                             base.RemoveCache();
@@ -510,7 +510,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
                     case "Configuration":
                         var arrConfiguration = obj["data"].ToObject<List<MixConfiguration>>();
-                        result = await Lib.ViewModels.MixConfigurations.ReadMvcViewModel.ImportConfigurations(arrConfiguration, _lang);
+                        result = await Lib.ViewModels.MixConfigurations.UpdateViewModel.ImportConfigurations(arrConfiguration, _lang);
                         if (result.IsSucceed)
                         {
                             base.RemoveCache();

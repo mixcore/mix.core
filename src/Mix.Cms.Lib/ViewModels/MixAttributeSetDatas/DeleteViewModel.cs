@@ -45,7 +45,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             // remove related navs
             if (result.IsSucceed)
             {
-                var removeRelated = MixRelatedAttributeDatas.DeleteViewModel.Repository.RemoveListModel(true, d => (d.Id == Id || d.ParentId == Id) && d.Specificulture == Specificulture);
+                var removeRelated = MixRelatedAttributeDatas.DeleteViewModel.Repository.RemoveListModel(true, d => (d.DataId == Id || d.ParentId == Id) && d.Specificulture == Specificulture);
                 ViewModelHelper.HandleResult(removeRelated, ref result);
             }
 
@@ -70,7 +70,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             if (result.IsSucceed)
             {
                 var removeRelated = await MixRelatedAttributeDatas.DeleteViewModel.Repository.RemoveListModelAsync
-                    (true, d => (d.Id == Id || d.ParentId == Id) && d.Specificulture == Specificulture
+                    (true, d => (d.DataId == Id || d.ParentId == Id) && d.Specificulture == Specificulture
                     , _context, _transaction);
                 ViewModelHelper.HandleResult(removeRelated, ref result);
             }

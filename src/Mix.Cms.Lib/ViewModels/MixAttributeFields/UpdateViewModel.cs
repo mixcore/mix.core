@@ -18,9 +18,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
-
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
 
@@ -64,13 +61,20 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
 
         [JsonProperty("isUnique")]
         public bool IsUnique { get; set; }
-
-        [JsonProperty("status")]
-        public int Status { get; set; }
-
+        [JsonProperty("isMultiple")]
+        public bool IsMultiple { get; set; }
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #endregion Properties
@@ -94,13 +98,26 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
             base.Validate(_context, _transaction);
             if (IsValid)
             {
-                // Check if there is field name in the same attribute set
-                IsValid = !Repository.CheckIsExists(f => f.Id != Id && f.Name == Name && f.AttributeSetId == AttributeSetId);
-                if (!IsValid)
+                if (AttributeSetName != "sys_additional_field")
                 {
-                    Errors.Add($"Field {Name} Existed");
+                    // Check if there is field name in the same attribute set
+                    IsValid = !Repository.CheckIsExists(f => f.Id != Id && f.Name == Name && f.AttributeSetId == AttributeSetId);
+                    if (!IsValid)
+                    {
+                        Errors.Add($"Field {Name} Existed");
+                    }
+                }
+                else
+                {
+                    var currentField = Repository.GetSingleModel(m => m.Name == Name && m.DataType == (int)DataType, _context, _transaction);
+                    if (currentField.IsSucceed)
+                    {
+                        Id = currentField.Data.Id;
+                        CreatedDateTime = currentField.Data.CreatedDateTime;
+                    }
                 }
             }
+
         }
 
         public override MixAttributeField ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)

@@ -7,31 +7,37 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\v1\Mix\AttributeFields\**" />
     <Compile Remove="Controllers\v1\Mix\AttributeSetDatas\**" />
     <Compile Remove="Controllers\v1\Mix\AttributeSetDataValues\**" />
+    <Compile Remove="Controllers\v1\Mix\AttributeSets\**" />
     <Compile Remove="Controllers\v1\Mix\RelatedAttributeDatas\**" />
     <Compile Remove="Controllers\v1\Mix\RelatedAttributeSets\**" />
+    <Content Remove="Controllers\v1\Mix\AttributeFields\**" />
     <Content Remove="Controllers\v1\Mix\AttributeSetDatas\**" />
     <Content Remove="Controllers\v1\Mix\AttributeSetDataValues\**" />
+    <Content Remove="Controllers\v1\Mix\AttributeSets\**" />
     <Content Remove="Controllers\v1\Mix\RelatedAttributeDatas\**" />
     <Content Remove="Controllers\v1\Mix\RelatedAttributeSets\**" />
+    <EmbeddedResource Remove="Controllers\v1\Mix\AttributeFields\**" />
     <EmbeddedResource Remove="Controllers\v1\Mix\AttributeSetDatas\**" />
     <EmbeddedResource Remove="Controllers\v1\Mix\AttributeSetDataValues\**" />
+    <EmbeddedResource Remove="Controllers\v1\Mix\AttributeSets\**" />
     <EmbeddedResource Remove="Controllers\v1\Mix\RelatedAttributeDatas\**" />
     <EmbeddedResource Remove="Controllers\v1\Mix\RelatedAttributeSets\**" />
+    <None Remove="Controllers\v1\Mix\AttributeFields\**" />
     <None Remove="Controllers\v1\Mix\AttributeSetDatas\**" />
     <None Remove="Controllers\v1\Mix\AttributeSetDataValues\**" />
+    <None Remove="Controllers\v1\Mix\AttributeSets\**" />
     <None Remove="Controllers\v1\Mix\RelatedAttributeDatas\**" />
     <None Remove="Controllers\v1\Mix\RelatedAttributeSets\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Controllers\v1\Mix\AttributeSetDatas\ApiAttributeSetDataController.cs" />
-    <Compile Include="Controllers\v1\Mix\AttributeSetDatas\ApiAttributeSetDataNavigationController.cs" />
-    <Compile Include="Controllers\v1\Mix\AttributeSetDatas\ApiAttributeSetDataPortalController.cs" />
-    <Compile Include="Controllers\v1\Mix\AttributeSetDataValues\ApiAttributeSetValuePortalController.cs" />
-    <Compile Include="Controllers\v1\Mix\RelatedAttributeDatas\ApiRelatedAttributeSetDataPortalController.cs" />
-    <Compile Include="Controllers\v1\Mix\RelatedAttributeSets\ApiRelatedAttributeSetPortalController.cs" />
+    <Compile Remove="Controllers\v1\ApiPageController.cs" />
+    <Compile Remove="Controllers\v1\ApiPostAttributeDataController.cs" />
+    <Compile Remove="Controllers\v1\ApiPostAttributeValueController.cs" />
+    <Compile Remove="Controllers\v1\ApiPostController.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,7 +45,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.3.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
   </ItemGroup>
 

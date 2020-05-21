@@ -28,10 +28,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+
         [JsonProperty("template")]
         public string Template { get; set; }
 
@@ -81,29 +80,25 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public int? Views { get; set; }
 
         [JsonProperty("type")]
-        public int Type { get; set; }
-
-        [JsonProperty("createdDateTime")]
-        public DateTime CreatedDateTime { get; set; }
+        public MixContentStatus Type { get; set; }
 
         [JsonProperty("publishedDateTime")]
         public DateTime? PublishedDateTime { get; set; }
 
-        [JsonProperty("createdBy")]
-        public string CreatedBy { get; set; }
-
-        [JsonProperty("lastModified")]
-        public DateTime? LastModified { get; set; }
-
-        [JsonProperty("modifiedBy")]
-        public string ModifiedBy { get; set; }
-
         [JsonProperty("tags")]
         public string Tags { get; set; } = "[]";
 
+        public string CreatedBy { get; set; }
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("status")]
         public MixEnums.MixContentStatus Status { get; set; }
-
         #endregion Models
 
         #region Views
@@ -314,7 +309,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 m => (m.Type == (int)MixEnums.MixModuleType.Content || m.Type == (int)MixEnums.MixModuleType.ListPost)
                 && m.Specificulture == Specificulture
                 && !Modules.Any(n => n.ModuleId == m.Id && n.Specificulture == m.Specificulture)
-                , "CreatedDateTime", 1, null, 0, _context, _transaction);
+                , "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection.Desc, null, 0, _context, _transaction);
             foreach (var item in otherModules.Data.Items)
             {
                 Modules.Add(new MixModulePosts.ReadViewModel()
@@ -347,7 +342,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
             var otherModuleNavs = MixModules.ReadMvcViewModel.Repository.GetModelListBy(
                 m => (m.Type == (int)MixEnums.MixModuleType.SubPost) && m.Specificulture == Specificulture
-                && !ModuleNavs.Any(n => n.ModuleId == m.Id), "CreatedDateTime", 1, null, 0, _context, _transaction);
+                && !ModuleNavs.Any(n => n.ModuleId == m.Id), "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection.Desc, null, 0, _context, _transaction);
             foreach (var item in otherModuleNavs.Data.Items)
             {
                 item.LoadData(postId: Id, _context: _context, _transaction: _transaction);
@@ -366,7 +361,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             var otherPosts = MixPosts.ReadListItemViewModel.Repository.GetModelListBy(
                 m => m.Id != Id && m.Specificulture == Specificulture
                     && !PostNavs.Any(n => n.SourceId == Id)
-                    , "CreatedDateTime", 1, 10, 0, _context, _transaction);
+                    , "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection.Desc, 10, 0, _context, _transaction);
             foreach (var item in otherPosts.Data.Items)
             {
                 PostNavs.Add(new MixPostPosts.ReadViewModel()
@@ -480,7 +475,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                             startMediaId += 1;
                             navMedia.Media.Specificulture = Specificulture;
                             navMedia.Media.Id = startMediaId;
-                            navMedia.Media.Cultures = Cultures;
                             var saveMedia = await navMedia.Media.SaveModelAsync(false, _context, _transaction);
                             if (saveMedia.IsSucceed)
                             {
@@ -657,7 +651,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                         {
                             startMediaId += 1;
                             navMedia.Media.Specificulture = Specificulture;
-                            navMedia.Media.Cultures = Cultures;
                             navMedia.Media.Id = startMediaId;
                             var saveMedia = navMedia.Media.SaveModel(false, _context, _transaction);
                             if (saveMedia.IsSucceed)

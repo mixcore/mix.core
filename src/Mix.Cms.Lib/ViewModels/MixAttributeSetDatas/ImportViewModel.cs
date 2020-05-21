@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mix.Cms.Lib;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
@@ -23,25 +24,26 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public string Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
 
         [JsonProperty("attributeSetName")]
         public string AttributeSetName { get; set; }
-
-        [JsonProperty("createdDateTime")]
-        public DateTime CreatedDateTime { get; set; }
-
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
-
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("status")]
-        public int Status { get; set; }
-
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -50,7 +52,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public List<MixAttributeSetValues.ImportViewModel> Values { get; set; }
 
         [JsonProperty("fields")]
-        public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
+        public List<Lib.ViewModels.MixAttributeFields.UpdateViewModel> Fields { get; set; }
 
         ////[JsonIgnore]
         //public List<MixAttributeSetDatas.ODataMobileViewModel> RefData { get; set; } = new List<ODataMobileViewModel>();
@@ -58,7 +60,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public JObject Data { get; set; }
 
         [JsonProperty("relatedData")]
-        public List<MixRelatedAttributeDatas.ODataMobileViewModel> RelatedData { get; set; } = new List<MixRelatedAttributeDatas.ODataMobileViewModel>();
+        public List<MixRelatedAttributeDatas.UpdateViewModel> RelatedData { get; set; } = new List<MixRelatedAttributeDatas.UpdateViewModel>();
 
         #endregion Views
 
@@ -91,7 +93,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
             }
-            Fields = Fields ?? new List<MixAttributeFields.UpdateViewModel>();
+            Fields = Fields ?? new List<Lib.ViewModels.MixAttributeFields.UpdateViewModel>();
             Values = new List<MixAttributeSetValues.ImportViewModel>();
             foreach (var field in Fields)
             {
@@ -218,7 +220,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 case MixEnums.MixDataType.Boolean:
                     return (new JProperty(item.AttributeFieldName, item.BooleanValue));
 
-                case MixEnums.MixDataType.Number:
+                case MixEnums.MixDataType.Integer:
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue));
 
                 case MixEnums.MixDataType.Reference:
@@ -276,7 +278,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     item.StringValue = property.Value<string>()?.ToLower();
                     break;
 
-                case MixEnums.MixDataType.Number:
+                case MixEnums.MixDataType.Integer:
                     item.IntegerValue = property.Value<int?>();
                     item.StringValue = property.Value<string>();
                     break;
@@ -289,11 +291,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     string mediaData = property.Value<string>();
                     if (mediaData.IsBase64())
                     {
-                        MixMedias.UpdateViewModel media = new MixMedias.UpdateViewModel()
+                        Lib.ViewModels.MixMedias.UpdateViewModel media = new Lib.ViewModels.MixMedias.UpdateViewModel()
                         {
                             Specificulture = Specificulture,
                             Status = MixEnums.MixContentStatus.Published,
-                            MediaFile = new FileViewModel()
+                            MediaFile = new Lib.ViewModels.FileViewModel()
                             {
                                 FileStream = mediaData,
                                 Extension = ".png",

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -46,7 +47,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         [JsonIgnore]
         [JsonProperty("values")]
-        public List<MixAttributeSetValues.ReadViewModel> Values { get; set; }
+        public List<Lib.ViewModels.MixAttributeSetValues.ReadViewModel> Values { get; set; }
 
         [JsonProperty("data")]
         public JObject Data { get; set; }
@@ -71,7 +72,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getValues = MixAttributeSetValues.ReadViewModel
+            var getValues = Lib.ViewModels.MixAttributeSetValues.ReadViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
             if (getValues.IsSucceed)
             {
@@ -82,7 +83,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #endregion Overrides
 
-        private JProperty ParseValue(MixAttributeSetValues.ReadViewModel item)
+        private JProperty ParseValue(Lib.ViewModels.MixAttributeSetValues.ReadViewModel item)
         {
             switch (item.DataType)
             {

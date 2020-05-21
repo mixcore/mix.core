@@ -14,7 +14,12 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
         #region Properties
 
         #region Models
-
+        [JsonProperty("id")]
+        public int Id { get; set; }
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("cultures")]
+        public System.Collections.Generic.List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
         [Required]
         [JsonProperty("keyword")]
         public string Keyword { get; set; }
@@ -28,15 +33,21 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
         [JsonProperty("dataType")]
         public MixDataType DataType { get; set; }
 
-        [JsonProperty("status")]
-        public MixContentStatus Status { get; set; }
-
         [JsonProperty("description")]
         public string Description { get; set; }
 
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #endregion Properties

@@ -7,6 +7,7 @@ using Mix.Identity.Models;
 
 namespace Mix.Cms.Web.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class SecurityController : BaseController
     {
 

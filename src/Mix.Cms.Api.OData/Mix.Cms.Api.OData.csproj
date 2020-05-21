@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
+    <ProjectReference Include="..\Mix.Cms.Service.SignalR\Mix.Cms.Service.SignalR.csproj" />
+  </ItemGroup>
+
+
+</Project>

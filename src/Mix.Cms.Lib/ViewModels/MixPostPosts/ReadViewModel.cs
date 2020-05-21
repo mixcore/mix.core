@@ -12,28 +12,33 @@ namespace Mix.Cms.Lib.ViewModels.MixPostPosts
     {
         #region Properties
         #region Models
+        [JsonProperty("id")]
+        public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }        
-
+        
         [JsonProperty("sourceId")]
         public int SourceId { get; set; }
 
         [JsonProperty("destinationId")]
         public int DestinationId { get; set; }
 
-        [JsonProperty("createdDateTime")]
-        public DateTime CreatedDateTime { get; set; }
-
         [JsonProperty("image")]
         public string Image { get; set; }
 
         [JsonProperty("description")]
         public string Description { get; set; }
-
+        public string CreatedBy { get; set; }
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixContentStatus Status { get; set; }
+        public MixEnums.MixContentStatus Status { get; set; }
 
         #endregion Models
 
@@ -62,7 +67,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostPosts
         #endregion Contructors
 
         #region Overrides
-
+        
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getPost = MixPosts.ReadListItemViewModel.Repository.GetSingleModel(
@@ -76,8 +81,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPostPosts
 
         public override MixRelatedPost ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (CreatedDateTime == default(DateTime))
+            if (Id == 0)
             {
+                Id = Repository.Max(m => m.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
             return base.ParseModel(_context, _transaction);

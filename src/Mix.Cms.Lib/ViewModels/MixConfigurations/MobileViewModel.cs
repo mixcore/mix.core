@@ -15,7 +15,14 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
 
         #region Models
 
-        [Required]
+        [JsonProperty("id")]
+        public int Id { get; set; }
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("cultures")]
+        public System.Collections.Generic.List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
         [JsonProperty("keyword")]
         public string Keyword { get; set; }
 
