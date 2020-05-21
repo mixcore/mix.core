@@ -99,9 +99,14 @@ namespace Mix.Cms.Api.Controllers.v1
                         return Ok(loginResult);
                     }
                 }
+                if (result.IsLockedOut)
+                {
+                    loginResult.Errors.Add("This account has been locked out, please try again later.");
+                    return BadRequest(loginResult);
+                }
                 else
                 {
-                    loginResult.Errors.Add("login failed");
+                    loginResult.Errors.Add("Login failed");
                     return BadRequest(loginResult);
                 }
             }
@@ -189,6 +194,10 @@ namespace Mix.Cms.Api.Controllers.v1
                     user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
                     model.Id = user.Id;
                     model.CreatedDateTime = DateTime.UtcNow;
+                    model.Status = MixUserStatus.Actived;
+                    model.LastModified = DateTime.UtcNow;
+                    model.CreatedBy = User.Identity.Name;
+                    model.ModifiedBy = User.Identity.Name;
                     // Save to cms db context
                     await model.SaveModelAsync();
                     var token = await _helper.GenerateAccessTokenAsync(user, true);
@@ -288,7 +297,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                     else
                     {
-                        var model = new MixCmsUser() { Status = (int)MixUserStatus.Actived };
+                        var model = new MixCmsUser() { Status = MixUserStatus.Actived.ToString() };
 
                         RepositoryResponse<Lib.ViewModels.Account.MixUsers.UpdateViewModel> result = new RepositoryResponse<Lib.ViewModels.Account.MixUsers.UpdateViewModel>()
                         {
@@ -306,7 +315,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                     else
                     {
-                        var model = new MixCmsUser() { Status = (int)MixUserStatus.Actived };
+                        var model = new MixCmsUser() { Status = MixUserStatus.Actived.ToString() };
 
                         RepositoryResponse<UserInfoViewModel> result = new RepositoryResponse<UserInfoViewModel>()
                         {
@@ -389,7 +398,7 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<RepositoryResponse<PaginationModel<UserInfoViewModel>>> GetList(RequestPaging request)
         {
             Expression<Func<MixCmsUser, bool>> predicate = model =>
-                (!request.Status.HasValue || model.Status == request.Status.Value)
+                (string.IsNullOrEmpty(request.Status) || model.Status == request.Status)
                 && (string.IsNullOrWhiteSpace(request.Keyword)
                 || (
                     (EF.Functions.Like(model.Username, $"%{request.Keyword}%"))

@@ -23,8 +23,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
@@ -76,19 +74,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("type")]
         public MixPageType Type { get; set; }
-
-        [JsonProperty("status")]
-        public MixEnums.PageStatus Status { get; set; }
-
-        [JsonProperty("createdDateTime")]
-        public DateTime CreatedDateTime { get; set; }
-
-        [JsonProperty("updatedDateTime")]
-        public DateTime? UpdatedDateTime { get; set; }
-
-        [JsonProperty("createdBy")]
-        public string CreatedBy { get; set; }
-
         [JsonProperty("tags")]
         public string Tags { get; set; }
 
@@ -98,15 +83,21 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("level")]
         public int? Level { get; set; }
 
-        [JsonProperty("lastModified")]
-        public DateTime? LastModified { get; set; }
-
-        [JsonProperty("modifiedBy")]
-        public string ModifiedBy { get; set; }
-
         [JsonProperty("pageSize")]
         public int? PageSize { get; set; }
 
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -180,13 +171,14 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             //Save Module Navigations
             if (result.IsSucceed && ModuleNavs != null)
             {
+                var startId = MixPageModules.ImportViewModel.Repository.Max(m => m.Id).Data;
                 foreach (var item in ModuleNavs)
                 {
+
                     if (!MixModules.ImportViewModel.Repository.CheckIsExists(m => m.Name == item.Module.Name && m.Specificulture == parent.Specificulture,
                             _context, _transaction))
                     {
                         //  Force to create new module
-                        item.Module.Id = 0;
                         item.Module.Specificulture = parent.Specificulture;
                         if (!string.IsNullOrEmpty(item.Image))
                         {
@@ -208,10 +200,14 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                         }
                         else // Save Module Success
                         {
+                            startId++;
+                            item.Id = startId;
                             item.PageId = parent.Id;
                             item.ModuleId = saveModule.Data.Id;
                             item.Specificulture = parent.Specificulture;
                             item.Description = saveModule.Data.Title;
+                            item.CreatedDateTime = DateTime.UtcNow;
+                            item.CreatedBy = CreatedBy;
                             var saveResult = await item.SaveModelAsync(false, _context, _transaction);
                             ViewModelHelper.HandleResult(saveResult, ref result);
                             if (!result.IsSucceed)
@@ -276,16 +272,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             return MixPageModules.ImportViewModel.Repository.GetModelListBy(
                 module => module.Specificulture == Specificulture && module.PageId == Id,
                 context, transaction).Data;
-        }
-
-        public List<MixPagePages.ReadViewModel> GetParentNavs(MixCmsContext context, IDbContextTransaction transaction)
-        {
-            return MixPagePages.ReadViewModel.Repository.GetModelListBy(p => p.Specificulture == Specificulture && p.Id == Id).Data;
-        }
-
-        public List<MixPagePages.ReadViewModel> GetChildNavs(MixCmsContext context, IDbContextTransaction transaction)
-        {
-            return MixPagePages.ReadViewModel.Repository.GetModelListBy(p => p.Specificulture == Specificulture && p.ParentId == Id).Data;
         }
 
         #endregion Expands

@@ -12,15 +12,17 @@ namespace Mix.Cms.Lib.Models.Cms
         }
 
         public int Id { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime CreatedDateTime { get; set; }
         public string Thumbnail { get; set; }
         public string Image { get; set; }
         public string Title { get; set; }
         public string Name { get; set; }
-        public int Priority { get; set; }
-        public int Status { get; set; }
         public string PreviewUrl { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime CreatedDateTime { get; set; }
+        public string ModifiedBy { get; set; }
+        public DateTime? LastModified { get; set; }
+        public int Priority { get; set; }
+        public string Status { get; set; }
 
         public virtual ICollection<MixFile> MixFile { get; set; }
         public virtual ICollection<MixTemplate> MixTemplate { get; set; }

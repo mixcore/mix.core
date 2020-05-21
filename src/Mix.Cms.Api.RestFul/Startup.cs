@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Mix.Cms.Lib.Extensions;
 
 namespace Mix.Cms.Api.RestFul
 {
@@ -25,7 +26,9 @@ namespace Mix.Cms.Api.RestFul
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
+            services.AddGenerateApis();
+            services.AddMixRestApi();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,7 +42,7 @@ namespace Mix.Cms.Api.RestFul
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseMixRestApi();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

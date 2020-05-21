@@ -5,7 +5,40 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
+    <Compile Remove="Attributes\**" />
+    <Compile Remove="cache\**" />
+    <Compile Remove="Controllers\v1\AttributeSetDatas\**" />
+    <Compile Remove="Conventions\**" />
+    <Compile Remove="Providers\**" />
+    <Compile Remove="ViewModels\**" />
+    <Content Remove="Attributes\**" />
+    <Content Remove="cache\**" />
+    <Content Remove="Controllers\v1\AttributeSetDatas\**" />
+    <Content Remove="Conventions\**" />
+    <Content Remove="Providers\**" />
+    <Content Remove="ViewModels\**" />
+    <EmbeddedResource Remove="Attributes\**" />
+    <EmbeddedResource Remove="cache\**" />
+    <EmbeddedResource Remove="Controllers\v1\AttributeSetDatas\**" />
+    <EmbeddedResource Remove="Conventions\**" />
+    <EmbeddedResource Remove="Providers\**" />
+    <EmbeddedResource Remove="ViewModels\**" />
+    <None Remove="Attributes\**" />
+    <None Remove="cache\**" />
+    <None Remove="Controllers\v1\AttributeSetDatas\**" />
+    <None Remove="Conventions\**" />
+    <None Remove="Providers\**" />
+    <None Remove="ViewModels\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Controllers\v1\AttributeSetDatas\ApiAttributeSetDataController.cs" />
+    <Compile Include="Controllers\v1\AttributeSetDatas\AttributeSetDataPortalController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
+    <PackageReference Include="NSwag.Generation.AspNetCore" Version="13.3.0" />
   </ItemGroup>
 
   <ItemGroup>

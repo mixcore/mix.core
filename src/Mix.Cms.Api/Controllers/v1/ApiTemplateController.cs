@@ -49,7 +49,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 {
                     var model = new MixTemplate()
                     {
-                        Status = (int)MixContentStatus.Preview,
+                        Status = MixContentStatus.Preview.ToString(),
                         ThemeId = themeId,
                         ThemeName = getTheme.Data.Name,
                         Extension = MixService.GetConfig<string>("TemplateExtension"),

@@ -16,18 +16,23 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPageRoles
         [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("createdBy")]
-        public string CreatedBy { get; set; }
-
-        [JsonProperty("createdDateTime")]
-        public DateTime CreatedDateTime { get; set; }
-
         [JsonProperty("pageId")]
         public int PageId { get; set; }
         [JsonProperty("roleId")]
-        public string RoleId { get; set; }
+        public string RoleId { get; set; }        
+        
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
         [JsonProperty("priority")]
         public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
 
         #endregion Model
 

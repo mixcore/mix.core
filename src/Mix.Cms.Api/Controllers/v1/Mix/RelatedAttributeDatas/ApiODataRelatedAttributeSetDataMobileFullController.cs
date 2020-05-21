@@ -35,7 +35,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
         [EnableQuery]
         [HttpGet, HttpOptions]
         [Route("{parentId}/{parentType}/{id}")]
-        public async Task<ActionResult<ODataMobileFullViewModel>> Details(string culture, string parentId, int parentType, string id)
+        public async Task<ActionResult<ODataMobileFullViewModel>> Details(string culture, string parentId, MixEnums.MixAttributeSetDataType, string id)
         {
             string msg = string.Empty;
             Expression<Func<MixRelatedAttributeData, bool>> predicate = null;
@@ -127,7 +127,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
         // Save api/odata/{culture}/attribute-set-data/portal/{id}
         [HttpPost, HttpOptions]
         [Route("{parentId}/{parentType}/{id}")]
-        public async Task<ActionResult<ODataMobileFullViewModel>> Save(string culture, string parentId, int parentType, string id, [FromBody]JObject data)
+        public async Task<ActionResult<ODataMobileFullViewModel>> Save(string culture, string parentId, MixEnums.MixAttributeSetDataType, string id, [FromBody]JObject data)
         {
             var portalResult = await base.SaveAsync<ODataMobileFullViewModel>(data, p => p.Id == id && p.ParentId == parentId && p.ParentType == parentType && p.Specificulture == _lang);
             if (portalResult.IsSucceed)
@@ -152,7 +152,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
                 JObject properties = item.Value<JObject>("properties");
                 string id = keys.Value<string>("id");
                 string parentId = keys.Value<string>("parentId");
-                int parentType = keys.Value<int>("parentType");
+                MixEnums.MixAttributeSetDataType = keys.Value<int>("parentType");
                 var portalResult = await base.SaveAsync<ODataMobileFullViewModel>(properties, p => p.Id == id && p.ParentId == parentId && p.ParentType == parentType && p.Specificulture == _lang);
                 if (!portalResult.IsSucceed)
                 {
@@ -164,7 +164,7 @@ namespace Mix.Cms.Api.Controllers.v1.OData.RelatedAttributeSetDatas
 
         [HttpDelete, HttpOptions]
         [Route("{parentId}/{parentType}/{id}")]
-        public async Task<ActionResult<ODataDeleteViewModel>> Delete(string culture, string parentId, int parentType, string id)
+        public async Task<ActionResult<ODataDeleteViewModel>> Delete(string culture, string parentId, MixEnums.MixAttributeSetDataType, string id)
         {
             Expression<Func<MixRelatedAttributeData, bool>> predicate = model => model.Id == id && model.ParentId == parentId && model.ParentType == parentType && model.Specificulture == _lang;
 

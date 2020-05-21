@@ -71,7 +71,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         var model = new MixPage()
                         {
                             Specificulture = _lang,
-                            Status = MixService.GetConfig<int>("DefaultStatus"),
+                            Status = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
                             PageSize = 20
                             ,
                             Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
@@ -100,7 +100,7 @@ namespace Mix.Cms.Api.Controllers.v1
                             Data = new ReadListItemViewModel(model)
                             {
                                 Specificulture = _lang,
-                                Status = MixEnums.PageStatus.Preview,
+                                Status = MixEnums.MixContentStatus.Preview,
                                 PageSize = 20
                             }
                         };
@@ -186,13 +186,13 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
             //bool isLevel = int.TryParse(parsed.Get("level"), out int level);
-            bool isType = int.TryParse(parsed.Get("pageType"), out int pageType);
+            bool isType = Enum.TryParse(parsed.Get("pageType"), out MixEnums.MixPageType pageType);
             ParseRequestPagingDate(request);
             Expression<Func<MixPage, bool>> predicate = model =>
                         model.Specificulture == _lang
-                        && (!request.Status.HasValue || model.Status == request.Status.Value)
+                        && (string.IsNullOrEmpty(request.Status) || model.Status == request.Status)
                         //&& (!isLevel || model.Level == level)
-                        && (!isType || model.Type == pageType)
+                        && (!isType || model.Type == pageType.ToString())
                         && (string.IsNullOrWhiteSpace(request.Keyword)                            
                             || (EF.Functions.Like(model.Title, $"%{request.Keyword}%"))
                             || (EF.Functions.Like(model.Excerpt, $"%{request.Keyword}%"))
@@ -240,11 +240,6 @@ namespace Mix.Cms.Api.Controllers.v1
                         {
                             a.DetailsUrl = MixCmsHelper.GetRouterUrl(
                                 new { action = "page", culture = _lang, seoName = a.SeoName }, Request, Url);
-                            a.Childs.ForEach((Action<Lib.ViewModels.MixPagePages.ReadViewModel>)(c =>
-                            {
-                                c.Page.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                    new { action = "page", culture = _lang, seoName = c.Page.SeoName }, Request, Url);
-                            }));
                         }));
                     }
 

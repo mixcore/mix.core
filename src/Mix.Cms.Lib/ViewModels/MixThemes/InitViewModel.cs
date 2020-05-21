@@ -30,9 +30,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
-
+        
         [JsonProperty("name")]
         public string Name { get; set; }
 
@@ -45,20 +43,21 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
-
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixContentStatus Status { get; set; }
-
-        [JsonProperty("isCreateDefault")]
-        public bool IsCreateDefault { get; set; }
-
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
-
+        [JsonProperty("isCreateDefault")]
+        public bool IsCreateDefault { get; set; }
         [JsonProperty("domain")]
         public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 

@@ -9,14 +9,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Reflection;
 
 namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
     public class Helper
     {
+        /// <summary>
+        /// Gets the modelist by meta.
+        /// </summary>
+        /// <typeparam name="TView">The type of the view.</typeparam>
+        /// <param name="culture">The culture.</param>
+        /// <param name="metaName">Name of the meta. Ex: sys_tag / sys_category</param>
+        /// <param name="metaValue">The meta value.</param>
+        /// <param name="orderByPropertyName">Name of the order by property.</param>
+        /// <param name="direction">The direction.</param>
+        /// <param name="pageSize">Size of the page.</param>
+        /// <param name="pageIndex">Index of the page.</param>
+        /// <param name="_context">The context.</param>
+        /// <param name="_transaction">The transaction.</param>
+        /// <returns></returns>
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetModelistByMeta<TView>(
-            string culture, string metaName, string metaValue
-            , string orderByPropertyName, int direction, int? pageSize, int? pageIndex
+            string metaName, string metaValue, string culture
+            , string orderByPropertyName, Heart.Enums.MixHeartEnums.DisplayDirection direction, int? pageSize, int? pageIndex
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
         {
@@ -39,8 +55,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (getVal.IsSucceed)
                 {
                     var getRelatedData = await MixRelatedAttributeDatas.ReadViewModel.Repository.GetModelListByAsync(
-                        m => m.Specificulture == culture && m.Id == getVal.Data.DataId
-                        && m.ParentType == (int)MixEnums.MixAttributeSetDataType.Post
+                        m => m.Specificulture == culture && m.DataId == getVal.Data.DataId
+                        && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
                         , orderByPropertyName, direction, pageIndex, pageSize
                         , _context: context, _transaction: transaction
                         );
@@ -79,9 +95,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
             }
-        }
+        }        
     }
 }

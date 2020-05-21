@@ -27,15 +27,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
-        [JsonProperty("setAttributeId")]
-        public int? SetAttributeId { get; set; }
-
-        [Required]
         [JsonProperty("name")]
         public string Name { get; set; }
 
@@ -54,7 +48,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("edmTemplate")]
         public string EdmTemplate { get; set; }
 
-        [Required]
         [JsonProperty("title")]
         public string Title { get; set; }
 
@@ -67,24 +60,21 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("type")]
         public MixModuleType Type { get; set; }
 
-        [JsonProperty("status")]
-        public MixContentStatus Status { get; set; }
-
         [JsonProperty("pageSize")]
         public int? PageSize { get; set; }
 
-        [JsonProperty("lastModified")]
-        public DateTime LastModified { get; set; }
-
-        [JsonProperty("createdDateTime")]
-        public DateTime CreatedDateTime { get; set; }
-
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
-
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
-
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -356,14 +346,16 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 t => t.Theme.Id == ActivedTheme && t.FolderType == this.EdmFolderType).Data;
             this.EdmView = MixTemplates.UpdateViewModel.GetTemplateByPath(EdmTemplate, Specificulture, MixEnums.EnumTemplateFolder.Edms, _context, _transaction);
             this.EdmTemplate = $"{EdmView?.FileFolder}/{EdmView?.FileName}{View.Extension}";
-            if (SetAttributeId.HasValue)
-            {
-                AttributeSet = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(s => s.Id == SetAttributeId.Value).Data;
-            }
-            else
-            {
-                AttributeSet = new MixAttributeSets.UpdateViewModel();
-            }
+            
+            // TODO: Verified why use below code
+            //if (SetAttributeId.HasValue)
+            //{
+            //    AttributeSet = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(s => s.Id == SetAttributeId.Value).Data;
+            //}
+            //else
+            //{
+            //    AttributeSet = new MixAttributeSets.UpdateViewModel();
+            //}
         }
 
         #region Async
@@ -411,12 +403,12 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 AttributeData.Data.AttributeSetId = getAttrs.Data.Id;
                 AttributeData.Data.AttributeSetName = getAttrs.Data.Name;
                 AttributeData.ParentId = parentId.ToString();
-                AttributeData.ParentType = (int)MixEnums.MixAttributeSetDataType.Module;
+                AttributeData.ParentType = MixEnums.MixAttributeSetDataType.Module;
                 var saveData = await AttributeData.Data.SaveModelAsync(true, context, transaction);
                 ViewModelHelper.HandleResult(saveData, ref result);
                 if (result.IsSucceed)
                 {
-                    AttributeData.Id = saveData.Data.Id;
+                    AttributeData.DataId = saveData.Data.Id;
                     var saveRelated = await AttributeData.SaveModelAsync(true, context, transaction);
                     ViewModelHelper.HandleResult(saveRelated, ref result);
                 }
@@ -426,7 +418,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 if (result.IsSucceed)
                 {
                     item.ParentId = parentId.ToString();
-                    item.ParentType = (int)MixEnums.MixAttributeSetDataType.Module;
+                    item.ParentType = MixEnums.MixAttributeSetDataType.Module;
                     item.Specificulture = Specificulture;
                     var saveResult = await item.SaveModelAsync(false, context, transaction);
                     ViewModelHelper.HandleResult(saveResult, ref result);
@@ -438,7 +430,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 if (result.IsSucceed)
                 {
                     item.ParentId = parentId.ToString();
-                    item.ParentType = (int)MixEnums.MixAttributeSetDataType.Module;
+                    item.ParentType = MixEnums.MixAttributeSetDataType.Module;
                     item.Specificulture = Specificulture;
                     var saveResult = await item.SaveModelAsync(false, context, transaction);
                     ViewModelHelper.HandleResult(saveResult, ref result);
@@ -485,6 +477,86 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #endregion Overrides
 
         #region Expand
+        public static async Task<RepositoryResponse<JObject>> SaveByModuleName(string culture, string createdBy, string name, string formName, JObject obj
+       , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                var getModule = await Repository.GetSingleModelAsync(m => m.Specificulture == culture && m.Name == name, context, transaction);
+                string dataId = obj["id"]?.Value<string>();
+                if (getModule.IsSucceed)
+                {
+                    // Get Attribute set
+                    var getAttrSet = await Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModelAsync(m => m.Name == formName, context, transaction);
+                    if (getAttrSet.IsSucceed)
+                    {
+                        // Save attr data + navigation
+                        MixAttributeSetDatas.UpdateViewModel data = new MixAttributeSetDatas.UpdateViewModel()
+                        {
+                            Id = dataId,
+                            CreatedBy = createdBy,
+                            AttributeSetId = getAttrSet.Data.Id,
+                            AttributeSetName = getAttrSet.Data.Name,
+                            Specificulture = culture,
+                            Data = obj
+                        };
+
+                        // Create navigation module - attr data
+                        var getNavigation = await MixRelatedAttributeDatas.ReadViewModel.Repository.GetSingleModelAsync(
+                            m => m.ParentId == getModule.Data.Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Module.ToString() && m.Specificulture == culture
+                            , context, transaction);
+                        if (!getNavigation.IsSucceed)
+                        {
+                            data.RelatedData.Add(new MixRelatedAttributeDatas.UpdateViewModel()
+                            {
+                                ParentId = getModule.Data.Id.ToString(),
+                                Specificulture = culture,
+                                ParentType = MixAttributeSetDataType.Module
+                            });
+                        }
+                        var portalResult = await data.SaveModelAsync(true, context, transaction);
+                        UnitOfWorkHelper<MixCmsContext>.HandleTransaction(portalResult.IsSucceed, isRoot, transaction);
+                       
+                        return new RepositoryResponse<JObject>()
+                        {
+                            IsSucceed = portalResult.IsSucceed,
+                            Data = portalResult.Data?.Data,
+                            Exception = portalResult.Exception,
+                            Errors = portalResult.Errors
+                        };
+                    }
+                    else
+                    {
+                        return new RepositoryResponse<JObject>()
+                        {
+                            IsSucceed = false,
+                            Status = (int)MixEnums.ResponseStatus.BadRequest
+                        };
+                    }
+                }
+                else
+                {
+                    return new RepositoryResponse<JObject>()
+                    {
+                        IsSucceed = false,
+                        Status = (int)MixEnums.ResponseStatus.BadRequest
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return (UnitOfWorkHelper<MixCmsContext>.HandleException<JObject>(ex, isRoot, transaction));
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                }
+            }
+        }
 
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
@@ -507,7 +579,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 val.Field = field;
             }
             var getCategories = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
-               && m.ParentId == Id.ToString() && m.ParentType == (int)MixEnums.MixAttributeSetDataType.Module
+               && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Module.ToString()
                && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_CATEGORY, _context, _transaction);
             if (getCategories.IsSucceed)
             {
@@ -515,7 +587,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             }
 
             var getTags = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
-                && m.ParentId == Id.ToString() && m.ParentType == (int)MixEnums.MixAttributeSetDataType.Module
+                && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Module.ToString()
                 && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_TAG, _context, _transaction);
             if (getTags.IsSucceed)
             {
@@ -549,7 +621,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         private void LoadAttributeData(MixCmsContext context, IDbContextTransaction transaction)
         {
             AttributeData = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetFirstModel(
-                    a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.ParentType == (int)MixEnums.MixAttributeSetDataType.Module
+                    a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.ParentType == MixEnums.MixAttributeSetDataType.Module.ToString()
                         , context, transaction).Data;
             if (AttributeData == null)
             {
@@ -557,7 +629,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                     new MixRelatedAttributeData()
                     {
                         Specificulture = Specificulture,
-                        ParentType = (int)MixEnums.MixAttributeSetDataType.Module,
+                        ParentType = MixEnums.MixAttributeSetDataType.Module.ToString(),
                         ParentId = Id.ToString()
                     }
                     );
@@ -607,8 +679,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
             if (getDataResult.IsSucceed)
             {
-                getDataResult.Data.JsonItems = new List<JObject>();
-                getDataResult.Data.Items.ForEach(d => getDataResult.Data.JsonItems.Add(d.JItem));
+                //getDataResult.Data.JsonItems = new List<JObject>();
+                //getDataResult.Data.Items.ForEach(d => getDataResult.Data.JsonItems.Add(d.JItem));
                 Data = getDataResult.Data;
             }
         }

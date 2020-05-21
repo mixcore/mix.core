@@ -1,18 +1,20 @@
 using GraphiQl;
-using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Mix.Cms.Api.RestFul;
+using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Messenger.Models.Data;
 using Mix.Cms.Service.Gprc;
 using Mix.Cms.Service.SignalR;
+using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 
 namespace Mix.Cms.Web
 {
@@ -30,8 +32,7 @@ namespace Mix.Cms.Web
         {
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation()
-                .AddNewtonsoftJson()
-                .AddJsonOptions(options => options.JsonSerializerOptions.MaxDepth = 4);
+                .AddNewtonsoftJson(options => { options.SerializerSettings.Converters.Add(new StringEnumConverter()); });
 
             #region Addictionals Config for Mixcore Cms
 
@@ -44,19 +45,18 @@ namespace Mix.Cms.Web
             /* Mix: End Add db contexts */
 
             /* Mix: Inject Services */
-            services.AddControllers(mvcOptions =>
-               mvcOptions.EnableEndpointRouting = false);
-
-            services.AddOData();
-
+            services.AddControllers(mvcOptions => mvcOptions.EnableEndpointRouting = false);
+            services.AddGenerateApis();
+            services.AddMixRestApi();
             services.AddMixSignalR();
             services.AddMixGprc();
 
+            
             /* Mix: End Inject Services */
 
             VerifyInitData(services);
 
-            ConfigAuthorization(services, Configuration);
+            services.AddMixAuthorize(Configuration);
 
             /* End Addictional Config for Mixcore Cms  */
 
@@ -83,18 +83,19 @@ namespace Mix.Cms.Web
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseMixRestApi();
             #region Addictionals Config for Mixcore Cms
 
             if (MixService.GetConfig<bool>("IsHttps"))
             {
                 app.UseHttpsRedirection();
             }
-
+            app.UseMixRestApi();
             app.UseMixGprc();
+
             app.UseMixSignalR();
 
-            ConfigRoutes(app);
+            app.UseMixRoutes();
 
             #endregion Addictionals Config for Mixcore Cms
         }
@@ -104,13 +105,13 @@ namespace Mix.Cms.Web
         {
             // Mix: Migrate db if already inited
 
-            if (!MixService.GetConfig<bool>("IsInit"))
-            {
-                using (var ctx = new MixCmsContext())
-                {
-                    ctx.Database.Migrate();
-                }
-            }
+            //if (!MixService.GetConfig<bool>("IsInit"))
+            //{
+            //    using (var ctx = new MixCmsContext())
+            //    {
+            //        ctx.Database.Migrate();
+            //    }
+            //}
 
             // Mix: Check if require ssl
             if (MixService.GetConfig<bool>("IsHttps"))

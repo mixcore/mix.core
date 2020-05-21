@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -21,40 +22,39 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         public string Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("moduleId")]
         public int ModuleId { get; set; }
 
-        [JsonIgnore]
         [JsonProperty("fields")]
         public string Fields { get; set; } = "[]";
 
         [JsonProperty("value")]
-        [JsonIgnore]
         public string Value { get; set; }
 
         [JsonProperty("postId")]
-        public string PostId { get; set; }
+        public int? PostId { get; set; }
 
         [JsonProperty("productId")]
-        public string ProductId { get; set; }
+        public int? ProductId { get; set; }
 
         [JsonProperty("pageId")]
         public int? PageId { get; set; }
 
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
-        [JsonProperty("updatedDateTime")]
-        public DateTime? UpdatedDateTime { get; set; }
-
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixContentStatus Status { get; set; }
-
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -90,10 +90,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
             }
-            else
-            {
-                UpdatedDateTime = DateTime.UtcNow;
-            }
+            LastModified = DateTime.UtcNow;
             Value = JsonConvert.SerializeObject(JItem);
             Fields = JsonConvert.SerializeObject(DataProperties);
             return base.ParseModel(_context, _transaction);
@@ -101,18 +98,20 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Fields = _context.MixModule.First(m => m.Id == ModuleId && m.Specificulture == Specificulture)?.Fields;
+            Fields = Fields ?? _context.MixModule.First(m => m.Id == ModuleId && m.Specificulture == Specificulture)?.Fields;
             DataProperties = Fields == null ? null : JsonConvert.DeserializeObject<List<ApiModuleDataValueViewModel>>(Fields);
             JItem = Value == null ? InitValue() : JsonConvert.DeserializeObject<JObject>(Value);
             foreach (var item in DataProperties)
             {
-                if (!JItem.TryGetValue(item.Name, out JToken tmp))
+                JItem[item.Name] = Helper.ParseValue(JItem, item);
+                if (JItem[item.Name] == null)
                 {
                     JItem[item.Name] = new JObject()
                     {
                         new JProperty("dataType", item.DataType),
                         new JProperty("value", JItem[item.Name]?.Value<JObject>().Value<string>("value"))
                     };
+                    
                 }
             }
         }
