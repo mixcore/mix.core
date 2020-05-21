@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels.MixPostAttributeDatas;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
@@ -58,7 +57,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         var model = new MixPostAttributeData()
                         {
-                            Status = MixService.GetConfig<int>("DefaultStatus")
+                            Status = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.DefaultContentStatus)
                             ,
                             Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
@@ -77,7 +76,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         var model = new MixPostAttributeData()
                         {
-                            Status = MixService.GetConfig<int>("DefaultStatus")
+                            Status = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.DefaultContentStatus)
                             ,
                             Priority = ReadViewModel.Repository.Max(a => a.Priority).Data + 1
                         };

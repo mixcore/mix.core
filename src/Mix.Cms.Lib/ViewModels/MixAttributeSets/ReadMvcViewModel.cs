@@ -48,12 +48,18 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         [JsonProperty("edmAutoSend")]
         public bool? EdmAutoSend { get; set; }
 
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("status")]
-        public int Status { get; set; }
-
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -85,7 +91,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         {
             var getData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository
             .GetModelListBy(
-                m => m.ParentId == parentId && m.ParentType == (int)parentType && m.Specificulture == specificulture
+                m => m.ParentId == parentId && m.ParentType == parentType.ToString() && m.Specificulture == specificulture
                 , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
                 , pageSize, pageIndex
                 , _context: _context, _transaction: _transaction);

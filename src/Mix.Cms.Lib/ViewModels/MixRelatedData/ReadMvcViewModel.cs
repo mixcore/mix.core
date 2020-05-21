@@ -15,27 +15,32 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedDatas
         public string Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
-
+        [JsonProperty("dataId")]
+        public string DataId { get; set; }
+        
         [JsonProperty("parentId")]
         public string ParentId { get; set; }
 
         [JsonProperty("parentType")]
-        public int ParentType { get; set; }
+        public MixEnums.MixAttributeSetDataType ParentType { get; set; }
 
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
 
-        [JsonProperty("createdDateTime")]
-        public DateTime CreatedDateTime { get; set; }
-
-        [JsonProperty("status")]
-        public int Status { get; set; }
-
         [JsonProperty("description")]
         public string Description { get; set; }
-
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views

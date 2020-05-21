@@ -18,40 +18,39 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedDatas
         {
         }
 
-        #region Model
-
-        /*
-         * Attribute Set Data Id
-         */
+        #region Models
 
         [JsonProperty("id")]
         public string Id { get; set; }
-
-        [JsonProperty("type")]
-        public MixEnums.MixRelatedType Type { get; set; }
-
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("dataId")]
+        public string DataId { get; set; }
+        
         [JsonProperty("parentId")]
         public string ParentId { get; set; }
 
         [JsonProperty("parentType")]
-        public int ParentType { get; set; }
+        public MixEnums.MixAttributeSetDataType ParentType { get; set; }
 
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
 
-        [JsonProperty("attributeSetName")]
-        public string AttributeSetName { get; set; }
-
-        [JsonProperty("createdDateTime")]
-        public DateTime CreatedDateTime { get; set; }
-
-        [JsonProperty("status")]
-        public int Status { get; set; }
-
         [JsonProperty("description")]
         public string Description { get; set; }
-
-        #endregion Model
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
+        #endregion Models
 
 
 

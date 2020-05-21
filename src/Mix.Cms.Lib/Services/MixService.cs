@@ -136,11 +136,13 @@ namespace Mix.Cms.Lib.Services
 
         public static string GetConnectionString(string name)
         {
+            // Enhance: Add Encrypt / Decrypt appconnection string
             return Instance.ConnectionStrings?[name].Value<string>();
         }
 
         public static void SetConnectionString(string name, string value)
         {
+            // Enhance: Add Encrypt / Decrypt appconnection string
             Instance.ConnectionStrings[name] = value;
         }
 
@@ -148,7 +150,7 @@ namespace Mix.Cms.Lib.Services
         {
             if (Instance.Cultures == null)
             {
-                var cultures = ViewModels.MixCultures.ReadViewModel.Repository.GetModelList().Data;
+                var cultures = ViewModels.MixCultures.UpdateViewModel.Repository.GetModelList().Data;
                 Instance.Cultures = cultures?.Select(c => c.Specificulture).ToList() ?? new List<string>();
             }
             return Instance.Cultures.Any(c => c == specificulture);
@@ -205,10 +207,10 @@ namespace Mix.Cms.Lib.Services
             if (!string.IsNullOrEmpty(culture) && Instance.LocalSettings[culture] != null)
             {
                 result = Instance.LocalSettings[culture][name];
-                if (result == null)
-                {
-                    result = DefaultInstance.LocalSettings[MixService.GetConfig<string>("DefaultCulture")][name];
-                }
+                //if (result == null)
+                //{
+                //    result = DefaultInstance.LocalSettings[MixService.GetConfig<string>("DefaultCulture")][name];
+                //}
             }
             return result != null ? result.Value<T>() : default;
         }

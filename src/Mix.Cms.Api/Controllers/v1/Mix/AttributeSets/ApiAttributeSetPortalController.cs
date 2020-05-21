@@ -55,7 +55,7 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSets
                     {
                         var model = new MixAttributeSet()
                         {
-                            Status = MixService.GetConfig<int>("DefaultStatus")
+                            Status = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultContentStatus)
                             ,
                             Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
@@ -74,7 +74,7 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSets
                     {
                         var model = new MixAttributeSet()
                         {
-                            Status = MixService.GetConfig<int>("DefaultStatus")
+                            Status = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.DefaultContentStatus)
                             ,
                             Priority = ReadViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
@@ -116,7 +116,7 @@ namespace Mix.Cms.Api.Controllers.v1.AttributeSets
             var parsed = HttpUtility.ParseQueryString(request.Query ?? "");
             ParseRequestPagingDate(request);
             Expression<Func<MixAttributeSet, bool>> predicate = model =>
-                        (!request.Status.HasValue || model.Status == request.Status.Value)
+                        (string.IsNullOrEmpty(request.Status) || model.Status == request.Status)
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (model.Name.Contains(request.Keyword))
                             )

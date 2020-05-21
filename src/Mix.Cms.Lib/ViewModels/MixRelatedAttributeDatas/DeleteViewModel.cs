@@ -13,6 +13,8 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         #region Models
 
         public string Id { get; set; }
+        public string Specificulture { get; set; }
+        public string DataId { get; set; }
         public string ParentId { get; set; }
         public MixEnums.MixAttributeSetDataType ParentType { get; set; }
         public int AttributeSetId { get; set; }

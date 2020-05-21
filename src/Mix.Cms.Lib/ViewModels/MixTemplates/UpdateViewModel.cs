@@ -57,14 +57,18 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         [JsonProperty("styles")]
         public string Styles { get; set; }
 
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
-        [JsonProperty("lastModified")]
-        public DateTime? LastModified { get; set; }
-
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
 
         #endregion Models
 
@@ -122,11 +126,15 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var file = FileRepository.Instance.GetFile(FileName, Extension, FileFolder);
-            if (!string.IsNullOrWhiteSpace(file?.Content))
+            if (!string.IsNullOrEmpty(FileName))
             {
-                Content = file.Content;
+                var file = FileRepository.Instance.GetFile(FileName, Extension, FileFolder);
+                if (!string.IsNullOrWhiteSpace(file?.Content))
+                {
+                    Content = file.Content;
+                }
             }
+            
         }
 
         public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
@@ -140,6 +148,10 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                     {
                         FileName = $"{FileName}_1";
                     }
+                }
+                if (string.IsNullOrEmpty(ThemeName) && ThemeId > 0)
+                {
+                    ThemeName = _context.MixTheme.FirstOrDefault(m => m.Id == ThemeId)?.Name;
                 }
             }
         }

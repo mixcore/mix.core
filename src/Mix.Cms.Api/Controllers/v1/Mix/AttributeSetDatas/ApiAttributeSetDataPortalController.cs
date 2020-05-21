@@ -68,7 +68,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         var model = new MixAttributeSetData()
                         {
-                            Status = MixService.GetConfig<int>("DefaultStatus")
+                            Status = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.DefaultContentStatus)
                             ,
                             Priority = MobileViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
@@ -87,7 +87,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         var model = new MixAttributeSetData()
                         {
-                            Status = MixService.GetConfig<int>("DefaultStatus")
+                            Status = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.DefaultContentStatus)
                             ,
                             Priority = ReadViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
@@ -176,7 +176,7 @@ namespace Mix.Cms.Api.Controllers.v1
             int.TryParse(queries.Get("attributeSetId"), out int attributeSetId);
             string attributeSetName = queries.Get("attributeSetName");
             ParseRequestPagingDate(request);
-            var data = await Lib.ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<Lib.ViewModels.MixAttributeSetDatas.ImportViewModel>(_lang, attributeSetName,
+            var data = await Helper.FilterByKeywordAsync<ImportViewModel>(_lang, attributeSetName,
                         request, request.Keyword, queryDictionary);
             string exportPath = $"exports/module/{attributeSetName}";
             var jData = new List<JObject>();

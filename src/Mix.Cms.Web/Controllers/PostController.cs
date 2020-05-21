@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Web.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class PostController : BaseController
     {
 

@@ -161,7 +161,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
                 case Lib.MixEnums.MixDataType.Boolean:
                     return (new JProperty(item.AttributeFieldName, item.BooleanValue));
 
-                case Lib.MixEnums.MixDataType.Number:
+                case Lib.MixEnums.MixDataType.Integer:
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue));
 
                 case Lib.MixEnums.MixDataType.Reference:

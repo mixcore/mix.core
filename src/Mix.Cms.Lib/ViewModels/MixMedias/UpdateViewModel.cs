@@ -27,11 +27,6 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
-        [JsonProperty("cultures")]
-        public List<SupportedCulture> Cultures { get; set; }
-
         [JsonProperty("extension")]
         public string Extension { get; set; }
 
@@ -62,18 +57,18 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         [JsonProperty("tags")]
         public string Tags { get; set; }
 
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
-        [JsonProperty("lastModified")]
-        public DateTime? LastModified { get; set; }
-
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
-
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("status")]
         public MixEnums.MixContentStatus Status { get; set; }
-
         #endregion Models
 
         #region Views
@@ -142,8 +137,6 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
             {
                 Id = Id > 0 ? Id : UpdateViewModel.Repository.Max(c => c.Id).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
-                Cultures = Cultures ?? LoadCultures(Specificulture, _context, _transaction);
-                Cultures.ForEach(c => c.IsSupported = true);
             }
             if (string.IsNullOrEmpty(TargetUrl))
             {
@@ -200,7 +193,6 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Cultures = LoadCultures(Specificulture, _context, _transaction);
             MediaFile = new FileViewModel();
         }
 

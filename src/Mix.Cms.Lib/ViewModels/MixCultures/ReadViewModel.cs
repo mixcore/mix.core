@@ -2,6 +2,8 @@
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.ViewModels.MixCultures
 {
@@ -15,9 +17,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
         [JsonProperty("id")]
         public int Id { get; set; }
         [JsonProperty("specificulture")]
-        public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
+        public string Specificulture { get; set; }        
 
         [JsonProperty("alias")]
         public string Alias { get; set; }
@@ -34,22 +34,42 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
         [JsonProperty("lcid")]
         public string Lcid { get; set; }
 
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
+
         #endregion Models
+
+        #region Views
+
+        [JsonProperty("configurations")]
+        public List<MixConfigurations.ReadMvcViewModel> Configurations { get; set; }
+
+        #endregion Views
 
         #endregion Properties
 
         #region Contructors
 
-        public ReadViewModel()
-            : base()
+        public ReadViewModel() : base()
         {
         }
 
-        public ReadViewModel(MixCulture model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-            : base(model, _context, _transaction)
+        public ReadViewModel(MixCulture model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
         #endregion Contructors
+
+        
     }
 }

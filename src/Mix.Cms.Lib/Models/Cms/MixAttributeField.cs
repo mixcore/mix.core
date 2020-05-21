@@ -5,13 +5,6 @@ namespace Mix.Cms.Lib.Models.Cms
 {
     public partial class MixAttributeField
     {
-        public MixAttributeField()
-        {
-            MixModuleAttributeValue = new HashSet<MixModuleAttributeValue>();
-            MixPageAttributeValue = new HashSet<MixPageAttributeValue>();
-            MixPostAttributeValue = new HashSet<MixPostAttributeValue>();
-        }
-
         public int Id { get; set; }
         public int AttributeSetId { get; set; }
         public string AttributeSetName { get; set; }
@@ -23,17 +16,18 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Options { get; set; }
         public bool IsRequire { get; set; }
         public bool IsEncrypt { get; set; }
+        public bool IsMultiple { get; set; }
         public bool IsSelect { get; set; }
         public bool IsUnique { get; set; }
+        public int? ReferenceId { get; set; }
+        public string ModifiedBy { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime? LastModified { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public int Priority { get; set; }
-        public int Status { get; set; }
-        public int? ReferenceId { get; set; }
+        public string Status { get; set; }
 
         public virtual MixAttributeSet AttributeSet { get; set; }
         public virtual MixAttributeSet Reference { get; set; }
-        public virtual ICollection<MixModuleAttributeValue> MixModuleAttributeValue { get; set; }
-        public virtual ICollection<MixPageAttributeValue> MixPageAttributeValue { get; set; }
-        public virtual ICollection<MixPostAttributeValue> MixPostAttributeValue { get; set; }
     }
 }
