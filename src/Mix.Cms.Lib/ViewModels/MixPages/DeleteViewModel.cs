@@ -121,12 +121,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("moduleNavs")]
         public List<MixPageModules.ReadMvcViewModel> ModuleNavs { get; set; } // Parent to Modules
 
-        [JsonProperty("parentNavs")]
-        public List<MixPagePages.ReadViewModel> ParentNavs { get; set; } // Parent to  Parent
-
-        [JsonProperty("childNavs")]
-        public List<MixPagePages.ReadViewModel> ChildNavs { get; set; } // Parent to  Parent
-
         [JsonProperty("listTag")]
         public JArray ListTag { get; set; } = new JArray();
 
@@ -252,12 +246,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             await navPosts.ForEachAsync(m => _context.Entry(m).State = EntityState.Deleted);
             var navModls = _context.MixPageModule.Where(m => m.PageId == Id && m.Specificulture == Specificulture);
             await navModls.ForEachAsync(m => _context.Entry(m).State = EntityState.Deleted);
-            var navSets = _context.MixPageAttributeSet.Where(m => m.PageId == Id && m.Specificulture == Specificulture);
-            await navSets.ForEachAsync(m => _context.Entry(m).State = EntityState.Deleted);
-            var navValues = _context.MixPageAttributeValue.Where(m => m.PageId == Id && m.Specificulture == Specificulture);
-            await navValues.ForEachAsync(m => _context.Entry(m).State = EntityState.Deleted);
-            var navData = _context.MixPageAttributeData.Where(m => m.PageId == Id && m.Specificulture == Specificulture);
-            await navData.ForEachAsync(m => _context.Entry(m).State = EntityState.Deleted);
             await _context.SaveChangesAsync();
             return new RepositoryResponse<bool> { IsSucceed = true };
         }

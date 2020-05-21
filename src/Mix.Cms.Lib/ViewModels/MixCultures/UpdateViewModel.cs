@@ -24,9 +24,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
         [JsonProperty("id")]
         public int Id { get; set; }
         [JsonProperty("specificulture")]
-        public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
+        public string Specificulture { get; set; }        
 
         [JsonProperty("alias")]
         public string Alias { get; set; }
@@ -45,12 +43,16 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
-
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixContentStatus Status { get; set; }
+        public MixEnums.MixContentStatus Status { get; set; }
 
         #endregion Models
 
@@ -160,13 +162,6 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             if (result.IsSucceed)
             {
                 var cloneResult = await ClonePageModulesAsync(parent, _context, _transaction);
-                ViewModelHelper.HandleResult(cloneResult, ref result);
-            }
-
-            // Clone PagePosition from Default culture
-            if (result.IsSucceed)
-            {
-                var cloneResult = await ClonePagePositionsAsync(parent, _context, _transaction);
                 ViewModelHelper.HandleResult(cloneResult, ref result);
             }
 
@@ -389,32 +384,6 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             return result;
         }
 
-        public async Task<RepositoryResponse<bool>> ClonePagePositionsAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            try
-            {
-                var getPages = await DefaultModelRepository<MixCmsContext, MixPagePosition>.Instance.GetModelListByAsync(
-                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
-                if (getPages.IsSucceed)
-                {
-                    foreach (var p in getPages.Data)
-                    {
-                        p.Specificulture = Specificulture;
-                        context.Entry(p).State = EntityState.Added;
-                    }
-                    await context.SaveChangesAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                result.IsSucceed = false;
-                result.Exception = ex;
-                result.Errors.Add(ex.Message);
-            }
-            return result;
-        }
-
         public async Task<RepositoryResponse<bool>> ClonePageModulesAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -587,9 +556,6 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
 
             var PageModules = await _context.MixPageModule.Where(l => l.Specificulture == Specificulture).ToListAsync();
             PageModules.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
-
-            var PagePositions = await _context.MixPagePosition.Where(l => l.Specificulture == Specificulture).ToListAsync();
-            PagePositions.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
             var PagePosts = await _context.MixPagePost.Where(l => l.Specificulture == Specificulture).ToListAsync();
             PagePosts.ForEach(l => _context.Entry(l).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);

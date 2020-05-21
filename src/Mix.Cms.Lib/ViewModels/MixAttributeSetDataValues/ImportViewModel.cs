@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -19,9 +20,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         public string Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
-
         [JsonProperty("attributeFieldId")]
         public int AttributeFieldId { get; set; }
 
@@ -31,9 +29,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         [JsonProperty("dataType")]
         public MixEnums.MixDataType DataType { get; set; }
 
-        [JsonProperty("status")]
-        public int Status { get; set; }
-
         [JsonProperty("attributeFieldName")]
         public string AttributeFieldName { get; set; }
 
@@ -42,9 +37,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
         [JsonProperty("booleanValue")]
         public bool? BooleanValue { get; set; }
-
-        [JsonProperty("createdDateTime")]
-        public DateTime CreatedDateTime { get; set; }
 
         [JsonProperty("dataId")]
         public string DataId { get; set; }
@@ -69,13 +61,24 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
         [JsonProperty("encryptType")]
         public int EncryptType { get; set; }
-
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
 
         [JsonProperty("field")]
-        public MixAttributeFields.UpdateViewModel Field { get; set; }
+        public Mix.Cms.Lib.ViewModels.MixAttributeFields.UpdateViewModel Field { get; set; }
 
         #endregion Views
 
@@ -140,7 +143,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                     BooleanValue = boolValue;
                     break;
 
-                case MixEnums.MixDataType.Number:
+                case MixEnums.MixDataType.Integer:
                     int.TryParse(defaultValue, out int intValue);
                     IntegerValue = intValue;
                     break;
@@ -151,7 +154,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         {
             if (AttributeFieldId > 0)
             {
-                Field = MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId).Data;
+                Field = Lib.ViewModels.MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId).Data;
                 if (Field != null && DataType == MixEnums.MixDataType.Reference)
                 {
                     AttributeSetName = _context.MixAttributeSet.FirstOrDefault(m => m.Id == Field.ReferenceId)?.Name;
@@ -159,7 +162,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
             }
             else // addictional field for page / post / module => id = 0
             {
-                Field = new MixAttributeFields.UpdateViewModel()
+                Field = new Lib.ViewModels.MixAttributeFields.UpdateViewModel()
                 {
                     DataType = DataType,
                     Id = AttributeFieldId,

@@ -20,6 +20,8 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         #region Properties
 
         #region Models
+        [JsonProperty("id")]
+        public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
         [JsonProperty("priority")]

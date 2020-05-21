@@ -3,6 +3,7 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using static Mix.Cms.Lib.MixEnums;
 
@@ -13,8 +14,14 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
         #region Properties
 
         #region Models
-
-        [Required]
+        [JsonProperty("id")]
+        public int Id { get; set; }
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("cultures")]
+        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
         [JsonProperty("keyword")]
         public string Keyword { get; set; }
 

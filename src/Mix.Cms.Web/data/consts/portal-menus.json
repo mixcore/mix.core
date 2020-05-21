@@ -435,17 +435,17 @@
         {
           "path": "/portal/module-data/details/:moduleId",
           "templatePath": "/app/app-portal/pages/module-data/details.html",
-          "controller": "SharedModuleDataController"
+          "controller": "ModuleDataController"
         },
         {
           "path": "/portal/module-data/details/:moduleId/:id",
           "templatePath": "/app/app-portal/pages/module-data/details.html",
-          "controller": "SharedModuleDataController"
+          "controller": "ModuleDataController"
         },
         {
           "path": "/portal/module-data/list/:moduleId",
           "templatePath": "/app/app-portal/pages/module-data/list.html",
-          "controller": "SharedModuleDataController"
+          "controller": "ModuleDataController"
         }
       ]
     },

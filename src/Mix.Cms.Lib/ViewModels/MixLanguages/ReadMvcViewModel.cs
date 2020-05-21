@@ -22,10 +22,11 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
 
         #region Models
 
+        [JsonProperty("id")]
+        public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
+        
         [JsonProperty("cultures")]
         public List<SupportedCulture> Cultures { get; set; }
 
@@ -48,12 +49,18 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         [JsonProperty("defaultValue")]
         public string DefaultValue { get; set; }
 
-        [JsonProperty("status")]
-        public MixContentStatus Status { get; set; }
-
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -121,49 +128,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
 
         #region Expands
 
-        public static async Task<RepositoryResponse<bool>> ImportLanguages(List<MixLanguage> arrLanguage, string destCulture
-            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            bool isRoot = _context == null;
-            var context = _context ?? new MixCmsContext();
-            var transaction = _transaction ?? context.Database.BeginTransaction();
-
-            try
-            {
-                foreach (var item in arrLanguage)
-                {
-                    var lang = new ReadMvcViewModel(item, context, transaction);
-                    lang.Specificulture = destCulture;
-                    lang.CreatedDateTime = DateTime.UtcNow;
-                    var saveResult = await lang.SaveModelAsync(false, context, transaction);
-                    result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
-                    if (!result.IsSucceed)
-                    {
-                        result.Exception = saveResult.Exception;
-                        result.Errors = saveResult.Errors;
-                        break;
-                    }
-                }
-                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
-            }
-            catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
-            {
-                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<ReadMvcViewModel>(ex, isRoot, transaction);
-                result.IsSucceed = false;
-                result.Errors = error.Errors;
-                result.Exception = error.Exception;
-            }
-            finally
-            {
-                if (isRoot)
-                {
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
-                }
-            }
-            return result;
-        }
-
+        
         #endregion Expands
     }
 }

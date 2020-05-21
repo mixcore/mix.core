@@ -2,21 +2,19 @@
 // The mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Service.SignalR.Hubs;
 using RewriteRules;
 using System.IO;
 
 namespace Mix.Cms.Web
 {
-    public partial class Startup
+    public static class MixRoutesServiceCollectionExtensions
     {
-        protected void ConfigRoutes(IApplicationBuilder app)
+        public static IApplicationBuilder UseMixRoutes(this IApplicationBuilder app)
         {
             if (MixService.GetConfig<bool>("IsRewrite"))
             {
@@ -56,16 +54,7 @@ namespace Mix.Cms.Web
                     name: "post",
                     pattern: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/post/{id}/{seoName}");
             });
-            app.UseMvc(routes =>
-            {
-                // uncomment the following line to Work-around for #1175 in beta1
-                routes.EnableDependencyInjection();
-
-                //and this line to enable OData query option, for example $filter
-
-                routes.Select().Expand().Filter().OrderBy().MaxTop(100).Count();
-                //routes.MapODataServiceRoute("ODataRoute", "odata", builder.GetEdmModel());
-            });
+            return app;
         }
     }
 }

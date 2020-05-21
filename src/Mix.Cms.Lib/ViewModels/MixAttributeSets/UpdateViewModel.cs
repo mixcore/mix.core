@@ -21,18 +21,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 
         [JsonProperty("id")]
         public int Id { get; set; }
-        [JsonProperty("specificulture")]
-        public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
-        [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("ReferenceId")]
         public int? ReferenceId { get; set; }
 
         [JsonProperty("type")]
-        public int? Type { get; set; }
+        public MixEnums.MixAttributeSetDataType? Type { get; set; }
 
         [JsonProperty("title")]
         public string Title { get; set; }
@@ -58,16 +52,23 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         [JsonProperty("edmAutoSend")]
         public bool? EdmAutoSend { get; set; }
 
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("status")]
-        public int Status { get; set; }
-
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
-
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
         [JsonProperty("fields")]
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
 
@@ -104,8 +105,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             {
                 Fields = MixAttributeFields.UpdateViewModel
                 .Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList();
-                FormView = MixTemplates.UpdateViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
-                EdmView = MixTemplates.UpdateViewModel.GetTemplateByPath(EdmTemplate, Specificulture, _context, _transaction).Data;
+                //FormView = MixTemplates.UpdateViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
+                //EdmView = MixTemplates.UpdateViewModel.GetTemplateByPath(EdmTemplate, Specificulture, _context, _transaction).Data;
             }
             else
             {

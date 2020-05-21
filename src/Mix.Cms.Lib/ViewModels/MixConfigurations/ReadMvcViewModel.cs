@@ -20,12 +20,12 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
         #region Properties
 
         #region Models
+        [JsonProperty("id")]
+        public int Id { get; set; }
         [JsonProperty("specificulture")]
-        public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
+        public string Specificulture { get; set; }        
         [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+        public System.Collections.Generic.List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
         [Required]
         [JsonProperty("keyword")]
         public string Keyword { get; set; }
@@ -39,15 +39,21 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
         [JsonProperty("dataType")]
         public MixDataType DataType { get; set; }
 
-        [JsonProperty("status")]
-        public MixContentStatus Status { get; set; }
-
         [JsonProperty("description")]
         public string Description { get; set; }
 
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
-
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("status")]
+        public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -87,51 +93,7 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
 
         #region Expands
 
-        public static async Task<RepositoryResponse<bool>> ImportConfigurations(List<MixConfiguration> arrConfiguration, string destCulture,
-            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            bool isRoot = _context == null;
-            var context = _context ?? new MixCmsContext();
-            var transaction = _transaction ?? context.Database.BeginTransaction();
-
-            try
-            {
-                foreach (var item in arrConfiguration)
-                {
-                    var lang = new ReadMvcViewModel(item, context, transaction);
-                    lang.CreatedDateTime = DateTime.UtcNow;
-                    lang.Specificulture = destCulture;
-                    var saveResult = await lang.SaveModelAsync(false, context, transaction);
-                    result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
-                    if (!result.IsSucceed)
-                    {
-                        result.Exception = saveResult.Exception;
-                        result.Errors = saveResult.Errors;
-                        break;
-                    }
-                }
-                result.Data = true;
-                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
-            }
-            catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
-            {
-                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<ReadMvcViewModel>(ex, isRoot, transaction);
-                result.IsSucceed = false;
-                result.Errors = error.Errors;
-                result.Exception = error.Exception;
-            }
-            finally
-            {
-                //if current Context is Root
-                if (isRoot)
-                {
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
-                }
-            }
-            return result;
-        }
-
+        
         #endregion Expands
 
     }

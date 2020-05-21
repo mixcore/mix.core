@@ -12,10 +12,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string AttributeSetName { get; set; }
         public string Regex { get; set; }
         public int DataType { get; set; }
-        public int Priority { get; set; }
-        public int Status { get; set; }
         public bool? BooleanValue { get; set; }
-        public DateTime CreatedDateTime { get; set; }
         public string DataId { get; set; }
         public DateTime? DateTimeValue { get; set; }
         public double? DoubleValue { get; set; }
@@ -24,5 +21,11 @@ namespace Mix.Cms.Lib.Models.Cms
         public string EncryptValue { get; set; }
         public string EncryptKey { get; set; }
         public int EncryptType { get; set; }
+        public string ModifiedBy { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime? LastModified { get; set; }
+        public DateTime CreatedDateTime { get; set; }
+        public int Priority { get; set; }
+        public string Status { get; set; }
     }
 }

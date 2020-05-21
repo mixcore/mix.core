@@ -166,7 +166,7 @@ namespace Mix.Cms.Lib.Services
                 configurations.Find(c => c.Keyword == "ThemeName").Value = Common.Helper.SeoHelper.GetSEOString(cnfSiteName.Value);
                 configurations.Find(c => c.Keyword == "ThemeFolder").Value = Common.Helper.SeoHelper.GetSEOString(cnfSiteName.Value);
             }
-            var result = await ViewModels.MixConfigurations.ReadMvcViewModel.ImportConfigurations(configurations, specifiCulture, context, transaction);
+            var result = await ViewModels.MixConfigurations.UpdateViewModel.ImportConfigurations(configurations, specifiCulture, context, transaction);
 
             UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
 
@@ -224,7 +224,7 @@ namespace Mix.Cms.Lib.Services
             /* Init Languages */
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
 
-            var result = await ViewModels.MixLanguages.ReadMvcViewModel.ImportLanguages(languages, specificulture, context, transaction);
+            var result = await ViewModels.MixLanguages.UpdateViewModel.ImportLanguages(languages, specificulture, context, transaction);
 
             UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
             return result;
@@ -245,16 +245,16 @@ namespace Mix.Cms.Lib.Services
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (!context.MixTheme.Any())
             {
-                ViewModels.MixThemes.InitViewModel theme = new ViewModels.MixThemes.InitViewModel(new MixTheme()
+                ViewModels.MixThemes.InitViewModel theme = new ViewModels.MixThemes.InitViewModel()
                 {
                     Id = 1,
                     Title = siteName,
                     Name = SeoHelper.GetSEOString(siteName),
                     CreatedDateTime = DateTime.UtcNow,
                     CreatedBy = "Admin",
-                    Status = (int)MixContentStatus.Published,
-                }, context, transaction);
-
+                    Status = MixContentStatus.Published,
+                };
+                theme.ExpandView(context, transaction);
                 var saveResult = await theme.SaveModelAsync(true, context, transaction);
                 ViewModelHelper.HandleResult(saveResult, ref result);
             }
@@ -279,7 +279,7 @@ namespace Mix.Cms.Lib.Services
                         Description = culture.Description,
                         Icon = culture.Icon,
                         Alias = culture.Alias,
-                        Status = (int)MixEnums.MixContentStatus.Published,
+                        Status = MixEnums.MixContentStatus.Published.ToString(),
                         CreatedDateTime = DateTime.UtcNow
                     };
                     context.Entry(enCulture).State = EntityState.Added;
@@ -318,7 +318,7 @@ namespace Mix.Cms.Lib.Services
                     Specificulture = culture,
                     CreatedDateTime = DateTime.UtcNow,
                     Alias = page.Title.ToLower(),
-                    Status = (int)MixContentStatus.Published
+                    Status = MixContentStatus.Published.ToString()
                 };
                 context.Entry(alias).State = EntityState.Added;
             }

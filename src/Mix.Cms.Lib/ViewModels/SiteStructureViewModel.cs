@@ -29,7 +29,7 @@ namespace Mix.Cms.Lib.ViewModels
         public List<MixConfigurations.ReadViewModel> Configurations { get; set; }
 
         [JsonProperty("relatedData")]
-        public List<MixRelatedAttributeDatas.ReadViewModel> RelatedData { get; set; } = new List<MixRelatedAttributeDatas.ReadViewModel>();
+        public List<MixRelatedAttributeDatas.ImportViewModel> RelatedData { get; set; } = new List<MixRelatedAttributeDatas.ImportViewModel>();
 
         [JsonProperty("attributeSetDatas")]
         public List<MixAttributeSetDatas.ImportViewModel> AttributeSetDatas { get; set; } = new List<MixAttributeSetDatas.ImportViewModel>();
@@ -48,7 +48,7 @@ namespace Mix.Cms.Lib.ViewModels
         {
             Pages = (await MixPages.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
             Modules = (await MixModules.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
-            AttributeSets = (await MixAttributeSets.ImportViewModel.Repository.GetModelListAsync()).Data;
+            //AttributeSets = (await MixAttributeSets.ODataImportViewModel.Repository.GetModelListAsync()).Data;
         }
 
         #region Export
@@ -165,8 +165,8 @@ namespace Mix.Cms.Lib.ViewModels
 
             if (getDataResult.IsSucceed)
             {
-                getDataResult.Data.JsonItems = new List<JObject>();
-                getDataResult.Data.Items.ForEach(d => getDataResult.Data.JsonItems.Add(d.JItem));
+                //getDataResult.Data.JsonItems = new List<JObject>();
+                //getDataResult.Data.Items.ForEach(d => getDataResult.Data.JsonItems.Add(d.JItem));
                 item.Data = getDataResult.Data;
             }
 
@@ -175,10 +175,10 @@ namespace Mix.Cms.Lib.ViewModels
 
         private void GetAdditionalData(string id, MixEnums.MixAttributeSetDataType type, MixCmsContext context, IDbContextTransaction transaction)
         {
-            if (!RelatedData.Any(m => m.ParentId == id && m.ParentType == (int)type))
+            if (!RelatedData.Any(m => m.ParentId == id && m.ParentType == type))
             {
-                var getRelatedData = MixRelatedAttributeDatas.ReadViewModel.Repository.GetSingleModel(
-                            m => m.Specificulture == Specificulture && m.ParentType == (int)type
+                var getRelatedData = MixRelatedAttributeDatas.ImportViewModel.Repository.GetSingleModel(
+                            m => m.Specificulture == Specificulture && m.ParentType == type.ToString()
                                 && m.ParentId == id, context, transaction);
                 if (getRelatedData.IsSucceed)
                 {
@@ -222,7 +222,10 @@ namespace Mix.Cms.Lib.ViewModels
         #endregion Export
 
         #region Import
-
+        Dictionary<int, int> dicModuleIds = new Dictionary<int, int>();
+        Dictionary<int, int> dicPageIds = new Dictionary<int, int>();
+        Dictionary<int, int> dicFieldIds = new Dictionary<int, int>();
+        Dictionary<int, int> dicAttributeSetIds = new Dictionary<int, int>();
         public async Task<RepositoryResponse<bool>> ImportAsync(string destCulture,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -273,14 +276,18 @@ namespace Mix.Cms.Lib.ViewModels
         private async Task<RepositoryResponse<bool>> ImportModulesAsync(string destCulture, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            
             foreach (var module in Modules)
             {
+                
                 var oldId = module.Id;
+                var startId = context.MixModule.Max(m => m.Id);
                 if (result.IsSucceed)
                 {
                     if (!context.MixModule.Any(m => m.Name == module.Name && m.Specificulture == destCulture))
                     {
-                        module.Id = context.MixModule.Max(m => m.Id) + 1;
+                        startId++;
+                        module.Id = startId;
                         module.Specificulture = destCulture;
                         if (!string.IsNullOrEmpty(module.Image))
                         {
@@ -291,18 +298,14 @@ namespace Mix.Cms.Lib.ViewModels
                         ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                     // update new id to related attribute data
-                    var related = RelatedData.Where(
-                        m => m.ParentType == (int)MixEnums.MixAttributeSetDataType.Module && m.ParentId == oldId.ToString());
-                    foreach (var r in related)
-                    {
-                        r.ParentId = module.Id.ToString();
-                    }
+                    dicModuleIds.Add(oldId, module.Id);                    
                 }
                 else
                 {
                     break;
                 }
             }
+
             return result;
         }
 
@@ -312,15 +315,24 @@ namespace Mix.Cms.Lib.ViewModels
             if (AttributeSets != null)
             {
                 var startId = MixAttributeSets.ImportViewModel.Repository.Max(m => m.Id).Data;
+                var startFieldId = MixAttributeFields.UpdateViewModel.Repository.Max(m => m.Id).Data;
                 foreach (var set in AttributeSets)
                 {
                     if (result.IsSucceed)
                     {
                         startId++;
+                        dicAttributeSetIds.Add(set.Id, startId);
                         if (!context.MixAttributeSet.Any(m => m.Name == set.Name))
                         {
                             set.Id = startId;
                             set.CreatedDateTime = DateTime.UtcNow;
+                            foreach (var field in set.Fields)
+                            {
+                                startFieldId++;
+                                dicFieldIds.Add(field.Id, startFieldId);
+                                field.Id = startFieldId;
+                                field.CreatedDateTime = DateTime.UtcNow;
+                            }
                             var saveResult = await set.SaveModelAsync(true, context, transaction);
                             ViewModelHelper.HandleResult(saveResult, ref result);
                         }
@@ -342,7 +354,8 @@ namespace Mix.Cms.Lib.ViewModels
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                int startId = MixPages.UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data + 1;
+                int startId = MixPages.UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
+                int startModuleId = MixModules.UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
                 //var pages = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, "data", true, "{}");
                 //var obj = JObject.Parse(pages.Content);
                 //var initPages = obj["data"].ToObject<JArray>();
@@ -350,10 +363,25 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     // store old id => update to related data if save success
                     var oldId = item.Id;
+                    
+                    startId++;
+                    dicPageIds.Add(oldId, startId);
 
                     item.Id = startId;
+
                     item.CreatedDateTime = DateTime.UtcNow;
                     item.ThemeName = ThemeName;
+
+                    foreach (var nav in item.ModuleNavs)
+                    {
+                        startModuleId++;
+                        dicModuleIds.Add(nav.Module.Id, startModuleId);
+
+                        nav.Module.Id = startModuleId;
+
+                        nav.PageId = startId;
+                        nav.ModuleId = startModuleId;
+                    }
 
                     //if (_context.MixPage.Any(m=>m.Id == startId)) //(item.Id > initPages.Count)
                     //{
@@ -376,17 +404,6 @@ namespace Mix.Cms.Lib.ViewModels
                         result.Exception = saveResult.Exception;
                         result.Errors = saveResult.Errors;
                         break;
-                    }
-                    else
-                    {
-                        // update new id to related attribute data
-                        var related = RelatedData.Where(
-                        m => m.ParentType == (int)MixEnums.MixAttributeSetDataType.Page && m.ParentId == oldId.ToString());
-                        foreach (var r in related)
-                        {
-                            r.ParentId = item.Id.ToString();
-                        }
-                        startId++;
                     }
                 }
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
@@ -419,6 +436,12 @@ namespace Mix.Cms.Lib.ViewModels
                     if (!context.MixAttributeSetData.Any(m => m.Id == item.Id && m.Specificulture == item.Specificulture))
                     {
                         item.Specificulture = destCulture;
+
+                        // update new Id if not system attribute
+                        if (item.AttributeSetName.IndexOf("sys_") !=0 && dicAttributeSetIds.ContainsKey(item.AttributeSetId))
+                        {
+                            item.AttributeSetId = dicAttributeSetIds[item.AttributeSetId];
+                        }
                         item.Fields = item.Fields ?? MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(
                             m => m.AttributeSetId == item.AttributeSetId, context, transaction).Data;
                         foreach (var field in item.Fields)
@@ -450,7 +473,42 @@ namespace Mix.Cms.Lib.ViewModels
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             foreach (var item in RelatedData)
             {
+                item.Id = Guid.NewGuid().ToString();
                 item.Specificulture = desCulture;
+                switch (item.ParentType)
+                {
+                    case MixEnums.MixAttributeSetDataType.System:
+                        break;
+                    case MixEnums.MixAttributeSetDataType.Set:
+                        item.AttributeSetId = dicAttributeSetIds[int.Parse(item.ParentId)];
+                        break;
+                    case MixEnums.MixAttributeSetDataType.Post:
+                        break;
+                    case MixEnums.MixAttributeSetDataType.Page:
+                        if (dicPageIds.TryGetValue(int.Parse(item.ParentId), out int pageId))
+                        {
+                            item.ParentId = pageId.ToString();
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                        break;
+                    case MixEnums.MixAttributeSetDataType.Module:
+                        if (dicModuleIds.TryGetValue(int.Parse(item.ParentId), out int moduleId))
+                        {
+                            item.ParentId = moduleId.ToString();
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                        break;
+                    case MixEnums.MixAttributeSetDataType.Service:
+                        break;
+                    default:
+                        break;
+                }
                 if (result.IsSucceed)
                 {
                     var saveResult = await item.SaveModelAsync(false, context, transaction);

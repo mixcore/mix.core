@@ -9,8 +9,9 @@ namespace Mix.Cms.Lib
 
         public enum DatabaseProvider
         {
-            MSSQL = 1,
-            MySQL = 2
+            MSSQL,
+            MySQL,
+            PostgreSQL
         }
 
         public enum CatePosition
@@ -66,11 +67,11 @@ namespace Mix.Cms.Lib
 
         public enum MixContentStatus
         {
-            Deleted = 0,
-            Preview = 1,
-            Published = 2,
-            Draft = 3,
-            Schedule = 4
+            Deleted,
+            Preview,
+            Published,
+            Draft,
+            Schedule
         }
 
         public enum ResponseStatus
@@ -243,7 +244,7 @@ namespace Mix.Cms.Lib
             Icon = 19,
             VideoYoutube = 20,
             TuiEditor = 21,
-            Number = 22,
+            Integer = 22,
             QRCode = 24,
             Reference = 23,
         }
@@ -282,13 +283,23 @@ namespace Mix.Cms.Lib
             BadRequest = 2
         }
 
+        public enum CompareType
+        {
+            Eq = 1,
+            Lt = 2,
+            Gt = 3,
+            Lte = 4,
+            Gte = 5,
+            In = 6
+        }
+
         public static List<object> EnumToObject(Type enumType)
         {
             List<object> result = new List<object>();
             var values = Enum.GetValues(enumType);
             foreach (var item in values)
             {
-                result.Add(new { name = Enum.GetName(enumType, item), value = Enum.ToObject(enumType, item) });
+                result.Add(new { name = Enum.GetName(enumType, item), value = Enum.GetName(enumType, item) });
             }
             return result;
         }

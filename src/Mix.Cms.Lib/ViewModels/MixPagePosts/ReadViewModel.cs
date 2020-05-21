@@ -22,10 +22,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         public ReadViewModel() : base()
         {
         }
+
+        #region Properties
+        #region Models
+        [JsonProperty("id")]
+        public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
         [JsonProperty("postId")]
         public int PostId { get; set; }
 
@@ -41,9 +44,19 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         [JsonProperty("description")]
         public string Description { get; set; }
 
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixContentStatus Status { get; set; }
-
+        public MixEnums.MixContentStatus Status { get; set; }
+        #endregion
         #region Views
 
         [JsonProperty("post")]
@@ -53,9 +66,17 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         public MixPages.ReadViewModel Page { get; set; }
 
         #endregion Views
+        #endregion
 
         #region overrides
-
+        public override MixPagePost ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            if (Id == 0)
+            {
+                Id = Repository.Max(m => m.Id, _context, _transaction).Data + 1;
+            }
+            return base.ParseModel(_context, _transaction);
+        }
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getPost = MixPosts.ReadListItemViewModel.Repository.GetSingleModel(p => p.Id == PostId && p.Specificulture == Specificulture
@@ -86,7 +107,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
             try
             {
                 var navCategoryPostViewModels = context.MixPage.Include(cp => cp.MixPagePost).Where(a => a.Specificulture == specificulture
-                    && (a.Type == (int)MixEnums.MixPageType.ListPost)
+                    && (a.Type == MixEnums.MixPageType.ListPost.ToString())
                     )
                     .AsEnumerable()
                     .Select(p => new MixPagePosts.ReadViewModel(

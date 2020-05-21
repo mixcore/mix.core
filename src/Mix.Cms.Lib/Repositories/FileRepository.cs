@@ -658,7 +658,7 @@ namespace Mix.Cms.Lib.Repositories
         {
             try
             {
-                ZipFile.ExtractToDirectory(filePath, webFolder);
+                ZipFile.ExtractToDirectory(filePath, webFolder, true);
             }
             catch
             {
