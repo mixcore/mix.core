@@ -39,7 +39,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         public string FileName { get; set; }
 
         [JsonProperty("extension")]
-        public string Extension { get; set; }
+        public string Extension { get; set; } = ".cshtml";
 
         [Required]
         [JsonProperty("content")]
