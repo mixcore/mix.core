@@ -119,6 +119,8 @@ namespace Mix.Cms.Lib.Controllers
         public async Task<ActionResult<TModel>> Create([FromBody]TView data)
         {
             var result = await SaveAsync(data, true);
+            ReflectionHelper.SetPropertyValue(data, new JProperty("CreatedBy", User.Identity.Name));
+            ReflectionHelper.SetPropertyValue(data, new JProperty("CreatedDateTime", DateTime.UtcNow));
             if (result.IsSucceed)
             {
                 return Ok(result.Data);
@@ -143,6 +145,8 @@ namespace Mix.Cms.Lib.Controllers
                 {
                     return BadRequest();
                 }
+                ReflectionHelper.SetPropertyValue(data, new JProperty("ModifiedBy", User.Identity.Name));
+                ReflectionHelper.SetPropertyValue(data, new JProperty("LastModified", DateTime.UtcNow));
                 var result = await SaveAsync(data, true);
                 if (result.IsSucceed)
                 {
@@ -174,6 +178,8 @@ namespace Mix.Cms.Lib.Controllers
             var result = await GetSingleAsync(id);
             if (result.IsSucceed)
             {
+                ReflectionHelper.SetPropertyValue(result.Data, new JProperty("ModifiedBy", User.Identity.Name));
+                ReflectionHelper.SetPropertyValue(result.Data, new JProperty("LastModified", DateTime.UtcNow));
                 var saveResult = await result.Data.UpdateFieldsAsync(fields);
                 if (saveResult.IsSucceed)
                 {
@@ -387,6 +393,7 @@ namespace Mix.Cms.Lib.Controllers
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
             bool isDirection = Enum.TryParse(Request.Query["direction"], out Heart.Enums.MixHeartEnums.DisplayDirection direction);
             bool isPageSize = int.TryParse(Request.Query["pageSize"], out int pageSize);
+            bool isStatus = Enum.TryParse(Request.Query["status"], out MixEnums.MixContentStatus status);
 
             RequestPaging request = new RequestPaging()
             {
