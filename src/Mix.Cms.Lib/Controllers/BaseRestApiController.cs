@@ -118,9 +118,9 @@ namespace Mix.Cms.Lib.Controllers
         [HttpPost]
         public async Task<ActionResult<TModel>> Create([FromBody]TView data)
         {
-            var result = await SaveAsync(data, true);
             ReflectionHelper.SetPropertyValue(data, new JProperty("CreatedBy", User.Identity.Name));
             ReflectionHelper.SetPropertyValue(data, new JProperty("CreatedDateTime", DateTime.UtcNow));
+            var result = await SaveAsync(data, true);
             if (result.IsSucceed)
             {
                 return Ok(result.Data);
