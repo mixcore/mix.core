@@ -41,11 +41,11 @@ namespace Mix.Cms.Web.Controllers
         [HttpGet]
         [Route("")]
         [Route("{seoName}")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string seoName)
         {
             if (isValid)
             {
-                string seoName = Request.Query["alias"];
+                seoName = seoName ?? Request.Query["alias"];
                 if (!string.IsNullOrEmpty(seoName))
                 {
                     HandleSeoName(ref seoName);

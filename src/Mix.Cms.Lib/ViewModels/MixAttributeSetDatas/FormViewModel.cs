@@ -65,12 +65,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("relatedData")]
         public List<MixRelatedAttributeDatas.UpdateViewModel> RelatedData { get; set; } = new List<MixRelatedAttributeDatas.UpdateViewModel>();
 
-        [JsonIgnore]
         public List<MixAttributeSetValues.UpdateViewModel> Values { get; set; }
 
-        [JsonIgnore]
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
-        [JsonIgnore]
         public List<MixAttributeSetDatas.FormViewModel> RefData { get; set; } = new List<FormViewModel>();
 
 
@@ -103,6 +100,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             foreach (var refField in Fields.Where(f=>f.DataType == MixEnums.MixDataType.Reference))
             {
                 var arr = new JArray();
+                
                 var children = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(
                         m => m.Specificulture == Specificulture && m.ParentId == Id && m.ParentType == MixEnums.MixAttributeSetDataType.Set.ToString()
                         && m.AttributeSetId == refField.ReferenceId

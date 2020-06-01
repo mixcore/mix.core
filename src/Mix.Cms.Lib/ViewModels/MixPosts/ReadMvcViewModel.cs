@@ -172,7 +172,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         [JsonProperty("attributeData")]
         public MixRelatedAttributeDatas.ReadMvcViewModel AttributeData { get; set; }
-
+        
+        [JsonProperty("sysTags")]
+        public List<MixRelatedAttributeDatas.FormViewModel> SysTags { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -197,7 +199,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
 
             LoadAttributes(_context, _transaction);
-
+            LoadTags(_context, _transaction);
             var getPostMedia = MixPostMedias.ReadViewModel.Repository.GetModelListBy(n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction);
             if (getPostMedia.IsSucceed)
             {
@@ -221,6 +223,17 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             // Related Posts
             PostNavs = MixPostPosts.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
 
+        }
+
+        private void LoadTags(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var getTags = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
+                   && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
+                   && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_TAG, context, transaction);
+            if (getTags.IsSucceed)
+            {
+                SysTags = getTags.Data;
+            }
         }
 
         #endregion Overrides
