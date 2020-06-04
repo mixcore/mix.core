@@ -94,6 +94,7 @@ namespace Mix.Cms.Lib
             public const string FileFolder = @"content";
             public const string CacheFolder = @"cache";
             public const string TemplateExtension = @".cshtml";
+            public const string BlankThemeFolder = @"wwwroot/import/default_blank";
             public const string TemplatesAssetFolder = @"templates";
             public const string TemplatesFolder = @"Views/Shared/Templates";
             public const string UploadFolder = @"Content/Uploads";
