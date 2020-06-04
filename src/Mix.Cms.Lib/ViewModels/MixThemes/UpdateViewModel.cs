@@ -171,10 +171,16 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             RepositoryResponse<bool> result = new RepositoryResponse<bool>() { IsSucceed = true };
 
             //Import From existing Theme (zip)
-            if (!string.IsNullOrEmpty(TemplateAsset.Filename))
+            if (string.IsNullOrEmpty(TemplateAsset.Filename))
             {
-                result = await ImportThemeAsync(parent, _context, _transaction);
+                TemplateAsset = new Lib.ViewModels.FileViewModel()
+                {
+                    Filename = "default_blank",
+                    Extension = ".zip",
+                    FileFolder = "Imports/Themes"
+                };                
             }
+            result = await ImportThemeAsync(parent, _context, _transaction);
 
             // Import Assets
             if (result.IsSucceed && !string.IsNullOrEmpty(Asset.Filename))
@@ -182,11 +188,11 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 result = ImportAssetsAsync(_context, _transaction);
             }
 
-            // New themes without import existing theme => create from default folder
-            if (result.IsSucceed && !Directory.Exists(TemplateFolder) && string.IsNullOrEmpty(TemplateAsset.Filename))
-            {
-                result = await CreateDefaultThemeTemplatesAsync(_context, _transaction);
-            }
+            //// New themes without import existing theme => create from default folder
+            //if (result.IsSucceed && !Directory.Exists(TemplateFolder) && string.IsNullOrEmpty(TemplateAsset.Filename))
+            //{
+            //    result = await CreateDefaultThemeTemplatesAsync(_context, _transaction);
+            //}
 
             // Actived Theme
             if (IsActived)

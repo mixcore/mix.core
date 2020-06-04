@@ -11,7 +11,7 @@ using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Messenger.Models.Data;
-using Mix.Cms.Service.Gprc;
+//using Mix.Cms.Service.Gprc;
 using Mix.Cms.Service.SignalR;
 using Newtonsoft.Json.Converters;
 using System.Text.Json.Serialization;
@@ -49,7 +49,7 @@ namespace Mix.Cms.Web
             services.AddGenerateApis();
             services.AddMixRestApi();
             services.AddMixSignalR();
-            services.AddMixGprc();
+            //services.AddMixGprc();
 
             
             /* Mix: End Inject Services */
@@ -91,7 +91,7 @@ namespace Mix.Cms.Web
                 app.UseHttpsRedirection();
             }
             app.UseMixRestApi();
-            app.UseMixGprc();
+            //app.UseMixGprc();
 
             app.UseMixSignalR();
 
