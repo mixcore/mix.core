@@ -24,9 +24,6 @@ namespace Mix.Cms.Web
                     File.OpenText("IISUrlRewrite.xml"))
                 {
                     var options = new RewriteOptions()
-                        .AddRedirect("redirect-rule/(.*)", "redirected/$1")
-                        .AddRewrite(@"^rewrite-rule/(\d+)/(\d+)", "rewritten?var1=$1&var2=$2",
-                            skipRemainingRules: true)
                         .AddApacheModRewrite(apacheModRewriteStreamReader)
                         .AddIISUrlRewrite(iisUrlRewriteStreamReader)
                         .Add(MethodRules.RedirectXMLRequests);
@@ -46,7 +43,9 @@ namespace Mix.Cms.Web
                     pattern: "{controller=Home}/{alias}");
                 routes.MapControllerRoute(
                    name: "page",
-                   pattern: "{controller=Page}/{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{seoName}");
+                   pattern: "{controller=Page}/{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{seoName}"); routes.MapControllerRoute(
+                    name: "vue",
+                    pattern: "{controller=Vue}/{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{seoName}");
                 routes.MapControllerRoute(
                     name: "file",
                     pattern: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/portal/file");
