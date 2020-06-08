@@ -48,7 +48,15 @@ namespace Mix.Cms.Web.Controllers
                 seoName = seoName ?? Request.Query["alias"];
                 if (!string.IsNullOrEmpty(seoName))
                 {
-                    HandleSeoName(ref seoName);
+                    string redirectUrl = CheckIsVueRoute(seoName);
+                    if (!string.IsNullOrEmpty(redirectUrl))
+                    {
+                        return Redirect(redirectUrl);
+                    }
+                    else
+                    {
+                        HandleSeoName(ref seoName);
+                    }
                 }
                 ViewData["Layout"] = "Masters/_Layout";
                 return await AliasAsync(seoName);
@@ -72,7 +80,7 @@ namespace Mix.Cms.Web.Controllers
             }
 
             // Check first group is culture
-            // Ex: en-us/page-name => culture = en-us , seoNam = page-name
+            // Ex: en-us/page-name => culture = en-us , seoName = page-name
             regex = @"^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/(.*)$";
             r = new System.Text.RegularExpressions.Regex(regex, RegexOptions.IgnoreCase);
             m = r.Match(seoName);
@@ -90,6 +98,19 @@ namespace Mix.Cms.Web.Controllers
                 culture = seoName;
                 seoName = string.Empty;
             }
+        }
+
+        protected string CheckIsVueRoute(string seoName)
+        {
+            // Check if seoname is vue route
+            var regex = @"^(.*)\.((vue)$)";
+            var r = new System.Text.RegularExpressions.Regex(regex, RegexOptions.IgnoreCase);
+            var m = r.Match(seoName);
+            if (m.Success)
+            {
+                return $"/vue/{culture}/{m.Groups[1].Value}";
+            }
+            return string.Empty;
         }
 
         #endregion Routes
