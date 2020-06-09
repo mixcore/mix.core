@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Mix.Cms.Lib;
+using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Identity.Models;
 using System.Text.RegularExpressions;
@@ -48,10 +50,37 @@ namespace Mix.Cms.Web.Controllers
                 seoName = seoName ?? Request.Query["alias"];
                 if (!string.IsNullOrEmpty(seoName))
                 {
-                    string redirectUrl = CheckIsVueRoute(seoName);
-                    if (!string.IsNullOrEmpty(redirectUrl))
+                    if (CheckIsVueRoute(seoName))
                     {
-                        return Redirect(redirectUrl);
+                        var staticFile = FileRepository.Instance.GetFile(seoName, MixConstants.Folder.WebRootPath);
+                        if (staticFile != null)
+                        {
+                            return Ok(staticFile.Content);
+                        }
+                        else
+                        {
+                            var getModule = await Mix.Cms.Lib.ViewModels.MixModules.ReadMvcViewModel.Repository.GetSingleModelAsync(
+                m => m.Name == seoName && m.Specificulture == culture);
+                            if (getModule.IsSucceed)
+                            {
+                                var myViewData = new ViewDataDictionary(new Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider(),
+                                new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary()) { { "ModuleViewModel",
+                    getModule.Data} };
+                                myViewData.Model = getModule.Data;
+
+                                PartialViewResult result = new PartialViewResult()
+                                {
+                                    ViewName = "VueComponent",
+                                    ViewData = myViewData,
+                                };
+
+                                return result;
+                            }
+                            else
+                            {
+                                return NotFound();
+                            }
+                        }
                     }
                     else
                     {
@@ -100,17 +129,13 @@ namespace Mix.Cms.Web.Controllers
             }
         }
 
-        protected string CheckIsVueRoute(string seoName)
+        protected bool CheckIsVueRoute(string seoName)
         {
             // Check if seoname is vue route
             var regex = @"^(.*)\.((vue)$)";
             var r = new System.Text.RegularExpressions.Regex(regex, RegexOptions.IgnoreCase);
             var m = r.Match(seoName);
-            if (m.Success)
-            {
-                return $"/vue/{culture}/{m.Groups[1].Value}";
-            }
-            return string.Empty;
+            return m.Success;
         }
 
         #endregion Routes
