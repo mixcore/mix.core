@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Mix.Cms.Lib;
+using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Identity.Models;
 using System.Text.RegularExpressions;
@@ -48,7 +50,42 @@ namespace Mix.Cms.Web.Controllers
                 seoName = seoName ?? Request.Query["alias"];
                 if (!string.IsNullOrEmpty(seoName))
                 {
-                    HandleSeoName(ref seoName);
+                    if (CheckIsVueRoute(seoName))
+                    {
+                        var staticFile = FileRepository.Instance.GetFile(seoName, MixConstants.Folder.WebRootPath);
+                        if (staticFile != null)
+                        {
+                            return Ok(staticFile.Content);
+                        }
+                        else
+                        {
+                            var getModule = await Mix.Cms.Lib.ViewModels.MixModules.ReadMvcViewModel.Repository.GetSingleModelAsync(
+                m => m.Name == seoName && m.Specificulture == culture);
+                            if (getModule.IsSucceed)
+                            {
+                                var myViewData = new ViewDataDictionary(new Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider(),
+                                new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary()) { { "ModuleViewModel",
+                    getModule.Data} };
+                                myViewData.Model = getModule.Data;
+
+                                PartialViewResult result = new PartialViewResult()
+                                {
+                                    ViewName = "VueComponent",
+                                    ViewData = myViewData,
+                                };
+
+                                return result;
+                            }
+                            else
+                            {
+                                return NotFound();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        HandleSeoName(ref seoName);
+                    }
                 }
                 ViewData["Layout"] = "Masters/_Layout";
                 return await AliasAsync(seoName);
@@ -72,7 +109,7 @@ namespace Mix.Cms.Web.Controllers
             }
 
             // Check first group is culture
-            // Ex: en-us/page-name => culture = en-us , seoNam = page-name
+            // Ex: en-us/page-name => culture = en-us , seoName = page-name
             regex = @"^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/(.*)$";
             r = new System.Text.RegularExpressions.Regex(regex, RegexOptions.IgnoreCase);
             m = r.Match(seoName);
@@ -90,6 +127,15 @@ namespace Mix.Cms.Web.Controllers
                 culture = seoName;
                 seoName = string.Empty;
             }
+        }
+
+        protected bool CheckIsVueRoute(string seoName)
+        {
+            // Check if seoname is vue route
+            var regex = @"^(.*)\.((vue)$)";
+            var r = new System.Text.RegularExpressions.Regex(regex, RegexOptions.IgnoreCase);
+            var m = r.Match(seoName);
+            return m.Success;
         }
 
         #endregion Routes
