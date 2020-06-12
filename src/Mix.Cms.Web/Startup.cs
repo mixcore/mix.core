@@ -2,6 +2,7 @@ using GraphiQl;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,7 +12,7 @@ using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Messenger.Models.Data;
-using Mix.Cms.Service.Gprc;
+//using Mix.Cms.Service.Gprc;
 using Mix.Cms.Service.SignalR;
 using Newtonsoft.Json.Converters;
 using System.Text.Json.Serialization;
@@ -49,7 +50,7 @@ namespace Mix.Cms.Web
             services.AddGenerateApis();
             services.AddMixRestApi();
             services.AddMixSignalR();
-            services.AddMixGprc();
+            //services.AddMixGprc();
 
             
             /* Mix: End Inject Services */
@@ -77,7 +78,16 @@ namespace Mix.Cms.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseStaticFiles();
+            var provider = new FileExtensionContentTypeProvider();
+            // Add new mappings
+            provider.Mappings[".vue"] = "application/text";
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ContentTypeProvider = provider
+            });
+
+            //app.UseStaticFiles();
             app.UseGraphiQl("/api/graphql");
             
             app.UseRouting();
@@ -91,7 +101,7 @@ namespace Mix.Cms.Web
                 app.UseHttpsRedirection();
             }
             app.UseMixRestApi();
-            app.UseMixGprc();
+            //app.UseMixGprc();
 
             app.UseMixSignalR();
 

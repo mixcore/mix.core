@@ -223,11 +223,17 @@ namespace Mix.Cms.Lib.Services
         public static T Translate<T>(string name, string culture)
         {
             var result = Instance.Translator[culture][name];
-            if (result == null)
-            {
-                result = DefaultInstance.Translator[culture][name];
-            }
+            //if (result == null)
+            //{
+            //    result = DefaultInstance.Translator[culture][name];
+            //}
             return result != null ? result.Value<T>() : default;
+        }
+
+        public static string TranslateString(string name, string culture)
+        {
+            var result = Instance.Translator[culture][name];            
+            return result != null ? result.Value<string>() : name;
         }
 
         public static JObject GetTranslator(string culture)
