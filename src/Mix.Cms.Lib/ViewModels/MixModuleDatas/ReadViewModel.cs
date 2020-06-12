@@ -36,7 +36,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         public string Fields { get; set; } = "[]";
 
         [JsonProperty("value")]
-        [JsonIgnore]
         public string Value { get; set; }
 
         [JsonProperty("postId")]

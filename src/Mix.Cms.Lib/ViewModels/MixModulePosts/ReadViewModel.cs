@@ -21,6 +21,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
         public ReadViewModel() : base()
         {
         }
+        [JsonProperty("id")]
+        public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
         [JsonProperty("postId")]
@@ -61,6 +63,15 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
         #endregion Views
 
         #region overrides
+        public override MixModulePost ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            if (Id == 0)
+            {
+                Id = Repository.Max(c => c.Id, _context, _transaction).Data + 1;
+                CreatedDateTime = DateTime.UtcNow;
+            }
+            return base.ParseModel(_context, _transaction);
+        }
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

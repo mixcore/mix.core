@@ -1,0 +1,5 @@
+﻿@model Mix.Cms.Lib.ViewModels.MixModules.ReadMvcViewModel
+
+@await Html.PartialAsync(Model.TemplatePath, Model)
+@Html.Raw(Model.View.Scripts) 
+@Html.Raw(Model.View.Styles) 

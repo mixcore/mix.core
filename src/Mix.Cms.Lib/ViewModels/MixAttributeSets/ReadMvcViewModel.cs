@@ -5,6 +5,8 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 {
@@ -65,7 +67,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         #region Views
 
         public PaginationModel<MixRelatedAttributeDatas.ReadMvcViewModel> Data { get; set; }
-
+        [JsonProperty("fields")]
+        public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -81,6 +84,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         }
 
         #endregion Contructors
+
+        #region Overrides
+
+        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            Fields = Fields ?? MixAttributeFields.UpdateViewModel
+                .Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList();
+        }
+        #endregion
 
 
 

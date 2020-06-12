@@ -454,6 +454,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             foreach (var item in Modules)
             {
+                item.Specificulture = Specificulture;
                 item.PostId = id;
                 item.Status = MixEnums.MixContentStatus.Published;
                 if (item.IsActived)
@@ -485,6 +486,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             foreach (var item in Pages)
             {
+                item.Specificulture = Specificulture;
                 item.PostId = id;
                 item.Status = MixEnums.MixContentStatus.Published;
                 if (item.IsActived)
