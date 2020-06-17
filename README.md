@@ -20,7 +20,7 @@ Codefactor     |[![CodeFactor](https://www.codefactor.io/repository/github/mixco
 
 |  |Links  |
 |---------|---------|
-|STAG / Demo     |https://dev.mixcore.org|
+|STAG / Demo     |https://demo.mixcore.org or https://mixcore-demo-docker.azurewebsites.net/ (wait around 10mins for docker compose to run) Ref: [How to install Mixcore CMS with Azure Docker Composer](https://community.mixcore.org/topic/4/install-mixcore-cms-with-azure-and-docker-compose)|
 |Dev docs     |https://docs.mixcore.org / https://mixcore.dev|
 |Community     |https://community.mixcore.org|
 |Youtube     |https://www.youtube.com/channel/UChqzh6JnC8HBUSQ9AWIcZAw|
