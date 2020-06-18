@@ -316,11 +316,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 var getfields = await MixAttributeFields.ReadViewModel.Repository.GetModelListByAsync(
                     m => m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName, context, transaction);
                 var fields = getfields.IsSucceed ? getfields.Data : new List<MixAttributeFields.ReadViewModel>();
-                var fieldQueries = JObject.Parse(request.Query["query"]);
-                // fitler list query by field name
-                //var fieldQueries = queryDictionary?.Where(m => fields.Any(f => f.Name == m.Key)).ToList()
-                //    ?? new List<KeyValuePair<string, Microsoft.Extensions.Primitives.StringValues>>();
-
+                string strQuery = !string.IsNullOrEmpty(request.Query["query"]) ? request.Query["query"].ToString() : "{}";
+                var fieldQueries = JObject.Parse(strQuery);
+                
                 Expression<Func<MixAttributeSetValue, bool>> attrPredicate = null;
                 // val predicate
                 Expression<Func<MixAttributeSetValue, bool>> valPredicate = null;

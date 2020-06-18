@@ -372,15 +372,18 @@ namespace Mix.Cms.Lib.ViewModels
                     item.CreatedDateTime = DateTime.UtcNow;
                     item.ThemeName = ThemeName;
 
-                    foreach (var nav in item.ModuleNavs)
+                    if (item.ModuleNavs!=null)
                     {
-                        startModuleId++;
-                        dicModuleIds.Add(nav.Module.Id, startModuleId);
+                        foreach (var nav in item.ModuleNavs)
+                        {
+                            startModuleId++;
+                            dicModuleIds.Add(nav.Module.Id, startModuleId);
 
-                        nav.Module.Id = startModuleId;
+                            nav.Module.Id = startModuleId;
 
-                        nav.PageId = startId;
-                        nav.ModuleId = startModuleId;
+                            nav.PageId = startId;
+                            nav.ModuleId = startModuleId;
+                        }
                     }
 
                     //if (_context.MixPage.Any(m=>m.Id == startId)) //(item.Id > initPages.Count)

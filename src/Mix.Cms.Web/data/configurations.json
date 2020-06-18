@@ -7,7 +7,7 @@
       "dataType": 7,
       "description": "Domain",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "SiteName",
@@ -16,7 +16,7 @@
       "dataType": 7,
       "description": "Site Name",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "LanguageVersion",
@@ -25,7 +25,7 @@
       "dataType": 7,
       "description": "Language Version",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "SettingVersion",
@@ -34,7 +34,7 @@
       "dataType": 7,
       "description": "Settings Version",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "ContactAddress",
@@ -43,7 +43,7 @@
       "dataType": 7,
       "description": "Address",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "ContactEmail",
@@ -52,7 +52,7 @@
       "dataType": 10,
       "description": "Email",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "ContactPhone",
@@ -61,7 +61,7 @@
       "dataType": 7,
       "description": "Hotline",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "Facebook_Token",
@@ -70,7 +70,7 @@
       "dataType": 9,
       "description": "Facebook Access Token",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "FacebookAppId",
@@ -79,7 +79,7 @@
       "dataType": 7,
       "description": "Facebook App Id",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "Facebook_Page_Id",
@@ -88,7 +88,7 @@
       "dataType": 7,
       "description": "Facebook Page Id",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "Google_Analytic_Key",
@@ -97,7 +97,7 @@
       "dataType": 7,
       "description": "Google Analytic Key",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "Google_Analytic_Ids",
@@ -106,7 +106,7 @@
       "dataType": 7,
       "description": "Google Analytic Id",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "Google_Client_Id",
@@ -115,7 +115,7 @@
       "dataType": 7,
       "description": "Google Client Id",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "Recaptcha_Key",
@@ -124,7 +124,7 @@
       "dataType": 7,
       "description": "Recaptcha Key",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "Recaptcha_Secret",
@@ -133,7 +133,7 @@
       "dataType": 7,
       "description": "Recaptcha Secret",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "Favicon",
@@ -142,7 +142,7 @@
       "dataType": 16,
       "description": "Favicon",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "Logo",
@@ -151,7 +151,7 @@
       "dataType": 16,
       "description": "Logo",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "LogoWhite",
@@ -160,7 +160,7 @@
       "dataType": 16,
       "description": "Logo White",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "LogoBlack",
@@ -169,7 +169,7 @@
       "dataType": 16,
       "description": "Logo Black",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "ThemeName",
@@ -178,7 +178,7 @@
       "dataType": 7,
       "description": "Theme Name",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "ThemeFolder",
@@ -187,7 +187,7 @@
       "dataType": 7,
       "description": "Theme Folder",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "ThemeId",
@@ -196,7 +196,7 @@
       "dataType": 7,
       "description": "Theme Id",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "DateTimeFormat",
@@ -205,7 +205,7 @@
       "dataType": 7,
       "description": "Date Time Format",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "StartWeekOn",
@@ -214,7 +214,7 @@
       "dataType": 7,
       "description": "Day",
       "priority": 0,
-      "status": 2
+      "status": "Published"
     }
   ]
 }
