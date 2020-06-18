@@ -361,52 +361,57 @@ namespace Mix.Cms.Lib.ViewModels
                 //var initPages = obj["data"].ToObject<JArray>();
                 foreach (var item in Pages)
                 {
-                    // store old id => update to related data if save success
-                    var oldId = item.Id;
-                    
-                    startId++;
-                    dicPageIds.Add(oldId, startId);
-
-                    item.Id = startId;
-
-                    item.CreatedDateTime = DateTime.UtcNow;
-                    item.ThemeName = ThemeName;
-
-                    if (item.ModuleNavs!=null)
+                    // TODO: Id > 7 => not system init page
+                    if (item.Id > 7)
                     {
-                        foreach (var nav in item.ModuleNavs)
+
+                        // store old id => update to related data if save success
+                        var oldId = item.Id;
+
+                        startId++;
+                        dicPageIds.Add(oldId, startId);
+
+                        item.Id = startId;
+
+                        item.CreatedDateTime = DateTime.UtcNow;
+                        item.ThemeName = ThemeName;
+
+                        if (item.ModuleNavs != null)
                         {
-                            startModuleId++;
-                            dicModuleIds.Add(nav.Module.Id, startModuleId);
+                            foreach (var nav in item.ModuleNavs)
+                            {
+                                startModuleId++;
+                                dicModuleIds.Add(nav.Module.Id, startModuleId);
 
-                            nav.Module.Id = startModuleId;
+                                nav.Module.Id = startModuleId;
 
-                            nav.PageId = startId;
-                            nav.ModuleId = startModuleId;
+                                nav.PageId = startId;
+                                nav.ModuleId = startModuleId;
+                            }
                         }
-                    }
 
-                    //if (_context.MixPage.Any(m=>m.Id == startId)) //(item.Id > initPages.Count)
-                    //{
-                    //    item.Id = _context.MixPage.Max(m => m.Id) + 1;
-                    //    item.CreatedDateTime = DateTime.UtcNow;
-                    //}
-                    if (!string.IsNullOrEmpty(item.Image))
-                    {
-                        item.Image = item.Image.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
-                    }
-                    if (!string.IsNullOrEmpty(item.Thumbnail))
-                    {
-                        item.Thumbnail = item.Thumbnail.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
-                    }
-                    item.Specificulture = destCulture;
-                    var saveResult = await item.SaveModelAsync(true, context, transaction);
-                    if (!saveResult.IsSucceed)
-                    {
-                        result.IsSucceed = false;
-                        result.Exception = saveResult.Exception;
-                        result.Errors = saveResult.Errors;
-                        break;
+                        //if (_context.MixPage.Any(m=>m.Id == startId)) //(item.Id > initPages.Count)
+                        //{
+                        //    item.Id = _context.MixPage.Max(m => m.Id) + 1;
+                        //    item.CreatedDateTime = DateTime.UtcNow;
+                        //}
+                        if (!string.IsNullOrEmpty(item.Image))
+                        {
+                            item.Image = item.Image.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
+                        }
+                        if (!string.IsNullOrEmpty(item.Thumbnail))
+                        {
+                            item.Thumbnail = item.Thumbnail.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
+                        }
+                        item.Specificulture = destCulture;
+                        var saveResult = await item.SaveModelAsync(true, context, transaction);
+                        if (!saveResult.IsSucceed)
+                        {
+                            result.IsSucceed = false;
+                            result.Exception = saveResult.Exception;
+                            result.Errors = saveResult.Errors;
+                            break;
+                        }
                     }
                 }
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
