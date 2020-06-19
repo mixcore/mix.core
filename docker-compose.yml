@@ -6,8 +6,9 @@ services:
             - "5000:80"
             - "5001:443"
         depends_on:
-            - db
-    db:
+            - sqlserver
+            - mysql
+    sqlserver:
         image: "mcr.microsoft.com/mssql/server"
         environment:
             SA_PASSWORD: "P@ssw0rd"
@@ -15,9 +16,8 @@ services:
         ports:
             - "1433:1433"
         restart: always
-    redis:
-        image: redis
-
+    # redis:
+    #     image: redis
     mysql:
         image: mysql:5.7
         volumes:
@@ -30,6 +30,5 @@ services:
           MYSQL_PASSWORD: P@ssw0rd
         ports:
         - 3306:3306
-
 volumes:
     db_data: {}
