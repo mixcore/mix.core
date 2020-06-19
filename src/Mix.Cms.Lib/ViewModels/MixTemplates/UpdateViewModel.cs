@@ -146,7 +146,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                 {
                     if (_context.MixTemplate.Any(t => t.FileName == FileName && t.FolderType == FolderType && t.ThemeId == ThemeId))
                     {
-                        FileName = $"{FileName}_1";
+                        IsValid = false;
+                        Errors.Add($"{FileName} is existed");
                     }
                 }
                 if (string.IsNullOrEmpty(ThemeName) && ThemeId > 0)
