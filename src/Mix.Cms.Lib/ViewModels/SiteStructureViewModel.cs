@@ -362,7 +362,7 @@ namespace Mix.Cms.Lib.ViewModels
                 foreach (var item in Pages)
                 {
                     // TODO: Id > 7 => not system init page
-                    if (item.Id > 7)
+                    if (!context.MixPage.Any(p=>p.SeoName == item.SeoName))
                     {
 
                         // store old id => update to related data if save success
