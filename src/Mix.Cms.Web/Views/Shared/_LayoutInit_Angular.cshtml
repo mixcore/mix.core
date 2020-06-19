@@ -77,19 +77,17 @@
 
     <link href="~/css/app-vendor.min.css" rel="stylesheet" />
     <link href="~/css/shared.min.css" rel="stylesheet" />
-
     <link href="~/css/app-init.min.css" rel="stylesheet" />
-
     <script src="~/js/particles/particles.min.js"></script>
 </head>
-s<body class="" ng-app="MixPortal">
-    <div id="particles-js" class="position-absolute w-100 h-100"></div>
+<body class="" ng-app="MixPortal">
+    <div id="particles-js" class="position-fixed w-100 h-100"></div>
     <mix-loader ng-show="isBusy"></mix-loader>
     <div class="progress" style="height: 2px;">
         <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
 
-    <div class="card form-init mb-5">
+    <div class="card form-init">
         <div class="p-5">
             <img class="mb-4" src="/css/portal/img/mixcore-logo-green.svg" alt="Mixcore CMS" height="35">
             @RenderBody()
@@ -98,6 +96,7 @@ s<body class="" ng-app="MixPortal">
 
     <environment names="Development">
     </environment>
+
     <script src="~/js/framework.min.js"></script>
     <script src="~/js/app-portal-required.min.js"></script>
     <script src="~/js/portal.min.js"></script>
