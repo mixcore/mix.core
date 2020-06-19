@@ -1,6 +1,6 @@
 version: "3"
 services:
-    web:
+    mixcore:
         build: .
         ports:
             - "5000:80"
@@ -19,14 +19,14 @@ services:
     # redis:
     #     image: redis
     mysql:
-        image: mysql:5.7
+        image: mysql:8.0
         volumes:
           - db_data:/var/lib/mysql
         restart: always
         environment:
           MYSQL_ROOT_PASSWORD: P@ssw0rd
           MYSQL_DATABASE: mixcore
-          MYSQL_USER: mixcore
+          MYSQL_USER: root
           MYSQL_PASSWORD: P@ssw0rd
         ports:
         - 3306:3306
