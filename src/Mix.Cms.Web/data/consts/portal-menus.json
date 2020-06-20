@@ -157,11 +157,6 @@
           "path": "/portal/media/list",
           "title": "List",
           "icon": "mi mi-List"
-        },
-        {
-          "path": "/portal/media/grid",
-          "title": "Grid",
-          "icon": "mi mi-GridView"
         }
       ]
     },
@@ -262,6 +257,7 @@
       "title": "Mix Store",
       "path": "#",
       "icon": "mi mi-Shop",
+      "isHiden": true,
       "subMenus": [
         {
           "title": "List Online",
