@@ -16,7 +16,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
         public int ParentId { get; set; }
         public MixEnums.MixAttributeSetDataType ParentType { get; set; }
         public DateTime CreatedDateTime { get; set; }
-        public int Status { get; set; }
+        public string Status { get; set; }
         public string Description { get; set; }
         public string Image { get; set; }
 

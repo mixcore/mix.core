@@ -62,7 +62,7 @@ namespace Mix.Cms.Api.OData.ViewModels.MixAttributeSets
         public DateTime CreatedDateTime { get; set; }
 
         [JsonProperty("status")]
-        public int Status { get; set; }
+        public string Status { get; set; }
 
         #endregion Models
 
