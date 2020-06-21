@@ -30,7 +30,7 @@ namespace Mix.Cms.Lib.Hubs
             if (result.IsSucceed)
             {
                 //  Send success msg to caller
-                var getAvailableUsers = Service.SignalR.ViewModels.MixMessengerUsers.DefaultViewModel.Repository.GetModelListBy(u => u.Status == 1);
+                var getAvailableUsers = Service.SignalR.ViewModels.MixMessengerUsers.DefaultViewModel.Repository.GetModelListBy(u => u.Status == MixEnums.MixContentStatus.Published.ToString());
                 SendToCaller(getAvailableUsers.Data, Constants.Enums.MessageReponseKey.ConnectSuccess);
                 // Announce every one there's new member
                 SendToAll(user, Constants.Enums.MessageReponseKey.NewMember, false);
