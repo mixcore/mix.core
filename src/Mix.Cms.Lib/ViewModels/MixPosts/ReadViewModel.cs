@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -138,7 +139,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         }
 
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl { get; set; }
+        public string DetailsUrl { get => $"/post/{Specificulture}/{Id}/{SeoName}"; }
 
         [JsonProperty("properties")]
         public List<ExtraProperty> Properties { get; set; }

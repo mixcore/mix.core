@@ -24,12 +24,18 @@ namespace Mix.Cms.Lib.ViewModels
 
         [JsonProperty("attributeSets")]
         public List<MixAttributeSets.ImportViewModel> AttributeSets { get; set; }
-
+        
         [JsonProperty("configurations")]
         public List<MixConfigurations.ReadViewModel> Configurations { get; set; }
 
         [JsonProperty("relatedData")]
         public List<MixRelatedAttributeDatas.ImportViewModel> RelatedData { get; set; } = new List<MixRelatedAttributeDatas.ImportViewModel>();
+
+        [JsonProperty("posts")]
+        public List<MixPosts.ImportViewModel> Posts { get; set; } = new List<MixPosts.ImportViewModel>();
+
+        [JsonProperty("moduleDatas")]
+        public List<MixModuleDatas.UpdateViewModel> ModuleDatas { get; set; } = new List<MixModuleDatas.UpdateViewModel>();
 
         [JsonProperty("attributeSetDatas")]
         public List<MixAttributeSetDatas.ImportViewModel> AttributeSetDatas { get; set; } = new List<MixAttributeSetDatas.ImportViewModel>();
@@ -64,6 +70,7 @@ namespace Mix.Cms.Lib.ViewModels
                 ProcessModules(context, transaction);
                 ProcessAttributeSetsAsync(context, transaction);
                 ProcessAttributeSetData(context, transaction);
+                ProcessDatas(context, transaction);
                 return result;
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
@@ -82,6 +89,30 @@ namespace Mix.Cms.Lib.ViewModels
                     context.Database.CloseConnection();transaction.Dispose();context.Dispose();
                 }
             }
+        }
+
+        private void ProcessDatas(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            ProcessPosts(context, transaction);
+            ProcessAttributeDatas(context, transaction);
+            ProcessModuleDatas(context, transaction);
+        }
+
+        private void ProcessModuleDatas(MixCmsContext context, IDbContextTransaction transaction)
+        {
+        }
+
+        private void ProcessAttributeDatas(MixCmsContext context, IDbContextTransaction transaction)
+        {
+        }
+
+        private void ProcessPosts(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            // TODO: Validate Export Post have necessary data (Module, Template, Sub Attribute ...)
+            //foreach (var item in Posts)
+            //{
+               
+            //}
         }
 
         private void ProcessAttributeSetsAsync(MixCmsContext context, IDbContextTransaction transaction)
@@ -253,6 +284,7 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     result = await ImportRelatedDatas(destCulture, context, transaction);
                 }
+
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only

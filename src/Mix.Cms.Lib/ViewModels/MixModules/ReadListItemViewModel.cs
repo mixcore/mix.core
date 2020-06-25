@@ -101,6 +101,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             }
         }
 
+        [JsonProperty("detailsUrl")]
+        public string DetailsUrl { get => $"/module/{Specificulture}/{Id}/{SeoHelper.GetSEOString(Title)}"; }
         #endregion Properties
 
         #region Contructors
