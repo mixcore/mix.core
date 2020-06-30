@@ -25,6 +25,7 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
 WORKDIR /app
 # COPY --from=node-env /app/Mix.Cms.Web/wwwroot .
 COPY --from=build-env /app/Mix.Cms.Web/bin/Release/netcoreapp3.1/publish .
+EXPOSE 80
 ENTRYPOINT ["dotnet", "Mix.Cms.Web.dll"]
 
 # Build -> Tag -> Push process
