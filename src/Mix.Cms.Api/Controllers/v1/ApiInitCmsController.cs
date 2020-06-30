@@ -241,7 +241,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         Filename = "default",
                         Extension = ".zip",
-                        FileFolder = "Imports/Themes"
+                        FileFolder = "wwwroot/Imports/Themes"
                     };
                 }
                 else
@@ -250,7 +250,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         Filename = "default_blank",
                         Extension = ".zip",
-                        FileFolder = "Imports/Themes"
+                        FileFolder = "wwwroot/Imports/Themes"
                     };
                 }
             }

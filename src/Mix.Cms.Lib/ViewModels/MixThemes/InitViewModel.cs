@@ -89,13 +89,13 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         [JsonProperty("assetFolder")]
         public string AssetFolder {
             get {
-                return $"content/templates/{Name}/assets";
+                return $"wwwroot/content/templates/{Name}/assets";
             }
         }
 
         public string UploadsFolder {
             get {
-                return $"content/templates/{Name}/uploads";
+                return $"wwwroot/content/templates/{Name}/uploads";
             }
         }
 
@@ -172,24 +172,24 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         private async Task<RepositoryResponse<bool>> ImportThemeAsync(MixTheme parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            string filePath = $"wwwroot/{TemplateAsset.FileFolder}/{TemplateAsset.Filename}{TemplateAsset.Extension}";
+            string filePath = $"{TemplateAsset.FileFolder}/{TemplateAsset.Filename}{TemplateAsset.Extension}";
             if (File.Exists(filePath))
             {
-                string outputFolder = $"wwwroot/{TemplateAsset.FileFolder}/Extract";
+                string outputFolder = $"{TemplateAsset.FileFolder}/Extract";
                 FileRepository.Instance.DeleteFolder(outputFolder);
                 FileRepository.Instance.CreateDirectoryIfNotExist(outputFolder);
                 FileRepository.Instance.UnZipFile(filePath, outputFolder);
                 //Move Unzip Asset folder
-                FileRepository.Instance.CopyDirectory($"{outputFolder}/Assets", $"wwwroot/{AssetFolder}");
+                FileRepository.Instance.CopyDirectory($"{outputFolder}/Assets", $"{AssetFolder}");
                 //Move Unzip Templates folder
                 FileRepository.Instance.CopyDirectory($"{outputFolder}/Templates", TemplateFolder);
                 //Move Unzip Uploads folder
-                FileRepository.Instance.CopyDirectory($"{outputFolder}/Uploads", $"wwwroot/{UploadsFolder}");
+                FileRepository.Instance.CopyDirectory($"{outputFolder}/Uploads", $"{UploadsFolder}");
                 // Get SiteStructure
                 var strSchema = FileRepository.Instance.GetFile("schema.json", $"{outputFolder}/Data");
                 var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteStructureViewModel>();
                 FileRepository.Instance.DeleteFolder(outputFolder);
-
+                //FileRepository.Instance.DeleteFile(filePath);
                 //Import Site Structures
                 result = await siteStructures.ImportAsync(Specificulture);
                 if (result.IsSucceed)

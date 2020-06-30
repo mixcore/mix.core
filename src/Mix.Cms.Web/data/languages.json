@@ -9,7 +9,7 @@
       "defaultValue": "Read more",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "success",
@@ -20,7 +20,7 @@
       "defaultValue": "Success",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "fail",
@@ -31,7 +31,7 @@
       "defaultValue": "Fail",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "portal_import",
@@ -42,7 +42,7 @@
       "defaultValue": "Import",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "portal_attributes",
@@ -53,7 +53,7 @@
       "defaultValue": "Attributes",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "portal_list",
@@ -64,7 +64,7 @@
       "defaultValue": "List",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "portal_create",
@@ -75,7 +75,7 @@
       "defaultValue": "Create",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "portal_title",
@@ -86,7 +86,7 @@
       "defaultValue": "Title",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "portal_permissions",
@@ -97,7 +97,7 @@
       "defaultValue": "Permissions",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "portal_users",
@@ -108,7 +108,7 @@
       "defaultValue": "Users",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "portal_themes",
@@ -119,7 +119,7 @@
       "defaultValue": "Themes",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "portal_settings",
@@ -130,7 +130,7 @@
       "defaultValue": "Settings",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "portal_products",
@@ -141,7 +141,7 @@
       "defaultValue": "Products",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "portal_pages",
@@ -152,7 +152,7 @@
       "defaultValue": "Pages",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "portal_orders",
@@ -163,7 +163,7 @@
       "defaultValue": "Orders",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "portal_modules",
@@ -174,7 +174,7 @@
       "defaultValue": "Modules",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "portal_media",
@@ -185,7 +185,7 @@
       "defaultValue": "Media",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "portal_file",
@@ -196,7 +196,7 @@
       "defaultValue": "File",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "portal_dashboard",
@@ -218,7 +218,7 @@
       "defaultValue": "Cultures",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "portal_posts",
@@ -229,7 +229,7 @@
       "defaultValue": "Posts",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "portal_menus",
@@ -240,7 +240,7 @@
       "defaultValue": "Menus",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     },
     {
       "keyword": "language",
@@ -251,7 +251,7 @@
       "defaultValue": "Languages",
       "cultures": null,
       "priority": 0,
-      "status": 2
+      "status": "Published"
     }
   ]
 }

@@ -8,7 +8,7 @@
       "template": "Pages/_Home.cshtml",
       "layout": "Masters/_Layout.cshtml",
       "type": 3,
-      "status": 2
+      "status": "Published"
     },
     {
       "id": 2,
@@ -18,7 +18,7 @@
       "template": "Pages/_Tag.cshtml",
       "layout": "Masters/_Layout.cshtml",
       "type": 8,
-      "status": 2
+      "status": "Published"
     },
     {
       "id": 3,
@@ -28,7 +28,7 @@
       "template": "Pages/_Search.cshtml",
       "layout": "Masters/_Layout.cshtml",
       "type": 8,
-      "status": 2
+      "status": "Published"
     },
     {
       "id": 4,
@@ -38,7 +38,7 @@
       "template": "Pages/_404.cshtml",
       "layout": "Masters/_Blank.cshtml",
       "type": 8,
-      "status": 2
+      "status": "Published"
     },
     {
       "id": 5,
@@ -48,7 +48,7 @@
       "template": "Pages/_403.cshtml",
       "layout": "Masters/_Blank.cshtml",
       "type": 8,
-      "status": 2
+      "status": "Published"
     },
     {
       "id": 6,
@@ -58,7 +58,7 @@
       "template": "Pages/_403.cshtml",
       "layout": "Masters/_Blank.cshtml",
       "type": 8,
-      "status": 2
+      "status": "Published"
     },
     {
       "id": 7,
@@ -68,7 +68,7 @@
       "template": "Pages/_Maintenance.cshtml",
       "layout": "Masters/_Blank.cshtml",
       "type": 8,
-      "status": 2
+      "status": "Published"
     }
   ]
 }

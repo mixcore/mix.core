@@ -36,7 +36,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         public DateTime CreatedDateTime { get; set; }
 
         [JsonProperty("status")]
-        public int Status { get; set; }
+        public string Status { get; set; }
 
         [JsonProperty("description")]
         public string Description { get; set; }
