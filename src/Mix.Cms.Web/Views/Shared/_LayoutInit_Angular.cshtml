@@ -23,8 +23,6 @@
                 display: flex;
                 -ms-flex-align: center;
                 align-items: center;
-                padding-top: 40px;
-                padding-bottom: 40px;
                 background-color: #000;
                 height: 100%;
             }
@@ -77,19 +75,17 @@
 
     <link href="~/css/app-vendor.min.css" rel="stylesheet" />
     <link href="~/css/shared.min.css" rel="stylesheet" />
-
     <link href="~/css/app-init.min.css" rel="stylesheet" />
-
     <script src="~/js/particles/particles.min.js"></script>
 </head>
-s<body class="" ng-app="MixPortal">
-    <div id="particles-js" class="position-absolute w-100 h-100"></div>
+<body class="" ng-app="MixPortal">
+    <div id="particles-js" class="position-fixed w-100 h-100"></div>
     <mix-loader ng-show="isBusy"></mix-loader>
     <div class="progress" style="height: 2px;">
         <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
 
-    <div class="card form-init mb-5">
+    <div class="card form-init">
         <div class="p-5">
             <img class="mb-4" src="/css/portal/img/mixcore-logo-green.svg" alt="Mixcore CMS" height="35">
             @RenderBody()
@@ -98,7 +94,9 @@ s<body class="" ng-app="MixPortal">
 
     <environment names="Development">
     </environment>
+
     <script src="~/js/framework.min.js"></script>
+    <script src="~/js/app-portal-required.min.js"></script>
     <script src="~/js/portal.min.js"></script>
     <script src="~/js/app-init.min.js"></script>
     <script src="~/js/app-shared.min.js"></script>
@@ -125,118 +123,6 @@ s<body class="" ng-app="MixPortal">
         </div>
     </div>
 
-    <script>
-    particlesJS('particles-js',
-      {
-        "particles": {
-          "number": {
-            "value": 50,
-            "density": {
-              "enable": true,
-              "value_area": 800
-            }
-          },
-          "color": {
-            "value": "#ffffff"
-          },
-          "shape": {
-            "type": "circle",
-            "stroke": {
-              "width": 0,
-              "color": "#000000"
-            },
-            "polygon": {
-              "nb_sides": 5
-            },
-            "image": {
-                "src": "img/background.jpg",
-              "width": 100,
-              "height": 100
-            }
-          },
-          "opacity": {
-            "value": 0.2,
-            "random": false,
-            "anim": {
-              "enable": false,
-              "speed": 1,
-              "opacity_min": 0.1,
-              "sync": false
-            }
-          },
-          "size": {
-            "value": 3,
-            "random": true,
-            "anim": {
-              "enable": false,
-              "speed": 40,
-              "size_min": 0.1,
-              "sync": false
-            }
-          },
-          "line_linked": {
-            "enable": true,
-            "distance": 150,
-            "color": "#ffffff",
-            "opacity": 0.2,
-            "width": 1
-          },
-          "move": {
-            "enable": true,
-            "speed": 3,
-            "direction": "none",
-            "random": false,
-            "straight": false,
-            "out_mode": "out",
-            "bounce": false,
-            "attract": {
-              "enable": false,
-              "rotateX": 600,
-              "rotateY": 1200
-            }
-          }
-        },
-        "interactivity": {
-          "detect_on": "window",
-          "events": {
-            "onhover": {
-              "enable": true,
-              "mode": "grab"
-            },
-            "onclick": {
-              "enable": true,
-              "mode": "push"
-            },
-            "resize": true
-          },
-          "modes": {
-            "grab": {
-              "distance": 200,
-              "line_linked": {
-                "opacity": 0.2
-              }
-            },
-            "bubble": {
-              "distance": 400,
-              "size": 40,
-              "duration": 2,
-              "opacity": 8,
-              "speed": 3
-            },
-            "repulse": {
-              "distance": 200,
-              "duration": 0.4
-            },
-            "push": {
-              "particles_nb": 4
-            },
-            "remove": {
-              "particles_nb": 2
-            }
-          }
-        },
-        "retina_detect": true
-      });
-    </script>
+    <script> particlesJS('particles-js', { "particles": { "number": { "value": 50, "density": { "enable": true, "value_area": 800 } }, "color": { "value": "#ffffff" }, "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" }, "polygon": { "nb_sides": 5 }, "image": { "src": "img/background.jpg", "width": 100, "height": 100 } }, "opacity": { "value": 0.2, "random": false, "anim": { "enable": false, "speed": 1, "opacity_min": 0.1, "sync": false } }, "size": { "value": 3, "random": true, "anim": { "enable": false, "speed": 40, "size_min": 0.1, "sync": false } }, "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.2, "width": 1 }, "move": { "enable": true, "speed": 3, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false, "rotateX": 600, "rotateY": 1200 } } }, "interactivity": { "detect_on": "window", "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true }, "modes": { "grab": { "distance": 200, "line_linked": { "opacity": 0.2 } }, "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 }, "repulse": { "distance": 200, "duration": 0.4 }, "push": { "particles_nb": 4 }, "remove": { "particles_nb": 2 } } }, "retina_detect": true }); </script>
 </body>
 </html>

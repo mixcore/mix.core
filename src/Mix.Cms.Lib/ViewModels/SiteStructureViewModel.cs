@@ -24,12 +24,18 @@ namespace Mix.Cms.Lib.ViewModels
 
         [JsonProperty("attributeSets")]
         public List<MixAttributeSets.ImportViewModel> AttributeSets { get; set; }
-
+        
         [JsonProperty("configurations")]
         public List<MixConfigurations.ReadViewModel> Configurations { get; set; }
 
         [JsonProperty("relatedData")]
         public List<MixRelatedAttributeDatas.ImportViewModel> RelatedData { get; set; } = new List<MixRelatedAttributeDatas.ImportViewModel>();
+
+        [JsonProperty("posts")]
+        public List<MixPosts.ImportViewModel> Posts { get; set; } = new List<MixPosts.ImportViewModel>();
+
+        [JsonProperty("moduleDatas")]
+        public List<MixModuleDatas.UpdateViewModel> ModuleDatas { get; set; } = new List<MixModuleDatas.UpdateViewModel>();
 
         [JsonProperty("attributeSetDatas")]
         public List<MixAttributeSetDatas.ImportViewModel> AttributeSetDatas { get; set; } = new List<MixAttributeSetDatas.ImportViewModel>();
@@ -48,7 +54,7 @@ namespace Mix.Cms.Lib.ViewModels
         {
             Pages = (await MixPages.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
             Modules = (await MixModules.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
-            //AttributeSets = (await MixAttributeSets.ODataImportViewModel.Repository.GetModelListAsync()).Data;
+            AttributeSets = (await MixAttributeSets.ImportViewModel.Repository.GetModelListAsync()).Data;
         }
 
         #region Export
@@ -64,6 +70,7 @@ namespace Mix.Cms.Lib.ViewModels
                 ProcessModules(context, transaction);
                 ProcessAttributeSetsAsync(context, transaction);
                 ProcessAttributeSetData(context, transaction);
+                ProcessDatas(context, transaction);
                 return result;
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
@@ -82,6 +89,30 @@ namespace Mix.Cms.Lib.ViewModels
                     context.Database.CloseConnection();transaction.Dispose();context.Dispose();
                 }
             }
+        }
+
+        private void ProcessDatas(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            ProcessPosts(context, transaction);
+            ProcessAttributeDatas(context, transaction);
+            ProcessModuleDatas(context, transaction);
+        }
+
+        private void ProcessModuleDatas(MixCmsContext context, IDbContextTransaction transaction)
+        {
+        }
+
+        private void ProcessAttributeDatas(MixCmsContext context, IDbContextTransaction transaction)
+        {
+        }
+
+        private void ProcessPosts(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            // TODO: Validate Export Post have necessary data (Module, Template, Sub Attribute ...)
+            //foreach (var item in Posts)
+            //{
+               
+            //}
         }
 
         private void ProcessAttributeSetsAsync(MixCmsContext context, IDbContextTransaction transaction)
@@ -253,6 +284,7 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     result = await ImportRelatedDatas(destCulture, context, transaction);
                 }
+
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
@@ -361,49 +393,57 @@ namespace Mix.Cms.Lib.ViewModels
                 //var initPages = obj["data"].ToObject<JArray>();
                 foreach (var item in Pages)
                 {
-                    // store old id => update to related data if save success
-                    var oldId = item.Id;
-                    
-                    startId++;
-                    dicPageIds.Add(oldId, startId);
-
-                    item.Id = startId;
-
-                    item.CreatedDateTime = DateTime.UtcNow;
-                    item.ThemeName = ThemeName;
-
-                    foreach (var nav in item.ModuleNavs)
+                    // TODO: Id > 7 => not system init page
+                    if (!context.MixPage.Any(p=>p.SeoName == item.SeoName))
                     {
-                        startModuleId++;
-                        dicModuleIds.Add(nav.Module.Id, startModuleId);
 
-                        nav.Module.Id = startModuleId;
+                        // store old id => update to related data if save success
+                        var oldId = item.Id;
 
-                        nav.PageId = startId;
-                        nav.ModuleId = startModuleId;
-                    }
+                        startId++;
+                        dicPageIds.Add(oldId, startId);
 
-                    //if (_context.MixPage.Any(m=>m.Id == startId)) //(item.Id > initPages.Count)
-                    //{
-                    //    item.Id = _context.MixPage.Max(m => m.Id) + 1;
-                    //    item.CreatedDateTime = DateTime.UtcNow;
-                    //}
-                    if (!string.IsNullOrEmpty(item.Image))
-                    {
-                        item.Image = item.Image.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
-                    }
-                    if (!string.IsNullOrEmpty(item.Thumbnail))
-                    {
-                        item.Thumbnail = item.Thumbnail.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
-                    }
-                    item.Specificulture = destCulture;
-                    var saveResult = await item.SaveModelAsync(true, context, transaction);
-                    if (!saveResult.IsSucceed)
-                    {
-                        result.IsSucceed = false;
-                        result.Exception = saveResult.Exception;
-                        result.Errors = saveResult.Errors;
-                        break;
+                        item.Id = startId;
+
+                        item.CreatedDateTime = DateTime.UtcNow;
+                        item.ThemeName = ThemeName;
+
+                        if (item.ModuleNavs != null)
+                        {
+                            foreach (var nav in item.ModuleNavs)
+                            {
+                                startModuleId++;
+                                dicModuleIds.Add(nav.Module.Id, startModuleId);
+
+                                nav.Module.Id = startModuleId;
+
+                                nav.PageId = startId;
+                                nav.ModuleId = startModuleId;
+                            }
+                        }
+
+                        //if (_context.MixPage.Any(m=>m.Id == startId)) //(item.Id > initPages.Count)
+                        //{
+                        //    item.Id = _context.MixPage.Max(m => m.Id) + 1;
+                        //    item.CreatedDateTime = DateTime.UtcNow;
+                        //}
+                        if (!string.IsNullOrEmpty(item.Image))
+                        {
+                            item.Image = item.Image.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
+                        }
+                        if (!string.IsNullOrEmpty(item.Thumbnail))
+                        {
+                            item.Thumbnail = item.Thumbnail.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
+                        }
+                        item.Specificulture = destCulture;
+                        var saveResult = await item.SaveModelAsync(true, context, transaction);
+                        if (!saveResult.IsSucceed)
+                        {
+                            result.IsSucceed = false;
+                            result.Exception = saveResult.Exception;
+                            result.Errors = saveResult.Errors;
+                            break;
+                        }
                     }
                 }
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);

@@ -12,7 +12,7 @@
       "edmFrom": null,
       "edmAutoSend": null,
       "createdDateTime": "2019-12-05T05:54:56.813",
-      "status": 2,
+      "status": "Published",
       "fields": [
         {
           "id": 1,
@@ -29,7 +29,7 @@
           "isEncrypt": false,
           "isSelect": false,
           "isUnique": false,
-          "status": 2,
+          "status": "Published",
           "createdDateTime": "2019-11-02T04:54:35.07",
           "isClone": false,
           "cultures": null,
@@ -37,7 +37,7 @@
           "specificulture": null
         },
         {
-          "id": 2,
+          "id": 3,
           "attributeSetId": 1,
           "attributeSetName": "sys_menu_item",
           "referenceId": null,
@@ -51,11 +51,11 @@
           "isEncrypt": false,
           "isSelect": false,
           "isUnique": false,
-          "status": 2,
-          "createdDateTime": "2019-11-02T04:54:35.24",
+          "status": "Published",
+          "createdDateTime": "2019-11-02T04:54:35.07",
           "isClone": false,
           "cultures": null,
-          "priority": 1,
+          "priority": 0,
           "specificulture": null
         },
         {
@@ -73,7 +73,7 @@
           "isEncrypt": false,
           "isSelect": false,
           "isUnique": false,
-          "status": 2,
+          "status": "Published",
           "createdDateTime": "2019-12-21T08:18:12.13",
           "isClone": false,
           "cultures": null,
@@ -108,7 +108,7 @@
           "isEncrypt": false,
           "isSelect": true,
           "isUnique": false,
-          "status": 2,
+          "status": "Published",
           "createdDateTime": "2019-11-09T05:56:45.447",
           "isClone": false,
           "cultures": null,
@@ -151,7 +151,7 @@
           "isEncrypt": false,
           "isSelect": true,
           "isUnique": false,
-          "status": 2,
+          "status": "Published",
           "createdDateTime": "2019-11-09T04:59:07.743",
           "isClone": false,
           "cultures": null,
@@ -173,7 +173,7 @@
           "isEncrypt": false,
           "isSelect": false,
           "isUnique": false,
-          "status": 2,
+          "status": "Published",
           "createdDateTime": "2019-11-09T04:59:07.793",
           "isClone": false,
           "cultures": null,
@@ -195,7 +195,7 @@
           "isEncrypt": false,
           "isSelect": false,
           "isUnique": false,
-          "status": 2,
+          "status": "Published",
           "createdDateTime": "2019-11-09T04:59:07.83",
           "isClone": false,
           "cultures": null,
@@ -217,15 +217,14 @@
           "isEncrypt": false,
           "isSelect": false,
           "isUnique": false,
-          "status": 2,
+          "status": "Published",
           "createdDateTime": "2019-12-17T13:29:02.05",
           "isClone": false,
           "cultures": null,
           "priority": 7,
           "specificulture": null
         }
-      ],
-      "status": 2
+      ]
     },
     {
       "id": 2,
@@ -244,7 +243,7 @@
           "isSelect": false,
           "isUnique": false,
           "priority": 1,
-          "status": 2
+          "status": "Published"
         },
         {
           "id": 23,
@@ -260,7 +259,7 @@
           "isEncrypt": false,
           "isSelect": false,
           "isUnique": false,
-          "status": 2,
+          "status": "Published",
           "createdDateTime": "2019-12-17T13:19:42.663",
           "isClone": false,
           "cultures": null,
@@ -280,10 +279,10 @@
           "isEncrypt": false,
           "isSelect": false,
           "isUnique": false,
-          "status": 2
+          "status": "Published"
         }
       ],
-      "status": 2
+      "status": "Published"
     },
     {
       "id": 3,

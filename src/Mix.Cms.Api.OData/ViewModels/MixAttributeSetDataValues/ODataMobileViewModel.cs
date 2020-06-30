@@ -29,7 +29,7 @@ namespace Mix.Cms.Api.OData.ViewModels.MixAttributeSetValues
         public MixEnums.MixDataType DataType { get; set; }
 
         [JsonProperty("status")]
-        public int Status { get; set; }
+        public string Status { get; set; }
 
         [JsonProperty("attributeFieldName")]
         public string AttributeFieldName { get; set; }

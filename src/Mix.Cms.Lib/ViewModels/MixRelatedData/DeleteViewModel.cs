@@ -18,7 +18,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedDatas
         public MixEnums.MixAttributeSetDataType ParentType { get; set; }
         public int AttributeSetId { get; set; }
         public DateTime CreatedDateTime { get; set; }
-        public int Status { get; set; }
+        public string Status { get; set; }
         public string Description { get; set; }
 
         #endregion Models

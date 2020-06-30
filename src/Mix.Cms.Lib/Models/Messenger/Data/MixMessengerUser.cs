@@ -18,7 +18,7 @@ namespace Mix.Cms.Messenger.Models.Data
         public DateTime CreatedDate { get; set; }
         public DateTime? LastModified { get; set; }
         public string Name { get; set; }
-        public int Status { get; set; }
+        public string Status { get; set; }
 
         public ICollection<MixMessengerMessage> MixMessengerMessage { get; set; }
         public ICollection<MixMessengerNavRoomUser> MixMessengerNavRoomUser { get; set; }

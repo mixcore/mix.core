@@ -8,7 +8,7 @@ namespace Mix.Cms.Messenger.Models.Data
         public string UserId { get; set; }
         public DateTime JoinedDate { get; set; }
         public DateTime? LastModified { get; set; }
-        public int Status { get; set; }
+        public string Status { get; set; }
 
         public MixMessengerTeam Team { get; set; }
         public MixMessengerUser User { get; set; }

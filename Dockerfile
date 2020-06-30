@@ -28,6 +28,10 @@ COPY --from=build-env /app/Mix.Cms.Web/bin/Release/netcoreapp3.1/publish .
 EXPOSE 80
 ENTRYPOINT ["dotnet", "Mix.Cms.Web.dll"]
 
+
+#############################
+# PUBLISH NEW IMAGE GUIDELINE
+#############################
 # Build -> Tag -> Push process
 # docker build -t mixcoreimage -f Dockerfile .
 # docker tag mixcoreimage mixcore/mix.core:v1.0.0-alpha.1

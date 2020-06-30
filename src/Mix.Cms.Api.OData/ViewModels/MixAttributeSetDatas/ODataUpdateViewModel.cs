@@ -36,7 +36,7 @@ namespace Mix.Cms.Api.OData.ViewModels.MixAttributeSetDatas
         public string CreatedBy { get; set; }
 
         [JsonProperty("status")]
-        public int Status { get; set; }
+        public string Status { get; set; }
 
         #endregion Models
 
