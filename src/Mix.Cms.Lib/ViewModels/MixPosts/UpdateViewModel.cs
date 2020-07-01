@@ -1117,7 +1117,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                         }
                         )
                     {
-                        Data = new MixAttributeSetDatas.UpdateViewModel( 
+                        Data = new MixAttributeSetDatas.FormViewModel( 
                     new MixAttributeSetData()
                     {
                         Specificulture = Specificulture,
