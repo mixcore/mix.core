@@ -102,6 +102,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         #region Views
 
+        [JsonProperty("postNavs")]
+        public List<MixPagePosts.ImportViewModel> PostNavs { get; set; } // Parent to Posts
+        
         [JsonProperty("moduleNavs")]
         public List<MixPageModules.ImportViewModel> ModuleNavs { get; set; } // Parent to Modules
 
@@ -271,6 +274,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             return MixPageModules.ImportViewModel.Repository.GetModelListBy(
                 module => module.Specificulture == Specificulture && module.PageId == Id,
+                context, transaction).Data;
+        }
+        
+        public List<MixPagePosts.ImportViewModel> GetPostNavs(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            return MixPagePosts.ImportViewModel.Repository.GetModelListBy(
+                m => m.Specificulture == Specificulture && m.PageId == Id,
                 context, transaction).Data;
         }
 

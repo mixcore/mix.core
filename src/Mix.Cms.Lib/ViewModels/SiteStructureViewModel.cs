@@ -24,7 +24,7 @@ namespace Mix.Cms.Lib.ViewModels
 
         [JsonProperty("attributeSets")]
         public List<MixAttributeSets.ImportViewModel> AttributeSets { get; set; }
-        
+
         [JsonProperty("configurations")]
         public List<MixConfigurations.ReadViewModel> Configurations { get; set; }
 
@@ -86,7 +86,7 @@ namespace Mix.Cms.Lib.ViewModels
                 //if current Context is Root
                 if (isRoot)
                 {
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
             }
         }
@@ -111,7 +111,7 @@ namespace Mix.Cms.Lib.ViewModels
             // TODO: Validate Export Post have necessary data (Module, Template, Sub Attribute ...)
             //foreach (var item in Posts)
             //{
-               
+
             //}
         }
 
@@ -165,20 +165,8 @@ namespace Mix.Cms.Lib.ViewModels
             {
                 if (item.IsExportData)
                 {
-                    item.ModuleNavs = item.GetModuleNavs(context, transaction);
-                    foreach (var nav in item.ModuleNavs)
-                    {
-                        var dupModule = Modules.FirstOrDefault(m => m.Id == nav.ModuleId && m.Specificulture == Specificulture);
-                        if (dupModule != null)
-                        {
-                            Modules.Remove(dupModule);
-                        }
-                        else
-                        {
-                            nav.Module.IsExportData = true;
-                        }
-                        ProcessModuleData(nav.Module, context, transaction);
-                    }
+                    LoadSubModules(item, context, transaction);
+                    LoadSubPosts(item, context, transaction);
                     item.UrlAliases = item.GetAliases(context, transaction);
                     GetAdditionalData(item.Id.ToString(), MixEnums.MixAttributeSetDataType.Page, context, transaction);
                     //this.ParentNavs = GetParentNavs(_context, _transaction);
@@ -187,7 +175,37 @@ namespace Mix.Cms.Lib.ViewModels
             }
         }
 
-        private void ProcessModuleData(ImportViewModel item, MixCmsContext context, IDbContextTransaction transaction)
+        private void LoadSubModules(MixPages.ImportViewModel item, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            item.ModuleNavs = item.GetModuleNavs(context, transaction);
+            foreach (var nav in item.ModuleNavs)
+            {
+                var dupModule = Modules.FirstOrDefault(m => m.Id == nav.ModuleId && m.Specificulture == Specificulture);
+                if (dupModule != null)
+                {
+                    Modules.Remove(dupModule);
+                }
+                else
+                {
+                    nav.Module.IsExportData = true;
+                }
+                ProcessModuleData(nav.Module, context, transaction);
+            }
+        }
+
+        private void LoadSubPosts(MixPages.ImportViewModel item, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            item.PostNavs = item.GetPostNavs(context, transaction);
+            var navPostIds = item.PostNavs.Select(n => n.PostId);
+            var postIds = navPostIds.Where(n => !Posts.Any(m => m.Id == n));
+            var getPosts = MixPosts.ImportViewModel.Repository.GetModelListBy(m => postIds.Contains(m.Id), context, transaction);
+            if (getPosts.IsSucceed)
+            {
+                Posts.AddRange(getPosts.Data);                
+            }            
+        }
+
+        private void ProcessModuleData(MixModules.ImportViewModel item, MixCmsContext context, IDbContextTransaction transaction)
         {
             var getDataResult = MixModuleDatas.ReadViewModel.Repository
                                .GetModelListBy(m => m.ModuleId == item.Id && m.Specificulture == item.Specificulture
@@ -236,6 +254,7 @@ namespace Mix.Cms.Lib.ViewModels
                 }
             }
             // Load Related Data
+            RelatedData.AddRange(Posts.Select(p => p.RelatedData));
             foreach (var item in RelatedData)
             {
                 if (!AttributeSetDatas.Any(m => m.Id == item.Id))
@@ -299,7 +318,7 @@ namespace Mix.Cms.Lib.ViewModels
                 //if current Context is Root
                 if (isRoot)
                 {
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
             }
             return result;
@@ -308,10 +327,10 @@ namespace Mix.Cms.Lib.ViewModels
         private async Task<RepositoryResponse<bool>> ImportModulesAsync(string destCulture, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            
+
             foreach (var module in Modules)
             {
-                
+
                 var oldId = module.Id;
                 var startId = context.MixModule.Max(m => m.Id);
                 if (result.IsSucceed)
@@ -330,7 +349,7 @@ namespace Mix.Cms.Lib.ViewModels
                         ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                     // update new id to related attribute data
-                    dicModuleIds.Add(oldId, module.Id);                    
+                    dicModuleIds.Add(oldId, module.Id);
                 }
                 else
                 {
@@ -394,7 +413,7 @@ namespace Mix.Cms.Lib.ViewModels
                 foreach (var item in Pages)
                 {
                     // TODO: Id > 7 => not system init page
-                    if (!context.MixPage.Any(p=>p.SeoName == item.SeoName))
+                    if (!context.MixPage.Any(p => p.SeoName == item.SeoName))
                     {
 
                         // store old id => update to related data if save success
@@ -460,7 +479,7 @@ namespace Mix.Cms.Lib.ViewModels
                 //if current Context is Root
                 if (isRoot)
                 {
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
             }
             return result;
@@ -478,7 +497,7 @@ namespace Mix.Cms.Lib.ViewModels
                         item.Specificulture = destCulture;
 
                         // update new Id if not system attribute
-                        if (item.AttributeSetName.IndexOf("sys_") !=0 && dicAttributeSetIds.ContainsKey(item.AttributeSetId))
+                        if (item.AttributeSetName.IndexOf("sys_") != 0 && dicAttributeSetIds.ContainsKey(item.AttributeSetId))
                         {
                             item.AttributeSetId = dicAttributeSetIds[item.AttributeSetId];
                         }

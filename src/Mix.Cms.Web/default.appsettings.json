@@ -26,6 +26,13 @@
         "AllowedIps": [],
         "ExceptIps": []
     },
+    "Cloudflare":{
+        "ApiToken": "",
+        "ApiKey":{
+            "GlobalKey": "",
+            "OriginKey": ""
+        }
+    },
     "Smtp": {
         "Server": "",
         "Port": 587,
