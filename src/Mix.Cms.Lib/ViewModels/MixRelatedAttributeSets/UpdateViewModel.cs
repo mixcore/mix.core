@@ -17,7 +17,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
         [JsonProperty("attributeSetId")]
-        public int SetId { get; set; }
+        public int AttributeSetId { get; set; }
         [JsonProperty("parentId")]
         public int ParentId { get; set; }
         [JsonProperty("parentType")]
@@ -71,7 +71,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getData = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(p => p.Id == SetId
+            var getData = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(p => p.Id == AttributeSetId
                 , _context: _context, _transaction: _transaction
             );
             if (getData.IsSucceed)

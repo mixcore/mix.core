@@ -64,7 +64,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             if (result.IsSucceed)
             {
                 var removeRelated = await MixRelatedAttributeSets.DeleteViewModel.Repository.RemoveListModelAsync(false,
-                    f => f.Id == Id || (f.ParentId == Id && f.ParentType == MixEnums.MixAttributeSetDataType.Service.ToString())
+                    f => f.Id == Id || (f.AttributeSetId == Id && f.ParentType == MixEnums.MixAttributeSetDataType.Service.ToString())
                     , _context, _transaction);
                 ViewModelHelper.HandleResult(removeRelated, ref result);
             }
