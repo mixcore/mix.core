@@ -30,17 +30,16 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
             string keyword = Request.Query["keyword"];
             string parentType = Request.Query["parentType"];
-            string parentId = Request.Query["parentId"];
+            bool isParentId = int.TryParse(Request.Query["parentId"], out int parentId);
             Expression<Func<MixRelatedAttributeSet, bool>> predicate = model =>
                 (!isStatus || model.Status == status.ToString())
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
-                && (string.IsNullOrEmpty(parentId)
-                 || model.ParentId.Equals(keyword)
-                 )
+                && (!isParentId || model.ParentId == parentId)
                 && (string.IsNullOrEmpty(parentType)
-                 || model.ParentId.Equals(parentType)
-                 );
+                 || model.ParentType == parentType
+                 )
+                 ;
             var getData = await base.GetListAsync(predicate);
             if (getData.IsSucceed)
             {
