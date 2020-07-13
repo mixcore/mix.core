@@ -29,7 +29,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             int.TryParse(Request.Query["attributeSetId"], out int attributeSetId);
             bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
-            Enum.TryParse(Request.Query["parentType"], out MixEnums.MixAttributeSetDataType parentType);
+            string parentType = Request.Query["parentType"];
             string parentId = Request.Query["parentId"];
             string attributeSetName = Request.Query["attributeSetName"];
             Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
