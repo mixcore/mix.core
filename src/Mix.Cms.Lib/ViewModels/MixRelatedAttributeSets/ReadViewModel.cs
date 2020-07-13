@@ -17,7 +17,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
         [JsonProperty("attributeSetId")]
-        public int SetId { get; set; }
+        public int AttributeSetId { get; set; }
         [JsonProperty("parentId")]
         public int ParentId { get; set; }
         [JsonProperty("parentType")]

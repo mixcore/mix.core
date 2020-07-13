@@ -7,8 +7,8 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public int Id { get; set; }
         public string Specificulture { get; set; }
-        public int SetId { get; set; }
-        public int ParentId { get; set; }
+        public int AttributeSetId { get; set; }
+        public string ParentId { get; set; }
         public string ParentType { get; set; }
         public string Description { get; set; }
         public string Image { get; set; }
