@@ -38,7 +38,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 && (!isToDate || model.CreatedDateTime <= toDate)
                 && (model.AttributeSetId == attributeSetId || model.AttributeSetName == attributeSetName)
                 && (string.IsNullOrEmpty(parentId)
-                 || (model.ParentId.Equals(parentId) && model.ParentType == parentType.ToString())
+                 || (model.ParentId == parentId && model.ParentType == parentType.ToString())
                  );
                 
                 
