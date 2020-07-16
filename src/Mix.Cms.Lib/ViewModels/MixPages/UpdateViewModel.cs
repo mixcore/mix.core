@@ -201,6 +201,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("attributes")]
         public MixAttributeSets.UpdateViewModel Attributes { get; set; }
+        
+        [JsonProperty("attributeSetNavs")]
+        public List<MixRelatedAttributeSets.UpdateViewModel> AttributeSetNavs { get; set; }
 
         [JsonProperty("attributeData")]
         public MixRelatedAttributeDatas.UpdateViewModel AttributeData { get; set; }
@@ -518,6 +521,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     SysTags = getTags.Data;
                 }
             }
+
+            AttributeSetNavs = MixRelatedAttributeSets.UpdateViewModel.Repository.GetModelListBy(
+                m => m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Page.ToString() && m.Specificulture == Specificulture
+                , _context, _transaction).Data;
         }
 
         private void GenerateSEO()
