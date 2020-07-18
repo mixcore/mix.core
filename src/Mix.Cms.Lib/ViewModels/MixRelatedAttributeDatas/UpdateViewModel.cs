@@ -73,7 +73,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         [JsonProperty("parentName")]
         public string ParentName { get; set; }
         [JsonProperty("data")]
-        public MixAttributeSetDatas.FormViewModel Data { get; set; }
+        public MixAttributeSetDatas.UpdateViewModel Data { get; set; }
 
         #endregion Views
 
@@ -92,7 +92,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getData = MixAttributeSetDatas.FormViewModel.Repository.GetSingleModel(p => p.Id == DataId && p.Specificulture == Specificulture
+            var getData = MixAttributeSetDatas.UpdateViewModel.Repository.GetSingleModel(p => p.Id == DataId && p.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction
             );
             if (getData.IsSucceed)
