@@ -263,3 +263,4 @@ src/Mix.Cms.Web/wwwroot/edms/
 src/portal-app/
 src/Mix.Cms.Webbk
 src/ref
+src/Mix.Cms.Web/wwwroot/css/app-vendor-scss.min.css
