@@ -472,5 +472,26 @@ namespace Mix.Cms.Lib
             }
             return Expression.Lambda<Func<TModel, bool>>(eq, par);
         }
+
+        public async static Task<RepositoryResponse<PaginationModel<TView>>> GetPostlistByMeta<TView>(
+
+            HttpContext context
+            , string culture, string type = MixConstants.AttributeSetName.SYSTEM_TAG
+            , string orderByPropertyName = "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Desc
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            where TView : ViewModelBase<MixCmsContext, MixPost, TView>
+        {
+            int maxPageSize = MixService.GetConfig<int>("MaxPageSize");
+            string orderBy = MixService.GetConfig<string>("OrderBy");
+            int orderDirection = MixService.GetConfig<int>("OrderDirection");
+            int.TryParse(context.Request.Query["page"], out int page);
+            int.TryParse(context.Request.Query["pageSize"], out int pageSize);
+            pageSize = (pageSize > 0 && pageSize < maxPageSize) ? pageSize : maxPageSize;
+            page = (page > 0) ? page : 1;
+            
+            return await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetModelistByMeta<TView>(
+                type, context.Request.Query["keyword"],
+                culture, orderByPropertyName, direction, pageSize, page - 1, _context, _transaction);
+        }
     }
 }
