@@ -493,5 +493,18 @@ namespace Mix.Cms.Lib
                 type, context.Request.Query["keyword"],
                 culture, orderByPropertyName, direction, pageSize, page - 1, _context, _transaction);
         }
-    }
+
+        public static async Task<RepositoryResponse<PaginationModel<TView>>> GetAttributeDataByParent<TView>(
+            string culture, string attributeSetName,
+            string parentId, MixEnums.MixAttributeSetDataType parentType,
+            string orderBy = "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Desc,
+            int? pageSize = null, int? pageIndex = 0,
+            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            where TView : ViewModelBase<MixCmsContext, MixAttributeSetData, TView>
+        {
+            return await ViewModels.MixAttributeSetDatas.Helper.GetAttributeDataByParent<TView>(
+                culture, attributeSetName,
+                parentId, parentType, orderBy, direction, pageSize, pageIndex, _context, _transaction);
+        }
+        }
 }

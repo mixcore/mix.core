@@ -200,7 +200,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
 
         [JsonProperty("attributeSets")]
-        public MixAttributeSets.UpdateViewModel AttributeSets { get; set; }
+        public MixAttributeSets.UpdateViewModel AttributeSet { get; set; }
         
         [JsonProperty("attributeSetNavs")]
         public List<MixRelatedAttributeSets.UpdateViewModel> AttributeSetNavs { get; set; }
@@ -460,9 +460,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 , _context, _transaction);
             if (getAttrs.IsSucceed)
             {
-                AttributeSets = getAttrs.Data;
+                AttributeSet = getAttrs.Data;
                 AttributeData = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetFirstModel(
-                    a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId == AttributeSets.Id
+                    a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId == AttributeSet.Id
                         , _context, _transaction).Data;
                 if (AttributeData == null)
                 {
@@ -472,8 +472,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                             Specificulture = Specificulture,
                             ParentType = MixEnums.MixAttributeSetDataType.Page.ToString(),
                             ParentId = Id.ToString(),
-                            AttributeSetId = AttributeSets.Id,
-                            AttributeSetName = AttributeSets.Name
+                            AttributeSetId = AttributeSet.Id,
+                            AttributeSetName = AttributeSet.Name
                         }
                         )
                     {
@@ -481,13 +481,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     new MixAttributeSetData()
                     {
                         Specificulture = Specificulture,
-                        AttributeSetId = AttributeSets.Id,
-                        AttributeSetName = AttributeSets.Name
+                        AttributeSetId = AttributeSet.Id,
+                        AttributeSetName = AttributeSet.Name
                     }
                     )
                     };
                 }
-                foreach (var field in AttributeSets.Fields.OrderBy(f => f.Priority))
+                foreach (var field in AttributeSet.Fields.OrderBy(f => f.Priority))
                 {
                     var val = AttributeData.Data.Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
                     if (val == null)

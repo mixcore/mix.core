@@ -119,181 +119,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
         }
 
-        public static Task<RepositoryResponse<List<TView>>> FilterByValueAsync<TView>(string culture, string attributeSetName
-            , Dictionary<string, Microsoft.Extensions.Primitives.StringValues> queryDictionary
-            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-            where TView : ODataViewModelBase<MixCmsContext, MixAttributeSetData, TView>
-        {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            try
-            {
-                Expression<Func<MixAttributeSetValue, bool>> valPredicate = m => m.Specificulture == culture && m.AttributeSetName == attributeSetName;
-                RepositoryResponse<List<TView>> result = new RepositoryResponse<List<TView>>()
-                {
-                    IsSucceed = true,
-                    Data = new List<TView>()
-                };
-                var tasks = new List<Task<RepositoryResponse<TView>>>();
-
-                // Loop queries string => predicate
-                foreach (var q in queryDictionary)
-                {
-                    if (!string.IsNullOrEmpty(q.Key) && !string.IsNullOrEmpty(q.Value))
-                    {
-                        Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeFieldName == q.Key && m.StringValue.Contains(q.Value);
-                        valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
-                    }
-                }
-                var query = context.MixAttributeSetValue.Where(valPredicate).Select(m => m.DataId).Distinct().ToList();
-                if (query != null)
-                {
-                    foreach (var item in query)
-                    {
-                        tasks.Add(Task.Run(async () =>
-                        {
-                            var resp = await ODataDefaultRepository<MixCmsContext, MixAttributeSetData, TView>.Instance.GetSingleModelAsync(
-                                m => m.Id == item && m.Specificulture == culture);
-                            return resp;
-                        }));
-                    }
-                    var continuation = Task.WhenAll(tasks);
-                    continuation.Wait();
-                    if (continuation.Status == TaskStatus.RanToCompletion)
-                    {
-                        foreach (var data in continuation.Result)
-                        {
-                            if (data.IsSucceed)
-                            {
-                                result.Data.Add(data.Data);
-                            }
-                            else
-                            {
-                                result.Errors.AddRange(data.Errors);
-                            }
-                        }
-                    }
-                    // Display information on faulted tasks.
-                    else
-                    {
-                        foreach (var t in tasks)
-                        {
-                            result.Errors.Add($"Task {t.Id}: {t.Status}");
-                        }
-                    }
-                }
-                return Task.FromResult(result);
-            }
-            catch (Exception ex)
-            {
-                return Task.FromResult(UnitOfWorkHelper<MixCmsContext>.HandleException<List<TView>>(ex, isRoot, transaction));
-            }
-            finally
-            {
-                if (isRoot)
-                {
-                    //if current Context is Root
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
-                }
-            }
-        }
-
-        public static async Task<RepositoryResponse<PaginationModel<TView>>> FilterByKeywordAsync<TView>(string culture, string attributeSetName
-            , RequestPaging request, string keyword
-            , Dictionary<string, Microsoft.Extensions.Primitives.StringValues> queryDictionary = null
-            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-            where TView : ViewModelBase<MixCmsContext, MixAttributeSetData, TView>
-        {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            try
-            {
-                Expression<Func<MixAttributeSetValue, bool>> attrPredicate = 
-                    m => m.Specificulture == culture && m.AttributeSetName == attributeSetName
-                     && (!request.FromDate.HasValue
-                                        || (m.CreatedDateTime >= request.FromDate.Value)
-                                    )
-                                    && (!request.ToDate.HasValue
-                                        || (m.CreatedDateTime <= request.ToDate.Value)
-                                        )
-                    ;
-                Expression<Func<MixAttributeSetValue, bool>> valPredicate = null;
-                RepositoryResponse<PaginationModel<TView>> result = new RepositoryResponse<PaginationModel<TView>>()
-                {
-                    IsSucceed = true,
-                    Data = new PaginationModel<TView>()
-                };
-                var filterType = queryDictionary.FirstOrDefault(q => q.Key == "filterType");
-                var tasks = new List<Task<RepositoryResponse<TView>>>();
-                if (queryDictionary != null)
-                {
-                    foreach (var q in queryDictionary)
-                    {
-                        if (!string.IsNullOrEmpty(q.Key) && q.Key != "attributeSetId" && q.Key != "attributeSetName" && q.Key != "filterType" && !string.IsNullOrEmpty(q.Value))
-                        {
-                            if (!string.IsNullOrEmpty(filterType.Value) && filterType.Value == "equal")
-                            {
-                                Expression<Func<MixAttributeSetValue, bool>> pre = m => 
-                                    m.AttributeFieldName == q.Key && m.StringValue == (q.Value.ToString());
-                                if (valPredicate != null)
-                                {
-                                    valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
-                                }
-                                else
-                                {
-                                    valPredicate = pre;
-                                }
-                            }
-                            else
-                            {
-                                Expression<Func<MixAttributeSetValue, bool>> pre = 
-                                    m => m.AttributeFieldName == q.Key &&
-                                    (EF.Functions.Like(m.StringValue, $"%{q.Value.ToString()}%"));
-                                if (valPredicate != null)
-                                {
-                                    valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
-                                }
-                                else
-                                {
-                                    valPredicate = pre;
-                                }
-                            }
-                        }
-                    }
-                    if (valPredicate != null)
-                    {
-                        attrPredicate = ReflectionHelper.CombineExpression(valPredicate, attrPredicate, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
-                    }
-                }
-                // Loop queries string => predicate
-                if (!string.IsNullOrEmpty(keyword))
-                {
-                    Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeSetName == attributeSetName && m.Specificulture == culture && m.StringValue.Contains(keyword);
-                    attrPredicate = ReflectionHelper.CombineExpression(attrPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
-                }
-
-                var query = context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
-                var dataIds = query.ToList();
-                if (query != null)
-                {
-                    Expression<Func<MixAttributeSetData, bool>> predicate = m => dataIds.Any(id => m.Id == id);
-                    result = await DefaultRepository<MixCmsContext, MixAttributeSetData, TView>.Instance.GetModelListByAsync(
-                        predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null, context, transaction);
-                }
-                return result;
-            }
-            catch (Exception ex)
-            {
-                return UnitOfWorkHelper<MixCmsContext>.HandleException<PaginationModel<TView>>(ex, isRoot, transaction);
-            }
-            finally
-            {
-                if (isRoot)
-                {
-                    //if current Context is Root
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
-                }
-            }
-        }
-        
         public static async Task<RepositoryResponse<PaginationModel<TView>>> FilterByKeywordAsync<TView>(string culture, HttpRequest request, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixAttributeSetData, TView>
         {
@@ -418,7 +243,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
         }
 
-        public static async Task<RepositoryResponse<List<TView>>> FilterByKeywordAsync<TView>(string culture, string attributeSetName
+        public static async Task<RepositoryResponse<List<TView>>> FilterByKeywordAsync<TView>(
+            string culture, string attributeSetName
             , string filterType, string fieldName, string keyword
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixAttributeSetData, TView>
@@ -485,7 +311,46 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
             }
         }
+        
+        public static async Task<RepositoryResponse<PaginationModel<TView>>> GetAttributeDataByParent<TView>(
+            string culture, string attributeSetName,
+            string parentId, MixEnums.MixAttributeSetDataType parentType,
+            string orderBy, Heart.Enums.MixHeartEnums.DisplayDirection direction, 
+            int? pageSize, int? pageIndex,
+            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            where TView : ViewModelBase<MixCmsContext, MixAttributeSetData, TView>
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                var tasks = new List<Task<RepositoryResponse<TView>>>();
 
+                Expression<Func<MixRelatedAttributeData, bool>> predicate = m => m.Specificulture == culture
+                    && (m.AttributeSetName == attributeSetName)
+                    && (m.Status == MixEnums.MixContentStatus.Published.ToString())
+                    && (string.IsNullOrEmpty(parentId)
+                         || (m.ParentId == parentId && m.ParentType == parentType.ToString())
+                         );
+                ;
+                var query = context.MixRelatedAttributeData.Where(predicate).Select(m => m.DataId).Distinct();
+                var dataIds = query.ToList();
+                Expression<Func<MixAttributeSetData, bool>> pre = m => dataIds.Any(id => m.Id == id);
+                return await DefaultRepository<MixCmsContext, MixAttributeSetData, TView>.Instance.GetModelListByAsync(
+                            pre, orderBy, direction, pageSize, pageIndex, null, null, context, transaction);
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<PaginationModel<TView>>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                }
+            }
+        }
         public static RepositoryResponse<string> ExportAttributeToExcel(List<JObject> lstData, string sheetName
           , string folderPath, string fileName
           , List<string> headers = null)
