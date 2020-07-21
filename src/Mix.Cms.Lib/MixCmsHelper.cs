@@ -298,7 +298,7 @@ namespace Mix.Cms.Lib
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetListPostByAddictionalField<TView>(
             string fieldName, object fieldValue, string culture, MixEnums.MixDataType dataType
             , MixEnums.CompareType filterType = MixEnums.CompareType.Eq
-            , string orderByPropertyName = null, Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Asc , int? pageSize = null, int? pageIndex = null
+            , string orderByPropertyName = null, Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Asc, int? pageSize = null, int? pageIndex = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
         {
@@ -488,7 +488,7 @@ namespace Mix.Cms.Lib
             int.TryParse(context.Request.Query["pageSize"], out int pageSize);
             pageSize = (pageSize > 0 && pageSize < maxPageSize) ? pageSize : maxPageSize;
             page = (page > 0) ? page : 1;
-            
+
             return await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetModelistByMeta<TView>(
                 type, context.Request.Query["keyword"],
                 culture, orderByPropertyName, direction, pageSize, page - 1, _context, _transaction);
@@ -506,5 +506,5 @@ namespace Mix.Cms.Lib
                 culture, attributeSetName,
                 parentId, parentType, orderBy, direction, pageSize, pageIndex, _context, _transaction);
         }
-        }
+    }
 }
