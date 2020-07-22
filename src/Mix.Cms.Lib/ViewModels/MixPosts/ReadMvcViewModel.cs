@@ -167,14 +167,20 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("attributeSets")]
         public List<MixAttributeSets.ReadViewModel> AttributeSets { get; set; } = new List<MixAttributeSets.ReadViewModel>();
 
-        [JsonProperty("listTag")]
-        public JArray ListTag { get => JArray.Parse(Tags ?? "[]"); }
-
         [JsonProperty("attributeData")]
         public MixRelatedAttributeDatas.ReadMvcViewModel AttributeData { get; set; }
-        
+
         [JsonProperty("sysTags")]
-        public List<MixRelatedAttributeDatas.FormViewModel> SysTags { get; set; }
+        public List<MixRelatedAttributeDatas.FormViewModel> SysTags { get; set; } = new List<MixRelatedAttributeDatas.FormViewModel>();
+        
+        [JsonProperty("sysCategories")]
+        public List<MixRelatedAttributeDatas.FormViewModel> SysCategories { get; set; } = new List<MixRelatedAttributeDatas.FormViewModel>();
+
+        [JsonProperty("listTag")]
+        public List<string> ListTag { get => SysTags.Select(t=>t.AttributeData.Property<string>("title")).Distinct().ToList(); }
+
+        [JsonProperty("listCategory")]
+        public List<string> ListCategory { get => SysCategories.Select(t=>t.AttributeData.Property<string>("title")).Distinct().ToList(); }
         #endregion Views
 
         #endregion Properties
@@ -200,6 +206,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
             LoadAttributes(_context, _transaction);
             LoadTags(_context, _transaction);
+            LoadCategories(_context, _transaction);
             var getPostMedia = MixPostMedias.ReadViewModel.Repository.GetModelListBy(n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction);
             if (getPostMedia.IsSucceed)
             {
@@ -227,12 +234,24 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         private void LoadTags(MixCmsContext context, IDbContextTransaction transaction)
         {
-            var getTags = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
+            var getTags = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(
+                    m => m.Specificulture == Specificulture && m.Status == MixEnums.MixContentStatus.Published.ToString()
                    && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
                    && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_TAG, context, transaction);
             if (getTags.IsSucceed)
             {
                 SysTags = getTags.Data;
+            }
+        }
+        
+        private void LoadCategories(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var getData = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
+                   && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
+                   && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_CATEGORY, context, transaction);
+            if (getData.IsSucceed)
+            {
+                SysCategories= getData.Data;
             }
         }
 
