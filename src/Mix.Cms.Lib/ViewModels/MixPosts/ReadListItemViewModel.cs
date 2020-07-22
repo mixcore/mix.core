@@ -96,6 +96,20 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #endregion Models
 
         #region Views
+        [JsonProperty("attributeData")]
+        public MixRelatedAttributeDatas.ReadMvcViewModel AttributeData { get; set; }
+
+        [JsonProperty("sysTags")]
+        public List<MixRelatedAttributeDatas.FormViewModel> SysTags { get; set; } = new List<MixRelatedAttributeDatas.FormViewModel>();
+
+        [JsonProperty("sysCategories")]
+        public List<MixRelatedAttributeDatas.FormViewModel> SysCategories { get; set; } = new List<MixRelatedAttributeDatas.FormViewModel>();
+
+        [JsonProperty("listTag")]
+        public List<string> ListTag { get => SysTags.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
+
+        [JsonProperty("listCategory")]
+        public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
 
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }
@@ -152,9 +166,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public List<ExtraProperty> Properties { get; set; }
 
-        [JsonProperty("listTag")]
-        public JArray ListTag { get => JArray.Parse(Tags ?? "[]"); }
-
         #endregion Views
 
         #endregion Properties
@@ -175,21 +186,45 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Properties = new List<ExtraProperty>();
-
-            if (!string.IsNullOrEmpty(ExtraProperties))
-            {
-                JArray arr = JArray.Parse(ExtraProperties);
-                foreach (JToken item in arr)
-                {
-                    Properties.Add(item.ToObject<ExtraProperty>());
-                }
-            }
+            LoadAttributes(_context, _transaction);
+            LoadTags(_context, _transaction);
+            LoadCategories(_context, _transaction);
         }
 
         #endregion Overrides
 
         #region Expands
+        private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST, _context, _transaction);
+            if (getAttrs.IsSucceed)
+            {
+                AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
+                a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId == getAttrs.Data.Id
+                    , _context, _transaction).Data;
+            }
+        }
+        private void LoadTags(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var getTags = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
+                   && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
+                   && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_TAG, context, transaction);
+            if (getTags.IsSucceed)
+            {
+                SysTags = getTags.Data;
+            }
+        }
+
+        private void LoadCategories(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var getData = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
+                   && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
+                   && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_CATEGORY, context, transaction);
+            if (getData.IsSucceed)
+            {
+                SysCategories = getData.Data;
+            }
+        }
 
         //Get Property by name
         public string Property(string name)

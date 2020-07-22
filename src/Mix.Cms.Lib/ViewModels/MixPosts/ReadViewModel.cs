@@ -143,6 +143,20 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("properties")]
         public List<ExtraProperty> Properties { get; set; }
 
+        [JsonProperty("attributeData")]
+        public MixRelatedAttributeDatas.ReadMvcViewModel AttributeData { get; set; }
+
+        [JsonProperty("sysTags")]
+        public List<MixRelatedAttributeDatas.FormViewModel> SysTags { get; set; } = new List<MixRelatedAttributeDatas.FormViewModel>();
+
+        [JsonProperty("sysCategories")]
+        public List<MixRelatedAttributeDatas.FormViewModel> SysCategories { get; set; } = new List<MixRelatedAttributeDatas.FormViewModel>();
+
+        [JsonProperty("listTag")]
+        public List<string> ListTag { get => SysTags.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
+
+        [JsonProperty("listCategory")]
+        public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
         #endregion Views
 
         #endregion Properties
@@ -332,18 +346,75 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Properties = new List<ExtraProperty>();
+            LoadAttributes(_context, _transaction);
+            LoadTags(_context, _transaction);
+            LoadCategories(_context, _transaction);
+        }
 
-            if (!string.IsNullOrEmpty(ExtraProperties))
+        private void LoadTags(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var getTags = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(
+                    m => m.Specificulture == Specificulture && m.Status == MixEnums.MixContentStatus.Published.ToString()
+                   && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
+                   && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_TAG, context, transaction);
+            if (getTags.IsSucceed)
             {
-                JArray arr = JArray.Parse(ExtraProperties);
-                foreach (JToken item in arr)
-                {
-                    Properties.Add(item.ToObject<ExtraProperty>());
-                }
+                SysTags = getTags.Data;
             }
         }
 
+        private void LoadCategories(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var getData = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
+                   && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
+                   && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_CATEGORY, context, transaction);
+            if (getData.IsSucceed)
+            {
+                SysCategories = getData.Data;
+            }
+        }
+
+        #endregion Overrides
+
+        #region Expands
+
+        /// <summary>Loads the attributes.</summary>
+        /// <param name="_context">The context.</param>
+        /// <param name="_transaction">The transaction.</param>
+        private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST, _context, _transaction);
+            if (getAttrs.IsSucceed)
+            {
+                AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
+                a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId == getAttrs.Data.Id
+                    , _context, _transaction).Data;
+            }
+        }
+
+        /// <summary>Get Post's Property by type and name</summary>
+        /// <typeparam name="T">Type of field</typeparam>
+        /// <param name="fieldName">Name of the field.</param>
+        /// <returns>T</returns>
+        public T Property<T>(string fieldName)
+        {
+            if (AttributeData != null)
+            {
+                var field = AttributeData.Data.Data.GetValue(fieldName);
+                if (field != null)
+                {
+                    return field.Value<T>();
+                }
+                else
+                {
+                    return default;
+                }
+            }
+            else
+            {
+                return default;
+            }
+        }
         #endregion Overrides
     }
 }
