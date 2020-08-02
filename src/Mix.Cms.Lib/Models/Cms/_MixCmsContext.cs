@@ -1021,7 +1021,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasOne(d => d.IdNavigation)
                     .WithOne(p => p.MixPortalPageNavigationIdNavigation)
-                    .HasForeignKey<MixPortalPageNavigation>(d => d.Id)
+                    .HasForeignKey<MixPortalPageNavigation>(d => d.PageId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_mix_portal_page_navigation_mix_portal_page");
 

@@ -160,7 +160,7 @@ namespace Mix.Cms.Web.Controllers
             int orderDirection = MixService.GetConfig<int>("OrderDirection");
             int.TryParse(Request.Query["page"], out int page);
             int.TryParse(Request.Query["pageSize"], out int pageSize);
-            pageSize = (pageSize < maxPageSize) ? pageSize : maxPageSize;
+            pageSize = (pageSize > 0 && pageSize < maxPageSize) ? pageSize : maxPageSize;
 
             RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
             Expression<Func<MixPage, bool>> predicate;

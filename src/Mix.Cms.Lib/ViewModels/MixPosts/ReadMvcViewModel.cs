@@ -109,8 +109,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl {
-            get {
+        public string ImageUrl
+        {
+            get
+            {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -125,13 +127,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl {
-            get {
+        public string ThumbnailUrl
+        {
+            get
+            {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
-                    return CommonHelper.GetFullPath(new string[] {
-                    Domain,  Thumbnail
-                });
+                    return $"{Domain}/{Thumbnail}";
                 }
                 else
                 {
@@ -140,15 +142,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
         }
 
-        public string TemplatePath {
-            get {
-                return CommonHelper.GetFullPath(new string[]
-                {
-                    ""
-                    , MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture) ?? "Default"
-                    , Template
-                });
+        public string TemplatePath
+        {
+            get
+            {
+                return $"/{ MixConstants.Folder.TemplatesFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture) ?? "Default"}/{Template}";
             }
         }
 
@@ -172,15 +170,15 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         [JsonProperty("sysTags")]
         public List<MixRelatedAttributeDatas.FormViewModel> SysTags { get; set; } = new List<MixRelatedAttributeDatas.FormViewModel>();
-        
+
         [JsonProperty("sysCategories")]
         public List<MixRelatedAttributeDatas.FormViewModel> SysCategories { get; set; } = new List<MixRelatedAttributeDatas.FormViewModel>();
 
         [JsonProperty("listTag")]
-        public List<string> ListTag { get => SysTags.Select(t=>t.AttributeData.Property<string>("title")).Distinct().ToList(); }
+        public List<string> ListTag { get => SysTags.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
 
         [JsonProperty("listCategory")]
-        public List<string> ListCategory { get => SysCategories.Select(t=>t.AttributeData.Property<string>("title")).Distinct().ToList(); }
+        public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
         #endregion Views
 
         #endregion Properties
@@ -243,7 +241,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 SysTags = getTags.Data;
             }
         }
-        
+
         private void LoadCategories(MixCmsContext context, IDbContextTransaction transaction)
         {
             var getData = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
@@ -251,7 +249,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                    && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_CATEGORY, context, transaction);
             if (getData.IsSucceed)
             {
-                SysCategories= getData.Data;
+                SysCategories = getData.Data;
             }
         }
 
