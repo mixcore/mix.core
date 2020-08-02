@@ -25,6 +25,10 @@ namespace Mix.Cms.Lib
 {
     public class MixCmsHelper
     {
+        public static string GetSEOString(string input)
+        {
+            return SeoHelper.GetSEOString(input);
+        }
         public static FileViewModel LoadDataFile(string folder, string name)
         {
             return FileRepository.Instance.GetFile(name, folder, true, "[]");
@@ -492,6 +496,24 @@ namespace Mix.Cms.Lib
             return await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetModelistByMeta<TView>(
                 type, context.Request.Query["keyword"],
                 culture, orderByPropertyName, direction, pageSize, page - 1, _context, _transaction);
+        }
+        
+        public async static Task<RepositoryResponse<PaginationModel<TView>>> GetPostlistByAddictionalField<TView>(
+
+            string fieldName, string value, string culture
+            , string orderByPropertyName = null, Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Asc
+            , int? pageSize = null, int? pageIndex = 0
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            where TView : ViewModelBase<MixCmsContext, MixPost, TView>
+        {
+            int maxPageSize = MixService.GetConfig<int>("MaxPageSize");
+            string orderBy = MixService.GetConfig<string>("OrderBy");
+            pageSize = (pageSize > 0 && pageSize < maxPageSize) ? pageSize : maxPageSize;
+            pageIndex = (pageIndex >= 0) ? pageIndex : 0;
+
+            return await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetModelistByAddictionalField<TView>(
+                fieldName, value,
+                culture, orderByPropertyName ?? orderBy, direction, pageSize, pageIndex - 1, _context, _transaction);
         }
 
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetAttributeDataByParent<TView>(

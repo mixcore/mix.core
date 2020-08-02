@@ -60,7 +60,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme
             , Roles = "SuperAdmin")]
-        [HttpGet, HttpPost, HttpOptions]
+        [HttpGet, HttpOptions]
         [Route("details/{id}/{viewType}")]
         [Route("details/{viewType}")]
         public async Task<JObject> GetDetails(string id, string viewType)
@@ -77,8 +77,9 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
+        [Authorize]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpGet, HttpPost, HttpOptions]
+        [HttpGet, HttpOptions]
         [Route("permissions")]
         public async Task<JObject> GetPermissions()
         {
