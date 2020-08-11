@@ -62,7 +62,7 @@ namespace Mix.Cms.Web
             /* End Addictional Config for Mixcore Cms  */
 
             #endregion Addictionals Config for Mixcore Cms
-
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

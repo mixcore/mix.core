@@ -45,19 +45,19 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("DefaultValue")
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsEncrypt")
+                    b.Property<ulong>("IsEncrypt")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsMultiple")
+                    b.Property<ulong>("IsMultiple")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsRequire")
+                    b.Property<ulong>("IsRequire")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsSelect")
+                    b.Property<ulong>("IsSelect")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsUnique")
+                    b.Property<ulong>("IsUnique")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModified")
@@ -122,7 +122,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<bool?>("EdmAutoSend")
+                    b.Property<ulong?>("EdmAutoSend")
                         .HasColumnType("bit");
 
                     b.Property<string>("EdmFrom")
@@ -297,7 +297,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<bool?>("BooleanValue")
+                    b.Property<ulong?>("BooleanValue")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
@@ -319,7 +319,7 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<DateTime?>("DateTimeValue")
                         .HasColumnType("datetime");
 
-                    b.Property<double?>("DoubleValue")
+                    b.Property<float?>("DoubleValue")
                         .HasColumnType("float");
 
                     b.Property<string>("EncryptKey")
@@ -2246,7 +2246,7 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPortalPage", "IdNavigation")
                         .WithOne("MixPortalPageNavigationIdNavigation")
-                        .HasForeignKey("Mix.Cms.Lib.Models.Cms.MixPortalPageNavigation", "Id")
+                        .HasForeignKey("PageId")
                         .HasConstraintName("FK_mix_portal_page_navigation_mix_portal_page")
                         .IsRequired();
 

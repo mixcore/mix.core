@@ -36,10 +36,10 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
                 && (string.IsNullOrEmpty(parentId)
-                 || model.ParentId.Equals(keyword)
+                 || model.ParentId.Equals(parentId)
                  )
                 && (string.IsNullOrEmpty(parentType)
-                 || model.ParentId.Equals(parentType)
+                 || model.ParentType.Equals(parentType)
                  );
             var getData = await base.GetListAsync(predicate);
             if (getData.IsSucceed)

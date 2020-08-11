@@ -2248,7 +2248,7 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPortalPage", "IdNavigation")
                         .WithOne("MixPortalPageNavigationIdNavigation")
-                        .HasForeignKey("Mix.Cms.Lib.Models.Cms.MixPortalPageNavigation", "Id")
+                        .HasForeignKey("Mix.Cms.Lib.Models.Cms.MixPortalPageNavigation", "PageId")
                         .HasConstraintName("FK_mix_portal_page_navigation_mix_portal_page")
                         .IsRequired();
 

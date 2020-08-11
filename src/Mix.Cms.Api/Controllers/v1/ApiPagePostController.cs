@@ -34,11 +34,11 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // GET api/page/id
         [HttpGet, HttpOptions]
-        [Route("delete/{pageId}/{postId}")]
-        public async Task<RepositoryResponse<MixPagePost>> DeleteAsync(int pageId, int postId)
+        [Route("delete/{id}")]
+        public async Task<RepositoryResponse<MixPagePost>> DeleteAsync(int id)
         {
             return await base.DeleteAsync<ReadViewModel>(
-                model => model.PostId == postId && model.PageId == pageId && model.Specificulture == _lang, true);
+                model => model.Id == id && model.Specificulture == _lang, true);
         }
 
         // GET api/pages/id

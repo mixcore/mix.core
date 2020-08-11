@@ -101,7 +101,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
                 if (AttributeSetName != "sys_additional_field")
                 {
                     // Check if there is field name in the same attribute set
-                    IsValid = !Repository.CheckIsExists(f => f.Id != Id && f.Name == Name && f.AttributeSetId == AttributeSetId);
+                    IsValid = !Repository.CheckIsExists(
+                        f => f.Id != Id && f.Name == Name && f.AttributeSetId == AttributeSetId);
                     if (!IsValid)
                     {
                         Errors.Add($"Field {Name} Existed");

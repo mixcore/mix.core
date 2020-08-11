@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Mix.Cms.Api.RestFul.Controllers.v1;
-using Mix.Heart.NetCore;
-using System.Reflection;
 
 namespace Mix.Cms.Api.RestFul
 {

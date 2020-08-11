@@ -1,9 +1,11 @@
-﻿@{
+﻿@model Mix.Cms.Lib.ViewModels.MixPages.ReadMvcViewModel
+@{
     string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, ViewBag.culture);
     string templateFolder = MixCmsHelper.GetTemplateFolder(ViewBag.culture);
     string layout = Model.Layout ?? "Masters/_Layout.cshtml";
     var masterTemplate = await MixCmsHelper.GetTemplateByPath(master, layout);
     Layout = $"{templateFolder}/{layout}";
+    
 }
 @* <mix-loader ng-show="isBusy"></mix-loader>
     <confirm ng-if="isInit" message="confirmMessage"></confirm>

@@ -124,10 +124,16 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
             {
                 foreach (var item in ParentNavs)
                 {
-                    item.Id = parent.Id;
+                    item.PageId = parent.Id;
+                    var startId = Lib.ViewModels.MixPortalPagePortalPages.UpdateViewModel.Repository.Max(m => m.Id, _context, _transaction).Data + 1;
                     if (item.IsActived)
                     {
-                        var saveResult = await item.SaveModelAsync(true, _context, _transaction);
+                        if (item.Id == 0)
+                        {
+                            item.Id = startId;
+                            startId += 1;
+                        }
+                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
                         result.IsSucceed = saveResult.IsSucceed;
                         if (!result.IsSucceed)
                         {
@@ -153,9 +159,16 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
                 foreach (var item in ChildNavs)
                 {
                     item.ParentId = parent.Id;
+                    var startId = Lib.ViewModels.MixPortalPagePortalPages.UpdateViewModel.Repository.Max(m => m.Id, _context, _transaction).Data + 1;
                     if (item.IsActived)
                     {
-                        var saveResult = await item.SaveModelAsync(true, _context, _transaction);
+                        if (item.Id == 0)
+                        {
+                            item.Id = startId;
+                            startId += 1;
+                        }
+
+                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
                         result.IsSucceed = saveResult.IsSucceed;
                         if (!result.IsSucceed)
                         {
@@ -201,52 +214,65 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
 
         public List<MixPortalPagePortalPages.UpdateViewModel> GetParentNavs(MixCmsContext context, IDbContextTransaction transaction)
         {
+            var result = MixPortalPagePortalPages.UpdateViewModel.Repository.GetModelListBy(
+                m => m.PageId == Id).Data;
+            result.ForEach(nav =>
+            {
+                nav.IsActived = true;
+            });
+            var activeIds = result.Select(m => m.PageId).ToList();
+
             var query = context.MixPortalPage
                 .Include(cp => cp.MixPortalPageNavigationParent)
-                .Where(PortalPage => PortalPage.Id != Id && PortalPage.Level == 0)
+                .Where(PortalPage =>
+                    // not load current active parent
+                    !activeIds.Any(p => p == PortalPage.Id) &&
+                    // not load current page or page already have another parent
+                    PortalPage.Id != Id && PortalPage.Level == 0
+                )
                 .AsEnumerable()
                 .Select(PortalPage =>
                     new MixPortalPagePortalPages.UpdateViewModel()
                     {
-                        Id = Id,
+                        PageId = Id,
                         ParentId = PortalPage.Id,
                         Description = PortalPage.TextDefault,
                         Level = PortalPage.Level
                     }
                 );
-
-            var result = query.ToList();
-            result.ForEach(nav =>
-            {
-                nav.IsActived = context.MixPortalPageNavigation.Any(
-                        m => m.ParentId == nav.ParentId && m.Id == Id);
-            });
+            result.AddRange(query.ToList());
             return result.OrderBy(m => m.Priority).ToList();
         }
 
         public List<MixPortalPagePortalPages.UpdateViewModel> GetChildNavs(MixCmsContext context, IDbContextTransaction transaction)
         {
+            var result = MixPortalPagePortalPages.UpdateViewModel.Repository.GetModelListBy(
+               m => m.ParentId == Id).Data;
+            result.ForEach(nav =>
+            {
+                nav.IsActived = true;
+            });
+            var activeIds = result.Select(m => m.PageId).ToList();
+
             var query = context.MixPortalPage
                 .Include(cp => cp.MixPortalPageNavigationParent)
-                .Where(PortalPage => PortalPage.Id != Id)
+                .Where(PortalPage =>
+                        // not load current active parent
+                        !activeIds.Any(p => p == PortalPage.Id) &&
+                        // not load current page or page already have another parent
+                        PortalPage.Id != Id
+                    )
                 .AsEnumerable()
                 .Select(PortalPage =>
                 new MixPortalPagePortalPages.UpdateViewModel(
                       new MixPortalPageNavigation()
                       {
-                          Id = PortalPage.Id,
+                          PageId = PortalPage.Id,
                           ParentId = Id,
                           Description = PortalPage.TextDefault,
                       }, context, transaction));
 
-            var result = query.ToList();
-            result.ForEach(nav =>
-            {
-                var currentNav = context.MixPortalPageNavigation.FirstOrDefault(
-                        m => m.ParentId == Id && m.Id == nav.Id);
-                nav.Priority = currentNav?.Priority ?? 0;
-                nav.IsActived = currentNav != null;
-            });
+            result.AddRange(query.ToList());
             return result.OrderBy(m => m.Priority).ToList();
         }
 

@@ -129,7 +129,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
 
         #endregion Views
-
+        [JsonProperty("relatedData")]
+        public MixRelatedAttributeDatas.ImportViewModel RelatedData { get; set; }
         #endregion Properties
 
         #region Contructors
@@ -145,259 +146,25 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #endregion Contructors
 
         #region Overrides
-
+        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            GetAdditionalData(Id.ToString(), MixEnums.MixAttributeSetDataType.Post, _context, _transaction);
+        }
+        private void GetAdditionalData(string id, MixEnums.MixAttributeSetDataType type, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var getRelatedData = MixRelatedAttributeDatas.ImportViewModel.Repository.GetSingleModel(
+                        m => m.Specificulture == Specificulture && m.ParentType == type.ToString()
+                            && m.ParentId == id, context, transaction);
+            if (getRelatedData.IsSucceed)
+            {
+                RelatedData = (getRelatedData.Data);
+            }
+        }
         #region Async Methods
 
-        #region Save Sub Models Async
 
-        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(
-            MixPost parent
-            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            try
-            {
-                if (result.IsSucceed)
-                {
-                    // Save Alias
-                    result = await SaveUrlAliasAsync(parent.Id, _context, _transaction);
-                }
-                
-                if (result.IsSucceed && MediaNavs != null)
-                {
-                    // Save Medias
-                    result = await SaveMediasAsync(parent.Id, _context, _transaction);
-                }
-                
-                if (result.IsSucceed)
-                {
-                    // Save Attributes
-                    result = await SaveAttributeAsync(parent.Id, _context, _transaction);
-                }
 
-                if (result.IsSucceed && PostNavs != null)
-                {
-                    // Save related posts
-                    result = await SaveRelatedPostAsync(parent.Id, _context, _transaction);
-                }
-                if (result.IsSucceed && Pages != null)
-                {
-                    // Save Parent Category
-                    result = await SaveParentPagesAsync(parent.Id, _context, _transaction);
-                }
 
-                if (result.IsSucceed && Modules != null)
-                {
-                    // Save Parent Modules
-                    result = await SaveParentModulesAsync(parent.Id, _context, _transaction);
-                }
-
-                return result;
-            }
-            catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
-            {
-                result.IsSucceed = false;
-                result.Exception = ex;
-                return result;
-            }
-        }
-
-        private async Task<RepositoryResponse<bool>> SaveAttributeAsync(int parentId, MixCmsContext context, IDbContextTransaction transaction)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            AttributeData.ParentId = parentId.ToString();
-            AttributeData.ParentType = MixEnums.MixAttributeSetDataType.Post;
-            var saveData = await AttributeData.Data.SaveModelAsync(true, context, transaction);
-            ViewModelHelper.HandleResult(saveData, ref result);
-            if (result.IsSucceed)
-            {
-                AttributeData.DataId = saveData.Data.Id;
-                var saveRelated = await AttributeData.SaveModelAsync(true, context, transaction);
-                ViewModelHelper.HandleResult(saveRelated, ref result);
-            }
-
-            foreach (var item in SysCategories)
-            {
-                if (result.IsSucceed)
-                {
-                    item.ParentId = parentId.ToString();
-                    item.ParentType = MixEnums.MixAttributeSetDataType.Post;
-                    item.Specificulture = Specificulture;
-                    var saveResult = await item.SaveModelAsync(false, context, transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-                }
-            }
-
-            foreach (var item in SysTags)
-            {
-                if (result.IsSucceed)
-                {
-                    item.ParentId = parentId.ToString();
-                    item.ParentType = MixEnums.MixAttributeSetDataType.Post;
-                    item.Specificulture = Specificulture;
-                    var saveResult = await item.SaveModelAsync(false, context, transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-                }
-            }
-            return result;
-        }
-
-        private async Task<RepositoryResponse<bool>> SaveParentModulesAsync(int id, MixCmsContext _context, IDbContextTransaction _transaction)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            foreach (var item in Modules)
-            {
-                item.Specificulture = Specificulture;
-                item.PostId = id;
-                item.Status = MixEnums.MixContentStatus.Published;
-                if (item.IsActived)
-                {
-                    var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                    result.IsSucceed = saveResult.IsSucceed;
-                    if (!result.IsSucceed)
-                    {
-                        result.Exception = saveResult.Exception;
-                        Errors.AddRange(saveResult.Errors);
-                    }
-                }
-                else
-                {
-                    var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
-                    result.IsSucceed = saveResult.IsSucceed;
-                    if (!result.IsSucceed)
-                    {
-                        result.Exception = saveResult.Exception;
-                        Errors.AddRange(saveResult.Errors);
-                    }
-                }
-            }
-            return result;
-        }
-
-        private async Task<RepositoryResponse<bool>> SaveParentPagesAsync(int id, MixCmsContext _context, IDbContextTransaction _transaction)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            foreach (var item in Pages)
-            {
-                item.Specificulture = Specificulture;
-                item.PostId = id;
-                item.Status = MixEnums.MixContentStatus.Published;
-                if (item.IsActived)
-                {
-                    var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                    result.IsSucceed = saveResult.IsSucceed;
-                    if (!result.IsSucceed)
-                    {
-                        result.Exception = saveResult.Exception;
-                        Errors.AddRange(saveResult.Errors);
-                    }
-                }
-                else
-                {
-                    var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
-                    result.IsSucceed = saveResult.IsSucceed;
-                    if (!result.IsSucceed)
-                    {
-                        result.Exception = saveResult.Exception;
-                        Errors.AddRange(saveResult.Errors);
-                    }
-                }
-            }
-            return result;
-        }
-
-        private async Task<RepositoryResponse<bool>> SaveRelatedPostAsync(int id, MixCmsContext _context, IDbContextTransaction _transaction)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            foreach (var navPost in PostNavs)
-            {
-                navPost.SourceId = id;
-                navPost.Status = MixEnums.MixContentStatus.Published;
-                navPost.Specificulture = Specificulture;
-                if (navPost.IsActived)
-                {
-                    var saveResult = await navPost.SaveModelAsync(false, _context, _transaction);
-                    result.IsSucceed = saveResult.IsSucceed;
-                    if (!result.IsSucceed)
-                    {
-                        result.Exception = saveResult.Exception;
-                        Errors.AddRange(saveResult.Errors);
-                    }
-                }
-                else
-                {
-                    var saveResult = await navPost.RemoveModelAsync(false, _context, _transaction);
-                    result.IsSucceed = saveResult.IsSucceed;
-                    if (!result.IsSucceed)
-                    {
-                        result.Exception = saveResult.Exception;
-                        Errors.AddRange(saveResult.Errors);
-                    }
-                }
-            }
-            return result;
-        }
-
-        //private async Task<RepositoryResponse<bool>> SaveSubModulesAsync(int id, MixCmsContext _context, IDbContextTransaction _transaction)
-        //{
-        //    var result = new RepositoryResponse<bool>() { IsSucceed = true };
-        //    foreach (var navModule in ModuleNavs)
-        //    {
-        //        navModule.PostId = id;
-        //        navModule.Specificulture = Specificulture;
-        //        navModule.Status = MixEnums.MixContentStatus.Published;
-        //        if (navModule.IsActived)
-        //        {
-        //            var saveResult = await navModule.SaveModelAsync(false, _context, _transaction);
-        //            ViewModelHelper.HandleResult(saveResult, ref result);
-        //        }
-        //        else
-        //        {
-        //            var saveResult = await navModule.RemoveModelAsync(false, _context, _transaction);
-        //            ViewModelHelper.HandleResult(saveResult, ref result);
-        //        }
-        //    }
-        //    return result;
-        //}
-
-        private async Task<RepositoryResponse<bool>> SaveMediasAsync(int id, MixCmsContext _context, IDbContextTransaction _transaction)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            foreach (var navMedia in MediaNavs)
-            {
-                navMedia.PostId = id;
-                navMedia.Specificulture = Specificulture;
-
-                if (navMedia.IsActived)
-                {
-                    var saveResult = await navMedia.SaveModelAsync(false, _context, _transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-                }
-            }
-            return result;
-        }
-
-        private async Task<RepositoryResponse<bool>> SaveUrlAliasAsync(int parentId, MixCmsContext _context, IDbContextTransaction _transaction)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            foreach (var item in UrlAliases)
-            {
-                item.SourceId = parentId.ToString();
-                item.Type = MixEnums.UrlAliasType.Post;
-                item.Specificulture = Specificulture;
-                var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                ViewModelHelper.HandleResult(saveResult, ref result);
-                if (!result.IsSucceed)
-                {
-                    break;
-                }
-            }
-            return result;
-        }
-
-        #endregion Save Sub Models Async
-
-        
         #endregion Async Methods
 
         #endregion Overrides
