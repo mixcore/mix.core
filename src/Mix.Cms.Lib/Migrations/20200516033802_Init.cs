@@ -610,7 +610,7 @@ namespace Mix.Cms.Lib.Migrations
                     table.PrimaryKey("PK_mix_portal_page_navigation", x => x.Id);
                     table.ForeignKey(
                         name: "FK_mix_portal_page_navigation_mix_portal_page",
-                        column: x => x.Id,
+                        column: x => x.PageId,
                         principalTable: "mix_portal_page",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);

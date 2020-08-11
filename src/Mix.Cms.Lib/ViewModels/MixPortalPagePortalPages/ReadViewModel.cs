@@ -28,6 +28,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
         [JsonProperty("id")]
         public int Id { get; set; }
 
+        [JsonProperty("pageId")]
+        public int PageId { get; set; }
+        
         [JsonProperty("parentId")]
         public int ParentId { get; set; }
 
@@ -67,7 +70,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getCategory = MixPortalPages.ReadRolePermissionViewModel.Repository.GetSingleModel(p => p.Id == Id
+            var getCategory = MixPortalPages.ReadRolePermissionViewModel.Repository.GetSingleModel(p => p.Id == PageId
 
             );
             if (getCategory.IsSucceed)

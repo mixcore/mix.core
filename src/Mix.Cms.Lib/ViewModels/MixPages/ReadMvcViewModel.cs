@@ -408,6 +408,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             return Modules.FirstOrDefault(m => m.Module.Name == name)?.Module;
         }
+        
 
         public T Property<T>(string fieldName)
         {

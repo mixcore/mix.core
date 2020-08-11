@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Mix.Cms.Lib.ViewModels.MixCultures;
 using Mix.Common.Helper;
 using Mix.Domain.Core.Models;
@@ -459,12 +460,15 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 item.Status = MixEnums.MixContentStatus.Published;
                 if (item.IsActived)
                 {
-                    var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                    result.IsSucceed = saveResult.IsSucceed;
-                    if (!result.IsSucceed)
+                    if (!_context.MixModulePost.Any(m=>m.Specificulture == item.Specificulture && m.PostId == item.PostId  && m.ModuleId == item.ModuleId))
                     {
-                        result.Exception = saveResult.Exception;
-                        Errors.AddRange(saveResult.Errors);
+                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+                        result.IsSucceed = saveResult.IsSucceed;
+                        if (!result.IsSucceed)
+                        {
+                            result.Exception = saveResult.Exception;
+                            Errors.AddRange(saveResult.Errors);
+                        }
                     }
                 }
                 else
@@ -491,12 +495,15 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 item.Status = MixEnums.MixContentStatus.Published;
                 if (item.IsActived)
                 {
-                    var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                    result.IsSucceed = saveResult.IsSucceed;
-                    if (!result.IsSucceed)
+                    if (!_context.MixPagePost.Any(m => m.Specificulture == item.Specificulture && m.PostId == item.PostId && m.PageId == item.PageId))
                     {
-                        result.Exception = saveResult.Exception;
-                        Errors.AddRange(saveResult.Errors);
+                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+                        result.IsSucceed = saveResult.IsSucceed;
+                        if (!result.IsSucceed)
+                        {
+                            result.Exception = saveResult.Exception;
+                            Errors.AddRange(saveResult.Errors);
+                        }
                     }
                 }
                 else
@@ -516,24 +523,27 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         private async Task<RepositoryResponse<bool>> SaveRelatedPostAsync(int id, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            foreach (var navPost in PostNavs)
+            foreach (var item in PostNavs)
             {
-                navPost.SourceId = id;
-                navPost.Status = MixEnums.MixContentStatus.Published;
-                navPost.Specificulture = Specificulture;
-                if (navPost.IsActived)
+                item.SourceId = id;
+                item.Status = MixEnums.MixContentStatus.Published;
+                item.Specificulture = Specificulture;
+                if (item.IsActived)
                 {
-                    var saveResult = await navPost.SaveModelAsync(false, _context, _transaction);
-                    result.IsSucceed = saveResult.IsSucceed;
-                    if (!result.IsSucceed)
+                    if (!_context.MixRelatedPost.Any(m => m.Specificulture == item.Specificulture && m.SourceId == item.SourceId && m.DestinationId == item.DestinationId))
                     {
-                        result.Exception = saveResult.Exception;
-                        Errors.AddRange(saveResult.Errors);
+                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+                        result.IsSucceed = saveResult.IsSucceed;
+                        if (!result.IsSucceed)
+                        {
+                            result.Exception = saveResult.Exception;
+                            Errors.AddRange(saveResult.Errors);
+                        }
                     }
                 }
                 else
                 {
-                    var saveResult = await navPost.RemoveModelAsync(false, _context, _transaction);
+                    var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
                     result.IsSucceed = saveResult.IsSucceed;
                     if (!result.IsSucceed)
                     {
@@ -577,8 +587,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
                 if (navMedia.IsActived)
                 {
-                    var saveResult = await navMedia.SaveModelAsync(false, _context, _transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
+                    if (navMedia.Id == 0)
+                    {
+                        var saveResult = await navMedia.SaveModelAsync(false, _context, _transaction);
+                        ViewModelHelper.HandleResult(saveResult, ref result);
+                    }
                 }
                 else
                 {

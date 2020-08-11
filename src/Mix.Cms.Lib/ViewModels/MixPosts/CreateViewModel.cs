@@ -561,7 +561,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> SaveAttributeSetDataAsync(int parentId, MixCmsContext _context, IDbContextTransaction _transaction)
+        private Task<RepositoryResponse<bool>> SaveAttributeSetDataAsync(int parentId, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             //foreach (var nav in AttributeSetNavs)
@@ -602,7 +602,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             //        //}
             //    }
             //}
-            return result;
+            return Task.FromResult(result);
         }
 
         #endregion Save Sub Models Async

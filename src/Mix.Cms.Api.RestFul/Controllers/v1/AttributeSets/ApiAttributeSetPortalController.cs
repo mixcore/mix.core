@@ -29,13 +29,13 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         public override async Task<ActionResult<PaginationModel<UpdateViewModel>>> Get()
         {
             bool isStatus = Enum.TryParse(Request.Query["status"], out MixEnums.MixContentStatus status);
-            bool isType= int.TryParse(Request.Query["type"], out int type);
+            bool isType = Enum.TryParse(Request.Query["type"], out MixEnums.MixAttributeSetDataType type);
             bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
             string keyword = Request.Query["keyword"];
             Expression<Func<MixAttributeSet, bool>> predicate = model =>
                 (!isStatus || model.Status == status.ToString())
-                && (!isType || model.Type == type)
+                && (!isType || model.Type == type.ToString())
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
                 && (string.IsNullOrEmpty(keyword)

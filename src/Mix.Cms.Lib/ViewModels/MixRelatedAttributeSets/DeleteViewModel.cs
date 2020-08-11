@@ -13,6 +13,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
         #region Models
 
         public int Id { get; set; }
+        public int AttributeSetId { get; set; }
         public int ParentId { get; set; }
         public MixEnums.MixAttributeSetDataType ParentType { get; set; }
         public DateTime CreatedDateTime { get; set; }

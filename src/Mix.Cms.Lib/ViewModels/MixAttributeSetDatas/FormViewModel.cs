@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Heart.Extensions;
 using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
-using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -623,29 +621,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             base.GenerateCache(model, view, _context, _transaction);
         }
 
-        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        //{
-        //    var tasks = new List<Task>();
-        //    var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
-        //        .Any(d => d.Specificulture == Specificulture && d.Id == Id));
-        //    foreach (var item in attrDatas)
-        //    {
-        //        tasks.Add(Task.Run(() =>
-        //        {
-        //            var data = new ReadViewModel(item, context, transaction);
-        //            data.RemoveCache(item, context, transaction);
-        //        }));
-        //    }
-        //    foreach (var item in Values)
-        //    {
-        //        tasks.Add(Task.Run(() =>
-        //        {
-        //            item.RemoveCache(item.Model);
-        //        }));
-        //    }
-        //    return tasks;
-        //}
-
+        
         private void ParseData(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getValues = MixAttributeSetValues.UpdateViewModel
@@ -695,6 +671,18 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 Obj = data
             };
             return await vm.SaveModelAsync();
+        }
+
+        public T Property<T>(string fieldName)
+        {
+            if (Obj != null)
+            {
+                return Obj.Value<T>(fieldName);
+            }
+            else
+            {
+                return default(T);
+            }
         }
         #endregion Expands
     }

@@ -199,8 +199,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("urlAliases")]
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
 
-        [JsonProperty("attributes")]
-        public MixAttributeSets.UpdateViewModel Attributes { get; set; }
+        [JsonProperty("attributeSets")]
+        public MixAttributeSets.UpdateViewModel AttributeSet { get; set; }
+        
+        [JsonProperty("attributeSetNavs")]
+        public List<MixRelatedAttributeSets.UpdateViewModel> AttributeSetNavs { get; set; }
 
         [JsonProperty("attributeData")]
         public MixRelatedAttributeDatas.UpdateViewModel AttributeData { get; set; }
@@ -457,9 +460,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 , _context, _transaction);
             if (getAttrs.IsSucceed)
             {
-                Attributes = getAttrs.Data;
+                AttributeSet = getAttrs.Data;
                 AttributeData = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetFirstModel(
-                    a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId == Attributes.Id
+                    a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId == AttributeSet.Id
                         , _context, _transaction).Data;
                 if (AttributeData == null)
                 {
@@ -469,8 +472,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                             Specificulture = Specificulture,
                             ParentType = MixEnums.MixAttributeSetDataType.Page.ToString(),
                             ParentId = Id.ToString(),
-                            AttributeSetId = Attributes.Id,
-                            AttributeSetName = Attributes.Name
+                            AttributeSetId = AttributeSet.Id,
+                            AttributeSetName = AttributeSet.Name
                         }
                         )
                     {
@@ -478,13 +481,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     new MixAttributeSetData()
                     {
                         Specificulture = Specificulture,
-                        AttributeSetId = Attributes.Id,
-                        AttributeSetName = Attributes.Name
+                        AttributeSetId = AttributeSet.Id,
+                        AttributeSetName = AttributeSet.Name
                     }
                     )
                     };
                 }
-                foreach (var field in Attributes.Fields.OrderBy(f => f.Priority))
+                foreach (var field in AttributeSet.Fields.OrderBy(f => f.Priority))
                 {
                     var val = AttributeData.Data.Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
                     if (val == null)
@@ -518,6 +521,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     SysTags = getTags.Data;
                 }
             }
+
+            AttributeSetNavs = MixRelatedAttributeSets.UpdateViewModel.Repository.GetModelListBy(
+                m => m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Page.ToString() && m.Specificulture == Specificulture
+                , _context, _transaction).Data;
         }
 
         private void GenerateSEO()

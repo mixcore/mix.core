@@ -57,7 +57,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     var getRelatedData = await MixRelatedAttributeDatas.ReadViewModel.Repository.GetModelListByAsync(
                         m => m.Specificulture == culture && m.DataId == getVal.Data.DataId
                         && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
-                        , orderByPropertyName, direction, pageIndex, pageSize
+                        , orderByPropertyName, direction, pageSize, pageIndex
                         , _context: context, _transaction: transaction
                         );
                     if (getRelatedData.IsSucceed)
@@ -83,6 +83,74 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     //    .Select(m => m.ParentId).Distinct().ToList();
                 }
                 Expression<Func<MixAttributeSetValue, bool>> valPredicate = m => m.Specificulture == culture && m.AttributeSetName == metaName && m.StringValue == metaValue;
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<PaginationModel<TView>>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                }
+            }
+        }        
+        
+        public static async Task<RepositoryResponse<PaginationModel<TView>>> GetModelistByAddictionalField<TView>(
+            string fieldName, string value, string culture
+            , string orderByPropertyName = "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Desc
+            , int? pageSize = null, int? pageIndex = 0
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            where TView : ViewModelBase<MixCmsContext, MixPost, TView>
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                var result = new RepositoryResponse<PaginationModel<TView>>()
+                {
+                    IsSucceed = true,
+                    Data = new PaginationModel<TView>()
+                    {
+                        PageIndex = pageIndex.HasValue ? pageIndex.Value : 0,
+                        PageSize = pageSize
+                    }
+                };
+                var tasks = new List<Task<RepositoryResponse<TView>>>();
+                // Get Value
+                var dataIds = await context.MixAttributeSetValue.Where(
+                    m => m.AttributeSetName == MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST && m.Specificulture == culture
+                        && m.StringValue == value && m.AttributeFieldName == fieldName)
+                    .Select(m => m.DataId)?.ToListAsync();
+                if (dataIds != null && dataIds.Count > 0)
+                {
+                    var getRelatedData = await MixRelatedAttributeDatas.ReadViewModel.Repository.GetModelListByAsync(
+                        m => dataIds.Contains(m.DataId)
+                        , orderByPropertyName, direction, pageSize, pageIndex
+                        , _context: context, _transaction: transaction
+                        );
+                    if (getRelatedData.IsSucceed)
+                    {
+                        foreach (var item in getRelatedData.Data.Items)
+                        {
+                            if (int.TryParse(item.ParentId, out int postId))
+                            {
+                                var getData = await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetSingleModelAsync(
+                                m => m.Specificulture == item.Specificulture && m.Id == postId
+                                    , context, transaction);
+                                if (getData.IsSucceed)
+                                {
+                                    result.Data.Items.Add(getData.Data);
+                                }
+                            }
+                        }
+                        result.Data.TotalItems = getRelatedData.Data.TotalItems;
+                        result.Data.TotalPage = getRelatedData.Data.TotalPage;
+                    }                    
+                }
 
                 return result;
             }

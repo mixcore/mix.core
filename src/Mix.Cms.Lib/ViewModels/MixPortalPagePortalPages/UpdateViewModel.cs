@@ -29,6 +29,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
         public string Specificulture { get; set; }
         [JsonProperty("id")]
         public int Id { get; set; }
+        
+        [JsonProperty("pageId")]
+        public int PageId { get; set; }
 
         [JsonProperty("parentId")]
         public int ParentId { get; set; }
@@ -71,6 +74,15 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
 
         #region overrides
 
+        public override MixPortalPageNavigation ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            if (Id == 0)
+            {
+                Id = Repository.Max(m => m.Id, _context, _transaction).Data + 1;
+            }
+            return base.ParseModel(_context, _transaction);
+        }
+
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixPortalPageNavigation parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             if (Page != null)
@@ -92,7 +104,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getCategory = MixPortalPages.UpdateRolePermissionViewModel.Repository.GetSingleModel(p => p.Id == Id
+            var getCategory = MixPortalPages.UpdateRolePermissionViewModel.Repository.GetSingleModel(p => p.Id == PageId
 
             );
             if (getCategory.IsSucceed)
