@@ -160,8 +160,9 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (models != null)
             {
-                await MixCacheService.RemoveCacheAsync();
-                return await Lib.ViewModels.MixPortalPagePortalPages.ReadViewModel.UpdateInfosAsync(models);
+                // TODO Handle save fields
+                //return await Lib.ViewModels.MixPortalPagePortalPages.ReadViewModel.UpdateInfosAsync(models);
+                return new RepositoryResponse<List<Lib.ViewModels.MixPortalPagePortalPages.ReadViewModel>>();
             }
             else
             {

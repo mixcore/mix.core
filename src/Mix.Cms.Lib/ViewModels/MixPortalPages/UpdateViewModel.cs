@@ -61,10 +61,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         #region Views
 
         [JsonProperty("childNavs")]
-        public List<MixPortalPagePortalPages.UpdateViewModel> ChildNavs { get; set; }
+        public List<MixPortalPagePortalPages.UpdateViewModel> ChildNavs { get; set; } = new List<MixPortalPagePortalPages.UpdateViewModel>();
 
         [JsonProperty("parentNavs")]
-        public List<MixPortalPagePortalPages.UpdateViewModel> ParentNavs { get; set; }
+        public List<MixPortalPagePortalPages.UpdateViewModel> ParentNavs { get; set; } = new List<MixPortalPagePortalPages.UpdateViewModel>();
 
         #endregion Views
 
@@ -119,7 +119,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixPortalPage parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool> { IsSucceed = true };
-            
+
             if (result.IsSucceed)
             {
                 foreach (var item in ParentNavs)
@@ -193,18 +193,14 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
 
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
 
-            var navs = _context.MixPortalPageNavigation.Where(p => p.Id == Id || p.ParentId == Id);
-            foreach (var item in navs)
+            var removeNavs = await MixPortalPagePortalPages.UpdateViewModel.Repository.RemoveListModelAsync(false, p => p.PageId == Id || p.ParentId == Id);
+            var result = new RepositoryResponse<bool>()
             {
-                _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-                if (item.ParentId == Id)
-                {
-                    _context.Entry(_context.MixPortalPage.Single(sub => sub.Id == item.Id)).State = EntityState.Deleted;
-                }
-            }
-            await _context.SaveChangesAsync();
+                IsSucceed = true,
+                Errors = removeNavs.Errors,
+                Exception = removeNavs.Exception
+            };
             return result;
         }
 
@@ -220,27 +216,28 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
             {
                 nav.IsActived = true;
             });
-            var activeIds = result.Select(m => m.PageId).ToList();
 
-            var query = context.MixPortalPage
-                .Include(cp => cp.MixPortalPageNavigationParent)
-                .Where(PortalPage =>
-                    // not load current active parent
-                    !activeIds.Any(p => p == PortalPage.Id) &&
-                    // not load current page or page already have another parent
-                    PortalPage.Id != Id && PortalPage.Level == 0
-                )
-                .AsEnumerable()
-                .Select(PortalPage =>
-                    new MixPortalPagePortalPages.UpdateViewModel()
-                    {
-                        PageId = Id,
-                        ParentId = PortalPage.Id,
-                        Description = PortalPage.TextDefault,
-                        Level = PortalPage.Level
-                    }
-                );
-            result.AddRange(query.ToList());
+            //var activeIds = result.Select(m => m.PageId).ToList();
+
+            //var query = context.MixPortalPage
+            //    .Include(cp => cp.MixPortalPageNavigationParent)
+            //    .Where(PortalPage =>
+            //        // not load current active parent
+            //        !activeIds.Any(p => p == PortalPage.Id) &&
+            //        // not load current page or page already have another parent
+            //        PortalPage.Id != Id
+            //    )
+            //    .AsEnumerable()
+            //    .Select(PortalPage =>
+            //        new MixPortalPagePortalPages.ReadViewModel()
+            //        {
+            //            PageId = Id,
+            //            ParentId = PortalPage.Id,
+            //            Description = PortalPage.TextDefault,
+            //            Level = PortalPage.Level
+            //        }
+            //    );
+            //result.AddRange(query.ToList());
             return result.OrderBy(m => m.Priority).ToList();
         }
 
@@ -252,27 +249,27 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
             {
                 nav.IsActived = true;
             });
-            var activeIds = result.Select(m => m.PageId).ToList();
+            //var activeIds = result.Select(m => m.PageId).ToList();
 
-            var query = context.MixPortalPage
-                .Include(cp => cp.MixPortalPageNavigationParent)
-                .Where(PortalPage =>
-                        // not load current active parent
-                        !activeIds.Any(p => p == PortalPage.Id) &&
-                        // not load current page or page already have another parent
-                        PortalPage.Id != Id
-                    )
-                .AsEnumerable()
-                .Select(PortalPage =>
-                new MixPortalPagePortalPages.UpdateViewModel(
-                      new MixPortalPageNavigation()
-                      {
-                          PageId = PortalPage.Id,
-                          ParentId = Id,
-                          Description = PortalPage.TextDefault,
-                      }, context, transaction));
+            //var query = context.MixPortalPage
+            //    .Include(cp => cp.MixPortalPageNavigationParent)
+            //    .Where(PortalPage =>
+            //            // not load current active parent
+            //            !activeIds.Any(p => p == PortalPage.Id) &&
+            //            // not load current page or page already have another parent
+            //            PortalPage.Id != Id
+            //        )
+            //    .AsEnumerable()
+            //    .Select(PortalPage =>
+            //    new MixPortalPagePortalPages.ReadViewModel(
+            //          new MixPortalPageNavigation()
+            //          {
+            //              PageId = PortalPage.Id,
+            //              ParentId = Id,
+            //              Description = PortalPage.TextDefault,
+            //          }, context, transaction));
 
-            result.AddRange(query.ToList());
+            //result.AddRange(query.ToList());
             return result.OrderBy(m => m.Priority).ToList();
         }
 

@@ -41,8 +41,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPageRoles
         [JsonProperty("isActived")]
         public bool IsActived { get; set; }
 
-        [JsonProperty("page")]
-        public MixPortalPages.ReadViewModel Page { get; set; }
+        //[JsonProperty("page")]
+        //public MixPortalPages.ReadViewModel Page { get; set; }
 
         #endregion Views
 
@@ -70,13 +70,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPageRoles
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getCategory = MixPortalPages.ReadViewModel.Repository.GetSingleModel(p => p.Id == Id
-            , _context: _context, _transaction: _transaction
-            );
-            if (getCategory.IsSucceed)
-            {
-                Page = getCategory.Data;
-            }
+            //var getCategory = MixPortalPages.ReadViewModel.Repository.GetSingleModel(p => p.Id == Id
+            //, _context: _context, _transaction: _transaction
+            //);
+            //if (getCategory.IsSucceed)
+            //{
+            //    Page = getCategory.Data;
+            //}
         }
 
         #endregion overrides

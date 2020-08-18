@@ -183,6 +183,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                 if (Field.IsUnique)
                 {
                     var exist = _context.MixAttributeSetValue.Any(d => d.Specificulture == Specificulture
+                        && d.AttributeSetName == AttributeSetName
                         && d.StringValue == StringValue && d.Id != Id && d.DataId != DataId);
                     if (exist)
                     {

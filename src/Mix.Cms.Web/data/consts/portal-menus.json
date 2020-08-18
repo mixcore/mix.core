@@ -354,6 +354,11 @@
           "controller": "PostController"
         },
         {
+          "path": "/portal/post/gallery-list",
+          "templatePath": "/app/app-portal/pages/post/gallery-list.html",
+          "controller": "PostController"
+        },
+        {
           "path": "/portal/post/gallery-details/:id",
           "templatePath": "/app/app-portal/pages/post/gallery-details.html",
           "controller": "PostController"

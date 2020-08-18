@@ -73,7 +73,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             Data.Add(new JProperty("id", Id));
             foreach (var item in values.OrderBy(v => v.Priority))
             {
-                Data.Add(ParseValue(item));
+                if (!Data.TryGetValue(item.AttributeFieldName, out JToken val))
+                {
+                    Data.Add(ParseValue(item));
+                }
             }
         }
 
