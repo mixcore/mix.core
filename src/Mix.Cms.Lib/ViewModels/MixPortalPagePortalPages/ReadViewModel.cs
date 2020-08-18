@@ -61,7 +61,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
         public bool IsActived { get; set; }
 
         [JsonProperty("page")]
-        public MixPortalPages.ReadRolePermissionViewModel Page { get; set; }
+        public MixPortalPages.ReadViewModel Page { get; set; }
+        
+        [JsonProperty("parent")]
+        public MixPortalPages.ReadViewModel Parent { get; set; }
 
         #endregion Views
         #endregion
@@ -70,58 +73,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getCategory = MixPortalPages.ReadRolePermissionViewModel.Repository.GetSingleModel(p => p.Id == PageId
-
-            );
-            if (getCategory.IsSucceed)
-            {
-                Page = getCategory.Data;
-            }
+            Page = MixPortalPages.ReadViewModel.Repository.GetSingleModel(p => p.Id == PageId).Data;
+            Parent = MixPortalPages.ReadViewModel.Repository.GetSingleModel(p => p.Id == ParentId).Data;
         }
 
         #endregion overrides
 
-        #region Expands
-
-        public static async System.Threading.Tasks.Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfosAsync(List<MixPortalPagePortalPages.ReadViewModel> cates)
-        {
-            MixCmsContext context = new MixCmsContext();
-            var transaction = context.Database.BeginTransaction();
-            var result = new RepositoryResponse<List<ReadViewModel>>();
-            try
-            {
-                foreach (var item in cates)
-                {
-                    var saveResult = await item.SaveModelAsync(false, context, transaction);
-                    result.IsSucceed = saveResult.IsSucceed;
-                    if (!result.IsSucceed)
-                    {
-                        result.Errors.AddRange(saveResult.Errors);
-                        result.Exception = saveResult.Exception;
-                        break;
-                    }
-                }
-                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, true, transaction);
-                return result;
-            }
-            catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
-            {
-                UnitOfWorkHelper<MixCmsContext>.HandleException<ReadViewModel>(ex, true, transaction);
-                return new RepositoryResponse<List<ReadViewModel>>()
-                {
-                    IsSucceed = false,
-                    Data = null,
-                    Exception = ex
-                };
-            }
-            finally
-            {
-                //if current Context is Root
-                transaction.Dispose();
-                context.Database.CloseConnection();transaction.Dispose();context.Dispose();
-            }
-        }
-
-        #endregion Expands
     }
 }

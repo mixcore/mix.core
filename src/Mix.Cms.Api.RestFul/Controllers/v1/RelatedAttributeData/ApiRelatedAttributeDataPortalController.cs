@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Models.Cms;
@@ -51,6 +52,15 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             {
                 return BadRequest(getData.Errors);
             }
+        }
+
+        [HttpGet]
+        [Route("navigation/{name}")]
+        public async Task<ActionResult<Lib.ViewModels.MixAttributeSetDatas.Navigation>> GetNavigation(string name)
+        {
+            var navs = await Lib.ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<Lib.ViewModels.MixAttributeSetDatas.NavigationViewModel>(
+                _lang, MixConstants.AttributeSetName.NAVIGATION, "equal", "name", name);
+            return Ok(navs.Data.FirstOrDefault()?.Nav);
         }
     }
 
