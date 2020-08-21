@@ -169,7 +169,9 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(250);
 
                     b.Property<int>("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
 
                     b.HasKey("Id");
 

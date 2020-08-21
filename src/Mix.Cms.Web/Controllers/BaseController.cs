@@ -75,7 +75,7 @@ namespace Mix.Cms.Web.Controllers
                 var exceptIps = MixService.GetIpConfig<JArray>("ExceptIps") ?? new JArray();
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 if (
-                        // allow localhost
+                        // To allow localhost remove below comment
                         //remoteIp != "::1" &&
                         allowedIps.Count > 0 &&
                         !allowedIps.Any(t => t["text"].Value<string>() == remoteIp) ||
@@ -100,10 +100,10 @@ namespace Mix.Cms.Web.Controllers
             }
 
             // If mode Maintenance enabled in appsettings
-            if (MixService.GetConfig<bool>("IsMaintenance"))
+            if (MixService.GetConfig<bool>("IsMaintenance") && Request.RouteValues["seoName"].ToString() != "maintenance")
             {
                 isValid = false;
-                _redirectUrl = $"/{culture}/maintenance";
+                _redirectUrl = $"/maintenance";
             }
         }
 

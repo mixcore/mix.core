@@ -12,7 +12,7 @@ namespace Mix.Cms.Lib.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false),
-                    Type = table.Column<int>(nullable: false),
+                    Type = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     Title = table.Column<string>(maxLength: 250, nullable: false),
                     Name = table.Column<string>(maxLength: 250, nullable: false),
                     Description = table.Column<string>(maxLength: 250, nullable: true),
