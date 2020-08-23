@@ -94,9 +94,9 @@ namespace Mix.Cms.Lib
 
         public enum MixUserStatus
         {
-            Deleted = 0,
-            Actived = 1,
-            Banned = 3
+            Deleted,
+            Actived,
+            Banned
         }
 
         #endregion Status

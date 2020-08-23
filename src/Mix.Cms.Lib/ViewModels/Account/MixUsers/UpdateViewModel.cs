@@ -7,6 +7,7 @@ using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,6 +60,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixUsers
         public DateTime? LastModified { get; set; }
         [JsonProperty("priority")]
         public int Priority { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty("status")]
         public MixEnums.MixUserStatus Status { get; set; }
         #endregion Models
