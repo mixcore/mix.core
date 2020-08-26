@@ -359,7 +359,7 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     Id = table.Column<int>(nullable: false),
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
-                    SetId = table.Column<int>(nullable: false),
+                    AttributeSetId = table.Column<int>(nullable: false),
                     ParentId = table.Column<int>(nullable: false),
                     ParentType = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     Description = table.Column<string>(maxLength: 450, nullable: true),

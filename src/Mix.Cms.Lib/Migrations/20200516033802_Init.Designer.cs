@@ -1761,7 +1761,7 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
-                    b.Property<int>("SetId")
+                    b.Property<int>("AttributeSetId")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")

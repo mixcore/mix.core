@@ -15,7 +15,7 @@ using Mix.Cms.Lib;
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
     [Produces("application/json")]
-    [Route("api/v1/rest/{culture}/attribute-field/portal")]
+    [Route("api/v1/rest/attribute-field/portal")]
     public class ApiAttributeFieldController :
         BaseRestApiController<MixCmsContext, MixAttributeField, ReadViewModel>
     {
