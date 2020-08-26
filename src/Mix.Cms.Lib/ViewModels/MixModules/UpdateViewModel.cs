@@ -288,9 +288,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 LastModified = DateTime.UtcNow;
                 CreatedDateTime = DateTime.UtcNow;
             }
-            Template = View != null ? string.Format(@"{0}/{1}{2}", View.FolderType, View.FileName, View.Extension) : Template;
-            FormTemplate = FormView != null ? string.Format(@"{0}/{1}{2}", FormView.FolderType, FormView.FileName, FormView.Extension) : FormTemplate;
-            EdmTemplate = EdmView != null ? string.Format(@"{0}/{1}{2}", EdmView.FolderType, EdmView.FileName, EdmView.Extension) : EdmTemplate;
+            Template = View != null ? $"{View.FolderType}/{View.FileName}{View.Extension}" : Template;
+            FormTemplate = FormView != null ? $"{FormView.FolderType}/{FormView.FileName}{FormView.Extension}" : FormTemplate;
+            EdmTemplate = EdmView != null ? $"{EdmView.FolderType}/{EdmView.FileName}{EdmView.Extension}" : EdmTemplate;
 
             var arrField = Columns != null ? JArray.Parse(
                 Newtonsoft.Json.JsonConvert.SerializeObject(Columns.OrderBy(c => c.Priority).Where(
@@ -369,15 +369,18 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         {
             var result = new RepositoryResponse<bool> { IsSucceed = true };
 
-            var saveViewResult = await View.SaveModelAsync(true, _context, _transaction);
-            ViewModelHelper.HandleResult(saveViewResult, ref result);
+            if (View.Id == 0)
+            {
+                var saveViewResult = await View.SaveModelAsync(true, _context, _transaction);
+                ViewModelHelper.HandleResult(saveViewResult, ref result);
+            }
 
-            if (result.IsSucceed && !string.IsNullOrEmpty(FormView.Content))
+            if (FormView.Id == 0 && result.IsSucceed && !string.IsNullOrEmpty(FormView.Content))
             {
                 var saveResult = await FormView.SaveModelAsync(true, _context, _transaction);
                 ViewModelHelper.HandleResult(saveResult, ref result);
             }
-            if (result.IsSucceed && !string.IsNullOrEmpty(EdmView.Content))
+            if (EdmView.Id == 0 && result.IsSucceed && !string.IsNullOrEmpty(EdmView.Content))
             {
                 var saveResult = await EdmView.SaveModelAsync(true, _context, _transaction);
                 ViewModelHelper.HandleResult(saveResult, ref result);

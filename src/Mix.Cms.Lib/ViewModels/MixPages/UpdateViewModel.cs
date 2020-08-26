@@ -302,9 +302,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public override RepositoryResponse<bool> SaveSubModels(MixPage parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool> { IsSucceed = true };
-            var saveTemplate = View.SaveModel(true, _context, _transaction);
-            ViewModelHelper.HandleResult(saveTemplate, ref result);
-
+            if (View.Id == 0)
+            {
+                var saveTemplate = View.SaveModel(true, _context, _transaction);
+                ViewModelHelper.HandleResult(saveTemplate, ref result);
+            }
             if (result.IsSucceed && Master != null)
             {
                 var saveLayout = Master.SaveModel(true, _context, _transaction);
@@ -356,8 +358,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixPage parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool> { IsSucceed = true };
-            var saveTemplate = await View.SaveModelAsync(true, _context, _transaction);
-            ViewModelHelper.HandleResult(saveTemplate, ref result);
+            
+            if (View.Id == 0)
+            {
+                var saveTemplate = await View.SaveModelAsync(true, _context, _transaction);
+                ViewModelHelper.HandleResult(saveTemplate, ref result);
+            }
 
             if (result.IsSucceed && Master != null)
             {

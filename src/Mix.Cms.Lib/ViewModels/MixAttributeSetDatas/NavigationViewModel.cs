@@ -46,10 +46,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #region Views
 
-        [JsonIgnore]
         public List<MixAttributeSetValues.NavigationViewModel> Values { get; set; }
 
-        [JsonIgnore]
         public List<MixAttributeFields.ReadViewModel> Fields { get; set; }
 
         [JsonProperty("data")]
@@ -86,15 +84,19 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Data = new JObject
+            if (Data == null)
+            {
+
+                Data = new JObject
             {
                 new JProperty("id", Id)
             };
-            Values = MixAttributeSetValues.NavigationViewModel
-                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-            foreach (var item in Values.OrderBy(v => v.Priority))
-            {
-                Data.Add(ParseValue(item));
+                Values = Values ?? MixAttributeSetValues.NavigationViewModel
+                    .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
+                foreach (var item in Values.OrderBy(v => v.Priority))
+                {
+                    Data.Add(ParseValue(item));
+                }
             }
         }
 

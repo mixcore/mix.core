@@ -6,6 +6,7 @@ using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Mix.Identity.Models.AccountViewModels;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 
@@ -53,6 +54,11 @@ namespace Mix.Cms.Lib.ViewModels.Account
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
 
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonProperty("status")]
+        public MixEnums.MixUserStatus Status { get; set; }
         #endregion Models
 
         #region Views

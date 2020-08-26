@@ -81,15 +81,15 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
             Permissions = MixPortalPages.ReadRolePermissionViewModel.Repository.GetModelListBy(p => p.Level == 0
             && (p.MixPortalPageRole.Any(r => r.RoleId == Id) || Name == "SuperAdmin")
             ).Data;
-            foreach (var item in Permissions)
-            {
-                item.NavPermission = MixPortalPageRoles.ReadViewModel.Repository.GetSingleModel(n => n.PageId == item.Id && n.RoleId == Id).Data;
+            //foreach (var item in Permissions)
+            //{
+            //    item.NavPermission = MixPortalPageRoles.ReadViewModel.Repository.GetSingleModel(n => n.PageId == item.Id && n.RoleId == Id).Data;
 
-                foreach (var child in item.ChildPages)
-                {
-                    child.Page.NavPermission = MixPortalPageRoles.ReadViewModel.Repository.GetSingleModel(n => n.PageId == child.Page.Id && n.RoleId == Id).Data;
-                }
-            }
+            //    //foreach (var child in item.ChildPages)
+            //    //{
+            //    //    child.Page.NavPermission = MixPortalPageRoles.ReadViewModel.Repository.GetSingleModel(n => n.PageId == child.Page.Id && n.RoleId == Id).Data;
+            //    //}
+            //}
         }
 
         #endregion Overrides

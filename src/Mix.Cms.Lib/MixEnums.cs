@@ -94,9 +94,9 @@ namespace Mix.Cms.Lib
 
         public enum MixUserStatus
         {
-            Deleted = 0,
-            Actived = 1,
-            Banned = 3
+            Deleted,
+            Actived,
+            Banned
         }
 
         #endregion Status
@@ -245,8 +245,8 @@ namespace Mix.Cms.Lib
             VideoYoutube = 20,
             TuiEditor = 21,
             Integer = 22,
-            QRCode = 24,
             Reference = 23,
+            QRCode = 24,
         }
 
         public enum UrlAliasType
