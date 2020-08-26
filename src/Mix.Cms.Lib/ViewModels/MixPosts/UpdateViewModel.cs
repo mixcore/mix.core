@@ -357,9 +357,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             try
             {
                 // Save Template
-                var saveTemplate = await View.SaveModelAsync(true, _context, _transaction);
-                result.IsSucceed = result.IsSucceed && saveTemplate.IsSucceed;
-                ViewModelHelper.HandleResult(saveTemplate, ref result);
+                if (View.Id == 0)
+                {
+                    var saveTemplate = await View.SaveModelAsync(true, _context, _transaction);
+                    ViewModelHelper.HandleResult(saveTemplate, ref result);
+                }
 
                 if (result.IsSucceed)
                 {
@@ -704,9 +706,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             try
             {
                 // Save Template
-                var saveTemplate = View.SaveModel(true, _context, _transaction);
-                result.IsSucceed = result.IsSucceed && saveTemplate.IsSucceed;
-                ViewModelHelper.HandleResult(saveTemplate, ref result);
+                if (View.Id == 0)
+                {
+                    var saveTemplate = View.SaveModel(true, _context, _transaction);
+                    ViewModelHelper.HandleResult(saveTemplate, ref result);
+                }
 
                 if (result.IsSucceed)
                 {
@@ -1258,12 +1262,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
             if (string.IsNullOrEmpty(this.SeoTitle))
             {
-                this.SeoTitle = SeoHelper.GetSEOString(this.Title);
+                this.SeoTitle = this.Title;
             }
 
-            if (string.IsNullOrEmpty(this.SeoDescription))
+            if (string.IsNullOrEmpty(this.Excerpt))
             {
-                this.SeoDescription = SeoHelper.GetSEOString(this.Title);
+                this.SeoDescription = this.Excerpt;
             }
 
             if (string.IsNullOrEmpty(this.SeoKeywords))

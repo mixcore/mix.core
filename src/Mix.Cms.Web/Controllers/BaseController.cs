@@ -75,7 +75,7 @@ namespace Mix.Cms.Web.Controllers
                 var exceptIps = MixService.GetIpConfig<JArray>("ExceptIps") ?? new JArray();
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 if (
-                        // allow localhost
+                        // To allow localhost remove below comment
                         //remoteIp != "::1" &&
                         allowedIps.Count > 0 &&
                         !allowedIps.Any(t => t["text"].Value<string>() == remoteIp) ||
@@ -100,10 +100,10 @@ namespace Mix.Cms.Web.Controllers
             }
 
             // If mode Maintenance enabled in appsettings
-            if (MixService.GetConfig<bool>("IsMaintenance"))
+            if (MixService.GetConfig<bool>("IsMaintenance") && Request.RouteValues["seoName"].ToString() != "maintenance")
             {
                 isValid = false;
-                _redirectUrl = $"/{culture}/maintenance";
+                _redirectUrl = $"/maintenance";
             }
         }
 
@@ -201,7 +201,14 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return await Error("404");
+                if (seoName != "404")
+                {
+                    return await Page("404");
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
         }
 
@@ -244,7 +251,7 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return await Error("404");
+                return await Page("404");
             }
         }
 
@@ -267,16 +274,15 @@ namespace Mix.Cms.Web.Controllers
                 getPost = await Lib.ViewModels.MixPosts.ReadMvcViewModel.Repository.GetFirstModelAsync(predicate);
                 if (getPost.IsSucceed)
                 {
-                    getPost.Data.DetailsUrl = GenerateDetailsUrl(
-                        new { culture = culture, action = "post", id = getPost.Data.Id, seoName = getPost.Data.SeoName }
-                        );
+                    getPost.Data.DetailsUrl = $"{getPost.Data.Domain}/post/{culture}/{id}/{getPost.Data.SeoName}";
                     //Generate details url for related posts
                     if (getPost.IsSucceed)
                     {
                         if (getPost.Data.PostNavs != null && getPost.Data.PostNavs.Count > 0)
                         {
-                            getPost.Data.PostNavs.ForEach(n => n.RelatedPost.DetailsUrl = GenerateDetailsUrl(
-                                new { action = "post", culture = culture, id = n.RelatedPost.Id, seoName = n.RelatedPost.SeoName }));
+                            getPost.Data.PostNavs.ForEach(
+                                n => n.RelatedPost.DetailsUrl = $"{getPost.Data.Domain}/post/{culture}/{n.RelatedPost.Id}/{n.RelatedPost.SeoName}"
+                            );
                         }
                         //_ = MixCacheService.SetAsync(cacheKey, getPost);
                     }
@@ -294,7 +300,7 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return await Error("404");
+                return await Page("404");
             }
         }
 
@@ -335,7 +341,7 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return await Error("404");
+                return await Page("404");
             }
         }
 

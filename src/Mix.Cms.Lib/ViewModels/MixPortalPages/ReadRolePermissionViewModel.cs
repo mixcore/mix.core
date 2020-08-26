@@ -57,7 +57,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         #region Views
 
         [JsonProperty("childPages")]
-        public List<MixPortalPagePortalPages.ReadViewModel> ChildPages { get; set; } = new List<MixPortalPagePortalPages.ReadViewModel>();
+        public List<MixPortalPagePortalPages.ReadPermissionViewModel> ChildPages { get; set; } = new List<MixPortalPagePortalPages.ReadPermissionViewModel>();
 
         [JsonProperty("navPermission")]
         public MixPortalPageRoles.ReadViewModel NavPermission { get; set; }
@@ -82,7 +82,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getChilds = MixPortalPagePortalPages.ReadViewModel.Repository.GetModelListBy(n => n.ParentId == Id, _context, _transaction);
+            var getChilds = MixPortalPagePortalPages.ReadPermissionViewModel.Repository.GetModelListBy(
+                n => n.ParentId == Id, _context, _transaction);
             if (getChilds.IsSucceed)
             {
                 ChildPages = getChilds.Data.OrderBy(c => c.Priority).ToList();

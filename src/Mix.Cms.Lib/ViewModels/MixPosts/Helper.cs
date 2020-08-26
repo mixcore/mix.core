@@ -48,14 +48,15 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                         PageSize = pageSize
                     }
                 };
-                var tasks = new List<Task<RepositoryResponse<TView>>>();
                 // Get Tag
-                var getVal = await MixAttributeSetValues.ReadViewModel.Repository.GetSingleModelAsync(m => m.AttributeSetName == metaName && m.StringValue == metaValue
+                var getVal = await MixAttributeSetValues.ReadViewModel.Repository.GetSingleModelAsync(
+                    m => m.Specificulture == culture && m.Status == MixEnums.MixContentStatus.Published.ToString() 
+                        && m.AttributeSetName == metaName && m.StringValue == metaValue
                 , context, transaction);
                 if (getVal.IsSucceed)
                 {
                     var getRelatedData = await MixRelatedAttributeDatas.ReadViewModel.Repository.GetModelListByAsync(
-                        m => m.Specificulture == culture && m.DataId == getVal.Data.DataId
+                        m => m.Specificulture == culture && m.AttributeSetName == metaName && m.DataId == getVal.Data.DataId
                         && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
                         , orderByPropertyName, direction, pageSize, pageIndex
                         , _context: context, _transaction: transaction
