@@ -287,10 +287,21 @@ namespace Mix.Cms.Lib
                 foreach (var cate in nav.MenuItems)
                 {
                     cate.IsActive = cate.Uri == activePath;
+                    if (cate.IsActive)
+                    {
+                        nav.CurrentActivedMenuItem = cate;
+                        nav.ActivedMenuItems.Add(cate);
+                    }
 
                     foreach (var item in cate.MenuItems)
-                    {
+                    {                        
                         item.IsActive = item.Uri == activePath;
+                        if (item.IsActive)
+                        {
+                            nav.CurrentActivedMenuItem = item;
+                            nav.ActivedMenuItems.Add(cate);
+                            nav.ActivedMenuItems.Add(item);
+                        }
                         cate.IsActive = cate.IsActive || item.IsActive;
                     }
                 }
