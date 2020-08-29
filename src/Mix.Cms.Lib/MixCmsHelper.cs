@@ -289,7 +289,7 @@ namespace Mix.Cms.Lib
                     cate.IsActive = cate.Uri == activePath;
                     if (cate.IsActive)
                     {
-                        nav.CurrentActivedMenuItem = cate;
+                        nav.ActivedMenuItem = cate;
                         nav.ActivedMenuItems.Add(cate);
                     }
 
@@ -298,7 +298,7 @@ namespace Mix.Cms.Lib
                         item.IsActive = item.Uri == activePath;
                         if (item.IsActive)
                         {
-                            nav.CurrentActivedMenuItem = item;
+                            nav.ActivedMenuItem = item;
                             nav.ActivedMenuItems.Add(cate);
                             nav.ActivedMenuItems.Add(item);
                         }

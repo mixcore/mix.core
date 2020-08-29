@@ -299,8 +299,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("actived_menu_items")]
         public List<MenuItem> ActivedMenuItems { get; set; } = new List<MenuItem>();
         
-        [JsonProperty("current_actived_menu_item")]
-        public MenuItem CurrentActivedMenuItem { get; set; }
+        [JsonProperty("actived_menu_item")]
+        public MenuItem ActivedMenuItem { get; set; }
     }
 
     public class MenuItem
