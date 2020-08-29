@@ -151,7 +151,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public bool IsActived { get; set; }
 
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl { get => $"page/{Specificulture}/{SeoName}"; }
+        public string DetailsUrl { get => Id > 0 ? $"/page/{Specificulture}/{SeoName}" : null; }
 
         #endregion Views
 

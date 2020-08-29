@@ -107,7 +107,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         #region Views
 
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl { get; set; }
+        public string DetailsUrl { get => Id > 0 ? $"/page/{Specificulture}/{SeoName}" : null; }
 
         [JsonProperty("moduleNavs")]
         public List<MixPageModules.ReadMvcViewModel> ModuleNavs { get; set; } // Parent to Modules
@@ -122,8 +122,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl {
-            get {
+        public string ImageUrl
+        {
+            get
+            {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -138,8 +140,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl {
-            get {
+        public string ThumbnailUrl
+        {
+            get
+            {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -168,22 +172,28 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public List<MixTemplates.UpdateViewModel> Masters { get; set; }
 
         [JsonIgnore]
-        public int ActivedTheme {
-            get {
+        public int ActivedTheme
+        {
+            get
+            {
                 return MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
             }
         }
 
         [JsonIgnore]
-        public string TemplateFolderType {
-            get {
+        public string TemplateFolderType
+        {
+            get
+            {
                 return MixEnums.EnumTemplateFolder.Pages.ToString();
             }
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder {
-            get {
+        public string TemplateFolder
+        {
+            get
+            {
                 return CommonHelper.GetFullPath(new string[]
                 {
                     MixConstants.Folder.TemplatesFolder
@@ -201,7 +211,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("attributeSets")]
         public MixAttributeSets.UpdateViewModel AttributeSet { get; set; }
-        
+
         [JsonProperty("attributeSetNavs")]
         public List<MixRelatedAttributeSets.UpdateViewModel> AttributeSetNavs { get; set; }
 
@@ -358,7 +368,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixPage parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool> { IsSucceed = true };
-            
+
             if (View.Id == 0)
             {
                 var saveTemplate = await View.SaveModelAsync(true, _context, _transaction);
@@ -411,7 +421,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 // Save Attributes
                 result = await SaveAttributeAsync(parent.Id, _context, _transaction);
             }
-            
+
             return result;
         }
 
