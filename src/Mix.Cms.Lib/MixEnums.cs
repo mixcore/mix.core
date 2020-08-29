@@ -157,96 +157,96 @@ namespace Mix.Cms.Lib
 
         public enum MixDataType
         {
-            Custom = 0,
+            Custom,
 
             //
             // Summary:
             //     Represents an instant in time, expressed as a date and time of day.
-            DateTime = 1,
+            DateTime,
 
             //
             // Summary:
             //     Represents a date value.
-            Date = 2,
+            Date,
 
             //
             // Summary:
             //     Represents a time value.
-            Time = 3,
+            Time,
 
             //
             // Summary:
             //     Represents a continuous time during which an object exists.
-            Duration = 4,
+            Duration,
 
             //
             // Summary:
             //     Represents a phone number value.
-            PhoneNumber = 5,
+            PhoneNumber,
 
             //
             // Summary:
             //     Represents a currency value.
-            Double = 6,
+            Double,
 
             //
             // Summary:
             //     Represents text that is displayed.
-            Text = 7,
+            Text,
 
             //
             // Summary:
             //     Represents an HTML file.
-            Html = 8,
+            Html,
 
             //
             // Summary:
             //     Represents multi-line text.
-            MultilineText = 9,
+            MultilineText,
 
             //
             // Summary:
             //     Represents an email address.
-            EmailAddress = 10,
+            EmailAddress,
 
             //
             // Summary:
             //     Represent a password value.
-            Password = 11,
+            Password,
 
             //
             // Summary:
             //     Represents a URL value.
-            Url = 12,
+            Url,
 
             //
             // Summary:
             //     Represents a URL to an image.
-            ImageUrl = 13,
+            ImageUrl,
 
             //
             // Summary:
             //     Represents a credit card number.
-            CreditCard = 14,
+            CreditCard,
 
             //
             // Summary:
             //     Represents a postal code.
-            PostalCode = 15,
+            PostalCode,
 
             //
             // Summary:
             //     Represents file upload data type.
-            Upload = 16,
+            Upload,
 
-            Color = 17,
-            Boolean = 18,
-            Icon = 19,
-            VideoYoutube = 20,
-            TuiEditor = 21,
-            Integer = 22,
-            Reference = 23,
-            QRCode = 24,
+            Color,
+            Boolean,
+            Icon,
+            VideoYoutube,
+            TuiEditor,
+            Integer,
+            Reference,
+            QRCode,
         }
 
         public enum UrlAliasType
