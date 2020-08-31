@@ -9,7 +9,6 @@
         <Compile Remove="cache\**" />
         <Compile Remove="logs\**" />
         <Compile Remove="Views\Shared\Templates\**" />
-        <Content Remove="cache\**" />
         <Content Remove="logs\**" />
         <Content Remove="Views\Shared\Templates\**" />
         <EmbeddedResource Remove="cache\**" />
