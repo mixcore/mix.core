@@ -182,7 +182,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
 
         [JsonProperty("pages")]
-        public List<MixPagePosts.ReadViewModel> Pages { get; set; }
+        public List<MixPagePosts.ReadMvcViewModel> Pages { get; set; }
         #endregion Views
 
         #endregion Properties

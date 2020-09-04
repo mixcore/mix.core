@@ -1154,7 +1154,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                             , _context, _transaction)
                         {
                             Field = field,
-                            AttributeFieldName = field.Name,
+                            AttributeFieldName = field.Name ?? SeoHelper.GetSEOString(field.Title),
                             Priority = field.Priority,
                             StringValue = field.DefaultValue
                         };

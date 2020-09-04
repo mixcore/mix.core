@@ -69,12 +69,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
             }
         }
 
-        public static RepositoryResponse<List<MixPagePosts.ReadViewModel>> GetActivedNavAsync(
+        public static RepositoryResponse<List<MixPagePosts.ReadMvcViewModel>> GetActivedNavAsync(
             int postId, string specificulture
             , bool isLoadPage = false, bool isLoadPost = false
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var result = MixPagePosts.ReadViewModel.Repository.GetModelListBy(
+            var result = MixPagePosts.ReadMvcViewModel.Repository.GetModelListBy(
                 m => m.PostId == postId && m.Specificulture == specificulture, _context, _transaction);
             result.Data.ForEach(p => {
                 p.IsActived = true;

@@ -146,7 +146,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public MixTemplates.ReadListItemViewModel View { get; set; }
 
         [JsonProperty("posts")]
-        public PaginationModel<MixPagePosts.ReadViewModel> Posts { get; set; } = new PaginationModel<MixPagePosts.ReadViewModel>();
+        public PaginationModel<MixPagePosts.ReadMvcViewModel> Posts { get; set; } = new PaginationModel<MixPagePosts.ReadMvcViewModel>();
 
         [JsonProperty("modules")]
         public List<MixPageModules.ReadMvcViewModel> Modules { get; set; } = new List<MixPageModules.ReadMvcViewModel>(); // Get All Module
@@ -223,7 +223,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
                 if (postExp != null)
                 {
-                    var getPosts = MixPagePosts.ReadViewModel.Repository
+                    var getPosts = MixPagePosts.ReadMvcViewModel.Repository
                     .GetModelListBy(postExp
                     , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
                     , pageSize, pageIndex
@@ -265,21 +265,21 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
                 if (postExp != null)
                 {
-                    var getPosts = MixPosts.ReadListItemViewModel.Repository
+                    var getPosts = MixPosts.ReadMvcViewModel.Repository
                     .GetModelListBy(postExp
                     , MixService.GetConfig<string>(orderBy), 0
                     , pageSize, pageIndex
                     , _context: context, _transaction: transaction);
                     if (getPosts.IsSucceed)
                     {
-                        Posts.Items = new List<MixPagePosts.ReadViewModel>();
+                        Posts.Items = new List<MixPagePosts.ReadMvcViewModel>();
                         Posts.PageIndex = getPosts.Data.PageIndex;
                         Posts.PageSize = getPosts.Data.PageSize;
                         Posts.TotalItems = getPosts.Data.TotalItems;
                         Posts.TotalPage = getPosts.Data.TotalPage;
                         foreach (var post in getPosts.Data.Items)
                         {
-                            Posts.Items.Add(new MixPagePosts.ReadViewModel()
+                            Posts.Items.Add(new MixPagePosts.ReadMvcViewModel()
                             {
                                 PageId = Id,
                                 PostId = post.Id,
@@ -319,21 +319,21 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
                 if (postExp != null)
                 {
-                    var getPosts = MixPosts.ReadListItemViewModel.Repository
+                    var getPosts = MixPosts.ReadMvcViewModel.Repository
                     .GetModelListBy(postExp
                     , MixService.GetConfig<string>(orderBy), 0
                     , pageSize, pageIndex
                     , _context: context, _transaction: transaction);
                     if (getPosts.IsSucceed)
                     {
-                        Posts.Items = new List<MixPagePosts.ReadViewModel>();
+                        Posts.Items = new List<MixPagePosts.ReadMvcViewModel>();
                         Posts.PageIndex = getPosts.Data.PageIndex;
                         Posts.PageSize = getPosts.Data.PageSize;
                         Posts.TotalItems = getPosts.Data.TotalItems;
                         Posts.TotalPage = getPosts.Data.TotalPage;
                         foreach (var post in getPosts.Data.Items)
                         {
-                            Posts.Items.Add(new MixPagePosts.ReadViewModel()
+                            Posts.Items.Add(new MixPagePosts.ReadMvcViewModel()
                             {
                                 PageId = Id,
                                 PostId = post.Id,
@@ -379,7 +379,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         private void GetSubPosts(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getPosts = MixPagePosts.ReadViewModel.Repository.GetModelListBy(
+            var getPosts = MixPagePosts.ReadMvcViewModel.Repository.GetModelListBy(
                 n => n.PageId == Id && n.Specificulture == Specificulture,
                 MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
                 , 4, 0

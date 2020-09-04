@@ -142,9 +142,11 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 default:
                     var listItemResult = await base.GetListAsync<ReadViewModel>(request, predicate);
-                    listItemResult.Data.Items.ForEach(n => n.IsActived = true);
-                    listItemResult.Data.Items.ForEach(n => n.Post.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                new { action = "post", culture = _lang, id = n.Post.Id, seoName = n.Post.SeoName }, Request, Url));
+                    listItemResult.Data.Items.ForEach(n => { 
+                        n.IsActived = true;
+                        n.Post.DetailsUrl = MixCmsHelper.GetRouterUrl(
+                                new { action = "post", culture = _lang, id = n.Post.Id, seoName = n.Post.SeoName }, Request, Url);
+                    });
                     return JObject.FromObject(listItemResult);
             }
         }
