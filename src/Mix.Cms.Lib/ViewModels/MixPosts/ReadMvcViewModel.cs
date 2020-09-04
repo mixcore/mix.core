@@ -182,7 +182,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
 
         [JsonProperty("pages")]
-        public List<MixPagePosts.ReadMvcViewModel> Pages { get; set; }
+        public List<MixPagePosts.ReadViewModel> Pages { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -205,7 +205,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             //Load Template + Style +  Scripts for views
             this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
-            LoadParentPage(_context, _transaction);
+            LoadPages(_context, _transaction);
             LoadAttributes(_context, _transaction);
             LoadTags(_context, _transaction);
             LoadCategories(_context, _transaction);
@@ -261,9 +261,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         #region Expands
 
-        private void LoadParentPage(MixCmsContext _context, IDbContextTransaction _transaction)
+        private void LoadPages(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            this.Pages = MixPagePosts.Helper.GetActivedNavAsync(Id, Specificulture, true, false, _context, _transaction).Data;
+            this.Pages = MixPagePosts.Helper.GetActivedNavAsync<MixPagePosts.ReadViewModel>(Id, null, Specificulture, _context, _transaction).Data;
+            this.Pages.ForEach(p => p.LoadPage(_context, _transaction));
         }
 
         /// <summary>Loads the attributes.</summary>

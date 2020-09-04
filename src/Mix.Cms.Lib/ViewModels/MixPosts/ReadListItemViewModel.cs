@@ -114,9 +114,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }
 
-        [JsonProperty("view")]
-        public ReadViewModel View { get; set; }
-
         [JsonProperty("domain")]
         public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
@@ -152,20 +149,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
         }
 
-        public string TemplatePath {
-            get {
-                return CommonHelper.GetFullPath(new string[]
-                {
-                    ""
-                    , MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture) ?? "Default"
-                    , Template
-                });
-            }
-        }
-
-        public List<ExtraProperty> Properties { get; set; }
-
+        [JsonProperty("pages")]
+        public List<MixPagePosts.ReadViewModel> Pages { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -189,6 +174,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             LoadAttributes(_context, _transaction);
             LoadTags(_context, _transaction);
             LoadCategories(_context, _transaction);
+            LoadPages(_context, _transaction);
+        }
+
+        private void LoadPages(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            this.Pages = MixPagePosts.Helper.GetActivedNavAsync<MixPagePosts.ReadViewModel>(Id, null, Specificulture, context, transaction).Data;
+            this.Pages.ForEach(p => p.LoadPage(context, transaction));
         }
 
         #endregion Overrides
@@ -227,10 +219,24 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         }
 
         //Get Property by name
-        public string Property(string name)
+        public T Property<T>(string fieldName)
         {
-            var prop = Properties.FirstOrDefault(p => p.Name.ToLower() == name.ToLower());
-            return prop?.Value;
+            if (AttributeData != null)
+            {
+                var field = AttributeData.Data.Data.GetValue(fieldName);
+                if (field != null)
+                {
+                    return field.Value<T>();
+                }
+                else
+                {
+                    return default(T);
+                }
+            }
+            else
+            {
+                return default(T);
+            }
         }
 
         #endregion Expands

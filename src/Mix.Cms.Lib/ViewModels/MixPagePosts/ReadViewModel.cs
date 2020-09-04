@@ -81,8 +81,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         }
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            this.LoadPost(_context, _transaction);
-            this.LoadPage(_context, _transaction);
+            //this.LoadPost(_context, _transaction);
+            //this.LoadPage(_context, _transaction);
         }
 
         #endregion overrides
