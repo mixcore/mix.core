@@ -144,6 +144,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     var listItemResult = await base.GetListAsync<ReadViewModel>(request, predicate);
                     listItemResult.Data.Items.ForEach(n => { 
                         n.IsActived = true;
+                        n.LoadPost();
                         n.Post.DetailsUrl = $"/post/{_lang}/{n.PostId}/{n.Post.SeoName}";
                     });
                     return JObject.FromObject(listItemResult);

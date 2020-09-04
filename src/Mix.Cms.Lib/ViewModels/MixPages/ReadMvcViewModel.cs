@@ -180,13 +180,17 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
-            if (View != null)
+            if (View == null)
             {
-                GetSubModules(_context, _transaction);
-            }
 
-            LoadAttributes(_context, _transaction);
+                this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
+                if (View != null)
+                {
+                    GetSubModules(_context, _transaction);
+                }
+
+                LoadAttributes(_context, _transaction);
+            }
         }
 
         #endregion Overrides

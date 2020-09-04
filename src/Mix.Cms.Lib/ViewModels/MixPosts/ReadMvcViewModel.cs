@@ -203,35 +203,39 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            //Load Template + Style +  Scripts for views
-            this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
-            LoadPages(_context, _transaction);
-            LoadAttributes(_context, _transaction);
-            LoadTags(_context, _transaction);
-            LoadCategories(_context, _transaction);
-            var getPostMedia = MixPostMedias.ReadViewModel.Repository.GetModelListBy(n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction);
-            if (getPostMedia.IsSucceed)
+            if (View == null)
             {
-                MediaNavs = getPostMedia.Data.OrderBy(p => p.Priority).ToList();
-                MediaNavs.ForEach(n => n.IsActived = true);
-            }
 
-            // Modules
-            var getPostModule = MixPostModules.ReadViewModel.Repository.GetModelListBy(
-                n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction);
-            if (getPostModule.IsSucceed)
-            {
-                ModuleNavs = getPostModule.Data.OrderBy(p => p.Priority).ToList();
-                foreach (var item in ModuleNavs)
+                //Load Template + Style +  Scripts for views
+                this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
+                LoadPages(_context, _transaction);
+                LoadAttributes(_context, _transaction);
+                LoadTags(_context, _transaction);
+                LoadCategories(_context, _transaction);
+                var getPostMedia = MixPostMedias.ReadViewModel.Repository.GetModelListBy(n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction);
+                if (getPostMedia.IsSucceed)
                 {
-                    item.IsActived = true;
-                    item.Module.LoadData(postId: Id, _context: _context, _transaction: _transaction);
+                    MediaNavs = getPostMedia.Data.OrderBy(p => p.Priority).ToList();
+                    MediaNavs.ForEach(n => n.IsActived = true);
                 }
+
+                // Modules
+                var getPostModule = MixPostModules.ReadViewModel.Repository.GetModelListBy(
+                    n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction);
+                if (getPostModule.IsSucceed)
+                {
+                    ModuleNavs = getPostModule.Data.OrderBy(p => p.Priority).ToList();
+                    foreach (var item in ModuleNavs)
+                    {
+                        item.IsActived = true;
+                        item.Module.LoadData(postId: Id, _context: _context, _transaction: _transaction);
+                    }
+                }
+
+                // Related Posts
+                PostNavs = MixPostPosts.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
+
             }
-
-            // Related Posts
-            PostNavs = MixPostPosts.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
-
         }
 
         private void LoadTags(MixCmsContext context, IDbContextTransaction transaction)
@@ -282,7 +286,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 {
                     AttributeData.Data.LoadData(refData.AttributeFieldName, Id.ToString(), MixEnums.MixAttributeSetDataType.Post);
                 }
-                    
+
             }
         }
 
