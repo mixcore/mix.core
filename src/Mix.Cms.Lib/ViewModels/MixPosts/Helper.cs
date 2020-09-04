@@ -11,6 +11,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Linq;
 using Mix.Cms.Lib.Services;
+using Mix.Heart.Helpers;
 
 namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
@@ -146,6 +147,77 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 }
             }
         }
+        
+        public static async Task<RepositoryResponse<PaginationModel<TView>>> GetPostListByValueIds<TView>(
+            List<string> valueIds
+            , string culture = null
+            , string orderByPropertyName = "CreatedDateTime"
+            , Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Desc
+            , int? pageSize = null, int? pageIndex = null
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            where TView : ViewModelBase<MixCmsContext, MixPost, TView>
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
+                var result = new RepositoryResponse<PaginationModel<TView>>()
+                {
+                    IsSucceed = true,
+                    Data = new PaginationModel<TView>()
+                    {
+                        PageIndex = pageIndex.HasValue ? pageIndex.Value : 0,
+                        PageSize = pageSize
+                    }
+                };
+                // Get Data                
+                Expression<Func<MixAttributeSetValue, bool>> predicate = m => m.Specificulture == culture
+                   && m.Status == MixEnums.MixContentStatus.Published.ToString();
+                foreach (var item in valueIds)
+                {
+                    Expression<Func<MixAttributeSetValue, bool>> pre = m => m.Id == item;
+                    
+                    predicate = ReflectionHelper.CombineExpression(
+                        predicate
+                        , pre
+                        , Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                }
+                var getVal = await MixAttributeSetValues.ReadViewModel.Repository.GetModelListByAsync(predicate, context, transaction);
+                if (getVal.IsSucceed)
+                {
+                    var dataIds = getVal.Data.Select(m => m.DataId).Distinct();
+                    if (dataIds.Count() == 1)
+                    {
+
+                        result = await GetPostListByDataIds<TView>(
+                                dataIds: dataIds.ToList(),
+                                culture: culture,
+                                orderByPropertyName: orderByPropertyName,
+                                direction: direction,
+                                pageSize: pageSize,
+                                pageIndex: pageIndex,
+                                _context: context,
+                                _transaction: transaction);
+                    }
+                    //var query = context.MixRelatedAttributeData.Where(m=> m.Specificulture == culture
+                    //    && m.Id == getVal.Data.DataId && m.ParentId == parentId && m.ParentType == (int) MixEnums.MixAttributeSetDataType.Post)
+                    //    .Select(m => m.ParentId).Distinct().ToList();
+                }                
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<PaginationModel<TView>>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                }
+            }
+        }
 
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetPostListByDataId<TView>(
             string dataId
@@ -164,6 +236,80 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 var getRelatedData = await MixRelatedAttributeDatas.ReadViewModel.Repository.GetModelListByAsync(
                             m => m.Specificulture == culture && m.DataId == dataId
                             && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
+                            , orderByPropertyName = "CreatedDateTime", direction, pageSize, pageIndex
+                            , _context: context, _transaction: transaction
+                            );
+                if (getRelatedData.IsSucceed)
+                {
+                    foreach (var item in getRelatedData.Data.Items)
+                    {
+                        if (int.TryParse(item.ParentId, out int postId))
+                        {
+                            var getData = await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetSingleModelAsync(
+                            m => m.Specificulture == item.Specificulture && m.Id == postId
+                                , context, transaction);
+                            if (getData.IsSucceed)
+                            {
+                                result = new RepositoryResponse<PaginationModel<TView>>()
+                                {
+                                    IsSucceed = true,
+                                    Data = new PaginationModel<TView>()
+                                    {
+                                        Items = new List<TView>(),
+                                        PageIndex = pageIndex ?? 0,
+                                        PageSize = pageSize
+                                    }
+                                };
+                                result.Data.Items.Add(getData.Data);
+                            }
+                        }
+                    }
+                    result.Data.TotalItems = getRelatedData.Data.TotalItems;
+                    result.Data.TotalPage = getRelatedData.Data.TotalPage;
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<PaginationModel<TView>>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                }
+            }
+        }
+        
+        public static async Task<RepositoryResponse<PaginationModel<TView>>> GetPostListByDataIds<TView>(
+            List<string> dataIds
+            , string culture = null
+            , string orderByPropertyName = "CreatedDateTime"
+            , Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Desc
+            , int? pageSize = null, int? pageIndex = null
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            where TView : ViewModelBase<MixCmsContext, MixPost, TView>
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
+                var result = new RepositoryResponse<PaginationModel<TView>>();
+                Expression<Func<MixRelatedAttributeData, bool>> predicate = m => m.Specificulture == culture && dataIds.Contains(m.DataId)
+                            && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString();
+                foreach (var id in dataIds)
+                {
+                    Expression<Func<MixRelatedAttributeData, bool>> pre = m => m.DataId == id;
+
+                    predicate = ReflectionHelper.CombineExpression(
+                        predicate
+                        , pre
+                        , Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                }
+                var getRelatedData = await MixRelatedAttributeDatas.ReadViewModel.Repository.GetModelListByAsync(
+                            predicate
                             , orderByPropertyName = "CreatedDateTime", direction, pageSize, pageIndex
                             , _context: context, _transaction: transaction
                             );

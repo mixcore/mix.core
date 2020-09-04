@@ -10,6 +10,7 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixPosts;
 using Mix.Domain.Core.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -71,6 +72,21 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         {
             var result = await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetPostListByValueId<ReadMvcViewModel>(
                 Request.Query["value"]);
+            if (result.IsSucceed)
+            {
+                return result.Data;
+            }
+            else
+            {
+                return BadRequest(result.Errors);
+            }
+        }
+        
+        [HttpPost("get-by-value-ids")]
+        public async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> GetByValueIds([FromBody] List<string> valueIds)
+        {
+            var result = await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetPostListByValueIds<ReadMvcViewModel>(
+                valueIds);
             if (result.IsSucceed)
             {
                 return result.Data;
