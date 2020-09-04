@@ -142,6 +142,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
         }
 
+        [JsonProperty("templatePath")]
         public string TemplatePath
         {
             get
@@ -179,6 +180,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         [JsonProperty("listCategory")]
         public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
+
+        [JsonProperty("pages")]
+        public List<MixPagePosts.ReadViewModel> Pages { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -201,7 +205,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             //Load Template + Style +  Scripts for views
             this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
-
+            LoadParentPage(_context, _transaction);
             LoadAttributes(_context, _transaction);
             LoadTags(_context, _transaction);
             LoadCategories(_context, _transaction);
@@ -257,6 +261,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         #region Expands
 
+        private void LoadParentPage(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            this.Pages = MixPagePosts.Helper.GetActivedNavAsync(Id, Specificulture, true, false, _context, _transaction).Data;
+        }
+
         /// <summary>Loads the attributes.</summary>
         /// <param name="_context">The context.</param>
         /// <param name="_transaction">The transaction.</param>
@@ -268,6 +277,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
                 a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId == getAttrs.Data.Id
                     , _context, _transaction).Data;
+                foreach (var refData in AttributeData.Data.Values.Where(v => v.DataType == MixEnums.MixDataType.Reference))
+                {
+                    AttributeData.Data.LoadData(refData.AttributeFieldName, Id.ToString(), MixEnums.MixAttributeSetDataType.Post);
+                }
+                    
             }
         }
 

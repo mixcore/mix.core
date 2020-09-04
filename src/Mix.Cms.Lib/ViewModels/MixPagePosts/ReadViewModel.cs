@@ -6,6 +6,7 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using System.Linq;
 using static Mix.Cms.Lib.MixEnums;
 
@@ -80,25 +81,31 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         }
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getPost = MixPosts.ReadListItemViewModel.Repository.GetSingleModel(p => p.Id == PostId && p.Specificulture == Specificulture
+        }
+
+        #endregion overrides
+
+        #region Expand
+        public void LoadPage(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var getPage = MixPages.ReadViewModel.Repository.GetSingleModel(p => p.Id == PageId && p.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction
             );
-            var getPage = MixPages.ReadViewModel.Repository.GetSingleModel(p => p.Id == PageId && p.Specificulture == Specificulture
+            if (getPage.IsSucceed)
+            {
+                Page = getPage.Data;
+            }
+        }
+        public void LoadPost(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var getPost = MixPosts.ReadListItemViewModel.Repository.GetSingleModel(p => p.Id == PostId && p.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction
             );
             if (getPost.IsSucceed)
             {
                 Post = getPost.Data;
             }
-            if (getPage.IsSucceed)
-            {
-                Page = getPage.Data;
-            }
         }
-
-        #endregion overrides
-
-        #region Expand
 
         public static RepositoryResponse<List<MixPagePosts.ReadViewModel>> GetPagePostNavAsync(int postId, string specificulture
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
