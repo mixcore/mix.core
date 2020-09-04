@@ -133,7 +133,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public PaginationModel<ViewModels.MixModuleDatas.ReadViewModel> Data { get; set; } = new PaginationModel<ViewModels.MixModuleDatas.ReadViewModel>();
 
         [JsonProperty("posts")]
-        public PaginationModel<MixModulePosts.ReadMvcViewModel> Posts { get; set; } = new PaginationModel<MixModulePosts.ReadMvcViewModel>();
+        public PaginationModel<MixModulePosts.ReadViewModel> Posts { get; set; } = new PaginationModel<MixModulePosts.ReadViewModel>();
 
         public string TemplatePath {
             get {
@@ -291,7 +291,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 }
                 if (postExp != null)
                 {
-                    var getPosts = MixModulePosts.ReadMvcViewModel.Repository
+                    var getPosts = MixModulePosts.ReadViewModel.Repository
                     .GetModelListBy(postExp
                     , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
                     , pageSize, pageIndex

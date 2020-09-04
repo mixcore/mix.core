@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Linq;
+using Mix.Cms.Lib.Services;
 
 namespace Mix.Cms.Lib.ViewModels.MixPagePosts
 {
@@ -69,25 +70,27 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
             }
         }
 
-        public static RepositoryResponse<List<MixPagePosts.ReadMvcViewModel>> GetActivedNavAsync(
-            int postId, string specificulture
-            , bool isLoadPage = false, bool isLoadPost = false
+        public static RepositoryResponse<List<TView>> GetActivedNavAsync<TView>(
+            int? postId
+            , int? pageId = null
+            , string specificulture = null
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            where  TView: ViewModelBase<MixCmsContext, MixPagePost, TView>
         {
-            var result = MixPagePosts.ReadMvcViewModel.Repository.GetModelListBy(
-                m => m.PostId == postId && m.Specificulture == specificulture, _context, _transaction);
-            result.Data.ForEach(p => {
-                p.IsActived = true;
-                if (isLoadPage)
-                {
-                    p.LoadPage(_context, _transaction);
-                }
-                if (isLoadPost)
-                {
-                    p.LoadPost(_context, _transaction);
-                }
-                });
-            return result;
+            if (postId.HasValue || pageId.HasValue)
+            {
+                specificulture = specificulture ?? MixService.GetConfig<string>("DefaultCulture");
+                var result = DefaultRepository<MixCmsContext, MixPagePost, TView>.Instance.GetModelListBy(
+                    m => (!postId.HasValue || m.PostId == postId.Value)
+                        && (!pageId.HasValue || m.PageId == pageId.Value)
+                        && m.Specificulture == specificulture, _context, _transaction);
+                return result;
+            }
+            else
+            {
+                return new RepositoryResponse<List<TView>>();
+            }
         }
+
     }
 }

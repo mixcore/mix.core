@@ -61,7 +61,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         #region Views
 
         [JsonProperty("post")]
-        public MixPosts.ReadMvcViewModel Post { get; set; }
+        public MixPosts.ReadListItemViewModel Post { get; set; }
 
         [JsonProperty("page")]
         public MixPages.ReadViewModel Page { get; set; }
@@ -95,7 +95,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         }
         public void LoadPost(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getPost = MixPosts.ReadMvcViewModel.Repository.GetSingleModel(p => p.Id == PostId && p.Specificulture == Specificulture
+            var getPost = MixPosts.ReadListItemViewModel.Repository.GetSingleModel(p => p.Id == PostId && p.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction
             );
             if (getPost.IsSucceed)
