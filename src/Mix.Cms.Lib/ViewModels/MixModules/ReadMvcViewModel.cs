@@ -197,12 +197,15 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            //Load Template + Style +  Scripts for views
-            this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
-            this.FormView = MixTemplates.ReadListItemViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
-            this.EdmView = MixTemplates.ReadListItemViewModel.GetTemplateByPath(EdmTemplate, Specificulture, _context, _transaction).Data;
-            LoadAttributes(_context, _transaction);
-            // call load data from controller for padding parameter (postId, productId, ...)
+            if (View == null)
+            {
+                //Load Template + Style +  Scripts for views
+                this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
+                this.FormView = MixTemplates.ReadListItemViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
+                this.EdmView = MixTemplates.ReadListItemViewModel.GetTemplateByPath(EdmTemplate, Specificulture, _context, _transaction).Data;
+                LoadAttributes(_context, _transaction);
+                // call load data from controller for padding parameter (postId, productId, ...)
+            }
         }
 
         #endregion Overrides
