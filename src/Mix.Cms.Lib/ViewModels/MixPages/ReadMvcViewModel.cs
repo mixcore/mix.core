@@ -105,7 +105,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         #region Views
 
         [JsonProperty("details")]
-        public string DetailsUrl { get; set; }
+        public string DetailsUrl { get => Id > 0 ? $"/page/{Specificulture}/{SeoName}" : null; }
 
         [JsonProperty("domain")]
         public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
@@ -180,13 +180,17 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
-            if (View != null)
+            if (View == null)
             {
-                GetSubModules(_context, _transaction);
-            }
 
-            LoadAttributes(_context, _transaction);
+                this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
+                if (View != null)
+                {
+                    GetSubModules(_context, _transaction);
+                }
+
+                LoadAttributes(_context, _transaction);
+            }
         }
 
         #endregion Overrides
@@ -231,6 +235,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     if (getPosts.IsSucceed)
                     {
                         Posts = getPosts.Data;
+                        Posts.Items.ForEach(m => m.LoadPost(context, transaction));
                     }
                 }
             }
@@ -414,7 +419,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             if (AttributeData != null)
             {
-                var field = AttributeData.Data.Data.GetValue(fieldName);
+                var field = AttributeData.Data.Obj.GetValue(fieldName);
                 if (field != null)
                 {
                     return field.Value<T>();

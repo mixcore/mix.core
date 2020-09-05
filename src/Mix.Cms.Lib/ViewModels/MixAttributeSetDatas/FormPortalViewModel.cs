@@ -600,29 +600,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
         }
 
-        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        //{
-        //    var tasks = new List<Task>();
-        //    var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
-        //        .Any(d => d.Specificulture == Specificulture && d.Id == Id));
-        //    foreach (var item in attrDatas)
-        //    {
-        //        tasks.Add(Task.Run(() =>
-        //        {
-        //            var data = new ReadViewModel(item, context, transaction);
-        //            data.RemoveCache(item, context, transaction);
-        //        }));
-        //    }
-        //    foreach (var item in Values)
-        //    {
-        //        tasks.Add(Task.Run(() =>
-        //        {
-        //            item.RemoveCache(item.Model);
-        //        }));
-        //    }
-        //    return tasks;
-        //}
-
+        
         private void ParseData(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getValues = MixAttributeSetValues.UpdateViewModel

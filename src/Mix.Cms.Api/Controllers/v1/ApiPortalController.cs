@@ -256,8 +256,6 @@ namespace Mix.Cms.Api.Controllers.v1
                 var posts = Lib.ViewModels.MixPosts.ReadListItemViewModel.Repository.GetModelList();
                 foreach (var post in posts.Data)
                 {
-                    post.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                    new { culture = post.Specificulture, action = "post", id = post.Id, seoName = post.SeoName }, Request, Url);
                     var otherLanguages = pages.Data.Where(p => p.Id == post.Id && p.Specificulture != post.Specificulture);
                     var lstOther = new List<SitemapLanguage>();
                     foreach (var item in otherLanguages)

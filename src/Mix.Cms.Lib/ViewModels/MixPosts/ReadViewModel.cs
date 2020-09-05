@@ -106,8 +106,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl {
-            get {
+        public string ImageUrl
+        {
+            get
+            {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return $"{Domain}/{Image}";
@@ -120,8 +122,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl {
-            get {
+        public string ThumbnailUrl
+        {
+            get
+            {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return $"{Domain}/{Thumbnail}";
@@ -134,7 +138,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         }
 
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl { get => $"/post/{Specificulture}/{Id}/{SeoName}"; }
+        public string DetailsUrl { get => Id > 0 ? $"/post/{Specificulture}/{Id}/{SeoName}" : null; }
 
         [JsonProperty("properties")]
         public List<ExtraProperty> Properties { get; set; }
@@ -225,7 +229,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (_context == null)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
             }
         }
@@ -278,7 +282,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (_context == null)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
             }
         }
@@ -329,7 +333,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (_context == null)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
             }
         }
@@ -396,7 +400,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             if (AttributeData != null)
             {
-                var field = AttributeData.Data.Data.GetValue(fieldName);
+                var field = AttributeData.Data.Obj.GetValue(fieldName);
                 if (field != null)
                 {
                     return field.Value<T>();

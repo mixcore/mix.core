@@ -196,8 +196,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         }
                         if (result.IsSucceed)
                         {
-                            item.AttributeFieldId = item.Field.Id;
-                            item.AttributeFieldName = item.Field.Name;
+                            item.AttributeFieldId = item.Field?.Id ?? item.AttributeFieldId;
+                            item.AttributeFieldName = item.Field?.Name ?? item.AttributeFieldName;
                             item.Priority = item.Field?.Priority ?? item.Priority;
                             item.DataId = parent.Id;
                             item.Specificulture = parent.Specificulture;

@@ -97,7 +97,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #region Views
 
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl { get; set; }
+        public string DetailsUrl { get => Id > 0 ? $"/post/{Specificulture}/{Id}/{SeoName}" : null; }
 
         [JsonProperty("view")]
         public MixTemplates.ReadListItemViewModel View { get; set; }
@@ -142,6 +142,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
         }
 
+        [JsonProperty("templatePath")]
         public string TemplatePath
         {
             get
@@ -179,6 +180,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         [JsonProperty("listCategory")]
         public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
+
+        [JsonProperty("pages")]
+        public List<MixPagePosts.ReadViewModel> Pages { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -199,35 +203,39 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            //Load Template + Style +  Scripts for views
-            this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
-
-            LoadAttributes(_context, _transaction);
-            LoadTags(_context, _transaction);
-            LoadCategories(_context, _transaction);
-            var getPostMedia = MixPostMedias.ReadViewModel.Repository.GetModelListBy(n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction);
-            if (getPostMedia.IsSucceed)
+            if (View == null)
             {
-                MediaNavs = getPostMedia.Data.OrderBy(p => p.Priority).ToList();
-                MediaNavs.ForEach(n => n.IsActived = true);
-            }
 
-            // Modules
-            var getPostModule = MixPostModules.ReadViewModel.Repository.GetModelListBy(
-                n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction);
-            if (getPostModule.IsSucceed)
-            {
-                ModuleNavs = getPostModule.Data.OrderBy(p => p.Priority).ToList();
-                foreach (var item in ModuleNavs)
+                //Load Template + Style +  Scripts for views
+                this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
+                LoadPages(_context, _transaction);
+                LoadAttributes(_context, _transaction);
+                LoadTags(_context, _transaction);
+                LoadCategories(_context, _transaction);
+                var getPostMedia = MixPostMedias.ReadViewModel.Repository.GetModelListBy(n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction);
+                if (getPostMedia.IsSucceed)
                 {
-                    item.IsActived = true;
-                    item.Module.LoadData(postId: Id, _context: _context, _transaction: _transaction);
+                    MediaNavs = getPostMedia.Data.OrderBy(p => p.Priority).ToList();
+                    MediaNavs.ForEach(n => n.IsActived = true);
                 }
+
+                // Modules
+                var getPostModule = MixPostModules.ReadViewModel.Repository.GetModelListBy(
+                    n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction);
+                if (getPostModule.IsSucceed)
+                {
+                    ModuleNavs = getPostModule.Data.OrderBy(p => p.Priority).ToList();
+                    foreach (var item in ModuleNavs)
+                    {
+                        item.IsActived = true;
+                        item.Module.LoadData(postId: Id, _context: _context, _transaction: _transaction);
+                    }
+                }
+
+                // Related Posts
+                PostNavs = MixPostPosts.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
+
             }
-
-            // Related Posts
-            PostNavs = MixPostPosts.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
-
         }
 
         private void LoadTags(MixCmsContext context, IDbContextTransaction transaction)
@@ -257,6 +265,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         #region Expands
 
+        private void LoadPages(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            this.Pages = MixPagePosts.Helper.GetActivedNavAsync<MixPagePosts.ReadViewModel>(Id, null, Specificulture, _context, _transaction).Data;
+            this.Pages.ForEach(p => p.LoadPage(_context, _transaction));
+        }
+
         /// <summary>Loads the attributes.</summary>
         /// <param name="_context">The context.</param>
         /// <param name="_transaction">The transaction.</param>
@@ -268,6 +282,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
                 a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId == getAttrs.Data.Id
                     , _context, _transaction).Data;
+                AttributeData.Data.LoadReferenceData(
+                        Id.ToString(), MixEnums.MixAttributeSetDataType.Post, _context, _transaction);
+
             }
         }
 
@@ -279,7 +296,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             if (AttributeData != null)
             {
-                var field = AttributeData.Data.Data.GetValue(fieldName);
+                var field = AttributeData.Data.Obj.GetValue(fieldName);
                 if (field != null)
                 {
                     return field.Value<T>();

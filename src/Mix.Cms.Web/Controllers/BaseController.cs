@@ -231,9 +231,6 @@ namespace Mix.Cms.Web.Controllers
             if (getPage.IsSucceed)
             {
                 getPage.Data.LoadData(pageIndex: page - 1, pageSize: pageSize);
-                getPage.Data.DetailsUrl = GenerateDetailsUrl(
-                    new { culture = culture, seoName = getPage.Data.SeoName }
-                    );
                 GeneratePageDetailsUrls(getPage.Data);
                 //_ = MixCacheService.SetAsync(cacheKey, getPage);
             }
@@ -272,21 +269,6 @@ namespace Mix.Cms.Web.Controllers
                 && p.Specificulture == culture;
 
                 getPost = await Lib.ViewModels.MixPosts.ReadMvcViewModel.Repository.GetFirstModelAsync(predicate);
-                if (getPost.IsSucceed)
-                {
-                    getPost.Data.DetailsUrl = $"{getPost.Data.Domain}/post/{culture}/{id}/{getPost.Data.SeoName}";
-                    //Generate details url for related posts
-                    if (getPost.IsSucceed)
-                    {
-                        if (getPost.Data.PostNavs != null && getPost.Data.PostNavs.Count > 0)
-                        {
-                            getPost.Data.PostNavs.ForEach(
-                                n => n.RelatedPost.DetailsUrl = $"{getPost.Data.Domain}/post/{culture}/{n.RelatedPost.Id}/{n.RelatedPost.SeoName}"
-                            );
-                        }
-                        //_ = MixCacheService.SetAsync(cacheKey, getPost);
-                    }
-                }
             }
 
             if (getPost.IsSucceed)
@@ -326,7 +308,7 @@ namespace Mix.Cms.Web.Controllers
                 getData.Data.DetailsUrl = GenerateDetailsUrl(
                     new { culture = culture, seoName = getData.Data.Name }
                     );
-                GeneratePageDetailsUrls(getData.Data);
+                GenerateDetailsUrls(getData.Data);
                 //_ = MixCacheService.SetAsync(cacheKey, getPage);
             }
 
@@ -347,45 +329,20 @@ namespace Mix.Cms.Web.Controllers
 
         protected void GeneratePageDetailsUrls(Lib.ViewModels.MixPages.ReadMvcViewModel page)
         {
-            page.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                   new { culture = culture, seoName = page.SeoName }, Request, Url);
-            if (page.Posts != null)
-            {
-                foreach (var postNav in page.Posts.Items)
-                {
-                    if (postNav.Post != null)
-                    {
-                        postNav.Post.DetailsUrl = GenerateDetailsUrl(new { action = "post", culture = culture, id = postNav.PostId, seoName = postNav.Post.SeoName });
-                    }
-                }
-            }
-
             if (page.Modules != null)
             {
                 foreach (var nav in page.Modules)
                 {
-                    GeneratePageDetailsUrls(nav.Module);
+                    GenerateDetailsUrls(nav.Module);
                 }
             }
         }
 
-        protected void GeneratePageDetailsUrls(Lib.ViewModels.MixModules.ReadMvcViewModel module)
+        protected void GenerateDetailsUrls(Lib.ViewModels.MixModules.ReadMvcViewModel module)
         {
             module.DetailsUrl = GenerateDetailsUrl(
                             new { action = "module", culture = culture, id = module.Id, seoName = module.Name }
                             );
-            if (module.Posts != null)
-            {
-                foreach (var postNav in module.Posts.Items)
-                {
-                    if (postNav.Post != null)
-                    {
-                        postNav.Post.DetailsUrl = GenerateDetailsUrl(
-                            new { action = "post", culture = culture, id = postNav.PostId, seoName = postNav.Post.SeoName }
-                            );
-                    }
-                }
-            }
         }
 
         protected string GenerateDetailsUrl(object routeValues)

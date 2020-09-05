@@ -112,17 +112,16 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
 
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl { get; set; }
-
-        [JsonProperty("view")]
-        public ReadViewModel View { get; set; }
+        public string DetailsUrl { get => Id > 0 ? $"/post/{Specificulture}/{Id}/{SeoName}" : null; }
 
         [JsonProperty("domain")]
         public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl {
-            get {
+        public string ImageUrl
+        {
+            get
+            {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -137,8 +136,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl {
-            get {
+        public string ThumbnailUrl
+        {
+            get
+            {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -152,20 +153,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
         }
 
-        public string TemplatePath {
-            get {
-                return CommonHelper.GetFullPath(new string[]
-                {
-                    ""
-                    , MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture) ?? "Default"
-                    , Template
-                });
-            }
-        }
-
-        public List<ExtraProperty> Properties { get; set; }
-
+        [JsonProperty("pages")]
+        public List<MixPagePosts.ReadViewModel> Pages { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -186,9 +175,28 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            LoadAttributes(_context, _transaction);
-            LoadTags(_context, _transaction);
-            LoadCategories(_context, _transaction);
+            if (AttributeData == null)
+            {
+                LoadAttributes(_context, _transaction);
+            }
+            if (SysTags == null)
+            {
+                LoadTags(_context, _transaction);
+            }
+            if (SysCategories == null)
+            {
+                LoadCategories(_context, _transaction);
+            }
+            if (Pages == null)
+            {
+                LoadPages(_context, _transaction);
+            }
+        }
+
+        private void LoadPages(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            this.Pages = MixPagePosts.Helper.GetActivedNavAsync<MixPagePosts.ReadViewModel>(Id, null, Specificulture, context, transaction).Data;
+            this.Pages.ForEach(p => p.LoadPage(context, transaction));
         }
 
         #endregion Overrides
@@ -227,10 +235,24 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         }
 
         //Get Property by name
-        public string Property(string name)
+        public T Property<T>(string fieldName)
         {
-            var prop = Properties.FirstOrDefault(p => p.Name.ToLower() == name.ToLower());
-            return prop?.Value;
+            if (AttributeData != null)
+            {
+                var field = AttributeData.Data.Obj.GetValue(fieldName);
+                if (field != null)
+                {
+                    return field.Value<T>();
+                }
+                else
+                {
+                    return default(T);
+                }
+            }
+            else
+            {
+                return default(T);
+            }
         }
 
         #endregion Expands

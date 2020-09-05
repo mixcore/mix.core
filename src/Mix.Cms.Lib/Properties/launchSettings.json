@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Mix.Cms.Lib": {
+      "commandName": "Project",
+      "sqlDebugging": true,
+      "nativeDebugging": true
+    }
+  }
+}
