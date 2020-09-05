@@ -54,12 +54,6 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         Expression<Func<MixPagePost, bool>> predicate = model => model.PageId == pageId && model.PostId == postId && model.Specificulture == _lang;
                         var portalResult = await base.GetSingleAsync<ReadViewModel>($"{viewType}_{pageId}_{postId}", predicate);
-                        if (portalResult.IsSucceed)
-                        {
-                            portalResult.Data.Post.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                new { action = "post", culture = _lang, portalResult.Data.Post.SeoName }, Request, Url);
-                        }
-
                         return Ok(JObject.FromObject(portalResult));
                     }
                     else
@@ -145,7 +139,6 @@ namespace Mix.Cms.Api.Controllers.v1
                     listItemResult.Data.Items.ForEach(n => { 
                         n.IsActived = true;
                         n.LoadPost();
-                        n.Post.DetailsUrl = $"/post/{_lang}/{n.PostId}/{n.Post.SeoName}";
                     });
                     return JObject.FromObject(listItemResult);
             }
