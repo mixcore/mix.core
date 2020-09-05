@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
@@ -47,8 +48,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("values")]
         public List<MixAttributeSetValues.ReadViewModel> Values { get; set; }
 
-        [JsonProperty("data")]
-        public JObject Data { get; set; }
+        [JsonProperty("obj")]
+        public JObject Obj { get; set; }
 
         #endregion Views
 
@@ -70,17 +71,21 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (Values == null)
+            if (Obj == null)
             {
-                Data = new JObject();
-                Values = MixAttributeSetValues.ReadViewModel
+                Obj = new JObject();
+                Values = Values ??  MixAttributeSetValues.ReadViewModel
                     .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-                Data.Add(new JProperty("id", Id));
-                foreach (var item in Values.OrderBy(v => v.Priority))
+                Obj.Add(new JProperty("id", Id));
+                foreach (var item in Values.Where(m => m.DataType != MixEnums.MixDataType.Reference).OrderBy(v => v.Priority))
                 {
-                    if (!Data.TryGetValue(item.AttributeFieldName, out JToken val))
+                    if (!Obj.TryGetValue(item.AttributeFieldName, out JToken val))
                     {
-                        Data.Add(ParseValue(item));
+                        var prop = ParseValue(item);
+                        if (prop != null)
+                        {
+                            Obj.Add(prop);
+                        }
                     }
                 }
             }
@@ -113,8 +118,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue));
 
                 case MixEnums.MixDataType.Reference:
-                    JArray arr = new JArray();
-                    return (new JProperty(item.AttributeFieldName, arr));
+                    return null;
 
                 case MixEnums.MixDataType.Custom:
                 case MixEnums.MixDataType.Duration:
@@ -138,17 +142,28 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
         }
 
-        public void  LoadData(string fieldName, string parentId, MixEnums.MixAttributeSetDataType  parentType)
+        public void LoadReferenceData(string parentId, MixEnums.MixAttributeSetDataType parentType,
+            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var navs = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(
-                        m => m.DataId == parentId  && m.ParentType  == parentType.ToString() && m.Specificulture == Specificulture);
-            JArray arr = new JArray();
-            foreach (var nav in navs.Data)
+            var refFields = Values.Where(m => m.DataType == MixEnums.MixDataType.Reference).OrderBy(v => v.Priority).ToList();
+            foreach (var item in refFields)
             {
-                nav.Data.Data.Add(new JProperty("id", nav.Data.Id));
-                arr.Add(nav.Data.Data);
+                item.Field = item.Field ?? MixAttributeFields.ReadViewModel.Repository.GetSingleModel(m => m.Id == item.AttributeFieldId
+                , _context, _transaction).Data;
+                Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
+                    (model.AttributeSetId == item.Field.ReferenceId)
+                    &&  (model.ParentId == parentId && model.ParentType == parentType.ToString())
+                    && model.Specificulture == Specificulture
+                    ;
+                var getData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(predicate, _context, _transaction);
+
+                JArray arr = new JArray();
+                foreach (var nav in getData.Data)
+                {
+                    arr.Add(nav.Data.Obj);
+                }
+                Obj.Add(new JProperty(item.AttributeFieldName, arr));
             }
-            Data[fieldName] = arr;
         }
         #endregion Expands
     }
