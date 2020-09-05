@@ -419,7 +419,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             if (AttributeData != null)
             {
-                var field = AttributeData.Data.Data.GetValue(fieldName);
+                var field = AttributeData.Data.Obj.GetValue(fieldName);
                 if (field != null)
                 {
                     return field.Value<T>();

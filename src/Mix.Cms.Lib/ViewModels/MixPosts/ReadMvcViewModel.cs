@@ -282,10 +282,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
                 a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId == getAttrs.Data.Id
                     , _context, _transaction).Data;
-                foreach (var refData in AttributeData.Data.Values.Where(v => v.DataType == MixEnums.MixDataType.Reference))
-                {
-                    AttributeData.Data.LoadData(refData.AttributeFieldName, Id.ToString(), MixEnums.MixAttributeSetDataType.Post);
-                }
+                AttributeData.Data.LoadReferenceData(
+                        Id.ToString(), MixEnums.MixAttributeSetDataType.Post, _context, _transaction);
 
             }
         }
@@ -298,7 +296,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             if (AttributeData != null)
             {
-                var field = AttributeData.Data.Data.GetValue(fieldName);
+                var field = AttributeData.Data.Obj.GetValue(fieldName);
                 if (field != null)
                 {
                     return field.Value<T>();
