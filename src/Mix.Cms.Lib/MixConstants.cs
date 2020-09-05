@@ -51,7 +51,7 @@ namespace Mix.Cms.Lib
             public const string DefaultBlankTemplateFolder = "DefaultTemplateFolder";
             public const string DefaultTemplateFolder = "DefaultTemplateFolder";
             public const string Language = "Language";
-            public const string DefaultStatus = MixConstants.ConfigurationKeyword.DefaultContentStatus;
+            public const string DefaultStatus = "DefaultContentStatus";
             public const string DefaultCulture = "DefaultCulture";
             public const string IsMysql = "IsMysql";
             public const string Domain = "Domain";

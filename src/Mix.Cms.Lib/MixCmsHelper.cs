@@ -214,14 +214,6 @@ namespace Mix.Cms.Lib
             }
 
             // If load successful => load details
-            if (module.IsSucceed)
-            {
-                if (url != null && module.Data.Posts != null)
-                {
-                    module.Data.Posts.Items.ForEach(a => { a.Post.DetailsUrl = url.RouteUrl("Post", new { id = a.PostId, seoName = a.Post.SeoName }); });
-                }
-                //await MixCacheService.SetAsync(cacheKey, module);
-            }
 
             return Task.FromResult(module.Data);
         }

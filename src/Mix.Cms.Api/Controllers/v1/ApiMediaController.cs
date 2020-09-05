@@ -5,7 +5,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixMedias;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
@@ -83,6 +85,7 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 var json = JObject.Parse(model);
                 var data = json.ToObject<UpdateViewModel>();
+                data.Status = (MixContentStatus)Enum.Parse(typeof(MixContentStatus), MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultContentStatus));
                 data.Specificulture = _lang;
                 data.File = file;
                 var result = await base.SaveAsync<UpdateViewModel>(data, true);
