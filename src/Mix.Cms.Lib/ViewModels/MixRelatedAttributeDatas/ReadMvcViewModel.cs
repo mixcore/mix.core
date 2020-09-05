@@ -75,12 +75,15 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getData = MixAttributeSetDatas.ReadMvcViewModel.Repository.GetSingleModel(p => p.Id == DataId && p.Specificulture == Specificulture
-                , _context: _context, _transaction: _transaction
-            );
-            if (getData.IsSucceed)
+            if (Data == null)
             {
-                Data = getData.Data;
+                var getData = MixAttributeSetDatas.ReadMvcViewModel.Repository.GetSingleModel(p => p.Id == DataId && p.Specificulture == Specificulture
+                    , _context: _context, _transaction: _transaction
+                );
+                if (getData.IsSucceed)
+                {
+                    Data = getData.Data;
+                }
             }
         }
 

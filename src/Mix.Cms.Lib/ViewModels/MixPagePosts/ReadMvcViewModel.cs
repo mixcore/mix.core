@@ -12,15 +12,15 @@ using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixPagePosts
 {
-    public class ReadViewModel
-       : ViewModelBase<MixCmsContext, MixPagePost, ReadViewModel>
+    public class ReadMvcViewModel
+       : ViewModelBase<MixCmsContext, MixPagePost, ReadMvcViewModel>
     {
-        public ReadViewModel(MixPagePost model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public ReadMvcViewModel(MixPagePost model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
 
-        public ReadViewModel() : base()
+        public ReadMvcViewModel() : base()
         {
         }
 
@@ -78,11 +78,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
                 CreatedDateTime = DateTime.UtcNow;
             }
             return base.ParseModel(_context, _transaction);
-        }
-        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            //this.LoadPost(_context, _transaction);
-            //this.LoadPage(_context, _transaction);
         }
 
         #endregion overrides

@@ -75,8 +75,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
         #region Views
 
-        [JsonProperty("dataNavs")]
-        public List<MixRelatedAttributeDatas.ReadMvcViewModel> DataNavs { get; set; }
+        //[JsonProperty("dataNavs")]
+        //public List<MixRelatedAttributeDatas.ReadMvcViewModel> DataNavs { get; set; }
 
         #endregion Views
 
@@ -100,12 +100,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (DataType == MixEnums.MixDataType.Reference)
-            {
-                DataNavs = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(d =>
-                    d.ParentId == DataId && d.ParentType == MixEnums.MixAttributeSetDataType.Set.ToString() && d.Specificulture == Specificulture,
-                _context, _transaction).Data;
-            }
+            //if (DataType == MixEnums.MixDataType.Reference)
+            //{
+            //    DataNavs = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(d =>
+            //        d.DataId == DataId && d.Specificulture == Specificulture,
+            //    _context, _transaction).Data;
+            //}
         }
 
         #endregion Override

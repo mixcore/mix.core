@@ -7,6 +7,7 @@ using Mix.Domain.Core.Models;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -37,6 +38,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         [JsonProperty("category")]
         public string Category { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty("dataType")]
         public MixDataType DataType { get; set; }
 

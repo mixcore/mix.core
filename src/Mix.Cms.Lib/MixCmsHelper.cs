@@ -214,14 +214,6 @@ namespace Mix.Cms.Lib
             }
 
             // If load successful => load details
-            if (module.IsSucceed)
-            {
-                if (url != null && module.Data.Posts != null)
-                {
-                    module.Data.Posts.Items.ForEach(a => { a.Post.DetailsUrl = url.RouteUrl("Post", new { id = a.PostId, seoName = a.Post.SeoName }); });
-                }
-                //await MixCacheService.SetAsync(cacheKey, module);
-            }
 
             return Task.FromResult(module.Data);
         }
@@ -287,10 +279,21 @@ namespace Mix.Cms.Lib
                 foreach (var cate in nav.MenuItems)
                 {
                     cate.IsActive = cate.Uri == activePath;
+                    if (cate.IsActive)
+                    {
+                        nav.ActivedMenuItem = cate;
+                        nav.ActivedMenuItems.Add(cate);
+                    }
 
                     foreach (var item in cate.MenuItems)
-                    {
+                    {                        
                         item.IsActive = item.Uri == activePath;
+                        if (item.IsActive)
+                        {
+                            nav.ActivedMenuItem = item;
+                            nav.ActivedMenuItems.Add(cate);
+                            nav.ActivedMenuItems.Add(item);
+                        }
                         cate.IsActive = cate.IsActive || item.IsActive;
                     }
                 }

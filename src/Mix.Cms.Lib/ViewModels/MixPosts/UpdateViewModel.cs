@@ -216,7 +216,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<ExtraProperty> Properties { get; set; }
 
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl { get; set; }
+        public string DetailsUrl { get => Id > 0 ? $"/post/{Specificulture}/{Id}/{SeoName}" : null; }
 
         [JsonProperty("urlAliases")]
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
@@ -1154,7 +1154,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                             , _context, _transaction)
                         {
                             Field = field,
-                            AttributeFieldName = field.Name,
+                            AttributeFieldName = field.Name ?? SeoHelper.GetSEOString(field.Title),
                             Priority = field.Priority,
                             StringValue = field.DefaultValue
                         };
