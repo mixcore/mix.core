@@ -356,6 +356,87 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 }
             }
         }
+        
+        public static async Task<RepositoryResponse<PaginationModel<TView>>> SearchPost<TView>(
+            string keyword
+            , List<string> dataIds
+            , string culture = null
+            , string orderByPropertyName = "CreatedDateTime"
+            , Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Desc
+            , int? pageSize = null, int? pageIndex = null
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            where TView : ViewModelBase<MixCmsContext, MixPost, TView>
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
+                var result = new RepositoryResponse<PaginationModel<TView>>();
+                Expression<Func<MixRelatedAttributeData, bool>> predicate = 
+                    m => m.Specificulture == culture && dataIds.Contains(m.DataId)
+                            && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString();
+                foreach (var id in dataIds)
+                {
+                    Expression<Func<MixRelatedAttributeData, bool>> pre = m => m.DataId == id;
+
+                    predicate = ReflectionHelper.CombineExpression(
+                        predicate
+                        , pre
+                        , Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                }
+                var getRelatedData = await MixRelatedAttributeDatas.ReadViewModel.Repository.GetModelListByAsync(
+                            predicate
+                            , orderByPropertyName = "CreatedDateTime", direction, pageSize, pageIndex
+                            , _context: context, _transaction: transaction
+                            );
+                if (getRelatedData.IsSucceed)
+                {
+                    foreach (var item in getRelatedData.Data.Items)
+                    {
+                        if (int.TryParse(item.ParentId, out int postId))
+                        {
+                            var getData = await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetSingleModelAsync(
+                            m => m.Specificulture == item.Specificulture 
+                            && m.Id == postId
+                            && (string.IsNullOrEmpty(keyword)
+                             || (EF.Functions.Like(m.Title, $"%{keyword}%"))
+                             || (EF.Functions.Like(m.Excerpt, $"%{keyword}%"))
+                             || (EF.Functions.Like(m.Content, $"%{keyword}%")))
+                                , context, transaction);
+                            if (getData.IsSucceed)
+                            {
+                                result = new RepositoryResponse<PaginationModel<TView>>()
+                                {
+                                    IsSucceed = true,
+                                    Data = new PaginationModel<TView>()
+                                    {
+                                        Items = new List<TView>(),
+                                        PageIndex = pageIndex ?? 0,
+                                        PageSize = pageSize
+                                    }
+                                };
+                                result.Data.Items.Add(getData.Data);
+                            }
+                        }
+                    }
+                    result.Data.TotalItems = getRelatedData.Data.TotalItems;
+                    result.Data.TotalPage = getRelatedData.Data.TotalPage;
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<PaginationModel<TView>>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                }
+            }
+        }
 
 
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetModelistByAddictionalField<TView>(
