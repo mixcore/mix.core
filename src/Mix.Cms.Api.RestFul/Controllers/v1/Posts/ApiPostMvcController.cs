@@ -97,6 +97,21 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
         
+        [HttpPost("search-post")]
+        public async Task<ActionResult<PaginationModel<ReadListItemViewModel>>> SearchPost([FromBody] List<string> dataIds, [FromQuery] string keyword)
+        {
+            var result = await Mix.Cms.Lib.ViewModels.MixPosts.Helper.SearchPost<ReadListItemViewModel>(
+                keyword, dataIds);
+            if (result.IsSucceed)   
+            {
+                return result.Data;
+            }
+            else
+            {
+                return BadRequest(result.Errors);
+            }
+        }
+        
         [HttpGet("get-by-data-id")]
         public async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> GetByAttributeDataId()
         {

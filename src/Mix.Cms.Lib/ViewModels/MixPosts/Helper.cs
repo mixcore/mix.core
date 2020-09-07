@@ -61,7 +61,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (getVal.IsSucceed)
                 {
                     result = await GetPostListByDataId<TView>(
-                            dataId:getVal.Data.DataId,
+                            dataId: getVal.Data.DataId,
                             culture: culture,
                             orderByPropertyName: orderByPropertyName,
                             direction: direction,
@@ -88,7 +88,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 }
             }
         }
-        
+
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetPostListByValueId<TView>(
             string valueId
             , string culture = null
@@ -113,14 +113,14 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 };
                 // Get Tag
                 var getVal = await MixAttributeSetValues.ReadViewModel.Repository.GetSingleModelAsync(
-                    m => m.Specificulture == culture 
+                    m => m.Specificulture == culture
                     && m.Status == MixEnums.MixContentStatus.Published.ToString()
                     && m.Id == valueId
                 , context, transaction);
                 if (getVal.IsSucceed)
                 {
                     result = await GetPostListByDataId<TView>(
-                            dataId:getVal.Data.DataId,
+                            dataId: getVal.Data.DataId,
                             culture: culture,
                             orderByPropertyName: orderByPropertyName,
                             direction: direction,
@@ -131,7 +131,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     //var query = context.MixRelatedAttributeData.Where(m=> m.Specificulture == culture
                     //    && m.Id == getVal.Data.DataId && m.ParentId == parentId && m.ParentType == (int) MixEnums.MixAttributeSetDataType.Post)
                     //    .Select(m => m.ParentId).Distinct().ToList();
-                }                
+                }
                 return result;
             }
             catch (Exception ex)
@@ -147,7 +147,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 }
             }
         }
-        
+
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetPostListByValueIds<TView>(
             List<string> valueIds
             , string culture = null
@@ -176,7 +176,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 foreach (var item in valueIds)
                 {
                     Expression<Func<MixAttributeSetValue, bool>> pre = m => m.Id == item;
-                    
+
                     predicate = ReflectionHelper.CombineExpression(
                         predicate
                         , pre
@@ -202,7 +202,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     //var query = context.MixRelatedAttributeData.Where(m=> m.Specificulture == culture
                     //    && m.Id == getVal.Data.DataId && m.ParentId == parentId && m.ParentType == (int) MixEnums.MixAttributeSetDataType.Post)
                     //    .Select(m => m.ParentId).Distinct().ToList();
-                }                
+                }
                 return result;
             }
             catch (Exception ex)
@@ -282,7 +282,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 }
             }
         }
-        
+
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetPostListByDataIds<TView>(
             List<string> dataIds
             , string culture = null
@@ -356,7 +356,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 }
             }
         }
-        
+
         public static async Task<RepositoryResponse<PaginationModel<TView>>> SearchPost<TView>(
             string keyword
             , List<string> dataIds
@@ -371,56 +371,53 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             try
             {
                 culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
-                var result = new RepositoryResponse<PaginationModel<TView>>();
-                Expression<Func<MixRelatedAttributeData, bool>> predicate = 
-                    m => m.Specificulture == culture && dataIds.Contains(m.DataId)
-                            && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString();
+                var result = new RepositoryResponse<PaginationModel<TView>>()
+                {
+                    IsSucceed = true,
+                    Data = new PaginationModel<TView>()
+                };
+                List<int> postIds = null;
+                Expression<Func<MixRelatedAttributeData, bool>> predicate =
+                    m => m.Specificulture == culture && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString();
+
                 foreach (var id in dataIds)
                 {
-                    Expression<Func<MixRelatedAttributeData, bool>> pre = m => m.DataId == id;
+                    // Get list related post ids by data id
+                    Expression<Func<MixRelatedAttributeData, bool>> dataPredicate =
+                        m => m.Specificulture == culture && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
+                            && m.DataId == id;
+                    var ids = context.MixRelatedAttributeData.Where(dataPredicate).Select(m => int.Parse(m.ParentId)).ToList();
 
-                    predicate = ReflectionHelper.CombineExpression(
-                        predicate
-                        , pre
-                        , Heart.Enums.MixHeartEnums.ExpressionMethod.And);
-                }
-                var getRelatedData = await MixRelatedAttributeDatas.ReadViewModel.Repository.GetModelListByAsync(
-                            predicate
-                            , orderByPropertyName = "CreatedDateTime", direction, pageSize, pageIndex
-                            , _context: context, _transaction: transaction
-                            );
-                if (getRelatedData.IsSucceed)
-                {
-                    foreach (var item in getRelatedData.Data.Items)
+                    // if first id in list => return ids
+                    if (postIds == null)
                     {
-                        if (int.TryParse(item.ParentId, out int postId))
+                        postIds = ids;
+                    }
+                    else
+                    {
+                        // filter ids by new data id ( for 'AND' condition)
+                        postIds = postIds.Where(m => ids.Contains(m)).ToList();
+                        // if there is no items => no need to filter more
+                        if (postIds.Count == 0)
                         {
-                            var getData = await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetSingleModelAsync(
-                            m => m.Specificulture == item.Specificulture 
-                            && m.Id == postId
-                            && (string.IsNullOrEmpty(keyword)
+                            break;
+                        }
+                    }
+                }
+
+                if (postIds.Count > 0)
+                {
+                    var getPosts = await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(
+                        m => m.Specificulture == culture
+                        && postIds.Contains(m.Id)
+                        && (string.IsNullOrEmpty(keyword)
                              || (EF.Functions.Like(m.Title, $"%{keyword}%"))
                              || (EF.Functions.Like(m.Excerpt, $"%{keyword}%"))
                              || (EF.Functions.Like(m.Content, $"%{keyword}%")))
-                                , context, transaction);
-                            if (getData.IsSucceed)
-                            {
-                                result = new RepositoryResponse<PaginationModel<TView>>()
-                                {
-                                    IsSucceed = true,
-                                    Data = new PaginationModel<TView>()
-                                    {
-                                        Items = new List<TView>(),
-                                        PageIndex = pageIndex ?? 0,
-                                        PageSize = pageSize
-                                    }
-                                };
-                                result.Data.Items.Add(getData.Data);
-                            }
-                        }
-                    }
-                    result.Data.TotalItems = getRelatedData.Data.TotalItems;
-                    result.Data.TotalPage = getRelatedData.Data.TotalPage;
+                        , orderByPropertyName, direction
+                        , pageSize, pageIndex
+                        , _context: context, _transaction: transaction);
+                    result = getPosts;
                 }
                 return result;
             }
@@ -505,6 +502,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
             }
-        }        
+        }
     }
 }
