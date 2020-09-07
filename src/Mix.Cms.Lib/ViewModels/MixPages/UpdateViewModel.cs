@@ -438,29 +438,29 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 var saveRelated = await AttributeData.SaveModelAsync(true, context, transaction);
                 ViewModelHelper.HandleResult(saveRelated, ref result);
             }
-            foreach (var item in SysCategories)
-            {
-                if (result.IsSucceed)
-                {
-                    item.ParentId = parentId.ToString();
-                    item.ParentType = MixEnums.MixAttributeSetDataType.Page;
-                    item.Specificulture = Specificulture;
-                    var saveResult = await item.SaveModelAsync(false, context, transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-                }
-            }
+            //foreach (var item in SysCategories)
+            //{
+            //    if (result.IsSucceed)
+            //    {
+            //        item.ParentId = parentId.ToString();
+            //        item.ParentType = MixEnums.MixAttributeSetDataType.Page;
+            //        item.Specificulture = Specificulture;
+            //        var saveResult = await item.SaveModelAsync(false, context, transaction);
+            //        ViewModelHelper.HandleResult(saveResult, ref result);
+            //    }
+            //}
 
-            foreach (var item in SysTags)
-            {
-                if (result.IsSucceed)
-                {
-                    item.ParentId = parentId.ToString();
-                    item.ParentType = MixEnums.MixAttributeSetDataType.Page;
-                    item.Specificulture = Specificulture;
-                    var saveResult = await item.SaveModelAsync(false, context, transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-                }
-            }
+            //foreach (var item in SysTags)
+            //{
+            //    if (result.IsSucceed)
+            //    {
+            //        item.ParentId = parentId.ToString();
+            //        item.ParentType = MixEnums.MixAttributeSetDataType.Page;
+            //        item.Specificulture = Specificulture;
+            //        var saveResult = await item.SaveModelAsync(false, context, transaction);
+            //        ViewModelHelper.HandleResult(saveResult, ref result);
+            //    }
+            //}
             return result;
         }
 
