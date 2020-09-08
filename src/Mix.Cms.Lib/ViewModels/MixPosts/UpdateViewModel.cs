@@ -81,7 +81,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public int? Views { get; set; }
 
         [JsonProperty("type")]
-        public MixEnums.MixContentStatus Type { get; set; }
+        public string Type { get; set; }
 
         [JsonProperty("publishedDateTime")]
         public DateTime? PublishedDateTime { get; set; }
@@ -244,10 +244,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (Id == 0)
-            {
-                ExtraFields = MixService.GetConfig<string>("DefaultPostAttr");
-            }
+            Type = Type ?? MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST;
+
             Cultures = LoadCultures(Specificulture, _context, _transaction);
             UrlAliases = GetAliases(_context, _transaction);
             if (!string.IsNullOrEmpty(this.Tags))
@@ -1114,7 +1112,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST, _context, _transaction);
+            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(
+                m => m.Name == Type, _context, _transaction);
             if (getAttrs.IsSucceed)
             {
                 Attributes = getAttrs.Data;

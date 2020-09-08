@@ -391,12 +391,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     // if first id in list => return ids
                     if (postIds == null)
                     {
-                        postIds = ids;
+                        postIds = ids.Distinct().ToList();
                     }
                     else
                     {
                         // filter ids by new data id ( for 'AND' condition)
-                        postIds = postIds.Where(m => ids.Contains(m)).ToList();
+                        postIds = postIds.Where(m => ids.Contains(m)).Distinct().ToList();
                         // if there is no items => no need to filter more
                         if (postIds.Count == 0)
                         {
@@ -405,20 +405,29 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     }
                 }
 
-                if (postIds.Count > 0)
+                // Load Posts
+                Expression<Func<MixPost, bool>> postPredicate = m => m.Specificulture == culture
+                            && (string.IsNullOrEmpty(keyword)
+                             || (EF.Functions.Like(m.Title, $"%{keyword}%"))
+                             || (EF.Functions.Like(m.Excerpt, $"%{keyword}%"))
+                             || (EF.Functions.Like(m.Content, $"%{keyword}%")));
+
+                if (postIds !=null && postIds.Count > 0)
                 {
-                    var getPosts = await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(
-                        m => m.Specificulture == culture
-                        && postIds.Contains(m.Id)
-                        && (string.IsNullOrEmpty(keyword)
+                    postPredicate = m => m.Specificulture == culture
+                            && (string.IsNullOrEmpty(keyword)
                              || (EF.Functions.Like(m.Title, $"%{keyword}%"))
                              || (EF.Functions.Like(m.Excerpt, $"%{keyword}%"))
                              || (EF.Functions.Like(m.Content, $"%{keyword}%")))
+                            && postIds.Any(n=> n == m.Id);
+                }
+
+                var getPosts = await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(
+                        postPredicate
                         , orderByPropertyName, direction
                         , pageSize, pageIndex
                         , _context: context, _transaction: transaction);
-                    result = getPosts;
-                }
+                result = getPosts;
                 return result;
             }
             catch (Exception ex)
