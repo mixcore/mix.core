@@ -84,7 +84,7 @@ namespace Mix.Cms.Lib.Controllers
 
         // GET: api/v1/rest/{culture}/attribute-set-data/5
         [HttpGet("default")]
-        public ActionResult<TView> Default()
+        public virtual ActionResult<TView> Default()
         {
             using (TDbContext context = UnitOfWorkHelper<TDbContext>.InitContext())
             {
@@ -98,7 +98,7 @@ namespace Mix.Cms.Lib.Controllers
         }
 
         [HttpGet("remove-cache/{id}")]
-        public async Task<ActionResult> ClearCacheAsync(string id)
+        public virtual async Task<ActionResult> ClearCacheAsync(string id)
         {
             string key = $"_{id}";
             key += !string.IsNullOrEmpty(_lang) ? $"_{_lang}" : string.Empty;
@@ -107,7 +107,7 @@ namespace Mix.Cms.Lib.Controllers
         }
         
         [HttpGet("remove-cache")]
-        public async Task<ActionResult> ClearCacheAsync()
+        public virtual async Task<ActionResult> ClearCacheAsync()
         {
             await CacheService.RemoveCacheAsync(typeof(TView));
             return NoContent();
@@ -117,7 +117,7 @@ namespace Mix.Cms.Lib.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<TModel>> Create([FromBody]TView data)
+        public virtual async Task<ActionResult<TModel>> Create([FromBody]TView data)
         {
             var result = await SaveAsync(data, true);
             if (result.IsSucceed)
@@ -134,7 +134,7 @@ namespace Mix.Cms.Lib.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, [FromBody]TView data)
+        public virtual async Task<IActionResult> Update(string id, [FromBody]TView data)
         {
             if (data != null)
             {
@@ -170,7 +170,7 @@ namespace Mix.Cms.Lib.Controllers
 
         // PATCH: api/v1/rest/en-us/attribute-set/portal/5
         [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(string id, [FromBody]JObject fields)
+        public virtual async Task<IActionResult> Patch(string id, [FromBody]JObject fields)
         {
             var result = await GetSingleAsync(id);
             if (result.IsSucceed)
