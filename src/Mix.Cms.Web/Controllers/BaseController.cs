@@ -285,6 +285,36 @@ namespace Mix.Cms.Web.Controllers
                 return await Page("404");
             }
         }
+        
+        protected async System.Threading.Tasks.Task<IActionResult> Data(string id)
+        {
+            RepositoryResponse<Lib.ViewModels.MixAttributeSetDatas.ReadMvcViewModel> getPost = null;
+            var cacheKey = $"mvc_{culture}_post_{id}";
+            if (MixService.GetConfig<bool>("IsCache"))
+            {
+                getPost = await MixCacheService.GetAsync<RepositoryResponse<Lib.ViewModels.MixAttributeSetDatas.ReadMvcViewModel>>(cacheKey);
+            }
+            if (getPost == null)
+            {
+                Expression<Func<MixAttributeSetData, bool>> predicate;
+                predicate = p =>
+                p.Id == id
+                && p.Status == MixContentStatus.Published.ToString()
+                && p.Specificulture == culture;
+
+                getPost = await Lib.ViewModels.MixAttributeSetDatas.ReadMvcViewModel.Repository.GetFirstModelAsync(predicate);
+            }
+
+            if (getPost.IsSucceed)
+            {
+                getPost.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+                return View(getPost.Data);
+            }
+            else
+            {
+                return await Page("404");
+            }
+        }
 
         protected async System.Threading.Tasks.Task<IActionResult> Module(int id)
         {

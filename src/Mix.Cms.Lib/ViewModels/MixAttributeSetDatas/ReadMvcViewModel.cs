@@ -51,6 +51,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("obj")]
         public JObject Obj { get; set; }
 
+        [JsonProperty("detailsUrl")]
+        public string DetailsUrl { get => !string.IsNullOrEmpty(Id) ? $"/data/{Specificulture}/{Id}/{Property<string>("seo_name")}" : null; }
+
+        [JsonProperty("templatePath")]
+        public string TemplatePath { get => $"{MixCmsHelper.GetTemplateFolder(Specificulture)}/{Property<string>("template_path")}"; }
+
         #endregion Views
 
         #endregion Properties
@@ -74,7 +80,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             if (Obj == null)
             {
                 Obj = new JObject();
-                Values = Values ??  MixAttributeSetValues.ReadViewModel
+                Values = Values ?? MixAttributeSetValues.ReadViewModel
                     .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
                 Obj.Add(new JProperty("id", Id));
                 foreach (var item in Values.Where(m => m.DataType != MixEnums.MixDataType.Reference).OrderBy(v => v.Priority))
@@ -94,6 +100,17 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #endregion Overrides
 
         #region Expands
+        public T Property<T>(string fieldName)
+        {
+            if (Obj != null)
+            {
+                return Obj.Value<T>(fieldName);
+            }
+            else
+            {
+                return default(T);
+            }
+        }
 
         private JProperty ParseValue(MixAttributeSetValues.ReadViewModel item)
         {
@@ -152,7 +169,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 , _context, _transaction).Data;
                 Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
                     (model.AttributeSetId == item.Field.ReferenceId)
-                    &&  (model.ParentId == parentId && model.ParentType == parentType.ToString())
+                    && (model.ParentId == parentId && model.ParentType == parentType.ToString())
                     && model.Specificulture == Specificulture
                     ;
                 var getData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(predicate, _context, _transaction);
