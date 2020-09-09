@@ -458,7 +458,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         //    }
         //    // Remove parent Pages
         //    var relatedPages = context.MixPageModule.Include(m => m.MixPage).Where(d => d.Specificulture == Specificulture && (d.ModuleId == Id))
-        //        .AsEnumerable();
+        //        .AsEnumerable();  
         //    foreach (var item in relatedPages)
         //    {
         //        tasks.Add(Task.Run(() =>
@@ -479,7 +479,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         #endregion Overrides
 
-        #region Expand
+            #region Expand
         public static async Task<RepositoryResponse<JObject>> SaveByModuleName(string culture, string createdBy, string name, string formName, JObject obj
        , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

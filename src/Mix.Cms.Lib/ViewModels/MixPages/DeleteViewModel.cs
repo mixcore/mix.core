@@ -131,8 +131,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl {
-            get {
+        public string ImageUrl
+        {
+            get
+            {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -147,8 +149,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl {
-            get {
+        public string ThumbnailUrl
+        {
+            get
+            {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -177,22 +181,28 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public List<MixTemplates.UpdateViewModel> Masters { get; set; }
 
         [JsonIgnore]
-        public int ActivedTheme {
-            get {
+        public int ActivedTheme
+        {
+            get
+            {
                 return MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
             }
         }
 
         [JsonIgnore]
-        public string TemplateFolderType {
-            get {
+        public string TemplateFolderType
+        {
+            get
+            {
                 return MixEnums.EnumTemplateFolder.Pages.ToString();
             }
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder {
-            get {
+        public string TemplateFolder
+        {
+            get
+            {
                 return CommonHelper.GetFullPath(new string[]
                 {
                     MixConstants.Folder.TemplatesFolder
@@ -242,12 +252,19 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(DeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            var result = new RepositoryResponse<bool> { IsSucceed = true };
             var navPosts = _context.MixPagePost.Where(m => m.PageId == Id && m.Specificulture == Specificulture);
             await navPosts.ForEachAsync(m => _context.Entry(m).State = EntityState.Deleted);
             var navModls = _context.MixPageModule.Where(m => m.PageId == Id && m.Specificulture == Specificulture);
             await navModls.ForEachAsync(m => _context.Entry(m).State = EntityState.Deleted);
             await _context.SaveChangesAsync();
-            return new RepositoryResponse<bool> { IsSucceed = true };
+            var removeRelatedData = await MixRelatedAttributeDatas.Helper.RemoveRelatedDataAsync(
+                    MixConstants.AttributeSetName.ADDITIONAL_FIELD_PAGE
+                    , Id.ToString(), MixEnums.MixAttributeSetDataType.Page
+                    , Specificulture
+                    , _context, _transaction);
+            ViewModelHelper.HandleResult(removeRelatedData, ref result);
+            return result;
         }
 
         #endregion Async
