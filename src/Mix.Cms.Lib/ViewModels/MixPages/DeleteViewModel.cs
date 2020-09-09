@@ -259,8 +259,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             await navModls.ForEachAsync(m => _context.Entry(m).State = EntityState.Deleted);
             await _context.SaveChangesAsync();
             var removeRelatedData = await MixRelatedAttributeDatas.Helper.RemoveRelatedDataAsync(
-                    MixConstants.AttributeSetName.ADDITIONAL_FIELD_PAGE
-                    , Id.ToString(), MixEnums.MixAttributeSetDataType.Page
+                    Id.ToString(), MixEnums.MixAttributeSetDataType.Page
                     , Specificulture
                     , _context, _transaction);
             ViewModelHelper.HandleResult(removeRelatedData, ref result);

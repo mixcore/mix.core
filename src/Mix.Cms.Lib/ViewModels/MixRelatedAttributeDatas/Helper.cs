@@ -10,23 +10,17 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 {
     public class Helper
     {
-        public static async Task<RepositoryResponse<MixRelatedAttributeData>> RemoveRelatedDataAsync(
-            string attributeSetName
-            , string parentId, MixEnums.MixAttributeSetDataType parentType, string specificulture
+        public static async Task<RepositoryResponse<List<MixRelatedAttributeData>>> RemoveRelatedDataAsync(
+            string parentId, MixEnums.MixAttributeSetDataType parentType, string specificulture
             , MixCmsContext context, IDbContextTransaction transaction)
         {
-            var getAttrs = await MixAttributeSets.ReadViewModel.Repository.GetSingleModelAsync(
-            m => m.Name == attributeSetName, context, transaction);
-            var getRelatedData = await MixRelatedAttributeDatas.DeleteViewModel.Repository.GetSingleModelAsync(
-                a => a.ParentId == parentId && a.ParentType == parentType.ToString() 
-                    && a.Specificulture == specificulture && a.AttributeSetId == getAttrs.Data.Id
-                    , context, transaction);
-            if (getRelatedData.IsSucceed)
-            {
-                var removeRelated = await getRelatedData.Data.RemoveModelAsync(true, context, transaction);
-                return removeRelated;
-            }
-            return new RepositoryResponse<MixRelatedAttributeData>();
+            var result = await MixRelatedAttributeDatas.DeleteViewModel.Repository.RemoveListModelAsync( 
+                true
+                , a => a.ParentId == parentId && a.ParentType == parentType.ToString() 
+                    && a.Specificulture == specificulture
+                , context, transaction);
+
+            return result;
         }
     }
 }
