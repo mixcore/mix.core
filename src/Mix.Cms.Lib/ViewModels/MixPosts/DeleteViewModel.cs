@@ -116,10 +116,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
 
             await _context.SaveChangesAsync();
-            Type = Type ?? MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST;
             var removeRelatedData = await MixRelatedAttributeDatas.Helper.RemoveRelatedDataAsync(
-                    Type
-                    , Id.ToString(), MixEnums.MixAttributeSetDataType.Post
+                    Id.ToString(), MixEnums.MixAttributeSetDataType.Post
                     , Specificulture
                     , _context, _transaction);
             ViewModelHelper.HandleResult(removeRelatedData, ref result);
