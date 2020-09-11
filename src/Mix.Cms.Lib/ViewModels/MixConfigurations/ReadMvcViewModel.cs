@@ -1,15 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixConfigurations
@@ -23,7 +18,7 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
         [JsonProperty("id")]
         public int Id { get; set; }
         [JsonProperty("specificulture")]
-        public string Specificulture { get; set; }        
+        public string Specificulture { get; set; }
         [JsonProperty("cultures")]
         public System.Collections.Generic.List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
         [Required]
@@ -93,7 +88,7 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
 
         #region Expands
 
-        
+
         #endregion Expands
 
     }

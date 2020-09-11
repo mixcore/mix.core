@@ -286,7 +286,7 @@ namespace Mix.Cms.Lib
                     }
 
                     foreach (var item in cate.MenuItems)
-                    {                        
+                    {
                         item.IsActive = item.Uri == activePath;
                         if (item.IsActive)
                         {
@@ -500,7 +500,7 @@ namespace Mix.Cms.Lib
                 type, context.Request.Query["keyword"],
                 culture, orderByPropertyName, direction, pageSize, page - 1, _context, _transaction);
         }
-        
+
         public async static Task<RepositoryResponse<PaginationModel<TView>>> GetPostlistByAddictionalField<TView>(
 
             string fieldName, string value, string culture

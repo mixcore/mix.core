@@ -93,7 +93,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("list/{themeId}")]
         public async Task<ActionResult<JObject>> GetList(
             int themeId,
-            [FromBody]RequestPaging request
+            [FromBody] RequestPaging request
             )
         {
             Expression<Func<MixTemplate, bool>> predicate = model =>

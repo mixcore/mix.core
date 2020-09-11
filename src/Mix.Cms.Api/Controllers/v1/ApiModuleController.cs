@@ -108,7 +108,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("save")]
-        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromBody]UpdateViewModel model)
+        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromBody] UpdateViewModel model)
         {
             if (model != null)
             {
@@ -122,7 +122,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST api/module
         [HttpPost, HttpOptions]
         [Route("save/{id}")]
-        public async Task<RepositoryResponse<MixModule>> SaveFields(int id, [FromBody]List<EntityField> fields)
+        public async Task<RepositoryResponse<MixModule>> SaveFields(int id, [FromBody] List<EntityField> fields)
         {
             if (fields != null)
             {
@@ -146,7 +146,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST api/module
         [HttpPost, HttpOptions]
         [Route("data/save/{name}/{formName}")]
-        public async Task<ActionResult<JObject>> SaveData(string name, string formName, [FromBody]JObject obj)
+        public async Task<ActionResult<JObject>> SaveData(string name, string formName, [FromBody] JObject obj)
         {
             // Get module by name
             string _username = User?.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
@@ -206,7 +206,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         [HttpPost, HttpOptions]
         [Route("update-infos")]
-        public async Task<RepositoryResponse<List<ReadListItemViewModel>>> UpdateInfos([FromBody]List<ReadListItemViewModel> models)
+        public async Task<RepositoryResponse<List<ReadListItemViewModel>>> UpdateInfos([FromBody] List<ReadListItemViewModel> models)
         {
             if (models != null)
             {
@@ -220,7 +220,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         [HttpPost, HttpOptions]
         [Route("apply-list")]
-        public async Task<ActionResult<JObject>> ListActionAsync([FromBody]ListAction<int> data)
+        public async Task<ActionResult<JObject>> ListActionAsync([FromBody] ListAction<int> data)
         {
             Expression<Func<MixModule, bool>> predicate = model =>
                        model.Specificulture == _lang

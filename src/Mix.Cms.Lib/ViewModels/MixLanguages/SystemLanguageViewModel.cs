@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
@@ -87,7 +86,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         public static async Task<RepositoryResponse<bool>> ImportLanguages(List<MixLanguage> arrLanguage, string destCulture)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(null, null, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            
+
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
 
             try
@@ -117,8 +116,9 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
             finally
             {
                 //if current Context is Root
-                if(isRoot){
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                if (isRoot)
+                {
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
             }
             return result;

@@ -26,8 +26,10 @@ namespace Mix.Cms.Lib.Services
             Repository = DefaultModelRepository<MixCmsContext, MixCache>.Instance;
         }
 
-        public static MixCacheService Instance {
-            get {
+        public static MixCacheService Instance
+        {
+            get
+            {
                 if (instance == null)
                 {
                     lock (syncRoot)

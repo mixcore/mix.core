@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Messenger.Models.Data;
 using Mix.Cms.Service.SignalR.Models;
-using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
@@ -65,7 +62,7 @@ namespace Mix.Cms.Service.SignalR.Hubs
             };
             var saveData = await data.SaveModelAsync(true);
         }
-        
+
         private async Task JoinGroup(HubRequest<JObject> request)
         {
             var connection = request.Data.ToObject<MessengerConnection>();
@@ -104,7 +101,7 @@ namespace Mix.Cms.Service.SignalR.Hubs
                 CreatedDate = DateTime.UtcNow
             };
             result = user.Join();
-           
+
         }
 
         private async Task<object> GetGroupMembersAsync(HubRequest<JObject> request)

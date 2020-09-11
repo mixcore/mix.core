@@ -7,12 +7,14 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
         #region Properties
 
         [JsonProperty("connectionString")]
-        public string ConnectionString {
+        public string ConnectionString
+        {
             // If use local db  => return local db cnn string
             // Else If use remote db
             // => return: if use mysql => return mysql cnn string
             //              else return remote mssql cnn string
-            get {
+            get
+            {
                 switch (DatabaseProvider)
                 {
                     case MixEnums.DatabaseProvider.MSSQL:

@@ -11,7 +11,6 @@ using Mix.Cms.Lib.ViewModels.MixPosts;
 using Mix.Domain.Core.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -66,7 +65,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 return BadRequest(result.Errors);
             }
         }
-        
+
         [HttpGet("get-by-value-id")]
         public async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> GetByValueId()
         {
@@ -81,7 +80,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 return BadRequest(result.Errors);
             }
         }
-        
+
         [HttpPost("get-by-value-ids")]
         public async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> GetByValueIds([FromBody] List<string> valueIds)
         {
@@ -96,13 +95,13 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 return BadRequest(result.Errors);
             }
         }
-        
+
         [HttpPost("search-post")]
         public async Task<ActionResult<PaginationModel<ReadListItemViewModel>>> SearchPost([FromBody] List<string> dataIds, [FromQuery] string keyword)
         {
             var result = await Mix.Cms.Lib.ViewModels.MixPosts.Helper.SearchPost<ReadListItemViewModel>(
                 keyword, dataIds);
-            if (result.IsSucceed)   
+            if (result.IsSucceed)
             {
                 return result.Data;
             }
@@ -111,7 +110,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 return BadRequest(result.Errors);
             }
         }
-        
+
         [HttpGet("get-by-data-id")]
         public async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> GetByAttributeDataId()
         {

@@ -23,8 +23,10 @@ namespace Mix.Cms.Web.Controllers
         protected bool isValid = true;
         protected string _redirectUrl;
 
-        protected bool _forbiddenPortal {
-            get {
+        protected bool _forbiddenPortal
+        {
+            get
+            {
                 var allowedIps = MixService.GetIpConfig<JArray>("AllowedPortalIps") ?? new JArray();
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 return forbidden || (
@@ -51,8 +53,10 @@ namespace Mix.Cms.Web.Controllers
         public ViewContext ViewContext { get; set; }
         private string _culture;
 
-        public string culture {
-            get {
+        public string culture
+        {
+            get
+            {
                 return RouteData?.Values["culture"]?.ToString().ToLower()
                     ?? _culture
                     ?? MixService.GetConfig<string>("DefaultCulture");
@@ -285,7 +289,7 @@ namespace Mix.Cms.Web.Controllers
                 return await Page("404");
             }
         }
-        
+
         protected async System.Threading.Tasks.Task<IActionResult> Data(string id)
         {
             RepositoryResponse<Lib.ViewModels.MixAttributeSetDatas.ReadMvcViewModel> getPost = null;

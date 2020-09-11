@@ -30,7 +30,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
 
         [JsonProperty("pageId")]
         public int PageId { get; set; }
-        
+
         [JsonProperty("parentId")]
         public int ParentId { get; set; }
 
@@ -118,7 +118,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
             {
                 //if current Context is Root
                 transaction.Dispose();
-                context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
             }
         }
 

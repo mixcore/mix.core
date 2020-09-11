@@ -73,8 +73,10 @@ namespace Mix.Cms.Lib.ViewModels.Account
         public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("avatarUrl")]
-        public string AvatarUrl {
-            get {
+        public string AvatarUrl
+        {
+            get
+            {
                 if (Avatar != null && (Avatar.IndexOf("http") == -1 && Avatar[0] != '/'))
                 {
                     return CommonHelper.GetFullPath(new string[] {

@@ -54,7 +54,7 @@ namespace Mix.Cms.Lib.Models.Account
                         break;
                     default:
                         break;
-                }               
+                }
             }
         }
         //Ref https://github.com/dotnet/efcore/issues/10169

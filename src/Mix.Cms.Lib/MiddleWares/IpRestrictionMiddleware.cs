@@ -47,7 +47,8 @@ namespace Mix.Cms.Lib.MiddleWares
         public string AllowedIps { get; set; }
         public string ExceptIps { get; set; }
 
-        public List<string> AllowedIPsList {
+        public List<string> AllowedIPsList
+        {
             get { return !string.IsNullOrEmpty(AllowedIps) ? AllowedIps.Split(',').ToList() : new List<string>(); }
         }
     }

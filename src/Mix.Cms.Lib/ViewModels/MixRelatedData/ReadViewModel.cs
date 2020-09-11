@@ -19,7 +19,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedDatas
         public string Specificulture { get; set; }
         [JsonProperty("dataId")]
         public string DataId { get; set; }
-        
+
         [JsonProperty("parentId")]
         public string ParentId { get; set; }
 

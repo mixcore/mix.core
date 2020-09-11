@@ -6,9 +6,7 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixTemplates
 {
@@ -40,7 +38,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         [JsonProperty("extension")]
         public string Extension { get; set; }
 
-        
+
 
         [JsonIgnore]
         [JsonProperty("createdDateTime")]
@@ -60,8 +58,10 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         [JsonIgnore]
         [JsonProperty("assetFolder")]
-        public string AssetFolder {
-            get {
+        public string AssetFolder
+        {
+            get
+            {
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.FileFolder,
                     MixConstants.Folder.TemplatesAssetFolder,
@@ -71,8 +71,10 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         [JsonIgnore]
         [JsonProperty("templateFolder")]
-        public string TemplateFolder {
-            get {
+        public string TemplateFolder
+        {
+            get
+            {
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.TemplatesFolder,
                     ThemeName
@@ -81,8 +83,10 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         }
 
         [JsonProperty("templatePath")]
-        public string TemplatePath {
-            get {
+        public string TemplatePath
+        {
+            get
+            {
                 return $"/{FileFolder}/{FileName}{Extension}";
             }
         }

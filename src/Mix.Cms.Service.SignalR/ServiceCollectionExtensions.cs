@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Cms.Service.SignalR.Hubs;
-using System;
 
 namespace Mix.Cms.Service.SignalR
 {

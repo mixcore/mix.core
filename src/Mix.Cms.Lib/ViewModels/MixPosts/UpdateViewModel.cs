@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Mix.Cms.Lib.ViewModels.MixCultures;
 using Mix.Common.Helper;
 using Mix.Domain.Core.Models;
@@ -152,22 +151,28 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<MixTemplates.UpdateViewModel> Templates { get; set; }// Post Templates
 
         [JsonIgnore]
-        public int ActivedTheme {
-            get {
+        public int ActivedTheme
+        {
+            get
+            {
                 return MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
             }
         }
 
         [JsonIgnore]
-        public string TemplateFolderType {
-            get {
+        public string TemplateFolderType
+        {
+            get
+            {
                 return MixEnums.EnumTemplateFolder.Posts.ToString();
             }
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder {
-            get {
+        public string TemplateFolder
+        {
+            get
+            {
                 return CommonHelper.GetFullPath(new string[]
                 {
                     MixConstants.Folder.TemplatesFolder
@@ -181,8 +186,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #endregion Template
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl {
-            get {
+        public string ImageUrl
+        {
+            get
+            {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -197,8 +204,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl {
-            get {
+        public string ThumbnailUrl
+        {
+            get
+            {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -460,7 +469,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 item.Status = MixEnums.MixContentStatus.Published;
                 if (item.IsActived)
                 {
-                    if (!_context.MixModulePost.Any(m=>m.Specificulture == item.Specificulture && m.PostId == item.PostId  && m.ModuleId == item.ModuleId))
+                    if (!_context.MixModulePost.Any(m => m.Specificulture == item.Specificulture && m.PostId == item.PostId && m.ModuleId == item.ModuleId))
                     {
                         var saveResult = await item.SaveModelAsync(false, _context, _transaction);
                         result.IsSucceed = saveResult.IsSucceed;
@@ -1133,7 +1142,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                         }
                         )
                     {
-                        Data = new MixAttributeSetDatas.UpdateViewModel( 
+                        Data = new MixAttributeSetDatas.UpdateViewModel(
                     new MixAttributeSetData()
                     {
                         Specificulture = Specificulture,

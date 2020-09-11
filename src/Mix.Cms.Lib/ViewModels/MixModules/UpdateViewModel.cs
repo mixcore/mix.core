@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
@@ -90,8 +89,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl {
-            get {
+        public string ImageUrl
+        {
+            get
+            {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -106,8 +107,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl {
-            get {
+        public string ThumbnailUrl
+        {
+            get
+            {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -133,8 +136,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public List<MixTemplates.UpdateViewModel> Templates { get; set; }// Post Templates
 
         [JsonIgnore]
-        public string TemplateFolderType {
-            get {
+        public string TemplateFolderType
+        {
+            get
+            {
                 return MixEnums.EnumTemplateFolder.Modules.ToString();
             }
         }
@@ -143,8 +148,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public MixTemplates.UpdateViewModel View { get; set; }
 
         [JsonIgnore]
-        public int ActivedTheme {
-            get {
+        public int ActivedTheme
+        {
+            get
+            {
                 return MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
             }
         }
@@ -153,8 +160,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public string ThemeFolderType { get { return MixEnums.EnumTemplateFolder.Modules.ToString(); } }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder {
-            get {
+        public string TemplateFolder
+        {
+            get
+            {
                 return CommonHelper.GetFullPath(new string[]
                 {
                     MixConstants.Folder.TemplatesFolder
@@ -173,8 +182,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public List<MixTemplates.UpdateViewModel> Forms { get; set; }// Post Forms
 
         [JsonIgnore]
-        public string FormFolderType {
-            get {
+        public string FormFolderType
+        {
+            get
+            {
                 return MixEnums.EnumTemplateFolder.Forms.ToString();
             }
         }
@@ -183,8 +194,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public MixTemplates.UpdateViewModel FormView { get; set; }
 
         [JsonProperty("formFolder")]
-        public string FormFolder {
-            get {
+        public string FormFolder
+        {
+            get
+            {
                 return CommonHelper.GetFullPath(new string[]
                 {
                     MixConstants.Folder.TemplatesFolder
@@ -203,8 +216,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public List<MixTemplates.UpdateViewModel> Edms { get; set; }// Post Edms
 
         [JsonIgnore]
-        public string EdmFolderType {
-            get {
+        public string EdmFolderType
+        {
+            get
+            {
                 return MixEnums.EnumTemplateFolder.Edms.ToString();
             }
         }
@@ -213,8 +228,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public MixTemplates.UpdateViewModel EdmView { get; set; }
 
         [JsonProperty("edmFolder")]
-        public string EdmFolder {
-            get {
+        public string EdmFolder
+        {
+            get
+            {
                 return CommonHelper.GetFullPath(new string[]
                 {
                     MixConstants.Folder.TemplatesFolder
@@ -243,7 +260,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("attributeData")]
         public MixRelatedAttributeDatas.UpdateViewModel AttributeData { get; set; }
 
-         [JsonProperty("sysCategories")]
+        [JsonProperty("sysCategories")]
         public List<MixRelatedAttributeDatas.UpdateViewModel> SysCategories { get; set; }
 
         [JsonProperty("sysTags")]
@@ -331,7 +348,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType, _context, _transaction).Data;
             var templateName = Template?.Substring(Template.LastIndexOf('/') + 1) ?? MixConstants.DefaultTemplate.Module;
             this.View = Templates.FirstOrDefault(t => !string.IsNullOrEmpty(templateName) && templateName.Equals($"{t.FileName}{t.Extension}"));
-            if (this.View==null)
+            if (this.View == null)
             {
                 this.View = Templates.FirstOrDefault(t => MixConstants.DefaultTemplate.Module.Equals($"{t.FileName}{t.Extension}"));
             }
@@ -340,13 +357,13 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             this.Forms = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == this.FormFolderType).Data;
             this.FormView = MixTemplates.UpdateViewModel.GetTemplateByPath(FormTemplate, Specificulture, MixEnums.EnumTemplateFolder.Forms, _context, _transaction);
-            this.FormTemplate = $"{FormView?.FileFolder}/{FormView?.FileName}{View.Extension}"; 
+            this.FormTemplate = $"{FormView?.FileFolder}/{FormView?.FileName}{View.Extension}";
 
             this.Edms = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == this.EdmFolderType).Data;
             this.EdmView = MixTemplates.UpdateViewModel.GetTemplateByPath(EdmTemplate, Specificulture, MixEnums.EnumTemplateFolder.Edms, _context, _transaction);
             this.EdmTemplate = $"{EdmView?.FileFolder}/{EdmView?.FileName}{View.Extension}";
-            
+
             // TODO: Verified why use below code
             //if (SetAttributeId.HasValue)
             //{
@@ -479,7 +496,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         #endregion Overrides
 
-            #region Expand
+        #region Expand
         public static async Task<RepositoryResponse<JObject>> SaveByModuleName(string culture, string createdBy, string name, string formName, JObject obj
        , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -520,7 +537,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                         }
                         var portalResult = await data.SaveModelAsync(true, context, transaction);
                         UnitOfWorkHelper<MixCmsContext>.HandleTransaction(portalResult.IsSucceed, isRoot, transaction);
-                       
+
                         return new RepositoryResponse<JObject>()
                         {
                             IsSucceed = portalResult.IsSucceed,

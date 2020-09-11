@@ -124,7 +124,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
             Cultures = LoadCultures(Specificulture, _context, _transaction);
             Property = new DataValueViewModel() { DataType = DataType, Value = Value, Name = Keyword };
             this.Cultures.ForEach(c => c.IsSupported = true);
-            
+
             return base.ExpandViewAsync(_context, _transaction);
         }
 
@@ -175,7 +175,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         {
             Cultures = LoadCultures(Specificulture, _context, _transaction);
             Property = new DataValueViewModel() { DataType = DataType, Value = Value, Name = Keyword };
-            this.Cultures.ForEach(c => c.IsSupported = true);            
+            this.Cultures.ForEach(c => c.IsSupported = true);
         }
 
         public override RepositoryResponse<bool> RemoveRelatedModels(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)

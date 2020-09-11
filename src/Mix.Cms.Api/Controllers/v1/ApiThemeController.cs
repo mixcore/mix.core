@@ -67,7 +67,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // GET api/theme/id
         [HttpPost, HttpOptions]
         [Route("export/{id}")]
-        public async Task<RepositoryResponse<string>> Export(int id, [FromBody]SiteStructureViewModel data)
+        public async Task<RepositoryResponse<string>> Export(int id, [FromBody] SiteStructureViewModel data)
         {
             var getTheme = await ReadViewModel.Repository.GetSingleModelAsync(
                  theme => theme.Id == id).ConfigureAwait(false);
@@ -197,7 +197,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [HttpPost, HttpOptions]
         [RequestFormSizeLimit(100000000)] // 200Mb
         [Route("save")]
-        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromForm]string model, [FromForm]IFormFile assets, [FromForm]IFormFile theme)
+        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromForm] string model, [FromForm] IFormFile assets, [FromForm] IFormFile theme)
         {
             var data = JsonConvert.DeserializeObject<UpdateViewModel>(model);
 
@@ -214,7 +214,7 @@ namespace Mix.Cms.Api.Controllers.v1
             }
 
             // Load default blank if created new without upload theme
-            if (data.Id==0 && theme ==null)
+            if (data.Id == 0 && theme == null)
             {
                 data.TemplateAsset = new Lib.ViewModels.FileViewModel()
                 {

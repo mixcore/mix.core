@@ -1,19 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Cms.Lib.Extensions;
-using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Service.SignalR.Models;
-using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
 {
@@ -66,7 +59,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
         [JsonIgnore]
         public List<MixAttributeSetDatas.FormViewModel> RefData { get; set; } = new List<FormViewModel>();
 
-        
+
 
         #endregion Views
 
@@ -93,7 +86,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
             if (getValues.IsSucceed)
             {
                 Values = getValues.Data.OrderBy(a => a.Priority).ToList();
-                ParseValueData(_context, _transaction);                
+                ParseValueData(_context, _transaction);
             }
             var getUser = ViewModels.MixMessengerUsers.DefaultViewModel.Repository.GetSingleModel(m => m.Id == CreatedBy);
             if (getUser.IsSucceed)
