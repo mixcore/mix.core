@@ -124,7 +124,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
-                if (AttributeSetId==0 && !string.IsNullOrEmpty(AttributeSetName))
+                if (AttributeSetId == 0 && !string.IsNullOrEmpty(AttributeSetName))
                 {
                     AttributeSetId = MixAttributeSets.ReadViewModel.Repository.GetSingleModel(m => m.Name == AttributeSetName, _context, _transaction).Data?.Id ?? 0;
                 }
@@ -169,10 +169,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 if (isRoot)
                 {
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
 
-            }            
+            }
         }
 
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSetData parent, MixCmsContext _context, IDbContextTransaction _transaction)

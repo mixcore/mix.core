@@ -79,7 +79,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("save")]
-        public async Task<RepositoryResponse<ReadViewModel>> Save([FromBody]ReadViewModel model)
+        public async Task<RepositoryResponse<ReadViewModel>> Save([FromBody] ReadViewModel model)
         {
             if (model != null)
             {
@@ -92,7 +92,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST api/page
         [HttpPost, HttpOptions]
         [Route("save/{id}/{postId}")]
-        public async Task<RepositoryResponse<MixPagePost>> SaveFields(int pageId, int postId, [FromBody]List<EntityField> fields)
+        public async Task<RepositoryResponse<MixPagePost>> SaveFields(int pageId, int postId, [FromBody] List<EntityField> fields)
         {
             if (fields != null)
             {
@@ -136,7 +136,8 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 default:
                     var listItemResult = await base.GetListAsync<ReadViewModel>(request, predicate);
-                    listItemResult.Data.Items.ForEach(n => { 
+                    listItemResult.Data.Items.ForEach(n =>
+                    {
                         n.IsActived = true;
                         n.LoadPost();
                     });
@@ -146,7 +147,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         [HttpPost, HttpOptions]
         [Route("update-infos")]
-        public async Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfos([FromBody]List<ReadViewModel> models)
+        public async Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfos([FromBody] List<ReadViewModel> models)
         {
             if (models != null)
             {
@@ -161,7 +162,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST api/update-infos
         [HttpPost, HttpOptions]
         [Route("save-list")]
-        public async Task<RepositoryResponse<List<ReadViewModel>>> SaveList([FromBody]List<ReadViewModel> models)
+        public async Task<RepositoryResponse<List<ReadViewModel>>> SaveList([FromBody] List<ReadViewModel> models)
         {
             if (models != null)
             {

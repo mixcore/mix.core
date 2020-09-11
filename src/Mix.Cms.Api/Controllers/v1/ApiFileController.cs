@@ -67,7 +67,7 @@ namespace Mix.Cms.Api.Controllers.v1
         /// <returns></returns>
         [Route("upload-file")]
         [HttpPost, HttpOptions]
-        public IActionResult Upload([FromForm] string folder, [FromForm]IFormFile file)
+        public IActionResult Upload([FromForm] string folder, [FromForm] IFormFile file)
         {
             if (ModelState.IsValid)
             {
@@ -80,7 +80,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST api/files
         [HttpPost, HttpOptions]
         [Route("save")]
-        public RepositoryResponse<FileViewModel> Save([FromBody]FileViewModel model)
+        public RepositoryResponse<FileViewModel> Save([FromBody] FileViewModel model)
         {
             if (model != null)
             {
@@ -98,7 +98,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         [HttpPost, HttpOptions]
         [Route("list")]
-        public RepositoryResponse<FilePageViewModel> GetList([FromBody]RequestPaging request)
+        public RepositoryResponse<FilePageViewModel> GetList([FromBody] RequestPaging request)
         {
             ParseRequestPagingDate(request);
             var files = FileRepository.Instance.GetTopFiles(request.Key);

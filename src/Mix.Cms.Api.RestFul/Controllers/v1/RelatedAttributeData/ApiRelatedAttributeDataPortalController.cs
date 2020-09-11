@@ -3,13 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas;
 using Mix.Domain.Core.ViewModels;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -41,8 +39,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 && (string.IsNullOrEmpty(parentId)
                  || (model.ParentId == parentId && model.ParentType == parentType.ToString())
                  );
-                
-                
+
+
             var getData = await base.GetListAsync(predicate);
             if (getData.IsSucceed)
             {

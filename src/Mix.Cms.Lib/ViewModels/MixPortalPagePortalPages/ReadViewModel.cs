@@ -1,12 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
 {
@@ -30,7 +26,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
 
         [JsonProperty("pageId")]
         public int PageId { get; set; }
-        
+
         [JsonProperty("parentId")]
         public int ParentId { get; set; }
 
@@ -62,7 +58,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
 
         [JsonProperty("page")]
         public MixPortalPages.ReadViewModel Page { get; set; }
-        
+
         [JsonProperty("parent")]
         public MixPortalPages.ReadViewModel Parent { get; set; }
 

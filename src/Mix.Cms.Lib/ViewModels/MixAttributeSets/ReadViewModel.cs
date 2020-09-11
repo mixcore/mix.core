@@ -2,7 +2,6 @@
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 
@@ -57,7 +56,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
         [JsonProperty("priority")]
-        public int Priority { get; set; }        
+        public int Priority { get; set; }
         [JsonProperty("status")]
         public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models

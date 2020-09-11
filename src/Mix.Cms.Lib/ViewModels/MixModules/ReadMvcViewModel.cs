@@ -45,7 +45,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("edmTemplate")]
         public string EdmTemplate { get; set; }
-        
+
         [JsonProperty("title")]
         public string Title { get; set; }
 
@@ -83,8 +83,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public string DetailsUrl { get; set; }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl {
-            get {
+        public string ImageUrl
+        {
+            get
+            {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -99,8 +101,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl {
-            get {
+        public string ThumbnailUrl
+        {
+            get
+            {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -115,7 +119,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         }
 
         [JsonProperty("columns")]
-        public List<ModuleFieldViewModel> Columns {
+        public List<ModuleFieldViewModel> Columns
+        {
             get { return Fields == null ? null : JsonConvert.DeserializeObject<List<ModuleFieldViewModel>>(Fields); }
             set { Fields = JsonConvert.SerializeObject(value); }
         }
@@ -135,8 +140,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("posts")]
         public PaginationModel<MixModulePosts.ReadViewModel> Posts { get; set; } = new PaginationModel<MixModulePosts.ReadViewModel>();
 
-        public string TemplatePath {
-            get {
+        public string TemplatePath
+        {
+            get
+            {
                 return CommonHelper.GetFullPath(new string[]
                 {
                     ""
@@ -147,8 +154,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             }
         }
 
-        public string FormTemplatePath {
-            get {
+        public string FormTemplatePath
+        {
+            get
+            {
                 return CommonHelper.GetFullPath(new string[]
                 {
                     ""
@@ -159,8 +168,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             }
         }
 
-        public string EdmTemplatePath {
-            get {
+        public string EdmTemplatePath
+        {
+            get
+            {
                 return CommonHelper.GetFullPath(new string[]
                 {
                     ""
@@ -314,7 +325,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
             }
         }

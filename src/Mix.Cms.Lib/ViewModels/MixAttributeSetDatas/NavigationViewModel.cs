@@ -54,8 +54,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public JObject Data { get; set; }
 
         [JsonProperty("nav")]
-        public Navigation Nav {
-            get {
+        public Navigation Nav
+        {
+            get
+            {
                 if (AttributeSetName == MixConstants.AttributeSetName.NAVIGATION && Data != null)
                 {
                     return Data.ToObject<Navigation>();
@@ -298,7 +300,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("actived_menu_items")]
         public List<MenuItem> ActivedMenuItems { get; set; } = new List<MenuItem>();
-        
+
         [JsonProperty("actived_menu_item")]
         public MenuItem ActivedMenuItem { get; set; }
     }

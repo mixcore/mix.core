@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -9,13 +8,12 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
 {
-    public class ImportViewModel
-      : ViewModelBase<MixCmsContext, MixModuleData, ImportViewModel>
+    public class ReadMvcViewModel
+      : ViewModelBase<MixCmsContext, MixModuleData, ReadMvcViewModel>
     {
         #region Properties
 
@@ -36,7 +34,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         public string Fields { get; set; } = "[]";
 
         [JsonProperty("value")]
-        [JsonIgnore]
         public string Value { get; set; }
 
         [JsonProperty("postId")]
@@ -67,8 +64,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         [JsonProperty("dataProperties")]
         public List<ApiModuleDataValueViewModel> DataProperties { get; set; }
 
-        [JsonProperty("jItem")]
-        public JObject JItem { get; set; }
+        [JsonProperty("obj")]
+        public JObject Obj { get; set; }
 
         #endregion Views
 
@@ -76,11 +73,11 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
 
         #region Contructors
 
-        public ImportViewModel() : base()
+        public ReadMvcViewModel() : base()
         {
         }
 
-        public ImportViewModel(MixModuleData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ReadMvcViewModel(MixModuleData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -95,40 +92,29 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
             }
-            else
-            {
-                LastModified = DateTime.UtcNow;
-            }
-            Value = JsonConvert.SerializeObject(JItem);
+
+            LastModified = DateTime.UtcNow;
+            Value = JsonConvert.SerializeObject(Obj);
             Fields = JsonConvert.SerializeObject(DataProperties);
             return base.ParseModel(_context, _transaction);
         }
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Fields = _context.MixModule.First(m => m.Id == ModuleId && m.Specificulture == Specificulture)?.Fields;
+            Fields = Fields ?? _context.MixModule.First(m => m.Id == ModuleId && m.Specificulture == Specificulture)?.Fields;
             DataProperties = Fields == null ? null : JsonConvert.DeserializeObject<List<ApiModuleDataValueViewModel>>(Fields);
-            JItem = Value == null ? InitValue() : JsonConvert.DeserializeObject<JObject>(Value);
+            Obj = Value == null ? InitValue() : JsonConvert.DeserializeObject<JObject>(Value);
             foreach (var item in DataProperties)
             {
-                if (!JItem.TryGetValue(item.Name, out JToken tmp))
+                Obj[item.Name] = Helper.ParseValue(Obj, item);
+                if (Obj[item.Name] == null)
                 {
-                    string val = string.Empty;
-                    switch (item.DataType)
-                    {
-                        case MixEnums.MixDataType.Upload:
-                            val = Path.Combine(MixService.GetConfig<string>("Domain"), JItem[item.Name]?.Value<JObject>().Value<string>("value"));
-                            break;
-
-                        default:
-                            val = JItem[item.Name]?.Value<JObject>().Value<string>("value");
-                            break;
-                    }
-                    JItem[item.Name] = new JObject()
+                    Obj[item.Name] = new JObject()
                     {
                         new JProperty("dataType", item.DataType),
-                        new JProperty("value", val)
+                        new JProperty("value", Obj[item.Name]?.Value<JObject>().Value<string>("value"))
                     };
+
                 }
             }
         }
@@ -141,7 +127,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
             {
                 foreach (var col in DataProperties)
                 {
-                    var result = col.Validate<MixModuleData>(Id, Specificulture, JItem, _context, _transaction);
+                    var result = col.Validate<MixModuleData>(Id, Specificulture, Obj, _context, _transaction);
                     if (!result.IsSucceed)
                     {
                         IsValid = false;
@@ -189,7 +175,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
 
         public string Property(string name)
         {
-            return JItem[name]?.Value<JObject>().Value<string>("value");
+            return Obj[name]?.Value<JObject>().Value<string>("value");
         }
 
         public ApiModuleDataValueViewModel GetDataProperty(string name)

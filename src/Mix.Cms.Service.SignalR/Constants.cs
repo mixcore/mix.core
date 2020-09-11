@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mix.Cms.Service.SignalR
+﻿namespace Mix.Cms.Service.SignalR
 {
     public class Constants
     {
@@ -22,10 +18,10 @@ namespace Mix.Cms.Service.SignalR
         public class HubMessages
         {
             public const string HubMemberName = "hub_member";
-            public const string HubMemberFieldName = "hub_name";            
+            public const string HubMemberFieldName = "hub_name";
             public const string UnknowErrorMsg = "Unknow";
 
-            
+
         }
         public class Enums
         {

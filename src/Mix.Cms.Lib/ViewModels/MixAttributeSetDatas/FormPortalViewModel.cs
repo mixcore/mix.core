@@ -1,13 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Heart.Extensions;
 using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
-using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -73,7 +72,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonIgnore]
         public List<MixAttributeSetDatas.FormPortalViewModel> RefData { get; set; } = new List<FormPortalViewModel>();
 
-        
+
 
         #endregion Views
 
@@ -106,7 +105,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 CreatedDateTime = DateTime.UtcNow;
                 Priority = Repository.Count(m => m.AttributeSetName == AttributeSetName && m.Specificulture == Specificulture, _context, _transaction).Data + 1;
             }
-            
+
             if (string.IsNullOrEmpty(AttributeSetName))
             {
                 AttributeSetName = _context.MixAttributeSet.First(m => m.Id == AttributeSetId)?.Name;
@@ -432,7 +431,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue));
 
                 case MixEnums.MixDataType.Reference:
-                   
+
                     var arr = new JArray();
                     return (new JProperty(item.AttributeFieldName, arr));
 
@@ -555,7 +554,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         break;
                 }
             }
-            
+
         }
 
         public static Task<RepositoryResponse<List<FormViewModel>>> FilterByValueAsync(string culture, string attributeSetName
@@ -595,12 +594,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
             }
         }
 
-        
+
         private void ParseData(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getValues = MixAttributeSetValues.UpdateViewModel
@@ -618,10 +617,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             new MixAttributeSetValue()
                             {
                                 AttributeFieldId = field.Id,
-                                AttributeFieldName = field.Name,                                
+                                AttributeFieldName = field.Name,
                             }
                             , _context, _transaction)
-                        {                            
+                        {
                         };
                         Values.Add(val);
                     }

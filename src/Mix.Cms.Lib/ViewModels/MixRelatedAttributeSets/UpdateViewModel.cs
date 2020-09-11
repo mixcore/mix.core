@@ -61,9 +61,9 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
 
         public override MixRelatedAttributeSet ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (Id==0)
+            if (Id == 0)
             {
-                Id = Repository.Max(m=>m.Id).Data + 1;
+                Id = Repository.Max(m => m.Id).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
             return base.ParseModel(_context, _transaction);

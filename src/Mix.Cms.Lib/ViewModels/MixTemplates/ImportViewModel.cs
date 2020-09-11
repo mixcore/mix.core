@@ -78,8 +78,10 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         public string Layout { get; set; }
 
         [JsonProperty("assetFolder")]
-        public string AssetFolder {
-            get {
+        public string AssetFolder
+        {
+            get
+            {
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.FileFolder,
                     MixConstants.Folder.TemplatesAssetFolder,
@@ -88,16 +90,20 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder {
-            get {
+        public string TemplateFolder
+        {
+            get
+            {
                 return CommonHelper.GetFullPath(new string[] {
                     MixConstants.Folder.TemplatesFolder, SeoHelper.GetSEOString(ThemeName) });
             }
         }
 
         [JsonProperty("templatePath")]
-        public string TemplatePath {
-            get {
+        public string TemplatePath
+        {
+            get
+            {
                 return $"/{FileFolder}/{FileName}{Extension}";
             }
         }
@@ -134,7 +140,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                     Content = file.Content;
                 }
             }
-            
+
         }
 
         public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)

@@ -1,14 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Cms.Lib.ViewModels;
 using Mix.Cms.Messenger.Models.Data;
 using Mix.Cms.Service.SignalR.Models;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json;
 using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
 {
@@ -61,7 +58,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
                 return getUser.Data.Status == Constants.Enums.OnlineStatus.Connected;
             }
             else
-            {                
+            {
                 return false;
             }
         }
@@ -72,7 +69,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
 
         #region Async
         // Cannot use asyn method for signalr hub
-        public RepositoryResponse<bool> Join(MixChatServiceContext _context=null, IDbContextTransaction _transaction= null)
+        public RepositoryResponse<bool> Join(MixChatServiceContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             UnitOfWorkHelper<MixChatServiceContext>.InitTransaction(_context, _transaction, out MixChatServiceContext context, out IDbContextTransaction transaction, out bool isRoot);
@@ -97,9 +94,9 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
                 {
                     //if current Context is Root
                     transaction.Dispose();
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
-            }            
+            }
         }
 
         private RepositoryResponse<bool> UpdateUser(MixChatServiceContext context, IDbContextTransaction transaction)
@@ -129,7 +126,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
                     Name = Name,
                     Status = Constants.Enums.OnlineStatus.Connected
                 };
-                var saveUser = user.SaveModel(false, context,transaction);
+                var saveUser = user.SaveModel(false, context, transaction);
                 ViewModelHelper.HandleResult(saveUser, ref result);
             }
             return result;

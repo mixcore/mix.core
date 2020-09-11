@@ -63,7 +63,7 @@ namespace Mix.Cms.Api.Controllers.v1
         /// <returns></returns>
         [HttpPost, HttpOptions]
         [Route("init-cms/step-1")]
-        public async Task<RepositoryResponse<bool>> Step1([FromBody]InitCmsViewModel model)
+        public async Task<RepositoryResponse<bool>> Step1([FromBody] InitCmsViewModel model)
         {
             if (model != null)
             {
@@ -188,7 +188,7 @@ namespace Mix.Cms.Api.Controllers.v1
         /// <returns></returns>
         [HttpPost, HttpOptions]
         [Route("init-cms/step-4")]
-        public async Task<RepositoryResponse<bool>> InitLanguages([FromBody]List<MixLanguage> model)
+        public async Task<RepositoryResponse<bool>> InitLanguages([FromBody] List<MixLanguage> model)
         {
             if (model != null)
             {
@@ -222,7 +222,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [HttpPost, HttpOptions]
         [Route("init-cms/step-3")]
         [RequestFormSizeLimit(valueCountLimit: 214748364)] // 200Mb
-        public async Task<RepositoryResponse<Cms.Lib.ViewModels.MixThemes.InitViewModel>> Save([FromForm]string model, [FromForm]IFormFile assets, [FromForm]IFormFile theme)
+        public async Task<RepositoryResponse<Cms.Lib.ViewModels.MixThemes.InitViewModel>> Save([FromForm] string model, [FromForm] IFormFile assets, [FromForm] IFormFile theme)
         {
             var json = JObject.Parse(model);
             var data = json.ToObject<Lib.ViewModels.MixThemes.InitViewModel>();

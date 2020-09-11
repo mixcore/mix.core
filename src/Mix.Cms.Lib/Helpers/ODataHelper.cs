@@ -345,7 +345,8 @@ namespace Mix.Cms.Lib.Helpers
             headers = new Dictionary<string, string>();
         }
 
-        public IEnumerable<KeyValuePair<string, string>> Headers {
+        public IEnumerable<KeyValuePair<string, string>> Headers
+        {
             get { return this.headers; }
         }
 

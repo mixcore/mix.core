@@ -230,7 +230,7 @@ namespace Mix.Cms.Api.Controllers.v1
         Roles = "SuperAdmin")]
         [Route("user-in-role")]
         [HttpPost, HttpOptions]
-        public async Task<RepositoryResponse<bool>> ManageUserInRole([FromBody]UserRoleModel model)
+        public async Task<RepositoryResponse<bool>> ManageUserInRole([FromBody] UserRoleModel model)
         {
             var role = await _roleManager.FindByIdAsync(model.RoleId);
             var result = new RepositoryResponse<bool>();
@@ -428,7 +428,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         [HttpPost, HttpOptions]
         [Route("forgot-password")]
-        public async Task<RepositoryResponse<string>> ForgotPassword([FromBody]Mix.Identity.Models.AccountViewModels.ForgotPasswordViewModel model)
+        public async Task<RepositoryResponse<string>> ForgotPassword([FromBody] Mix.Identity.Models.AccountViewModels.ForgotPasswordViewModel model)
         {
             var result = new RepositoryResponse<string>() { IsSucceed = true };
             if (string.IsNullOrEmpty(model.Email))
@@ -461,7 +461,7 @@ namespace Mix.Cms.Api.Controllers.v1
             if (getEdmTemplate.IsSucceed)
             {
                 content = getEdmTemplate.Data.Content.Replace("[URL]", callbackurl);
-                
+
             }
             MixService.SendMail(
                     to: user.Email,
@@ -473,7 +473,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         [HttpPost]
         [Route("reset-password")]
-        public async Task<RepositoryResponse<string>> ResetPassword([FromBody]Mix.Identity.Models.AccountViewModels.ResetPasswordViewModel model)
+        public async Task<RepositoryResponse<string>> ResetPassword([FromBody] Mix.Identity.Models.AccountViewModels.ResetPasswordViewModel model)
         {
             var result = new RepositoryResponse<string>() { IsSucceed = true };
             var user = await _userManager.FindByEmailAsync(model.Email);

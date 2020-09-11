@@ -5,16 +5,15 @@ using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Extensions;
+using Mix.Heart.Helpers;
 using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
-using Mix.Heart.Extensions;
-using Mix.Heart.Helpers;
 
 namespace Mix.Heart.NetCore.Controllers
 {
@@ -280,7 +279,7 @@ namespace Mix.Heart.NetCore.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<TModel>> Create([FromBody]TView data)
+        public async Task<ActionResult<TModel>> Create([FromBody] TView data)
         {
             var result = await SaveAsync(data, true);
             if (result.IsSucceed)
@@ -297,7 +296,7 @@ namespace Mix.Heart.NetCore.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, [FromBody]TView data)
+        public async Task<IActionResult> Update(string id, [FromBody] TView data)
         {
             var currentId = ReflectionHelper.GetPropertyValue(data, "id").ToString();
             if (id != currentId)
@@ -325,7 +324,7 @@ namespace Mix.Heart.NetCore.Controllers
 
         // PATCH: api/v1/rest/en-us/attribute-set/portal/5
         [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(string id, [FromBody]JObject fields)
+        public async Task<IActionResult> Patch(string id, [FromBody] JObject fields)
         {
             var result = await GetSingleAsync(id);
             if (result.IsSucceed)

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -8,7 +7,6 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
 {
@@ -111,7 +109,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                         new JProperty("dataType", item.DataType),
                         new JProperty("value", JItem[item.Name]?.Value<JObject>().Value<string>("value"))
                     };
-                    
+
                 }
             }
         }

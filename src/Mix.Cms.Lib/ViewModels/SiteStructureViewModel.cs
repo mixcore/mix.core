@@ -2,11 +2,9 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels.MixModules;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -201,8 +199,8 @@ namespace Mix.Cms.Lib.ViewModels
             var getPosts = MixPosts.ImportViewModel.Repository.GetModelListBy(m => postIds.Contains(m.Id), context, transaction);
             if (getPosts.IsSucceed)
             {
-                Posts.AddRange(getPosts.Data);                
-            }            
+                Posts.AddRange(getPosts.Data);
+            }
         }
 
         private void ProcessModuleData(MixModules.ImportViewModel item, MixCmsContext context, IDbContextTransaction transaction)

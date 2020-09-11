@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Caching.Memory;
-using Mix.Cms.Service.SignalR.Hubs;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
@@ -17,12 +16,12 @@ using Mix.Heart.Helpers;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
-using System.IO;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -43,8 +42,10 @@ namespace Mix.Cms.Api.Controllers.v1
 
         protected bool _forbidden = false;
 
-        protected bool _forbiddenPortal {
-            get {
+        protected bool _forbiddenPortal
+        {
+            get
+            {
                 var allowedIps = MixService.GetIpConfig<JArray>("AllowedPortalIps") ?? new JArray();
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 return _forbidden || (
@@ -151,7 +152,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     };
                 }
             }
-            AlertAsync($"Get {typeof(TView).Name}", data?.Status?? 400, data?.ResponseKey);
+            AlertAsync($"Get {typeof(TView).Name}", data?.Status ?? 400, data?.ResponseKey);
             data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
             return data;
         }
@@ -343,7 +344,7 @@ namespace Mix.Cms.Api.Controllers.v1
             }
             var logMsg = new JObject()
                 {
-                    new JProperty("created_at", DateTime.UtcNow),   
+                    new JProperty("created_at", DateTime.UtcNow),
                     new JProperty("id", Request.HttpContext.Connection.Id.ToString()),
                     new JProperty("address", address),
                     new JProperty("ip_address", Request.HttpContext.Connection.RemoteIpAddress.ToString()),
@@ -397,7 +398,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     writer.WriteLine(content);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
                 // File invalid
@@ -409,12 +410,12 @@ namespace Mix.Cms.Api.Controllers.v1
             if (request.FromDate.HasValue)
             {
                 request.FromDate = request.FromDate.Value.Kind == DateTimeKind.Utc ? request.FromDate.Value
-                    :request.FromDate.Value.ToUniversalTime();
+                    : request.FromDate.Value.ToUniversalTime();
             }
             if (request.ToDate.HasValue)
             {
                 request.ToDate = request.ToDate.Value.Kind == DateTimeKind.Utc ? request.ToDate.Value
-                    :request.ToDate.Value.ToUniversalTime();
+                    : request.ToDate.Value.ToUniversalTime();
             }
         }
 

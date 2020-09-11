@@ -1,17 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using System.Linq;
-using Mix.Cms.Lib.Services;
-using Mix.Heart.Helpers;
 
 namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
@@ -412,14 +412,14 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                              || (EF.Functions.Like(m.Excerpt, $"%{keyword}%"))
                              || (EF.Functions.Like(m.Content, $"%{keyword}%")));
 
-                if (postIds !=null && postIds.Count > 0)
+                if (postIds != null && postIds.Count > 0)
                 {
                     postPredicate = m => m.Specificulture == culture
                             && (string.IsNullOrEmpty(keyword)
                              || (EF.Functions.Like(m.Title, $"%{keyword}%"))
                              || (EF.Functions.Like(m.Excerpt, $"%{keyword}%"))
                              || (EF.Functions.Like(m.Content, $"%{keyword}%")))
-                            && postIds.Any(n=> n == m.Id);
+                            && postIds.Any(n => n == m.Id);
                 }
 
                 var getPosts = await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(

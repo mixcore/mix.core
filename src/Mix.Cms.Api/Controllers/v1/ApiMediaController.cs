@@ -79,7 +79,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST api/media
         [HttpPost, HttpOptions]
         [Route("save")]
-        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromForm]string model, [FromForm]IFormFile file)
+        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromForm] string model, [FromForm] IFormFile file)
         {
             if (model != null)
             {
@@ -127,7 +127,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST api/update-infos
         [HttpPost, HttpOptions]
         [Route("update-infos")]
-        public async Task<RepositoryResponse<List<UpdateViewModel>>> UpdateInfos([FromBody]List<UpdateViewModel> models)
+        public async Task<RepositoryResponse<List<UpdateViewModel>>> UpdateInfos([FromBody] List<UpdateViewModel> models)
         {
             if (models != null)
             {

@@ -4,7 +4,6 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Service.SignalR.Hubs
@@ -50,7 +49,7 @@ namespace Mix.Cms.Service.SignalR.Hubs
         }
 
         #endregion Overrides
-        
+
         public async Task CallUser(string targetConnectionId)
         {
             var callingUser = Users.SingleOrDefault(u => u.ConnectionId == Context.ConnectionId);
@@ -156,7 +155,7 @@ namespace Mix.Cms.Service.SignalR.Hubs
             {
                 foreach (var user in currentCall.Users.Where(u => u.ConnectionId != callingUser.ConnectionId))
                 {
-                    await Clients.Client(user.ConnectionId).SendAsync("callEnded", callingUser.ConnectionId, 
+                    await Clients.Client(user.ConnectionId).SendAsync("callEnded", callingUser.ConnectionId,
                         string.Format("{0} has hung up.", callingUser.Username));
                 }
 

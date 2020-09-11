@@ -109,8 +109,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
             if (DataType == MixEnums.MixDataType.Reference)
             {
                 DataNavs = MixRelatedAttributeDatas.NavigationViewModel.Repository.GetModelListBy(d =>
-                    d.ParentId == DataId && d.ParentType == MixEnums.MixAttributeSetDataType.Set.ToString() && d.Specificulture == Specificulture                    
-                    , _context, _transaction).Data?.OrderBy(m=>m.Priority).ToList();
+                    d.ParentId == DataId && d.ParentType == MixEnums.MixAttributeSetDataType.Set.ToString() && d.Specificulture == Specificulture
+                    , _context, _transaction).Data?.OrderBy(m => m.Priority).ToList();
 
             }
             Field = MixAttributeFields.ReadViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId, _context, _transaction).Data;

@@ -8,7 +8,6 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
 
@@ -107,8 +106,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl {
-            get {
+        public string ImageUrl
+        {
+            get
+            {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1))
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -123,8 +124,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl {
-            get {
+        public string ThumbnailUrl
+        {
+            get
+            {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -221,7 +224,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             finally
             {
                 //if current Context is Root
-                context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
             }
         }
 

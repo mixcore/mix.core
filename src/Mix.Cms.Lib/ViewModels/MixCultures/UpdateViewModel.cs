@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixCultures
 {
@@ -24,7 +23,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
         [JsonProperty("id")]
         public int Id { get; set; }
         [JsonProperty("specificulture")]
-        public string Specificulture { get; set; }        
+        public string Specificulture { get; set; }
 
         [JsonProperty("alias")]
         public string Alias { get; set; }

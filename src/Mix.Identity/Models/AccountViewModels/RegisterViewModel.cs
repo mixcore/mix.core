@@ -2,8 +2,6 @@
 // The Mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Identity.Models.AccountViewModels
@@ -13,7 +11,6 @@ namespace Mix.Identity.Models.AccountViewModels
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string NickName { get; set; }
-        public List<SelectListItem> UserClaims { get; set; }
 
         [Required]
         public string UserName { get; set; }

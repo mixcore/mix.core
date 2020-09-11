@@ -20,14 +20,14 @@ using System.Threading.Tasks;
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
     [Produces("application/json")]
-    [Route("api/v1/rest/{culture}/module-data/portal")]
-    public class ApiModuleDataDataController :
-        BaseRestApiController<MixCmsContext, MixModuleData, UpdateViewModel>
+    [Route("api/v1/rest/{culture}/module-data/mvc")]
+    public class ApiModuleDataMvcController :
+        BaseRestApiController<MixCmsContext, MixModuleData, ReadMvcViewModel>
     {
 
         // GET: api/s
         [HttpGet]
-        public override async Task<ActionResult<PaginationModel<UpdateViewModel>>> Get()
+        public override async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> Get()
         {
             bool isModuleId = int.TryParse(Request.Query["module_id"], out int moduleId);
             bool isPostId = int.TryParse(Request.Query["post_id"], out int postId);
@@ -58,51 +58,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
 
-        [HttpGet("export")]
-        public async Task<ActionResult<PaginationModel<string>>> Export()
-        {
-            bool isModuleId = int.TryParse(Request.Query["module_id"], out int moduleId);
-            bool isPostId = int.TryParse(Request.Query["post_id"], out int postId);
-            bool isPageId = int.TryParse(Request.Query[""], out int pageId);
-            bool isStatus = Enum.TryParse(Request.Query["status"], out MixEnums.MixContentStatus status);
-            bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
-            bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
-            string keyword = Request.Query["keyword"];
-            Expression<Func<MixModuleData, bool>> predicate = model =>
-                model.Specificulture == _lang
-                && (model.ModuleId == moduleId)
-                && (!isPostId || model.PostId == postId)
-                && (!isPageId || model.PageId == pageId)
-                && (!isStatus || model.Status == status.ToString())
-                && (!isFromDate || model.CreatedDateTime >= fromDate)
-                && (!isToDate || model.CreatedDateTime <= toDate)
-                && (string.IsNullOrEmpty(keyword)
-                 || (EF.Functions.Like(model.Value, $"%{keyword}%"))
-                 );
-            var getData = await base.GetListAsync(predicate);
-            var exportData = new List<JObject>();
-            foreach (var item in getData.Data.Items)
-            {
-                item.JItem["created_date"] = new JObject()
-                {
-                    new JProperty("dataType", 1),
-                    new JProperty("value", item.CreatedDateTime.ToLocalTime().ToString("dd-MM-yyyy hh:mm:ss"))
-                };
-                exportData.Add(item.JItem);
-            }
-
-            string exportPath = $"Exports/Module/{moduleId}";
-            var result = CommonHelper.ExportJObjectToExcel(exportData, string.Empty, exportPath, Guid.NewGuid().ToString(), null);
-
-            if (result.IsSucceed)
-            {
-                return Ok(result.Data);
-            }
-            else
-            {
-                return BadRequest(getData.Errors);
-            }
-        }
         // GET api/module-data/create/id
         [HttpGet, HttpOptions]
         [Route("init-form/{moduleId}")]

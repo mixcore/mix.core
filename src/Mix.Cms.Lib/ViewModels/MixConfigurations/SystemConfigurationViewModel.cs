@@ -135,7 +135,7 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
             finally
             {
                 //if current Context is Root
-                context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
             }
             return result;
         }
