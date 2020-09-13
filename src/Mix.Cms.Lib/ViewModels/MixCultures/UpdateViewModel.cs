@@ -196,7 +196,117 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 var cloneResult = await CloneUrlAliasAsync(parent, _context, _transaction);
                 ViewModelHelper.HandleResult(cloneResult, ref result);
             }
+            
+            // Clone Attribute Value from Default culture
+            if (result.IsSucceed)
+            {
+                var cloneResult = await CloneAttributeValuesAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
+            }
+            // Clone Attribute Data from Default culture
+            if (result.IsSucceed)
+            {
+                var cloneResult = await CloneAttributeDatasAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
+            }
+            // Clone Related Data from Default culture
+            if (result.IsSucceed)
+            {
+                var cloneResult = await CloneRelatedAttributeDatasAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
+            }
 
+            return result;
+        }
+
+        public async Task<RepositoryResponse<bool>> CloneRelatedAttributeDatasAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                var getPages = await DefaultModelRepository<MixCmsContext, MixRelatedAttributeData>.Instance.GetModelListByAsync(
+                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
+                if (getPages.IsSucceed)
+                {
+                    foreach (var p in getPages.Data)
+                    {
+                        if (!context.MixRelatedAttributeData.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            p.CreatedDateTime = DateTime.UtcNow;
+                            context.Entry(p).State = EntityState.Added;
+                        }
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
+            }
+            return result;
+        }
+        
+        public async Task<RepositoryResponse<bool>> CloneAttributeDatasAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                var getPages = await DefaultModelRepository<MixCmsContext, MixAttributeSetData>.Instance.GetModelListByAsync(
+                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
+                if (getPages.IsSucceed)
+                {
+                    foreach (var p in getPages.Data)
+                    {
+                        if (!context.MixAttributeSetData.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            p.CreatedDateTime = DateTime.UtcNow;
+                            context.Entry(p).State = EntityState.Added;
+                        }
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
+            }
+            return result;
+        }
+        
+        public async Task<RepositoryResponse<bool>> CloneAttributeValuesAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                var getPages = await DefaultModelRepository<MixCmsContext, MixAttributeSetValue>.Instance.GetModelListByAsync(
+                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
+                if (getPages.IsSucceed)
+                {
+                    foreach (var p in getPages.Data)
+                    {
+                        if (!context.MixAttributeSetValue.Any(m => m.DataId == p.DataId && m.Specificulture == Specificulture))
+                        {
+                            p.Id = Guid.NewGuid().ToString();
+                            p.Specificulture = Specificulture;
+                            p.CreatedDateTime = DateTime.UtcNow;
+                            context.Entry(p).State = EntityState.Added;
+                        }
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
+            }
             return result;
         }
 
