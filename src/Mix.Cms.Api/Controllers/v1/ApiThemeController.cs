@@ -216,12 +216,20 @@ namespace Mix.Cms.Api.Controllers.v1
             // Load default blank if created new without upload theme
             if (data.Id == 0 && theme == null)
             {
-                data.TemplateAsset = new Lib.ViewModels.FileViewModel()
+                if (data.IsCloneFromCurrentTheme)
                 {
-                    Filename = "default_blank",
-                    Extension = ".zip",
-                    FileFolder = "Imports/Themes"
-                };
+                    var currentThemeFolder = $"{MixConstants.Folder.TemplatesFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, _lang)}";
+                    FileRepository.Instance.CopyDirectory(currentThemeFolder, data.TemplateFolder);
+                }
+                else
+                {
+                    data.TemplateAsset = new Lib.ViewModels.FileViewModel()
+                    {
+                        Filename = "default_blank",
+                        Extension = ".zip",
+                        FileFolder = "wwwroot/Imports/Themes"
+                    };
+                }
             }
 
             if (data != null)
