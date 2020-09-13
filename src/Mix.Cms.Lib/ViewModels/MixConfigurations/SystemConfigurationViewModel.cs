@@ -6,6 +6,7 @@ using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -36,6 +37,7 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
         [JsonProperty("value")]
         public string Value { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty("dataType")]
         public MixDataType DataType { get; set; }
 
