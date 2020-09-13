@@ -34,7 +34,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual DbSet<MixPostModule> MixPostModule { get; set; }
         public virtual DbSet<MixRelatedAttributeData> MixRelatedAttributeData { get; set; }
         public virtual DbSet<MixRelatedAttributeSet> MixRelatedAttributeSet { get; set; }
-        public virtual DbSet<MixRelatedData> MixRelatedData { get; set; }
         public virtual DbSet<MixRelatedPost> MixRelatedPost { get; set; }
         public virtual DbSet<MixTemplate> MixTemplate { get; set; }
         public virtual DbSet<MixTheme> MixTheme { get; set; }
@@ -1312,49 +1311,6 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasForeignKey(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_mix_related_attribute_set_mix_attribute_set");
-            });
-
-            modelBuilder.Entity<MixRelatedData>(entity =>
-            {
-                entity.HasKey(e => new { e.Id, e.Specificulture });
-
-                entity.ToTable("mix_related_data");
-
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
-
-                entity.Property(e => e.AttributeSetName).HasMaxLength(250);
-
-                entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.DataId)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Description).HasMaxLength(450);
-
-                entity.Property(e => e.LastModified).HasColumnType("datetime");
-
-                entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ParentId)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.ParentType)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<MixRelatedPost>(entity =>

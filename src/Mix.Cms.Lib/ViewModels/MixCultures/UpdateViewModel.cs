@@ -196,6 +196,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 var cloneResult = await CloneUrlAliasAsync(parent, _context, _transaction);
                 ViewModelHelper.HandleResult(cloneResult, ref result);
             }
+
             return result;
         }
 
@@ -210,9 +211,12 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        p.CreatedDateTime = DateTime.UtcNow;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixUrlAlias.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            p.CreatedDateTime = DateTime.UtcNow;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -237,8 +241,11 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixModule.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -263,8 +270,11 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixMedia.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -289,8 +299,11 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixPostMedia.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -315,9 +328,12 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        p.CreatedDateTime = DateTime.UtcNow;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixRelatedPost.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            p.CreatedDateTime = DateTime.UtcNow;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -336,14 +352,18 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             try
             {
-                var getPages = await DefaultModelRepository<MixCmsContext, MixModulePost>.Instance.GetModelListByAsync(
+                
+                var getModules = await DefaultModelRepository<MixCmsContext, MixModulePost>.Instance.GetModelListByAsync(
                     c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
-                if (getPages.IsSucceed)
+                if (getModules.IsSucceed)
                 {
-                    foreach (var p in getPages.Data)
+                    foreach (var p in getModules.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixModulePost.Any(m =>m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            context.Entry(p).State = EntityState.Added;
+                        }                        
                     }
                     await context.SaveChangesAsync();
                 }
@@ -368,8 +388,11 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixPagePost.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -394,8 +417,11 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixPageModule.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -420,8 +446,11 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixPost.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -446,8 +475,11 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixModulePost.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -472,9 +504,12 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        p.CreatedDateTime = DateTime.UtcNow;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixLanguage.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            p.CreatedDateTime = DateTime.UtcNow;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -499,9 +534,12 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        p.CreatedDateTime = DateTime.UtcNow;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixConfiguration.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            p.CreatedDateTime = DateTime.UtcNow;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -526,10 +564,13 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        p.CreatedDateTime = DateTime.UtcNow;
-                        p.LastModified = DateTime.UtcNow;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixPage.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            p.CreatedDateTime = DateTime.UtcNow;
+                            p.LastModified = DateTime.UtcNow;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
