@@ -17,7 +17,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
         [JsonProperty("id")]
         public int Id { get; set; }
         [JsonProperty("specificulture")]
-        public string Specificulture { get; set; }        
+        public string Specificulture { get; set; }
 
         [JsonProperty("alias")]
         public string Alias { get; set; }
@@ -70,6 +70,6 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
 
         #endregion Contructors
 
-        
+
     }
 }

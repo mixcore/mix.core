@@ -29,7 +29,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
         public string Specificulture { get; set; }
         [JsonProperty("id")]
         public int Id { get; set; }
-        
+
         [JsonProperty("pageId")]
         public int PageId { get; set; }
 
@@ -159,7 +159,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
             {
                 //if current Context is Root
                 transaction.Dispose();
-                context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
             }
         }
 

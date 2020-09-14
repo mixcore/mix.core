@@ -48,8 +48,10 @@ namespace Mix.Cms.Lib.Services
             watcher.EnableRaisingEvents = true;
         }
 
-        public static MixService Instance {
-            get {
+        public static MixService Instance
+        {
+            get
+            {
                 if (instance == null)
                 {
                     lock (syncRoot)
@@ -66,8 +68,10 @@ namespace Mix.Cms.Lib.Services
             }
         }
 
-        public static MixService DefaultInstance {
-            get {
+        public static MixService DefaultInstance
+        {
+            get
+            {
                 if (defaultInstance == null)
                 {
                     lock (syncRoot)
@@ -232,7 +236,7 @@ namespace Mix.Cms.Lib.Services
 
         public static string TranslateString(string name, string culture)
         {
-            var result = Instance.Translator[culture][name];            
+            var result = Instance.Translator[culture][name];
             return result != null ? result.Value<string>() : name;
         }
 
@@ -345,7 +349,7 @@ namespace Mix.Cms.Lib.Services
                 //if current Context is Root
                 if (isRoot)
                 {
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
             }
         }
@@ -403,7 +407,7 @@ namespace Mix.Cms.Lib.Services
                     };
                     smtpClient.Send(mailMessage);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     MixService.LogException(ex);
                     // ToDo: cannot send mail

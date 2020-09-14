@@ -8,7 +8,6 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
@@ -35,14 +34,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("image")]
         public string Image { get; set; }
 
-        [JsonIgnore]
-        [JsonProperty("extraFields")]
-        public string ExtraFields { get; set; } = "[]";
-
-        [JsonIgnore]
-        [JsonProperty("extraProperties")]
-        public string ExtraProperties { get; set; } = "[]";
-
         [JsonProperty("icon")]
         public string Icon { get; set; }
 
@@ -51,9 +42,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         [JsonProperty("excerpt")]
         public string Excerpt { get; set; }
-
-        [JsonProperty("content")]
-        public string Content { get; set; }
 
         [JsonProperty("seoName")]
         public string SeoName { get; set; }
@@ -74,7 +62,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public int? Views { get; set; }
 
         [JsonProperty("type")]
-        public MixContentStatus Type { get; set; }
+        public string Type { get; set; }
 
         [JsonProperty("publishedDateTime")]
         public DateTime? PublishedDateTime { get; set; }

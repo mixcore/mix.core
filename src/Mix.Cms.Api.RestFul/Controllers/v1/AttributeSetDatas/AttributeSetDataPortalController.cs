@@ -44,7 +44,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             var getAttrSet = await Lib.ViewModels.MixAttributeSets.UpdateViewModel.Repository.GetSingleModelAsync(m => m.Name == attributeSet || m.Id == attributeSetId);
             if (getAttrSet.IsSucceed)
             {
-                FormPortalViewModel result = new FormPortalViewModel() { 
+                FormPortalViewModel result = new FormPortalViewModel()
+                {
                     Specificulture = _lang,
                     AttributeSetId = getAttrSet.Data.Id,
                     AttributeSetName = getAttrSet.Data.Name,
@@ -53,7 +54,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 };
                 result.ExpandView();
                 return Ok(result);
-            }            
+            }
             else
             {
                 return BadRequest(getAttrSet.Errors);
@@ -67,7 +68,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             string attributeSetName = Request.Query["attributeSetName"].ToString();
             string exportPath = $"exports/module/{attributeSetName}";
             var getData = await Helper.FilterByKeywordAsync<FormPortalViewModel>(_lang, Request);
-            
+
             var jData = new List<JObject>();
             if (getData.IsSucceed)
             {
@@ -88,7 +89,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("import-data/{attributeSetName}")]
-        public async Task<ActionResult<RepositoryResponse<ImportViewModel>>> ImportData(string attributeSetName, [FromForm]IFormFile file)
+        public async Task<ActionResult<RepositoryResponse<ImportViewModel>>> ImportData(string attributeSetName, [FromForm] IFormFile file)
         {
             var getAttributeSet = await Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModelAsync(
                     m => m.Name == attributeSetName);

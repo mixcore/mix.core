@@ -23,8 +23,10 @@ namespace Mix.Cms.Web.Controllers
         protected bool isValid = true;
         protected string _redirectUrl;
 
-        protected bool _forbiddenPortal {
-            get {
+        protected bool _forbiddenPortal
+        {
+            get
+            {
                 var allowedIps = MixService.GetIpConfig<JArray>("AllowedPortalIps") ?? new JArray();
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 return forbidden || (
@@ -51,8 +53,10 @@ namespace Mix.Cms.Web.Controllers
         public ViewContext ViewContext { get; set; }
         private string _culture;
 
-        public string culture {
-            get {
+        public string culture
+        {
+            get
+            {
                 return RouteData?.Values["culture"]?.ToString().ToLower()
                     ?? _culture
                     ?? MixService.GetConfig<string>("DefaultCulture");
@@ -277,6 +281,36 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["Description"] = getPost.Data.SeoDescription;
                 ViewData["Keywords"] = getPost.Data.SeoKeywords;
                 ViewData["Image"] = getPost.Data.ImageUrl;
+                getPost.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+                return View(getPost.Data);
+            }
+            else
+            {
+                return await Page("404");
+            }
+        }
+
+        protected async System.Threading.Tasks.Task<IActionResult> Data(string id)
+        {
+            RepositoryResponse<Lib.ViewModels.MixAttributeSetDatas.ReadMvcViewModel> getPost = null;
+            var cacheKey = $"mvc_{culture}_post_{id}";
+            if (MixService.GetConfig<bool>("IsCache"))
+            {
+                getPost = await MixCacheService.GetAsync<RepositoryResponse<Lib.ViewModels.MixAttributeSetDatas.ReadMvcViewModel>>(cacheKey);
+            }
+            if (getPost == null)
+            {
+                Expression<Func<MixAttributeSetData, bool>> predicate;
+                predicate = p =>
+                p.Id == id
+                && p.Status == MixContentStatus.Published.ToString()
+                && p.Specificulture == culture;
+
+                getPost = await Lib.ViewModels.MixAttributeSetDatas.ReadMvcViewModel.Repository.GetFirstModelAsync(predicate);
+            }
+
+            if (getPost.IsSucceed)
+            {
                 getPost.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
                 return View(getPost.Data);
             }

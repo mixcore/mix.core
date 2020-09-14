@@ -9,7 +9,6 @@ using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixModuleDatas;
-using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
@@ -228,7 +227,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [AllowAnonymous]
         [HttpPost, HttpOptions]
         [Route("save")]
-        public async Task<RepositoryResponse<UpdateViewModel>> Post([FromBody]UpdateViewModel data)
+        public async Task<RepositoryResponse<UpdateViewModel>> Post([FromBody] UpdateViewModel data)
         {
             return await base.SaveAsync<UpdateViewModel>(data, true);
         }
@@ -310,7 +309,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST api/PortalPage
         [HttpPost, HttpOptions]
         [Route("update-infos")]
-        public async Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfos([FromBody]List<ReadViewModel> models)
+        public async Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfos([FromBody] List<ReadViewModel> models)
         {
             if (models != null)
             {

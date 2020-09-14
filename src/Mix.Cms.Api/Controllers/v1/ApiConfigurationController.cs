@@ -104,7 +104,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("save")]
-        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromBody]UpdateViewModel model)
+        public async Task<RepositoryResponse<UpdateViewModel>> Save([FromBody] UpdateViewModel model)
         {
             var result = await base.SaveAsync<UpdateViewModel>(model, true);
             if (result.IsSucceed)

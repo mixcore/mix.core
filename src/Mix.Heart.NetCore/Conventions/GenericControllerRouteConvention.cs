@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Mix.Heart.Extensions;
 using Mix.Heart.NetCore.Attributes;
 using System.Reflection;
-using Mix.Heart.Extensions;
 
 namespace Mix.Heart.RestFul.Conventions
 {

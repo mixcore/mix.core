@@ -5,7 +5,6 @@ using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -108,7 +107,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                if (AttributeData!= null && string.IsNullOrEmpty(AttributeData.Id))
+                if (AttributeData != null && string.IsNullOrEmpty(AttributeData.Id))
                 {
                     var saveData = await AttributeData.SaveModelAsync(true, context, transaction);
                     if (!saveData.IsSucceed)

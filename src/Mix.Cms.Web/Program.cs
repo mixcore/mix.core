@@ -2,18 +2,16 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Mix.Cms.Lib;
-using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace Mix.Cms.Web
 {
     public class Program
     {
-        
+
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();            
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args)

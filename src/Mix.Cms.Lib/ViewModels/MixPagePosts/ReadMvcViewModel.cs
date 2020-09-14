@@ -6,9 +6,7 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
 using System.Linq;
-using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixPagePosts
 {
@@ -152,7 +150,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
                 {
                     //if current Context is Root
                     transaction.Dispose();
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
             }
         }

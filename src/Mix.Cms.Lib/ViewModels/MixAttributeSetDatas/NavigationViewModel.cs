@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
@@ -54,8 +55,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public JObject Data { get; set; }
 
         [JsonProperty("nav")]
-        public Navigation Nav {
-            get {
+        public Navigation Nav
+        {
+            get
+            {
                 if (AttributeSetName == MixConstants.AttributeSetName.NAVIGATION && Data != null)
                 {
                     return Data.ToObject<Navigation>();
@@ -98,6 +101,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     Data.Add(ParseValue(item));
                 }
             }
+            LoadReferenceData(Id, MixEnums.MixAttributeSetDataType.Set, _context, _transaction);
         }
 
         #region Async
@@ -139,31 +143,41 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #endregion Overrides
 
-        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        //{
-        //    var tasks = new List<Task>();
-        //    var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
-        //        .Any(d => d.Specificulture == Specificulture && d.Id == Id));
-        //    foreach (var item in attrDatas)
-        //    {
-        //        tasks.Add(Task.Run(() =>
-        //        {
-        //            var updModel = new NavigationViewModel(item, context, transaction);
-        //            updModel.GenerateCache(item, updModel);
-        //        }));
-        //    }
-        //    foreach (var item in Values)
-        //    {
-        //        tasks.Add(Task.Run(() =>
-        //        {
-        //            item.RemoveCache(item.Model);
-        //        }));
-        //    }
-        //    return tasks;
-        //}
+
 
         #region Expands
+        public void LoadReferenceData(string parentId, MixEnums.MixAttributeSetDataType parentType,
+            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var refFields = Values.Where(m => m.DataType == MixEnums.MixDataType.Reference).OrderBy(v => v.Priority).ToList();
+            foreach (var item in refFields)
+            {
+                item.Field = item.Field ?? MixAttributeFields.ReadViewModel.Repository.GetSingleModel(m => m.Id == item.AttributeFieldId
+                , _context, _transaction).Data;
+                Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
+                    (model.AttributeSetId == item.Field.ReferenceId)
+                    && (model.ParentId == parentId && model.ParentType == parentType.ToString())
+                    && model.Specificulture == Specificulture
+                    ;
+                var getData = MixRelatedAttributeDatas.NavigationViewModel.Repository.GetModelListBy(predicate, _context, _transaction);
 
+                JArray arr = new JArray();
+                
+                foreach (var nav in getData.Data.OrderBy(d => d.Priority))
+                {
+                    nav.Data.Data.Add(new JProperty("data", nav.Data.Data));
+                    arr.Add(nav.Data.Data);
+                }
+                if (Data.ContainsKey(item.AttributeFieldName))
+                {
+                    Data[item.AttributeFieldName] = arr;
+                }
+                else
+                {
+                    Data.Add(new JProperty(item.AttributeFieldName, arr));
+                }
+            }
+        }
         private JProperty ParseValue(MixAttributeSetValues.NavigationViewModel item)
         {
             switch (item.DataType)
@@ -187,13 +201,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue));
 
                 case MixEnums.MixDataType.Reference:
-                    JArray arr = new JArray();
-                    foreach (var nav in item.DataNavs.OrderBy(d => d.Priority))
-                    {
-                        nav.Data.Data.Add(new JProperty("data", nav.Data.Data));
-                        arr.Add(nav.Data.Data);
-                    }
-                    return (new JProperty(item.AttributeFieldName, arr));
+                    return null;
 
                 case MixEnums.MixDataType.Custom:
                 case MixEnums.MixDataType.Duration:
@@ -298,7 +306,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("actived_menu_items")]
         public List<MenuItem> ActivedMenuItems { get; set; } = new List<MenuItem>();
-        
+
         [JsonProperty("actived_menu_item")]
         public MenuItem ActivedMenuItem { get; set; }
     }

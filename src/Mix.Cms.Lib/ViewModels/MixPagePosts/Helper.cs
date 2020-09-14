@@ -1,16 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Common.Helper;
+using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 using System.Linq;
-using Mix.Cms.Lib.Services;
 
 namespace Mix.Cms.Lib.ViewModels.MixPagePosts
 {
@@ -75,7 +72,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
             , int? pageId = null
             , string specificulture = null
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-            where  TView: ViewModelBase<MixCmsContext, MixPagePost, TView>
+            where TView : ViewModelBase<MixCmsContext, MixPagePost, TView>
         {
             if (postId.HasValue || pageId.HasValue)
             {

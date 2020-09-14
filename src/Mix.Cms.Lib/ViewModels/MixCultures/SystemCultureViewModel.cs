@@ -6,7 +6,6 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixCultures
@@ -22,7 +21,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
         public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        
+
         [JsonProperty("alias")]
         public string Alias { get; set; }
 

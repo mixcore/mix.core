@@ -1,8 +1,5 @@
 ﻿using Mix.Cms.Lib.Services;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
 {

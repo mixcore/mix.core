@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -33,6 +34,7 @@
 
   <ItemGroup>
     <Compile Include="Controllers\v1\AttributeSetDatas\ApiAttributeSetDataController.cs" />
+    <Compile Include="Controllers\v1\AttributeSetDatas\AttributeSetDataMvcController.cs" />
     <Compile Include="Controllers\v1\AttributeSetDatas\AttributeSetDataPortalController.cs" />
   </ItemGroup>
 

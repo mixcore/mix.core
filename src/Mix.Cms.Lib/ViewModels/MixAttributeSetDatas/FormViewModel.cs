@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Heart.Extensions;
 using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -95,10 +95,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 ParseData(_context, _transaction);
             }
-            foreach (var refField in Fields.Where(f=>f.DataType == MixEnums.MixDataType.Reference))
+            foreach (var refField in Fields.Where(f => f.DataType == MixEnums.MixDataType.Reference))
             {
                 var arr = new JArray();
-                
+
                 var children = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(
                         m => m.Specificulture == Specificulture && m.ParentId == Id && m.ParentType == MixEnums.MixAttributeSetDataType.Set.ToString()
                         && m.AttributeSetId == refField.ReferenceId
@@ -109,7 +109,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     arr.Add(JObject.FromObject(child.AttributeData));
                 }
                 Obj[refField.Name] = arr;
-                
+
             }
         }
 
@@ -621,13 +621,13 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             base.GenerateCache(model, view, _context, _transaction);
         }
 
-        
+
         private void ParseData(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getValues = MixAttributeSetValues.UpdateViewModel
                        .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
             if (getValues.IsSucceed)
-            {                
+            {
                 Values = getValues.Data.OrderBy(a => a.Priority).ToList();
                 foreach (var field in Fields.OrderBy(f => f.Priority))
                 {

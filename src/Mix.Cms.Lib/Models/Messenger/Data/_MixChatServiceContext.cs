@@ -87,7 +87,7 @@ namespace Mix.Cms.Messenger.Models.Data
                 case MixEnums.DatabaseProvider.PostgreSQL:
                     Npgsql.NpgsqlConnection.ClearPool((Npgsql.NpgsqlConnection)Database.GetDbConnection());
                     break;
-                
+
             }
             base.Dispose();
         }

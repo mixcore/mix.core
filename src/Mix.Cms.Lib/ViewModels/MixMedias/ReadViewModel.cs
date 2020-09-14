@@ -73,8 +73,10 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
 
         [JsonProperty("fullPath")]
-        public string FullPath {
-            get {
+        public string FullPath
+        {
+            get
+            {
                 if (!string.IsNullOrEmpty(FileName) && string.IsNullOrEmpty(TargetUrl))
                 {
                     return FileFolder.IndexOf("http") > 0 ? $"{FileFolder}/{FileName}{Extension}"
@@ -88,8 +90,10 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         }
 
         [JsonProperty("filePath")]
-        public string FilePath {
-            get {
+        public string FilePath
+        {
+            get
+            {
                 if (!string.IsNullOrEmpty(FileName) && string.IsNullOrEmpty(TargetUrl))
                 {
                     return FileFolder.IndexOf("http") > 0 ? $"{FileFolder}/{FileName}{Extension}"

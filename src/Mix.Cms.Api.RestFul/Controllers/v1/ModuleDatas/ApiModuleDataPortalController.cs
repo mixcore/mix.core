@@ -14,7 +14,6 @@ using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -58,7 +57,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 return BadRequest(getData.Errors);
             }
         }
-        
+
         [HttpGet("export")]
         public async Task<ActionResult<PaginationModel<string>>> Export()
         {
@@ -94,7 +93,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
 
             string exportPath = $"Exports/Module/{moduleId}";
             var result = CommonHelper.ExportJObjectToExcel(exportData, string.Empty, exportPath, Guid.NewGuid().ToString(), null);
-            
+
             if (result.IsSucceed)
             {
                 return Ok(result.Data);

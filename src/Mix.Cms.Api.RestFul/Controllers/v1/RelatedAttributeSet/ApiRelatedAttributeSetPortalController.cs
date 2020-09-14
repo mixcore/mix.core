@@ -8,9 +8,7 @@ using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets;
 using Mix.Domain.Core.ViewModels;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 

@@ -134,8 +134,10 @@ namespace Mix.Cms.Lib.ViewModels
         private string _webPath = string.Empty;
 
         [JsonProperty("fullPath")]
-        public string FullPath {
-            get {
+        public string FullPath
+        {
+            get
+            {
                 _fullPath = CommonHelper.GetFullPath(new string[] {
                     FileFolder,
                     //FolderName,
@@ -144,18 +146,22 @@ namespace Mix.Cms.Lib.ViewModels
 
                 return _fullPath;
             }
-            set {
+            set
+            {
                 _fullPath = value;
             }
         }
 
         [JsonProperty("webPath")]
-        public string WebPath {
-            get {
+        public string WebPath
+        {
+            get
+            {
                 _webPath = FullPath.Replace("wwwroot", string.Empty);
                 return _webPath;
             }
-            set {
+            set
+            {
                 _webPath = value;
             }
         }

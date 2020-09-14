@@ -1,22 +1,21 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Services;
+using Mix.Common.Helper;
+using Mix.Domain.Core.ViewModels;
+using Mix.Domain.Data.Repository;
+using Mix.Heart.Extensions;
+using Mix.Heart.Helpers;
+using Mix.Services;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Heart.Extensions;
-using Mix.Cms.Lib.Services;
-using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.Repository;
-using Newtonsoft.Json.Linq;
-using Mix.Services;
-using Mix.Heart.Helpers;
-using Mix.Heart.Enums;
 
 namespace Mix.Cms.Lib.Controllers
 {
@@ -31,7 +30,7 @@ namespace Mix.Cms.Lib.Controllers
         protected static IDbContextTransaction _transaction;
         protected string _lang;
         protected bool _forbidden;
-        
+
         /// <summary>
         /// The domain
         /// </summary>
@@ -84,7 +83,7 @@ namespace Mix.Cms.Lib.Controllers
 
         // GET: api/v1/rest/{culture}/attribute-set-data/5
         [HttpGet("default")]
-        public ActionResult<TView> Default()
+        public virtual ActionResult<TView> Default()
         {
             using (TDbContext context = UnitOfWorkHelper<TDbContext>.InitContext())
             {
@@ -98,16 +97,16 @@ namespace Mix.Cms.Lib.Controllers
         }
 
         [HttpGet("remove-cache/{id}")]
-        public async Task<ActionResult> ClearCacheAsync(string id)
+        public virtual async Task<ActionResult> ClearCacheAsync(string id)
         {
             string key = $"_{id}";
             key += !string.IsNullOrEmpty(_lang) ? $"_{_lang}" : string.Empty;
             await CacheService.RemoveCacheAsync(typeof(TView), key);
             return NoContent();
         }
-        
+
         [HttpGet("remove-cache")]
-        public async Task<ActionResult> ClearCacheAsync()
+        public virtual async Task<ActionResult> ClearCacheAsync()
         {
             await CacheService.RemoveCacheAsync(typeof(TView));
             return NoContent();
@@ -117,7 +116,7 @@ namespace Mix.Cms.Lib.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<TModel>> Create([FromBody]TView data)
+        public virtual async Task<ActionResult<TModel>> Create([FromBody] TView data)
         {
             var result = await SaveAsync(data, true);
             if (result.IsSucceed)
@@ -134,7 +133,7 @@ namespace Mix.Cms.Lib.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, [FromBody]TView data)
+        public virtual async Task<IActionResult> Update(string id, [FromBody] TView data)
         {
             if (data != null)
             {
@@ -170,7 +169,7 @@ namespace Mix.Cms.Lib.Controllers
 
         // PATCH: api/v1/rest/en-us/attribute-set/portal/5
         [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(string id, [FromBody]JObject fields)
+        public virtual async Task<IActionResult> Patch(string id, [FromBody] JObject fields)
         {
             var result = await GetSingleAsync(id);
             if (result.IsSucceed)
@@ -207,7 +206,7 @@ namespace Mix.Cms.Lib.Controllers
 
         }
 
-        
+
         #endregion
 
         #region Overrides
@@ -245,7 +244,7 @@ namespace Mix.Cms.Lib.Controllers
 
         #region Helpers
         protected async Task<RepositoryResponse<T>> GetSingleAsync<T>(string id)
-            where T: Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
+            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
             Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>("Id", id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
             if (!string.IsNullOrEmpty(_lang))
@@ -256,7 +255,7 @@ namespace Mix.Cms.Lib.Controllers
 
             return await GetSingleAsync<T>(predicate);
         }
-        
+
         protected async Task<RepositoryResponse<TView>> GetSingleAsync(string id)
         {
             Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>("Id", id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
@@ -278,9 +277,9 @@ namespace Mix.Cms.Lib.Controllers
             }
             return data;
         }
-        
+
         protected async Task<RepositoryResponse<T>> GetSingleAsync<T>(Expression<Func<TModel, bool>> predicate = null)
-            where T: Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
+            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
             RepositoryResponse<T> data = null;
             if (predicate != null)
@@ -291,7 +290,7 @@ namespace Mix.Cms.Lib.Controllers
         }
 
         protected async Task<RepositoryResponse<TModel>> DeleteAsync<T>(string id, bool isDeleteRelated = false)
-            where T: Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
+            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
 
             var data = await GetSingleAsync<T>(id);
@@ -329,7 +328,7 @@ namespace Mix.Cms.Lib.Controllers
         }
 
         protected async Task<RepositoryResponse<TModel>> DeleteAsync<T>(T data, bool isDeleteRelated = false)
-            where T: Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
+            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
             if (data != null)
             {
@@ -492,7 +491,7 @@ namespace Mix.Cms.Lib.Controllers
 
 
         #endregion
-                
+
     }
 
 }
