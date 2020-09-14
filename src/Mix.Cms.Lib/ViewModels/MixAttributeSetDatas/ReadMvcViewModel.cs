@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -51,6 +51,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("obj")]
         public JObject Obj { get; set; }
 
+        [JsonProperty("detailsUrl")]
+        public string DetailsUrl { get => !string.IsNullOrEmpty(Id) ? $"/data/{Specificulture}/{Id}/{SeoHelper.GetSEOString(Property<string>("seo_name"))}" : null; }
+
+        [JsonProperty("templatePath")]
+        public string TemplatePath { get => $"{MixCmsHelper.GetTemplateFolder(Specificulture)}/{Property<string>("template_path")}"; }
+
         #endregion Views
 
         #endregion Properties
@@ -74,7 +80,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             if (Obj == null)
             {
                 Obj = new JObject();
-                Values = Values ??  MixAttributeSetValues.ReadViewModel
+                Values = Values ?? MixAttributeSetValues.ReadViewModel
                     .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
                 Obj.Add(new JProperty("id", Id));
                 foreach (var item in Values.Where(m => m.DataType != MixEnums.MixDataType.Reference).OrderBy(v => v.Priority))
@@ -89,11 +95,23 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     }
                 }
             }
+            LoadReferenceData(Id, MixEnums.MixAttributeSetDataType.Set, _context, _transaction);
         }
 
         #endregion Overrides
 
         #region Expands
+        public T Property<T>(string fieldName)
+        {
+            if (Obj != null)
+            {
+                return Obj.Value<T>(fieldName);
+            }
+            else
+            {
+                return default(T);
+            }
+        }
 
         private JProperty ParseValue(MixAttributeSetValues.ReadViewModel item)
         {
@@ -152,7 +170,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 , _context, _transaction).Data;
                 Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
                     (model.AttributeSetId == item.Field.ReferenceId)
-                    &&  (model.ParentId == parentId && model.ParentType == parentType.ToString())
+                    && (model.ParentId == parentId && model.ParentType == parentType.ToString())
                     && model.Specificulture == Specificulture
                     ;
                 var getData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(predicate, _context, _transaction);
@@ -162,7 +180,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     arr.Add(nav.Data.Obj);
                 }
-                Obj.Add(new JProperty(item.AttributeFieldName, arr));
+                if (Obj.ContainsKey(item.AttributeFieldName))
+                {
+                    Obj[item.AttributeFieldName] = arr;
+                }
+                else
+                {
+                    Obj.Add(new JProperty(item.AttributeFieldName, arr));
+                }
             }
         }
         #endregion Expands

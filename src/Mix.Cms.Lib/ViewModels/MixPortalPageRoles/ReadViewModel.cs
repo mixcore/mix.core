@@ -19,8 +19,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPageRoles
         [JsonProperty("pageId")]
         public int PageId { get; set; }
         [JsonProperty("roleId")]
-        public string RoleId { get; set; }        
-        
+        public string RoleId { get; set; }
+
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
         [JsonProperty("createdDateTime")]

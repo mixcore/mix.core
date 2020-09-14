@@ -3,7 +3,6 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
-using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixPostPosts
 {
@@ -16,7 +15,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostPosts
         public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        
+
         [JsonProperty("sourceId")]
         public int SourceId { get; set; }
 
@@ -67,7 +66,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostPosts
         #endregion Contructors
 
         #region Overrides
-        
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getPost = MixPosts.ReadListItemViewModel.Repository.GetSingleModel(

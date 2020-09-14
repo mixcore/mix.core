@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using Mix.Cms.Service.SignalR.Hubs;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.Account;
 using Mix.Cms.Lib.ViewModels.Account.MixRoles;
+using Mix.Cms.Service.SignalR.Hubs;
 using Mix.Domain.Core.ViewModels;
 using Mix.Identity.Models;
 using Newtonsoft.Json.Linq;
@@ -112,7 +112,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin")]
         [HttpPost, HttpOptions]
         [Route("create")]
-        public async Task<RepositoryResponse<IdentityRole>> Save([FromBody]string name)
+        public async Task<RepositoryResponse<IdentityRole>> Save([FromBody] string name)
         {
             var role = new IdentityRole()
             {

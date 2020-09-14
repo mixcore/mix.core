@@ -10,7 +10,6 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixPosts;
 using Mix.Domain.Core.ViewModels;
 using System;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -19,7 +18,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/post/portal")]
     public class ApiPostController :
-        BaseRestApiController<MixCmsContext, MixPost, UpdateViewModel, ReadListItemViewModel>
+        BaseRestApiController<MixCmsContext, MixPost, UpdateViewModel, ReadListItemViewModel, DeleteViewModel>
     {
 
         // GET: api/s

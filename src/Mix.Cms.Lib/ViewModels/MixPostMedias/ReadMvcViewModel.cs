@@ -4,8 +4,8 @@ using Mix.Cms.Lib.ViewModels.MixMedias;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
-using System.Threading.Tasks;
 using System;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixPostMedias
 {

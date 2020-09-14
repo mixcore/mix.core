@@ -10,7 +10,6 @@ using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixAttributeSets;
 using Mix.Domain.Core.ViewModels;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -58,7 +57,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         public override async Task<ActionResult<MixAttributeSet>> Delete(string id)
         {
             var getData = await DeleteViewModel.Repository.GetSingleModelAsync(m => m.Id == int.Parse(id));
-            
+
             if (getData.IsSucceed)
             {
                 var result = await getData.Data.RemoveModelAsync(true);

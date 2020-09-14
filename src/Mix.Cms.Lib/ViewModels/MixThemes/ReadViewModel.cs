@@ -49,8 +49,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         #region Views
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl {
-            get {
+        public string ImageUrl
+        {
+            get
+            {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -65,8 +67,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl {
-            get {
+        public string ThumbnailUrl
+        {
+            get
+            {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return CommonHelper.GetFullPath(new string[] {
@@ -87,21 +91,27 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public IFormFile Asset { get; set; }
 
         [JsonProperty("assetFolder")]
-        public string AssetFolder {
-            get {
+        public string AssetFolder
+        {
+            get
+            {
                 return $"wwwroot/content/templates/{Name}/assets";
             }
         }
 
-        public string UploadsFolder {
-            get {
+        public string UploadsFolder
+        {
+            get
+            {
                 return $"wwwroot/content/templates/{Name}/uploads";
             }
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder {
-            get {
+        public string TemplateFolder
+        {
+            get
+            {
                 return $"{MixConstants.Folder.TemplatesFolder}/{Name}";
             }
         }

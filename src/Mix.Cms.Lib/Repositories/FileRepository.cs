@@ -36,8 +36,10 @@ namespace Mix.Cms.Lib.Repositories
         /// Gets the instance.
         /// </summary>
         /// <returns></returns>
-        public static FileRepository Instance {
-            get {
+        public static FileRepository Instance
+        {
+            get
+            {
                 if (instance == null)
                 {
                     lock (syncRoot)
@@ -48,7 +50,8 @@ namespace Mix.Cms.Lib.Repositories
                 }
                 return instance;
             }
-            set {
+            set
+            {
                 instance = value;
             }
         }

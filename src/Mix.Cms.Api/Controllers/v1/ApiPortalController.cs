@@ -52,7 +52,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         #region Get
-        
+
         // GET api/category/id
         [AllowAnonymous]
         [HttpGet, HttpOptions]
@@ -72,7 +72,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 PageTypes = EnumToObject(typeof(MixPageType)),
                 ModuleTypes = EnumToObject(typeof(MixModuleType)),
                 AttributeSetTypes = EnumToObject(typeof(MixAttributeSetDataType)),
-                DataTypes = EnumToObject(typeof(MixDataType)),                
+                DataTypes = EnumToObject(typeof(MixDataType)),
                 Statuses = EnumToObject(typeof(MixContentStatus)),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
             };
@@ -373,7 +373,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [AllowAnonymous]
         [HttpPost, HttpOptions]
         [Route("encrypt-rsa")]
-        public RepositoryResponse<string> EncryptRsa([FromBody]JObject model)
+        public RepositoryResponse<string> EncryptRsa([FromBody] JObject model)
         {
             string data = model.GetValue("data").Value<string>();
             return new RepositoryResponse<string>()
@@ -385,7 +385,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [AllowAnonymous]
         [HttpPost, HttpOptions]
         [Route("decrypt-rsa")]
-        public RepositoryResponse<string> DecryptRsa([FromBody]JObject model)
+        public RepositoryResponse<string> DecryptRsa([FromBody] JObject model)
         {
             string data = model.GetValue("data").Value<string>();
             return new RepositoryResponse<string>()
@@ -397,7 +397,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [AllowAnonymous]
         [HttpPost, HttpOptions]
         [Route("encrypt")]
-        public RepositoryResponse<string> Encrypt([FromBody]JObject model)
+        public RepositoryResponse<string> Encrypt([FromBody] JObject model)
         {
             string data = model.GetValue("data").Value<string>();
             var encrypted = new JObject(new JProperty("encrypted", data));
@@ -411,7 +411,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [AllowAnonymous]
         [HttpPost, HttpOptions]
         [Route("decrypt")]
-        public RepositoryResponse<string> Decrypt([FromBody]JObject model)
+        public RepositoryResponse<string> Decrypt([FromBody] JObject model)
         {
             string data = model.GetValue("data")?.Value<string>();
             //string key = model.GetValue("key")?.Value<string>();
@@ -426,7 +426,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("app-settings/save")]
-        public RepositoryResponse<JObject> SaveAppSettings([FromBody]JObject model)
+        public RepositoryResponse<JObject> SaveAppSettings([FromBody] JObject model)
         {
             var settings = FileRepository.Instance.GetFile("appsettings", ".json", string.Empty, true, "{}");
             if (model != null)
@@ -449,7 +449,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("app-settings/save-global/{name}")]
-        public RepositoryResponse<string> SaveGlobalSettings(string name, [FromBody]JObject model)
+        public RepositoryResponse<string> SaveGlobalSettings(string name, [FromBody] JObject model)
         {
             switch (name)
             {
@@ -476,7 +476,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [AllowAnonymous]
         [HttpPost, HttpOptions]
         [Route("sendmail")]
-        public void SendMail([FromBody]JObject model)
+        public void SendMail([FromBody] JObject model)
         {
             MixService.SendMail(model.Value<string>("subject"), model.Value<string>("body"), MixService.GetConfig<string>("ContactEmail", _lang));
         }
@@ -486,7 +486,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [HttpPost, HttpOptions]
         [Route("import")]
         [Route("{culture}/import")]
-        public async Task<RepositoryResponse<bool>> ImportAsync([FromForm]IFormFile assets)
+        public async Task<RepositoryResponse<bool>> ImportAsync([FromForm] IFormFile assets)
         {
             string importFolder = $"Imports/Structures/{_lang}";
             var result = new RepositoryResponse<bool>();

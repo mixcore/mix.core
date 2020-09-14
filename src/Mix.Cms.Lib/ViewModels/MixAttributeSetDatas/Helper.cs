@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
-using Mix.Heart.Enums;
 using Mix.Heart.Helpers;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
@@ -193,7 +191,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
             }
         }
@@ -207,7 +205,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                Expression<Func<MixAttributeSetValue, bool>> attrPredicate = 
+                Expression<Func<MixAttributeSetValue, bool>> attrPredicate =
                     m => m.Specificulture == culture && m.AttributeSetName == attributeSetName
                      && (!request.FromDate.HasValue
                                         || (m.CreatedDateTime >= request.FromDate.Value)
@@ -232,7 +230,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         {
                             if (!string.IsNullOrEmpty(filterType.Value) && filterType.Value == "equal")
                             {
-                                Expression<Func<MixAttributeSetValue, bool>> pre = m => 
+                                Expression<Func<MixAttributeSetValue, bool>> pre = m =>
                                     m.AttributeFieldName == q.Key && m.StringValue == (q.Value.ToString());
                                 if (valPredicate != null)
                                 {
@@ -245,7 +243,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             }
                             else
                             {
-                                Expression<Func<MixAttributeSetValue, bool>> pre = 
+                                Expression<Func<MixAttributeSetValue, bool>> pre =
                                     m => m.AttributeFieldName == q.Key &&
                                     (EF.Functions.Like(m.StringValue, $"%{q.Value.ToString()}%"));
                                 if (valPredicate != null)
@@ -290,11 +288,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
             }
         }
-        
+
         public static async Task<RepositoryResponse<PaginationModel<TView>>> FilterByKeywordAsync<TView>(string culture, HttpRequest request, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixAttributeSetData, TView>
         {
@@ -317,7 +315,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 var getfields = await MixAttributeFields.ReadViewModel.Repository.GetModelListByAsync(
                     m => m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName, context, transaction);
                 var fields = getfields.IsSucceed ? getfields.Data : new List<MixAttributeFields.ReadViewModel>();
-                var fieldQueries = !string.IsNullOrEmpty(request.Query["query"]) ? JObject.Parse(request.Query["query"])  : new JObject();
+                var fieldQueries = !string.IsNullOrEmpty(request.Query["query"]) ? JObject.Parse(request.Query["query"]) : new JObject();
                 // fitler list query by field name
                 //var fieldQueries = queryDictionary?.Where(m => fields.Any(f => f.Name == m.Key)).ToList()
                 //    ?? new List<KeyValuePair<string, Microsoft.Extensions.Primitives.StringValues>>();
@@ -328,19 +326,19 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 Expression<Func<MixAttributeSetValue, bool>> valPredicate = null;
                 // Data predicate
                 Expression<Func<MixAttributeSetData, bool>> predicate = null;
-                    // m => m.Specificulture == culture;
-                    //&& (m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName)
-                    //&& (!isStatus || (m.Status == status.ToString()))
-                    //&& (!isFromDate || (m.CreatedDateTime >= fromDate))
-                    //&& (!isToDate || (m.CreatedDateTime <= toDate));
-                RepositoryResponse <PaginationModel<TView>> result = new RepositoryResponse<PaginationModel<TView>>()
+                // m => m.Specificulture == culture;
+                //&& (m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName)
+                //&& (!isStatus || (m.Status == status.ToString()))
+                //&& (!isFromDate || (m.CreatedDateTime >= fromDate))
+                //&& (!isToDate || (m.CreatedDateTime <= toDate));
+                RepositoryResponse<PaginationModel<TView>> result = new RepositoryResponse<PaginationModel<TView>>()
                 {
                     IsSucceed = true,
                     Data = new PaginationModel<TView>()
                 };
 
                 // if filter by field name or keyword => filter by attr value
-                if (fieldQueries.Count>0 || !string.IsNullOrEmpty(keyword))
+                if (fieldQueries.Count > 0 || !string.IsNullOrEmpty(keyword))
                 {
 
                     // filter by all fields if have keyword
@@ -362,7 +360,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             }
                         }
                     }
-                    if(fieldQueries!=null && fieldQueries.Properties().Count() > 0) // filter by specific field name
+                    if (fieldQueries != null && fieldQueries.Properties().Count() > 0) // filter by specific field name
                     {
                         foreach (var q in fieldQueries)
                         {
@@ -426,7 +424,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
             }
         }
@@ -494,15 +492,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
             }
         }
-        
+
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetAttributeDataByParent<TView>(
             string culture, string attributeSetName,
             string parentId, MixEnums.MixAttributeSetDataType parentType,
-            string orderBy, Heart.Enums.MixHeartEnums.DisplayDirection direction, 
+            string orderBy, Heart.Enums.MixHeartEnums.DisplayDirection direction,
             int? pageSize, int? pageIndex,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixAttributeSetData, TView>

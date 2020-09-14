@@ -79,7 +79,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("save")]
-        public async Task<RepositoryResponse<ReadViewModel>> Save([FromBody]ReadViewModel model)
+        public async Task<RepositoryResponse<ReadViewModel>> Save([FromBody] ReadViewModel model)
         {
             if (model != null)
             {
@@ -92,7 +92,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST api/module
         [HttpPost, HttpOptions]
         [Route("save/{id}/{postId}")]
-        public async Task<RepositoryResponse<MixModulePost>> SaveFields(int moduleId, int postId, [FromBody]List<EntityField> fields)
+        public async Task<RepositoryResponse<MixModulePost>> SaveFields(int moduleId, int postId, [FromBody] List<EntityField> fields)
         {
             if (fields != null)
             {
@@ -145,7 +145,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST api/update-infos
         [HttpPost, HttpOptions]
         [Route("update-infos")]
-        public async Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfos([FromBody]List<ReadViewModel> models)
+        public async Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfos([FromBody] List<ReadViewModel> models)
         {
             if (models != null)
             {
@@ -160,7 +160,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST api/update-infos
         [HttpPost, HttpOptions]
         [Route("save-list")]
-        public async Task<RepositoryResponse<List<ReadViewModel>>> SaveList([FromBody]List<ReadViewModel> models)
+        public async Task<RepositoryResponse<List<ReadViewModel>>> SaveList([FromBody] List<ReadViewModel> models)
         {
             if (models != null)
             {

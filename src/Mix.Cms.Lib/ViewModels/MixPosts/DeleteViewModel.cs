@@ -5,8 +5,6 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,67 +21,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
-
-        [JsonProperty("template")]
-        public string Template { get; set; }
-
-        [JsonProperty("thumbnail")]
-        public string Thumbnail { get; set; }
-
-        [JsonProperty("image")]
-        public string Image { get; set; }
-
-        [JsonIgnore]
-        [JsonProperty("extraFields")]
-        public string ExtraFields { get; set; } = "[]";
-
-        [JsonIgnore]
-        [JsonProperty("extraProperties")]
-        public string ExtraProperties { get; set; } = "[]";
-
-        [JsonProperty("icon")]
-        public string Icon { get; set; }
-
-        [Required]
-        [JsonProperty("title")]
-        public string Title { get; set; }
-
-        [JsonProperty("excerpt")]
-        public string Excerpt { get; set; }
-
-        [JsonProperty("content")]
-        public string Content { get; set; }
-
-        [JsonProperty("seoName")]
-        public string SeoName { get; set; }
-
-        [JsonProperty("seoTitle")]
-        public string SeoTitle { get; set; }
-
-        [JsonProperty("seoDescription")]
-        public string SeoDescription { get; set; }
-
-        [JsonProperty("seoKeywords")]
-        public string SeoKeywords { get; set; }
-
-        [JsonProperty("source")]
-        public string Source { get; set; }
-
-        [JsonProperty("views")]
-        public int? Views { get; set; }
-
-        [JsonProperty("type")]
-        public int Type { get; set; }
-
-        [JsonProperty("publishedDateTime")]
-        public DateTime? PublishedDateTime { get; set; }
-
-        [JsonProperty("tags")]
-        public string Tags { get; set; } = "[]";
-
-        public string CreatedBy { get; set; }
+        public string Type { get; set; }
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
         [JsonProperty("modifiedBy")]
@@ -175,78 +113,15 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
 
             await _context.SaveChangesAsync();
+            var removeRelatedData = await MixRelatedAttributeDatas.Helper.RemoveRelatedDataAsync(
+                    Id.ToString(), MixEnums.MixAttributeSetDataType.Post
+                    , Specificulture
+                    , _context, _transaction);
+            ViewModelHelper.HandleResult(removeRelatedData, ref result);
             return result;
         }
 
         #endregion Async Methods
-
-        #region Sync Methods
-
-        public override RepositoryResponse<bool> RemoveRelatedModels(DeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            RepositoryResponse<bool> result = new RepositoryResponse<bool>()
-            {
-                IsSucceed = true
-            };
-
-            if (result.IsSucceed)
-            {
-                var navCate = _context.MixPagePost.Where(n => n.PostId == Id && n.Specificulture == Specificulture).ToList();
-                foreach (var item in navCate)
-                {
-                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-                }
-            }
-
-            if (result.IsSucceed)
-            {
-                var navModule = _context.MixModulePost.Where(n => n.PostId == Id && n.Specificulture == Specificulture).ToList();
-                foreach (var item in navModule)
-                {
-                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-                }
-            }
-
-            if (result.IsSucceed)
-            {
-                var navMedia = _context.MixPostMedia.Where(n => n.PostId == Id && n.Specificulture == Specificulture).ToList();
-                foreach (var item in navMedia)
-                {
-                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-                }
-            }
-            if (result.IsSucceed)
-            {
-                var navModule = _context.MixPostModule.Where(n => n.PostId == Id && n.Specificulture == Specificulture).ToList();
-                foreach (var item in navModule)
-                {
-                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-                }
-            }
-
-            if (result.IsSucceed)
-            {
-                var navRelated = _context.MixPostMedia.Where(n => n.PostId == Id && n.Specificulture == Specificulture).ToList();
-                foreach (var item in navRelated)
-                {
-                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-                }
-            }
-
-            if (result.IsSucceed)
-            {
-                var navs = _context.MixUrlAlias.Where(n => n.SourceId == Id.ToString() && n.Type == (int)MixEnums.UrlAliasType.Post && n.Specificulture == Specificulture).ToList();
-                foreach (var item in navs)
-                {
-                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-                }
-            }
-
-            _context.SaveChanges();
-            return result;
-        }
-
-        #endregion Sync Methods
 
         #endregion Overrides
     }

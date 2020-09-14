@@ -73,7 +73,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public int? Views { get; set; }
 
         [JsonProperty("type")]
-        public MixEnums.MixContentStatus Type { get; set; }
+        public string Type { get; set; }
 
         [JsonProperty("publishedDateTime")]
         public DateTime? PublishedDateTime { get; set; }
@@ -203,15 +203,15 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            LoadAttributes(_context, _transaction);
+            LoadTags(_context, _transaction);
+            LoadCategories(_context, _transaction);
             if (View == null)
             {
 
                 //Load Template + Style +  Scripts for views
                 this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
                 LoadPages(_context, _transaction);
-                LoadAttributes(_context, _transaction);
-                LoadTags(_context, _transaction);
-                LoadCategories(_context, _transaction);
                 var getPostMedia = MixPostMedias.ReadViewModel.Repository.GetModelListBy(n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction);
                 if (getPostMedia.IsSucceed)
                 {

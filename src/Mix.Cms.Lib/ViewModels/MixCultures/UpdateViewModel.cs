@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixCultures
 {
@@ -24,7 +23,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
         [JsonProperty("id")]
         public int Id { get; set; }
         [JsonProperty("specificulture")]
-        public string Specificulture { get; set; }        
+        public string Specificulture { get; set; }
 
         [JsonProperty("alias")]
         public string Alias { get; set; }
@@ -171,10 +170,18 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 var cloneResult = await ClonePagePostsAsync(parent, _context, _transaction);
                 ViewModelHelper.HandleResult(cloneResult, ref result);
             }
+            
             // Clone ModulePost from Default culture
             if (result.IsSucceed)
             {
                 var cloneResult = await CloneModulePostsAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
+            }
+            
+            // Clone ModulePost from Default culture
+            if (result.IsSucceed)
+            {
+                var cloneResult = await CloneModuleDatasAsync(parent, _context, _transaction);
                 ViewModelHelper.HandleResult(cloneResult, ref result);
             }
             // Clone PostPost from Default culture
@@ -197,6 +204,117 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 var cloneResult = await CloneUrlAliasAsync(parent, _context, _transaction);
                 ViewModelHelper.HandleResult(cloneResult, ref result);
             }
+            
+            // Clone Attribute Value from Default culture
+            if (result.IsSucceed)
+            {
+                var cloneResult = await CloneAttributeValuesAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
+            }
+            // Clone Attribute Data from Default culture
+            if (result.IsSucceed)
+            {
+                var cloneResult = await CloneAttributeDatasAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
+            }
+            // Clone Related Data from Default culture
+            if (result.IsSucceed)
+            {
+                var cloneResult = await CloneRelatedAttributeDatasAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneResult, ref result);
+            }
+
+            return result;
+        }
+
+        public async Task<RepositoryResponse<bool>> CloneRelatedAttributeDatasAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                var getPages = await DefaultModelRepository<MixCmsContext, MixRelatedAttributeData>.Instance.GetModelListByAsync(
+                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
+                if (getPages.IsSucceed)
+                {
+                    foreach (var p in getPages.Data)
+                    {
+                        if (!context.MixRelatedAttributeData.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            p.CreatedDateTime = DateTime.UtcNow;
+                            context.Entry(p).State = EntityState.Added;
+                        }
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
+            }
+            return result;
+        }
+        
+        public async Task<RepositoryResponse<bool>> CloneAttributeDatasAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                var getPages = await DefaultModelRepository<MixCmsContext, MixAttributeSetData>.Instance.GetModelListByAsync(
+                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
+                if (getPages.IsSucceed)
+                {
+                    foreach (var p in getPages.Data)
+                    {
+                        if (!context.MixAttributeSetData.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            p.CreatedDateTime = DateTime.UtcNow;
+                            context.Entry(p).State = EntityState.Added;
+                        }
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
+            }
+            return result;
+        }
+        
+        public async Task<RepositoryResponse<bool>> CloneAttributeValuesAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                var getPages = await DefaultModelRepository<MixCmsContext, MixAttributeSetValue>.Instance.GetModelListByAsync(
+                    c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
+                if (getPages.IsSucceed)
+                {
+                    foreach (var p in getPages.Data)
+                    {
+                        if (!context.MixAttributeSetValue.Any(m => m.DataId == p.DataId && m.Specificulture == Specificulture))
+                        {
+                            p.Id = Guid.NewGuid().ToString();
+                            p.Specificulture = Specificulture;
+                            p.CreatedDateTime = DateTime.UtcNow;
+                            context.Entry(p).State = EntityState.Added;
+                        }
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                result.Errors.Add(ex.Message);
+            }
             return result;
         }
 
@@ -211,9 +329,12 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        p.CreatedDateTime = DateTime.UtcNow;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixUrlAlias.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            p.CreatedDateTime = DateTime.UtcNow;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -238,8 +359,11 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixModule.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -264,8 +388,11 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixMedia.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -290,8 +417,11 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixPostMedia.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -316,9 +446,12 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        p.CreatedDateTime = DateTime.UtcNow;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixRelatedPost.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            p.CreatedDateTime = DateTime.UtcNow;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -337,14 +470,18 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             try
             {
-                var getPages = await DefaultModelRepository<MixCmsContext, MixModulePost>.Instance.GetModelListByAsync(
+                
+                var getModules = await DefaultModelRepository<MixCmsContext, MixModulePost>.Instance.GetModelListByAsync(
                     c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
-                if (getPages.IsSucceed)
+                if (getModules.IsSucceed)
                 {
-                    foreach (var p in getPages.Data)
+                    foreach (var p in getModules.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixModulePost.Any(m =>m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            context.Entry(p).State = EntityState.Added;
+                        }                        
                     }
                     await context.SaveChangesAsync();
                 }
@@ -369,8 +506,11 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixPagePost.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -395,8 +535,11 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixPageModule.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -421,8 +564,11 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixPost.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -441,14 +587,17 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             try
             {
-                var getPages = await DefaultModelRepository<MixCmsContext, MixModulePost>.Instance.GetModelListByAsync(
+                var getPages = await DefaultModelRepository<MixCmsContext, MixModuleData>.Instance.GetModelListByAsync(
                     c => c.Specificulture == MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture));
                 if (getPages.IsSucceed)
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixModuleData.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -473,9 +622,12 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        p.CreatedDateTime = DateTime.UtcNow;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixLanguage.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            p.CreatedDateTime = DateTime.UtcNow;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -500,9 +652,12 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        p.CreatedDateTime = DateTime.UtcNow;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixConfiguration.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            p.CreatedDateTime = DateTime.UtcNow;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -527,10 +682,13 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                 {
                     foreach (var p in getPages.Data)
                     {
-                        p.Specificulture = Specificulture;
-                        p.CreatedDateTime = DateTime.UtcNow;
-                        p.LastModified = DateTime.UtcNow;
-                        context.Entry(p).State = EntityState.Added;
+                        if (!context.MixPage.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        {
+                            p.Specificulture = Specificulture;
+                            p.CreatedDateTime = DateTime.UtcNow;
+                            p.LastModified = DateTime.UtcNow;
+                            context.Entry(p).State = EntityState.Added;
+                        }
                     }
                     await context.SaveChangesAsync();
                 }
@@ -585,6 +743,15 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             posts.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
             var aliases = await _context.MixUrlAlias.Where(c => c.Specificulture == Specificulture).ToListAsync();
+            aliases.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+            
+            var values = await _context.MixAttributeSetValue.Where(c => c.Specificulture == Specificulture).ToListAsync();
+            aliases.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+
+            var datas = await _context.MixAttributeSetData.Where(c => c.Specificulture == Specificulture).ToListAsync();
+            aliases.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+
+            var relateddatas = await _context.MixRelatedAttributeData.Where(c => c.Specificulture == Specificulture).ToListAsync();
             aliases.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
             result.IsSucceed = (await _context.SaveChangesAsync() > 0);

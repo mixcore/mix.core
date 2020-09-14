@@ -20,8 +20,10 @@ namespace Mix.Cms.Lib.Repositories
         {
         }
 
-        public static CommonRepository Instance {
-            get {
+        public static CommonRepository Instance
+        {
+            get
+            {
                 if (instance == null)
                 {
                     lock (syncRoot)

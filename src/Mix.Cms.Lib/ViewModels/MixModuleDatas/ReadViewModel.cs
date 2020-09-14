@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -9,7 +8,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
@@ -94,7 +92,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
             }
-            
+
             LastModified = DateTime.UtcNow;
             Value = JsonConvert.SerializeObject(JItem);
             Fields = JsonConvert.SerializeObject(DataProperties);
@@ -222,7 +220,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
             finally
             {
                 //if current Context is Root
-                context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
             }
 
             #endregion Expands

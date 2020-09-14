@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Common.Helper;
 using Mix.Domain.Core.Models;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -26,7 +24,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         public int Id { get; set; }
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
-        
+
         [JsonProperty("cultures")]
         public List<SupportedCulture> Cultures { get; set; }
 
@@ -128,7 +126,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
 
         #region Expands
 
-        
+
         #endregion Expands
     }
 }

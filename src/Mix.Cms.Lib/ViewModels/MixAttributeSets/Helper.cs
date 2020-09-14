@@ -1,11 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Services;
-using Mix.Domain.Core.ViewModels;
-using System;
-using System.Linq.Expressions;
-
-namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
+﻿namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 {
     public class Helper
     {

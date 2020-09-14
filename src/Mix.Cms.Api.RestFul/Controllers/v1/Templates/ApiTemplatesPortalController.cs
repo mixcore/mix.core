@@ -8,9 +8,7 @@ using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixTemplates;
 using Mix.Domain.Core.ViewModels;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -57,7 +55,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         // GET: api/s/5
         [HttpGet("copy/{id}")]
         public async Task<ActionResult<UpdateViewModel>> Copy(string id)
-        {            
+        {
             var getData = await GetSingleAsync<UpdateViewModel>(id);
             if (getData.IsSucceed)
             {
