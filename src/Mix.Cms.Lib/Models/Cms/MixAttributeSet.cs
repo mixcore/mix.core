@@ -23,7 +23,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string EdmTemplate { get; set; }
         public string EdmSubject { get; set; }
         public string EdmFrom { get; set; }
-        public ulong? EdmAutoSend { get; set; }
+        public bool? EdmAutoSend { get; set; }
         public string ModifiedBy { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? LastModified { get; set; }
