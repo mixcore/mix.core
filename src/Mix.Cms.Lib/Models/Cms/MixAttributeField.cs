@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
@@ -13,11 +14,11 @@ namespace Mix.Cms.Lib.Models.Cms
         public string DefaultValue { get; set; }
         public string Name { get; set; }
         public string Options { get; set; }
-        public bool IsRequire { get; set; }
-        public bool IsEncrypt { get; set; }
-        public bool IsMultiple { get; set; }
-        public bool IsSelect { get; set; }
-        public bool IsUnique { get; set; }
+        public ulong IsRequire { get; set; }
+        public ulong IsEncrypt { get; set; }
+        public ulong IsMultiple { get; set; }
+        public ulong IsSelect { get; set; }
+        public ulong IsUnique { get; set; }
         public int? ReferenceId { get; set; }
         public string ModifiedBy { get; set; }
         public string CreatedBy { get; set; }
