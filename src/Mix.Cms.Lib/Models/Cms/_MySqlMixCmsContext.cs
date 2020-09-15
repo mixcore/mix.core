@@ -6,7 +6,7 @@ using System;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixCmsContext : DbContext
+    public partial class MySqlMixCmsContext : DbContext
     {
         public virtual DbSet<MixAttributeField> MixAttributeField { get; set; }
         public virtual DbSet<MixAttributeSet> MixAttributeSet { get; set; }
@@ -43,12 +43,12 @@ namespace Mix.Cms.Lib.Models.Cms
         /// Initializes a new instance of the <see cref="ApplicationDbContext" /> class.
         /// </summary>
         /// <param name="options">The options.</param>
-        public MixCmsContext(DbContextOptions<MixCmsContext> options)
+        public MySqlMixCmsContext(DbContextOptions<MixCmsContext> options)
                     : base(options)
         {
         }
 
-        public MixCmsContext()
+        public MySqlMixCmsContext()
         {
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

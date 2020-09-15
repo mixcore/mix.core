@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
@@ -11,10 +12,10 @@ namespace Mix.Cms.Lib.Models.Cms
         public string AttributeSetName { get; set; }
         public string Regex { get; set; }
         public int DataType { get; set; }
-        public bool? BooleanValue { get; set; }
+        public ulong? BooleanValue { get; set; }
         public string DataId { get; set; }
         public DateTime? DateTimeValue { get; set; }
-        public double? DoubleValue { get; set; }
+        public float? DoubleValue { get; set; }
         public int? IntegerValue { get; set; }
         public string StringValue { get; set; }
         public string EncryptValue { get; set; }
