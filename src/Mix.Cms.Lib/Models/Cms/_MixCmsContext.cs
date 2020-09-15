@@ -53,7 +53,7 @@ namespace Mix.Cms.Lib.Models.Cms
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.EnableSensitiveDataLogging(true);
+            //optionsBuilder.EnableSensitiveDataLogging(true);
             //define the database to use
             string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
