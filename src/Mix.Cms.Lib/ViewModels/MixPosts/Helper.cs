@@ -219,6 +219,46 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
         }
 
+        public static async Task<RepositoryResponse<PaginationModel<TView>>> GetPostListByPageId<TView>(
+            int pageId
+            , string keyword = null
+            , string culture = null
+            , string orderByPropertyName = "CreatedDateTime"
+            , Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Desc
+            , int? pageSize = null, int? pageIndex = null
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            where TView : ViewModelBase<MixCmsContext, MixPagePost, TView>
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
+                var result = await DefaultRepository<MixCmsContext, MixPagePost, TView>.Instance.GetModelListByAsync(
+                            m => m.Specificulture == culture && m.PageId == pageId
+                             && (string.IsNullOrEmpty(keyword)
+                             || (EF.Functions.Like(m.MixPost.Title, $"%{keyword}%"))
+                             || (EF.Functions.Like(m.MixPost.Excerpt, $"%{keyword}%"))
+                             || (EF.Functions.Like(m.MixPost.Content, $"%{keyword}%"))
+                             )
+                            , orderByPropertyName, direction, pageSize, pageIndex
+                            , _context: context, _transaction: transaction
+                            );
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<PaginationModel<TView>>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                }
+            }
+        }
+
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetPostListByDataId<TView>(
             string dataId
             , string culture = null
