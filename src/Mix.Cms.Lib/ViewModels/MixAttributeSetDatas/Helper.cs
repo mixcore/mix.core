@@ -7,6 +7,7 @@ using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
@@ -293,21 +294,22 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
         }
 
-        public static async Task<RepositoryResponse<PaginationModel<TView>>> FilterByKeywordAsync<TView>(string culture, HttpRequest request, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public static async Task<RepositoryResponse<PaginationModel<TView>>> FilterByKeywordAsync<TView>(HttpRequest request, string culture = null, string attributeSetName = null, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixAttributeSetData, TView>
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
+                culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
                 var queryDictionary = request.Query.ToList();
-                var attributeSetName = request.Query["attributeSetName"].ToString();
+                attributeSetName = attributeSetName ?? request.Query["attributeSetName"].ToString();
                 var keyword = request.Query["keyword"].ToString();
                 var filterType = request.Query["filterType"].ToString();
                 var orderBy = request.Query["orderBy"].ToString();
                 int.TryParse(request.Query["attributeSetId"], out int attributeSetId);
                 bool isDirection = Enum.TryParse(request.Query["direction"], out Heart.Enums.MixHeartEnums.DisplayDirection direction);
                 int.TryParse(request.Query["pageIndex"], out int pageIndex);
-                int.TryParse(request.Query["pageSize"], out int pageSize);
+                var isPageSize = int.TryParse(request.Query["pageSize"], out int pageSize);
                 bool isFromDate = DateTime.TryParse(request.Query["fromDate"], out DateTime fromDate);
                 bool isToDate = DateTime.TryParse(request.Query["toDate"], out DateTime toDate);
                 bool isStatus = Enum.TryParse(request.Query["status"], out MixEnums.MixContentStatus status);
@@ -412,7 +414,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     && (!isToDate || (m.CreatedDateTime <= toDate));
                 }
                 result = await DefaultRepository<MixCmsContext, MixAttributeSetData, TView>.Instance.GetModelListByAsync(
-                            predicate, orderBy, direction, pageSize, pageIndex, null, null, context, transaction);
+                            predicate, orderBy, direction, isPageSize ? pageSize: default, isPageSize ? pageIndex : 0, null, null, context, transaction);
                 return result;
             }
             catch (Exception ex)

@@ -25,7 +25,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<FormPortalViewModel>>> Get()
         {
-            var getData = await Helper.FilterByKeywordAsync<FormPortalViewModel>(_lang, Request);
+            var getData = await Helper.FilterByKeywordAsync<FormPortalViewModel>(Request, _lang);
             if (getData.IsSucceed)
             {
                 return Ok(getData.Data);
@@ -67,7 +67,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         {
             string attributeSetName = Request.Query["attributeSetName"].ToString();
             string exportPath = $"exports/module/{attributeSetName}";
-            var getData = await Helper.FilterByKeywordAsync<FormPortalViewModel>(_lang, Request);
+            var getData = await Helper.FilterByKeywordAsync<FormPortalViewModel>(Request, _lang);
 
             var jData = new List<JObject>();
             if (getData.IsSucceed)

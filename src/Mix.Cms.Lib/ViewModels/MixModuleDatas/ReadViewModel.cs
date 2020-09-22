@@ -172,7 +172,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
             var prop = DataProperties.FirstOrDefault(p => p.Name == name);
             return prop != null && prop.Value != null ? prop.Value.ToString() : string.Empty;
         }
-
+        public bool HasValue(string fieldName)
+        {
+            return !string.IsNullOrEmpty(JItem[fieldName]?.Value<JObject>().Value<string>("value"));
+        }
         public string Property(string name)
         {
             return JItem[name]?.Value<JObject>().Value<string>("value");

@@ -169,6 +169,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                     Priority = Priority
                 };
             }
+
+            if (string.IsNullOrEmpty(Id) && Field != null)
+            {
+                ParseDefaultValue(Field.DefaultValue);
+            }
         }
 
         #endregion Overrides

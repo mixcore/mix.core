@@ -330,6 +330,11 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             }
         }
 
+        public bool HasValue(string fieldName)
+        {
+            return AttributeData!= null && AttributeData.Data.Obj.GetValue(fieldName) != null;
+        }
+
         public T Property<T>(string fieldName)
         {
             if (AttributeData != null)
@@ -341,12 +346,12 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 }
                 else
                 {
-                    return default(T);
+                    return default;
                 }
             }
             else
             {
-                return default(T);
+                return default;
             }
         }
 

@@ -206,11 +206,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             LoadAttributes(_context, _transaction);
             LoadTags(_context, _transaction);
             LoadCategories(_context, _transaction);
-            if (View == null)
+            //Load Template + Style +  Scripts for views
+            this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
+            if (Pages == null)
             {
 
-                //Load Template + Style +  Scripts for views
-                this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
                 LoadPages(_context, _transaction);
                 var getPostMedia = MixPostMedias.ReadViewModel.Repository.GetModelListBy(n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction);
                 if (getPostMedia.IsSucceed)
@@ -286,6 +286,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                         Id.ToString(), MixEnums.MixAttributeSetDataType.Post, _context, _transaction);
 
             }
+        }
+
+        public bool HasValue(string fieldName)
+        {
+            return AttributeData != null && AttributeData.Data.Obj.GetValue(fieldName) != null;
         }
 
         /// <summary>Get Post's Property by type and name</summary>
