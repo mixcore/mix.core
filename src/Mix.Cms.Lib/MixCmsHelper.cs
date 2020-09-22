@@ -552,5 +552,18 @@ namespace Mix.Cms.Lib
             result.Data.Items.ForEach(m => m.LoadPost(_context, _transaction));
             return result;
         }
+        
+        public static async Task<RepositoryResponse<PaginationModel<Lib.ViewModels.MixAttributeSetDatas.ReadMvcViewModel>>> GetAttributeDataListBySet(
+            HttpContext context
+            , string attributeSetName
+            , string culture = null
+            , Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Desc
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null
+            )
+        {            
+            var result = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.ReadMvcViewModel>(
+                    context.Request, culture, attributeSetName);
+            return result;
+        }
     }
 }
