@@ -82,6 +82,42 @@ namespace Mix.Cms.Lib.Controllers
                 return NotFound();
             }
         }
+        
+        // GET: api/v1/rest/{culture}/attribute-set-data/5
+        [HttpGet("duplicate/{id}")]
+        public async Task<ActionResult<TView>> Duplicate(string id)
+        {
+            var getData = await GetSingleAsync(id);
+            if (getData.IsSucceed)
+            {
+                var data = getData.Data;
+                var idProperty = ReflectionHelper.GetPropertyType(data.GetType(), "Id");
+                switch (idProperty.Name.ToLower())
+                {
+                    case "int32":
+                        ReflectionHelper.SetPropertyValue(data, new JProperty("id", 0));
+                        break;
+                    default:
+                        ReflectionHelper.SetPropertyValue(data, new JProperty("id", default));
+                        break;
+                }
+                
+                var saveResult = await data.SaveModelAsync(true);
+                if (saveResult.IsSucceed)
+                {
+                    return Ok(saveResult.Data);
+                }
+                else
+                {
+                    return BadRequest(saveResult.Errors);
+                }
+                return getData.Data;
+            }
+            else
+            {
+                return NoContent();
+            }
+        }
 
         // GET: api/v1/rest/{culture}/attribute-set-data/5
         [HttpGet("default")]
