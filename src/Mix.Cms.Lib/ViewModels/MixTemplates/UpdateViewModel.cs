@@ -279,12 +279,15 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         public static UpdateViewModel GetTemplateByPath(string path, string specificulture, MixEnums.EnumTemplateFolder folderType, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            string templateName = path?.Split('/')[1];
+            string templateName = !string.IsNullOrEmpty(path) ? path.Substring(path.LastIndexOf('/') + 1) : null;
+            string filename = templateName?.Substring(0, templateName.LastIndexOf('.'));
+            string ext = templateName?.Substring(templateName.LastIndexOf('.'));
             int themeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, specificulture);
             string themeName = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, specificulture);
             var getView = UpdateViewModel.Repository.GetSingleModel(t =>
                     t.ThemeId == themeId && t.FolderType == folderType.ToString()
-                    && !string.IsNullOrEmpty(templateName) && templateName.Equals($"{t.FileName}{t.Extension}"), _context, _transaction);
+                    && !string.IsNullOrEmpty(templateName) && t.FileName == filename && t.Extension == ext
+                    , _context, _transaction);
             return getView.Data ?? GetDefault(folderType, specificulture);
         }
 

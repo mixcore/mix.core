@@ -112,14 +112,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         
         public T Property<T>(string fieldName)
         {
-            if (Obj != null)
-            {
-                return Obj.Value<T>(fieldName);
-            }
-            else
-            {
-                return default(T);
-            }
+            return MixCmsHelper.Property<T>(Obj, fieldName);
         }
 
         private JProperty ParseValue(MixAttributeSetValues.ReadViewModel item)

@@ -302,7 +302,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public string Name { get; set; }
 
         [JsonProperty("menu_items")]
-        public List<MenuItem> MenuItems { get; set; }
+        public List<MenuItem> MenuItems { get; set; } = new List<MenuItem>();
 
         [JsonProperty("actived_menu_items")]
         public List<MenuItem> ActivedMenuItems { get; set; } = new List<MenuItem>();

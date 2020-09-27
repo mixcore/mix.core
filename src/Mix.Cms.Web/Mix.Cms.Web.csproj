@@ -21,10 +21,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Include="Views\Shared\Templates\hai-yen-local-demo\Widgets\_Related_Posts.cshtml" />
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.2" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2">
             <PrivateAssets>all</PrivateAssets>
@@ -49,6 +45,10 @@
         <None Update="IISUrlRewrite.xml">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Views\Shared\Templates\" />
     </ItemGroup>
 
     <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="http://json.schemastore.org/band-manifest" /></VisualStudio></ProjectExtensions>

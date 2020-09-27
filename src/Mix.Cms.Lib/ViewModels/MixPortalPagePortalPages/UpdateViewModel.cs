@@ -64,7 +64,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
         public bool IsActived { get; set; }
 
         [JsonProperty("page")]
-        public MixPortalPages.UpdateRolePermissionViewModel Page { get; set; }
+        public MixPortalPages.UpdateRolePermissionViewModel PortalPage { get; set; }
 
         [JsonProperty("parent")]
         public MixPortalPages.ReadViewModel ParentPage { get; set; }
@@ -85,9 +85,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
 
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixPortalPageNavigation parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            if (Page != null)
+            if (PortalPage != null)
             {
-                var result = await Page.SaveModelAsync(false, _context, _transaction);
+                var result = await PortalPage.SaveModelAsync(false, _context, _transaction);
                 return new RepositoryResponse<bool>()
                 {
                     IsSucceed = result.IsSucceed,
@@ -109,7 +109,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
             );
             if (getCategory.IsSucceed)
             {
-                Page = getCategory.Data;
+                PortalPage = getCategory.Data;
             }
             //var getParent = MixPortalPages.ReadViewModel.Repository.GetSingleModel(p => p.Id == ParentId
             //    , _context: _context, _transaction: _transaction

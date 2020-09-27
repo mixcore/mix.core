@@ -43,6 +43,7 @@
 @{    
     string url = ViewData["OgUrl"] != null ? (string)ViewData["OgUrl"] : Model.DetailsUrl;
     string title = ViewData["OgTitle"] != null ? (string)ViewData["OgTitle"] : Model.SeoTitle;
+    ViewData["Title"] = ViewData["Title"] != null ? (string)ViewData["Title"] : Model.SeoTitle;
     string desc = ViewData["OgDescription"] != null ? (string)ViewData["OgDescription"] : Model.SeoDescription;
     string image = ViewData["OgImage"] != null ? (string)ViewData["OgImage"] : Model.ThumbnailUrl;
 

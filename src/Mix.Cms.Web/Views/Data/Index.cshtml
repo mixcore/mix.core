@@ -44,6 +44,7 @@
 @{    
     string url = ViewData["OgUrl"] != null ? (string)ViewData["OgUrl"] : Model.DetailsUrl;
     string title = ViewData["OgTitle"] != null ? (string)ViewData["OgTitle"] : Model.Property<string>("title");
+    ViewData["Title"] = ViewData["Title"] != null ? (string)ViewData["Title"] : Model.Property<string>("title");
     string desc = ViewData["OgDescription"] != null ? (string)ViewData["OgDescription"] : Model.Property<string>("seo_description");
     string image = ViewData["OgImage"] != null ? (string)ViewData["OgImage"] : Model.Property<string>("image");
 
