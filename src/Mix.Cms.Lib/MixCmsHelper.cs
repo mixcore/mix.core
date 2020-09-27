@@ -42,7 +42,17 @@ namespace Mix.Cms.Lib
         {
             return $"/{MixConstants.Folder.TemplatesFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, culture)}";
         }
-
+        public static T Property<T>(JObject obj,  string fieldName)
+        {
+            if (obj != null  && obj.ContainsKey(fieldName)  && obj[fieldName] != null)
+            {
+                return obj.Value<T>(fieldName);
+            }
+            else
+            {
+                return default(T);
+            }
+        }
         //public static List<ViewModels.MixPages.ReadListItemViewModel> GetPage(IUrlHelper Url, string culture, MixEnums.CatePosition position, string activePath = "")
         //{
         //    var getTopCates = ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelListBy

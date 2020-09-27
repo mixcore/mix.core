@@ -100,20 +100,20 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
 
                 foreach (var child in item.ChildPages)
                 {
-                    child.Page.NavPermission = MixPortalPageRoles.ReadViewModel.Repository.GetSingleModel(n => n.PageId == child.Page.Id && n.RoleId == Id).Data;
-                    if (child.Page.NavPermission == null)
+                    child.PortalPage.NavPermission = MixPortalPageRoles.ReadViewModel.Repository.GetSingleModel(n => n.PageId == child.PortalPage.Id && n.RoleId == Id).Data;
+                    if (child.PortalPage.NavPermission == null)
                     {
                         var nav = new MixPortalPageRole()
                         {
-                            PageId = child.Page.Id,
+                            PageId = child.PortalPage.Id,
                             RoleId = Id,
                             Status = MixContentStatus.Published.ToString()
                         };
-                        child.Page.NavPermission = new MixPortalPageRoles.ReadViewModel(nav) { IsActived = false };
+                        child.PortalPage.NavPermission = new MixPortalPageRoles.ReadViewModel(nav) { IsActived = false };
                     }
                     else
                     {
-                        child.Page.NavPermission.IsActived = true;
+                        child.PortalPage.NavPermission.IsActived = true;
                     }
                 }
             }
@@ -227,8 +227,8 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
                 {
                     foreach (var child in item.ChildPages)
                     {
-                        child.Page.NavPermission.IsActived = false;
-                        result = await HandlePermission(child.Page, context, transaction);
+                        child.PortalPage.NavPermission.IsActived = false;
+                        result = await HandlePermission(child.PortalPage, context, transaction);
                     }
                 }
 

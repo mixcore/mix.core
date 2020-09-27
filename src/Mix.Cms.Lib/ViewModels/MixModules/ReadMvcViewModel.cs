@@ -208,14 +208,12 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (View == null)
-            {
-                //Load Template + Style +  Scripts for views
-                this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
-                this.FormView = MixTemplates.ReadListItemViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
-                this.EdmView = MixTemplates.ReadListItemViewModel.GetTemplateByPath(EdmTemplate, Specificulture, _context, _transaction).Data;
-                // call load data from controller for padding parameter (postId, productId, ...)
-            }
+
+            //Load Template + Style +  Scripts for views
+            this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
+            this.FormView = MixTemplates.ReadListItemViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
+            this.EdmView = MixTemplates.ReadListItemViewModel.GetTemplateByPath(EdmTemplate, Specificulture, _context, _transaction).Data;
+            // call load data from controller for padding parameter (postId, productId, ...)
             LoadAttributes(_context, _transaction);
         }
 
@@ -332,27 +330,12 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         public bool HasValue(string fieldName)
         {
-            return AttributeData!= null && AttributeData.Data.Obj.GetValue(fieldName) != null;
+            return AttributeData != null && AttributeData.Data.Obj.GetValue(fieldName) != null;
         }
 
         public T Property<T>(string fieldName)
         {
-            if (AttributeData != null)
-            {
-                var field = AttributeData.Data.Obj.GetValue(fieldName);
-                if (field != null)
-                {
-                    return field.Value<T>();
-                }
-                else
-                {
-                    return default;
-                }
-            }
-            else
-            {
-                return default;
-            }
+            return MixCmsHelper.Property<T>(AttributeData?.Data?.Obj, fieldName);
         }
 
         #endregion Expand

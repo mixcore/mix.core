@@ -29,12 +29,14 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             bool isStatus = Enum.TryParse(Request.Query["status"], out MixEnums.MixContentStatus status);
             bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
+            string type = Request.Query["type"];
             string keyword = Request.Query["keyword"];
             Expression<Func<MixPost, bool>> predicate = model =>
                 model.Specificulture == _lang
                 && (!isStatus || model.Status == status.ToString())
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
+                && (string.IsNullOrEmpty(type) || model.Type == type)
                 && (string.IsNullOrEmpty(keyword)
                  || (EF.Functions.Like(model.Title, $"%{keyword}%"))
                  || (EF.Functions.Like(model.Excerpt, $"%{keyword}%"))
