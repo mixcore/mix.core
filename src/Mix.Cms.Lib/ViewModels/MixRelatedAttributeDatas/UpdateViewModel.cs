@@ -82,14 +82,18 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
             if (string.IsNullOrEmpty(Id))
             {
                 Id = Guid.NewGuid().ToString();
-                CreatedDateTime = DateTime.UtcNow;
-                Status = Status == default ? Enum.Parse<MixEnums.MixContentStatus>(MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultContentStatus)) : Status;
+                CreatedDateTime = DateTime.UtcNow;                
             }
             return base.ParseModel(_context, _transaction);
         }
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            if (string.IsNullOrEmpty(Id))
+            {
+                Status = Status == default ? Enum.Parse<MixEnums.MixContentStatus>(MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultContentStatus)) : Status;
+            }
+
             var getData = MixAttributeSetDatas.UpdateViewModel.Repository.GetSingleModel(p => p.Id == DataId && p.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction
             );

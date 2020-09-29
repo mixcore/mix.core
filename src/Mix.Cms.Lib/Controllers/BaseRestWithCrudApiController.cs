@@ -79,7 +79,7 @@ namespace Mix.Cms.Lib.Controllers
             }
             else
             {
-                return NotFound();
+                return NoContent();
             }
         }
         

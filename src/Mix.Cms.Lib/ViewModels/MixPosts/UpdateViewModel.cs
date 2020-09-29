@@ -1135,7 +1135,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                             ParentType = MixEnums.MixAttributeSetDataType.Post.ToString(),
                             ParentId = Id.ToString(),
                             AttributeSetId = Attributes.Id,
-                            AttributeSetName = Attributes.Name
+                            AttributeSetName = Attributes.Name                            
                         }
                         )
                     {
