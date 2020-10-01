@@ -42,7 +42,17 @@ namespace Mix.Cms.Lib
         {
             return $"/{MixConstants.Folder.TemplatesFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, culture)}";
         }
-
+        public static T Property<T>(JObject obj,  string fieldName)
+        {
+            if (obj != null  && obj.ContainsKey(fieldName)  && obj[fieldName] != null)
+            {
+                return obj.Value<T>(fieldName);
+            }
+            else
+            {
+                return default(T);
+            }
+        }
         //public static List<ViewModels.MixPages.ReadListItemViewModel> GetPage(IUrlHelper Url, string culture, MixEnums.CatePosition position, string activePath = "")
         //{
         //    var getTopCates = ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelListBy
@@ -254,7 +264,8 @@ namespace Mix.Cms.Lib
             return getData.Data;
         }
 
-        public static async System.Threading.Tasks.Task<ViewModels.MixAttributeSetDatas.Navigation> GetNavigation(string name, string culture, IUrlHelper Url)
+        public static async System.Threading.Tasks.Task<ViewModels.MixAttributeSetDatas.Navigation> GetNavigation(
+            string name, string culture, IUrlHelper Url)
         {
             var navs = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.NavigationViewModel>(culture, MixConstants.AttributeSetName.NAVIGATION, "equal", "name", name);
             var nav = navs.Data.FirstOrDefault()?.Nav;
@@ -530,6 +541,39 @@ namespace Mix.Cms.Lib
             return await ViewModels.MixAttributeSetDatas.Helper.GetAttributeDataByParent<TView>(
                 culture, attributeSetName,
                 parentId, parentType, orderBy, direction, pageSize, pageIndex, _context, _transaction);
+        }
+        
+        public static async Task<RepositoryResponse<PaginationModel<Lib.ViewModels.MixPagePosts.ReadViewModel>>> GetPostListByPageId(
+            HttpContext context
+            , int pageId
+            , string keyword = null
+            , string culture = null
+            , string orderBy = "CreatedDateTime"
+            , Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Desc
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null
+            )
+        {
+            int.TryParse(context.Request.Query["page"], out int page);
+            int.TryParse(context.Request.Query["pageSize"], out int pageSize);
+            page = (page > 0) ? page : 1;
+            var result = await ViewModels.MixPosts.Helper.GetPostListByPageId<Lib.ViewModels.MixPagePosts.ReadViewModel>(
+                pageId, keyword, culture, 
+                orderBy, direction, pageSize, page -  1, _context, _transaction);
+            result.Data.Items.ForEach(m => m.LoadPost(_context, _transaction));
+            return result;
+        }
+        
+        public static async Task<RepositoryResponse<PaginationModel<Lib.ViewModels.MixAttributeSetDatas.ReadMvcViewModel>>> GetAttributeDataListBySet(
+            HttpContext context
+            , string attributeSetName
+            , string culture = null
+            , Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Desc
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null
+            )
+        {            
+            var result = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.ReadMvcViewModel>(
+                    context.Request, culture, attributeSetName);
+            return result;
         }
     }
 }

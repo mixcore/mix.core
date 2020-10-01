@@ -25,7 +25,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         public override async Task<ActionResult<PaginationModel<FormViewModel>>> Get()
         {
             bool isStatus = Enum.TryParse(Request.Query["status"], out MixEnums.MixContentStatus status);
-            int.TryParse(Request.Query["attributeSetId"], out int attributeSetId);
+            bool isAttributeId = int.TryParse(Request.Query["attributeSetId"], out int attributeSetId);
             bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
             string parentType = Request.Query["parentType"];
@@ -35,7 +35,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 (!isStatus || model.Status == status.ToString())
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
-                && (model.AttributeSetId == attributeSetId || model.AttributeSetName == attributeSetName)
+                && ((isAttributeId && model.AttributeSetId == attributeSetId) || model.AttributeSetName == attributeSetName)
                 && (string.IsNullOrEmpty(parentId)
                  || (model.ParentId == parentId && model.ParentType == parentType.ToString())
                  );

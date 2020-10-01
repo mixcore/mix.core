@@ -51,6 +51,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #endregion Models
 
         #region Views
+        [JsonProperty("detailsUrl")]
+        public string DetailsUrl
+        {
+            get => !string.IsNullOrEmpty(Id) && HasValue("seo_url")
+                    ? $"/data/{Specificulture}/{AttributeSetName}/{Property<string>("seo_url")}"
+                    : null;
+        }
+
         [JsonProperty("obj")]
         public JObject Obj { get; set; }
 
@@ -618,6 +626,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             {
                                 AttributeFieldId = field.Id,
                                 AttributeFieldName = field.Name,
+                                StringValue = field.DefaultValue
                             }
                             , _context, _transaction)
                         {
@@ -650,6 +659,22 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 Obj = data
             };
             return await vm.SaveModelAsync();
+        }
+        public bool HasValue(string fieldName)
+        {
+            return Obj.Value<string>(fieldName) != null;
+        }
+
+        public T Property<T>(string fieldName)
+        {
+            if (Obj != null)
+            {
+                return Obj.Value<T>(fieldName);
+            }
+            else
+            {
+                return default(T);
+            }
         }
         #endregion Expands
     }

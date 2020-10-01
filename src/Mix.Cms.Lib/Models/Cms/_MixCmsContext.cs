@@ -53,7 +53,7 @@ namespace Mix.Cms.Lib.Models.Cms
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.EnableSensitiveDataLogging(true);
+            //optionsBuilder.EnableSensitiveDataLogging(true);
             //define the database to use
             string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
@@ -105,38 +105,66 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => e.ReferenceId);
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.AttributeSetName).HasMaxLength(250);
+                entity.Property(e => e.AttributeSetName)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.DefaultValue).HasColumnType("text");
+                entity.Property(e => e.DefaultValue)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
+
+                entity.Property(e => e.IsEncrypt).HasColumnType("bit(1)");
+
+                entity.Property(e => e.IsMultiple).HasColumnType("bit(1)");
+
+                entity.Property(e => e.IsRequire).HasColumnType("bit(1)");
+
+                entity.Property(e => e.IsSelect).HasColumnType("bit(1)");
+
+                entity.Property(e => e.IsUnique).HasColumnType("bit(1)");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(250);
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Options).HasColumnType("text");
+                entity.Property(e => e.Options)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Regex).HasMaxLength(250);
+                entity.Property(e => e.Regex)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Title).HasMaxLength(250);
+                entity.Property(e => e.Title)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.HasOne(d => d.AttributeSet)
                     .WithMany(p => p.MixAttributeFieldAttributeSet)
@@ -154,74 +182,115 @@ namespace Mix.Cms.Lib.Models.Cms
             {
                 entity.ToTable("mix_attribute_set");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Description).HasMaxLength(250);
+                entity.Property(e => e.Description)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.EdmFrom).HasMaxLength(250);
+                entity.Property(e => e.EdmAutoSend).HasColumnType("bit(1)");
 
-                entity.Property(e => e.EdmSubject).HasMaxLength(250);
+                entity.Property(e => e.EdmFrom)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.EdmTemplate).HasMaxLength(250);
+                entity.Property(e => e.EdmSubject)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.FormTemplate).HasMaxLength(250);
+                entity.Property(e => e.EdmTemplate)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
+
+                entity.Property(e => e.FormTemplate)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(250);
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Title)
                     .IsRequired()
-                    .HasMaxLength(250);
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
+
+                entity.Property(e => e.Type)
+                    .IsRequired()
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
             });
 
             modelBuilder.Entity<MixAttributeSetData>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.Specificulture });
+                entity.HasKey(e => new { e.Id, e.Specificulture })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("mix_attribute_set_data");
 
                 entity.HasIndex(e => e.AttributeSetId);
 
-                entity.Property(e => e.Id).HasMaxLength(50);
+                entity.Property(e => e.Id)
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
+                entity.Property(e => e.Specificulture)
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.AttributeSetName).HasMaxLength(250);
+                entity.Property(e => e.AttributeSetName)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.HasOne(d => d.AttributeSet)
                     .WithMany(p => p.MixAttributeSetData)
@@ -236,28 +305,35 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => e.AttributeSetId);
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Description).HasMaxLength(450);
+                entity.Property(e => e.Description)
+                    .HasColumnType("varchar(450)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Image).HasMaxLength(450);
+                entity.Property(e => e.Image)
+                    .HasColumnType("varchar(450)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.HasOne(d => d.AttributeSet)
                     .WithMany(p => p.MixAttributeSetReference)
@@ -272,48 +348,77 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => e.DataId);
 
-                entity.Property(e => e.Id).HasMaxLength(50);
+                entity.Property(e => e.Id)
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.AttributeFieldName)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.AttributeSetName).HasMaxLength(250);
+                entity.Property(e => e.AttributeSetName)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
+
+                entity.Property(e => e.BooleanValue).HasColumnType("bit(1)");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.DataId)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.DateTimeValue).HasColumnType("datetime");
 
-                entity.Property(e => e.EncryptKey).HasMaxLength(50);
+                entity.Property(e => e.EncryptKey)
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.EncryptValue).HasMaxLength(4000);
+                entity.Property(e => e.EncryptValue)
+                    .HasColumnType("varchar(4000)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Regex).HasMaxLength(250);
+                entity.Property(e => e.Regex)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Specificulture)
                     .IsRequired()
-                    .HasMaxLength(10);
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.StringValue).HasMaxLength(4000);
+                entity.Property(e => e.StringValue)
+                    .HasColumnType("varchar(4000)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
             });
 
             modelBuilder.Entity<MixCache>(entity =>
@@ -323,11 +428,15 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.HasIndex(e => e.ExpiredDateTime)
                     .HasName("Index_ExpiresAtTime");
 
-                entity.Property(e => e.Id).HasMaxLength(50);
+                entity.Property(e => e.Id)
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
@@ -336,96 +445,153 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Value)
                     .IsRequired()
-                    .HasMaxLength(4000);
+                    .HasColumnType("varchar(4000)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
             });
 
             modelBuilder.Entity<MixCmsUser>(entity =>
             {
                 entity.ToTable("mix_cms_user");
 
-                entity.Property(e => e.Id).HasMaxLength(50);
+                entity.Property(e => e.Id)
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Address).HasMaxLength(250);
+                entity.Property(e => e.Address)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Avatar).HasMaxLength(250);
+                entity.Property(e => e.Avatar)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Email).HasMaxLength(250);
+                entity.Property(e => e.Email)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.FirstName).HasMaxLength(50);
+                entity.Property(e => e.FirstName)
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
-                entity.Property(e => e.LastName).HasMaxLength(50);
+                entity.Property(e => e.LastName)
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.MiddleName).HasMaxLength(50);
+                entity.Property(e => e.MiddleName)
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.PhoneNumber).HasMaxLength(50);
+                entity.Property(e => e.PhoneNumber)
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Username).HasMaxLength(250);
+                entity.Property(e => e.Username)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
             });
 
             modelBuilder.Entity<MixConfiguration>(entity =>
             {
                 entity.HasKey(e => new { e.Id, e.Specificulture })
-                    .HasName("PK_mix_configuration_1");
+                    .HasName("PRIMARY");
 
                 entity.ToTable("mix_configuration");
 
                 entity.HasIndex(e => e.Specificulture);
 
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
+                entity.Property(e => e.Specificulture)
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Category).HasMaxLength(250);
+                entity.Property(e => e.Category)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Description).HasMaxLength(250);
+                entity.Property(e => e.DataType)
+                    .IsRequired()
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
+
+                entity.Property(e => e.Description)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Keyword)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Value).HasMaxLength(4000);
+                entity.Property(e => e.Value)
+                    .HasColumnType("varchar(4000)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.HasOne(d => d.SpecificultureNavigation)
                     .WithMany(p => p.MixConfiguration)
@@ -442,40 +608,57 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasName("IX_Mix_Culture")
                     .IsUnique();
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.Alias).HasMaxLength(150);
+                entity.Property(e => e.Alias)
+                    .HasColumnType("varchar(150)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Description).HasMaxLength(250);
+                entity.Property(e => e.Description)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.FullName).HasMaxLength(150);
+                entity.Property(e => e.FullName)
+                    .HasColumnType("varchar(150)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Icon).HasMaxLength(50);
+                entity.Property(e => e.Icon)
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.Lcid)
                     .HasColumnName("LCID")
-                    .HasMaxLength(50);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Specificulture)
                     .IsRequired()
-                    .HasMaxLength(10);
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
             });
 
             modelBuilder.Entity<MixFile>(entity =>
@@ -485,45 +668,60 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.HasIndex(e => e.ThemeId);
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.Extension)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.FileFolder)
                     .IsRequired()
-                    .HasMaxLength(250);
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.FileName)
                     .IsRequired()
-                    .HasMaxLength(250);
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.FolderType)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.StringContent)
                     .IsRequired()
-                    .HasMaxLength(4000);
+                    .HasColumnType("varchar(4000)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.ThemeName)
                     .IsRequired()
-                    .HasMaxLength(250);
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.HasOne(d => d.Theme)
                     .WithMany(p => p.MixFile)
@@ -534,42 +732,68 @@ namespace Mix.Cms.Lib.Models.Cms
             modelBuilder.Entity<MixLanguage>(entity =>
             {
                 entity.HasKey(e => new { e.Id, e.Specificulture })
-                    .HasName("PK_mix_language_1");
+                    .HasName("PRIMARY");
 
                 entity.ToTable("mix_language");
 
                 entity.HasIndex(e => e.Specificulture);
 
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
+                entity.Property(e => e.Specificulture)
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Category).HasMaxLength(250);
+                entity.Property(e => e.Category)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.DefaultValue).HasMaxLength(250);
+                entity.Property(e => e.DataType)
+                    .IsRequired()
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Description).HasMaxLength(250);
+                entity.Property(e => e.DefaultValue)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
+
+                entity.Property(e => e.Description)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Keyword)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Value).HasMaxLength(4000);
+                entity.Property(e => e.Value)
+                    .HasColumnType("varchar(4000)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.HasOne(d => d.SpecificultureNavigation)
                     .WithMany(p => p.MixLanguage)
@@ -580,104 +804,170 @@ namespace Mix.Cms.Lib.Models.Cms
 
             modelBuilder.Entity<MixMedia>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.Specificulture });
+                entity.HasKey(e => new { e.Id, e.Specificulture })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("mix_media");
 
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
+                entity.Property(e => e.Specificulture)
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Description).HasMaxLength(4000);
+                entity.Property(e => e.Description)
+                    .HasColumnType("varchar(4000)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Extension)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.FileFolder)
                     .IsRequired()
-                    .HasMaxLength(250);
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.FileName)
                     .IsRequired()
-                    .HasMaxLength(250);
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.FileProperties).HasMaxLength(4000);
+                entity.Property(e => e.FileProperties)
+                    .HasColumnType("varchar(4000)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.FileType)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Source).HasMaxLength(250);
+                entity.Property(e => e.Source)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Tags).HasMaxLength(400);
+                entity.Property(e => e.Tags)
+                    .HasColumnType("varchar(400)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.TargetUrl).HasMaxLength(250);
+                entity.Property(e => e.TargetUrl)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Title).HasMaxLength(4000);
+                entity.Property(e => e.Title)
+                    .HasColumnType("varchar(4000)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
             });
 
             modelBuilder.Entity<MixModule>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.Specificulture });
+                entity.HasKey(e => new { e.Id, e.Specificulture })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("mix_module");
 
                 entity.HasIndex(e => e.Specificulture);
 
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
+                entity.Property(e => e.Specificulture)
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Description).HasMaxLength(4000);
+                entity.Property(e => e.Description)
+                    .HasColumnType("varchar(4000)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.EdmTemplate).HasMaxLength(250);
+                entity.Property(e => e.EdmTemplate)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Fields).HasMaxLength(4000);
+                entity.Property(e => e.Fields)
+                    .HasColumnType("varchar(4000)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.FormTemplate).HasMaxLength(250);
+                entity.Property(e => e.FormTemplate)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Image).HasMaxLength(250);
+                entity.Property(e => e.Image)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Template).HasMaxLength(250);
+                entity.Property(e => e.Template)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Thumbnail).HasMaxLength(250);
+                entity.Property(e => e.Thumbnail)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Title).HasMaxLength(250);
+                entity.Property(e => e.Title)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.HasOne(d => d.SpecificultureNavigation)
                     .WithMany(p => p.MixModule)
@@ -688,7 +978,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
             modelBuilder.Entity<MixModuleData>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.Specificulture });
+                entity.HasKey(e => new { e.Id, e.Specificulture })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("mix_module_data");
 
@@ -700,32 +991,46 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => new { e.ModuleId, e.PageId, e.Specificulture });
 
-                entity.Property(e => e.Id).HasMaxLength(50);
+                entity.Property(e => e.Id)
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
+                entity.Property(e => e.Specificulture)
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.Fields)
                     .IsRequired()
-                    .HasMaxLength(4000);
+                    .HasColumnType("varchar(4000)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Value).HasMaxLength(4000);
+                entity.Property(e => e.Value)
+                    .HasColumnType("varchar(4000)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.HasOne(d => d.MixModule)
                     .WithMany(p => p.MixModuleData)
@@ -745,7 +1050,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
             modelBuilder.Entity<MixModulePost>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.Specificulture });
+                entity.HasKey(e => new { e.Id, e.Specificulture })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("mix_module_post");
 
@@ -753,28 +1059,40 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => new { e.PostId, e.Specificulture });
 
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
+                entity.Property(e => e.Specificulture)
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Description).HasMaxLength(250);
+                entity.Property(e => e.Description)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Image).HasMaxLength(250);
+                entity.Property(e => e.Image)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.HasOne(d => d.MixModule)
                     .WithMany(p => p.MixModulePost)
@@ -791,68 +1109,117 @@ namespace Mix.Cms.Lib.Models.Cms
 
             modelBuilder.Entity<MixPage>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.Specificulture });
+                entity.HasKey(e => new { e.Id, e.Specificulture })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("mix_page");
 
                 entity.HasIndex(e => e.Specificulture);
 
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
+                entity.Property(e => e.Specificulture)
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Content).HasColumnType("text");
+                entity.Property(e => e.Content)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.CssClass).HasMaxLength(250);
+                entity.Property(e => e.CssClass)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Excerpt).HasColumnType("text");
+                entity.Property(e => e.Excerpt)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.ExtraFields).HasColumnType("text");
+                entity.Property(e => e.ExtraFields)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Icon).HasMaxLength(50);
+                entity.Property(e => e.Icon)
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Image).HasMaxLength(250);
+                entity.Property(e => e.Image)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
-                entity.Property(e => e.Layout).HasMaxLength(50);
+                entity.Property(e => e.Layout)
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.SeoDescription).HasColumnType("text");
+                entity.Property(e => e.SeoDescription)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.SeoKeywords).HasColumnType("text");
+                entity.Property(e => e.SeoKeywords)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.SeoName)
-                    .HasMaxLength(500)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(500)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.SeoTitle)
-                    .HasMaxLength(250)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.StaticUrl).HasMaxLength(250);
+                entity.Property(e => e.StaticUrl)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Tags).HasColumnType("text");
+                entity.Property(e => e.Tags)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Template).HasMaxLength(250);
+                entity.Property(e => e.Template)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Title).HasColumnType("text");
+                entity.Property(e => e.Title)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Type)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.HasOne(d => d.SpecificultureNavigation)
                     .WithMany(p => p.MixPage)
@@ -864,7 +1231,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
             modelBuilder.Entity<MixPageModule>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.Specificulture });
+                entity.HasKey(e => new { e.Id, e.Specificulture })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("mix_page_module");
 
@@ -872,28 +1240,40 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => new { e.PageId, e.Specificulture });
 
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
+                entity.Property(e => e.Specificulture)
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Description).HasMaxLength(250);
+                entity.Property(e => e.Description)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Image).HasMaxLength(250);
+                entity.Property(e => e.Image)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.HasOne(d => d.MixModule)
                     .WithMany(p => p.MixPageModule)
@@ -909,7 +1289,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
             modelBuilder.Entity<MixPagePost>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.Specificulture });
+                entity.HasKey(e => new { e.Id, e.Specificulture })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("mix_page_post");
 
@@ -917,28 +1298,40 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => new { e.PostId, e.Specificulture });
 
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
+                entity.Property(e => e.Specificulture)
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Description).HasMaxLength(250);
+                entity.Property(e => e.Description)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Image).HasMaxLength(250);
+                entity.Property(e => e.Image)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.HasOne(d => d.MixPage)
                     .WithMany(p => p.MixPagePost)
@@ -957,68 +1350,94 @@ namespace Mix.Cms.Lib.Models.Cms
             {
                 entity.ToTable("mix_portal_page");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Description).HasMaxLength(450);
+                entity.Property(e => e.Description)
+                    .HasColumnType("varchar(450)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Icon).HasMaxLength(50);
+                entity.Property(e => e.Icon)
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.TextDefault).HasMaxLength(250);
+                entity.Property(e => e.TextDefault)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.TextKeyword).HasMaxLength(250);
+                entity.Property(e => e.TextKeyword)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Url).HasMaxLength(250);
+                entity.Property(e => e.Url)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
             });
 
             modelBuilder.Entity<MixPortalPageNavigation>(entity =>
             {
                 entity.ToTable("mix_portal_page_navigation");
 
+                entity.HasIndex(e => e.PageId)
+                    .HasName("FK_mix_portal_page_navigation_mix_portal_page");
+
                 entity.HasIndex(e => e.ParentId);
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Description).HasMaxLength(250);
+                entity.Property(e => e.Description)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Image).HasMaxLength(250);
+                entity.Property(e => e.Image)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.MixPortalPageNavigationIdNavigation)
-                    .HasForeignKey<MixPortalPageNavigation>(d => d.PageId)
+                entity.HasOne(d => d.Page)
+                    .WithMany(p => p.MixPortalPageNavigationPage)
+                    .HasForeignKey(d => d.PageId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_mix_portal_page_navigation_mix_portal_page");
 
@@ -1031,30 +1450,37 @@ namespace Mix.Cms.Lib.Models.Cms
 
             modelBuilder.Entity<MixPortalPageRole>(entity =>
             {
-                entity.HasKey(e => new { e.RoleId, e.PageId });
+                entity.HasKey(e => new { e.RoleId, e.PageId })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("mix_portal_page_role");
 
                 entity.HasIndex(e => e.PageId);
 
-                entity.Property(e => e.RoleId).HasMaxLength(50);
+                entity.Property(e => e.RoleId)
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.HasOne(d => d.Page)
                     .WithMany(p => p.MixPortalPageRole)
@@ -1064,68 +1490,119 @@ namespace Mix.Cms.Lib.Models.Cms
 
             modelBuilder.Entity<MixPost>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.Specificulture });
+                entity.HasKey(e => new { e.Id, e.Specificulture })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("mix_post");
 
                 entity.HasIndex(e => e.Specificulture);
 
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
+                entity.Property(e => e.Specificulture)
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Content).HasColumnType("text");
+                entity.Property(e => e.Content)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Excerpt).HasColumnType("text");
+                entity.Property(e => e.Excerpt)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.ExtraFields).HasColumnType("text");
+                entity.Property(e => e.ExtraFields)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.ExtraProperties).HasColumnType("text");
+                entity.Property(e => e.ExtraProperties)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Icon).HasColumnType("text");
+                entity.Property(e => e.Icon)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Image).HasMaxLength(250);
+                entity.Property(e => e.Image)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.PublishedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.SeoDescription).HasColumnType("text");
+                entity.Property(e => e.SeoDescription)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.SeoKeywords).HasColumnType("text");
+                entity.Property(e => e.SeoKeywords)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.SeoName)
-                    .HasMaxLength(500)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(500)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.SeoTitle).HasColumnType("text");
+                entity.Property(e => e.SeoTitle)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Source).HasMaxLength(250);
+                entity.Property(e => e.Source)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Tags).HasColumnType("text");
+                entity.Property(e => e.Tags)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Template).HasMaxLength(250);
+                entity.Property(e => e.Template)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Thumbnail).HasMaxLength(250);
+                entity.Property(e => e.Thumbnail)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Title).HasColumnType("text");
+                entity.Property(e => e.Title)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Type)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.HasOne(d => d.SpecificultureNavigation)
                     .WithMany(p => p.MixPost)
@@ -1137,7 +1614,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
             modelBuilder.Entity<MixPostMedia>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.Specificulture });
+                entity.HasKey(e => new { e.Id, e.Specificulture })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("mix_post_media");
 
@@ -1145,28 +1623,40 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => new { e.PostId, e.Specificulture });
 
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
+                entity.Property(e => e.Specificulture)
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Description).HasMaxLength(250);
+                entity.Property(e => e.Description)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Image).HasMaxLength(250);
+                entity.Property(e => e.Image)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.HasOne(d => d.MixMedia)
                     .WithMany(p => p.MixPostMedia)
@@ -1183,7 +1673,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
             modelBuilder.Entity<MixPostModule>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.Specificulture });
+                entity.HasKey(e => new { e.Id, e.Specificulture })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("mix_post_module");
 
@@ -1191,28 +1682,40 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => new { e.PostId, e.Specificulture });
 
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
+                entity.Property(e => e.Specificulture)
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Description).HasMaxLength(250);
+                entity.Property(e => e.Description)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Image).HasMaxLength(250);
+                entity.Property(e => e.Image)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.HasOne(d => d.MixModule)
                     .WithMany(p => p.MixPostModule)
@@ -1229,82 +1732,116 @@ namespace Mix.Cms.Lib.Models.Cms
             modelBuilder.Entity<MixRelatedAttributeData>(entity =>
             {
                 entity.HasKey(e => new { e.Id, e.Specificulture })
-                    .HasName("PK_mix_related_attribute_data_1");
+                    .HasName("PRIMARY");
 
                 entity.ToTable("mix_related_attribute_data");
 
-                entity.Property(e => e.Id).HasMaxLength(50);
+                entity.Property(e => e.Id)
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
+                entity.Property(e => e.Specificulture)
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.AttributeSetName).HasMaxLength(250);
+                entity.Property(e => e.AttributeSetName)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.DataId)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Description).HasMaxLength(450);
+                entity.Property(e => e.Description)
+                    .HasColumnType("varchar(450)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.ParentId)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.ParentType)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
             });
 
             modelBuilder.Entity<MixRelatedAttributeSet>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.Specificulture });
+                entity.HasKey(e => new { e.Id, e.Specificulture })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("mix_related_attribute_set");
 
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
+                entity.Property(e => e.Specificulture)
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Description).HasMaxLength(450);
+                entity.Property(e => e.Description)
+                    .HasColumnType("varchar(450)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Image).HasMaxLength(450);
+                entity.Property(e => e.Image)
+                    .HasColumnType("varchar(450)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.ParentType)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.HasOne(d => d.IdNavigation)
                     .WithMany(p => p.MixRelatedAttributeSet)
@@ -1313,9 +1850,71 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasConstraintName("FK_mix_related_attribute_set_mix_attribute_set");
             });
 
+            modelBuilder.Entity<MixRelatedData>(entity =>
+            {
+                entity.HasKey(e => new { e.Id, e.Specificulture })
+                    .HasName("PRIMARY");
+
+                entity.ToTable("mix_related_data");
+
+                entity.Property(e => e.Specificulture)
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
+
+                entity.Property(e => e.AttributeSetName)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
+
+                entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.DataId)
+                    .IsRequired()
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
+
+                entity.Property(e => e.Description)
+                    .HasColumnType("varchar(450)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
+
+                entity.Property(e => e.LastModified).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
+
+                entity.Property(e => e.ParentId)
+                    .IsRequired()
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
+
+                entity.Property(e => e.ParentType)
+                    .IsRequired()
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
+
+                entity.Property(e => e.Status)
+                    .IsRequired()
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
+            });
+
             modelBuilder.Entity<MixRelatedPost>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.Specificulture });
+                entity.HasKey(e => new { e.Id, e.Specificulture })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("mix_related_post");
 
@@ -1323,28 +1922,40 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.HasIndex(e => new { e.SourceId, e.Specificulture });
 
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
+                entity.Property(e => e.Specificulture)
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Description).HasMaxLength(450);
+                entity.Property(e => e.Description)
+                    .HasColumnType("varchar(450)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Image).HasMaxLength(450);
+                entity.Property(e => e.Image)
+                    .HasColumnType("varchar(450)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.HasOne(d => d.MixPost)
                     .WithMany(p => p.MixRelatedPostMixPost)
@@ -1366,56 +1977,81 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.HasIndex(e => e.ThemeId)
                     .HasName("IX_mix_template_file_TemplateId");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Content)
                     .IsRequired()
-                    .HasColumnType("text");
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.Extension)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.FileFolder)
                     .IsRequired()
-                    .HasMaxLength(250);
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.FileName)
                     .IsRequired()
-                    .HasMaxLength(250);
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.FolderType)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
-                entity.Property(e => e.MobileContent).HasColumnType("text");
+                entity.Property(e => e.MobileContent)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Scripts).HasColumnType("text");
+                entity.Property(e => e.Scripts)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.SpaContent).HasColumnType("text");
+                entity.Property(e => e.SpaContent)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Styles).HasColumnType("text");
+                entity.Property(e => e.Styles)
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.ThemeName)
                     .IsRequired()
-                    .HasMaxLength(250);
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.HasOne(d => d.Theme)
                     .WithMany(p => p.MixTemplate)
@@ -1428,70 +2064,101 @@ namespace Mix.Cms.Lib.Models.Cms
             {
                 entity.ToTable("mix_theme");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Image).HasMaxLength(250);
+                entity.Property(e => e.Image)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(250);
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.PreviewUrl).HasMaxLength(450);
+                entity.Property(e => e.PreviewUrl)
+                    .HasColumnType("varchar(450)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Thumbnail).HasMaxLength(250);
+                entity.Property(e => e.Thumbnail)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Title).HasMaxLength(250);
+                entity.Property(e => e.Title)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
             });
 
             modelBuilder.Entity<MixUrlAlias>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.Specificulture });
+                entity.HasKey(e => new { e.Id, e.Specificulture })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("mix_url_alias");
 
                 entity.HasIndex(e => e.Specificulture);
 
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
+                entity.Property(e => e.Specificulture)
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.Alias).HasMaxLength(250);
+                entity.Property(e => e.Alias)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Description).HasMaxLength(4000);
+                entity.Property(e => e.Description)
+                    .HasColumnType("varchar(4000)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.LastModified).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
-                entity.Property(e => e.SourceId).HasMaxLength(250);
+                entity.Property(e => e.SourceId)
+                    .HasColumnType("varchar(250)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_unicode_ci");
 
                 entity.HasOne(d => d.SpecificultureNavigation)
                     .WithMany(p => p.MixUrlAlias)

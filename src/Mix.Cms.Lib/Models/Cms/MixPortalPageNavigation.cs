@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
@@ -16,7 +17,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Priority { get; set; }
         public string Status { get; set; }
 
-        public virtual MixPortalPage IdNavigation { get; set; }
+        public virtual MixPortalPage Page { get; set; }
         public virtual MixPortalPage Parent { get; set; }
     }
 }

@@ -538,7 +538,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             }
 
             AttributeSetNavs = MixRelatedAttributeSets.UpdateViewModel.Repository.GetModelListBy(
-                m => m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Page.ToString() && m.Specificulture == Specificulture
+                m => m.ParentId == Id && m.ParentType == MixEnums.MixAttributeSetDataType.Page.ToString() && m.Specificulture == Specificulture
                 , _context, _transaction).Data;
         }
 

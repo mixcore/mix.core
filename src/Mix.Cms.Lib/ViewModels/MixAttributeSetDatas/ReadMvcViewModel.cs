@@ -52,7 +52,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public JObject Obj { get; set; }
 
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl { get => !string.IsNullOrEmpty(Id) ? $"/data/{Specificulture}/{Id}/{SeoHelper.GetSEOString(Property<string>("seo_name"))}" : null; }
+        public string DetailsUrl { 
+            get => !string.IsNullOrEmpty(Id) && HasValue("seo_url") 
+                    ? $"/data/{Specificulture}/{AttributeSetName}/{Property<string>("seo_url")}" 
+                    : null; 
+        }
 
         [JsonProperty("templatePath")]
         public string TemplatePath { get => $"{MixCmsHelper.GetTemplateFolder(Specificulture)}/{Property<string>("template_path")}"; }
@@ -101,16 +105,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #endregion Overrides
 
         #region Expands
+        public bool HasValue(string fieldName)
+        {
+            return Obj.Value<string>(fieldName) != null;
+        }
+        
         public T Property<T>(string fieldName)
         {
-            if (Obj != null)
-            {
-                return Obj.Value<T>(fieldName);
-            }
-            else
-            {
-                return default(T);
-            }
+            return MixCmsHelper.Property<T>(Obj, fieldName);
         }
 
         private JProperty ParseValue(MixAttributeSetValues.ReadViewModel item)
@@ -136,7 +138,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue));
 
                 case MixEnums.MixDataType.Reference:
-                    return null;
+                    return (new JProperty(item.AttributeFieldName, null));
 
                 case MixEnums.MixDataType.Custom:
                 case MixEnums.MixDataType.Duration:

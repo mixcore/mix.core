@@ -79,7 +79,43 @@ namespace Mix.Cms.Lib.Controllers
             }
             else
             {
-                return NotFound();
+                return NoContent();
+            }
+        }
+        
+        // GET: api/v1/rest/{culture}/attribute-set-data/5
+        [HttpGet("duplicate/{id}")]
+        public async Task<ActionResult<TView>> Duplicate(string id)
+        {
+            var getData = await GetSingleAsync(id);
+            if (getData.IsSucceed)
+            {
+                var data = getData.Data;
+                var idProperty = ReflectionHelper.GetPropertyType(data.GetType(), "Id");
+                switch (idProperty.Name.ToLower())
+                {
+                    case "int32":
+                        ReflectionHelper.SetPropertyValue(data, new JProperty("id", 0));
+                        break;
+                    default:
+                        ReflectionHelper.SetPropertyValue(data, new JProperty("id", default));
+                        break;
+                }
+                
+                var saveResult = await data.SaveModelAsync(true);
+                if (saveResult.IsSucceed)
+                {
+                    return Ok(saveResult.Data);
+                }
+                else
+                {
+                    return BadRequest(saveResult.Errors);
+                }
+                return getData.Data;
+            }
+            else
+            {
+                return NoContent();
             }
         }
 
@@ -120,6 +156,7 @@ namespace Mix.Cms.Lib.Controllers
         [HttpPost]
         public virtual async Task<ActionResult<TModel>> Create([FromBody] TView data)
         {
+            ReflectionHelper.SetPropertyValue(data, new JProperty("CreatedBy", User.Identity.Name));
             var result = await SaveAsync(data, true);
             if (result.IsSucceed)
             {
@@ -139,7 +176,8 @@ namespace Mix.Cms.Lib.Controllers
         {
             if (data != null)
             {
-
+                ReflectionHelper.SetPropertyValue(data, new JProperty("ModifiedBy", User.Identity.Name));
+                ReflectionHelper.SetPropertyValue(data, new JProperty("LastModified", DateTime.UtcNow));
                 var currentId = ReflectionHelper.GetPropertyValue(data, "Id").ToString();
                 if (id != currentId)
                 {
@@ -176,6 +214,8 @@ namespace Mix.Cms.Lib.Controllers
             var result = await GetSingleAsync(id);
             if (result.IsSucceed)
             {
+                ReflectionHelper.SetPropertyValue(result.Data, new JProperty("ModifiedBy", User.Identity.Name));
+                ReflectionHelper.SetPropertyValue(result.Data, new JProperty("LastModified", DateTime.UtcNow));
                 var saveResult = await result.Data.UpdateFieldsAsync(fields);
                 if (saveResult.IsSucceed)
                 {

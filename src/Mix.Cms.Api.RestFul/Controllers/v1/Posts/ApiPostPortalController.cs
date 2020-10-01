@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixPosts;
 using Mix.Domain.Core.ViewModels;
 using System;
@@ -28,12 +29,14 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             bool isStatus = Enum.TryParse(Request.Query["status"], out MixEnums.MixContentStatus status);
             bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
+            string type = Request.Query["type"];
             string keyword = Request.Query["keyword"];
             Expression<Func<MixPost, bool>> predicate = model =>
                 model.Specificulture == _lang
                 && (!isStatus || model.Status == status.ToString())
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
+                && (string.IsNullOrEmpty(type) || model.Type == type)
                 && (string.IsNullOrEmpty(keyword)
                  || (EF.Functions.Like(model.Title, $"%{keyword}%"))
                  || (EF.Functions.Like(model.Excerpt, $"%{keyword}%"))
@@ -47,6 +50,24 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             else
             {
                 return BadRequest(getData.Errors);
+            }
+        }
+
+        public override ActionResult<UpdateViewModel> Default()
+        {
+            using (MixCmsContext context = new MixCmsContext())
+            {
+                var transaction = context.Database.BeginTransaction();
+                var model = new MixPost()
+                {
+                    Specificulture = _lang,
+                    Status = MixService.GetConfig<string>("DefaultContentStatus"),
+                    Type = Request.Query["type"].ToString(),
+                    Template = Request.Query["template"].ToString()
+
+                };
+                var result = new UpdateViewModel(model, context, transaction);
+                return Ok(result);
             }
         }
     }
