@@ -206,11 +206,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             LoadAttributes(_context, _transaction);
             LoadTags(_context, _transaction);
             LoadCategories(_context, _transaction);
-            if (View == null)
+            //Load Template + Style +  Scripts for views
+            this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
+            if (Pages == null)
             {
 
-                //Load Template + Style +  Scripts for views
-                this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
                 LoadPages(_context, _transaction);
                 var getPostMedia = MixPostMedias.ReadViewModel.Repository.GetModelListBy(n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction);
                 if (getPostMedia.IsSucceed)
@@ -276,7 +276,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         /// <param name="_transaction">The transaction.</param>
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST, _context, _transaction);
+            Type = string.IsNullOrEmpty(Type) ? MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST : Type;
+            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == Type, _context, _transaction);
             if (getAttrs.IsSucceed)
             {
                 AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
@@ -288,28 +289,18 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
         }
 
+        public bool HasValue(string fieldName)
+        {
+            return AttributeData != null && AttributeData.Data.Obj.GetValue(fieldName) != null;
+        }
+
         /// <summary>Get Post's Property by type and name</summary>
         /// <typeparam name="T">Type of field</typeparam>
         /// <param name="fieldName">Name of the field.</param>
         /// <returns>T</returns>
         public T Property<T>(string fieldName)
         {
-            if (AttributeData != null)
-            {
-                var field = AttributeData.Data.Obj.GetValue(fieldName);
-                if (field != null)
-                {
-                    return field.Value<T>();
-                }
-                else
-                {
-                    return default;
-                }
-            }
-            else
-            {
-                return default;
-            }
+            return MixCmsHelper.Property<T>(AttributeData?.Data?.Obj, fieldName);
         }
 
         /// <summary>Gets the module.</summary>

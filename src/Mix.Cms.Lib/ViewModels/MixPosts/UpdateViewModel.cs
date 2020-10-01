@@ -102,6 +102,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #endregion Models
 
         #region Views
+        [JsonProperty("templatePath")]
+        public string TemplatePath { get; set; }
 
         [JsonProperty("domain")]
         public string Domain => MixService.GetConfig<string>("Domain");
@@ -253,7 +255,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Type = Type ?? MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST;
+            Type = string.IsNullOrEmpty(Type) ? MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST: Type;
 
             Cultures = LoadCultures(Specificulture, _context, _transaction);
             UrlAliases = GetAliases(_context, _transaction);
@@ -1111,12 +1113,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             this.Templates = this.Templates ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
             View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Posts, _context, _transaction);
-
-            this.Template = CommonHelper.GetFullPath(new string[]
-               {
-                    this.View?.FileFolder
-                    , this.View?.FileName
-               });
+            this.Template = $"{this.View?.TemplateFolder}/{this.View?.FolderType}/{this.View?.FileName}{this.View?.Extension}";
         }
 
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
@@ -1138,7 +1135,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                             ParentType = MixEnums.MixAttributeSetDataType.Post.ToString(),
                             ParentId = Id.ToString(),
                             AttributeSetId = Attributes.Id,
-                            AttributeSetName = Attributes.Name
+                            AttributeSetName = Attributes.Name                            
                         }
                         )
                     {

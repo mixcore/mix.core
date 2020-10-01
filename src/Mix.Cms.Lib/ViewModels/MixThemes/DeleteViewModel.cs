@@ -180,6 +180,11 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             {
                 FileRepository.Instance.DeleteFolder(AssetFolder);
             }
+            
+            if (result.IsSucceed)
+            {
+                FileRepository.Instance.DeleteFolder(TemplateFolder);
+            }
             return result;
         }
 

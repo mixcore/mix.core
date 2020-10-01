@@ -8,8 +8,8 @@ using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Migrations
 {
-    [DbContext(typeof(MixCmsContext))]
-    partial class MixCmsContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(MsSqlMixCmsContext))]
+    partial class MsSqlMixCmsContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -43,21 +43,21 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("DefaultValue")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
-                    b.Property<ulong>("IsEncrypt")
+                    b.Property<bool>("IsEncrypt")
                         .HasColumnType("bit");
 
-                    b.Property<ulong>("IsMultiple")
+                    b.Property<bool>("IsMultiple")
                         .HasColumnType("bit");
 
-                    b.Property<ulong>("IsRequire")
+                    b.Property<bool>("IsRequire")
                         .HasColumnType("bit");
 
-                    b.Property<ulong>("IsSelect")
+                    b.Property<bool>("IsSelect")
                         .HasColumnType("bit");
 
-                    b.Property<ulong>("IsUnique")
+                    b.Property<bool>("IsUnique")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModified")
@@ -74,7 +74,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(250);
 
                     b.Property<string>("Options")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -122,7 +122,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<ulong?>("EdmAutoSend")
+                    b.Property<bool?>("EdmAutoSend")
                         .HasColumnType("bit");
 
                     b.Property<string>("EdmFrom")
@@ -168,7 +168,8 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<int>("Type")
+                    b.Property<string>("Type")
+                        .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasMaxLength(50)
                         .IsUnicode(false);
@@ -299,7 +300,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<ulong?>("BooleanValue")
+                    b.Property<bool?>("BooleanValue")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
@@ -321,7 +322,7 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<DateTime?>("DateTimeValue")
                         .HasColumnType("datetime");
 
-                    b.Property<float?>("DoubleValue")
+                    b.Property<double?>("DoubleValue")
                         .HasColumnType("float");
 
                     b.Property<string>("EncryptKey")
@@ -370,8 +371,6 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DataId");
-
                     b.ToTable("mix_attribute_set_value");
                 });
 
@@ -415,9 +414,6 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(4000);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ExpiredDateTime")
-                        .HasName("Index_ExpiresAtTime");
 
                     b.ToTable("mix_cache");
                 });
@@ -511,8 +507,11 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("DataType")
-                        .HasColumnType("int");
+                    b.Property<string>("DataType")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(250)")
@@ -612,7 +611,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasIndex("Specificulture")
                         .IsUnique()
-                        .HasName("IX_Mix_Culture");
+                        .HasName("AK_mix_culture_Specificulture");
 
                     b.ToTable("mix_culture");
                 });
@@ -710,8 +709,11 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("DataType")
-                        .HasColumnType("int");
+                    b.Property<string>("DataType")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
 
                     b.Property<string>("DefaultValue")
                         .HasColumnType("nvarchar(250)")
@@ -986,8 +988,6 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasIndex("PostId", "Specificulture");
 
-                    b.HasIndex("ModuleId", "PageId", "Specificulture");
-
                     b.ToTable("mix_module_data");
                 });
 
@@ -1058,7 +1058,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(10);
 
                     b.Property<string>("Content")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
@@ -1073,10 +1073,10 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(250);
 
                     b.Property<string>("Excerpt")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("ExtraFields")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("Icon")
                         .HasColumnType("nvarchar(50)")
@@ -1108,10 +1108,10 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("SeoDescription")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("SeoKeywords")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("SeoName")
                         .HasColumnType("varchar(500)")
@@ -1134,14 +1134,14 @@ namespace Mix.Cms.Lib.Migrations
                         .IsUnicode(false);
 
                     b.Property<string>("Tags")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("Template")
                         .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Title")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("Type")
                         .HasColumnType("varchar(50)")
@@ -1379,6 +1379,8 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PageId");
+
                     b.HasIndex("ParentId");
 
                     b.ToTable("mix_portal_page_navigation");
@@ -1435,7 +1437,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(10);
 
                     b.Property<string>("Content")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
@@ -1446,16 +1448,16 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("Excerpt")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("ExtraFields")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("ExtraProperties")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(250)")
@@ -1476,10 +1478,10 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("SeoDescription")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("SeoKeywords")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("SeoName")
                         .HasColumnType("varchar(500)")
@@ -1487,7 +1489,7 @@ namespace Mix.Cms.Lib.Migrations
                         .IsUnicode(false);
 
                     b.Property<string>("SeoTitle")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("Source")
                         .HasColumnType("nvarchar(250)")
@@ -1500,7 +1502,7 @@ namespace Mix.Cms.Lib.Migrations
                         .IsUnicode(false);
 
                     b.Property<string>("Tags")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("Template")
                         .HasColumnType("nvarchar(250)")
@@ -1511,7 +1513,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasMaxLength(250);
 
                     b.Property<string>("Title")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("Type")
                         .HasColumnType("varchar(50)")
@@ -1725,6 +1727,9 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
+                    b.Property<int>("AttributeSetId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
                         .HasMaxLength(50)
@@ -1759,9 +1764,6 @@ namespace Mix.Cms.Lib.Migrations
                         .IsUnicode(false);
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AttributeSetId")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
@@ -1908,7 +1910,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
@@ -1942,7 +1944,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("MobileContent")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
@@ -1953,10 +1955,10 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Scripts")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("SpaContent")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1965,7 +1967,7 @@ namespace Mix.Cms.Lib.Migrations
                         .IsUnicode(false);
 
                     b.Property<string>("Styles")
-                        .HasColumnType("text");
+                        .HasColumnType("ntext");
 
                     b.Property<int>("ThemeId")
                         .HasColumnType("int");
@@ -1977,8 +1979,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ThemeId")
-                        .HasName("IX_mix_template_file_TemplateId");
+                    b.HasIndex("ThemeId");
 
                     b.ToTable("mix_template");
                 });
@@ -2246,8 +2247,8 @@ namespace Mix.Cms.Lib.Migrations
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPortalPageNavigation", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPortalPage", "IdNavigation")
-                        .WithOne("MixPortalPageNavigationIdNavigation")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixPortalPage", "Page")
+                        .WithMany("MixPortalPageNavigationPage")
                         .HasForeignKey("PageId")
                         .HasConstraintName("FK_mix_portal_page_navigation_mix_portal_page")
                         .IsRequired();

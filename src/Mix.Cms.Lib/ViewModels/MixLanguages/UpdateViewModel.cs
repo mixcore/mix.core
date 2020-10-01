@@ -171,6 +171,18 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
 
         #endregion Async
 
+        public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            base.Validate(_context, _transaction);
+            if (IsValid)
+            {
+                IsValid = !Repository.CheckIsExists(m => m.Keyword == Keyword && m.Specificulture == Specificulture && m.Id != Id);
+                if (!IsValid)
+                {
+                    Errors.Add($"The keyword: {Keyword} is existed");
+                }
+            }
+        }
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Cultures = LoadCultures(Specificulture, _context, _transaction);

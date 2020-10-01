@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
@@ -6,7 +7,7 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public int Id { get; set; }
         public int ParentId { get; set; }
-        public MixEnums.MixAttributeSetDataType ParentType { get; set; }
+        public int ParentType { get; set; }
         public string Description { get; set; }
         public string Image { get; set; }
         public int AttributeSetId { get; set; }

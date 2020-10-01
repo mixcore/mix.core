@@ -16,7 +16,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         #region Properties
 
         #region Models
-
         [JsonProperty("id")]
         public int Id { get; set; }
         [JsonProperty("specificulture")]
@@ -31,7 +30,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         public string Title { get; set; }
 
         [JsonProperty("description")]
-        public string Descriotion { get; set; }
+        public string Description { get; set; }
 
         [JsonProperty("icon")]
         public string Icon { get; set; }
@@ -102,7 +101,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
 
             if (ChildNavs != null)
             {
-                ChildNavs.Where(c => c.IsActived).ToList().ForEach(c => c.Page.Level = Level + 1);
+                ChildNavs.Where(c => c.IsActived).ToList().ForEach(c => c.PortalPage.Level = Level + 1);
             }
 
             return base.ParseModel(_context, _transaction);

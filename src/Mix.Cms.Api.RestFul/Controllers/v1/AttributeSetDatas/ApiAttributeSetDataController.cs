@@ -23,7 +23,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<FormViewModel>>> Get()
         {
-            var getData = await Helper.FilterByKeywordAsync<FormViewModel>(_lang, Request);
+            var getData = await Helper.FilterByKeywordAsync<FormViewModel>(Request, _lang);
             if (getData.IsSucceed)
             {
                 return Ok(getData.Data);

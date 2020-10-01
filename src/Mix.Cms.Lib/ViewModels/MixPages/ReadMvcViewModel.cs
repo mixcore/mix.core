@@ -415,25 +415,14 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             return Modules.FirstOrDefault(m => m.Module.Name == name)?.Module;
         }
 
+        public bool HasValue(string fieldName)
+        {
+            return AttributeData != null && AttributeData.Data.Obj.GetValue(fieldName) != null;
+        }
 
         public T Property<T>(string fieldName)
         {
-            if (AttributeData != null)
-            {
-                var field = AttributeData.Data.Obj.GetValue(fieldName);
-                if (field != null)
-                {
-                    return field.Value<T>();
-                }
-                else
-                {
-                    return default(T);
-                }
-            }
-            else
-            {
-                return default(T);
-            }
+            return MixCmsHelper.Property<T>(AttributeData?.Data?.Obj, fieldName);
         }
 
         #endregion Expands

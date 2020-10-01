@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Mix.Cms.Lib.Migrations
 {
-    public partial class Init : Migration
+    public partial class Init_MsSql_Cms : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -266,9 +266,9 @@ namespace Mix.Cms.Lib.Migrations
                     Regex = table.Column<string>(maxLength: 250, nullable: true),
                     Title = table.Column<string>(maxLength: 250, nullable: true),
                     DataType = table.Column<int>(nullable: false),
-                    DefaultValue = table.Column<string>(type: "text", nullable: true),
+                    DefaultValue = table.Column<string>(type: "ntext", nullable: true),
                     Name = table.Column<string>(maxLength: 250, nullable: false),
-                    Options = table.Column<string>(type: "text", nullable: true),
+                    Options = table.Column<string>(type: "ntext", nullable: true),
                     IsRequire = table.Column<bool>(nullable: false),
                     IsEncrypt = table.Column<bool>(nullable: false),
                     IsMultiple = table.Column<bool>(nullable: false),
@@ -390,7 +390,7 @@ namespace Mix.Cms.Lib.Migrations
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
                     Keyword = table.Column<string>(maxLength: 50, nullable: false),
                     Category = table.Column<string>(maxLength: 250, nullable: true),
-                    DataType = table.Column<string>(nullable: false),
+                    DataType = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     Description = table.Column<string>(maxLength: 250, nullable: true),
                     Value = table.Column<string>(maxLength: 4000, nullable: true),
                     CreatedBy = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
@@ -419,7 +419,7 @@ namespace Mix.Cms.Lib.Migrations
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
                     Keyword = table.Column<string>(maxLength: 50, nullable: false),
                     Category = table.Column<string>(maxLength: 250, nullable: true),
-                    DataType = table.Column<string>(nullable: false),
+                    DataType = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     Description = table.Column<string>(maxLength: 250, nullable: true),
                     Value = table.Column<string>(maxLength: 4000, nullable: true),
                     DefaultValue = table.Column<string>(maxLength: 250, nullable: true),
@@ -482,25 +482,25 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     Id = table.Column<int>(nullable: false),
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
-                    Content = table.Column<string>(type: "text", nullable: true),
+                    Content = table.Column<string>(type: "ntext", nullable: true),
                     CssClass = table.Column<string>(maxLength: 250, nullable: true),
-                    Excerpt = table.Column<string>(type: "text", nullable: true),
+                    Excerpt = table.Column<string>(type: "ntext", nullable: true),
                     Icon = table.Column<string>(maxLength: 50, nullable: true),
                     Image = table.Column<string>(maxLength: 250, nullable: true),
                     Layout = table.Column<string>(maxLength: 50, nullable: true),
                     Level = table.Column<int>(nullable: true),
-                    SeoDescription = table.Column<string>(type: "text", nullable: true),
-                    SeoKeywords = table.Column<string>(type: "text", nullable: true),
+                    SeoDescription = table.Column<string>(type: "ntext", nullable: true),
+                    SeoKeywords = table.Column<string>(type: "ntext", nullable: true),
                     SeoName = table.Column<string>(unicode: false, maxLength: 500, nullable: true),
                     SeoTitle = table.Column<string>(unicode: false, maxLength: 250, nullable: true),
                     StaticUrl = table.Column<string>(maxLength: 250, nullable: true),
-                    Tags = table.Column<string>(type: "text", nullable: true),
+                    Tags = table.Column<string>(type: "ntext", nullable: true),
                     Template = table.Column<string>(maxLength: 250, nullable: true),
-                    Title = table.Column<string>(type: "text", nullable: true),
+                    Title = table.Column<string>(type: "ntext", nullable: true),
                     Type = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     Views = table.Column<int>(nullable: true),
                     PageSize = table.Column<int>(nullable: true),
-                    ExtraFields = table.Column<string>(type: "text", nullable: true),
+                    ExtraFields = table.Column<string>(type: "ntext", nullable: true),
                     CreatedBy = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     ModifiedBy = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
@@ -525,24 +525,24 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     Id = table.Column<int>(nullable: false),
                     Specificulture = table.Column<string>(maxLength: 10, nullable: false),
-                    Content = table.Column<string>(type: "text", nullable: true),
+                    Content = table.Column<string>(type: "ntext", nullable: true),
                     PublishedDateTime = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Excerpt = table.Column<string>(type: "text", nullable: true),
-                    ExtraProperties = table.Column<string>(type: "text", nullable: true),
-                    Icon = table.Column<string>(type: "text", nullable: true),
+                    Excerpt = table.Column<string>(type: "ntext", nullable: true),
+                    ExtraProperties = table.Column<string>(type: "ntext", nullable: true),
+                    Icon = table.Column<string>(type: "ntext", nullable: true),
                     Image = table.Column<string>(maxLength: 250, nullable: true),
-                    SeoDescription = table.Column<string>(type: "text", nullable: true),
-                    SeoKeywords = table.Column<string>(type: "text", nullable: true),
+                    SeoDescription = table.Column<string>(type: "ntext", nullable: true),
+                    SeoKeywords = table.Column<string>(type: "ntext", nullable: true),
                     SeoName = table.Column<string>(unicode: false, maxLength: 500, nullable: true),
-                    SeoTitle = table.Column<string>(type: "text", nullable: true),
+                    SeoTitle = table.Column<string>(type: "ntext", nullable: true),
                     Source = table.Column<string>(maxLength: 250, nullable: true),
-                    Tags = table.Column<string>(type: "text", nullable: true),
+                    Tags = table.Column<string>(type: "ntext", nullable: true),
                     Template = table.Column<string>(maxLength: 250, nullable: true),
                     Thumbnail = table.Column<string>(maxLength: 250, nullable: true),
-                    Title = table.Column<string>(type: "text", nullable: true),
+                    Title = table.Column<string>(type: "ntext", nullable: true),
                     Type = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     Views = table.Column<int>(nullable: true),
-                    ExtraFields = table.Column<string>(type: "text", nullable: true),
+                    ExtraFields = table.Column<string>(type: "ntext", nullable: true),
                     CreatedBy = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     ModifiedBy = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
@@ -682,15 +682,15 @@ namespace Mix.Cms.Lib.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false),
-                    Content = table.Column<string>(type: "text", nullable: false),
+                    Content = table.Column<string>(type: "ntext", nullable: false),
                     Extension = table.Column<string>(maxLength: 50, nullable: false),
                     FileFolder = table.Column<string>(maxLength: 250, nullable: false),
                     FileName = table.Column<string>(maxLength: 250, nullable: false),
                     FolderType = table.Column<string>(maxLength: 50, nullable: false),
-                    MobileContent = table.Column<string>(type: "text", nullable: true),
-                    Scripts = table.Column<string>(type: "text", nullable: true),
-                    SpaContent = table.Column<string>(type: "text", nullable: true),
-                    Styles = table.Column<string>(type: "text", nullable: true),
+                    MobileContent = table.Column<string>(type: "ntext", nullable: true),
+                    Scripts = table.Column<string>(type: "ntext", nullable: true),
+                    SpaContent = table.Column<string>(type: "ntext", nullable: true),
+                    Styles = table.Column<string>(type: "ntext", nullable: true),
                     ThemeId = table.Column<int>(nullable: false),
                     ThemeName = table.Column<string>(maxLength: 250, nullable: false),
                     CreatedBy = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
@@ -980,22 +980,12 @@ namespace Mix.Cms.Lib.Migrations
                 column: "AttributeSetId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_set_value_DataId",
-                table: "mix_attribute_set_value",
-                column: "DataId");
-
-            migrationBuilder.CreateIndex(
-                name: "Index_ExpiresAtTime",
-                table: "mix_cache",
-                column: "ExpiredDateTime");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_mix_configuration_Specificulture",
                 table: "mix_configuration",
                 column: "Specificulture");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Mix_Culture",
+                name: "AK_mix_culture_Specificulture",
                 table: "mix_culture",
                 column: "Specificulture",
                 unique: true);
@@ -1031,11 +1021,6 @@ namespace Mix.Cms.Lib.Migrations
                 columns: new[] { "PostId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_module_data_ModuleId_PageId_Specificulture",
-                table: "mix_module_data",
-                columns: new[] { "ModuleId", "PageId", "Specificulture" });
-
-            migrationBuilder.CreateIndex(
                 name: "IX_mix_module_post_ModuleId_Specificulture",
                 table: "mix_module_post",
                 columns: new[] { "ModuleId", "Specificulture" });
@@ -1069,6 +1054,11 @@ namespace Mix.Cms.Lib.Migrations
                 name: "IX_mix_page_post_PostId_Specificulture",
                 table: "mix_page_post",
                 columns: new[] { "PostId", "Specificulture" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mix_portal_page_navigation_PageId",
+                table: "mix_portal_page_navigation",
+                column: "PageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_mix_portal_page_navigation_ParentId",
@@ -1116,7 +1106,7 @@ namespace Mix.Cms.Lib.Migrations
                 columns: new[] { "SourceId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_template_file_TemplateId",
+                name: "IX_mix_template_ThemeId",
                 table: "mix_template",
                 column: "ThemeId");
 
