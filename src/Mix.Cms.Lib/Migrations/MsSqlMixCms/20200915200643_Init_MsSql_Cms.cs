@@ -985,7 +985,7 @@ namespace Mix.Cms.Lib.Migrations
                 column: "Specificulture");
 
             migrationBuilder.CreateIndex(
-                name: "AK_mix_culture_Specificulture",
+                name: "IK_mix_culture_Specificulture",
                 table: "mix_culture",
                 column: "Specificulture",
                 unique: true);
