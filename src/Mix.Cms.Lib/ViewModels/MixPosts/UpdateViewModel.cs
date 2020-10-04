@@ -424,6 +424,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         private async Task<RepositoryResponse<bool>> SaveAttributeAsync(int parentId, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
+
+            // Force create new sub models if parent is create new
+            if (AttributeData.ParentId != parentId.ToString())
+            {
+                AttributeData.Id = null;
+                AttributeData.Data.Id = null;
+            }
             AttributeData.ParentId = parentId.ToString();
             AttributeData.ParentType = MixEnums.MixAttributeSetDataType.Post;
             var saveData = await AttributeData.Data.SaveModelAsync(true, context, transaction);
@@ -437,6 +444,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
             foreach (var item in SysCategories)
             {
+                // Force create new sub models if parent is create new
+                if (item.ParentId != parentId.ToString())
+                {
+                    item.Id = null;
+                }
                 if (result.IsSucceed)
                 {
                     item.ParentId = parentId.ToString();
@@ -449,6 +461,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
             foreach (var item in SysTags)
             {
+                // Force create new sub models if parent is create new
+                if (item.ParentId != parentId.ToString())
+                {
+                    item.Id = null;
+                }
                 if (result.IsSucceed)
                 {
                     item.ParentId = parentId.ToString();
@@ -461,13 +478,18 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> SaveParentModulesAsync(int id, MixCmsContext _context, IDbContextTransaction _transaction)
+        private async Task<RepositoryResponse<bool>> SaveParentModulesAsync(int newPostId, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             foreach (var item in Modules)
             {
+                // Force create new sub models if parent is create new
+                if (item.PostId != newPostId)
+                {
+                    item.Id = 0;
+                }
                 item.Specificulture = Specificulture;
-                item.PostId = id;
+                item.PostId = newPostId;
                 item.Status = MixEnums.MixContentStatus.Published;
                 if (item.IsActived)
                 {
@@ -496,13 +518,18 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> SaveParentPagesAsync(int id, MixCmsContext _context, IDbContextTransaction _transaction)
+        private async Task<RepositoryResponse<bool>> SaveParentPagesAsync(int newPostId, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             foreach (var item in Pages)
             {
+                // Force create new sub models if parent is create new
+                if (item.PostId != newPostId)
+                {
+                    item.Id = 0;
+                }
                 item.Specificulture = Specificulture;
-                item.PostId = id;
+                item.PostId = newPostId;
                 item.Status = MixEnums.MixContentStatus.Published;
                 if (item.IsActived)
                 {
@@ -531,12 +558,17 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> SaveRelatedPostAsync(int id, MixCmsContext _context, IDbContextTransaction _transaction)
+        private async Task<RepositoryResponse<bool>> SaveRelatedPostAsync(int newPostId, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             foreach (var item in PostNavs)
             {
-                item.SourceId = id;
+                // Force create new sub models if parent is create new
+                if (item.SourceId != newPostId)
+                {
+                    item.Id = 0;
+                }
+                item.SourceId = newPostId;
                 item.Status = MixEnums.MixContentStatus.Published;
                 item.Specificulture = Specificulture;
                 if (item.IsActived)
@@ -588,12 +620,17 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         //    return result;
         //}
 
-        private async Task<RepositoryResponse<bool>> SaveMediasAsync(int id, MixCmsContext _context, IDbContextTransaction _transaction)
+        private async Task<RepositoryResponse<bool>> SaveMediasAsync(int newPostid, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             foreach (var navMedia in MediaNavs)
             {
-                navMedia.PostId = id;
+                // Force create new sub models if parent is create new
+                if (navMedia.PostId != newPostid)
+                {
+                    navMedia.Id = 0;
+                }
+                navMedia.PostId = newPostid;
                 navMedia.Specificulture = Specificulture;
 
                 if (navMedia.IsActived)
@@ -618,6 +655,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             foreach (var item in UrlAliases)
             {
+                // Force create new sub models if parent is create new
+                if (item.SourceId != parentId.ToString())
+                {
+                    item.Id = 0;
+                }
                 item.SourceId = parentId.ToString();
                 item.Type = MixEnums.UrlAliasType.Post;
                 item.Specificulture = Specificulture;

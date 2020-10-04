@@ -189,6 +189,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 var addictionalSet = _context.MixAttributeSet.FirstOrDefault(m => m.Name == "sys_additional_field");
                 foreach (var item in Values)
                 {
+                    if (item.DataId != parent.Id)
+                    {
+                        item.Id = null;
+                    }
                     if (result.IsSucceed)
                     {
                         if (addictionalSet != null && item.Field != null && item.Field.Id == 0)

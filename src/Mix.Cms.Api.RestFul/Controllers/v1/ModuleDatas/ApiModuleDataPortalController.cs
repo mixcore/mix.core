@@ -59,7 +59,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         }
 
         [HttpGet("export")]
-        public async Task<ActionResult<PaginationModel<string>>> Export()
+        public async Task<ActionResult<Lib.ViewModels.FileViewModel>> Export()
         {
             bool isModuleId = int.TryParse(Request.Query["module_id"], out int moduleId);
             bool isPostId = int.TryParse(Request.Query["post_id"], out int postId);

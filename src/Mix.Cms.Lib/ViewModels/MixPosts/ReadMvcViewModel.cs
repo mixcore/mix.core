@@ -282,8 +282,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
                 a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId == getAttrs.Data.Id
-                    , _context, _transaction).Data;
-                AttributeData.Data.LoadReferenceData(
+                    , _context, _transaction).Data ?? new MixRelatedAttributeDatas.ReadMvcViewModel();
+                AttributeData.Data?.LoadReferenceData(
                         Id.ToString(), MixEnums.MixAttributeSetDataType.Post, _context, _transaction);
 
             }

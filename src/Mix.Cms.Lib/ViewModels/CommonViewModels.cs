@@ -157,7 +157,7 @@ namespace Mix.Cms.Lib.ViewModels
         {
             get
             {
-                _webPath = FullPath.Replace("wwwroot", string.Empty);
+                _webPath = FullPath.Replace("wwwroot", "/");
                 return _webPath;
             }
             set

@@ -77,12 +77,16 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         {
             if (Data == null)
             {
-                var getData = MixAttributeSetDatas.ReadMvcViewModel.Repository.GetSingleModel(p => p.Id == DataId && p.Specificulture == Specificulture
+                var getData = MixAttributeSetDatas.ReadMvcViewModel.Repository.GetFirstModel(p => p.Id == DataId && p.Specificulture == Specificulture
                     , _context: _context, _transaction: _transaction
                 );
                 if (getData.IsSucceed)
                 {
                     Data = getData.Data;
+                }
+                else
+                {
+                    Data = new MixAttributeSetDatas.ReadMvcViewModel();
                 }
             }
         }
