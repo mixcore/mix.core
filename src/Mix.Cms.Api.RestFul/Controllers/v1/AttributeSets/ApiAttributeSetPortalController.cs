@@ -20,12 +20,12 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/attribute-set/portal")]
     public class ApiAttributeSetPortalController :
-        BaseRestApiController<MixCmsContext, MixAttributeSet, UpdateViewModel>
+        BaseRestApiController<MixCmsContext, MixAttributeSet, UpdateViewModel, ReadViewModel, UpdateViewModel>
     {
 
         // GET: api/v1/rest/en-us/attribute-set/portal
         [HttpGet]
-        public override async Task<ActionResult<PaginationModel<UpdateViewModel>>> Get()
+        public override async Task<ActionResult<PaginationModel<ReadViewModel>>> Get()
         {
             bool isStatus = Enum.TryParse(Request.Query["status"], out MixEnums.MixContentStatus status);
             bool isType = Enum.TryParse(Request.Query["type"], out MixEnums.MixAttributeSetDataType type);
@@ -41,7 +41,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                  || model.Name.Contains(keyword)
                  || model.Title.Contains(keyword)
                  );
-            var getData = await base.GetListAsync(predicate);
+            var getData = await base.GetListAsync<ReadViewModel>(predicate);
             if (getData.IsSucceed)
             {
                 return Ok(getData.Data);

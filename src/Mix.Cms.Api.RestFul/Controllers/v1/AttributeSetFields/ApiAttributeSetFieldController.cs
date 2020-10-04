@@ -17,7 +17,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/attribute-field/portal")]
     public class ApiAttributeFieldController :
-        BaseRestApiController<MixCmsContext, MixAttributeField, ReadViewModel>
+        BaseRestApiController<MixCmsContext, MixAttributeField, UpdateViewModel, ReadViewModel, UpdateViewModel>
     {
 
         // GET: api/v1/rest/en-us/attribute-field/client
@@ -37,7 +37,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                  || model.Name.Contains(keyword)
                  || model.DefaultValue.Contains(keyword)
                  );
-            var getData = await base.GetListAsync(predicate);
+            var getData = await base.GetListAsync<ReadViewModel>(predicate);
             if (getData.IsSucceed)
             {
                 return Ok(getData.Data);
