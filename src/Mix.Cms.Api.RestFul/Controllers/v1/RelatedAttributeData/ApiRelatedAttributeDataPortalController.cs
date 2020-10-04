@@ -32,7 +32,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             string parentId = Request.Query["parentId"];
             string attributeSetName = Request.Query["attributeSetName"];
             Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
-                (!isStatus || model.Status == status.ToString())
+                model.Specificulture == _lang
+                && (!isStatus || model.Status == status.ToString())
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
                 && ((isAttributeId && model.AttributeSetId == attributeSetId) || model.AttributeSetName == attributeSetName)

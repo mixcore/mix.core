@@ -538,16 +538,23 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
             }
         }
-        public static RepositoryResponse<string> ExportAttributeToExcel(List<JObject> lstData, string sheetName
+        public static RepositoryResponse<FileViewModel> ExportAttributeToExcel(List<JObject> lstData, string sheetName
           , string folderPath, string fileName
           , List<string> headers = null)
         {
-            var result = new RepositoryResponse<string>();
+            var result = new RepositoryResponse<FileViewModel>() {
+                Data = new FileViewModel()
+                {
+                    FileFolder = folderPath,
+                    Filename = fileName + "-" + DateTime.Now.ToString("yyyyMMdd"),
+                    Extension = ".xlsx"
+                }
+            };
             try
             {
                 if (lstData.Count > 0)
                 {
-                    var filenameE = fileName + "-" + DateTime.Now.ToString("yyyyMMdd") + ".xlsx";
+                    var filenameE = $"{ result.Data.Filename}{result.Data.Extension}";
 
                     // create new data table
                     var dtable = new DataTable();
@@ -596,7 +603,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
                         CommonHelper.SaveFileBytes(folderPath, filenameE, pck.GetAsByteArray());
                         result.IsSucceed = true;
-                        result.Data = $"{MixService.GetConfig<string>("Domain")}/{folderPath}/{filenameE}";
 
                         return result;
                     }

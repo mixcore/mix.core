@@ -42,7 +42,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                  || (EF.Functions.Like(model.Excerpt, $"%{keyword}%"))
                  || (EF.Functions.Like(model.Content, $"%{keyword}%"))
                  );
-            var getData = await base.GetListAsync(predicate);
+            var getData = await base.GetListAsync<ReadListItemViewModel>(predicate);
             if (getData.IsSucceed)
             {
                 return getData.Data;
