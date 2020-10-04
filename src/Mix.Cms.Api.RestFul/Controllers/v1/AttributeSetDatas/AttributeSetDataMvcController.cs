@@ -13,7 +13,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
     [Route("api/v1/rest/{culture}/attribute-set-data/mvc")]
     public class AttributeSetDataMvcController :
-        BaseRestApiController<MixCmsContext, MixAttributeSetData, ReadMvcViewModel>
+        BaseRestApiController<MixCmsContext, MixAttributeSetData, UpdateViewModel, ReadMvcViewModel>
     {
         // GET: api/v1/rest/{culture}/attribute-set-data
         [HttpGet]

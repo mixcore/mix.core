@@ -18,7 +18,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/related-attribute-data/portal")]
     public class ApiRelatedAttributeDataPortalController :
-        BaseRestApiController<MixCmsContext, MixRelatedAttributeData, FormViewModel>
+        BaseRestApiController<MixCmsContext, MixRelatedAttributeData, FormViewModel, FormViewModel, FormViewModel>
     {
         // GET: api/v1/rest/{culture}/related-attribute-data
         [HttpGet]
@@ -42,7 +42,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                  );
 
 
-            var getData = await base.GetListAsync(predicate);
+            var getData = await base.GetListAsync<FormViewModel> (predicate);
             if (getData.IsSucceed)
             {
                 return Ok(getData.Data);

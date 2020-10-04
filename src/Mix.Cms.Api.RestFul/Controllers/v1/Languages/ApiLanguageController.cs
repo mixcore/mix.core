@@ -17,12 +17,12 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/language")]
     public class ApiLanguageController :
-        BaseRestApiController<MixCmsContext, MixLanguage, UpdateViewModel>
+        BaseRestApiController<MixCmsContext, MixLanguage, UpdateViewModel, ReadMvcViewModel, UpdateViewModel>
     {
 
         // GET: api/s
         [HttpGet]
-        public override async Task<ActionResult<PaginationModel<UpdateViewModel>>> Get()
+        public override async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> Get()
         {
             bool isStatus = Enum.TryParse(Request.Query["status"], out MixEnums.MixContentStatus status);
             bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
@@ -38,7 +38,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                  || model.Value.Contains(keyword)
                  || model.DefaultValue.Contains(keyword)
                  );
-            var getData = await base.GetListAsync(predicate);
+            var getData = await base.GetListAsync<ReadMvcViewModel>(predicate);
             if (getData.IsSucceed)
             {
                 return getData.Data;

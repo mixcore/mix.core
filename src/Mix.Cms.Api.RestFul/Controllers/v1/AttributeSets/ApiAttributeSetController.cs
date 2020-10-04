@@ -17,7 +17,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/attribute-set/client")]
     public class ApiAttributeSetController :
-        BaseRestApiController<MixCmsContext, MixAttributeSet, ReadViewModel>
+        BaseRestApiController<MixCmsContext, MixAttributeSet, UpdateViewModel, ReadViewModel, UpdateViewModel>
     {
 
         // GET: api/v1/rest/en-us/attribute-set/client
@@ -36,7 +36,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                  || model.Name.Contains(keyword)
                  || model.Title.Contains(keyword)
                  );
-            var getData = await base.GetListAsync(predicate);
+            var getData = await base.GetListAsync<UpdateViewModel>(predicate);
             if (getData.IsSucceed)
             {
                 return Ok(getData.Data);
