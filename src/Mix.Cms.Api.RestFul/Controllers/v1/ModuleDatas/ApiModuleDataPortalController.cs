@@ -22,7 +22,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/module-data/portal")]
     public class ApiModuleDataDataController :
-        BaseRestApiController<MixCmsContext, MixModuleData, UpdateViewModel>
+        BaseRestApiController<MixCmsContext, MixModuleData, UpdateViewModel, UpdateViewModel, UpdateViewModel>
     {
 
         // GET: api/s
@@ -47,7 +47,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 && (string.IsNullOrEmpty(keyword)
                  || (EF.Functions.Like(model.Value, $"%{keyword}%"))
                  );
-            var getData = await base.GetListAsync(predicate);
+            var getData = await base.GetListAsync<UpdateViewModel>(predicate);
             if (getData.IsSucceed)
             {
                 return getData.Data;
@@ -59,7 +59,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         }
 
         [HttpGet("export")]
-        public async Task<ActionResult<PaginationModel<string>>> Export()
+        public async Task<ActionResult<Lib.ViewModels.FileViewModel>> Export()
         {
             bool isModuleId = int.TryParse(Request.Query["module_id"], out int moduleId);
             bool isPostId = int.TryParse(Request.Query["post_id"], out int postId);
@@ -79,7 +79,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 && (string.IsNullOrEmpty(keyword)
                  || (EF.Functions.Like(model.Value, $"%{keyword}%"))
                  );
-            var getData = await base.GetListAsync(predicate);
+            var getData = await base.GetListAsync<UpdateViewModel>(predicate);
             var exportData = new List<JObject>();
             foreach (var item in getData.Data.Items)
             {

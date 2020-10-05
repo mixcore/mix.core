@@ -6,48 +6,55 @@
     var masterTemplate = await MixCmsHelper.GetTemplateByPath(master, layout);
     Layout = $"{templateFolder}/{layout}";
 }
-<div>
-    <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
+@if (Model != null)
+{
+    <div>
+        <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
 
-    <input type="hidden" id="view-type" value="Post" />
-    <input type="hidden" id="view-id" value="@Model.Id" />
-    @if (!string.IsNullOrEmpty(Model.TemplatePath))
-    {
-        try
+        <input type="hidden" id="view-type" value="Post" />
+        <input type="hidden" id="view-id" value="@Model.Id" />
+        @if (!string.IsNullOrEmpty(Model.TemplatePath))
         {
-            <partial name="@Model.TemplatePath" model="@Model" />
-        }
-        catch (System.InvalidOperationException invalidOperationException)
-        {
-            <p class="danger text-center has-error">Unable load template with Exception detail below:</p>
-            <code>
-                @invalidOperationException
-            </code>
+            try
+            {
+                <partial name="@Model.TemplatePath" model="@Model" />
+            }
+            catch (System.InvalidOperationException invalidOperationException)
+            {
+                <p class="danger text-center has-error">Unable load template with Exception detail below:</p>
+                <code>
+                    @invalidOperationException
+                </code>
 
+            }
+            catch (Exception ex)
+            {
+                <code>
+                    @ex
+                </code>
+                <p class="danger text-center has-error">Unable load template</p>
+            }
         }
-        catch (Exception ex)
+        else
         {
-            <code>
-                @ex
-            </code>
-            <p class="danger text-center has-error">Unable load template</p>
+            <section class="container">
+                <h1>@(MixService.Translate<string>("Please choose template", ViewBag.culture))</h1>
+            </section>
         }
-    }
-    else
-    {
-        <section class="container">
-            <h1>@(MixService.Translate<string>("Please choose template", ViewBag.culture))</h1>
-        </section>
-    }
-</div>
-@{    
+    </div>
+}
+else
+{
+    <h1>NotFound</h1>
+}
+@{
     string url = ViewData["OgUrl"] != null ? (string)ViewData["OgUrl"] : Model.DetailsUrl;
     string title = ViewData["OgTitle"] != null ? (string)ViewData["OgTitle"] : Model.SeoTitle;
     ViewData["Title"] = ViewData["Title"] != null ? (string)ViewData["Title"] : Model.SeoTitle;
     string desc = ViewData["OgDescription"] != null ? (string)ViewData["OgDescription"] : Model.SeoDescription;
     string image = ViewData["OgImage"] != null ? (string)ViewData["OgImage"] : Model.ThumbnailUrl;
 
-    var domain = url.IndexOf("http") == -1 ? $"{Context.Request.Scheme}://{Context.Request.Host}": string.Empty;
+    var domain = url.IndexOf("http") == -1 ? $"{Context.Request.Scheme}://{Context.Request.Host}" : string.Empty;
 }
 @section Seo{
     <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @Model.SeoTitle</title>
@@ -63,6 +70,7 @@
     <meta name="description" content="@desc" />
     <meta name="keywords" content="@desc" />
 }
+
 @section Styles{
     @Html.Raw(masterTemplate?.Styles)
     @Html.Raw(Model.View?.Styles)
