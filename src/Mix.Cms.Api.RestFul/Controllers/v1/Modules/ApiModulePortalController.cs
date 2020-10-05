@@ -18,7 +18,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/module/portal")]
     public class ApiModuleController :
-        BaseRestApiController<MixCmsContext, MixModule, UpdateViewModel, ReadListItemViewModel>
+        BaseRestApiController<MixCmsContext, MixModule, UpdateViewModel, ReadListItemViewModel, UpdateViewModel>
     {
 
         // GET: api/s
@@ -39,7 +39,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                  || (EF.Functions.Like(model.Description, $"%{keyword}%"))
                  || (EF.Functions.Like(model.Name, $"%{keyword}%"))
                  );
-            var getData = await base.GetListAsync(predicate);
+            var getData = await base.GetListAsync<ReadListItemViewModel>(predicate);
             if (getData.IsSucceed)
             {
                 return getData.Data;
