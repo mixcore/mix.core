@@ -25,6 +25,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string EdmTemplate { get; set; }
         public string Title { get; set; }
         public int Type { get; set; }
+        public string PostType { get; set; }
         public int? PageSize { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedDateTime { get; set; }

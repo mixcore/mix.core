@@ -896,6 +896,9 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<int?>("PageSize")
                         .HasColumnType("int");
 
+                    b.Property<string>("PostType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
@@ -1103,6 +1106,9 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<int?>("PageSize")
                         .HasColumnType("int");
+
+                    b.Property<string>("PostType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");

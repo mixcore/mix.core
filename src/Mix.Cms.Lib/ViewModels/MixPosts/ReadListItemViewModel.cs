@@ -163,22 +163,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (AttributeData == null)
-            {
-                LoadAttributes(_context, _transaction);
-            }
-            if (SysTags == null)
-            {
-                LoadTags(_context, _transaction);
-            }
-            if (SysCategories == null)
-            {
-                LoadCategories(_context, _transaction);
-            }
-            if (Pages == null)
-            {
-                LoadPages(_context, _transaction);
-            }
+            LoadAttributes(_context, _transaction);
+            LoadPages(_context, _transaction);
+            LoadTags(_context, _transaction);
+            LoadCategories(_context, _transaction);
         }
 
         private void LoadPages(MixCmsContext context, IDbContextTransaction transaction)
