@@ -268,7 +268,7 @@ namespace Mix.Cms.Lib
             string name, string culture, IUrlHelper Url)
         {
             var navs = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.NavigationViewModel>(culture, MixConstants.AttributeSetName.NAVIGATION, "equal", "name", name);
-            var nav = navs.Data.FirstOrDefault()?.Nav;
+            var nav = navs.Data?.FirstOrDefault()?.Nav;
             string activePath = Url.ActionContext.HttpContext.Request.Path;
             //string controller = Url.ActionContext.ActionDescriptor.RouteValues["controller"];
             //switch (controller)
