@@ -610,10 +610,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         private void ParseData(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getValues = MixAttributeSetValues.UpdateViewModel
-                       .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
-            if (getValues.IsSucceed)
+            if (Obj == null)
             {
+                var getValues = MixAttributeSetValues.UpdateViewModel
+                       .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
                 Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
                 Values = getValues.Data.OrderBy(a => a.Priority).ToList();
                 foreach (var field in Fields.OrderBy(f => f.Priority))
