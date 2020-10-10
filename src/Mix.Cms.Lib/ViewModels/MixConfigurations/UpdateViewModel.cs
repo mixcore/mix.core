@@ -109,6 +109,17 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
             Property = new DataValueViewModel() { DataType = DataType, Value = Value, Name = Keyword };
         }
 
+        public override async Task<RepositoryResponse<UpdateViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = await base.SaveModelAsync(isSaveSubModels, _context, _transaction);
+            if (result.IsSucceed)
+            {
+                MixService.SetConfig("LastUpdateConfiguration", DateTime.UtcNow);
+                MixService.LoadFromDatabase();
+                MixService.SaveSettings();
+            }
+            return result;
+        }
         #endregion Overrides
 
         #region Expand
