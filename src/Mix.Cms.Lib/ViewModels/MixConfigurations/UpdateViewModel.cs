@@ -112,7 +112,7 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
         public override async Task<RepositoryResponse<UpdateViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = await base.SaveModelAsync(isSaveSubModels, _context, _transaction);
-            if (result.IsSucceed)
+            if (result.IsSucceed && _context == null)
             {
                 MixService.SetConfig("LastUpdateConfiguration", DateTime.UtcNow);
                 MixService.LoadFromDatabase();
