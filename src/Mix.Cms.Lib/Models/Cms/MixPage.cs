@@ -30,6 +30,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Template { get; set; }
         public string Title { get; set; }
         public string Type { get; set; }
+        public string PostType { get; set; }
         public int? Views { get; set; }
         public int? PageSize { get; set; }
         public string ExtraFields { get; set; }

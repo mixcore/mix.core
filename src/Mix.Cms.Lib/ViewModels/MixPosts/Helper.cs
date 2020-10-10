@@ -56,7 +56,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 // Get Tag
                 var getVal = await MixAttributeSetValues.ReadViewModel.Repository.GetSingleModelAsync(
                     m => m.Specificulture == culture && m.Status == MixEnums.MixContentStatus.Published.ToString()
-                        && m.AttributeSetName == metaName && m.StringValue == metaValue
+                        && m.AttributeSetName == metaName
+                        && m.AttributeFieldName == "title" && m.StringValue == metaValue
                 , context, transaction);
                 if (getVal.IsSucceed)
                 {

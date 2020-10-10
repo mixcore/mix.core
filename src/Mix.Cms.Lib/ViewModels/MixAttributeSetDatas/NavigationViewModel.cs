@@ -52,16 +52,16 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public List<MixAttributeFields.ReadViewModel> Fields { get; set; }
 
         [JsonProperty("data")]
-        public JObject Data { get; set; }
+        public JObject Obj { get; set; }
 
         [JsonProperty("nav")]
         public Navigation Nav
         {
             get
             {
-                if (AttributeSetName == MixConstants.AttributeSetName.NAVIGATION && Data != null)
+                if (AttributeSetName == MixConstants.AttributeSetName.NAVIGATION && Obj != null)
                 {
-                    return Data.ToObject<Navigation>();
+                    return Obj.ToObject<Navigation>();
                 }
                 return null;
             }
@@ -87,18 +87,23 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (Data == null)
+            if (Obj == null)
             {
 
-                Data = new JObject
-            {
-                new JProperty("id", Id)
-            };
+                Obj = new JObject();
                 Values = Values ?? MixAttributeSetValues.NavigationViewModel
                     .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-                foreach (var item in Values.OrderBy(v => v.Priority))
+                Obj.Add(new JProperty("id", Id));
+                foreach (var item in Values.Where(m => m.DataType != MixEnums.MixDataType.Reference).OrderBy(v => v.Priority))
                 {
-                    Data.Add(ParseValue(item));
+                    if (!Obj.TryGetValue(item.AttributeFieldName, out JToken val))
+                    {
+                        var prop = ParseValue(item);
+                        if (prop != null)
+                        {
+                            Obj.Add(prop);
+                        }
+                    }
                 }
             }
             LoadReferenceData(Id, MixEnums.MixAttributeSetDataType.Set, _context, _transaction);
@@ -162,19 +167,19 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 var getData = MixRelatedAttributeDatas.NavigationViewModel.Repository.GetModelListBy(predicate, _context, _transaction);
 
                 JArray arr = new JArray();
-                
+
                 foreach (var nav in getData.Data.OrderBy(d => d.Priority))
                 {
-                    nav.Data.Data.Add(new JProperty("data", nav.Data.Data));
-                    arr.Add(nav.Data.Data);
+                    nav.Data.Obj.Add(new JProperty("data", nav.Data.Obj));
+                    arr.Add(nav.Data.Obj);
                 }
-                if (Data.ContainsKey(item.AttributeFieldName))
+                if (Obj.ContainsKey(item.AttributeFieldName))
                 {
-                    Data[item.AttributeFieldName] = arr;
+                    Obj[item.AttributeFieldName] = arr;
                 }
                 else
                 {
-                    Data.Add(new JProperty(item.AttributeFieldName, arr));
+                    Obj.Add(new JProperty(item.AttributeFieldName, arr));
                 }
             }
         }

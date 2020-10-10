@@ -1,6 +1,12 @@
-Scaffold-DbContext "Server=localhost;Database=mssql_mix_structure;UID=tinku;Pwd=1234qwe@;MultipleActiveResultSets=true;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models\Cms -force
-dotnet ef dbcontext scaffold "Host=my_host;Database=my_db;Username=my_user;Password=my_pw" Npgsql.EntityFrameworkCore.PostgreSQL  -OutputDir Models\Cms\PostgreSQL -force
+Scaffold-DbContext [CONNECTION_STRING] Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models\Cms -force
+ex: [CONNECTION_STRING] = "Server=localhost;Database=mixcore_structure;UID=sa;Pwd=1234qwe@;MultipleActiveResultSets=true;"
+
+dotnet ef dbcontext scaffold [CONNECTION_STRING] Npgsql.EntityFrameworkCore.PostgreSQL  -OutputDir Models\Cms\PostgreSQL -force
+ex: [CONNECTION_STRING] =  "Host=my_host;Database=mixcore_structure;Username=my_user;Password=my_pw"
+
 Scaffold-DbContext [CONNECTION_STRING] Pomelo.EntityFrameworkCore.MySql -OutputDir [OUTPUT DIRECTORY] -Context [NAME OF CONTEXT CLASS] -f
+ex: [CONNECTION_STRING] = "Server=localhost;port=3306;Database=mixcore_structure;User=root;Password=;"
+
 Add-Migration -Context MixCmsContext
 Update-Database -Context MixCmsContext
 
