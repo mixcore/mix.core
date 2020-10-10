@@ -66,7 +66,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         public async Task<ActionResult> Export()
         {
             string attributeSetName = Request.Query["attributeSetName"].ToString();
-            string exportPath = $"exports/module/{attributeSetName}";
+            string exportPath = $"content/exports/module/{attributeSetName}";
             var getData = await Helper.FilterByKeywordAsync<FormPortalViewModel>(Request, _lang);
 
             var jData = new List<JObject>();
