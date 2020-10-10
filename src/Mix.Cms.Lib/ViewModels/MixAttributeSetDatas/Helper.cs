@@ -479,7 +479,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 var dataIds = query.ToList();
                 if (query != null)
                 {
-                    Expression<Func<MixAttributeSetData, bool>> predicate = m => dataIds.Any(id => m.Id == id);
+                    Expression<Func<MixAttributeSetData, bool>> predicate = m => m.Specificulture == culture && dataIds.Any(id => m.Id == id);
                     result = await DefaultRepository<MixCmsContext, MixAttributeSetData, TView>.Instance.GetModelListByAsync(
                         predicate, context, transaction);
                 }
