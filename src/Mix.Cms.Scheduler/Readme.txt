@@ -1,5 +1,0 @@
-Ref: https://www.quartz-scheduler.net/documentation/
-Trigger objects are used to trigger the execution (or ‘firing’) of jobs. When you wish to schedule a job, you instantiate a trigger and ‘tune’ its properties to provide the scheduling you wish to have. Triggers may also have a JobDataMap associated with them - this is useful to passing parameters to a Job that are specific to the firings of the trigger. Quartz ships with a handful of different trigger types, but the most commonly used types are SimpleTrigger (interface ISimpleTrigger) and CronTrigger (interface ICronTrigger).
-
-
-For example, Jobs can be created and stored in the job scheduler independent of a trigger, and many triggers can be associated with the same job. Another benefit of this loose-coupling is the ability to configure jobs that remain in the scheduler after their associated triggers have expired, so that that it can be rescheduled later, without having to re-define it. It also allows you to modify or replace a trigger without having to re-define its associated job.
