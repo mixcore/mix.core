@@ -156,7 +156,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST api/PortalPage
         [HttpPost, HttpOptions]
         [Route("update-child-infos")]
-        public async Task<RepositoryResponse<List<Lib.ViewModels.MixPortalPagePortalPages.ReadViewModel>>> UpdateNavInfos([FromBody] List<Lib.ViewModels.MixPortalPagePortalPages.ReadViewModel> models)
+        public RepositoryResponse<List<Lib.ViewModels.MixPortalPagePortalPages.ReadViewModel>> UpdateNavInfos([FromBody] List<Lib.ViewModels.MixPortalPagePortalPages.ReadViewModel> models)
         {
             if (models != null)
             {

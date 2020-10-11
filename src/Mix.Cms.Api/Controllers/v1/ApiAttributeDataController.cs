@@ -47,7 +47,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         private async Task<ActionResult<JObject>> GetPostDataAsync(int setId, string viewType, string id)
         {
-            return new JObject();
+            return await Task.FromResult(new JObject());
             //switch (viewType)
             //{
             //    case "portal":

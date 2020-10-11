@@ -35,10 +35,7 @@ namespace Mix.Cms.Lib.Services
             RepositoryResponse<bool> result = new RepositoryResponse<bool>();
             MixCmsContext context = null;
             MixCmsAccountContext accountContext = null;
-            MixChatServiceContext messengerContext;
-            IDbContextTransaction transaction = null;
-            IDbContextTransaction accTransaction = null;
-            bool isSucceed = true;
+            MixChatServiceContext messengerContext = null;
             try
             {
                 if (!string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
@@ -49,14 +46,46 @@ namespace Mix.Cms.Lib.Services
                     await context.Database.MigrateAsync();
                     await accountContext.Database.MigrateAsync();
                     await messengerContext.Database.MigrateAsync();
+
+                    var countCulture = context.MixCulture.Count();
+                    var pendingMigration = context.Database.GetPendingMigrations().Count();
+                    if (pendingMigration == 0)
+                    {
+                        return await InitSiteData(siteName, culture);
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
+            {
+                result.IsSucceed = false;
+                result.Exception = ex;
+                return result;
+            }
+            finally
+            {
+                context?.Dispose();
+                accountContext?.Dispose();
+                messengerContext?.Dispose();
+            }
+        }
+        
+        public static async Task<RepositoryResponse<bool>> InitSiteData(string siteName, InitCulture culture)
+        {
+            RepositoryResponse<bool> result = new RepositoryResponse<bool>();
+            MixCmsContext context = null;
+            IDbContextTransaction transaction = null;
+            bool isSucceed = true;
+            try
+            {
+                if (!string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
+                {
+                    context = GetDbContext();
                     transaction = context.Database.BeginTransaction();
 
                     var countCulture = context.MixCulture.Count();
 
-                    var isInit = MixService.GetConfig<bool>("IsInit");
-
-                    if (isInit)
-                    {
+                    
                         /**
                          * Init Selected Language as default
                          */
@@ -77,7 +106,6 @@ namespace Mix.Cms.Lib.Services
                             result.IsSucceed = isSucceed;
                             result.Errors.Add("Cannot init cultures");
                         }
-                    }
                     if (result.IsSucceed)
                     {
                         transaction.Commit();
@@ -92,7 +120,6 @@ namespace Mix.Cms.Lib.Services
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
                 transaction?.Rollback();
-                accTransaction?.Rollback();
                 result.IsSucceed = false;
                 result.Exception = ex;
                 return result;
@@ -101,8 +128,6 @@ namespace Mix.Cms.Lib.Services
             {
                 context?.Database.CloseConnection();
                 context?.Dispose();
-                accountContext?.Database.CloseConnection();
-                accountContext?.Dispose();
             }
         }
 

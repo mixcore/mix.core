@@ -10,6 +10,7 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixModuleDatas;
 using Mix.Domain.Core.ViewModels;
+using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -313,7 +314,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (models != null)
             {
-                await MixCacheService.RemoveCacheAsync();
+                await CacheService.RemoveCacheAsync();
                 return await ReadViewModel.UpdateInfosAsync(models);
             }
             else

@@ -204,7 +204,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         MixService.SetConfig("InitStatus", 4);
                         MixService.SetConfig("IsInit", true);
                         MixService.SaveSettings();
-                        _ = MixCacheService.RemoveCacheAsync();
+                        _ = Services.CacheService.RemoveCacheAsync();
                         MixService.Reload();
                     }
                 }
@@ -270,7 +270,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     MixService.SetConfig("InitStatus", 3);
                     MixService.SetConfig("IsInit", false);
                     MixService.SaveSettings();
-                    _ = MixCacheService.RemoveCacheAsync();
+                    _ = Services.CacheService.RemoveCacheAsync();
                     MixService.Reload();
                 }
                 return result;
@@ -287,10 +287,9 @@ namespace Mix.Cms.Api.Controllers.v1
             MixService.SetConnectionString(MixConstants.CONST_CMS_CONNECTION, model.ConnectionString);
             MixService.SetConnectionString(MixConstants.CONST_MESSENGER_CONNECTION, model.ConnectionString);
             MixService.SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, model.ConnectionString);
-            MixService.SetConfig(MixConstants.CONST_SETTING_IS_MYSQL, model.IsMysql);
             MixService.SetConfig(MixConstants.CONST_SETTING_DATABASE_PROVIDER, model.DatabaseProvider);
             MixService.SetConfig(MixConstants.CONST_SETTING_LANGUAGE, model.Culture.Specificulture);
-
+            MixService.SaveSettings();
             var result = await InitCmsService.InitCms(model.SiteName, model.Culture);
 
             if (result.IsSucceed)

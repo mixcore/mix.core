@@ -271,6 +271,7 @@ namespace Mix.Cms.Lib.ViewModels
 
         #region Import
         Dictionary<int, int> dicModuleIds = new Dictionary<int, int>();
+        Dictionary<int, int> dicPostIds = new Dictionary<int, int>();
         Dictionary<int, int> dicPageIds = new Dictionary<int, int>();
         Dictionary<int, int> dicFieldIds = new Dictionary<int, int>();
         Dictionary<int, int> dicAttributeSetIds = new Dictionary<int, int>();
@@ -288,6 +289,10 @@ namespace Mix.Cms.Lib.ViewModels
                 if (result.IsSucceed && Modules != null)
                 {
                     result = await ImportModulesAsync(destCulture, context, transaction);
+                }
+                if (result.IsSucceed && Modules != null)
+                {
+                    result = await ImportPostsAsync(destCulture, context, transaction);
                 }
                 if (result.IsSucceed && AttributeSets != null)
                 {
@@ -325,12 +330,12 @@ namespace Mix.Cms.Lib.ViewModels
         private async Task<RepositoryResponse<bool>> ImportModulesAsync(string destCulture, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-
+            var startId = context.MixModule.Any() ? context.MixModule.Max(m => m.Id) : 0;
             foreach (var module in Modules)
             {
 
                 var oldId = module.Id;
-                var startId = context.MixModule.Max(m => m.Id);
+
                 if (result.IsSucceed)
                 {
                     if (!context.MixModule.Any(m => m.Name == module.Name && m.Specificulture == destCulture))
@@ -348,6 +353,49 @@ namespace Mix.Cms.Lib.ViewModels
                     }
                     // update new id to related attribute data
                     dicModuleIds.Add(oldId, module.Id);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return result;
+        }
+        private async Task<RepositoryResponse<bool>> ImportPostsAsync(string destCulture, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+
+            var startId = context.MixPost.Any() ? context.MixPost.Max(m => m.Id) : 0;
+            foreach (var post in Posts)
+            {
+                var oldId = post.Id;
+
+                if (result.IsSucceed)
+                {
+                    if (!context.MixPost.Any(m => m.SeoName == post.SeoName && m.Specificulture == destCulture))
+                    {
+                        startId++;
+                        post.Id = startId;
+                        post.Specificulture = destCulture;
+                        if (!string.IsNullOrEmpty(post.Template))
+                        {
+                            post.Template = post.Template.Replace($"Views/Shared/Templates/{ThemeName}", $"Views/Shared/Templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
+                        }
+                        if (!string.IsNullOrEmpty(post.Image))
+                        {
+                            post.Image = post.Image.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
+                        }
+                        if (!string.IsNullOrEmpty(post.Thumbnail))
+                        {
+                            post.Thumbnail = post.Thumbnail.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
+                        }
+                        post.CreatedDateTime = DateTime.UtcNow;
+                        var saveResult = await post.SaveModelAsync(true, context, transaction);
+                        ViewModelHelper.HandleResult(saveResult, ref result);
+                    }
+                    // update new id to related attribute data
+                    dicPostIds.Add(oldId, post.Id);
                 }
                 else
                 {

@@ -264,7 +264,7 @@ namespace Mix.Cms.Web.Controllers
             var cacheKey = $"mvc_{culture}_post_{id}";
             if (MixService.GetConfig<bool>("IsCache"))
             {
-                getPost = await MixCacheService.GetAsync<RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel>>(cacheKey);
+                getPost = await Services.CacheService.GetAsync<RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel>>(cacheKey);
             }
             if (getPost == null)
             {

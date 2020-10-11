@@ -7,17 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Remove="cache\**" />
         <Compile Remove="logs\**" />
-        <Compile Remove="Views\Shared\Templates\**" />
         <Content Remove="logs\**" />
-        <Content Remove="Views\Shared\Templates\**" />
-        <EmbeddedResource Remove="cache\**" />
         <EmbeddedResource Remove="logs\**" />
-        <EmbeddedResource Remove="Views\Shared\Templates\**" />
-        <None Remove="cache\**" />
         <None Remove="logs\**" />
-        <None Remove="Views\Shared\Templates\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -47,11 +40,7 @@
         </None>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Views\Shared\Templates\" />
-    </ItemGroup>
-
-    <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="http://json.schemastore.org/band-manifest" /></VisualStudio></ProjectExtensions>
+    <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 
 

@@ -1,14 +1,7 @@
 {
   "data": {
-    "configuration_types": [
-      "System",
-      "Site",
-      "Mobile"
-    ],
-    "language_types": [
-      "System",
-      "Site",
-      "Mobile"
-    ]
+    "configuration_cates": ["Common", "Version", "Site"],
+    "configuration_scope": ["System", "Site", "Shared"],
+    "language_cates": ["System", "Site", "Mobile"]
   }
 }
