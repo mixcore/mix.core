@@ -378,10 +378,7 @@ namespace Mix.Cms.Lib.ViewModels
                         startId++;
                         post.Id = startId;
                         post.Specificulture = destCulture;
-                        if (!string.IsNullOrEmpty(post.Template))
-                        {
-                            post.Template = post.Template.Replace($"Views/Shared/Templates/{ThemeName}", $"Views/Shared/Templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
-                        }
+                        
                         if (!string.IsNullOrEmpty(post.Image))
                         {
                             post.Image = post.Image.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
