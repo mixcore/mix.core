@@ -63,57 +63,22 @@ namespace Mix.Cms.Lib.Services
                         isSucceed = InitCultures(culture, context, transaction);
 
                         /**
-                         * Init System Pages
-                         */
-                        //if (isSucceed && context.MixPage.Count() == 0)
-                        //{
-                        //    InitPages(culture.Specificulture, context, transaction);
-                        //    isSucceed = (await context.SaveChangesAsync().ConfigureAwait(false)) > 0;
-                        //}
-                        //else
-                        //{
-                        //    result.Errors.Add("Cannot init Pages");
-                        //}
-
-                        ///**
-                        // * Init System Positions
-                        // */
-                        //if (isSucceed && context.MixPosition.Count() == 0)
-                        //{
-                        //    isSucceed = await InitPositionsAsync(context, transaction);
-                        //}
-                        //else
-                        //{
-                        //    result.Errors.Add("Cannot init Positions");
-                        //}
-
-                        /**
                          * Init System Configurations
                          */
                         if (isSucceed && context.MixConfiguration.Count() == 0)
                         {
                             var saveResult = await InitConfigurationsAsync(siteName, culture.Specificulture, context, transaction);
-                            isSucceed = saveResult.IsSucceed;
+                            result.IsSucceed = saveResult.IsSucceed;
+                            result.Errors = saveResult.Errors;
+                            result.Exception = saveResult.Exception;
                         }
                         else
                         {
-                            result.Errors.Add("Cannot init Configurations");
+                            result.IsSucceed = isSucceed;
+                            result.Errors.Add("Cannot init cultures");
                         }
-
-                        ///**
-                        //* Init System Attribute Sets
-                        //*/
-                        //if (isSucceed && context.MixAttributeField.Count() == 0)
-                        //{
-                        //    var saveResult = await InitAttributeSetsAsync(siteName, culture.Specificulture, context, transaction);
-                        //    isSucceed = saveResult.IsSucceed;
-                        //}
-                        //else
-                        //{
-                        //    result.Errors.Add("Cannot init Attribute Sets");
-                        //}
                     }
-                    if (isSucceed)
+                    if (result.IsSucceed)
                     {
                         transaction.Commit();
                     }
@@ -122,7 +87,6 @@ namespace Mix.Cms.Lib.Services
                         transaction.Rollback();
                     }
                 }
-                result.IsSucceed = isSucceed;
                 return result;
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
