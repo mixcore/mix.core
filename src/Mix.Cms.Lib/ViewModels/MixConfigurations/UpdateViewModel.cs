@@ -132,10 +132,10 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
             {
                 foreach (var item in arrConfiguration)
                 {
-                    var lang = new UpdateViewModel(item, context, transaction);
-                    lang.CreatedDateTime = DateTime.UtcNow;
-                    lang.Specificulture = destCulture;
-                    var saveResult = await lang.SaveModelAsync(false, context, transaction);
+                    var conf = new UpdateViewModel(item, context, transaction);
+                    conf.CreatedDateTime = DateTime.UtcNow;
+                    conf.Specificulture = destCulture;
+                    var saveResult = await conf.SaveModelAsync(false, context, transaction);
                     result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
                     if (!result.IsSucceed)
                     {

@@ -14,6 +14,7 @@
     <Compile Remove="Migrations\MixCmsAccount\20190804034827_init_mysql.Designer.cs" />
     <Compile Remove="Migrations\MixCms\20201007055113_add_post_type.cs" />
     <Compile Remove="Migrations\MixCms\20201007055113_add_post_type.Designer.cs" />
+    <Compile Remove="Services\MixCacheService.cs" />
     <Compile Remove="ViewModels\MixAttributeFields\HubViewModel.cs" />
     <Compile Remove="ViewModels\MixAttributeFields\MobileViewModel.cs" />
     <Compile Remove="ViewModels\MixAttributeSetDatas\HubViewModel.cs" />

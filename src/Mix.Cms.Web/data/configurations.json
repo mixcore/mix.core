@@ -1,143 +1,39 @@
 ﻿{
   "data": [
     {
-      "keyword": "Domain",
-      "category": "Site",
-      "value": "/",
-      "dataType": 7,
-      "description": "Domain",
-      "priority": 0,
-      "status": "Published"
-    },
-    {
       "keyword": "SiteName",
-      "category": "Site",
+      "scope": "Site",
+      "category": "Common",
       "value": "Mix Core",
-      "dataType": 7,
+      "dataType": "Text",
       "description": "Site Name",
       "priority": 0,
       "status": "Published"
     },
     {
       "keyword": "LanguageVersion",
-      "category": "System",
+      "scope": "System",
+      "category": "Version",
       "value": 1,
-      "dataType": 7,
+      "dataType": "Text",
       "description": "Language Version",
       "priority": 0,
       "status": "Published"
     },
     {
       "keyword": "SettingVersion",
-      "category": "System",
+      "scope": "System",
+      "category": "Version",
       "value": 1,
-      "dataType": 7,
+      "dataType": "Text",
       "description": "Settings Version",
       "priority": 0,
       "status": "Published"
     },
     {
-      "keyword": "ContactAddress",
-      "category": "Site_Common",
-      "value": "",
-      "dataType": 7,
-      "description": "Address",
-      "priority": 0,
-      "status": "Published"
-    },
-    {
-      "keyword": "ContactEmail",
-      "category": "Site_Common",
-      "value": "",
-      "dataType": 10,
-      "description": "Email",
-      "priority": 0,
-      "status": "Published"
-    },
-    {
-      "keyword": "ContactPhone",
-      "category": "Site_Common",
-      "value": "",
-      "dataType": 7,
-      "description": "Hotline",
-      "priority": 0,
-      "status": "Published"
-    },
-    {
-      "keyword": "Facebook_Token",
-      "category": "Social_Facebook",
-      "value": "",
-      "dataType": 9,
-      "description": "Facebook Access Token",
-      "priority": 0,
-      "status": "Published"
-    },
-    {
-      "keyword": "FacebookAppId",
-      "category": "Social_Facebook",
-      "value": "",
-      "dataType": 7,
-      "description": "Facebook App Id",
-      "priority": 0,
-      "status": "Published"
-    },
-    {
-      "keyword": "Facebook_Page_Id",
-      "category": "Social_Facebook",
-      "value": "",
-      "dataType": 7,
-      "description": "Facebook Page Id",
-      "priority": 0,
-      "status": "Published"
-    },
-    {
-      "keyword": "Google_Analytic_Key",
-      "category": "Social_Google",
-      "value": "",
-      "dataType": 7,
-      "description": "Google Analytic Key",
-      "priority": 0,
-      "status": "Published"
-    },
-    {
-      "keyword": "Google_Analytic_Ids",
-      "category": "Social_Google",
-      "value": "",
-      "dataType": 7,
-      "description": "Google Analytic Id",
-      "priority": 0,
-      "status": "Published"
-    },
-    {
-      "keyword": "Google_Client_Id",
-      "category": "Social_Google",
-      "value": "",
-      "dataType": 7,
-      "description": "Google Client Id",
-      "priority": 0,
-      "status": "Published"
-    },
-    {
-      "keyword": "Recaptcha_Key",
-      "category": "Social_Google",
-      "value": "",
-      "dataType": 7,
-      "description": "Recaptcha Key",
-      "priority": 0,
-      "status": "Published"
-    },
-    {
-      "keyword": "Recaptcha_Secret",
-      "category": "Social_Google",
-      "value": "",
-      "dataType": 7,
-      "description": "Recaptcha Secret",
-      "priority": 0,
-      "status": "Published"
-    },
-    {
       "keyword": "Favicon",
-      "category": "Site_Common",
+      "scope": "Site",
+      "category": "Common",
       "value": "/css/portal/img/mixcore-logo-green-16x16.png",
       "dataType": 16,
       "description": "Favicon",
@@ -146,7 +42,8 @@
     },
     {
       "keyword": "Logo",
-      "category": "Site_Common",
+      "scope": "Site",
+      "category": "Common",
       "value": "/css/portal/img/mixcore-logo-green.png",
       "dataType": 16,
       "description": "Logo",
@@ -155,7 +52,8 @@
     },
     {
       "keyword": "LogoWhite",
-      "category": "Site_Common",
+      "scope": "Site",
+      "category": "Common",
       "value": "",
       "dataType": 16,
       "description": "Logo White",
@@ -164,7 +62,8 @@
     },
     {
       "keyword": "LogoBlack",
-      "category": "Site_Common",
+      "scope": "Site",
+      "category": "Common",
       "value": "",
       "dataType": 16,
       "description": "Logo Black",
@@ -173,45 +72,50 @@
     },
     {
       "keyword": "ThemeName",
+      "scope": "System",
       "category": "Site",
       "value": "Default",
-      "dataType": 7,
+      "dataType": "Text",
       "description": "Theme Name",
       "priority": 0,
       "status": "Published"
     },
     {
       "keyword": "ThemeFolder",
-      "category": "Site_Settings",
+      "scope": "System",
+      "category": "Site",
       "value": "Default",
-      "dataType": 7,
+      "dataType": "Text",
       "description": "Theme Folder",
       "priority": 0,
       "status": "Published"
     },
     {
       "keyword": "ThemeId",
-      "category": "Site_Settings",
+      "scope": "System",
+      "category": "Site",
       "value": "1",
-      "dataType": 7,
+      "dataType": "Text",
       "description": "Theme Id",
       "priority": 0,
       "status": "Published"
     },
     {
       "keyword": "DateTimeFormat",
-      "category": "System",
+      "scope": "Shared",
+      "category": "Common",
       "value": "dd-MM-yyyy HH:mm:ss",
-      "dataType": 7,
+      "dataType": "Text",
       "description": "Date Time Format",
       "priority": 0,
       "status": "Published"
     },
     {
       "keyword": "StartWeekOn",
-      "category": "System",
+      "scope": "Shared",
+      "category": "Common",
       "value": "Monday",
-      "dataType": 7,
+      "dataType": "Text",
       "description": "Day",
       "priority": 0,
       "status": "Published"
