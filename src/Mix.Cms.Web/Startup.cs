@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,6 +16,7 @@ using Mix.Cms.Messenger.Models.Data;
 //using Mix.Cms.Service.Gprc;
 using Mix.Cms.Service.SignalR;
 using Newtonsoft.Json.Converters;
+using System.Linq;
 
 namespace Mix.Cms.Web
 {
@@ -77,6 +79,16 @@ namespace Mix.Cms.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            if (!MixService.GetConfig<bool>("IsInit"))
+            {
+                var context = MixService.GetDbContext();
+                var pendingMigration = context.Database.GetPendingMigrations();
+                if (pendingMigration.Count() > 0)
+                {
+                    context.Database.Migrate();
+                }
+            }
+
             var provider = new FileExtensionContentTypeProvider();
             // Add new mappings
             provider.Mappings[".vue"] = "application/text";

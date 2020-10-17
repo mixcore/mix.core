@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Mix.Cms.Lib;
+using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using System.IO;
 
 namespace Mix.Cms.Web
@@ -20,6 +23,7 @@ namespace Mix.Cms.Web
             {
                 File.Copy($"{MixConstants.CONST_DEFAULT_FILE_APPSETTING}", $"{MixConstants.CONST_FILE_APPSETTING}");
             }
+           
             var config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile(MixConstants.CONST_FILE_APPSETTING, optional: true, reloadOnChange: true)
