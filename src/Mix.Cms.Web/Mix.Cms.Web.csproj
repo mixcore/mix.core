@@ -40,6 +40,10 @@
         </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Views\Shared\Templates\" />
+    </ItemGroup>
+
     <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 
