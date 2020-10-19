@@ -12,8 +12,6 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure
     public class MyFieldResolver: IFieldResolver
     {
         private TableMetadata _tableMetadata;
-        private Type _type;
-        //private DefaultModelRepository<DbContext _repo;
         private DbContext _dbContext; 
         public MyFieldResolver(TableMetadata tableMetadata, DbContext dbContext)
         {
@@ -25,7 +23,6 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure
             var queryable = _dbContext.Query(_tableMetadata.AssemblyFullName);
 
             // Get filters
-            LambdaExpression lamda = null;
             var filters = context.Arguments.Where(c => c.Key != "first" && c.Key != "offset");
             string predicates = string.Empty;
             object[] args = new object[filters.Count()];
@@ -62,18 +59,6 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure
             {
                 return paramsCount >= 0 ? queryable.FirstOrDefault(predicates, args) : null;
             }
-        }
-
-        protected LambdaExpression GetLambda(string propName, bool isGetDefault = false)
-        {
-            var parameter = Expression.Parameter(_type);
-            var prop = Array.Find(_type.GetProperties(), p => p.Name == propName);
-            if (prop == null && isGetDefault)
-            {
-                propName = _type.GetProperties().FirstOrDefault()?.Name;
-            }
-            var memberExpression = Expression.Property(parameter, propName);
-            return Expression.Lambda(memberExpression, parameter);
         }
     }
 }
