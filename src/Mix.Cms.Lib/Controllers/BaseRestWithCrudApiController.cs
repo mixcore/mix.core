@@ -115,7 +115,6 @@ namespace Mix.Cms.Lib.Controllers
                 {
                     return BadRequest(saveResult.Errors);
                 }
-                return getData.Data;
             }
             else
             {

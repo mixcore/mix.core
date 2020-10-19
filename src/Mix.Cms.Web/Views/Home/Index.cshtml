@@ -1,6 +1,6 @@
 ﻿@using Mix.Cms.Lib;
 @using Mix.Cms.Lib.Services;
-@model Mix.Cms.Lib.ViewModels.MixPages.ReadMvcViewModel
+@model Mix.Cms.Lib.Interfaces.MvcViewModel
 @{
     var assetFolder = MixCmsHelper.GetAssetFolder(ViewBag.culture);
     string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, ViewBag.culture);
@@ -14,9 +14,6 @@
         MixConstants.AttributeSetName.SYSTEM_TAG, Context.Request.Query["tag"],
         ViewBag.culture as string, "CreatedDateTime", Mix.Heart.Enums.MixHeartEnums.DisplayDirection.Desc, 10, 0);
 }
-@* <mix-loader ng-show="isBusy"></mix-loader>
-    <confirm ng-if="isInit" message="confirmMessage"></confirm>
-    <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup> *@
 <input type="hidden" id="view-type" value="Alias" />
 <input type="hidden" id="view-id" value="@Model.Id" />
 
