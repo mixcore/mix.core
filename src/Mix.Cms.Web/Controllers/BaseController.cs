@@ -238,7 +238,6 @@ namespace Mix.Cms.Web.Controllers
             {
                 getPage.Data.LoadData(pageIndex: page - 1, pageSize: pageSize);
                 GeneratePageDetailsUrls(getPage.Data);
-                //_ = MixCacheService.SetAsync(cacheKey, getPage);
             }
 
             if (getPage.IsSucceed)
@@ -260,22 +259,14 @@ namespace Mix.Cms.Web.Controllers
 
         protected async System.Threading.Tasks.Task<IActionResult> Post(int id)
         {
-            RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel> getPost = null;
-            var cacheKey = $"mvc_{culture}_post_{id}";
-            if (MixService.GetConfig<bool>("IsCache"))
-            {
-                getPost = await Services.CacheService.GetAsync<RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel>>(cacheKey);
-            }
-            if (getPost == null)
-            {
-                Expression<Func<MixPost, bool>> predicate;
-                predicate = p =>
-                p.Id == id
-                && p.Status == MixContentStatus.Published.ToString()
-                && p.Specificulture == culture;
+            Expression<Func<MixPost, bool>> predicate;
+            predicate = p =>
+            p.Id == id
+            && p.Status == MixContentStatus.Published.ToString()
+            && p.Specificulture == culture;
 
-                getPost = await Lib.ViewModels.MixPosts.ReadMvcViewModel.Repository.GetFirstModelAsync(predicate);
-            }
+            RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel> getPost = 
+                await Lib.ViewModels.MixPosts.ReadMvcViewModel.Repository.GetFirstModelAsync(predicate);
 
             if (getPost.IsSucceed)
             {

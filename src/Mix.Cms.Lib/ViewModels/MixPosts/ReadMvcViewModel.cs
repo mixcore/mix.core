@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Interfaces;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -12,7 +13,7 @@ using System.Linq;
 namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
     public class ReadMvcViewModel
-        : ViewModelBase<MixCmsContext, MixPost, ReadMvcViewModel>
+        : ViewModelBase<MixCmsContext, MixPost, ReadMvcViewModel>, MvcViewModel
     {
         #region Properties
 
@@ -183,6 +184,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         [JsonProperty("pages")]
         public List<MixPagePosts.ReadViewModel> Pages { get; set; }
+
+        [JsonProperty("Layout")]
+        public string Layout { get; set; }
         #endregion Views
 
         #endregion Properties
