@@ -89,6 +89,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 Obj.Add(new JProperty("id", Id));
                 foreach (var item in Values.Where(m => m.DataType != MixEnums.MixDataType.Reference).OrderBy(v => v.Priority))
                 {
+                    item.Field = item.Field ?? MixAttributeFields.ReadViewModel.Repository.GetSingleModel(m => m.Id == item.AttributeFieldId, _context, _transaction).Data;
                     if (!Obj.TryGetValue(item.AttributeFieldName, out JToken val))
                     {
                         var prop = ParseValue(item);

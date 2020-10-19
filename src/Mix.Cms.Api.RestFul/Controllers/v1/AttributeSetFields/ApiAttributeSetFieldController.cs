@@ -52,7 +52,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         public async Task<ActionResult<PaginationModel<UpdateViewModel>>> Init(string attributeSet)
         {
             int.TryParse(attributeSet, out int attributeSetId);
-            var getData = UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetName == attributeSet || f.AttributeSetId == attributeSetId
+            var getData = await UpdateViewModel.Repository.GetModelListByAsync(f => f.AttributeSetName == attributeSet || f.AttributeSetId == attributeSetId
             , _context, _transaction);
 
             if (getData.IsSucceed)

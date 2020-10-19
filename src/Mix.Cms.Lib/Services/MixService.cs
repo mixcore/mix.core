@@ -13,6 +13,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
+using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.Services
 {
@@ -466,6 +467,23 @@ namespace Mix.Cms.Lib.Services
         public static string GetTemplateUploadFolder(string culture)
         {
             return $"content/templates/{Instance.LocalSettings[culture][MixConstants.ConfigurationKeyword.ThemeFolder]}/uploads";
+        }
+
+        public static MixCmsContext GetDbContext()
+        {
+            var provider = System.Enum.Parse<MixEnums.DatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
+            switch (provider)
+            {
+                case DatabaseProvider.MSSQL:
+                    return new MsSqlMixCmsContext();
+                case DatabaseProvider.MySQL:
+                    return new MySqlMixCmsContext();
+                case DatabaseProvider.PostgreSQL:
+                default:
+                    // TODO: Add PostgreSQL db context
+                    return null;
+            }
+
         }
     }
 }

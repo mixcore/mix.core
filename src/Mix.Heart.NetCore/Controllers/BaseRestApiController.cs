@@ -121,8 +121,7 @@ namespace Mix.Heart.NetCore.Controllers
             };
 
         }
-        protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync<TView>(Expression<Func<TModel, bool>> predicate = null)
-            where TView : ViewModelBase<TDbContext, TModel, TView>
+        protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync(Expression<Func<TModel, bool>> predicate = null)
         {
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
             Enum.TryParse(Request.Query["direction"], out Heart.Enums.MixHeartEnums.DisplayDirection direction);

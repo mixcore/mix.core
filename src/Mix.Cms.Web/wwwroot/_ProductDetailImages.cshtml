@@ -1,0 +1,100 @@
+@using Mix.Cms.Lib
+@using Mix.Cms.Lib.Services
+@using Mix.Domain.Core.ViewModels
+@using System.Linq
+@using Newtonsoft.Json.Linq
+@using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
+@{ 
+   string assetFolder = MixCmsHelper.GetAssetFolder(ViewBag.culture);
+   string imageThumbail = assetFolder + "/images/single-product/thumb-2.png";
+   string templateFolder = MixCmsHelper.GetTemplateFolder(ViewBag.culture);
+   
+}
+
+<div class="single-product-image">
+    <div class="tab-content">
+        @if (Model.Count > 0) {
+            foreach (var collection in Model) {
+            var index = Model.IndexOf(collection);
+            var cl = index == 0 ? "show active": "";
+            var medias = collection["medias"];
+                <div id="single-image-@index" 
+                        class="tab-pane fade @cl big-image-slider">
+                        @if (medias.Count > 0) {
+                            foreach (var image in medias) {
+                                <div class="big-image">
+                                    <img style="height: 550px"
+                                        src="@Html.Raw(image["file"])" 
+                                        alt="Big Image">
+                                    <a class="detail-image-popup"
+                                        onclick="showPopupImage('@(image["file"])')"
+                                        tabindex="0"><i class="fa fa-search-plus"></i></a>
+                                </div>
+                                }
+                        } else {
+                            <div class="big-image">
+                                    <img style="height: 550px" 
+                                    src="@collection["image"]" 
+                                    alt="Big Image"></div>
+                        }
+                        
+                </div>
+            }
+        }        
+    </div>
+    <div class="thumb-image-slider nav">
+        @if (Model.Count > 0) {
+            foreach (var collection in Model) {
+                var index = Model.IndexOf(collection);
+                 var cl = index == 0 ? "active": "";
+                <a class="thumb-image @cl" data-toggle="tab" href="#single-image-@index">
+                    <img style="height: 180px" src="@collection["image"]" alt="Thumbnail Image"></a>
+            }
+        }
+    </div>
+</div>
+
+<div style="left: -15vw;" class="modal fade" id="showImageModal" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div style="width: 50vw; box-sizing: border-box;" class="modal-content">
+        <div class="modal-body">
+           <img style="width: 100%; max-height: 70vh;" id="showImageModal-image" alt="Thumbnail Image">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+<script>
+    function showPopupImage(url) {
+            $("#showImageModal-image").attr('src', url);
+            $("#showImageModal").modal();
+    };
+</script>
+<style>
+    .detail-image-popup {
+        width: 50px;
+        height: 50px;
+        background-color: transparent;
+        border: none;
+        text-align: center;
+        color: #f5d730 !important;
+        position: absolute;
+        right: 25px;
+        top: 25px;
+        z-index: 9;
+        opacity: 0.7;
+    }
+
+    .detail-image-popup i {
+        font-size: 40px !important;
+    }
+
+    .detail-image-popup:hover{
+        opacity: 1;
+    }
+</style>

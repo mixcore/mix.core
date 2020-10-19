@@ -40,7 +40,7 @@ namespace Mix.Cms.Lib.Services
             {
                 if (!string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
                 {
-                    context = GetDbContext();
+                    context = MixService.GetDbContext();
                     accountContext = new MixCmsAccountContext();
                     messengerContext = new MixChatServiceContext();
                     await context.Database.MigrateAsync();
@@ -80,7 +80,7 @@ namespace Mix.Cms.Lib.Services
             {
                 if (!string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
                 {
-                    context = GetDbContext();
+                    context = MixService.GetDbContext();
                     transaction = context.Database.BeginTransaction();
 
                     var countCulture = context.MixCulture.Count();
@@ -131,22 +131,6 @@ namespace Mix.Cms.Lib.Services
             }
         }
 
-        private static MixCmsContext GetDbContext()
-        {
-            var provider = System.Enum.Parse<MixEnums.DatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
-            switch (provider)
-            {
-                case DatabaseProvider.MSSQL:
-                    return new MsSqlMixCmsContext();
-                case DatabaseProvider.MySQL:
-                    return new MySqlMixCmsContext();
-                case DatabaseProvider.PostgreSQL:
-                default:
-                    // TODO: Add PostgreSQL db context
-                    return null;
-            }
-            
-        }
 
         /// <summary>
         /// Step 2
