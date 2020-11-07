@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Migrations
 {
     [DbContext(typeof(MsSqlMixCmsContext))]
-    partial class MsSqlMixCmsContextModelSnapshot : ModelSnapshot
+    [Migration("20201103053127_Add_Field_Configurations")]
+    partial class Add_Field_Configurations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

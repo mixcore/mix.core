@@ -447,28 +447,23 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 }
 
                 // Load Posts
-                Expression<Func<MixPost, bool>> postPredicate = m => m.Specificulture == culture
-                            && (string.IsNullOrEmpty(keyword)
-                             || (EF.Functions.Like(m.Title, $"%{keyword}%"))
-                             || (EF.Functions.Like(m.Excerpt, $"%{keyword}%"))
-                             || (EF.Functions.Like(m.Content, $"%{keyword}%")));
-
+                
                 if (postIds != null && postIds.Count > 0)
                 {
-                    postPredicate = m => m.Specificulture == culture
+                    Expression<Func<MixPost, bool>> postPredicate = m => m.Specificulture == culture
                             && (string.IsNullOrEmpty(keyword)
                              || (EF.Functions.Like(m.Title, $"%{keyword}%"))
                              || (EF.Functions.Like(m.Excerpt, $"%{keyword}%"))
                              || (EF.Functions.Like(m.Content, $"%{keyword}%")))
                             && postIds.Any(n => n == m.Id);
-                }
 
-                var getPosts = await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(
-                        postPredicate
-                        , orderByPropertyName, direction
-                        , pageSize, pageIndex
-                        , _context: context, _transaction: transaction);
-                result = getPosts;
+                    var getPosts = await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(
+                            postPredicate
+                            , orderByPropertyName, direction
+                            , pageSize, pageIndex
+                            , _context: context, _transaction: transaction);
+                    result = getPosts;
+                }
                 return result;
             }
             catch (Exception ex)
