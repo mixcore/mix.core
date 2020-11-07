@@ -2,42 +2,44 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Cms.Lib.Models.Cms;
 
-namespace Mix.Cms.Lib.Migrations
+namespace Mix.Cms.Lib.Migrations.MySqlMixCms
 {
-    [DbContext(typeof(MsSqlMixCmsContext))]
-    partial class MsSqlMixCmsContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(MySqlMixCmsContext))]
+    [Migration("20201103052726_Add_Field_Configurations")]
+    partial class Add_Field_Configurations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.3")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeField", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<int>("AttributeSetId")
                         .HasColumnType("int");
 
                     b.Property<string>("AttributeSetName")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Configurations")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -46,38 +48,43 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("DefaultValue")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
-                    b.Property<bool>("IsEncrypt")
-                        .HasColumnType("bit");
+                    b.Property<ulong>("IsEncrypt")
+                        .HasColumnType("bit(1)");
 
-                    b.Property<bool>("IsMultiple")
-                        .HasColumnType("bit");
+                    b.Property<ulong>("IsMultiple")
+                        .HasColumnType("bit(1)");
 
-                    b.Property<bool>("IsRequire")
-                        .HasColumnType("bit");
+                    b.Property<ulong>("IsRequire")
+                        .HasColumnType("bit(1)");
 
-                    b.Property<bool>("IsSelect")
-                        .HasColumnType("bit");
+                    b.Property<ulong>("IsSelect")
+                        .HasColumnType("bit(1)");
 
-                    b.Property<bool>("IsUnique")
-                        .HasColumnType("bit");
+                    b.Property<ulong>("IsUnique")
+                        .HasColumnType("bit(1)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Options")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -86,18 +93,20 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Regex")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.HasKey("Id");
 
@@ -111,51 +120,58 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeSet", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
-                    b.Property<bool?>("EdmAutoSend")
-                        .HasColumnType("bit");
+                    b.Property<ulong?>("EdmAutoSend")
+                        .HasColumnType("bit(1)");
 
                     b.Property<string>("EdmFrom")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("EdmSubject")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("EdmTemplate")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("FormTemplate")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -163,19 +179,20 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.HasKey("Id");
 
@@ -185,24 +202,27 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeSetData", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(10)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("AttributeSetId")
                         .HasColumnType("int");
 
                     b.Property<string>("AttributeSetName")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -212,8 +232,8 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -221,10 +241,11 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
-                    b.HasKey("Id", "Specificulture");
+                    b.HasKey("Id", "Specificulture")
+                        .HasName("PRIMARY");
 
                     b.HasIndex("AttributeSetId");
 
@@ -234,6 +255,7 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeSetReference", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<int>("AttributeSetId")
@@ -241,27 +263,29 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(450)")
-                        .HasMaxLength(450);
+                        .HasColumnType("varchar(450)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(450)")
-                        .HasMaxLength(450);
+                        .HasColumnType("varchar(450)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("ParentId")
                         .HasColumnType("int");
@@ -275,8 +299,8 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.HasKey("Id");
 
@@ -288,36 +312,40 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeSetValue", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("AttributeFieldId")
                         .HasColumnType("int");
 
                     b.Property<string>("AttributeFieldName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("AttributeSetName")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
-                    b.Property<bool?>("BooleanValue")
-                        .HasColumnType("bit");
+                    b.Property<ulong?>("BooleanValue")
+                        .HasColumnType("bit(1)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("DataId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("DataType")
                         .HasColumnType("int");
@@ -326,18 +354,20 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<double?>("DoubleValue")
-                        .HasColumnType("float");
+                        .HasColumnType("double");
 
                     b.Property<string>("EncryptKey")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("EncryptType")
                         .HasColumnType("int");
 
                     b.Property<string>("EncryptValue")
-                        .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
+                        .HasColumnType("varchar(4000)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int?>("IntegerValue")
                         .HasColumnType("int");
@@ -347,32 +377,37 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<string>("Regex")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(10)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("StringValue")
-                        .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
+                        .HasColumnType("varchar(4000)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DataId");
 
                     b.ToTable("mix_attribute_set_value");
                 });
@@ -380,13 +415,14 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCache", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -399,8 +435,8 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -408,15 +444,19 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
+                        .HasColumnType("varchar(4000)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ExpiredDateTime")
+                        .HasName("Index_ExpiresAtTime");
 
                     b.ToTable("mix_cache");
                 });
@@ -424,52 +464,60 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCmsUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Address")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Avatar")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("MiddleName")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -477,12 +525,13 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Username")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.HasKey("Id");
 
@@ -495,17 +544,19 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(10)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Category")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -513,25 +564,27 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("DataType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Keyword")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -539,15 +592,16 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
+                        .HasColumnType("varchar(4000)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PK_mix_configuration_1");
+                        .HasName("PRIMARY");
 
                     b.HasIndex("Specificulture");
 
@@ -557,64 +611,71 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCulture", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("Alias")
-                        .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
+                        .HasColumnType("varchar(150)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("FullName")
-                        .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
+                        .HasColumnType("varchar(150)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Lcid")
                         .HasColumnName("LCID")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(10)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Specificulture")
                         .IsUnique()
-                        .HasName("AK_mix_culture_Specificulture");
+                        .HasName("IX_Mix_Culture");
 
                     b.ToTable("mix_culture");
                 });
@@ -623,44 +684,47 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Extension")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("FileFolder")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("FolderType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -668,21 +732,23 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("StringContent")
                         .IsRequired()
-                        .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
+                        .HasColumnType("varchar(4000)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int?>("ThemeId")
                         .HasColumnType("int");
 
                     b.Property<string>("ThemeName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.HasKey("Id");
 
@@ -697,17 +763,19 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(10)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Category")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -715,29 +783,32 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("DataType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("DefaultValue")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Keyword")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -745,15 +816,16 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
+                        .HasColumnType("varchar(4000)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PK_mix_language_1");
+                        .HasName("PRIMARY");
 
                     b.HasIndex("Specificulture");
 
@@ -766,82 +838,94 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(10)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
+                        .HasColumnType("varchar(4000)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Extension")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("FileFolder")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("FileProperties")
-                        .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
+                        .HasColumnType("varchar(4000)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<long>("FileSize")
                         .HasColumnType("bigint");
 
                     b.Property<string>("FileType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<string>("Source")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Tags")
-                        .HasColumnType("nvarchar(400)")
-                        .HasMaxLength(400);
+                        .HasColumnType("varchar(400)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("TargetUrl")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
+                        .HasColumnType("varchar(4000)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
-                    b.HasKey("Id", "Specificulture");
+                    b.HasKey("Id", "Specificulture")
+                        .HasName("PRIMARY");
 
                     b.ToTable("mix_media");
                 });
@@ -852,55 +936,62 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(10)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
+                        .HasColumnType("varchar(4000)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("EdmTemplate")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Fields")
-                        .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
+                        .HasColumnType("varchar(4000)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("FormTemplate")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int?>("PageSize")
                         .HasColumnType("int");
 
                     b.Property<string>("PostType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -908,25 +999,29 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Template")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Thumbnail")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.HasKey("Id", "Specificulture");
+                    b.HasKey("Id", "Specificulture")
+                        .HasName("PRIMARY");
 
                     b.HasIndex("Specificulture");
 
@@ -936,33 +1031,36 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModuleData", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(10)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Fields")
                         .IsRequired()
-                        .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
+                        .HasColumnType("varchar(4000)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("ModuleId")
                         .HasColumnType("int");
@@ -979,20 +1077,24 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
+                        .HasColumnType("varchar(4000)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
-                    b.HasKey("Id", "Specificulture");
+                    b.HasKey("Id", "Specificulture")
+                        .HasName("PRIMARY");
 
                     b.HasIndex("ModuleId", "Specificulture");
 
                     b.HasIndex("PageId", "Specificulture");
 
                     b.HasIndex("PostId", "Specificulture");
+
+                    b.HasIndex("ModuleId", "PageId", "Specificulture");
 
                     b.ToTable("mix_module_data");
                 });
@@ -1003,32 +1105,35 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(10)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("ModuleId")
                         .HasColumnType("int");
@@ -1042,10 +1147,11 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
-                    b.HasKey("Id", "Specificulture");
+                    b.HasKey("Id", "Specificulture")
+                        .HasName("PRIMARY");
 
                     b.HasIndex("ModuleId", "Specificulture");
 
@@ -1060,107 +1166,129 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(10)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Content")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("CssClass")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Excerpt")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("ExtraFields")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Layout")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int?>("Level")
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int?>("PageSize")
                         .HasColumnType("int");
 
                     b.Property<string>("PostType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<string>("SeoDescription")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("SeoKeywords")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("SeoName")
                         .HasColumnType("varchar(500)")
-                        .HasMaxLength(500)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("SeoTitle")
                         .HasColumnType("varchar(250)")
-                        .HasMaxLength(250)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("StaticUrl")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Tags")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Template")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Title")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Type")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int?>("Views")
                         .HasColumnType("int");
 
-                    b.HasKey("Id", "Specificulture");
+                    b.HasKey("Id", "Specificulture")
+                        .HasName("PRIMARY");
 
                     b.HasIndex("Specificulture");
 
@@ -1173,32 +1301,35 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(10)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("ModuleId")
                         .HasColumnType("int");
@@ -1215,10 +1346,11 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
-                    b.HasKey("Id", "Specificulture");
+                    b.HasKey("Id", "Specificulture")
+                        .HasName("PRIMARY");
 
                     b.HasIndex("ModuleId", "Specificulture");
 
@@ -1233,32 +1365,35 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(10)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("PageId")
                         .HasColumnType("int");
@@ -1272,10 +1407,11 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
-                    b.HasKey("Id", "Specificulture");
+                    b.HasKey("Id", "Specificulture")
+                        .HasName("PRIMARY");
 
                     b.HasIndex("PageId", "Specificulture");
 
@@ -1287,23 +1423,26 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPortalPage", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(450)")
-                        .HasMaxLength(450);
+                        .HasColumnType("varchar(450)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1313,8 +1452,8 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1322,20 +1461,23 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("TextDefault")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("TextKeyword")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Url")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.HasKey("Id");
 
@@ -1345,31 +1487,34 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPortalPageNavigation", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("PageId")
                         .HasColumnType("int");
@@ -1383,12 +1528,13 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PageId");
+                    b.HasIndex("PageId")
+                        .HasName("FK_mix_portal_page_navigation_mix_portal_page");
 
                     b.HasIndex("ParentId");
 
@@ -1398,16 +1544,17 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPortalPageRole", b =>
                 {
                     b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("PageId")
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -1417,8 +1564,8 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1426,10 +1573,11 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
-                    b.HasKey("RoleId", "PageId");
+                    b.HasKey("RoleId", "PageId")
+                        .HasName("PRIMARY");
 
                     b.HasIndex("PageId");
 
@@ -1442,43 +1590,55 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(10)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Content")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Excerpt")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("ExtraFields")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("ExtraProperties")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1487,52 +1647,66 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("SeoDescription")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("SeoKeywords")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("SeoName")
                         .HasColumnType("varchar(500)")
-                        .HasMaxLength(500)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("SeoTitle")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Source")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Tags")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Template")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Thumbnail")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Title")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Type")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int?>("Views")
                         .HasColumnType("int");
 
-                    b.HasKey("Id", "Specificulture");
+                    b.HasKey("Id", "Specificulture")
+                        .HasName("PRIMARY");
 
                     b.HasIndex("Specificulture");
 
@@ -1545,24 +1719,27 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(10)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1572,8 +1749,8 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Position")
                         .HasColumnType("int");
@@ -1587,10 +1764,11 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
-                    b.HasKey("Id", "Specificulture");
+                    b.HasKey("Id", "Specificulture")
+                        .HasName("PRIMARY");
 
                     b.HasIndex("MediaId", "Specificulture");
 
@@ -1605,32 +1783,35 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(10)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("ModuleId")
                         .HasColumnType("int");
@@ -1647,10 +1828,11 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
-                    b.HasKey("Id", "Specificulture");
+                    b.HasKey("Id", "Specificulture")
+                        .HasName("PRIMARY");
 
                     b.HasIndex("ModuleId", "Specificulture");
 
@@ -1662,55 +1844,61 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedAttributeData", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(10)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("AttributeSetId")
                         .HasColumnType("int");
 
                     b.Property<string>("AttributeSetName")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("DataId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(450)")
-                        .HasMaxLength(450);
+                        .HasColumnType("varchar(450)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("ParentId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("ParentType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1718,11 +1906,11 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PK_mix_related_attribute_data_1");
+                        .HasName("PRIMARY");
 
                     b.ToTable("mix_related_attribute_data");
                 });
@@ -1733,35 +1921,38 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(10)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("AttributeSetId")
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(450)")
-                        .HasMaxLength(450);
+                        .HasColumnType("varchar(450)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(450)")
-                        .HasMaxLength(450);
+                        .HasColumnType("varchar(450)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("ParentId")
                         .HasColumnType("int");
@@ -1769,8 +1960,8 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("ParentType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1778,10 +1969,11 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
-                    b.HasKey("Id", "Specificulture");
+                    b.HasKey("Id", "Specificulture")
+                        .HasName("PRIMARY");
 
                     b.ToTable("mix_related_attribute_set");
                 });
@@ -1792,51 +1984,56 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(10)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("AttributeSetId")
                         .HasColumnType("int");
 
                     b.Property<string>("AttributeSetName")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("DataId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(450)")
-                        .HasMaxLength(450);
+                        .HasColumnType("varchar(450)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("ParentId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("ParentType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1844,13 +2041,14 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.HasKey("Id", "Specificulture");
+                    b.HasKey("Id", "Specificulture")
+                        .HasName("PRIMARY");
 
                     b.ToTable("mix_related_data");
                 });
@@ -1861,35 +2059,38 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(10)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(450)")
-                        .HasMaxLength(450);
+                        .HasColumnType("varchar(450)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("DestinationId")
                         .HasColumnType("int");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(450)")
-                        .HasMaxLength(450);
+                        .HasColumnType("varchar(450)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1900,10 +2101,11 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
-                    b.HasKey("Id", "Specificulture");
+                    b.HasKey("Id", "Specificulture")
+                        .HasName("PRIMARY");
 
                     b.HasIndex("DestinationId", "Specificulture");
 
@@ -1915,80 +2117,97 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixTemplate", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Extension")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("FileFolder")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("FolderType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("MobileContent")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<string>("Scripts")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("SpaContent")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Styles")
-                        .HasColumnType("ntext");
+                        .HasColumnType("text")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("ThemeId")
                         .HasColumnType("int");
 
                     b.Property<string>("ThemeName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ThemeId");
+                    b.HasIndex("ThemeId")
+                        .HasName("IX_mix_template_file_TemplateId");
 
                     b.ToTable("mix_template");
                 });
@@ -1996,36 +2215,40 @@ namespace Mix.Cms.Lib.Migrations
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixTheme", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("PreviewUrl")
-                        .HasColumnType("nvarchar(450)")
-                        .HasMaxLength(450);
+                        .HasColumnType("varchar(450)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -2033,16 +2256,18 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Thumbnail")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.HasKey("Id");
 
@@ -2055,50 +2280,55 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(10)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Alias")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
+                        .HasColumnType("varchar(4000)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<string>("SourceId")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasAnnotation("MySql:CharSet", "utf8")
+                        .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.HasKey("Id", "Specificulture");
+                    b.HasKey("Id", "Specificulture")
+                        .HasName("PRIMARY");
 
                     b.HasIndex("Specificulture");
 

@@ -31,6 +31,9 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8")
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
+                    b.Property<string>("Configurations")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8")
