@@ -38,13 +38,13 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
 
         // GET: api/v1/rest/{culture}/attribute-set-data
         [HttpGet("init/{attributeSet}")]
-        public async Task<ActionResult<FormPortalViewModel>> Init(string attributeSet)
+        public async Task<ActionResult<FormViewModel>> Init(string attributeSet)
         {
             int.TryParse(attributeSet, out int attributeSetId);
             var getAttrSet = await Lib.ViewModels.MixAttributeSets.UpdateViewModel.Repository.GetSingleModelAsync(m => m.Name == attributeSet || m.Id == attributeSetId);
             if (getAttrSet.IsSucceed)
             {
-                FormPortalViewModel result = new FormPortalViewModel()
+                FormViewModel result = new FormViewModel()
                 {
                     Specificulture = _lang,
                     AttributeSetId = getAttrSet.Data.Id,
