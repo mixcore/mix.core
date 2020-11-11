@@ -22,6 +22,9 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         [JsonProperty("id")]
         public int Id { get; set; }
 
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+
         [Required(ErrorMessage = "Please choose File")]
         [JsonProperty("extension")]
         public string Extension { get; set; }
