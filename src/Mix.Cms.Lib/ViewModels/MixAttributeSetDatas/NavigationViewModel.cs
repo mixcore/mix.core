@@ -345,6 +345,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("description")]
         public string Description { get; set; }
+        
+        [JsonProperty("target_id")]
+        public string TargetId { get; set; }
 
         [JsonProperty("isActive")]
         public bool IsActive { get; set; }

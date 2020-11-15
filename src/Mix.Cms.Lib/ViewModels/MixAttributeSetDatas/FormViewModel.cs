@@ -103,7 +103,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 ParseData(_context, _transaction);
             }
-            foreach (var refField in Fields.Where(f => f.DataType == MixEnums.MixDataType.Reference))
+            foreach (var refField in Fields.Where(f => f.DataType == MixEnums.MixDataType.Reference).OrderBy(m=>m.Priority))
             {
                 var arr = new JArray();
 
@@ -111,7 +111,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         m => m.Specificulture == Specificulture && m.ParentId == Id && m.ParentType == MixEnums.MixAttributeSetDataType.Set.ToString()
                         && m.AttributeSetId == refField.ReferenceId
                         , _context, _transaction);
-                foreach (var child in children.Data)
+                foreach (var child in children.Data.OrderBy(m => m.Priority))
                 {
                     child.AttributeData.Priority = child.Priority;
                     arr.Add(JObject.FromObject(child.AttributeData));
