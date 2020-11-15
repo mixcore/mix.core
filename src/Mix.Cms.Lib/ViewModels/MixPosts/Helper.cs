@@ -273,13 +273,22 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             try
             {
                 culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
-                var result = new RepositoryResponse<PaginationModel<TView>>();
                 var getRelatedData = await MixRelatedAttributeDatas.ReadViewModel.Repository.GetModelListByAsync(
                             m => m.Specificulture == culture && m.DataId == dataId
                             && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
                             , orderByPropertyName = "CreatedDateTime", direction, pageSize, pageIndex
                             , _context: context, _transaction: transaction
                             );
+                var result = new RepositoryResponse<PaginationModel<TView>>()
+                {
+                    IsSucceed = true,
+                    Data = new PaginationModel<TView>()
+                    {
+                        Items = new List<TView>(),
+                        PageIndex = pageIndex ?? 0,
+                        PageSize = pageSize
+                    }
+                };
                 if (getRelatedData.IsSucceed)
                 {
                     foreach (var item in getRelatedData.Data.Items)
@@ -290,17 +299,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                             m => m.Specificulture == item.Specificulture && m.Id == postId
                                 , context, transaction);
                             if (getData.IsSucceed)
-                            {
-                                result = new RepositoryResponse<PaginationModel<TView>>()
-                                {
-                                    IsSucceed = true,
-                                    Data = new PaginationModel<TView>()
-                                    {
-                                        Items = new List<TView>(),
-                                        PageIndex = pageIndex ?? 0,
-                                        PageSize = pageSize
-                                    }
-                                };
+                            {                                
                                 result.Data.Items.Add(getData.Data);
                             }
                         }
@@ -401,6 +400,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public static async Task<RepositoryResponse<PaginationModel<TView>>> SearchPost<TView>(
             string keyword
             , List<string> dataIds
+            , List<int> pageIds = null
             , string culture = null
             , string orderByPropertyName = "CreatedDateTime"
             , Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Desc
@@ -417,35 +417,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     IsSucceed = true,
                     Data = new PaginationModel<TView>()
                 };
-                List<int> postIds = null;
-                Expression<Func<MixRelatedAttributeData, bool>> predicate =
-                    m => m.Specificulture == culture && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString();
-
-                foreach (var id in dataIds)
+                List<int> postIds = SearchPostByDataIds(dataIds, culture, context);
+                if (pageIds!= null &&  pageIds.Count>0)
                 {
-                    // Get list related post ids by data id
-                    Expression<Func<MixRelatedAttributeData, bool>> dataPredicate =
-                        m => m.Specificulture == culture && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
-                            && m.DataId == id;
-                    var ids = context.MixRelatedAttributeData.Where(dataPredicate).Select(m => int.Parse(m.ParentId)).ToList();
-
-                    // if first id in list => return ids
-                    if (postIds == null)
-                    {
-                        postIds = ids.Distinct().ToList();
-                    }
-                    else
-                    {
-                        // filter ids by new data id ( for 'AND' condition)
-                        postIds = postIds.Where(m => ids.Contains(m)).Distinct().ToList();
-                        // if there is no items => no need to filter more
-                        if (postIds.Count == 0)
-                        {
-                            break;
-                        }
-                    }
+                    postIds.AddRange(SearchPostByPageIds(pageIds, culture, context));
+                    postIds = postIds.Distinct().ToList();
                 }
-
                 // Load Posts
                 
                 if (postIds != null && postIds.Count > 0)
@@ -480,6 +457,58 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
         }
 
+        private static List<int> SearchPostByPageIds(List<int> pageIds, string culture, MixCmsContext context)
+        {
+            List<int> postIds = new List<int>();
+
+            foreach (var id in pageIds)
+            {
+                // Get list related post ids by data id
+                Expression<Func<MixPagePost, bool>> predicate =
+                    m => m.Specificulture == culture
+                        && m.Status == "Published"
+                        && m.PageId == id;
+                var ids = context.MixPagePost
+                    .Where(predicate)
+                    .Select(m => m.PostId).ToList();
+                postIds.AddRange(ids);
+            }
+            return postIds.Distinct().ToList();
+        }
+        
+        private static List<int> SearchPostByDataIds(List<string> dataIds, string culture, MixCmsContext context)
+        {
+            List<int> postIds = new List<int>();
+
+            foreach (var id in dataIds)
+            {
+                // Get list related post ids by data id
+                Expression<Func<MixRelatedAttributeData, bool>> dataPredicate =
+                    m => m.Specificulture == culture
+                        && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
+                        && m.DataId == id;
+                var ids = context.MixRelatedAttributeData
+                    .Where(dataPredicate)
+                    .Select(m => int.Parse(m.ParentId)).ToList();
+
+                // if first id in list => return ids
+                if (postIds.Count == 0)
+                {
+                    postIds = ids.Distinct().ToList();
+                }
+                else
+                {
+                    // filter ids by new data id ( for 'AND' condition)
+                    postIds = postIds.Where(m => ids.Contains(m)).Distinct().ToList();
+                    // if there is no items => no need to filter more
+                    if (postIds.Count == 0)
+                    {
+                        break;
+                    }
+                }
+            }
+            return postIds;
+        }
 
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetModelistByAddictionalField<TView>(
             string fieldName, string value, string culture

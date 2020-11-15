@@ -83,7 +83,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         #region Views
 
         [JsonProperty("fieldConfigurations")]
-        public FieldConfigurations FieldConfigurations { get; set; }
+        public FieldConfigurations FieldConfigurations { get; set; } = new FieldConfigurations();
 
         #endregion
 

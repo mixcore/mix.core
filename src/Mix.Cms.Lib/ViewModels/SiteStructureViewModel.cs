@@ -252,7 +252,7 @@ namespace Mix.Cms.Lib.ViewModels
                 }
             }
             // Load Related Data
-            RelatedData.AddRange(Posts.Select(p => p.RelatedData));
+            RelatedData.AddRange(Posts.Where(p => p.RelatedData != null).Select(p => p.RelatedData));
             foreach (var item in RelatedData)
             {
                 if (!AttributeSetDatas.Any(m => m.Id == item.Id))
@@ -378,7 +378,7 @@ namespace Mix.Cms.Lib.ViewModels
                         startId++;
                         post.Id = startId;
                         post.Specificulture = destCulture;
-                        
+
                         if (!string.IsNullOrEmpty(post.Image))
                         {
                             post.Image = post.Image.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");

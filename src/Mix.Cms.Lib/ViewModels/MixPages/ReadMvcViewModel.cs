@@ -376,8 +376,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 StringBuilder styles = new StringBuilder();
                 foreach (var nav in getNavs.Data.OrderBy(n => n.Priority).ToList())
                 {
-                    scripts.Append(nav.Module.View?.Scripts);
-                    styles.Append(nav.Module.View?.Styles);
+                    string script = $"<!-- Start script module {nav.Module.Name} --> {nav.Module.View?.Scripts} <!-- End script module {nav.Module.Name} -->";
+                    string style = $"<!-- Start style module {nav.Module.Name} --> {nav.Module.View?.Styles} <!-- End style module {nav.Module.Name} -->";
+                    scripts.Append(script);
+                    styles.Append(style);
                 }
                 View.Scripts += scripts.ToString();
                 View.Styles += styles.ToString();
