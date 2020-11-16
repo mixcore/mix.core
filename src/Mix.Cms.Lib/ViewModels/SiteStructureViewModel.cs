@@ -415,8 +415,8 @@ namespace Mix.Cms.Lib.ViewModels
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (AttributeSets != null)
             {
-                var startId = context.MixAttributeSet.Max(m => m.Id);
-                var startFieldId = context.MixAttributeField.Max(m => m.Id);
+                var startId = MixAttributeSets.ImportViewModel.Repository.Max(m => m.Id, context, transaction).Data;
+                var startFieldId = MixAttributeFields.UpdateViewModel.Repository.Max(m => m.Id, context, transaction).Data;
                 foreach (var set in AttributeSets)
                 {
                     if (result.IsSucceed)
@@ -469,8 +469,8 @@ namespace Mix.Cms.Lib.ViewModels
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                int startId = context.MixPage.Max(m => m.Id);
-                int startModuleId = context.MixModule.Max(m => m.Id);
+                int startId = MixPages.UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
+                int startModuleId = MixModules.UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
                 //var pages = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, "data", true, "{}");
                 //var obj = JObject.Parse(pages.Content);
                 //var initPages = obj["data"].ToObject<JArray>();
@@ -513,7 +513,7 @@ namespace Mix.Cms.Lib.ViewModels
 
                         //if (_context.MixPage.Any(m=>m.Id == startId)) //(item.Id > initPages.Count)
                         //{
-                        //    item.Id = _context.MixPage.Max(m => m.Id, context, transaction) + 1;
+                        //    item.Id = _context.MixPage.Max(m => m.Id) + 1;
                         //    item.CreatedDateTime = DateTime.UtcNow;
                         //}
                         if (!string.IsNullOrEmpty(item.Image))
