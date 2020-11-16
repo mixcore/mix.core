@@ -174,7 +174,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             //Save Module Navigations
             if (result.IsSucceed && ModuleNavs != null)
             {
-                var startId = MixPageModules.ImportViewModel.Repository.Max(m => m.Id).Data;
+                var startId = MixPageModules.ImportViewModel.Repository.Max(m => m.Id, _context, _transaction).Data;
                 foreach (var item in ModuleNavs)
                 {
 

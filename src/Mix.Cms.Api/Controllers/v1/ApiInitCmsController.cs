@@ -221,7 +221,8 @@ namespace Mix.Cms.Api.Controllers.v1
         /// <returns></returns>
         [HttpPost, HttpOptions]
         [Route("init-cms/step-3")]
-        [RequestFormSizeLimit(valueCountLimit: 214748364)] // 200Mb
+        //[RequestFormSizeLimit(valueCountLimit: 214748364)] // 200Mb
+        [DisableRequestSizeLimit]
         public async Task<RepositoryResponse<Cms.Lib.ViewModels.MixThemes.InitViewModel>> Save([FromForm] string model, [FromForm] IFormFile assets, [FromForm] IFormFile theme)
         {
             var json = JObject.Parse(model);

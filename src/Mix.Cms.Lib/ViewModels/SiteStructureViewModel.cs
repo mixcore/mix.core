@@ -57,18 +57,18 @@ namespace Mix.Cms.Lib.ViewModels
 
         #region Export
 
-        public RepositoryResponse<string> ProcessSelectedExportDataAsync()
+        public RepositoryResponse<string> ProcessExportSelectedExportDataAsync()
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(null, null, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             var result = new RepositoryResponse<string>() { IsSucceed = true };
             try
             {
                 //Configurations = MixConfigurations.ReadViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture, context, transaction).Data;
-                ProcessPages(context, transaction);
-                ProcessModules(context, transaction);
-                ProcessAttributeSetsAsync(context, transaction);
-                ProcessAttributeSetData(context, transaction);
-                ProcessDatas(context, transaction);
+                ProcessExportPages(context, transaction);
+                ProcessExportModules(context, transaction);
+                ProcessExportAttributeSetsAsync(context, transaction);
+                ProcessExportAttributeSetData(context, transaction);
+                ProcessExportDatas(context, transaction);
                 return result;
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
@@ -89,22 +89,22 @@ namespace Mix.Cms.Lib.ViewModels
             }
         }
 
-        private void ProcessDatas(MixCmsContext context, IDbContextTransaction transaction)
+        private void ProcessExportDatas(MixCmsContext context, IDbContextTransaction transaction)
         {
-            ProcessPosts(context, transaction);
-            ProcessAttributeDatas(context, transaction);
-            ProcessModuleDatas(context, transaction);
+            ProcessExportPosts(context, transaction);
+            ProcessExportAttributeDatas(context, transaction);
+            ProcessExportModuleDatas(context, transaction);
         }
 
-        private void ProcessModuleDatas(MixCmsContext context, IDbContextTransaction transaction)
-        {
-        }
-
-        private void ProcessAttributeDatas(MixCmsContext context, IDbContextTransaction transaction)
+        private void ProcessExportModuleDatas(MixCmsContext context, IDbContextTransaction transaction)
         {
         }
 
-        private void ProcessPosts(MixCmsContext context, IDbContextTransaction transaction)
+        private void ProcessExportAttributeDatas(MixCmsContext context, IDbContextTransaction transaction)
+        {
+        }
+
+        private void ProcessExportPosts(MixCmsContext context, IDbContextTransaction transaction)
         {
             // TODO: Validate Export Post have necessary data (Module, Template, Sub Attribute ...)
             //foreach (var item in Posts)
@@ -113,7 +113,7 @@ namespace Mix.Cms.Lib.ViewModels
             //}
         }
 
-        private void ProcessAttributeSetsAsync(MixCmsContext context, IDbContextTransaction transaction)
+        private void ProcessExportAttributeSetsAsync(MixCmsContext context, IDbContextTransaction transaction)
         {
             foreach (var item in AttributeSets)
             {
@@ -146,7 +146,7 @@ namespace Mix.Cms.Lib.ViewModels
             }
         }
 
-        private void ProcessModules(MixCmsContext context, IDbContextTransaction transaction)
+        private void ProcessExportModules(MixCmsContext context, IDbContextTransaction transaction)
         {
             foreach (var item in Modules)
             {
@@ -157,7 +157,7 @@ namespace Mix.Cms.Lib.ViewModels
             }
         }
 
-        private void ProcessPages(MixCmsContext context, IDbContextTransaction transaction)
+        private void ProcessExportPages(MixCmsContext context, IDbContextTransaction transaction)
         {
             foreach (var item in Pages)
             {
@@ -234,7 +234,7 @@ namespace Mix.Cms.Lib.ViewModels
             }
         }
 
-        private void ProcessAttributeSetData(MixCmsContext context, IDbContextTransaction transaction)
+        private void ProcessExportAttributeSetData(MixCmsContext context, IDbContextTransaction transaction)
         {
             AttributeSetDatas = new List<MixAttributeSetDatas.ImportViewModel>();
             // Load AttributeSet data
@@ -351,8 +351,11 @@ namespace Mix.Cms.Lib.ViewModels
                         var saveResult = await module.SaveModelAsync(true, context, transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
                     }
-                    // update new id to related attribute data
-                    dicModuleIds.Add(oldId, module.Id);
+                    if (!dicModuleIds.Any(m => m.Key == oldId))
+                    {
+                        // update new id to related attribute data
+                        dicModuleIds.Add(oldId, module.Id);
+                    }
                 }
                 else
                 {
@@ -373,6 +376,7 @@ namespace Mix.Cms.Lib.ViewModels
 
                 if (result.IsSucceed)
                 {
+
                     if (!context.MixPost.Any(m => m.SeoName == post.SeoName && m.Specificulture == destCulture))
                     {
                         startId++;
@@ -392,7 +396,10 @@ namespace Mix.Cms.Lib.ViewModels
                         ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                     // update new id to related attribute data
-                    dicPostIds.Add(oldId, post.Id);
+                    if (!dicPostIds.Any(m => m.Key == oldId))
+                    {
+                        dicPostIds.Add(oldId, post.Id);
+                    }
                 }
                 else
                 {
@@ -408,27 +415,41 @@ namespace Mix.Cms.Lib.ViewModels
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (AttributeSets != null)
             {
-                var startId = MixAttributeSets.ImportViewModel.Repository.Max(m => m.Id).Data;
-                var startFieldId = MixAttributeFields.UpdateViewModel.Repository.Max(m => m.Id).Data;
+                var startId = context.MixAttributeSet.Max(m => m.Id);
+                var startFieldId = context.MixAttributeField.Max(m => m.Id);
                 foreach (var set in AttributeSets)
                 {
                     if (result.IsSucceed)
                     {
-                        startId++;
-                        dicAttributeSetIds.Add(set.Id, startId);
                         if (!context.MixAttributeSet.Any(m => m.Name == set.Name))
                         {
+                            startId++;
                             set.Id = startId;
                             set.CreatedDateTime = DateTime.UtcNow;
                             foreach (var field in set.Fields)
                             {
                                 startFieldId++;
-                                dicFieldIds.Add(field.Id, startFieldId);
-                                field.Id = startFieldId;
-                                field.CreatedDateTime = DateTime.UtcNow;
+
+                                if (!dicFieldIds.Any(m => m.Key == field.Id))
+                                {
+                                    dicFieldIds.Add(field.Id, startFieldId);
+                                    field.Id = startFieldId;
+                                    field.CreatedDateTime = DateTime.UtcNow;
+                                }
+                                else
+                                {
+                                    var current = dicFieldIds.FirstOrDefault(m => m.Key == field.Id);
+                                    field.Id = current.Value;
+                                    field.CreatedDateTime = DateTime.UtcNow;
+                                }
+
                             }
                             var saveResult = await set.SaveModelAsync(true, context, transaction);
                             ViewModelHelper.HandleResult(saveResult, ref result);
+                        }
+                        if (!dicAttributeSetIds.Any(m => m.Key == set.Id))
+                        {
+                            dicAttributeSetIds.Add(set.Id, startId);
                         }
                     }
                     else
@@ -448,23 +469,20 @@ namespace Mix.Cms.Lib.ViewModels
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                int startId = MixPages.UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
-                int startModuleId = MixModules.UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
+                int startId = context.MixPage.Max(m => m.Id);
+                int startModuleId = context.MixModule.Max(m => m.Id);
                 //var pages = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, "data", true, "{}");
                 //var obj = JObject.Parse(pages.Content);
                 //var initPages = obj["data"].ToObject<JArray>();
                 foreach (var item in Pages)
                 {
+                    // store old id => update to related data if save success
+                    var oldId = item.Id;
                     // TODO: Id > 7 => not system init page
                     if (!context.MixPage.Any(p => p.SeoName == item.SeoName))
                     {
-
-                        // store old id => update to related data if save success
-                        var oldId = item.Id;
-
+                        
                         startId++;
-                        dicPageIds.Add(oldId, startId);
-
                         item.Id = startId;
 
                         item.CreatedDateTime = DateTime.UtcNow;
@@ -474,19 +492,28 @@ namespace Mix.Cms.Lib.ViewModels
                         {
                             foreach (var nav in item.ModuleNavs)
                             {
-                                startModuleId++;
-                                dicModuleIds.Add(nav.Module.Id, startModuleId);
-
-                                nav.Module.Id = startModuleId;
-
-                                nav.PageId = startId;
-                                nav.ModuleId = startModuleId;
+                                if (!dicModuleIds.Any(m => m.Key == nav.Module.Id))
+                                {
+                                    startModuleId++;
+                                    dicModuleIds.Add(nav.Module.Id, startModuleId);
+                                    nav.Module.Id = startModuleId;
+                                    nav.PageId = startId;
+                                    nav.ModuleId = startModuleId;
+                                }
+                                else
+                                {
+                                    var current = dicModuleIds.FirstOrDefault(m => m.Key == nav.Module.Id);
+                                    nav.Module.Id = current.Value;
+                                    nav.PageId = startId;
+                                    nav.ModuleId = current.Value;
+                                }
                             }
                         }
 
+
                         //if (_context.MixPage.Any(m=>m.Id == startId)) //(item.Id > initPages.Count)
                         //{
-                        //    item.Id = _context.MixPage.Max(m => m.Id) + 1;
+                        //    item.Id = _context.MixPage.Max(m => m.Id, context, transaction) + 1;
                         //    item.CreatedDateTime = DateTime.UtcNow;
                         //}
                         if (!string.IsNullOrEmpty(item.Image))
@@ -506,6 +533,10 @@ namespace Mix.Cms.Lib.ViewModels
                             result.Errors = saveResult.Errors;
                             break;
                         }
+                    }
+                    if (!dicPageIds.Any(m => m.Key == item.Id))
+                    {
+                        dicPageIds.Add(oldId, startId);
                     }
                 }
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
