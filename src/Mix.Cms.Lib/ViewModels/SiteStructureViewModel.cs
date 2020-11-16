@@ -417,6 +417,7 @@ namespace Mix.Cms.Lib.ViewModels
             {
                 var startId = MixAttributeSets.ImportViewModel.Repository.Max(m => m.Id, context, transaction).Data;
                 var startFieldId = MixAttributeFields.UpdateViewModel.Repository.Max(m => m.Id, context, transaction).Data;
+                var attributeFields = new List<MixAttributeFields.UpdateViewModel>();
                 foreach (var set in AttributeSets)
                 {
                     if (result.IsSucceed)
@@ -426,25 +427,10 @@ namespace Mix.Cms.Lib.ViewModels
                             startId++;
                             set.Id = startId;
                             set.CreatedDateTime = DateTime.UtcNow;
-                            foreach (var field in set.Fields)
-                            {
-                                startFieldId++;
-
-                                if (!dicFieldIds.Any(m => m.Key == field.Id))
-                                {
-                                    dicFieldIds.Add(field.Id, startFieldId);
-                                    field.Id = startFieldId;
-                                    field.CreatedDateTime = DateTime.UtcNow;
-                                }
-                                else
-                                {
-                                    var current = dicFieldIds.FirstOrDefault(m => m.Key == field.Id);
-                                    field.Id = current.Value;
-                                    field.CreatedDateTime = DateTime.UtcNow;
-                                }
-
-                            }
-                            var saveResult = await set.SaveModelAsync(true, context, transaction);
+                            attributeFields.AddRange(set.Fields
+                                    .Where(m => !attributeFields.Any(n => n.Id == m.Id))
+                                    .ToList());
+                            var saveResult = await set.SaveModelAsync(false, context, transaction);
                             ViewModelHelper.HandleResult(saveResult, ref result);
                         }
                         if (!dicAttributeSetIds.Any(m => m.Key == set.Id))
@@ -455,6 +441,44 @@ namespace Mix.Cms.Lib.ViewModels
                     else
                     {
                         break;
+                    }
+                }
+                // save fields
+                if (result.IsSucceed)
+                {
+                    foreach (var field in attributeFields)
+                    {
+                        if (result.IsSucceed)
+                        {
+                            var setId = dicAttributeSetIds.FirstOrDefault(m => m.Key == field.AttributeSetId);
+                            field.AttributeSetId = setId.Value;
+                            if (field.ReferenceId != null)
+                            {
+                                var refId = dicAttributeSetIds.FirstOrDefault(m => m.Key == field.ReferenceId);
+                                field.ReferenceId = refId.Value;
+
+                            }
+                            if (!dicFieldIds.Any(m => m.Key == field.Id))
+                            {
+                                startFieldId++;
+                                dicFieldIds.Add(field.Id, startFieldId);
+                                field.Id = startFieldId;
+                                field.CreatedDateTime = DateTime.UtcNow;
+                            }
+                            else
+                            {
+                                var current = dicFieldIds.FirstOrDefault(m => m.Key == field.Id);
+                                field.Id = current.Value;
+                                field.CreatedDateTime = DateTime.UtcNow;
+                            }
+                            var saveResult = await field.SaveModelAsync(false, context, transaction);
+                            ViewModelHelper.HandleResult(saveResult, ref result);
+                        }
+                        else
+                        {
+                            result.Errors.Add($"Cannot Import {field.Name} - {field.Id}");
+                            break;
+                        }
                     }
                 }
             }
@@ -481,7 +505,7 @@ namespace Mix.Cms.Lib.ViewModels
                     // TODO: Id > 7 => not system init page
                     if (!context.MixPage.Any(p => p.SeoName == item.SeoName))
                     {
-                        
+
                         startId++;
                         item.Id = startId;
 
@@ -569,7 +593,7 @@ namespace Mix.Cms.Lib.ViewModels
                     if (!context.MixAttributeSetData.Any(m => m.Id == item.Id && m.Specificulture == item.Specificulture))
                     {
                         item.Specificulture = destCulture;
-
+                        item.CreatedDateTime = DateTime.UtcNow;
                         // update new Id if not system attribute
                         if (item.AttributeSetName.IndexOf("sys_") != 0 && dicAttributeSetIds.ContainsKey(item.AttributeSetId))
                         {
@@ -587,6 +611,7 @@ namespace Mix.Cms.Lib.ViewModels
                                 field.Id = newField.Id;
                                 field.AttributeSetId = newSet.Id;
                                 field.AttributeSetName = newSet.Name;
+                                field.CreatedDateTime = DateTime.UtcNow;
                             }
                         }
                         var saveResult = await item.SaveModelAsync(true, context, transaction);
