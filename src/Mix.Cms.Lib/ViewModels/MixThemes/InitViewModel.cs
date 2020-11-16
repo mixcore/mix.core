@@ -169,12 +169,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
             result = await ImportThemeAsync(parent, _context, _transaction);
 
-            // Import Assets
-            if (result.IsSucceed && !string.IsNullOrEmpty(Asset.Filename))
-            {
-                result = ImportAssetsAsync(_context, _transaction);
-            }
-
             // Actived Theme
             if (IsActived)
             {
@@ -184,32 +178,13 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             return result;
         }
 
-        private RepositoryResponse<bool> ImportAssetsAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var result = new RepositoryResponse<bool>();
-            string fullPath = $"{Asset.FileFolder}/{Asset.Filename}{Asset.Extension}";
-            if (File.Exists(fullPath))
-            {
-                FileRepository.Instance.UnZipFile(fullPath, Asset.FileFolder);
-                //InitAssetStyle();
-                result.IsSucceed = true;
-            }
-            else
-            {
-                result.Errors.Add("Cannot saved asset file");
-            }
-
-            return result;
-        }
-
-
         private async Task<RepositoryResponse<bool>> ImportThemeAsync(MixTheme parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             string filePath = $"wwwroot/{TemplateAsset.FileFolder}/{TemplateAsset.Filename}{TemplateAsset.Extension}";
             if (File.Exists(filePath))
             {
-                string outputFolder = $"{TemplateAsset.FileFolder}/Extract";
+                string outputFolder = $"wwwroot/{TemplateAsset.FileFolder}/Extract";
                 FileRepository.Instance.DeleteFolder(outputFolder);
                 FileRepository.Instance.CreateDirectoryIfNotExist(outputFolder);
                 FileRepository.Instance.UnZipFile(filePath, outputFolder);
