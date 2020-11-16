@@ -77,7 +77,7 @@ namespace Mix.Cms.Api.Controllers.v1
             string outputPath = $"Exports/Themes/{getTheme.Data.Name}";
             data.ThemeName = getTheme.Data.Name;
             data.Specificulture = _lang;
-            var result = data.ProcessSelectedExportDataAsync();
+            var result = data.ProcessExportSelectedExportDataAsync();
             if (result.IsSucceed)
             {
                 string filename = $"schema";

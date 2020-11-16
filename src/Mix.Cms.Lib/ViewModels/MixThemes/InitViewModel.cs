@@ -157,18 +157,26 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>() { IsSucceed = true };
 
-            //Import From existing Theme (zip)
-            if (!string.IsNullOrEmpty(TemplateAsset.Filename))
+            if (string.IsNullOrEmpty(TemplateAsset.Filename))
             {
-                result = await ImportThemeAsync(parent, _context, _transaction);
+                TemplateAsset = new Lib.ViewModels.FileViewModel()
+                {
+                    Filename = "default_blank",
+                    Extension = ".zip",
+                    FileFolder = "Imports/Themes"
+                };
             }
 
-            // New themes without import existing theme => create from default folder
-            if (result.IsSucceed && !Directory.Exists(TemplateFolder) && string.IsNullOrEmpty(TemplateAsset.Filename))
+            result = await ImportThemeAsync(parent, _context, _transaction);
+
+            // Import Assets
+            if (result.IsSucceed && !string.IsNullOrEmpty(Asset.Filename))
             {
-                result = await CreateDefaultThemeTemplatesAsync(_context, _transaction);
+                result = ImportAssetsAsync(_context, _transaction);
             }
-            if (result.IsSucceed)
+
+            // Actived Theme
+            if (IsActived)
             {
                 result = await ActivedThemeAsync(_context, _transaction);
             }
@@ -176,10 +184,29 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             return result;
         }
 
+        private RepositoryResponse<bool> ImportAssetsAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>();
+            string fullPath = $"{Asset.FileFolder}/{Asset.Filename}{Asset.Extension}";
+            if (File.Exists(fullPath))
+            {
+                FileRepository.Instance.UnZipFile(fullPath, Asset.FileFolder);
+                //InitAssetStyle();
+                result.IsSucceed = true;
+            }
+            else
+            {
+                result.Errors.Add("Cannot saved asset file");
+            }
+
+            return result;
+        }
+
+
         private async Task<RepositoryResponse<bool>> ImportThemeAsync(MixTheme parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            string filePath = $"{TemplateAsset.FileFolder}/{TemplateAsset.Filename}{TemplateAsset.Extension}";
+            string filePath = $"wwwroot/{TemplateAsset.FileFolder}/{TemplateAsset.Filename}{TemplateAsset.Extension}";
             if (File.Exists(filePath))
             {
                 string outputFolder = $"{TemplateAsset.FileFolder}/Extract";
