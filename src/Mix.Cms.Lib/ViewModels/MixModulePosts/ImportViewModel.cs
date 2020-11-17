@@ -8,12 +8,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Mix.Cms.Lib.ViewModels.MixPagePosts
+namespace Mix.Cms.Lib.ViewModels.MixModulePosts
 {
     public class ImportViewModel
-       : ViewModelBase<MixCmsContext, MixPagePost, ImportViewModel>
+       : ViewModelBase<MixCmsContext, MixModulePost, ImportViewModel>
     {
-        public ImportViewModel(MixPagePost model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public ImportViewModel(MixModulePost model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
@@ -21,9 +21,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         public ImportViewModel() : base()
         {
         }
-
-        #region Properties
-        #region Models
         [JsonProperty("id")]
         public int Id { get; set; }
         [JsonProperty("specificulture")]
@@ -31,8 +28,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         [JsonProperty("postId")]
         public int PostId { get; set; }
 
-        [JsonProperty("pageId")]
-        public int PageId { get; set; }
+        [JsonProperty("moduleId")]
+        public int ModuleId { get; set; }
 
         [JsonProperty("isActived")]
         public bool IsActived { get; set; }
@@ -55,27 +52,40 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         public int Priority { get; set; }
         [JsonProperty("status")]
         public MixEnums.MixContentStatus Status { get; set; }
-        #endregion
         #region Views
 
         [JsonProperty("post")]
         public MixPosts.ImportViewModel Post { get; set; }
 
-        [JsonProperty("page")]
-        public MixPages.ImportViewModel Page { get; set; }
+        [JsonProperty("module")]
+        public MixModules.ReadListItemViewModel Module { get; set; }
 
         #endregion Views
-        #endregion
 
         #region overrides
-        public override MixPagePost ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            base.Validate(_context, _transaction);
+            if (IsValid)
+            {
+                IsValid = !_context.MixModulePost.Any(m => m.PostId == PostId && m.ModuleId == ModuleId
+                    && m.Id != Id && m.Specificulture == Specificulture);
+                if (!IsValid)
+                {
+                    Errors.Add("Existed");
+                }
+            }
+        }
+        public override MixModulePost ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)
             {
-                Id = Repository.Max(m => m.Id, _context, _transaction).Data + 1;
+                Id = Repository.Max(c => c.Id, _context, _transaction).Data + 1;
+                CreatedDateTime = DateTime.UtcNow;
             }
             return base.ParseModel(_context, _transaction);
         }
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getPost = MixPosts.ImportViewModel.Repository.GetSingleModel(p => p.Id == PostId && p.Specificulture == Specificulture
@@ -91,30 +101,30 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
 
         #region Expand
 
-        public static RepositoryResponse<List<MixPagePosts.ImportViewModel>> GetPagePostNavAsync(int postId, string specificulture
+        public static RepositoryResponse<List<MixModulePosts.ReadViewModel>> GetModulePostNavAsync(int postId, string specificulture
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             MixCmsContext context = _context ?? new MixCmsContext();
             var transaction = _transaction ?? context.Database.BeginTransaction();
             try
             {
-                var navCategoryPostViewModels = context.MixPage.Include(cp => cp.MixPagePost).Where(a => a.Specificulture == specificulture
-                    && (a.Type == MixEnums.MixPageType.ListPost.ToString())
+                var navCategoryPostViewModels = context.MixModule.Include(cp => cp.MixModulePost).Where(a => a.Specificulture == specificulture
+                    && (a.Type == (int)MixEnums.MixModuleType.ListPost || a.Type == (int)MixEnums.MixModuleType.ListProduct)
                     )
                     .AsEnumerable()
-                    .Select(p => new MixPagePosts.ImportViewModel(
-                        new MixPagePost()
+                    .Select(p => new MixModulePosts.ReadViewModel(
+                        new MixModulePost()
                         {
                             PostId = postId,
-                            PageId = p.Id,
+                            ModuleId = p.Id,
                             Specificulture = specificulture
                         },
                         _context, _transaction)
                     {
-                        IsActived = p.MixPagePost.Any(cp => cp.PostId == postId && cp.Specificulture == specificulture),
+                        IsActived = p.MixModulePost.Any(cp => cp.PostId == postId && cp.Specificulture == specificulture),
                         Description = p.Title
                     });
-                return new RepositoryResponse<List<ImportViewModel>>()
+                return new RepositoryResponse<List<ReadViewModel>>()
                 {
                     IsSucceed = true,
                     Data = navCategoryPostViewModels.ToList()
@@ -126,7 +136,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
                 {
                     transaction.Rollback();
                 }
-                return new RepositoryResponse<List<MixPagePosts.ImportViewModel>>()
+                return new RepositoryResponse<List<MixModulePosts.ReadViewModel>>()
                 {
                     IsSucceed = true,
                     Data = null,
