@@ -74,19 +74,22 @@ namespace Mix.Cms.Api.Controllers.v1
 
             //path to temporary folder
             string tempPath = $"wwwroot/Exports/Themes/{getTheme.Data.Name}/temp";
-            string outputPath = $"Exports/Themes/{getTheme.Data.Name}";
+            string outputPath = $"Exports/Themes/{getTheme.Data.Name}";            
             data.ThemeName = getTheme.Data.Name;
             data.Specificulture = _lang;
-            var result = data.ProcessExportSelectedExportDataAsync();
+            var result = data.ExportSelectedItemsAsync();
             if (result.IsSucceed)
             {
+                string domain = MixService.GetConfig<string>("Domain");
+                string accessFolder = $"{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{getTheme.Data.Name}/assets";
+                string content = JObject.FromObject(data).ToString();                
                 string filename = $"schema";
                 var file = new FileViewModel()
                 {
                     Filename = filename,
                     Extension = ".json",
                     FileFolder = $"{tempPath}/Data",
-                    Content = JObject.FromObject(data).ToString()
+                    Content = content.Replace(domain, string.Empty).Replace(accessFolder, "[ACCESS_FOLDER]")
                 };
 
                 // Delete Existing folder
