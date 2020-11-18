@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Text;
 
 namespace Mix.Cms.Lib.Repositories
 {
@@ -189,7 +190,7 @@ namespace Mix.Cms.Lib.Repositories
                 {
                     using (var stream = File.Open(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
                     {
-                        using (StreamReader s = new StreamReader(stream))
+                        using (StreamReader s = new StreamReader(stream, Encoding.UTF8))
                         {
                             result = new FileViewModel()
                             {

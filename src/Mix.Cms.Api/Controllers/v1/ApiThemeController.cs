@@ -67,65 +67,10 @@ namespace Mix.Cms.Api.Controllers.v1
         // GET api/theme/id
         [HttpPost, HttpOptions]
         [Route("export/{id}")]
-        public async Task<RepositoryResponse<string>> Export(int id, [FromBody] SiteStructureViewModel data)
+        public Task<RepositoryResponse<string>> Export(int id, [FromBody] SiteStructureViewModel data)
         {
-            var getTheme = await ReadViewModel.Repository.GetSingleModelAsync(
-                 theme => theme.Id == id).ConfigureAwait(false);
-
-            //path to temporary folder
-            string tempPath = $"wwwroot/Exports/Themes/{getTheme.Data.Name}/temp";
-            string outputPath = $"Exports/Themes/{getTheme.Data.Name}";            
-            data.ThemeName = getTheme.Data.Name;
-            data.Specificulture = _lang;
-            var result = data.ExportSelectedItemsAsync();
-            if (result.IsSucceed)
-            {
-                string domain = MixService.GetConfig<string>("Domain");
-                string accessFolder = $"{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{getTheme.Data.Name}/assets";
-                string content = JObject.FromObject(data).ToString().Replace(accessFolder, "[ACCESS_FOLDER]");
-                if (!string.IsNullOrEmpty(domain))
-                {
-                    content = content.Replace(domain, string.Empty);
-                }
-                string filename = $"schema";
-                var file = new FileViewModel()
-                {
-                    Filename = filename,
-                    Extension = ".json",
-                    FileFolder = $"{tempPath}/Data",
-                    Content = content
-                };
-
-                // Delete Existing folder
-                FileRepository.Instance.DeleteFolder(outputPath);
-                // Copy current templates file
-                FileRepository.Instance.CopyDirectory($"{getTheme.Data.TemplateFolder}", $"{tempPath}/Templates");
-                // Copy current assets files
-                FileRepository.Instance.CopyDirectory($"{getTheme.Data.AssetFolder}", $"{tempPath}/Assets");
-                // Copy current uploads files
-                FileRepository.Instance.CopyDirectory($"{getTheme.Data.UploadsFolder}", $"{tempPath}/Uploads");
-                // Save Site Structures
-                FileRepository.Instance.SaveFile(file);
-
-                // Zip to [theme_name].zip ( wwwroot for web path)
-                string filePath = FileRepository.Instance.ZipFolder($"{tempPath}", outputPath, $"{getTheme.Data.Name}-{Guid.NewGuid()}");
-
-                // Delete temp folder
-                FileRepository.Instance.DeleteWebFolder($"{outputPath}/Assets");
-                FileRepository.Instance.DeleteWebFolder($"{outputPath}/Uploads");
-                FileRepository.Instance.DeleteWebFolder($"{outputPath}/Templates");
-                FileRepository.Instance.DeleteWebFolder($"{outputPath}/Data");
-
-                return new RepositoryResponse<string>()
-                {
-                    IsSucceed = !string.IsNullOrEmpty(outputPath),
-                    Data = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/{filePath}"
-                };
-            }
-            else
-            {
-                return result;
-            }
+            return Lib.ViewModels.MixThemes.Helper.ExportTheme(id, data
+                , _lang, HttpContext.Request.Scheme, HttpContext.Request.Host.Value);
         }
 
         // GET api/theme/id

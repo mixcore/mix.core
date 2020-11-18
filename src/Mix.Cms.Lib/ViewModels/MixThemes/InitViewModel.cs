@@ -196,7 +196,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 FileRepository.Instance.CopyDirectory($"{outputFolder}/Uploads", $"{UploadsFolder}");
                 // Get SiteStructure
                 var strSchema = FileRepository.Instance.GetFile("schema.json", $"{outputFolder}/Data");
-                string parseContent = strSchema.Content.Replace("[ACCESS_FOLDER]", AssetFolder);
+                string parseContent = strSchema.Content.Replace("[ACCESS_FOLDER]", AssetFolder)
+                                                       .Replace("[CULTURE]", Specificulture);
                 var siteStructures = JObject.Parse(parseContent).ToObject<SiteStructureViewModel>();
                 FileRepository.Instance.DeleteFolder(outputFolder);
                 //FileRepository.Instance.DeleteFile(filePath);
