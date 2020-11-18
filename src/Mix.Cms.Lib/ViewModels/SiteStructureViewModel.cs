@@ -28,15 +28,15 @@ namespace Mix.Cms.Lib.ViewModels
 
         [JsonProperty("relatedData")]
         public List<MixRelatedAttributeDatas.ImportViewModel> RelatedData { get; set; } = new List<MixRelatedAttributeDatas.ImportViewModel>();
-        
+
         [JsonProperty("pagePostNavs")]
-        public List<MixPagePosts.ImportViewModel> PagePostNavs  { get; set; } = new List<MixPagePosts.ImportViewModel>();
-        
+        public List<MixPagePosts.ImportViewModel> PagePostNavs { get; set; } = new List<MixPagePosts.ImportViewModel>();
+
         [JsonProperty("pageModuleNavs")]
-        public List<MixPageModules.ImportViewModel> PageModuleNavs  { get; set; } = new List<MixPageModules.ImportViewModel>();
-        
+        public List<MixPageModules.ImportViewModel> PageModuleNavs { get; set; } = new List<MixPageModules.ImportViewModel>();
+
         [JsonProperty("modulePostNavs")]
-        public List<MixModulePosts.ImportViewModel> ModulePostNavs  { get; set; } = new List<MixModulePosts.ImportViewModel>();
+        public List<MixModulePosts.ImportViewModel> ModulePostNavs { get; set; } = new List<MixModulePosts.ImportViewModel>();
 
         [JsonProperty("posts")]
         public List<MixPosts.ImportViewModel> Posts { get; set; } = new List<MixPosts.ImportViewModel>();
@@ -150,7 +150,7 @@ namespace Mix.Cms.Lib.ViewModels
                 }
             }
         }
-        
+
         private void ExportPageModuleNav(MixPages.ImportViewModel item, MixCmsContext context, IDbContextTransaction transaction)
         {
             PageModuleNavs = item.GetModuleNavs(context, transaction);
@@ -274,7 +274,10 @@ namespace Mix.Cms.Lib.ViewModels
 
                 if (getDataResult.IsSucceed && getDataResult.Data.Count > 0)
                 {
-                    var data = getDataResult.Data.Where(m => AttributeSetDatas.Any(d => d.Id == m.DataId)).ToList();
+                    var data = getDataResult.Data.Where(m =>
+                        AttributeSetDatas.Any(d => d.Id == m.DataId)
+                        && !RelatedData.Any(r => r.ParentId == item.Id && r.DataId == m.DataId))
+                        .ToList();
                     RelatedData.AddRange(data);
                 }
             }
@@ -303,7 +306,7 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     result = await ImportModulesAsync(destCulture, context, transaction);
                 }
-                
+
                 if (result.IsSucceed && ModuleDatas.Count > 0)
                 {
                     result = await ImportModuleDatas(destCulture, context, transaction);
@@ -619,13 +622,13 @@ namespace Mix.Cms.Lib.ViewModels
 
         private async Task<RepositoryResponse<bool>> ImportRelatedDatas(string desCulture, MixCmsContext context, IDbContextTransaction transaction)
         {
-            
+
             var result = await ImportRelatedAttributeSetDatas(desCulture, context, transaction);
             if (result.IsSucceed)
             {
                 result = await ImportPagePostNavs(desCulture, context, transaction);
             }
-            
+
             if (result.IsSucceed)
             {
                 result = await ImportPageModuleNavs(desCulture, context, transaction);
@@ -658,7 +661,7 @@ namespace Mix.Cms.Lib.ViewModels
             }
             return result;
         }
-        
+
         private async Task<RepositoryResponse<bool>> ImportPageModuleNavs(string desCulture, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -702,7 +705,7 @@ namespace Mix.Cms.Lib.ViewModels
             }
             return result;
         }
-        
+
         private async Task<RepositoryResponse<bool>> ImportModuleDatas(string desCulture, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -736,7 +739,7 @@ namespace Mix.Cms.Lib.ViewModels
                     case MixEnums.MixAttributeSetDataType.System:
                         break;
                     case MixEnums.MixAttributeSetDataType.Set:
-                        item.AttributeSetId = dicAttributeSetIds[int.Parse(item.ParentId)];
+                        item.AttributeSetId = dicAttributeSetIds[item.AttributeSetId];
                         break;
                     case MixEnums.MixAttributeSetDataType.Post:
                         break;
