@@ -42,7 +42,7 @@ namespace Mix.Cms.Lib.ViewModels
         public List<MixPosts.ImportViewModel> Posts { get; set; } = new List<MixPosts.ImportViewModel>();
 
         [JsonProperty("moduleDatas")]
-        public List<MixModuleDatas.UpdateViewModel> ModuleDatas { get; set; } = new List<MixModuleDatas.UpdateViewModel>();
+        public List<MixModuleDatas.ImportViewModel> ModuleDatas { get; set; } = new List<MixModuleDatas.ImportViewModel>();
 
         [JsonProperty("attributeSetDatas")]
         public List<MixAttributeSetDatas.ImportViewModel> AttributeSetDatas { get; set; } = new List<MixAttributeSetDatas.ImportViewModel>();
@@ -153,7 +153,8 @@ namespace Mix.Cms.Lib.ViewModels
 
         private void ExportPageModuleNav(MixPages.ImportViewModel item, MixCmsContext context, IDbContextTransaction transaction)
         {
-            PageModuleNavs = item.GetModuleNavs(context, transaction);
+            PageModuleNavs.AddRange(item.GetModuleNavs(context, transaction)
+                .Where(m => !PageModuleNavs.Any(n => n.ModuleId == m.ModuleId && n.PageId == m.PageId)));
             foreach (var nav in PageModuleNavs)
             {
                 if (!Modules.Any(m => m.Id == nav.ModuleId && m.Specificulture == Specificulture))
@@ -165,7 +166,8 @@ namespace Mix.Cms.Lib.ViewModels
 
         private void ExportPagePostNav(MixPages.ImportViewModel item, MixCmsContext context, IDbContextTransaction transaction)
         {
-            PagePostNavs = item.GetPostNavs(context, transaction);
+            PagePostNavs.AddRange(item.GetPostNavs(context, transaction)
+                .Where(m => !PagePostNavs.Any(n => n.PostId == m.PostId && n.PageId == m.PageId)));
             foreach (var nav in PagePostNavs)
             {
                 if (!Posts.Any(m => m.Id == nav.Post.Id && m.Specificulture == Specificulture))
@@ -195,17 +197,19 @@ namespace Mix.Cms.Lib.ViewModels
         private void ExportModuleDatas(MixModules.ImportViewModel item, MixCmsContext context, IDbContextTransaction transaction)
         {
             var getDataResult = MixModuleDatas.ImportViewModel.Repository
-                               .GetModelListBy(m => m.ModuleId == item.Id && m.Specificulture == item.Specificulture
+                               .GetModelListBy(m => m.ModuleId == item.Id 
+                                    && m.Specificulture == item.Specificulture
                                , context, transaction);
 
             if (getDataResult.IsSucceed)
             {
-                item.Data = getDataResult.Data;
+                ModuleDatas.AddRange(getDataResult.Data);
             }
         }
         private void ExportModulePostNavs(MixModules.ImportViewModel item, MixCmsContext context, IDbContextTransaction transaction)
         {
-            ModulePostNavs = item.GetPostNavs(context, transaction);
+            ModulePostNavs.AddRange(item.GetPostNavs(context, transaction)
+                .Where(m => !ModulePostNavs.Any(n => n.PostId == m.PostId && n.ModuleId == m.ModuleId)));
             foreach (var nav in ModulePostNavs)
             {
                 if (!Posts.Any(m => m.Id == nav.Post.Id && m.Specificulture == Specificulture))
