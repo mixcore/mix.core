@@ -347,7 +347,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             foreach (var item in Values.OrderBy(v => v.Priority))
             {
                 item.AttributeFieldName = item.Field.Name;
-                Data.Add(ParseValue(item));
+                if(Data.GetValue(item.Field.Name) == null)
+                {
+                    Data.Add(ParseValue(item));
+                }
             }
         }
 

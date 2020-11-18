@@ -82,14 +82,18 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 string domain = MixService.GetConfig<string>("Domain");
                 string accessFolder = $"{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{getTheme.Data.Name}/assets";
-                string content = JObject.FromObject(data).ToString();                
+                string content = JObject.FromObject(data).ToString().Replace(accessFolder, "[ACCESS_FOLDER]");
+                if (!string.IsNullOrEmpty(domain))
+                {
+                    content = content.Replace(domain, string.Empty);
+                }
                 string filename = $"schema";
                 var file = new FileViewModel()
                 {
                     Filename = filename,
                     Extension = ".json",
                     FileFolder = $"{tempPath}/Data",
-                    Content = content.Replace(domain, string.Empty).Replace(accessFolder, "[ACCESS_FOLDER]")
+                    Content = content
                 };
 
                 // Delete Existing folder
