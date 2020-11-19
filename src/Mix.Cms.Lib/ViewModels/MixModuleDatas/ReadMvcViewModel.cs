@@ -4,6 +4,7 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
+using Mix.Heart.NetCore.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -12,6 +13,7 @@ using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
 {
+    [GeneratedController("api/v1/rest/{culture}/mix-module-data/mvc")]
     public class ReadMvcViewModel
       : ViewModelBase<MixCmsContext, MixModuleData, ReadMvcViewModel>
     {

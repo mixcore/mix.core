@@ -28,7 +28,10 @@ namespace Mix.Heart.Providers
                 {
                     feature.Controllers.Add(
                         BaseType.MakeGenericType(
-                            candidate.BaseType.GenericTypeArguments[0], candidate.BaseType.GenericTypeArguments[1], candidate)
+                            candidate.BaseType.GenericTypeArguments[0], 
+                            candidate.BaseType.GenericTypeArguments[1], 
+                            candidate.BaseType.GenericTypeArguments[2], 
+                            candidate)
                             .GetTypeInfo()
                     );
                 }
