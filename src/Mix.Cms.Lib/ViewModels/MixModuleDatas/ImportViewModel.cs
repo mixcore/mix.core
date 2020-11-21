@@ -31,12 +31,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         [JsonProperty("moduleId")]
         public int ModuleId { get; set; }
 
-        [JsonIgnore]
         [JsonProperty("fields")]
         public string Fields { get; set; } = "[]";
 
         [JsonProperty("value")]
-        [JsonIgnore]
         public string Value { get; set; }
 
         [JsonProperty("postId")]
