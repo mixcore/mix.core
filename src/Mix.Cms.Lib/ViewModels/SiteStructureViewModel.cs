@@ -24,7 +24,10 @@ namespace Mix.Cms.Lib.ViewModels
         public List<MixAttributeSets.ImportViewModel> AttributeSets { get; set; }
 
         [JsonProperty("configurations")]
-        public List<MixConfigurations.ReadViewModel> Configurations { get; set; }
+        public List<MixConfigurations.ImportViewModel> Configurations { get; set; }
+
+        [JsonProperty("languages")]
+        public List<MixLanguages.ImportViewModel> Languages { get; set; }
 
         [JsonProperty("relatedData")]
         public List<MixRelatedAttributeDatas.ImportViewModel> RelatedData { get; set; } = new List<MixRelatedAttributeDatas.ImportViewModel>();
@@ -72,7 +75,11 @@ namespace Mix.Cms.Lib.ViewModels
             var result = new RepositoryResponse<string>() { IsSucceed = true };
             try
             {
-                //Configurations = MixConfigurations.ReadViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture, context, transaction).Data;
+                Configurations = MixConfigurations.ImportViewModel.Repository.GetModelListBy(
+                    m => !m.Keyword.Contains("sys_") && m.Specificulture == Specificulture, context, transaction).Data;
+                Languages = MixLanguages.ImportViewModel.Repository.GetModelListBy(
+                    m => m.Specificulture == Specificulture, context, transaction).Data;
+
                 ExportPages(context, transaction);
                 ExportModules(context, transaction);
                 ExportAttributeSetsAsync(context, transaction);
@@ -197,7 +204,7 @@ namespace Mix.Cms.Lib.ViewModels
         private void ExportModuleDatas(MixModules.ImportViewModel item, MixCmsContext context, IDbContextTransaction transaction)
         {
             var getDataResult = MixModuleDatas.ImportViewModel.Repository
-                               .GetModelListBy(m => m.ModuleId == item.Id 
+                               .GetModelListBy(m => m.ModuleId == item.Id
                                     && m.Specificulture == item.Specificulture
                                , context, transaction);
 
@@ -290,6 +297,8 @@ namespace Mix.Cms.Lib.ViewModels
 
         #region Import
 
+        Dictionary<int, int> dicConfigurationIds = new Dictionary<int, int>();
+        Dictionary<int, int> dicLanguageIds = new Dictionary<int, int>();
         Dictionary<int, int> dicModuleIds = new Dictionary<int, int>();
         Dictionary<int, int> dicPostIds = new Dictionary<int, int>();
         Dictionary<int, int> dicPageIds = new Dictionary<int, int>();
@@ -302,11 +311,19 @@ namespace Mix.Cms.Lib.ViewModels
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                if (Pages != null)
+                if (Configurations != null && Configurations.Count > 0)
+                {
+                    result = await ImportConfigurationsAsync(destCulture, context, transaction);
+                }
+                if (result.IsSucceed && Languages != null && Languages.Count > 0)
+                {
+                    result = await ImportLanguagesAsync(destCulture, context, transaction);
+                }
+                if (result.IsSucceed && Pages != null && Pages.Count > 0)
                 {
                     result = await ImportPagesAsync(destCulture, context, transaction);
                 }
-                if (result.IsSucceed && Modules != null)
+                if (result.IsSucceed && Modules != null && Modules.Count > 0)
                 {
                     result = await ImportModulesAsync(destCulture, context, transaction);
                 }
@@ -315,11 +332,11 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     result = await ImportModuleDatas(destCulture, context, transaction);
                 }
-                if (result.IsSucceed && Modules != null)
+                if (result.IsSucceed && Posts != null && Posts.Count > 0)
                 {
                     result = await ImportPostsAsync(destCulture, context, transaction);
                 }
-                if (result.IsSucceed && AttributeSets != null)
+                if (result.IsSucceed && AttributeSets != null && AttributeSets.Count > 0)
                 {
                     result = await ImportAttributeSetsAsync(context, transaction);
                 }
@@ -506,6 +523,114 @@ namespace Mix.Cms.Lib.ViewModels
                             break;
                         }
                     }
+                }
+            }
+            return result;
+        }
+
+        private async Task<RepositoryResponse<bool>> ImportConfigurationsAsync(string destCulture,
+          MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                int startId = MixConfigurations.UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
+                foreach (var item in Configurations)
+                {
+                    var oldId = item.Id;
+                    if (!context.MixConfiguration.Any(p => p.Keyword == item.Keyword))
+                    {
+                        startId++;
+                        item.Id = startId;
+
+                        item.CreatedDateTime = DateTime.UtcNow;
+
+                        item.Specificulture = destCulture;
+                        var saveResult = await item.SaveModelAsync(false, context, transaction);
+                        if (!saveResult.IsSucceed)
+                        {
+                            result.IsSucceed = false;
+                            result.Exception = saveResult.Exception;
+                            result.Errors = saveResult.Errors;
+                            break;
+                        }
+                    }
+                    if (!dicConfigurationIds.Any(m => m.Key == item.Id))
+                    {
+                        dicConfigurationIds.Add(oldId, startId);
+                    }
+                }
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+            }
+            catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
+            {
+                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<MixPages.ImportViewModel>(ex, isRoot, transaction);
+                result.IsSucceed = false;
+                result.Errors = error.Errors;
+                result.Exception = error.Exception;
+            }
+            finally
+            {
+                //if current Context is Root
+                if (isRoot)
+                {
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                }
+            }
+            return result;
+        }
+
+        private async Task<RepositoryResponse<bool>> ImportLanguagesAsync(string destCulture,
+          MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                int startId = MixLanguages.UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
+                foreach (var item in Languages)
+                {
+                    var oldId = item.Id;
+                    if (!context.MixLanguage.Any(p => p.Keyword == item.Keyword))
+                    {
+                        startId++;
+                        item.Id = startId;
+
+                        item.CreatedDateTime = DateTime.UtcNow;
+
+                        item.Specificulture = destCulture;
+                        var saveResult = await item.SaveModelAsync(false, context, transaction);
+                        if (!saveResult.IsSucceed)
+                        {
+                            result.IsSucceed = false;
+                            result.Exception = saveResult.Exception;
+                            result.Errors = saveResult.Errors;
+                            break;
+                        }
+                    }
+                    if (!dicLanguageIds.Any(m => m.Key == item.Id))
+                    {
+                        dicLanguageIds.Add(oldId, startId);
+                    }
+                }
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+            }
+            catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
+            {
+                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<MixPages.ImportViewModel>(ex, isRoot, transaction);
+                result.IsSucceed = false;
+                result.Errors = error.Errors;
+                result.Exception = error.Exception;
+            }
+            finally
+            {
+                //if current Context is Root
+                if (isRoot)
+                {
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
             }
             return result;
