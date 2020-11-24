@@ -304,6 +304,7 @@ namespace Mix.Cms.Lib.ViewModels
         Dictionary<int, int> dicPageIds = new Dictionary<int, int>();
         Dictionary<int, int> dicFieldIds = new Dictionary<int, int>();
         Dictionary<int, int> dicAttributeSetIds = new Dictionary<int, int>();
+
         public async Task<RepositoryResponse<bool>> ImportAsync(string destCulture,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -385,10 +386,6 @@ namespace Mix.Cms.Lib.ViewModels
                         startId++;
                         module.Id = startId;
                         module.Specificulture = destCulture;
-                        if (!string.IsNullOrEmpty(module.Image))
-                        {
-                            module.Image = module.Image.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
-                        }
                         module.CreatedDateTime = DateTime.UtcNow;
                         var saveResult = await module.SaveModelAsync(false, context, transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
@@ -425,15 +422,6 @@ namespace Mix.Cms.Lib.ViewModels
                         startId++;
                         post.Id = startId;
                         post.Specificulture = destCulture;
-
-                        if (!string.IsNullOrEmpty(post.Image))
-                        {
-                            post.Image = post.Image.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
-                        }
-                        if (!string.IsNullOrEmpty(post.Thumbnail))
-                        {
-                            post.Thumbnail = post.Thumbnail.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
-                        }
                         post.CreatedDateTime = DateTime.UtcNow;
                         var saveResult = await post.SaveModelAsync(true, context, transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
@@ -663,14 +651,6 @@ namespace Mix.Cms.Lib.ViewModels
                         item.CreatedDateTime = DateTime.UtcNow;
                         item.ThemeName = ThemeName;
 
-                        if (!string.IsNullOrEmpty(item.Image))
-                        {
-                            item.Image = item.Image.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
-                        }
-                        if (!string.IsNullOrEmpty(item.Thumbnail))
-                        {
-                            item.Thumbnail = item.Thumbnail.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", destCulture)}");
-                        }
                         item.Specificulture = destCulture;
                         var saveResult = await item.SaveModelAsync(false, context, transaction);
                         if (!saveResult.IsSucceed)
