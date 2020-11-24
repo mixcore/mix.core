@@ -114,7 +114,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"wwwroot/content/templates/{Name}/assets";
+                return $"content/templates/{Name}/assets";
             }
         }
 
@@ -173,7 +173,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             Templates = MixTemplates.UpdateViewModel.Repository.GetModelListBy(t => t.ThemeId == Id,
                 _context: _context, _transaction: _transaction).Data;
             TemplateAsset = new FileViewModel() { FileFolder = $"wwwroot/import/themes/{DateTime.UtcNow.ToShortDateString()}/{Name}" };
-            Asset = new FileViewModel() { FileFolder = AssetFolder };
+            Asset = new FileViewModel() { FileFolder = $"wwwroot/{AssetFolder}" };
         }
 
         #region Async
@@ -246,14 +246,16 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 FileRepository.Instance.CreateDirectoryIfNotExist(outputFolder);
                 FileRepository.Instance.UnZipFile(filePath, outputFolder);
                 //Move Unzip Asset folder
-                FileRepository.Instance.CopyDirectory($"{outputFolder}/Assets", $"{AssetFolder}");
+                FileRepository.Instance.CopyDirectory($"{outputFolder}/Assets", $"wwwroot/{AssetFolder}");
                 //Move Unzip Templates folder
                 FileRepository.Instance.CopyDirectory($"{outputFolder}/Templates", TemplateFolder);
                 //Move Unzip Uploads folder
                 FileRepository.Instance.CopyDirectory($"{outputFolder}/Uploads", $"{UploadsFolder}");
                 // Get SiteStructure
                 var strSchema = FileRepository.Instance.GetFile("schema.json", $"{outputFolder}/Data");
-                var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteStructureViewModel>();
+                string parseContent = strSchema.Content.Replace("[ACCESS_FOLDER]", AssetFolder)
+                                                       .Replace("[CULTURE]", Specificulture);
+                var siteStructures = JObject.Parse(parseContent).ToObject<SiteStructureViewModel>();
                 FileRepository.Instance.DeleteFolder(outputFolder);
                 //FileRepository.Instance.DeleteFile(filePath);
                 //Import Site Structures
@@ -275,8 +277,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             //TODO: Create default asset
             foreach (var file in files)
             {
-                string content = file.Content.Replace($"/Content/Templates/{themeName}/",
-                $"/Content/Templates/{Name}/");
+                string content = file.Content.Replace($"Content/Templates/{themeName}/",
+                $"Content/Templates/{Name}/");
                 MixTemplates.UpdateViewModel template = new MixTemplates.UpdateViewModel(
                     new MixTemplate()
                     {
@@ -429,7 +431,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         private async Task InitAssetStyleAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var files = FileRepository.Instance.GetWebFiles(AssetFolder);
+            var files = FileRepository.Instance.GetWebFiles($"wwwroot/{AssetFolder}");
             StringBuilder strStyles = new StringBuilder();
 
             foreach (var css in files.Where(f => f.Extension == ".css"))

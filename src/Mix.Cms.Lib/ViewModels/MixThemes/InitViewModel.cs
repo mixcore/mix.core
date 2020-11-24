@@ -92,7 +92,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"wwwroot/content/templates/{Name}/assets";
+                return $"content/templates/{Name}/assets";
             }
         }
 
@@ -148,7 +148,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             Templates = MixTemplates.InitViewModel.Repository.GetModelListBy(t => t.ThemeId == Id,
                 _context: _context, _transaction: _transaction).Data;
             TemplateAsset = new FileViewModel() { FileFolder = $"Import/Themes/{DateTime.UtcNow.ToShortDateString()}/{Name}" };
-            Asset = new FileViewModel() { FileFolder = AssetFolder };
+            Asset = new FileViewModel() { FileFolder = $"wwwroot/{AssetFolder}" };
         }
 
         #region Async
@@ -189,7 +189,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 FileRepository.Instance.CreateDirectoryIfNotExist(outputFolder);
                 FileRepository.Instance.UnZipFile(filePath, outputFolder);
                 //Move Unzip Asset folder
-                FileRepository.Instance.CopyDirectory($"{outputFolder}/Assets", $"{AssetFolder}");
+                FileRepository.Instance.CopyDirectory($"{outputFolder}/Assets", $"wwwroot/{AssetFolder}");
                 //Move Unzip Templates folder
                 FileRepository.Instance.CopyDirectory($"{outputFolder}/Templates", TemplateFolder);
                 //Move Unzip Uploads folder

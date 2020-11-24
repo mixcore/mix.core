@@ -121,35 +121,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             return base.ParseModel(_context, _transaction);
         }
 
-        public override void GenerateCache(MixAttributeSetData model, ImportViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            ParseData();
-            base.GenerateCache(model, view, _context, _transaction);
-        }
-
-        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        //{
-        //    var tasks = new List<Task>();
-        //    var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
-        //        .Any(d => d.Specificulture == Specificulture && d.Id == Id));
-        //    foreach (var item in attrDatas)
-        //    {
-        //        tasks.Add(Task.Run(() =>
-        //        {
-        //            var data = new ReadViewModel(item, context, transaction);
-        //            data.GenerateCache(item, data, context, transaction);
-        //        }));
-        //    }
-        //    foreach (var item in Values)
-        //    {
-        //        tasks.Add(Task.Run(() =>
-        //        {
-        //            item.RemoveCache(item.Model);
-        //        }));
-        //    }
-        //    return tasks;
-        //}
-
         #region Async
 
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSetData parent, MixCmsContext _context, IDbContextTransaction _transaction)

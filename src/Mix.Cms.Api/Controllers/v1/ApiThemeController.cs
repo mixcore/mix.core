@@ -155,8 +155,8 @@ namespace Mix.Cms.Api.Controllers.v1
 
             if (assets != null)
             {
-                data.Asset = new Lib.ViewModels.FileViewModel(assets, data.AssetFolder);
-                FileRepository.Instance.SaveFile(assets, assets.FileName, data.AssetFolder);
+                data.Asset = new Lib.ViewModels.FileViewModel(assets, $"wwwroot/{data.AssetFolder}");
+                FileRepository.Instance.SaveFile(assets, assets.FileName, $"wwwroot/{data.AssetFolder}");
             }
             if (theme != null)
             {
@@ -173,7 +173,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     var currentThemeFolder = $"{MixConstants.Folder.TemplatesFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, _lang)}";
                     var assetFolder = $"{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, _lang)}/assets";
                     FileRepository.Instance.CopyDirectory(currentThemeFolder, data.TemplateFolder);
-                    FileRepository.Instance.CopyDirectory(assetFolder, data.AssetFolder);
+                    FileRepository.Instance.CopyDirectory(assetFolder, $"wwwroot/{data.AssetFolder}");
                 }
                 else
                 {
