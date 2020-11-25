@@ -12,6 +12,9 @@ namespace Mix.Cms.Lib.Models.Cms
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Auto apply configuration by convention.
+            modelBuilder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
+
             modelBuilder.Entity<MixAttributeField>(entity =>
             {
                 entity.ToTable("mix_attribute_field");
