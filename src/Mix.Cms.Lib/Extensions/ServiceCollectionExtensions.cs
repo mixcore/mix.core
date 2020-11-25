@@ -15,7 +15,8 @@ namespace Mix.Cms.Lib.Extensions
 
         public static IServiceCollection AddGenerateApis(this IServiceCollection services)
         {
-            services.AddGeneratedRestApi(Assembly.GetExecutingAssembly(), typeof(BaseRestApiController<,,,>));
+            services.AddGeneratedRestApi(Assembly.GetExecutingAssembly(), typeof(BaseRestApiController<,,>));
+            //services.AddGeneratedRestApi(Assembly.GetExecutingAssembly(), typeof(BaseRestApiController<,,,>));
             //services.AddGeneratedRestApi(Assembly.GetExecutingAssembly(), typeof(BaseRestApiController<,,,,>));
 
             services.AddSignalR();
