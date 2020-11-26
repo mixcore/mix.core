@@ -33,7 +33,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             string keyword = Request.Query["keyword"];
             Expression<Func<MixPost, bool>> predicate = model =>
                 model.Specificulture == _lang
-                && (!isStatus || model.Status == status.ToString())
+                && (!isStatus || model.Status == status)
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
                 && (string.IsNullOrEmpty(type) || model.Type == type)
@@ -61,7 +61,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 var model = new MixPost()
                 {
                     Specificulture = _lang,
-                    Status = MixService.GetConfig<string>("DefaultContentStatus"),
+                    Status = MixService.GetConfig<MixEnums.MixContentStatus>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
                     Type = Request.Query["type"].ToString(),
                     Template = Request.Query["template"].ToString()
 

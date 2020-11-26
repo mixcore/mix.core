@@ -61,7 +61,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         var model = new MixModulePost()
                         {
                             Specificulture = _lang,
-                            Status = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
+                            Status = MixService.GetConfig<MixEnums.MixContentStatus>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
                             Priority = ReadViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 
@@ -127,7 +127,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         model.Specificulture == _lang
                         && (!isModule || model.ModuleId == moduleId)
                         && (!isPost || model.PostId == postId)
-                        && (string.IsNullOrEmpty(request.Status) || model.Status == request.Status)
+                        && (string.IsNullOrEmpty(request.Status) || model.Status == Enum.Parse<MixEnums.MixContentStatus>(request.Status))
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (model.Description.Contains(request.Keyword)
                             ))

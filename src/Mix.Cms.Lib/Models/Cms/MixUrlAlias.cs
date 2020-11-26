@@ -16,7 +16,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string ModifiedBy { get; set; }
         public DateTime? LastModified { get; set; }
         public int Priority { get; set; }
-        public string Status { get; set; }
+        public MixEnums.MixContentStatus Status { get; set; }
 
         public virtual MixCulture SpecificultureNavigation { get; set; }
     }

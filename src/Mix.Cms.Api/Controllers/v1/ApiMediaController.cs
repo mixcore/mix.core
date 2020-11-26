@@ -105,7 +105,7 @@ namespace Mix.Cms.Api.Controllers.v1
             ParseRequestPagingDate(request);
             Expression<Func<MixMedia, bool>> predicate = model =>
                         model.Specificulture == _lang
-                        && (string.IsNullOrEmpty(request.Status) || model.Status == request.Status)
+                        && (string.IsNullOrEmpty(request.Status) || model.Status == Enum.Parse<MixEnums.MixContentStatus>(request.Status))
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (model.Title.Contains(request.Keyword)
                             || model.Description.Contains(request.Keyword)))
