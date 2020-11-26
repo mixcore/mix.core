@@ -130,7 +130,7 @@ namespace Mix.Cms.Web.Controllers
 
                 predicate = p =>
                 p.Alias == seoName
-                && p.Status == MixContentStatus.Published.ToString() && p.Specificulture == culture;
+                && p.Status == MixContentStatus.Published && p.Specificulture == culture;
 
                 getAlias = await Lib.ViewModels.MixUrlAliases.UpdateViewModel.Repository.GetFirstModelAsync(predicate);
                 if (getAlias.IsSucceed)// && getPage.Data.View != null
@@ -173,13 +173,13 @@ namespace Mix.Cms.Web.Controllers
             {
                 predicate = p =>
                 p.Type == MixPageType.Home.ToString()
-                && p.Status == MixContentStatus.Published.ToString() && p.Specificulture == culture;
+                && p.Status == MixContentStatus.Published && p.Specificulture == culture;
             }
             else
             {
                 predicate = p =>
                 p.SeoName == seoName
-                && p.Status == MixContentStatus.Published.ToString() && p.Specificulture == culture;
+                && p.Status == MixContentStatus.Published && p.Specificulture == culture;
             }
 
             getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetFirstModelAsync(predicate);
@@ -231,7 +231,7 @@ namespace Mix.Cms.Web.Controllers
 
             predicate = p =>
             p.Id == pageId
-            && p.Status == MixContentStatus.Published.ToString() && p.Specificulture == culture;
+            && p.Status == MixContentStatus.Published && p.Specificulture == culture;
 
             getPage = await Lib.ViewModels.MixPages.ReadMvcViewModel.Repository.GetFirstModelAsync(predicate);
             if (getPage.IsSucceed)
@@ -262,7 +262,7 @@ namespace Mix.Cms.Web.Controllers
             Expression<Func<MixPost, bool>> predicate;
             predicate = p =>
             p.Id == id
-            && p.Status == MixContentStatus.Published.ToString()
+            && p.Status == MixContentStatus.Published
             && p.Specificulture == culture;
 
             RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel> getPost = 
@@ -312,7 +312,7 @@ namespace Mix.Cms.Web.Controllers
 
             predicate = p =>
             p.Id == id
-            && p.Status == MixContentStatus.Published.ToString() && p.Specificulture == culture;
+            && p.Status == MixContentStatus.Published && p.Specificulture == culture;
 
             getData = await Lib.ViewModels.MixModules.ReadMvcViewModel.Repository.GetFirstModelAsync(predicate);
             if (getData.IsSucceed)

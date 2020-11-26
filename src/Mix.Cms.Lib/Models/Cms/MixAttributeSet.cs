@@ -29,7 +29,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public DateTime? LastModified { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public int Priority { get; set; }
-        public string Status { get; set; }
+        public MixEnums.MixContentStatus Status { get; set; }
 
         public virtual ICollection<MixAttributeField> MixAttributeFieldAttributeSet { get; set; }
         public virtual ICollection<MixAttributeField> MixAttributeFieldReference { get; set; }
