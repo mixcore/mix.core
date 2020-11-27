@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Cms.Lib.Services;
 using MySql.Data.MySqlClient;
 using System;
@@ -129,7 +130,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -203,7 +205,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -260,7 +263,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -303,7 +307,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -383,7 +388,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -423,7 +429,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -494,7 +501,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -556,7 +564,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -628,7 +637,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
             });
@@ -679,7 +689,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -758,7 +769,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -841,7 +853,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -922,7 +935,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -995,7 +1009,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -1062,7 +1077,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -1169,7 +1185,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -1243,7 +1260,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -1301,7 +1319,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -1348,7 +1367,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -1403,7 +1423,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -1450,7 +1471,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -1547,7 +1569,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -1626,7 +1649,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -1685,7 +1709,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -1762,7 +1787,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
             });
@@ -1811,7 +1837,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -1878,7 +1905,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
             });
@@ -1925,7 +1953,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -2010,7 +2039,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -2068,7 +2098,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -2128,7 +2159,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasColumnType("varchar(50)")
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+                    .HasColumnType("varchar(30)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
