@@ -1,4 +1,4 @@
-using GraphiQl;
+//using GraphiQl;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -99,7 +99,7 @@ namespace Mix.Cms.Web
             });
 
             //app.UseStaticFiles();
-            app.UseGraphiQl("/api/graphql");
+            //app.UseGraphiQl("/api/graphql");
 
             app.UseRouting();
             app.UseAuthentication();
