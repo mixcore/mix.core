@@ -12,6 +12,7 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -33,6 +34,45 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             else
             {
                 return BadRequest(getData.Errors);
+            }
+        }
+        
+        // GET: api/v1/rest/{culture}/attribute-set-data/addictional-data
+        [HttpGet("addictional-data")]
+        public async Task<ActionResult<PaginationModel<FormPortalViewModel>>> GetAddictionalData()
+        {
+            if (Enum.TryParse(Request.Query["parentType"].ToString(), out MixEnums.MixAttributeSetDataType parentType)
+                && int.TryParse(Request.Query["parentId"].ToString(), out int parentId) && parentId > 0)
+            {
+                var getData = await Helper.GetAddictionalData<FormPortalViewModel>(parentType, parentId, Request, _lang);
+                if (getData.IsSucceed)
+                {
+                    return Ok(getData.Data);
+                }
+                else
+                {
+                    return BadRequest(getData.Errors);
+                }
+            }
+            else
+            {
+                var getAttrSet = await Lib.ViewModels.MixAttributeSets.UpdateViewModel.Repository.GetSingleModelAsync(
+                    m => m.Name == Request.Query["databaseName"].ToString());
+                if (getAttrSet.IsSucceed)
+                {
+                    FormViewModel result = new FormViewModel()
+                    {
+                        Specificulture = _lang,
+                        AttributeSetId = getAttrSet.Data.Id,
+                        AttributeSetName = getAttrSet.Data.Name,
+                        Status = MixEnums.MixContentStatus.Published,
+                        Fields = getAttrSet.Data.Fields,
+                        ParentType = parentType
+                    };
+                    result.ExpandView();
+                    return Ok(result);
+                }
+                return BadRequest(getAttrSet.Errors);
             }
         }
 
