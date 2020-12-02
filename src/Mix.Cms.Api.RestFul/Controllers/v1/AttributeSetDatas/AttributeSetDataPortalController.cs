@@ -60,7 +60,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                     m => m.Name == Request.Query["databaseName"].ToString());
                 if (getAttrSet.IsSucceed)
                 {
-                    FormViewModel result = new FormViewModel()
+                    FormPortalViewModel result = new FormPortalViewModel()
                     {
                         Specificulture = _lang,
                         AttributeSetId = getAttrSet.Data.Id,

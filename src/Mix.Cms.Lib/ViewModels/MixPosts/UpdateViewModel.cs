@@ -249,7 +249,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Type = string.IsNullOrEmpty(Type) ? MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST: Type;
+            Type = string.IsNullOrEmpty(Type) ? MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST : Type;
 
             Cultures = LoadCultures(Specificulture, _context, _transaction);
             UrlAliases = GetAliases(_context, _transaction);
@@ -257,6 +257,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 ListTag = JArray.Parse(this.Tags);
             }
+
+            LoadAttributes(_context, _transaction);
 
             //Get Templates
             LoadTemplates(_context, _transaction);
@@ -1148,6 +1150,25 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 }
             }
             return result;
+        }
+
+        private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var getCategories = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
+                && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
+                && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_CATEGORY, _context, _transaction);
+            if (getCategories.IsSucceed)
+            {
+                SysCategories = getCategories.Data;
+            }
+
+            var getTags = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
+                && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
+                && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_TAG, _context, _transaction);
+            if (getTags.IsSucceed)
+            {
+                SysTags = getTags.Data;
+            }
         }
 
         private void GenerateSEO()
