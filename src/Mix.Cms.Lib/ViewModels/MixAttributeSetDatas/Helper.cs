@@ -229,7 +229,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
                 var databaseName = request.Query["databaseName"].ToString();
                 var dataId = (await context.MixRelatedAttributeData.FirstOrDefaultAsync(
-                    m => m.ParentType == parentType.ToString() && m.ParentId == parentId.ToString() && m.Specificulture == culture))?.DataId;
+                    m => m.AttributeSetName == databaseName && m.ParentType == parentType.ToString() && m.ParentId == parentId.ToString() && m.Specificulture == culture))?.DataId;
                 if (!string.IsNullOrEmpty(dataId))
                 {
                     return await DefaultRepository<MixCmsContext, MixAttributeSetData, TView>.Instance.GetSingleModelAsync(
