@@ -79,6 +79,26 @@
       "description": "Day",
       "priority": 0,
       "status": "Published"
+    },
+    {
+      "keyword": "post_image_width",
+      "scope": "Shared",
+      "category": "Site",
+      "value": "",
+      "dataType": "Integer",
+      "description": "Post Image Width",
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "post_image_height",
+      "scope": "Shared",
+      "category": "Site",
+      "value": "",
+      "dataType": "Integer",
+      "description": "Post Image Width",
+      "priority": 0,
+      "status": "Published"
     }
   ]
 }
