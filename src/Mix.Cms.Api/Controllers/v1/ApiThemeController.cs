@@ -155,14 +155,14 @@ namespace Mix.Cms.Api.Controllers.v1
 
             if (assets != null)
             {
-                data.Asset = new Lib.ViewModels.FileViewModel(assets, $"wwwroot/{data.AssetFolder}");
+                data.Asset = new Lib.ViewModels.FileViewModel(assets, data.AssetFolder);
                 FileRepository.Instance.SaveFile(assets, assets.FileName, $"wwwroot/{data.AssetFolder}");
             }
             if (theme != null)
             {
-                string importFolder = $"wwwroot/Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
+                string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
                 data.TemplateAsset = new Lib.ViewModels.FileViewModel(theme, importFolder);
-                FileRepository.Instance.SaveFile(theme, theme.FileName, importFolder);
+                FileRepository.Instance.SaveFile(theme, theme.FileName, $"wwwroot/{importFolder}");
             }
 
             // Load default blank if created new without upload theme
@@ -181,7 +181,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         Filename = "default_blank",
                         Extension = ".zip",
-                        FileFolder = "wwwroot/Imports/Themes"
+                        FileFolder = "Imports/Themes"
                     };
                 }
             }

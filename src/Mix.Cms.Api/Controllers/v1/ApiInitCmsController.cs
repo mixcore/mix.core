@@ -225,58 +225,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [DisableRequestSizeLimit]
         public async Task<RepositoryResponse<Cms.Lib.ViewModels.MixThemes.InitViewModel>> Save([FromForm] string model, [FromForm] IFormFile assets, [FromForm] IFormFile theme)
         {
-            var json = JObject.Parse(model);
-            var data = json.ToObject<Lib.ViewModels.MixThemes.InitViewModel>();
-
-            if (theme != null)
-            {
-                string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
-                FileRepository.Instance.SaveWebFile(theme, theme.FileName, importFolder);
-                data.TemplateAsset = new Lib.ViewModels.FileViewModel(theme, importFolder);
-            }
-            else
-            {
-                if (data.IsCreateDefault)
-                {
-                    data.TemplateAsset = new Lib.ViewModels.FileViewModel()
-                    {
-                        Filename = "default",
-                        Extension = ".zip",
-                        FileFolder = "wwwroot/Imports/Themes"
-                    };
-                }
-                else
-                {
-                    data.TemplateAsset = new Lib.ViewModels.FileViewModel()
-                    {
-                        Filename = "default_blank",
-                        Extension = ".zip",
-                        FileFolder = "wwwroot/Imports/Themes"
-                    };
-                }
-            }
-
-            if (data != null)
-            {
-                string culture = MixService.GetConfig<string>("DefaultCulture");
-                data.Title = MixService.GetConfig<string>("SiteName", culture);
-                data.Name = SeoHelper.GetSEOString(data.Title);
-                data.CreatedBy = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value ?? "Init";
-                data.Specificulture = _lang;
-                var result = await data.SaveModelAsync(true);
-                if (result.IsSucceed)
-                {
-                    // MixService.SetConfig<string>("SiteName", _lang, data.Title);
-                    MixService.LoadFromDatabase();
-                    MixService.SetConfig("InitStatus", 3);
-                    MixService.SetConfig("IsInit", false);
-                    MixService.SaveSettings();
-                    _ = Services.CacheService.RemoveCacheAsync();
-                    MixService.Reload();
-                }
-                return result;
-            }
-            return new RepositoryResponse<Lib.ViewModels.MixThemes.InitViewModel>() { Status = 501 };
+            return await Mix.Cms.Lib.ViewModels.MixThemes.Helper.InitTheme(model, _lang, assets, theme);
         }
 
         #endregion Post

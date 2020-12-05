@@ -1,10 +1,10 @@
-﻿using Mix.Cms.Lib.Repositories;
+﻿using Microsoft.AspNetCore.Http;
+using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
+using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixThemes
@@ -19,7 +19,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                  theme => theme.Id == id).ConfigureAwait(false);
 
             //path to temporary folder
-            string tempPath = $"wwwroot/Exports/Themes/{getTheme.Data.Name}/temp";
+            string tempPath = $"Exports/Themes/{getTheme.Data.Name}/temp";
             string outputPath = $"Exports/Themes/{getTheme.Data.Name}";
             data.ThemeName = getTheme.Data.Name;
             data.Specificulture = culture;
@@ -74,6 +74,59 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             {
                 return result;
             }
+        }
+
+        public static async Task<RepositoryResponse<InitViewModel>> InitTheme(string model, string culture, IFormFile assets, IFormFile theme)
+        {
+            var json = JObject.Parse(model);
+            var data = json.ToObject<Lib.ViewModels.MixThemes.InitViewModel>();
+            if (data != null)
+            {
+                string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
+                if (theme != null)
+                {
+                    Repositories.FileRepository.Instance.SaveWebFile(theme, theme.FileName, importFolder);
+                    data.TemplateAsset = new Lib.ViewModels.FileViewModel(theme, importFolder);
+                }
+                else
+                {
+                    if (data.IsCreateDefault)
+                    {
+                        data.TemplateAsset = new Lib.ViewModels.FileViewModel()
+                        {
+                            Filename = "default",
+                            Extension = ".zip",
+                            FileFolder = "Imports/Themes"
+                        };
+                    }
+                    else
+                    {
+                        data.TemplateAsset = new Lib.ViewModels.FileViewModel()
+                        {
+                            Filename = "default_blank",
+                            Extension = ".zip",
+                            FileFolder = "Imports/Themes"
+                        };
+                    }
+                }
+
+                data.Title = MixService.GetConfig<string>("SiteName", culture);
+                data.Name = SeoHelper.GetSEOString(data.Title);
+                data.Specificulture = culture;
+                var result = await data.SaveModelAsync(true);
+                if (result.IsSucceed)
+                {
+                    // MixService.SetConfig<string>("SiteName", _lang, data.Title);
+                    MixService.LoadFromDatabase();
+                    MixService.SetConfig("InitStatus", 3);
+                    MixService.SetConfig("IsInit", false);
+                    MixService.SaveSettings();
+                    _ = Mix.Services.CacheService.RemoveCacheAsync();
+                    MixService.Reload();
+                }
+                return result;
+            }
+            return new RepositoryResponse<InitViewModel>();            
         }
     }
 }

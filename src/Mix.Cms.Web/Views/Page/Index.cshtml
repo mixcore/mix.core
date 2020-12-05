@@ -4,7 +4,7 @@
     string layout = Model.Layout ?? "Masters/_Layout.cshtml";
     var masterTemplate = await MixCmsHelper.GetTemplateByPath(master, layout);
     Layout = $"{templateFolder}/{layout}";
-    
+
 }
 @* <mix-loader ng-show="isBusy"></mix-loader>
     <confirm ng-if="isInit" message="confirmMessage"></confirm>
@@ -63,10 +63,14 @@ else
     <meta name="keywords" content="@desc" />
 }
 @section Styles{
+    <!-- master styles -->
     @Html.Raw(masterTemplate?.Styles)
+    <!-- end master styles -->
     @Html.Raw(Model.View?.Styles)
 }
 @section Scripts{
+    <!-- master scripts -->
     @Html.Raw(masterTemplate?.Scripts)
+    <!-- end master scripts -->
     @Html.Raw(Model.View?.Scripts)
 }
