@@ -17,8 +17,8 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
-    public class FormPortalViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSetData, FormPortalViewModel>
+    public class AddictionalViewModel
+      : ViewModelBase<MixCmsContext, MixAttributeSetData, AddictionalViewModel>
     {
         #region Properties
 
@@ -78,7 +78,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("fields")]
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
         [JsonIgnore]
-        public List<MixAttributeSetDatas.FormPortalViewModel> RefData { get; set; } = new List<FormPortalViewModel>();
+        public List<MixAttributeSetDatas.AddictionalViewModel> RefData { get; set; } = new List<AddictionalViewModel>();
 
 
 
@@ -88,11 +88,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #region Contructors
 
-        public FormPortalViewModel() : base()
+        public AddictionalViewModel() : base()
         {
         }
 
-        public FormPortalViewModel(MixAttributeSetData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public AddictionalViewModel(MixAttributeSetData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -124,7 +124,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             Values = Values ?? MixAttributeSetValues.UpdateViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-            Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
+            Fields = Fields ?? MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
 
             foreach (var field in Fields.OrderBy(f => f.Priority))
             {
@@ -170,7 +170,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                                 }
                                 else
                                 {
-                                    RefData.Add(new FormPortalViewModel()
+                                    RefData.Add(new AddictionalViewModel()
                                     {
                                         Specificulture = Specificulture,
                                         AttributeSetId = field.ReferenceId.Value,
@@ -221,7 +221,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #region Async
 
-        public override async Task<RepositoryResponse<FormPortalViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override async Task<RepositoryResponse<AddictionalViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
@@ -260,7 +260,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             catch (Exception ex)
             {
-                return UnitOfWorkHelper<MixCmsContext>.HandleException<FormPortalViewModel>(ex, isRoot, transaction);
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<AddictionalViewModel>(ex, isRoot, transaction);
             }
             finally
             {
@@ -273,7 +273,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         }
 
-        public override RepositoryResponse<FormPortalViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override RepositoryResponse<AddictionalViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = base.SaveModel(isSaveSubModels, _context, _transaction);
             if (result.IsSucceed)
@@ -287,6 +287,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
 
+            if (result.IsSucceed)
+            {
+                RepositoryResponse<bool> saveFields = await SaveFields(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(saveFields, ref result);
+            }
+            
             if (result.IsSucceed)
             {
                 RepositoryResponse<bool> saveValues = await SaveValues(parent, _context, _transaction);
@@ -309,6 +315,34 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             return result;
         }
 
+        private async Task<RepositoryResponse<bool>> SaveFields(MixAttributeSetData parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var field in Fields)
+            {
+                if (result.IsSucceed)
+                {
+                    if (field.AttributeSetName == "sys_additional_field")
+                    {
+                        // Add field to addictional_field set
+                        var saveField = await field.SaveModelAsync(false, context, transaction);
+                        var val = Values.FirstOrDefault(m => m.AttributeFieldName == field.Name);
+                        ViewModelHelper.HandleResult(saveField, ref result);
+                        if (result.IsSucceed)
+                        {
+                            val.AttributeFieldId = saveField.Data.Id;
+                            val.AttributeSetName = saveField.Data.AttributeSetName;
+                        }
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return result;
+        }
+        
         private async Task<RepositoryResponse<bool>> SaveValues(MixAttributeSetData parent, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -614,7 +648,16 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 var getValues = MixAttributeSetValues.UpdateViewModel
                        .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
-                Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
+
+                // if create new => init from default custom data
+                if (string.IsNullOrEmpty(Id))
+                {
+                    Fields = Fields ?? MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
+                }
+                else // load custom fields
+                {
+                    Fields = getValues.Data.Select(v => v.Field).OrderBy(f => f.Priority).ToList();
+                }
                 Values = getValues.Data.OrderBy(a => a.Priority).ToList();
                 foreach (var field in Fields.OrderBy(f => f.Priority))
                 {
