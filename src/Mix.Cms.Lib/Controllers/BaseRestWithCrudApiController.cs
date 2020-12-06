@@ -508,7 +508,8 @@ namespace Mix.Cms.Lib.Controllers
             return data;
         }
 
-        protected async Task<RepositoryResponse<TView>> SaveAsync(TView vm, bool isSaveSubModel)
+        protected async Task<RepositoryResponse<T>> SaveAsync<T>(T vm, bool isSaveSubModel)
+            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
             if (vm != null)
             {
@@ -517,7 +518,7 @@ namespace Mix.Cms.Lib.Controllers
 
                 return result;
             }
-            return new RepositoryResponse<TView>();
+            return new RepositoryResponse<T>();
         }
 
         protected async Task<RepositoryResponse<TModel>> SavePropertiesAsync(JObject obj, Expression<Func<TModel, bool>> predicate)

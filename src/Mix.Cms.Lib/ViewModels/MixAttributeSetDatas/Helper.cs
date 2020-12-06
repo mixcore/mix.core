@@ -216,11 +216,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
         }
 
-        public static async Task<RepositoryResponse<TView>> GetAddictionalData<TView>(
+        public static async Task<RepositoryResponse<AddictionalViewModel>> GetAddictionalData(
             MixEnums.MixAttributeSetDataType parentType, int parentId,
             HttpRequest request, string culture = null,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-            where TView : ViewModelBase<MixCmsContext, MixAttributeSetData, TView>
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
@@ -232,14 +231,38 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     m => m.AttributeSetName == databaseName && m.ParentType == parentType.ToString() && m.ParentId == parentId.ToString() && m.Specificulture == culture))?.DataId;
                 if (!string.IsNullOrEmpty(dataId))
                 {
-                    return await DefaultRepository<MixCmsContext, MixAttributeSetData, TView>.Instance.GetSingleModelAsync(
+                    return await AddictionalViewModel.Repository.GetSingleModelAsync(
                         m => m.Id == dataId && m.Specificulture == culture);
                 }
-                return new RepositoryResponse<TView>();
+                else
+                {
+                    // Init default data
+                    var getAttrSet = await Lib.ViewModels.MixAttributeSets.UpdateViewModel.Repository.GetSingleModelAsync(
+                    m => m.Name == request.Query["databaseName"].ToString());
+                    if (getAttrSet.IsSucceed)
+                    {
+                        AddictionalViewModel result = new AddictionalViewModel()
+                        {
+                            Specificulture = culture,
+                            AttributeSetId = getAttrSet.Data.Id,
+                            AttributeSetName = getAttrSet.Data.Name,
+                            Status = MixEnums.MixContentStatus.Published,
+                            Fields = getAttrSet.Data.Fields,
+                            ParentType = parentType
+                        };
+                        result.ExpandView();
+                        return new RepositoryResponse<AddictionalViewModel>()
+                        {
+                            IsSucceed = true,
+                            Data = result
+                        };
+                    }
+                }
+                return new RepositoryResponse<AddictionalViewModel>();
             }
             catch (Exception ex)
             {
-                return UnitOfWorkHelper<MixCmsContext>.HandleException<TView>(ex, isRoot, transaction);
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<AddictionalViewModel>(ex, isRoot, transaction);
             }
             finally
             {
