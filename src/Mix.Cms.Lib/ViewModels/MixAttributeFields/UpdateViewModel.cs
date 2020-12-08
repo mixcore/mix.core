@@ -23,6 +23,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
 
         [JsonProperty("attributeSetName")]
         public string AttributeSetName { get; set; }
+        
+        [JsonProperty("configurations")]
+        public string Configurations { get; set; }
 
         [JsonProperty("referenceId")]
         public int? ReferenceId { get; set; }
@@ -77,6 +80,13 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         public MixEnums.MixContentStatus Status { get; set; }
         #endregion Models
 
+        #region Views
+
+        [JsonProperty("fieldConfigurations")]
+        public FieldConfigurations FieldConfigurations { get; set; } = new FieldConfigurations();
+
+        #endregion
+
         #endregion Properties
 
         #region Contructors
@@ -129,6 +139,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
                 CreatedDateTime = DateTime.UtcNow;
             }
             Options = JOptions?.ToString();
+            Configurations = JObject.FromObject(FieldConfigurations).ToString(Formatting.None);
             return base.ParseModel(_context, _transaction);
         }
 
@@ -138,6 +149,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
             {
                 JOptions = JArray.Parse(Options);
             }
+            
+            FieldConfigurations = string.IsNullOrEmpty(Configurations) ? new FieldConfigurations()
+                    : JObject.Parse(Configurations).ToObject<FieldConfigurations>();
         }
 
         #endregion Overrides

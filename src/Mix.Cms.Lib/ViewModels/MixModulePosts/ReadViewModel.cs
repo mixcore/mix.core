@@ -63,6 +63,19 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
         #endregion Views
 
         #region overrides
+        public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            base.Validate(_context, _transaction);
+            if (IsValid)
+            {
+                IsValid = !_context.MixModulePost.Any(m => m.PostId == PostId && m.ModuleId == ModuleId
+                    && m.Id != Id && m.Specificulture == Specificulture);
+                if (!IsValid)
+                {
+                    Errors.Add("Existed");
+                }
+            }
+        }
         public override MixModulePost ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)

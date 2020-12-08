@@ -103,6 +103,13 @@ namespace Mix.Cms.Lib
 
         #region Types
 
+        public enum MixAddictionalType
+        {
+            Page,
+            Post,
+            Module
+        }
+
         public enum MixPageType
         {
             Article = 1,

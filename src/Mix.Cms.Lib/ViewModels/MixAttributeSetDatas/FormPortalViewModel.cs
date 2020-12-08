@@ -75,7 +75,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonIgnore]
         public List<MixAttributeSetValues.UpdateViewModel> Values { get; set; }
 
-        [JsonIgnore]
+        [JsonProperty("fields")]
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
         [JsonIgnore]
         public List<MixAttributeSetDatas.FormPortalViewModel> RefData { get; set; } = new List<FormPortalViewModel>();

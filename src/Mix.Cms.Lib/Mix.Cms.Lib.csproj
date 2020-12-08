@@ -12,8 +12,6 @@
     <Compile Remove="Migrations\20200409113816_Init.Designer.cs" />
     <Compile Remove="Migrations\MixCmsAccount\20190804034827_init_mysql.cs" />
     <Compile Remove="Migrations\MixCmsAccount\20190804034827_init_mysql.Designer.cs" />
-    <Compile Remove="Migrations\MixCms\20201007055113_add_post_type.cs" />
-    <Compile Remove="Migrations\MixCms\20201007055113_add_post_type.Designer.cs" />
     <Compile Remove="Services\MixCacheService.cs" />
     <Compile Remove="ViewModels\MixAttributeFields\HubViewModel.cs" />
     <Compile Remove="ViewModels\MixAttributeFields\MobileViewModel.cs" />
@@ -57,10 +55,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Mix.Heart.NetCore\Mix.Heart.NetCore.csproj" />
     <ProjectReference Include="..\Mix.Identity\Mix.Identity.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Migrations\MixCms\" />
   </ItemGroup>
 
 </Project>

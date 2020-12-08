@@ -123,22 +123,22 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             }
         }
 
-        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSet parent, MixCmsContext _context, IDbContextTransaction _transaction)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            // Save Fields
-            if (Fields != null)
-            {
-                result = await SaveFieldsAsync(parent, _context, _transaction);
-            }
-            //if (result.IsSucceed)
-            //{
-            //    // Save Data
-            //    result = await SaveDataAsync(parent, _context, _transaction);
-            //}
+        //public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSet parent, MixCmsContext _context, IDbContextTransaction _transaction)
+        //{
+        //    var result = new RepositoryResponse<bool>() { IsSucceed = true };
+        //    // Save Fields
+        //    //if (Fields != null)
+        //    //{
+        //    //    result = await SaveFieldsAsync(parent, _context, _transaction);
+        //    //}
+        //    //if (result.IsSucceed)
+        //    //{
+        //    //    // Save Data
+        //    //    result = await SaveDataAsync(parent, _context, _transaction);
+        //    //}
 
-            return result;
-        }
+        //    return result;
+        //}
 
         private async Task<RepositoryResponse<bool>> SaveDataAsync(MixAttributeSet parent, MixCmsContext context, IDbContextTransaction transaction)
         {
@@ -165,25 +165,25 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> SaveFieldsAsync(MixAttributeSet parent, MixCmsContext context, IDbContextTransaction transaction)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            foreach (var item in Fields)
-            {
-                if (result.IsSucceed)
-                {
-                    item.AttributeSetId = parent.Id;
-                    item.AttributeSetName = parent.Name;
-                    var saveResult = await item.SaveModelAsync(false, context, transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-                }
-                else
-                {
-                    break;
-                }
-            }
-            return result;
-        }
+        //private async Task<RepositoryResponse<bool>> SaveFieldsAsync(MixAttributeSet parent, MixCmsContext context, IDbContextTransaction transaction)
+        //{
+        //    var result = new RepositoryResponse<bool>() { IsSucceed = true };
+        //    foreach (var item in Fields)
+        //    {
+        //        if (result.IsSucceed)
+        //        {
+        //            item.AttributeSetId = parent.Id;
+        //            item.AttributeSetName = parent.Name;
+        //            var saveResult = await item.SaveModelAsync(false, context, transaction);
+        //            ViewModelHelper.HandleResult(saveResult, ref result);
+        //        }
+        //        else
+        //        {
+        //            break;
+        //        }
+        //    }
+        //    return result;
+        //}
 
         public override RepositoryResponse<bool> SaveSubModels(MixAttributeSet parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {

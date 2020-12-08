@@ -5,6 +5,7 @@ using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
+using Mix.Heart.NetCore.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -14,6 +15,7 @@ using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixModules
 {
+    [GeneratedController("api/v1/rest/{culture}/mix-module/mvc")]
     public class ReadMvcViewModel
         : ViewModelBase<MixCmsContext, MixModule, ReadMvcViewModel>
     {

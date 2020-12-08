@@ -102,18 +102,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         #region Views
 
-        [JsonProperty("postNavs")]
-        public List<MixPagePosts.ImportViewModel> PostNavs { get; set; } // Parent to Posts
-
-        [JsonProperty("moduleNavs")]
-        public List<MixPageModules.ImportViewModel> ModuleNavs { get; set; } // Parent to Modules
-
-        //[JsonProperty("parentNavs")]
-        //public List<MixPagePages.ReadViewModel> ParentNavs { get; set; } // Parent to  Parent
-
-        //[JsonProperty("childNavs")]
-        //public List<MixPagePages.ReadViewModel> ChildNavs { get; set; } // Parent to  Parent
-
         [JsonProperty("urlAliases")]
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
 
@@ -143,112 +131,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            //Cultures = Helper.LoadCultures(Id, Specificulture, _context, _transaction);
-            //this.ModuleNavs = GetModuleNavs(_context, _transaction);
-            ////this.ParentNavs = GetParentNavs(_context, _transaction);
-            ////this.ChildNavs = GetChildNavs(_context, _transaction);
-            //this.UrlAliases = GetAliases(_context, _transaction);
         }
 
         #region Async
-
-        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixPage parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var result = new RepositoryResponse<bool> { IsSucceed = true };
-
-            // Save Alias
-            //foreach (var item in UrlAliases)
-            //{
-            //    item.SourceId = parent.Id.ToString();
-            //    item.Type = UrlAliasType.Page;
-            //    item.Specificulture = parent.Specificulture;
-            //    var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-            //    ViewModelHelper.HandleResult(saveResult, ref result);
-            //    if (!result.IsSucceed)
-            //    {
-            //        break;
-            //    }
-            //}
-            // End Save Alias
-
-            //Save Module Navigations
-            if (result.IsSucceed && ModuleNavs != null)
-            {
-                var startId = MixPageModules.ImportViewModel.Repository.Max(m => m.Id).Data;
-                foreach (var item in ModuleNavs)
-                {
-
-                    if (!MixModules.ImportViewModel.Repository.CheckIsExists(m => m.Name == item.Module.Name && m.Specificulture == parent.Specificulture,
-                            _context, _transaction))
-                    {
-                        //  Force to create new module
-                        item.Module.Specificulture = parent.Specificulture;
-                        if (!string.IsNullOrEmpty(item.Image))
-                        {
-                            item.Image = item.Image.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", parent.Specificulture)}");
-                        }
-                        if (!string.IsNullOrEmpty(item.Module.Image))
-                        {
-                            item.Module.Image = item.Module.Image.Replace($"content/templates/{ThemeName}", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", parent.Specificulture)}");
-                        }
-                        if (!string.IsNullOrEmpty(item.Module.Thumbnail))
-                        {
-                            item.Module.Thumbnail = item.Module.Thumbnail.Replace("content/templates/default", $"content/templates/{MixService.GetConfig<string>("ThemeFolder", parent.Specificulture)}");
-                        }
-                        var saveModule = await item.Module.SaveModelAsync(true, _context, _transaction);
-                        ViewModelHelper.HandleResult(saveModule, ref result);
-                        if (!result.IsSucceed)
-                        {
-                            break;
-                        }
-                        else // Save Module Success
-                        {
-                            startId++;
-                            item.Id = startId;
-                            item.PageId = parent.Id;
-                            item.ModuleId = saveModule.Data.Id;
-                            item.Specificulture = parent.Specificulture;
-                            item.Description = saveModule.Data.Title;
-                            item.CreatedDateTime = DateTime.UtcNow;
-                            item.CreatedBy = CreatedBy;
-                            var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                            ViewModelHelper.HandleResult(saveResult, ref result);
-                            if (!result.IsSucceed)
-                            {
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            // End Save Module Navigations
-            /*
-            // Save Parents Pages
-            if (result.IsSucceed)
-            {
-                foreach (var item in ParentNavs)
-                {
-                    item.Id = parent.Id;
-
-                    var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-                }
-            }
-            // End Save Parents Pages
-
-            // Save Children Pages
-            if (result.IsSucceed)
-            {
-                foreach (var item in ChildNavs)
-                {
-                    item.ParentId = parent.Id;
-                    var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-                }
-            }
-            // End Save Children Pages*/
-            return result;
-        }
 
         #endregion Async
 

@@ -24,11 +24,12 @@ namespace Mix.Heart.Providers
 
             foreach (var candidate in candidates)
             {
-                if (candidate.BaseType.IsGenericType)
+                if (candidate.BaseType.IsGenericType 
+                    && candidate.BaseType.GenericTypeArguments.Length == this.BaseType.GetGenericArguments().Length)
                 {
+                    Type[] types = candidate.BaseType.GenericTypeArguments;
                     feature.Controllers.Add(
-                        BaseType.MakeGenericType(
-                            candidate.BaseType.GenericTypeArguments[0], candidate.BaseType.GenericTypeArguments[1], candidate)
+                        BaseType.MakeGenericType(types)
                             .GetTypeInfo()
                     );
                 }

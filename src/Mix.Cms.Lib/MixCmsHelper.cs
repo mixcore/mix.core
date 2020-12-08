@@ -285,7 +285,7 @@ namespace Mix.Cms.Lib
             //        activePath = $"/{culture}/{alias}";
             //        break;
             //}
-            if (nav != null && !string.IsNullOrEmpty(activePath))
+            if (nav != null)
             {
                 foreach (var cate in nav.MenuItems)
                 {

@@ -88,6 +88,13 @@
     <div class="card form-init">
         <div class="p-5">
             <img class="mb-4" src="/css/portal/img/mixcore-logo-green.svg" alt="Mixcore CMS" height="35">
+            @try
+            {
+            <p>@Environment.GetEnvironmentVariable("MYSQLCONNSTR_localdb")</p>
+            }
+            catch(Exception ex) { 
+                @ex.Message
+            }
             @RenderBody()
         </div>
     </div>
