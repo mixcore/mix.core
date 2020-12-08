@@ -77,7 +77,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #region Views
 
         [JsonProperty("data")]
-        public PaginationModel<MixModuleDatas.ReadViewModel> Data { get; set; } = new PaginationModel<MixModuleDatas.ReadViewModel>();
+        public List<MixModuleDatas.ImportViewModel> Data { get; set; } = new List<MixModuleDatas.ImportViewModel>();
+
+        [JsonProperty("postNavs")]
+        public List<MixModulePosts.ImportViewModel> PostNavs { get; set; } // Parent to Posts
 
         //Parent Post Id
         [JsonProperty("postId")]
@@ -151,7 +154,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         {
             var result = new RepositoryResponse<bool> { IsSucceed = true };
 
-            foreach (var item in Data.Items)
+            foreach (var item in Data)
             {
                 if (result.IsSucceed)
                 {
@@ -186,7 +189,12 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                        , "Priority", 0, null, null
                        , _context, _transaction);
         }
-
+        public List<MixModulePosts.ImportViewModel> GetPostNavs(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            return MixModulePosts.ImportViewModel.Repository.GetModelListBy(
+                m => m.Specificulture == Specificulture && m.ModuleId == Id,
+                context, transaction).Data;
+        }
         #endregion Expand
     }
 }

@@ -562,10 +562,10 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
             }
         }
 
-        public override void GenerateCache(MixAttributeSetData model, FormViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override Task GenerateCache(MixAttributeSetData model, FormViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             ParseData();
-            base.GenerateCache(model, view, _context, _transaction);
+            return base.GenerateCache(model, view, _context, _transaction);
         }
 
         //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)

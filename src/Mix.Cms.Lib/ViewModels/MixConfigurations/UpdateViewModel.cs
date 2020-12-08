@@ -17,7 +17,7 @@ using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib.ViewModels.MixConfigurations
 {
-    public class UpdateViewModel : ViewModelBase<MixCmsContext, MixConfiguration, UpdateViewModel>
+    public class ImportViewModel : ViewModelBase<MixCmsContext, MixConfiguration, ImportViewModel>
     {
         #region Properties
 
@@ -73,11 +73,11 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
 
         #region Contructors
 
-        public UpdateViewModel() : base()
+        public ImportViewModel() : base()
         {
         }
 
-        public UpdateViewModel(MixConfiguration model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public ImportViewModel(MixConfiguration model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
@@ -109,7 +109,7 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
             Property = new DataValueViewModel() { DataType = DataType, Value = Value, Name = Keyword };
         }
 
-        public override async Task<RepositoryResponse<UpdateViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override async Task<RepositoryResponse<ImportViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = await base.SaveModelAsync(isSaveSubModels, _context, _transaction);
             if (result.IsSucceed && _context == null)
@@ -132,7 +132,7 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
             {
                 foreach (var item in arrConfiguration)
                 {
-                    var conf = new UpdateViewModel(item, context, transaction);
+                    var conf = new ImportViewModel(item, context, transaction);
                     conf.CreatedDateTime = DateTime.UtcNow;
                     conf.Specificulture = destCulture;
                     var saveResult = await conf.SaveModelAsync(false, context, transaction);

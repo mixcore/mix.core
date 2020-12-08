@@ -67,58 +67,10 @@ namespace Mix.Cms.Api.Controllers.v1
         // GET api/theme/id
         [HttpPost, HttpOptions]
         [Route("export/{id}")]
-        public async Task<RepositoryResponse<string>> Export(int id, [FromBody] SiteStructureViewModel data)
+        public Task<RepositoryResponse<string>> Export(int id, [FromBody] SiteStructureViewModel data)
         {
-            var getTheme = await ReadViewModel.Repository.GetSingleModelAsync(
-                 theme => theme.Id == id).ConfigureAwait(false);
-
-            //path to temporary folder
-            string tempPath = $"wwwroot/Exports/Themes/{getTheme.Data.Name}/temp";
-            string outputPath = $"Exports/Themes/{getTheme.Data.Name}";
-            data.ThemeName = getTheme.Data.Name;
-            data.Specificulture = _lang;
-            var result = data.ProcessSelectedExportDataAsync();
-            if (result.IsSucceed)
-            {
-                string filename = $"schema";
-                var file = new FileViewModel()
-                {
-                    Filename = filename,
-                    Extension = ".json",
-                    FileFolder = $"{tempPath}/Data",
-                    Content = JObject.FromObject(data).ToString()
-                };
-
-                // Delete Existing folder
-                FileRepository.Instance.DeleteFolder(outputPath);
-                // Copy current templates file
-                FileRepository.Instance.CopyDirectory($"{getTheme.Data.TemplateFolder}", $"{tempPath}/Templates");
-                // Copy current assets files
-                FileRepository.Instance.CopyDirectory($"{getTheme.Data.AssetFolder}", $"{tempPath}/Assets");
-                // Copy current uploads files
-                FileRepository.Instance.CopyDirectory($"{getTheme.Data.UploadsFolder}", $"{tempPath}/Uploads");
-                // Save Site Structures
-                FileRepository.Instance.SaveFile(file);
-
-                // Zip to [theme_name].zip ( wwwroot for web path)
-                string filePath = FileRepository.Instance.ZipFolder($"{tempPath}", outputPath, $"{getTheme.Data.Name}-{Guid.NewGuid()}");
-
-                // Delete temp folder
-                FileRepository.Instance.DeleteWebFolder($"{outputPath}/Assets");
-                FileRepository.Instance.DeleteWebFolder($"{outputPath}/Uploads");
-                FileRepository.Instance.DeleteWebFolder($"{outputPath}/Templates");
-                FileRepository.Instance.DeleteWebFolder($"{outputPath}/Data");
-
-                return new RepositoryResponse<string>()
-                {
-                    IsSucceed = !string.IsNullOrEmpty(outputPath),
-                    Data = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/{filePath}"
-                };
-            }
-            else
-            {
-                return result;
-            }
+            return Lib.ViewModels.MixThemes.Helper.ExportTheme(id, data
+                , _lang, HttpContext.Request.Scheme, HttpContext.Request.Host.Value);
         }
 
         // GET api/theme/id
@@ -195,7 +147,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST api/theme
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
-        [RequestFormSizeLimit(100000000)] // 200Mb
+        [DisableRequestSizeLimit]
         [Route("save")]
         public async Task<RepositoryResponse<UpdateViewModel>> Save([FromForm] string model, [FromForm] IFormFile assets, [FromForm] IFormFile theme)
         {
@@ -204,13 +156,13 @@ namespace Mix.Cms.Api.Controllers.v1
             if (assets != null)
             {
                 data.Asset = new Lib.ViewModels.FileViewModel(assets, data.AssetFolder);
-                FileRepository.Instance.SaveFile(assets, assets.FileName, data.AssetFolder);
+                FileRepository.Instance.SaveFile(assets, assets.FileName, $"wwwroot/{data.AssetFolder}");
             }
             if (theme != null)
             {
-                string importFolder = $"wwwroot/Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
+                string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
                 data.TemplateAsset = new Lib.ViewModels.FileViewModel(theme, importFolder);
-                FileRepository.Instance.SaveFile(theme, theme.FileName, importFolder);
+                FileRepository.Instance.SaveFile(theme, theme.FileName, $"wwwroot/{importFolder}");
             }
 
             // Load default blank if created new without upload theme
@@ -221,7 +173,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     var currentThemeFolder = $"{MixConstants.Folder.TemplatesFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, _lang)}";
                     var assetFolder = $"{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, _lang)}/assets";
                     FileRepository.Instance.CopyDirectory(currentThemeFolder, data.TemplateFolder);
-                    FileRepository.Instance.CopyDirectory(assetFolder, data.AssetFolder);
+                    FileRepository.Instance.CopyDirectory(assetFolder, $"wwwroot/{data.AssetFolder}");
                 }
                 else
                 {
@@ -229,7 +181,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         Filename = "default_blank",
                         Extension = ".zip",
-                        FileFolder = "wwwroot/Imports/Themes"
+                        FileFolder = "Imports/Themes"
                     };
                 }
             }

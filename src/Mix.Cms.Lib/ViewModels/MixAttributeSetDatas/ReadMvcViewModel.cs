@@ -179,7 +179,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 var getData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(predicate, _context, _transaction);
 
                 JArray arr = new JArray();
-                foreach (var nav in getData.Data)
+                foreach (var nav in getData.Data.OrderBy(v => v.Priority))
                 {
                     arr.Add(nav.Data.Obj);
                 }

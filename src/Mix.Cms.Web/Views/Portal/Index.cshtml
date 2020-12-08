@@ -6,7 +6,7 @@
     var menus = MixCmsHelper.LoadDataFile("data/consts", "portal-menus.json");
 }
 <div class="w-100" ng-show="isAuth">
-    
+
     <mix-loader ng-show="isBusy"></mix-loader>
     <header-nav ng-if="isInit" settings="settings" bread-crumbs="breadCrumbs"></header-nav>
     <login-popup></login-popup>
@@ -47,7 +47,8 @@
                     <hub-messages ng-if="isInit"></hub-messages>
                     <message ng-if="isInit" message="message"></message>
                     <confirm ng-if="isInit" message="confirmMessage"></confirm>
-                    <modal-favorite ng-if="isInit"></modal-favorite>
+                    <modal-permission ng-if="isInit"></modal-permission>
+                    <modal-bookmark ng-if="isInit"></modal-bookmark>
                     <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
                 </section>
 

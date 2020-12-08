@@ -52,9 +52,22 @@ namespace Mix.Cms.Lib.Controllers
                 OrderBy = Request.Query["orderBy"].ToString().ToTitleCase(),
                 Direction = direction
             };
-
-            RepositoryResponse<PaginationModel<TRead>> getData = await DefaultRepository<TDbContext, TModel, TRead>.Instance.GetModelListAsync(
+            Expression<Func<TModel, bool>> predicate = null;
+            RepositoryResponse<PaginationModel<TRead>> getData = null;
+            if (!string.IsNullOrEmpty(_lang))
+            {
+                predicate = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+                getData = await DefaultRepository<TDbContext, TModel, TRead>.Instance.GetModelListByAsync(
+                            predicate,
+                            request.OrderBy, request.Direction, 
+                            request.PageSize, request.PageIndex, null, null)
+                    .ConfigureAwait(false);
+            }
+            else
+            {
+                getData = await DefaultRepository<TDbContext, TModel, TRead>.Instance.GetModelListAsync(
                 request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
+            }
 
             if (getData.IsSucceed)
             {

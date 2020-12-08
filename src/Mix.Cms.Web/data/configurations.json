@@ -31,46 +31,6 @@
       "status": "Published"
     },
     {
-      "keyword": "Favicon",
-      "scope": "Site",
-      "category": "Common",
-      "value": "/css/portal/img/mixcore-logo-green-16x16.png",
-      "dataType": 16,
-      "description": "Favicon",
-      "priority": 0,
-      "status": "Published"
-    },
-    {
-      "keyword": "Logo",
-      "scope": "Site",
-      "category": "Common",
-      "value": "/css/portal/img/mixcore-logo-green.png",
-      "dataType": 16,
-      "description": "Logo",
-      "priority": 0,
-      "status": "Published"
-    },
-    {
-      "keyword": "LogoWhite",
-      "scope": "Site",
-      "category": "Common",
-      "value": "",
-      "dataType": 16,
-      "description": "Logo White",
-      "priority": 0,
-      "status": "Published"
-    },
-    {
-      "keyword": "LogoBlack",
-      "scope": "Site",
-      "category": "Common",
-      "value": "",
-      "dataType": 16,
-      "description": "Logo Black",
-      "priority": 0,
-      "status": "Published"
-    },
-    {
       "keyword": "ThemeName",
       "scope": "System",
       "category": "Site",
@@ -117,6 +77,26 @@
       "value": "Monday",
       "dataType": "Text",
       "description": "Day",
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "post_image_width",
+      "scope": "Shared",
+      "category": "Site",
+      "value": "",
+      "dataType": "Integer",
+      "description": "Post Image Width",
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "post_image_height",
+      "scope": "Shared",
+      "category": "Site",
+      "value": "",
+      "dataType": "Integer",
+      "description": "Post Image Width",
       "priority": 0,
       "status": "Published"
     }

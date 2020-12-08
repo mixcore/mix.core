@@ -12,6 +12,7 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -35,16 +36,90 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 return BadRequest(getData.Errors);
             }
         }
+        
+        // GET: api/v1/rest/{culture}/attribute-set-data/addictional-data
+        [HttpGet("addictional-data")]
+        public async Task<ActionResult<PaginationModel<AddictionalViewModel>>> GetAddictionalData()
+        {
+            if (Enum.TryParse(Request.Query["parentType"].ToString(), out MixEnums.MixAttributeSetDataType parentType)
+                && int.TryParse(Request.Query["parentId"].ToString(), out int parentId) && parentId > 0)
+            {
+                var getData = await Helper.GetAddictionalData(parentType, parentId, Request, _lang);
+                if (getData.IsSucceed)
+                {
+                    return Ok(getData.Data);
+                }
+                else
+                {
+                    return BadRequest(getData.Errors);
+                }
+            }
+            else
+            {
+                var getAttrSet = await Lib.ViewModels.MixAttributeSets.UpdateViewModel.Repository.GetSingleModelAsync(
+                    m => m.Name == Request.Query["databaseName"].ToString());
+                if (getAttrSet.IsSucceed)
+                {
+                    AddictionalViewModel result = new AddictionalViewModel()
+                    {
+                        Specificulture = _lang,
+                        AttributeSetId = getAttrSet.Data.Id,
+                        AttributeSetName = getAttrSet.Data.Name,
+                        Status = MixEnums.MixContentStatus.Published,
+                        Fields = getAttrSet.Data.Fields,
+                        ParentType = parentType
+                    };
+                    result.ExpandView();
+                    return Ok(result);
+                }
+                return BadRequest(getAttrSet.Errors);
+            }
+        }
+
+        // PUT: api/s/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
+        [HttpPost("save-addictional-data")]
+        public async Task<IActionResult> SaveAddictionalData([FromBody] AddictionalViewModel data)
+        {
+            if (string.IsNullOrEmpty(data.Id))
+            {
+                data.CreatedBy = User.Identity.Name;
+            }
+            else
+            {
+                data.ModifiedBy = User.Identity.Name;
+                data.LastModified = DateTime.UtcNow;
+            }
+
+            var result = await base.SaveAsync<AddictionalViewModel>(data, true);
+            if (result.IsSucceed)
+            {
+                return Ok(result.Data);
+            }
+            else
+            {
+                var current = await GetSingleAsync(data.Id);
+                if (!current.IsSucceed)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return BadRequest(result.Errors);
+                }
+            }
+        }
 
         // GET: api/v1/rest/{culture}/attribute-set-data
         [HttpGet("init/{attributeSet}")]
-        public async Task<ActionResult<FormPortalViewModel>> Init(string attributeSet)
+        public async Task<ActionResult<FormViewModel>> Init(string attributeSet)
         {
             int.TryParse(attributeSet, out int attributeSetId);
             var getAttrSet = await Lib.ViewModels.MixAttributeSets.UpdateViewModel.Repository.GetSingleModelAsync(m => m.Name == attributeSet || m.Id == attributeSetId);
             if (getAttrSet.IsSucceed)
             {
-                FormPortalViewModel result = new FormPortalViewModel()
+                FormViewModel result = new FormViewModel()
                 {
                     Specificulture = _lang,
                     AttributeSetId = getAttrSet.Data.Id,

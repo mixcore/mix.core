@@ -132,12 +132,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("thumbnailFileStream")]
         public FileStreamViewModel ThumbnailFileStream { get; set; }
 
-        [JsonProperty("attributes")]
-        public MixAttributeSets.UpdateViewModel Attributes { get; set; }
-
-        [JsonProperty("attributeData")]
-        public MixRelatedAttributeDatas.UpdateViewModel AttributeData { get; set; }
-
         [JsonProperty("sysCategories")]
         public List<MixRelatedAttributeDatas.FormViewModel> SysCategories { get; set; }
 
@@ -255,7 +249,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Type = string.IsNullOrEmpty(Type) ? MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST: Type;
+            Type = string.IsNullOrEmpty(Type) ? MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST : Type;
 
             Cultures = LoadCultures(Specificulture, _context, _transaction);
             UrlAliases = GetAliases(_context, _transaction);
@@ -264,11 +258,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 ListTag = JArray.Parse(this.Tags);
             }
 
-            // Load Attributes
             LoadAttributes(_context, _transaction);
-
-            //// Load Properties
-            //LoadExtraProperties();
 
             //Get Templates
             LoadTemplates(_context, _transaction);
@@ -424,23 +414,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         private async Task<RepositoryResponse<bool>> SaveAttributeAsync(int parentId, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-
-            // Force create new sub models if parent is create new
-            if (AttributeData.ParentId != parentId.ToString())
-            {
-                AttributeData.Id = null;
-                AttributeData.Data.Id = null;
-            }
-            AttributeData.ParentId = parentId.ToString();
-            AttributeData.ParentType = MixEnums.MixAttributeSetDataType.Post;
-            var saveData = await AttributeData.Data.SaveModelAsync(true, context, transaction);
-            ViewModelHelper.HandleResult(saveData, ref result);
-            if (result.IsSucceed)
-            {
-                AttributeData.DataId = saveData.Data.Id;
-                var saveRelated = await AttributeData.SaveModelAsync(true, context, transaction);
-                ViewModelHelper.HandleResult(saveRelated, ref result);
-            }
 
             foreach (var item in SysCategories)
             {
@@ -815,10 +788,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         private RepositoryResponse<bool> SaveAttribute(int parentId, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            AttributeData.ParentId = parentId.ToString();
-            AttributeData.ParentType = MixEnums.MixAttributeSetDataType.Post;
-            var saveData = AttributeData.SaveModel(true, context, transaction);
-            ViewModelHelper.HandleResult(saveData, ref result);
             foreach (var item in SysCategories)
             {
                 if (result.IsSucceed)
@@ -1158,115 +1127,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             this.Template = $"{this.View?.TemplateFolder}/{this.View?.FolderType}/{this.View?.FileName}{this.View?.Extension}";
         }
 
-        private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
-        {
-            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(
-                m => m.Name == Type, _context, _transaction);
-            if (getAttrs.IsSucceed)
-            {
-                Attributes = getAttrs.Data;
-                AttributeData = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetFirstModel(
-                    a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId == Attributes.Id
-                        , _context, _transaction).Data;
-                if (AttributeData == null)
-                {
-                    AttributeData = new MixRelatedAttributeDatas.UpdateViewModel(
-                        new MixRelatedAttributeData()
-                        {
-                            Specificulture = Specificulture,
-                            ParentType = MixEnums.MixAttributeSetDataType.Post.ToString(),
-                            ParentId = Id.ToString(),
-                            AttributeSetId = Attributes.Id,
-                            AttributeSetName = Attributes.Name                            
-                        }
-                        )
-                    {
-                        Data = new MixAttributeSetDatas.UpdateViewModel(
-                    new MixAttributeSetData()
-                    {
-                        Specificulture = Specificulture,
-                        AttributeSetId = Attributes.Id,
-                        AttributeSetName = Attributes.Name
-                    }
-                    )
-                    };
-                }
-                foreach (var field in Attributes.Fields.OrderBy(f => f.Priority))
-                {
-                    var val = AttributeData.Data.Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
-                    if (val == null)
-                    {
-                        val = new MixAttributeSetValues.UpdateViewModel(
-                            new MixAttributeSetValue() { AttributeFieldId = field.Id }
-                            , _context, _transaction)
-                        {
-                            Field = field,
-                            AttributeFieldName = field.Name ?? SeoHelper.GetSEOString(field.Title),
-                            Priority = field.Priority,
-                            StringValue = field.DefaultValue
-                        };
-                        AttributeData.Data.Values.Add(val);
-                    }
-                    val.Priority = field.Priority;
-                    val.Field = field;
-                }
-                var getCategories = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
-                    && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
-                    && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_CATEGORY, _context, _transaction);
-                if (getCategories.IsSucceed)
-                {
-                    SysCategories = getCategories.Data;
-                }
-
-                var getTags = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
-                    && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
-                    && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_TAG, _context, _transaction);
-                if (getTags.IsSucceed)
-                {
-                    SysTags = getTags.Data;
-                }
-            }
-        }
-
-        //private void LoadExtraProperties()
-        //{
-        //    // Parsing Extra Properties fields
-        //    Columns = new List<ModuleFieldViewModel>();
-        //    JArray arrField = !string.IsNullOrEmpty(ExtraFields) ? JArray.Parse(ExtraFields) : new JArray();
-        //    foreach (var field in arrField)
-        //    {
-        //        ModuleFieldViewModel thisField = new ModuleFieldViewModel()
-        //        {
-        //            Name = CommonHelper.ParseJsonPropertyName(field["name"].ToString()),
-        //            Title = field["title"]?.ToString(),
-        //            DefaultValue = field["defaultValue"]?.ToString(),
-        //            Options = field["options"] != null ? field["options"].Value<JArray>() : new JArray(),
-        //            Priority = field["priority"] != null ? field["priority"].Value<int>() : 0,
-        //            DataType = (MixDataType)(int)field["dataType"],
-        //            Width = field["width"] != null ? field["width"].Value<int>() : 3,
-        //            IsUnique = field["isUnique"] != null ? field["isUnique"].Value<bool>() : true,
-        //            IsRequired = field["isRequired"] != null ? field["isRequired"].Value<bool>() : true,
-        //            IsDisplay = field["isDisplay"] != null ? field["isDisplay"].Value<bool>() : true,
-        //            IsSelect = field["isSelect"] != null ? field["isSelect"].Value<bool>() : false,
-        //            IsGroupBy = field["isGroupBy"] != null ? field["isGroupBy"].Value<bool>() : false,
-        //        };
-        //        Columns.Add(thisField);
-        //    }
-
-        //    // Parsing Extra Properties value
-        //    Properties = new List<ExtraProperty>();
-
-        //    if (!string.IsNullOrEmpty(ExtraProperties))
-        //    {
-        //        JArray arr = JArray.Parse(ExtraProperties);
-        //        foreach (JToken item in arr)
-        //        {
-        //            var property = item.ToObject<ExtraProperty>();
-        //            Properties.Add(property);
-        //        }
-        //    }
-        //}
-
         private List<SupportedCulture> LoadCultures(string initCulture = null, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getCultures = SystemCultureViewModel.Repository.GetModelList(_context, _transaction);
@@ -1290,6 +1150,25 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 }
             }
             return result;
+        }
+
+        private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            var getCategories = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
+                && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
+                && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_CATEGORY, _context, _transaction);
+            if (getCategories.IsSucceed)
+            {
+                SysCategories = getCategories.Data;
+            }
+
+            var getTags = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
+                && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
+                && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_TAG, _context, _transaction);
+            if (getTags.IsSucceed)
+            {
+                SysTags = getTags.Data;
+            }
         }
 
         private void GenerateSEO()

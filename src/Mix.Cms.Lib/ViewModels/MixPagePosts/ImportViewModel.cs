@@ -59,7 +59,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         #region Views
 
         [JsonProperty("post")]
-        public MixPosts.ReadListItemViewModel Post { get; set; }
+        public MixPosts.ImportViewModel Post { get; set; }
 
         [JsonProperty("page")]
         public MixPages.ImportViewModel Page { get; set; }
@@ -78,19 +78,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         }
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getPost = MixPosts.ReadListItemViewModel.Repository.GetSingleModel(p => p.Id == PostId && p.Specificulture == Specificulture
-                , _context: _context, _transaction: _transaction
-            );
-            var getPage = MixPages.ImportViewModel.Repository.GetSingleModel(p => p.Id == PageId && p.Specificulture == Specificulture
+            var getPost = MixPosts.ImportViewModel.Repository.GetSingleModel(p => p.Id == PostId && p.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction
             );
             if (getPost.IsSucceed)
             {
                 Post = getPost.Data;
-            }
-            if (getPage.IsSucceed)
-            {
-                Page = getPage.Data;
             }
         }
 

@@ -9,7 +9,7 @@ namespace Mix.Cms.Service.SignalR.Hubs
     {
         public async Task SendMessage(string message)
         {
-            await Clients.All.SendAsync(Constants.HubMethods.ReceiveMethod, message);
+            await Clients.All.SendAsync(Constants.HubMethods.ReceiveMethod, message).ConfigureAwait(false);
         }
 
         public Task SendMessageToCaller(string message)
@@ -25,15 +25,15 @@ namespace Mix.Cms.Service.SignalR.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, "SignalR Users");
-            await base.OnConnectedAsync();
+            await Groups.AddToGroupAsync(Context.ConnectionId, "SignalR Users").ConfigureAwait(true);
+            await base.OnConnectedAsync().ConfigureAwait(false);
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, "SignalR Users");
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, "SignalR Users").ConfigureAwait(true);
 
-            await base.OnDisconnectedAsync(exception);
+            await base.OnDisconnectedAsync(exception).ConfigureAwait(false);
         }
     }
 }

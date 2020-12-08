@@ -31,6 +31,9 @@ namespace Mix.Cms.Lib.Migrations
                         .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
+                    b.Property<string>("Configurations")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
                         .HasMaxLength(50)
