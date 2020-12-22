@@ -363,7 +363,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<string>("EncryptValue")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("text")
                         .HasAnnotation("MySql:CharSet", "utf8")
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
@@ -399,7 +399,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("StringValue")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("text")
                         .HasAnnotation("MySql:CharSet", "utf8")
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
@@ -447,7 +447,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("text")
                         .HasAnnotation("MySql:CharSet", "utf8")
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
@@ -594,7 +594,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Value")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("text")
                         .HasAnnotation("MySql:CharSet", "utf8")
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
@@ -735,7 +735,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
 
                     b.Property<string>("StringContent")
                         .IsRequired()
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("text")
                         .HasAnnotation("MySql:CharSet", "utf8")
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
@@ -818,7 +818,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Value")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("text")
                         .HasAnnotation("MySql:CharSet", "utf8")
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
@@ -849,7 +849,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("text")
                         .HasAnnotation("MySql:CharSet", "utf8")
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
@@ -872,7 +872,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("FileProperties")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("text")
                         .HasAnnotation("MySql:CharSet", "utf8")
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
@@ -918,7 +918,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Title")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("text")
                         .HasAnnotation("MySql:CharSet", "utf8")
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
@@ -947,7 +947,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("text")
                         .HasAnnotation("MySql:CharSet", "utf8")
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
@@ -957,7 +957,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Fields")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("text")
                         .HasAnnotation("MySql:CharSet", "utf8")
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
@@ -1048,7 +1048,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
 
                     b.Property<string>("Fields")
                         .IsRequired()
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("text")
                         .HasAnnotation("MySql:CharSet", "utf8")
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
@@ -1079,7 +1079,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Value")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("text")
                         .HasAnnotation("MySql:CharSet", "utf8")
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
@@ -2296,7 +2296,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("text")
                         .HasAnnotation("MySql:CharSet", "utf8")
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
