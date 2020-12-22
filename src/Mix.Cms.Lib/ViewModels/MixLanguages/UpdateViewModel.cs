@@ -213,9 +213,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            bool isRoot = _context == null;
-            var context = _context ?? new MixCmsContext();
-            var transaction = _transaction ?? context.Database.BeginTransaction();
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
 
             try
             {

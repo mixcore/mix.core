@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -187,8 +188,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             , int? pageSize = 1, int? pageIndex = 0, int? skip = null, int? top = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            MixCmsContext context = _context ?? new MixCmsContext();
-            var transaction = _transaction ?? context.Database.BeginTransaction();
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
                 var query = context.MixPagePost.Include(ac => ac.MixPost)
@@ -210,7 +210,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
                 Repository.LogErrorMessage(ex);
-                if (_transaction == null)
+                if (isRoot)
                 {
                     //if current transaction is root transaction
                     transaction.Rollback();
@@ -225,10 +225,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
             finally
             {
-                if (_context == null)
+                if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }
@@ -241,8 +241,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
            , int? pageSize = 1, int? pageIndex = 0
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            MixCmsContext context = _context ?? new MixCmsContext();
-            var transaction = _transaction ?? context.Database.BeginTransaction();
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
                 var query = context.MixPagePost.Include(ac => ac.MixPost)
@@ -263,7 +262,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
                 Repository.LogErrorMessage(ex);
-                if (_transaction == null)
+                if (isRoot)
                 {
                     //if current transaction is root transaction
                     transaction.Rollback();
@@ -278,10 +277,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
             finally
             {
-                if (_context == null)
+                if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }
@@ -292,8 +291,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
           , int? pageSize = 1, int? pageIndex = 0
           , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            MixCmsContext context = _context ?? new MixCmsContext();
-            var transaction = _transaction ?? context.Database.BeginTransaction();
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
                 var query = context.MixModulePost.Include(ac => ac.MixPost)
@@ -314,7 +312,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
                 Repository.LogErrorMessage(ex);
-                if (_transaction == null)
+                if (isRoot)
                 {
                     //if current transaction is root transaction
                     transaction.Rollback();
@@ -329,10 +327,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
             finally
             {
-                if (_context == null)
+                if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }
