@@ -356,7 +356,7 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.EncryptValue)
-                    .HasColumnType("varchar(4000)")
+                    .HasColumnType("text")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -385,7 +385,7 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.StringValue)
-                    .HasColumnType("varchar(4000)")
+                    .HasColumnType("text")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
             });
@@ -426,7 +426,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Value)
                     .IsRequired()
-                    .HasColumnType("varchar(4000)")
+                    .HasColumnType("text")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
             });
@@ -558,7 +558,7 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Value)
-                    .HasColumnType("varchar(4000)")
+                    .HasColumnType("text")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -682,7 +682,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.StringContent)
                     .IsRequired()
-                    .HasColumnType("varchar(4000)")
+                    .HasColumnType("text")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -760,7 +760,7 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Value)
-                    .HasColumnType("varchar(4000)")
+                    .HasColumnType("text")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -791,7 +791,7 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.Description)
-                    .HasColumnType("varchar(4000)")
+                    .HasColumnType("text")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -814,7 +814,7 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.FileProperties)
-                    .HasColumnType("varchar(4000)")
+                    .HasColumnType("text")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -853,7 +853,7 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Title)
-                    .HasColumnType("varchar(4000)")
+                    .HasColumnType("text")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
             });
@@ -880,7 +880,7 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.Description)
-                    .HasColumnType("varchar(4000)")
+                    .HasColumnType("text")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -890,7 +890,7 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Fields)
-                    .HasColumnType("varchar(4000)")
+                    .HasColumnType("text")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -979,7 +979,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Fields)
                     .IsRequired()
-                    .HasColumnType("varchar(4000)")
+                    .HasColumnType("text")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -997,7 +997,7 @@ namespace Mix.Cms.Lib.Models.Cms
                     .HasCollation("utf8_unicode_ci");
 
                 entity.Property(e => e.Value)
-                    .HasColumnType("varchar(4000)")
+                    .HasColumnType("text")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 
@@ -2107,7 +2107,7 @@ namespace Mix.Cms.Lib.Models.Cms
                 entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.Description)
-                    .HasColumnType("varchar(4000)")
+                    .HasColumnType("text")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_unicode_ci");
 

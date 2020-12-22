@@ -85,10 +85,10 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                     DateTimeValue = table.Column<DateTime>(type: "datetime", nullable: true),
                     DoubleValue = table.Column<float>(nullable: true),
                     IntegerValue = table.Column<int>(nullable: true),
-                    StringValue = table.Column<string>(type: "varchar(4000)", nullable: true)
+                    StringValue = table.Column<string>(type: "text", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    EncryptValue = table.Column<string>(type: "varchar(4000)", nullable: true)
+                    EncryptValue = table.Column<string>(type: "text", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     EncryptKey = table.Column<string>(type: "varchar(50)", nullable: true)
@@ -120,7 +120,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                     Id = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Value = table.Column<string>(type: "varchar(4000)", nullable: false)
+                    Value = table.Column<string>(type: "text", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     ExpiredDateTime = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -242,7 +242,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "varchar(4000)", nullable: true)
+                    Description = table.Column<string>(type: "text", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     Extension = table.Column<string>(type: "varchar(50)", nullable: false)
@@ -254,14 +254,14 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                     FileName = table.Column<string>(type: "varchar(250)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    FileProperties = table.Column<string>(type: "varchar(4000)", nullable: true)
+                    FileProperties = table.Column<string>(type: "text", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     FileSize = table.Column<long>(nullable: false),
                     FileType = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Title = table.Column<string>(type: "varchar(4000)", nullable: true)
+                    Title = table.Column<string>(type: "text", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     Tags = table.Column<string>(type: "varchar(400)", nullable: true)
@@ -659,7 +659,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                     Description = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Value = table.Column<string>(type: "varchar(4000)", nullable: true)
+                    Value = table.Column<string>(type: "text", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
@@ -706,7 +706,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                     Description = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Value = table.Column<string>(type: "varchar(4000)", nullable: true)
+                    Value = table.Column<string>(type: "text", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     DefaultValue = table.Column<string>(type: "varchar(250)", nullable: true)
@@ -744,10 +744,10 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "varchar(4000)", nullable: true)
+                    Description = table.Column<string>(type: "text", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Fields = table.Column<string>(type: "varchar(4000)", nullable: true)
+                    Fields = table.Column<string>(type: "text", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     Thumbnail = table.Column<string>(type: "varchar(250)", nullable: true)
@@ -974,7 +974,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     Type = table.Column<int>(nullable: false),
-                    Description = table.Column<string>(type: "varchar(4000)", nullable: true)
+                    Description = table.Column<string>(type: "text", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     Alias = table.Column<string>(type: "varchar(250)", nullable: true)
@@ -1086,7 +1086,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    StringContent = table.Column<string>(type: "varchar(4000)", nullable: false)
+                    StringContent = table.Column<string>(type: "text", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     Extension = table.Column<string>(type: "varchar(50)", nullable: false)
@@ -1250,10 +1250,10 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                     ModuleId = table.Column<int>(nullable: false),
                     PageId = table.Column<int>(nullable: true),
                     PostId = table.Column<int>(nullable: true),
-                    Fields = table.Column<string>(type: "varchar(4000)", nullable: false)
+                    Fields = table.Column<string>(type: "text", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Value = table.Column<string>(type: "varchar(4000)", nullable: true)
+                    Value = table.Column<string>(type: "text", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
