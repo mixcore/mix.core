@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixTemplates;
@@ -49,7 +50,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 {
                     var model = new MixTemplate()
                     {
-                        Status = MixContentStatus.Preview.ToString(),
+                        Status = MixService.GetConfig<MixEnums.MixContentStatus>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
                         ThemeId = themeId,
                         ThemeName = getTheme.Data.Name,
                         Extension = MixService.GetConfig<string>("TemplateExtension"),

@@ -33,7 +33,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             string attributeSetName = Request.Query["attributeSetName"];
             Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
                 model.Specificulture == _lang
-                && (!isStatus || model.Status == status.ToString())
+                && (!isStatus || model.Status == status)
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
                 && ((isAttributeId && model.AttributeSetId == attributeSetId) || model.AttributeSetName == attributeSetName)
@@ -42,7 +42,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                  );
 
 
-            var getData = await base.GetListAsync<FormViewModel> (predicate);
+            var getData = await base.GetListAsync<FormViewModel>(predicate);
             if (getData.IsSucceed)
             {
                 return Ok(getData.Data);

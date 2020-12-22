@@ -245,7 +245,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         private void LoadTags(MixCmsContext context, IDbContextTransaction transaction)
         {
             var getTags = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(
-                    m => m.Specificulture == Specificulture && m.Status == MixEnums.MixContentStatus.Published.ToString()
+                    m => m.Specificulture == Specificulture && m.Status == MixEnums.MixContentStatus.Published
                    && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
                    && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_TAG, context, transaction);
             if (getTags.IsSucceed)

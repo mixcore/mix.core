@@ -194,7 +194,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 var query = context.MixPagePost.Include(ac => ac.MixPost)
                     .Where(ac =>
                     ac.PageId == pageId && ac.Specificulture == specificulture
-                    && ac.Status == MixEnums.MixContentStatus.Published.ToString()).Select(ac => ac.MixPost);
+                    && ac.Status == MixEnums.MixContentStatus.Published).Select(ac => ac.MixPost);
                 PaginationModel<ReadViewModel> result = await Repository.ParsePagingQueryAsync(
                     query, orderByPropertyName
                     , direction
@@ -247,7 +247,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 var query = context.MixPagePost.Include(ac => ac.MixPost)
                     .Where(ac =>
                     ac.PageId == pageId && ac.Specificulture == specificulture
-                    && ac.Status == MixContentStatus.Published.ToString()).Select(ac => ac.MixPost);
+                    && ac.Status == MixContentStatus.Published).Select(ac => ac.MixPost);
                 PaginationModel<ReadViewModel> result = Repository.ParsePagingQuery(
                     query, orderByPropertyName
                     , direction,
@@ -297,7 +297,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 var query = context.MixModulePost.Include(ac => ac.MixPost)
                     .Where(ac =>
                     ac.ModuleId == ModuleId && ac.Specificulture == specificulture
-                    && (ac.Status == MixContentStatus.Published.ToString() || ac.Status == MixContentStatus.Preview.ToString())).Select(ac => ac.MixPost);
+                    && (ac.Status == MixContentStatus.Published || ac.Status == MixContentStatus.Preview)).Select(ac => ac.MixPost);
                 PaginationModel<ReadViewModel> result = Repository.ParsePagingQuery(
                     query, orderByPropertyName
                     , direction,
@@ -351,7 +351,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         private void LoadTags(MixCmsContext context, IDbContextTransaction transaction)
         {
             var getTags = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(
-                    m => m.Specificulture == Specificulture && m.Status == MixEnums.MixContentStatus.Published.ToString()
+                    m => m.Specificulture == Specificulture && m.Status == MixEnums.MixContentStatus.Published
                    && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
                    && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_TAG, context, transaction);
             if (getTags.IsSucceed)
