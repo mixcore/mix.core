@@ -31,7 +31,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             bool isTheme = int.TryParse(Request.Query["themeId"], out int themeId);
             string folderType = Request.Query["folderType"];
             Expression<Func<MixTemplate, bool>> predicate = model =>
-                (!isStatus || model.Status == status.ToString())
+                (!isStatus || model.Status == status)
                 && (!isTheme || model.ThemeId == themeId)
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)

@@ -372,7 +372,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     predicate = m => m.Specificulture == culture
                     && (m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName)
-                    && (!isStatus || (m.Status == status.ToString()))
+                    && (!isStatus || (m.Status == status))
                     && (!isFromDate || (m.CreatedDateTime >= fromDate))
                     && (!isToDate || (m.CreatedDateTime <= toDate));
                 }
@@ -523,7 +523,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
                 Expression<Func<MixRelatedAttributeData, bool>> predicate = m => m.Specificulture == culture
                     && (m.AttributeSetName == attributeSetName)
-                    && (m.Status == MixEnums.MixContentStatus.Published.ToString())
+                    && (m.Status == MixEnums.MixContentStatus.Published)
                     && (string.IsNullOrEmpty(parentId)
                          || (m.ParentId == parentId && m.ParentType == parentType.ToString())
                          );

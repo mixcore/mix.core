@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
@@ -12,6 +13,9 @@ namespace Mix.Cms.Lib.Models.Cms
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Auto apply configuration by convention.
+            modelBuilder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
+
             modelBuilder.Entity<MixAttributeField>(entity =>
             {
                 entity.ToTable("mix_attribute_field");
@@ -44,7 +48,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.Property(e => e.Title).HasMaxLength(250);
@@ -95,7 +100,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.Property(e => e.Title)
@@ -134,7 +140,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.AttributeSet)
@@ -168,7 +175,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.AttributeSet)
@@ -220,7 +228,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.Property(e => e.StringValue).HasMaxLength(4000);
@@ -248,7 +257,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.Property(e => e.Value)
@@ -290,7 +300,7 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.Property(e => e.Username).HasMaxLength(250);
@@ -332,7 +342,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.Property(e => e.Value).HasMaxLength(4000);
@@ -384,7 +395,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
             });
 
@@ -422,7 +434,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.Property(e => e.StringContent)
@@ -477,7 +490,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.Property(e => e.Value).HasMaxLength(4000);
@@ -533,7 +547,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.Property(e => e.Tags).HasMaxLength(400);
@@ -579,7 +594,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.Property(e => e.Template).HasMaxLength(250);
@@ -623,7 +639,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.Property(e => e.Value).HasMaxLength(4000);
@@ -670,7 +687,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.MixModule)
@@ -736,7 +754,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.Property(e => e.Tags).HasColumnType("ntext");
@@ -783,7 +802,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.MixModule)
@@ -824,7 +844,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.MixPage)
@@ -864,7 +885,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.Property(e => e.TextDefault).HasMaxLength(250);
@@ -898,7 +920,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.Page)
@@ -936,7 +959,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.Page)
@@ -993,7 +1017,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.Property(e => e.Tags).HasColumnType("ntext");
@@ -1042,7 +1067,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.MixMedia)
@@ -1084,7 +1110,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.MixModule)
@@ -1141,7 +1168,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
             });
 
@@ -1176,7 +1204,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.IdNavigation)
@@ -1225,7 +1254,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
             });
 
@@ -1255,7 +1285,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.MixPost)
@@ -1317,7 +1348,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.Property(e => e.Styles).HasColumnType("ntext");
@@ -1361,7 +1393,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.Property(e => e.Thumbnail).HasMaxLength(250);
@@ -1397,7 +1430,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                    .HasColumnType("varchar(30)")
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.SpecificultureNavigation)

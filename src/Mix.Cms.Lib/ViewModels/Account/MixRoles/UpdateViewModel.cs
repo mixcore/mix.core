@@ -90,7 +90,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
                     {
                         PageId = item.Id,
                         RoleId = Id,
-                        Status = MixContentStatus.Published.ToString()
+                        Status = MixContentStatus.Published
                     };
                     item.NavPermission = new MixPortalPageRoles.ReadViewModel(nav) { IsActived = false };
                 }
@@ -108,7 +108,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
                         {
                             PageId = child.PortalPage.Id,
                             RoleId = Id,
-                            Status = MixContentStatus.Published.ToString()
+                            Status = MixContentStatus.Published
                         };
                         child.PortalPage.NavPermission = new MixPortalPageRoles.ReadViewModel(nav) { IsActived = false };
                     }

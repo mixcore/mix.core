@@ -31,7 +31,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             string keyword = Request.Query["keyword"];
             bool isParentId = int.TryParse(Request.Query["parentId"], out int parentId);
             Expression<Func<MixPortalPageNavigation, bool>> predicate = model =>
-                (!isStatus || model.Status == status.ToString())
+                (!isStatus || model.Status == status)
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
                 && (!isParentId || model.ParentId == parentId)

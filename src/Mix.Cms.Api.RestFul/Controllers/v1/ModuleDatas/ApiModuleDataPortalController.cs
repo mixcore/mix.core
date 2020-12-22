@@ -41,7 +41,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 && (model.ModuleId == moduleId)
                 && (!isPostId || model.PostId == postId)
                 && (!isPageId || model.PageId == pageId)
-                && (!isStatus || model.Status == status.ToString())
+                && (!isStatus || model.Status == status)
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
                 && (string.IsNullOrEmpty(keyword)
@@ -73,7 +73,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 && (model.ModuleId == moduleId)
                 && (!isPostId || model.PostId == postId)
                 && (!isPageId || model.PageId == pageId)
-                && (!isStatus || model.Status == status.ToString())
+                && (!isStatus || model.Status == status)
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
                 && (string.IsNullOrEmpty(keyword)
@@ -118,7 +118,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                         ModuleId = getModule.Data.Id,
                         Specificulture = _lang,
                         Fields = getModule.Data.Fields,
-                        Status = MixService.GetConfig<string>("DefaultContentStatus")
+                        Status = MixService.GetConfig<MixEnums.MixContentStatus>(MixConstants.ConfigurationKeyword.DefaultContentStatus)
                     });
                 return Ok(ModuleData);
             }

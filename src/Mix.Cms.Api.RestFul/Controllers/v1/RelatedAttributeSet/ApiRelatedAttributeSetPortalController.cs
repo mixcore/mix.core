@@ -30,7 +30,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             string parentType = Request.Query["parentType"];
             string parentId = Request.Query["parentId"];
             Expression<Func<MixRelatedAttributeSet, bool>> predicate = model =>
-                (!isStatus || model.Status == status.ToString())
+                (!isStatus || model.Status == status)
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
                 && (string.IsNullOrEmpty(parentId)
