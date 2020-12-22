@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -112,8 +113,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
         public static RepositoryResponse<List<MixModulePosts.ReadViewModel>> GetModulePostNavAsync(int postId, string specificulture
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            MixCmsContext context = _context ?? new MixCmsContext();
-            var transaction = _transaction ?? context.Database.BeginTransaction();
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
                 var navCategoryPostViewModels = context.MixModule.Include(cp => cp.MixModulePost).Where(a => a.Specificulture == specificulture
@@ -140,7 +140,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
-                if (_transaction == null)
+                if (isRoot)
                 {
                     transaction.Rollback();
                 }
@@ -153,11 +153,11 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
             }
             finally
             {
-                if (_context == null)
+                if (isRoot)
                 {
                     //if current Context is Root
                     transaction.Dispose();
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }

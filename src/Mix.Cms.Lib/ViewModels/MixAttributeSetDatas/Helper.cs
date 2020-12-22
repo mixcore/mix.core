@@ -7,7 +7,6 @@ using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
-using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
@@ -15,6 +14,7 @@ using OfficeOpenXml.Table;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -211,7 +211,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }
@@ -269,7 +269,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }
@@ -343,31 +343,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             }
                         }
                     }
-                    if (fieldQueries != null && fieldQueries.Properties().Count() > 0) // filter by specific field name
-                    {
-                        foreach (var q in fieldQueries)
-                        {
-                            if (fields.Any(f => f.Name == q.Key))
-                            {
-                                string value = q.Value.ToString();
-                                if (!string.IsNullOrEmpty(value))
-                                {
-                                    Expression<Func<MixAttributeSetValue, bool>> pre =
-                                       m => m.AttributeFieldName == q.Key &&
-                                            (filterType == "equal" && m.StringValue == (q.Value.ToString())) ||
-                                            (filterType == "contain" && (EF.Functions.Like(m.StringValue, $"%{q.Value.ToString()}%")));
-                                    if (valPredicate != null)
-                                    {
-                                        valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.Or);
-                                    }
-                                    else
-                                    {
-                                        valPredicate = pre;
-                                    }
-                                }
-                            }
-                        }
-                    }
+
+                    valPredicate = GetValuePredicateByFieldQueries(fieldQueries, fields, filterType, context, transaction);
+
                     if (valPredicate != null)
                     {
                         attrPredicate = attrPredicate == null ? valPredicate
@@ -376,11 +354,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
                     if (attrPredicate != null)
                     {
-                        var query = context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
+                        var query = fieldQueries.Count == 0 ? context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct()
+                                : context.MixAttributeSetValue.Where(attrPredicate).GroupBy(m => m.DataId)
+                            .Select(g => new { DataId = g.Key, Count = g.Count() }).Where(c => c.Count == fieldQueries.Count).Select(c => c.DataId);
                         var dataIds = query.ToList();
                         if (query != null)
                         {
-                            Expression<Func<MixAttributeSetData, bool>> pre = m => dataIds.Any(id => m.Id == id);
+                            Expression<Func<MixAttributeSetData, bool>> pre = m => dataIds.Any(id => m.Id == id) &&
+                            (!isFromDate || (m.CreatedDateTime >= fromDate))
+                            && (!isToDate || (m.CreatedDateTime <= toDate)); ;
                             predicate = pre; // ReflectionHelper.CombineExpression(pre, predicate, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
 
                         }
@@ -407,9 +389,55 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
+        }
+
+        private static Expression<Func<MixAttributeSetValue, bool>> GetValuePredicateByFieldQueries(
+                JObject fieldQueries, List<MixAttributeFields.ReadViewModel> fields, string filterType,
+                MixCmsContext context, IDbContextTransaction transaction)
+        {
+            Expression<Func<MixAttributeSetValue, bool>> valPredicate = null;
+            if (fieldQueries != null && fieldQueries.Properties().Count() > 0) // filter by specific field name
+            {
+                foreach (var q in fieldQueries)
+                {
+                    if (fields.Any(f => f.Name == q.Key))
+                    {
+                        string value = q.Value.ToString();
+                        if (!string.IsNullOrEmpty(value))
+                        {
+                            Expression<Func<MixAttributeSetValue, bool>> pre = GetValueFilter(filterType, q.Key, value);
+
+                            if (valPredicate != null)
+                            {
+                                valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.Or);
+                            }
+                            else
+                            {
+                                valPredicate = pre;
+                            }
+                        }
+                    }
+                }
+            }
+            return valPredicate;
+        }
+
+        private static Expression<Func<MixAttributeSetValue, bool>> GetValueFilter(string filterType, string key, string value)
+        {
+            switch (filterType)
+            {
+                case "equal":
+                    return m => m.AttributeFieldName == key
+                        && (EF.Functions.Like(m.StringValue, $"{value}"));
+                case "contain":
+                    return m => m.AttributeFieldName == key &&
+                                            (EF.Functions.Like(m.StringValue, $"%{value}%"));
+
+            }
+            return null;
         }
 
         public static async Task<RepositoryResponse<List<TView>>> FilterByKeywordAsync<TView>(string culture, string attributeSetName
@@ -475,7 +503,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }
@@ -515,10 +543,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }
+
         public static RepositoryResponse<FileViewModel> ExportAttributeToExcel(List<JObject> lstData, string sheetName
           , string folderPath, string fileName
           , List<string> headers = null)
@@ -528,7 +557,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 Data = new FileViewModel()
                 {
                     FileFolder = folderPath,
-                    Filename = fileName + "-" + DateTime.Now.ToString("yyyyMMdd"),
+                    Filename = fileName + "-" + DateTime.Now.ToString("yyyyMMdd-hh-mm-ss"),
                     Extension = ".xlsx"
                 }
             };
@@ -566,10 +595,13 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         var r = dtable.NewRow();
                         foreach (var prop in a.Properties())
                         {
-                            bool isHaveValue = a.TryGetValue(prop.Name, out JToken val);
-                            if (isHaveValue)
+                            if (dtable.Columns.Contains(prop.Name))
                             {
-                                r[prop.Name] = val.ToString();
+                                bool isHaveValue = a.TryGetValue(prop.Name, out JToken val);
+                                if (isHaveValue)
+                                {
+                                    r[prop.Name] = val.ToString();
+                                }
                             }
                         }
                         dtable.Rows.Add(r);
@@ -583,7 +615,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         wsDt.Cells["A1"].LoadFromDataTable(dtable, true, TableStyles.None);
                         wsDt.Cells[wsDt.Dimension.Address].AutoFitColumns();
 
-                        CommonHelper.SaveFileBytes(folderPath, filenameE, pck.GetAsByteArray());
+                        SaveFileBytes(folderPath, filenameE, pck.GetAsByteArray());
                         result.IsSucceed = true;
 
                         return result;
@@ -599,6 +631,37 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 result.Errors.Add(ex.Message);
                 return result;
+            }
+        }
+
+        public static bool SaveFileBytes(string folder, string filename, byte[] bytes)
+        {
+            //data:image/gif;base64,
+            //this image is a single pixel (black)
+            try
+            {
+                folder = $"wwwroot/{folder}";
+                string fullPath = $"{folder}/{filename}";
+
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+
+                if (File.Exists(fullPath))
+                {
+                    File.Delete(fullPath);
+                }
+
+                using (var writer = File.Create(fullPath))
+                {
+                    writer.Write(bytes, 0, bytes.Length);
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
             }
         }
     }

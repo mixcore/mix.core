@@ -19,10 +19,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            bool isRoot = _context == null;
-            var context = _context ?? new MixCmsContext();
-            var transaction = _transaction ?? context.Database.BeginTransaction();
-
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
                 int id = UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data + 1;
@@ -50,7 +47,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 //if current Context is Root
                 if (isRoot)
                 {
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
             return result;
