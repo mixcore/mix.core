@@ -1,0 +1,13 @@
+@using Mix.Cms.Lib
+@using Mix.Cms.Lib.Services
+@{ 
+   string assetFolder = MixCmsHelper.GetAssetFolder(ViewBag.culture); 
+   string templateFolder = MixCmsHelper.GetTemplateFolder(ViewBag.culture);
+}
+@*
+    // Get Configuration
+    @MixService.GetConfig<T>("conf_name", ViewBag.culture)
+*@
+<h1>
+    Edm
+</h1>

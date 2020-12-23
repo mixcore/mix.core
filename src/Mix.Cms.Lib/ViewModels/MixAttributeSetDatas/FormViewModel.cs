@@ -634,6 +634,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         {
             var getValues = MixAttributeSetValues.UpdateViewModel
                        .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
+            Fields = Fields ?? MixAttributeFields.UpdateViewModel
+                        .Repository.GetModelListBy(a => a.AttributeSetId == AttributeSetId, _context, _transaction).Data;
             if (getValues.IsSucceed)
             {
                 Values = getValues.Data.OrderBy(a => a.Priority).ToList();

@@ -12,7 +12,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations
             builder
            .Property(e => e.DataType)
            .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
-           .HasColumnType("varchar(30)");
+           .HasColumnType("varchar(50)");
         }
     }
 }

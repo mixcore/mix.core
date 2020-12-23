@@ -77,7 +77,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                     Regex = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    DataType = table.Column<int>(nullable: false),
+                    DataType = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     BooleanValue = table.Column<ulong>(type: "bit(1)", nullable: true),
                     DataId = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
@@ -473,7 +473,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                     Title = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    DataType = table.Column<int>(nullable: false),
+                    DataType = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     DefaultValue = table.Column<string>(type: "text", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),

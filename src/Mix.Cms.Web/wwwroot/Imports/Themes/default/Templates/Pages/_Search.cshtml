@@ -1,0 +1,65 @@
+@using Mix.Cms.Lib
+@using Mix.Cms.Lib.Services
+@model Mix.Cms.Lib.ViewModels.MixPages.ReadMvcViewModel
+@{
+    string assetFolder = MixCmsHelper.GetAssetFolder(ViewBag.culture); 
+    string templateFolder = MixCmsHelper.GetTemplateFolder(ViewBag.culture);
+    string culture = ViewBag.culture;
+    var social = Mix.Cms.Lib.MixCmsHelper.GetModule("Social", ViewBag.culture);
+    ViewData["DetailsUrl"] = Model.DetailsUrl;
+}
+<div>
+    
+    <div class="page-header page-header-small">
+        <div class="page-header-image" data-parallax="true" style="background-image: url('@Model.Image');">
+        </div>
+        <div class="content-center">
+            <div class="row">
+                <div class="col-md-8 ml-auto mr-auto text-center">
+                    <h2 class="title">
+                        @Model.Title
+                    </h2>
+                     <div class="description">
+                        @Html.Raw(Model.Excerpt)
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--     *********    END BLOGS 4      *********      -->
+    <div class="blogs-4" id="blogs-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 ml-auto mr-auto">
+                    @foreach (var nav in Model.Posts.Items)
+                    {
+                        var product = nav.Post;
+                        <div class="card card-plain card-blog">
+                            <div class="card-image">
+                                <a href="@product.DetailsUrl">
+                                    <img class="img img-raised rounded" src="@product.ImageUrl" />
+                                </a>
+                            </div>
+                            <h3 class="card-title">
+                                <a href="@product.DetailsUrl">@product.Title</a>
+                            </h3>
+                            <h5 class="card-description">
+                                @Html.Raw(product.Excerpt)
+                            </h5>
+                            <a href="@product.DetailsUrl" class="btn btn-primary btn-round">
+                                @(Mix.Cms.Lib.Services.MixService.Translate<string>("read_more", ViewBag.culture))                                    
+                                </a>
+                        </div>
+                    }
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col-md-8 ml-auto mr-auto">
+                    @await Html.PartialAsync("../Widgets/_Pagination.cshtml", Model.Posts)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
