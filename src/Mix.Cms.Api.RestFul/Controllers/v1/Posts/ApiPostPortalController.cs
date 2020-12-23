@@ -61,7 +61,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 var model = new MixPost()
                 {
                     Specificulture = _lang,
-                    Status = MixService.GetConfig<MixEnums.MixContentStatus>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
+                    Status = MixService.GetEnumConfig<MixEnums.MixContentStatus>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
                     Type = Request.Query["type"].ToString(),
                     Template = Request.Query["template"].ToString()
 

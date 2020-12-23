@@ -1,0 +1,35 @@
+@using Mix.Cms.Lib
+@using Mix.Cms.Lib.Services
+@{
+    var assetFolder = MixCmsHelper.GetAssetFolder(ViewBag.culture);
+}
+@if(Model.PostNavs.Count >0){
+    <!-- Our Blog Section -->
+    <div class="blog section section-invert py-4">
+        <h3 class="section-title text-center m-5">Related Posts</h3>
+
+        <div class="container">
+            <div class="py-4">
+            <div class="row">
+                <div class="card-deck">
+                @foreach(var item in Model.PostNavs)
+                {
+                    var post = item.RelatedPost;
+                    <div class="col-md-12 col-lg-4">
+                        <div class="card mb-4">
+                            <img class="card-img-top" src="@post.ImageUrl" alt="Card image cap">
+                            <div class="card-body">
+                                <h4 class="card-title">@post.Title</h4>
+                                <p class="card-text">@post.Excerpt</p>
+                                <a class="btn btn-primary btn-pill" href="@post.DetailsUrl">Read More &rarr;</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- / Our Blog Section -->
+}

@@ -1,0 +1,50 @@
+@{ 
+    string assetFolder = Mix.Cms.Lib.MixCmsHelper.GetAssetFolder(ViewBag.culture);
+}
+<!DOCTYPE html>
+<html lang="@ViewBag.culture" amp>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Clean Blog - Start Bootstrap Theme</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="@assetFolder/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="@assetFolder/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="@assetFolder/css/clean-blog.min.css" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/http-vue-loader"></script> 
+   
+    @RenderSection("Seo", false)     
+    <!--[STYLES]-->
+    @RenderSection("Styles", false)    
+</head>
+
+<body class="@ViewData["PageClass"]">
+    @await Html.PartialAsync("../Layouts/Navigation.cshtml")
+    
+    @RenderBody()                
+    <hr>
+    @await Html.PartialAsync("../Layouts/Footer.cshtml")
+    <!-- Bootstrap core JavaScript -->
+    <script src="@assetFolder/vendor/jquery/jquery.min.js"></script>
+    <script src="@assetFolder/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="@assetFolder/js/clean-blog.min.js"></script>
+    <!--[SCRIPTS]-->
+    @RenderSection("Scripts", false)    
+</body>
+</html>

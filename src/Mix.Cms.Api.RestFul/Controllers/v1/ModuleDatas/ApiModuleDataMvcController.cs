@@ -73,7 +73,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                         ModuleId = getModule.Data.Id,
                         Specificulture = _lang,
                         Fields = getModule.Data.Fields,
-                        Status = MixService.GetConfig<MixEnums.MixContentStatus>(MixConstants.ConfigurationKeyword.DefaultContentStatus)
+                        Status = MixService.GetEnumConfig<MixEnums.MixContentStatus>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
                     });
                 return Ok(ModuleData);
             }
