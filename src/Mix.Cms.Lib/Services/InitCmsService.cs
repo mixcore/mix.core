@@ -35,17 +35,14 @@ namespace Mix.Cms.Lib.Services
             RepositoryResponse<bool> result = new RepositoryResponse<bool>();
             MixCmsContext context = null;
             MixCmsAccountContext accountContext = null;
-            MixChatServiceContext messengerContext = null;
             try
             {
                 if (!string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
                 {
                     context = MixService.GetDbContext();
                     accountContext = new MixCmsAccountContext();
-                    messengerContext = new MixChatServiceContext();
                     await context.Database.MigrateAsync();
                     await accountContext.Database.MigrateAsync();
-                    await messengerContext.Database.MigrateAsync();
 
                     var countCulture = context.MixCulture.Count();
                     var pendingMigration = context.Database.GetPendingMigrations().Count();
@@ -66,7 +63,6 @@ namespace Mix.Cms.Lib.Services
             {
                 context?.Dispose();
                 accountContext?.Dispose();
-                messengerContext?.Dispose();
             }
         }
         

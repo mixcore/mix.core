@@ -109,7 +109,8 @@ namespace Mix.Cms.Service.SignalR.Hubs
         {
             Expression<Func<MixAttributeSetValue, bool>> predicate = m => m.Specificulture == request.Specificulture
                  && m.AttributeSetName == Constants.HubMessages.HubMemberName && m.AttributeFieldName == request.Room;
-            var data = await Lib.ViewModels.MixAttributeSetDatas.FormViewModel.FilterByValueAsync(request.Specificulture, request.Room, new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>());
+            var data = await Lib.ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<Lib.ViewModels.MixAttributeSetDatas.FormViewModel>(
+                request.Specificulture, request.Room, null, null);
             return data;
         }
 

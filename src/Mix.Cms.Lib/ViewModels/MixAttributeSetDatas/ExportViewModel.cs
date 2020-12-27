@@ -314,64 +314,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
         }
 
-        public static Task<RepositoryResponse<List<UpdateViewModel>>> FilterByValueAsync(string culture, string attributeSetName
-            , Dictionary<string, Microsoft.Extensions.Primitives.StringValues> queryDictionary
-            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            try
-            {
-                Expression<Func<MixAttributeSetValue, bool>> valPredicate = m => m.Specificulture == culture;
-                List<UpdateViewModel> result = new List<UpdateViewModel>();
-                foreach (var q in queryDictionary)
-                {
-                    Expression<Func<MixAttributeSetValue, bool>> pre = m =>
-                    m.Specificulture == culture && m.AttributeSetName == attributeSetName
-                    && m.AttributeFieldName == q.Key && m.StringValue.Contains(q.Value);
-                    valPredicate = ODataHelper<MixAttributeSetValue>.CombineExpression(valPredicate, pre, Microsoft.OData.UriParser.BinaryOperatorKind.And);
-                }
-                var query = context.MixAttributeSetValue.Where(valPredicate);
-                var data = context.MixAttributeSetData.Where(m => query.Any(q => q.DataId == m.Id) && m.Specificulture == culture);
-                foreach (var item in data)
-                {
-                    result.Add(new UpdateViewModel(item, context, transaction));
-                }
-                return Task.FromResult(new RepositoryResponse<List<UpdateViewModel>>()
-                {
-                    IsSucceed = true,
-                    Data = result
-                });
-            }
-            catch (Exception ex)
-            {
-                return Task.FromResult(UnitOfWorkHelper<MixCmsContext>.HandleException<List<UpdateViewModel>>(ex, isRoot, transaction));
-            }
-            finally
-            {
-                if (isRoot)
-                {
-                    //if current Context is Root
-                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
-                }
-            }
-        }
-
-        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        //{
-        //    var tasks = new List<Task>();
-        //    var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
-        //        .Any(d => d.Specificulture == Specificulture && d.Id == Id));
-        //    foreach (var item in attrDatas)
-        //    {
-        //        tasks.Add(Task.Run(() =>
-        //        {
-        //            var updModel = new ExportViewModel(item, context, transaction);
-        //            updModel.GenerateCache(item, updModel, context, transaction);
-        //        }));
-        //    }
-        //    return tasks;
-        //}
-
         private void ParseData()
         {
             Data = new JObject();
