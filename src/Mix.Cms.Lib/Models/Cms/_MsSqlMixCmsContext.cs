@@ -1,7 +1,5 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+﻿using Microsoft.EntityFrameworkCore;
+using Mix.Cms.Lib.Extensions;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
@@ -13,8 +11,9 @@ namespace Mix.Cms.Lib.Models.Cms
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Auto apply configuration by convention.
-            modelBuilder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
+            modelBuilder.ApplyAllConfigurationsFromNamespace(
+                this.GetType().Assembly,
+                "Mix.Cms.Lib.Models.EntityConfigurations.MSSQL");
             OnModelCreatingPartial(modelBuilder);
         }
 

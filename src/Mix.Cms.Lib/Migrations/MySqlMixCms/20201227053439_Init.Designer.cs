@@ -34,7 +34,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
                     b.Property<string>("Configurations")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
@@ -997,7 +997,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<string>("PostType")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1234,7 +1234,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<string>("PostType")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
