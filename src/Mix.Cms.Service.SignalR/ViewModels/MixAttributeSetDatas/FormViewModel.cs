@@ -562,34 +562,11 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
             }
         }
 
-        public override void GenerateCache(MixAttributeSetData model, FormViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override async Task GenerateCache(MixAttributeSetData model, FormViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             ParseData();
-            base.GenerateCache(model, view, _context, _transaction);
+            await base.GenerateCache(model, view, _context, _transaction).ConfigureAwait(false);
         }
-
-        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        //{
-        //    var tasks = new List<Task>();
-        //    var attrDatas = context.MixAttributeSetData.Where(m => m.MixRelatedAttributeData
-        //        .Any(d => d.Specificulture == Specificulture && d.Id == Id));
-        //    foreach (var item in attrDatas)
-        //    {
-        //        tasks.Add(Task.Run(() =>
-        //        {
-        //            var data = new ReadViewModel(item, context, transaction);
-        //            data.RemoveCache(item, context, transaction);
-        //        }));
-        //    }
-        //    foreach (var item in Values)
-        //    {
-        //        tasks.Add(Task.Run(() =>
-        //        {
-        //            item.RemoveCache(item.Model);
-        //        }));
-        //    }
-        //    return tasks;
-        //}
 
         private void ParseData()
         {
