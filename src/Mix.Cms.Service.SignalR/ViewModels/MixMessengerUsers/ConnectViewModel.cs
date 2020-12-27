@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Messenger.Models.Data;
 using Mix.Cms.Service.SignalR.Models;
 using Mix.Common.Helper;
@@ -94,7 +93,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
                 {
                     //if current Context is Root
                     transaction.Dispose();
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixChatServiceContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }

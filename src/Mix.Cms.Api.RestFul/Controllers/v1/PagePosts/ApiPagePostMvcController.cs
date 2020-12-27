@@ -33,7 +33,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             string keyword = Request.Query["keyword"];
             Expression<Func<MixPagePost, bool>> predicate = model =>
                         model.Specificulture == _lang
-                        && (!isStatus || model.Status == status.ToString())
+                        && (!isStatus || model.Status == status)
                         && (!isFromDate || model.CreatedDateTime >= fromDate)
                         && (!isToDate || model.CreatedDateTime <= toDate)
                         && (!isPage || model.PageId == pageId)

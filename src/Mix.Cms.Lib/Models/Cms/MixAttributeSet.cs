@@ -7,11 +7,6 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public MixAttributeSet()
         {
-            MixAttributeFieldAttributeSet = new HashSet<MixAttributeField>();
-            MixAttributeFieldReference = new HashSet<MixAttributeField>();
-            MixAttributeSetData = new HashSet<MixAttributeSetData>();
-            MixAttributeSetReference = new HashSet<MixAttributeSetReference>();
-            MixRelatedAttributeSet = new HashSet<MixRelatedAttributeSet>();
         }
 
         public int Id { get; set; }
@@ -29,12 +24,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public DateTime? LastModified { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public int Priority { get; set; }
-        public string Status { get; set; }
+        public MixEnums.MixContentStatus Status { get; set; }
 
-        public virtual ICollection<MixAttributeField> MixAttributeFieldAttributeSet { get; set; }
-        public virtual ICollection<MixAttributeField> MixAttributeFieldReference { get; set; }
-        public virtual ICollection<MixAttributeSetData> MixAttributeSetData { get; set; }
-        public virtual ICollection<MixAttributeSetReference> MixAttributeSetReference { get; set; }
-        public virtual ICollection<MixRelatedAttributeSet> MixRelatedAttributeSet { get; set; }
     }
 }

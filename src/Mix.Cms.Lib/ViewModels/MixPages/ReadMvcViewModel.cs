@@ -252,7 +252,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }
@@ -307,7 +307,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }
@@ -361,7 +361,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }

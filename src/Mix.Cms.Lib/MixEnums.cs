@@ -253,7 +253,7 @@ namespace Mix.Cms.Lib
             TuiEditor,
             Integer,
             Reference,
-            QRCode,
+            QRCode
         }
 
         public enum UrlAliasType

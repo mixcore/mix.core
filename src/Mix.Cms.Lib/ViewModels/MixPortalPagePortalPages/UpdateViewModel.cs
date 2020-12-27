@@ -159,7 +159,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
             {
                 //if current Context is Root
                 transaction.Dispose();
-                context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
             }
         }
 
