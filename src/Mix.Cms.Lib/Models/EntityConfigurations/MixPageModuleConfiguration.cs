@@ -5,24 +5,21 @@ using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Models.EntityConfigurations
 {
-    public class MixLanguageConfiguration : IEntityTypeConfiguration<MixLanguage>
+    public class MixPageModuleConfiguration : IEntityTypeConfiguration<MixPageModule>
     {
-        public void Configure(EntityTypeBuilder<MixLanguage> entity)
+        public void Configure(EntityTypeBuilder<MixPageModule> entity)
         {
             entity.HasKey(e => new { e.Id, e.Specificulture })
-                     .HasName("PRIMARY");
+                    .HasName("PRIMARY");
 
-            entity.ToTable("mix_language");
+            entity.ToTable("mix_page_module");
 
-            entity.HasIndex(e => e.Specificulture);
+            entity.HasIndex(e => new { e.ModuleId, e.Specificulture });
+
+            entity.HasIndex(e => new { e.PageId, e.Specificulture });
 
             entity.Property(e => e.Specificulture)
                 .HasColumnType("varchar(10)")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
-
-            entity.Property(e => e.Category)
-                .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
@@ -33,19 +30,13 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-            entity.Property(e => e.DefaultValue)
-                .HasColumnType("varchar(250)")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
-
             entity.Property(e => e.Description)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.Keyword)
-                .IsRequired()
-                .HasColumnType("varchar(50)")
+            entity.Property(e => e.Image)
+                .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
@@ -63,23 +54,16 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.DataType)
-                .IsRequired()
-                .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
-                .HasColumnType("varchar(50)")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+            entity.HasOne(d => d.MixModule)
+                .WithMany(p => p.MixPageModule)
+                .HasForeignKey(d => new { d.ModuleId, d.Specificulture })
+                .HasConstraintName("FK_Mix_Menu_Module_Mix_Module1");
 
-            entity.Property(e => e.Value)
-                .HasColumnType("text")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
-
-            entity.HasOne(d => d.SpecificultureNavigation)
-                .WithMany(p => p.MixLanguage)
-                .HasPrincipalKey(p => p.Specificulture)
-                .HasForeignKey(d => d.Specificulture)
-                .HasConstraintName("FK_Mix_Language_Mix_Culture");
+            entity.HasOne(d => d.MixPage)
+                .WithMany(p => p.MixPageModule)
+                .HasForeignKey(d => new { d.PageId, d.Specificulture })
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Mix_Page_Module_Mix_Page");
         }
     }
 }

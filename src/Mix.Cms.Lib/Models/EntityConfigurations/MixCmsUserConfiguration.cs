@@ -5,23 +5,23 @@ using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Models.EntityConfigurations
 {
-    public class MixLanguageConfiguration : IEntityTypeConfiguration<MixLanguage>
+    public class MixCmsUserConfiguration : IEntityTypeConfiguration<MixCmsUser>
     {
-        public void Configure(EntityTypeBuilder<MixLanguage> entity)
+        public void Configure(EntityTypeBuilder<MixCmsUser> entity)
         {
-            entity.HasKey(e => new { e.Id, e.Specificulture })
-                     .HasName("PRIMARY");
+            entity.ToTable("mix_cms_user");
 
-            entity.ToTable("mix_language");
-
-            entity.HasIndex(e => e.Specificulture);
-
-            entity.Property(e => e.Specificulture)
-                .HasColumnType("varchar(10)")
+            entity.Property(e => e.Id)
+                .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.Category)
+            entity.Property(e => e.Address)
+                .HasColumnType("varchar(250)")
+                .HasCharSet("utf8")
+                .HasCollation("utf8_unicode_ci");
+
+            entity.Property(e => e.Avatar)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
@@ -33,53 +33,48 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-            entity.Property(e => e.DefaultValue)
+            entity.Property(e => e.Email)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.Description)
-                .HasColumnType("varchar(250)")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
-
-            entity.Property(e => e.Keyword)
-                .IsRequired()
+            entity.Property(e => e.FirstName)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
             entity.Property(e => e.LastModified).HasColumnType("datetime");
 
+            entity.Property(e => e.LastName)
+                .HasColumnType("varchar(50)")
+                .HasCharSet("utf8")
+                .HasCollation("utf8_unicode_ci");
+
+            entity.Property(e => e.MiddleName)
+                .HasColumnType("varchar(50)")
+                .HasCharSet("utf8")
+                .HasCollation("utf8_unicode_ci");
+
             entity.Property(e => e.ModifiedBy)
+                .HasColumnType("varchar(50)")
+                .HasCharSet("utf8")
+                .HasCollation("utf8_unicode_ci");
+
+            entity.Property(e => e.PhoneNumber)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
             entity.Property(e => e.Status)
                 .IsRequired()
-                .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.DataType)
-                .IsRequired()
-                .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
-                .HasColumnType("varchar(50)")
+            entity.Property(e => e.Username)
+                .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
-
-            entity.Property(e => e.Value)
-                .HasColumnType("text")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
-
-            entity.HasOne(d => d.SpecificultureNavigation)
-                .WithMany(p => p.MixLanguage)
-                .HasPrincipalKey(p => p.Specificulture)
-                .HasForeignKey(d => d.Specificulture)
-                .HasConstraintName("FK_Mix_Language_Mix_Culture");
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "DataType",
                 table: "mix_attribute_field",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int");
@@ -23,7 +23,7 @@ namespace Mix.Cms.Lib.Migrations
                 type: "int",
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)");
+                oldType: "varchar(50)");
         }
     }
 }

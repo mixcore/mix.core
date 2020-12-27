@@ -5,26 +5,13 @@ using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Models.EntityConfigurations
 {
-    public class MixLanguageConfiguration : IEntityTypeConfiguration<MixLanguage>
+    public class MixFileConfiguration : IEntityTypeConfiguration<MixFile>
     {
-        public void Configure(EntityTypeBuilder<MixLanguage> entity)
+        public void Configure(EntityTypeBuilder<MixFile> entity)
         {
-            entity.HasKey(e => new { e.Id, e.Specificulture })
-                     .HasName("PRIMARY");
+            entity.ToTable("mix_file");
 
-            entity.ToTable("mix_language");
-
-            entity.HasIndex(e => e.Specificulture);
-
-            entity.Property(e => e.Specificulture)
-                .HasColumnType("varchar(10)")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
-
-            entity.Property(e => e.Category)
-                .HasColumnType("varchar(250)")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+            entity.HasIndex(e => e.ThemeId);
 
             entity.Property(e => e.CreatedBy)
                 .HasColumnType("varchar(50)")
@@ -33,17 +20,25 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-            entity.Property(e => e.DefaultValue)
+            entity.Property(e => e.Extension)
+                .IsRequired()
+                .HasColumnType("varchar(50)")
+                .HasCharSet("utf8")
+                .HasCollation("utf8_unicode_ci");
+
+            entity.Property(e => e.FileFolder)
+                .IsRequired()
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.Description)
+            entity.Property(e => e.FileName)
+                .IsRequired()
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.Keyword)
+            entity.Property(e => e.FolderType)
                 .IsRequired()
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
@@ -63,23 +58,22 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.DataType)
+            entity.Property(e => e.StringContent)
                 .IsRequired()
-                .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
-                .HasColumnType("varchar(50)")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
-
-            entity.Property(e => e.Value)
                 .HasColumnType("text")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.HasOne(d => d.SpecificultureNavigation)
-                .WithMany(p => p.MixLanguage)
-                .HasPrincipalKey(p => p.Specificulture)
-                .HasForeignKey(d => d.Specificulture)
-                .HasConstraintName("FK_Mix_Language_Mix_Culture");
+            entity.Property(e => e.ThemeName)
+                .IsRequired()
+                .HasColumnType("varchar(250)")
+                .HasCharSet("utf8")
+                .HasCollation("utf8_unicode_ci");
+
+            entity.HasOne(d => d.Theme)
+                .WithMany(p => p.MixFile)
+                .HasForeignKey(d => d.ThemeId)
+                .HasConstraintName("FK_mix_file_mix_template");
         }
     }
 }

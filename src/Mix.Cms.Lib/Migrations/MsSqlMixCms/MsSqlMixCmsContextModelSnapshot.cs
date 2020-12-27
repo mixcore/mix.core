@@ -42,7 +42,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("DataType")
                         .IsRequired()
-                        .HasColumnType("varchar(30)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("DefaultValue")
                         .HasColumnType("ntext");
@@ -90,7 +90,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.Property<string>("Title")
@@ -160,7 +160,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.Property<string>("Title")
@@ -217,7 +217,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.HasKey("Id", "Specificulture");
@@ -270,7 +270,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.HasKey("Id");
@@ -359,7 +359,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.Property<string>("StringValue")
@@ -401,7 +401,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.Property<string>("Value")
@@ -469,7 +469,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.Property<string>("Username")
@@ -530,7 +530,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.Property<string>("Value")
@@ -597,7 +597,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.HasKey("Id");
@@ -656,7 +656,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.Property<string>("StringContent")
@@ -732,7 +732,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.Property<string>("Value")
@@ -812,7 +812,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.Property<string>("Tags")
@@ -893,7 +893,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.Property<string>("Template")
@@ -963,7 +963,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.Property<string>("Value")
@@ -1025,7 +1025,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.HasKey("Id", "Specificulture");
@@ -1121,7 +1121,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.Property<string>("Tags")
@@ -1196,7 +1196,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.HasKey("Id", "Specificulture");
@@ -1252,7 +1252,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.HasKey("Id", "Specificulture");
@@ -1301,7 +1301,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.Property<string>("TextDefault")
@@ -1361,7 +1361,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.HasKey("Id");
@@ -1403,7 +1403,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.HasKey("RoleId", "PageId");
@@ -1483,7 +1483,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.Property<string>("Tags")
@@ -1562,7 +1562,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.HasKey("Id", "Specificulture");
@@ -1621,7 +1621,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.HasKey("Id", "Specificulture");
@@ -1691,7 +1691,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.HasKey("Id", "Specificulture")
@@ -1750,7 +1750,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.HasKey("Id", "Specificulture");
@@ -1815,7 +1815,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.Property<int>("Type")
@@ -1870,7 +1870,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.HasKey("Id", "Specificulture");
@@ -1941,7 +1941,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.Property<string>("Styles")
@@ -2001,7 +2001,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.Property<string>("Thumbnail")
@@ -2059,7 +2059,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(50)")
                         .IsUnicode(false);
 
                     b.Property<int>("Type")
