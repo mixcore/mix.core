@@ -59,9 +59,6 @@ namespace Mix.Cms.Lib.Models.Account
                     case MixEnums.DatabaseProvider.MySQL:
                         optionsBuilder.UseMySql(cnn, ServerVersion.AutoDetect(cnn));
                         break;
-                    case MixEnums.DatabaseProvider.PostgreSQL:
-                        optionsBuilder.UseNpgsql(cnn);
-                        break;
                     default:
                         break;
                 }
@@ -79,10 +76,6 @@ namespace Mix.Cms.Lib.Models.Account
                 case MixEnums.DatabaseProvider.MySQL:
                     MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
                     break;
-                case MixEnums.DatabaseProvider.PostgreSQL:
-                    Npgsql.NpgsqlConnection.ClearPool((Npgsql.NpgsqlConnection)Database.GetDbConnection());
-                    break;
-
             }
             base.Dispose();
         }
