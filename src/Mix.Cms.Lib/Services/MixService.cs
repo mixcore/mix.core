@@ -200,6 +200,12 @@ namespace Mix.Cms.Lib.Services
             }
             return result != null ? result.Value<T>() : default;
         }
+        
+        public static T GetEnumConfig<T>(string name)
+        {
+            Enum.TryParse(typeof(T), Instance.GlobalSettings[name]?.Value<string>(), true, out object result);
+            return result != null ? (T)result : default;
+        }
 
         public static void SetConfig<T>(string name, T value)
         {
@@ -350,7 +356,7 @@ namespace Mix.Cms.Lib.Services
                 //if current Context is Root
                 if (isRoot)
                 {
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }

@@ -76,7 +76,8 @@ namespace Mix.Cms.Service.SignalR.Hubs
             await SendToGroup(connection, Constants.Enums.MessageReponseKey.NewMember, request.Room);
 
             // Get Online users
-            var getAvailableUsers = ViewModels.MixMessengerUsers.DefaultViewModel.Repository.GetModelListBy(u => u.Status == Constants.Enums.OnlineStatus.Connected.ToString());
+            var getAvailableUsers = ViewModels.MixMessengerUsers.DefaultViewModel.Repository.GetModelListBy(
+                u => u.Status == Constants.Enums.OnlineStatus.Connected.ToString());
             if (getAvailableUsers.IsSucceed)
             {
                 // Announce User Connected to Group and list available users

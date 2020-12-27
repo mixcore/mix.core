@@ -11,7 +11,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Configurations { get; set; }
         public string Regex { get; set; }
         public string Title { get; set; }
-        public int DataType { get; set; }
+        public MixEnums.MixDataType DataType { get; set; }
         public string DefaultValue { get; set; }
         public string Name { get; set; }
         public string Options { get; set; }
@@ -26,9 +26,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public DateTime? LastModified { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public int Priority { get; set; }
-        public string Status { get; set; }
-
-        public virtual MixAttributeSet AttributeSet { get; set; }
-        public virtual MixAttributeSet Reference { get; set; }
+        public MixEnums.MixContentStatus Status { get; set; }
     }
 }

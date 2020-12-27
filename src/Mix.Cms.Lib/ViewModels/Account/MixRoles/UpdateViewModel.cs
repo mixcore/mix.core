@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -89,7 +90,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
                     {
                         PageId = item.Id,
                         RoleId = Id,
-                        Status = MixContentStatus.Published.ToString()
+                        Status = MixContentStatus.Published
                     };
                     item.NavPermission = new MixPortalPageRoles.ReadViewModel(nav) { IsActived = false };
                 }
@@ -107,7 +108,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
                         {
                             PageId = child.PortalPage.Id,
                             RoleId = Id,
-                            Status = MixContentStatus.Published.ToString()
+                            Status = MixContentStatus.Published
                         };
                         child.PortalPage.NavPermission = new MixPortalPageRoles.ReadViewModel(nav) { IsActived = false };
                     }
@@ -156,7 +157,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
             }
             finally
             {
-                context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
             }
         }
 

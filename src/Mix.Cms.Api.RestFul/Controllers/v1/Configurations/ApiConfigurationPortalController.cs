@@ -31,7 +31,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             string category = Request.Query["category"];
             Expression<Func<MixConfiguration, bool>> predicate = model =>
                 model.Specificulture == _lang
-                && (!isStatus || model.Status == status.ToString())
+                && (!isStatus || model.Status == status)
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
                 && (string.IsNullOrEmpty(keyword)

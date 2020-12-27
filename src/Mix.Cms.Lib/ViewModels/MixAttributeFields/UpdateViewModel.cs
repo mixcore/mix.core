@@ -120,7 +120,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
                 }
                 else
                 {
-                    var currentField = Repository.GetSingleModel(m => m.Name == Name && m.DataType == (int)DataType, _context, _transaction);
+                    var currentField = Repository.GetSingleModel(m => m.Name == Name && m.DataType == DataType, _context, _transaction);
                     if (currentField.IsSucceed)
                     {
                         Id = currentField.Data.Id;

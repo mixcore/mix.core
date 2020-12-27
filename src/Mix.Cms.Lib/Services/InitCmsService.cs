@@ -103,7 +103,7 @@ namespace Mix.Cms.Lib.Services
                         }
                         else
                         {
-                            result.IsSucceed = isSucceed;
+                            result.IsSucceed = false;
                             result.Errors.Add("Cannot init cultures");
                         }
                     if (result.IsSucceed)
@@ -269,7 +269,7 @@ namespace Mix.Cms.Lib.Services
                         Description = culture.Description,
                         Icon = culture.Icon,
                         Alias = culture.Alias,
-                        Status = MixEnums.MixContentStatus.Published.ToString(),
+                        Status = MixEnums.MixContentStatus.Published,
                         CreatedDateTime = DateTime.UtcNow
                     };
                     context.Entry(enCulture).State = EntityState.Added;
@@ -308,7 +308,7 @@ namespace Mix.Cms.Lib.Services
                     Specificulture = culture,
                     CreatedDateTime = DateTime.UtcNow,
                     Alias = page.Title.ToLower(),
-                    Status = MixContentStatus.Published.ToString()
+                    Status = MixContentStatus.Published
                 };
                 context.Entry(alias).State = EntityState.Added;
             }

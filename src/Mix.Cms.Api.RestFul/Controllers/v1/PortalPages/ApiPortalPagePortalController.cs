@@ -37,7 +37,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
 
             bool isLevel = int.TryParse(Request.Query["level"], out int level);
             Expression<Func<MixPortalPage, bool>> predicate = model =>
-                (!isStatus || model.Status == status.ToString())
+                (!isStatus || model.Status == status)
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
                 && (!isLevel || model.Level == level)

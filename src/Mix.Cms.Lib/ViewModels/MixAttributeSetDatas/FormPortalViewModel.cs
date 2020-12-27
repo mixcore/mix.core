@@ -602,7 +602,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }
@@ -644,7 +644,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             );
                 foreach (var item in Values.OrderBy(v => v.Priority))
                 {
-                    item.AttributeFieldName = item.Field.Name;
+                    item.AttributeFieldName = item.AttributeFieldName ?? item.Field?.Name;
                     Obj.Add(ParseValue(item, _context, _transaction));
                 }
             }

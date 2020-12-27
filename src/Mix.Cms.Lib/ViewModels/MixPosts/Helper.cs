@@ -55,7 +55,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 };
                 // Get Tag
                 var getVal = await MixAttributeSetValues.ReadViewModel.Repository.GetSingleModelAsync(
-                    m => m.Specificulture == culture && m.Status == MixEnums.MixContentStatus.Published.ToString()
+                    m => m.Specificulture == culture && m.Status == MixEnums.MixContentStatus.Published
                         && m.AttributeSetName == metaName
                         && m.AttributeFieldName == "title" && m.StringValue == metaValue
                 , context, transaction);
@@ -85,7 +85,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }
@@ -115,7 +115,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 // Get Tag
                 var getVal = await MixAttributeSetValues.ReadViewModel.Repository.GetSingleModelAsync(
                     m => m.Specificulture == culture
-                    && m.Status == MixEnums.MixContentStatus.Published.ToString()
+                    && m.Status == MixEnums.MixContentStatus.Published
                     && m.Id == valueId
                 , context, transaction);
                 if (getVal.IsSucceed)
@@ -144,7 +144,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }
@@ -173,7 +173,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 };
                 // Get Data                
                 Expression<Func<MixAttributeSetValue, bool>> predicate = m => m.Specificulture == culture
-                   && m.Status == MixEnums.MixContentStatus.Published.ToString();
+                   && m.Status == MixEnums.MixContentStatus.Published;
                 foreach (var item in valueIds)
                 {
                     Expression<Func<MixAttributeSetValue, bool>> pre = m => m.Id == item;
@@ -215,7 +215,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }
@@ -255,7 +255,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }
@@ -318,7 +318,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }
@@ -392,7 +392,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }
@@ -452,7 +452,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }
@@ -466,7 +466,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 // Get list related post ids by data id
                 Expression<Func<MixPagePost, bool>> predicate =
                     m => m.Specificulture == culture
-                        && m.Status == "Published"
+                        && m.Status == MixEnums.MixContentStatus.Published
                         && m.PageId == id;
                 var ids = context.MixPagePost
                     .Where(predicate)
@@ -573,7 +573,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 if (isRoot)
                 {
                     //if current Context is Root
-                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }

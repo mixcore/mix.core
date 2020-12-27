@@ -24,7 +24,8 @@ namespace Mix.Cms.Api.Controllers.v1
     public class ApiConfigurationController :
          BaseGenericApiController<MixCmsContext, MixConfiguration>
     {
-        public ApiConfigurationController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext) : base(context, memoryCache, hubContext)
+        public ApiConfigurationController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext) 
+            : base(context, memoryCache, hubContext)
         {
         }
 
@@ -66,7 +67,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         {
                             Specificulture = _lang,
                             Category = "Site",
-                            Status = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
+                            Status = MixService.GetConfig<MixContentStatus>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
                             Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 
@@ -125,7 +126,7 @@ namespace Mix.Cms.Api.Controllers.v1
             ParseRequestPagingDate(request);
             Expression<Func<MixConfiguration, bool>> predicate = model =>
                         model.Specificulture == _lang
-                        && (string.IsNullOrEmpty(request.Status) || model.Status == request.Status)
+                        && (string.IsNullOrEmpty(request.Status) || model.Status == Enum.Parse<MixContentStatus>(request.Status))
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (model.Keyword.Contains(request.Keyword)
                             || model.Description.Contains(request.Keyword)))
