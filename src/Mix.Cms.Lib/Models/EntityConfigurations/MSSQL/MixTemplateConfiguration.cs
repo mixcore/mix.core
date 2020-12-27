@@ -12,7 +12,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
             entity.ToTable("mix_template");
 
             entity.HasIndex(e => e.ThemeId)
-                .HasName("IX_mix_template_file_TemplateId");
+                .HasDatabaseName("IX_mix_template_file_TemplateId");
 
             entity.Property(e => e.Content)
                 .IsRequired()
