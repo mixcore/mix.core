@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using System;
 
 namespace Mix.Cms.Messenger.Models.Data
@@ -13,7 +13,7 @@ namespace Mix.Cms.Messenger.Models.Data
         {
         }
 
-        public MixChatServiceContext(DbContextOptions<sw_chatContext> options)
+        public MixChatServiceContext(DbContextOptions<MixChatServiceContext> options)
             : base(options)
         {
         }
@@ -61,10 +61,7 @@ namespace Mix.Cms.Messenger.Models.Data
                             optionsBuilder.UseSqlServer(cnn);
                             break;
                         case MixEnums.DatabaseProvider.MySQL:
-                            optionsBuilder.UseMySql(cnn);
-                            break;
-                        case MixEnums.DatabaseProvider.PostgreSQL:
-                            optionsBuilder.UseNpgsql(cnn);
+                            optionsBuilder.UseMySql(cnn, ServerVersion.AutoDetect(cnn));
                             break;
                         default:
                             break;
@@ -84,10 +81,6 @@ namespace Mix.Cms.Messenger.Models.Data
                 case MixEnums.DatabaseProvider.MySQL:
                     MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
                     break;
-                case MixEnums.DatabaseProvider.PostgreSQL:
-                    Npgsql.NpgsqlConnection.ClearPool((Npgsql.NpgsqlConnection)Database.GetDbConnection());
-                    break;
-
             }
             base.Dispose();
         }
@@ -121,13 +114,13 @@ namespace Mix.Cms.Messenger.Models.Data
                 entity.ToTable("mix_messenger_message");
 
                 entity.HasIndex(e => e.RoomId)
-                    .HasName("IX_messenger_message_RoomId");
+                    .HasDatabaseName("IX_messenger_message_RoomId");
 
                 entity.HasIndex(e => e.TeamId)
-                    .HasName("IX_messenger_message_TeamId");
+                    .HasDatabaseName("IX_messenger_message_TeamId");
 
                 entity.HasIndex(e => e.UserId)
-                    .HasName("IX_messenger_message_UserId");
+                    .HasDatabaseName("IX_messenger_message_UserId");
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
@@ -160,7 +153,7 @@ namespace Mix.Cms.Messenger.Models.Data
                 entity.ToTable("mix_messenger_nav_room_user");
 
                 entity.HasIndex(e => e.UserId)
-                    .HasName("IX_messenger_nav_room_user_UserId");
+                    .HasDatabaseName("IX_messenger_nav_room_user_UserId");
 
                 entity.Property(e => e.UserId).HasMaxLength(50);
 
@@ -186,7 +179,7 @@ namespace Mix.Cms.Messenger.Models.Data
                 entity.ToTable("mix_messenger_nav_team_user");
 
                 entity.HasIndex(e => e.UserId)
-                    .HasName("IX_messenger_nav_team_user_UserId");
+                    .HasDatabaseName("IX_messenger_nav_team_user_UserId");
 
                 entity.Property(e => e.UserId).HasMaxLength(50);
 

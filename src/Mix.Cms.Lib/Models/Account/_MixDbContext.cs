@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Services;
 using Mix.Identity.Entities;
 using Mix.Identity.Models;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 
 namespace Mix.Cms.Lib.Models.Account
 {
@@ -57,10 +57,7 @@ namespace Mix.Cms.Lib.Models.Account
                         optionsBuilder.UseSqlServer(cnn);
                         break;
                     case MixEnums.DatabaseProvider.MySQL:
-                        optionsBuilder.UseMySql(cnn);
-                        break;
-                    case MixEnums.DatabaseProvider.PostgreSQL:
-                        optionsBuilder.UseNpgsql(cnn);
+                        optionsBuilder.UseMySql(cnn, ServerVersion.AutoDetect(cnn));
                         break;
                     default:
                         break;
@@ -79,10 +76,6 @@ namespace Mix.Cms.Lib.Models.Account
                 case MixEnums.DatabaseProvider.MySQL:
                     MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
                     break;
-                case MixEnums.DatabaseProvider.PostgreSQL:
-                    Npgsql.NpgsqlConnection.ClearPool((Npgsql.NpgsqlConnection)Database.GetDbConnection());
-                    break;
-
             }
             base.Dispose();
         }

@@ -12,7 +12,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MySQL
             entity.ToTable("mix_portal_page_navigation");
 
             entity.HasIndex(e => e.PageId)
-                .HasName("FK_mix_portal_page_navigation_mix_portal_page");
+                .HasDatabaseName("FK_mix_portal_page_navigation_mix_portal_page");
 
             entity.HasIndex(e => e.ParentId);
 

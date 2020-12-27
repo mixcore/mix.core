@@ -12,7 +12,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
             entity.ToTable("mix_culture");
 
             entity.HasIndex(e => e.Specificulture)
-                .HasName("IX_Mix_Culture")
+                .HasDatabaseName("IX_Mix_Culture")
                 .IsUnique();
 
             entity.Property(e => e.Alias)

@@ -12,7 +12,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
             entity.ToTable("mix_cache");
 
             entity.HasIndex(e => e.ExpiredDateTime)
-                .HasName("Index_ExpiresAtTime");
+                .HasDatabaseName("Index_ExpiresAtTime");
 
             entity.Property(e => e.Id)
                 .HasColumnType("varchar(50)")
