@@ -5,23 +5,28 @@ using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Models.EntityConfigurations
 {
-    public class MixConfigurationConfiguration : IEntityTypeConfiguration<MixConfiguration>
+    public class MixAttributeSetDataConfiguration : IEntityTypeConfiguration<MixAttributeSetData>
     {
-        public void Configure(EntityTypeBuilder<MixConfiguration> entity)
+        public void Configure(EntityTypeBuilder<MixAttributeSetData> entity)
         {
             entity.HasKey(e => new { e.Id, e.Specificulture })
                     .HasName("PRIMARY");
 
-            entity.ToTable("mix_configuration");
+            entity.ToTable("mix_attribute_set_data");
 
-            entity.HasIndex(e => e.Specificulture);
+            entity.HasIndex(e => e.AttributeSetId);
+
+            entity.Property(e => e.Id)
+                .HasColumnType("varchar(50)")
+                .HasCharSet("utf8")
+                .HasCollation("utf8_unicode_ci");
 
             entity.Property(e => e.Specificulture)
                 .HasColumnType("varchar(10)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.Category)
+            entity.Property(e => e.AttributeSetName)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
@@ -32,17 +37,6 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations
                 .HasCollation("utf8_unicode_ci");
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
-
-            entity.Property(e => e.Description)
-                .HasColumnType("varchar(250)")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
-
-            entity.Property(e => e.Keyword)
-                .IsRequired()
-                .HasColumnType("varchar(50)")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
 
             entity.Property(e => e.LastModified).HasColumnType("datetime");
 
@@ -57,24 +51,6 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
-
-            entity.Property(e => e.DataType)
-                .IsRequired()
-                .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
-                .HasColumnType("varchar(50)")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
-
-            entity.Property(e => e.Value)
-                .HasColumnType("text")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
-
-            entity.HasOne(d => d.SpecificultureNavigation)
-                .WithMany(p => p.MixConfiguration)
-                .HasPrincipalKey(p => p.Specificulture)
-                .HasForeignKey(d => d.Specificulture)
-                .HasConstraintName("FK_Mix_Configuration_Mix_Culture");
         }
     }
 }

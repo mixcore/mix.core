@@ -9,7 +9,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_url_alias",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -103,7 +103,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_theme",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -176,7 +176,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_template",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -247,7 +247,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_related_post",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -311,7 +311,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_related_data",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -404,7 +404,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_related_attribute_set",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -479,7 +479,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_related_attribute_data",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -581,7 +581,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_post_module",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -645,7 +645,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_post_media",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -741,7 +741,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_post",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -817,7 +817,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_portal_page_role",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -861,7 +861,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_portal_page_navigation",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -946,7 +946,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_portal_page",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -1001,7 +1001,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_page_post",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -1065,7 +1065,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_page_module",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -1151,7 +1151,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_page",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -1277,7 +1277,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_module_post",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -1351,7 +1351,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_module_data",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -1443,7 +1443,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_module",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -1584,7 +1584,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_media",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -1704,7 +1704,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_language",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -1816,7 +1816,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_file",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -1887,7 +1887,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_culture",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -1991,7 +1991,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_configuration",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -2085,7 +2085,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_cms_user",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -2208,7 +2208,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_cache",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -2262,7 +2262,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_attribute_set_value",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -2389,7 +2389,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_attribute_set_reference",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -2444,7 +2444,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_attribute_set_data",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -2527,7 +2527,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_attribute_set",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -2639,7 +2639,7 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "mix_attribute_field",
-                type: "varchar(30)",
+                type: "varchar(50)",
                 unicode: false,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -2754,7 +2754,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -2848,7 +2848,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -2921,7 +2921,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -2992,7 +2992,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -3056,7 +3056,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -3149,7 +3149,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -3224,7 +3224,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -3326,7 +3326,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -3390,7 +3390,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -3486,7 +3486,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -3562,7 +3562,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -3606,7 +3606,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -3691,7 +3691,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -3746,7 +3746,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -3810,7 +3810,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -3896,7 +3896,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -4022,7 +4022,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -4096,7 +4096,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -4188,7 +4188,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -4329,7 +4329,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -4449,7 +4449,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -4561,7 +4561,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -4632,7 +4632,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -4736,7 +4736,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -4830,7 +4830,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -4953,7 +4953,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -5007,7 +5007,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -5134,7 +5134,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -5189,7 +5189,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -5272,7 +5272,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(
@@ -5384,7 +5384,7 @@ namespace Mix.Cms.Lib.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(30)",
+                oldType: "varchar(50)",
                 oldUnicode: false);
 
             migrationBuilder.AlterColumn<string>(

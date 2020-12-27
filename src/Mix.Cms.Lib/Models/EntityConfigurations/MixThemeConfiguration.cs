@@ -5,20 +5,11 @@ using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Models.EntityConfigurations
 {
-    public class MixAttributeFieldConfiguration : IEntityTypeConfiguration<MixAttributeField>
+    public class MixThemeConfiguration : IEntityTypeConfiguration<MixTheme>
     {
-        public void Configure(EntityTypeBuilder<MixAttributeField> entity)
+        public void Configure(EntityTypeBuilder<MixTheme> entity)
         {
-            entity.ToTable("mix_attribute_field");
-
-            entity.HasIndex(e => e.AttributeSetId);
-
-            entity.HasIndex(e => e.ReferenceId);
-
-            entity.Property(e => e.AttributeSetName)
-                .HasColumnType("varchar(250)")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+            entity.ToTable("mix_theme");
 
             entity.Property(e => e.CreatedBy)
                 .HasColumnType("varchar(50)")
@@ -27,20 +18,10 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
-            entity.Property(e => e.DefaultValue)
-                .HasColumnType("text")
+            entity.Property(e => e.Image)
+                .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
-
-            entity.Property(e => e.IsEncrypt).HasColumnType("bit(1)");
-
-            entity.Property(e => e.IsMultiple).HasColumnType("bit(1)");
-
-            entity.Property(e => e.IsRequire).HasColumnType("bit(1)");
-
-            entity.Property(e => e.IsSelect).HasColumnType("bit(1)");
-
-            entity.Property(e => e.IsUnique).HasColumnType("bit(1)");
 
             entity.Property(e => e.LastModified).HasColumnType("datetime");
 
@@ -55,13 +36,8 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.Options)
-                .HasColumnType("text")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
-
-            entity.Property(e => e.Regex)
-                .HasColumnType("varchar(250)")
+            entity.Property(e => e.PreviewUrl)
+                .HasColumnType("varchar(450)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
@@ -72,10 +48,8 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.DataType)
-                .IsRequired()
-                .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
-                .HasColumnType("varchar(50)")
+            entity.Property(e => e.Thumbnail)
+                .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 

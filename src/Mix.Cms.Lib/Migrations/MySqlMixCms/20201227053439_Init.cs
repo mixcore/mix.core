@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Mix.Cms.Lib.Migrations.MySqlMixCms
 {
-    public partial class Init_MySql_Cms : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -77,13 +77,15 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                     Regex = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    DataType = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
+                    DataType = table.Column<string>(type: "varchar(50)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8")
+                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     BooleanValue = table.Column<ulong>(type: "bit(1)", nullable: true),
                     DataId = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     DateTimeValue = table.Column<DateTime>(type: "datetime", nullable: true),
-                    DoubleValue = table.Column<float>(nullable: true),
+                    DoubleValue = table.Column<double>(nullable: true),
                     IntegerValue = table.Column<int>(nullable: true),
                     StringValue = table.Column<string>(type: "text", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
@@ -467,13 +469,16 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                     AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Configurations = table.Column<string>(nullable: true),
                     Regex = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     Title = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    DataType = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
+                    DataType = table.Column<string>(type: "varchar(50)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8")
+                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     DefaultValue = table.Column<string>(type: "text", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
@@ -772,6 +777,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     Type = table.Column<int>(nullable: false),
+                    PostType = table.Column<string>(nullable: true),
                     PageSize = table.Column<int>(nullable: true),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
@@ -851,6 +857,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                     Type = table.Column<string>(type: "varchar(50)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    PostType = table.Column<string>(nullable: true),
                     Views = table.Column<int>(nullable: true),
                     PageSize = table.Column<int>(nullable: true),
                     ExtraFields = table.Column<string>(type: "text", nullable: true)
