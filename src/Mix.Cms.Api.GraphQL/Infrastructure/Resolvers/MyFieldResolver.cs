@@ -1,4 +1,5 @@
-﻿using GraphQL.Resolvers;
+﻿using GraphQL;
+using GraphQL.Resolvers;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 using Mix.Heart.Extensions;
@@ -18,7 +19,8 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure
             _tableMetadata = tableMetadata;
             _dbContext = dbContext;
         }
-        public object Resolve(ResolveFieldContext context)
+
+        public object Resolve(IResolveFieldContext context)
         {
             var queryable = _dbContext.Query(_tableMetadata.AssemblyFullName);
 
@@ -43,13 +45,13 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure
             if (context.FieldName.Contains("_list"))
             {
                 var first = context.Arguments["first"] != null ?
-                    context.GetArgument("first", int.MaxValue) : int.MaxValue; 
+                    context.GetArgument("first", int.MaxValue) : int.MaxValue;
                 var offset = context.Arguments["offset"] != null ?
                     context.GetArgument("offset", 0) : 0;
-                
+
                 if (paramsCount >= 0)
                 {
-                    
+
                     queryable = queryable.Where(predicates, args);
                 }
 
