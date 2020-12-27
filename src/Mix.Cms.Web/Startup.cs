@@ -104,7 +104,6 @@ namespace Mix.Cms.Web
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseMixRestApi();
             #region Addictionals Config for Mixcore Cms
 
             if (MixService.GetConfig<bool>("IsHttps"))

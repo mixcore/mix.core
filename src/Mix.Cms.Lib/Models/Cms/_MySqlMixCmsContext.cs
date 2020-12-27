@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Cms.Lib.Services;
 using MySql.Data.MySqlClient;
 using System;
+using System.Linq;
+using System.Reflection;
+using Mix.Cms.Lib.Extensions;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
@@ -67,7 +70,9 @@ namespace Mix.Cms.Lib.Models.Cms
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
+            modelBuilder.ApplyAllConfigurationsFromNamespace(
+                this.GetType().Assembly, 
+                "Mix.Cms.Lib.Models.EntityConfigurations.MySQL");
             OnModelCreatingPartial(modelBuilder);
         }
 
