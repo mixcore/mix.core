@@ -103,7 +103,7 @@ namespace Mix.Cms.Lib.Services
                         }
                         else
                         {
-                            result.IsSucceed = isSucceed;
+                            result.IsSucceed = false;
                             result.Errors.Add("Cannot init cultures");
                         }
                     if (result.IsSucceed)
