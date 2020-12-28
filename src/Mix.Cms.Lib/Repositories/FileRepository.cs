@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
+using Mix.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
