@@ -166,13 +166,19 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public void LoadReferenceData(string parentId, MixEnums.MixAttributeSetDataType parentType,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var refFields = Values.Where(m => m.DataType == MixEnums.MixDataType.Reference).OrderBy(v => v.Priority).ToList();
-            foreach (var item in refFields)
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(
+                    _context, _transaction,
+                    out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            var refValues = context.MixAttributeSetValue.Where(
+                   m => m.DataId == Id 
+                    && m.Specificulture == Specificulture 
+                    && m.DataType == MixEnums.MixDataType.Reference);
+
+            foreach (var item in refValues)
             {
-                item.Field = item.Field ?? MixAttributeFields.ReadViewModel.Repository.GetSingleModel(m => m.Id == item.AttributeFieldId
-                , _context, _transaction).Data;
+                var refId = context.MixAttributeField.FirstOrDefault(m => m.Id == item.AttributeFieldId).ReferenceId;
                 Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
-                    (model.AttributeSetId == item.Field.ReferenceId)
+                    (model.AttributeSetId == refId)
                     && (model.ParentId == parentId && model.ParentType == parentType.ToString())
                     && model.Specificulture == Specificulture
                     ;
@@ -189,8 +195,13 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
                 else
                 {
-                    Obj.Add(new JProperty(item.AttributeFieldName, arr));
+                    Obj.Add(item.ToJProperty());
                 }
+            }
+            if (isRoot)
+            {
+                transaction.Dispose();
+                context.Dispose();
             }
         }
         #endregion Expands
