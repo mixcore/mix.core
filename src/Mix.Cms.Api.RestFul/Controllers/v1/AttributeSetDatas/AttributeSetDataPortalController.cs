@@ -20,13 +20,13 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
     [Route("api/v1/rest/{culture}/attribute-set-data/portal")]
     public class AttributeSetDataPortalController :
-        BaseRestApiController<MixCmsContext, MixAttributeSetData, FormPortalViewModel, FormPortalViewModel, FormPortalViewModel>
+        BaseRestApiController<MixCmsContext, MixAttributeSetData, FormViewModel, FormViewModel, FormViewModel>
     {
         // GET: api/v1/rest/{culture}/attribute-set-data
         [HttpGet]
-        public override async Task<ActionResult<PaginationModel<FormPortalViewModel>>> Get()
+        public override async Task<ActionResult<PaginationModel<FormViewModel>>> Get()
         {
-            var getData = await Helper.FilterByKeywordAsync<FormPortalViewModel>(Request, _lang);
+            var getData = await Helper.FilterByKeywordAsync<FormViewModel>(Request, _lang);
             if (getData.IsSucceed)
             {
                 return Ok(getData.Data);
@@ -142,7 +142,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         {
             string attributeSetName = Request.Query["attributeSetName"].ToString();
             string exportPath = $"content/exports/module/{attributeSetName}";
-            var getData = await Helper.FilterByKeywordAsync<FormPortalViewModel>(Request, _lang);
+            var getData = await Helper.FilterByKeywordAsync<FormViewModel>(Request, _lang);
 
             var jData = new List<JObject>();
             if (getData.IsSucceed)
