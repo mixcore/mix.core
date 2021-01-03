@@ -82,35 +82,16 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            ParseData(_context, _transaction);
-            LoadReferenceData(Id, MixEnums.MixAttributeSetDataType.Set, _context, _transaction);
-        }
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(
+                  _context, _transaction,
+                  out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            Obj.ParseData(Id, Specificulture, context, transaction);
+            Obj.LoadReferenceData(Id, Specificulture, MixEnums.MixAttributeSetDataType.Set, context, transaction);
 
-        #endregion Overrides
-
-        #region Expands
-        private void ParseData(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            if (Obj == null)
+            if (isRoot)
             {
-                UnitOfWorkHelper<MixCmsContext>.InitTransaction(
-                    _context, _transaction,
-                    out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-
-                var values = context.MixAttributeSetValue.Where(
-                    m => m.DataId == Id && m.Specificulture == Specificulture);
-                var properties = values.Select(m => m.ToJProperty());
-
-                Obj = new JObject(
-                    new JProperty("id", Id),
-                    properties
-                );
-
-                if (isRoot)
-                {
-                    transaction.Dispose();
-                    context.Dispose();
-                }
+                transaction.Dispose();
+                context.Dispose();
             }
         }
 
@@ -125,36 +106,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             return MixCmsHelper.Property<T>(Obj, fieldName);
         }
 
-        public void LoadReferenceData(string parentId, MixEnums.MixAttributeSetDataType parentType,
-            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var refFields = Values.Where(m => m.DataType == MixEnums.MixDataType.Reference).OrderBy(v => v.Priority).ToList();
-            foreach (var item in refFields)
-            {
-                item.Field = item.Field ?? MixAttributeFields.ReadViewModel.Repository.GetSingleModel(
-                    m => m.Id == item.AttributeFieldId, _context, _transaction).Data;
-                Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
-                    (model.AttributeSetId == item.Field.ReferenceId)
-                    && (model.ParentId == parentId && model.ParentType == parentType.ToString())
-                    && model.Specificulture == Specificulture
-                    ;
-                var getData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(predicate, _context, _transaction);
-
-                JArray arr = new JArray();
-                foreach (var nav in getData.Data.OrderBy(v => v.Priority))
-                {
-                    arr.Add(nav.Data.Obj);
-                }
-                if (Obj.ContainsKey(item.AttributeFieldName))
-                {
-                    Obj[item.AttributeFieldName] = arr;
-                }
-                else
-                {
-                    Obj.Add(item.Model.ToJProperty());
-                }
-            }
-        }
         #endregion Expands
     }
 }

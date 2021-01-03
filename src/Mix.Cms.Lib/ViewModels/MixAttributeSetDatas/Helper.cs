@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels.MixAttributeSetDataValues;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
@@ -20,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
-    public class Helper
+    public static class Helper
     {
         public static async Task<RepositoryResponse<bool>> ImportData(
             string culture, Lib.ViewModels.MixAttributeSets.ReadViewModel attributeSet, IFormFile file)
@@ -590,5 +591,68 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 return result;
             }
         }
+
+        public static void ParseData(this JObject obj, string dataId, string culture, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            if (obj != null)
+            {
+
+                UnitOfWorkHelper<MixCmsContext>.InitTransaction(
+                        _context, _transaction,
+                        out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+                var values = context.MixAttributeSetValue.Where(
+                    m => m.DataId == dataId && m.Specificulture == culture);
+                var properties = values.Select(m => m.ToJProperty());
+
+                obj = new JObject(
+                    new JProperty("id", dataId),
+                    properties
+                );
+
+                if (isRoot)
+                {
+                    transaction.Dispose();
+                    context.Dispose();
+                }
+            }
+        }
+
+        public static void LoadReferenceData(this JObject obj
+            , string dataId, string culture
+            , MixEnums.MixAttributeSetDataType parentType,
+            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(
+                    _context, _transaction,
+                    out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            var refValues = context.MixAttributeSetValue.Where(
+                   m => m.DataId == dataId
+                    && m.Specificulture == culture
+                    && m.DataType == MixEnums.MixDataType.Reference).ToList();
+
+            foreach (var item in refValues)
+            {
+                var refId = context.MixAttributeField.FirstOrDefault(m => m.Id == item.AttributeFieldId).ReferenceId;
+                Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
+                    (model.AttributeSetId == refId)
+                    && (model.ParentId == dataId && model.ParentType == parentType.ToString())
+                    && model.Specificulture == culture
+                    ;
+                var getData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(predicate, _context, _transaction);
+
+                JArray arr = new JArray();
+                foreach (var nav in getData.Data.OrderBy(v => v.Priority))
+                {
+                    arr.Add(nav.Data.Obj);
+                }
+                obj[item.AttributeFieldName] = arr;
+            }
+            if (isRoot)
+            {
+                transaction.Dispose();
+                context.Dispose();
+            }
+        }
+
     }
 }
