@@ -85,7 +85,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(
                   _context, _transaction,
                   out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            Obj.ParseData(Id, Specificulture, context, transaction);
+            
+            if (Obj == null)
+            {
+                Obj = Helper.ParseData(Id, Specificulture, context, transaction);
+            }
+            
             Obj.LoadReferenceData(Id, Specificulture, MixEnums.MixAttributeSetDataType.Set, context, transaction);
 
             if (isRoot)
