@@ -180,12 +180,14 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #region Expands
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
+            string type = Type ?? MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST;
             var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(
-                m => m.Name == this.Type, _context, _transaction);
+                m => m.Name == type, _context, _transaction);
             if (getAttrs.IsSucceed)
             {
                 AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
-                a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId == getAttrs.Data.Id
+                a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture 
+                    && a.AttributeSetId == getAttrs.Data.Id
                     , _context, _transaction).Data;
             }
         }
