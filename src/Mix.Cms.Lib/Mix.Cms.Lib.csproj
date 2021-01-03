@@ -55,4 +55,9 @@
     <ProjectReference Include="..\Mix.Identity\Mix.Identity.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Infrastructure\" />
+    <Folder Include="Infrastructure\Models\" />
+    <Folder Include="Infrastructure\Helper\" />
+  </ItemGroup>
 </Project>

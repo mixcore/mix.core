@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Cms.Service.SignalR", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Heart.NetCore", "Mix.Heart.NetCore\Mix.Heart.NetCore.csproj", "{EEA39C49-5113-4772-87C1-2F1D0487A8CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mix.Heart", "..\..\mix.heart\src\Mix.Heart\Mix.Heart.csproj", "{DD8B16E7-3A13-42E4-BF1C-BFBB3792B028}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{EEA39C49-5113-4772-87C1-2F1D0487A8CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEA39C49-5113-4772-87C1-2F1D0487A8CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEA39C49-5113-4772-87C1-2F1D0487A8CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD8B16E7-3A13-42E4-BF1C-BFBB3792B028}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD8B16E7-3A13-42E4-BF1C-BFBB3792B028}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD8B16E7-3A13-42E4-BF1C-BFBB3792B028}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD8B16E7-3A13-42E4-BF1C-BFBB3792B028}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

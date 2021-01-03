@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Infrastructure.Helper;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -296,6 +297,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 var getfields = await MixAttributeFields.ReadViewModel.Repository.GetModelListByAsync(
                     m => m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName, context, transaction);
                 var fields = getfields.IsSucceed ? getfields.Data : new List<MixAttributeFields.ReadViewModel>();
+                
                 var fieldQueries = !string.IsNullOrEmpty(request.Query["query"]) ? JObject.Parse(request.Query["query"]) : new JObject();
                 Expression<Func<MixAttributeSetValue, bool>> attrPredicate = m => m.Specificulture == culture
                    && (m.AttributeSetName == attributeSetName);
@@ -308,7 +310,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     IsSucceed = true,
                     Data = new PaginationModel<TView>()
                 };
-
+                Console.Write("DUY");
                 // if filter by field name or keyword => filter by attr value
                 if (fieldQueries.Count > 0 || !string.IsNullOrEmpty(keyword))
                 {
@@ -332,31 +334,34 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             }
                         }
                     }
-                    if (fieldQueries != null && fieldQueries.Properties().Count() > 0) // filter by specific field name
-                    {
-                        foreach (var q in fieldQueries)
-                        {
-                            if (fields.Any(f => f.Name == q.Key))
-                            {
-                                string value = q.Value.ToString();
-                                if (!string.IsNullOrEmpty(value))
-                                {
-                                    Expression<Func<MixAttributeSetValue, bool>> pre =
-                                       m => m.AttributeFieldName == q.Key &&
-                                            (filterType == "equal" && m.StringValue == (q.Value.ToString())) ||
-                                            (filterType == "contain" && (EF.Functions.Like(m.StringValue, $"%{q.Value.ToString()}%")));
-                                    if (valPredicate != null)
-                                    {
-                                        valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.Or);
-                                    }
-                                    else
-                                    {
-                                        valPredicate = pre;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    valPredicate =  QueryFilterHelper.CreateExpression(fieldQueries);
+                    var queryy = context.MixAttributeSetValue.Where(valPredicate).ToQueryString();
+                    Console.WriteLine(queryy);
+                    //if (fieldQueries != null && fieldQueries.Properties().Count() > 0) // filter by specific field name
+                    //{
+                    //    foreach (var q in fieldQueries)
+                    //    {
+                    //        if (fields.Any(f => f.Name == q.Key))
+                    //        {
+                    //            string value = q.Value.ToString();
+                    //            if (!string.IsNullOrEmpty(value))
+                    //            {
+                    //                Expression<Func<MixAttributeSetValue, bool>> pre =
+                    //                   m => m.AttributeFieldName == q.Key &&
+                    //                        (filterType == "equal" && m.StringValue == (q.Value.ToString())) ||
+                    //                        (filterType == "contain" && (EF.Functions.Like(m.StringValue, $"%{q.Value.ToString()}%")));
+                    //                if (valPredicate != null)
+                    //                {
+                    //                    valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.Or);
+                    //                }
+                    //                else
+                    //                {
+                    //                    valPredicate = pre;
+                    //                }
+                    //            }
+                    //        }
+                    //    }
+                    //}
                     if (valPredicate != null)
                     {
                         attrPredicate = attrPredicate == null ? valPredicate
@@ -366,6 +371,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     if (attrPredicate != null)
                     {
                         var query = context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
+                        Console.Write("DUY");
+                        Console.Write(query.ToQueryString());
                         var dataIds = query.ToList();
                         if (query != null)
                         {
