@@ -9,6 +9,7 @@ using System;
 
 namespace Mix.Cms.Lib.ViewModels.MixTemplates
 {
+    [Serializable]
     public class ReadListItemViewModel
        : ViewModelBase<MixCmsContext, MixTemplate, ReadListItemViewModel>
     {
