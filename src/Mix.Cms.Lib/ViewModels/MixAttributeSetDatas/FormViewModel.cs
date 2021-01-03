@@ -99,7 +99,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Obj.ParseData(Id, Specificulture, _context, _transaction);
+            if (Obj == null)
+            {
+                Obj = Helper.ParseData(Id, Specificulture, _context, _transaction);
+            }
         }
 
         public override MixAttributeSetData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -263,7 +266,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 if (isRoot)
                 {
-                    Obj.ParseData(Id, Specificulture, context, transaction);
+                    Obj = Helper.ParseData(Id, Specificulture, _context, _transaction);
                     context.Dispose();
                 }
             }
@@ -275,7 +278,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             var result = base.SaveModel(isSaveSubModels, _context, _transaction);
             if (result.IsSucceed)
             {
-                Obj.ParseData(Id, Specificulture, _context, _transaction);
+                Obj = Helper.ParseData(Id, Specificulture, _context, _transaction);
             }
             return result;
         }
@@ -426,7 +429,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         }
         public bool HasValue(string fieldName)
         {
-            return Obj.Value<string>(fieldName) != null;
+            return Obj != null ? Obj.Value<string>(fieldName) != null : false;
         }
 
         public T Property<T>(string fieldName)
