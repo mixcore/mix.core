@@ -417,7 +417,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         {
             if (Obj == null)
             {
-                var values = _context.MixAttributeSetValue.Where(
+                UnitOfWorkHelper<MixCmsContext>.InitTransaction(
+                    _context, _transaction, 
+                    out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+
+                var values = context.MixAttributeSetValue.Where(
                     m => m.DataId == Id && m.Specificulture == Specificulture);
                 var properties = values.Select(m => m.ToJProperty());
 
@@ -425,6 +429,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     new JProperty("id", Id),
                     properties
                 );
+                
+                if (isRoot)
+                {
+                    transaction.Dispose();
+                    context.Dispose();
+                }
             }
         }
         public static async Task<RepositoryResponse<FormViewModel>> SaveObjectAsync(JObject data, string attributeSetName)
