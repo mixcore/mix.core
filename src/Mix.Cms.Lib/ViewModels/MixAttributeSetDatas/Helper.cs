@@ -592,29 +592,28 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
         }
 
-        public static void ParseData(this JObject obj, string dataId, string culture, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public static JObject ParseData(string dataId, string culture, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (obj != null)
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(
+                    _context, _transaction,
+                    out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            var values = context.MixAttributeSetValue.Where(
+                m => m.DataId == dataId && m.Specificulture == culture
+                    && !string.IsNullOrEmpty(m.AttributeFieldName));
+            var properties = values.Select(m => m.ToJProperty());
+
+            var obj = new JObject(
+                new JProperty("id", dataId),
+                properties
+            );
+
+            if (isRoot)
             {
-
-                UnitOfWorkHelper<MixCmsContext>.InitTransaction(
-                        _context, _transaction,
-                        out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-                var values = context.MixAttributeSetValue.Where(
-                    m => m.DataId == dataId && m.Specificulture == culture);
-                var properties = values.Select(m => m.ToJProperty());
-
-                obj = new JObject(
-                    new JProperty("id", dataId),
-                    properties
-                );
-
-                if (isRoot)
-                {
-                    transaction.Dispose();
-                    context.Dispose();
-                }
+                transaction.Dispose();
+                context.Dispose();
             }
+
+            return obj;
         }
 
         public static void LoadReferenceData(this JObject obj
@@ -645,7 +644,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     arr.Add(nav.Data.Obj);
                 }
-                obj[item.AttributeFieldName] = arr;
+                if (obj.ContainsKey(item.AttributeFieldName))
+                {
+                    obj[item.AttributeFieldName] = arr;
+                }
+                else
+                {
+                    obj.Add(new JProperty(item.AttributeFieldName, arr));
+                }
             }
             if (isRoot)
             {
