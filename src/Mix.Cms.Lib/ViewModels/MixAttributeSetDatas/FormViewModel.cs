@@ -99,7 +99,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            ParseData(_context, _transaction);
+            Obj.ParseData(Id, Specificulture, _context, _transaction);
         }
 
         public override MixAttributeSetData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -263,7 +263,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 if (isRoot)
                 {
-                    ParseData(context, transaction);
+                    Obj.ParseData(Id, Specificulture, context, transaction);
                     context.Dispose();
                 }
             }
@@ -275,7 +275,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             var result = base.SaveModel(isSaveSubModels, _context, _transaction);
             if (result.IsSucceed)
             {
-                ParseData();
+                Obj.ParseData(Id, Specificulture, _context, _transaction);
             }
             return result;
         }
@@ -413,20 +413,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #region Expands
 
-        private void ParseData(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            if (Obj == null)
-            {
-                var values = _context.MixAttributeSetValue.Where(
-                    m => m.DataId == Id && m.Specificulture == Specificulture);
-                var properties = values.Select(m => m.ToJProperty());
-
-                Obj = new JObject(
-                    new JProperty("id", Id),
-                    properties
-                );
-            }
-        }
         public static async Task<RepositoryResponse<FormViewModel>> SaveObjectAsync(JObject data, string attributeSetName)
         {
             var vm = new FormViewModel()
