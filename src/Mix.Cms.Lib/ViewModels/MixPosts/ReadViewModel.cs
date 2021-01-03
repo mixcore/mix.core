@@ -252,7 +252,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     query, orderByPropertyName
                     , direction
                     , pageSize, pageIndex
-                    , null, null
                     , context, transaction
                     );
                 return new RepositoryResponse<PaginationModel<ReadViewModel>>()
@@ -304,7 +303,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     query, orderByPropertyName
                     , direction
                     , pageSize, pageIndex
-                    , null, null
                     , context, transaction
                     );
                 return new RepositoryResponse<PaginationModel<ReadViewModel>>()

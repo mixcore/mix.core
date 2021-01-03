@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.ViewModels.MixAttributeSetDataValues;
 using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -172,7 +173,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             var refValues = context.MixAttributeSetValue.Where(
                    m => m.DataId == Id 
                     && m.Specificulture == Specificulture 
-                    && m.DataType == MixEnums.MixDataType.Reference);
+                    && m.DataType == MixEnums.MixDataType.Reference).ToList();
 
             foreach (var item in refValues)
             {
