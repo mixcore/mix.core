@@ -180,7 +180,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #region Expands
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST, _context, _transaction);
+            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(
+                m => m.Name == this.Type, _context, _transaction);
             if (getAttrs.IsSucceed)
             {
                 AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
@@ -215,7 +216,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             if (AttributeData != null)
             {
-                var field = AttributeData.Data.Obj.GetValue(fieldName);
+                var field = AttributeData.Data.Obj?.GetValue(fieldName);
                 if (field != null)
                 {
                     return field.Value<T>();
