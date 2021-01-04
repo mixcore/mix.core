@@ -132,6 +132,6 @@
     }
   },
   "Quartz": {
-    "quartz.scheduler.instanceName": "Quartz ASP.NET Core Sample Scheduler"
+    "quartz.scheduler.instanceName": "Mixcore Cms Scheduler"
   }
 }

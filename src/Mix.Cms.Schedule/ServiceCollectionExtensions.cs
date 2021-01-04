@@ -19,7 +19,7 @@ namespace Mix.Cms.Schedule
             // base configuration from appsettings.json
             services.Configure<QuartzOptions>(configuration.GetSection("Quartz"));
 
-            services.AddQuartz(q=>
+            services.AddQuartz(q =>
             {
                 // we could leave DI configuration intact and then jobs need
                 // to have public no-arg constructor
@@ -31,7 +31,7 @@ namespace Mix.Cms.Schedule
                     // to configure via default constructor
                     options.AllowDefaultConstructor = true;
                 });
-                
+
                 // or for scoped service support like EF Core DbContext
                 // q.UseMicrosoftDependencyInjectionScopedJobFactory();
 
@@ -43,19 +43,24 @@ namespace Mix.Cms.Schedule
                     tp.MaxConcurrency = 10;
                 });
 
-                // here's a known job for triggers
-                var jobKey = new JobKey("awesome job", "awesome group");
-                q.AddJob<HelloJob>(jobKey, j => j
-                    .WithDescription("my awesome job")
-                );
 
-                q.AddTrigger(t => t
-                    .WithIdentity("Simple Trigger")
-                    .ForJob(jobKey)
-                    .StartNow()
-                    .WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(10)).RepeatForever())
-                    .WithDescription("my awesome simple trigger")
-                );
+                if (!MixService.GetConfig<bool>("IsInit"))
+                {
+                    // here's a known job for triggers
+                    var jobKey = new JobKey("PublishScheduledPostsJob", "Publish Scheduled Posts Job");
+                    q.AddJob<PublishScheduledPostsJob>(jobKey, j => j
+                        .WithDescription("Publish Scheduled Posts Job")
+                    );
+
+                    q.AddTrigger(t => t
+                        .WithIdentity("PublishScheduledPostsTrigger")
+                        .ForJob(jobKey)
+                        .StartAt(DateTime.UtcNow.AddSeconds(10))
+                        .WithSimpleSchedule(x => x.WithIntervalInMinutes(1)
+                        .RepeatForever())
+                        .WithDescription("Publish Scheduled Posts trigger")
+                    );
+                }
             });
             // ASP.NET Core hosting
             services.AddQuartzServer(options =>
@@ -83,7 +88,7 @@ namespace Mix.Cms.Schedule
             await scheduler.Start();
 
             // define the job and tie it to our HelloJob class
-            IJobDetail job = JobBuilder.Create<HelloJob>()
+            IJobDetail job = JobBuilder.Create<PublishScheduledPostsJob>()
                 .WithIdentity("job1", "group1")
                 .Build();
 

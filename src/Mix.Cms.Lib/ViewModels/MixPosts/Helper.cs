@@ -577,5 +577,23 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 }
             }
         }
+
+        public static async Task PublishScheduledPosts()
+        {
+            using(var context = new MixCmsContext())
+            {
+                var now = DateTime.UtcNow;
+                now = now.AddSeconds(-now.Second);
+                var sheduledPosts = context.MixPost
+                    .Where(m => m.Status == MixEnums.MixContentStatus.Schedule
+                        && Equals(m.PublishedDateTime.Value, now));
+                var posts = await sheduledPosts.ToListAsync();
+                foreach (var post in posts)
+                {
+                    post.Status = MixEnums.MixContentStatus.Published;
+                }
+                _ = await context.SaveChangesAsync();
+            }
+        }
     }
 }
