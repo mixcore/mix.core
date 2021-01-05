@@ -140,21 +140,22 @@
     <div class="progress" style="height: 2px;">
         <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
-<div class="container">
-    <div class="card form-init">
-        <div class="p-5">
-            <img src="/css/portal/img/mixcore-logo-green.svg" alt="Mixcore CMS" height="35">
-            @try
-            {
-                <p>@Environment.GetEnvironmentVariable("MYSQLCONNSTR_localdb")</p>
-            }
-            catch(Exception ex) { 
-                @ex.Message
-            }
-            @RenderBody()
+        
+    <div class="container">
+        <div class="card form-init">
+            <div class="p-5">
+                <img src="/css/portal/img/mixcore-logo-green.svg" alt="Mixcore CMS" height="35">
+                @try
+                {
+                    <p>@Environment.GetEnvironmentVariable("MYSQLCONNSTR_localdb")</p>
+                }
+                catch(Exception ex) { 
+                    @ex.Message
+                }
+                @RenderBody()
+            </div>
         </div>
     </div>
-</div>
 
     <environment names="Development">
     </environment>
