@@ -51,7 +51,7 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure.Models
             {
                 tableColumns.Add(new ColumnMetadata
                 {
-                    ColumnName = propertyType.Name,
+                    ColumnName = propertyType.GetColumnName(),
                     DataType = propertyType.GetColumnType()
                 });
             }

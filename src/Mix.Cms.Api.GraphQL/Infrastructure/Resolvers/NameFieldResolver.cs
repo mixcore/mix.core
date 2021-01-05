@@ -1,5 +1,4 @@
-﻿using GraphQL;
-using GraphQL.Resolvers;
+﻿using GraphQL.Resolvers;
 using GraphQL.Types;
 using System;
 using System.Collections.Generic;
@@ -10,12 +9,7 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure
 {
     public class NameFieldResolver : IFieldResolver
     {
-        private static object GetPropValue(object src, string propName)
-        {
-            return src.GetType().GetProperty(propName)?.GetValue(src, null);
-        }
-
-        public object Resolve(IResolveFieldContext context)
+        public object Resolve(ResolveFieldContext context)
         {
             var source = context.Source;
             if (source == null)
@@ -29,6 +23,10 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure
             //    throw new InvalidOperationException($"Expected to find property {context.FieldAst.Name} on {context.Source.GetType().Name} but it does not exist.");
             //}
             return value;
+        }
+        private static object GetPropValue(object src, string propName)
+        {
+            return src.GetType().GetProperty(propName)?.GetValue(src, null);
         }
     }
 }

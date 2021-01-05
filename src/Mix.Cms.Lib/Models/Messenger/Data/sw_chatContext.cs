@@ -1,19 +1,16 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
-using MySql.Data.MySqlClient;
-using System;
 
 namespace Mix.Cms.Messenger.Models.Data
 {
-    public partial class MixChatServiceContext : DbContext
+    public partial class sw_chatContext : DbContext
     {
-        public MixChatServiceContext()
+        public sw_chatContext()
         {
         }
 
-        public MixChatServiceContext(DbContextOptions<sw_chatContext> options)
+        public sw_chatContext(DbContextOptions<sw_chatContext> options)
             : base(options)
         {
         }
@@ -32,65 +29,24 @@ namespace Mix.Cms.Messenger.Models.Data
             {
                 //define the database to use
                 //string cnn = "Data Source=mix-messenger.db";
+                //string cnn = "Server=(localdb)\\mssqllocaldb;Database=mix-cms.db;Trusted_Connection=True;MultipleActiveResultSets=true";
                 //optionsBuilder.UseSqlite(cnn);
-                ;
-                // IConfiguration configuration = new ConfigurationBuilder()
-                //.SetBasePath(System.IO.Directory.GetCurrentDirectory())
-                //.AddJsonFile(Common.Utility.Const.CONST_FILE_APPSETTING)
-                //.Build();
-
-                // //optionsBuilder.UseSqlServer(cnn);
-                // string cnn = configuration.GetConnectionString("MixMessengerConnection");
-                // if (string.IsNullOrEmpty(cnn))
-                // {
-                //     cnn = _cnn;
-                // }
-                // //define the database to use
-                // if (!string.IsNullOrEmpty(cnn))
-                // {
-                //         optionsBuilder.UseSqlServer(cnn);
-                // }
-
+                //define the database to use
                 string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
                 if (!string.IsNullOrEmpty(cnn))
                 {
-                    var provider = Enum.Parse<MixEnums.DatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
-                    switch (provider)
+                    if (MixService.GetConfig<bool>("IsMysql"))
                     {
-                        case MixEnums.DatabaseProvider.MSSQL:
-                            optionsBuilder.UseSqlServer(cnn);
-                            break;
-                        case MixEnums.DatabaseProvider.MySQL:
-                            optionsBuilder.UseMySql(cnn);
-                            break;
-                        case MixEnums.DatabaseProvider.PostgreSQL:
-                            optionsBuilder.UseNpgsql(cnn);
-                            break;
-                        default:
-                            break;
+                        optionsBuilder.UseMySql(cnn);
+                    }
+                    else
+                    {
+                        optionsBuilder.UseSqlServer(cnn);
                     }
                 }
             }
         }
-        //Ref https://github.com/dotnet/efcore/issues/10169
-        public override void Dispose()
-        {
-            var provider = Enum.Parse<MixEnums.DatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
-            switch (provider)
-            {
-                case MixEnums.DatabaseProvider.MSSQL:
-                    SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
-                    break;
-                case MixEnums.DatabaseProvider.MySQL:
-                    MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
-                    break;
-                case MixEnums.DatabaseProvider.PostgreSQL:
-                    Npgsql.NpgsqlConnection.ClearPool((Npgsql.NpgsqlConnection)Database.GetDbConnection());
-                    break;
 
-            }
-            base.Dispose();
-        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MixMessengerHubRoom>(entity =>

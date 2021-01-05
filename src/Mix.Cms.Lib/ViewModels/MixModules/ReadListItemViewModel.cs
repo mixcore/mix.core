@@ -127,6 +127,11 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         {
         }
 
+        public override Task<bool> ExpandViewAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            return base.ExpandViewAsync(_context, _transaction);
+        }
+
         #endregion Overrides
     }
 }

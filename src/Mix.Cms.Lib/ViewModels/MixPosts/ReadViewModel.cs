@@ -250,10 +250,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     && ac.Status == MixContentStatus.Published).Select(ac => ac.MixPost);
                 PaginationModel<ReadViewModel> result = Repository.ParsePagingQuery(
                     query, orderByPropertyName
-                    , direction
-                    , pageSize, pageIndex
-                    , null, null
-                    , context, transaction
+                    , direction,
+                    pageSize, pageIndex, context, transaction
                     );
                 return new RepositoryResponse<PaginationModel<ReadViewModel>>()
                 {
@@ -302,10 +300,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     && (ac.Status == MixContentStatus.Published || ac.Status == MixContentStatus.Preview)).Select(ac => ac.MixPost);
                 PaginationModel<ReadViewModel> result = Repository.ParsePagingQuery(
                     query, orderByPropertyName
-                    , direction
-                    , pageSize, pageIndex
-                    , null, null
-                    , context, transaction
+                    , direction,
+                    pageSize, pageIndex, context, transaction
                     );
                 return new RepositoryResponse<PaginationModel<ReadViewModel>>()
                 {
