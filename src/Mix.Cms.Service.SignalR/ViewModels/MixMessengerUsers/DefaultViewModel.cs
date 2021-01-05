@@ -62,6 +62,12 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
 
         #region Async
 
+        public override async Task<bool> ExpandViewAsync(MixChatServiceContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            this.Connections = (await MixMessengerUserDevices.DefaultViewModel.Repository.GetModelListByAsync(m => m.UserId == this.Id)).Data;
+            return Connections != null;
+        }
+
         #endregion Async
 
         #endregion Override

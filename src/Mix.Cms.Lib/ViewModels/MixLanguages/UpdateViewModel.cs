@@ -113,6 +113,21 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
 
         #region Async
 
+        public override Task<UpdateViewModel> ParseViewAsync(bool isExpand = true, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            Property = new DataValueViewModel() { DataType = DataType, Value = Value, Name = Keyword };
+            return base.ParseViewAsync(isExpand, _context, _transaction);
+        }
+
+        public override Task<bool> ExpandViewAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            Cultures = LoadCultures(Specificulture, _context, _transaction);
+            Property = new DataValueViewModel() { DataType = DataType, Value = Value, Name = Keyword };
+            this.Cultures.ForEach(c => c.IsSupported = true);
+
+            return base.ExpandViewAsync(_context, _transaction);
+        }
+
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             foreach (var culture in Cultures.Where(c => c.Specificulture != Specificulture))

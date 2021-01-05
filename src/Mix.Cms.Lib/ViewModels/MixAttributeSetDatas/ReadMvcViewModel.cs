@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.ViewModels.MixAttributeSetDataValues;
 using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -82,28 +81,34 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(
-                  _context, _transaction,
-                  out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            
             if (Obj == null)
             {
-                Obj = Helper.ParseData(Id, Specificulture, context, transaction);
+                Obj = new JObject();
+                Values = Values ?? MixAttributeSetValues.ReadViewModel
+                    .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
+                Obj.Add(new JProperty("id", Id));
+                foreach (var item in Values.Where(m => m.DataType != MixEnums.MixDataType.Reference).OrderBy(v => v.Priority))
+                {
+                    item.Field = item.Field ?? MixAttributeFields.ReadViewModel.Repository.GetSingleModel(m => m.Id == item.AttributeFieldId, _context, _transaction).Data;
+                    if (!Obj.TryGetValue(item.AttributeFieldName, out JToken val))
+                    {
+                        var prop = ParseValue(item);
+                        if (prop != null)
+                        {
+                            Obj.Add(prop);
+                        }
+                    }
+                }
             }
-            
-            Obj.LoadReferenceData(Id, Specificulture, MixEnums.MixAttributeSetDataType.Set, context, transaction);
-
-            if (isRoot)
-            {
-                transaction.Dispose();
-                context.Dispose();
-            }
+            LoadReferenceData(Id, MixEnums.MixAttributeSetDataType.Set, _context, _transaction);
         }
 
+        #endregion Overrides
 
+        #region Expands
         public bool HasValue(string fieldName)
         {
-            return Obj != null ? Obj.Value<string>(fieldName) != null : false;
+            return Obj.Value<string>(fieldName) != null;
         }
         
         public T Property<T>(string fieldName)
@@ -111,6 +116,83 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             return MixCmsHelper.Property<T>(Obj, fieldName);
         }
 
+        private JProperty ParseValue(MixAttributeSetValues.ReadViewModel item)
+        {
+            switch (item.DataType)
+            {
+                case MixEnums.MixDataType.DateTime:
+                    return new JProperty(item.AttributeFieldName, item.DateTimeValue);
+
+                case MixEnums.MixDataType.Date:
+                    return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
+
+                case MixEnums.MixDataType.Time:
+                    return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
+
+                case MixEnums.MixDataType.Double:
+                    return (new JProperty(item.AttributeFieldName, item.DoubleValue));
+
+                case MixEnums.MixDataType.Boolean:
+                    return (new JProperty(item.AttributeFieldName, item.BooleanValue));
+
+                case MixEnums.MixDataType.Integer:
+                    return (new JProperty(item.AttributeFieldName, item.IntegerValue));
+
+                case MixEnums.MixDataType.Reference:
+                    return (new JProperty(item.AttributeFieldName, null));
+
+                case MixEnums.MixDataType.Custom:
+                case MixEnums.MixDataType.Duration:
+                case MixEnums.MixDataType.PhoneNumber:
+                case MixEnums.MixDataType.Text:
+                case MixEnums.MixDataType.Html:
+                case MixEnums.MixDataType.MultilineText:
+                case MixEnums.MixDataType.EmailAddress:
+                case MixEnums.MixDataType.Password:
+                case MixEnums.MixDataType.Url:
+                case MixEnums.MixDataType.ImageUrl:
+                case MixEnums.MixDataType.CreditCard:
+                case MixEnums.MixDataType.PostalCode:
+                case MixEnums.MixDataType.Upload:
+                case MixEnums.MixDataType.Color:
+                case MixEnums.MixDataType.Icon:
+                case MixEnums.MixDataType.VideoYoutube:
+                case MixEnums.MixDataType.TuiEditor:
+                default:
+                    return (new JProperty(item.AttributeFieldName, item.StringValue));
+            }
+        }
+
+        public void LoadReferenceData(string parentId, MixEnums.MixAttributeSetDataType parentType,
+            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var refFields = Values.Where(m => m.DataType == MixEnums.MixDataType.Reference).OrderBy(v => v.Priority).ToList();
+            foreach (var item in refFields)
+            {
+                item.Field = item.Field ?? MixAttributeFields.ReadViewModel.Repository.GetSingleModel(m => m.Id == item.AttributeFieldId
+                , _context, _transaction).Data;
+                Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
+                    (model.AttributeSetId == item.Field.ReferenceId)
+                    && (model.ParentId == parentId && model.ParentType == parentType.ToString())
+                    && model.Specificulture == Specificulture
+                    ;
+                var getData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(predicate, _context, _transaction);
+
+                JArray arr = new JArray();
+                foreach (var nav in getData.Data.OrderBy(v => v.Priority))
+                {
+                    arr.Add(nav.Data.Obj);
+                }
+                if (Obj.ContainsKey(item.AttributeFieldName))
+                {
+                    Obj[item.AttributeFieldName] = arr;
+                }
+                else
+                {
+                    Obj.Add(new JProperty(item.AttributeFieldName, arr));
+                }
+            }
+        }
         #endregion Expands
     }
 }

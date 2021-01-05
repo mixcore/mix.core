@@ -297,12 +297,12 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                     else
                     {
-                        var data = new Lib.ViewModels.Account.MixUsers.UpdateViewModel(new MixCmsUser() { Status = MixUserStatus.Actived.ToString() });
-                        data.ExpandView();
+                        var model = new MixCmsUser() { Status = MixUserStatus.Actived.ToString() };
+
                         RepositoryResponse<Lib.ViewModels.Account.MixUsers.UpdateViewModel> result = new RepositoryResponse<Lib.ViewModels.Account.MixUsers.UpdateViewModel>()
                         {
                             IsSucceed = true,
-                            Data = data
+                            Data = await Lib.ViewModels.Account.MixUsers.UpdateViewModel.InitViewAsync(model)
                         };
                         return JObject.FromObject(result);
                     }
@@ -315,13 +315,12 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                     else
                     {
-                        var data = new UserInfoViewModel(new MixCmsUser() { Status = MixUserStatus.Actived.ToString() });
-                        data.ExpandView();
+                        var model = new MixCmsUser() { Status = MixUserStatus.Actived.ToString() };
 
                         RepositoryResponse<UserInfoViewModel> result = new RepositoryResponse<UserInfoViewModel>()
                         {
                             IsSucceed = true,
-                            Data = data
+                            Data = await UserInfoViewModel.InitViewAsync(model)
                         };
                         return JObject.FromObject(result);
                     }

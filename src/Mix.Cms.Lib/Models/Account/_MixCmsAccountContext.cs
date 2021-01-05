@@ -6,7 +6,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Services;
 using Mix.Identity.Data;
-using MySqlConnector;
+using MySql.Data.MySqlClient;
 
 namespace Mix.Cms.Lib.Models.Account
 {
@@ -47,7 +47,10 @@ namespace Mix.Cms.Lib.Models.Account
                         optionsBuilder.UseSqlServer(cnn);
                         break;
                     case MixEnums.DatabaseProvider.MySQL:
-                        optionsBuilder.UseMySql(cnn, ServerVersion.AutoDetect(cnn));
+                        optionsBuilder.UseMySql(cnn);
+                        break;
+                    case MixEnums.DatabaseProvider.PostgreSQL:
+                        optionsBuilder.UseNpgsql(cnn);
                         break;
                     default:
                         break;
@@ -67,6 +70,10 @@ namespace Mix.Cms.Lib.Models.Account
                 case MixEnums.DatabaseProvider.MySQL:
                     MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
                     break;
+                case MixEnums.DatabaseProvider.PostgreSQL:
+                    Npgsql.NpgsqlConnection.ClearPool((Npgsql.NpgsqlConnection)Database.GetDbConnection());
+                    break;
+
             }
             base.Dispose();
         }
@@ -94,7 +101,7 @@ namespace Mix.Cms.Lib.Models.Account
             modelBuilder.Entity<AspNetRoles>(entity =>
             {
                 entity.HasIndex(e => e.NormalizedName)
-                    .HasDatabaseName("RoleNameIndex")
+                    .HasName("RoleNameIndex")
                     .IsUnique()
                     .HasFilter("([NormalizedName] IS NOT NULL)");
 
@@ -211,10 +218,10 @@ namespace Mix.Cms.Lib.Models.Account
             modelBuilder.Entity<AspNetUsers>(entity =>
             {
                 entity.HasIndex(e => e.NormalizedEmail)
-                    .HasDatabaseName("EmailIndex");
+                    .HasName("EmailIndex");
 
                 entity.HasIndex(e => e.NormalizedUserName)
-                    .HasDatabaseName("UserNameIndex")
+                    .HasName("UserNameIndex")
                     .IsUnique()
                     .HasFilter("([NormalizedUserName] IS NOT NULL)");
 

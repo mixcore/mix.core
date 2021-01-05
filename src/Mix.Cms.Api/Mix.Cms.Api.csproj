@@ -1,19 +1,55 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <DockerTargetOS>Windows</DockerTargetOS>
+    <UserSecretsId>8d8e7493-9576-4341-89be-19d4e1c62ac2</UserSecretsId>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" NoWarn="NU1605" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.0" NoWarn="NU1605" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    <Compile Remove="Controllers\v1\Mix\AttributeFields\**" />
+    <Compile Remove="Controllers\v1\Mix\AttributeSetDatas\**" />
+    <Compile Remove="Controllers\v1\Mix\AttributeSetDataValues\**" />
+    <Compile Remove="Controllers\v1\Mix\AttributeSets\**" />
+    <Compile Remove="Controllers\v1\Mix\RelatedAttributeDatas\**" />
+    <Compile Remove="Controllers\v1\Mix\RelatedAttributeSets\**" />
+    <Content Remove="Controllers\v1\Mix\AttributeFields\**" />
+    <Content Remove="Controllers\v1\Mix\AttributeSetDatas\**" />
+    <Content Remove="Controllers\v1\Mix\AttributeSetDataValues\**" />
+    <Content Remove="Controllers\v1\Mix\AttributeSets\**" />
+    <Content Remove="Controllers\v1\Mix\RelatedAttributeDatas\**" />
+    <Content Remove="Controllers\v1\Mix\RelatedAttributeSets\**" />
+    <EmbeddedResource Remove="Controllers\v1\Mix\AttributeFields\**" />
+    <EmbeddedResource Remove="Controllers\v1\Mix\AttributeSetDatas\**" />
+    <EmbeddedResource Remove="Controllers\v1\Mix\AttributeSetDataValues\**" />
+    <EmbeddedResource Remove="Controllers\v1\Mix\AttributeSets\**" />
+    <EmbeddedResource Remove="Controllers\v1\Mix\RelatedAttributeDatas\**" />
+    <EmbeddedResource Remove="Controllers\v1\Mix\RelatedAttributeSets\**" />
+    <None Remove="Controllers\v1\Mix\AttributeFields\**" />
+    <None Remove="Controllers\v1\Mix\AttributeSetDatas\**" />
+    <None Remove="Controllers\v1\Mix\AttributeSetDataValues\**" />
+    <None Remove="Controllers\v1\Mix\AttributeSets\**" />
+    <None Remove="Controllers\v1\Mix\RelatedAttributeDatas\**" />
+    <None Remove="Controllers\v1\Mix\RelatedAttributeSets\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
+    <Compile Remove="Controllers\v1\ApiPageController.cs" />
+    <Compile Remove="Controllers\v1\ApiPostAttributeDataController.cs" />
+    <Compile Remove="Controllers\v1\ApiPostAttributeValueController.cs" />
+    <Compile Remove="Controllers\v1\ApiPostController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Mix.Cms.Service.SignalR\Mix.Cms.Service.SignalR.csproj" />
   </ItemGroup>
 
