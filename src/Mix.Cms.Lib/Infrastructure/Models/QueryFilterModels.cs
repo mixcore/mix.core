@@ -14,6 +14,24 @@ namespace Mix.Cms.Lib.Infrastructure.Models
 
         [JsonProperty("expressions")]
         public List<ExpressionModel> Expressions { get; set; }
+
+
+        public static ExpressionModel Create(string expressType)
+        {
+            return new ExpressionModel() { ExpressionType = expressType };
+        }
+
+        public ExpressionModel AddFunction(FunctionModel function)
+        {
+            (this.Functions ??= new List<FunctionModel>()).Add(function);
+            return this;
+        }
+
+        public ExpressionModel AddExpression(ExpressionModel expression)
+        {
+            (this.Expressions ??= new List<ExpressionModel>()).Add(expression);
+            return this;
+        }
     }
 
     public class FunctionModel
@@ -28,18 +46,32 @@ namespace Mix.Cms.Lib.Infrastructure.Models
         public string Value { get; set; }
 
         [JsonProperty("minValue")]
-        public RangValueModel MinValue { get; set; }
+        public string MinValue { get; set; }
 
         [JsonProperty("maxValue")]
-        public RangValueModel MaxValue { get; set; }
-    }
+        public string MaxValue { get; set; }
 
-    public class RangValueModel
-    {
-        [JsonProperty("value")]
-        public string Value { get; set; }
+        public static FunctionModel Create(string rule, string fieldName, string value)
+        {
+            return new FunctionModel()
+                {
+                    Rule = rule,
+                    FieldName = fieldName,
+                    Value = value,
+                };
+            
+        }
 
-        [JsonProperty("equal")]
-        public bool Equal { get; set; }
+        public static FunctionModel Create(string rule, string fieldName,
+           string minValue = "", string maxValue = "")
+        {
+            return new FunctionModel()
+            {
+                Rule = rule,
+                FieldName = fieldName,
+                MinValue = minValue,
+                MaxValue = maxValue,
+            };
+        }
     }
 }

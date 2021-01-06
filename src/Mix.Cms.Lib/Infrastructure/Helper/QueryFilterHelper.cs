@@ -10,42 +10,76 @@ namespace Mix.Cms.Lib.Infrastructure.Helper
 {
     public class QueryFilterHelper
     {
-
-        private static Func<MixAttributeSetValue, bool> GetBinaryExpressionByType(string type,
-            Func<MixAttributeSetValue, bool> left,
-            Func<MixAttributeSetValue, bool> right)
+        public void TestCreateModel()
         {
+            ExpressionModel.Create("and")
+                .AddExpression
+                (
+                    ExpressionModel.Create("and")
+                        .AddFunction(FunctionModel.Create("equal", "ho_va_ten", "Tran Nhat Duy"))
+                        .AddFunction(FunctionModel.Create("equal", "status", "open"))
+                ).AddExpression
+                (
+                    ExpressionModel.Create("and")
+                    .AddExpression
+                    (
+                        ExpressionModel.Create("or")
+                            .AddFunction(FunctionModel.Create("equal", "date",  "2020/12/10", "2020/12/30"))
+                            .AddFunction(FunctionModel.Create("equal", "address", "Nguyen thi Minh Khai"))
+                    ).AddExpression
+                    (
+                        ExpressionModel.Create("and")
+                            .AddFunction(FunctionModel.Create("greater", "age", "18"))
+                            .AddFunction(FunctionModel.Create("equal", "gender", "male"))
+                    )
+                );
+        }
+
+
+
+        /// <summary>
+        /// Combine Two Expressions by Type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="expr1"></param>
+        /// <param name="expr2"></param>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        private static Expression<Func<MixAttributeSetValue, bool>> CombineExpressionByType(string type,
+            Expression<Func<MixAttributeSetValue, bool>> expr1,
+            Expression<Func<MixAttributeSetValue, bool>> expr2, ParameterExpression parameter)
+        {
+            Expression left = null;
+            if (expr1 != null)
+            {
+                var leftVisitor = new ReplaceExpressionVisitor(expr1.Parameters[0], parameter);
+                left = leftVisitor.Visit(expr1.Body);
+            }
+
+            var rightVisitor = new ReplaceExpressionVisitor(expr2.Parameters[0], parameter);
+            var right = rightVisitor.Visit(expr2.Body);
             return type switch
             {
-                "and" => m => left != null ? (left(m) && right(m)) : right(m),
-                "or" => m => left != null ? (left(m) || right(m)) : right(m),
-                "nand" => m => left != null ? !(left(m) && right(m)) : !right(m),
-                "nor" => m => left != null ? !(left(m) || right(m)) : !right(m),
+                "and" => expr1 != null ? Expression.Lambda<Func<MixAttributeSetValue, bool>>(Expression.AndAlso(left, right), parameter) :
+                                        Expression.Lambda<Func<MixAttributeSetValue, bool>>(right, parameter),
+                "or"  => expr1 != null ? Expression.Lambda<Func<MixAttributeSetValue, bool>>(Expression.OrElse(left, right), parameter) :
+                                        Expression.Lambda<Func<MixAttributeSetValue, bool>>(right, parameter),
                 _ => null,
             };
         }
 
-        private static Expression<Func<MixAttributeSetValue, bool>> FuncToExpression(Func<MixAttributeSetValue, bool> f)
+        public static Expression<Func<MixAttributeSetValue, bool>> CreateExpression(
+          JObject jsonQuery)
         {
-            return x => f(x);
-        }
-
-
-        public static Expression<Func<MixAttributeSetValue, bool>> CreateExpression  (
-          JObject jsonQuery, string name = "model")
-        {
-
-            var parameter = Expression.Parameter(typeof(MixAttributeSetValue), name);
-
-            Func<MixAttributeSetValue, bool> root;
+            Expression<Func<MixAttributeSetValue, bool>> root = null;
             try
             {
                 ExpressionModel expressionModel = jsonQuery.ToObject<ExpressionModel>();
                 root = GetExpression(expressionModel);
+                return root;
 
-                return FuncToExpression(root);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.Write(ex.ToString());
             }
@@ -53,27 +87,28 @@ namespace Mix.Cms.Lib.Infrastructure.Helper
             return null;
         }
 
-        private static Func<MixAttributeSetValue, bool> GetExpression(
+        private static Expression<Func<MixAttributeSetValue, bool>> GetExpression(
          ExpressionModel expressionModel)
         {
+            string expressionType = expressionModel.ExpressionType;
 
-            Func<MixAttributeSetValue, bool> root = null;
+            var parameter = Expression.Parameter(typeof(MixAttributeSetValue), "m");
+            Expression<Func<MixAttributeSetValue, bool>> root = null;
             try
             {
-                expressionModel?.Functions?.ForEach(function => {
-                    Console.Write("Function " + function.Rule);
-                    root = GetBinaryExpressionByType(expressionModel.ExpressionType,
-                        root, GetFunction(function));
+                expressionModel?.Functions?.ForEach(function =>
+                {
+                    root = CombineExpressionByType(expressionType,
+                        root, GetFunction(function), parameter);
                 });
-              
+
 
                 expressionModel?.Expressions?.ForEach(expression =>
                 {
-                    Console.Write("root.ToString() " + expression.ToString());
-                    root = GetBinaryExpressionByType(expressionModel.ExpressionType,
-                            root, GetExpression(expression));
+                    root = CombineExpressionByType(expressionType,
+                            root, GetExpression(expression), parameter);
                 });
-               
+
                 return root;
             }
             catch (Exception ex)
@@ -84,16 +119,67 @@ namespace Mix.Cms.Lib.Infrastructure.Helper
             return null;
         }
 
-        private static Func<MixAttributeSetValue, bool> GetFunction(FunctionModel functionModel)
+        private static Expression<Func<MixAttributeSetValue, bool>> GetFunction(FunctionModel functionModel)
         {
-            return functionModel.Rule switch
+            Enum.TryParse(functionModel.Rule, out Heart.Enums.MixHeartEnums.ExpressionRule rule);
+            return rule switch
             {
-                "equal" => m => m.AttributeFieldName == functionModel.FieldName
-                                         && (EF.Functions.Like(m.StringValue, $"{functionModel.Value}")),
-                "contain" => m => m.AttributeFieldName == functionModel.FieldName &&
-                                        (EF.Functions.Like(m.StringValue, $"%{functionModel.Value}%")),
+                Heart.Enums.MixHeartEnums.ExpressionRule. Eq => m => m.AttributeFieldName == functionModel.FieldName
+                 && m.StringValue == functionModel.Value,
+
+                Heart.Enums.MixHeartEnums.ExpressionRule.Neq => m => m.AttributeFieldName == functionModel.FieldName
+                && m.StringValue != functionModel.Value,
+
+                Heart.Enums.MixHeartEnums.ExpressionRule.Ct => m => m.AttributeFieldName == functionModel.FieldName
+                && (EF.Functions.Like(m.StringValue, $"{functionModel.Value}")),
+
+                Heart.Enums.MixHeartEnums.ExpressionRule.Nct => m => m.AttributeFieldName == functionModel.FieldName
+                && !(EF.Functions.Like(m.StringValue, $"{functionModel.Value}")),
+
+                Heart.Enums.MixHeartEnums.ExpressionRule.Ra => m => m.AttributeFieldName == functionModel.FieldName
+                && (string.Compare(m.StringValue, functionModel.MinValue) > 0
+                && string.Compare(m.StringValue, functionModel.MaxValue) < 0),
+
+                Heart.Enums.MixHeartEnums.ExpressionRule.Nra => m => m.AttributeFieldName == functionModel.FieldName
+                && (string.Compare(m.StringValue, functionModel.MinValue) < 0
+                || string.Compare(m.StringValue, functionModel.MaxValue) > 0),
+
+                Heart.Enums.MixHeartEnums.ExpressionRule.Gte => m => m.AttributeFieldName == functionModel.FieldName
+                && (string.Compare(m.StringValue, functionModel.Value) > 0
+                || m.StringValue == functionModel.Value),
+
+                Heart.Enums.MixHeartEnums.ExpressionRule.Gt => m => m.AttributeFieldName == functionModel.FieldName
+                && string.Compare(m.StringValue, functionModel.Value) > 0,
+
+                Heart.Enums.MixHeartEnums.ExpressionRule.Lte => m => m.AttributeFieldName == functionModel.FieldName
+                && (string.Compare(m.StringValue, functionModel.Value) < 0
+                || m.StringValue == functionModel.Value),
+
+                Heart.Enums.MixHeartEnums.ExpressionRule.Lt => m => m.AttributeFieldName == functionModel.FieldName
+                && string.Compare(m.StringValue, functionModel.Value) < 0,
+
                 _ => null,
             };
+        }
+    }
+
+
+    public class ReplaceExpressionVisitor : ExpressionVisitor
+    {
+        private readonly Expression _oldValue;
+        private readonly Expression _newValue;
+
+        public ReplaceExpressionVisitor(Expression oldValue, Expression newValue)
+        {
+            _oldValue = oldValue;
+            _newValue = newValue;
+        }
+
+        public override Expression Visit(Expression node)
+        {
+            if (node == _oldValue)
+                return _newValue;
+            return base.Visit(node);
         }
     }
 }

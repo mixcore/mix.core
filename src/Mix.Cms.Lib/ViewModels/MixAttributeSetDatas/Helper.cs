@@ -334,34 +334,36 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             }
                         }
                     }
+
+                    //New query filter
                     valPredicate =  QueryFilterHelper.CreateExpression(fieldQueries);
-                    var queryy = context.MixAttributeSetValue.Where(valPredicate).ToQueryString();
-                    Console.WriteLine(queryy);
-                    //if (fieldQueries != null && fieldQueries.Properties().Count() > 0) // filter by specific field name
-                    //{
-                    //    foreach (var q in fieldQueries)
-                    //    {
-                    //        if (fields.Any(f => f.Name == q.Key))
-                    //        {
-                    //            string value = q.Value.ToString();
-                    //            if (!string.IsNullOrEmpty(value))
-                    //            {
-                    //                Expression<Func<MixAttributeSetValue, bool>> pre =
-                    //                   m => m.AttributeFieldName == q.Key &&
-                    //                        (filterType == "equal" && m.StringValue == (q.Value.ToString())) ||
-                    //                        (filterType == "contain" && (EF.Functions.Like(m.StringValue, $"%{q.Value.ToString()}%")));
-                    //                if (valPredicate != null)
-                    //                {
-                    //                    valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.Or);
-                    //                }
-                    //                else
-                    //                {
-                    //                    valPredicate = pre;
-                    //                }
-                    //            }
-                    //        }
-                    //    }
-                    //}
+
+                    //Todo: will remove this block below
+                    if (valPredicate == null &&(fieldQueries != null && fieldQueries.Properties().Count() > 0)) // filter by specific field name
+                    {
+                        foreach (var q in fieldQueries)
+                        {
+                            if (fields.Any(f => f.Name == q.Key))
+                            {
+                                string value = q.Value.ToString();
+                                if (!string.IsNullOrEmpty(value))
+                                {
+                                    Expression<Func<MixAttributeSetValue, bool>> pre =
+                                       m => m.AttributeFieldName == q.Key &&
+                                            (filterType == "equal" && m.StringValue == (q.Value.ToString())) ||
+                                            (filterType == "contain" && (EF.Functions.Like(m.StringValue, $"%{q.Value.ToString()}%")));
+                                    if (valPredicate != null)
+                                    {
+                                        valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.Or);
+                                    }
+                                    else
+                                    {
+                                        valPredicate = pre;
+                                    }
+                                }
+                            }
+                        }
+                    }
                     if (valPredicate != null)
                     {
                         attrPredicate = attrPredicate == null ? valPredicate
