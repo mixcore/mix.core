@@ -9,10 +9,12 @@
     <title>@ViewData["Title"] - Angular mixcore</title>
     
     <meta charset="utf-8">
-    <meta name="viewport" content="width=1920, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <link rel="icon" type="image/png" sizes="16x16" href="@(MixService.GetConfig<string>("Favicon", ViewBag.culture) ?? "/mixcore-logo-green-16x16.png")">
 
-    <link rel="stylesheet" href="~/css/portal.min.css" />
+    <!-- <link rel="stylesheet" href="~/css/portal.min.css" /> -->
     <link rel="stylesheet" href="~/css/portal-extend.css" />
     <link rel="stylesheet" href="~/css/app-vendor.min.css" />
     <link rel="stylesheet" href="~/css/shared.min.css" />
@@ -21,32 +23,6 @@
 </head>
 
 <body ng-app="MixPortal" ng-init="init()" ng-controller="AppPortalController" class="d-grid overflow-auto">
-    <style>
-        :root
-        {
-            --primary-color-hue : {{globalSettings.portalThemeSettings.primaryColorHue}};
-            --primary-color-saturation : {{globalSettings.portalThemeSettings.primaryColorSaturation}}%;
-            --primary-color-brightness : {{globalSettings.portalThemeSettings.primaryColorBrightness}}%;
-            --bg-color: {{globalSettings.portalThemeSettings.bgColor}};
-            --text-color: {{globalSettings.portalThemeSettings.textColor}};
-        }
-        .btn-group-xs > .btn, .btn-xs {
-            padding: .25rem .4rem;
-            font-size: .875rem;
-            line-height: .5;
-            border-radius: .2rem;
-        }
-        .modal{
-            background-color: hsla(var(--primary-color-hue,211),20%,10%,0.5);
-        }
-        #trumbowyg-icons{
-            display:none;
-        }
-        form{
-            width:100%;
-        }
-        
-    </style>
     @RenderBody()
 
     <script src="~/js/framework.min.js"></script>
