@@ -91,7 +91,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 Obj = Helper.ParseData(Id, Specificulture, context, transaction);
             }
             
-            Obj.LoadReferenceData(Id, Specificulture, MixEnums.MixAttributeSetDataType.Set, context, transaction);
+            Obj.LoadReferenceData(Id, AttributeSetId, Specificulture, context, transaction);
 
             if (isRoot)
             {

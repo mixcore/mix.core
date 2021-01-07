@@ -11,70 +11,73 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
         {
             entity.ToTable("mix_attribute_set");
 
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever();
+
             entity.Property(e => e.CreatedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
             entity.Property(e => e.Description)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
-            entity.Property(e => e.EdmAutoSend).HasColumnType("bit(1)");
+            entity.Property(e => e.EdmAutoSend).HasColumnType("bit");
 
             entity.Property(e => e.EdmFrom)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.EdmSubject)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.EdmTemplate)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.FormTemplate)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.LastModified).HasColumnType("datetime");
 
             entity.Property(e => e.ModifiedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Status)
                 .IsRequired()
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Title)
                 .IsRequired()
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Type)
                 .IsRequired()
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
         }
     }

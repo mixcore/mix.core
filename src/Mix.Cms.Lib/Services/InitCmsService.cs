@@ -263,7 +263,6 @@ namespace Mix.Cms.Lib.Services
 
                     var enCulture = new MixCulture()
                     {
-                        Id = 1,
                         Specificulture = culture.Specificulture,
                         FullName = culture.FullName,
                         Description = culture.Description,
