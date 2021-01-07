@@ -1,3 +1,6 @@
+a {
+  text-decoration: none !important;
+}
 .main-sidebar {
   width: 15%;
 }
@@ -353,7 +356,7 @@
     position: sticky;
     top: 4rem;
     display: block !important;
-    height: calc(100vh - 4rem);
+    height: calc(100vh - 4.1rem);
     padding-left: .25rem;
     margin-left: -.25rem;
     overflow-y: auto;
