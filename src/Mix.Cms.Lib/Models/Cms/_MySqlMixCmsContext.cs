@@ -1,12 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Mix.Cms.Lib.Services;
-using System;
-using System.Linq;
-using System.Reflection;
+﻿using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Extensions;
-using MySqlConnector;
 
 namespace Mix.Cms.Lib.Models.Cms
 {

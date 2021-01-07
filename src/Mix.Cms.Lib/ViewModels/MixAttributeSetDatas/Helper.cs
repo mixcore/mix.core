@@ -617,40 +617,37 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         }
 
         public static void LoadReferenceData(this JObject obj
-            , string dataId, string culture
-            , MixEnums.MixAttributeSetDataType parentType,
-            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            , string dataId, int attributeSetId, string culture
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(
                     _context, _transaction,
                     out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            var refValues = context.MixAttributeSetValue.Where(
-                   m => m.DataId == dataId
-                    && m.Specificulture == culture
+            var refFields = context.MixAttributeField.Where(
+                   m => m.AttributeSetId == attributeSetId
                     && m.DataType == MixEnums.MixDataType.Reference).ToList();
 
-            foreach (var item in refValues)
+            foreach (var item in refFields)
             {
-                var refId = context.MixAttributeField.FirstOrDefault(m => m.Id == item.AttributeFieldId).ReferenceId;
                 Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
-                    (model.AttributeSetId == refId)
-                    && (model.ParentId == dataId && model.ParentType == parentType.ToString())
+                    (model.AttributeSetId == item.ReferenceId)
+                    && (model.ParentId == dataId && model.ParentType == MixEnums.MixAttributeSetDataType.Set.ToString())
                     && model.Specificulture == culture
                     ;
-                var getData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(predicate, _context, _transaction);
+                var getData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(predicate, context, transaction);
 
                 JArray arr = new JArray();
                 foreach (var nav in getData.Data.OrderBy(v => v.Priority))
                 {
                     arr.Add(nav.Data.Obj);
                 }
-                if (obj.ContainsKey(item.AttributeFieldName))
+                if (obj.ContainsKey(item.Name))
                 {
-                    obj[item.AttributeFieldName] = arr;
+                    obj[item.Name] = arr;
                 }
                 else
                 {
-                    obj.Add(new JProperty(item.AttributeFieldName, arr));
+                    obj.Add(new JProperty(item.Name, arr));
                 }
             }
             if (isRoot)

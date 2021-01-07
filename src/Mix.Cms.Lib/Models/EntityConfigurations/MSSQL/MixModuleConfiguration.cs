@@ -10,83 +10,86 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
         public void Configure(EntityTypeBuilder<MixModule> entity)
         {
             entity.HasKey(e => new { e.Id, e.Specificulture })
-                    .HasName("PRIMARY");
+                    .HasName("PK_mix_module");
 
             entity.ToTable("mix_module");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever();
 
             entity.HasIndex(e => e.Specificulture);
 
             entity.Property(e => e.Specificulture)
                 .HasColumnType("varchar(10)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.CreatedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
             entity.Property(e => e.Description)
                 .HasColumnType("text")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.EdmTemplate)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Fields)
                 .HasColumnType("text")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.FormTemplate)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Image)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.LastModified).HasColumnType("datetime");
 
             entity.Property(e => e.ModifiedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Status)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Template)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Thumbnail)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Title)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.HasOne(d => d.SpecificultureNavigation)
                 .WithMany(p => p.MixModule)
