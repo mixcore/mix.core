@@ -591,7 +591,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 return result;
             }
         }
-                var getData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(predicate, _context, _transaction);
 
         public static JObject ParseData(string dataId, string culture, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
