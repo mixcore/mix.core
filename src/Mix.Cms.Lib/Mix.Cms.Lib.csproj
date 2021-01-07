@@ -55,4 +55,8 @@
     <ProjectReference Include="..\Mix.Identity\Mix.Identity.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\MsSqlMixCms\" />
+  </ItemGroup>
+
 </Project>
