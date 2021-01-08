@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Cms.Lib.Models.Cms;
 
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
 {
     public class MixAttributeSetConfiguration : IEntityTypeConfiguration<MixAttributeSet>

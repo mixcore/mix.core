@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
@@ -7,7 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Mix.Cms.Lib.Enums;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 {
     public class ReadMvcViewModel
@@ -61,7 +62,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -98,13 +99,13 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 
         #region Expand
 
-        public void LoadData(string parentId, MixEnums.MixAttributeSetDataType parentType, string specificulture, int? pageSize = null, int? pageIndex = 0
+        public void LoadData(string parentId, MixDatabaseContentAssociationType parentType, string specificulture, int? pageSize = null, int? pageIndex = 0
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository
             .GetModelListBy(
-                m => m.ParentId == parentId && m.ParentType == parentType.ToString() && m.Specificulture == specificulture
-                , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+                m => m.ParentId == parentId && m.ParentType == parentType && m.Specificulture == specificulture
+                , MixService.GetConfig<string>(AppSettingKeywords.OrderBy), 0
                 , pageSize, pageIndex
                 , _context: _context, _transaction: _transaction);
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Web.Mvc.App_Start.Validattors
 {
     public class JwtValidator

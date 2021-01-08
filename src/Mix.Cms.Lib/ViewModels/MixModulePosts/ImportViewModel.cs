@@ -8,7 +8,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixModulePosts
 {
     public class ImportViewModel
@@ -52,7 +53,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #region Views
 
         [JsonProperty("post")]
@@ -109,7 +110,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
             try
             {
                 var navCategoryPostViewModels = context.MixModule.Include(cp => cp.MixModulePost).Where(a => a.Specificulture == specificulture
-                    && (a.Type == (int)MixEnums.MixModuleType.ListPost || a.Type == (int)MixEnums.MixModuleType.ListProduct)
+                    && (a.Type == MixModuleType.ListPost)
                     )
                     .AsEnumerable()
                     .Select(p => new MixModulePosts.ReadViewModel(

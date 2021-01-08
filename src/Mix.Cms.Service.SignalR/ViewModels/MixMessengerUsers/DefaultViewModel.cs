@@ -4,7 +4,7 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using Mix.Cms.Service.SignalR.Domain.Enums;
 
 namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
 {
@@ -33,7 +33,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
         public DateTime? LastModified { get; set; }
 
         [JsonProperty("status")]
-        public Constants.Enums.OnlineStatus Status { get; set; }
+        public MixOnlineStatus Status { get; set; }
 
         #endregion Properties
 

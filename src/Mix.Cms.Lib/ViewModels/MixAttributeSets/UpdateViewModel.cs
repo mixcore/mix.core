@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 {
     public class UpdateViewModel
@@ -24,7 +24,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         public int? ReferenceId { get; set; }
 
         [JsonProperty("type")]
-        public MixEnums.MixAttributeSetDataType Type { get; set; }
+        public MixDatabaseContentAssociationType Type { get; set; }
 
         [JsonProperty("title")]
         public string Title { get; set; }
@@ -61,7 +61,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -102,7 +102,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             if (Id > 0)
             {
                 Fields = MixAttributeFields.UpdateViewModel
-                .Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList() 
+                .Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList()
                 ?? new List<MixAttributeFields.UpdateViewModel>();
                 //FormView = MixTemplates.UpdateViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
                 //EdmView = MixTemplates.UpdateViewModel.GetTemplateByPath(EdmTemplate, Specificulture, _context, _transaction).Data;

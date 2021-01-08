@@ -5,7 +5,8 @@ using System.Linq;
 using System.Linq.Dynamic.Core.CustomTypeProviders;
 using System.Reflection;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Api.GraphQL.Infrastructure.Providers
 {
     public class DynamicLinqProvider : IDynamicLinkCustomTypeProvider

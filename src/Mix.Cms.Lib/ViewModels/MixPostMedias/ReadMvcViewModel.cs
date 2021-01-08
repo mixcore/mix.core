@@ -6,7 +6,8 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixPostMedias
 {
     public class ReadViewModel
@@ -52,7 +53,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostMedias
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion
         #region Views
 

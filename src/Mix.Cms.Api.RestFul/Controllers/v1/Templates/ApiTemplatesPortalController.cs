@@ -11,7 +11,8 @@ using Mix.Domain.Core.ViewModels;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
     [Produces("application/json")]
@@ -24,18 +25,18 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadViewModel>>> Get()
         {
-            bool isStatus = Enum.TryParse(Request.Query["status"], out MixEnums.MixContentStatus status);
+            bool isStatus = Enum.TryParse(Request.Query["status"], out MixContentStatus status);
             bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
             string keyword = Request.Query["keyword"];
             bool isTheme = int.TryParse(Request.Query["themeId"], out int themeId);
-            string folderType = Request.Query["folderType"];
+            bool isFolderType = Enum.TryParse(Request.Query["folderType"], out MixTemplateFolderType folderType);
             Expression<Func<MixTemplate, bool>> predicate = model =>
                 (!isStatus || model.Status == status)
                 && (!isTheme || model.ThemeId == themeId)
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
-                && (string.IsNullOrEmpty(folderType) || model.FolderType == folderType)
+                && (!isFolderType || model.FolderType == folderType)
                 && (string.IsNullOrEmpty(keyword)
                  || model.FileName.Contains(keyword)
                  || model.Content.Contains(keyword)

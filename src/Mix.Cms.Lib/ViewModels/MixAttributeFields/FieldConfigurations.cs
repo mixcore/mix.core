@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
 {
     public class FieldConfigurations

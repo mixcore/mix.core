@@ -9,7 +9,8 @@ using Quartz.Impl.Calendar;
 using Quartz.Logging;
 using System;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Schedule
 {
     public static class ServiceCollectionExtensions

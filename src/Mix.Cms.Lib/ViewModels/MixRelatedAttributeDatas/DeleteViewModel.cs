@@ -2,11 +2,12 @@
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using System;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 {
     public class DeleteViewModel
-        : ViewModelBase<MixCmsContext, MixRelatedAttributeData, DeleteViewModel>
+        : ViewModelBase<MixCmsContext, MixDatabaseContentAssociation, DeleteViewModel>
     {
         #region Properties
 
@@ -16,7 +17,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         public string Specificulture { get; set; }
         public string DataId { get; set; }
         public string ParentId { get; set; }
-        public MixEnums.MixAttributeSetDataType ParentType { get; set; }
+        public MixDatabaseContentAssociationType ParentType { get; set; }
         public int AttributeSetId { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public string Status { get; set; }
@@ -32,7 +33,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         {
         }
 
-        public DeleteViewModel(MixRelatedAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public DeleteViewModel(MixDatabaseContentAssociation model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -40,7 +41,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         #region Overrides
 
-        public override MixRelatedAttributeData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixDatabaseContentAssociation ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (CreatedDateTime == default(DateTime))
             {

@@ -12,7 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
     public class Helper
@@ -55,7 +56,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 };
                 // Get Tag
                 var getVal = await MixAttributeSetValues.ReadViewModel.Repository.GetSingleModelAsync(
-                    m => m.Specificulture == culture && m.Status == MixEnums.MixContentStatus.Published
+                    m => m.Specificulture == culture && m.Status == MixContentStatus.Published
                         && m.AttributeSetName == metaName
                         && m.AttributeFieldName == "title" && m.StringValue == metaValue
                 , context, transaction);
@@ -71,7 +72,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                             _context: context,
                             _transaction: transaction);
                     //var query = context.MixRelatedAttributeData.Where(m=> m.Specificulture == culture
-                    //    && m.Id == getVal.Data.DataId && m.ParentId == parentId && m.ParentType == (int) MixEnums.MixAttributeSetDataType.Post)
+                    //    && m.Id == getVal.Data.DataId && m.ParentId == parentId && m.ParentType == (int) MixAttributeSetDataType.Post)
                     //    .Select(m => m.ParentId).Distinct().ToList();
                 }
                 return result;
@@ -115,7 +116,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 // Get Tag
                 var getVal = await MixAttributeSetValues.ReadViewModel.Repository.GetSingleModelAsync(
                     m => m.Specificulture == culture
-                    && m.Status == MixEnums.MixContentStatus.Published
+                    && m.Status == MixContentStatus.Published
                     && m.Id == valueId
                 , context, transaction);
                 if (getVal.IsSucceed)
@@ -130,7 +131,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                             _context: context,
                             _transaction: transaction);
                     //var query = context.MixRelatedAttributeData.Where(m=> m.Specificulture == culture
-                    //    && m.Id == getVal.Data.DataId && m.ParentId == parentId && m.ParentType == (int) MixEnums.MixAttributeSetDataType.Post)
+                    //    && m.Id == getVal.Data.DataId && m.ParentId == parentId && m.ParentType == (int) MixAttributeSetDataType.Post)
                     //    .Select(m => m.ParentId).Distinct().ToList();
                 }
                 return result;
@@ -173,7 +174,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 };
                 // Get Data                
                 Expression<Func<MixAttributeSetValue, bool>> predicate = m => m.Specificulture == culture
-                   && m.Status == MixEnums.MixContentStatus.Published;
+                   && m.Status == MixContentStatus.Published;
                 foreach (var item in valueIds)
                 {
                     Expression<Func<MixAttributeSetValue, bool>> pre = m => m.Id == item;
@@ -201,7 +202,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                                 _transaction: transaction);
                     }
                     //var query = context.MixRelatedAttributeData.Where(m=> m.Specificulture == culture
-                    //    && m.Id == getVal.Data.DataId && m.ParentId == parentId && m.ParentType == (int) MixEnums.MixAttributeSetDataType.Post)
+                    //    && m.Id == getVal.Data.DataId && m.ParentId == parentId && m.ParentType == (int) MixAttributeSetDataType.Post)
                     //    .Select(m => m.ParentId).Distinct().ToList();
                 }
                 return result;
@@ -275,7 +276,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
                 var getRelatedData = await MixRelatedAttributeDatas.ReadViewModel.Repository.GetModelListByAsync(
                             m => m.Specificulture == culture && m.DataId == dataId
-                            && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
+                            && m.ParentType == MixDatabaseContentAssociationType.DataPost
                             , orderByPropertyName = "CreatedDateTime", direction, pageSize, pageIndex
                             , _context: context, _transaction: transaction
                             );
@@ -299,7 +300,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                             m => m.Specificulture == item.Specificulture && m.Id == postId
                                 , context, transaction);
                             if (getData.IsSucceed)
-                            {                                
+                            {
                                 result.Data.Items.Add(getData.Data);
                             }
                         }
@@ -337,11 +338,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
                 var result = new RepositoryResponse<PaginationModel<TView>>();
-                Expression<Func<MixRelatedAttributeData, bool>> predicate = m => m.Specificulture == culture && dataIds.Contains(m.DataId)
-                            && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString();
+                Expression<Func<MixDatabaseContentAssociation, bool>> predicate = m => m.Specificulture == culture && dataIds.Contains(m.DataId)
+                            && m.ParentType == MixDatabaseContentAssociationType.DataPost;
                 foreach (var id in dataIds)
                 {
-                    Expression<Func<MixRelatedAttributeData, bool>> pre = m => m.DataId == id;
+                    Expression<Func<MixDatabaseContentAssociation, bool>> pre = m => m.DataId == id;
 
                     predicate = ReflectionHelper.CombineExpression(
                         predicate
@@ -418,13 +419,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     Data = new PaginationModel<TView>()
                 };
                 List<int> postIds = SearchPostByDataIds(dataIds, culture, context);
-                if (pageIds!= null &&  pageIds.Count>0)
+                if (pageIds != null && pageIds.Count > 0)
                 {
                     postIds.AddRange(SearchPostByPageIds(pageIds, culture, context));
                     postIds = postIds.Distinct().ToList();
                 }
                 // Load Posts
-                
+
                 if (postIds != null && postIds.Count > 0)
                 {
                     Expression<Func<MixPost, bool>> postPredicate = m => m.Specificulture == culture
@@ -466,7 +467,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 // Get list related post ids by data id
                 Expression<Func<MixPagePost, bool>> predicate =
                     m => m.Specificulture == culture
-                        && m.Status == MixEnums.MixContentStatus.Published
+                        && m.Status == MixContentStatus.Published
                         && m.PageId == id;
                 var ids = context.MixPagePost
                     .Where(predicate)
@@ -475,7 +476,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
             return postIds.Distinct().ToList();
         }
-        
+
         private static List<int> SearchPostByDataIds(List<string> dataIds, string culture, MixCmsContext context)
         {
             List<int> postIds = new List<int>();
@@ -483,9 +484,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             foreach (var id in dataIds)
             {
                 // Get list related post ids by data id
-                Expression<Func<MixRelatedAttributeData, bool>> dataPredicate =
+                Expression<Func<MixDatabaseContentAssociation, bool>> dataPredicate =
                     m => m.Specificulture == culture
-                        && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
+                        && m.ParentType == MixDatabaseContentAssociationType.DataPost
                         && m.DataId == id;
                 var ids = context.MixRelatedAttributeData
                     .Where(dataPredicate)
@@ -532,7 +533,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 var tasks = new List<Task<RepositoryResponse<TView>>>();
                 // Get Value
                 var dataIds = await context.MixAttributeSetValue.Where(
-                    m => m.AttributeSetName == MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST && m.Specificulture == culture
+                    m => m.AttributeSetName == MixDatabaseNames.ADDITIONAL_FIELD_POST && m.Specificulture == culture
                         && m.StringValue == value && m.AttributeFieldName == fieldName)
                     .Select(m => m.DataId)?.ToListAsync();
                 if (dataIds != null && dataIds.Count > 0)
@@ -580,17 +581,17 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public static async Task PublishScheduledPosts()
         {
-            using(var context = new MixCmsContext())
+            using (var context = new MixCmsContext())
             {
                 var now = DateTime.UtcNow;
                 now = now.AddSeconds(-now.Second);
                 var sheduledPosts = context.MixPost
-                    .Where(m => m.Status == MixEnums.MixContentStatus.Schedule
+                    .Where(m => m.Status == MixContentStatus.Schedule
                         && Equals(m.PublishedDateTime.Value, now));
                 var posts = await sheduledPosts.ToListAsync();
                 foreach (var post in posts)
                 {
-                    post.Status = MixEnums.MixContentStatus.Published;
+                    post.Status = MixContentStatus.Published;
                 }
                 _ = await context.SaveChangesAsync();
             }

@@ -15,7 +15,8 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
     [Route("api/v1/rest/{culture}/attribute-set-data/portal")]
@@ -36,12 +37,12 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 return BadRequest(getData.Errors);
             }
         }
-        
+
         // GET: api/v1/rest/{culture}/attribute-set-data/addictional-data
         [HttpGet("addictional-data")]
         public async Task<ActionResult<PaginationModel<AddictionalViewModel>>> GetAddictionalData()
         {
-            if (Enum.TryParse(Request.Query["parentType"].ToString(), out MixEnums.MixAttributeSetDataType parentType)
+            if (Enum.TryParse(Request.Query["parentType"].ToString(), out MixDatabaseContentAssociationType parentType)
                 && int.TryParse(Request.Query["parentId"].ToString(), out int parentId) && parentId > 0)
             {
                 var getData = await Helper.GetAddictionalData(parentType, parentId, Request, _lang);
@@ -65,7 +66,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                         Specificulture = _lang,
                         AttributeSetId = getAttrSet.Data.Id,
                         AttributeSetName = getAttrSet.Data.Name,
-                        Status = MixEnums.MixContentStatus.Published,
+                        Status = MixContentStatus.Published,
                         Fields = getAttrSet.Data.Fields,
                         ParentType = parentType
                     };
@@ -124,7 +125,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                     Specificulture = _lang,
                     AttributeSetId = getAttrSet.Data.Id,
                     AttributeSetName = getAttrSet.Data.Name,
-                    Status = MixEnums.MixContentStatus.Published,
+                    Status = MixContentStatus.Published,
                     Fields = getAttrSet.Data.Fields
                 };
                 result.ExpandView();

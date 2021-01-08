@@ -8,7 +8,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixModulePosts
 {
     public class ReadMvcViewModel
@@ -50,7 +51,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
 
         #region Views
 
@@ -82,7 +83,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                var navCategoryPostViewModels = context.MixModule.Include(cp => cp.MixModulePost).Where(a => a.Specificulture == specificulture && a.Type == (int)MixEnums.MixModuleType.ListPost)
+                var navCategoryPostViewModels = context.MixModule.Include(cp => cp.MixModulePost).Where(
+                        a => a.Specificulture == specificulture && a.Type == MixModuleType.ListPost)
                     .Select(p => new MixModulePosts.ReadViewModel(
                         new MixModulePost()
                         {

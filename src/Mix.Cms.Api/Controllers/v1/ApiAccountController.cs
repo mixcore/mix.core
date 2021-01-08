@@ -18,8 +18,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Api.Controllers.v1
 {
     //[Authorize(Roles = "SuperAdmin,Admin")]
@@ -194,7 +194,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
                     model.Id = user.Id;
                     model.CreatedDateTime = DateTime.UtcNow;
-                    model.Status = MixUserStatus.Actived;
+                    model.Status = MixUserStatus.Active;
                     model.LastModified = DateTime.UtcNow;
                     model.CreatedBy = User.Identity.Name;
                     model.ModifiedBy = User.Identity.Name;
@@ -297,7 +297,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                     else
                     {
-                        var data = new Lib.ViewModels.Account.MixUsers.UpdateViewModel(new MixCmsUser() { Status = MixUserStatus.Actived.ToString() });
+                        var data = new Lib.ViewModels.Account.MixUsers.UpdateViewModel(new MixCmsUser() { Status = MixUserStatus.Active });
                         data.ExpandView();
                         RepositoryResponse<Lib.ViewModels.Account.MixUsers.UpdateViewModel> result = new RepositoryResponse<Lib.ViewModels.Account.MixUsers.UpdateViewModel>()
                         {
@@ -315,7 +315,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                     else
                     {
-                        var data = new UserInfoViewModel(new MixCmsUser() { Status = MixUserStatus.Actived.ToString() });
+                        var data = new UserInfoViewModel(new MixCmsUser() { Status = MixUserStatus.Active });
                         data.ExpandView();
 
                         RepositoryResponse<UserInfoViewModel> result = new RepositoryResponse<UserInfoViewModel>()
@@ -398,8 +398,9 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("list")]
         public async Task<RepositoryResponse<PaginationModel<UserInfoViewModel>>> GetList(RequestPaging request)
         {
+            Enum.TryParse(request.Status, out MixUserStatus status);
             Expression<Func<MixCmsUser, bool>> predicate = model =>
-                (string.IsNullOrEmpty(request.Status) || model.Status == request.Status)
+                (string.IsNullOrEmpty(request.Status) || model.Status == status)
                 && (string.IsNullOrWhiteSpace(request.Keyword)
                 || (
                     (EF.Functions.Like(model.Username, $"%{request.Keyword}%"))
@@ -457,7 +458,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
             var callbackurl = $"{Request.Scheme}://{Request.Host}/security/reset-password/?token={System.Web.HttpUtility.UrlEncode(confrimationCode)}";
             var getEdmTemplate = await Lib.ViewModels.MixTemplates.ReadViewModel.Repository.GetSingleModelAsync(
-                m => m.FolderType == MixConstants.TemplateFolder.Edms && m.FileName == "ForgotPassword");
+                m => m.FolderType == MixTemplateFolderType.Edms && m.FileName == "ForgotPassword");
             string content = callbackurl;
             if (getEdmTemplate.IsSucceed)
             {

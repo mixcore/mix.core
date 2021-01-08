@@ -1,6 +1,6 @@
 ﻿@model Mix.Cms.Lib.ViewModels.MixModules.ReadMvcViewModel
 @{
-    string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, ViewBag.culture);
+    string master = MixService.GetConfig<string>(AppSettingKeywords.ThemeFolder, ViewBag.culture);
     Layout = null;
 }
 @if (!string.IsNullOrEmpty(Model.TemplatePath))
@@ -13,15 +13,14 @@
     {
         <p class="danger text-center has-error">Unable load template with Exception detail below:</p>
         <code>
-            @invalidOperationException
-        </code>
-
+                    @invalidOperationException
+                </code>
     }
     catch (Exception ex)
     {
         <code>
-            @ex
-        </code>
+                    @ex
+                </code>
         <p class="danger text-center has-error">Unable load template</p>
     }
 }

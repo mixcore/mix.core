@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Cms.Lib.Models.Cms;
 
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.Models.EntityConfigurations.MySQL
 {
     public class MixAttributeValueConfiguration : IEntityTypeConfiguration<MixAttributeSetValue>
@@ -11,7 +13,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MySQL
         {
             builder
            .Property(e => e.DataType)
-           .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+           .HasConversion(new EnumToStringConverter<MixDataType>())
            .HasColumnType("varchar(50)");
         }
     }

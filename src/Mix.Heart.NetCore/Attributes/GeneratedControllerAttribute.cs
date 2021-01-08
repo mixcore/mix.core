@@ -1,5 +1,4 @@
 ﻿using System;
-
 namespace Mix.Heart.NetCore.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]

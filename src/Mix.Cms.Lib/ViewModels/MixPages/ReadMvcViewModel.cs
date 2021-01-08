@@ -14,8 +14,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using static Mix.Cms.Lib.MixEnums;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixPages
 {
     [GeneratedController("api/v1/rest/{culture}/mix-page/mvc")]
@@ -102,7 +102,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -162,7 +162,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             get
             {
-                return $"/{MixConstants.Folder.TemplatesFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture)}/{Template}";
+                return $"/{MixFolders.TemplatesFolder}/{MixService.GetConfig<string>(AppSettingKeywords.ThemeFolder, Specificulture)}/{Template}";
             }
         }
 
@@ -233,7 +233,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 {
                     var getPosts = MixPagePosts.ReadViewModel.Repository
                     .GetModelListBy(postExp
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+                    , MixService.GetConfig<string>(AppSettingKeywords.OrderBy), 0
                     , pageSize, pageIndex
                     , _context: context, _transaction: transaction);
                     if (getPosts.IsSucceed)
@@ -392,7 +392,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             var getPosts = MixPagePosts.ReadViewModel.Repository.GetModelListBy(
                 n => n.PageId == Id && n.Specificulture == Specificulture,
-                MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+                MixService.GetConfig<string>(AppSettingKeywords.OrderBy), 0
                 , 4, 0
                , _context: _context, _transaction: _transaction
                );
@@ -406,7 +406,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_PAGE, _context, _transaction);
+            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixDatabaseNames.ADDITIONAL_FIELD_PAGE, _context, _transaction);
             if (getAttrs.IsSucceed)
             {
                 AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(

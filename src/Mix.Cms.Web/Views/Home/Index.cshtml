@@ -3,15 +3,15 @@
 @model Mix.Cms.Lib.Interfaces.MvcViewModel
 @{
     var assetFolder = MixCmsHelper.GetAssetFolder(ViewBag.culture);
-    string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, ViewBag.culture);
+    string master = MixService.GetConfig<string>(AppSettingKeywords.ThemeName, ViewBag.culture);
     string templateFolder = MixCmsHelper.GetTemplateFolder(ViewBag.culture);
     string layout = Model.Layout ?? "Masters/_Layout.cshtml";
     var masterTemplate = await MixCmsHelper.GetTemplateByPath(master, layout);
     Layout = $"{templateFolder}/{layout}";
     var p = MixCmsHelper.GetPostlistByMeta<Mix.Cms.Lib.ViewModels.MixPosts.ReadMvcViewModel>(Context, ViewBag.culture as string
-        , MixConstants.AttributeSetName.SYSTEM_TAG);
+        , MixDatabaseNames.SYSTEM_TAG);
     var posts = Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetModelistByMeta<Mix.Cms.Lib.ViewModels.MixPosts.ReadMvcViewModel>(
-        MixConstants.AttributeSetName.SYSTEM_TAG, Context.Request.Query["tag"],
+        MixDatabaseNames.SYSTEM_TAG, Context.Request.Query["tag"],
         ViewBag.culture as string, "CreatedDateTime", Mix.Heart.Enums.MixHeartEnums.DisplayDirection.Desc, 10, 0);
 }
 <input type="hidden" id="view-type" value="Alias" />

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -12,8 +13,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
-
+using Mix.Cms.Lib.Enums;
 namespace Mix.Cms.Lib.ViewModels.MixPages
 {
     public class DeleteViewModel
@@ -82,7 +82,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public MixPageType Type { get; set; }
 
         [JsonProperty("status")]
-        public MixEnums.PageStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
 
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
@@ -185,7 +185,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             get
             {
-                return MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
+                return MixService.GetConfig<int>(AppSettingKeywords.ThemeId, Specificulture);
             }
         }
 
@@ -194,7 +194,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             get
             {
-                return MixEnums.EnumTemplateFolder.Pages.ToString();
+                return MixTemplateFolderType.Pages.ToString();
             }
         }
 
@@ -205,8 +205,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 return CommonHelper.GetFullPath(new string[]
                 {
-                    MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture)
+                    MixFolders.TemplatesFolder
+                    , MixService.GetConfig<string>(AppSettingKeywords.ThemeName, Specificulture)
                     , TemplateFolderType
                 }
             );
@@ -217,9 +217,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("urlAliases")]
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
-
-        [JsonProperty("attributes")]
-        public MixAttributeSets.UpdateViewModel Attributes { get; set; }
 
         [JsonProperty("attributeData")]
         public MixRelatedAttributeDatas.UpdateViewModel AttributeData { get; set; }
@@ -259,7 +256,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             await navModls.ForEachAsync(m => _context.Entry(m).State = EntityState.Deleted);
             await _context.SaveChangesAsync();
             var removeRelatedData = await MixRelatedAttributeDatas.Helper.RemoveRelatedDataAsync(
-                    Id.ToString(), MixEnums.MixAttributeSetDataType.Page
+                    Id.ToString(), MixDatabaseContentAssociationType.DataPage
                     , Specificulture
                     , _context, _transaction);
             ViewModelHelper.HandleResult(removeRelatedData, ref result);

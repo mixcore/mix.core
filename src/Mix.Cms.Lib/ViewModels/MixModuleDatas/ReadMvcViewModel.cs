@@ -10,7 +10,8 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
 {
     [GeneratedController("api/v1/rest/{culture}/mix-module-data/mvc")]
@@ -58,7 +59,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views

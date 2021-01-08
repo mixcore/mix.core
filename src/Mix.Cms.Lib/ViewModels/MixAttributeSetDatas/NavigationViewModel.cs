@@ -11,7 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
     public class NavigationViewModel
@@ -44,7 +45,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -61,7 +62,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         {
             get
             {
-                if (AttributeSetName == MixConstants.AttributeSetName.NAVIGATION && Obj != null)
+                if (AttributeSetName == MixDatabaseNames.NAVIGATION && Obj != null)
                 {
                     return Obj.ToObject<Navigation>();
                 }
@@ -147,7 +148,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
 
         #region Expands
-       
+
         #endregion Expands
     }
 
@@ -201,7 +202,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("description")]
         public string Description { get; set; }
-        
+
         [JsonProperty("target_id")]
         public string TargetId { get; set; }
 

@@ -14,8 +14,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
     public class CreateViewModel
@@ -99,7 +99,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -147,16 +147,16 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             get
             {
-                return MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
+                return MixService.GetConfig<int>(AppSettingKeywords.ThemeId, Specificulture);
             }
         }
 
         [JsonIgnore]
-        public string TemplateFolderType
+        public MixTemplateFolderType TemplateFolderType
         {
             get
             {
-                return MixEnums.EnumTemplateFolder.Posts.ToString();
+                return MixTemplateFolderType.Posts;
             }
         }
 
@@ -165,13 +165,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[]
-                {
-                    MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture)
-                    , TemplateFolderType
-                }
-            );
+                return $"{MixFolders.TemplatesFolder}/{ MixService.GetConfig<string>(AppSettingKeywords.ThemeName, Specificulture)}/{TemplateFolderType}";
             }
         }
 
@@ -259,9 +253,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             // Load Properties
             LoadExtraProperties();
 
-            // Load Attribute Sets
-            LoadAttributeSets(_context, _transaction);
-
             //Get Templates
             LoadTemplates(_context, _transaction);
 
@@ -273,9 +264,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
             // Medias
             LoadMedias(_context, _transaction);
-
-            // Sub Modules
-            LoadSubModules(_context, _transaction);
 
             // Related Posts
             LoadRelatedPost(_context, _transaction);
@@ -313,7 +301,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 string folder = CommonHelper.GetFullPath(new string[]
                 {
-                    MixConstants.Folder.UploadFolder, "Posts", DateTime.UtcNow.ToString("dd-MM-yyyy")
+                    MixFolders.UploadFolder, "Posts", DateTime.UtcNow.ToString("dd-MM-yyyy")
                 });
                 string filename = CommonHelper.GetRandomName(ThumbnailFileStream.Name);
                 bool saveThumbnail = CommonHelper.SaveFileBase64(folder, filename, ThumbnailFileStream.Base64);
@@ -327,7 +315,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 string folder = CommonHelper.GetFullPath(new string[]
                 {
-                    MixConstants.Folder.UploadFolder, "Posts", DateTime.UtcNow.ToString("dd-MM-yyyy")
+                    MixFolders.UploadFolder, "Posts", DateTime.UtcNow.ToString("dd-MM-yyyy")
                 });
                 string filename = CommonHelper.GetRandomName(ImageFileStream.Name);
                 bool saveImage = CommonHelper.SaveFileBase64(folder, filename, ImageFileStream.Base64);
@@ -419,7 +407,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 item.PostId = id;
                 item.Description = Title;
                 item.Image = ThumbnailUrl;
-                item.Status = MixEnums.MixContentStatus.Published;
+                item.Status = MixContentStatus.Published;
                 if (item.IsActived)
                 {
                     var saveResult = await item.SaveModelAsync(false, _context, _transaction);
@@ -452,7 +440,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 item.PostId = id;
                 item.Description = Title;
                 item.Image = ThumbnailUrl;
-                item.Status = MixEnums.MixContentStatus.Published;
+                item.Status = MixContentStatus.Published;
                 if (item.IsActived)
                 {
                     var saveResult = await item.SaveModelAsync(false, _context, _transaction);
@@ -483,7 +471,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             foreach (var navPost in PostNavs)
             {
                 navPost.SourceId = id;
-                navPost.Status = MixEnums.MixContentStatus.Published;
+                navPost.Status = MixContentStatus.Published;
                 navPost.Specificulture = Specificulture;
                 if (navPost.IsActived)
                 {
@@ -516,7 +504,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 navModule.PostId = id;
                 navModule.Specificulture = Specificulture;
-                navModule.Status = MixEnums.MixContentStatus.Published;
+                navModule.Status = MixContentStatus.Published;
                 if (navModule.IsActived)
                 {
                     var saveResult = await navModule.SaveModelAsync(false, _context, _transaction);
@@ -559,7 +547,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             foreach (var item in UrlAliases)
             {
                 item.SourceId = parentId.ToString();
-                item.Type = MixEnums.UrlAliasType.Post;
+                item.Type = MixUrlAliasType.Post;
                 item.Specificulture = Specificulture;
                 var saveResult = await item.SaveModelAsync(false, _context, _transaction);
                 ViewModelHelper.HandleResult(saveResult, ref result);
@@ -670,7 +658,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
             if (result.IsSucceed)
             {
-                var navs = await _context.MixUrlAlias.Where(n => n.SourceId == Id.ToString() && n.Type == (int)MixEnums.UrlAliasType.Post && n.Specificulture == Specificulture).ToListAsync();
+                var navs = await _context.MixUrlAlias.Where(n => n.SourceId == Id.ToString() && n.Type == MixUrlAliasType.Post && n.Specificulture == Specificulture).ToListAsync();
                 foreach (var item in navs)
                 {
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
@@ -755,7 +743,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 item.PostId = id;
                 item.Description = Title;
                 item.Image = ThumbnailUrl;
-                item.Status = MixEnums.MixContentStatus.Published;
+                item.Status = MixContentStatus.Published;
                 if (item.IsActived)
                 {
                     var saveResult = item.SaveModel(false, _context, _transaction);
@@ -788,7 +776,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 item.PostId = id;
                 item.Description = Title;
                 item.Image = ThumbnailUrl;
-                item.Status = MixEnums.MixContentStatus.Published;
+                item.Status = MixContentStatus.Published;
                 if (item.IsActived)
                 {
                     var saveResult = item.SaveModel(false, _context, _transaction);
@@ -819,7 +807,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             foreach (var navPost in PostNavs)
             {
                 navPost.SourceId = id;
-                navPost.Status = MixEnums.MixContentStatus.Published;
+                navPost.Status = MixContentStatus.Published;
                 navPost.Specificulture = Specificulture;
                 if (navPost.IsActived)
                 {
@@ -852,7 +840,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 navModule.PostId = id;
                 navModule.Specificulture = Specificulture;
-                navModule.Status = MixEnums.MixContentStatus.Published;
+                navModule.Status = MixContentStatus.Published;
                 if (navModule.IsActived)
                 {
                     var saveResult = navModule.SaveModel(false, _context, _transaction);
@@ -895,7 +883,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             foreach (var item in UrlAliases)
             {
                 item.SourceId = parentId.ToString();
-                item.Type = MixEnums.UrlAliasType.Post;
+                item.Type = MixUrlAliasType.Post;
                 item.Specificulture = Specificulture;
                 var saveResult = item.SaveModel(false, _context, _transaction);
                 ViewModelHelper.HandleResult(saveResult, ref result);
@@ -962,7 +950,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
             if (result.IsSucceed)
             {
-                var navs = _context.MixUrlAlias.Where(n => n.SourceId == Id.ToString() && n.Type == (int)MixEnums.UrlAliasType.Post && n.Specificulture == Specificulture).ToList();
+                var navs = _context.MixUrlAlias.Where(n => n.SourceId == Id.ToString() && n.Type == MixUrlAliasType.Post && n.Specificulture == Specificulture).ToList();
                 foreach (var item in navs)
                 {
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
@@ -999,69 +987,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
         }
 
-        private void LoadSubModules(MixCmsContext _context, IDbContextTransaction _transaction)
-        {
-            var getPostModule = MixPostModules.ReadViewModel.Repository.GetModelListBy(
-                n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction);
-            if (getPostModule.IsSucceed)
-            {
-                ModuleNavs = getPostModule.Data.OrderBy(p => p.Priority).ToList();
-                foreach (var item in ModuleNavs)
-                {
-                    item.IsActived = true;
-                    item.Module.LoadData(postId: Id, _context: _context, _transaction: _transaction);
-                }
-            }
-            var otherModuleNavs = MixModules.ReadMvcViewModel.Repository.GetModelListBy(
-                m => (m.Type == (int)MixEnums.MixModuleType.SubPost) && m.Specificulture == Specificulture
-                && !ModuleNavs.Any(n => n.ModuleId == m.Id), "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection.Desc, null, 0, _context, _transaction);
-            foreach (var item in otherModuleNavs.Data.Items)
-            {
-                item.LoadData(postId: Id, _context: _context, _transaction: _transaction);
-                ModuleNavs.Add(new MixPostModules.ReadViewModel()
-                {
-                    ModuleId = item.Id,
-                    Image = item.Image,
-                    PostId = Id,
-                    Description = item.Title,
-                    Module = item
-                });
-            }
-        }
-
-        private void LoadAttributeSets(MixCmsContext _context, IDbContextTransaction _transaction)
-        {
-            //var getPostAttributeSet = MixPostAttributeSets.UpdateViewModel.Repository.GetModelListBy(
-            //    n => n.PostId == Id, _context, _transaction);
-            //if (getPostAttributeSet.IsSucceed)
-            //{
-            //    AttributeSetNavs = getPostAttributeSet.Data.OrderBy(p => p.Priority).ToList();
-            //    foreach (var item in AttributeSetNavs)
-            //    {
-            //        item.IsActived = true;
-            //        item.MixAttributeSet.LoadPostData(
-            //            postId: Id, specificulture: Specificulture
-            //            , _context: _context, _transaction: _transaction);
-            //    }
-            //}
-            //var otherAttributeSetNavs = MixAttributeSets.ContentUpdateViewModel.Repository.GetModelListBy(
-            //    m => m.Type == (int)MixEnums.MixAttributeSetDataType.Post && !AttributeSetNavs.Any(n => n.AttributeSetId == m.Id)
-            //    , "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection.Desc, null, 0, _context, _transaction);
-            //foreach (var item in otherAttributeSetNavs.Data.Items)
-            //{
-            //    item.LoadPostData(
-            //            postId: Id, specificulture: Specificulture
-            //            , _context: _context, _transaction: _transaction);
-            //    AttributeSetNavs.Add(new MixPostAttributeSets.UpdateViewModel()
-            //    {
-            //        AttributeSetId = item.Id,
-            //        PostId = Id,
-            //        Description = item.Title,
-            //        MixAttributeSet = item
-            //    });
-            //}
-        }
-
         private void LoadMedias(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var getPostMedia = MixPostMedias.ReadViewModel.Repository.GetModelListBy(n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction);
@@ -1084,7 +1009,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 });
             }
             var otherModules = MixModules.ReadListItemViewModel.Repository.GetModelListBy(
-                m => (m.Type == (int)MixEnums.MixModuleType.Content || m.Type == (int)MixEnums.MixModuleType.ListPost)
+                m => (m.Type == MixModuleType.Content || m.Type == MixModuleType.ListPost)
                 && m.Specificulture == Specificulture
                 && !Modules.Any(n => n.ModuleId == m.Id && n.Specificulture == m.Specificulture)
                 , "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection.Desc, null, 0, _context, _transaction);
@@ -1117,7 +1042,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             this.Templates = this.Templates ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
-            View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Posts, _context, _transaction);
+            View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixTemplateFolderType.Posts, _context, _transaction);
 
             this.Template = CommonHelper.GetFullPath(new string[]
                {
@@ -1231,7 +1156,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<MixUrlAliases.UpdateViewModel> GetAliases(MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = MixUrlAliases.UpdateViewModel.Repository.GetModelListBy(p => p.Specificulture == Specificulture
-                        && p.SourceId == Id.ToString() && p.Type == (int)MixEnums.UrlAliasType.Post, context, transaction);
+                        && p.SourceId == Id.ToString() && p.Type == MixUrlAliasType.Post, context, transaction);
             if (result.IsSucceed)
             {
                 return result.Data;

@@ -5,7 +5,8 @@ using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 {
     public class ImportViewModel
@@ -26,7 +27,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         public string Regex { get; set; }
 
         [JsonProperty("dataType")]
-        public MixEnums.MixDataType DataType { get; set; }
+        public MixDataType DataType { get; set; }
 
         [JsonProperty("attributeFieldName")]
         public string AttributeFieldName { get; set; }
@@ -71,7 +72,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -123,26 +124,26 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
             StringValue = defaultValue;
             switch (DataType)
             {
-                case MixEnums.MixDataType.DateTime:
+                case MixDataType.DateTime:
                     break;
 
-                case MixEnums.MixDataType.Date:
+                case MixDataType.Date:
                     break;
 
-                case MixEnums.MixDataType.Time:
+                case MixDataType.Time:
                     break;
 
-                case MixEnums.MixDataType.Double:
+                case MixDataType.Double:
                     double.TryParse(defaultValue, out double doubleValue);
                     DoubleValue = DoubleValue;
                     break;
 
-                case MixEnums.MixDataType.Boolean:
+                case MixDataType.Boolean:
                     bool.TryParse(defaultValue, out bool boolValue);
                     BooleanValue = boolValue;
                     break;
 
-                case MixEnums.MixDataType.Integer:
+                case MixDataType.Integer:
                     int.TryParse(defaultValue, out int intValue);
                     IntegerValue = intValue;
                     break;
@@ -154,7 +155,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
             if (AttributeFieldId > 0)
             {
                 Field = Lib.ViewModels.MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId).Data;
-                if (Field != null && DataType == MixEnums.MixDataType.Reference)
+                if (Field != null && DataType == MixDataType.Reference)
                 {
                     AttributeSetName = _context.MixAttributeSet.FirstOrDefault(m => m.Id == Field.ReferenceId)?.Name;
                 }

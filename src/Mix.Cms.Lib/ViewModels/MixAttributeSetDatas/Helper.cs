@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDataValues;
@@ -18,7 +19,7 @@ using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
     public static class Helper
@@ -33,8 +34,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     List<ImportViewModel> data = LoadFileData(culture, attributeSet, file);
 
-                    var fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == attributeSet.Id).Data;
-                    var priority = ImportViewModel.Repository.Count(m => m.AttributeSetName == attributeSet.Name && m.Specificulture == culture).Data;
+                    var fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(
+                        f => f.AttributeSetId == attributeSet.Id).Data;
+                    var priority = ImportViewModel.Repository.Count(
+                        m => m.AttributeSetName == attributeSet.Name && m.Specificulture == culture).Data;
                     foreach (var item in data)
                     {
                         priority += 1;
@@ -46,7 +49,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         item.Priority = priority;
                         item.Fields = fields;
                         item.AttributeSetName = attributeSet.Name;
-                        item.Status = Enum.Parse<MixEnums.MixContentStatus>(MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultContentStatus));
+                        item.Status = Enum.Parse<MixContentStatus>(MixService.GetConfig<string>(AppSettingKeywords.DefaultContentStatus));
                         item.ParseModel();
                         context.Entry(item.Model).State = Microsoft.EntityFrameworkCore.EntityState.Added;
                         foreach (var val in item.Values)
@@ -82,7 +85,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         }
 
         public static async Task<RepositoryResponse<AddictionalViewModel>> GetAddictionalData(
-            MixEnums.MixAttributeSetDataType parentType, int parentId,
+            MixDatabaseContentAssociationType parentType, int parentId,
             HttpRequest request, string culture = null,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -93,7 +96,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
                 var databaseName = request.Query["databaseName"].ToString();
                 var dataId = (await context.MixRelatedAttributeData.FirstOrDefaultAsync(
-                    m => m.AttributeSetName == databaseName && m.ParentType == parentType.ToString() && m.ParentId == parentId.ToString() && m.Specificulture == culture))?.DataId;
+                    m => m.AttributeSetName == databaseName && m.ParentType == parentType && m.ParentId == parentId.ToString() && m.Specificulture == culture))?.DataId;
                 if (!string.IsNullOrEmpty(dataId))
                 {
                     return await AddictionalViewModel.Repository.GetSingleModelAsync(
@@ -111,7 +114,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             Specificulture = culture,
                             AttributeSetId = getAttrSet.Data.Id,
                             AttributeSetName = getAttrSet.Data.Name,
-                            Status = MixEnums.MixContentStatus.Published,
+                            Status = MixContentStatus.Published,
                             Fields = getAttrSet.Data.Fields,
                             ParentType = parentType
                         };
@@ -292,7 +295,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 var isPageSize = int.TryParse(request.Query["pageSize"], out int pageSize);
                 bool isFromDate = DateTime.TryParse(request.Query["fromDate"], out DateTime fromDate);
                 bool isToDate = DateTime.TryParse(request.Query["toDate"], out DateTime toDate);
-                bool isStatus = Enum.TryParse(request.Query["status"], out MixEnums.MixContentStatus status);
+                bool isStatus = Enum.TryParse(request.Query["status"], out MixContentStatus status);
                 var tasks = new List<Task<RepositoryResponse<TView>>>();
                 var getfields = await MixAttributeFields.ReadViewModel.Repository.GetModelListByAsync(
                     m => m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName, context, transaction);
@@ -472,7 +475,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetAttributeDataByParent<TView>(
             string culture, string attributeSetName,
-            string parentId, MixEnums.MixAttributeSetDataType parentType,
+            string parentId, MixDatabaseContentAssociationType parentType,
             string orderBy, Heart.Enums.MixHeartEnums.DisplayDirection direction,
             int? pageSize, int? pageIndex,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -483,11 +486,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 var tasks = new List<Task<RepositoryResponse<TView>>>();
 
-                Expression<Func<MixRelatedAttributeData, bool>> predicate = m => m.Specificulture == culture
+                Expression<Func<MixDatabaseContentAssociation, bool>> predicate = m => m.Specificulture == culture
                     && (m.AttributeSetName == attributeSetName)
-                    && (m.Status == MixEnums.MixContentStatus.Published)
+                    && (m.Status == MixContentStatus.Published)
                     && (string.IsNullOrEmpty(parentId)
-                         || (m.ParentId == parentId && m.ParentType == parentType.ToString())
+                         || (m.ParentId == parentId && m.ParentType == parentType)
                          );
                 ;
                 var query = context.MixRelatedAttributeData.Where(predicate).Select(m => m.DataId).Distinct();
@@ -625,14 +628,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             var refFields = context.MixAttributeField.Where(
                    m => m.AttributeSetId == attributeSetId
-                    && m.DataType == MixEnums.MixDataType.Reference).ToList();
+                    && m.DataType == MixDataType.Reference).ToList();
 
             foreach (var item in refFields)
             {
-                Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
+                Expression<Func<MixDatabaseContentAssociation, bool>> predicate = model =>
                     (model.AttributeSetId == item.ReferenceId)
-                    && (model.ParentId == dataId && model.ParentType == MixEnums.MixAttributeSetDataType.Set.ToString())
-                    && model.Specificulture == culture
+                    && (model.ParentId == dataId && model.ParentType == MixDatabaseContentAssociationType.DataData
+                    && model.Specificulture == culture)
                     ;
                 var getData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(predicate, context, transaction);
 

@@ -3,7 +3,8 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 {
     public class ReadViewModel
@@ -24,7 +25,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         public string Regex { get; set; }
 
         [JsonProperty("dataType")]
-        public MixEnums.MixDataType DataType { get; set; }
+        public MixDataType DataType { get; set; }
 
         [JsonProperty("attributeFieldName")]
         public string AttributeFieldName { get; set; }
@@ -69,7 +70,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views

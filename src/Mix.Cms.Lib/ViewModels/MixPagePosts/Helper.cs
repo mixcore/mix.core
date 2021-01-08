@@ -9,7 +9,8 @@ using Mix.Domain.Data.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixPagePosts
 {
     public class Helper
@@ -22,7 +23,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
             try
             {
                 var navCategoryPostViewModels = context.MixPage.Include(cp => cp.MixPagePost).Where(a => a.Specificulture == specificulture
-                    && (a.Type == MixEnums.MixPageType.ListPost.ToString())
+                    && (a.Type == MixPageType.ListPost.ToString())
                     )
                     .AsEnumerable()
                     .Select(p => new MixPagePosts.ReadViewModel(

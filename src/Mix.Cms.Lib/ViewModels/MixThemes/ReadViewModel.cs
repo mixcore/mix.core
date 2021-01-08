@@ -6,7 +6,8 @@ using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixThemes
 {
     public class ReadViewModel
@@ -43,7 +44,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -112,7 +113,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"{MixConstants.Folder.TemplatesFolder}/{Name}";
+                return $"{MixFolders.TemplatesFolder}/{Name}";
             }
         }
 

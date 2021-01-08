@@ -7,7 +7,8 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
     public class ImportViewModel
@@ -83,7 +84,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -141,12 +142,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #region Overrides
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            GetAdditionalData(Id.ToString(), MixEnums.MixAttributeSetDataType.Post, _context, _transaction);
+            GetAdditionalData(Id.ToString(), MixDatabaseContentAssociationType.DataPost, _context, _transaction);
         }
-        private void GetAdditionalData(string id, MixEnums.MixAttributeSetDataType type, MixCmsContext context, IDbContextTransaction transaction)
+        private void GetAdditionalData(string id, MixDatabaseContentAssociationType type, MixCmsContext context, IDbContextTransaction transaction)
         {
             var getRelatedData = MixRelatedAttributeDatas.ImportViewModel.Repository.GetSingleModel(
-                        m => m.Specificulture == Specificulture && m.ParentType == type.ToString()
+                        m => m.Specificulture == Specificulture && m.ParentType == type
                             && m.ParentId == id, context, transaction);
             if (getRelatedData.IsSucceed)
             {

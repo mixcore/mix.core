@@ -5,7 +5,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
 {
     public class ImportViewModel
@@ -51,11 +52,11 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #endregion Properties
-        
+
         #region Contructors
 
         public ImportViewModel() : base()

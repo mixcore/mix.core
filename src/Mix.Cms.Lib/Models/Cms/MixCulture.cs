@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.Models.Cms
 {
     public partial class MixCulture
@@ -27,7 +28,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string ModifiedBy { get; set; }
         public DateTime? LastModified { get; set; }
         public int Priority { get; set; }
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
 
         public virtual ICollection<MixConfiguration> MixConfiguration { get; set; }
         public virtual ICollection<MixLanguage> MixLanguage { get; set; }

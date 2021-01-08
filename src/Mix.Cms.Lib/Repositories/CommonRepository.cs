@@ -8,7 +8,8 @@ using Mix.Cms.Lib.ViewModels.MixCultures;
 using Mix.Domain.Core.Models;
 using System;
 using System.Collections.Generic;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.Repositories
 {
     public class CommonRepository

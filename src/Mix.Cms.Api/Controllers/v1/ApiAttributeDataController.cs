@@ -7,7 +7,8 @@ using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
@@ -60,7 +61,7 @@ namespace Mix.Cms.Api.Controllers.v1
             //        {
             //            var model = new MixPostAttributeData()
             //            {
-            //                Status = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
+            //                Status = MixService.GetConfig<int>(AppSettingKeywords.DefaultContentStatus),
             //                AttributeSetId = setId,
             //                Specificulture = _lang,
             //                Priority = Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
@@ -82,7 +83,7 @@ namespace Mix.Cms.Api.Controllers.v1
             //        {
             //            var model = new MixPostAttributeData()
             //            {
-            //                Status = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.DefaultContentStatus)
+            //                Status = MixService.GetConfig<int>(AppSettingKeywords.DefaultContentStatus)
             //               ,
             //                Priority = Lib.ViewModels.MixPostAttributeDatas.UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
             //            };

@@ -10,8 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixThemes
 {
     public class DeleteViewModel
@@ -124,7 +124,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"{MixConstants.Folder.TemplatesFolder}/{Name}";
+                return $"{MixFolders.TemplatesFolder}/{Name}";
             }
         }
 
@@ -175,7 +175,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             {
                 FileRepository.Instance.DeleteFolder(AssetFolder);
             }
-            
+
             if (result.IsSucceed)
             {
                 FileRepository.Instance.DeleteFolder(TemplateFolder);

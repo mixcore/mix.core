@@ -20,8 +20,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web;
-using static Mix.Cms.Lib.MixEnums;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
@@ -65,7 +65,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         var model = new MixModule()
                         {
                             Specificulture = _lang,
-                            Status = MixService.GetConfig<MixEnums.MixContentStatus>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
+                            Status = MixService.GetConfig<MixContentStatus>(AppSettingKeywords.DefaultContentStatus),
                             Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 
@@ -168,11 +168,11 @@ namespace Mix.Cms.Api.Controllers.v1
             [FromBody] RequestPaging request)
         {
             var query = HttpUtility.ParseQueryString(request.Query ?? "");
-            bool isType = int.TryParse(query.Get("type"), out int moduleType) && moduleType >= 0;
+            bool isType = Enum.TryParse(query.Get("type"), out MixModuleType moduleType);
             ParseRequestPagingDate(request);
             Expression<Func<MixModule, bool>> predicate = model =>
                         model.Specificulture == _lang
-                        && (string.IsNullOrEmpty(request.Status) || model.Status == Enum.Parse<MixEnums.MixContentStatus>(request.Status))
+                        && (string.IsNullOrEmpty(request.Status) || model.Status == Enum.Parse<MixContentStatus>(request.Status))
                         && (!isType || model.Type == moduleType)
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (EF.Functions.Like(model.Name, $"%{request.Keyword}%"))

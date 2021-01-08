@@ -17,7 +17,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Api.Controllers.v1
 {
     public class BaseRestApiController<TDbContext, TModel> : Controller

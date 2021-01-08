@@ -11,7 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
     public class FormViewModel
@@ -44,7 +45,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -63,7 +64,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public string ParentId { get; set; }
 
         [JsonProperty("parentType")]
-        public MixEnums.MixAttributeSetDataType ParentType { get; set; }
+        public MixDatabaseContentAssociationType ParentType { get; set; }
 
 
         [JsonProperty("relatedData")]
@@ -149,7 +150,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 val.AttributeSetName = AttributeSetName;
                 if (Obj[val.AttributeFieldName] != null)
                 {
-                    if (val.Field.DataType == MixEnums.MixDataType.Reference)
+                    if (val.Field.DataType == MixDataType.Reference)
                     {
                         var arr = Obj[val.AttributeFieldName].Value<JArray>();
                         if (arr != null)
@@ -231,7 +232,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (result.IsSucceed && !string.IsNullOrEmpty(ParentId))
                 {
                     var getNav = MixRelatedAttributeDatas.UpdateViewModel.Repository.CheckIsExists(
-                        m => m.DataId == Id && m.ParentId == ParentId && m.ParentType == ParentType.ToString() && m.Specificulture == Specificulture
+                        m => m.DataId == Id && m.ParentId == ParentId && m.ParentType == ParentType && m.Specificulture == Specificulture
                         , context, transaction);
                     if (!getNav)
                     {
@@ -243,7 +244,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             AttributeSetName = AttributeSetName,
                             ParentType = ParentType,
                             ParentId = ParentId,
-                            Status = MixEnums.MixContentStatus.Published
+                            Status = MixContentStatus.Published
                         };
                         var saveResult = await nav.SaveModelAsync(false, context, transaction);
                         if (!saveResult.IsSucceed)
@@ -321,7 +322,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         item.DataId = parent.Id;
                         item.Specificulture = parent.Specificulture;
                         item.Priority = item.Field.Priority;
-                        item.Status = MixEnums.MixContentStatus.Published;
+                        item.Status = MixContentStatus.Published;
                         var saveResult = await item.SaveModelAsync(false, context, transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
                     }
@@ -348,8 +349,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     item.Specificulture = Specificulture;
                     item.ParentId = parent.Id;
-                    item.ParentType = MixEnums.MixAttributeSetDataType.Set;
-                    item.Status = MixEnums.MixContentStatus.Published;
+                    item.ParentType = MixDatabaseContentAssociationType.DataData;
+                    item.Status = MixContentStatus.Published;
                     var saveRef = await item.SaveModelAsync(true, context, transaction);
                     if (saveRef.IsSucceed)
                     {
@@ -357,7 +358,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         {
                             DataId = saveRef.Data.Id,
                             ParentId = Id,
-                            ParentType = MixEnums.MixAttributeSetDataType.Set,
+                            ParentType = MixDatabaseContentAssociationType.DataData,
                             AttributeSetId = saveRef.Data.AttributeSetId,
                             AttributeSetName = saveRef.Data.AttributeSetName,
                             CreatedDateTime = DateTime.UtcNow,

@@ -11,8 +11,8 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using static Mix.Cms.Lib.MixEnums;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixModules
 {
     [GeneratedController("api/v1/rest/{culture}/mix-module/mvc")]
@@ -74,7 +74,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
         #region Views
 
@@ -149,8 +149,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 return CommonHelper.GetFullPath(new string[]
                 {
                     ""
-                    , MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture) ?? "Default"
+                    , MixFolders.TemplatesFolder
+                    , MixService.GetConfig<string>(AppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"
                     , Template
                 });
             }
@@ -163,8 +163,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 return CommonHelper.GetFullPath(new string[]
                 {
                     ""
-                    , MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture) ?? "Default"
+                    , MixFolders.TemplatesFolder
+                    , MixService.GetConfig<string>(AppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"
                     , FormTemplate
                 });
             }
@@ -177,8 +177,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 return CommonHelper.GetFullPath(new string[]
                 {
                     ""
-                    , MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture) ?? "Default"
+                    , MixFolders.TemplatesFolder
+                    , MixService.GetConfig<string>(AppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"
                     , EdmTemplate
                 });
             }
@@ -225,7 +225,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_MODULE, _context, _transaction);
+            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixDatabaseNames.ADDITIONAL_FIELD_MODULE, _context, _transaction);
             if (getAttrs.IsSucceed)
             {
                 AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
@@ -268,15 +268,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                         //productExp = m => m.ModuleId == Id && m.Specificulture == Specificulture;
                         break;
 
-                    case MixModuleType.SubPage:
-                        dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture && (m.PageId == pageId);
-                        postExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
-                        break;
-
-                    case MixModuleType.SubPost:
-                        dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture && (m.PostId == postId);
-                        break;
-
                     case MixModuleType.ListPost:
                         postExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
                         break;
@@ -292,7 +283,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                     var getDataResult = MixModuleDatas.ReadViewModel.Repository
                     .GetModelListBy(
                         dataExp
-                        , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy
+                        , MixService.GetConfig<string>(AppSettingKeywords.OrderBy
                         ), 0
                         , pageSize, pageIndex
                         , _context: context, _transaction: transaction);
@@ -307,7 +298,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 {
                     var getPosts = MixModulePosts.ReadViewModel.Repository
                     .GetModelListBy(postExp
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+                    , MixService.GetConfig<string>(AppSettingKeywords.OrderBy), 0
                     , pageSize, pageIndex
                     , _context: context, _transaction: transaction);
                     if (getPosts.IsSucceed)

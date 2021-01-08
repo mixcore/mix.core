@@ -9,7 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
     public class ReadMvcViewModel
@@ -42,7 +43,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -53,10 +54,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public JObject Obj { get; set; }
 
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl { 
-            get => !string.IsNullOrEmpty(Id) && HasValue("seo_url") 
-                    ? $"/data/{Specificulture}/{AttributeSetName}/{Property<string>("seo_url")}" 
-                    : null; 
+        public string DetailsUrl
+        {
+            get => !string.IsNullOrEmpty(Id) && HasValue("seo_url")
+                    ? $"/data/{Specificulture}/{AttributeSetName}/{Property<string>("seo_url")}"
+                    : null;
         }
 
         [JsonProperty("templatePath")]
@@ -85,12 +87,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(
                   _context, _transaction,
                   out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            
+
             if (Obj == null)
             {
                 Obj = Helper.ParseData(Id, Specificulture, context, transaction);
             }
-            
+
             Obj.LoadReferenceData(Id, AttributeSetId, Specificulture, context, transaction);
 
             if (isRoot)
@@ -105,7 +107,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         {
             return Obj != null ? Obj.Value<string>(fieldName) != null : false;
         }
-        
+
         public T Property<T>(string fieldName)
         {
             return MixCmsHelper.Property<T>(Obj, fieldName);

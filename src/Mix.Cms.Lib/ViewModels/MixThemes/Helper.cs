@@ -6,7 +6,8 @@ using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixThemes
 {
     public class Helper
@@ -27,7 +28,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             if (result.IsSucceed)
             {
                 string domain = MixService.GetConfig<string>("Domain");
-                string accessFolder = $"{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{getTheme.Data.Name}/assets";
+                string accessFolder = $"{MixFolders.FileFolder}/{MixFolders.TemplatesAssetFolder}/{getTheme.Data.Name}/assets";
                 string content = JObject.FromObject(data).ToString()
                     .Replace(accessFolder, "[ACCESS_FOLDER]")
                     .Replace($"/{culture}/", "/[CULTURE]/");
@@ -126,7 +127,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 }
                 return result;
             }
-            return new RepositoryResponse<InitViewModel>();            
+            return new RepositoryResponse<InitViewModel>();
         }
     }
 }

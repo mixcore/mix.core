@@ -8,7 +8,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
 {
     public class UpdateViewModel
@@ -55,7 +56,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion
 
         #region Views

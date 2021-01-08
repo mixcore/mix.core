@@ -7,7 +7,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 {
     public class ContentUpdateViewModel
@@ -109,8 +110,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         {
             var getData = MixRelatedAttributeDatas.UpdateViewModel.Repository
             .GetModelListBy(
-                m => m.ParentId == postId.ToString() && m.ParentType == (int)MixEnums.MixAttributeSetDataType.Post && m.Specificulture == specificulture
-                , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+                m => m.ParentId == postId.ToString() && m.ParentType == (int)MixAttributeSetDataType.Post && m.Specificulture == specificulture
+                , MixService.GetConfig<string>(AppSettingKeywords.OrderBy), 0
                 , pageSize, pageIndex
                 , _context: _context, _transaction: _transaction);
             if (!getData.IsSucceed || getData.Data == null || getData.Data.Items.Count == 0)

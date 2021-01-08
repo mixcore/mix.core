@@ -8,7 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.Repositories
 {
     public class TemplateRepository
@@ -83,7 +84,7 @@ namespace Mix.Cms.Lib.Repositories
             string fullPath = CommonHelper.GetFullPath(new string[]
             {
                 templateFolder,
-                name + MixConstants.Folder.TemplateExtension
+                name + MixDefaultValues.TemplateExtension
             });
             if (File.Exists(fullPath))
             {
@@ -99,7 +100,7 @@ namespace Mix.Cms.Lib.Repositories
                 Directory.CreateDirectory(folder);
             }
             DirectoryInfo d = new DirectoryInfo(folder);//Assuming Test is your Folder
-            FileInfo[] Files = d.GetFiles(string.Format("*{0}", MixConstants.Folder.TemplateExtension)); //Getting cshtml files
+            FileInfo[] Files = d.GetFiles(string.Format("*{0}", MixDefaultValues.TemplateExtension)); //Getting cshtml files
             List<TemplateViewModel> result = new List<TemplateViewModel>();
             foreach (var file in Files)
             {
@@ -109,7 +110,7 @@ namespace Mix.Cms.Lib.Repositories
                     {
                         FileFolder = folder,
                         Filename = file.Name,
-                        Extension = MixConstants.Folder.TemplateExtension,
+                        Extension = MixDefaultValues.TemplateExtension,
                         Content = s.ReadToEnd()
                     });
                 }

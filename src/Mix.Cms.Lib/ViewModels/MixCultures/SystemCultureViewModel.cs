@@ -7,7 +7,8 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixCultures
 {
     public class SystemCultureViewModel
@@ -48,7 +49,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
 
         #endregion Models
 

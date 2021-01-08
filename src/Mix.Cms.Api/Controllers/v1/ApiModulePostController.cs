@@ -17,7 +17,8 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
@@ -61,7 +62,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         var model = new MixModulePost()
                         {
                             Specificulture = _lang,
-                            Status = MixService.GetConfig<MixEnums.MixContentStatus>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
+                            Status = MixService.GetConfig<MixContentStatus>(AppSettingKeywords.DefaultContentStatus),
                             Priority = ReadViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 
@@ -127,7 +128,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         model.Specificulture == _lang
                         && (!isModule || model.ModuleId == moduleId)
                         && (!isPost || model.PostId == postId)
-                        && (string.IsNullOrEmpty(request.Status) || model.Status == Enum.Parse<MixEnums.MixContentStatus>(request.Status))
+                        && (string.IsNullOrEmpty(request.Status) || model.Status == Enum.Parse<MixContentStatus>(request.Status))
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (model.Description.Contains(request.Keyword)
                             ))

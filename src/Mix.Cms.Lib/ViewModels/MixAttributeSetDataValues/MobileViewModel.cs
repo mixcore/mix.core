@@ -5,7 +5,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 {
     public class MobileViewModel
@@ -29,7 +30,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         public string Regex { get; set; }
 
         [JsonProperty("dataType")]
-        public MixEnums.MixDataType DataType { get; set; }
+        public MixDataType DataType { get; set; }
 
         [JsonProperty("status")]
         public string Status { get; set; }
@@ -104,10 +105,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (DataType == MixEnums.MixDataType.Reference)
+            if (DataType == MixDataType.Reference)
             {
                 DataNavs = MixRelatedAttributeDatas.MobileViewModel.Repository.GetModelListBy(d =>
-                    d.ParentId == DataId && d.ParentType == (int)MixEnums.MixAttributeSetDataType.Set && d.Specificulture == Specificulture,
+                    d.ParentId == DataId && d.ParentType == (int)MixAttributeSetDataType.Set && d.Specificulture == Specificulture,
                 _context, _transaction).Data;
             }
             Field = MixAttributeFields.ReadViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId, _context, _transaction).Data;

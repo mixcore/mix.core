@@ -5,7 +5,8 @@ using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Web.Controllers
 {
     [ApiExplorerSettings(IgnoreApi = true)]
@@ -51,7 +52,7 @@ namespace Mix.Cms.Web.Controllers
                 {
                     if (CheckIsVueRoute(seoName))
                     {
-                        var staticFile = FileRepository.Instance.GetFile(seoName, MixConstants.Folder.WebRootPath);
+                        var staticFile = FileRepository.Instance.GetFile(seoName, MixFolders.WebRootPath);
                         if (staticFile != null)
                         {
                             return Ok(staticFile.Content);

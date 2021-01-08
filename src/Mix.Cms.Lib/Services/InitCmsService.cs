@@ -12,8 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.Services
 {
     public class InitCmsService
@@ -65,7 +65,7 @@ namespace Mix.Cms.Lib.Services
                 accountContext?.Dispose();
             }
         }
-        
+
         public static async Task<RepositoryResponse<bool>> InitSiteData(string siteName, InitCulture culture)
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>();
@@ -81,27 +81,27 @@ namespace Mix.Cms.Lib.Services
 
                     var countCulture = context.MixCulture.Count();
 
-                    
-                        /**
-                         * Init Selected Language as default
-                         */
-                        isSucceed = InitCultures(culture, context, transaction);
 
-                        /**
-                         * Init System Configurations
-                         */
-                        if (isSucceed && context.MixConfiguration.Count() == 0)
-                        {
-                            var saveResult = await InitConfigurationsAsync(siteName, culture.Specificulture, context, transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            result.Errors = saveResult.Errors;
-                            result.Exception = saveResult.Exception;
-                        }
-                        else
-                        {
-                            result.IsSucceed = false;
-                            result.Errors.Add("Cannot init cultures");
-                        }
+                    /**
+                     * Init Selected Language as default
+                     */
+                    isSucceed = InitCultures(culture, context, transaction);
+
+                    /**
+                     * Init System Configurations
+                     */
+                    if (isSucceed && context.MixConfiguration.Count() == 0)
+                    {
+                        var saveResult = await InitConfigurationsAsync(siteName, culture.Specificulture, context, transaction);
+                        result.IsSucceed = saveResult.IsSucceed;
+                        result.Errors = saveResult.Errors;
+                        result.Exception = saveResult.Exception;
+                    }
+                    else
+                    {
+                        result.IsSucceed = false;
+                        result.Errors.Add("Cannot init cultures");
+                    }
                     if (result.IsSucceed)
                     {
                         transaction.Commit();
@@ -264,7 +264,7 @@ namespace Mix.Cms.Lib.Services
                         Description = culture.Description,
                         Icon = culture.Icon,
                         Alias = culture.Alias,
-                        Status = MixEnums.MixContentStatus.Published,
+                        Status = MixContentStatus.Published,
                         CreatedDateTime = DateTime.UtcNow
                     };
                     context.Entry(enCulture).State = EntityState.Added;
@@ -299,7 +299,7 @@ namespace Mix.Cms.Lib.Services
                 {
                     Id = page.Id,
                     SourceId = page.Id.ToString(),
-                    Type = (int)UrlAliasType.Page,
+                    Type = MixUrlAliasType.Page,
                     Specificulture = culture,
                     CreatedDateTime = DateTime.UtcNow,
                     Alias = page.Title.ToLower(),

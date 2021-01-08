@@ -3,6 +3,9 @@ using Mix.Cms.Messenger.Models.Data;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
+using Mix.Cms.Service.SignalR.Domain.Enums;
 
 namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUserDevices
 {
@@ -23,7 +26,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUserDevices
         public string DeviceId { get; set; }
 
         [JsonProperty("status")]
-        public Constants.Enums.DeviceStatus Status { get; set; }
+        public MixDeviceStatus Status { get; set; }
 
         [JsonProperty("startDate")]
         public DateTime StartDate { get; set; }

@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Cms.Lib.Models.Cms;
 
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
 {
     public class MixPostMediaConfiguration : IEntityTypeConfiguration<MixPostMedia>
@@ -52,7 +54,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
 
             entity.Property(e => e.Status)
                 .IsRequired()
-                .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                .HasConversion(new EnumToStringConverter<MixContentStatus>())
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");

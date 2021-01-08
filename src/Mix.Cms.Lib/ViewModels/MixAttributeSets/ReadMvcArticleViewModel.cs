@@ -5,7 +5,8 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 {
     public class ReadMvcPostViewModel
@@ -59,7 +60,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -102,7 +103,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             //var getData = MixPostAttributeDatas.ReadMvcViewModel.Repository
             //.GetModelListBy(
             //    m => m.PostId == postId && m.Specificulture == specificulture && m.AttributeSetId == Id
-            //    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+            //    , MixService.GetConfig<string>(AppSettingKeywords.OrderBy), 0
             //    , pageSize, pageIndex
             //    , _context: _context, _transaction: _transaction);
 

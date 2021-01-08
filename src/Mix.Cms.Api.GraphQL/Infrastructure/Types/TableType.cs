@@ -6,7 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Api.GraphQL.Infrastructure
 {
     public class TableType : ObjectGraphType<object>
@@ -52,7 +53,7 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure
             var columnField = Field(
                 graphQLType,
                 columnMetadata.ColumnName
-            ); 
+            );
             columnField.Resolver = new NameFieldResolver();
             FillArgs(columnMetadata.ColumnName);
         }

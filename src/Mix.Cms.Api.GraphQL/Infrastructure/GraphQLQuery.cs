@@ -4,14 +4,15 @@ using Mix.Cms.Api.GraphQL.Infrastructure.Interfaces;
 using System;
 using System.Linq;
 using System.Reflection;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Api.GraphQL.Infrastructure
 {
     public class GraphQLQuery : ObjectGraphType<object>
     {
         private IDatabaseMetadata _dbMetadata;
         private ITableNameLookup _tableNameLookup;
-        private DbContext _dbContext; 
+        private DbContext _dbContext;
         public GraphQLQuery(
          DbContext dbContext,
          IDatabaseMetadata dbMetadata,
@@ -19,15 +20,15 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure
         {
             _dbMetadata = dbMetadata;
             _tableNameLookup = tableNameLookup;
-            _dbContext = dbContext; 
+            _dbContext = dbContext;
             Name = "Query";
             var assem = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.ManifestModule.Name == "Mix.Cms.Lib.dll");
-            
+
             foreach (var metaTable in _dbMetadata.GetTableMetadatas())
             {
                 var type = assem.GetType(metaTable.AssemblyFullName);
                 var tableType = new TableType(metaTable, type);
-                var friendlyTableName = metaTable.TableName;                
+                var friendlyTableName = metaTable.TableName;
                 // _tableNameLookup.GetFriendlyName(metaTable.TableName); 
                 AddField(new FieldType
                 {

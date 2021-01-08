@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Mix.Cms.Service.SignalR.Domain.Constants;
 
 namespace Mix.Cms.Service.SignalR.Hubs
 {
@@ -9,18 +10,18 @@ namespace Mix.Cms.Service.SignalR.Hubs
     {
         public async Task SendMessage(string message)
         {
-            await Clients.All.SendAsync(Constants.HubMethods.ReceiveMethod, message).ConfigureAwait(false);
+            await Clients.All.SendAsync(MixHubMethods.ReceiveMethod, message).ConfigureAwait(false);
         }
 
         public Task SendMessageToCaller(string message)
         {
-            return Clients.Caller.SendAsync(Constants.HubMethods.ReceiveMethod, message);
+            return Clients.Caller.SendAsync(MixHubMethods.ReceiveMethod, message);
         }
 
         public Task SendMessageToGroups(string message)
         {
             List<string> groups = new List<string>() { "SignalR Users" };
-            return Clients.Groups(groups).SendAsync(Constants.HubMethods.ReceiveMethod, message);
+            return Clients.Groups(groups).SendAsync(MixHubMethods.ReceiveMethod, message);
         }
 
         public override async Task OnConnectedAsync()

@@ -7,13 +7,14 @@ using System;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Api.GraphQL.Infrastructure
 {
-    public class MyFieldResolver: IFieldResolver
+    public class MyFieldResolver : IFieldResolver
     {
         private TableMetadata _tableMetadata;
-        private DbContext _dbContext; 
+        private DbContext _dbContext;
         public MyFieldResolver(TableMetadata tableMetadata, DbContext dbContext)
         {
             _tableMetadata = tableMetadata;

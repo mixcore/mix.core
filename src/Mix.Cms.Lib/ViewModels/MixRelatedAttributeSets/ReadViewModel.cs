@@ -3,11 +3,12 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
 {
     public class ReadViewModel
-        : ViewModelBase<MixCmsContext, MixRelatedAttributeSet, ReadViewModel>
+        : ViewModelBase<MixCmsContext, MixDatabaseAssociation, ReadViewModel>
     {
         #region Properties
 
@@ -21,7 +22,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
         [JsonProperty("parentId")]
         public int ParentId { get; set; }
         [JsonProperty("parentType")]
-        public MixEnums.MixAttributeSetDataType ParentType { get; set; }
+        public MixDatabaseContentAssociationType ParentType { get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
         [JsonProperty("image")]
@@ -37,7 +38,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion
 
         #region Views
@@ -58,7 +59,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
         {
         }
 
-        public ReadViewModel(MixRelatedAttributeSet model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ReadViewModel(MixDatabaseAssociation model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -77,7 +78,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
             }
         }
 
-        public override MixRelatedAttributeSet ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixDatabaseAssociation ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (CreatedDateTime == default(DateTime))
             {

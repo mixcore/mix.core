@@ -7,7 +7,8 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixTemplates
 {
     public class DeleteViewModel
@@ -27,7 +28,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         public string ThemeName { get; set; }
 
         [JsonProperty("folderType")]
-        public string FolderType { get; set; }
+        public MixTemplateFolderType FolderType { get; set; }
 
         [JsonProperty("fileFolder")]
         public string FileFolder { get; set; }
@@ -63,8 +64,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             get
             {
                 return CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.FileFolder,
-                    MixConstants.Folder.TemplatesAssetFolder,
+                    MixFolders.FileFolder,
+                    MixFolders.TemplatesAssetFolder,
                     ThemeName });
             }
         }
@@ -76,7 +77,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             get
             {
                 return CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.TemplatesFolder,
+                    MixFolders.TemplatesFolder,
                     ThemeName
                     });
             }
@@ -120,12 +121,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             {
                 CreatedDateTime = DateTime.UtcNow;
             }
-            FileFolder = CommonHelper.GetFullPath(new string[]
-                {
-                    MixConstants.Folder.TemplatesFolder
-                    , ThemeName
-                    , FolderType
-                });
+            FileFolder = $"{MixFolders.TemplatesFolder}/{ThemeName}/{FolderType}";
             return base.ParseModel(_context, _transaction);
         }
 

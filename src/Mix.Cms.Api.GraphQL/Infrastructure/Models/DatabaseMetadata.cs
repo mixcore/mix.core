@@ -2,20 +2,21 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Mix.Cms.Api.GraphQL.Infrastructure.Interfaces;
 using System.Collections.Generic;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Api.GraphQL.Infrastructure.Models
 {
     public sealed class DatabaseMetadata : IDatabaseMetadata
     {
         private readonly DbContext _dbContext;
-        private readonly ITableNameLookup _tableNameLookup; 
+        private readonly ITableNameLookup _tableNameLookup;
         private string _databaseName;
-        private IEnumerable<TableMetadata> _tables; 
+        private IEnumerable<TableMetadata> _tables;
         public DatabaseMetadata(DbContext dbContext, ITableNameLookup tableNameLookup)
         {
             _dbContext = dbContext;
-            _tableNameLookup = tableNameLookup; 
-            _databaseName = _dbContext.Database.GetDbConnection().Database; 
+            _tableNameLookup = tableNameLookup;
+            _databaseName = _dbContext.Database.GetDbConnection().Database;
             if (_tables == null)
                 ReloadMetadata();
         }
@@ -30,7 +31,7 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure.Models
         }
         private IReadOnlyList<TableMetadata> FetchTableMetaData()
         {
-            var metaTables = new List<TableMetadata>(); 
+            var metaTables = new List<TableMetadata>();
             foreach (var entityType in _dbContext.Model.GetEntityTypes())
             {
                 var tableName = entityType.GetTableName();
@@ -39,7 +40,7 @@ namespace Mix.Cms.Api.GraphQL.Infrastructure.Models
                     TableName = tableName,
                     AssemblyFullName = entityType.ClrType.FullName,
                     Columns = GetColumnsMetadata(entityType)
-                }); 
+                });
                 _tableNameLookup.InsertKeyName(tableName);
             }
 

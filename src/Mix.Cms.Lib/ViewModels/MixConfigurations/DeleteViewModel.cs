@@ -4,8 +4,8 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using static Mix.Cms.Lib.MixEnums;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixConfigurations
 {
     public class DeleteViewModel : ViewModelBase<MixCmsContext, MixConfiguration, DeleteViewModel>

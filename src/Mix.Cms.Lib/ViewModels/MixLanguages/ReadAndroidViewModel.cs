@@ -10,8 +10,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixLanguages
 {
     public class ReadAndroidViewModel
@@ -133,7 +133,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
             {
                 if (isRoot)
                 {
-                    context.Database.CloseConnection();transaction.Dispose();context.Dispose();
+                    context.Database.CloseConnection(); transaction.Dispose(); context.Dispose();
                 }
             }
             return result;

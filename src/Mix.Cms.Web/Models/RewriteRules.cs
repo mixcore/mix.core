@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.Text.RegularExpressions;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace RewriteRules
 {
     public class MethodRules

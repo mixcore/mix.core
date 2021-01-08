@@ -8,7 +8,8 @@ using Mix.Domain.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Service.SignalR
 {
     /// <summary>

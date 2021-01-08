@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
@@ -10,7 +11,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
 namespace Mix.Cms.Lib.ViewModels.MixTemplates
 {
     public class UpdateViewModel
@@ -30,7 +31,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         public string ThemeName { get; set; }
 
         [JsonProperty("folderType")]
-        public string FolderType { get; set; }
+        public MixTemplateFolderType FolderType { get; set; }
 
         [JsonProperty("fileFolder")]
         public string FileFolder { get; set; }
@@ -68,7 +69,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
 
         #endregion Models
 
@@ -83,8 +84,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             get
             {
                 return CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.FileFolder,
-                    MixConstants.Folder.TemplatesAssetFolder,
+                    MixFolders.FileFolder,
+                    MixFolders.TemplatesAssetFolder,
                      SeoHelper.GetSEOString(ThemeName) });
             }
         }
@@ -95,7 +96,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             get
             {
                 return CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.TemplatesFolder, SeoHelper.GetSEOString(ThemeName) });
+                    MixFolders.TemplatesFolder, SeoHelper.GetSEOString(ThemeName) });
             }
         }
 
@@ -170,13 +171,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                 Id = Repository.Max(m => m.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
-            FileFolder = CommonHelper.GetFullPath(new string[]
-                {
-                    MixConstants.Folder.TemplatesFolder
-                    , ThemeName
-                    , FolderType
-                });
-
+            FileFolder = $"{MixFolders.TemplatesFolder}/{ThemeName}/{FolderType}";
             Content = Content?.Trim();
             Scripts = Scripts?.Trim();
             Styles = Styles?.Trim();
@@ -268,49 +263,50 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             }
             else
             {
+                Enum.TryParse(temp[0], out MixTemplateFolderType folderType);
                 int activeThemeId = MixService.GetConfig<int>(
-                    MixConstants.ConfigurationKeyword.ThemeId, culture);
+                    AppSettingKeywords.ThemeId, culture);
                 string name = temp[1].Split('.')[0];
-                result = Repository.GetSingleModel(t => t.FolderType == temp[0] && t.FileName == name && t.ThemeId == activeThemeId
+                result = Repository.GetSingleModel(t => t.FolderType == folderType && t.FileName == name && t.ThemeId == activeThemeId
                     , _context, _transaction);
             }
             return result;
         }
 
-        public static UpdateViewModel GetTemplateByPath(string path, string specificulture, MixEnums.EnumTemplateFolder folderType, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public static UpdateViewModel GetTemplateByPath(string path, string specificulture, MixTemplateFolderType folderType, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             string templateName = !string.IsNullOrEmpty(path) ? path.Substring(path.LastIndexOf('/') + 1) : null;
             string filename = templateName?.Substring(0, templateName.LastIndexOf('.'));
             string ext = templateName?.Substring(templateName.LastIndexOf('.'));
-            int themeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, specificulture);
-            string themeName = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, specificulture);
+            int themeId = MixService.GetConfig<int>(AppSettingKeywords.ThemeId, specificulture);
+            string themeName = MixService.GetConfig<string>(AppSettingKeywords.ThemeName, specificulture);
             var getView = UpdateViewModel.Repository.GetSingleModel(t =>
-                    t.ThemeId == themeId && t.FolderType == folderType.ToString()
+                    t.ThemeId == themeId && t.FolderType == folderType
                     && !string.IsNullOrEmpty(templateName) && t.FileName == filename && t.Extension == ext
                     , _context, _transaction);
             return getView.Data ?? GetDefault(folderType, specificulture);
         }
 
-        public static UpdateViewModel GetDefault(MixEnums.EnumTemplateFolder folderType, string specificulture)
+        public static UpdateViewModel GetDefault(MixTemplateFolderType folderType, string specificulture)
         {
-            string activedTheme = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, specificulture)
-                    ?? MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTheme);
+            string activedTheme = MixService.GetConfig<string>(AppSettingKeywords.ThemeFolder, specificulture)
+                    ?? MixService.GetConfig<string>(AppSettingKeywords.DefaultTheme);
             string folder = CommonHelper.GetFullPath(new string[]
                     {
-                    MixConstants.Folder.TemplatesFolder
+                    MixFolders.TemplatesFolder
                     , activedTheme
                     , folderType.ToString()
                     });
             var defaulTemplate = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
-                t => t.Theme.Name == activedTheme && t.FolderType == folderType.ToString()).Data?.FirstOrDefault();
+                t => t.Theme.Name == activedTheme && t.FolderType == folderType).Data?.FirstOrDefault();
             return defaulTemplate ?? new UpdateViewModel(new MixTemplate()
             {
-                ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, specificulture),
-                ThemeName = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, specificulture),
-                FileName = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplate),
-                Extension = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.TemplateExtension),
-                Content = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateContent),
-                FolderType = folderType.ToString(),
+                ThemeId = MixService.GetConfig<int>(AppSettingKeywords.ThemeId, specificulture),
+                ThemeName = MixService.GetConfig<string>(AppSettingKeywords.ThemeFolder, specificulture),
+                FileName = MixService.GetConfig<string>(AppSettingKeywords.DefaultTemplate),
+                Extension = MixService.GetConfig<string>(AppSettingKeywords.TemplateExtension),
+                Content = MixService.GetConfig<string>(AppSettingKeywords.DefaultTemplateContent),
+                FolderType = folderType,
                 FileFolder = folder.ToString()
             });
         }

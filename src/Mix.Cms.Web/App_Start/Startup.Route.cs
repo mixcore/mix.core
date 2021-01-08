@@ -8,7 +8,8 @@ using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
 using RewriteRules;
 using System.IO;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Web
 {
     public static class MixRoutesServiceCollectionExtensions
@@ -42,15 +43,15 @@ namespace Mix.Cms.Web
                     pattern: "{controller=Home}/{alias}");
                 routes.MapControllerRoute(
                    name: "page",
-                   pattern: "{controller=Page}/{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{seoName}"); routes.MapControllerRoute(
+                   pattern: "{controller=Page}/{culture=" + MixService.GetConfig<string>(AppSettingKeywords.DefaultCulture) + "}/{seoName}"); routes.MapControllerRoute(
                     name: "vue",
-                    pattern: "{controller=Vue}/{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/{seoName}");
+                    pattern: "{controller=Vue}/{culture=" + MixService.GetConfig<string>(AppSettingKeywords.DefaultCulture) + "}/{seoName}");
                 routes.MapControllerRoute(
                     name: "file",
-                    pattern: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/portal/file");
+                    pattern: "{culture=" + MixService.GetConfig<string>(AppSettingKeywords.DefaultCulture) + "}/portal/file");
                 routes.MapControllerRoute(
                     name: "post",
-                    pattern: "{culture=" + MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultCulture) + "}/post/{id}/{seoName}");
+                    pattern: "{culture=" + MixService.GetConfig<string>(AppSettingKeywords.DefaultCulture) + "}/post/{id}/{seoName}");
             });
             return app;
         }

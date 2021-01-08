@@ -1,5 +1,7 @@
-﻿using Newtonsoft.Json;
-
+﻿
+using Newtonsoft.Json;
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixInit
 {
     public class InitCmsViewModel
@@ -17,7 +19,7 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
             {
                 switch (DatabaseProvider)
                 {
-                    case MixEnums.DatabaseProvider.MSSQL:
+                    case MixDatabaseProvider.MSSQL:
                         {
                             string dbServer = !string.IsNullOrEmpty(DatabasePort) ? $"{DatabaseServer},{DatabasePort}" : DatabaseServer;
                             return IsUseLocal
@@ -25,10 +27,10 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
                                 : $"Server={dbServer};Database={DatabaseName}" +
                                 $";UID={DatabaseUser};Pwd={DatabasePassword};MultipleActiveResultSets=true;";
                         }
-                    case MixEnums.DatabaseProvider.MySQL:
+                    case MixDatabaseProvider.MySQL:
                         return $"Server={DatabaseServer};port={DatabasePort};Database={DatabaseName}" +
                       $";User={DatabaseUser};Password={DatabasePassword};";
-                    case MixEnums.DatabaseProvider.PostgreSQL:
+                    case MixDatabaseProvider.PostgreSQL:
                         return $"Host={DatabaseServer};Port={DatabasePort};Database={DatabaseName};Username={DatabaseUser};Password={DatabasePassword}";
                     default:
                         return string.Empty;
@@ -65,10 +67,10 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
         public string Lang { get; set; }
 
         [JsonProperty("isMysql")]
-        public bool IsMysql { get { return DatabaseProvider == MixEnums.DatabaseProvider.MySQL; } }
+        public bool IsMysql { get { return DatabaseProvider == MixDatabaseProvider.MySQL; } }
 
         [JsonProperty("databaseProvider")]
-        public MixEnums.DatabaseProvider DatabaseProvider { get; set; }
+        public MixDatabaseProvider DatabaseProvider { get; set; }
 
         [JsonProperty("culture")]
         public InitCulture Culture { get; set; }

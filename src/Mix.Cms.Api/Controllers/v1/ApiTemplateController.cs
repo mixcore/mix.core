@@ -15,8 +15,8 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Api.Controllers.v1
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
@@ -35,7 +35,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [HttpGet, HttpOptions]
         [Route("details/{viewType}/{themeId}/{folderType}/{id}")]
         [Route("details/{viewType}/{themeId}/{folderType}")]
-        public async Task<ActionResult<RepositoryResponse<UpdateViewModel>>> DetailsAsync(string viewType, int themeId, string folderType, int? id)
+        public async Task<ActionResult<RepositoryResponse<UpdateViewModel>>> DetailsAsync(string viewType, int themeId, MixTemplateFolderType folderType, int? id)
         {
             if (id.HasValue)
             {
@@ -50,7 +50,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 {
                     var model = new MixTemplate()
                     {
-                        Status = MixService.GetConfig<MixEnums.MixContentStatus>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
+                        Status = MixService.GetConfig<MixContentStatus>(AppSettingKeywords.DefaultContentStatus),
                         ThemeId = themeId,
                         ThemeName = getTheme.Data.Name,
                         Extension = MixService.GetConfig<string>("TemplateExtension"),
@@ -97,19 +97,19 @@ namespace Mix.Cms.Api.Controllers.v1
             [FromBody] RequestPaging request
             )
         {
+            bool isFolderType = Enum.TryParse(Request.Query["folderType"], out MixTemplateFolderType folderType);
             Expression<Func<MixTemplate, bool>> predicate = model =>
                 model.ThemeId == themeId
-                 && (string.IsNullOrWhiteSpace(request.Key)
+                 && (!isFolderType
                     ||
                     (
-                        model.FolderType == (request.Key)
+                        model.FolderType == folderType
                     ))
                 && (string.IsNullOrWhiteSpace(request.Keyword)
                     ||
                     (
                          model.FileName.Contains(request.Keyword)
                         || model.FileFolder.Contains(request.Keyword)
-                        || model.FolderType == request.Keyword
                     ));
 
             switch (request.Key)

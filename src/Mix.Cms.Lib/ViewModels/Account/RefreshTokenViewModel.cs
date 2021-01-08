@@ -3,7 +3,8 @@ using Mix.Cms.Lib.Models.Account;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.Account
 {
     public class RefreshTokenViewModel

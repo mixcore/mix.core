@@ -2,7 +2,8 @@
 using System;
 using System.Linq;
 using System.Reflection;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.Extensions
 {
     public static class ModelBuilderExtensions

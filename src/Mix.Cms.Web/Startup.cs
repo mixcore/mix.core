@@ -19,7 +19,8 @@ using Newtonsoft.Json.Converters;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Web
 {
     public partial class Startup
@@ -121,7 +122,7 @@ namespace Mix.Cms.Web
 
         }
 
-        
+
         // Mix: Check custom cms config
         private void VerifyInitData(IServiceCollection services)
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.Models.Cms
 {
     public partial class MixAttributeField
@@ -11,7 +12,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Configurations { get; set; }
         public string Regex { get; set; }
         public string Title { get; set; }
-        public MixEnums.MixDataType DataType { get; set; }
+        public MixDataType DataType { get; set; }
         public string DefaultValue { get; set; }
         public string Name { get; set; }
         public string Options { get; set; }
@@ -26,6 +27,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public DateTime? LastModified { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public int Priority { get; set; }
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
     }
 }

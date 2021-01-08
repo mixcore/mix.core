@@ -9,7 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixUrlAliases
 {
     public class UpdateViewModel
@@ -30,7 +31,7 @@ namespace Mix.Cms.Lib.ViewModels.MixUrlAliases
         public string SourceId { get; set; }
 
         [JsonProperty("type")]
-        public MixEnums.UrlAliasType Type { get; set; }
+        public MixUrlAliasType Type { get; set; }
 
         [JsonProperty("description")]
         public string Description { get; set; }
@@ -49,7 +50,7 @@ namespace Mix.Cms.Lib.ViewModels.MixUrlAliases
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #endregion Properties

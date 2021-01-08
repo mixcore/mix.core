@@ -5,6 +5,7 @@ using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json;
 using System;
+using Mix.Cms.Service.SignalR.Domain.Enums;
 
 namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
 {
@@ -54,7 +55,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
             var getUser = MixMessengerUsers.DefaultViewModel.Repository.GetSingleModel(u => u.Id == Id);
             if (getUser.IsSucceed)
             {
-                return getUser.Data.Status == Constants.Enums.OnlineStatus.Connected;
+                return getUser.Data.Status == MixOnlineStatus.Connected;
             }
             else
             {
@@ -106,9 +107,9 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
             if (getUser.IsSucceed)
             {
                 // if existed => update status = connected
-                if (getUser.Data.Status == Constants.Enums.OnlineStatus.Disconnected)
+                if (getUser.Data.Status == MixOnlineStatus.Disconnected)
                 {
-                    getUser.Data.Status = Constants.Enums.OnlineStatus.Connected;
+                    getUser.Data.Status = MixOnlineStatus.Connected;
                     var saveUser = getUser.Data.SaveModel(false, context, transaction);
                     ViewModelHelper.HandleResult(saveUser, ref result);
                 }
@@ -123,7 +124,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
                     Avatar = Avatar,
                     CreatedDate = DateTime.UtcNow,
                     Name = Name,
-                    Status = Constants.Enums.OnlineStatus.Connected
+                    Status = MixOnlineStatus.Connected
                 };
                 var saveUser = user.SaveModel(false, context, transaction);
                 ViewModelHelper.HandleResult(saveUser, ref result);
@@ -139,7 +140,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
                 var getDevice = MixMessengerUserDevices.DefaultViewModel.Repository.GetSingleModel(c => c.UserId == Device.UserId && c.DeviceId == Device.DeviceId, context, transaction);
                 if (getDevice.IsSucceed)
                 {
-                    getDevice.Data.Status = Constants.Enums.DeviceStatus.Actived;
+                    getDevice.Data.Status = MixDeviceStatus.Actived;
                     getDevice.Data.StartDate = DateTime.UtcNow;
                     getDevice.Data.ConnectionId = Device.ConnectionId;
                     var saveDevice = getDevice.Data.SaveModel(false, context, transaction);
@@ -147,7 +148,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
                 }
                 else
                 {
-                    Device.Status = (int)Constants.Enums.DeviceStatus.Actived;
+                    Device.Status = (int)MixDeviceStatus.Actived;
                     Device.StartDate = DateTime.UtcNow;
                     var dv = new MixMessengerUserDevices.DefaultViewModel(Device, context, transaction);
                     var saveDevice = dv.SaveModel(false, context, transaction);

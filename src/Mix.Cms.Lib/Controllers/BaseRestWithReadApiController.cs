@@ -16,7 +16,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.Controllers
 {
     [Produces("application/json")]
@@ -59,7 +60,7 @@ namespace Mix.Cms.Lib.Controllers
                 predicate = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
                 getData = await DefaultRepository<TDbContext, TModel, TRead>.Instance.GetModelListByAsync(
                             predicate,
-                            request.OrderBy, request.Direction, 
+                            request.OrderBy, request.Direction,
                             request.PageSize, request.PageIndex, null, null)
                     .ConfigureAwait(false);
             }

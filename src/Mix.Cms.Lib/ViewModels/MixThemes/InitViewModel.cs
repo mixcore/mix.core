@@ -14,8 +14,8 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixThemes
 {
     public class InitViewModel
@@ -51,7 +51,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -109,7 +109,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"{MixConstants.Folder.TemplatesFolder}/{Name}";
+                return $"{MixFolders.TemplatesFolder}/{Name}";
             }
         }
 
@@ -210,6 +210,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                     //TODO: Create default asset
                     foreach (var file in files)
                     {
+                        Enum.TryParse(file.FolderName, out MixTemplateFolderType folderType);
                         string content = file.Content.Replace($"/Content/Templates/{siteStructures.ThemeName}/",
                         $"/Content/Templates/{Name}/");
                         MixTemplates.UpdateViewModel template = new MixTemplates.UpdateViewModel(
@@ -223,7 +224,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                                 LastModified = DateTime.UtcNow,
                                 ThemeId = parent.Id,
                                 ThemeName = parent.Name,
-                                FolderType = file.FolderName,
+                                FolderType = folderType,
                                 ModifiedBy = CreatedBy
                             });
                         var saveResult = await template.SaveModelAsync(true, _context, _transaction);
@@ -245,13 +246,13 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             SystemConfigurationViewModel config = (await SystemConfigurationViewModel.Repository.GetSingleModelAsync(
-                    c => c.Keyword == MixConstants.ConfigurationKeyword.ThemeName && c.Specificulture == Specificulture
+                    c => c.Keyword == AppSettingKeywords.ThemeName && c.Specificulture == Specificulture
                     , _context, _transaction)).Data;
             if (config == null)
             {
                 config = new SystemConfigurationViewModel()
                 {
-                    Keyword = MixConstants.ConfigurationKeyword.ThemeName,
+                    Keyword = AppSettingKeywords.ThemeName,
                     Specificulture = Specificulture,
                     Category = "Site",
                     DataType = MixDataType.Text,
@@ -267,7 +268,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             if (saveConfigResult.IsSucceed)
             {
                 SystemConfigurationViewModel configFolder = (await SystemConfigurationViewModel.Repository.GetSingleModelAsync(
-                c => c.Keyword == MixConstants.ConfigurationKeyword.ThemeFolder && c.Specificulture == Specificulture
+                c => c.Keyword == AppSettingKeywords.ThemeFolder && c.Specificulture == Specificulture
                 , _context, _transaction)).Data;
                 configFolder.Value = Name;
 
@@ -279,12 +280,12 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             if (result.IsSucceed)
             {
                 SystemConfigurationViewModel configId = (await SystemConfigurationViewModel.Repository.GetSingleModelAsync(
-                      c => c.Keyword == MixConstants.ConfigurationKeyword.ThemeId && c.Specificulture == Specificulture, _context, _transaction)).Data;
+                      c => c.Keyword == AppSettingKeywords.ThemeId && c.Specificulture == Specificulture, _context, _transaction)).Data;
                 if (configId == null)
                 {
                     configId = new SystemConfigurationViewModel()
                     {
-                        Keyword = MixConstants.ConfigurationKeyword.ThemeId,
+                        Keyword = AppSettingKeywords.ThemeId,
                         Specificulture = Specificulture,
                         Category = "Site",
                         DataType = MixDataType.Text,
@@ -305,7 +306,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         private async Task<RepositoryResponse<bool>> CreateDefaultThemeTemplatesAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            string defaultFolder = $"{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultBlankTemplateFolder) }";
+            string defaultFolder = $"{MixService.GetConfig<string>(AppSettingKeywords.DefaultBlankTemplateFolder) }";
 
             bool copyResult = FileRepository.Instance.CopyDirectory(defaultFolder, TemplateFolder);
 
@@ -314,6 +315,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             //TODO: Create default asset
             foreach (var file in files)
             {
+                Enum.TryParse(file.FolderName, out MixTemplateFolderType folderType);
                 MixTemplates.InitViewModel template = new MixTemplates.InitViewModel(
                     new MixTemplate()
                     {
@@ -326,7 +328,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                         LastModified = DateTime.UtcNow,
                         ThemeId = Model.Id,
                         ThemeName = Model.Name,
-                        FolderType = file.FolderName,
+                        FolderType = folderType,
                         ModifiedBy = CreatedBy
                     }, _context, _transaction);
                 var saveResult = await template.SaveModelAsync(true, _context, _transaction);

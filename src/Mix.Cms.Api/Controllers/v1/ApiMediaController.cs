@@ -17,8 +17,8 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web;
-using static Mix.Cms.Lib.MixEnums;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Api.Controllers.v1
 {
     [Route("api/v1/{culture}/media")]
@@ -85,7 +85,7 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 var json = JObject.Parse(model);
                 var data = json.ToObject<UpdateViewModel>();
-                data.Status = (MixContentStatus)Enum.Parse(typeof(MixContentStatus), MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultContentStatus));
+                data.Status = (MixContentStatus)Enum.Parse(typeof(MixContentStatus), MixService.GetConfig<string>(AppSettingKeywords.DefaultContentStatus));
                 data.Specificulture = _lang;
                 data.File = file;
                 var result = await base.SaveAsync<UpdateViewModel>(data, true);
@@ -105,7 +105,7 @@ namespace Mix.Cms.Api.Controllers.v1
             ParseRequestPagingDate(request);
             Expression<Func<MixMedia, bool>> predicate = model =>
                         model.Specificulture == _lang
-                        && (string.IsNullOrEmpty(request.Status) || model.Status == Enum.Parse<MixEnums.MixContentStatus>(request.Status))
+                        && (string.IsNullOrEmpty(request.Status) || model.Status == Enum.Parse<MixContentStatus>(request.Status))
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (model.Title.Contains(request.Keyword)
                             || model.Description.Contains(request.Keyword)))

@@ -4,11 +4,12 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 {
     public class ImportViewModel
-        : ViewModelBase<MixCmsContext, MixRelatedAttributeData, ImportViewModel>
+        : ViewModelBase<MixCmsContext, MixDatabaseContentAssociation, ImportViewModel>
     {
         #region Properties
 
@@ -34,7 +35,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         public string ParentId { get; set; }
 
         [JsonProperty("parentType")]
-        public MixEnums.MixAttributeSetDataType ParentType { get; set; }
+        public MixDatabaseContentAssociationType ParentType { get; set; }
 
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
@@ -54,7 +55,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Model
 
         #region Views
@@ -72,7 +73,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         {
         }
 
-        public ImportViewModel(MixRelatedAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ImportViewModel(MixDatabaseContentAssociation model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 

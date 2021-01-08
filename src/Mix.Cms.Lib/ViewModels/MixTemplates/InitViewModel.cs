@@ -8,7 +8,8 @@ using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixTemplates
 {
     public class InitViewModel
@@ -28,7 +29,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         public string ThemeName { get; set; }
 
         [JsonProperty("folderType")]
-        public string FolderType { get; set; }
+        public MixTemplateFolderType FolderType { get; set; }
 
         [JsonProperty("fileFolder")]
         public string FileFolder { get; set; }
@@ -66,7 +67,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
 
         #endregion Models
 
@@ -81,8 +82,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             get
             {
                 return CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.FileFolder,
-                    MixConstants.Folder.TemplatesAssetFolder,
+                    MixFolders.FileFolder,
+                    MixFolders.TemplatesAssetFolder,
                     ThemeName });
             }
         }
@@ -93,7 +94,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             get
             {
                 return CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.TemplatesFolder,
+                    MixFolders.TemplatesFolder,
                     ThemeName });
             }
         }
@@ -134,12 +135,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             {
                 CreatedDateTime = DateTime.UtcNow;
             }
-            FileFolder = CommonHelper.GetFullPath(new string[]
-                {
-                    MixConstants.Folder.TemplatesFolder
-                    , ThemeName
-                    , FolderType
-                });
+            FileFolder = $"{MixFolders.TemplatesFolder}/{ThemeName}/{FolderType}";
 
             Content = Content?.Trim();
             Scripts = Scripts?.Trim();

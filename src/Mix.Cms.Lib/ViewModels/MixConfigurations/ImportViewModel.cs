@@ -13,8 +13,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixConfigurations
 {
     public class UpdateViewModel : ViewModelBase<MixCmsContext, MixConfiguration, UpdateViewModel>
@@ -56,7 +56,7 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views

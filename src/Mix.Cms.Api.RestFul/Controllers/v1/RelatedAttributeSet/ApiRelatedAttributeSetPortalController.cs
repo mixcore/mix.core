@@ -11,33 +11,30 @@ using Mix.Domain.Core.ViewModels;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/related-attribute-set/portal")]
     public class ApiRelatedAttributeSetPortalController :
-        BaseRestApiController<MixCmsContext, MixRelatedAttributeSet, UpdateViewModel, ReadMvcViewModel, DeleteViewModel>
+        BaseRestApiController<MixCmsContext, MixDatabaseAssociation, UpdateViewModel, ReadMvcViewModel, DeleteViewModel>
     {
         // GET: api/v1/rest/{culture}/related-attribute-set
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> Get()
         {
-            bool isStatus = Enum.TryParse(Request.Query["status"], out MixEnums.MixContentStatus status);
+            bool isStatus = Enum.TryParse(Request.Query["status"], out MixContentStatus status);
             bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
             string keyword = Request.Query["keyword"];
-            string parentType = Request.Query["parentType"];
             string parentId = Request.Query["parentId"];
-            Expression<Func<MixRelatedAttributeSet, bool>> predicate = model =>
+            Expression<Func<MixDatabaseAssociation, bool>> predicate = model =>
                 (!isStatus || model.Status == status)
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
                 && (string.IsNullOrEmpty(parentId)
                  || model.ParentId.Equals(parentId)
-                 )
-                && (string.IsNullOrEmpty(parentType)
-                 || model.ParentType.Equals(parentType)
                  );
             var getData = await base.GetListAsync<ReadMvcViewModel>(predicate);
             if (getData.IsSucceed)

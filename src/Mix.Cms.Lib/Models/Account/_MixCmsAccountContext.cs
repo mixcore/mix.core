@@ -4,10 +4,11 @@
 
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Services;
 using Mix.Identity.Data;
 using MySqlConnector;
-
+using Mix.Cms.Lib.Enums;
 namespace Mix.Cms.Lib.Models.Account
 {
     public partial class MixCmsAccountContext : DbContext
@@ -40,13 +41,13 @@ namespace Mix.Cms.Lib.Models.Account
             string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {
-                var provider = System.Enum.Parse<MixEnums.DatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
+                var provider = System.Enum.Parse<MixDatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
                 switch (provider)
                 {
-                    case MixEnums.DatabaseProvider.MSSQL:
+                    case MixDatabaseProvider.MSSQL:
                         optionsBuilder.UseSqlServer(cnn);
                         break;
-                    case MixEnums.DatabaseProvider.MySQL:
+                    case MixDatabaseProvider.MySQL:
                         optionsBuilder.UseMySql(cnn, ServerVersion.AutoDetect(cnn));
                         break;
                     default:
@@ -58,13 +59,13 @@ namespace Mix.Cms.Lib.Models.Account
         public override void Dispose()
         {
 
-            var provider = System.Enum.Parse<MixEnums.DatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
+            var provider = System.Enum.Parse<MixDatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
             switch (provider)
             {
-                case MixEnums.DatabaseProvider.MSSQL:
+                case MixDatabaseProvider.MSSQL:
                     SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
                     break;
-                case MixEnums.DatabaseProvider.MySQL:
+                case MixDatabaseProvider.MySQL:
                     MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
                     break;
             }

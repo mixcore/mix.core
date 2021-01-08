@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
+using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
@@ -19,7 +22,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
 
 namespace Mix.Cms.Lib
 {
@@ -36,15 +38,19 @@ namespace Mix.Cms.Lib
 
         public static string GetAssetFolder(string culture)
         {
-            return $"{MixService.GetConfig<string>("Domain")}/{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, culture)}/assets";
+            return $"{MixService.GetConfig<string>(AppSettingKeywords.Domain)}" +
+                $"/{MixFolders.FileFolder}/{MixFolders.TemplatesAssetFolder}" +
+                $"/{MixService.GetConfig<string>(AppSettingKeywords.ThemeFolder, culture)}" +
+                $"/assets";
         }
         public static string GetTemplateFolder(string culture)
         {
-            return $"/{MixConstants.Folder.TemplatesFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, culture)}";
+            return $"/{MixFolders.TemplatesFolder}" +
+                $"/{MixService.GetConfig<string>(AppSettingKeywords.ThemeFolder, culture)}";
         }
-        public static T Property<T>(JObject obj,  string fieldName)
+        public static T Property<T>(JObject obj, string fieldName)
         {
-            if (obj != null  && obj.ContainsKey(fieldName)  && obj[fieldName] != null)
+            if (obj != null && obj.ContainsKey(fieldName) && obj[fieldName] != null)
             {
                 return obj.Value<T>(fieldName);
             }
@@ -53,35 +59,6 @@ namespace Mix.Cms.Lib
                 return default(T);
             }
         }
-        //public static List<ViewModels.MixPages.ReadListItemViewModel> GetPage(IUrlHelper Url, string culture, MixEnums.CatePosition position, string activePath = "")
-        //{
-        //    var getTopCates = ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelListBy
-        //    (c => c.Specificulture == culture && c.MixPagePosition.Any(
-        //      p => p.PositionId == (int)position)
-        //    );
-        //    var cates = getTopCates.Data ?? new List<ViewModels.MixPages.ReadListItemViewModel>();
-        //    activePath = activePath.ToLower();
-        //    foreach (var cate in cates)
-        //    {
-        //        switch (cate.Type)
-        //        {
-        //            case MixPageType.Home:
-        //            case MixPageType.ListPost:
-        //            default:
-        //                cate.DetailsUrl = Url.RouteUrl("Alias", new { culture, seoName = cate.SeoName });
-        //                break;
-        //        }
-        //        cate.IsActived = (cate.DetailsUrl == activePath
-        //            || (cate.Type == MixPageType.Home && activePath == string.Format("/{0}/home", culture)));
-        //        cate.Childs.ForEach((Action<ViewModels.MixPagePages.ReadViewModel>)(c =>
-        //        {
-        //            c.IsActived = (
-        //            c.Page.DetailsUrl == activePath);
-        //            cate.IsActived = cate.IsActived || c.IsActived;
-        //        }));
-        //    }
-        //    return cates;
-        //}
 
         public static List<ViewModels.MixPages.ReadListItemViewModel> GetCategory(IUrlHelper Url, string culture, MixPageType cateType, string activePath = "")
         {
@@ -258,8 +235,9 @@ namespace Mix.Cms.Lib
             {
                 tmp[1] = tmp[1].Substring(0, tmp[1].IndexOf('.'));
             }
+            Enum.TryParse(tmp[0], out MixTemplateFolderType folderType);
             var getData = await ViewModels.MixTemplates.ReadViewModel.Repository.GetFirstModelAsync(
-                m => m.ThemeName == themeName && m.FolderType == tmp[0] && m.FileName == tmp[1]);
+                m => m.ThemeName == themeName && m.FolderType == folderType && m.FileName == tmp[1]);
 
             return getData.Data;
         }
@@ -267,24 +245,11 @@ namespace Mix.Cms.Lib
         public static async System.Threading.Tasks.Task<ViewModels.MixAttributeSetDatas.Navigation> GetNavigation(
             string name, string culture, IUrlHelper Url)
         {
-            var navs = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.NavigationViewModel>(culture, MixConstants.AttributeSetName.NAVIGATION, "equal", "name", name);
+            var navs = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<NavigationViewModel>(
+                    culture, MixDatabaseNames.NAVIGATION, "equal", "name", name);
             var nav = navs.Data?.FirstOrDefault()?.Nav;
             string activePath = Url.ActionContext.HttpContext.Request.Path;
-            //string controller = Url.ActionContext.ActionDescriptor.RouteValues["controller"];
-            //switch (controller)
-            //{
-            //    case "Page":
-            //    case "Post":
-            //        string seoName = Url.ActionContext.RouteData.Values["seoName"].ToString();
-            //        string id = Url.ActionContext.RouteData.Values["id"].ToString();
-            //        activePath = $"/{culture}/post/{id}/{seoName}";
-            //        break;
 
-            //    case "Home":
-            //        string alias = Url.ActionContext.HttpContext.Request.Query["alias"].ToString();
-            //        activePath = $"/{culture}/{alias}";
-            //        break;
-            //}
             if (nav != null)
             {
                 foreach (var cate in nav.MenuItems)
@@ -314,8 +279,8 @@ namespace Mix.Cms.Lib
         }
 
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetListPostByAddictionalField<TView>(
-            string fieldName, object fieldValue, string culture, MixEnums.MixDataType dataType
-            , MixEnums.CompareType filterType = MixEnums.CompareType.Eq
+            string fieldName, object fieldValue, string culture, MixDataType dataType
+            , MixExpressionRule filterType = MixExpressionRule.Eq
             , string orderByPropertyName = null, Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Asc, int? pageSize = null, int? pageIndex = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
@@ -333,7 +298,7 @@ namespace Mix.Cms.Lib
                     }
                 };
                 // Get Value Predicate By Type
-                Expression<Func<MixAttributeSetValue, bool>> valPredicate = m => m.AttributeSetName == MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST
+                Expression<Func<MixAttributeSetValue, bool>> valPredicate = m => m.AttributeSetName == MixDatabaseNames.ADDITIONAL_FIELD_POST
                    && m.AttributeFieldName == fieldName;
 
                 var pre = GetValuePredicate(fieldValue.ToString(), filterType, dataType);
@@ -345,7 +310,7 @@ namespace Mix.Cms.Lib
                 var query = context.MixAttributeSetValue.Where(valPredicate).Select(m => m.DataId).Distinct();
                 var dataIds = query.ToList();
                 var relatedQuery = context.MixRelatedAttributeData.Where(
-                         m => m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString() && m.Specificulture == culture
+                         m => m.ParentType == MixDatabaseContentAssociationType.DataPost && m.Specificulture == culture
                             && dataIds.Any(d => d == m.DataId));
                 var postIds = relatedQuery.Select(m => int.Parse(m.ParentId)).Distinct().AsEnumerable().ToList();
                 result = await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(
@@ -371,57 +336,57 @@ namespace Mix.Cms.Lib
         }
 
         private static Expression<Func<MixAttributeSetValue, bool>> GetValuePredicate(string fieldValue
-            , MixEnums.CompareType filterType, MixEnums.MixDataType dataType)
+            , MixExpressionRule filterType, MixDataType dataType)
         {
             Expression<Func<MixAttributeSetValue, bool>> valPredicate = null;
             switch (dataType)
             {
-                case MixEnums.MixDataType.Date:
-                case MixEnums.MixDataType.Time:
+                case MixDataType.Date:
+                case MixDataType.Time:
                     if (DateTime.TryParse(fieldValue, out DateTime dtValue))
                     {
                         valPredicate = FilterObjectSet<MixAttributeSetValue, DateTime>("DateTimeValue", dtValue, filterType);
                     }
                     break;
-                case MixEnums.MixDataType.Double:
+                case MixDataType.Double:
                     if (double.TryParse(fieldValue, out double dbValue))
                     {
                         valPredicate = FilterObjectSet<MixAttributeSetValue, double>("DoubleValue", dbValue, filterType);
                     }
                     break;
-                case MixEnums.MixDataType.Boolean:
+                case MixDataType.Boolean:
                     if (bool.TryParse(fieldValue, out bool boolValue))
                     {
                         valPredicate = FilterObjectSet<MixAttributeSetValue, bool>("BooleanValue", boolValue, filterType);
                     }
                     break;
-                case MixEnums.MixDataType.Integer:
+                case MixDataType.Integer:
                     if (int.TryParse(fieldValue, out int intValue))
                     {
                         valPredicate = FilterObjectSet<MixAttributeSetValue, int>("IntegerValue", intValue, filterType);
                     }
                     break;
-                case MixEnums.MixDataType.Reference:
+                case MixDataType.Reference:
                     break;
-                case MixEnums.MixDataType.Duration:
-                case MixEnums.MixDataType.Custom:
-                case MixEnums.MixDataType.DateTime:
-                case MixEnums.MixDataType.PhoneNumber:
-                case MixEnums.MixDataType.Text:
-                case MixEnums.MixDataType.Html:
-                case MixEnums.MixDataType.MultilineText:
-                case MixEnums.MixDataType.EmailAddress:
-                case MixEnums.MixDataType.Password:
-                case MixEnums.MixDataType.Url:
-                case MixEnums.MixDataType.ImageUrl:
-                case MixEnums.MixDataType.CreditCard:
-                case MixEnums.MixDataType.PostalCode:
-                case MixEnums.MixDataType.Upload:
-                case MixEnums.MixDataType.Color:
-                case MixEnums.MixDataType.Icon:
-                case MixEnums.MixDataType.VideoYoutube:
-                case MixEnums.MixDataType.TuiEditor:
-                case MixEnums.MixDataType.QRCode:
+                case MixDataType.Duration:
+                case MixDataType.Custom:
+                case MixDataType.DateTime:
+                case MixDataType.PhoneNumber:
+                case MixDataType.Text:
+                case MixDataType.Html:
+                case MixDataType.MultilineText:
+                case MixDataType.EmailAddress:
+                case MixDataType.Password:
+                case MixDataType.Url:
+                case MixDataType.ImageUrl:
+                case MixDataType.CreditCard:
+                case MixDataType.PostalCode:
+                case MixDataType.Upload:
+                case MixDataType.Color:
+                case MixDataType.Icon:
+                case MixDataType.VideoYoutube:
+                case MixDataType.TuiEditor:
+                case MixDataType.QRCode:
                 default:
                     valPredicate = FilterObjectSet<MixAttributeSetValue, string>("StringValue", fieldValue, filterType);
                     break;
@@ -430,7 +395,7 @@ namespace Mix.Cms.Lib
             return valPredicate;
         }
 
-        public static Expression<Func<TModel, bool>> FilterObjectSet<TModel, T>(string propName, T data2, MixEnums.CompareType filterType)
+        public static Expression<Func<TModel, bool>> FilterObjectSet<TModel, T>(string propName, T data2, MixExpressionRule filterType)
         {
             Type type = typeof(TModel);
             var par = Expression.Parameter(type, "model");
@@ -461,27 +426,27 @@ namespace Mix.Cms.Lib
             BinaryExpression eq = null;
             switch (filterType)
             {
-                case MixEnums.CompareType.Eq:
+                case MixExpressionRule.Eq:
                     eq = Expression.Equal(fieldPropertyExpression,
                                      Expression.Constant(data2, fieldPropertyType));
                     break;
-                case MixEnums.CompareType.Lt:
+                case MixExpressionRule.Lt:
                     eq = Expression.LessThan(fieldPropertyExpression,
                                      Expression.Constant(data2, fieldPropertyType));
                     break;
-                case MixEnums.CompareType.Gt:
+                case MixExpressionRule.Gt:
                     eq = Expression.GreaterThan(fieldPropertyExpression,
                                      Expression.Constant(data2, fieldPropertyType));
                     break;
-                case MixEnums.CompareType.Lte:
+                case MixExpressionRule.Lte:
                     eq = Expression.LessThanOrEqual(fieldPropertyExpression,
                                      Expression.Constant(data2, fieldPropertyType));
                     break;
-                case MixEnums.CompareType.Gte:
+                case MixExpressionRule.Gte:
                     eq = Expression.GreaterThanOrEqual(fieldPropertyExpression,
                                      Expression.Constant(data2, fieldPropertyType));
                     break;
-                case MixEnums.CompareType.In:
+                case MixExpressionRule.Ct:
                     var method = typeof(string).GetMethod("Contains");
                     var call = Expression.Call(par, method, Expression.Constant(data2, typeof(string)));
                     return Expression.Lambda<Func<TModel, bool>>(call, par);
@@ -494,7 +459,7 @@ namespace Mix.Cms.Lib
         public async static Task<RepositoryResponse<PaginationModel<TView>>> GetPostlistByMeta<TView>(
 
             HttpContext context
-            , string culture, string type = MixConstants.AttributeSetName.SYSTEM_TAG
+            , string culture, string type = MixDatabaseNames.SYSTEM_TAG
             , string orderByPropertyName = "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Desc
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
@@ -532,7 +497,7 @@ namespace Mix.Cms.Lib
 
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetAttributeDataByParent<TView>(
             string culture, string attributeSetName,
-            string parentId, MixEnums.MixAttributeSetDataType parentType,
+            string parentId, MixDatabaseContentAssociationType parentType,
             string orderBy = "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Desc,
             int? pageSize = null, int? pageIndex = 0,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -542,7 +507,7 @@ namespace Mix.Cms.Lib
                 culture, attributeSetName,
                 parentId, parentType, orderBy, direction, pageSize, pageIndex, _context, _transaction);
         }
-        
+
         public static async Task<RepositoryResponse<PaginationModel<Lib.ViewModels.MixPagePosts.ReadViewModel>>> GetPostListByPageId(
             HttpContext context
             , int pageId
@@ -557,12 +522,12 @@ namespace Mix.Cms.Lib
             int.TryParse(context.Request.Query["pageSize"], out int pageSize);
             page = (page > 0) ? page : 1;
             var result = await ViewModels.MixPosts.Helper.GetPostListByPageId<Lib.ViewModels.MixPagePosts.ReadViewModel>(
-                pageId, keyword, culture, 
-                orderBy, direction, pageSize, page -  1, _context, _transaction);
+                pageId, keyword, culture,
+                orderBy, direction, pageSize, page - 1, _context, _transaction);
             result.Data.Items.ForEach(m => m.LoadPost(_context, _transaction));
             return result;
         }
-        
+
         public static async Task<RepositoryResponse<PaginationModel<Lib.ViewModels.MixAttributeSetDatas.ReadMvcViewModel>>> GetAttributeDataListBySet(
             HttpContext context
             , string attributeSetName
@@ -570,7 +535,7 @@ namespace Mix.Cms.Lib
             , Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Desc
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null
             )
-        {            
+        {
             var result = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.ReadMvcViewModel>(
                     context.Request, culture, attributeSetName);
             return result;

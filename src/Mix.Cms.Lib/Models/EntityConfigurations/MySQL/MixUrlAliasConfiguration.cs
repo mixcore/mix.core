@@ -2,7 +2,8 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Cms.Lib.Models.Cms;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.Models.EntityConfigurations.MySQL
 {
     public class MixUrlAliasConfiguration : IEntityTypeConfiguration<MixUrlAlias>
@@ -50,9 +51,15 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MySQL
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
+            entity.Property(e => e.Type)
+                .HasConversion(new EnumToStringConverter<MixUrlAliasType>())
+                .HasColumnType("varchar(50)")
+                .HasCharSet("utf8")
+                .HasCollation("utf8_unicode_ci");
+
             entity.Property(e => e.Status)
                 .IsRequired()
-                .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+                .HasConversion(new EnumToStringConverter<MixContentStatus>())
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");

@@ -8,8 +8,8 @@ using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixModules
 {
     public class ReadListItemViewModel : ViewModelBase<MixCmsContext, MixModule, ReadListItemViewModel>
@@ -70,7 +70,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public int Priority { get; set; }
         [JsonProperty("status")]
         [JsonConverter(typeof(StringEnumConverter))]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         [JsonProperty("imageUrl")]

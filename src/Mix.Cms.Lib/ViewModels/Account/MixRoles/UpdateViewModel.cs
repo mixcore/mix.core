@@ -11,8 +11,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
 {
     public class UpdateViewModel : ViewModelBase<MixCmsAccountContext, AspNetRoles, UpdateViewModel>

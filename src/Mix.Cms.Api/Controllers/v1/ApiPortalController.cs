@@ -23,8 +23,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using static Mix.Cms.Lib.MixEnums;
-
+using Mix.Common.Helper;
+using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
@@ -64,16 +65,16 @@ namespace Mix.Cms.Api.Controllers.v1
             var culture = cultures.FirstOrDefault(c => c.Specificulture == _lang);
             GlobalSettingsViewModel settings = new GlobalSettingsViewModel()
             {
-                Domain = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.Domain),
+                Domain = MixService.GetConfig<string>(AppSettingKeywords.Domain),
                 Lang = _lang,
-                PortalThemeSettings = MixService.GetConfig<JObject>(MixConstants.ConfigurationKeyword.PortalThemeSettings),
-                ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, _lang),
+                PortalThemeSettings = MixService.GetConfig<JObject>(AppSettingKeywords.PortalThemeSettings),
+                ThemeId = MixService.GetConfig<int>(AppSettingKeywords.ThemeId, _lang),
                 Cultures = cultures,
-                PageTypes = EnumToObject(typeof(MixPageType)),
-                ModuleTypes = EnumToObject(typeof(MixModuleType)),
-                AttributeSetTypes = EnumToObject(typeof(MixAttributeSetDataType)),
-                DataTypes = EnumToObject(typeof(MixDataType)),
-                Statuses = EnumToObject(typeof(MixContentStatus)),
+                PageTypes = CommonHelper.ParseEnumToObject(typeof(MixPageType)),
+                ModuleTypes = CommonHelper.ParseEnumToObject(typeof(MixModuleType)),
+                AttributeSetTypes = CommonHelper.ParseEnumToObject(typeof(MixDatabaseType)),
+                DataTypes = CommonHelper.ParseEnumToObject(typeof(MixDataType)),
+                Statuses = CommonHelper.ParseEnumToObject(typeof(MixContentStatus)),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
             };
             settings.LangIcon = culture?.Icon ?? MixService.GetConfig<string>("Language");
@@ -101,7 +102,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             try
             {
-                var cultures = FileRepository.Instance.GetFile(name, "data", true, "[]");
+                var cultures = FileRepository.Instance.GetFile(name, MixFolders.JsonDataFolder, true, "[]");
                 var obj = JObject.Parse(cultures.Content);
                 return new RepositoryResponse<JArray>()
                 {
@@ -124,7 +125,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("json-data/{name}")]
         public RepositoryResponse<JObject> loadJsonData(string name)
         {
-            var cultures = FileRepository.Instance.GetFile(name, "data", true, "{}");
+            var cultures = FileRepository.Instance.GetFile(name, MixFolders.JsonDataFolder, true, "{}");
             var obj = JObject.Parse(cultures.Content);
             return new RepositoryResponse<JObject>()
             {
@@ -159,19 +160,19 @@ namespace Mix.Cms.Api.Controllers.v1
             // Get Settings
             GlobalSettingsViewModel configurations = new GlobalSettingsViewModel()
             {
-                Domain = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.Domain),
+                Domain = MixService.GetConfig<string>(AppSettingKeywords.Domain),
                 Lang = _lang,
-                PortalThemeSettings = MixService.GetConfig<JObject>(MixConstants.ConfigurationKeyword.PortalThemeSettings),
-                ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, _lang),
-                ApiEncryptKey = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ApiEncryptKey),
-                ApiEncryptIV = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ApiEncryptIV),
-                IsEncryptApi = MixService.GetConfig<bool>(MixConstants.ConfigurationKeyword.IsEncryptApi),
+                PortalThemeSettings = MixService.GetConfig<JObject>(AppSettingKeywords.PortalThemeSettings),
+                ThemeId = MixService.GetConfig<int>(AppSettingKeywords.ThemeId, _lang),
+                ApiEncryptKey = MixService.GetConfig<string>(AppSettingKeywords.ApiEncryptKey),
+                ApiEncryptIV = MixService.GetConfig<string>(AppSettingKeywords.ApiEncryptIV),
+                IsEncryptApi = MixService.GetConfig<bool>(AppSettingKeywords.IsEncryptApi),
                 Cultures = cultures,
-                PageTypes = EnumToObject(typeof(MixPageType)),
-                ModuleTypes = EnumToObject(typeof(MixModuleType)),
-                AttributeSetTypes = EnumToObject(typeof(MixAttributeSetDataType)),
-                DataTypes = EnumToObject(typeof(MixDataType)),
-                Statuses = EnumToObject(typeof(MixContentStatus)),
+                PageTypes = CommonHelper.ParseEnumToObject(typeof(MixPageType)),
+                ModuleTypes = CommonHelper.ParseEnumToObject(typeof(MixModuleType)),
+                AttributeSetTypes = CommonHelper.ParseEnumToObject(typeof(MixDatabaseType)),
+                DataTypes = CommonHelper.ParseEnumToObject(typeof(MixDataType)),
+                Statuses = CommonHelper.ParseEnumToObject(typeof(MixContentStatus)),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
             };
 
@@ -500,28 +501,16 @@ namespace Mix.Cms.Api.Controllers.v1
                     case "Language":
                         var arrLanguage = obj["data"].ToObject<List<MixLanguage>>();
                         result = await Lib.ViewModels.MixLanguages.UpdateViewModel.ImportLanguages(arrLanguage, _lang);
-                        if (result.IsSucceed)
-                        {
-                            base.RemoveCache();
-                        }
                         return result;
 
                     case "Configuration":
                         var arrConfiguration = obj["data"].ToObject<List<MixConfiguration>>();
                         result = await Lib.ViewModels.MixConfigurations.UpdateViewModel.ImportConfigurations(arrConfiguration, _lang);
-                        if (result.IsSucceed)
-                        {
-                            base.RemoveCache();
-                        }
                         return result;
 
                     case "Module":
                         var arrModule = obj["data"].ToObject<List<MixModule>>();
                         result = await Lib.ViewModels.MixModules.Helper.Import(arrModule, _lang);
-                        if (result.IsSucceed)
-                        {
-                            base.RemoveCache();
-                        }
                         return result;
 
                     default:
@@ -543,19 +532,19 @@ namespace Mix.Cms.Api.Controllers.v1
             // Get Settings
             GlobalSettingsViewModel configurations = new GlobalSettingsViewModel()
             {
-                Domain = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.Domain),
+                Domain = MixService.GetConfig<string>(AppSettingKeywords.Domain),
                 Lang = _lang,
-                PortalThemeSettings = MixService.GetConfig<JObject>(MixConstants.ConfigurationKeyword.PortalThemeSettings),
-                ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, _lang),
-                ApiEncryptKey = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ApiEncryptKey),
-                ApiEncryptIV = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ApiEncryptIV),
-                IsEncryptApi = MixService.GetConfig<bool>(MixConstants.ConfigurationKeyword.IsEncryptApi),
+                PortalThemeSettings = MixService.GetConfig<JObject>(AppSettingKeywords.PortalThemeSettings),
+                ThemeId = MixService.GetConfig<int>(AppSettingKeywords.ThemeId, _lang),
+                ApiEncryptKey = MixService.GetConfig<string>(AppSettingKeywords.ApiEncryptKey),
+                ApiEncryptIV = MixService.GetConfig<string>(AppSettingKeywords.ApiEncryptIV),
+                IsEncryptApi = MixService.GetConfig<bool>(AppSettingKeywords.IsEncryptApi),
                 Cultures = cultures,
-                PageTypes = EnumToObject(typeof(MixPageType)),
-                ModuleTypes = EnumToObject(typeof(MixModuleType)),
-                AttributeSetTypes = EnumToObject(typeof(MixAttributeSetDataType)),
-                DataTypes = EnumToObject(typeof(MixDataType)),
-                Statuses = EnumToObject(typeof(MixContentStatus)),
+                PageTypes = CommonHelper.ParseEnumToObject(typeof(MixPageType)),
+                ModuleTypes = CommonHelper.ParseEnumToObject(typeof(MixModuleType)),
+                AttributeSetTypes = CommonHelper.ParseEnumToObject(typeof(MixDatabaseType)),
+                DataTypes = CommonHelper.ParseEnumToObject(typeof(MixDataType)),
+                Statuses = CommonHelper.ParseEnumToObject(typeof(MixContentStatus)),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
             };
 

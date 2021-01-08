@@ -17,7 +17,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.Controllers
 {
     [Produces("application/json")]
@@ -83,7 +84,7 @@ namespace Mix.Cms.Lib.Controllers
                 return NoContent();
             }
         }
-        
+
         // GET: api/v1/rest/{culture}/attribute-set-data/5
         [HttpGet("duplicate/{id}")]
         public async Task<ActionResult<TView>> Duplicate(string id)
@@ -91,7 +92,7 @@ namespace Mix.Cms.Lib.Controllers
             var getData = await GetSingleAsync(id);
             if (getData.IsSucceed)
             {
-                var data = getData.Data;                
+                var data = getData.Data;
                 var idProperty = ReflectionHelper.GetPropertyType(data.GetType(), "Id");
                 switch (idProperty.Name.ToLower())
                 {
@@ -102,7 +103,7 @@ namespace Mix.Cms.Lib.Controllers
                         ReflectionHelper.SetPropertyValue(data, new JProperty("id", default));
                         break;
                 }
-                
+
                 var saveResult = await data.SaveModelAsync(true);
                 if (saveResult.IsSucceed)
                 {
@@ -264,7 +265,7 @@ namespace Mix.Cms.Lib.Controllers
                 idPre = idPre != null ? ReflectionHelper.CombineExpression(idPre, temp, Heart.Enums.MixHeartEnums.ExpressionMethod.Or)
                     : temp;
             }
-            if (idPre !=  null)
+            if (idPre != null)
             {
                 predicate = ReflectionHelper.CombineExpression(predicate, idPre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
 
@@ -272,10 +273,10 @@ namespace Mix.Cms.Lib.Controllers
                 {
                     case "Delete":
                         return Ok(JObject.FromObject(await DeleteListAsync(predicate, true)));
-                    
+
                     case "Publish":
                         return Ok(JObject.FromObject(await PublishListAsync(predicate)));
-                    
+
                     case "Export":
                         return Ok(JObject.FromObject(await ExportListAsync(predicate)));
 
@@ -287,7 +288,7 @@ namespace Mix.Cms.Lib.Controllers
             {
                 return BadRequest();
             }
-            
+
         }
 
         #endregion
@@ -333,7 +334,7 @@ namespace Mix.Cms.Lib.Controllers
             var data = await GetListAsync<TView>(predicate);
             foreach (var item in data.Data.Items)
             {
-                ReflectionHelper.SetPropertyValue(item, new JProperty("Status", MixEnums.MixContentStatus.Published));
+                ReflectionHelper.SetPropertyValue(item, new JProperty("Status", MixContentStatus.Published));
             }
             return await SaveListAsync(data.Data.Items, false);
         }
@@ -456,10 +457,10 @@ namespace Mix.Cms.Lib.Controllers
                 {
                     jData.Add(JObject.FromObject(item));
                 }
-                
+
                 var result = Lib.ViewModels.MixAttributeSetDatas.Helper.ExportAttributeToExcel(
                         jData, string.Empty, exportPath, $"{type}", null);
-                
+
                 return result;
             }
             else
@@ -470,7 +471,7 @@ namespace Mix.Cms.Lib.Controllers
                 };
             }
         }
-        
+
         protected async Task<RepositoryResponse<PaginationModel<T>>> GetListAsync<T>(Expression<Func<TModel, bool>> predicate = null)
             where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {

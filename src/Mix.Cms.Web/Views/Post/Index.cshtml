@@ -1,6 +1,6 @@
 ﻿@model Mix.Cms.Lib.ViewModels.MixPosts.ReadMvcViewModel
 @{
-    string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, ViewBag.culture);
+    string master = MixService.GetConfig<string>(AppSettingKeywords.ThemeName, ViewBag.culture);
     string templateFolder = MixCmsHelper.GetTemplateFolder(ViewBag.culture);
     string layout = "Masters/_Layout.cshtml";
     var masterTemplate = await MixCmsHelper.GetTemplateByPath(master, layout);

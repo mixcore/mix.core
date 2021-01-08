@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.Models.Cms
 {
     public partial class MixCache
@@ -13,6 +14,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public DateTime? LastModified { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public int Priority { get; set; }
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
     }
 }

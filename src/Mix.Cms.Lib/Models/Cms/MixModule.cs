@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.Models.Cms
 {
     public partial class MixModule
@@ -24,7 +25,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string FormTemplate { get; set; }
         public string EdmTemplate { get; set; }
         public string Title { get; set; }
-        public int Type { get; set; }
+        public MixModuleType Type { get; set; }
         public string PostType { get; set; }
         public int? PageSize { get; set; }
         public string CreatedBy { get; set; }
@@ -32,7 +33,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string ModifiedBy { get; set; }
         public DateTime? LastModified { get; set; }
         public int Priority { get; set; }
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
 
         public virtual MixCulture SpecificultureNavigation { get; set; }
         public virtual ICollection<MixModuleData> MixModuleData { get; set; }

@@ -12,8 +12,8 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Web.Controllers
 {
     public class BaseController : Controller
@@ -137,14 +137,14 @@ namespace Mix.Cms.Web.Controllers
                 {
                     switch (getAlias.Data.Type)
                     {
-                        case UrlAliasType.Page:
+                        case MixUrlAliasType.Page:
                             return await Page(int.Parse(getAlias.Data.SourceId));
 
-                        case UrlAliasType.Post:
+                        case MixUrlAliasType.Post:
                             return await Post(int.Parse(getAlias.Data.SourceId));
 
-                        case UrlAliasType.Module: // TODO: Create view for module
-                        case UrlAliasType.ModuleData: // TODO: Create view for module data
+                        case MixUrlAliasType.Module: // TODO: Create view for module
+                        case MixUrlAliasType.ModuleData: // TODO: Create view for module data
                         default:
                             return await Page(0);
                     }
@@ -265,7 +265,7 @@ namespace Mix.Cms.Web.Controllers
             && p.Status == MixContentStatus.Published
             && p.Specificulture == culture;
 
-            RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel> getPost = 
+            RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel> getPost =
                 await Lib.ViewModels.MixPosts.ReadMvcViewModel.Repository.GetFirstModelAsync(predicate);
 
             if (getPost.IsSucceed)
@@ -287,7 +287,7 @@ namespace Mix.Cms.Web.Controllers
         {
             var getData = await Lib.ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<Lib.ViewModels.MixAttributeSetDatas.ReadMvcViewModel>(
                 culture, attributeSetName, "equal", "seo_url", seoName);
-            
+
             if (getData.IsSucceed && getData.Data.Count > 0)
             {
                 getData.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");

@@ -6,7 +6,8 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixTemplates
 {
     public class ReadListItemViewModel
@@ -26,7 +27,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         public string ThemeName { get; set; }
 
         [JsonProperty("folderType")]
-        public string FolderType { get; set; }
+        public MixTemplateFolderType FolderType { get; set; }
 
         [JsonProperty("fileFolder")]
         public string FileFolder { get; set; }
@@ -63,7 +64,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
 
         #endregion Models
 
@@ -76,8 +77,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             get
             {
                 return CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.FileFolder,
-                    MixConstants.Folder.TemplatesAssetFolder,
+                    MixFolders.FileFolder,
+                    MixFolders.TemplatesAssetFolder,
                     ThemeName });
             }
         }
@@ -88,7 +89,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[] { MixConstants.Folder.TemplatesFolder, ThemeName });
+                return CommonHelper.GetFullPath(new string[] { MixFolders.TemplatesFolder, ThemeName });
             }
         }
 
@@ -141,15 +142,16 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             else
             {
                 int activeThemeId = MixService.GetConfig<int>(
-                    MixConstants.ConfigurationKeyword.ThemeId, culture);
+                    AppSettingKeywords.ThemeId, culture);
                 string name = temp[1].Split('.')[0];
-                result = Repository.GetSingleModel(t => t.FolderType == temp[0] && t.FileName == name && t.ThemeId == activeThemeId
+                Enum.TryParse(temp[0], out MixTemplateFolderType folderType);
+                result = Repository.GetSingleModel(t => t.FolderType == folderType && t.FileName == name && t.ThemeId == activeThemeId
                     , _context, _transaction);
             }
             return result;
         }
 
-        public static ReadListItemViewModel GetTemplateByPath(int themeId, string path, string type, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public static ReadListItemViewModel GetTemplateByPath(int themeId, string path, MixTemplateFolderType type, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             string templateName = path?.Split('/')[1];
             var getView = ReadListItemViewModel.Repository.GetSingleModel(t =>
@@ -158,12 +160,12 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             return getView.Data;
         }
 
-        public static ReadListItemViewModel GetDefault(string activedTemplate, string folderType, string folder, string specificulture)
+        public static ReadListItemViewModel GetDefault(string activedTemplate, MixTemplateFolderType folderType, string folder, string specificulture)
         {
             return new ReadListItemViewModel(new MixTemplate()
             {
                 Extension = MixService.GetConfig<string>("TemplateExtension"),
-                ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, specificulture),
+                ThemeId = MixService.GetConfig<int>(AppSettingKeywords.ThemeId, specificulture),
                 ThemeName = activedTemplate,
                 FolderType = folderType,
                 FileFolder = folder,

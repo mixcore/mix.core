@@ -7,7 +7,8 @@ using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
     public class DeleteViewModel
@@ -31,7 +32,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #endregion Properties
@@ -105,7 +106,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
             if (result.IsSucceed)
             {
-                var navs = await _context.MixUrlAlias.Where(n => n.SourceId == Id.ToString() && n.Type == (int)MixEnums.UrlAliasType.Post && n.Specificulture == Specificulture).ToListAsync();
+                var navs = await _context.MixUrlAlias.Where(n => n.SourceId == Id.ToString() 
+                    && n.Type == MixUrlAliasType.Post && n.Specificulture == Specificulture).ToListAsync();
                 foreach (var item in navs)
                 {
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
@@ -114,7 +116,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
             await _context.SaveChangesAsync();
             var removeRelatedData = await MixRelatedAttributeDatas.Helper.RemoveRelatedDataAsync(
-                    Id.ToString(), MixEnums.MixAttributeSetDataType.Post
+                    Id.ToString(), MixDatabaseContentAssociationType.DataPost
                     , Specificulture
                     , _context, _transaction);
             ViewModelHelper.HandleResult(removeRelatedData, ref result);

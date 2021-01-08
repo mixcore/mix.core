@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -8,7 +9,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Mix.Cms.Lib.Enums;
 namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
     public class ReadListItemViewModel
@@ -80,7 +81,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -180,13 +181,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #region Expands
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            string type = Type ?? MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST;
+            string type = Type ?? MixDatabaseNames.ADDITIONAL_FIELD_POST;
             var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(
                 m => m.Name == type, _context, _transaction);
             if (getAttrs.IsSucceed)
             {
                 AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
-                a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture 
+                a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture
                     && a.AttributeSetId == getAttrs.Data.Id
                     , _context, _transaction).Data;
             }
@@ -194,8 +195,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         private void LoadTags(MixCmsContext context, IDbContextTransaction transaction)
         {
             var getTags = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
-                   && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
-                   && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_TAG, context, transaction);
+                   && m.ParentId == Id.ToString() && m.ParentType == MixDatabaseContentAssociationType.DataPost
+                   && m.AttributeSetName == MixDatabaseNames.SYSTEM_TAG, context, transaction);
             if (getTags.IsSucceed)
             {
                 SysTags = getTags.Data;
@@ -205,8 +206,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         private void LoadCategories(MixCmsContext context, IDbContextTransaction transaction)
         {
             var getData = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
-                   && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
-                   && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_CATEGORY, context, transaction);
+                   && m.ParentId == Id.ToString() && m.ParentType == MixDatabaseContentAssociationType.DataPost
+                   && m.AttributeSetName == MixDatabaseNames.SYSTEM_CATEGORY, context, transaction);
             if (getData.IsSucceed)
             {
                 SysCategories = getData.Data;

@@ -4,7 +4,8 @@ using Mix.Cms.Lib.ViewModels.MixCultures;
 using Mix.Domain.Core.Models;
 using System.Collections.Generic;
 using System.Linq;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.MixPages
 {
     public class Helper

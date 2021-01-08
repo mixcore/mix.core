@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -9,13 +10,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Mix.Cms.Lib.Enums;
 namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 {
     public class FormViewModel
-       : ViewModelBase<MixCmsContext, MixRelatedAttributeData, FormViewModel>
+       : ViewModelBase<MixCmsContext, MixDatabaseContentAssociation, FormViewModel>
     {
-        public FormViewModel(MixRelatedAttributeData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public FormViewModel(MixDatabaseContentAssociation model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
@@ -46,7 +47,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         public string ParentId { get; set; }
 
         [JsonProperty("parentType")]
-        public MixEnums.MixAttributeSetDataType ParentType { get; set; }
+        public MixDatabaseContentAssociationType ParentType { get; set; }
 
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
@@ -66,7 +67,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Model
 
         #region Views
@@ -78,13 +79,13 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         #region overrides
 
-        public override MixRelatedAttributeData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixDatabaseContentAssociation ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))
             {
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
-                Status = Status == default ? Enum.Parse<MixEnums.MixContentStatus>(MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultContentStatus)) : Status;
+                Status = Status == default ? Enum.Parse<MixContentStatus>(MixService.GetConfig<string>(AppSettingKeywords.DefaultContentStatus)) : Status;
             }
             return base.ParseModel(_context, _transaction);
         }

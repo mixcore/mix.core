@@ -10,7 +10,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.ViewModels.Account
 {
     public class MixRegisterViewModel : ViewModelBase<MixCmsContext, MixCmsUser, MixRegisterViewModel>
@@ -56,7 +57,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixUserStatus Status { get; set; }
+        public MixUserStatus Status { get; set; }
 
         #endregion Models
 

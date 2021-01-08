@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
-
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Api.GraphQL.Infrastructure.Models
 {
     public class QueryRequest
