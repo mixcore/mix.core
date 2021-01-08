@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Extensions;
-using Mix.Cms.Lib.Enums;
-using Mix.Cms.Lib.Constants;
 namespace Mix.Cms.Lib.Models.Cms
 {
     public partial class MySqlMixCmsContext : MixCmsContext
