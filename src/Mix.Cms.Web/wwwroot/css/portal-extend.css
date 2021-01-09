@@ -1,9 +1,43 @@
-a {
+a,
+.btn-link {
   text-decoration: none !important;
+}
+
+.btn-link,
+.text-primary {
+  color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
+}
+
+.btn-primary {
+  background-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
+  border-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
+}
+
+.card {
+  -webkit-box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 }
 
 .main-sidebar {
   width: 15%;
+  background-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), 100%, 1);
+  -webkit-box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.main-sidebar .btn {
+  font-weight: 550;
+}
+
+.main-sidebar .sidebar-menu-item-main .btn-group:hover .btn {
+  background-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), 100%, 1);
+  border-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
+  -webkit-box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.main-sidebar .sidebar-menu-item-main:hover .btn-group {
+  display: inherit !important;
 }
 
 .content-body {
@@ -16,9 +50,11 @@ a {
 
 .bd-navbar {
   padding: .75rem 0;
-  background-color: rgba(255, 255, 255, 0.95);
-  -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-          box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  min-height: 4rem;
+  max-height: 4rem;
+  background-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), 100%, 1);
+  -webkit-box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   z-index: 1020;
 }
 
@@ -66,6 +102,19 @@ a {
   background-repeat: no-repeat;
   background-position: right 1rem top 0.6rem;
   background-size: .75rem .75rem;
+}
+
+.card-header {
+  border-top: 3px solid hsla(var(--primary-color-hue, 211), 100%, 90%, 1);
+  background-color: hsla(var(--primary-color-hue, 211), 100%, 98%, 1);
+}
+
+.table .thead-light th {
+  background-color: hsla(var(--primary-color-hue, 211), 100%, 98%, 1);
+}
+
+.accordion-header .accordion-button {
+  font-weight: 550;
 }
 
 @media (min-width: 768px) {

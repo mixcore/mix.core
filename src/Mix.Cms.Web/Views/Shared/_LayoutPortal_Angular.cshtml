@@ -24,6 +24,16 @@
 </head>
 
 <body ng-app="MixPortal" ng-init="init()" ng-controller="AppPortalController" class="w-100 overflow-auto">
+    <style>
+        :root
+        {
+            --primary-color-hue : {{globalSettings.portalThemeSettings.primaryColorHue}};
+            --primary-color-saturation : {{globalSettings.portalThemeSettings.primaryColorSaturation}}%;
+            --primary-color-brightness : {{globalSettings.portalThemeSettings.primaryColorBrightness}}%;
+            --bg-color: {{globalSettings.portalThemeSettings.bgColor}};
+            --text-color: {{globalSettings.portalThemeSettings.textColor}};
+        }
+    </style>
     @RenderBody()
 
     <script src="~/js/framework.min.js"></script>
