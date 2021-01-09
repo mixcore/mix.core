@@ -135,6 +135,17 @@
     <script src="~/js/particles/particles.min.js"></script>
 </head>
 <body class="" ng-app="MixPortal">
+    <style>
+        
+        :root
+        {
+            --primary-color-hue : {{globalSettings.portalThemeSettings.primaryColorHue}};
+            --primary-color-saturation : {{globalSettings.portalThemeSettings.primaryColorSaturation}}%;
+            --primary-color-brightness : {{globalSettings.portalThemeSettings.primaryColorBrightness}}%;
+            --bg-color: {{globalSettings.portalThemeSettings.bgColor}};
+            --text-color: {{globalSettings.portalThemeSettings.textColor}};
+        }
+    </style>
     <div id="particles-js" class="position-fixed w-100 h-100"></div>
     <mix-loader ng-show="isBusy"></mix-loader>
     <div class="progress" style="height: 2px;">

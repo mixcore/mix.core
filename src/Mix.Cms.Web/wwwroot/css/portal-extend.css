@@ -1,6 +1,7 @@
 a {
   text-decoration: none !important;
 }
+
 .main-sidebar {
   width: 15%;
 }
@@ -34,16 +35,10 @@ a {
 .bd-navbar .navbar-nav .nav-link {
   padding-right: .25rem;
   padding-left: .25rem;
-  color: rgba(255, 255, 255, 0.85);
-}
-
-.bd-navbar .navbar-nav .nav-link:hover, .bd-navbar .navbar-nav .nav-link:focus {
-  color: #fff;
 }
 
 .bd-navbar .navbar-nav .nav-link.active {
   font-weight: 600;
-  color: #fff;
 }
 
 .bd-navbar .navbar-nav-svg {
