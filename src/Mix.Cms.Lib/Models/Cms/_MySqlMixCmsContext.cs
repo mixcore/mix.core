@@ -1,5 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Extensions;
+using Mix.Cms.Lib.Services;
+using MySql.Data.MySqlClient;
+using System;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
