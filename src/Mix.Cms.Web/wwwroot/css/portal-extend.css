@@ -29,6 +29,29 @@ a,
   font-weight: 550;
 }
 
+.main-sidebar .sidebar-menu-item-main {
+  border-radius: 0;
+}
+
+.main-sidebar .sidebar-menu-item-main:hover {
+  background-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
+}
+
+.main-sidebar .sidebar-menu-item-main:hover span {
+  color: #fff !important;
+}
+
+.main-sidebar .sidebar-menu-item-main:hover .btn-group .btn {
+  background-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
+  border-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
+  color: #fff !important;
+}
+
+.main-sidebar .sidebar-menu-item-main .btn-group .btn:last-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
 .main-sidebar .sidebar-menu-item-main .btn-group:hover .btn {
   background-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), 100%, 1);
   border-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
