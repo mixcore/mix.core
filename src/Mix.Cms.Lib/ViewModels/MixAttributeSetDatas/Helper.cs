@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels.MixAttributeSetDataValues;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
@@ -39,10 +39,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     {
                         priority += 1;
 
-                        //item.Model.Id = Guid.NewGuid().ToString();
-                        //item.Model.Specificulture = culture;
-                        //item.Model.CreatedDateTime = DateTime.UtcNow;
-                        //item.Model.Priority = context.MixAttributeSetData.Count() + 1;
                         item.Priority = priority;
                         item.Fields = fields;
                         item.AttributeSetName = attributeSet.Name;
@@ -54,21 +50,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             val.DataId = item.Id;
                             val.Specificulture = culture;
                             val.ParseModel();
-                            //val.Model.DataId = item.Id;
-                            //val.Model.CreatedDateTime = DateTime.UtcNow;
-                            //val.Model.Specificulture = culture;
-                            //val.Model.Id = Guid.NewGuid().ToString();
                             context.Entry(val.Model).State = Microsoft.EntityFrameworkCore.EntityState.Added;
                         }
                     }
                     int tmp = await context.SaveChangesAsync();
-                    //if (result.IsSucceed)
-                    //{
-                    //    foreach (var item in data)
-                    //    {
-                    //       item.GenerateCache(item.Model, item);
-                    //    }
-                    //}
                     return result;
                 }
                 catch (Exception ex)

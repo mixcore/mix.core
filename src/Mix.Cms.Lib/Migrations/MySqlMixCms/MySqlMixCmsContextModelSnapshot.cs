@@ -409,7 +409,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8")
                         .HasAnnotation("MySql:Collation", "utf8_unicode_ci");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id", "Specificulture");
 
                     b.HasIndex("DataId");
 

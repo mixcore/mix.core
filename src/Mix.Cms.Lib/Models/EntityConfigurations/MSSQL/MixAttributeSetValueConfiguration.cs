@@ -9,6 +9,9 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
     {
         public void Configure(EntityTypeBuilder<MixAttributeSetValue> entity)
         {
+            entity.HasKey(e => new { e.Id, e.Specificulture })
+                    .HasName("PK_mix_attribute_set_value");
+
             entity.ToTable("mix_attribute_set_value");
 
             entity.HasIndex(e => e.DataId);
