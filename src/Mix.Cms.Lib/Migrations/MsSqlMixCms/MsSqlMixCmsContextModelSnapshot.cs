@@ -395,7 +395,7 @@ namespace Mix.Cms.Lib.Migrations
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id", "Specificulture");
 
                     b.HasIndex("DataId");
 
