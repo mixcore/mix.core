@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
 using System;
 using System.Collections.Generic;
@@ -299,7 +301,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                             m => m.Specificulture == item.Specificulture && m.Id == postId
                                 , context, transaction);
                             if (getData.IsSucceed)
-                            {                                
+                            {
                                 result.Data.Items.Add(getData.Data);
                             }
                         }
@@ -417,30 +419,29 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     IsSucceed = true,
                     Data = new PaginationModel<TView>()
                 };
-                List<int> postIds = SearchPostByDataIds(dataIds, culture, context);
-                if (pageIds!= null &&  pageIds.Count>0)
-                {
-                    postIds.AddRange(SearchPostByPageIds(pageIds, culture, context));
-                    postIds = postIds.Distinct().ToList();
-                }
-                // Load Posts
-                
-                if (postIds != null && postIds.Count > 0)
-                {
-                    Expression<Func<MixPost, bool>> postPredicate = m => m.Specificulture == culture
+                Expression<Func<MixPost, bool>> postPredicate = m => m.Specificulture == culture
                             && (string.IsNullOrEmpty(keyword)
                              || (EF.Functions.Like(m.Title, $"%{keyword}%"))
                              || (EF.Functions.Like(m.Excerpt, $"%{keyword}%"))
-                             || (EF.Functions.Like(m.Content, $"%{keyword}%")))
-                            && postIds.Any(n => n == m.Id);
-
-                    var getPosts = await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(
-                            postPredicate
-                            , orderByPropertyName, direction
-                            , pageSize, pageIndex
-                            , _context: context, _transaction: transaction);
-                    result = getPosts;
+                             || (EF.Functions.Like(m.Content, $"%{keyword}%")));
+                if (dataIds.Count > 0)
+                {
+                    var searchPostByDataIds = SearchPostByDataIdsPredicate(dataIds, culture, context);
+                    postPredicate = searchPostByDataIds.AndAlso(postPredicate);
                 }
+
+                if (pageIds != null && pageIds.Count > 0)
+                {
+                    var searchPostByPageIds = SearchPostByPageIdsPredicate(pageIds, culture, context);
+                    postPredicate = searchPostByPageIds.AndAlso(postPredicate);
+                }
+
+                var getPosts = await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(
+                        postPredicate
+                        , orderByPropertyName, direction
+                        , pageSize, pageIndex
+                        , _context: context, _transaction: transaction);
+                result = getPosts;
                 return result;
             }
             catch (Exception ex)
@@ -457,57 +458,53 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
         }
 
-        private static List<int> SearchPostByPageIds(List<int> pageIds, string culture, MixCmsContext context)
+        private static Expression<Func<MixPost, bool>> SearchPostByPageIdsPredicate(List<int> pageIds, string culture, MixCmsContext context)
         {
-            List<int> postIds = new List<int>();
-
+            Expression<Func<MixPost, bool>> postPredicate = null;
+            Expression<Func<MixPagePost, bool>> predicate = null;
             foreach (var id in pageIds)
             {
                 // Get list related post ids by data id
-                Expression<Func<MixPagePost, bool>> predicate =
+                Expression<Func<MixPagePost, bool>> pre =
                     m => m.Specificulture == culture
                         && m.Status == MixEnums.MixContentStatus.Published
                         && m.PageId == id;
-                var ids = context.MixPagePost
-                    .Where(predicate)
-                    .Select(m => m.PostId).ToList();
-                postIds.AddRange(ids);
+                predicate = predicate == null ? pre : predicate.Or(pre);
             }
-            return postIds.Distinct().ToList();
+            if (predicate != null)
+            {
+                var postIds = context.MixPagePost
+                .Where(predicate)
+                .Select(m => m.PostId).Distinct();
+                postPredicate = p => postIds.Any(m => m == p.Id);
+            }
+            return postPredicate;
         }
-        
-        private static List<int> SearchPostByDataIds(List<string> dataIds, string culture, MixCmsContext context)
-        {
-            List<int> postIds = new List<int>();
 
+        private static Expression<Func<MixPost, bool>> SearchPostByDataIdsPredicate(List<string> dataIds, string culture, MixCmsContext context)
+        {
+            Expression<Func<MixPost, bool>> postPredicate = null;
+            Expression<Func<MixRelatedAttributeData, bool>> predicate = null;
             foreach (var id in dataIds)
             {
                 // Get list related post ids by data id
-                Expression<Func<MixRelatedAttributeData, bool>> dataPredicate =
+                Expression<Func<MixRelatedAttributeData, bool>> pre =
                     m => m.Specificulture == culture
                         && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
                         && m.DataId == id;
-                var ids = context.MixRelatedAttributeData
-                    .Where(dataPredicate)
-                    .Select(m => int.Parse(m.ParentId)).ToList();
 
-                // if first id in list => return ids
-                if (postIds.Count == 0)
-                {
-                    postIds = ids.Distinct().ToList();
-                }
-                else
-                {
-                    // filter ids by new data id ( for 'AND' condition)
-                    postIds = postIds.Where(m => ids.Contains(m)).Distinct().ToList();
-                    // if there is no items => no need to filter more
-                    if (postIds.Count == 0)
-                    {
-                        break;
-                    }
-                }
+                predicate = predicate == null ? pre : predicate.AndAlso(pre);
             }
-            return postIds;
+
+            if (predicate != null)
+            {
+                var postIds = context.MixRelatedAttributeData
+                    .Where(predicate)
+                    .Select(m => int.Parse(m.ParentId)).Distinct();
+                postPredicate = p => postIds.Any(m => m == p.Id);
+            }
+
+            return postPredicate;
         }
 
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetModelistByAddictionalField<TView>(
