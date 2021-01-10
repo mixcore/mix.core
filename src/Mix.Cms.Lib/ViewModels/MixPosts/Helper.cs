@@ -414,11 +414,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             try
             {
                 culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
-                var result = new RepositoryResponse<PaginationModel<TView>>()
-                {
-                    IsSucceed = true,
-                    Data = new PaginationModel<TView>()
-                };
                 Expression<Func<MixPost, bool>> postPredicate = m => m.Specificulture == culture
                             && (string.IsNullOrEmpty(keyword)
                              || (EF.Functions.Like(m.Title, $"%{keyword}%"))
@@ -436,13 +431,22 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     postPredicate = searchPostByPageIds.AndAlso(postPredicate);
                 }
 
-                var getPosts = await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(
+                if (!typeof(MixPost).GetProperties().Any(p => p.Name.ToLower() == orderByPropertyName.ToLower()))
+                {
+                    var postIds = context.MixPost.Where(postPredicate).Select(p => p.Id);
+                    var orderedPostIds = context.MixRelatedAttributeData.Where(
+                            m => m.Specificulture == culture && postIds.Any(p => p.ToString() == m.ParentId))
+                        .Join(context.MixAttributeSetValue, r => r.DataId, v => v.DataId, (r, v) => new { r, v })
+                        .OrderBy(rv => rv.v.StringValue)
+                        .Select(rv => rv.r.ParentId);
+                    postPredicate = p => orderedPostIds.Distinct().Any(o => o == p.Id.ToString() && p.Specificulture == culture);
+                }
+
+                return await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(
                         postPredicate
                         , orderByPropertyName, direction
                         , pageSize, pageIndex
                         , _context: context, _transaction: transaction);
-                result = getPosts;
-                return result;
             }
             catch (Exception ex)
             {
@@ -500,8 +504,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 var postIds = context.MixRelatedAttributeData
                     .Where(predicate)
-                    .Select(m => int.Parse(m.ParentId)).Distinct();
-                postPredicate = p => postIds.Any(m => m == p.Id);
+                    .Select(m => m.ParentId).Distinct();
+                postPredicate = p => postIds.Any(m => p.Id.ToString() == m);
             }
 
             return postPredicate;
@@ -577,7 +581,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public static async Task PublishScheduledPosts()
         {
-            using(var context = new MixCmsContext())
+            using (var context = new MixCmsContext())
             {
                 var now = DateTime.UtcNow;
                 now = now.AddSeconds(-now.Second);
