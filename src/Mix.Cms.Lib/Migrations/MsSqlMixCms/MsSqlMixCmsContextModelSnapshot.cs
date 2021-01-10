@@ -393,7 +393,7 @@ namespace Mix.Cms.Lib.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8")
                         .HasAnnotation("MySql:Collation", "Vietnamese_CI_AS");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id", "Specificulture");
 
                     b.HasIndex("DataId");
 

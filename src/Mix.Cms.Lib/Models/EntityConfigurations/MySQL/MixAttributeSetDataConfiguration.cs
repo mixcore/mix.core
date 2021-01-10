@@ -10,7 +10,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MySQL
         public void Configure(EntityTypeBuilder<MixAttributeSetData> entity)
         {
             entity.HasKey(e => new { e.Id, e.Specificulture })
-                    .HasName("PRIMARY");
+                    .HasName("PK_mix_attribute_set_value");
 
             entity.ToTable("mix_attribute_set_data");
 

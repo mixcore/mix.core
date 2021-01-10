@@ -146,7 +146,7 @@ namespace Mix.Cms.Lib.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_attribute_set_value", x => x.Id);
+                    table.PrimaryKey("PK_mix_attribute_set_value", x => new { x.Id, x.Specificulture });
                 });
 
             migrationBuilder.CreateTable(
