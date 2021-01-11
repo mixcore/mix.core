@@ -10,7 +10,7 @@
         //    var getDataResult = MixPostAttributeDatas.UpdateViewModel.Repository
         //    .GetModelListBy(
         //        dataExp
-        //        , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+        //        , MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy), 0
         //        , pageSize, pageIndex
         //        , _context: _context, _transaction: _transaction);
         //    if (getDataResult.Data.TotalItems == 0)
@@ -28,7 +28,7 @@
         //    var getDataResult = await MixPostAttributeDatas.UpdateViewModel.Repository
         //    .GetModelListByAsync(
         //        dataExp
-        //        , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+        //        , MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy), 0
         //        , pageSize, pageIndex, null, null
         //        , _context: _context, _transaction: _transaction);
         //    if (getDataResult.Data.TotalItems == 0)

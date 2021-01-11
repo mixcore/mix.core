@@ -47,7 +47,7 @@ namespace Mix.Cms.Lib.Services
 
         public static Task<T> GetAsync<T>(string key)
         {
-            var data = FileRepository.Instance.GetFile(key, ".json", MixConstants.Folder.CacheFolder, false, "{}");
+            var data = FileRepository.Instance.GetFile(key, MixFileExtensions.Json, MixFolders.CacheFolder, false, "{}");
             if (data != null && !string.IsNullOrEmpty(data.Content))
             {
                 var jobj = JObject.Parse(data.Content);
@@ -72,7 +72,7 @@ namespace Mix.Cms.Lib.Services
         //        var cacheFile = new FileViewModel()
         //        {
         //            Filename = key.ToLower(),
-        //            Extension = ".json",
+        //            Extension = MixFileExtensions.Json,
         //            FileFolder = "Cache",
         //            Content = jobj.ToString(Newtonsoft.Json.Formatting.None)
         //        };
@@ -121,7 +121,7 @@ namespace Mix.Cms.Lib.Services
 
         public static Task RemoveCacheAsync()
         {
-            return Task.FromResult(FileRepository.Instance.EmptyFolder(MixConstants.Folder.CacheFolder));
+            return Task.FromResult(FileRepository.Instance.EmptyFolder(MixFolders.CacheFolder));
             //await Instance.Repository.RemoveListModelAsync(c => !string.IsNullOrEmpty(c.Id));
         }
     }

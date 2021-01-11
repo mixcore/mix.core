@@ -2,6 +2,7 @@
 // The Mixcore Foundation licenses this file to you under the MIT.
 // See the LICENSE file in the project root for more information.
 
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
 using System;
@@ -83,7 +84,7 @@ namespace Mix.Cms.Lib.Repositories
             string fullPath = CommonHelper.GetFullPath(new string[]
             {
                 templateFolder,
-                name + MixConstants.Folder.TemplateExtension
+                name + MixFileExtensions.CsHtml
             });
             if (File.Exists(fullPath))
             {
@@ -99,7 +100,7 @@ namespace Mix.Cms.Lib.Repositories
                 Directory.CreateDirectory(folder);
             }
             DirectoryInfo d = new DirectoryInfo(folder);//Assuming Test is your Folder
-            FileInfo[] Files = d.GetFiles(string.Format("*{0}", MixConstants.Folder.TemplateExtension)); //Getting cshtml files
+            FileInfo[] Files = d.GetFiles(string.Format("*{0}", MixFileExtensions.CsHtml)); //Getting cshtml files
             List<TemplateViewModel> result = new List<TemplateViewModel>();
             foreach (var file in Files)
             {
@@ -109,7 +110,7 @@ namespace Mix.Cms.Lib.Repositories
                     {
                         FileFolder = folder,
                         Filename = file.Name,
-                        Extension = MixConstants.Folder.TemplateExtension,
+                        Extension = MixFileExtensions.CsHtml,
                         Content = s.ReadToEnd()
                     });
                 }

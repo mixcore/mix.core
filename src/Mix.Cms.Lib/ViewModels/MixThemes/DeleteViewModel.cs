@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
@@ -55,7 +56,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         #region Views
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
+        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl
@@ -107,7 +108,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"wwwroot/content/templates/{Name}/assets";
+                return $"{MixFolders.WebRootPath}/{MixFolders.SiteContentFileFolder}/{Name}/assets";
             }
         }
 
@@ -115,7 +116,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"wwwroot/content/templates/{Name}/uploads";
+                return $"{MixFolders.WebRootPath}/{MixFolders.SiteContentFileFolder}/{Name}/uploads";
             }
         }
 
@@ -124,7 +125,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"{MixConstants.Folder.TemplatesFolder}/{Name}";
+                return $"{MixFolders.TemplatesFolder}/{Name}";
             }
         }
 
@@ -154,7 +155,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             Templates = MixTemplates.DeleteViewModel.Repository.GetModelListBy(t => t.ThemeId == Id,
                 _context: _context, _transaction: _transaction).Data;
-            TemplateAsset = new FileViewModel() { FileFolder = $"wwwroot/import/themes/{DateTime.UtcNow.ToShortDateString()}/{Name}" };
+            TemplateAsset = new FileViewModel() { FileFolder = $"{MixFolders.WebRootPath}/{MixFolders.ImportFolder}/{DateTime.UtcNow.ToShortDateString()}/{Name}" };
             Asset = new FileViewModel() { FileFolder = AssetFolder };
         }
 
@@ -175,7 +176,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             {
                 FileRepository.Instance.DeleteFolder(AssetFolder);
             }
-            
+
             if (result.IsSucceed)
             {
                 FileRepository.Instance.DeleteFolder(TemplateFolder);

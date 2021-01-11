@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixCultures;
@@ -106,7 +107,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public string TemplatePath { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain => MixService.GetConfig<string>("Domain");
+        public string Domain => MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
 
         [JsonProperty("categories")]
         public List<MixPagePosts.ReadViewModel> Pages { get; set; }
@@ -151,7 +152,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             get
             {
-                return MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
+                return MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, Specificulture);
             }
         }
 
@@ -171,8 +172,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 return CommonHelper.GetFullPath(new string[]
                 {
-                    MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture)
+                    MixFolders.TemplatesFolder
+                    , MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)
                     , TemplateFolderType
                 }
             );
@@ -311,7 +312,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 string folder = CommonHelper.GetFullPath(new string[]
                 {
-                    MixConstants.Folder.UploadFolder, "Posts", DateTime.UtcNow.ToString("dd-MM-yyyy")
+                    MixFolders.UploadFolder, "Posts", DateTime.UtcNow.ToString("dd-MM-yyyy")
                 });
                 string filename = CommonHelper.GetRandomName(ThumbnailFileStream.Name);
                 bool saveThumbnail = CommonHelper.SaveFileBase64(folder, filename, ThumbnailFileStream.Base64);
@@ -325,7 +326,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 string folder = CommonHelper.GetFullPath(new string[]
                 {
-                    MixConstants.Folder.UploadFolder, "Posts", DateTime.UtcNow.ToString("dd-MM-yyyy")
+                    MixFolders.UploadFolder, "Posts", DateTime.UtcNow.ToString("dd-MM-yyyy")
                 });
                 string filename = CommonHelper.GetRandomName(ImageFileStream.Name);
                 bool saveImage = CommonHelper.SaveFileBase64(folder, filename, ImageFileStream.Base64);

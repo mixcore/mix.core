@@ -16,6 +16,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Mix.Cms.Lib.Constants;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -60,7 +61,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         var model = new MixAttributeSet()
                         {
-                            Status = MixService.GetConfig<MixEnums.MixContentStatus>(MixConstants.ConfigurationKeyword.DefaultContentStatus)
+                            Status = MixService.GetConfig<MixEnums.MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)
                             ,
                             Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
@@ -79,7 +80,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         var model = new MixAttributeSet()
                         {
-                            Status = MixService.GetConfig<MixEnums.MixContentStatus>(MixConstants.ConfigurationKeyword.DefaultContentStatus)
+                            Status = MixService.GetConfig<MixEnums.MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)
                             ,
                             Priority = ReadViewModel.Repository.Max(a => a.Priority).Data + 1
                         };

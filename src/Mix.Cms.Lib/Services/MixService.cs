@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.ViewModels;
@@ -13,7 +12,9 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
+using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Mix.Cms.Lib.Services
 {
@@ -32,6 +33,7 @@ namespace Mix.Cms.Lib.Services
         private static volatile MixService defaultInstance;
 
         private List<string> Cultures { get; set; }
+        private JObject MixConfigurations { get; set; }
         private JObject GlobalSettings { get; set; }
         private JObject ConnectionStrings { get; set; }
         private JObject LocalSettings { get; set; }
@@ -105,6 +107,7 @@ namespace Mix.Cms.Lib.Services
             //var cultures = CommonRepository.Instance.LoadCultures();
 
             instance.ConnectionStrings = JObject.FromObject(jsonSettings["ConnectionStrings"]);
+            instance.MixConfigurations = jsonSettings["MixConfigurations"] != null ? JObject.FromObject(jsonSettings["MixConfigurations"]) : new JObject();
             instance.Authentication = JObject.FromObject(jsonSettings["Authentication"]);
             instance.IpSecuritySettings = JObject.FromObject(jsonSettings["IpSecuritySettings"]);
             instance.Smtp = JObject.FromObject(jsonSettings["Smtp"] ?? new JObject());
@@ -125,6 +128,7 @@ namespace Mix.Cms.Lib.Services
             jsonSettings = JObject.Parse(content);
 
             defaultInstance.ConnectionStrings = JObject.FromObject(jsonSettings["ConnectionStrings"]);
+            defaultInstance.MixConfigurations = JObject.FromObject(jsonSettings["MixConfigurations"]);
             defaultInstance.Authentication = JObject.FromObject(jsonSettings["Authentication"]);
             defaultInstance.IpSecuritySettings = JObject.FromObject(jsonSettings["IpSecuritySettings"]);
             defaultInstance.Smtp = JObject.FromObject(jsonSettings["Smtp"] ?? new JObject());
@@ -191,6 +195,21 @@ namespace Mix.Cms.Lib.Services
             Instance.IpSecuritySettings[name] = value.ToString();
         }
 
+        public static T GetMixConfig<T>(string name)
+        {
+            var result = Instance.MixConfigurations[name];
+            if (result == null)
+            {
+                result = DefaultInstance.MixConfigurations[name];
+            }
+            return result != null ? result.Value<T>() : default;
+        }
+
+        public static void SetMixConfig<T>(string name, T value)
+        {
+            Instance.MixConfigurations[name] = value != null ? JToken.FromObject(value) : null;
+        }
+
         public static T GetConfig<T>(string name)
         {
             var result = Instance.GlobalSettings[name];
@@ -200,7 +219,7 @@ namespace Mix.Cms.Lib.Services
             }
             return result != null ? result.Value<T>() : default;
         }
-        
+
         public static T GetEnumConfig<T>(string name)
         {
             Enum.TryParse(typeof(T), Instance.GlobalSettings[name]?.Value<string>(), true, out object result);
@@ -218,10 +237,6 @@ namespace Mix.Cms.Lib.Services
             if (!string.IsNullOrEmpty(culture) && Instance.LocalSettings[culture] != null)
             {
                 result = Instance.LocalSettings[culture][name];
-                //if (result == null)
-                //{
-                //    result = DefaultInstance.LocalSettings[MixService.GetConfig<string>("DefaultCulture")][name];
-                //}
             }
             return result != null ? result.Value<T>() : default;
         }
@@ -273,7 +288,7 @@ namespace Mix.Cms.Lib.Services
                     settings = new FileViewModel()
                     {
                         Filename = "appsettings",
-                        Extension = ".json",
+                        Extension = MixFileExtensions.Json,
                         Content = defaultSettings.Content
                     };
                     return FileRepository.Instance.SaveFile(settings);
@@ -467,24 +482,24 @@ namespace Mix.Cms.Lib.Services
 
         public static string GetTemplateFolder(string culture)
         {
-            return $"content/templates/{Instance.LocalSettings[culture][MixConstants.ConfigurationKeyword.ThemeFolder]}";
+            return $"{MixFolders.SiteContentFileFolder}/{Instance.LocalSettings[culture][MixAppSettingKeywords.ThemeFolder]}";
         }
 
         public static string GetTemplateUploadFolder(string culture)
         {
-            return $"content/templates/{Instance.LocalSettings[culture][MixConstants.ConfigurationKeyword.ThemeFolder]}/uploads";
+            return $"{MixFolders.SiteContentFileFolder}/{Instance.LocalSettings[culture][MixAppSettingKeywords.ThemeFolder]}/uploads";
         }
 
         public static MixCmsContext GetDbContext()
         {
-            var provider = System.Enum.Parse<MixEnums.DatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
+            var provider = Enum.Parse<MixDatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
             switch (provider)
             {
-                case DatabaseProvider.MSSQL:
+                case MixDatabaseProvider.MSSQL:
                     return new MsSqlMixCmsContext();
-                case DatabaseProvider.MySQL:
+                case MixDatabaseProvider.MySQL:
                     return new MySqlMixCmsContext();
-                case DatabaseProvider.PostgreSQL:
+                case MixDatabaseProvider.PostgreSQL:
                 default:
                     // TODO: Add PostgreSQL db context
                     return null;

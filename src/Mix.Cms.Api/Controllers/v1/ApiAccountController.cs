@@ -19,6 +19,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
+using Mix.Cms.Lib.Constants;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -457,7 +458,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
             var callbackurl = $"{Request.Scheme}://{Request.Host}/security/reset-password/?token={System.Web.HttpUtility.UrlEncode(confrimationCode)}";
             var getEdmTemplate = await Lib.ViewModels.MixTemplates.ReadViewModel.Repository.GetSingleModelAsync(
-                m => m.FolderType == MixConstants.TemplateFolder.Edms && m.FileName == "ForgotPassword");
+                m => m.FolderType == MixTemplateFolders.Edms && m.FileName == "ForgotPassword");
             string content = callbackurl;
             if (getEdmTemplate.IsSucceed)
             {
