@@ -1,137 +1,137 @@
 {
-  "ConnectionStrings": {
-    "MixAccountConnection": null,
-    "MixCmsConnection": null,
-    "DefaultConnection": null
-  },
-  "Authentication": {
-    "ClockSkew": 20,
-    "CookieExpiration": 20,
-    "RefreshTokenExpiration": 120,
-    "ValidateIssuer": false,
-    "ValidateAudience": false,
-    "ValidateLifetime": true,
-    "ValidateIssuerSigningKey": true,
-    "TokenType": "Bearer",
-    "Audience": "mix-core",
-    "SecretKey": "mixcore-secret-key",
-    "Issuer": "mix-core",
-    "Issuers": "mix-core",
-    "Audiences": "mix-core",
-    "AllowedIps": ""
-  },
-  "IpSecuritySettings": {
-    "IsRetrictIp": true,
-    "AllowedPortalIps": [],
-    "AllowedIps": [],
-    "ExceptIps": []
-  },
-  "Cloudflare": {
-    "ApiToken": "",
-    "ApiKey": {
-      "GlobalKey": "",
-      "OriginKey": ""
-    }
-  },
-  "Smtp": {
-    "Server": "",
-    "Port": 587,
-    "SSL": true,
-    "User": "",
-    "Password": "",
-    "From": "support@mixcore.org",
-    "FromName": "mix-core"
-  },
-  "Translator": {
+    "ConnectionStrings": {
+        "MixAccountConnection": null,
+        "MixCmsConnection": null,
+        "MixMessengerConnection": null
+    },
+    "Authentication": {
+        "ClockSkew": 20,
+        "CookieExpiration": 20,
+        "RefreshTokenExpiration": 120,
+        "ValidateIssuer": false,
+        "ValidateAudience": false,
+        "ValidateLifetime": true,
+        "ValidateIssuerSigningKey": true,
+        "TokenType": "Bearer",
+        "Audience": "mix-core",
+        "SecretKey": "mixcore-secret-key",
+        "Issuer": "mix-core",
+        "Issuers": "mix-core",
+        "Audiences": "mix-core",
+        "AllowedIps": ""
+    },
+    "IpSecuritySettings": {
+        "IsRetrictIp": true,
+        "AllowedPortalIps": [],
+        "AllowedIps": [],
+        "ExceptIps": []
+    },
+    "Cloudflare": {
+        "ApiToken": "",
+        "ApiKey": {
+            "GlobalKey": "",
+            "OriginKey": ""
+        }
+    },
+    "Smtp": {
+        "Server": "",
+        "Port": 587,
+        "SSL": true,
+        "User": "",
+        "Password": "",
+        "From": "support@mixcore.org",
+        "FromName": "mix-core"
+    },
+    "Translator": {
 
-  },
-  "LocalSettings": {
-    "en-us": {
-      "ContactAddress": "",
-      "ContactEmail": "",
-      "ContactPhone": "",
-      "Facebook": "",
-      "FacebookAppId": "",
-      "Favicon": "",
-      "LanguageVersion": "1",
-      "Logo": "",
-      "SettingVersion": "1",
-      "Theme": "Default",
-      "ThemeId": "1"
-    }
-  },
-  "GlobalSettings": {
-    "IsInit": true,
-    "InitStatus": 0,
-    "IsMaintenance": false,
-    "IsRewrite": true,
-    "IsHttps": false,
-    "IsCache": true,
-    "IsRegistration": true,
-    "MaxPageSize": 100,
-    "ImageSize": 2000,
-    "DefaultAvatar": "/assets/img/user.png",
-    "DefaultCulture": "en-us",
-    "DefaultTemplate": "_Blank",
-    "DefaultTemplateContent": "<div></div>",
-    "DefaultTheme": "Default_Blank",
-    "DefaultContentStatus": "Published",
-    "DefaultBlankTemplateFolder": "Themes/Default_Blank",
-    "DefaultTemplateFolder": "Themes/Default",
-    "DefaultTemplateLayout": "_Layout",
-    "DefaultPostAttr": "[]",
-    "OrderBy": "Priority",
-    "OrderDirection": "0",
+    },
+    "LocalSettings": {
+        "en-us": {
+            "ContactAddress": "",
+            "ContactEmail": "",
+            "ContactPhone": "",
+            "Facebook": "",
+            "FacebookAppId": "",
+            "Favicon": "",
+            "LanguageVersion": "1",
+            "Logo": "",
+            "SettingVersion": "1",
+            "Theme": "Default",
+            "ThemeId": "1"
+        }
+    },
+    "GlobalSettings": {
+        "IsInit": true,
+        "InitStatus": 0,
+        "IsMaintenance": false,
+        "IsRewrite": true,
+        "IsHttps": false,
+        "IsCache": true,
+        "IsRegistration": true,
+        "MaxPageSize": 100,
+        "ImageSize": 2000,
+        "DefaultAvatar": "/assets/img/user.png",
+        "DefaultCulture": "en-us",
+        "DefaultTemplate": "_Blank",
+        "DefaultTemplateContent": "<div></div>",
+        "DefaultTheme": "Default_Blank",
+        "DefaultContentStatus": "Published",
+        "DefaultBlankTemplateFolder": "Themes/Default_Blank",
+        "DefaultTemplateFolder": "Themes/Default",
+        "DefaultTemplateLayout": "_Layout",
+        "DefaultPostAttr": "[]",
+        "OrderBy": "Priority",
+        "OrderDirection": "0",
+        "Language": "en-us",
+        "UploadFolder": "Content/Uploads",
+        "ThemeId": "1",
+        "Domain": "",
+        "TemplateExtension": ".cshtml",
+        "TagPageSize": "20",
+        "SearchPageSize": "20",
+        "IsEncryptApi": true,
+        "LastUpdateConfiguration": null,
+        "IsMysql": false,
+        "DatabaseProvider": "MSSQL",
+        "PortalThemeSettings": {
+            "primaryColorHue": 211,
+            "primaryColorSaturation": 100,
+            "primaryColorBrightness": 50,
+            "bgColor": "#fbfbfb",
+            "textColor": "#404040",
+            "primaryColor": "#47c5d1",
+            "bgColorHover": "#d1e0de",
+            "borderColor": "#d1e0de",
+            "borderColorHover": "#e0e4e7",
+            "linkColor": "#47c5d1",
+            "linkColorHover": "#404040",
+            "linkColorActive": "#404040",
+            "textColorHover": "#008b8b",
+            "fontFamily": "",
+            "fontSizeH1": "16",
+            "fontSize": "12"
+        }
+    },
+    "Logging": {
+        "LogLevel": {
+            "Default": "Information",
+            "Microsoft": "Warning",
+            "Microsoft.Hosting.Lifetime": "Information"
+        }
+    },
+    "JWTSettings": {
+        "SecretKey": "sw-cms-secret-key",
+        "Issuer": "sw-cms",
+        "Audience": "sw-client"
+    },
+    "AllowedHosts": "*",
     "Language": "en-us",
-    "UploadFolder": "Content/Uploads",
-    "ThemeId": "1",
-    "Domain": "",
-    "TemplateExtension": ".cshtml",
-    "TagPageSize": "20",
-    "SearchPageSize": "20",
-    "IsEncryptApi": true,
-    "LastUpdateConfiguration": null,
-    "IsMysql": false,
-    "DatabaseProvider": "MSSQL",
-    "PortalThemeSettings": {
-      "primaryColorHue": 211,
-      "primaryColorSaturation": 100,
-      "primaryColorBrightness": 50,
-      "bgColor": "#fbfbfb",
-      "textColor": "#404040",
-      "primaryColor": "#47c5d1",
-      "bgColorHover": "#d1e0de",
-      "borderColor": "#d1e0de",
-      "borderColorHover": "#e0e4e7",
-      "linkColor": "#47c5d1",
-      "linkColorHover": "#404040",
-      "linkColorActive": "#404040",
-      "textColorHover": "#008b8b",
-      "fontFamily": "",
-      "fontSizeH1": "16",
-      "fontSize": "12"
+    "EPPlus": {
+        "ExcelPackage": {
+            "LicenseContext": "NonCommercial" //The license context used
+        }
+    },
+    "Quartz": {
+        "quartz.scheduler.instanceName": "Mixcore Cms Scheduler"
     }
-  },
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft": "Warning",
-      "Microsoft.Hosting.Lifetime": "Information"
-    }
-  },
-  "JWTSettings": {
-    "SecretKey": "sw-cms-secret-key",
-    "Issuer": "sw-cms",
-    "Audience": "sw-client"
-  },
-  "AllowedHosts": "*",
-  "Language": "en-us",
-  "EPPlus": {
-    "ExcelPackage": {
-      "LicenseContext": "NonCommercial" //The license context used
-    }
-  },
-  "Quartz": {
-    "quartz.scheduler.instanceName": "Mixcore Cms Scheduler"
-  }
 }
