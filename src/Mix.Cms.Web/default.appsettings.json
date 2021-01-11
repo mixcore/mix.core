@@ -74,7 +74,7 @@
     "IsRegistration": true,
     "MaxPageSize": 100,
     "ImageSize": 2000,
-    "DefaultAvatar": "/assets/img/user.png",
+    "DefaultAvatar": "/mix-app/assets/img/user.png",
     "DefaultCulture": "en-us",
     "DefaultTemplate": "_Blank",
     "DefaultTemplateContent": "<div></div>",

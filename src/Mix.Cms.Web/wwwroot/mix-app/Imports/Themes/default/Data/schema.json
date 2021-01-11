@@ -216,7 +216,7 @@
       "cultures": null,
       "template": "Pages/Home.cshtml",
       "thumbnail": null,
-      "image": "https://dev.mixcore.org/assets/img/bgs/home.jpeg",
+      "image": "https://dev.mixcore.org/mix-app/assets/img/bgs/home.jpeg",
       "icon": null,
       "cssClass": null,
       "layout": "Masters/_Layout.cshtml",
