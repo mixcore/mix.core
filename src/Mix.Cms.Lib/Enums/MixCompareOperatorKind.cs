@@ -6,15 +6,15 @@ namespace Mix.Cms.Lib.Enums
 {
     public enum MixCompareOperatorKind
     {
-        Eq,
-        Neq,
-        Ct,
-        Nct,
-        Ra,
-        Nra,
-        Gte,
-        Gt,
-        Lte,
-        Lt
+        Equal,
+        NotEqual,
+        Contain,
+        NotContain,
+        InRange,
+        NotInRange,
+        GreaterThanOrEqual,
+        GreaterThan,
+        LessThanOrEqual,
+        LessThan
     }
 }
