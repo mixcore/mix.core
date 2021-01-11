@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Domain.Data.ViewModels;
@@ -89,7 +90,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #region Views
 
         [JsonProperty("domain")]
-        public string Domain => MixService.GetConfig<string>("Domain");
+        public string Domain => MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
 
         [JsonProperty("categories")]
         public List<MixPagePosts.ReadViewModel> Pages { get; set; }

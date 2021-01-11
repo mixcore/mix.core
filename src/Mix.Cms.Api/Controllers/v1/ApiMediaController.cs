@@ -18,6 +18,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web;
 using static Mix.Cms.Lib.MixEnums;
+using Mix.Cms.Lib.Constants;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -85,7 +86,7 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 var json = JObject.Parse(model);
                 var data = json.ToObject<UpdateViewModel>();
-                data.Status = (MixContentStatus)Enum.Parse(typeof(MixContentStatus), MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultContentStatus));
+                data.Status = (MixContentStatus)Enum.Parse(typeof(MixContentStatus), MixService.GetConfig<string>(MixAppSettingKeywords.DefaultContentStatus));
                 data.Specificulture = _lang;
                 data.File = file;
                 var result = await base.SaveAsync<UpdateViewModel>(data, true);

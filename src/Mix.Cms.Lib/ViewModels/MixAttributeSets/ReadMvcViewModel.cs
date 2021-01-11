@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
@@ -104,7 +105,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             var getData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository
             .GetModelListBy(
                 m => m.ParentId == parentId && m.ParentType == parentType.ToString() && m.Specificulture == specificulture
-                , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+                , MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy), 0
                 , pageSize, pageIndex
                 , _context: _context, _transaction: _transaction);
 
