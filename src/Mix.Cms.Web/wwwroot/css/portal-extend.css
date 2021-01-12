@@ -18,11 +18,32 @@ a,
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 }
 
+.card .card-header {
+  border-top: 3px solid hsla(var(--primary-color-hue, 211), 100%, 90%, 1);
+  background-color: hsla(var(--primary-color-hue, 211), 100%, 98%, 1);
+}
+
+.nav-tabs {
+  border-color: hsla(var(--primary-color-hue, 211), 100%, 90%, 1);
+}
+
+.nav-tabs .nav-link {
+  padding: .5rem 2.5rem;
+  border-top: 3px solid;
+  border-color: transparent;
+}
+
+.nav-tabs .nav-link.active {
+  border-top: 3px solid hsla(var(--primary-color-hue, 211), 100%, 90%, 1);
+  background-color: hsla(var(--primary-color-hue, 211), 100%, 98%, 1);
+}
+
 .main-sidebar {
   width: 15%;
   background-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), 100%, 1);
   -webkit-box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  border-right: 1px solid rgba(0, 0, 0, 0.125);
 }
 
 .main-sidebar .btn {
@@ -79,6 +100,7 @@ a,
   -webkit-box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   z-index: 1020;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
 }
 
 .bd-navbar .navbar-toggler {
@@ -127,17 +149,24 @@ a,
   background-size: .75rem .75rem;
 }
 
-.card-header {
-  border-top: 3px solid hsla(var(--primary-color-hue, 211), 100%, 90%, 1);
-  background-color: hsla(var(--primary-color-hue, 211), 100%, 98%, 1);
+.table-striped > tbody > tr:nth-of-type(odd) {
+  --bs-table-accent-bg: hsla(var(--primary-color-hue,211),100%,98%,0.5);
 }
 
 .table .thead-light th {
+  font-weight: 500;
   background-color: hsla(var(--primary-color-hue, 211), 100%, 98%, 1);
 }
 
-.accordion-header .accordion-button {
-  font-weight: 550;
+.accordion {
+  background-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), 100%, 1);
+  -webkit-box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.accordion .accordion-button:not(.collapsed) {
+  border-top: 3px solid hsla(var(--primary-color-hue, 211), 100%, 90%, 1);
+  background-color: hsla(var(--primary-color-hue, 211), 100%, 98%, 1);
 }
 
 @media (min-width: 768px) {
