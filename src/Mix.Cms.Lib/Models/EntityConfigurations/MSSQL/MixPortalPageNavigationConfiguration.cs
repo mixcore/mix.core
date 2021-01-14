@@ -11,6 +11,9 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
         {
             entity.ToTable("mix_portal_page_navigation");
 
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever();
+
             entity.HasIndex(e => e.PageId)
                 .HasDatabaseName("FK_mix_portal_page_navigation_mix_portal_page");
 
@@ -19,33 +22,33 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
             entity.Property(e => e.CreatedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
             entity.Property(e => e.Description)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Image)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.LastModified).HasColumnType("datetime");
 
             entity.Property(e => e.ModifiedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Status)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.HasOne(d => d.Page)
                 .WithMany(p => p.MixPortalPageNavigationPage)

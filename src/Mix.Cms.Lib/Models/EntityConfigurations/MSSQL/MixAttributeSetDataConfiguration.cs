@@ -10,31 +10,32 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
         public void Configure(EntityTypeBuilder<MixAttributeSetData> entity)
         {
             entity.HasKey(e => new { e.Id, e.Specificulture })
-                    .HasName("PRIMARY");
+                    .HasName("PK_mix_attribute_set_data");
 
             entity.ToTable("mix_attribute_set_data");
 
             entity.HasIndex(e => e.AttributeSetId);
 
             entity.Property(e => e.Id)
+                .ValueGeneratedNever()
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Specificulture)
                 .HasColumnType("varchar(10)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.AttributeSetName)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.CreatedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
@@ -43,14 +44,14 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
             entity.Property(e => e.ModifiedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Status)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
         }
     }
 }

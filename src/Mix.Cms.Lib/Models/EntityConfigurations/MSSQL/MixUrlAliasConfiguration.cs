@@ -13,7 +13,13 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
 
                 entity.ToTable("mix_url_alias");
 
-                entity.Property(e => e.Specificulture).HasMaxLength(10);
+                entity.Property(e => e.Id)
+                .ValueGeneratedNever();
+
+                entity.Property(e => e.Specificulture)
+                .HasColumnType("varchar(10)")
+                .HasCharSet("utf8")
+                .HasCollation("Vietnamese_CI_AS");
 
                 entity.Property(e => e.Alias).HasMaxLength(250);
 

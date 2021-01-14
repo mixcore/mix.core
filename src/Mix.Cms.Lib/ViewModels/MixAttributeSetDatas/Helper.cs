@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Infrastructure.Helper;
+using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -21,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
-    public class Helper
+    public static class Helper
     {
         public static async Task<RepositoryResponse<bool>> ImportData(
             string culture, Lib.ViewModels.MixAttributeSets.ReadViewModel attributeSet, IFormFile file)
@@ -39,10 +40,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     {
                         priority += 1;
 
-                        //item.Model.Id = Guid.NewGuid().ToString();
-                        //item.Model.Specificulture = culture;
-                        //item.Model.CreatedDateTime = DateTime.UtcNow;
-                        //item.Model.Priority = context.MixAttributeSetData.Count() + 1;
                         item.Priority = priority;
                         item.Fields = fields;
                         item.AttributeSetName = attributeSet.Name;
@@ -54,21 +51,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             val.DataId = item.Id;
                             val.Specificulture = culture;
                             val.ParseModel();
-                            //val.Model.DataId = item.Id;
-                            //val.Model.CreatedDateTime = DateTime.UtcNow;
-                            //val.Model.Specificulture = culture;
-                            //val.Model.Id = Guid.NewGuid().ToString();
                             context.Entry(val.Model).State = Microsoft.EntityFrameworkCore.EntityState.Added;
                         }
                     }
                     int tmp = await context.SaveChangesAsync();
-                    //if (result.IsSucceed)
-                    //{
-                    //    foreach (var item in data)
-                    //    {
-                    //       item.GenerateCache(item.Model, item);
-                    //    }
-                    //}
                     return result;
                 }
                 catch (Exception ex)
@@ -599,5 +585,71 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 return result;
             }
         }
+
+        public static JObject ParseData(string dataId, string culture, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(
+                    _context, _transaction,
+                    out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            var values = context.MixAttributeSetValue.Where(
+                m => m.DataId == dataId && m.Specificulture == culture
+                    && !string.IsNullOrEmpty(m.AttributeFieldName));
+            var properties = values.Select(m => m.ToJProperty());
+
+            var obj = new JObject(
+                new JProperty("id", dataId),
+                properties
+            );
+
+            if (isRoot)
+            {
+                transaction.Dispose();
+                context.Dispose();
+            }
+
+            return obj;
+        }
+
+        public static void LoadReferenceData(this JObject obj
+            , string dataId, int attributeSetId, string culture
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(
+                    _context, _transaction,
+                    out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            var refFields = context.MixAttributeField.Where(
+                   m => m.AttributeSetId == attributeSetId
+                    && m.DataType == MixEnums.MixDataType.Reference).ToList();
+
+            foreach (var item in refFields)
+            {
+                Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
+                    (model.AttributeSetId == item.ReferenceId)
+                    && (model.ParentId == dataId && model.ParentType == MixEnums.MixAttributeSetDataType.Set.ToString())
+                    && model.Specificulture == culture
+                    ;
+                var getData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(predicate, context, transaction);
+
+                JArray arr = new JArray();
+                foreach (var nav in getData.Data.OrderBy(v => v.Priority))
+                {
+                    arr.Add(nav.Data.Obj);
+                }
+                if (obj.ContainsKey(item.Name))
+                {
+                    obj[item.Name] = arr;
+                }
+                else
+                {
+                    obj.Add(new JProperty(item.Name, arr));
+                }
+            }
+            if (isRoot)
+            {
+                transaction.Dispose();
+                context.Dispose();
+            }
+        }
+
     }
 }

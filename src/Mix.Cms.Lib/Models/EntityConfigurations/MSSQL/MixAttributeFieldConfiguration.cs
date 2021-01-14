@@ -11,7 +11,15 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
         {
             entity.ToTable("mix_attribute_field");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever();
+
+            entity.Property(e => e.DataType)
+               .IsRequired()
+               .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+               .HasColumnType("varchar(50)")
+               .HasCharSet("utf8")
+               .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.AttributeSetName).HasMaxLength(250);
 
@@ -36,6 +44,13 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
                 entity.Property(e => e.Options).HasColumnType("ntext");
 
             entity.Property(e => e.Regex).HasMaxLength(4000);
+
+            entity.Property(e => e.Status)
+               .IsRequired()
+               .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
+               .HasColumnType("varchar(50)")
+               .HasCharSet("utf8")
+               .HasCollation("Vietnamese_CI_AS");
         }
     }
 }

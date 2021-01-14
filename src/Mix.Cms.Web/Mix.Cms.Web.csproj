@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
+        <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
         <StartupObject>Mix.Cms.Web.Program</StartupObject>
         <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
     </PropertyGroup>
@@ -31,6 +32,7 @@
         <ProjectReference Include="..\Mix.Cms.Api.RestFul\Mix.Cms.Api.RestFul.csproj" />
         <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
         <ProjectReference Include="..\Mix.Cms.Api\Mix.Cms.Api.csproj" />
+        <ProjectReference Include="..\Mix.Cms.Schedule\Mix.Cms.Schedule.csproj" />
         <ProjectReference Include="..\Mix.Cms.Service.SignalR\Mix.Cms.Service.SignalR.csproj" />
     </ItemGroup>
 
