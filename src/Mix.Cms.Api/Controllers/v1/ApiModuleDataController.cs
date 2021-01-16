@@ -49,7 +49,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         ModuleId = moduleId,
                         Specificulture = _lang,
                         Fields = getModule.Data.Fields,
-                        Status = MixService.GetConfig<MixEnums.MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)
+                        Status = MixService.GetEnumConfig<MixEnums.MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)
                     };
                     RepositoryResponse<UpdateViewModel> result = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_default", null, model);
 
