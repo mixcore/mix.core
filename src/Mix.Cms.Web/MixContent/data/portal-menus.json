@@ -14,10 +14,12 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/navigation/create?attributeSetName=sys_navigation&&dataId=default"
+          "path": "/portal/attribute-set-data/create?attributeSetId=2&attributeSetName=sys_navigation&attributeSetTitle=Navigation&dataId=default" 
+          
         },
         {
-          "path": "/portal/navigation/list?attributeSetName=sys_navigation",
+          "path": "/portal/attribute-set-data/list?attributeSetId=2&attributeSetName=sys_navigation&attributeSetTitle=Navigation",
+          
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -117,10 +119,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/navigation/create?attributeSetName=sys_category&&dataId=default"
+          "path": "/portal/attribute-set-data/create?attributeSetId=7&attributeSetName=sys_category&attributeSetTitle=Category&dataId=default"
         },
         {
-          "path": "/portal/attribute-set-data/list?attributeSetName=sys_category",
+          "path": "/portal/attribute-set-data/list?attributeSetId=7&attributeSetName=sys_category&attributeSetTitle=Category&dataId=default",
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -134,10 +136,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/navigation/create?attributeSetName=sys_tag&&dataId=default"
+          "path": "/portal/attribute-set-data/create?attributeSetId=8&attributeSetName=sys_tag&attributeSetTitle=Tag&dataId=default"
         },
         {
-          "path": "/portal/attribute-set-data/list?attributeSetName=sys_tag",
+          "path": "/portal/attribute-set-data/list?attributeSetId=8&attributeSetName=sys_tag&attributeSetTitle=Tag&dataId=default",
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -197,6 +199,11 @@
           "path": "/portal/role/list",
           "title": "Roles",
           "icon": "mi mi-GuestUser"
+        },
+        {
+          "path": "/portal/permission/list",
+          "title": "Permission",
+          "icon": "mi mi-Permissions"
         }
       ]
     },
