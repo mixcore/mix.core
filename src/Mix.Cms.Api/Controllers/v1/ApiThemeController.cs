@@ -130,7 +130,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         var model = new MixTheme()
                         {
-                            Status = MixService.GetConfig<MixEnums.MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)
+                            Status = MixService.GetEnumConfig<MixEnums.MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)
                             ,
                             Priority = ReadViewModel.Repository.Max(a => a.Priority).Data + 1
                         };

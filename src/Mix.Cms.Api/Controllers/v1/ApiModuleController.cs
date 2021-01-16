@@ -66,7 +66,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         var model = new MixModule()
                         {
                             Specificulture = _lang,
-                            Status = MixService.GetConfig<MixEnums.MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
+                            Status = MixService.GetEnumConfig<MixEnums.MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
                             Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 
