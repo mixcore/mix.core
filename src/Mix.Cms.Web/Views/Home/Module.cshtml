@@ -1,6 +1,6 @@
 ﻿@model Mix.Cms.Lib.ViewModels.MixModules.ReadMvcViewModel
 @{
-    string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, ViewBag.culture);
+    string master = MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, ViewBag.culture);
     Layout = null;
 }
 @if (!string.IsNullOrEmpty(Model.TemplatePath))

@@ -35,6 +35,13 @@
         <ProjectReference Include="..\Mix.Cms.Schedule\Mix.Cms.Schedule.csproj" />
         <ProjectReference Include="..\Mix.Cms.Service.SignalR\Mix.Cms.Service.SignalR.csproj" />
     </ItemGroup>
+    <ItemGroup>
+      <Content Update="MixContent\data\portal-menus.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
 
     <ItemGroup>
         <None Update="ApacheModRewrite.txt">

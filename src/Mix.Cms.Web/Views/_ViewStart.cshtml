@@ -14,6 +14,6 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
-    string master = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, ViewBag.culture) ?? "Default";
+    string master = MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, ViewBag.culture) ?? "Default";
     Layout = $"Templates/{master}/Masters/{"_Layout"}";
 }

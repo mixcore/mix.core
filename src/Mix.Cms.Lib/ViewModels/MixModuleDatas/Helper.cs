@@ -1,4 +1,5 @@
-﻿using Mix.Cms.Lib.Services;
+﻿using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Services;
 using Newtonsoft.Json.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
@@ -20,7 +21,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                     case MixEnums.MixDataType.Upload:
                         string fullUrl = val["value"].ToString().TrimStart('/');
 
-                        fullUrl = fullUrl.IndexOf("http") >= 0 ? fullUrl : $"{MixService.GetConfig<string>("Domain")}/{fullUrl}";
+                        fullUrl = fullUrl.IndexOf("http") >= 0 ? fullUrl : $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/{fullUrl}";
                         val["value"] = fullUrl;
                         break;
                     case MixEnums.MixDataType.DateTime:

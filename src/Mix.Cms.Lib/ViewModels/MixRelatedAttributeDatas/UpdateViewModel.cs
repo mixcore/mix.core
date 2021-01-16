@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Domain.Data.ViewModels;
@@ -82,7 +83,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
             if (string.IsNullOrEmpty(Id))
             {
                 Id = Guid.NewGuid().ToString();
-                CreatedDateTime = DateTime.UtcNow;                
+                CreatedDateTime = DateTime.UtcNow;
             }
             return base.ParseModel(_context, _transaction);
         }
@@ -91,7 +92,8 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         {
             if (string.IsNullOrEmpty(Id))
             {
-                Status = Status == default ? Enum.Parse<MixEnums.MixContentStatus>(MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultContentStatus)) : Status;
+                Status = Status == default ? Enum.Parse<MixEnums.MixContentStatus>(MixService.GetConfig<string>(
+                    MixAppSettingKeywords.DefaultContentStatus)) : Status;
             }
 
             var getData = MixAttributeSetDatas.UpdateViewModel.Repository.GetSingleModel(p => p.Id == DataId && p.Specificulture == Specificulture

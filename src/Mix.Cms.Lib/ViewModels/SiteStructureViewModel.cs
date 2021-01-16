@@ -634,7 +634,7 @@ namespace Mix.Cms.Lib.ViewModels
             {
                 int startId = MixPages.UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
                 int startModuleId = MixModules.UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
-                //var pages = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, "data", true, "{}");
+                //var pages = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, MixFolders.JsonDataFolder, true, "{}");
                 //var obj = JObject.Parse(pages.Content);
                 //var initPages = obj["data"].ToObject<JArray>();
                 foreach (var item in Pages)
