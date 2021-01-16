@@ -122,8 +122,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 AttributeSetId = _context.MixAttributeSet.First(m => m.Name == AttributeSetName)?.Id ?? 0;
             }
-            Values = Values ?? MixAttributeSetValues.UpdateViewModel
-                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
+            Values ??= MixAttributeSetValues.UpdateViewModel
+                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture).Data.OrderBy(a => a.Priority).ToList();
             Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
 
             foreach (var field in Fields.OrderBy(f => f.Priority))
@@ -256,6 +256,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
 
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+                if (result.IsSucceed)
+                {
+                    Obj = Helper.ParseData(Id, Specificulture, context, transaction);
+                }
                 return result;
             }
             catch (Exception ex)
@@ -266,7 +270,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 if (isRoot)
                 {
-                    Obj = Helper.ParseData(Id, Specificulture, _context, _transaction);
+                    transaction.Dispose();
                     context.Dispose();
                 }
             }
@@ -374,42 +378,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> SaveRelatedDataAsync(MixAttributeSetData parent, MixCmsContext context, IDbContextTransaction transaction)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-
-            foreach (var item in RelatedData)
-            {
-                if (result.IsSucceed)
-                {
-                    // Current data is child data
-                    if (string.IsNullOrEmpty(item.Id))
-                    {
-                        item.AttributeSetId = parent.AttributeSetId;
-                        item.AttributeSetName = parent.AttributeSetName;
-                        item.Id = parent.Id;
-                    }
-                    // Current data is parent data
-                    else if (string.IsNullOrEmpty(item.ParentId))
-                    {
-                        item.ParentId = parent.Id;
-                    }
-                    item.Priority = MixRelatedAttributeDatas.UpdateViewModel.Repository.Count(
-                                    m => m.ParentId == Id && m.Specificulture == Specificulture, context, transaction).Data + 1;
-                    item.Specificulture = Specificulture;
-                    item.CreatedDateTime = DateTime.UtcNow;
-                    var saveResult = await item.SaveModelAsync(true, context, transaction);
-                    ViewModelHelper.HandleResult(saveResult, ref result);
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            return result;
-        }
-
         #endregion Async
 
         #endregion Overrides
@@ -429,7 +397,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         }
         public bool HasValue(string fieldName)
         {
-            return Obj != null ? Obj.Value<string>(fieldName) != null : false;
+            return Obj != null && Obj.Value<string>(fieldName) != null;
         }
 
         public T Property<T>(string fieldName)
@@ -440,7 +408,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             else
             {
-                return default(T);
+                return default;
             }
         }
         #endregion Expands

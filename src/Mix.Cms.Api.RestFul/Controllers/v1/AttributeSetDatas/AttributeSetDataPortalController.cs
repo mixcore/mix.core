@@ -115,7 +115,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet("init/{attributeSet}")]
         public async Task<ActionResult<FormViewModel>> Init(string attributeSet)
         {
-            int.TryParse(attributeSet, out int attributeSetId);
+            _ = int.TryParse(attributeSet, out int attributeSetId);
             var getAttrSet = await Lib.ViewModels.MixAttributeSets.UpdateViewModel.Repository.GetSingleModelAsync(m => m.Name == attributeSet || m.Id == attributeSetId);
             if (getAttrSet.IsSucceed)
             {
