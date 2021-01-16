@@ -6,9 +6,9 @@
   },
   "MixConfigurations": {
     "IsCache": true,
-    "CacheFolder": "MixContent/cache",
+    "MixCacheFolder": "MixContent/cache",
     "JsonDataFolder": "MixContent/data",
-    "LogsFolder": "MixContent/logs"
+    "MixLogsFolder": "MixContent/logs"
   },
   "Authentication": {
     "ClockSkew": 20,
