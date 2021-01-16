@@ -28,7 +28,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             if (result.IsSucceed)
             {
                 string domain = MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
-                string accessFolder = $"{MixFolders.SiteContentFileFolder}/{MixFolders.TemplatesAssetFolder}/{getTheme.Data.Name}/assets";
+                string accessFolder = $"{MixFolders.SiteContentFolder}/{MixFolders.SiteContentTemplate}/{getTheme.Data.Name}/assets";
                 string content = JObject.FromObject(data).ToString()
                     .Replace(accessFolder, "[ACCESS_FOLDER]")
                     .Replace($"/{culture}/", "/[CULTURE]/");
@@ -96,8 +96,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                         data.TemplateAsset = new Lib.ViewModels.FileViewModel()
                         {
                             Filename = "default",
-                            Extension = ".zip",
-                            FileFolder = "Imports/Themes"
+                            Extension = MixFileExtensions.Zip,
+                            FileFolder = MixFolders.ImportFolder
                         };
                     }
                     else
@@ -105,8 +105,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                         data.TemplateAsset = new Lib.ViewModels.FileViewModel()
                         {
                             Filename = "default_blank",
-                            Extension = ".zip",
-                            FileFolder = "Imports/Themes"
+                            Extension = MixFileExtensions.Zip,
+                            FileFolder = MixFolders.ImportFolder
                         };
                     }
                 }

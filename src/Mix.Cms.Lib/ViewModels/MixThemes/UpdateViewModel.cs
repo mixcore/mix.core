@@ -115,7 +115,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"{MixFolders.SiteContentFileFolder}/{Name}/assets";
+                return $"{MixFolders.SiteContentFolder}/{Name}/assets";
             }
         }
 
@@ -123,7 +123,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"{MixFolders.SiteContentFileFolder}/{Name}/uploads";
+                return $"{MixFolders.SiteContentFolder}/{Name}/uploads";
             }
         }
 
@@ -171,8 +171,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                     TemplateAsset = new Lib.ViewModels.FileViewModel()
                     {
                         Filename = "default_blank",
-                        Extension = ".zip",
-                        FileFolder = "Imports/Themes"
+                        Extension = MixFileExtensions.Zip,
+                        FileFolder = MixFolders.ImportFolder
                     };
                 }
             }
@@ -281,8 +281,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             //TODO: Create default asset
             foreach (var file in files)
             {
-                string content = file.Content.Replace($"{MixFolders.SiteContentFileFolder}/{themeName}/",
-                $"{MixFolders.SiteContentFileFolder}/{Name}/");
+                string content = file.Content.Replace($"{MixFolders.SiteContentFolder}/{themeName}/",
+                $"{MixFolders.SiteContentFolder}/{Name}/");
                 MixTemplates.UpdateViewModel template = new MixTemplates.UpdateViewModel(
                     new MixTemplate()
                     {

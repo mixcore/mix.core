@@ -172,7 +172,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 if (data.IsCloneFromCurrentTheme)
                 {
                     var currentThemeFolder = $"{MixFolders.TemplatesFolder}/{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, _lang)}";
-                    var assetFolder = $"{MixFolders.SiteContentFileFolder}/{MixFolders.TemplatesAssetFolder}/{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, _lang)}/assets";
+                    var assetFolder = $"{MixFolders.SiteContentFolder}/{MixFolders.SiteContentTemplate}/{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, _lang)}/assets";
                     FileRepository.Instance.CopyDirectory(currentThemeFolder, data.TemplateFolder);
                     FileRepository.Instance.CopyDirectory(assetFolder, $"wwwroot/{data.AssetFolder}");
                 }
@@ -181,8 +181,8 @@ namespace Mix.Cms.Api.Controllers.v1
                     data.TemplateAsset = new Lib.ViewModels.FileViewModel()
                     {
                         Filename = "default_blank",
-                        Extension = ".zip",
-                        FileFolder = "Imports/Themes"
+                        Extension = MixFileExtensions.Zip,
+                        FileFolder = MixFolders.ImportFolder
                     };
                 }
             }
