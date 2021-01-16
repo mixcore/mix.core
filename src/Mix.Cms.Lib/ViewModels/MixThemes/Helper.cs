@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -19,15 +20,15 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                  theme => theme.Id == id).ConfigureAwait(false);
 
             //path to temporary folder
-            string tempPath = $"Exports/Themes/{getTheme.Data.Name}/temp";
-            string outputPath = $"Exports/Themes/{getTheme.Data.Name}";
+            string tempPath = $"{MixFolders.ExportFolder}/Themes/{getTheme.Data.Name}/temp";
+            string outputPath = $"{MixFolders.ExportFolder}/Themes/{getTheme.Data.Name}";
             data.ThemeName = getTheme.Data.Name;
             data.Specificulture = culture;
             var result = data.ExportSelectedItemsAsync();
             if (result.IsSucceed)
             {
-                string domain = MixService.GetConfig<string>("Domain");
-                string accessFolder = $"{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{getTheme.Data.Name}/assets";
+                string domain = MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
+                string accessFolder = $"{MixFolders.SiteContentFolder}/{MixFolders.SiteContentTemplate}/{getTheme.Data.Name}/assets";
                 string content = JObject.FromObject(data).ToString()
                     .Replace(accessFolder, "[ACCESS_FOLDER]")
                     .Replace($"/{culture}/", "/[CULTURE]/");
@@ -39,7 +40,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 var file = new FileViewModel()
                 {
                     Filename = filename,
-                    Extension = ".json",
+                    Extension = MixFileExtensions.Json,
                     FileFolder = $"{tempPath}/Data",
                     Content = content
                 };
@@ -95,8 +96,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                         data.TemplateAsset = new Lib.ViewModels.FileViewModel()
                         {
                             Filename = "default",
-                            Extension = ".zip",
-                            FileFolder = "Imports/Themes"
+                            Extension = MixFileExtensions.Zip,
+                            FileFolder = MixFolders.ImportFolder
                         };
                     }
                     else
@@ -104,19 +105,19 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                         data.TemplateAsset = new Lib.ViewModels.FileViewModel()
                         {
                             Filename = "default_blank",
-                            Extension = ".zip",
-                            FileFolder = "Imports/Themes"
+                            Extension = MixFileExtensions.Zip,
+                            FileFolder = MixFolders.ImportFolder
                         };
                     }
                 }
 
-                data.Title = MixService.GetConfig<string>("SiteName", culture);
+                data.Title = MixService.GetConfig<string>(MixAppSettingKeywords.SiteName, culture);
                 data.Name = SeoHelper.GetSEOString(data.Title);
                 data.Specificulture = culture;
                 var result = await data.SaveModelAsync(true);
                 if (result.IsSucceed)
                 {
-                    // MixService.SetConfig<string>("SiteName", _lang, data.Title);
+                    // MixService.SetConfig<string>(MixAppSettingKeywords.SiteName, _lang, data.Title);
                     MixService.LoadFromDatabase();
                     MixService.SetConfig("InitStatus", 3);
                     MixService.SetConfig("IsInit", false);
@@ -126,7 +127,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 }
                 return result;
             }
-            return new RepositoryResponse<InitViewModel>();            
+            return new RepositoryResponse<InitViewModel>();
         }
     }
 }

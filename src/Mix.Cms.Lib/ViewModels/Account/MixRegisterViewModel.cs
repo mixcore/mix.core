@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
@@ -75,7 +76,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
         public List<NavUserRoleViewModel> UserRoles { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain => MixService.GetConfig<string>("Domain");
+        public string Domain => MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
 
         [JsonProperty("avatarUrl")]
         public string AvatarUrl

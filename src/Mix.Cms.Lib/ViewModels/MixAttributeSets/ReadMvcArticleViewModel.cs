@@ -102,7 +102,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             //var getData = MixPostAttributeDatas.ReadMvcViewModel.Repository
             //.GetModelListBy(
             //    m => m.PostId == postId && m.Specificulture == specificulture && m.AttributeSetId == Id
-            //    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+            //    , MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy), 0
             //    , pageSize, pageIndex
             //    , _context: _context, _transaction: _transaction);
 

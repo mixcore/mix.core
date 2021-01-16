@@ -22,6 +22,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
+using Mix.Cms.Lib.Constants;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -204,7 +205,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 file = new FileViewModel()
                 {
                     Filename = filename,
-                    Extension = ".json",
+                    Extension = MixFileExtensions.Json,
                     FileFolder = exportPath,
                     Content = objContent.ToString()
                 };

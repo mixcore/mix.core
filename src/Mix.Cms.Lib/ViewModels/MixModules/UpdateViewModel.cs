@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -86,7 +87,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #endregion Attributes
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
+        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl
@@ -152,7 +153,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         {
             get
             {
-                return MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
+                return MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, Specificulture);
             }
         }
 
@@ -166,8 +167,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             {
                 return CommonHelper.GetFullPath(new string[]
                 {
-                    MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture)
+                    MixFolders.TemplatesFolder
+                    , MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)
                     , ThemeFolderType
                 }
             );
@@ -200,8 +201,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             {
                 return CommonHelper.GetFullPath(new string[]
                 {
-                    MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture)
+                    MixFolders.TemplatesFolder
+                    , MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)
                     , MixEnums.EnumTemplateFolder.Forms.ToString()
                 }
             );
@@ -234,8 +235,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             {
                 return CommonHelper.GetFullPath(new string[]
                 {
-                    MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture)
+                    MixFolders.TemplatesFolder
+                    , MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)
                     , MixEnums.EnumTemplateFolder.Edms.ToString()
                 }
             );

@@ -1,6 +1,8 @@
-﻿namespace Mix.Cms.Lib.Constants
+﻿using System.Collections.Generic;
+
+namespace Mix.Cms.Lib.Constants
 {
-    public static class MixConstants
+    public static class MixConfigurations
     {
         public const string CONST_CMS_CONNECTION = "MixCmsConnection";
         public const string CONST_MESSENGER_CONNECTION = "MixMessengerConnection";
@@ -28,5 +30,6 @@
         public const string CONST_DEFAULT_EXTENSIONS_FILE_PATH = "\\Contents\\Extensions\\";
         public const string CONST_DEFAULT_EXTENSION_FILE_NAME = "extensions.json";
         public const string CONST_DEFAULT_STRING_ID = "default";
+        public static List<string> cachedKeys = new List<string>();
     }
 }

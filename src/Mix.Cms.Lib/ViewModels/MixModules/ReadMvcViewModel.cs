@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -79,7 +80,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #region Views
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
+        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }
@@ -149,8 +150,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 return CommonHelper.GetFullPath(new string[]
                 {
                     ""
-                    , MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture) ?? "Default"
+                    , MixFolders.TemplatesFolder
+                    , MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"
                     , Template
                 });
             }
@@ -163,8 +164,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 return CommonHelper.GetFullPath(new string[]
                 {
                     ""
-                    , MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture) ?? "Default"
+                    , MixFolders.TemplatesFolder
+                    , MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"
                     , FormTemplate
                 });
             }
@@ -177,8 +178,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 return CommonHelper.GetFullPath(new string[]
                 {
                     ""
-                    , MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture) ?? "Default"
+                    , MixFolders.TemplatesFolder
+                    , MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"
                     , EdmTemplate
                 });
             }
@@ -292,7 +293,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                     var getDataResult = MixModuleDatas.ReadViewModel.Repository
                     .GetModelListBy(
                         dataExp
-                        , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy
+                        , MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy
                         ), 0
                         , pageSize, pageIndex
                         , _context: context, _transaction: transaction);
@@ -307,7 +308,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 {
                     var getPosts = MixModulePosts.ReadViewModel.Repository
                     .GetModelListBy(postExp
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+                    , MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy), 0
                     , pageSize, pageIndex
                     , _context: context, _transaction: transaction);
                     if (getPosts.IsSucceed)

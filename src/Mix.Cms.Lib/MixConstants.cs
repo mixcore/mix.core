@@ -31,8 +31,6 @@ namespace Mix.Cms.Lib
         public const string CONST_DEFAULT_EXTENSION_FILE_NAME = "extensions.json";
         public const string CONST_DEFAULT_STRING_ID = "default";
 
-        public static List<string> cachedKeys = new List<string>();
-
         public static class AttributeSetName
         {
             public const string ADDITIONAL_FIELD_PAGE = "sys_additional_field_page";
@@ -42,32 +40,6 @@ namespace Mix.Cms.Lib
             public const string MENU_ITEM = "sys_menu_item";
             public const string SYSTEM_CATEGORY = "sys_category";
             public const string SYSTEM_TAG = "sys_tag";
-        }
-
-        public static class ConfigurationKeyword
-        {
-            public const string ConnectionString = "ConnectionString";
-            public const string OrderBy = "OrderBy";
-            public const string DefaultBlankTemplateFolder = "DefaultTemplateFolder";
-            public const string DefaultTemplateFolder = "DefaultTemplateFolder";
-            public const string Language = "Language";
-            public const string DefaultStatus = "DefaultContentStatus";
-            public const string DefaultCulture = "DefaultCulture";
-            public const string IsMysql = "IsMysql";
-            public const string Domain = "Domain";
-            public const string PortalThemeSettings = "PortalThemeSettings";
-            public const string ThemeId = "ThemeId";
-            public const string ThemeName = "ThemeName";
-            public const string ThemeFolder = "ThemeFolder";
-            public const string ApiEncryptKey = "ApiEncryptKey";
-            public const string ApiEncryptIV = "ApiEncryptIV";
-            public const string IsEncryptApi = "IsEncryptApi";
-            public const string TemplateExtension = "TemplateExtension";
-            public const string DefaultTheme = "DefaultTheme";
-            public const string DefaultTemplate = "DefaultTemplate";
-            public const string DefaultTemplateContent = "DefaultTemplateContent";
-            public const string DefaultContentStatus = "DefaultContentStatus";
-            public const string NextSyncContent = "NextSyncContent";
         }
 
         public static class TemplateFolder
@@ -88,17 +60,5 @@ namespace Mix.Cms.Lib
             public const string Post = "_Blank.cshtml";
             public const string Module = "_Blank.cshtml";
         }
-
-        public static class Folder
-        {
-            public const string FileFolder = @"content";
-            public const string CacheFolder = @"cache";
-            public const string TemplateExtension = @".cshtml";
-            public const string TemplatesAssetFolder = @"templates";
-            public const string TemplatesFolder = @"Views/Shared/Templates";
-            public const string UploadFolder = @"Content/Uploads";
-            public const string WebRootPath = @"wwwroot";
-        }
-
     }
 }

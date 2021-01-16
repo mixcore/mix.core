@@ -1,0 +1,74 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "level": 0,
+      "title": "Home",
+      "image": "/mix-app/assets/img/bgs/home.jpeg",
+      "template": "Pages/_Home.cshtml",
+      "layout": "Masters/_Layout.cshtml",
+      "type": 3,
+      "status": "Published"
+    },
+    {
+      "id": 2,
+      "level": 0,
+      "title": "Tag",
+      "image": "/mix-app/assets/img/bgs/tag.jpg",
+      "template": "Pages/_Tag.cshtml",
+      "layout": "Masters/_Layout.cshtml",
+      "type": 8,
+      "status": "Published"
+    },
+    {
+      "id": 3,
+      "level": 0,
+      "title": "Search",
+      "image": "/mix-app/assets/img/bgs/search.jpg",
+      "template": "Pages/_Search.cshtml",
+      "layout": "Masters/_Layout.cshtml",
+      "type": 8,
+      "status": "Published"
+    },
+    {
+      "id": 4,
+      "level": 0,
+      "title": "404",
+      "image": "/mix-app/assets/img/bgs/404.jpg",
+      "template": "Pages/_404.cshtml",
+      "layout": "Masters/_Blank.cshtml",
+      "type": 8,
+      "status": "Published"
+    },
+    {
+      "id": 5,
+      "level": 0,
+      "title": "403",
+      "image": "/mix-app/assets/img/bgs/403.png",
+      "template": "Pages/_403.cshtml",
+      "layout": "Masters/_Blank.cshtml",
+      "type": 8,
+      "status": "Published"
+    },
+    {
+      "id": 6,
+      "level": 0,
+      "title": "500",
+      "image": "/mix-app/assets/img/bgs/500.png",
+      "template": "Pages/_403.cshtml",
+      "layout": "Masters/_Blank.cshtml",
+      "type": 8,
+      "status": "Published"
+    },
+    {
+      "id": 7,
+      "level": 0,
+      "title": "Maintenance",
+      "image": "/mix-app/assets/img/bgs/Maintenance.jpg",
+      "template": "Pages/_Maintenance.cshtml",
+      "layout": "Masters/_Blank.cshtml",
+      "type": 8,
+      "status": "Published"
+    }
+  ]
+}

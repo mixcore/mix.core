@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -42,7 +43,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         item.Priority = priority;
                         item.Fields = fields;
                         item.AttributeSetName = attributeSet.Name;
-                        item.Status = Enum.Parse<MixEnums.MixContentStatus>(MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultContentStatus));
+                        item.Status = Enum.Parse<MixEnums.MixContentStatus>(MixService.GetConfig<string>(MixAppSettingKeywords.DefaultContentStatus));
                         item.ParseModel();
                         context.Entry(item.Model).State = Microsoft.EntityFrameworkCore.EntityState.Added;
                         foreach (var val in item.Values)
