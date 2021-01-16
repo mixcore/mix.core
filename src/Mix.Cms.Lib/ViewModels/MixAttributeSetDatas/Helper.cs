@@ -284,12 +284,16 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     m => m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName, context, transaction);
                 var fields = getfields.IsSucceed ? getfields.Data : new List<MixAttributeFields.ReadViewModel>();
                 var fieldQueries = !string.IsNullOrEmpty(request.Query["query"]) ? JObject.Parse(request.Query["query"]) : new JObject();
+
+
+                // Data predicate
+                Expression<Func<MixAttributeSetData, bool>> predicate = m => m.Specificulture == culture
+                   && (m.AttributeSetName == attributeSetName);
+
+                // val predicate
                 Expression<Func<MixAttributeSetValue, bool>> attrPredicate = m => m.Specificulture == culture
                    && (m.AttributeSetName == attributeSetName);
-                // val predicate
-                Expression<Func<MixAttributeSetValue, bool>> valPredicate = null;
-                // Data predicate
-                Expression<Func<MixAttributeSetData, bool>> predicate = null;
+
                 RepositoryResponse<PaginationModel<TView>> result = new RepositoryResponse<PaginationModel<TView>>()
                 {
                     IsSucceed = true,
@@ -303,64 +307,30 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     // filter by all fields if have keyword
                     if (!string.IsNullOrEmpty(keyword))
                     {
+                        Expression<Func<MixAttributeSetValue, bool>> pre = null;
                         foreach (var field in fields)
                         {
-                            Expression<Func<MixAttributeSetValue, bool>> pre =
-                                       m => m.AttributeFieldName == field.Name &&
-                                            (filterType == "equal" && m.StringValue == keyword) ||
-                                            (filterType == "contain" && (EF.Functions.Like(m.StringValue, $"%{keyword}%")));
-                            if (valPredicate != null)
-                            {
-                                valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
-                            }
-                            else
-                            {
-                                valPredicate = pre;
-                            }
+                            Expression<Func<MixAttributeSetValue, bool>> keywordPredicate = m => m.AttributeFieldName == field.Name;
+                            keywordPredicate = keywordPredicate.AndAlsoIf(filterType == "equal", m => m.StringValue == keyword);
+                            keywordPredicate = keywordPredicate.AndAlsoIf(filterType == "contain", m => EF.Functions.Like(m.StringValue, $"%{keyword}%"));
+
+                            pre = pre == null 
+                                ? keywordPredicate
+                                : pre.Or(keywordPredicate);
                         }
+                        attrPredicate = attrPredicate.AndAlsoIf(pre != null, pre);
                     }
+
                     if (fieldQueries != null && fieldQueries.Properties().Count() > 0) // filter by specific field name
                     {
-                        foreach (var q in fieldQueries)
-                        {
-                            if (fields.Any(f => f.Name == q.Key))
-                            {
-                                string value = q.Value.ToString();
-                                if (!string.IsNullOrEmpty(value))
-                                {
-                                    Expression<Func<MixAttributeSetValue, bool>> pre =
-                                       m => m.AttributeFieldName == q.Key &&
-                                            (filterType == "equal" && m.StringValue == (q.Value.ToString())) ||
-                                            (filterType == "contain" && (EF.Functions.Like(m.StringValue, $"%{q.Value.ToString()}%")));
-                                    if (valPredicate != null)
-                                    {
-                                        valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.Or);
-                                    }
-                                    else
-                                    {
-                                        valPredicate = pre;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (valPredicate != null)
-                    {
-                        attrPredicate = attrPredicate == null ? valPredicate
-                                : ReflectionHelper.CombineExpression(valPredicate, attrPredicate, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                        var valPredicate = GetFilterValueByFields(fields, fieldQueries, filterType);
+                        attrPredicate.AndAlsoIf(valPredicate != null, valPredicate);
                     }
 
-                    if (attrPredicate != null)
-                    {
-                        var query = context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
-                        var dataIds = query.ToList();
-                        if (query != null)
-                        {
-                            Expression<Func<MixAttributeSetData, bool>> pre = m => dataIds.Any(id => m.Id == id);
-                            predicate = pre; // ReflectionHelper.CombineExpression(pre, predicate, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
-
-                        }
-                    }
+                    var query = context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
+                    var dataIds = query.ToList();
+                    
+                    predicate = predicate.AndAlsoIf(query != null, m => dataIds.Any(id => m.Id == id));
                 }
                 else
                 {
@@ -386,6 +356,29 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
+        }
+
+        private static Expression<Func<MixAttributeSetValue, bool>> GetFilterValueByFields(List<MixAttributeFields.ReadViewModel> fields, JObject fieldQueries, string filterType)
+        {
+            Expression<Func<MixAttributeSetValue, bool>> valPredicate = null;
+            foreach (var q in fieldQueries)
+            {
+                if (fields.Any(f => f.Name == q.Key))
+                {
+                    string value = q.Value.ToString();
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeFieldName == q.Key;
+                        pre = pre.AndAlsoIf(filterType == "equal", m => m.StringValue == (q.Value.ToString()));
+                        pre = pre.AndAlsoIf(filterType == "contain", m => EF.Functions.Like(m.StringValue, $"%{q.Value}%"));
+
+                        valPredicate = valPredicate == null
+                            ? pre
+                            : valPredicate.Or(pre);
+                    }
+                }
+            }
+            return valPredicate;
         }
 
         public static async Task<RepositoryResponse<List<TView>>> FilterByKeywordAsync<TView>(string culture, string attributeSetName
