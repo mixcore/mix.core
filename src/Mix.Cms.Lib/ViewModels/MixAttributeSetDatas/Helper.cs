@@ -27,42 +27,39 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public static async Task<RepositoryResponse<bool>> ImportData(
             string culture, Lib.ViewModels.MixAttributeSets.ReadViewModel attributeSet, IFormFile file)
         {
-            using (var context = new MixCmsContext())
+
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(null, null, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
             {
-                var result = new RepositoryResponse<bool>() { IsSucceed = true };
-                try
+                List<ImportViewModel> data = LoadFileData(culture, attributeSet, file);
+
+                var fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == attributeSet.Id, context, transaction).Data;
+                foreach (var item in data)
                 {
-                    List<ImportViewModel> data = LoadFileData(culture, attributeSet, file);
-
-                    var fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == attributeSet.Id).Data;
-                    var priority = ImportViewModel.Repository.Count(m => m.AttributeSetName == attributeSet.Name && m.Specificulture == culture).Data;
-                    foreach (var item in data)
+                    if (result.IsSucceed)
                     {
-                        priority += 1;
-
-                        item.Priority = priority;
+                        var isCreateNew = string.IsNullOrEmpty(item.Id);
                         item.Fields = fields;
                         item.AttributeSetName = attributeSet.Name;
                         item.Status = Enum.Parse<MixEnums.MixContentStatus>(MixService.GetConfig<string>(MixAppSettingKeywords.DefaultContentStatus));
-                        item.ParseModel();
-                        context.Entry(item.Model).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                        foreach (var val in item.Values)
-                        {
-                            val.DataId = item.Id;
-                            val.Specificulture = culture;
-                            val.ParseModel();
-                            context.Entry(val.Model).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                        }
+                        var saveResult = await item.SaveModelAsync(true, context, transaction);
+                        ViewModelHelper.HandleResult(saveResult, ref result);
                     }
-                    int tmp = await context.SaveChangesAsync();
-                    return result;
                 }
-                catch (Exception ex)
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<bool>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
                 {
-                    result.IsSucceed = false;
-                    result.Exception = ex;
-                    result.Errors.Add(ex.Message);
-                    return result;
+                    //if current Context is Root
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }
@@ -151,10 +148,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         }
                         ImportViewModel data = new ImportViewModel()
                         {
+                            Id = obj["id"]?.ToString(),
                             AttributeSetId = attributeSet.Id,
                             AttributeSetName = attributeSet.Name,
                             Specificulture = culture,
-                            Data = obj
+                            Obj = obj
                         };
                         excelData.Add(data);
                     }
@@ -314,7 +312,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             keywordPredicate = keywordPredicate.AndAlsoIf(filterType == "equal", m => m.StringValue == keyword);
                             keywordPredicate = keywordPredicate.AndAlsoIf(filterType == "contain", m => EF.Functions.Like(m.StringValue, $"%{keyword}%"));
 
-                            pre = pre == null 
+                            pre = pre == null
                                 ? keywordPredicate
                                 : pre.Or(keywordPredicate);
                         }
@@ -329,7 +327,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
                     var query = context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
                     var dataIds = query.ToList();
-                    
+
                     predicate = predicate.AndAlsoIf(query != null, m => dataIds.Any(id => m.Id == id));
                 }
                 else
