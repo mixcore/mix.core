@@ -76,7 +76,7 @@ namespace Mix.Cms.Lib.Repositories
         public FileViewModel GetWebFile(string filename, string folder)
         {
             string fullPath = $"{MixFolders.WebRootPath}/{folder}/{filename}";
-            string folderPath = $"{MixFolders.WebRootPath}/{MixFolders.SiteContentFileFolder}/{folder}";
+            string folderPath = $"{MixFolders.WebRootPath}/{MixFolders.SiteContentFolder}/{folder}";
             FileInfo file = new FileInfo(fullPath);
             FileViewModel result = null;
             try
@@ -107,7 +107,7 @@ namespace Mix.Cms.Lib.Repositories
             string fullPath = CommonHelper.GetFullPath(new string[]
            {
                 MixFolders.WebRootPath,
-                MixFolders.SiteContentFileFolder,
+                MixFolders.SiteContentFolder,
                 folder,
                 filename
            });
@@ -467,7 +467,7 @@ namespace Mix.Cms.Lib.Repositories
         {
             string fullPath = CommonHelper.GetFullPath(new string[] {
                     MixFolders.WebRootPath,
-                    MixFolders.SiteContentFileFolder,
+                    MixFolders.SiteContentFolder,
                     folder
                 });
 

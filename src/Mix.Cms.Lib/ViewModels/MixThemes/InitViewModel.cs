@@ -93,7 +93,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"{MixFolders.SiteContentFileFolder}/{Name}/assets";
+                return $"{MixFolders.SiteContentFolder}/{MixFolders.SiteContentTemplate}/{Name}/assets";
             }
         }
 
@@ -101,7 +101,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"{MixFolders.SiteContentFileFolder}/{Name}/uploads";
+                return $"{MixFolders.SiteContentFolder}/{Name}/uploads";
             }
         }
 
@@ -163,8 +163,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 TemplateAsset = new Lib.ViewModels.FileViewModel()
                 {
                     Filename = "default_blank",
-                    Extension = ".zip",
-                    FileFolder = "Imports/Themes"
+                    Extension = MixFileExtensions.Zip,
+                    FileFolder = MixFolders.ImportFolder
                 };
             }
 
@@ -192,9 +192,9 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 //Move Unzip Asset folder
                 FileRepository.Instance.CopyDirectory($"{outputFolder}/Assets", $"{MixFolders.WebRootPath}/{AssetFolder}");
                 //Move Unzip Templates folder
-                FileRepository.Instance.CopyDirectory($"{outputFolder}/Templates", TemplateFolder);
+                FileRepository.Instance.CopyDirectory($"{outputFolder}/{MixFolders.SiteContentTemplate}", TemplateFolder);
                 //Move Unzip Uploads folder
-                FileRepository.Instance.CopyDirectory($"{outputFolder}/Uploads", $"{MixFolders.WebRootPath}/{UploadsFolder}");
+                FileRepository.Instance.CopyDirectory($"{outputFolder}/{MixFolders.SiteContentUpload}", $"{MixFolders.WebRootPath}/{UploadsFolder}");
                 // Get SiteStructure
                 var strSchema = FileRepository.Instance.GetFile("schema.json", $"{outputFolder}/Data");
                 string parseContent = strSchema.Content.Replace("[ACCESS_FOLDER]", AssetFolder)
@@ -211,8 +211,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                     //TODO: Create default asset
                     foreach (var file in files)
                     {
-                        string content = file.Content.Replace($"/{MixFolders.SiteContentFileFolder}/{siteStructures.ThemeName}/",
-                        $"/{MixFolders.SiteContentFileFolder}/{Name}/");
+                        string content = file.Content.Replace($"/{MixFolders.SiteContentFolder}/{siteStructures.ThemeName}/",
+                        $"/{MixFolders.SiteContentFolder}/{Name}/");
                         MixTemplates.UpdateViewModel template = new MixTemplates.UpdateViewModel(
                             new MixTemplate()
                             {

@@ -482,12 +482,12 @@ namespace Mix.Cms.Lib.Services
 
         public static string GetTemplateFolder(string culture)
         {
-            return $"{MixFolders.SiteContentFileFolder}/{Instance.LocalSettings[culture][MixAppSettingKeywords.ThemeFolder]}";
+            return $"{MixFolders.SiteContentFolder}/{Instance.LocalSettings[culture][MixAppSettingKeywords.ThemeFolder]}";
         }
 
         public static string GetTemplateUploadFolder(string culture)
         {
-            return $"{MixFolders.SiteContentFileFolder}/{Instance.LocalSettings[culture][MixAppSettingKeywords.ThemeFolder]}/uploads";
+            return $"{MixFolders.SiteContentFolder}/{Instance.LocalSettings[culture][MixAppSettingKeywords.ThemeFolder]}/uploads";
         }
 
         public static MixCmsContext GetDbContext()

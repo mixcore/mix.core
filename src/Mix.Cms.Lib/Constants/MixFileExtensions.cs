@@ -4,5 +4,6 @@
     {
         public const string CsHtml = ".cshtml";
         public const string Json = ".json";
+        public const string Zip = ".zip";
     }
 }
