@@ -317,7 +317,7 @@ namespace Mix.Cms.Lib
             return nav;
         }
 
-        public static async Task<RepositoryResponse<PaginationModel<TView>>> GetListPostByAddictionalField<TView>(
+        public static async Task<RepositoryResponse<PaginationModel<TView>>> GetListPostByAdditionalField<TView>(
             string fieldName, object fieldValue, string culture, MixEnums.MixDataType dataType
             , MixEnums.CompareType filterType = MixEnums.CompareType.Eq
             , string orderByPropertyName = null, Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Asc, int? pageSize = null, int? pageIndex = null
@@ -516,7 +516,7 @@ namespace Mix.Cms.Lib
                 culture, orderByPropertyName, direction, pageSize, page - 1, _context, _transaction);
         }
 
-        public async static Task<RepositoryResponse<PaginationModel<TView>>> GetPostlistByAddictionalField<TView>(
+        public async static Task<RepositoryResponse<PaginationModel<TView>>> GetPostlistByAdditionalField<TView>(
 
             string fieldName, string value, string culture
             , string orderByPropertyName = null, Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Asc
@@ -529,7 +529,7 @@ namespace Mix.Cms.Lib
             pageSize = (pageSize > 0 && pageSize < maxPageSize) ? pageSize : maxPageSize;
             pageIndex = (pageIndex >= 0) ? pageIndex : 0;
 
-            return await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetModelistByAddictionalField<TView>(
+            return await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetModelistByAdditionalField<TView>(
                 fieldName, value,
                 culture, orderByPropertyName ?? orderBy, direction, pageSize, pageIndex - 1, _context, _transaction);
         }

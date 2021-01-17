@@ -38,9 +38,9 @@ namespace Mix.Cms.Web
                 .AddRazorRuntimeCompilation()
                 .AddNewtonsoftJson(options => { options.SerializerSettings.Converters.Add(new StringEnumConverter()); });
 
-            #region Addictionals Config for Mixcore Cms
+            #region Additionals Config for Mixcore Cms
 
-            /* Addictional Config for Mixcore Cms  */
+            /* Additional Config for Mixcore Cms  */
 
             /* Mix: Add db contexts */
             services.AddDbContext<MixCmsContext>();
@@ -60,9 +60,9 @@ namespace Mix.Cms.Web
             VerifyInitData(services);
 
             services.AddMixAuthorize(Configuration);
-            /* End Addictional Config for Mixcore Cms  */
+            /* End Additional Config for Mixcore Cms  */
 
-            #endregion Addictionals Config for Mixcore Cms
+            #endregion Additionals Config for Mixcore Cms
 
         }
 
@@ -104,7 +104,7 @@ namespace Mix.Cms.Web
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            #region Addictionals Config for Mixcore Cms
+            #region Additionals Config for Mixcore Cms
 
             if (MixService.GetConfig<bool>("IsHttps"))
             {
@@ -117,7 +117,7 @@ namespace Mix.Cms.Web
 
             app.UseMixRoutes();
             app.UseMixScheduler();
-            #endregion Addictionals Config for Mixcore Cms
+            #endregion Additionals Config for Mixcore Cms
 
         }
 

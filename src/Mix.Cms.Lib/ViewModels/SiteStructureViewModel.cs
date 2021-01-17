@@ -152,7 +152,7 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     ExportPageModuleNav(item, context, transaction);
                     ExportPagePostNav(item, context, transaction);
-                    ExportAddictionalData(item.Id.ToString(), MixEnums.MixAttributeSetDataType.Page, context, transaction);
+                    ExportAdditionalData(item.Id.ToString(), MixEnums.MixAttributeSetDataType.Page, context, transaction);
                     item.UrlAliases = item.GetAliases(context, transaction);
                 }
             }
@@ -197,7 +197,7 @@ namespace Mix.Cms.Lib.ViewModels
                     ExportModuleDatas(item, context, transaction);
                     ExportModulePostNavs(item, context, transaction);
                 }
-                ExportAddictionalData(item.Id.ToString(), MixEnums.MixAttributeSetDataType.Module, context, transaction);
+                ExportAdditionalData(item.Id.ToString(), MixEnums.MixAttributeSetDataType.Module, context, transaction);
             }
         }
 
@@ -228,7 +228,7 @@ namespace Mix.Cms.Lib.ViewModels
         #endregion
 
 
-        private void ExportAddictionalData(string id, MixEnums.MixAttributeSetDataType type, MixCmsContext context, IDbContextTransaction transaction)
+        private void ExportAdditionalData(string id, MixEnums.MixAttributeSetDataType type, MixCmsContext context, IDbContextTransaction transaction)
         {
             if (!RelatedData.Any(m => m.ParentId == id && m.ParentType == type))
             {

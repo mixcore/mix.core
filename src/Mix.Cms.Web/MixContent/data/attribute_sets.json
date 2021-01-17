@@ -304,8 +304,8 @@
     },
     {
       "id": 6,
-      "title": "Addictional Field",
-      "name": "sys_addictional_field",
+      "title": "Additional Field",
+      "name": "sys_additional_field",
       "fields": []
     },
     {
