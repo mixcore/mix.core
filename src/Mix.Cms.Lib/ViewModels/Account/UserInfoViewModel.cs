@@ -127,7 +127,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
             if (MediaFile.FileStream != null)
             {
                 MediaFile.FileFolder = CommonHelper.GetFullPath(new[] {
-                    MixFolders.UploadFolder,
+                    MixFolders.SiteContentUploadsFolder,
                     DateTime.UtcNow.ToString("MMM-yyyy")
                 }); ;
                 var isSaved = FileRepository.Instance.SaveWebFile(MediaFile);

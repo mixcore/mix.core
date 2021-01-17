@@ -314,7 +314,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 string folder = CommonHelper.GetFullPath(new string[]
                 {
-                    MixFolders.UploadFolder, "Posts", DateTime.UtcNow.ToString("dd-MM-yyyy")
+                    MixFolders.SiteContentUploadsFolder, "Posts", DateTime.UtcNow.ToString("dd-MM-yyyy")
                 });
                 string filename = CommonHelper.GetRandomName(ThumbnailFileStream.Name);
                 bool saveThumbnail = CommonHelper.SaveFileBase64(folder, filename, ThumbnailFileStream.Base64);
@@ -328,7 +328,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 string folder = CommonHelper.GetFullPath(new string[]
                 {
-                    MixFolders.UploadFolder, "Posts", DateTime.UtcNow.ToString("dd-MM-yyyy")
+                    MixFolders.SiteContentUploadsFolder, "Posts", DateTime.UtcNow.ToString("dd-MM-yyyy")
                 });
                 string filename = CommonHelper.GetRandomName(ImageFileStream.Name);
                 bool saveImage = CommonHelper.SaveFileBase64(folder, filename, ImageFileStream.Base64);

@@ -172,7 +172,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 if (data.IsCloneFromCurrentTheme)
                 {
                     var currentThemeFolder = $"{MixFolders.TemplatesFolder}/{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, _lang)}";
-                    var assetFolder = $"{MixFolders.SiteContentFolder}/{MixFolders.SiteContentTemplate}/{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, _lang)}/assets";
+                    var assetFolder = $"{MixFolders.SiteContentAssetsFolder}/{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, _lang)}/assets";
                     FileRepository.Instance.CopyDirectory(currentThemeFolder, data.TemplateFolder);
                     FileRepository.Instance.CopyDirectory(assetFolder, $"wwwroot/{data.AssetFolder}");
                 }

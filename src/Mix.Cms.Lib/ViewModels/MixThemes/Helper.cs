@@ -20,15 +20,15 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                  theme => theme.Id == id).ConfigureAwait(false);
 
             //path to temporary folder
-            string tempPath = $"{MixFolders.ExportFolder}/Themes/{getTheme.Data.Name}/temp";
-            string outputPath = $"{MixFolders.ExportFolder}/Themes/{getTheme.Data.Name}";
+            string tempPath = $"{MixFolders.WebRootPath}/{MixFolders.ExportFolder}/Themes/{getTheme.Data.Name}/temp";
+            string outputPath = $"{MixFolders.WebRootPath}/{MixFolders.ExportFolder}/Themes/{getTheme.Data.Name}";
             data.ThemeName = getTheme.Data.Name;
             data.Specificulture = culture;
             var result = data.ExportSelectedItemsAsync();
             if (result.IsSucceed)
             {
                 string domain = MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
-                string accessFolder = $"{MixFolders.SiteContentFolder}/{MixFolders.SiteContentTemplate}/{getTheme.Data.Name}/assets";
+                string accessFolder = $"{MixFolders.SiteContentAssetsFolder}/{getTheme.Data.Name}/assets";
                 string content = JObject.FromObject(data).ToString()
                     .Replace(accessFolder, "[ACCESS_FOLDER]")
                     .Replace($"/{culture}/", "/[CULTURE]/");

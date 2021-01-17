@@ -30,6 +30,7 @@ namespace Mix.Cms.Lib.Constants
         public const string CONST_DEFAULT_EXTENSIONS_FILE_PATH = "\\Contents\\Extensions\\";
         public const string CONST_DEFAULT_EXTENSION_FILE_NAME = "extensions.json";
         public const string CONST_DEFAULT_STRING_ID = "default";
+        public const string CONST_UPLOAD_FOLDER_FORMAT = "MMM-yyyy";
         public static List<string> cachedKeys = new List<string>();
     }
 }

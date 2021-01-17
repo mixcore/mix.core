@@ -76,7 +76,7 @@ namespace Mix.Cms.Lib.ViewModels
             try
             {
                 Configurations = MixConfigurations.ImportViewModel.Repository.GetModelListBy(
-                    m => !m.Keyword.Contains("sys_") && m.Specificulture == Specificulture, context, transaction).Data;
+                    m => m.Specificulture == Specificulture, context, transaction).Data;
                 Languages = MixLanguages.ImportViewModel.Repository.GetModelListBy(
                     m => m.Specificulture == Specificulture, context, transaction).Data;
 

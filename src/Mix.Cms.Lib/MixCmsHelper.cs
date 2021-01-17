@@ -38,8 +38,7 @@ namespace Mix.Cms.Lib
         public static string GetAssetFolder(string culture)
         {
             return $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/" +
-                $"{MixFolders.SiteContentFolder}/" +
-                $"{MixFolders.SiteContentTemplate}/" +
+                $"{MixFolders.SiteContentAssetsFolder}/" +
                 $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/assets";
         }
         public static string GetTemplateFolder(string culture)
