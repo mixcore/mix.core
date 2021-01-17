@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Cms.Lib.Helpers;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Common.Helper;
@@ -12,13 +10,12 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
-    public class AddictionalViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSetData, AddictionalViewModel>
+    public class AdditionalViewModel
+      : ViewModelBase<MixCmsContext, MixAttributeSetData, AdditionalViewModel>
     {
         #region Properties
 
@@ -78,7 +75,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("fields")]
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
         [JsonIgnore]
-        public List<MixAttributeSetDatas.AddictionalViewModel> RefData { get; set; } = new List<AddictionalViewModel>();
+        public List<MixAttributeSetDatas.AdditionalViewModel> RefData { get; set; } = new List<AdditionalViewModel>();
 
 
 
@@ -88,11 +85,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #region Contructors
 
-        public AddictionalViewModel() : base()
+        public AdditionalViewModel() : base()
         {
         }
 
-        public AddictionalViewModel(MixAttributeSetData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public AdditionalViewModel(MixAttributeSetData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -170,7 +167,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                                 }
                                 else
                                 {
-                                    RefData.Add(new AddictionalViewModel()
+                                    RefData.Add(new AdditionalViewModel()
                                     {
                                         Specificulture = Specificulture,
                                         AttributeSetId = field.ReferenceId.Value,
@@ -221,7 +218,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #region Async
 
-        public override async Task<RepositoryResponse<AddictionalViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override async Task<RepositoryResponse<AdditionalViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
@@ -260,7 +257,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             catch (Exception ex)
             {
-                return UnitOfWorkHelper<MixCmsContext>.HandleException<AddictionalViewModel>(ex, isRoot, transaction);
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<AdditionalViewModel>(ex, isRoot, transaction);
             }
             finally
             {
@@ -273,7 +270,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         }
 
-        public override RepositoryResponse<AddictionalViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override RepositoryResponse<AdditionalViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = base.SaveModel(isSaveSubModels, _context, _transaction);
             if (result.IsSucceed)
@@ -324,7 +321,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     if (field.AttributeSetName == "sys_additional_field")
                     {
-                        // Add field to addictional_field set
+                        // Add field to additional_field set
                         var saveField = await field.SaveModelAsync(false, context, transaction);
                         var val = Values.FirstOrDefault(m => m.AttributeFieldName == field.Name);
                         ViewModelHelper.HandleResult(saveField, ref result);

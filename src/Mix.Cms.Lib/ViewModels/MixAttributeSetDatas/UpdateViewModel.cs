@@ -187,7 +187,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             if (result.IsSucceed)
             {
                 // TODO: Double check logic code
-                var addictionalSet = _context.MixAttributeSet.FirstOrDefault(m => m.Name == "sys_additional_field");
+                var additionalSet = _context.MixAttributeSet.FirstOrDefault(m => m.Name == "sys_additional_field");
                 foreach (var item in Values)
                 {
                     if (item.DataId != parent.Id)
@@ -196,11 +196,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     }
                     if (result.IsSucceed)
                     {
-                        if (addictionalSet != null && item.Field != null && item.Field.Id == 0)
+                        if (additionalSet != null && item.Field != null && item.Field.Id == 0)
                         {
-                            // Add field to addictional_field set
-                            item.Field.AttributeSetId = addictionalSet.Id;
-                            item.Field.AttributeSetName = addictionalSet.Name;
+                            // Add field to additional_field set
+                            item.Field.AttributeSetId = additionalSet.Id;
+                            item.Field.AttributeSetName = additionalSet.Name;
                             var saveField = await item.Field.SaveModelAsync(false, _context, _transaction);
                             ViewModelHelper.HandleResult(saveField, ref result);
                         }

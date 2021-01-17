@@ -511,7 +511,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             return postPredicate;
         }
 
-        public static async Task<RepositoryResponse<PaginationModel<TView>>> GetModelistByAddictionalField<TView>(
+        public static async Task<RepositoryResponse<PaginationModel<TView>>> GetModelistByAdditionalField<TView>(
             string fieldName, string value, string culture
             , string orderByPropertyName = "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Desc
             , int? pageSize = null, int? pageIndex = 0

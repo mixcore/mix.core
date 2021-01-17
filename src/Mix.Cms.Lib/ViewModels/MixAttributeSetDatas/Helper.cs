@@ -64,7 +64,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
         }
 
-        public static async Task<RepositoryResponse<AddictionalViewModel>> GetAddictionalData(
+        public static async Task<RepositoryResponse<AdditionalViewModel>> GetAdditionalData(
             MixEnums.MixAttributeSetDataType parentType, int parentId,
             HttpRequest request, string culture = null,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -72,14 +72,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                // Addictional Data is sub data of page / post / module only
+                // Additional Data is sub data of page / post / module only
                 culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
                 var databaseName = request.Query["databaseName"].ToString();
                 var dataId = (await context.MixRelatedAttributeData.FirstOrDefaultAsync(
                     m => m.AttributeSetName == databaseName && m.ParentType == parentType.ToString() && m.ParentId == parentId.ToString() && m.Specificulture == culture))?.DataId;
                 if (!string.IsNullOrEmpty(dataId))
                 {
-                    return await AddictionalViewModel.Repository.GetSingleModelAsync(
+                    return await AdditionalViewModel.Repository.GetSingleModelAsync(
                         m => m.Id == dataId && m.Specificulture == culture);
                 }
                 else
@@ -89,7 +89,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     m => m.Name == request.Query["databaseName"].ToString());
                     if (getAttrSet.IsSucceed)
                     {
-                        AddictionalViewModel result = new AddictionalViewModel()
+                        AdditionalViewModel result = new AdditionalViewModel()
                         {
                             Specificulture = culture,
                             AttributeSetId = getAttrSet.Data.Id,
@@ -99,18 +99,18 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             ParentType = parentType
                         };
                         result.ExpandView();
-                        return new RepositoryResponse<AddictionalViewModel>()
+                        return new RepositoryResponse<AdditionalViewModel>()
                         {
                             IsSucceed = true,
                             Data = result
                         };
                     }
                 }
-                return new RepositoryResponse<AddictionalViewModel>();
+                return new RepositoryResponse<AdditionalViewModel>();
             }
             catch (Exception ex)
             {
-                return UnitOfWorkHelper<MixCmsContext>.HandleException<AddictionalViewModel>(ex, isRoot, transaction);
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<AdditionalViewModel>(ex, isRoot, transaction);
             }
             finally
             {
