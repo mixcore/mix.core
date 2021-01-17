@@ -76,7 +76,7 @@ namespace Mix.Cms.Lib.Repositories
         public FileViewModel GetWebFile(string filename, string folder)
         {
             string fullPath = $"{MixFolders.WebRootPath}/{folder}/{filename}";
-            string folderPath = $"{MixFolders.WebRootPath}/{MixFolders.SiteContentFolder}/{folder}";
+            string folderPath = $"{MixFolders.WebRootPath}/{MixFolders.SiteContentAssetsFolder}/{folder}";
             FileInfo file = new FileInfo(fullPath);
             FileViewModel result = null;
             try
@@ -107,7 +107,7 @@ namespace Mix.Cms.Lib.Repositories
             string fullPath = CommonHelper.GetFullPath(new string[]
            {
                 MixFolders.WebRootPath,
-                MixFolders.SiteContentFolder,
+                MixFolders.SiteContentAssetsFolder,
                 folder,
                 filename
            });
@@ -153,7 +153,7 @@ namespace Mix.Cms.Lib.Repositories
         {
             FileViewModel result = null;
 
-            string folder = CommonHelper.GetFullPath(new string[] { MixFolders.UploadFolder, FileFolder });
+            string folder = CommonHelper.GetFullPath(new string[] { MixFolders.SiteContentUploadsFolder, FileFolder });
             string fullPath = string.Format(@"{0}/{1}.{2}", folder, name, ext);
 
             FileInfo file = new FileInfo(fullPath);
@@ -241,7 +241,7 @@ namespace Mix.Cms.Lib.Repositories
 
         public bool DeleteFile(string name, string extension, string FileFolder)
         {
-            string folder = CommonHelper.GetFullPath(new string[] { MixFolders.UploadFolder, FileFolder });
+            string folder = CommonHelper.GetFullPath(new string[] { MixFolders.SiteContentUploadsFolder, FileFolder });
             string fullPath = string.Format(@"{0}/{1}{2}", folder, name, extension);
 
             if (File.Exists(fullPath))
@@ -340,7 +340,7 @@ namespace Mix.Cms.Lib.Repositories
 
         public List<FileViewModel> GetUploadFiles(string folder)
         {
-            string fullPath = CommonHelper.GetFullPath(new string[] { MixFolders.UploadFolder, folder });
+            string fullPath = CommonHelper.GetFullPath(new string[] { MixFolders.SiteContentUploadsFolder, folder });
 
             CreateDirectoryIfNotExist(fullPath);
 
@@ -467,7 +467,7 @@ namespace Mix.Cms.Lib.Repositories
         {
             string fullPath = CommonHelper.GetFullPath(new string[] {
                     MixFolders.WebRootPath,
-                    MixFolders.SiteContentFolder,
+                    MixFolders.SiteContentAssetsFolder,
                     folder
                 });
 
@@ -701,8 +701,8 @@ namespace Mix.Cms.Lib.Repositories
             try
             {
                 //string tmpPath = $"{MixFolders.WebRootPath}/Exports/temp/{fileName}-{DateTime.UtcNow.ToShortDateString()}";
-                string outputFile = $"{MixFolders.WebRootPath}/{outputPath}/{fileName}.zip";
-                string outputFilePath = $"{outputPath}/{fileName}.zip";
+                string outputFile = $"{outputPath}/{fileName}.zip";
+                string outputFilePath = $"{outputPath}/{fileName}.zip".Replace(MixFolders.WebRootPath, string.Empty);
 
                 if (Directory.Exists(tmpPath))
                 {

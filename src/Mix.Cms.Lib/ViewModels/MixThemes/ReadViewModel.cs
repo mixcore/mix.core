@@ -96,7 +96,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"{MixFolders.WebRootPath}/{MixFolders.SiteContentFolder}/{Name}/assets";
+                return $"{MixFolders.WebRootPath}/{MixFolders.SiteContentAssetsFolder}/{Name}/assets";
             }
         }
 
@@ -104,7 +104,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"{MixFolders.WebRootPath}/{MixFolders.SiteContentFolder}/{Name}/uploads";
+                return $"{MixFolders.WebRootPath}/{MixFolders.SiteContentUploadsFolder}";
             }
         }
 

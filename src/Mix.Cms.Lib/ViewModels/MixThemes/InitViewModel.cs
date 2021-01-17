@@ -93,7 +93,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"{MixFolders.SiteContentFolder}/{MixFolders.SiteContentTemplate}/{Name}/assets";
+                return $"{MixFolders.SiteContentAssetsFolder}/{Name}/assets";
             }
         }
 
@@ -101,7 +101,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"{MixFolders.SiteContentFolder}/{Name}/uploads";
+                return $"{MixFolders.SiteContentAssetsFolder}";
             }
         }
 
@@ -192,9 +192,9 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 //Move Unzip Asset folder
                 FileRepository.Instance.CopyDirectory($"{outputFolder}/Assets", $"{MixFolders.WebRootPath}/{AssetFolder}");
                 //Move Unzip Templates folder
-                FileRepository.Instance.CopyDirectory($"{outputFolder}/{MixFolders.SiteContentTemplate}", TemplateFolder);
+                FileRepository.Instance.CopyDirectory($"{outputFolder}/{MixFolders.SiteContentAssetsFolder}", TemplateFolder);
                 //Move Unzip Uploads folder
-                FileRepository.Instance.CopyDirectory($"{outputFolder}/{MixFolders.SiteContentUpload}", $"{MixFolders.WebRootPath}/{UploadsFolder}");
+                FileRepository.Instance.CopyDirectory($"{outputFolder}/{MixFolders.SiteContentUploadsFolder}", $"{MixFolders.WebRootPath}/{UploadsFolder}");
                 // Get SiteStructure
                 var strSchema = FileRepository.Instance.GetFile("schema.json", $"{outputFolder}/Data");
                 string parseContent = strSchema.Content.Replace("[ACCESS_FOLDER]", AssetFolder)
@@ -211,8 +211,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                     //TODO: Create default asset
                     foreach (var file in files)
                     {
-                        string content = file.Content.Replace($"/{MixFolders.SiteContentFolder}/{siteStructures.ThemeName}/",
-                        $"/{MixFolders.SiteContentFolder}/{Name}/");
+                        string content = file.Content.Replace($"/{MixFolders.SiteContentAssetsFolder}/{siteStructures.ThemeName}/",
+                        $"/{MixFolders.SiteContentAssetsFolder}/{Name}/");
                         MixTemplates.UpdateViewModel template = new MixTemplates.UpdateViewModel(
                             new MixTemplate()
                             {
