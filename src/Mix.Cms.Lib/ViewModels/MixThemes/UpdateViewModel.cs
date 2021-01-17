@@ -275,7 +275,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         private async Task<RepositoryResponse<bool>> SaveTemplatesAsync(MixTheme parent, string themeName, MixCmsContext context, IDbContextTransaction transaction)
         {
-            RepositoryResponse<bool> result = new RepositoryResponse<bool>();
+            RepositoryResponse<bool> result = new RepositoryResponse<bool>() { IsSucceed = true };
             // Save template files to db
             var files = FileRepository.Instance.GetFilesWithContent(TemplateFolder);
             //TODO: Create default asset
