@@ -144,8 +144,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #endregion Overrides
 
-
-
         #region Expands
        
         #endregion Expands

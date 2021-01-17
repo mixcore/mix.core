@@ -145,6 +145,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     };
                     Values.Add(val);
                 }
+                else
+                {
+                    val.LastModified = DateTime.UtcNow;
+                }
+                val.Status = Status;
                 val.Priority = field.Priority;
                 val.AttributeSetName = AttributeSetName;
                 if (Obj[val.AttributeFieldName] != null)
