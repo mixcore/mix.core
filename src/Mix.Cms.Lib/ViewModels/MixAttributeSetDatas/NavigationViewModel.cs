@@ -173,8 +173,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
     public class MenuItem
     {
         [JsonIgnore]
-        [JsonProperty("data")]
-        public JObject Data { get; set; }
+        [JsonProperty("obj")]
+        public JObject Obj { get; set; }
 
         [JsonProperty("id")]
         public string Id { get; set; }
@@ -211,9 +211,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public T Property<T>(string fieldName)
         {
-            if (Data != null)
+            if (Obj != null)
             {
-                var field = Data.GetValue(fieldName);
+                var field = Obj.GetValue(fieldName);
                 if (field != null)
                 {
                     return field.Value<T>();
