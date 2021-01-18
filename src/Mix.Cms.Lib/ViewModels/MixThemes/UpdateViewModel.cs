@@ -123,7 +123,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"{MixFolders.SiteContentAssetsFolder}";
+                return $"{MixFolders.SiteContentUploadsFolder}";
             }
         }
 
