@@ -499,6 +499,8 @@ namespace Mix.Cms.Lib.Services
                     return new MsSqlMixCmsContext();
                 case MixDatabaseProvider.MySQL:
                     return new MySqlMixCmsContext();
+                case MixDatabaseProvider.SQLITE:
+                    return new MySqlMixCmsContext();
                 case MixDatabaseProvider.PostgreSQL:
                 default:
                     // TODO: Add PostgreSQL db context
