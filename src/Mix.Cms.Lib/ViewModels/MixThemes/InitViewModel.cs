@@ -203,7 +203,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 FileRepository.Instance.DeleteFolder(outputFolder);
                 //FileRepository.Instance.DeleteFile(filePath);
                 //Import Site Structures
-                result = await siteStructures.ImportAsync(Specificulture);
+                result = await siteStructures.ImportAsync(Specificulture, _context, _transaction);
                 if (result.IsSucceed)
                 {
                     // Save template files to db
@@ -226,7 +226,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                                 ThemeName = parent.Name,
                                 FolderType = file.FolderName,
                                 ModifiedBy = CreatedBy
-                            });
+                            }, _context,  _transaction);
                         var saveResult = await template.SaveModelAsync(true, _context, _transaction);
                         result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
                         if (!saveResult.IsSucceed)
