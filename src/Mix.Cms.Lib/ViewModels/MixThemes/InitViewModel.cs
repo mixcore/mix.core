@@ -192,9 +192,9 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 //Move Unzip Asset folder
                 FileRepository.Instance.CopyDirectory($"{outputFolder}/Assets", $"{MixFolders.WebRootPath}/{AssetFolder}");
                 //Move Unzip Templates folder
-                FileRepository.Instance.CopyDirectory($"{outputFolder}/{MixFolders.SiteContentAssetsFolder}", TemplateFolder);
+                FileRepository.Instance.CopyDirectory($"{outputFolder}/Templates", TemplateFolder);
                 //Move Unzip Uploads folder
-                FileRepository.Instance.CopyDirectory($"{outputFolder}/{MixFolders.SiteContentUploadsFolder}", $"{MixFolders.WebRootPath}/{UploadsFolder}");
+                FileRepository.Instance.CopyDirectory($"{outputFolder}/Uploads", $"{MixFolders.WebRootPath}/{UploadsFolder}");
                 // Get SiteStructure
                 var strSchema = FileRepository.Instance.GetFile("schema.json", $"{outputFolder}/Data");
                 string parseContent = strSchema.Content.Replace("[ACCESS_FOLDER]", AssetFolder)
