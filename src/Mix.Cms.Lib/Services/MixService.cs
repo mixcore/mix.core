@@ -492,7 +492,7 @@ namespace Mix.Cms.Lib.Services
 
         public static MixCmsContext GetDbContext()
         {
-            var provider = Enum.Parse<MixDatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
+            var provider = MixService.GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
             switch (provider)
             {
                 case MixDatabaseProvider.MSSQL:
@@ -502,8 +502,8 @@ namespace Mix.Cms.Lib.Services
                 case MixDatabaseProvider.SQLITE:
                     return new MySqlMixCmsContext();
                 case MixDatabaseProvider.PostgreSQL:
+                    return new PostgresqlMixCmsContext();
                 default:
-                    // TODO: Add PostgreSQL db context
                     return null;
             }
 
