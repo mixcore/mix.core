@@ -14,67 +14,67 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.POSTGRESQL
             entity.Property(e => e.Id)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("und-x-icu");
 
             entity.Property(e => e.Address)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("und-x-icu");
 
             entity.Property(e => e.Avatar)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("und-x-icu");
 
             entity.Property(e => e.CreatedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("und-x-icu");
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("timestamp without time zone");
 
             entity.Property(e => e.Email)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("und-x-icu");
 
             entity.Property(e => e.FirstName)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("und-x-icu");
 
             entity.Property(e => e.LastModified).HasColumnType("timestamp without time zone");
 
             entity.Property(e => e.LastName)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("und-x-icu");
 
             entity.Property(e => e.MiddleName)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("und-x-icu");
 
             entity.Property(e => e.ModifiedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("und-x-icu");
 
             entity.Property(e => e.PhoneNumber)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("und-x-icu");
 
             entity.Property(e => e.Status)
                 .IsRequired()
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("und-x-icu");
 
             entity.Property(e => e.Username)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("und-x-icu");
         }
     }
 }

@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 {
     [DbContext(typeof(PostgresqlMixCmsContext))]
-    [Migration("20210119164517_Init")]
+    [Migration("20210119170618_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,7 +33,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("AttributeSetName")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Configurations")
@@ -41,7 +41,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -50,12 +50,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("DataType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DefaultValue")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsEncrypt")
@@ -78,18 +78,18 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Options")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -100,18 +100,18 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Regex")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id");
@@ -132,7 +132,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -140,7 +140,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool?>("EdmAutoSend")
@@ -148,22 +148,22 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("EdmFrom")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("EdmSubject")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("EdmTemplate")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FormTemplate")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -171,13 +171,13 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -186,19 +186,19 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id");
@@ -210,12 +210,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("AttributeSetId")
@@ -223,12 +223,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("AttributeSetName")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -239,7 +239,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -248,11 +248,11 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PK_mix_attribute_set_value");
+                        .HasName("PK_mix_attribute_set_data");
 
                     b.HasIndex("AttributeSetId");
 
@@ -271,7 +271,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -279,12 +279,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(450)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(450)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -292,7 +292,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("ParentId")
@@ -307,7 +307,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id");
@@ -321,12 +321,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("AttributeFieldId")
@@ -335,12 +335,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("AttributeFieldName")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("AttributeSetName")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool?>("BooleanValue")
@@ -348,7 +348,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -357,13 +357,13 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("DataId")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DataType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("DateTimeValue")
@@ -374,7 +374,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("EncryptKey")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("EncryptType")
@@ -382,7 +382,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("EncryptValue")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("IntegerValue")
@@ -393,7 +393,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -401,22 +401,22 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Regex")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("StringValue")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PRIMARY");
+                        .HasName("PK_mix_attribute_set_value");
 
                     b.HasIndex("DataId");
 
@@ -427,12 +427,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -446,7 +446,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -455,13 +455,13 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id");
@@ -476,22 +476,22 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Address")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Avatar")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -499,12 +499,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Email")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FirstName")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -512,22 +512,22 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("LastName")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("MiddleName")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -536,12 +536,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Username")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id");
@@ -556,17 +556,17 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Category")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -575,18 +575,18 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("DataType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Keyword")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -594,7 +594,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -603,16 +603,16 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Value")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PRIMARY");
+                        .HasName("PK_mix_configuration");
 
                     b.HasIndex("Specificulture");
 
@@ -628,12 +628,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Alias")
                         .HasColumnType("varchar(150)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -641,17 +641,17 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FullName")
                         .HasColumnType("varchar(150)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -660,12 +660,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Lcid")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("LCID")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -674,13 +674,13 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Specificulture")
                         .IsRequired()
                         .HasColumnType("varchar(10)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id");
@@ -701,7 +701,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -710,25 +710,25 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Extension")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FileFolder")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FolderType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -736,7 +736,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -745,13 +745,13 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("StringContent")
                         .IsRequired()
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("ThemeId")
@@ -760,7 +760,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("ThemeName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id");
@@ -777,17 +777,17 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Category")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -796,23 +796,23 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("DataType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DefaultValue")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Keyword")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -820,7 +820,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -829,16 +829,16 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Value")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PRIMARY");
+                        .HasName("PK_mix_language");
 
                     b.HasIndex("Specificulture");
 
@@ -852,12 +852,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -865,30 +865,30 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Extension")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FileFolder")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FileProperties")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<long>("FileSize")
@@ -897,7 +897,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("FileType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -905,7 +905,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -913,28 +913,28 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Source")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Tags")
                         .HasColumnType("varchar(400)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("TargetUrl")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Title")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id", "Specificulture")
@@ -950,12 +950,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -963,27 +963,27 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("EdmTemplate")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Fields")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FormTemplate")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -991,13 +991,13 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("PageSize")
@@ -1012,29 +1012,29 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Template")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Thumbnail")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PRIMARY");
+                        .HasName("PK_mix_module");
 
                     b.HasIndex("Specificulture");
 
@@ -1045,17 +1045,17 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -1064,7 +1064,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Fields")
                         .IsRequired()
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -1072,7 +1072,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("ModuleId")
@@ -1090,16 +1090,16 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Value")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PRIMARY");
+                        .HasName("PK_mix_module_data");
 
                     b.HasIndex("ModuleId", "Specificulture");
 
@@ -1119,12 +1119,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -1132,12 +1132,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -1145,7 +1145,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("ModuleId")
@@ -1160,11 +1160,11 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PRIMARY");
+                        .HasName("PK_mix_module_post");
 
                     b.HasIndex("ModuleId", "Specificulture");
 
@@ -1180,17 +1180,17 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Content")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -1198,27 +1198,27 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("CssClass")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ExtraFields")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -1226,7 +1226,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Layout")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("Level")
@@ -1234,7 +1234,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("PageSize")
@@ -1248,60 +1248,60 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("SeoDescription")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoKeywords")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoName")
                         .HasColumnType("varchar(500)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoTitle")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("StaticUrl")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Tags")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Template")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Title")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Type")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("Views")
                         .HasColumnType("integer");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PRIMARY");
+                        .HasName("PK_mix_page");
 
                     b.HasIndex("Specificulture");
 
@@ -1315,12 +1315,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -1328,12 +1328,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -1341,7 +1341,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("ModuleId")
@@ -1359,11 +1359,11 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PRIMARY");
+                        .HasName("PK_mix_page_module");
 
                     b.HasIndex("ModuleId", "Specificulture");
 
@@ -1379,12 +1379,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -1392,12 +1392,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -1405,7 +1405,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("PageId")
@@ -1420,11 +1420,11 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PRIMARY");
+                        .HasName("PK_mix_page_post");
 
                     b.HasIndex("PageId", "Specificulture");
 
@@ -1442,7 +1442,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -1450,12 +1450,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(450)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -1466,7 +1466,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -1475,22 +1475,22 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("TextDefault")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("TextKeyword")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Url")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id");
@@ -1507,7 +1507,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -1515,12 +1515,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -1528,7 +1528,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("PageId")
@@ -1543,7 +1543,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id");
@@ -1560,7 +1560,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     b.Property<string>("RoleId")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("PageId")
@@ -1568,7 +1568,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -1582,7 +1582,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -1591,11 +1591,11 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("RoleId", "PageId")
-                        .HasName("PRIMARY");
+                        .HasName("PK_mix_portal_page_role");
 
                     b.HasIndex("PageId");
 
@@ -1609,17 +1609,17 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Content")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -1627,27 +1627,27 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ExtraFields")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Icon")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -1655,7 +1655,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -1666,65 +1666,65 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("SeoDescription")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoKeywords")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoName")
                         .HasColumnType("varchar(500)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoTitle")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Source")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Tags")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Template")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Thumbnail")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Title")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Type")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("Views")
                         .HasColumnType("integer");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PRIMARY");
+                        .HasName("PK_mix_post");
 
                     b.HasIndex("Specificulture");
 
@@ -1738,12 +1738,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -1751,12 +1751,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -1767,7 +1767,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Position")
@@ -1782,11 +1782,11 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PRIMARY");
+                        .HasName("PK_mix_post_media");
 
                     b.HasIndex("MediaId", "Specificulture");
 
@@ -1802,12 +1802,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -1815,12 +1815,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -1828,7 +1828,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("ModuleId")
@@ -1846,11 +1846,11 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PRIMARY");
+                        .HasName("PK_mix_post_module");
 
                     b.HasIndex("ModuleId", "Specificulture");
 
@@ -1863,12 +1863,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("AttributeSetId")
@@ -1876,12 +1876,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("AttributeSetName")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -1890,12 +1890,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("DataId")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(450)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -1903,19 +1903,19 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ParentId")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ParentType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -1924,11 +1924,11 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PRIMARY");
+                        .HasName("PK_mix_related_attribute_data");
 
                     b.ToTable("mix_related_attribute_data");
                 });
@@ -1940,7 +1940,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("AttributeSetId")
@@ -1948,7 +1948,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -1956,7 +1956,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(450)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("IdNavigationId")
@@ -1964,7 +1964,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(450)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -1972,7 +1972,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("ParentId")
@@ -1981,7 +1981,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("ParentType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -1990,11 +1990,11 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PRIMARY");
+                        .HasName("PK_mix_related_attribute_set");
 
                     b.HasIndex("IdNavigationId");
 
@@ -2008,7 +2008,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("AttributeSetId")
@@ -2016,12 +2016,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("AttributeSetName")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -2030,12 +2030,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("DataId")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(450)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -2043,19 +2043,19 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ParentId")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ParentType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -2064,14 +2064,14 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PRIMARY");
+                        .HasName("PK_mix_related_data");
 
                     b.ToTable("mix_related_data");
                 });
@@ -2083,12 +2083,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -2096,7 +2096,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(450)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("DestinationId")
@@ -2104,7 +2104,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(450)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -2112,7 +2112,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -2124,11 +2124,11 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PRIMARY");
+                        .HasName("PK_mix_related_post");
 
                     b.HasIndex("DestinationId", "Specificulture");
 
@@ -2147,12 +2147,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -2161,25 +2161,25 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Extension")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FileFolder")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FolderType")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -2187,12 +2187,12 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("MobileContent")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -2200,23 +2200,23 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Scripts")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SpaContent")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Styles")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("ThemeId")
@@ -2225,7 +2225,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("ThemeName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id");
@@ -2245,7 +2245,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -2253,7 +2253,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -2261,18 +2261,18 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("PreviewUrl")
                         .HasColumnType("varchar(450)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -2281,17 +2281,17 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Thumbnail")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id");
@@ -2306,17 +2306,17 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Alias")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -2324,7 +2324,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Description")
                         .HasColumnType("text")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -2332,7 +2332,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -2340,20 +2340,20 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("SourceId")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci")
+                        .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PRIMARY");
+                        .HasName("PK_mix_url_alias");
 
                     b.HasIndex("Specificulture");
 

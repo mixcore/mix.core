@@ -53,6 +53,9 @@ namespace Mix.Cms.Lib.Models.Account
                     case MixDatabaseProvider.SQLITE:
                         optionsBuilder.UseSqlite(cnn);
                         break;
+                    case MixDatabaseProvider.PostgreSQL:
+                        optionsBuilder.UseNpgsql(cnn);
+                        break;
                     default:
                         break;
                 }

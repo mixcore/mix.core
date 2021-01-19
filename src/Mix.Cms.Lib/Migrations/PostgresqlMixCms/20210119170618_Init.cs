@@ -15,26 +15,26 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     AttributeSetId = table.Column<int>(type: "integer", nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
+                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     Configurations = table.Column<string>(type: "text", nullable: true),
-                    Regex = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    DefaultValue = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    Name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci"),
-                    Options = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
+                    Regex = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    DefaultValue = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    Name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                    Options = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
                     IsRequire = table.Column<bool>(type: "boolean", nullable: false),
                     IsEncrypt = table.Column<bool>(type: "boolean", nullable: false),
                     IsMultiple = table.Column<bool>(type: "boolean", nullable: false),
                     IsSelect = table.Column<bool>(type: "boolean", nullable: false),
                     IsUnique = table.Column<bool>(type: "boolean", nullable: false),
                     ReferenceId = table.Column<int>(type: "integer", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
@@ -47,21 +47,21 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Type = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    Title = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci"),
-                    Name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    FormTemplate = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    EdmTemplate = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    EdmSubject = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    EdmFrom = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
+                    Type = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Title = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                    Name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    FormTemplate = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    EdmTemplate = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    EdmSubject = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    EdmFrom = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     EdmAutoSend = table.Column<bool>(type: "boolean", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
@@ -72,47 +72,47 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 name: "mix_attribute_set_value",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci"),
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
                     AttributeFieldId = table.Column<int>(type: "integer", nullable: false),
-                    AttributeFieldName = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Regex = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
+                    AttributeFieldName = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Regex = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     BooleanValue = table.Column<bool>(type: "boolean", nullable: true),
-                    DataId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
+                    DataId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     DateTimeValue = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     DoubleValue = table.Column<double>(type: "double precision", nullable: true),
                     IntegerValue = table.Column<int>(type: "integer", nullable: true),
-                    StringValue = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    EncryptValue = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    EncryptKey = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    StringValue = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    EncryptValue = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    EncryptKey = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     EncryptType = table.Column<int>(type: "integer", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_attribute_set_value", x => new { x.Id, x.Specificulture });
                 });
 
             migrationBuilder.CreateTable(
                 name: "mix_cache",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    Value = table.Column<string>(type: "text", nullable: false, collation: "utf8_unicode_ci"),
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Value = table.Column<string>(type: "text", nullable: false, collation: "und-x-icu"),
                     ExpiredDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
@@ -123,21 +123,21 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 name: "mix_cms_user",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    Address = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Avatar = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    FirstName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
-                    LastName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
-                    MiddleName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
-                    PhoneNumber = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
-                    Username = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Email = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Address = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Avatar = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    FirstName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    LastName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    MiddleName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    PhoneNumber = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    Username = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Email = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
@@ -150,18 +150,18 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Alias = table.Column<string>(type: "varchar(150)", nullable: true, collation: "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    FullName = table.Column<string>(type: "varchar(150)", nullable: true, collation: "utf8_unicode_ci"),
-                    Icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
-                    LCID = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    Alias = table.Column<string>(type: "varchar(150)", nullable: true, collation: "und-x-icu"),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    FullName = table.Column<string>(type: "varchar(150)", nullable: true, collation: "und-x-icu"),
+                    Icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    LCID = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
@@ -174,24 +174,24 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    Extension = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    FileFolder = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci"),
-                    FileName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci"),
-                    FileProperties = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
+                    Description = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    Extension = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    FileFolder = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                    FileName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                    FileProperties = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
                     FileSize = table.Column<long>(type: "bigint", nullable: false),
-                    FileType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    Title = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    Tags = table.Column<string>(type: "varchar(400)", nullable: true, collation: "utf8_unicode_ci"),
-                    Source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    TargetUrl = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    FileType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Title = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    Tags = table.Column<string>(type: "varchar(400)", nullable: true, collation: "und-x-icu"),
+                    Source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    TargetUrl = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
@@ -204,18 +204,18 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
-                    TextKeyword = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Url = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "utf8_unicode_ci"),
-                    TextDefault = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
+                    Icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    TextKeyword = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Url = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
+                    TextDefault = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     Level = table.Column<int>(type: "integer", nullable: false),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
@@ -226,24 +226,24 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 name: "mix_related_attribute_data",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci"),
-                    DataId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    ParentId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
+                    DataId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    ParentId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     AttributeSetId = table.Column<int>(type: "integer", nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_related_attribute_data", x => new { x.Id, x.Specificulture });
                 });
 
             migrationBuilder.CreateTable(
@@ -251,24 +251,24 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci"),
-                    DataId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
+                    DataId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     Type = table.Column<int>(type: "integer", nullable: false),
-                    ParentId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
+                    ParentId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     AttributeSetId = table.Column<int>(type: "integer", nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_related_data", x => new { x.Id, x.Specificulture });
                 });
 
             migrationBuilder.CreateTable(
@@ -277,17 +277,17 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Thumbnail = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci"),
-                    PreviewUrl = table.Column<string>(type: "varchar(450)", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    Thumbnail = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                    PreviewUrl = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
@@ -298,20 +298,20 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 name: "mix_attribute_set_data",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci"),
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
                     AttributeSetId = table.Column<int>(type: "integer", nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_attribute_set_value", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_attribute_set_data", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
                         name: "FK_mix_attribute_set_data_mix_attribute_set_AttributeSetId",
                         column: x => x.AttributeSetId,
@@ -328,15 +328,15 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ParentId = table.Column<int>(type: "integer", nullable: false),
                     ParentType = table.Column<int>(type: "integer", nullable: false),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(450)", nullable: true, collation: "utf8_unicode_ci"),
+                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
+                    Image = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
                     AttributeSetId = table.Column<int>(type: "integer", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
@@ -354,23 +354,23 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
                     AttributeSetId = table.Column<int>(type: "integer", nullable: false),
                     ParentId = table.Column<int>(type: "integer", nullable: false),
-                    ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(450)", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
+                    Image = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     IdNavigationId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_related_attribute_set", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
                         name: "FK_mix_related_attribute_set_mix_attribute_set_IdNavigationId",
                         column: x => x.IdNavigationId,
@@ -384,22 +384,22 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci"),
-                    Keyword = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    Category = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Value = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
+                    Keyword = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Category = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Value = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_configuration", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
                         name: "FK_Mix_Configuration_Mix_Culture",
                         column: x => x.Specificulture,
@@ -413,23 +413,23 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci"),
-                    Keyword = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    Category = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Value = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    DefaultValue = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
+                    Keyword = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Category = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Value = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    DefaultValue = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_language", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
                         name: "FK_Mix_Language_Mix_Culture",
                         column: x => x.Specificulture,
@@ -443,29 +443,29 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    Fields = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    Thumbnail = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Name = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    Template = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    FormTemplate = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    EdmTemplate = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
+                    Description = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    Fields = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    Thumbnail = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Name = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Template = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    FormTemplate = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    EdmTemplate = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     Type = table.Column<int>(type: "integer", nullable: false),
                     PostType = table.Column<string>(type: "text", nullable: true),
                     PageSize = table.Column<int>(type: "integer", nullable: true),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_module", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
                         name: "FK_Mix_Module_Mix_Culture",
                         column: x => x.Specificulture,
@@ -479,37 +479,37 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci"),
-                    Content = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    CssClass = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Excerpt = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    Icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Layout = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
+                    Content = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    CssClass = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Excerpt = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    Icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Layout = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     Level = table.Column<int>(type: "integer", nullable: true),
-                    SeoDescription = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    SeoKeywords = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    SeoName = table.Column<string>(type: "varchar(500)", nullable: true, collation: "utf8_unicode_ci"),
-                    SeoTitle = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    StaticUrl = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Tags = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    Template = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Title = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    Type = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    SeoDescription = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    SeoKeywords = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    SeoName = table.Column<string>(type: "varchar(500)", nullable: true, collation: "und-x-icu"),
+                    SeoTitle = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    StaticUrl = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Tags = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    Template = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Title = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    Type = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     PostType = table.Column<string>(type: "text", nullable: true),
                     Views = table.Column<int>(type: "integer", nullable: true),
                     PageSize = table.Column<int>(type: "integer", nullable: true),
-                    ExtraFields = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ExtraFields = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_page", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
                         name: "FK_Mix_Page_Mix_Culture",
                         column: x => x.Specificulture,
@@ -523,35 +523,35 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci"),
-                    Content = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
+                    Content = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
                     PublishedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    Excerpt = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    ExtraProperties = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    Icon = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    SeoDescription = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    SeoKeywords = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    SeoName = table.Column<string>(type: "varchar(500)", nullable: true, collation: "utf8_unicode_ci"),
-                    SeoTitle = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    Source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Tags = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    Template = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Thumbnail = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Title = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    Type = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    Excerpt = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    ExtraProperties = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    Icon = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    SeoDescription = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    SeoKeywords = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    SeoName = table.Column<string>(type: "varchar(500)", nullable: true, collation: "und-x-icu"),
+                    SeoTitle = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    Source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Tags = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    Template = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Thumbnail = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Title = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    Type = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     Views = table.Column<int>(type: "integer", nullable: true),
-                    ExtraFields = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ExtraFields = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_post", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
                         name: "FK_Mix_Post_Mix_Culture",
                         column: x => x.Specificulture,
@@ -565,21 +565,21 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci"),
-                    SourceId = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
+                    SourceId = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     Type = table.Column<int>(type: "integer", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    Alias = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    Description = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    Alias = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_url_alias", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
                         name: "FK_Mix_Url_Alias_Mix_Culture",
                         column: x => x.Specificulture,
@@ -596,14 +596,14 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     PageId = table.Column<int>(type: "integer", nullable: false),
                     ParentId = table.Column<int>(type: "integer", nullable: false),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
@@ -627,18 +627,18 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     PageId = table.Column<int>(type: "integer", nullable: false),
-                    RoleId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
+                    RoleId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.RoleId, x.PageId });
+                    table.PrimaryKey("PK_mix_portal_page_role", x => new { x.RoleId, x.PageId });
                     table.ForeignKey(
                         name: "FK_mix_portal_page_role_mix_portal_page",
                         column: x => x.PageId,
@@ -653,19 +653,19 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    StringContent = table.Column<string>(type: "text", nullable: false, collation: "utf8_unicode_ci"),
-                    Extension = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    FileFolder = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci"),
-                    FileName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci"),
-                    FolderType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
+                    StringContent = table.Column<string>(type: "text", nullable: false, collation: "und-x-icu"),
+                    Extension = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    FileFolder = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                    FileName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                    FolderType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     ThemeId = table.Column<int>(type: "integer", nullable: true),
-                    ThemeName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ThemeName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
@@ -684,23 +684,23 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Content = table.Column<string>(type: "text", nullable: false, collation: "utf8_unicode_ci"),
-                    Extension = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    FileFolder = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci"),
-                    FileName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci"),
-                    FolderType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    MobileContent = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    Scripts = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    SpaContent = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    Styles = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
+                    Content = table.Column<string>(type: "text", nullable: false, collation: "und-x-icu"),
+                    Extension = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    FileFolder = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                    FileName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                    FolderType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    MobileContent = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    Scripts = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    SpaContent = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    Styles = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
                     ThemeId = table.Column<int>(type: "integer", nullable: false),
-                    ThemeName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ThemeName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
@@ -718,22 +718,22 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
                     ModuleId = table.Column<int>(type: "integer", nullable: false),
                     PageId = table.Column<int>(type: "integer", nullable: false),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     Position = table.Column<int>(type: "integer", nullable: false),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_page_module", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
                         name: "FK_Mix_Menu_Module_Mix_Module1",
                         columns: x => new { x.ModuleId, x.Specificulture },
@@ -752,23 +752,23 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 name: "mix_module_data",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci"),
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
                     ModuleId = table.Column<int>(type: "integer", nullable: false),
                     PageId = table.Column<int>(type: "integer", nullable: true),
                     PostId = table.Column<int>(type: "integer", nullable: true),
-                    Fields = table.Column<string>(type: "text", nullable: false, collation: "utf8_unicode_ci"),
-                    Value = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    Fields = table.Column<string>(type: "text", nullable: false, collation: "und-x-icu"),
+                    Value = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_module_data", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
                         name: "FK_Mix_Module_Data_Mix_Module",
                         columns: x => new { x.ModuleId, x.Specificulture },
@@ -794,21 +794,21 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
                     PostId = table.Column<int>(type: "integer", nullable: false),
                     ModuleId = table.Column<int>(type: "integer", nullable: false),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_module_post", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
                         name: "FK_Mix_Module_Post_Mix_Module",
                         columns: x => new { x.ModuleId, x.Specificulture },
@@ -828,21 +828,21 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
                     PostId = table.Column<int>(type: "integer", nullable: false),
                     PageId = table.Column<int>(type: "integer", nullable: false),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_page_post", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
                         name: "FK_Mix_Page_Post_Mix_Page",
                         columns: x => new { x.PageId, x.Specificulture },
@@ -862,22 +862,22 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
                     MediaId = table.Column<int>(type: "integer", nullable: false),
                     PostId = table.Column<int>(type: "integer", nullable: false),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     Position = table.Column<int>(type: "integer", nullable: false),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_post_media", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
                         name: "FK_mix_post_media_mix_media",
                         columns: x => new { x.MediaId, x.Specificulture },
@@ -897,22 +897,22 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
                     ModuleId = table.Column<int>(type: "integer", nullable: false),
                     PostId = table.Column<int>(type: "integer", nullable: false),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci"),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     Position = table.Column<int>(type: "integer", nullable: false),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_post_module", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
                         name: "FK_Mix_Post_Module_Mix_Module1",
                         columns: x => new { x.ModuleId, x.Specificulture },
@@ -932,21 +932,21 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
                     SourceId = table.Column<int>(type: "integer", nullable: false),
                     DestinationId = table.Column<int>(type: "integer", nullable: false),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(450)", nullable: true, collation: "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
+                    Image = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_related_post", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
                         name: "FK_mix_related_post_mix_post",
                         columns: x => new { x.SourceId, x.Specificulture },
