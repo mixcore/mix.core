@@ -277,7 +277,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             return result;
         }
 
-        public static UpdateViewModel GetTemplateByPath(string path, string specificulture, MixEnums.EnumTemplateFolder folderType, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public static UpdateViewModel GetTemplateByPath(string path, string specificulture, MixEnums.EnumTemplateFolder folderType
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             string templateName = !string.IsNullOrEmpty(path) ? path.Substring(path.LastIndexOf('/') + 1) : null;
             string filename = templateName?.Substring(0, templateName.LastIndexOf('.'));
@@ -288,10 +289,11 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                     t.ThemeId == themeId && t.FolderType == folderType.ToString()
                     && !string.IsNullOrEmpty(templateName) && t.FileName == filename && t.Extension == ext
                     , _context, _transaction);
-            return getView.Data ?? GetDefault(folderType, specificulture);
+            return getView.Data ?? GetDefault(folderType, specificulture, _context, _transaction);
         }
 
-        public static UpdateViewModel GetDefault(MixEnums.EnumTemplateFolder folderType, string specificulture)
+        public static UpdateViewModel GetDefault(MixEnums.EnumTemplateFolder folderType, string specificulture
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             string activedTheme = MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, specificulture)
                     ?? MixService.GetConfig<string>(MixAppSettingKeywords.DefaultTheme);
@@ -302,7 +304,9 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                     , folderType.ToString()
                     });
             var defaulTemplate = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
-                t => t.Theme.Name == activedTheme && t.FolderType == folderType.ToString()).Data?.FirstOrDefault();
+                t => t.Theme.Name == activedTheme && t.FolderType == folderType.ToString()
+                , _context, _transaction
+                ).Data?.FirstOrDefault();
             return defaulTemplate ?? new UpdateViewModel(new MixTemplate()
             {
                 ThemeId = MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, specificulture),

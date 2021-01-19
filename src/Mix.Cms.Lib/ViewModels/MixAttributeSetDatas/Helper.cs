@@ -86,7 +86,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     // Init default data
                     var getAttrSet = await Lib.ViewModels.MixAttributeSets.UpdateViewModel.Repository.GetSingleModelAsync(
-                    m => m.Name == request.Query["databaseName"].ToString());
+                    m => m.Name == request.Query["databaseName"].ToString()
+                    , context, transaction);
                     if (getAttrSet.IsSucceed)
                     {
                         AdditionalViewModel result = new AdditionalViewModel()
@@ -98,7 +99,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             Fields = getAttrSet.Data.Fields,
                             ParentType = parentType
                         };
-                        result.ExpandView();
+                        result.ExpandView(context, transaction);
                         return new RepositoryResponse<AdditionalViewModel>()
                         {
                             IsSucceed = true,

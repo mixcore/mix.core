@@ -273,9 +273,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             // Medias
             LoadMedias(_context, _transaction);
 
-            //// Sub Modules
-            //LoadSubModules(_context, _transaction);
-
             // Related Posts
             LoadRelatedPost(_context, _transaction);
         }
@@ -340,7 +337,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             if (!string.IsNullOrEmpty(Image) && Image[0] == '/') { Image = Image.Substring(1); }
             if (!string.IsNullOrEmpty(Thumbnail) && Thumbnail[0] == '/') { Thumbnail = Thumbnail.Substring(1); }
             Tags = ListTag.ToString(Newtonsoft.Json.Formatting.None);
-            GenerateSEO();
+            GenerateSEO(_context, _transaction);
 
             return base.ParseModel(_context, _transaction);
         }
@@ -1123,7 +1120,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         private void LoadTemplates(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             this.Templates = this.Templates ?? MixTemplates.UpdateViewModel.Repository.GetModelListBy(
-                t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
+                t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType, _context, _transaction).Data;
             View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixEnums.EnumTemplateFolder.Posts, _context, _transaction);
             this.Template = $"{this.View?.TemplateFolder}/{this.View?.FolderType}/{this.View?.FileName}{this.View?.Extension}";
         }
@@ -1172,7 +1169,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
         }
 
-        private void GenerateSEO()
+        private void GenerateSEO(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(this.SeoName))
             {
@@ -1180,7 +1177,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
             int i = 1;
             string name = SeoName;
-            while (UpdateViewModel.Repository.CheckIsExists(a => a.SeoName == name && a.Specificulture == Specificulture && a.Id != Id))
+            while (UpdateViewModel.Repository.CheckIsExists(a => a.SeoName == name && a.Specificulture == Specificulture && a.Id != Id, _context, _transaction))
             {
                 name = SeoName + "_" + i;
                 i++;
