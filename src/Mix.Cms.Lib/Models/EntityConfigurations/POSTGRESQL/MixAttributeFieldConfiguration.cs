@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Cms.Lib.Models.Cms;
 
-namespace Mix.Cms.Lib.Models.EntityConfigurations.Postgresql
+namespace Mix.Cms.Lib.Models.EntityConfigurations.POSTGRESQL
 {
     public class MixAttributeFieldConfiguration : IEntityTypeConfiguration<MixAttributeField>
     {
@@ -25,31 +25,24 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.Postgresql
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.CreatedDateTime)
-                .HasColumnType("datetime");
+            entity.Property(e => e.CreatedDateTime).HasColumnType("timestamp without time zone");
 
             entity.Property(e => e.DefaultValue)
                 .HasColumnType("text")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.IsEncrypt)
-                .HasColumnType("bit(1)");
+            entity.Property(e => e.IsEncrypt).HasColumnType("boolean");
 
-            entity.Property(e => e.IsMultiple)
-                .HasColumnType("bit(1)");
+            entity.Property(e => e.IsMultiple).HasColumnType("boolean");
 
-            entity.Property(e => e.IsRequire)
-                .HasColumnType("bit(1)");
+            entity.Property(e => e.IsRequire).HasColumnType("boolean");
 
-            entity.Property(e => e.IsSelect)
-                .HasColumnType("bit(1)");
+            entity.Property(e => e.IsSelect).HasColumnType("boolean");
 
-            entity.Property(e => e.IsUnique)
-                .HasColumnType("bit(1)");
+            entity.Property(e => e.IsUnique).HasColumnType("boolean");
 
-            entity.Property(e => e.LastModified)
-                .HasColumnType("datetime");
+            entity.Property(e => e.LastModified).HasColumnType("timestamp without time zone");
 
             entity.Property(e => e.ModifiedBy)
                 .HasColumnType("varchar(50)")

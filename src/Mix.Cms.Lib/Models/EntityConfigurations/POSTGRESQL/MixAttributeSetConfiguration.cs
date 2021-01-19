@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Cms.Lib.Models.Cms;
 
-namespace Mix.Cms.Lib.Models.EntityConfigurations.Postgresql
+namespace Mix.Cms.Lib.Models.EntityConfigurations.POSTGRESQL
 {
     public class MixAttributeSetConfiguration : IEntityTypeConfiguration<MixAttributeSet>
     {
@@ -16,16 +16,14 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.Postgresql
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.CreatedDateTime)
-                .HasColumnType("datetime");
+            entity.Property(e => e.CreatedDateTime).HasColumnType("timestamp without time zone");
 
             entity.Property(e => e.Description)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.EdmAutoSend)
-                .HasColumnType("bit(1)");
+            entity.Property(e => e.EdmAutoSend).HasColumnType("boolean");
 
             entity.Property(e => e.EdmFrom)
                 .HasColumnType("varchar(250)")
@@ -47,8 +45,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.Postgresql
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.LastModified)
-                .HasColumnType("datetime");
+            entity.Property(e => e.LastModified).HasColumnType("timestamp without time zone");
 
             entity.Property(e => e.ModifiedBy)
                 .HasColumnType("varchar(50)")
