@@ -42,7 +42,7 @@ namespace Mix.Cms.Lib.Services
                 {
                     context = MixService.GetDbContext();
                     accountContext = new MixCmsAccountContext();
-                    await context.Database.MigrateAsync();
+                    //await context.Database.MigrateAsync();
                     await accountContext.Database.MigrateAsync();
 
                     var countCulture = context.MixCulture.Count();
