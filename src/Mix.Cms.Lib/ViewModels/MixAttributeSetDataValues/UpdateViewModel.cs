@@ -161,7 +161,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
             if (AttributeFieldId > 0)
             {
-                Field = MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId).Data;
+                Field = MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(
+                    f => f.Id == AttributeFieldId
+                    , _context, _transaction).Data;
                 if (Field != null && DataType == MixEnums.MixDataType.Reference)
                 {
                     AttributeSetName = _context.MixAttributeSet.FirstOrDefault(m => m.Id == Field.ReferenceId)?.Name;

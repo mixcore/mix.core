@@ -80,7 +80,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (!string.IsNullOrEmpty(dataId))
                 {
                     return await AdditionalViewModel.Repository.GetSingleModelAsync(
-                        m => m.Id == dataId && m.Specificulture == culture);
+                        m => m.Id == dataId && m.Specificulture == culture
+                        ,  context, transaction);
                 }
                 else
                 {

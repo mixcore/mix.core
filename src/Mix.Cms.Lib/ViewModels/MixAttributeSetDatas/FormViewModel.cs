@@ -123,8 +123,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 AttributeSetId = _context.MixAttributeSet.First(m => m.Name == AttributeSetName)?.Id ?? 0;
             }
             Values ??= MixAttributeSetValues.UpdateViewModel
-                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture).Data.OrderBy(a => a.Priority).ToList();
-            Fields ??= MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
+                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture
+                , _context, _transaction)
+                .Data.OrderBy(a => a.Priority).ToList();
+            Fields ??= MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId
+            , _context, _transaction).Data;
 
             foreach (var field in Fields.OrderBy(f => f.Priority))
             {
@@ -197,8 +200,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
 
             // Save Edm html
-            var getAttrSet = Mix.Cms.Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModel(m => m.Name == AttributeSetName, _context, _transaction);
-            var getEdm = Lib.ViewModels.MixTemplates.UpdateViewModel.GetTemplateByPath(getAttrSet.Data.EdmTemplate, Specificulture);
+            var getAttrSet = MixAttributeSets.ReadViewModel.Repository.GetSingleModel(m => m.Name == AttributeSetName
+                , _context, _transaction);
+            var getEdm = Lib.ViewModels.MixTemplates.UpdateViewModel.GetTemplateByPath(getAttrSet.Data.EdmTemplate, Specificulture
+                , _context, _transaction);
             var edmField = Values.FirstOrDefault(f => f.AttributeFieldName == "edm");
             if (edmField != null && getEdm.IsSucceed && !string.IsNullOrEmpty(getEdm.Data.Content))
             {
