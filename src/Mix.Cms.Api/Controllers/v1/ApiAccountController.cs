@@ -87,6 +87,10 @@ namespace Mix.Cms.Api.Controllers.v1
                         {
                             info.Data = new UserInfoViewModel();
                         }
+                        else
+                        {
+                            info.Data.UserRoles = UserRoleViewModel.Repository.GetModelListBy(ur => ur.UserId == info.Data.Id).Data;
+                        }
                         token.UserData = info.Data;
 
                         loginResult.IsSucceed = true;

@@ -145,7 +145,6 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            UserRoles = UserRoleViewModel.Repository.GetModelListBy(ur => ur.UserId == Id).Data;
             ResetPassword = new ResetPasswordViewModel();
         }
 
