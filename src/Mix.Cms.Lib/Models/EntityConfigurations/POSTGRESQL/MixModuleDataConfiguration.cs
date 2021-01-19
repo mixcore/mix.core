@@ -3,44 +3,24 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Cms.Lib.Models.Cms;
 
-namespace Mix.Cms.Lib.Models.EntityConfigurations.Postgresql
+namespace Mix.Cms.Lib.Models.EntityConfigurations.POSTGRESQL
 {
     public class MixModuleDataConfiguration : IEntityTypeConfiguration<MixModuleData>
     {
         public void Configure(EntityTypeBuilder<MixModuleData> entity)
         {
-            entity.HasKey(e => new
-            {
-                e.Id,
-                e.Specificulture
-            }).HasName("PRIMARY");
+            entity.HasKey(e => new { e.Id, e.Specificulture })
+                    .HasName("PRIMARY");
 
             entity.ToTable("mix_module_data");
 
-            entity.HasIndex(e => new
-            {
-                e.ModuleId,
-                e.Specificulture
-            });
+            entity.HasIndex(e => new { e.ModuleId, e.Specificulture });
 
-            entity.HasIndex(e => new
-            {
-                e.PageId,
-                e.Specificulture
-            });
+            entity.HasIndex(e => new { e.PageId, e.Specificulture });
 
-            entity.HasIndex(e => new
-            {
-                e.PostId,
-                e.Specificulture
-            });
+            entity.HasIndex(e => new { e.PostId, e.Specificulture });
 
-            entity.HasIndex(e => new
-            {
-                e.ModuleId,
-                e.PageId,
-                e.Specificulture
-            });
+            entity.HasIndex(e => new { e.ModuleId, e.PageId, e.Specificulture });
 
             entity.Property(e => e.Id)
                 .HasColumnType("varchar(50)")
@@ -57,8 +37,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.Postgresql
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.CreatedDateTime)
-                .HasColumnType("datetime");
+            entity.Property(e => e.CreatedDateTime).HasColumnType("timestamp without time zone");
 
             entity.Property(e => e.Fields)
                 .IsRequired()
@@ -66,8 +45,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.Postgresql
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.LastModified)
-                .HasColumnType("datetime");
+            entity.Property(e => e.LastModified).HasColumnType("timestamp without time zone");
 
             entity.Property(e => e.ModifiedBy)
                 .HasColumnType("varchar(50)")

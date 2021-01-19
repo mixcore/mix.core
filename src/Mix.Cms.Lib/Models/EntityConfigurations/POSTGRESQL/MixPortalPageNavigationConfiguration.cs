@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Cms.Lib.Models.Cms;
 
-namespace Mix.Cms.Lib.Models.EntityConfigurations.Postgresql
+namespace Mix.Cms.Lib.Models.EntityConfigurations.POSTGRESQL
 {
     public class MixPortalPageNavigationConfiguration : IEntityTypeConfiguration<MixPortalPageNavigation>
     {
@@ -21,8 +21,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.Postgresql
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.CreatedDateTime)
-                .HasColumnType("datetime");
+            entity.Property(e => e.CreatedDateTime).HasColumnType("timestamp without time zone");
 
             entity.Property(e => e.Description)
                 .HasColumnType("varchar(250)")
@@ -34,8 +33,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.Postgresql
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.LastModified)
-                .HasColumnType("datetime");
+            entity.Property(e => e.LastModified).HasColumnType("timestamp without time zone");
 
             entity.Property(e => e.ModifiedBy)
                 .HasColumnType("varchar(50)")
@@ -51,6 +49,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.Postgresql
 
             entity.HasOne(d => d.Page)
                 .WithMany(p => p.MixPortalPageNavigationPage)
+                .HasForeignKey(d => d.PageId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_mix_portal_page_navigation_mix_portal_page");
 
