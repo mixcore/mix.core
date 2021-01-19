@@ -628,6 +628,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     PageId = table.Column<int>(type: "integer", nullable: false),
                     RoleId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci"),
+                    Id = table.Column<int>(type: "integer", nullable: false),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci"),
