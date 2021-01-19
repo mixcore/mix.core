@@ -59,7 +59,7 @@ namespace Mix.Cms.Lib.Models.Cms
             string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {
-                var provider = Enum.Parse<MixDatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
+                var provider = MixService.GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
                 switch (provider)
                 {
                     case MixDatabaseProvider.MSSQL:
@@ -78,7 +78,7 @@ namespace Mix.Cms.Lib.Models.Cms
         //Ref https://github.com/dotnet/efcore/issues/10169
         public override void Dispose()
         {
-            var provider = Enum.Parse<MixDatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
+            var provider = MixService.GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
             switch (provider)
             {
                 case MixDatabaseProvider.MSSQL:

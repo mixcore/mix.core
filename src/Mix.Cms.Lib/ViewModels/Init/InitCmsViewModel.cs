@@ -10,10 +10,6 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
         [JsonProperty("connectionString")]
         public string ConnectionString
         {
-            // If use local db  => return local db cnn string
-            // Else If use remote db
-            // => return: if use mysql => return mysql cnn string
-            //              else return remote mssql cnn string
             get
             {
                 switch (DatabaseProvider)
@@ -66,9 +62,6 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
 
         [JsonProperty("lang")]
         public string Lang { get; set; }
-
-        [JsonProperty("isMysql")]
-        public bool IsMysql { get { return DatabaseProvider == MixDatabaseProvider.MySQL; } }
 
         [JsonProperty("databaseProvider")]
         public MixDatabaseProvider DatabaseProvider { get; set; }
