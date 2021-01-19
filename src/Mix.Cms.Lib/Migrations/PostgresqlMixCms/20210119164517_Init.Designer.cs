@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 {
     [DbContext(typeof(PostgresqlMixCmsContext))]
-    [Migration("20210119164139_Init")]
+    [Migration("20210119164517_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1573,6 +1573,9 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
