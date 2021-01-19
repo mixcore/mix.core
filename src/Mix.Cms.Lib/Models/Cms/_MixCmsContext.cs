@@ -65,11 +65,20 @@ namespace Mix.Cms.Lib.Models.Cms
                     case MixDatabaseProvider.MSSQL:
                         optionsBuilder.UseSqlServer(cnn);
                         break;
+
                     case MixDatabaseProvider.MySQL:
                         optionsBuilder.UseMySql(cnn, ServerVersion.AutoDetect(cnn));
                         break;
+
                     case MixDatabaseProvider.SQLITE:
                         optionsBuilder.UseSqlite(cnn);
+                        break;
+
+                    case MixDatabaseProvider.PostgreSQL:
+                        optionsBuilder.UseNpgsql(cnn);
+                        break;
+
+                    default:
                         break;
                 }
             }

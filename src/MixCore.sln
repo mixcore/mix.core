@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Heart.NetCore", "Mix.He
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Cms.Schedule", "Mix.Cms.Schedule\Mix.Cms.Schedule.csproj", "{BCEA1296-5B82-4A1C-AD81-5A9ACC421750}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Postgresql", "Postgresql\Postgresql.csproj", "{5273A2A5-3500-4E3F-9399-29982BAF9C1D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{BCEA1296-5B82-4A1C-AD81-5A9ACC421750}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCEA1296-5B82-4A1C-AD81-5A9ACC421750}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCEA1296-5B82-4A1C-AD81-5A9ACC421750}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5273A2A5-3500-4E3F-9399-29982BAF9C1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5273A2A5-3500-4E3F-9399-29982BAF9C1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5273A2A5-3500-4E3F-9399-29982BAF9C1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5273A2A5-3500-4E3F-9399-29982BAF9C1D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
