@@ -99,11 +99,5 @@ namespace Mix.Cms.Lib.Models.Cms
             }
             base.Dispose();
         }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
-            OnModelCreatingPartial(modelBuilder);
-        }
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

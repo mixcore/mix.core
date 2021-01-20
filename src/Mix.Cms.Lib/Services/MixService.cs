@@ -502,6 +502,7 @@ namespace Mix.Cms.Lib.Services
                 case MixDatabaseProvider.SQLITE:
                     return new MySqlMixCmsContext();
                 case MixDatabaseProvider.PostgreSQL:
+                    return new PostgresqlMixCmsContext();
                 default:
                     return null;
             }
